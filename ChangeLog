@@ -1,5 +1,483 @@
-v0.8.0-beta2		09/18/05
+v0.8.0-rc1		10/03/05
 ----------------------------------------------------------------------------
+
+2005-11-03 14:49  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: Update
+
+2005-11-03 14:33  jahrens
+
+    * trunk/extragear/graphics/digikam/release_digikam.rb: preparing rc
+
+2005-11-03 14:30  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: Fixed
+
+2005-11-03 14:28  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam.lsm: wrong month
+
+2005-11-03 14:21  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam.lsm: version update
+
+2005-11-03 14:19  jahrens
+
+    * trunk/extragear/graphics/digikam/version.h: version update
+
+2005-11-03 10:45  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING:
+      http://websvn.kde.org/tags/digikam/ ==> tags == stable branch ?
+      Why there are no entries about 0.8.0 beta releases ? CCMAIL :
+      Tom Albers tomalbers@kde.nl, joern.ahrens@kdemail.net
+
+2005-11-03 10:34  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: Update
+
+2005-11-02 15:43  jahrens
+
+    * trunk/extragear/graphics/digikam/TODO: CVS_SILENT
+
+2005-11-02 15:13  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: updated
+
+2005-11-02 15:04  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: updated
+
+2005-11-02 14:59  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: updtaed
+
+2005-11-02 14:57  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: updtaed
+
+2005-11-02 14:51  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: updtaed
+
+2005-11-02 14:45  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: notice to create
+      tarball from svn
+
+2005-11-02 13:42  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+      Fixed widget tip CCBUGS: 115536
+
+2005-11-02 13:34  cgilles
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp:
+      Fix i18n CCBUG: 115535
+
+2005-11-01 17:39  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: Update (2) TODO list for
+      later 0.8.0 release CCMAIL: digikam-devel@kde.org
+
+2005-10-31 19:33  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: Update TODO list for
+      later 0.8.0 release CCMAIL: digikam-devel@kde.org
+
+2005-10-31 19:04  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: Fix flip
+      icon action name
+
+2005-10-31 15:49  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: no need
+      to toogle slideshow action in this case
+
+2005-10-31 13:15  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: Fix icon
+      action name
+
+2005-10-31 13:08  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/Makefile.am,
+      trunk/extragear/graphics/digikam/showfoto/hi128-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/hi16-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/hi22-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/hi32-action-slideshow.png,
+      trunk/extragear/graphics/digikam/showfoto/hi32-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/hi48-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/hi64-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics,
+      trunk/extragear/graphics/digikam/showfoto/pics/Makefile.am,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi128-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi16-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi22-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi32-action-flip.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi32-action-histogram.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi32-action-resize_image.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi32-action-slideshow.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi32-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi48-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/hi64-app-showfoto.png,
+      trunk/extragear/graphics/digikam/showfoto/pics/showfoto-splash.png,
+      trunk/extragear/graphics/digikam/showfoto/showfoto-splash.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/hi32-action-flip.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/hi32-action-histogram.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/hi32-action-resize_image.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/pics,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/pics/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/pics/hi32-action-flip.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/pics/hi32-action-histogram.png,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/pics/hi32-action-resize_image.png:
+      Showfoto and digiKam Image Editor pics and icons : - Do not mix
+      pictures and source code for more visibility. - Fix missing
+      showfoto action icons if showfoto is installed alone (without
+      digiKam). CCMAIL: digikam-devel@kde.org
+
+2005-10-31 12:12  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h:
+      Showfoto::slideshow : disable any unecessary actions during
+      slide (file open, file save, image plugins, etc.) CCMAIL:
+      digikam-devel@kde.org
+
+2005-10-24 18:46  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam/main.cpp: Yes, I fully
+      agree. CCMAIL: 113913
+
+2005-10-23 21:01  toma
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+      disable "remove tag" when no tags are available. BUG: 113913
+
+2005-10-22 20:22  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchresultsview.cpp:
+      Fixed exif auto thumbnail rotation in digiKam search view.
+      Please give me a feeback because i can check if is right (no
+      jpeg file with rotation exif tag here) CCBUG: 114848
+
+2005-10-21 11:24  coolo
+
+    * trunk/extragear/graphics/digikam/configure.in.in: if digikam
+      does not compile, digikamplugins can't link
+
+2005-10-16 22:04  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h: Thanks
+      for reporting! BUG: 114507
+
+2005-10-16 14:38  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: BUG:
+      114506
+
+2005-10-16 06:10  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      trunk/extragear/graphics/fraqtive/src/fraqtive.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/healpix/kstdata_healpix.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/indirect/kstdata_indirect.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/pulse/kstextension_pulse.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2005-10-12 06:15  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/fitsimage/kstdata_fitsimage.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/healpix/kstdata_healpix.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/qimagesource/kstdata_qimagesource.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/pulse/kstextension_pulse.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2005-10-10 06:10  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2005-10-06 15:12  jahrens
+
+    * trunk/extragear/graphics/digikam/digikam/monthwidget.cpp: Today
+      I wrote the date view manual, and thought it might be good to
+      display the week number in the month widget
+
+2005-10-06 06:12  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h: showfoto :
+      Fix 'toogle to fullscreen' toolbar icon rules. CCBUG : 113917
+
+2005-10-06 05:20  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/setupeditor.cpp:
+      showfoto : restore properly thumbar settings. CCBUG: 113919
+
+2005-10-06 02:22  pahlibar
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp:
+      preserve permissions when doing save/saveAs BUGS: 113914
+
+2005-10-04 08:29  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: load
+      the cameras before the createGUI, so that any toolbar actions
+      are plugged in correctly BUGS: 113804
+
+2005-10-04 08:17  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+      save/restore quick search dialog size BUGS: 113806
+
+2005-10-04 08:11  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+      disable the "set as XX thumbnail" in the non-albums/tags view
+      BUGS: 113805
+
+2005-10-04 08:06  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp: kde >
+      3.3.x allows us to lock out the "other" icon select option. use
+      it. Its no longer possible in 0.8.x to set icons through the
+      kicondialog. use the assign tag thumbnail or drag-and-drop a
+      file to assign thumbnail BUGS: 113808
+
+2005-10-02 06:00  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+      trunk/extragear/graphics/fraqtive/src/fraqtive.desktop,
+      trunk/extragear/graphics/kimdaba/x-vnd.kde.kimdaba-import.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/cdf/kstdata_cdf.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/fitsimage/kstdata_fitsimage.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/healpix/kstdata_healpix.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/lfiio/kstdata_lfiio.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/netcdf/kstdata_netcdf.desktop,
+      trunk/extragear/graphics/kst/kst/datasources/qimagesource/kstdata_qimagesource.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/elog/kstextension_elog.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/js/kjsembed/kjscmd.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/js/kjsembed/plugins/qprocess_plugin.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/pulse/kstextension_pulse.desktop,
+      trunk/extragear/graphics/kst/kst/extensions/rana/kstextension_rana.desktop,
+      trunk/extragear/graphics/kst/kst/kst.desktop,
+      trunk/extragear/graphics/showimg/showimgapp/konqshowimg.desktop,
+      trunk/extragear/graphics/showimg/showimgpart/showimgpart.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2005-09-30 10:43  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/main.cpp: fix i18n
+
+2005-09-30 06:12  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/Makefile.am: remove
+      comments
+
+2005-09-29 17:10  toma
+
+    * trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp: I
+      think this is needed to make translation possible.
+
+2005-09-29 13:52  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/Makefile.am: Fix error
+      about png files
+
+2005-09-29 11:50  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+      Fix i18n
+
+2005-09-29 11:46  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+      Fix i18n
+
+2005-09-29 11:43  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+      Fix i18n
+
+2005-09-29 11:41  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp:
+      Fix i18n
+
+2005-09-28 13:37  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.h,
+      trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+      add whatsthis polish advanced search interface
+
+2005-09-28 11:46  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp:
+      fix i18n ==> extended -> avanced (homogenous with handbook and
+      dialog title)
+
+2005-09-28 11:00  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+      add whatsthis
+
+2005-09-28 09:20  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp:
+      fix i18n ==> extended -> avanced (homogenous with handbook and
+      dialog title) Add dialog links to handbook anchors
+
+2005-09-28 05:39  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/searchresultsview.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchresultsview.h:
+      Accordinly with Renchi, digikam search result view widget using
+      digiKam::thumbnailjob instead kio:previewjob: - Homogenous
+      thumbnails rendering like in image view. - More fast with PNG
+      and JPEG. - Better results with PNG and TIFF. Kio::PreviewJob
+      give weird preview (nuul) with any PNG file using max
+      compression level. - RAW image files support ! CCMAIL:
+      digikam-devel@kde.org
+
+2005-09-23 13:20  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp:
+      fix i18n
+
+2005-09-22 17:20  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp:
+      Accordinly with Renchi, using generic USB/FireWire Mass Storage
+      Device name.
+
+2005-09-22 02:34  pahlibar
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      * forgot to fix the select/open for the camera icon items.
+      (click to open the items only when the mouse cursor is in the
+      pixmap region, otherwise select) * fixed a bug in the USB
+      storage cameras where the files in the root dir were not listed
+
+2005-09-21 14:38  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/imagepropertiesexif.cpp,
+      trunk/extragear/graphics/digikam/showfoto/imagepropertiesexif.h,
+      trunk/extragear/graphics/digikam/showfoto/imagepropertiesgeneral.cpp,
+      trunk/extragear/graphics/digikam/showfoto/imagepropertiesgeneral.h,
+      trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.cpp,
+      trunk/extragear/graphics/digikam/showfoto/imagepropertieshistogram.h:
+      showfoto imageproperties using digikam thumbnail job
+
+2005-09-21 13:50  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/iconview.cpp: do not
+      lose current item on a re-sort of items BUGS: 112971 105663
+
+2005-09-21 07:32  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: More
+      RAW file formats supported by default
+
+2005-09-19 19:41  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumsettings.cpp: add
+      *.cr2 canon RAW file format
+
+2005-09-19 03:17  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp:
+      couple more thumbnail job deletion fixes
+
+2005-09-19 03:02  pahlibar
+
+    * trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagepropertiesexif.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagepropertiesgeneral.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+      trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+      trunk/extragear/graphics/digikam/digikam/syncjob.cpp: in kdelibs
+      3.5, the default behavior of kio::job has changed, the job is
+      not immediately deleted on emitResult, but scheduled for a
+      deferred delete. since, we were relying on the immediate delete
+      behavior, it ended up causing the loading of thumbnails to slow
+      down or stop completely. correct for new behavior. can the
+      bugreporters verify that this fixes the problem? CCBUGS: 112467
+
+2005-09-18 12:51  toma
+
+    * trunk/extragear/graphics/digikam/ChangeLog,
+      trunk/extragear/graphics/digikam/digikam.lsm,
+      trunk/extragear/graphics/digikam/release_digikam.rb,
+      trunk/extragear/graphics/digikam/version.h: Preparing for beta2
+
 
 2005-09-18 00:07  pahlibar
 
