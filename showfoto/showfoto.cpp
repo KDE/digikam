@@ -858,8 +858,8 @@ bool ShowFoto::save()
 
     m_canvas->setModified( false );
     m_bar->invalidateThumb(m_currentItem);
-    slotOpenURL(m_currentItem->url());
     kapp->restoreOverrideCursor();
+    slotOpenURL(m_currentItem->url());
 
     return true;
 }
@@ -878,6 +878,8 @@ void ShowFoto::slotOpenURL(const KURL& url)
     if(!m_currentItem)
         return;
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     QString localFile;
 #if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
@@ -887,6 +889,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
     m_canvas->load(localFile);
 
     slotUpdateItemInfo();
+    QApplication::restoreOverrideCursor();
 }
 
 void ShowFoto::toggleNavigation(int index)
