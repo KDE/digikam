@@ -86,6 +86,7 @@ TODO list later 0.8.0 release:
    - Add DCOP interface.
    - Add open dir action (Done - GC).
    - Add Support KURL for better konqueror interactions.
+   - Add canvas Exif autorotate with JPEG file like image editor.
 
    ==> Who : ??
    ==> Status : todo
