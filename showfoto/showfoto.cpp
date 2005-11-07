@@ -89,6 +89,7 @@
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
 {
+    m_currentItem            = 0;
     m_itemsNb                = 0;
     m_splash                 = 0;
     m_BCGAction              = 0;
@@ -98,7 +99,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_fullScreenHideThumbBar = true;
     m_config                 = kapp->config();
     m_config->setGroup("ImageViewer Settings");
-    m_currentItem = 0;
 
     if(m_config->readBoolEntry("ShowSplash", true) &&
        !kapp->isRestored())
@@ -1271,9 +1271,9 @@ void ShowFoto::slotSetup()
     if (setup.exec() != QDialog::Accepted)
         return;
 
+    unLoadPlugins();
     m_imagePluginLoader->loadPluginsFromList(setup.pluginsPage_->getImagePluginsListEnable());
     m_config->sync();
-    unLoadPlugins();
     loadPlugins();
     applySettings();
 
