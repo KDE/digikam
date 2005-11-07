@@ -635,7 +635,7 @@ void AdjustLevelDialog::slotDefault()
 }
 
 // Load all settings.
-void AdjustLevelDialog::slotUser2()
+void AdjustLevelDialog::slotUser3()
 {
     KURL loadLevelsFile;
 
@@ -656,7 +656,7 @@ void AdjustLevelDialog::slotUser2()
 }
 
 // Save all settings.
-void AdjustLevelDialog::slotUser3()
+void AdjustLevelDialog::slotUser2()
 {
     KURL saveLevelsFile;
 
