@@ -117,6 +117,7 @@ protected:
     void abortPreview(void);
     void readSettings(void);
     void writeSettings(void);
+    void keyPressEvent(QKeyEvent *e);
             
     virtual void writeUserSettings(void){};
     virtual void resetValues(void){};

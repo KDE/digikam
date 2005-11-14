@@ -103,6 +103,7 @@ protected:
     void closeEvent(QCloseEvent *e);
     void customEvent(QCustomEvent *event);
     void abortPreview(void);
+    void keyPressEvent(QKeyEvent *e);
 
     virtual void writeUserSettings(void){};            
     virtual void resetValues(void){};
