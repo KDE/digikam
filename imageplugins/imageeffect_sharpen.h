@@ -80,6 +80,7 @@ protected:
     void closeEvent(QCloseEvent *e);
     void customEvent(QCustomEvent *event);
     void abortPreview(void);
+    void keyPressEvent(QKeyEvent *e);
 };
 
 #endif /* IMAGEEFFECT_SHARPEN_H */

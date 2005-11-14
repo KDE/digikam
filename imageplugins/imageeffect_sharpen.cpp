@@ -301,4 +301,42 @@ void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
     delete d;        
 }
 
+// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
+// to prevent any conflicts between dialog keys events and SpinBox keys events.
+
+void ImageEffect_Sharpen::keyPressEvent(QKeyEvent *e)
+{
+    if ( e->state() == 0 )
+    {
+        switch ( e->key() )
+        {
+        case Key_Escape:
+            e->accept();
+            reject();
+        break;
+        case Key_Enter:            
+        case Key_Return:     
+            e->ignore();              
+        break;
+        default:
+            e->ignore();
+            return;
+        }
+    }
+    else
+    {
+        // accept the dialog when Ctrl-Return is pressed
+        if ( e->state() == ControlButton &&
+            (e->key() == Key_Return || e->key() == Key_Enter) )
+        {
+            e->accept();
+            accept();
+        }
+        else
+        {
+            e->ignore();
+        }
+    }
+}
+
 #include "imageeffect_sharpen.moc"
