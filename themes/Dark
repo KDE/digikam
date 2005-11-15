@@ -1,5 +1,5 @@
-! GKblack
-! Digikam theme by Debian User (Mon Jul 18 05:58:59 2005)
+! Dark
+! Digikam theme by Gerhard Kulzer (Mit Nov 9 07:32:35 2005)
 
 base.color:				#000000
 text.regular.color:			#dadada
@@ -16,10 +16,10 @@ banner.borderColor			#000000
 
 thumbnail.regular.color:		#131313
 thumbnail.regular.colorTo:		#191919
-thumbnail.regular.bevel:		FLAT
+thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
-thumbnail.regular.borderColor		#3d3d41
+thumbnail.regular.borderColor		#e0e0ef
 
 thumbnail.selected.color:		#819ebb
 thumbnail.selected.colorTo:		#2c3c4c
@@ -29,15 +29,15 @@ thumbnail.selected.border:		false
 thumbnail.selected.borderColor		#e0e0ef
 
 listview.regular.color:			#030303
-listview.regular.colorTo:		#80837e
+listview.regular.colorTo:		#474644
 listview.regular.bevel:			RAISED
 listview.regular.gradient:		HORIZONTAL
 listview.regular.border:		false
 listview.regular.borderColor		#000000
 
-listview.selected.color:		#34475a
-listview.selected.colorTo:		#6c8fb2
-listview.selected.bevel:		FLAT
+listview.selected.color:		#678cb2
+listview.selected.colorTo:		#37485a
+listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
 listview.selected.border:		true
 listview.selected.borderColor		#000000
