@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=showFoto
+Name=ShowFoto
 Name[el]=εμφάνισηΦωτογραφίας
 Name[pa]=ਫੋਟੋਵੇਖਾਓ
 Name[sv]=Showfoto
 Name[xx]=xxshowFotoxx
-GenericName=Image Viewer
+GenericName=Image Editor
 GenericName[br]=Gweler ar skeudennoù
 GenericName[cy]=Gwelydd Delwedd
 GenericName[da]=Billedfremviser
@@ -25,7 +25,7 @@ GenericName[sr@Latn]=Prikazivač slika
 GenericName[sv]=Bildvisare
 GenericName[tr]=Resim Göstericisi
 GenericName[xx]=xxImage Viewerxx
-Comment=digiKam photo viewer
+Comment=Stand alone digiKam photo editor
 Comment[br]=Gweler foto digiKam
 Comment[da]=Digikam Foto-fremviser
 Comment[de]=digiKam-Photobetrachter
