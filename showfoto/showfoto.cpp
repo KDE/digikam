@@ -746,6 +746,9 @@ void ShowFoto::slotSaveAs()
         }
         else
             kdDebug() << ("slotSaveAs::No Exif Data Found") << endl;
+    
+        if ( m_canvas->exifRotated() )
+            KExifUtils::writeOrientation(tmpFile, KExifData::NORMAL);    
     }
 
     kdDebug() << "renaming to " << saveAsURL.path() << endl;
