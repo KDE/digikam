@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                           .arg(kipi_version);
     
     KAboutData aboutData( "digikam", 
-                          I18N_NOOP("digiKam"),
+                          "digiKam",
                           digikam_version,        
                           description.latin1(),
                           KAboutData::License_GPL,
