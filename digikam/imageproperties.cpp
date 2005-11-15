@@ -59,9 +59,10 @@ ImageProperties::ImageProperties(enum Mode mode, QWidget* parent,
 {
     if (m_mode == MULTI)
     {
+#if KDE_IS_VERSION(3,3,0)
         setButtonGuiItem(User1, KStdGuiItem::guiItem(KStdGuiItem::Forward));
         setButtonGuiItem(User2, KStdGuiItem::guiItem(KStdGuiItem::Back));
-
+#endif
         enableButton(User1, m_currItem->nextItem() != 0);
         enableButton(User2, m_currItem->prevItem() != 0);
     }
