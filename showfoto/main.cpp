@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     QString Description = i18n("KDE Photo Viewer and Editor");
 
     KAboutData aboutData( "showfoto",
-                          "Showfoto",
+                          "showFoto",
                           "0.3.0",
                           Description.latin1(),
                           KAboutData::License_GPL,
