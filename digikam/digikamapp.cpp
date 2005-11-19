@@ -934,6 +934,8 @@ void DigikamApp::slotSetupCamera()
 
 void DigikamApp::slotSetupChanged()
 {
+    if(mAlbumSettings->getAlbumLibraryPath() != mAlbumManager->getLibraryPath())
+        mView->clearHistory();
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mAlbumManager->startScan();
 

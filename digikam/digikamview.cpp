@@ -353,6 +353,13 @@ void DigikamView::slotAlbumHistoryForward(int steps)
     }
 }
 
+void DigikamView::clearHistory()
+{
+    mAlbumHistory->clearHistory();
+    mParent->enableAlbumBackwardHistory(false);
+    mParent->enableAlbumForwardHistory(false);
+}
+
 void DigikamView::getBackwardHistory(QStringList &titles)
 {
     mAlbumHistory->getBackwardHistory(titles);

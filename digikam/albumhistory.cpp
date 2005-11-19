@@ -66,18 +66,27 @@ AlbumHistory::AlbumHistory()
 
 AlbumHistory::~AlbumHistory()
 {
+    clearHistory();
+    
+    delete m_backwardStack;
+    delete m_forwardStack;
+}
+
+void AlbumHistory::clearHistory()
+{
     AlbumStack::iterator iter = m_backwardStack->begin();
     AlbumStack::iterator end = m_backwardStack->end();
     for(; iter != end; ++iter)
         delete *iter;
-    
+    m_backwardStack->clear();
+
     iter = m_forwardStack->begin();
     end = m_forwardStack->end();
     for(; iter != end; ++iter)
         delete *iter;
-    
-    delete m_backwardStack;
-    delete m_forwardStack;
+    m_forwardStack->clear();
+
+    m_moving = false;
 }
 
 void AlbumHistory::addAlbum(Album *album, QWidget *widget)

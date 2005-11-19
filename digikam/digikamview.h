@@ -67,6 +67,7 @@ public:
 
     void applySettings(const AlbumSettings* settings);
 
+    void clearHistory();
     void getForwardHistory(QStringList &titles);
     void getBackwardHistory(QStringList &titles);    
     

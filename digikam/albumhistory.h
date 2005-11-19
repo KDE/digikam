@@ -47,6 +47,7 @@ public:
 
     void            addAlbum(Album *album, QWidget *widget = 0);
     void            deleteAlbum(Album *album);
+    void            clearHistory();
     void            back(Album **album, QWidget **widget, unsigned int steps=1);
     void            forward(Album **album, QWidget **widget, unsigned int steps=1);
     void            getCurrentAlbum(Album **album, QWidget **widget) const;
