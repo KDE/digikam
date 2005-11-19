@@ -75,7 +75,13 @@ void Sidebar::loadViewState()
     minimized = config->readNumEntry("Minimized", m_minimizedDefault);
         
     if(minimized)
+    {
         m_activeTab = tab;
+        setTab(m_activeTab, true);
+        m_stack->raiseWidget(m_activeTab);
+
+        emit signalChangedTab(m_stack->visibleWidget());        
+    }
     else
         m_activeTab = -1;
     
@@ -135,7 +141,7 @@ void Sidebar::clicked(int tab)
         m_stack->raiseWidget(m_activeTab);
         
         if(m_minimized)
-            expand();    
+            expand();
 
         emit signalChangedTab(m_stack->visibleWidget());
     }
