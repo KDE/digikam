@@ -1,4 +1,108 @@
-v0.8.0-rc1		10/03/05
+v0.8.0   		11/21/05
+----------------------------------------------------------------------------
+2005-11-19 23:01  jahrens
+
+	* trunk/extragear/graphics/digikam/digikam/albumhistory.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumhistory.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamview.h: Oh Tung,
+	  how do you find all these stupid bugs? Cool :) The album history
+	  wasn't cleared if another album library path was set. BUG: 116344
+
+2005-11-19 10:20  jahrens
+
+	* trunk/extragear/graphics/digikam/libs/widgets/sidebar.cpp: The
+	  initial widget wasn't properly set if the sitebar was started
+	  minimized. BUG: 116346
+
+2005-11-16 11:29  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/main.cpp: revert
+	* trunk/extragear/graphics/digikam/showfoto/main.cpp: revert
+
+2005-11-16 06:00  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/main.cpp: Fix real
+	  name accordinly with .desktop file
+
+2005-11-15 22:24  gkulzer
+
+	* trunk/extragear/graphics/digikam/themes/Dark: Harmonized colors
+
+2005-11-15 19:52  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/showfoto.desktop: Fix
+	  real name to prevent broken i18n
+
+2005-11-15 17:51  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.desktop: Fix
+	  real name
+
+2005-11-15 14:11  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/main.cpp,
+	  trunk/extragear/graphics/digikam/showfoto/main.cpp: No need to
+	  internationalize application name, CF mandriva bug report :
+	  http://qa.mandriva.com/show_bug.cgi?id=16820 CCMAIL:
+	  digikam-devel@kde.org
+
+2005-11-15 13:40  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	  ShowFoto: missing to fix Exif::orientation tag during save
+	  operation CCMAIL: digikam-devel@kde.org
+
+2005-11-15 06:03  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/imageproperties.cpp:
+	  Fix broken compilation under KDE 3.2.x
+
+2005-11-14 16:12  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_blur.h,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.h:
+	  Prevent Enter keys events between dialog and spinBox CCBUG :
+	  116347
+
+2005-11-08 22:17  mueller
+
+	* trunk/extragear/graphics/digikam/showfoto/pics,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/pics,
+	  trunk/extragear/graphics/gwenview/app/configdialog.h,
+	  trunk/extragear/graphics/gwenview/app/configslideshowpage.ui,
+	  trunk/extragear/graphics/kst/kst/kst2dplot.h,
+	  trunk/extragear/graphics/kst/tests/healpix: the usual "daily
+	  unbreak compilation". Its getting tiring
+
+2005-11-08 21:00  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: Update
+
+2005-11-07 11:02  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: Unload
+	  image plugins list properly before to reload it. CCBUG : 115850
+
+2005-11-07 08:38  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: updated
+
+2005-11-06 11:43  cgilles
+
+	* trunk/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	  Showfoto: Override/Restore Cursor properly when opening image
+
+2005-11-04 10:09  jahrens
+
+	* trunk/extragear/graphics/digikam/ChangeLog: preparing for rc
+
+
+v0.8.0-rc1		11/03/05
 ----------------------------------------------------------------------------
 
 2005-11-03 14:49  cgilles
