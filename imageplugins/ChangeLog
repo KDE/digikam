@@ -1,3 +1,20 @@
+v0.8.0 - 21/11/05
+----------------------------------------------------------------------------
+
+2005-11-14 16:12  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.h,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.h:
+	  Prevent Enter keys events between dialog and spinBox CCBUG :
+	  116347
+
+2005-11-07 10:36  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp:
+	  Fix inverted Load/Save As settings buttons. CCBUG : 115849
+
 v0.8.0-rc - 03/11/05
 ----------------------------------------------------------------------------
 
