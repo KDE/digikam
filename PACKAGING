@@ -17,6 +17,7 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 4/ Backup old ChangeLog file to ChangeLog.old.
 
 5/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. Please check if ChangeLog file is updated properly.
+( or use /branches/KDE/3.5/kde-common/release/svn2log.py)
 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
