@@ -1,20 +1,3 @@
-* Fix PPC compatibility in image filters [GC]
-* Use threaded implementation in image filter when it's possible [GC]
-* Add doxygen comments in libs implementation [GC]
-* Update handbooks [GC/GK]
-* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
-* CD/DVD album folders+database backup/restore tool [GC]
+Please, consult the RoadMap available on the web project page :
 
-Post 0.8
-------------------------------------------------------------------------------------
-
-* post conversion to qlistview: allow selection of multiple 
-  albums/tags/dates
-   - instead of a "current album" there will a list of 
-     "current urls"
-   - will lead to widesweeping changes all over the core
-     and the kioslaves
-
-* Custom ordering of images [TA]
-
-* resizable thumbnail in comments tag editor?
+http://extragear.kde.org/apps/digikamimageplugins
