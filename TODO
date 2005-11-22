@@ -1,28 +1,3 @@
-* Add doxygen comments in libs implementation [GC]
-* Update handbooks [GC/GK]
+Please, consult the RoadMap available on the web project page :
 
-Post 0.8
-------------------------------------------------------------------------------------
-
-* post conversion to qlistview: allow selection of multiple 
-  albums/tags/dates
-   - instead of a "current album" there will a list of 
-     "current urls"
-   - will lead to widesweeping changes all over the core
-     and the kioslaves
-
-* Custom ordering of images [TA]
-
-* Image Properties SideBar integration in Showfoto, Image Editor, and Main Interface [GC] :
-   - New common image properties tab widgets in digikam/libs
-   - Add General tab.
-   - Add Exif tab.
-   - Add Histogram tab.
-   - Add Comments & tags tab (digikam only).
-
-* New CD/DVD album folders+database backup/restore tool [GC]
-
-* Using new image Framework DImage (16 bits/color/pixels) instead QImage/imlib2 [RR - GC]
-
-* Add 'Zoom In/Out' capabilities with ImagePreviewWidget (like in Photoshop (tm)) [GC]
-
+http://extragear.kde.org/apps/digikamimageplugins
