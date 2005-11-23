@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=Digikam tags kioslave
+Description[cs]=Digikam tagy kioslave
 Description[da]=Digikam tag-kioslave
 Description[de]=digiKam Ein/Ausgabe-Modul für Stichworte
 Description[el]=Digikam kioslave ετικέτες

@@ -6,6 +6,7 @@ output=filesystem,stream
 maxInstances=1
 Description=digiKam Search kioslave
 Description[br]=kioslave klask evit Digikam
+Description[cs]=digiKam kioslave vyhledávání
 Description[da]=Digikam søge-kioslave
 Description[de]=digiKam Ein/Ausgabe-Modul für Suchen
 Description[el]=digiKam kioslave Αναζήτηση
