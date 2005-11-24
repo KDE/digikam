@@ -4,7 +4,7 @@
  * Date   : 2003-02-03
  * Description : digiKam setup dialog.
  * 
- * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,7 @@ class SetupCollections;
 class SetupMime;
 class SetupEditor;
 class SetupPlugins;
+class SetupICC;
 class SetupCamera;
 class SetupMisc;
 
@@ -43,24 +44,26 @@ class Setup : public KDialogBase
 
 public:
 
-    enum Page {
+    enum Page 
+    {
         General = 0,
         Exif,
         Collections,
         Mime,
         Editor,
+        Icc,
         Plugins,
         Camera,
         Miscellaneous
     };
-    
+
     Setup(QWidget* parent=0, const char* name=0,
           Page page=General);
     ~Setup();
 
     SetupPlugins     *pluginsPage_;
     SetupEditor      *editorPage_;
-    
+
 private:
 
     QFrame           *page_general;
@@ -68,14 +71,16 @@ private:
     QFrame           *page_collections;
     QFrame           *page_mime;
     QFrame           *page_editor;
+    QFrame           *page_icc;
     QFrame           *page_plugins;
     QFrame           *page_camera;
     QFrame           *page_misc;
-    
+
     SetupGeneral     *generalPage_;
     SetupExif        *exifPage_;
     SetupCollections *collectionsPage_;
     SetupMime        *mimePage_;
+    SetupICC         *iccPage_;
     SetupCamera      *cameraPage_;
     SetupMisc        *miscPage_;
 

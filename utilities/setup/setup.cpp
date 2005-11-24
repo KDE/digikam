@@ -4,7 +4,7 @@
  * Date   : 2003-02-03
  * Description : digiKam setup dialog.
  * 
- * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,7 @@
 #include "setupcollections.h"
 #include "setupmime.h"
 #include "setupeditor.h"
+#include "setupicc.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
 #include "setupmisc.h"
@@ -66,8 +67,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     mimePage_ = new SetupMime(page_mime);
 
     page_editor = addPage(i18n("Image Editor"), i18n("Image Editor"),
-                        BarIcon("image", KIcon::SizeMedium));
+                          BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
+
+    page_icc = addPage(i18n("ICC profils"), i18n("ICC profils"),
+                       BarIcon("colorize", KIcon::SizeMedium));
+    iccPage_ = new SetupICC(page_icc);
 
     page_plugins = addPage(i18n("Kipi Plugins"), i18n("Kipi Plugins"),
                            BarIcon("kipi", KIcon::SizeMedium));
@@ -85,7 +90,6 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
             this, SLOT(slotOkClicked()) );
 
     showPage((int) page);
-
     show();
 }
 
@@ -101,9 +105,9 @@ void Setup::slotOkClicked()
     cameraPage_->applySettings();
     exifPage_->applySettings();
     editorPage_->applySettings();
+    iccPage_->applySettings();
     miscPage_->applySettings();
     close();
 }
-
 
 #include "setup.moc"
