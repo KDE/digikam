@@ -155,11 +155,11 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
         
         // Paco, uncomment this code to test ICC profil transformation.
         // It's harcoded actually until we make a setup dialog tab about ICC profil.
-        
+        /*
         IccTransform trans;
         trans.setProfiles("/home/gilles/Canon-EOS10D-linear.icc", "/home/gilles/AdobeRGB1998.icc");
         trans.apply(d->image);        
-        
+        */
     }
     else
     {
