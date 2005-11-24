@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_HotPixels
+Name[bg]=Приставка за снимки - Горещи пиксели
 Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
 Name[it]=PluginImmagini_PixelBruciati
 Name[nl]=Afbeeldingsplugin_HotPixels
@@ -12,6 +13,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Hot pixel correction plugin for Digikam
+Comment[bg]=Приставка на Digikam за корекция на "горещи пиксели"
 Comment[da]=Hot pixel rettelsesplugin for DigiKam
 Comment[de]=Ein digiKam-Modul zur Korrektur von heißen Pixeln.
 Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστοιχείων για το Digikam

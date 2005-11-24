@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Texture
+Name[bg]=Приставка за снимки - Текстури
 Name[el]=ΠρόσθετοΕικόνας_Υφή
 Name[it]=PluginImmagini_Trama
 Name[nl]=Afbeeldingsplugin_Textuur
@@ -14,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to apply texture on image
+Comment[bg]=Приставка на digiKam за добавяне на текстури към снимки
 Comment[da]=digiKam-plugin til at anvende tekstur til billedet
 Comment[de]=Ein digiKam-Modul zum Hinzufügen einer Textur zu einem Bild.
 Comment[el]=Πρόσθετο εφαρμογής υφής σε εικόνα για το digiKam

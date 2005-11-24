@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_RainDrop
+Name[bg]=Приставка за снимки - Дъждовни капки
 Name[da]=Billedplugin_Regndråber
 Name[el]=ΠροσθετοΕικόνας_Βροχή
 Name[it]=PluginImmagini_GocciaDiPioggia
@@ -15,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digiKam
+Comment[bg]=Приставка на digiKam за добавяне на дъждовни капки
 Comment[da]=Plugin til regndråbeeffekt på billeder i Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Regentropfeneffektes.
 Comment[el]=Πρόσθετο εφέ πτώσης βροχής για το digiKam

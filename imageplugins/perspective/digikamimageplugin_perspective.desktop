@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Perspective
+Name[bg]=Приставка за снимки - Перспектива
 Name[da]=Billedplugin_Perspektivværktøj
 Name[el]=ΠρόσθετοΕικόνας_Προοπτική
 Name[it]=PluginImmagini_Prospettiva
@@ -15,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Perspective tool plugin for digiKam
+Comment[bg]=Приставка на digiKam за промяна на перспективата
 Comment[da]=Perspektivværktøjs-plugin til Digikam
 Comment[de]=Ein digiKam-Modul zum Justieren der Perspektive eines Bildes.
 Comment[el]=Πρόσθετο εργαλείο προοπτικής για το digiKam

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Solarize
+Name[bg]=Приставка за снимки - Преекспониране
 Name[da]=Billedplugin_Solarisér
 Name[el]=ΠρόσθετοΕικόνας_ΗλιακήςΈκθεσης
 Name[en_GB]=ImagePlugin_Solarise
@@ -16,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Image solarize effect plugin for digiKam
+Comment[bg]=Приставка на digiKam за преекспониране на снимки
 Comment[da]=Solariseringsreffekt-plugin til Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Solarisierungseffektes.
 Comment[el]=Πρόσθετο εφέ ηλιακής έκθεσης εικόνας για το digiKam

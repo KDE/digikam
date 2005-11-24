@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_AntiVignetting
+Name[bg]=Приставка за снимки - Премахване на винетиране
 Name[da]=Billedplugin_Anti-vignettering
 Name[el]=ΠρόσθετοΕικόνας_Αντισκίασης
 Name[it]=PluginImmagini_Antivignettatura
@@ -14,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Anti Vignetting image effect plugin for digiKam
+Comment[bg]=Приставка на digiKam за намаляване на винетирането на снимки
 Comment[da]=Anti-vignetteringsplugin til Digikam
 Comment[de]=Ein digiKam-Modul zur Reduzierung von Vignettierung im Bild.
 Comment[el]=Πρόσθετο εφέ αντισκίασης εικόνας για το digiKam

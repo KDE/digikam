@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_BlowUp
+Name[bg]=Приставка за снимки - Цифрово увеличение
 Name[el]=ΠρόσθετοΕικόνας_Αστάθεια
 Name[it]=PluginImmagini_Espansione
 Name[nl]=Afbeeldingsplugin_Opblazen
@@ -14,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
+Comment[bg]=Приставка на digiKam за цифрово увеличение на снимки
 Comment[da]=Digikam plugin for at forstørre et fotografi
 Comment[de]=Ein digiKam-Modul zum Vergrößern von Bildern.
 Comment[el]=Πρόσθετο αστάθειας μιας φωτογραφίας για το digiKam

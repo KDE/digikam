@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_BlurFX
+Name[bg]=Приставка за снимки - Ефекти за замъгляване
 Name[el]=ΠρόσθετοΕικόνας_ΕφέΘολώματος
 Name[it]=PluginImmagini_EffettiDiSfocatura
 Name[nl]=Afbeeldingsplugin_VervaagFX
@@ -13,6 +14,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Blur special effects plugin for digiKam
+Comment[bg]=Приставка на digiKam с ефекти за замъгляване на снимки
 Comment[da]=Digikam plugin med specialeffekter for udviskning
 Comment[de]=Ein digiKam-Modul zum Verwackeln von Bildern.
 Comment[el]=Πρόσθετο ειδικών εφέ θολώματος για το digiKam

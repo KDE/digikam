@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_WhiteBalance
+Name[bg]=Приставка за снимки - Баланс на бялото
 Name[el]=ΠρόσθετοΕικόνας_ΙσορροπίαΛευκού
 Name[it]=PluginImmagini_BilanciamentoDelBianco
 Name[nl]=Afbeeldingsplugin_Witbalans
@@ -14,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=White balance correction plugin for digiKam
+Comment[bg]=Приставка на digiKam за промяна баланса на бялото
 Comment[da]=Hvid balance rettelsesplugin for digiKam
 Comment[de]=Ein digiKam-Modul zur Korrektur des Weißabgleichs.
 Comment[el]=Πρόσθετο διόρθωσης ισορροπίας λευκού για το digiKam

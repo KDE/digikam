@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_ChannelMixer
+Name[bg]=Приставка за снимки - Смесител на канали
 Name[el]=ΠρόσθετοΕικόνας_ΑνάμειξηΚαναλιών
 Name[it]=PluginImmagini_MixerDeiCanali
 Name[nl]=Afbeeldingsplugin_KanaalMixer
@@ -14,6 +15,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image color channels mixer plugin for digiKam
+Comment[bg]=Приставка на digiKam със смесител на цветови канали
 Comment[da]=Digikam plugin for at blande billedfarvekanaler
 Comment[de]=Ein digiKam-Modul zum Mischen von Farbkanälen.
 Comment[el]=Μείκτης καναλιών χρώματος εικόνας για το digiKam

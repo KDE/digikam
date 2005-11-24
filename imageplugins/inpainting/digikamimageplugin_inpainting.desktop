@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_InPainting
+Name[bg]=Приставка за снимка - Дорисуване
 Name[da]=Plugin for indfyldning
 Name[el]=ΠρόσθετοΕικόνας_Αποζωγραφισμός
 Name[it]=PluginImmagini_Reintegrazione
@@ -14,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to inpaint a photograph
+Comment[bg]=Приставка на digiKam за дорисуване на повредени или липсващи области от снимки
 Comment[da]=Digikam plugin for at indfylde i et fotografi
 Comment[de]=Ein digiKam-Modul um Bildfehler mittels Inpainting zu korrigieren.
 Comment[el]=Πρόσθετο αποζωγραφισμού μιας φωτογραφίας μέσα για το digiKam

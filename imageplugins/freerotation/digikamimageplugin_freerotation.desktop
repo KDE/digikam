@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_FreeRotation
+Name[bg]=Приставка за снимки - Свободно завъртане
 Name[da]=Billedplugin_Fri rotation
 Name[el]=ΠρόσθετοΕικόνας_ΕλεύθερηΠεριστροφή
 Name[it]=PluginImmagini_RotazioneLibera
@@ -15,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Free rotation plugin for digiKam
+Comment[bg]=Приставка на digiKam за свободно завъртане на снимки
 Comment[da]=Plugin til fri rotation af billeder til Digikam
 Comment[de]=Ein digiKam-Modul zur freien Rotation von Bildern.
 Comment[el]=Πρόσθετο ειδικών εφέ ελεύθερης περιστροφής για το digiKam
