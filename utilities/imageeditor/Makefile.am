@@ -1,4 +1,4 @@
-SUBDIRS = pics
+SUBDIRS = pics canvas editor 
 
 METASOURCES = AUTO
 
@@ -27,6 +27,7 @@ libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT)
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/widgets \
 	  -I$(top_srcdir)/digikam/libs/histogram \
+	  -I$(top_srcdir)/digikam/libs/imageproperties \
 	  -I$(top_srcdir)/digikam/utilities/splashscreen \
 	  $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
 

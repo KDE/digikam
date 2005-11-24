@@ -29,6 +29,7 @@
 
 class QLabel;
 class QPopupMenu;
+class QSplitter;
 
 class KAction;
 class KActionMenu;
@@ -51,6 +52,7 @@ namespace Digikam
 {
 class ThumbBarView;
 class ThumbBarItem;
+class ImagePropertiesSideBar;
 }
 
 class ShowFoto : public KMainWindow
@@ -64,10 +66,105 @@ public:
     
     virtual void show();
 
-protected:
-
-    void closeEvent(QCloseEvent* e);
+private:
     
+    bool                             m_removeFullScreenButton;
+    bool                             m_fullScreen;
+    bool                             m_TIFFCompression;
+    bool                             m_fullScreenHideToolBar;
+    bool                             m_fullScreenHideThumbBar;
+    bool                             m_deleteItem2Trash;
+    bool                             m_slideShowInFullScreen;
+    
+    // If current image file format is only available in read only,
+    // typicially all RAW image file formats.
+    bool                             m_isReadOnly;
+
+    // 'true' if current image have been modified, else 'false'.
+    bool                             m_dirtyImage;
+
+    int                              m_JPEGCompression;
+    int                              m_PNGCompression;
+    int                              m_itemsNb;
+
+    Canvas                          *m_canvas;
+    
+    ImagePluginLoader               *m_imagePluginLoader;
+    
+    SplashScreen                    *m_splash;
+    
+    SlideShow                       *m_slideShow;
+
+    KURL                             m_lastOpenedDirectory;
+
+    Digikam::ThumbBarView           *m_bar;
+    Digikam::ThumbBarItem           *m_currentItem;
+    Digikam::ImagePropertiesSideBar *m_rightSidebar;
+    
+    QLabel                          *m_nameLabel;
+    QLabel                          *m_zoomLabel;
+    QLabel                          *m_resLabel;
+        
+    QPopupMenu                      *m_contextMenu;
+
+    QSplitter                       *m_splitter;
+                          
+    KConfig                         *m_config;
+    
+    KAction                         *m_zoomPlusAction;
+    KAction                         *m_zoomMinusAction;
+    KToggleAction                   *m_zoomFitAction;
+    KToggleAction                   *m_fullScreenAction;
+    KToggleAction                   *m_showBarAction;
+    KToggleAction                   *m_slideShowAction;
+    
+    KAction                         *m_cropAction;
+    KAction                         *m_imagePluginsHelpAction;
+    
+    KAction                         *m_revertAction;
+    KAction                         *m_saveAction;
+    KAction                         *m_saveAsAction;
+    KAction                         *m_filePrintAction;    
+    KAction                         *m_fileDeleteAction;
+    KAction                         *m_openFilesInFolderAction;    
+    KAction                         *m_copyAction;
+    KAction                         *m_fileOpenAction;
+    
+    KAction                         *m_forwardAction;
+    KAction                         *m_backAction;
+    KAction                         *m_firstAction;
+    KAction                         *m_lastAction;
+                          
+    KAction                         *m_rotate90Action;
+    KAction                         *m_rotate180Action;
+    KAction                         *m_rotate270Action;
+    
+    KAction                         *m_resizeAction;
+    KAction                         *m_flipHorzAction;
+    KAction                         *m_flipVertAction;
+    
+    KActionMenu                     *m_flipAction;
+    KActionMenu                     *m_BCGAction;
+    KActionMenu                     *m_rotateAction;
+    
+    KToolBarPopupAction             *m_undoAction;
+    KToolBarPopupAction             *m_redoAction;
+        
+    KSelectAction                   *m_viewHistogramAction;
+
+private:
+
+    void setupActions();
+    void applySettings();
+    void saveSettings();
+    bool promptUserSave();
+    bool save();
+    bool saveAs();
+    void toggleActions(bool val, bool slideShow=false);
+    void toggleNavigation(int index);
+    void loadPlugins();
+    void unLoadPlugins();
+
 private slots:
 
     void slotOpenFile();
@@ -75,12 +172,14 @@ private slots:
     void slotPrev();
     void slotLast();
     void slotFirst();
-    void slotSave();
-    void slotSaveAs();
     void slotFilePrint();
     void slotOpenURL(const KURL& url);
+    void slotOpenFolder(const KURL& url);
+    void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
-    void slotFileProperties();
+
+    void slotSave()   { save();   };
+    void slotSaveAs() { saveAs(); };
     
     void slotToggleFullScreen();
     void slotToggleSlideShow();
@@ -107,92 +206,10 @@ private slots:
     void slotContextMenu();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
-               
-private:
 
-    void setupActions();
-    void applySettings();
-    void saveSettings();
-    bool promptUserSave();
-    bool save();
-    void toggleActions(bool val, bool slideShow=false);
-    void toggleNavigation(int index);
-    void loadPlugins();
-    void unLoadPlugins();
+protected:
 
-private:
-
-    Canvas                *m_canvas;
-    
-    ImagePluginLoader     *m_imagePluginLoader;
-    
-    Digikam::ThumbBarView *m_bar;
-    Digikam::ThumbBarItem *m_currentItem;
-    
-    SplashScreen          *m_splash;
-    
-    SlideShow             *m_slideShow;
-                          
-    QLabel                *m_nameLabel;
-    QLabel                *m_zoomLabel;
-    QLabel                *m_resLabel;
-        
-    QPopupMenu            *m_contextMenu;
-                               
-    KConfig               *m_config;
-    
-    KAction               *m_zoomPlusAction;
-    KAction               *m_zoomMinusAction;
-    KToggleAction         *m_zoomFitAction;
-    KToggleAction         *m_fullScreenAction;
-    KToggleAction         *m_showBarAction;
-    KToggleAction         *m_slideShowAction;
-    
-    KAction               *m_cropAction;
-    KAction               *m_imagePluginsHelpAction;
-    
-    KAction               *m_revertAction;
-    KAction               *m_saveAction;
-    KAction               *m_saveAsAction;
-    KAction               *m_propertiesAction;
-    KAction               *m_filePrintAction;    
-    KAction               *m_fileDeleteAction;
-    KAction               *m_fileOpenAction;
-    
-    KAction               *m_forwardAction;
-    KAction               *m_backAction;
-    KAction               *m_firstAction;
-    KAction               *m_lastAction;
-                          
-    KActionMenu           *m_rotateAction;
-    KAction               *m_rotate90Action;
-    KAction               *m_rotate180Action;
-    KAction               *m_rotate270Action;
-    
-    KAction               *m_resizeAction;
-    KActionMenu           *m_flipAction;
-    KAction               *m_flipHorzAction;
-    KAction               *m_flipVertAction;
-    
-    KActionMenu           *m_BCGAction;
-    
-    KAction               *m_copyAction;
-    KToolBarPopupAction   *m_undoAction;
-    KToolBarPopupAction   *m_redoAction;
-        
-    KSelectAction         *m_viewHistogramAction;
-    
-    int                    m_JPEGCompression;
-    int                    m_PNGCompression;
-    int                    m_itemsNb;
-    
-    bool                   m_removeFullScreenButton;
-    bool                   m_fullScreen;
-    bool                   m_TIFFCompression;
-    bool                   m_fullScreenHideToolBar;
-    bool                   m_fullScreenHideThumbBar;
-    bool                   m_deleteItem2Trash;
-    bool                   m_slideShowInFullScreen;
+    void closeEvent(QCloseEvent* e);
 };
 
 #endif /* SHOWFOTO_H */

@@ -39,6 +39,9 @@
 // KDE includes.
 
 #include <kurl.h>
+
+// Local includes.
+
 #include "digikam_export.h"
 						
 namespace Digikam

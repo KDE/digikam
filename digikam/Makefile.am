@@ -3,22 +3,25 @@ SUBDIRS = pics
 lib_LTLIBRARIES = libdigikam.la
 bin_PROGRAMS = digikam
 
-INCLUDES = \
-	-I$(top_srcdir)/digikam/sqlite \
-	-I$(top_srcdir)/digikam/libs/histogram \
-	-I$(top_srcdir)/digikam/libs/filters \
-	-I$(top_srcdir)/digikam/libs/levels \
-	-I$(top_srcdir)/digikam/libs/curves \
-	-I$(top_srcdir)/digikam/libs/themeengine \
-	-I$(top_srcdir)/digikam/libs/widgets \
-	-I$(top_srcdir)/digikam/libs/thumbbar \
-	-I$(top_srcdir)/digikam/libs/jpegutils \
-	-I$(top_srcdir)/digikam/utilities/cameragui \
-	-I$(top_srcdir)/digikam/utilities/imageeditor \
-	-I$(top_srcdir)/digikam/utilities/splashscreen \
-	-I$(top_srcdir)/digikam/utilities/setup \
-	-I$(top_srcdir)/digikam/ \
-	$(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
+INCLUDES = -I$(top_srcdir)/digikam/sqlite \
+	   -I$(top_srcdir)/digikam/libs/histogram \
+	   -I$(top_srcdir)/digikam/libs/filters \
+	   -I$(top_srcdir)/digikam/libs/levels \
+	   -I$(top_srcdir)/digikam/libs/curves \
+	   -I$(top_srcdir)/digikam/libs/themeengine \
+	   -I$(top_srcdir)/digikam/libs/widgets \
+	   -I$(top_srcdir)/digikam/libs/thumbbar \
+	   -I$(top_srcdir)/digikam/libs/jpegutils \
+	   -I$(top_srcdir)/digikam/libs/dcraw \
+	   -I$(top_srcdir)/digikam/libs/dimg \
+	   -I$(top_srcdir)/digikam/libs/imageproperties \
+	   -I$(top_srcdir)/digikam/utilities/cameragui \
+	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
+	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
+	   -I$(top_srcdir)/digikam/utilities/splashscreen \
+	   -I$(top_srcdir)/digikam/utilities/setup \
+	   -I$(top_srcdir)/digikam/ \
+	   $(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
 libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
@@ -27,10 +30,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			digikamapp.cpp digikamview.cpp \
 		        albumfolderview.cpp \
 		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
-		        albumpropsedit.cpp imagedescedit.cpp \
-		        albumsettings.cpp imageproperties.cpp \
-			imagepropertiesgeneral.cpp imagepropertiesexif.cpp \
-			imagepropertieshistogram.cpp \
+		        albumpropsedit.cpp albumsettings.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
 		        digikamfirstrun.cpp firstrunUI.ui \
 			kipiinterface.cpp tagcreatedlg.cpp \
@@ -58,14 +58,14 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
+                        $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
-		        $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \
-		        $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \
+		        $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
+		        $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
 		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 		        $(top_builddir)/digikam/utilities/setup/libsetup.la
 
-libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
-			-no-undefined
+libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
 
 digikam_SOURCES = main.cpp
@@ -73,7 +73,7 @@ digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
 		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
 		  libdigikam.la
 
-digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_IMLIB2) $(LIB_KUTILS)
+digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS)
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp

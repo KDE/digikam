@@ -19,8 +19,6 @@
  * 
  * ============================================================ */
 
-#define PI 3.14159265
- 
 // Lib Tiff includes.
 
 extern "C" 
@@ -63,6 +61,13 @@ extern "C"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "imlibinterface.h"
+
+// From dcraw program (digikam/libs/dcraw/parse.c) to identify RAW files
+
+extern "C"
+{
+int dcraw_identify(const char* infile, const char* outfile);
+}
 
 namespace Digikam
 {
@@ -168,10 +173,11 @@ ImlibInterface::~ImlibInterface()
     m_instance = 0;
 }
 
-bool ImlibInterface::load(const QString& filename)
+bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
 {
     bool valRet;
-    d->valid = false;
+    *isReadOnly = false;
+    d->valid    = false;
 
     d->filename = filename;
     
@@ -182,45 +188,119 @@ bool ImlibInterface::load(const QString& filename)
         d->image = 0;
     }
 
-    d->width      = 0;
-    d->height     = 0;
-    d->origWidth  = 0;
-    d->origHeight = 0;
-    d->selX       = 0;
-    d->selY       = 0;
-    d->selW       = 0;
-    d->selH       = 0;
-    d->gamma      = 1.0;
-    d->contrast   = 1.0;
-    d->brightness = 0.0;
+    d->width           = 0;
+    d->height          = 0;
+    d->origWidth       = 0;
+    d->origHeight      = 0;
+    d->selX            = 0;
+    d->selY            = 0;
+    d->selW            = 0;
+    d->selH            = 0;
+    d->gamma           = 1.0;
+    d->contrast        = 1.0;
+    d->brightness      = 0.0;
     d->filePermissions = 0;
 
     imlib_context_set_color_modifier(d->cmod);
     imlib_reset_color_modifier();
 
     d->undoMan->clear();
-    
+
+    if ( filename == QString::null )
+        return (false);
+
     Imlib_Load_Error errorReturn;
-    d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
-                                                  &errorReturn);
 
-    // try to load with kde imageio
-    if (!d->image)
+    // Identify RAW File using dcraw method.  
+    // Need to test it before TIFF because any RAW file 
+    // formats using TIFF header.
+
+    if ( dcraw_identify( QFile::encodeName(filename), NULL ) == 0 )
     {
-        QImage qtimage(filename);
-        if (!qtimage.isNull())
-        {
-            if (!qtimage.depth() == 32)
-                qtimage.convertDepth(32);
+        // Try to load using dcraw program.
 
-            d->image = imlib_create_image(qtimage.width(), qtimage.height());
+        QCString command;
+        
+        // run dcraw with options:
+        // -c : write to stdout
+        // -h : Half-size color image (3x faster than -q)
+        // -2 : 8bit ppm output
+        // -w : Use camera white balance, if possible  
+        // -a : Use automatic white balance
+        command  = "dcraw -c -h -2 -w -a ";
+        command += "'";
+        command += QFile::encodeName( filename );
+        command += "'";
+        kdWarning() << "Running dcraw command : " << command << endl;
+    
+        FILE* f = popen( command.data(), "r" );
+    
+        if ( !f )
+        {
+            kdWarning() << "dcraw program unvailable." << endl;
+        }
+        else
+        {
+            int  width, height, rgbmax;
+            char nl;
+        
+            if (fscanf (f, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
+            {
+                kdWarning() << "Not a raw digital camera image." << endl;
+                pclose (f);
+            }
+        
+            d->image = imlib_create_image(width, height);
             imlib_context_set_image(d->image);
             DATA32* data = imlib_image_get_data_for_reading_only();
-            memcpy(data, qtimage.bits(), qtimage.numBytes());
-            std::cout << "Loaded image with kde imageio resources: "
-                      << filename.ascii()
-                      << ", width="  << qtimage.width()
-                      << ", height=" << qtimage.height() << std::endl;
+            uchar s[3];
+            
+            for (int i = 0; i < width*height; i++)
+            {
+                fread (s, 3 *sizeof(unsigned char), 1, f);
+        
+                // Swap byte order to preserve compatibility with PPC.
+            
+                if (QImage::systemByteOrder() == QImage::BigEndian)
+                    swab((const char *) s, (char *) s, 3 *sizeof(unsigned char));
+        
+                // No need to adapt RGB components accordinly with rgbmax value because dcraw
+                // always return rgbmax to 255 in 8 bits/color/pixels.
+                
+                *data = 0xFF000000 | (s[0] << 16) | (s[1] << 8) | s[2];
+
+                data++;
+            }
+        
+            pclose( f );
+            *isReadOnly = true;
+        }
+    }
+    else 
+    {
+        // Try to load image using imlib2.
+        d->image = imlib_load_image_with_error_return(QFile::encodeName(filename),
+                                                      &errorReturn);
+    
+        if (!d->image)
+        {
+            // Try to load with kde imageio
+            QImage qtimage(filename);
+            
+            if (!qtimage.isNull())             
+            {
+                if (!qtimage.depth() == 32)
+                    qtimage.convertDepth(32);
+    
+                d->image = imlib_create_image(qtimage.width(), qtimage.height());
+                imlib_context_set_image(d->image);
+                DATA32* data = imlib_image_get_data_for_reading_only();
+                memcpy(data, qtimage.bits(), qtimage.numBytes());
+                kdWarning() << "Loaded image with kde imageio resources: " 
+                            << filename.ascii()
+                            << ", width="  << qtimage.width()
+                            << ", height=" << qtimage.height() << endl;
+            }
         }
     }
 
@@ -244,7 +324,8 @@ bool ImlibInterface::load(const QString& filename)
 
         valRet = true;
     }
-    else {
+    else 
+    {
         kdWarning() << k_funcinfo << "Failed to load image: error number: "
                     << errorReturn << endl;
         valRet = false;
@@ -368,9 +449,10 @@ void ImlibInterface::redo()
 
 void ImlibInterface::restore()
 {
+    bool isReadOnly;
     d->undoMan->clear();
     
-    load(d->filename);
+    load(d->filename, &isReadOnly);
     emit signalModified(false, false);
 }
 

@@ -25,7 +25,7 @@
 
 // Digikam includes.
 
-#include <imageplugin.h>
+#include "imageplugin.h"
 #include "digikam_export.h"
 
 class KAction;

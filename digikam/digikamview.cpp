@@ -1,23 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at free.fr>
+ * Date  : 2002-16-10
+ * Description : 
+ * 
+ * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 // Qt Includes.
 
@@ -55,6 +55,7 @@
 #include "albumsettings.h"
 #include "albumhistory.h"
 #include "sidebar.h"
+#include "imagepropertiessidebardb.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
@@ -66,7 +67,7 @@
 #include "digikamview.h"
 
 DigikamView::DigikamView(QWidget *parent)
-    : QHBox(parent)
+           : QHBox(parent)
 {
     mParent = static_cast<DigikamApp *>(parent);
 
@@ -80,14 +81,16 @@ DigikamView::DigikamView(QWidget *parent)
     
     mIconView = new AlbumIconView(mSplitter);
     
-    mRightSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Right, true);
-    mRightSidebar->setSplitter(mSplitter);    
+    mRightSidebar = new Digikam::ImagePropertiesSideBarDB(this, mSplitter, Digikam::Sidebar::Right, true, true);
     
-    mFolderView = new AlbumFolderView(this);
-    mDateFolderView = new DateFolderView(this);
-    mTagFolderView = new TagFolderView(this);
+    // To the left.
+    mFolderView       = new AlbumFolderView(this);
+    mDateFolderView   = new DateFolderView(this);
+    mTagFolderView    = new TagFolderView(this);
     mSearchFolderView = new SearchFolderView(this);
-    mTagFilterView = new TagFilterView(this);    
+    
+    // To the right.
+    mTagFilterView    = new TagFilterView(this);    
     
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
@@ -124,10 +127,13 @@ void DigikamView::setupConnections()
 
     connect(mAlbumMan, SIGNAL(signalAlbumCurrentChanged(Album*)),
             this, SLOT(slot_albumSelected(Album*)));
+            
     connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slot_albumsCleared()));
+            
     connect(mAlbumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
+            
     connect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));    
     
@@ -146,13 +152,24 @@ void DigikamView::setupConnections()
             mIconView->viewport(), SLOT(update()));
     
     connect(mFolderView, SIGNAL(signalAlbumModified()),
-	    mIconView, SLOT(slotAlbumModified()));
+            mIconView, SLOT(slotAlbumModified()));
 
     // -- Sidebar Connections -------------------------------------
 
     connect(mMainSidebar, SIGNAL(signalChangedTab(QWidget*)),
-            SLOT(slotLeftSidebarChangedTab(QWidget*)));
+            this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
 
+    connect(mRightSidebar, SIGNAL(signalFirstItem()),
+            this, SLOT(slotFirstItem()));
+    
+    connect(mRightSidebar, SIGNAL(signalNextItem()),
+            this, SLOT(slotNextItem()));
+                
+    connect(mRightSidebar, SIGNAL(signalPrevItem()),
+            this, SLOT(slotPrevItem()));                
+    
+    connect(mRightSidebar, SIGNAL(signalLastItem()),
+            this, SLOT(slotLastItem()));                
 }
 
 void DigikamView::loadViewState()
@@ -195,6 +212,44 @@ void DigikamView::saveViewState()
     }
 }
 
+void DigikamView::slotFirstItem(void)
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->firstItem());
+    if (currItem) 
+       mIconView->setCurrentItem(currItem);
+}
+
+void DigikamView::slotPrevItem(void)
+{
+    IconItem* prevItem = 0;
+    AlbumIconItem *currItem = mIconView->firstSelectedItem();
+    if (currItem) 
+       {
+       prevItem = currItem->prevItem();
+       if (prevItem)
+           mIconView->setCurrentItem(prevItem);
+       }
+}
+
+void DigikamView::slotNextItem(void)
+{
+    IconItem* nextItem = 0;
+    AlbumIconItem *currItem = mIconView->firstSelectedItem();
+    if (currItem) 
+       {
+       nextItem = currItem->nextItem();
+       if (nextItem)
+           mIconView->setCurrentItem(nextItem);
+       }
+}
+
+void DigikamView::slotLastItem(void)
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->lastItem());
+    if (currItem) 
+       mIconView->setCurrentItem(currItem);
+}
+
 void DigikamView::slotAllAlbumsLoaded()
 {
     disconnect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
@@ -206,6 +261,8 @@ void DigikamView::slotAllAlbumsLoaded()
     
     mMainSidebar->loadViewState();
     mRightSidebar->loadViewState();
+    mRightSidebar->populateTags();
+
     slot_albumSelected(album);
 }
 
@@ -392,6 +449,8 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 void DigikamView::slot_albumSelected(Album* album)
 {
+    mRightSidebar->noCurrentItem();
+    
     if (!album) {
         mIconView->setAlbum(0);
         emit signal_albumSelected(false);
@@ -437,13 +496,18 @@ void DigikamView::slot_imageSelected()
         if (item->isSelected())
         {
             selected = true;
+            AlbumIconItem *firstSelectedItem = mIconView->firstSelectedItem();            
+            mRightSidebar->itemChanged(firstSelectedItem->imageInfo()->kurl(), mIconView, firstSelectedItem);
+
             break;
         }
     }
 
+    if (!selected)
+       mRightSidebar->noCurrentItem();
+    
     emit signal_imageSelected(selected);
 }
-
 
 void DigikamView::slot_albumsCleared()
 {
@@ -455,6 +519,7 @@ void DigikamView::slot_albumsCleared()
 
 void DigikamView::slot_thumbSizePlus()
 {
+    mRightSidebar->noCurrentItem();
 
     ThumbnailSize thumbSize;
 
@@ -495,6 +560,8 @@ void DigikamView::slot_thumbSizePlus()
 
 void DigikamView::slot_thumbSizeMinus()
 {
+    mRightSidebar->noCurrentItem();
+    
     ThumbnailSize thumbSize;
 
     switch(mIconView->thumbnailSize().size()) {
@@ -601,21 +668,6 @@ void DigikamView::slot_imageView(AlbumIconItem *iconItem)
     mIconView->slotDisplayItem(item);
 }
 
-void DigikamView::slot_imageCommentsEdit(AlbumIconItem *iconItem)
-{
-    AlbumIconItem *item;
-
-    if (!iconItem) {
-        item = mIconView->firstSelectedItem();
-        if (!item) return;
-    }
-    else {
-        item = iconItem;
-    }
-
-    mIconView->slotEditImageComments(item);
-}
-
 void DigikamView::slot_imageExifOrientation(int orientation)
 {
     mIconView->slotSetExifOrientation(orientation);
@@ -639,15 +691,6 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 void DigikamView::slot_imageDelete()
 {
     mIconView->slotDeleteSelectedItems();
-}
-
-void DigikamView::slotImageProperties()
-{
-    AlbumIconItem *iconItem =
-        mIconView->firstSelectedItem();
-    if (!iconItem) return;
-
-    mIconView->slotProperties(iconItem);
 }
 
 void DigikamView::slotSelectAll()

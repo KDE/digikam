@@ -35,14 +35,12 @@
 #include <kapplication.h>
 #include <kcursor.h>
 
-// Digikam includes.
-
-#include <imageiface.h>
-#include <imagewidget.h>
-#include <imagefilters.h>
-
 // Local includes.
 
+#include "imageiface.h"
+#include "imagewidget.h"
+#include "dimg.h"
+#include "colormodifier.h"
 #include "imageeffect_hsl.h"
 
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
@@ -163,18 +161,17 @@ void ImageEffect_HSL::slotEffect()
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
     
-    enableButtonOK( hu != 0.0  || sa != 0.0 || lu != 0.0);
+    enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
     
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    uint* data = iface->getPreviewData();
-    int   w    = iface->previewWidth();
-    int   h    = iface->previewHeight();
-        
-    Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
-                
-    iface->putPreviewData(data);
-    delete [] data;
+    Digikam::DImg preview = iface->getPreviewImage(); 
+    Digikam::ColorModifier cmod;
+    cmod.setHue(hu);
+    cmod.setSaturation(sa);
+    cmod.setLightness(lu);
+    cmod.applyHSL(preview);
+    iface->putPreviewImage(preview);
+    
     m_previewWidget->update();
     kapp->restoreOverrideCursor();
 }
@@ -182,20 +179,20 @@ void ImageEffect_HSL::slotEffect()
 void ImageEffect_HSL::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
-    uint* data = iface->getOriginalData();
-    int   w    = iface->originalWidth();
-    int   h    = iface->originalHeight();
-        
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
 
-    Digikam::ImageFilters::hueSaturationLightnessImage(data, w, h, hu, sa, lu);
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    Digikam::DImg original = iface->getOriginalImage(); 
+    Digikam::ColorModifier cmod;
+    cmod.setHue(hu);
+    cmod.setSaturation(sa);
+    cmod.setLightness(lu);
+    cmod.applyHSL(original);
 
-    iface->putOriginalData(i18n("HSL Adjustments"), data);
-    delete [] data;
+    iface->putOriginalImage(i18n("HSL Adjustments"), original);
     kapp->restoreOverrideCursor();
     accept();
 }

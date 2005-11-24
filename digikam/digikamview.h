@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at free.fr>
+ * Date  : 2002-16-10
+ * Description : 
+ * 
+ * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
 
 #ifndef DIGIKAMVIEW_H
 #define DIGIKAMVIEW_H
@@ -37,6 +38,7 @@ class Job;
 namespace Digikam
 {
 class Sidebar;
+class ImagePropertiesSideBarDB;
 };
 
 class QString;
@@ -79,19 +81,19 @@ private:
 
 private:
 
-    DigikamApp               *mParent;
-    AlbumFolderView          *mFolderView;    
-    AlbumIconView            *mIconView;
-    AlbumManager             *mAlbumMan;
-    AlbumHistory             *mAlbumHistory;
-    Digikam::Sidebar         *mMainSidebar;
-    DateFolderView           *mDateFolderView;
-    TagFolderView            *mTagFolderView;
-    SearchFolderView         *mSearchFolderView;
-    Digikam::Sidebar         *mRightSidebar;
-    TagFilterView            *mTagFilterView;
-    int                      mInitialAlbumID;
-    QSplitter                *mSplitter;
+    DigikamApp                        *mParent;
+    AlbumFolderView                   *mFolderView;    
+    AlbumIconView                     *mIconView;
+    AlbumManager                      *mAlbumMan;
+    AlbumHistory                      *mAlbumHistory;
+    Digikam::Sidebar                  *mMainSidebar;
+    DateFolderView                    *mDateFolderView;
+    TagFolderView                     *mTagFolderView;
+    SearchFolderView                  *mSearchFolderView;
+    Digikam::ImagePropertiesSideBarDB *mRightSidebar;
+    TagFilterView                     *mTagFilterView;
+    int                                mInitialAlbumID;
+    QSplitter                         *mSplitter;
     
 public slots:
 
@@ -122,11 +124,9 @@ public slots:
     
     // Image action slots
     void slot_imageView(AlbumIconItem* iconItem=0);
-    void slot_imageCommentsEdit(AlbumIconItem* iconItem=0);
     void slot_imageExifOrientation(int orientation);
     void slot_imageRename(AlbumIconItem* iconItem=0);
     void slot_imageDelete();
-    void slotImageProperties();
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();
@@ -146,7 +146,12 @@ private slots:
     void slot_imageCopyResult(KIO::Job* job);
 
     void slotLeftSidebarChangedTab(QWidget* w);
-    
+
+    void slotFirstItem(void);
+    void slotPrevItem(void);    
+    void slotNextItem(void);
+    void slotLastItem(void);
+
 signals:
 
     void signal_albumSelected(bool val);

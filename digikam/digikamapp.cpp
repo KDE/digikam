@@ -1,25 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    DIGIKAMAPP.CPP
-//
-//    Copyright (C) 2002-2005 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at free.fr>
+ * Date  : 2002-16-10
+ * Description : 
+ * 
+ * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 // QT includes.
 
@@ -357,16 +355,6 @@ void DigikamApp::setupActions()
     mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the currently selected "
                                         "image."));
 
-    mImageCommentsAction = new KAction(i18n("Edit Image Comments && Tags..."),
-                                   "imagecomment",
-                                    Key_F3,
-                                    mView,
-                                    SLOT(slot_imageCommentsEdit()),
-                                    actionCollection(),
-                                    "image_comments");
-    mImageCommentsAction->setWhatsThis(i18n("This option allows you to edit the comments and tags of the currently "
-                                            "selected image."));
-
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
                                     Key_F2,
@@ -384,16 +372,6 @@ void DigikamApp::setupActions()
                                     SLOT(slot_imageDelete()),
                                     actionCollection(),
                                     "image_delete");
-
-    mImagePropsAction = new KAction(i18n("Properties"),
-                                    "exifinfo",
-                                    ALT+Key_Return,
-                                    mView,
-                                    SLOT(slotImageProperties()),
-                                    actionCollection(),
-                                    "image_properties");
-    mImagePropsAction->setWhatsThis(i18n("This option allows you to display the file properties, the meta-data "
-                                         "and the histogram of the currently selected image."));
 
     mImageSortAction = new KSelectAction(i18n("&Sort Images"),
                                     0,
@@ -588,11 +566,8 @@ void DigikamApp::setupActions()
     mOpenInKonquiAction->setEnabled(false);
 
     mImageViewAction->setEnabled(false);
-    mImageCommentsAction->setEnabled(false);
     mImageRenameAction->setEnabled(false);
     mImageDeleteAction->setEnabled(false);
-    mImagePropsAction->setEnabled(false);
-    mImagePropsAction->setEnabled(false);
     mImageExifOrientationActionMenu->setEnabled(false);
 
     mAlbumSortAction->setCurrentItem((int)mAlbumSettings->getAlbumSortOrder());
@@ -815,10 +790,8 @@ void DigikamApp::slot_tagSelected(bool val)
 void DigikamApp::slot_imageSelected(bool val)
 {
     mImageViewAction->setEnabled(val);
-    mImageCommentsAction->setEnabled(val);
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
-    mImagePropsAction->setEnabled(val);
     mImageExifOrientationActionMenu->setEnabled(val);
 }
 

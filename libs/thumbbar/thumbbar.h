@@ -1,8 +1,11 @@
 /* ============================================================
  * File  : thumbbar.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Copyright 2004 by Renchi Raju
+ * Description : 
+ * 
+ * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +31,8 @@
 
 #include <kurl.h>
 
+// Local includes.
+
 #include "digikam_export.h"
 
 class QPixmap;
@@ -36,7 +41,6 @@ class KFileItem;
 
 namespace Digikam
 {
-
 class ThumbBarItem;
 class ThumbBarViewPriv;
 
@@ -45,8 +49,16 @@ class DIGIKAM_EXPORT ThumbBarView : public QScrollView
     Q_OBJECT
 
 public:
+    
+    enum Orientation
+    {
+    Horizontal=0,      
+    Vertical         
+    };
 
-    ThumbBarView(QWidget* parent);
+public:
+
+    ThumbBarView(QWidget* parent, int orientation=Vertical);
     ~ThumbBarView();
 
     int  countItems();
@@ -97,6 +109,8 @@ private:
     friend class ThumbBarItem;
 };
 
+// -------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
@@ -125,6 +139,8 @@ private:
 
     friend class ThumbBarView;
 };
+
+// -------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ThumbBarToolTip : public QToolTip
 {

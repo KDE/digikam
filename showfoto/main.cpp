@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : main.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
  * Description :
  *
- * Copyright 2004-2005 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -40,7 +41,7 @@
 static KCmdLineOptions options[] =
 {
     { "+[file(s)]", I18N_NOOP("File(s) to open"), 0 },
-        KCmdLineLastOption
+    KCmdLineLastOption
 };
 
 int main(int argc, char *argv[])
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.3.0",
+                          "0.4.0",
                           Description.latin1(),
                           KAboutData::License_GPL,
                           I18N_NOOP("(c) 2004-2005, digiKam developers team"),

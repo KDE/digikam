@@ -1,25 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    ALBUMICONVIEW.H
-//
-//    Copyright (C) 2002-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles Caulier <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at free.fr>
+ * Date  : 2002-16-10
+ * Description : 
+ * 
+ * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
 
 #ifndef ALBUMICONVIEW_H
 #define ALBUMICONVIEW_H
@@ -124,8 +123,8 @@ private:
 
     AlbumIconViewPrivate *d;
 
-    void    updateBannerRectPixmap();
-    void    updateItemRectsPixmap();
+    void updateBannerRectPixmap();
+    void updateItemRectsPixmap();
 
 private slots:
 
@@ -153,12 +152,10 @@ private slots:
     
 public slots:
 
-    void slotEditImageComments(AlbumIconItem* item);
     void slotSetExifOrientation(int orientation);
     void slotRename(AlbumIconItem* item);
     void slotDeleteSelectedItems();
     void slotDisplayItem(AlbumIconItem *item=0);
-    void slotProperties(AlbumIconItem* item);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     

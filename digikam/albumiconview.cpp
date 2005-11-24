@@ -1,22 +1,22 @@
 /* ============================================================
- * Author: Renchi Raju <renchi at pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2002-02-21
- * Description :
- *
- * Copyright 2002-2004 by Renchi Raju and Gilles Caulier
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at free.fr>
+ * Date  : 2002-16-10
+ * Description : 
+ * 
+ * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
 
 #ifdef HAVE_CONFIG_H
@@ -100,8 +100,6 @@ extern "C"
 #include "tagspopupmenu.h"
 
 #include "albumsettings.h"
-#include "imagedescedit.h"
-#include "imageproperties.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
@@ -439,10 +437,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     popmenu.insertItem(i18n("Open With"),
                        &openWithMenu, 11);
     popmenu.insertSeparator();
-    popmenu.insertItem(SmallIcon("imagecomment"),
-                       i18n("Edit Comments && Tags..."), 12);
-    popmenu.insertItem(SmallIcon("exifinfo"),
-                       i18n("Properties"), 14);
 
     if (d->currentAlbum)
     {
@@ -537,16 +531,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         break;
     }
 
-    case 12: {
-        slotEditImageComments(iconItem);
-        break;
-    }
-
-    case 14: {
-        slotProperties(iconItem);
-        break;
-    }
-
     case 15: {
         slotRename(iconItem);
         break;
@@ -612,15 +596,6 @@ void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
                                                     iconItem->imageInfo()->id(),
                                                     err );
     }
-}
-
-void AlbumIconView::slotEditImageComments(AlbumIconItem* iconItem)
-{
-    ImageDescEdit descEdit(this, iconItem, this);
-    descEdit.exec();
-
-    d->imageLister->refresh();
-    updateContents();
 }
 
 void AlbumIconView::slotRename(AlbumIconItem* item)
@@ -740,10 +715,11 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
 
-    QString currentFileExtension =
-        item->imageInfo()->name().section( '.', -1 );
+    QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper();
+                          settings->getImageFileFilter().upper() + 
+                          settings->getRawFileFilter().lower() +
+                          settings->getRawFileFilter().upper();
 
     // If the current item isn't an image file.
     if ( !imagefilter.contains(currentFileExtension) )
@@ -797,14 +773,6 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     imview->raise();
     imview->setFocus();
-}
-
-void AlbumIconView::slotProperties(AlbumIconItem* item)
-{
-    if (!item) return;
-
-    ImageProperties properties(ImageProperties::MULTI, this, this, item);
-    properties.exec();
 }
 
 // ------------------------------------------------------------------------------

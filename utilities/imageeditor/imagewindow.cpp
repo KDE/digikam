@@ -26,6 +26,7 @@
 #include <qtimer.h>
 #include <qlabel.h>
 #include <qimage.h>
+#include <qsplitter.h>
 
 // KDE includes.
 
@@ -78,10 +79,9 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "imageinfo.h"
-#include "imageproperties.h"
+#include "imagepropertiessidebardb.h"
 #include "imagedescedit.h"
 #include "tagspopupmenu.h"
-
 
 ImageWindow* ImageWindow::imagewindow()
 {
@@ -101,13 +101,26 @@ ImageWindow::ImageWindow()
     m_allowSaving           = true;
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
+    m_isReadOnly            = false;
+    m_dirtyImage            = false;
     m_view                  = 0L;
-    
+
     // -- construct the view ---------------------------------
 
-    m_canvas    = new Canvas(this);
-    setCentralWidget(m_canvas);
-
+    QWidget* widget  = new QWidget(this);
+    QHBoxLayout *lay = new QHBoxLayout(widget);
+    
+    m_splitter       = new QSplitter(widget);
+    m_canvas         = new Canvas(m_splitter);
+    m_rightSidebar   = new Digikam::ImagePropertiesSideBarDB(widget, m_splitter, 
+                                    Digikam::Sidebar::Right, true, false);
+    
+    lay->addWidget(m_splitter);
+    lay->addWidget(m_rightSidebar);
+    
+    m_splitter->setOpaqueResize(false);
+    setCentralWidget(widget);
+    
     m_nameLabel = new QLabel(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);
@@ -163,20 +176,24 @@ ImageWindow::ImageWindow()
             
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotLoadPrev()));
+
+    connect(m_rightSidebar, SIGNAL(signalNextItem()),
+            this, SLOT(slotLoadNext()));
+                
+    connect(m_rightSidebar, SIGNAL(signalPrevItem()),
+            this, SLOT(slotLoadPrev()));
     
     // -- read settings --------------------------------
     
     readSettings();
     applySettings();
-    resize(640,480);
     setAutoSaveSettings("ImageViewer Settings");    
+    m_rightSidebar->populateTags();
 }
 
 ImageWindow::~ImageWindow()
 {
     m_instance = 0;
-
-    saveSettings();
 
     QPtrList<Digikam::ImagePlugin> pluginList
         = ImagePluginLoader::instance()->pluginList();
@@ -191,6 +208,18 @@ ImageWindow::~ImageWindow()
     }
     
     delete m_canvas; 
+    delete m_rightSidebar;
+}
+
+void ImageWindow::closeEvent(QCloseEvent *e)
+{
+    if (!e) return;
+
+    if(!promptUserSave())
+        return;
+
+    saveSettings();
+    e->accept();
 }
 
 void ImageWindow::buildGUI()
@@ -231,25 +260,10 @@ void ImageWindow::buildGUI()
                               this, SLOT(slotFilePrint()),
                               actionCollection(), "imageview_print");
 
-    m_fileproperties = new KAction(i18n("Properties"), "exifinfo",
-                                   ALT+Key_Return,
-                                   this, SLOT(slotFileProperties()),
-                                   actionCollection(), "file_properties");
-
-    m_fileproperties->setWhatsThis( i18n( "This option display the current image properties, meta-data, "
-                                          "and histogram. If you have selected a region, you can choose an "
-                                          "histogram rendering for the full image or the current image "
-                                          "selection."));
-                                   
     m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
                                    SHIFT+Key_Delete,
                                    this, SLOT(slotDeleteCurrentItem()),
                                    actionCollection(), "imageview_delete");
-
-    m_commentedit = new KAction(i18n("Edit Comments && Tags..."), "imagecomment",
-                                Key_F3,
-                                this, SLOT(slotCommentsEdit()),
-                                actionCollection(), "comments_edit");
 
     KStdAction::quit(this, SLOT(close()),
                      actionCollection(), "imageview_exit");
@@ -442,8 +456,7 @@ void ImageWindow::applySettings()
 
     // Background color.
     QColor bgColor(Qt::black);
-    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor",
-                                                        &bgColor));
+    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
     m_canvas->update();
 
     // JPEG quality value.
@@ -472,6 +485,12 @@ void ImageWindow::applySettings()
     }
 
     m_canvas->setExifOrient(settings->getExifRotate());
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    if(config->hasKey("Splitter Sizes"))
+        m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+    else 
+        m_canvas->setSizePolicy(rightSzPolicy);
 }
 
 void ImageWindow::readSettings()
@@ -483,7 +502,6 @@ void ImageWindow::readSettings()
 
     // GUI options.
     autoZoom = config->readBoolEntry("AutoZoom", true);
-    
     m_fullScreen = config->readBoolEntry("FullScreen", false);
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
@@ -516,6 +534,7 @@ void ImageWindow::saveSettings()
     
     config->setGroup("ImageViewer Settings");
     config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
+    config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
     int histogramType = m_viewHistogramAction->currentItem();
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
@@ -544,11 +563,12 @@ void ImageWindow::slotLoadCurrent()
 
     uint index = m_urlList.findIndex(m_urlCurrent);
 
-    if (it != m_urlList.end()) {
-
+    if (it != m_urlList.end()) 
+    {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        m_canvas->load(m_urlCurrent.path());
+        m_isReadOnly = m_canvas->load(m_urlCurrent.path());
+        
         m_rotatedOrFlipped = false;
 
         QString text = m_urlCurrent.filename() +
@@ -561,29 +581,32 @@ void ImageWindow::slotLoadCurrent()
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
 
-
         QApplication::restoreOverrideCursor();
     }
 
-    if (m_urlList.count() == 1) {
+    if (m_urlList.count() == 1) 
+    {
         m_navPrevAction->setEnabled(false);
         m_navNextAction->setEnabled(false);
         m_navFirstAction->setEnabled(false);
         m_navLastAction->setEnabled(false);
     }
-    else {
+    else 
+    {
         m_navPrevAction->setEnabled(true);
         m_navNextAction->setEnabled(true);
         m_navFirstAction->setEnabled(true);
         m_navLastAction->setEnabled(true);
     }
 
-    if (index == 0) {
+    if (index == 0) 
+    {
         m_navPrevAction->setEnabled(false);
         m_navFirstAction->setEnabled(false);
     }
 
-    if (index == m_urlList.count()-1) {
+    if (index == m_urlList.count()-1) 
+    {
         m_navNextAction->setEnabled(false);
         m_navLastAction->setEnabled(false);
     }
@@ -598,13 +621,13 @@ void ImageWindow::slotLoadCurrent()
     if (!palbum)
     {
        m_fileDelete->setEnabled(false);
-       m_commentedit->setEnabled(false);
     }
     else
     {
        m_fileDelete->setEnabled(true);
-       m_commentedit->setEnabled(true);
     }
+    
+    m_dirtyImage = false;
 }
 
 void ImageWindow::slotLoadNext()
@@ -614,9 +637,10 @@ void ImageWindow::slotLoadNext()
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
-    if (it != m_urlList.end()) {
-
-        if (m_urlCurrent != m_urlList.last()) {
+    if (it != m_urlList.end()) 
+    {
+        if (m_urlCurrent != m_urlList.last()) 
+        {
            KURL urlNext = *(++it);
            m_urlCurrent = urlNext;
            slotLoadCurrent();
@@ -631,8 +655,8 @@ void ImageWindow::slotLoadPrev()
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
-    if (it != m_urlList.begin()) {
-
+    if (it != m_urlList.begin()) 
+    {
         if (m_urlCurrent != m_urlList.first())
         {
             KURL urlPrev = *(--it);
@@ -784,6 +808,7 @@ void ImageWindow::slotZoomChanged(float zoom)
 
 void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 {
+    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -794,13 +819,32 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
-    if (m_allowSaving)
+    if (m_allowSaving && !m_isReadOnly)
     {
         m_saveAction->setEnabled(moreUndo);
     }
 
     if (!moreUndo)
         m_rotatedOrFlipped = false;
+        
+    if (m_urlCurrent.isValid())
+        {
+        KURL u(m_urlCurrent.directory());
+        PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+        
+        QRect sel = m_canvas->getSelectedArea();
+        uint* data   = Digikam::ImlibInterface::instance()->getData();
+        int   width  = Digikam::ImlibInterface::instance()->origWidth();
+        int   height = Digikam::ImlibInterface::instance()->origHeight();
+        AlbumIconItem* item = 0;
+        
+        if (palbum)
+           item = m_view->findItem(m_urlCurrent.url());
+            
+        m_rightSidebar->itemChanged(m_urlCurrent.url(), m_view, item,
+                                   sel.isNull() ? 0 : &sel, 
+                                   data, width, height);
+        }        
 }
 
 void ImageWindow::slotSelected(bool val)
@@ -815,46 +859,16 @@ void ImageWindow::slotSelected(bool val)
             plugin->setEnabledSelectionActions(val);
         }
     }
+    
+    // Update histogram.
+    
+    QRect sel = m_canvas->getSelectedArea();
+    m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
 }
 
 void ImageWindow::slotRotatedOrFlipped()
 {
     m_rotatedOrFlipped = true;
-}
-
-void ImageWindow::slotFileProperties()
-{
-    if (m_urlCurrent.isValid() && m_view)
-    {
-        AlbumIconItem* item = (AlbumIconItem*)m_view->findItem(m_urlCurrent.url());
-        if (!item)
-            return;
-        
-        QRect sel = m_canvas->getSelectedArea();
-        uint* data   = Digikam::ImlibInterface::instance()->getData();
-        int   width  = Digikam::ImlibInterface::instance()->origWidth();
-        int   height = Digikam::ImlibInterface::instance()->origHeight();
-            
-        ImageProperties properties(ImageProperties::SINGLE, this,
-                                   m_view, item,
-                                   sel.isNull() ? 0 : &sel,
-                                   data, width, height);
-        properties.exec();
-    }
-}
-
-void ImageWindow::slotCommentsEdit()
-{
-    if (m_view)
-    {
-        AlbumIconItem *iconItem = m_view->findItem(m_urlCurrent.url());
-
-        if (iconItem)
-        {
-            ImageDescEdit descEdit(m_view, iconItem, this, true);
-            descEdit.exec();
-        }
-    }
 }
 
 void ImageWindow::slotDeleteCurrentItem()
@@ -864,7 +878,6 @@ void ImageWindow::slotDeleteCurrentItem()
 
     if (!palbum)
         return;
-
 
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -960,11 +973,6 @@ void ImageWindow::slotFilePrint()
     }
 }
 
-void ImageWindow::slotSave()
-{
-    save();
-}
-
 bool ImageWindow::save()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -1011,14 +1019,15 @@ bool ImageWindow::save()
     m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    
     kapp->restoreOverrideCursor();
+    m_dirtyImage = false;
     return true;
 }
 
-void ImageWindow::slotSaveAs()
+bool ImageWindow::saveAs()
 {
     // Get the new filename.
-
     // The typemines listed is the base imagefiles supported by imlib2.
 
     QStringList mimetypes;
@@ -1040,7 +1049,7 @@ void ImageWindow::slotSaveAs()
     // Check for cancel.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
     {
-       return;
+       return false;
     }
 
     KURL newURL = imageFileSaveDialog.selectedURL();
@@ -1058,7 +1067,7 @@ void ImageWindow::slotSaveAs()
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
         kdWarning() << k_funcinfo << "target URL isn't valid !" << endl;
-        return;
+        return false;
     }
 
     // if new and original url are save use slotSave() ------------------------------
@@ -1070,7 +1079,7 @@ void ImageWindow::slotSaveAs()
     if (currURL.equals(newURL))
     {
         slotSave();
-        return;
+        return false;
     }
 
     // Check for overwrite ----------------------------------------------------------
@@ -1091,7 +1100,7 @@ void ImageWindow::slotSaveAs()
                                        KStdGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
-            return;
+            return false;
 
         fileExists = true;
     }
@@ -1113,7 +1122,7 @@ void ImageWindow::slotSaveAs()
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
 
-        return;
+        return false;
     }
 
     // only try to write exif if both src and destination are jpeg files
@@ -1145,7 +1154,7 @@ void ImageWindow::slotSaveAs()
         kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save to new file"),
                            i18n("Error Saving File"));
-        return;
+        return false;
     }
 
     // Find the src and dest albums ------------------------------------------
@@ -1156,7 +1165,7 @@ void ImageWindow::slotSaveAs()
     {
         kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
-        return;
+        return false;
     }
 
     KURL dstDirURL(QDir::cleanDirPath(newURL.directory()));
@@ -1165,7 +1174,7 @@ void ImageWindow::slotSaveAs()
     {
         kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
-        return;
+        return false;
     }
         
     // Now copy the metadata of the original file to the new file ------------
@@ -1192,6 +1201,9 @@ void ImageWindow::slotSaveAs()
     m_canvas->setModified( false );
     kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+
+    m_dirtyImage = false;
+    return true;
 }
 
 void ImageWindow::slotToggleFullScreen()
@@ -1230,9 +1242,7 @@ void ImageWindow::slotToggleFullScreen()
         unplugActionAccel(m_zoomFitAction);
         unplugActionAccel(m_cropAction);
         unplugActionAccel(m_fileprint);
-        unplugActionAccel(m_fileproperties);
         unplugActionAccel(m_fileDelete);
-        unplugActionAccel(m_commentedit);
 
         m_fullScreen = false;
     }
@@ -1278,9 +1288,7 @@ void ImageWindow::slotToggleFullScreen()
         plugActionAccel(m_zoomFitAction);
         plugActionAccel(m_cropAction);
         plugActionAccel(m_fileprint);
-        plugActionAccel(m_fileproperties);
         plugActionAccel(m_fileDelete);
-        plugActionAccel(m_commentedit);
 
         showFullScreen();
         m_fullScreen = true;
@@ -1297,19 +1305,22 @@ void ImageWindow::slotEscapePressed()
 
 bool ImageWindow::promptUserSave()
 {
-    if (m_saveAction->isEnabled())
+    if (m_dirtyImage)
     {
-        int result =
-            KMessageBox::warningYesNoCancel(this,
-                                            i18n("The image \"%1\" has been modified.\n"
-                                                 "Do you want to save it?")
-                                                 .arg(m_urlCurrent.filename()),
-                                            QString::null,
-                                            KStdGuiItem::save(),
-                                            KStdGuiItem::discard());
+        int result = KMessageBox::warningYesNoCancel(this,
+                                  i18n("The image \"%1\" has been modified.\n"
+                                       "Do you want to save it?")
+                                       .arg(m_urlCurrent.filename()),
+                                  QString::null,
+                                  KStdGuiItem::save(),
+                                  KStdGuiItem::discard());
+
         if (result == KMessageBox::Yes)
         {
-            return save();
+            if (m_isReadOnly)    
+                return saveAs();
+            else
+                return save();
         }
         else if (result == KMessageBox::No)
         {
@@ -1319,16 +1330,6 @@ bool ImageWindow::promptUserSave()
             return false;
     }
     return true;
-}
-
-void ImageWindow::closeEvent(QCloseEvent *e)
-{
-    if (!e) return;
-
-    if(!promptUserSave())
-        return;
-    
-    e->accept();
 }
 
 void ImageWindow::plugActionAccel(KAction* action)

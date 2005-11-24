@@ -72,4 +72,14 @@ else
   echo "-- libtiff found.................. YES"
 fi
 
+if test "x$have_lcms" != "xyes"; then
+  echo "-- lcms found.................. NO"
+  echo ""
+  echo "digiKam needs lcms library. You need to install the lcms development package."
+  echo ""
+  all_tests=bad
+else
+  echo "-- lcms found.................. YES"
+fi
+
 echo "------------------------------------------------"

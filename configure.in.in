@@ -251,6 +251,53 @@ else
 fi
 
 #------------------------------------------------------------------
+# Check for lcms (backported from krita)
+#------------------------------------------------------------------
+
+AC_MSG_CHECKING([for lcms >= 1.12])
+
+have_lcms_header='no'
+KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
+if test "$have_lcms_header" = 'yes'
+then
+        AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
+
+	echo "#include <lcms/lcms.h>" > conftest.$ac_ext
+	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
+	echo "#error Need lcms < 1.12" >> conftest.$ac_ext
+	echo "#endif" >> conftest.$ac_ext
+	echo "int main() {}" >> conftest.$ac_ext
+
+else
+        # Alternative! Debian does it this way...
+	KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
+
+       	AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
+
+	echo "#include <lcms.h>" > conftest.$ac_ext
+	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
+	echo "#error Need lcms < 1.12" >> conftest.$ac_ext
+	echo "#endif" >> conftest.$ac_ext
+	echo "int main() {}" >> conftest.$ac_ext
+fi
+
+ac_link='$LIBTOOL_SHELL --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext -llcms 1>&5'
+
+if AC_TRY_EVAL(ac_link) && test -s conftest; then
+    	AC_MSG_RESULT(yes)
+        have_lcms="yes"
+        LCMS_LIBS="-llcms"
+else
+	AC_MSG_RESULT(no)
+	have_lcms="no"
+	LCMS_LIBS=""
+        AC_WARN([LCMS library not found, digiKam will not be compiled.])
+        DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+fi
+
+AC_SUBST(LCMS_LIBS)
+
+#------------------------------------------------------------------
 # NFS is Evil (sqlite makes use of file locking for allowing 
 # multiple processes to access the database. but on many 
 # nfs implementations, this file locking is horribly broken and

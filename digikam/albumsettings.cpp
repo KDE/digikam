@@ -35,6 +35,7 @@
 
 #include "thumbnailsize.h"
 #include "albumsettings.h"
+#include "rawfiles.h"
 
 
 class AlbumSettingsPrivate 
@@ -116,7 +117,11 @@ void AlbumSettings::init()
     d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov *.wmf *.asf";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
-    d->rawFilefilter   = "*.crw *.cr2 *.nef *.raf *.mrw *.orf *.pef *.x3f *.dcr *.kdc *.srf *.raw *.dng";
+    
+    // RAW files estentions supported by dcraw program and 
+    // defines to digikam/libs/dcraw/rawfiles.h
+    d->rawFilefilter   = QString::QString(raw_file_extentions);
+      
     d->thumbnailSize   = ThumbnailSize::Medium;
 
     d->showToolTips = true;
