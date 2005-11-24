@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: F.J. Cruz <fj.cruz@supercable.es
+ * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-18
  * Copyright 2005 by F.J. Cruz
  *
