@@ -1,0 +1,12 @@
+METASOURCES = AUTO
+
+noinst_LTLIBRARIES = libdimgloaders.la
+
+libdimgloaders_la_SOURCES = jpegloader.cpp tiffloader.cpp rawloader.cpp pngloader.cpp \
+	                        ppmloader.cpp qimageloader.cpp iccjpeg.c 
+
+libdimgloaders_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
+	   	                    $(LIBJPEG) $(LIB_TIFF) 
+
+INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg 
+
