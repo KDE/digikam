@@ -3,7 +3,7 @@
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2005-06-14
  * Description : main DImg framework implementation
- * 
+ *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,7 +11,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 // Local includes.
 
 #include "digikam_export.h"
-						
+
 class QString;
 class QVariant;
 
@@ -71,7 +71,7 @@ public:
         TIF_TAG_SOFTWARE,
         TIF_TAG_TARGETPRINTER        
     };
-    
+
     enum ANGLE
     {
         ROT90,
@@ -84,30 +84,30 @@ public:
         HORIZONTAL,
         VERTICAL
     };
-    
+
     DImg();
     DImg(const QString& filePath);
     DImg(const DImg& image);
     DImg& operator=(const DImg& image);
-    DImg(uint width, uint height, bool sixteenBit=false);
-    DImg(uint width, uint height, uchar* data, bool sixteenBit);
+    DImg(uint width, uint height, bool sixteenBit=false, bool alpha=false);
+    DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
    ~DImg();
 
     bool        save(const QString& filePath, const char* format);
-             
+
     bool        isNull()     const;
     uint        width()      const;
     uint        height()     const;
     uchar*      bits()       const;
     bool        hasAlpha()   const;
     bool        sixteenBit() const;
-    
+
     /** Return the number of bytes depth of one pixel : 4 (non sixteenBit) or 8 (sixteen) */
     int         bytesDepth() const;
-    
+
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
-    
+
     /**
     Return true if the original image file format cannot be saved. 
     This is depending of DImgLoader::save() implementation. For example
@@ -126,9 +126,9 @@ public:
 
     /** Return a deep copy of full image */
     DImg       copy();
- 
+
     DImg       copy(uint x, uint y, uint w, uint h);
-    
+
     QImage     copyQImage();
     QImage     copyQImage(uint x, uint y, uint w, uint h);
 
@@ -142,11 +142,11 @@ public:
 
     void       rotate(ANGLE angle);
     void       flip(FLIP direction);
-    
+
     QPixmap    convertToPixmap();
 
     void       detach();
-    
+
     void       convertDepth(int depth);
 
 private:
@@ -159,7 +159,7 @@ private:
 
     friend class DImgLoader;
 };
-    
+
 }  // NameSpace Digikam
 
 #endif /* DIMG_H */

@@ -2,21 +2,21 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2003-01-15
- * Description : 
- * 
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Description :
+ *
+ * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -59,7 +59,7 @@ class DImgInterfacePrivate
 public:
 
     bool          valid;
-    
+
     int           width;
     int           height;
     int           origWidth;
@@ -87,11 +87,11 @@ DImgInterface::DImgInterface()
              : QObject()
 {
     m_instance    = this;
-    
+
     d             = new DImgInterfacePrivate;
 
     d->undoMan    = new UndoManager(this);
-    
+
     d->valid      = false;
     d->width      = 0;
     d->height     = 0;
@@ -103,7 +103,7 @@ DImgInterface::DImgInterface()
     d->selH       = 0;
     d->zoom       = 1.0;
     d->exifOrient = false;
-        
+
     m_rotatedOrFlipped = false;
 }
 
@@ -118,12 +118,12 @@ DImgInterface::~DImgInterface()
 bool DImgInterface::load(const QString& filename, bool *isReadOnly)
 {
     bool valRet;
-    
+
     *isReadOnly   = true;
     d->valid      = false;
 
     d->filename   = filename;
-    
+
     d->width      = 0;
     d->height     = 0;
     d->origWidth  = 0;
@@ -152,7 +152,7 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
 
         *isReadOnly   = d->image.isReadOnly();
         valRet        = true;
-        
+
         // Paco, uncomment this code to test ICC profil transformation.
         // It's harcoded actually until we make a setup dialog tab about ICC profil.
         /*
@@ -166,12 +166,12 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
         kdWarning() << k_funcinfo << "Failed to load image " << endl;
         valRet = false;
     }
-        
+
     if (d->exifOrient)
     {
         exifRotate(filename);
     }
-    
+
     return (valRet);
 }
 
@@ -272,7 +272,7 @@ void DImgInterface::restore()
 {
     bool isReadOnly;
     d->undoMan->clear();
-    
+
     load(d->filename, &isReadOnly);
     emit signalModified(false, false);
 }
@@ -301,7 +301,7 @@ bool DImgInterface::save(const QString& file, int JPEGcompression,
         d->undoMan->clear();
         emit signalModified(false, false);
     }
-    
+
     return result;
 }
 
@@ -333,7 +333,7 @@ bool DImgInterface::saveAction(const QString& fileName, int JPEGcompression,
 {
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType.ascii() << ")" << endl;
-    
+
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
        d->image.setAttribute("quality", JPEGcompression);
 
@@ -342,7 +342,7 @@ bool DImgInterface::saveAction(const QString& fileName, int JPEGcompression,
 
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
        d->image.setAttribute("compress", TIFFcompression);
-    
+
     if( !d->image.save(fileName, mimeType.ascii()) ) 
     {
         kdWarning() << "error saving image '" << QFile::encodeName(fileName).data() << endl;
@@ -427,7 +427,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
-        
+
     QPixmap pix(img.convertToPixmap());
     bitBlt(p, dx, dy, &pix, 0, 0);
 }
@@ -444,7 +444,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
     d->cmod.applyBCG(img);
     img.convertDepth(32);
-    
+
     uint* data  = (uint*)img.bits();
 
     uchar r, g, b, a;
@@ -471,7 +471,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
             data++;
         }
     }
-    
+
     QPixmap pix(img.convertToPixmap());
     bitBlt(p, dx, dy, &pix, 0, 0);
 }
@@ -489,11 +489,11 @@ void DImgInterface::rotate90(bool saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));    
     }
-    
+
     d->image.rotate(DImg::ROT90);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-    
+
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
@@ -503,11 +503,11 @@ void DImgInterface::rotate180(bool saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));    
     }
-    
+
     d->image.rotate(DImg::ROT180);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-    
+
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
@@ -517,11 +517,11 @@ void DImgInterface::rotate270(bool saveUndo)
     {
         d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));    
     }
-    
+
     d->image.rotate(DImg::ROT270);
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-    
+
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
@@ -533,7 +533,7 @@ void DImgInterface::flipHoriz(bool saveUndo)
     }
 
     d->image.flip(DImg::HORIZONTAL);
-    
+
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
@@ -554,7 +554,7 @@ void DImgInterface::crop(int x, int y, int w, int h)
     d->undoMan->addAction(new UndoActionIrreversible(this, "Crop"));
 
     d->image.crop(x, y, w, h);
-    
+
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
@@ -569,7 +569,7 @@ void DImgInterface::resize(int w, int h)
 
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-    
+
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
@@ -659,7 +659,7 @@ DImg DImgInterface::getImage()
         return d->image.copy();
     }
     else
-    {       
+    {
         kdWarning() << k_funcinfo << "d->image is NULL" << endl;
         return DImg();
     }
@@ -675,7 +675,7 @@ void DImgInterface::putImage(DImg& image)
 {
     if (d->image.isNull())
        return;
-    
+
     d->image = image.copy();
     d->origWidth  = image.width();
     d->origHeight = image.height();
@@ -691,10 +691,10 @@ uint* DImgInterface::getSelectedData()
     if (!d->image.isNull())
     {
         DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-        
+
         uchar *data = new uchar[im.width() * im.height() * im.bytesDepth()];
         memcpy (data, im.bits(), im.width() * im.height() * im.bytesDepth());
-        
+
         return (uint *)data;         // FIXME : return DImg instead
     }
 
@@ -708,18 +708,18 @@ void DImgInterface::putSelectedData(uint* data, bool saveUndo)
 
     if (saveUndo)
         d->undoMan->addAction(new UndoActionIrreversible(this));
-    
+
     uchar *ptr  = d->image.bits();
     uchar *pptr;
     uchar *dptr = (uchar*)data;
-        
+
     // FIXME : make a DImg method and support 16 bits!
-    
+
     for (int j = d->selY; j < (d->selY + d->selH); j++) 
     {
         pptr  = &ptr[ j * d->origWidth * d->image.bytesDepth() ] + 
                 d->selX * d->image.bytesDepth();
-        
+
         for (int i = 0; i < d->selW*d->image.bytesDepth() ; i++) 
         {
             *(pptr++) = *(dptr++);
@@ -745,8 +745,8 @@ DImgInterface* DImgInterface::instance()
     {
         new DImgInterface();
     }
-    
-    return m_instance;    
+
+    return m_instance;
 }
 
 DImgInterface* DImgInterface::m_instance = 0;

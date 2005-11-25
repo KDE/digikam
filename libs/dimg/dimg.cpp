@@ -182,13 +182,14 @@ DImg& DImg::operator=(const DImg& image)
     return *this;
 }
 
-DImg::DImg(uint width, uint height, bool sixteenBit)
+DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
     : m_priv(new DImgPrivate)
 {
     m_priv->null       = (width == 0) || (height == 0);
     m_priv->width      = width;
     m_priv->height     = height;
     m_priv->sixteenBit = sixteenBit;
+    m_priv->alpha      = alpha;
 
     if (sixteenBit)
         m_priv->data   = new uchar[width*height*8];
@@ -196,13 +197,14 @@ DImg::DImg(uint width, uint height, bool sixteenBit)
         m_priv->data   = new uchar[width*height*4];
 }
 
-DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit)
+DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
     : m_priv(new DImgPrivate)
 {
     m_priv->null       = (width == 0) || (height == 0);
     m_priv->width      = width;
     m_priv->height     = height;
     m_priv->sixteenBit = sixteenBit;
+    m_priv->alpha      = alpha;
 
     if (sixteenBit)
     {

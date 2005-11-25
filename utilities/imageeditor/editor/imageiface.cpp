@@ -45,15 +45,15 @@ public:
 
     int           constrainWidth;
     int           constrainHeight;
-    
+
     int           previewWidth;
     int           previewHeight;
     int           previewBytesDepth;
-    
+
     int           originalWidth;
     int           originalHeight;
     int           originalBytesDepth;
-    
+
     QPixmap       qcheck;
     QPixmap       qpix;
     QBitmap       qmask;
@@ -69,12 +69,12 @@ ImageIface::ImageIface(int w, int h)
     d->originalWidth      = 0;
     d->originalHeight     = 0;
     d->originalBytesDepth = 0;
-    
+
     d->previewWidth       = 0;
     d->previewHeight      = 0;
     d->previewData        = 0;
     d->previewBytesDepth  = 0;
-    
+
     d->originalWidth      = DImgInterface::instance()->origWidth();
     d->originalHeight     = DImgInterface::instance()->origHeight();
     d->originalBytesDepth = DImgInterface::instance()->bytesDepth();
@@ -103,11 +103,11 @@ DImg ImageIface::setPreviewImageSize(int w, int h)
 {
     if (d->previewData) 
         delete [] d->previewData;
-    
+
     d->previewData     = 0;
     d->constrainWidth  = w;
     d->constrainHeight = h;
-    
+
     return (getPreviewImage());
 }
 
@@ -116,7 +116,7 @@ DImg ImageIface::getPreviewImage()
     if (!d->previewData) 
     {
         DImg im = DImgInterface::instance()->getImage();
-        
+
         if ( im.isNull() ) 
             return DImg::DImg();
 
@@ -124,7 +124,7 @@ DImg ImageIface::getPreviewImage()
         sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
 
         d->image = im.smoothScale(sz.width(), sz.height());
-        
+
         d->previewWidth      = d->image.width();
         d->previewHeight     = d->image.height();
         d->previewBytesDepth = d->image.bytesDepth();
@@ -138,8 +138,9 @@ DImg ImageIface::getPreviewImage()
         d->qpix.resize(d->previewWidth, d->previewHeight);
     }
 
-    return DImg::DImg(d->previewWidth, d->previewHeight, d->previewData, 
-                     (d->previewBytesDepth==4) ? false : true );
+    return DImg::DImg(d->previewWidth, d->previewHeight, d->previewData,
+                     (d->previewBytesDepth==4) ? false : true,
+                      d->image.hasAlpha());
 }
 
 DImg ImageIface::getOriginalImage()
