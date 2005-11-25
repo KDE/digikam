@@ -12,7 +12,7 @@ libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 libshowfoto_la_SOURCES = imageprint.cpp imageresizedlg.cpp 
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
-                            
+
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/widgets \
 	  -I$(top_srcdir)/digikam/libs/dimg \

@@ -653,22 +653,14 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
 void ImageEffect_RatioCrop::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
+
     Digikam::ImageIface* iface = m_imageSelectionWidget->imageIface();
+    Digikam::DImg imOrg        = iface->getOriginalImage();
+    QRect currentPos           = m_imageSelectionWidget->getRegionSelection();
+    Digikam::DImg imDest       = imOrg.copy(currentPos);
 
-    uint* data       = iface->getOriginalData();
-    int w            = iface->originalWidth();
-    int h            = iface->originalHeight();
-    QRect currentPos = m_imageSelectionWidget->getRegionSelection();
+    iface->putOriginalImage(i18n("Aspect Ratio Crop"), imDest);
 
-    QImage* imOrg;
-    QImage  imDest;
-    imOrg = new QImage((uchar*)data, w, h, 32, 0, 0, QImage::IgnoreEndian);
-    imDest = imOrg->copy(currentPos);
-    delete imOrg;
-
-    iface->putOriginalData(i18n("Aspect Ratio Crop"), (uint*)imDest.bits(), imDest.width(), imDest.height());
-
-    delete [] data;
     kapp->restoreOverrideCursor();
     accept();
 }

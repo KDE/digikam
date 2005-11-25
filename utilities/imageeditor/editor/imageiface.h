@@ -62,7 +62,7 @@ public:
     DImg  getPreviewImage();
     DImg  getOriginalImage();
     void  putOriginalImage(const QString &caller, DImg& image);
-    
+
     void  putPreviewImage(DImg& image);
 
     /** Standard methods to get preview informations.*/
@@ -76,16 +76,16 @@ public:
     /** Standard methods to get image selection informations.*/
     int  selectedWidth();
     int  selectedHeight();
-    
+
     /** Get selected (X, Y) position on the top/left corner.*/
     int  selectedXOrg();
     int  selectedYOrg();
-        
+
     void setPreviewBCG(double brightness, double contrast, double gamma);
     void setOriginalBCG(double brightness, double contrast, double gamma);
-    
+
     void paint(QPaintDevice* device, int x, int y, int w, int h);
-    
+
     // FIXME : remove these methods when all image plugins will be ported to DImg.
     uint* getPreviewData();
     uint* getOriginalData();
@@ -95,7 +95,7 @@ public:
     void  putOriginalData(const QString &caller, uint* data, int w=-1, int h=-1);
     void  putSelectedData(uint* data);
     uint* setPreviewSize(int w, int h);
-    
+
 private:
 
     ImageIfacePriv* d;

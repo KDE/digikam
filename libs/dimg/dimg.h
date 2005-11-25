@@ -24,6 +24,7 @@
 // QT includes.
 
 #include <qcstring.h>
+#include <qrect.h>
 #include <qimage.h>
 #include <qpixmap.h>
 
@@ -127,9 +128,11 @@ public:
     /** Return a deep copy of full image */
     DImg       copy();
 
+    DImg       copy(QRect rect);
     DImg       copy(uint x, uint y, uint w, uint h);
 
     QImage     copyQImage();
+    QImage     copyQImage(QRect rect);
     QImage     copyQImage(uint x, uint y, uint w, uint h);
 
     void       crop(int x, int y, int w, int h);

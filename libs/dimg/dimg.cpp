@@ -422,6 +422,11 @@ DImg DImg::copy()
     return img;
 }
 
+DImg DImg::copy(QRect rect)
+{
+    return copy(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
 DImg DImg::copy(uint x, uint y, uint w, uint h)
 {
     if (x+w > width())
@@ -453,7 +458,7 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
     }
 
     image.m_priv->alpha = hasAlpha();
-    
+
     return image;
 }
 
@@ -474,7 +479,7 @@ QImage DImg::copyQImage()
 
     uchar* sptr = bits();
     uint*  dptr = (uint*)img.bits();
-        
+
     for (uint i=0; i < width()*height(); i++)
     {
         *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
@@ -485,8 +490,13 @@ QImage DImg::copyQImage()
     {
         img.setAlphaBuffer(true);
     }
-    
+
     return img;
+}
+
+QImage DImg::copyQImage(QRect rect)
+{
+    return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
 }
 
 QImage DImg::copyQImage(uint x, uint y, uint w, uint h)
@@ -495,10 +505,10 @@ QImage DImg::copyQImage(uint x, uint y, uint w, uint h)
         return QImage();
 
     DImg img = copy(x, y, w, h);
-    
+
     if (img.sixteenBit())
         img.convertDepth(32);
-    
+
     return img.copyQImage();
 }
 
