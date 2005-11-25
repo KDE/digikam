@@ -166,14 +166,14 @@ void ImageEffect_Solarize::slotOk()
 
 void ImageEffect_Solarize::solarize(double factor, Digikam::DImg& image)
 {
-    int w          = image.width();
-    int h          = image.height();
-    bool stretch   = true;
-    uint threshold = (uint)((100-factor)*(65535+1)/100);
-    threshold      = QMAX(1, threshold);
+    int w        = image.width();
+    int h        = image.height();
+    bool stretch = true;
 
     if (!image.sixteenBit())        // 8 bits image.
     {
+        uint threshold = (uint)((100-factor)*(255+1)/100);
+        threshold      = QMAX(1, threshold);
         uchar *ptr = image.bits();
         uchar  a, r, g, b;
 
@@ -210,6 +210,8 @@ void ImageEffect_Solarize::solarize(double factor, Digikam::DImg& image)
     }
     else                            // 16 bits image.
     {
+        uint threshold = (uint)((100-factor)*(65535+1)/100);
+        threshold      = QMAX(1, threshold);
         unsigned short *ptr = (unsigned short *)image.bits();
         unsigned short  a, r, g, b;
 
