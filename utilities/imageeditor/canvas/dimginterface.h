@@ -115,6 +115,8 @@ public:
     DImg   getImage();
     void   putImage(DImg& image);
     void   putImage(const QString &caller, DImg& image);
+    DImg   getImageSelection();
+    void   putImageSelection(DImg& selection, bool saveUndo=true);
 
     // FIXME : remove these methods when all image plugins will be ported to DImg.
     uint*  getData();

@@ -128,9 +128,17 @@ public:
     /** Return a deep copy of full image */
     DImg       copy();
 
+    /** Return a region of image */
     DImg       copy(QRect rect);
     DImg       copy(uint x, uint y, uint w, uint h);
 
+    /** Copy a pixels region to an image */
+    void       bitBlt(DImg& region, int x, int y, int w, int h);
+
+    /** Merge a pixels region to an image */
+    void       bitBlend(DImg& region, int x, int y, int w, int h);
+
+    /** QImage wrapper methods */
     QImage     copyQImage();
     QImage     copyQImage(QRect rect);
     QImage     copyQImage(uint x, uint y, uint w, uint h);

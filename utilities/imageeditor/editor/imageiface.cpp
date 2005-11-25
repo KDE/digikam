@@ -2,21 +2,21 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2004-02-14
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -95,7 +95,7 @@ ImageIface::~ImageIface()
 {
     if (d->previewData) 
         delete [] d->previewData;
-    
+
     delete d;
 }
 
@@ -148,9 +148,9 @@ DImg ImageIface::getOriginalImage()
     return DImgInterface::instance()->getImage();
 }
 
-uint* ImageIface::getSelectedData()
+DImg ImageIface::getImageSelection()
 {
-    return DImgInterface::instance()->getSelectedData();    
+    return DImgInterface::instance()->getImageSelection();
 }
 
 void ImageIface::putPreviewImage(DImg& image)
@@ -158,7 +158,7 @@ void ImageIface::putPreviewImage(DImg& image)
     if (image.isNull())
         return;
 
-    d->image = image.copy();    
+    d->image = image.copy();
 }
 
 void ImageIface::putOriginalImage(const QString &caller, DImg& image)
@@ -169,30 +169,22 @@ void ImageIface::putOriginalImage(const QString &caller, DImg& image)
     DImgInterface::instance()->putImage(caller, image);
 }
 
-void ImageIface::putOriginalData(const QString &caller, uint* data, int w, int h)  // FIXME to DImg
+void ImageIface::putImageSelection(DImg& selection)
 {
-    if (!data)
+    if (selection.isNull())
         return;
 
-    DImgInterface::instance()->putData(caller, data, w, h);
-}
-
-void ImageIface::putSelectedData(uint* data)   // FIXME to DImg
-{
-    if (!data)
-        return;
-
-    DImgInterface::instance()->putSelectedData(data);
+    DImgInterface::instance()->putImageSelection(selection);
 }
 
 int ImageIface::previewWidth()
 {
-    return d->previewWidth;    
+    return d->previewWidth;
 }
 
 int ImageIface::previewHeight()
 {
-    return d->previewHeight;    
+    return d->previewHeight;
 }
 
 int ImageIface::originalWidth()
@@ -346,6 +338,27 @@ uint* ImageIface::setPreviewSize(int w, int h)
     d->constrainHeight = h;
     
     return (getPreviewData());
+}
+
+void ImageIface::putOriginalData(const QString &caller, uint* data, int w, int h)
+{
+    if (!data)
+        return;
+
+    DImgInterface::instance()->putData(caller, data, w, h);
+}
+
+void ImageIface::putSelectedData(uint* data)
+{
+    if (!data)
+        return;
+
+    DImgInterface::instance()->putSelectedData(data);
+}
+
+uint* ImageIface::getSelectedData()
+{
+    return DImgInterface::instance()->getSelectedData();    
 }
 
 }   // namespace Digikam

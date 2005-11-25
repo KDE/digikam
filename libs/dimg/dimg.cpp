@@ -77,7 +77,7 @@ DImg::DImg(const QString& filePath)
             kdWarning() << filePath << " : Unknown image format !!!" << endl;
             return;
             break;
-        }    
+        }
         case(JPEG):
         {
             kdWarning() << filePath << " : JPEG file identified" << endl;
@@ -276,7 +276,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     const int headerLen = 8;
     unsigned char header[headerLen];
-    
+
     if (fread(&header, 8, 1, f) != 1)
     {
         kdWarning() << k_funcinfo << "Failed to read header" << endl;
@@ -285,12 +285,12 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     fclose(f);
-    
+
     unsigned short jpegID    = 0xD8FF;
     unsigned short tiffBigID = 0x4d4d;
     unsigned short tiffLilID = 0x4949;
     unsigned char  pngID[8]  = {'\211', 'P', 'N', 'G', '\r', '\n', '\032', '\n'};
-    
+
     if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
     {
         return JPEG;
@@ -304,7 +304,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         int width, height, rgbmax;
         char nl;
-    
+
         FILE *file = fopen(QFile::encodeName(filePath), "rb");
         if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4) 
         {
@@ -330,12 +330,12 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     // In others cases, QImage will be used to try to open file.
-    return QIMAGE;      
+    return QIMAGE;
 }
 
 bool DImg::isNull() const
 {
-    return m_priv->null;    
+    return m_priv->null;
 }
 
 uint DImg::width() const
@@ -345,12 +345,12 @@ uint DImg::width() const
 
 uint DImg::height() const
 {
-    return m_priv->height;    
+    return m_priv->height;
 }
 
 uchar* DImg::bits() const
 {
-    return m_priv->data;    
+    return m_priv->data;
 }
 
 bool DImg::hasAlpha() const
@@ -360,24 +360,24 @@ bool DImg::hasAlpha() const
 
 bool DImg::sixteenBit() const
 {
-    return m_priv->sixteenBit;    
+    return m_priv->sixteenBit;
 }
 
 bool DImg::isReadOnly() const
 {
-    return m_priv->isReadOnly;    
+    return m_priv->isReadOnly;
 }
 
 QByteArray DImg::getICCProfil() const
 {
-    return m_priv->ICCProfil;    
+    return m_priv->ICCProfil;
 }
 
 int DImg::bytesDepth() const
 {
     if (sixteenBit())
        return 8;
-    
+
     return 4;
 }
 
@@ -385,7 +385,7 @@ int DImg::bitsDepth() const
 {
     if (sixteenBit())
        return 16;
-   
+
     return 8;
 }
 
@@ -462,6 +462,150 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
     return image;
 }
 
+void DImg::bitBlt(DImg& region, int x, int y, int w, int h)
+{
+    if (isNull() || region.sixteenBit() != sixteenBit() ||
+        w <= 0 || h <= 0)
+       return;
+
+    // Normalize
+
+    if (x < 0)
+    {
+       w = w - x;
+       x = 0;
+    }
+
+    if (y < 0)
+    {
+       h = h - y;
+       y = 0;
+    }
+
+    if (w > (int)width())
+    {
+       w = width();
+    }
+
+    if (h > (int)height())
+    {
+       w = height();
+    }
+
+    uchar *pptr;
+    uchar *ptr  = bits();
+    uchar *dptr = region.bits();
+
+    for (int j = y; j < (y + h); j++) 
+    {
+        pptr  = &ptr[ j * width() * bytesDepth() ] + x * bytesDepth();
+
+        for (int i = 0; i < w * bytesDepth() ; i++) 
+        {
+            *(pptr++) = *(dptr++);
+        }
+    }
+}
+
+void DImg::bitBlend(DImg& region, int x, int y, int w, int h)
+{
+    if (isNull() || region.sixteenBit() != sixteenBit() ||
+        w <= 0 || h <= 0)
+       return;
+
+    // Normalize
+
+    if (x < 0)
+    {
+       w = w - x;
+       x = 0;
+    }
+
+    if (y < 0)
+    {
+       h = h - y;
+       y = 0;
+    }
+
+    if (w > (int)width())
+    {
+       w = width();
+    }
+
+    if (h > (int)height())
+    {
+       w = height();
+    }
+
+    uchar pow_lut[256][256];
+    int i, j;
+
+    for (i = 0; i < 256; i++)
+    {
+        for (j = 0; j < 256; j++)
+        {
+            int divisor;
+
+            divisor = (i + (j * (255 - i)) / 255);
+
+            if (divisor > 0)
+                pow_lut[i][j] = (i * 255) / divisor;
+            else
+                pow_lut[i][j] = 0;
+        }
+    }
+
+    int tmp;
+
+#define B_VAL(p) ((uchar *)(p))[0]
+#define G_VAL(p) ((uchar *)(p))[1]
+#define R_VAL(p) ((uchar *)(p))[2]
+#define A_VAL(p) ((uchar *)(p))[3]
+
+#define BLEND_COLOR(a, nc, c, cc) \
+tmp = ((c) - (cc)) * (a); \
+nc = (cc) + ((tmp + (tmp >> 8) + 0x80) >> 8);
+
+#define BLEND(r1, g1, b1, a1, dest) \
+BLEND_COLOR(a1, R_VAL(dest), r1, R_VAL(dest)); \
+BLEND_COLOR(a1, G_VAL(dest), g1, G_VAL(dest)); \
+BLEND_COLOR(a1, B_VAL(dest), b1, B_VAL(dest));
+
+    uchar  a, aa;
+    uchar *pptr;
+    uchar *src = bits();
+    uchar *dst = region.bits();
+
+    for (int j = y; j < (y + h); j++) 
+    {
+        pptr  = &src[ j * width() * bytesDepth() ] + x * bytesDepth();
+
+        for (int i = 0; i < w * bytesDepth() ; i++) 
+        {
+            aa = A_VAL(pptr);
+
+            switch (aa)
+            {
+                case 0:
+                    break;
+
+                case 255:
+                    *pptr = *dst;
+                    break;
+
+                default:
+                    a = pow_lut[aa][A_VAL(dst)];
+                    BLEND_COLOR(aa, A_VAL(dst), 255, A_VAL(dst));
+                    BLEND(R_VAL(pptr), G_VAL(pptr), B_VAL(pptr), a, dst);
+                    break;
+            }
+
+            pptr++;
+            dst++;
+        }
+    }
+}
+
 QImage DImg::copyQImage()
 {
     if (isNull())
@@ -529,7 +673,7 @@ QPixmap DImg::convertToPixmap()
 
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
-        
+
         for (uint i=0; i<width()*height(); i++)
         {
             *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
@@ -540,7 +684,7 @@ QPixmap DImg::convertToPixmap()
         {
             img.setAlphaBuffer(true);
         }
-    
+
         return QPixmap(img);
     }
     else
@@ -551,7 +695,7 @@ QPixmap DImg::convertToPixmap()
         {
             img.setAlphaBuffer(true);
         }
-    
+
         return QPixmap(img);
     }
 }

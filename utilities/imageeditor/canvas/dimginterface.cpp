@@ -182,7 +182,8 @@ bool DImgInterface::exifRotated()
 
 void DImgInterface::exifRotate(const QString& /*filename*/)
 {
-/*    
+/*  FIXME : Create a new method in DImg to do it
+
     // Rotate image based on EXIF rotate tag
     KExifData exifData;
 
@@ -683,48 +684,29 @@ void DImgInterface::putImage(DImg& image)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
-uint* DImgInterface::getSelectedData()
+DImg DImgInterface::getImageSelection()
 {
     if (!d->selW || !d->selH)
-        return 0;
+        return DImg::DImg();
 
     if (!d->image.isNull())
     {
         DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-
-        uchar *data = new uchar[im.width() * im.height() * im.bytesDepth()];
-        memcpy (data, im.bits(), im.width() * im.height() * im.bytesDepth());
-
-        return (uint *)data;         // FIXME : return DImg instead
+        return im;
     }
 
-    return 0;
+    return DImg::DImg();
 }
 
-void DImgInterface::putSelectedData(uint* data, bool saveUndo)
+void DImgInterface::putImageSelection(DImg& selection, bool saveUndo)
 {
-    if (!data || d->image.isNull())
+    if (selection.isNull() || d->image.isNull())
         return;
 
     if (saveUndo)
         d->undoMan->addAction(new UndoActionIrreversible(this));
 
-    uchar *ptr  = d->image.bits();
-    uchar *pptr;
-    uchar *dptr = (uchar*)data;
-
-    // FIXME : make a DImg method and support 16 bits!
-
-    for (int j = d->selY; j < (d->selY + d->selH); j++) 
-    {
-        pptr  = &ptr[ j * d->origWidth * d->image.bytesDepth() ] + 
-                d->selX * d->image.bytesDepth();
-
-        for (int i = 0; i < d->selW*d->image.bytesDepth() ; i++) 
-        {
-            *(pptr++) = *(dptr++);
-        }
-    }
+    d->image.bitBlt(selection, d->selX, d->selY, d->selW, d->selH);
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
@@ -794,6 +776,51 @@ void DImgInterface::putData(uint* data, int w, int h)
         
         uchar* ptr = d->image.bits();
         memcpy(ptr, (uchar*)data, d->origWidth * d->origHeight * d->image.bytesDepth());
+    }
+
+    emit signalModified(true, d->undoMan->anyMoreRedo());
+}
+
+uint* DImgInterface::getSelectedData()
+{
+    if (!d->selW || !d->selH)
+        return 0;
+
+    if (!d->image.isNull())
+    {
+        DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
+
+        uchar *data = new uchar[im.width() * im.height() * im.bytesDepth()];
+        memcpy (data, im.bits(), im.width() * im.height() * im.bytesDepth());
+
+        return (uint *)data;        
+    }
+
+    return 0;
+}
+
+void DImgInterface::putSelectedData(uint* data, bool saveUndo)
+{
+    if (!data || d->image.isNull())
+        return;
+
+    if (saveUndo)
+        d->undoMan->addAction(new UndoActionIrreversible(this));
+    
+    uchar *ptr  = d->image.bits();
+    uchar *pptr;
+    uchar *dptr = (uchar*)data;
+        
+    
+    for (int j = d->selY; j < (d->selY + d->selH); j++) 
+    {
+        pptr  = &ptr[ j * d->origWidth * d->image.bytesDepth() ] + 
+                d->selX * d->image.bytesDepth();
+        
+        for (int i = 0; i < d->selW*d->image.bytesDepth() ; i++) 
+        {
+            *(pptr++) = *(dptr++);
+        }
     }
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
