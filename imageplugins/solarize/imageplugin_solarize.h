@@ -32,7 +32,7 @@ class KAction;
 class ImagePlugin_Solarize : public Digikam::ImagePlugin
 {
     Q_OBJECT
-    
+
 public:
 
     ImagePlugin_Solarize(QObject *parent, const char* name,
@@ -44,11 +44,11 @@ public:
 private:
 
     KAction *m_solarizeAction;
-   
+
 private slots:
 
     void slotSolarize();
 
 };
-    
+
 #endif /* IMAGEPLUGIN_SOLARIZE_H */

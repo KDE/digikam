@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imageeffect_solarize.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-14
  * Description : a digiKam image plugin for to solarize
  *               an image.
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,7 +99,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     topLayout->addWidget(frame, 10);
 
     // -------------------------------------------------------------
-                
+
     QHBoxLayout *hlay = new QHBoxLayout(topLayout);
     QLabel *label = new QLabel(i18n("Intensity:"), plainPage());
     m_numInput = new KDoubleNumInput(plainPage());
@@ -107,15 +108,15 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     hlay->addWidget(label, 1);
     hlay->addWidget(m_numInput, 5);
 
-    resize(configDialogSize("Solarize Tool Dialog"));      
-    
+    resize(configDialogSize("Solarize Tool Dialog"));
+
     // -------------------------------------------------------------
 
     connect(m_numInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
-            
+
     connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));               
+            this, SLOT(slotEffect()));
 }
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
@@ -139,17 +140,11 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
 void ImageEffect_Solarize::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    Digikam::DImg image        = iface->getPreviewImage();
 
-    uint * data = iface->getPreviewData();
-    int w       = iface->previewWidth();
-    int h       = iface->previewHeight();
+    solarize(m_numInput->value(), image);
 
-    double factor = m_numInput->value();
-
-    solarize(factor, data, w, h);
-    
-    iface->putPreviewData(data);
-    delete [] data;
+    iface->putPreviewImage(image);
     m_previewWidget->update();
 }
 
@@ -157,61 +152,103 @@ void ImageEffect_Solarize::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
 
-    uint* data  = iface.getOriginalData();
-    int w       = iface.originalWidth();
-    int h       = iface.originalHeight();
-
-    if (data) 
+    if (!image.isNull())
        {
-       double factor = m_numInput->value();
-
-       solarize(factor, data, w, h);
-
-       iface.putOriginalData(i18n("Solarize"), data);
-       delete [] data;
+       solarize(m_numInput->value(), image);
+       iface.putOriginalImage(i18n("Solarize"), image);
        }
 
     kapp->restoreOverrideCursor();
     accept();
 }
 
-void ImageEffect_Solarize::solarize(double factor, uint *data, int w, int h)
+void ImageEffect_Solarize::solarize(double factor, Digikam::DImg& image)
 {
-    uint a, r, g, b;
-    Digikam::ImageFilters::imageData imagedata;
+    int w = image.width();
+    int h = image.height();
 
-    uint threshold = (uint)((100 - factor)*(255 + 1) / 100);
-    threshold = QMAX(1, threshold);
-    bool stretch = true;
+    if (!image.sixteenBit())         // 8 bits image.
+    {
+        uchar *ptr = image.bits();
+        uchar  a, r, g, b;
 
-    for (int x = 0; x < w*h; x++) 
-       {
-       imagedata.raw = data[x];
-       r             = (uint)imagedata.channel.red;
-       g             = (uint)imagedata.channel.green;
-       b             = (uint)imagedata.channel.blue;
-       a             = (uint)imagedata.channel.alpha;
+        uint threshold = (uint)((100-factor)*(255+1)/100);
+        threshold      = QMAX(1, threshold);
+        bool stretch   = true;
 
-       if (stretch) 
-          {
-          r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
-          g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
-          b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
-          }
-       else 
-          {
-          if (r > threshold) r = (255-r);
-          if (g > threshold) g = (255-g);
-          if (b > threshold) b = (255-b);
-          }
+        for (int x=0 ; x < w*h ; x++)
+        {
+            b = ptr[0];
+            g = ptr[1];
+            r = ptr[2];
+            a = ptr[3];
 
-       imagedata.channel.red   = r;
-       imagedata.channel.green = g;
-       imagedata.channel.blue  = b;         
-       imagedata.channel.alpha = a;         
-       data[x] = imagedata.raw;
-       }
+            if (stretch) 
+            {
+                r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
+                g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
+                b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
+            }
+            else 
+            {
+                if (r > threshold)
+                    r = (255-r);
+                if (g > threshold)
+                    g = (255-g);
+                if (b > threshold)
+                    b = (255-b);
+            }
+
+            ptr[0] = b;
+            ptr[1] = g;
+            ptr[2] = r;
+            ptr[3] = a;
+
+            ptr += 4;
+        }
+    }
+    else
+    {
+        unsigned short *ptr = (unsigned short *)image.bits();
+        unsigned short  a, r, g, b;
+
+        uint threshold = (uint)((100-factor)*(65535+1)/100);
+        threshold      = QMAX(1, threshold);
+        bool stretch   = true;
+
+        for (int x=0 ; x < w*h ; x++)
+        {
+            b = ptr[0];
+            g = ptr[1];
+            r = ptr[2];
+            a = ptr[3];
+
+            if (stretch) 
+            {
+                r = (r > threshold) ? (65535-r)*65535/(65535-threshold) : r*65535/threshold;
+                g = (g > threshold) ? (65535-g)*65535/(65535-threshold) : g*65535/threshold;
+                b = (b > threshold) ? (65535-b)*65535/(65535-threshold) : b*65535/threshold;
+            }
+            else 
+            {
+                if (r > threshold)
+                    r = (65535-r);
+                if (g > threshold)
+                    g = (65535-g);
+                if (b > threshold)
+                    b = (65535-b);
+            }
+
+            ptr[0] = b;
+            ptr[1] = g;
+            ptr[2] = r;
+            ptr[3] = a;
+
+            ptr += 4;
+        }
+    }
 }
 
 }  // NameSpace DigikamSolarizeImagesPlugin

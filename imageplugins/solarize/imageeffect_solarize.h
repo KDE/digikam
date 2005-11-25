@@ -1,11 +1,12 @@
 /* ============================================================
  * File  : imageeffect_solarize.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-14
- * Description : a Digikam image plugin for to solarize 
+ * Description : a digiKam image plugin for to solarize
  *               an image.
- * 
- * Copyright 2004 by Renchi Raju
+ *
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +28,10 @@
 
 #include <kdialogbase.h>
 
+// Digikam includes.
+
+#include <dimg.h>
+
 class QPushButton;
 
 class KDoubleNumInput;
@@ -42,7 +47,7 @@ namespace DigikamSolarizeImagesPlugin
 class ImageEffect_Solarize : public KDialogBase
 {
     Q_OBJECT
-    
+
 public:
 
     ImageEffect_Solarize(QWidget *parent);
@@ -50,18 +55,18 @@ public:
 
 protected:
 
-    void solarize(double factor, uint *data, int w, int h);
-    
+    void solarize(double factor, Digikam::DImg& image);
+
     void closeEvent(QCloseEvent *e);
-    
+
 private:
-    
+
     QWidget              *m_parent;
-    
+
     QPushButton          *m_helpButton;
 
     KDoubleNumInput      *m_numInput;
-    
+
     Digikam::ImageWidget *m_previewWidget;
 
 private slots:
