@@ -656,10 +656,10 @@ void ImageEffect_RatioCrop::slotOk()
 
     Digikam::ImageIface* iface = m_imageSelectionWidget->imageIface();
     Digikam::DImg imOrg        = iface->getOriginalImage();
-    QRect currentPos           = m_imageSelectionWidget->getRegionSelection();
-    Digikam::DImg imDest       = imOrg.copy(currentPos);
+    QRect currentRegion        = m_imageSelectionWidget->getRegionSelection();
+    imOrg.crop(currentRegion);
 
-    iface->putOriginalImage(i18n("Aspect Ratio Crop"), imDest);
+    iface->putOriginalImage(i18n("Aspect Ratio Crop"), imOrg);
 
     kapp->restoreOverrideCursor();
     accept();

@@ -735,6 +735,11 @@ void DImg::detach()
     }
 }
 
+void DImg::crop(QRect rect)
+{
+    crop(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
 void DImg::crop(int x, int y, int w, int h)
 {
     if ( w <= 0 || h <= 0)

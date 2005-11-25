@@ -143,6 +143,8 @@ public:
     QImage     copyQImage(QRect rect);
     QImage     copyQImage(uint x, uint y, uint w, uint h);
 
+    /** Cropping image methods */
+    void       crop(QRect rect);
     void       crop(int x, int y, int w, int h);
 
     void       resize(int w, int h);
