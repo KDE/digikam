@@ -49,21 +49,21 @@ public:
 
 signals:
 
-    void signalResized(void);  
-        
+    void signalResized(void);
+
 protected:
 
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent * e);
-    
+
 private:
 
-    DImg        m_image;
-    
+    DImg        m_preview;
+
     QRect       m_rect;
-    
+
     ImageIface *m_iface;
-    
+
 };
 
 }

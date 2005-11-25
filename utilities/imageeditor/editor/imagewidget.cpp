@@ -20,7 +20,7 @@
  * ============================================================ */
 
 // C++ includes.
-  
+
 #include <cstdio>
 
 // Qt includes.
@@ -42,10 +42,10 @@ ImageWidget::ImageWidget(int w, int h, QWidget *parent)
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
 
-    m_iface = new ImageIface(w, h);
-    m_image = m_iface->getPreviewImage();
-    m_rect = QRect(w/2 - m_image.width()/2, h/2 - m_image.height()/2, 
-                   m_image.width(), m_image.height());    
+    m_iface   = new ImageIface(w, h);
+    m_preview = m_iface->getPreviewImage();
+    m_rect    = QRect(w/2 - m_preview.width()/2, h/2 - m_preview.height()/2, 
+                      m_preview.width(), m_preview.height());    
 }
 
 ImageWidget::~ImageWidget()
@@ -75,11 +75,11 @@ void ImageWidget::paintEvent(QPaintEvent *)
 
 void ImageWidget::resizeEvent(QResizeEvent * e)
 {
-    int w   = e->size().width();
-    int h   = e->size().height();
-    m_image = m_iface->setPreviewImageSize(w, h);
-    m_rect = QRect(w/2 - m_image.width()/2, h/2 - m_image.height()/2, 
-                   m_image.width(), m_image.height());    
+    int w     = e->size().width();
+    int h     = e->size().height();
+    m_preview = m_iface->setPreviewImageSize(w, h);
+    m_rect    = QRect(w/2 - m_preview.width()/2, h/2 - m_preview.height()/2, 
+                      m_preview.width(), m_preview.height());    
     emit signalResized();
 }
 
