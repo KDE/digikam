@@ -1,6 +1,7 @@
 INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
-              -I$(top_srcdir)/digikam/digikam \
-		$(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
+	      -I$(top_srcdir)/digikam/libs/dimg \
+	      -I$(top_srcdir)/digikam/digikam \
+	      $(LIBKEXIF_CFLAGS) $(all_includes) 
 
 METASOURCES = AUTO  
 KDE_CFLAGS  = -w
@@ -12,10 +13,10 @@ kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp 
 
 kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) \
-	                          $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
+	                          $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(all_libraries) \
-	                          $(KDE_PLUGIN) $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
+	                          $(KDE_PLUGIN) $(LIBKEXIF_LIBS)
 
 kio_digikamtags_la_SOURCES = digikamtags.cpp sqlitedb.cpp
 kio_digikamtags_la_LIBADD  = $(LIB_KIO)  $(LIB_SQLITE3)

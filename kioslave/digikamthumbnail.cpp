@@ -1,29 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    DIGIKAMTHUMBNAIL.CPP
-//
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr> 
+ * Date  : 2003-01-15
+ * Description :
+ *
+ * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #define XMD_H
-
-#include <digikam_export.h>
 
 // Qt Includes.
 
@@ -54,6 +50,13 @@
 #include <kmimetype.h>
 #include <kio/thumbcreator.h>
 
+// Local includes
+
+#include "dimg.h"
+#include "exiforientation_p.h"
+#include "digikamthumbnail.h"
+#include "digikam_export.h"
+
 // C Ansi includes.
 
 extern "C"
@@ -70,14 +73,6 @@ extern "C"
 #include <sys/time.h>
 #include <png.h>
 }
-
-// Local includes
-
-#include "exiforientation_p.h"
-#include "digikamthumbnail.h"
-
-#define X_DISPLAY_MISSING 1
-#include <Imlib2.h>
 
 using namespace KIO;
 
@@ -97,7 +92,8 @@ static void exifRotate(const QString& filePath, QImage& thumb)
     bool doXform = (orientation != KExifData::NORMAL &&
                     orientation != KExifData::UNSPECIFIED);
 
-    switch (orientation) {
+    switch (orientation) 
+    {
        case KExifData::NORMAL:
        case KExifData::UNSPECIFIED:
           break;
@@ -273,11 +269,11 @@ static QImage loadPNG(const QString& path)
     png_textp text_ptr;
     int num_text=0;
     png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
-    while (num_text--) {
+    while (num_text--) 
+    {
         qimage.setText(text_ptr->key,0,text_ptr->text);
         text_ptr++;
     }
-
 
     png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
@@ -287,20 +283,18 @@ static QImage loadPNG(const QString& path)
 }
 
 kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv) 
-    : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
+                            : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
 {
     argc_ = argc;
     argv_ = argv;
     app_  = 0;
-    
+
     createThumbnailDirs();
 }
-
 
 kio_digikamthumbnailProtocol::~kio_digikamthumbnailProtocol()
 {
 }
-
 
 void kio_digikamthumbnailProtocol::get(const KURL& url )
 {
@@ -333,7 +327,6 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         return;
     }
 
-    
     img = loadPNG(thumbPath);
     if (!img.isNull())
     {
@@ -344,24 +337,20 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     if (regenerate)
     {
         // Try JPEG loading...
-        if ( !loadJPEG(img, url.path()) )
+        if ( !loadJPEG(img, url.path()))
         {
-            // Try to load with imlib2
-            if ( !loadImlib2(img, url.path()) )
+            // Try to load with dcraw
+            if (!loadDCRAW(img, url.path()))
             {
-                // Try to load with QT/KDELib
-                if (!img.load(url.path()))
+                // Try to load with DImg
+                if (!loadDImg(img, url.path()))
                 {
                     // Try to load with KDE thumbcreators
-                    if (!loadKDEThumbCreator(img, url.path()))
-                    {
-                        // Try to load with dcraw
-                        loadDCRAW( img, url.path() );
-                    }
+                    loadKDEThumbCreator(img, url.path());
                 }
             }
         }
-        
+
         if (img.isNull())
         {
             error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1")
@@ -439,7 +428,6 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     finished();
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
 // JPEG Extraction
 
@@ -491,7 +479,8 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
     int scale=1;
-    while(cachedSize_*scale*2<=imgSize) {
+    while(cachedSize_*scale*2<=imgSize) 
+    {
         scale*=2;
     }
     if(scale>8) scale=8;
@@ -504,19 +493,20 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
     QImage img;
 
-    switch(cinfo.output_components) {
-    case 3:
-    case 4:
-        img.create( cinfo.output_width, cinfo.output_height, 32 );
-        break;
-    case 1: // B&W image
-        img.create( cinfo.output_width, cinfo.output_height,
-                    8, 256 );
-        for (int i=0; i<256; i++)
-            img.setColor(i, qRgb(i,i,i));
-        break;
-    default:
-        return false;
+    switch(cinfo.output_components) 
+    {
+        case 3:
+        case 4:
+            img.create( cinfo.output_width, cinfo.output_height, 32 );
+            break;
+        case 1: // B&W image
+            img.create( cinfo.output_width, cinfo.output_height,
+                        8, 256 );
+            for (int i=0; i<256; i++)
+                img.setColor(i, qRgb(i,i,i));
+            break;
+        default:
+            return false;
     }
 
     uchar** lines = img.jumpTable();
@@ -526,12 +516,15 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     jpeg_finish_decompress(&cinfo);
 
     // Expand 24->32 bpp
-    if ( cinfo.output_components == 3 ) {
-        for (uint j=0; j<cinfo.output_height; j++) {
+    if ( cinfo.output_components == 3 ) 
+    {
+        for (uint j=0; j<cinfo.output_height; j++) 
+        {
             uchar *in = img.scanLine(j) + cinfo.output_width*3;
             QRgb *out = (QRgb*)( img.scanLine(j) );
 
-            for (uint i=cinfo.output_width; i--; ) {
+            for (uint i=cinfo.output_width; i--; ) 
+            {
                 in-=3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
@@ -550,46 +543,39 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     return true;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
-// Load using Imlib2 API
+// Load using DImg
 
-bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path)
+bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 {
-    Imlib_Image imlib2_im =
-        imlib_load_image_immediately_without_cache(QFile::encodeName(path));
+    Digikam::DImg dimg_im(QFile::encodeName(path));
 
-    if (imlib2_im == NULL) {
+    if (dimg_im.isNull()) 
+    {
         return false;
     }
 
-    imlib_context_set_image(imlib2_im);
-
-    org_width_  = imlib_image_get_width();
-    org_height_ = imlib_image_get_height();
+    image = dimg_im.copyQImage();
+    org_width_  = image.width();
+    org_height_ = image.height();
 
     if ( QMAX(org_width_, org_height_) != cachedSize_ )
     {
-        imlib2_im = imlib_create_cropped_scaled_image(0, 0,
-                                                      org_width_, org_height_,
-                                                      cachedSize_, cachedSize_);
+        QSize sz(dimg_im.width(), dimg_im.height());
+        sz.scale(cachedSize_, cachedSize_, QSize::ScaleMin);
+        image.scale(sz.width(), sz.height());
     }
 
-    new_width_  = imlib_image_get_width();
-    new_height_ = imlib_image_get_height();
+    new_width_  = image.width();
+    new_height_ = image.height();
 
-    image.create( new_width_, new_height_, 32 );
     image.setAlphaBuffer(true) ;
 
-    DATA32 *data = imlib_image_get_data();
-    if (!data)
-        return false;
-
-    memcpy(image.bits(), data, image.numBytes());
-
-    imlib_free_image();
     return true;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Load using Dcraw
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
@@ -599,6 +585,7 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 
     KTempFile thumbFile(QString::null, "rawthumb");
     thumbFile.setAutoDelete(true);
+
     if (thumbFile.status() == 0)
     {
         if (dcraw_identify(QFile::encodeName(path),
@@ -609,7 +596,7 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
                 return true;
         }
     }
-    
+
     QCString command;
 
     // run dcraw with options:
@@ -626,17 +613,17 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 
     FILE* f = popen( command.data(), "r" );
 
-    QByteArray imgData;
-
     if ( !f )
         return false;
 
-    const int MAX_IPC_SIZE = (1024*32);
-    char buffer[MAX_IPC_SIZE];
+    QByteArray imgData;
+    const int  MAX_IPC_SIZE = (1024*32);
+    char       buffer[MAX_IPC_SIZE];
+    QFile      file;
+    Q_LONG     len;
 
-    QFile file;
     file.open( IO_ReadOnly,  f );
-    Q_LONG len;
+
     while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
     {
         if ( len == -1 )
@@ -662,8 +649,7 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     return true;
 }
 
-bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image,
-                                                       const QString& path)
+bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QString& path)
 {
     // this sucks royally. some of the thumbcreators need an instance of
     // app running so that they can use pixmap. till they get their 
@@ -756,7 +742,8 @@ extern "C"
         KInstance instance( "kio_digikamthumbnail" );
         ( void ) KGlobal::locale();
 
-        if (argc != 4) {
+        if (argc != 4) 
+        {
             kdDebug() << "Usage: kio_digikamthumbnail  protocol domain-socket1 domain-socket2"
                       << endl;
             exit(-1);
