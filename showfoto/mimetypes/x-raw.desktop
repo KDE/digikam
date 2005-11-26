@@ -1,7 +1,13 @@
 [Desktop Entry]
 # Base type of RAW images supported by dcraw program
 Name=RAW image
+Name[da]=RAW-billede
+Name[de]=RAW-Bild
+Name[pt]=Imagem RAW
 Comment=RAW image file format
+Comment[da]=RAW billedfilformat
+Comment[de]=RAW Bildformat
+Comment[pt]=Um 'plugin' do digiKam para reduzir o ruído da imagem
 Encoding=UTF-8
 Icon=raw
 MimeType=image/x-raw
