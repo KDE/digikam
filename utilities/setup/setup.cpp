@@ -70,7 +70,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                           BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
 
-    page_icc = addPage(i18n("ICC profils"), i18n("ICC profils"),
+    page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
     iccPage_ = new SetupICC(page_icc);
 
