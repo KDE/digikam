@@ -374,6 +374,9 @@ public:
      */
     void removeItemTag(Q_LLONG imageID, int tagID);
 
+    void setItemRating(Q_LLONG imageID, int rating);
+    int  getItemRating(Q_LLONG imageID);
+    
     /**
      * Remove all tags for the item
      * @param imageID the ID of the item

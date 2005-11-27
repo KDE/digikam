@@ -63,6 +63,7 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     case(AlbumSettings::ByIName):
     case(AlbumSettings::ByISize):
     case(AlbumSettings::ByIPath):
+    case(AlbumSettings::ByIRating):
     {
         return mine->url().localeAwareCompare(his->url());
     }

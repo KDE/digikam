@@ -989,6 +989,32 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
     return true;
 }
 
+void AlbumDB::setItemRating(Q_LLONG imageID, int rating)
+{
+    execSql ( QString ("REPLACE INTO ImageProperties "
+                       "(imageid, property, value) "
+                       "VALUES(%1, '%2', '%3');")
+              .arg(imageID)
+              .arg("Rating")
+              .arg(rating) );
+}
+
+int AlbumDB::getItemRating(Q_LLONG imageID)
+{
+    QStringList values;
+
+    execSql( QString("SELECT value FROM ImageProperties "
+                     "WHERE imageid=%1 and property='%2';")
+             .arg(imageID)
+             .arg("Rating"),
+             &values);
+
+    if (!values.isEmpty())
+        return values[0].toInt();
+    else
+        return 0;
+}
+
 QStringList AlbumDB::getItemURLsInAlbum(int albumID)
 {
     QStringList values;
@@ -1135,3 +1161,4 @@ Q_LLONG AlbumDB::lastInsertedRow()
 {
     return sqlite3_last_insert_rowid(m_db);    
 }
+

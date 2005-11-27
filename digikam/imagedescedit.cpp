@@ -61,6 +61,7 @@
 #include "tagcreatedlg.h"
 #include "syncjob.h"
 #include "thumbnailjob.h"
+#include "ratingwidget.h"
 
 class TAlbumCheckListItem : public QCheckListItem
 {
@@ -124,17 +125,23 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_dateTimeEdit = new KDateTimeEdit( dateTimeBox,"datepicker");
     topLayout->addWidget(dateTimeBox, 1, 0);
 
+    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), plainPage());
+    ratingBox->layout()->setAlignment(Qt::AlignCenter);
+    m_ratingWidget = new RatingWidget(ratingBox);
+    topLayout->addWidget(ratingBox, 2, 0);
+    
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), plainPage());
     m_commentsEdit = new KTextEdit(commentsBox);
     m_commentsEdit->setTextFormat(QTextEdit::PlainText);
     m_commentsEdit->setCheckSpellingEnabled(true);
-    topLayout->addWidget(commentsBox, 2, 0);
+    topLayout->addWidget(commentsBox, 3, 0);
 
     connect(m_commentsEdit, SIGNAL(textChanged()),
             SLOT(slotModified()));
     connect(m_dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
             SLOT(slotModified()));
-
+    connect(m_ratingWidget, SIGNAL(signalRatingChanged(int)),
+            SLOT(slotModified()));
 
     // Tags view ---------------------------------------------------
 
@@ -163,7 +170,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
     m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     tagsBoxLayout->addWidget(m_recentTagsBtn);
 
-    topLayout->addMultiCellWidget(tagsBox, 0, 2, 1, 1);
+    topLayout->addMultiCellWidget(tagsBox, 0, 3, 1, 1);
 
     m_tagsView->addColumn(i18n( "Tags" ));
     m_tagsView->header()->hide();
@@ -193,6 +200,7 @@ ImageDescEdit::ImageDescEdit(AlbumIconView* view, AlbumIconItem* currItem,
 
     m_commentsEdit->installEventFilter(this);
     m_dateTimeEdit->installEventFilter(this);
+    m_ratingWidget->installEventFilter(this);
     m_tagsView->installEventFilter(this);
 
     m_commentsEdit->setFocus();
@@ -349,6 +357,7 @@ void ImageDescEdit::slotApply()
 
     info->setCaption(m_commentsEdit->text());
     info->setDateTime(m_dateTimeEdit->dateTime());
+    info->setRating(m_ratingWidget->rating());
 
     if (AlbumSettings::instance() &&
         AlbumSettings::instance()->getSaveExifComments())
@@ -434,6 +443,7 @@ void ImageDescEdit::slotItemChanged()
     m_thumbLabel->setPixmap(QPixmap());
     m_commentsEdit->setText(info->caption());
     m_dateTimeEdit->setDateTime(info->dateTime());
+    m_ratingWidget->setRating(info->rating());
 
     QValueList<int> tagIDs = info->tagIDs();
 

@@ -40,7 +40,8 @@ public:
         IMAGENAME,
         IMAGECAPTION,
         IMAGEDATE,
-        KEYWORD
+        KEYWORD,
+        RATING
     };
 
     enum SOperator

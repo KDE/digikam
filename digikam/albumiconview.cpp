@@ -137,6 +137,7 @@ public:
     QString albumComments;
 
     QRect itemRect;
+    QRect itemRatingRect;
     QRect itemDateRect;
     QRect itemPixmapRect;
     QRect itemNameRect;
@@ -149,6 +150,7 @@ public:
     QPixmap itemRegPixmap;
     QPixmap itemSelPixmap;
     QPixmap bannerPixmap;
+    QPixmap ratingPixmap;
 
     QFont fnReg;
     QFont fnCom;
@@ -172,6 +174,21 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
+    // -- Load rating Pixmap ------------------------------------------
+
+    KGlobal::dirs()->addResourceType("digikam_rating",
+                                     KGlobal::dirs()->kde_default("data")
+                                     + "digikam/data");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
+                                                             "rating.png");
+    ratingPixPath += "/rating.png";
+    d->ratingPixmap = QPixmap(ratingPixPath);
+
+    QPainter painter(&d->ratingPixmap);
+    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
+                     ThemeEngine::instance()->textSpecialRegColor());
+    painter.end();
+    
     // -- ImageLister connections -------------------------------------
 
     connect(d->imageLister, SIGNAL(signalNewFilteredItems(const ImageInfoList&)),
@@ -482,6 +499,31 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     popmenu.insertSeparator();
 
+    // Assign Star Rating -------------------------------------------
+
+    QPopupMenu ratingMenu;
+    connect(&ratingMenu, SIGNAL(activated(int)),
+            SLOT(slotAssignRating(int)));
+
+    ratingMenu.insertItem(i18n("None"), 0);
+    for (int i=1; i<=5; i++)
+    {
+        QPixmap pix(d->ratingPixmap.width() * 5,
+                    d->ratingPixmap.height());
+        pix.fill(ratingMenu.colorGroup().background());
+
+        QPainter painter(&pix);
+        painter.drawTiledPixmap(0, 0,
+                                i*d->ratingPixmap.width(),
+                                pix.height(),
+                                d->ratingPixmap);
+        painter.end();
+        ratingMenu.insertItem(pix, i);
+    }
+
+    popmenu.insertItem(i18n("Assign Rating"), &ratingMenu);
+    popmenu.insertSeparator();
+        
     // Merge in the KIPI plugins actions ----------------------------
 
     KIPI::PluginLoader* kipiPluginLoader = KIPI::PluginLoader::instance();
@@ -1170,6 +1212,11 @@ QRect AlbumIconView::itemRect() const
     return d->itemRect;
 }
 
+QRect AlbumIconView::itemRatingRect() const
+{
+    return d->itemRatingRect;
+}
+
 QRect AlbumIconView::itemDateRect() const
 {
     return d->itemDateRect;
@@ -1223,6 +1270,11 @@ QPixmap* AlbumIconView::itemBaseSelPixmap() const
 QPixmap AlbumIconView::bannerPixmap() const
 {
     return d->bannerPixmap;
+}
+
+QPixmap AlbumIconView::ratingPixmap() const
+{
+    return d->ratingPixmap;    
 }
 
 QFont AlbumIconView::itemFontReg() const
@@ -1289,6 +1341,7 @@ void AlbumIconView::updateBannerRectPixmap()
 void AlbumIconView::updateItemRectsPixmap()
 {
     d->itemRect = QRect(0,0,0,0);
+    d->itemRatingRect = QRect(0,0,0,0);
     d->itemDateRect = QRect(0,0,0,0);
     d->itemPixmapRect = QRect(0,0,0,0);
     d->itemNameRect = QRect(0,0,0,0);
@@ -1336,6 +1389,12 @@ void AlbumIconView::updateItemRectsPixmap()
     d->itemPixmapRect = QRect(margin, y, w, d->thumbSize.size()+margin);
     y = d->itemPixmapRect.bottom();
 
+    if (d->albumSettings->getIconShowRating())
+    {
+        d->itemRatingRect = QRect(margin, y, w, d->ratingPixmap.height());
+        y = d->itemRatingRect.bottom();
+    }
+    
     if (d->albumSettings->getIconShowName())
     {
         d->itemNameRect = QRect(margin, y, w, oneRowRegRect.height());
@@ -1393,6 +1452,11 @@ void AlbumIconView::slotThemeChanged()
     plt.setInactive(cg);
     setPalette(plt);
 
+    QPainter painter(&d->ratingPixmap);
+    painter.fillRect(0, 0, d->ratingPixmap.width(), d->ratingPixmap.height(),
+                     ThemeEngine::instance()->textSpecialRegColor());
+    painter.end();
+    
     updateBannerRectPixmap();
     updateItemRectsPixmap();
 
@@ -1478,6 +1542,22 @@ void AlbumIconView::slotRemoveTag(int tagID)
         d->imageLister->refresh();
     }
     updateContents();
+}
+
+void AlbumIconView::slotAssignRating(int rating)
+{
+    rating = QMIN(5, QMAX(0, rating));
+    
+    for (IconItem *it = firstItem(); it; it = it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+            albumItem->imageInfo()->setRating(rating);
+        }
+    }
+
+    triggerUpdate();
 }
 
 void AlbumIconView::slotDIOResult(KIO::Job* job)

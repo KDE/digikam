@@ -42,6 +42,7 @@
 #include <albuminfo.h>
 #include <albummanager.h>
 #include <searchwidgets.h>
+#include <ratingwidget.h>
 #include <squeezedcombobox.h>
 
 static struct
@@ -62,8 +63,9 @@ RuleKeyTable[] =
     { I18N_NOOP("Image Date"),       "imagedate",       SearchAdvancedRule::DATE     },
     { I18N_NOOP("Image Caption"),    "imagecaption",    SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Keyword"),          "keyword",         SearchAdvancedRule::LINEEDIT },
+    { I18N_NOOP("Rating"),           "rating",          SearchAdvancedRule::RATING   },
 };
-static const int RuleKeyTableCount = 10;
+static const int RuleKeyTableCount = 11;
 
 static struct
 {
@@ -85,8 +87,11 @@ RuleOpTable[] =
     { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },
+    { I18N_NOOP("Better then"),        "GT",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("Worse then"),         "LT",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING },
 };
-static const int RuleOpTableCount = 11;
+static const int RuleOpTableCount = 14;
 
 SearchRuleLabel::SearchRuleLabel( const QString & text,
                       QWidget * parent,
@@ -192,6 +197,14 @@ void SearchAdvancedRule::setValues(const KURL& url)
     if (m_widgetType == DATE)
         m_dateEdit->setDate( QDate::fromString( value, Qt::ISODate) );
 
+    if (m_widgetType == RATING)
+    {
+        bool ok;
+        int  num = value.toInt(&ok);
+        if (ok)
+            m_ratingWidget->setRating( num );
+    }
+
     if (m_widgetType == TAGS || m_widgetType == ALBUMS)
     {
         bool ok;
@@ -261,6 +274,9 @@ void SearchAdvancedRule::setValueWidget(
 
     if (m_dateEdit && oldType == DATE)
         delete m_dateEdit;
+
+    if (m_ratingWidget && oldType == RATING)
+	delete m_ratingWidget;
 
     if (m_valueCombo && (oldType == ALBUMS || oldType == TAGS))
         delete m_valueCombo;
@@ -338,6 +354,15 @@ void SearchAdvancedRule::setValueWidget(
         connect( m_valueCombo, SIGNAL( activated(int) ),
                  this, SIGNAL( signalPropertyChanged() ));
     }
+    else if (newType == RATING)
+    {
+        m_ratingWidget = new RatingWidget( m_valueBox );
+        m_ratingWidget->show();
+
+        connect( m_ratingWidget, SIGNAL( signalRatingChanged(int) ),
+                 this, SIGNAL( signalPropertyChanged() ));
+    }
+
 }
 
 QString SearchAdvancedRule::urlKey() const
@@ -373,6 +398,9 @@ QString SearchAdvancedRule::urlValue() const
 
     else if (m_widgetType == TAGS || m_widgetType == ALBUMS)
         string = QString::number(m_itemsIndexIDMap[ m_valueCombo->currentItem() ]);
+
+    else if (m_widgetType == RATING)
+        string = QString::number(m_ratingWidget->rating()) ;
 
     return string;
 }

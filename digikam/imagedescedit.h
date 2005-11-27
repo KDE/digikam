@@ -48,6 +48,7 @@ class TAlbum;
 class Album;
 class ThumbnailJob;
 class TAlbumListView;
+class RatingWidget;
 
 class ImageDescEdit : public KDialogBase
 {
@@ -77,6 +78,7 @@ private:
     KLineEdit       *m_tagsSearchEdit;
     QToolButton     *m_tagsSearchClearBtn;
     KDateTimeEdit   *m_dateTimeEdit;
+    RatingWidget    *m_ratingWidget;
     bool             m_modified;
 
     void tagNew(TAlbum* parAlbum);

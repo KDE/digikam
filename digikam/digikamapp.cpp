@@ -388,6 +388,7 @@ void DigikamApp::setupActions()
     sortImagesActionList.append(i18n("By Path"));
     sortImagesActionList.append(i18n("By Date"));
     sortImagesActionList.append(i18n("By File Size"));
+    sortImagesActionList.append(i18n("By Rating"));
     mImageSortAction->setItems(sortImagesActionList);
 
     // -----------------------------------------------------------------

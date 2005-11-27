@@ -154,6 +154,17 @@ int AlbumIconItem::compare(IconItem *item)
         else
             return 0;
     }
+    case(AlbumSettings::ByIRating):
+    {
+        int myrating(info_->rating());
+        int hisrating(iconItem->info_->rating());
+        if (myrating < hisrating)
+            return 1;
+        else if (myrating > hisrating)
+            return -1;
+        else
+            return 0;
+    }
     }
 
     return 0;
@@ -203,6 +214,21 @@ void AlbumIconItem::paintItem()
         dirty_ = false;
     }
 
+    if (settings->getIconShowRating())
+    {
+        r = view_->itemRatingRect();
+        QPixmap ratingPixmap = view_->ratingPixmap();
+
+        int rating = info_->rating();
+        
+        int x, w;
+        x = r.x() + (r.width() - rating * ratingPixmap.width())/2;
+        w = rating * ratingPixmap.width();
+        
+        p.drawTiledPixmap(x, r.y(), w, r.height(), ratingPixmap);
+    }
+    
+    
     if (settings->getIconShowName())
     {
         r = view_->itemNameRect();

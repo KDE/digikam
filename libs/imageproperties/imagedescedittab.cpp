@@ -70,6 +70,7 @@
 #include "syncjob.h"
 #include "navigatebarwidget.h"
 #include "imagedescedittab.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -109,7 +110,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     m_currItem = 0;
     m_modified = false;
     
-    QGridLayout *topLayout = new QGridLayout(this, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     m_navigateBar  = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(m_navigateBar, 0, 0, 0, 2);
@@ -126,8 +127,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), this);
     m_dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
-    topLayout->addWidget(dateTimeBox, 1, 0);
     topLayout->addMultiCellWidget(dateTimeBox, 2, 2, 0, 2);
+
+    // Rating view --------------------------------------------------
+
+    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), this);
+    ratingBox->layout()->setAlignment(Qt::AlignCenter);
+    m_ratingWidget = new RatingWidget(ratingBox);
+    topLayout->addMultiCellWidget(ratingBox, 3, 3, 0, 2);
         
     // Tags view ---------------------------------------------------
 
@@ -155,7 +162,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     tagsBoxLayout->addWidget(m_recentTagsBtn);
 
-    topLayout->addMultiCellWidget(tagsBox, 3, 3, 0, 2);
+    topLayout->addMultiCellWidget(tagsBox, 4, 4, 0, 2);
 
     m_tagsView->addColumn(i18n( "Tags" ));
     m_tagsView->header()->hide();
@@ -184,7 +191,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     connect(m_dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
             this, SLOT(slotModified()));
-    
+
+    connect(m_ratingWidget, SIGNAL(signalRatingChanged(int)),
+            this, SLOT(slotModified()));
+     
     connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(QListViewItem*, const QPoint&, int)));
             
@@ -201,6 +211,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     m_commentsEdit->installEventFilter(this);
     m_dateTimeEdit->installEventFilter(this);
+    m_ratingWidget->installEventFilter(this);
     m_tagsView->installEventFilter(this);
 
     m_commentsEdit->setFocus();
@@ -313,6 +324,7 @@ void ImageDescEditTab::applyChanges()
 
     info->setCaption(m_commentsEdit->text());
     info->setDateTime(m_dateTimeEdit->dateTime());
+    info->setRating(m_ratingWidget->rating());
 
     if (AlbumSettings::instance() &&
         AlbumSettings::instance()->getSaveExifComments())
@@ -401,6 +413,7 @@ void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int
 
     m_commentsEdit->setText(info->caption());
     m_dateTimeEdit->setDateTime(info->dateTime());
+    m_ratingWidget->setRating(info->rating());
 
     QValueList<int> tagIDs = info->tagIDs();
 

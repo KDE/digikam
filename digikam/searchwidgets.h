@@ -33,6 +33,7 @@ class QLabel;
 class QVGroupBox;
 class QLabel;
 class KDateEdit;
+class RatingWidget;
 class KURL;
 class SqueezedComboBox;
 
@@ -261,7 +262,8 @@ public:
         LINEEDIT,
         DATE,
         ALBUMS,
-        TAGS
+        TAGS,
+        RATING
     };
 
 private:
@@ -282,6 +284,7 @@ private:
     QLineEdit*              m_lineEdit;
     KDateEdit*              m_dateEdit;
     SqueezedComboBox*       m_valueCombo;
+    RatingWidget*           m_ratingWidget;
 
     QMap<int, int>          m_itemsIndexIDMap;
 

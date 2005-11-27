@@ -47,6 +47,7 @@ class AlbumIconItem;
 class TAlbum;
 class Album;
 class ThumbnailJob;
+class RatingWidget;
 
 namespace Digikam
 {
@@ -104,6 +105,7 @@ private:
     KLineEdit       *m_tagsSearchEdit;
     QToolButton     *m_tagsSearchClearBtn;
     KDateTimeEdit   *m_dateTimeEdit;
+    RatingWidget    *m_ratingWidget;
     bool             m_modified;
     
     NavigateBarWidget *m_navigateBar;
