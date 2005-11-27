@@ -79,7 +79,6 @@
 #include "albumiconitem.h"
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
-#include "imagedescedit.h"
 #include "tagspopupmenu.h"
 
 ImageWindow* ImageWindow::imagewindow()
