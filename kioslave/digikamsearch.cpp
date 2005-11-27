@@ -136,7 +136,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query head
         sqlQuery = "SELECT Images.id, Images.name, Images.dirid, Images.datetime, Albums.url "
-                   "FROM Images, Albums "
+                   "FROM Images, Albums, ImageProperties "
                    "WHERE ( ";
 
         // query body
@@ -144,7 +144,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query tail
         sqlQuery += " ) ";
-        sqlQuery += " AND (Albums.id=Images.dirid); ";
+        sqlQuery += " AND (Albums.id=Images.dirid) AND (Images.id = ImageProperties.imageid); ";
 
         QStringList values;
         QString     errMsg;
@@ -240,16 +240,15 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query head
         sqlQuery = "SELECT Albums.url||'/'||Images.name "
-                   "FROM Images, Albums "
+                   "FROM Images, Albums, ImageProperties "
                    "WHERE ( ";
 
         // query body
-        
         sqlQuery += buildQuery(url);
 
         // query tail
         sqlQuery += " ) ";
-        sqlQuery += " AND (Albums.id=Images.dirid) ";
+        sqlQuery += " AND (Albums.id=Images.dirid) AND (Images.id = ImageProperties.imageid) ";
         sqlQuery += " LIMIT 500;";
 
         QStringList values;
@@ -331,6 +330,10 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
         {
             rule.key = KEYWORD;
         }
+        else if (key == "rating")
+        {
+            rule.key = RATING;
+        }
         else
         {
             kdWarning() << "Unknown rule type: " << key << " passed to kioslave"
@@ -400,6 +403,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
                     todo.append( ALBUMCAPTION );
                     todo.append( ALBUMCOLLECTION );
                     todo.append( IMAGECAPTION );
+                    todo.append( RATING );
 
                     sqlQuery += "(";
                     QValueListIterator<SKey> it;
@@ -501,6 +505,11 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     case (KEYWORD):
     {
         kdWarning() << "KEYWORD Detected which is not possible" << endl;
+        break;
+    }
+    case(RATING):
+    {
+        query = " (ImageProperties.value $$##$$ $$@@$$ and ImageProperties.property='Rating') ";
         break;
     }
     }

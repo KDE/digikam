@@ -230,6 +230,18 @@ void ImageInfo::removeAllTags()
     db->removeItemAllTags(m_ID);
 }
 
+int ImageInfo::rating() const
+{
+    AlbumDB* db  = m_man->albumDB();
+    return db->getItemRating(m_ID);
+}
+
+void ImageInfo::setRating(int value)
+{
+    AlbumDB* db  = m_man->albumDB();
+    db->setItemRating(m_ID, value);
+}
+
 void ImageInfo::refresh()
 {
     m_datetime = m_man->albumDB()->getItemDate(m_ID);

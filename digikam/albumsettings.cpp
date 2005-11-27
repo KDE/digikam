@@ -66,6 +66,7 @@ public:
     bool iconShowComments;
     bool iconShowResolution;
     bool iconShowTags;
+    bool iconShowRating;
     bool saveExifComments;
     bool exifRotate;
     bool exifSetOrientation;
@@ -129,6 +130,7 @@ void AlbumSettings::init()
     d->iconShowComments   = true;
     d->iconShowResolution = false;
     d->iconShowTags       = true;
+    d->iconShowRating     = true;
     d->saveExifComments   = false;
     d->exifRotate         = false;
     d->exifSetOrientation = false;
@@ -193,6 +195,8 @@ void AlbumSettings::readSettings()
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
 
+    d->iconShowRating = config->readBoolEntry("Icon Show Rating", true);
+    
     d->currentTheme = config->readEntry("Theme", i18n("Default"));
     
     config->setGroup("EXIF Settings");
@@ -271,6 +275,9 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show Tags",
                        d->iconShowTags);
 
+    config->writeEntry("Icon Show Rating",
+                       d->iconShowRating);
+    
     config->writeEntry("Theme", d->currentTheme);
     
     config->setGroup("EXIF Settings");
@@ -498,6 +505,16 @@ void AlbumSettings::setIconShowDate(bool val)
 bool AlbumSettings::getIconShowDate() const
 {
     return d->iconShowDate;
+}
+
+void AlbumSettings::setIconShowRating(bool val)
+{
+    d->iconShowRating = val;    
+}
+
+bool AlbumSettings::getIconShowRating() const
+{
+    return d->iconShowRating;
 }
 
 void AlbumSettings::setSaveExifComments(bool val)

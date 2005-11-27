@@ -188,6 +188,10 @@ public:
      */
     void        removeAllTags();
 
+    int         rating() const;
+    
+    void        setRating(int value);
+    
     /**
      * Assign a viewitem for this item. This is useful when a view has a
      * corresponding viewitem for this item and wants to access the viewitem, given

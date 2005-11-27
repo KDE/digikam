@@ -62,6 +62,7 @@ private:
     QCheckBox    *iconShowResolutionBox_;
     QCheckBox    *iconShowCommentsBox_;
     QCheckBox    *iconShowTagsBox_;
+    QCheckBox    *iconShowRatingBox_;
 
     KDialogBase  *mainDialog_;
 

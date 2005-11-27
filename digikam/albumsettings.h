@@ -47,7 +47,8 @@ public:
         ByIName = 0,
         ByIPath,
         ByIDate,
-        ByISize
+        ByISize,
+        ByIRating
     };
     
     AlbumSettings();
@@ -113,6 +114,9 @@ public:
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 
+    void setIconShowRating(bool val);
+    bool getIconShowRating() const;
+    
     void setSaveExifComments(bool val);
     bool getSaveExifComments() const;
 

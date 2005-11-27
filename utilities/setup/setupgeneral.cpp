@@ -114,9 +114,13 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
    iconShowCommentsBox_->setText(i18n("Show &digiKam comments"));
    tagSettingsLayout->addWidget(iconShowCommentsBox_, 4, 0);
 
+   iconShowRatingBox_ = new QCheckBox(iconTextGroup);
+   iconShowRatingBox_->setText(i18n("Show file rating"));
+   tagSettingsLayout->addWidget(iconShowRatingBox_, 5,0);
+
    iconShowResolutionBox_ = new QCheckBox(iconTextGroup);
    iconShowResolutionBox_->setText(i18n("Show ima&ge dimensions (warning: slow)"));
-   tagSettingsLayout->addWidget(iconShowResolutionBox_, 5, 0);
+   tagSettingsLayout->addWidget(iconShowResolutionBox_, 6, 0);
 
    layout->addWidget(iconTextGroup);
 
@@ -148,6 +152,7 @@ void SetupGeneral::applySettings()
     settings->setIconShowDate(iconShowDateBox_->isChecked());
     settings->setIconShowResolution(iconShowResolutionBox_->isChecked());
     settings->setIconShowComments(iconShowCommentsBox_->isChecked());
+    settings->setIconShowRating(iconShowRatingBox_->isChecked());
 
     settings->saveSettings();
 }
@@ -168,6 +173,7 @@ void SetupGeneral::readSettings()
     iconShowDateBox_->setChecked(settings->getIconShowDate());
     iconShowResolutionBox_->setChecked(settings->getIconShowResolution());
     iconShowCommentsBox_->setChecked(settings->getIconShowComments());
+    iconShowRatingBox_->setChecked(settings->getIconShowRating());
 }
 
 void SetupGeneral::slotChangeAlbumPath()

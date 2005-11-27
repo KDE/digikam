@@ -85,6 +85,7 @@ public:
     void refreshItems(const KURL::List& itemList);
 
     QRect    itemRect() const;
+    QRect    itemRatingRect() const;
     QRect    itemDateRect() const;
     QRect    itemPixmapRect() const;
     QRect    itemNameRect() const;
@@ -97,6 +98,7 @@ public:
     QPixmap* itemBaseRegPixmap() const;
     QPixmap* itemBaseSelPixmap() const;
     QPixmap  bannerPixmap() const;
+    QPixmap  ratingPixmap() const;
 
     QFont    itemFontReg() const;
     QFont    itemFontCom() const;
@@ -149,6 +151,8 @@ private slots:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
+    void slotAssignRating(int rating);
+    
     void slotDIOResult(KIO::Job* job);
     
 public slots:
