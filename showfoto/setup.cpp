@@ -34,6 +34,7 @@
 #include "setupeditor.h"
 #include "setupplugins.h"
 #include "setupslideshow.h"
+#include "setupicc.h"
 #include "setup.h"
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -54,6 +55,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                              BarIcon("slideshow", KIcon::SizeMedium));
     slideshowPage_ = new SetupSlideShow(page_slideshow);
 
+    page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
+                       BarIcon("colorize", KIcon::SizeMedium));
+    iccPage_ = new SetupICC(page_icc);
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
@@ -70,6 +75,7 @@ void Setup::slotOkClicked()
     editorPage_->applySettings();
     pluginsPage_->applySettings();
     slideshowPage_->applySettings();
+    iccPage_->applySettings();
     close();
 }
 

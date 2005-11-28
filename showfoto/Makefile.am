@@ -17,7 +17,8 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/thumbbar \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 
 showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp slideshow.cpp \
-		   setupeditor.cpp setupplugins.cpp setupslideshow.cpp 
+		   setupeditor.cpp setupplugins.cpp setupslideshow.cpp \
+		   setupicc.cpp 
 
 showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) \

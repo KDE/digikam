@@ -30,6 +30,7 @@ class QFrame;
 class SetupEditor;
 class SetupPlugins;
 class SetupSlideShow;
+class SetupICC;
 
 class Setup : public KDialogBase 
 {
@@ -41,7 +42,8 @@ public:
     {
         EditorPage=0,
         PluginsPage,
-        SlideshowPage
+        SlideshowPage,
+        ICCPage
     };
     
     Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
@@ -54,9 +56,11 @@ private:
     QFrame           *page_editor;
     QFrame           *page_plugins;
     QFrame           *page_slideshow;
+    QFrame           *page_icc;
     
     SetupEditor      *editorPage_;
     SetupSlideShow   *slideshowPage_;
+    SetupICC         *iccPage_;
 
 private slots:
 
