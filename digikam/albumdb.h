@@ -439,7 +439,7 @@ public:
      * @param albumID the id of the albumdb
      * @return the url of the albumdb
      */
-    QString AlbumDB::getAlbumURL(int albumID);
+    QString getAlbumURL(int albumID);
 
     /**
      * Returns the average date of all images for that album.
