@@ -27,6 +27,7 @@
 #include <qwidget.h>
 
 // Local includes
+
 #include "digikam_export.h"
 
 class QCustomEvent;
@@ -51,7 +52,7 @@ public:
     AlphaChannelHistogram,    // Alpha channel.
     ColorChannelsHistogram    // All color channels.
     };
-    
+
     enum HistogramScale
     {
     LinScaleHistogram=0,      // Linear scale.
@@ -70,7 +71,7 @@ public:
     FullImageHistogram=0,     // Full image histogram rendering.
     ImageSelectionHistogram   // Image selection histogram rendering.
     };
-    
+
 private:
 
     enum RepaintType
@@ -79,52 +80,86 @@ private:
     HistogramStarted,         // Histogram values calculation started.
     HistogramCompleted,       // Histogram values calculation completed.
     HistogramFailed           // Histogram values calculation failed.
-    };    
+    };
 
 public:
 
-    // Constructor without image data (needed to use updateData() method after instance created).
-    
+    /** Constructor without image data. Needed to use updateData() method after to create instance.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     QWidget *parent=0, bool selectMode=true,
                     bool blinkComputation=true,
                     bool statisticsVisible=false);
 
-    // Constructor with image data and without image selection data.
-    
+    // FIXME : remove this constructor when all digiKam core will be ported to DImg
+    /** Constructor with image data and without image selection data.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     QWidget *parent=0, bool selectMode=true,
                     bool blinkComputation=true,
                     bool statisticsVisible=false);
-    
-    // Constructor with image data and image selection data.
-    
+
+    /** Constructor with image data and without image selection data.*/
+    HistogramWidget(int w, int h,                              // Widget size.
+                    uchar *i_data, uint i_w, uint i_h,         // Full image info.
+                    bool i_sixteenBits,                        // 8 or 16 bits image.
+                    QWidget *parent=0, bool selectMode=true,
+                    bool blinkComputation=true,
+                    bool statisticsVisible=false);
+
+    // FIXME : remove this constructor when all digiKam core will be ported to DImg
+    /** Constructor with image data and image selection data.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     uint *i_data, uint i_w, uint i_h,          // Full image info.
                     uint *s_data, uint s_w, uint s_h,          // Image selection info.
                     QWidget *parent=0, bool selectMode=true,
                     bool blinkComputation=true,
                     bool statisticsVisible=false);
-    
+
+    /** Constructor with image data and image selection data.*/
+    HistogramWidget(int w, int h,                              // Widget size.
+                    uchar *i_data, uint i_w, uint i_h,         // Full image info.
+                    uchar *s_data, uint s_w, uint s_h,         // Image selection info.
+                    bool i_sixteenBits,                        // 8 or 16 bits image.
+                    QWidget *parent=0, bool selectMode=true,
+                    bool blinkComputation=true,
+                    bool statisticsVisible=false);
+
+    void setup(int w, int h, bool selectMode=true,
+               bool blinkComputation=true,
+               bool statisticsVisible=false);
+
     ~HistogramWidget();
 
-    // Stop current histogram computations.
+    /** Stop current histogram computations.*/
     void stopHistogramComputation(void);
-    
-    // Update histogram data methods.
-    void updateData(uint *i_data, uint i_w, uint i_h, 
-                    uint *s_data=0, uint s_w=0, uint s_h=0, 
+
+    // FIXME : remove this constructor when all digiKam core will be ported to DImg
+    /** Update full image histogram data methods.*/
+    void updateData(uint *i_data, uint i_w, uint i_h,
+                    uint *s_data=0, uint s_w=0, uint s_h=0,
                     bool blinkComputation=true);
-    
-    void updateSelectionData(uint *s_data, uint s_w, uint s_h, 
+
+    /** Update full image histogram data methods.*/
+    void updateData(uchar *i_data, uint i_w, uint i_h,
+                    bool i_sixteenBits,                        // 8 or 16 bits image.
+                    uchar *s_data=0, uint s_w=0, uint s_h=0, 
                     bool blinkComputation=true);
-    
-    void setHistogramGuide(QColor color);                    
+
+    // FIXME : remove this constructor when all digiKam core will be ported to DImg
+    /** Update image selection histogram data methods.*/
+    void updateSelectionData(uint *s_data, uint s_w, uint s_h,
+                             bool blinkComputation=true);
+
+    /** Update image selection histogram data methods.*/
+    void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
+                             bool i_sixteenBits,               // 8 or 16 bits image.
+                             bool blinkComputation=true);
+
+    void setHistogramGuide(QColor color);
     void reset(void);
 
 public:
-        
+
     int   m_channelType;     // Channel type to draw.
     int   m_scaleType;       // Scale to use for drawing.
     int   m_colorType;       // Color to use for drawing in All Colors Channel mode.
@@ -134,7 +169,7 @@ public:
     class ImageHistogram *m_selectionHistogram;        // Image selection.
 
 signals:
-    
+
     void signalMousePressed( int );
     void signalMouseReleased( int );
     void signalHistogramComputationDone(void);
@@ -146,16 +181,16 @@ public slots:
     void slotMaxValueChanged( int max );
 
 protected slots:
-    
+
     void slotBlinkTimerDone( void );
-            
+
 protected:
 
     void paintEvent( QPaintEvent * );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
-    
+
 private:
 
     // Current selection informations.
@@ -163,7 +198,8 @@ private:
     int     m_xminOrg; 
     int     m_xmax;
     int     m_clearFlag;          // Clear drawing zone with message.
-    
+
+    bool    m_sixteenBits;
     bool    m_guideVisible;       // Display color guide.
     bool    m_statisticsVisible;  // Display tooltip histogram statistics.
     bool    m_inSelected;
@@ -171,12 +207,12 @@ private:
     bool    m_blinkFlag; 
     bool    m_blinkComputation;   // If true, a message will be displayed during histogram computation,
                                   // else nothing (limit flicker effect in widget especially for small
-                                  // image/computation time).       
-    
+                                  // image/computation time).
+
     QTimer *m_blinkTimer;
-    
+
     QColor  m_colorGuide;
-    
+
     void customEvent(QCustomEvent *event);
 };
 
