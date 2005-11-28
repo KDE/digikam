@@ -380,7 +380,7 @@ bool Canvas::load(const QString& filename)
     return (isReadOnly);
 }
 
-void Canvas::preload(const QString& filename)
+void Canvas::preload(const QString& /*filename*/)
 {
 //    d->im->preload(filename);
 }
