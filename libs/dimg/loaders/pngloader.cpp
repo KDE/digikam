@@ -358,6 +358,14 @@ bool PNGLoader::load(const QString& filePath)
     {
         imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
         kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
+
+        QString key(text_ptr[i].key);
+
+        if (key == "Source")
+           imageSetCameraModel(key);
+
+        if (key == "Software")
+           imageSetCameraConstructor(key);
     }
     
     // -------------------------------------------------------------------

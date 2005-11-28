@@ -512,6 +512,12 @@ void TIFFLoader::getTiffTextTag(TIFF* tif, int tag)
         QByteArray ba(strlen(text));
         memcpy(ba.data(), text, strlen(text));
         imageMetaData().insert(tag, ba);
+
+        if (tiffTag == TIFFTAG_MODEL)
+           imageSetCameraModel(QString::QString(text));
+
+        if (tiffTag == TIFFTAG_MAKE)
+           imageSetCameraConstructor(QString::QString(text));
     }
 }
 

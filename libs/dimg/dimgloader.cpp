@@ -97,4 +97,14 @@ QByteArray& DImgLoader::imageICCProfil()
     return m_image->m_priv->ICCProfil;
 }
 
+void DImgLoader::imageSetCameraModel(const QString& model)
+{
+    m_image->setCameraModel(model);
+}
+
+void DImgLoader::imageSetCameraConstructor(const QString& constructor)
+{
+    m_image->setCameraConstructor(constructor);
+}
+
 }  // NameSpace Digikam

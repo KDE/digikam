@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------
+
+Native DIMG Loaders status (Gilles Caulier - 2005-11-28)
+
+Format   Read   Write   ICC     MetaData   8bits    16bits  depency     Remarks
+
+JPG      Done   Done    Done    Done       yes      N.A     libjpeg     Metadata are EXIF/IPTC/APP13 - ICC profil automatic or manual
+PNG      Done   Done    Done    Done       yes      yes     libpng      Metadata are Embedded text - ICC profil automatic or manual
+TIF      Done   Done    Done    Done       yes      yes     libtiff     Metadata are IPTC - ICC profil automatic or manual
+RAW      Done   N.A     TODO    N.A        yes      yes     dcraw       RAW file formats supported by dcraw program
+PPM      Done   TODO    N.A     TODO       yes      yes     none        Metadata is just an embedded comment - no embedded ICC profil
+
+JP2  ==> TODO
+EXR  ==> TODO
+
+Others file formats are supported only in 8 bits/color/pixel using QImage/kimgio. 
+QT3.x + KDE 3.4.x support these formats :
+
+Format   Read       Write      Remarks
+
+PSD      yes        no         Photoshop file format
+JP2      yes        yes        JPEG 2000 (libjasper)
+EXR      yes        no         OpenEXR (libopenexr)
+XCF      yes        no
+PBM      yes        yes
+PGM      yes        yes  
+PPM      no         yes
+TGA      yes        yes
+PCX      yes        yes
+BMP      yes        yes
+RGB      yes        yes
+XBM      yes        yes
+XPM      yes        yes
+EPS      yes        yes
+DDS      yes        no
+ICO      yes        no
+MNG      yes        no
+GIF      yes        no
+
+---------------------------------------------------------------------------
+
+TODO list :
+
+JPEGLoader : add a metho to get 'make' and model' exif markers.

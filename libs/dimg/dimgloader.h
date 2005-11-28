@@ -67,10 +67,13 @@ protected:
     QMap<QString, QString>& imageEmbeddedText();    
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
+
+    void                    imageSetCameraModel(const QString& model);
+    void                    imageSetCameraConstructor(const QString& constructor);
     
 protected:
     
-    DImg                *m_image;
+    DImg                   *m_image;
     
 private:
     

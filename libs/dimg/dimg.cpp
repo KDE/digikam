@@ -54,7 +54,7 @@ typedef int64_t  llong;
 
 extern "C"
 {
-int dcraw_identify(const char* infile, const char* outfile);
+    int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* cameraModel);
 }
 
 namespace Digikam
@@ -63,6 +63,8 @@ namespace Digikam
 DImg::DImg()
     : m_priv(new DImgPrivate)
 {
+    m_priv->cameraModel       = QString::null;
+    m_priv->cameraConstructor = QString::null;
 }
 
 DImg::DImg(const QString& filePath)
@@ -316,7 +318,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         }
         pclose (file);
     }
-    else if (dcraw_identify( QFile::encodeName(filePath), NULL ) == 0) 
+    else if (dcraw_getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0) 
     {
         // RAW File test using dcraw.  
         // Need to test it before TIFF because any RAW file 
@@ -413,6 +415,26 @@ QString DImg::embeddedText(const QString& key)
         return m_priv->embeddedText[key];
 
     return QString();
+}
+
+void DImg::setCameraModel(QString model)
+{
+    m_priv->cameraModel = model;
+}
+
+QString DImg::cameraModel()
+{
+    return ( m_priv->cameraModel );
+}
+
+void DImg::setCameraConstructor(QString constructor)
+{
+    m_priv->cameraConstructor = constructor;
+}
+
+QString DImg::cameraConstructor()
+{
+    return ( m_priv->cameraConstructor );
 }
 
 DImg DImg::copy()

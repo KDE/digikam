@@ -3,7 +3,7 @@
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2005-06-14
  * Description : A JPEG IO file for DImg framework
- * 
+ *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,12 +11,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // JPEG_COM
@@ -37,7 +37,7 @@ extern "C"
 #include <setjmp.h>
 #include <jpeglib.h>
 #include "iccjpeg.h"
-}  
+}
 
 // QT includes.
 
@@ -102,7 +102,7 @@ bool JPEGLoader::load(const QString& filePath)
         return false;
 
     unsigned short header;
-    
+
     if (fread(&header, 2, 1, file) != 1)
     {
         fclose(file);
@@ -115,7 +115,7 @@ bool JPEGLoader::load(const QString& filePath)
         fclose(file);
         return false;
     }
-    
+
     fseek(file, 0L, SEEK_SET);
 
     struct jpeg_decompress_struct cinfo;
@@ -123,14 +123,14 @@ bool JPEGLoader::load(const QString& filePath)
 
     // -------------------------------------------------------------------
     // JPEG error handling.
-    
+
     cinfo.err                 = jpeg_std_error(&jerr);
     cinfo.err->error_exit     = dimg_jpeg_error_exit;
     cinfo.err->emit_message   = dimg_jpeg_emit_message;
     cinfo.err->output_message = dimg_jpeg_output_message;
-    
+
     // If an error occurs during writing, libjpeg will jump here
-    
+
     if (setjmp(jerr.setjmp_buffer)) 
     {
         jpeg_destroy_decompress(&cinfo);
@@ -143,11 +143,11 @@ bool JPEGLoader::load(const QString& filePath)
 
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, file);
-    
+
     jpeg_save_markers(&cinfo, M_COM,  0xFFFF);
     jpeg_save_markers(&cinfo, M_EXIF, 0xFFFF);
     jpeg_save_markers(&cinfo, M_IPTC, 0xFFFF);
-    
+
     // Recording ICC profile marker (from iccjpeg.c)
     setup_read_icc_profile(&cinfo);
 
@@ -159,7 +159,7 @@ bool JPEGLoader::load(const QString& filePath)
 
     // -------------------------------------------------------------------
     // Get image data.
-    
+
     int w = cinfo.output_width;
     int h = cinfo.output_height;
 
@@ -174,7 +174,7 @@ bool JPEGLoader::load(const QString& filePath)
         kdDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
         return false;
     }
-    
+
     if (cinfo.output_components != 3 && cinfo.output_components != 1)
     {
         jpeg_destroy_decompress(&cinfo);
@@ -182,9 +182,9 @@ bool JPEGLoader::load(const QString& filePath)
         kdDebug() << k_funcinfo << "Number of JPEG color components unsupported!" << endl;
         return false;
     }
-    
+
     data = new uchar[w * 16 * 3];
-    
+
     if (!data)
     {
         jpeg_destroy_decompress(&cinfo);
@@ -192,9 +192,9 @@ bool JPEGLoader::load(const QString& filePath)
         kdDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
         return false;
     }
-    
+
     ptr2 = new uchar[w * h * 4];
-    
+
     if (!ptr2)
     {
         delete [] data;
@@ -203,26 +203,26 @@ bool JPEGLoader::load(const QString& filePath)
         kdDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
         return false;
     }
-    
-    dest  = ptr2;    
+
+    dest  = ptr2;
     count = 0;
     prevy = 0;
-    
+
     if (cinfo.output_components == 3)
     {
         for (i = 0; i < cinfo.rec_outbuf_height; i++)
             line[i] = data + (i * w * 3);
-        
+
         for (l = 0; l < h; l += cinfo.rec_outbuf_height)
         {
             jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
             scans = cinfo.rec_outbuf_height;
-            
+
             if ((h - l) < scans)
                 scans = h - l;
-                
+
             ptr = data;
-            
+
             for (y = 0; y < scans; y++)
             {
                 for (x = 0; x < w; x++)
@@ -231,29 +231,28 @@ bool JPEGLoader::load(const QString& filePath)
                     ptr2[2] = ptr[0];
                     ptr2[1] = ptr[1];
                     ptr2[0] = ptr[2];
-                    
+
                     ptr  += 3;
                     ptr2 += 4;
                 }
             }
         }
-        
     }
     else if (cinfo.output_components == 1)
     {
         for (i = 0; i < cinfo.rec_outbuf_height; i++)
             line[i] = data + (i * w);
-        
+
         for (l = 0; l < h; l += cinfo.rec_outbuf_height)
         {
             jpeg_read_scanlines(&cinfo, line, cinfo.rec_outbuf_height);
             scans = cinfo.rec_outbuf_height;
-            
+
             if ((h - l) < scans)
                 scans = h - l;
-            
+
             ptr = data;
-            
+
             for (y = 0; y < scans; y++)
             {
                 for (x = 0; x < w; x++)
@@ -262,24 +261,24 @@ bool JPEGLoader::load(const QString& filePath)
                     ptr2[2] = ptr[0];
                     ptr2[1] = ptr[0];
                     ptr2[0] = ptr[0];
-                    
+
                     ptr  ++;
                     ptr2 += 4;
                 }
             }
         }
     }
-    
+
     delete [] data;
 
     // -------------------------------------------------------------------
     // Get meta-data markers contents.
-    
+
     QMap<int, QByteArray>& metaData = imageMetaData();
     metaData.clear();
-    
+
     jpeg_saved_marker_ptr marker = cinfo.marker_list;
-    
+
     while (marker)
     {
         QByteArray ba(marker->data_length);
@@ -300,15 +299,15 @@ bool JPEGLoader::load(const QString& filePath)
 
         marker = marker->next;
     }
-    
+
     // -------------------------------------------------------------------
     // Read image ICC profile
-    
+
     JOCTET *profile_data=NULL;
     uint    profile_size;
-    
+
     read_icc_profile (&cinfo, &profile_data, &profile_size);
-				     
+
     if (profile_data != NULL) 
     {
         kdDebug() << "Reading JPEG ICC Profil" << endl;
@@ -317,14 +316,14 @@ bool JPEGLoader::load(const QString& filePath)
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         free (profile_data);
     }
-    
+
     // -------------------------------------------------------------------
-    
+
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
 
     // -------------------------------------------------------------------
-    
+
     fclose(file);
 
     imageWidth()  = w;
@@ -342,7 +341,7 @@ bool JPEGLoader::save(const QString& filePath)
 
     struct jpeg_compress_struct  cinfo;
     struct dimg_jpeg_error_mgr jerr;    
-    
+
     // -------------------------------------------------------------------
     // JPEG error handling. 
     

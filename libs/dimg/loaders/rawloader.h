@@ -50,8 +50,12 @@ private:
     
 private:
 
+    // Methods to load RAW image using external dcraw instance.
     bool load8bits(const QString& filePath);
     bool load16bits(const QString& filePath);
+
+    // Method to load RAW image using dcraw include in digiKam.
+    bool loadDCraw(const QString& filePath);
     
 };
     

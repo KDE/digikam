@@ -125,6 +125,13 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key);
 
+    /** Save/Get camera informations witch taking the pictures.*/
+    void       setCameraModel(QString model);
+    QString    cameraModel();
+
+    void       setCameraConstructor(QString constructor);
+    QString    cameraConstructor();
+
     /** Return a deep copy of full image */
     DImg       copy();
 

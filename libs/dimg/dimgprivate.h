@@ -68,6 +68,10 @@ public:
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
 
+    /** Save informations about camera witch taking the picture. */
+    QString                 cameraModel;
+    QString                 cameraConstructor;
+
 };
 
 }  // NameSpace Digikam
