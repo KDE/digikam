@@ -72,6 +72,16 @@ else
   echo "-- libtiff found.................. YES"
 fi
 
+if test "x$have_png" != "xyes"; then
+  echo "-- libpng found................... NO"
+  echo ""
+  echo "digiKam needs libpng. You need to install the correct version (>= 1.2.7)."
+  echo ""
+  all_tests=bad
+else
+  echo "-- libpng found................... YES"
+fi
+
 if test "x$have_lcms" != "xyes"; then
   echo "-- lcms found..................... NO"
   echo ""

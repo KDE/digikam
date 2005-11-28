@@ -251,6 +251,21 @@ else
 fi
 
 #------------------------------------------------------------------
+# Check for libpng with png_set_add_alpha() function
+#------------------------------------------------------------------
+
+have_png=no
+KDE_CHECK_LIB(png, png_set_add_alpha,
+        have_png=yes,
+        AC_MSG_WARN([digiKam requires libpng >= 1.2.7]),
+        -lpng -lz -lm)
+
+if test "x$have_png" != "xyes"; then
+  AC_WARN([digiKam requires libpng >= 1.2.7; digiKam will not be compiled.])
+  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+fi  
+
+#------------------------------------------------------------------
 # Check for lcms (backported from krita)
 #------------------------------------------------------------------
 
