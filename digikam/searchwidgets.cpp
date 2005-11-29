@@ -87,8 +87,8 @@ RuleOpTable[] =
     { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },
-    { I18N_NOOP("Better then"),        "GT",           SearchAdvancedRule::RATING },
-    { I18N_NOOP("Worse then"),         "LT",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("Higher Than"),        "GT",           SearchAdvancedRule::RATING },
+    { I18N_NOOP("Lower Than"),         "LT",           SearchAdvancedRule::RATING },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING },
 };
 static const int RuleOpTableCount = 14;
