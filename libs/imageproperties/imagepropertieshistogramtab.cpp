@@ -35,6 +35,7 @@
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -92,7 +93,8 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+                                     "if it is used, all values (small and large) will be visible on the "
+                                     "graph."));
     
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
@@ -129,7 +131,8 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     m_regionBG->hide();
     QWhatsThis::add( m_regionBG, i18n("<p>Select here the histogram region computation:<p>"
                                       "<b>Full Image</b>: drawing histogram using the full image.<p>"
-                                      "<b>Selection</b>: drawing histogram using the current image selection."));
+                                      "<b>Selection</b>: drawing histogram using the current image "
+                                      "selection."));
     
     QPushButton *fullImageButton = new QPushButton( m_regionBG );
     QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
@@ -302,7 +305,8 @@ ImagePropertiesHistogramTab::~ImagePropertiesHistogramTab()
 }
 
 void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
-                                          uint* imageData, int imageWidth, int imageHeight, int itemType)
+                                          uchar* imageData, int imageWidth, int imageHeight, 
+                                          bool sixteenBit, int itemType)
 {
     // This is necessary to stop computation because m_image.bits() is currently used by
     // threaded histogram algorithm.
@@ -326,61 +330,62 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     {
         if ( m_image.load(url.path()) )
         {
-            if(m_image.depth() < 32)                 // we works always with 32bpp.
-                m_image = m_image.convertDepth(32);
-        
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
             
             if (m_selectionArea)
             {
                 m_imageSelection = m_image.copy(*m_selectionArea);
-                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
-                                              (uint *)m_imageSelection.bits(), m_imageSelection.width(),
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), 
+                                              m_image.sixteenBit(), 
+                                              m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
-                m_regionBG->show();                                         
+                m_regionBG->show();                                      
+                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
             }
             else 
             {
-                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(),
+                                              m_image.sixteenBit());
                 m_regionBG->hide();
+                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
             }
         }
         else 
         {
             m_imageSelection.reset();
             m_image.reset();
-            m_histogramWidget->updateData(0L, 0, 0);
+            m_histogramWidget->updateData(0L, 0, 0, false);
         }
     }
     else 
     {
-        if ( m_image.create(imageWidth, imageHeight, 32) )
+        if ( m_image.create(imageWidth, imageHeight, imageData, sixteenBit, true) )
         {
-            memcpy( m_image.bits(), imageData, m_image.numBytes());
-            
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
             
             if (m_selectionArea)
             {
                 m_imageSelection = m_image.copy(*m_selectionArea);
-                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height(),
-                                              (uint *)m_imageSelection.bits(), m_imageSelection.width(),
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit,
+                                              m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
                 m_regionBG->show();                                         
+                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
             }
             else 
             {
-                m_histogramWidget->updateData((uint *)m_image.bits(), m_image.width(), m_image.height());
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit);
                 m_regionBG->hide();
+                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
             }
         }
         else 
         {
             m_imageSelection.reset();
             m_image.reset();
-            m_histogramWidget->updateData(0L, 0, 0);
+            m_histogramWidget->updateData(0L, 0, 0, false);
         }
     }
 }

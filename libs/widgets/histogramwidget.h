@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
- * Description : a widget for to display an image histogram.
+ * Description : a widget to display an image histogram.
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *

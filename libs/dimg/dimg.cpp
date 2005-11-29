@@ -63,102 +63,12 @@ namespace Digikam
 DImg::DImg()
     : m_priv(new DImgPrivate)
 {
-    m_priv->cameraModel       = QString::null;
-    m_priv->cameraConstructor = QString::null;
 }
 
 DImg::DImg(const QString& filePath)
     : m_priv(new DImgPrivate)
 {
-    FORMAT format = fileFormat(filePath);
-
-    switch (format)
-    {
-        case(NONE):
-        {
-            kdWarning() << filePath << " : Unknown image format !!!" << endl;
-            return;
-            break;
-        }
-        case(JPEG):
-        {
-            kdWarning() << filePath << " : JPEG file identified" << endl;
-            JPEGLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-        case(TIFF):
-        {
-            kdWarning() << filePath << " : TIFF file identified" << endl;
-            TIFFLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-        case(PNG):
-        {
-            kdWarning() << filePath << " : PNG file identified" << endl;
-            PNGLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-        case(PPM):
-        {
-            kdWarning() << filePath << " : PPM file identified" << endl;
-            PPMLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-        case(RAW):
-        {
-            kdWarning() << filePath << " : RAW file identified" << endl;
-            RAWLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-        default:
-        {
-            kdWarning() << filePath << " : QIMAGE file identified" << endl;
-            QImageLoader loader(this);
-            if (loader.load(filePath))
-            {
-                m_priv->null       = false;
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
-            }
-            break;
-        }
-    }
+    load(filePath);
 }
 
 DImg::DImg(const DImg& image)
@@ -200,30 +110,155 @@ DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
 }
 
 DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
-    : m_priv(new DImgPrivate)
 {
-    m_priv->null       = (width == 0) || (height == 0);
-    m_priv->width      = width;
-    m_priv->height     = height;
-    m_priv->sixteenBit = sixteenBit;
-    m_priv->alpha      = alpha;
-
-    if (sixteenBit)
-    {
-        m_priv->data   = new uchar[width*height*8];
-        memcpy(m_priv->data, data, width*height*8); 
-    }
-    else
-    {
-        m_priv->data   = new uchar[width*height*4];
-        memcpy(m_priv->data, data, width*height*4); 
-    }
+    create(width, height, data, sixteenBit, alpha);
 }
 
 DImg::~DImg()
 {
     if (m_priv->deref())
         delete m_priv;
+}
+
+bool DImg::create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
+{
+    if (m_priv->deref())
+        delete m_priv;
+
+    m_priv = 0L;
+    m_priv = new DImgPrivate;
+    if (!m_priv) return false;
+
+    m_priv->null       = (width == 0) || (height == 0);
+    m_priv->width      = width;
+    m_priv->height     = height;
+    m_priv->sixteenBit = sixteenBit;
+    m_priv->alpha      = alpha;
+    m_priv->data       = 0L;
+
+    if (sixteenBit)
+    {
+        m_priv->data   = new uchar[width*height*8];
+        if (!m_priv->data) return false;
+        memcpy(m_priv->data, data, width*height*8); 
+    }
+    else
+    {
+        m_priv->data   = new uchar[width*height*4];
+        if (!m_priv->data) return false;
+        memcpy(m_priv->data, data, width*height*4); 
+    }
+    
+    return true;
+}
+
+void DImg::reset(void)
+{
+    if (m_priv->deref())
+        delete m_priv;
+
+    m_priv = new DImgPrivate;
+}
+
+bool DImg::load(const QString& filePath)
+{
+    FORMAT format = fileFormat(filePath);
+
+    switch (format)
+    {
+        case(NONE):
+        {
+            kdWarning() << filePath << " : Unknown image format !!!" << endl;
+            return false;
+            break;
+        }
+        case(JPEG):
+        {
+            kdWarning() << filePath << " : JPEG file identified" << endl;
+            JPEGLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+        case(TIFF):
+        {
+            kdWarning() << filePath << " : TIFF file identified" << endl;
+            TIFFLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+        case(PNG):
+        {
+            kdWarning() << filePath << " : PNG file identified" << endl;
+            PNGLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+        case(PPM):
+        {
+            kdWarning() << filePath << " : PPM file identified" << endl;
+            PPMLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+        case(RAW):
+        {
+            kdWarning() << filePath << " : RAW file identified" << endl;
+            RAWLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+        default:
+        {
+            kdWarning() << filePath << " : QIMAGE file identified" << endl;
+            QImageLoader loader(this);
+            if (loader.load(filePath))
+            {
+                m_priv->null       = false;
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
+    }
+
+    return false;
 }
 
 bool DImg::save(const QString& filePath, const char* format)
@@ -373,6 +408,11 @@ bool DImg::isReadOnly() const
 QByteArray DImg::getICCProfil() const
 {
     return m_priv->ICCProfil;
+}
+
+uint DImg::numBytes() const
+{
+    return (width() * height() * bytesDepth());
 }
 
 int DImg::bytesDepth() const

@@ -1072,14 +1072,14 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     {
         if (m_currentItem->url().isValid())
         {
-            QRect sel    = m_canvas->getSelectedArea();
-            uint* data   = Digikam::DImgInterface::instance()->getData();
-            int   width  = Digikam::DImgInterface::instance()->origWidth();
-            int   height = Digikam::DImgInterface::instance()->origHeight();
-                
+            QRect sel        = m_canvas->getSelectedArea();
+            uchar* data      = Digikam::DImgInterface::instance()->getImageData();
+            int   width      = Digikam::DImgInterface::instance()->origWidth();
+            int   height     = Digikam::DImgInterface::instance()->origHeight();
+            bool  sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
             m_rightSidebar->itemChanged(m_currentItem->url(),
                                        sel.isNull() ? 0 : &sel, 
-                                       data, width, height);
+                                       data, width, height, sixteenBit);
         }
     }    
 }

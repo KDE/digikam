@@ -69,7 +69,8 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 }
 
 void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, 
-                                         uint *imageData, int imageWidth, int imageHeight)
+                                         uchar *imageData, int imageWidth, int imageHeight, 
+                                         bool sixteenBit)
 {
     if (!url.isValid())
         return;
@@ -79,6 +80,7 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect,
     m_imageData         = imageData;
     m_imageWidth        = imageWidth;
     m_imageHeight       = imageHeight;
+    m_sixteenBit        = sixteenBit;
     m_dirtyExifTab      = false;
     m_dirtyHistogramTab = false;
     
@@ -118,7 +120,8 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
        }
     else if (tab == m_histogramTab && !m_dirtyHistogramTab)
        {
-       m_histogramTab->setData(m_currentURL, m_currentRect, m_imageData, m_imageWidth, m_imageHeight);
+       m_histogramTab->setData(m_currentURL, m_currentRect, 
+                               m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit);
        m_dirtyHistogramTab = true;
        }
     

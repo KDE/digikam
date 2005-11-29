@@ -94,6 +94,10 @@ public:
     DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
    ~DImg();
 
+    bool        create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
+    void        reset(void);
+
+    bool        load(const QString& filePath);
     bool        save(const QString& filePath, const char* format);
 
     bool        isNull()     const;
@@ -102,6 +106,7 @@ public:
     uchar*      bits()       const;
     bool        hasAlpha()   const;
     bool        sixteenBit() const;
+    uint        numBytes()   const;
 
     /** Return the number of bytes depth of one pixel : 4 (non sixteenBit) or 8 (sixteen) */
     int         bytesDepth() const;

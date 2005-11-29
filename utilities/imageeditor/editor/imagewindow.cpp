@@ -833,9 +833,10 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
         
         QRect sel           = m_canvas->getSelectedArea();
-        uint* data          = Digikam::DImgInterface::instance()->getData();
+        uchar* data         = Digikam::DImgInterface::instance()->getImageData();
         int   width         = Digikam::DImgInterface::instance()->origWidth();
         int   height        = Digikam::DImgInterface::instance()->origHeight();
+        bool  sixteenBit    = Digikam::DImgInterface::instance()->sixteenBit();
         AlbumIconItem* item = 0;
         
         if (palbum)
@@ -843,7 +844,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
             
         m_rightSidebar->itemChanged(m_urlCurrent.url(), m_view, item,
                                    sel.isNull() ? 0 : &sel, 
-                                   data, width, height);
+                                   data, width, height, sixteenBit);
         }        
 }
 

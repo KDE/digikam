@@ -55,7 +55,8 @@ public:
     ~ImagePropertiesSideBarDB();
     
     void itemChanged(const KURL& url, AlbumIconView* view, AlbumIconItem* item, 
-                     QRect *rect=0, uint *imageData=0, int imageWidth=0, int imageHeight=0);
+                     QRect *rect=0, uchar *imageData=0, int imageWidth=0, int imageHeight=0, 
+                     bool sixteenBit=false);
                     
     void imageSelectionChanged(QRect *rect);                 
     
@@ -75,10 +76,11 @@ private:
     bool                         m_dirtyExifTab;
     bool                         m_dirtyHistogramTab;
     bool                         m_dirtyDesceditTab;
+    bool                         m_sixteenBit;
 
     int                          m_imageWidth;
     int                          m_imageHeight;
-    uint                        *m_imageData;
+    uchar                       *m_imageData;
     
     QRect                       *m_currentRect;
 

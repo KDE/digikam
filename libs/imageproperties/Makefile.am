@@ -8,6 +8,7 @@ libimagepropertiesshowfoto_la_SOURCES = imagepropertiessidebar.cpp navigatebarwi
 	                                imagepropertiesexiftab.cpp imagepropertieshistogramtab.cpp 
 
 libimagepropertiesshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+	                               $(top_builddir)/digikam/libs/dimg/libdimg.la \
 	                               $(top_builddir)/digikam/libs/histogram/libhistogram.la 
 
 libimagepropertiesshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -22,6 +23,7 @@ libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/widgets \
+	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/digikam \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 

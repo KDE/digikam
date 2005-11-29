@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-21
- * Description : a widget for to display an image histogram.
+ * Description : a widget to display an image histogram.
  *
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -209,12 +209,18 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             // Send signal to refresh information if necessary.
             if ( m_xmax == 0 && m_xmin == 0)
             {
-               emit signalMouseReleased( 255 );      // No current selection.
+               // No current selection. Do not using ImageHistogram::getHistogramSegment()
+               // method here because histogram haven't yet computed.
+               if (m_sixteenBits)
+                  emit signalMouseReleased( 65535 );      
+               else
+                  emit signalMouseReleased( 255 );  
             }
             else
             {
+               // Current selection available.
                emit signalMousePressed( m_xmin );
-               emit signalMouseReleased( m_xmax );   // Current selection available.
+               emit signalMouseReleased( m_xmax );  
             }
 
             emit signalHistogramComputationDone();
@@ -307,7 +313,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 {
     // Widget is disable : drawing grayed frame.
     if ( !isEnabled() )
-       {
+    {
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
@@ -317,10 +323,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
-       }
+    }
 
     if (m_clearFlag == HistogramStarted && m_blinkComputation)
-       {
+    {
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
@@ -336,10 +342,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
-       }
+    }
 
     if (m_clearFlag == HistogramFailed)
-       {
+    {
        QPixmap pm(size());
        QPainter p1;
        p1.begin(&pm, this);
@@ -350,14 +356,14 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        p1.end();
        bitBlt(this, 0, 0, &pm);
        return;
-       }
+    }
 
     int    x, y;
     int    yr, yg, yb;             // For all color channels.
     int    wWidth = width();
     int    wHeight = height();
     double max;
-    class ImageHistogram *histogram; 
+    class  ImageHistogram *histogram; 
 
     if (m_renderingType == ImageSelectionHistogram && m_selectionHistogram)
        histogram = m_selectionHistogram;
@@ -367,12 +373,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     if (!histogram)
         return;
 
-    x  = 0; y  = 0;
-    yr = 0; yg = 0; yb = 0;
+    x   = 0; y  = 0;
+    yr  = 0; yg = 0; yb = 0;
     max = 0.0;
 
     switch(m_channelType)
-       {
+    {
        case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
           max = histogram->getMaximum(Digikam::ImageHistogram::GreenChannel);  
           break;
@@ -398,10 +404,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
           max = histogram->getMaximum(Digikam::ImageHistogram::ValueChannel); 
           break;
-       }
+    }
 
     switch (m_scaleType)
-       {
+    {
        case Digikam::HistogramWidget::LinScaleHistogram:
           break;
 
@@ -411,9 +417,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           else
               max = 1.0;
           break;
-       }
+    }
 
-    // A QPixmap is used for enable the double buffering.
+    // A QPixmap is used to enable the double buffering.
 
     QPixmap pm(size());
     QPainter p1;
@@ -422,16 +428,16 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     // Drawing selection or all histogram values.
 
     for (x = 0 ; x < wWidth ; x++)
-      {
+    {
       double value = 0.0; 
       double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
       int    i, j;
-
-      i = (x * 256) / wWidth;
-      j = ((x + 1) * 256) / wWidth;
+    
+      i = (x * histogram->getHistogramSegment()) / wWidth;
+      j = ((x + 1) * histogram->getHistogramSegment()) / wWidth;
 
       do
-          {
+      {
           double v;
           double vr, vg, vb;                              // For all color channels.
 
@@ -439,7 +445,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           vr = 0.0; vg = 0.0; vb = 0.0;
 
           switch(m_channelType)
-             {
+          {
              case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
                 v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
                 break;
@@ -465,29 +471,29 @@ void HistogramWidget::paintEvent( QPaintEvent * )
              case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
                 v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, i++);   
                 break;
-             }
+          }
 
           if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
-             {
+          {
              if (v > value)
                 value = v;
-             }
+          }
           else 
-             {
+          {
              if (vr > value_r)
                 value_r = vr;
              if (vg > value_g)
                 value_g = vg;
              if (vb > value_b)
                 value_b = vb;
-             }
           }
+      }
       while (i < j);
 
       if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
-         {
+      {
          switch (m_scaleType)
-            {
+         {
             case Digikam::HistogramWidget::LinScaleHistogram:
               y = (int) ((wHeight * value) / max);
               break;
@@ -500,12 +506,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
             default:
               y = 0;
               break;
-            }
          }
+      }
       else
-         {
+      {
          switch (m_scaleType)
-            {
+         {
             case Digikam::HistogramWidget::LinScaleHistogram:
               yr = (int) ((wHeight * value_r) / max);
               yg = (int) ((wHeight * value_g) / max);
@@ -526,25 +532,25 @@ void HistogramWidget::paintEvent( QPaintEvent * )
               yg = 0;
               yb = 0;
               break;
-            }
          }
+      }
 
       // Drawing the histogram + selection or only the histogram.
 
       if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
-         {
+      {
          if ( m_selectMode == true )   // Selection mode enable ?
+         {
+            if ( x >= (int)((float)(m_xmin * wWidth) / (float)histogram->getHistogramSegment()) && 
+                x <= (int)((float)(m_xmax * wWidth) / (float)histogram->getHistogramSegment()) )
             {
-            if ( x >= (int)((float)(m_xmin * wWidth) / 256.0) && 
-                x <= (int)((float)(m_xmax * wWidth) / 256.0) )
-               {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
                p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
-               }
+            }
             else 
-               {
+            {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, wHeight - y);
 
@@ -554,10 +560,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                   p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
 
                p1.drawLine(x, wHeight - y, x, 0);
-               }
             }
+         }
          else
-            {
+         {
             p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
             p1.drawLine(x, wHeight, x, wHeight - y);
 
@@ -567,107 +573,107 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
 
             p1.drawLine(x, wHeight - y, x, 0);
-            }
          }
+      }
       else
-         {
+      {
          if ( m_selectMode == true )   // Histogram selection mode enable ?
+         {
+            if ( x >= (int)((float)(m_xmin * wWidth) / (float)histogram->getHistogramSegment()) && 
+                x <= (int)((float)(m_xmax * wWidth) / (float)histogram->getHistogramSegment()) )
             {
-            if ( x >= (int)((float)(m_xmin * wWidth) / 256.0) && 
-                x <= (int)((float)(m_xmax * wWidth) / 256.0) )
-               {
                p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
                p1.drawLine(x, wHeight, x, 0);
                p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
 
                // Witch color must be used on the foreground with all colors channel mode?
                switch (m_colorType) 
-                  {
-                  case Digikam::HistogramWidget::RedColor:
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    break;
-
-                  case Digikam::HistogramWidget::GreenColor:
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    break;
-
-                  default:
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    break;
-                  }
-               }
-            else 
                {
-               // Which color must be used on the foreground with all colors channel mode?
-               switch (m_colorType) 
-                  {
                   case Digikam::HistogramWidget::RedColor:
-                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yr);
-
-                    if ( x == wWidth/3 || x == 2*wWidth/3 )
-                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-                    else
-                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
-                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
                     break;
 
                   case Digikam::HistogramWidget::GreenColor:
-                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yg);
-
-                    if ( x == wWidth/3 || x == 2*wWidth/3 )
-                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-                    else
-                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
-                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
                     break;
 
                   default:
-                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);
-
-                    if ( x == wWidth/3 || x == 2*wWidth/3 )
-                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
-                    else
-                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
-
-                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
-                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
                     break;
-                  }
                }
             }
-         else 
+            else 
             {
+               // Which color must be used on the foreground with all colors channel mode?
+               switch (m_colorType) 
+               {
+                  case Digikam::HistogramWidget::RedColor:
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);
+
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
+                    break;
+
+                  case Digikam::HistogramWidget::GreenColor:
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);
+
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
+                    break;
+
+                  default:
+                    p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yr);
+                    p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yg);
+                    p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight, x, wHeight - yb);
+
+                    if ( x == wWidth/3 || x == 2*wWidth/3 )
+                       p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::SolidLine));
+                    else
+                       p1.setPen(QPen::QPen(Qt::white, 1, Qt::SolidLine));
+
+                    p1.drawLine(x, wHeight - QMAX(QMAX(yr, yg), yb), x, 0);
+                    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
+                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
+                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
+                    break;
+               }
+            }
+         }
+         else 
+         {
             // Which color must be used on the foreground with all colors channel mode?
             switch (m_colorType) 
-               {
+            {
                case Digikam::HistogramWidget::RedColor:
                  p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yg);
@@ -727,10 +733,10 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                  p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);                 
                  p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);                 
                  break;
-               }
-            }
-         }
-      }
+             }
+          }
+       }
+    }
 
     // Drawing color guide.
 
@@ -738,9 +744,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
     int guidePos;
 
     if (m_guideVisible)
-       {
+    {
        switch(m_channelType)
-          {
+       {
           case HistogramWidget::RedChannelHistogram:
              guidePos = m_colorGuide.red();
              break;
@@ -760,11 +766,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           default:                                     // Alpha.
              guidePos = -1;
              break;
-          }
+       }
 
        if (guidePos != -1)
-          {
-          int xGuide = (guidePos * wWidth) / 256;
+       {
+          int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
           p1.drawLine(xGuide, 0, xGuide, wHeight);  
 
           QString string = i18n("x:%1").arg(guidePos);
@@ -773,20 +779,20 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           rect.setBottom(wHeight - 10);
 
           if (guidePos < wWidth/2)
-             {
+          {
              rect.moveLeft(xGuide + 3);
              p1.drawText(rect, Qt::AlignLeft, string);
-             }
+          }
           else
-             {
+          {
              rect.moveRight(xGuide - 3);
              p1.drawText(rect, Qt::AlignRight, string);
-             }
           }
        }
+    }
 
     if (m_statisticsVisible)   
-       {
+    {
        QString tipText, value;
        QString cellBeg("<tr><td><nobr><font size=-1>");
        QString cellMid("</font></nobr></td><td><nobr><font size=-1>");
@@ -794,7 +800,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        tipText  = "<table cellspacing=0 cellpadding=0>";
 
        tipText += cellBeg + i18n("Mean:") + cellMid;
-       double mean = histogram->getMean(m_channelType, 0, 255);
+       double mean = histogram->getMean(m_channelType, 0, histogram->getHistogramSegment()-1);
        tipText += value.setNum(mean, 'f', 1) + cellEnd;
 
        tipText += cellBeg + i18n("Pixels:") + cellMid;
@@ -802,15 +808,15 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        tipText += value.setNum((float)pixels, 'f', 0) + cellEnd;
 
        tipText += cellBeg + i18n("Std dev.:") + cellMid;
-       double stddev = histogram->getStdDev(m_channelType, 0, 255);
+       double stddev = histogram->getStdDev(m_channelType, 0, histogram->getHistogramSegment()-1);
        tipText += value.setNum(stddev, 'f', 1) + cellEnd;
 
        tipText += cellBeg + i18n("Count:") + cellMid;
-       double counts = histogram->getCount(m_channelType, 0, 255);
+       double counts = histogram->getCount(m_channelType, 0, histogram->getHistogramSegment()-1);
        tipText += value.setNum((float)counts, 'f', 0) + cellEnd;
 
        tipText += cellBeg + i18n("Median:") + cellMid;
-       double median = histogram->getMedian(m_channelType, 0, 255);
+       double median = histogram->getMedian(m_channelType, 0, histogram->getHistogramSegment()-1);
        tipText += value.setNum(median, 'f', 1) + cellEnd;
 
        tipText += cellBeg + i18n("Percent:") + cellMid;
@@ -820,7 +826,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        tipText += "</table>";
 
        QToolTip::add( this, tipText);
-       }
+    }
 
     // Drawing frame.
 
@@ -833,89 +839,89 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
-       {
+    {
        if (!m_inSelected) 
-          {
+       {
           m_inSelected = true;
           m_xmin = 0;
           m_xmax = 0;
           repaint(false);
-          }
+       }
 
-       m_xmin = (int)(e->pos().x()*(256.0/(float)width()));
+       m_xmin = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegment()/(float)width()));
        m_xminOrg = m_xmin;
        emit signalMousePressed( m_xmin );
-       }
+    }
 }
 
 void HistogramWidget::mouseReleaseEvent ( QMouseEvent * e )
 {
     if ( m_selectMode == true  && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
-       {
+    {
        m_inSelected = false;
-       int max = (int)(e->pos().x()*(256.0/(float)width()));
+       int max = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegment()/(float)width()));
 
        if (max < m_xminOrg) 
-          {
+       {
           m_xmax = m_xminOrg;
           m_xmin = max;
           emit signalMousePressed( m_xmin );
-          }
+       }
        else 
-          {
+       {
           m_xmin = m_xminOrg;
           m_xmax = max;
-          }
+       }
 
        emit signalMouseReleased( m_xmax );
-       }
+    }
 }
 
 void HistogramWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
-       {
+    {
        setCursor( KCursor::crossCursor() );
 
        if (m_inSelected)
-          {
-          int max = (int)(e->pos().x()*(256.0/(float)width()));
+       {
+          int max = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegment()/(float)width()));
 
           if (max < m_xminOrg) 
-             {
+          {
              m_xmax = m_xminOrg;
              m_xmin = max;
              emit signalMousePressed( m_xmin );
-             }
+          }
           else 
-             {
+          {
              m_xmin = m_xminOrg;
              m_xmax = max;
-             }
+          }
 
           emit signalMouseReleased( m_xmax );
 
           repaint(false);
-          }
        }
+    }
 }
 
 void HistogramWidget::slotMinValueChanged( int min )
 {
     if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
-       {
+    {
        m_xmin = min;
        repaint(false);
-       }
+    }
 }
 
 void HistogramWidget::slotMaxValueChanged( int max )
 {
     if ( m_selectMode == true && m_clearFlag == HistogramCompleted ) // Selection mode enable ?
-       {
+    {
        m_xmax = max;
        repaint(false);
-       }
+    }
 }
 
 }

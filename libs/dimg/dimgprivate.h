@@ -39,12 +39,14 @@ public:
 
     DImgPrivate()
     {
-        null       = true;
-        width      = 0;
-        height     = 0;
-        data       = 0;
-        alpha      = false;
-        sixteenBit = false;
+        null              = true;
+        width             = 0;
+        height            = 0;
+        data              = 0;
+        alpha             = false;
+        sixteenBit        = false;
+        cameraModel       = QString::null;
+        cameraConstructor = QString::null;
     }
 
     ~DImgPrivate()

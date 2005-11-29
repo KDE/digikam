@@ -94,6 +94,11 @@ ImageHistogram::~ImageHistogram()
        delete [] m_histogram;
 }
 
+int ImageHistogram::getHistogramSegment(void)
+{
+    return m_histoSegments;
+}
+
 void ImageHistogram::postProgress(bool starting, bool success)
 {
     EventData *eventData = new EventData();
@@ -142,7 +147,7 @@ void ImageHistogram::calcHistogramValues()
         unsigned short blue, green, red, alpha;
         unsigned short *data = (unsigned short*)m_imageData;
 
-        for (i = 0 ; (i < m_imageHeight*m_imageWidth*8) && m_runningFlag ; i+=8)
+        for (i = 0 ; (i < m_imageHeight*m_imageWidth*4) && m_runningFlag ; i+=4)
         {
             blue  = data[ i ];
             green = data[i+1];

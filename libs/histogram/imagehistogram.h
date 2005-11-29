@@ -97,10 +97,12 @@ public:
     double getCount(int channel, int start, int end);
     double getMean(int channel, int start, int end);
     double getPixels();
-    int    getMedian(int channel, int start, int end);
     double getStdDev(int channel, int start, int end);
     double getValue(int channel, int bin);
     double getMaximum(int channel);
+
+    int    getHistogramSegment(void);
+    int    getMedian(int channel, int start, int end);
 
 private:
 

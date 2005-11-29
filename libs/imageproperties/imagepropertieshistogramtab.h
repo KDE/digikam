@@ -23,7 +23,6 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qimage.h>
 
 // KDE includes.
 
@@ -31,6 +30,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 class QComboBox;
@@ -57,8 +57,8 @@ public:
     ~ImagePropertiesHistogramTab();
 
     void setData(const KURL& url=KURL::KURL(), QRect *selectionArea=0, 
-                 uint* imageData=0, int imageWidth=0, int imageHeight=0, 
-                 int itemType=0);
+                 uchar* imageData=0, int imageWidth=0, int imageHeight=0, 
+                 bool sixteenBit=false, int itemType=0);
 
     void setSelection(QRect *selectionArea);
 
@@ -104,8 +104,8 @@ private:
     QLabel              *m_labelMedianValue;
     QLabel              *m_labelPercentileValue;
     
-    QImage               m_image;
-    QImage               m_imageSelection;
+    DImg                 m_image;
+    DImg                 m_imageSelection;
     
     QRect               *m_selectionArea;
     

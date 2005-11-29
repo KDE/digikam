@@ -666,6 +666,19 @@ DImg DImgInterface::getImage()
     }
 }
 
+uchar* DImgInterface::getImageData()
+{
+    if (!d->image.isNull())
+    {
+        return d->image.bits();
+    }
+    else
+    {
+        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+        return 0;
+    }
+}
+
 void DImgInterface::putImage(const QString &caller, DImg& image)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
@@ -696,6 +709,20 @@ DImg DImgInterface::getImageSelection()
     }
 
     return DImg::DImg();
+}
+
+uchar* DImgInterface::getImageSelectionData()
+{
+    if (!d->selW || !d->selH)
+        return 0;
+
+    if (!d->image.isNull())
+    {
+        DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
+        return im.bits();
+    }
+
+    return 0;
 }
 
 void DImgInterface::putImageSelection(DImg& selection, bool saveUndo)
