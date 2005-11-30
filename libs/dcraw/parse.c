@@ -1316,7 +1316,6 @@ int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* came
 
     if (model[0] == 0)
     {
-        fclose (ifp);
         return 1;
     }
 
@@ -1326,7 +1325,6 @@ int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* came
     if (cameraModel != NULL)
         strcpy (cameraModel, model);
 
-    fclose (ifp);
     return 0;
 }
 
