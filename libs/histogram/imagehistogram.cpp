@@ -46,6 +46,7 @@ namespace Digikam
 {
 
 ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
+              : QThread()
 {
     setup(image.bits(), image.width(), image.height(), image.sixteenBit(), parent);
 }
