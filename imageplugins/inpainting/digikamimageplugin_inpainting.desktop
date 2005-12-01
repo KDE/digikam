@@ -8,7 +8,6 @@ Name[pt_BR]=Plug-in de coloração de imagens
 Name[sr]=Пребојавање
 Name[sr@Latn]=Prebojavanje
 Name[sv]=Insticksprogram för ifyllnad
-Name[xx]=xxImagePlugin_InPaintingxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -29,7 +28,6 @@ Comment[pt_BR]=Plug-in de coloração de fotos do digiKam
 Comment[sr]=digiKam-ов прикључак за пребојавање фотографије
 Comment[sr@Latn]=digiKam-ov priključak za prebojavanje fotografije
 Comment[sv]=Digikam insticksprogram för att fylla i ett fotografi
-Comment[xx]=xxdigiKam plugin to inpaint a photographxx
 
 X-KDE-Library=digikamimageplugin_inpainting
 author=Gilles Caulier, caulier dot gilles at free dot fr

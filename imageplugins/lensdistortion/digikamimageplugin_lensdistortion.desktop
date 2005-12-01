@@ -9,7 +9,6 @@ Name[sr]=Изобличење сочива
 Name[sr@Latn]=Izobličenje sočiva
 Name[sv]=Insticksprogram för linsförvrängning
 Name[tr]=ResimEklentisi_MercekÇarpıtması
-Name[xx]=xxImagePlugin_LensDistortionxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -31,7 +30,6 @@ Comment[sr]=digiKam-ов прикључак за исправљање сферн
 Comment[sr@Latn]=digiKam-ov priključak za ispravljanje sfernog iskrivljenja slike
 Comment[sv]=Digikam insticksprogram för korrigering av sfärisk avvikelse i bild
 Comment[tr]=digiKam için resim küresel sapma düzeltme eklentisi
-Comment[xx]=xxSpherical aberration image correction plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_lensdistortion
 author=Gilles Caulier, caulier dot gilles at free dot fr

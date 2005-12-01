@@ -8,7 +8,6 @@ Name[sr]=Разнеси
 Name[sr@Latn]=Raznesi
 Name[sv]=Insticksprogram för förstoring
 Name[tr]=ResimEklentisi_Büyüt
-Name[xx]=xxImagePlugin_BlowUpxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -30,7 +29,7 @@ Comment[sr]=digiKam-ов прикључак за разбијање фотогр
 Comment[sr@Latn]=digiKam-ov priključak za razbijanje fotografije
 Comment[sv]=Digikam insticksprogram för att förstora ett fotografi
 Comment[tr]=Fotoğraf büyütmek için digiKam eklentisi
-Comment[xx]=xxdigiKam plugin to blowup a photographxx
+Comment[uk]=Втулок збільшення фотографій для digiKam для
 
 X-KDE-Library=digikamimageplugin_blowup
 author=Gilles Caulier, caulier dot gilles at free dot fr

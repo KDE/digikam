@@ -10,7 +10,6 @@ Name[sr@Latn]=Kišne kapi
 Name[sv]=Insticksprogram för regndroppar
 Name[ta]=பிம்பசொருகுப்பொருள்_மழைத்துளி
 Name[tr]=ResimEklentisi_YağmurDamlaları
-Name[xx]=xxImagePlugin_RainDropxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -33,7 +32,6 @@ Comment[sr@Latn]=digiKam-ov priključak za efekat kišnih kapi u slici
 Comment[sv]=Digikam insticksprogram för regndroppsbildeffekt
 Comment[ta]=டிஜிகாமிற்கான மழைத்துளி விழுவதுபோன்ற படிம விளைவு சொருகுப்பொருள்
 Comment[tr]=digiKam için yağmur damlaları eklentisi
-Comment[xx]=xxRain dropping image effect plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at free dot fr

@@ -10,7 +10,6 @@ Name[sr@Latn]=Podešavanje nivoa
 Name[sv]=Insticksprogram för nivåjustering
 Name[ta]=பிம்பசொருகுப்பொருள்_சரிசெய்யும் நிலைகள்
 Name[tr]=ResimEklentisi_DüzeyAyarla
-Name[xx]=xxImagePlugin_AdjustLevelsxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -34,7 +33,6 @@ Comment[sr@Latn]=digiKam-ov priključak za podešavanje nivoa histograma slika
 Comment[sv]=Digikam insticksprogram för justering av nivåer i bildhistogram
 Comment[ta]=டிஜிகாமிற்க்கான பிம்ப வரைப்பட சரியாக்கும் நிலை சொருகுப்பொருள்
 Comment[tr]=digiKam için resim histogram düzeyleri ayarlama eklentisi
-Comment[xx]=xxImage histogram adjust levels plugin for digiKamxx
 Comment[zh_CN]=digiKam 的图像直方图调整级别插件
 
 X-KDE-Library=digikamimageplugin_adjustlevels

@@ -11,7 +11,6 @@ Name[sr@Latn]=Osunčavanje
 Name[sv]=Insticksprogram för solarisering
 Name[ta]=பிம்பசொருகுப்பொருள்_சாலரைஸ்
 Name[tr]=ResimEklentisi_Soldurma
-Name[xx]=xxImagePlugin_Solarizexx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -34,7 +33,6 @@ Comment[sr@Latn]=digiKam-ov priključak za efekat osunčavanja slika
 Comment[sv]=Digikam insticksprogram för att solarisera bild
 Comment[ta]=டிஜிகாமிற்கான பிம்ப கறுப்பாக்கும் விளைவு சொருகுப்பொருள்
 Comment[tr]=digiKam için resim soldurma etkisi eklentisi
-Comment[xx]=xxImage solarize effect plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_solarize
 author=Renchi Raju, renchi@pooh.tam.uiuc.edu

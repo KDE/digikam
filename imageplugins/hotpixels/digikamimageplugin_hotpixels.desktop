@@ -1,13 +1,13 @@
 [Desktop Entry]
 Name=ImagePlugin_HotPixels
 Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
+Name[es]=ImagePlugin_Solarize
 Name[it]=PluginImmagini_PixelBruciati
 Name[nl]=Afbeeldingsplugin_HotPixels
 Name[pt_BR]=Plug-in de Imagens - hotpixels
 Name[sr]=Врући пиксели
 Name[sr@Latn]=Vrući pikseli
 Name[sv]=Insticksprogram för heta bildpunkter
-Name[xx]=xxImagePlugin_HotPixelsxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -15,6 +15,7 @@ Comment=Hot pixel correction plugin for Digikam
 Comment[da]=Hot pixel rettelsesplugin for DigiKam
 Comment[de]=Ein digiKam-Modul zur Korrektur von heißen Pixeln.
 Comment[el]=Πρόσθετο διόρθωσης έντονων εικονοστοιχείων για το Digikam
+Comment[es]=Plugin  para digiKam para suprimir los puntos producidos por los pixeles cálidos/inactivos de un sensor CCD
 Comment[et]=DigiKami kuumade pikslite korrigeerimise plugin
 Comment[fr]=Module externe pour supprimer les points produits par les pixels chauds/collés/morts d'un capteur CCD
 Comment[it]=Plugin di correzione dei pixel bruciati per digiKam
@@ -26,7 +27,6 @@ Comment[pt_BR]=Plug-in de correção de hot pixels para o DigiKam
 Comment[sr]=digiKam-ов прикључак исправку врућих пиксела
 Comment[sr@Latn]=digiKam-ov priključak ispravku vrućih piksela
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
-Comment[xx]=xxHot pixel correction plugin for Digikamxx
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net

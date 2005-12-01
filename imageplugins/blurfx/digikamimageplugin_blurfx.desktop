@@ -8,7 +8,6 @@ Name[sr]=Ефекти замућења
 Name[sr@Latn]=Efekti zamućenja
 Name[sv]=Insticksprogram för oskärpeeffekt
 Name[tr]=ResimEklentisi_Bulanıklaştır
-Name[xx]=xxImagePlugin_BlurFXxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -30,7 +29,7 @@ Comment[sr]=Прикључци ефекта замућења за digiKam
 Comment[sr@Latn]=Priključci efekta zamućenja za digiKam
 Comment[sv]=Digikam insticksprogram med specialeffekter för oskärpa
 Comment[tr]=digiKam için bulanıklaştırma eklentisi
-Comment[xx]=xxBlur special effects plugin for digiKamxx
+Comment[uk]=Втулок спеціальних ефектів розмивання для digiKam
 
 X-KDE-Library=digikamimageplugin_blurfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

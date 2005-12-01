@@ -9,7 +9,6 @@ Name[sr]=Ефекти изобличења
 Name[sr@Latn]=Efekti izobličenja
 Name[sv]=Insticksprogram för förvrängningseffekt
 Name[tr]=ResimEklentisi_Bozma
-Name[xx]=xxImagePlugin_DistortionFXxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -30,7 +29,6 @@ Comment[sr]=digiKam-ов прикључак за ефекте изобличењ
 Comment[sr@Latn]=digiKam-ov priključak za efekte izobličenja
 Comment[sv]=Digikam insticksprogram för förvrängningsspecialeffekt
 Comment[tr]=Bozma etkileri uygulamak için bir digiKam eklentisi
-Comment[xx]=xxDistortion special effects plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_distortionfx
 author=Gilles Caulier, caulier dot gilles at free dot fr

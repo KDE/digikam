@@ -9,7 +9,6 @@ Name[sr]=Инфрацрвено
 Name[sr@Latn]=Infracrveno
 Name[sv]=Insticksprogram för infrarött
 Name[tr]=ResimEklentisi_Kızılötesi
-Name[xx]=xxImagePlugin_Infraredxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -31,7 +30,6 @@ Comment[sr]=digiKam-ов прикључак који симулира инфра
 Comment[sr@Latn]=digiKam-ov priključak koji simulira infracrveni film
 Comment[sv]=Digikam insticksprogram för att simulera infraröd film
 Comment[tr]=digiKam için kızılötesi film benzetme eklentisi
-Comment[xx]=xxSimulate infrared film plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_infrared
 author=Gilles Caulier, caulier dot gilles at free dot fr

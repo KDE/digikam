@@ -9,7 +9,6 @@ Name[sr]=Алат за искошавање
 Name[sr@Latn]=Alat za iskošavanje
 Name[sv]=Insticksprogram med skjuvningsverktyg
 Name[tr]=ResimEklentisi_EğmeAracı
-Name[xx]=xxImagePlugin_ShearToolxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -32,7 +31,6 @@ Comment[sr]=digiKam-ов прикључак за искошавање
 Comment[sr@Latn]=digiKam-ov priključak za iskošavanje
 Comment[sv]=Digikam insticksprogram med skjuvningsverktyg
 Comment[tr]=digiKam için eğme aracı eklentisi
-Comment[xx]=xxShear tool plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_sheartool
 author=Gilles Caulier, caulier dot gilles at free dot fr

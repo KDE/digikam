@@ -8,7 +8,6 @@ Name[sr]=Префокусирање
 Name[sr@Latn]=Prefokusiranje
 Name[sv]=Insticksprogram för omfokusering
 Name[tr]=ResimEklentisi_Odakla
-Name[xx]=xxImagePlugin_Refocusxx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -17,6 +16,7 @@ Comment=digiKam plugin to refocus an image
 Comment[da]=digiKam-plugin til at refokusere et billede
 Comment[de]=Ein digiKam-Modul zum Refokussieren eines Bildes.
 Comment[el]=Πρόσθετο για την επανεστίαση μιας εικόνας για το digiKam
+Comment[es]=Plugin de digiKam para refocalizar una imagen
 Comment[et]=DigiKami pildi fookuse muutmise plugin
 Comment[fr]=Module externe pour rendre une image nette (Refocus)
 Comment[it]=Plugin di digiKam per rimettere a fuoco un'immagine
@@ -30,7 +30,6 @@ Comment[sr]=digiKam-ов прикључак за префокусирање сл
 Comment[sr@Latn]=digiKam-ov priključak za prefokusiranje slike
 Comment[sv]=Digikam insticksprogram för att fokusera om en bild
 Comment[tr]=Bir resmi yeniden odaklamak için digiKam eklentisi
-Comment[xx]=xxdigiKam plugin to refocus an imagexx
 
 X-KDE-Library=digikamimageplugin_refocus
 author=Gilles Caulier, caulier dot gilles at free dot fr

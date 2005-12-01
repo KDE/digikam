@@ -8,7 +8,6 @@ Name[sr]=Баланс белог
 Name[sr@Latn]=Balans belog
 Name[sv]=Insticksprogram för vitbalans
 Name[tr]=ResimEklentisi_BeyazDengesi
-Name[xx]=xxImagePlugin_WhiteBalancexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -31,7 +30,6 @@ Comment[sr]=digiKam-ов прикључак исправку баланса бе
 Comment[sr@Latn]=digiKam-ov priključak ispravku balansa belog
 Comment[sv]=Digikam insticksprogram för korrigering av vitbalans
 Comment[tr]=digiKam için beyaz dengesi düzeltme eklentisi
-Comment[xx]=xxWhite balance correction plugin for digiKamxx
 Comment[zh_CN]=digiKam 的白平衡纠正插件
 
 X-KDE-Library=digikamimageplugin_whitebalance
