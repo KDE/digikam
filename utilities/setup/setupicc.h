@@ -28,6 +28,10 @@
 #include <qwidget.h>
 
 class QCheckBox;
+class QRadioButton;
+class KURLRequester;
+class KComboBox;
+// class QStringList;
 
 class SetupICC : public QWidget
 {
@@ -43,6 +47,33 @@ public:
 private:
 
     void readSettings();
+    void fillCombos();
+    void enableWidgets();
+    void disableWidgets();
+
+    QCheckBox       *m_enableColorManagement;
+    QCheckBox       *m_bpcAlgorithm;
+    
+    QRadioButton    *m_defaultApplyICC;
+    QRadioButton    *m_defaultAskICC;
+
+    QStringList     m_inICCFiles_file;
+    QStringList     m_workICCFiles_file;
+    QStringList     m_proofICCFiles_file;
+    QStringList     m_monitorICCFiles_file;
+
+    KURLRequester   *m_defaultPath;
+
+    KComboBox       *m_inProfiles;
+    KComboBox       *m_workProfiles;
+    KComboBox       *m_proofProfiles;
+    KComboBox       *m_monitorProfiles;
+    KComboBox       *m_renderingIntent;
+
+private slots:
+
+      void slotToggledWidgets(bool t);
+      void slotFillCombos(const QString&);
 
 };
 
