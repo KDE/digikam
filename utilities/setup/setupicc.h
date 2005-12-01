@@ -26,12 +26,14 @@
 // Qt includes.
 
 #include <qwidget.h>
+#include <qmap.h>
 
 class QCheckBox;
 class QRadioButton;
 class KURLRequester;
 class KComboBox;
 // class QStringList;
+typedef QMap<QString, QString> ICCfilesPath;
 
 class SetupICC : public QWidget
 {
@@ -69,6 +71,8 @@ private:
     KComboBox       *m_proofProfiles;
     KComboBox       *m_monitorProfiles;
     KComboBox       *m_renderingIntent;
+
+    ICCfilesPath    m_ICCfilesPath;
 
 private slots:
 

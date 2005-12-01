@@ -37,7 +37,7 @@
 #include <qpushbutton.h>
 #include <qstringlist.h>
 #include <qdir.h>
-
+#include <qmap.h>
 
 // KDE includes.
 
@@ -240,6 +240,9 @@ void SetupICC::applySettings()
     config->writeEntry("BPCAlgorithm", m_bpcAlgorithm->isChecked());
     config->writeEntry("RenderingIntent", m_renderingIntent->currentItem());
     config->writeEntry("InProfileFile", m_inICCFiles_file[m_inProfiles->currentItem()]);
+    config->writeEntry("WorkProfileFile", m_workICCFiles_file[m_workProfiles->currentItem()]);
+    config->writeEntry("MonitorProfileFile", m_monitorICCFiles_file[m_monitorProfiles->currentItem()]);
+    config->writeEntry("ProofProfileFile", m_proofICCFiles_file[m_proofProfiles->currentItem()]);
 
     config->sync();
     
@@ -267,6 +270,14 @@ void SetupICC::readSettings()
     m_proofProfiles->setCurrentItem(config->readNumEntry("ProofProfile", 0));
     m_bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
+    m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
+    m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("WorkProfileFile");
+    m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+    kdDebug() << "Profile Path: " << m_ICCfilesPath["InProfile"] << endl;
+    kdDebug() << "Profile Path: " << m_ICCfilesPath["WorkProfile"] << endl;
+    kdDebug() << "Profile Path: " << m_ICCfilesPath["MonitorProfile"] << endl;
+    kdDebug() << "Profile Path: " << m_ICCfilesPath["ProofProfile"] << endl;
 }
 
 void SetupICC::fillCombos()
@@ -287,7 +298,7 @@ void SetupICC::fillCombos()
     }
 
     const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_outICCFiles_description=0, m_workICCFiles_description=0;
+    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
     if (files)
     {
@@ -311,12 +322,16 @@ void SetupICC::fillCombos()
                 case MONITOR_ICC:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_monitorICCFiles_file.append(fileName);
+                    m_workICCFiles_file.append(fileName);
                     break;
                 case OUTPUT_ICC:
-                    m_outICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_proofICCFiles_file.append(fileName);
                     break;
                 case SPAC_ICC:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_workICCFiles_file.append(fileName);
                     break;
             }
 
@@ -330,7 +345,7 @@ void SetupICC::fillCombos()
     m_inProfiles->insertStringList(m_inICCFiles_description);
     m_monitorProfiles->insertStringList(m_monitorICCFiles_description);
     m_workProfiles->insertStringList(m_workICCFiles_description);
-    m_proofProfiles->insertStringList(m_outICCFiles_description);
+    m_proofProfiles->insertStringList(m_proofICCFiles_description);
 }
 
 void SetupICC::slotToggledWidgets(bool t)
@@ -362,7 +377,7 @@ void SetupICC::slotFillCombos(const QString& url)
     }
 
     const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_outICCFiles_description=0, m_workICCFiles_description=0;
+    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
     if (files)
     {
@@ -372,8 +387,11 @@ void SetupICC::slotFillCombos(const QString& url)
         m_inICCFiles_description.clear();
         m_inICCFiles_file.clear();
         m_monitorICCFiles_description.clear();
+        m_monitorICCFiles_file.clear();
         m_workICCFiles_description.clear();
-        m_outICCFiles_description.clear();
+        m_workICCFiles_file.clear();
+        m_proofICCFiles_description.clear();
+        m_proofICCFiles_file.clear();
 
         while ((fileInfo = it.current()) != 0)
         {
@@ -392,12 +410,16 @@ void SetupICC::slotFillCombos(const QString& url)
                 case MONITOR_ICC:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_monitorICCFiles_file.append(fileName);
+                    m_workICCFiles_file.append(fileName);
                     break;
                 case OUTPUT_ICC:
-                    m_outICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_proofICCFiles_file.append(fileName);
                     break;
                 case SPAC_ICC:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_workICCFiles_file.append(fileName);
                     break;
             }
 
@@ -415,6 +437,6 @@ void SetupICC::slotFillCombos(const QString& url)
     m_workProfiles->clear();
     m_workProfiles->insertStringList(m_workICCFiles_description);
     m_proofProfiles->clear();
-    m_proofProfiles->insertStringList(m_outICCFiles_description);
+    m_proofProfiles->insertStringList(m_proofICCFiles_description);
 }
 #include "setupicc.moc"
