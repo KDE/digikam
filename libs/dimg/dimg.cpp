@@ -110,8 +110,9 @@ DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
 }
 
 DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
+    : m_priv(new DImgPrivate)
 {
-    create(width, height, data, sixteenBit, alpha);
+    init(width, height, data, sixteenBit, alpha);
 }
 
 DImg::~DImg()
@@ -122,13 +123,12 @@ DImg::~DImg()
 
 bool DImg::create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
 {
-    if (m_priv->deref())
-        delete m_priv;
+    reset();
+    return ( init(width, height, data, sixteenBit, alpha) );
+}
 
-    m_priv = 0L;
-    m_priv = new DImgPrivate;
-    if (!m_priv) return false;
-
+bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
+{
     m_priv->null       = (width == 0) || (height == 0);
     m_priv->width      = width;
     m_priv->height     = height;

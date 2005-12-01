@@ -176,10 +176,11 @@ public:
 
 private:
 
-    DImgPrivate*  m_priv;
+    DImgPrivate *m_priv;
 
 private:
 
+    bool   init(uint width, uint height, uchar* data, bool sixteenBit, bool alpha);
     FORMAT fileFormat(const QString& filePath);
 
     friend class DImgLoader;
