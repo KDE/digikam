@@ -78,8 +78,9 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
                  : ImageTabDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", 
                                   true, true, false)
 {
+    // FIXME to support 16 bits image properly
     // Create an empty instance of levels to use.
-    m_levels = new Digikam::ImageLevels();
+    m_levels = new Digikam::ImageLevels(false);
 
     // About data and help button.
 
@@ -525,8 +526,9 @@ void AdjustLevelDialog::slotEffect()
     // Calculate the LUT to apply on the image.
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
+    // FIXME to support 16 bits image properly
     // Apply the lut to the image.
-    m_levels->levelsLutProcess(orgData, desData, w, h);
+    m_levels->levelsLutProcess((uchar*)orgData, (uchar*)desData, w, h);
 
     ifaceDest->putPreviewData(desData);
     m_previewTargetWidget->updatePreview();
@@ -550,8 +552,9 @@ void AdjustLevelDialog::slotOk()
     // Calculate the LUT to apply on the image.
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
+    // FIXME to support 16 bits image properly
     // Apply the lut to the image.
-    m_levels->levelsLutProcess(orgData, desData, w, h);
+    m_levels->levelsLutProcess((uchar*)orgData, (uchar*)desData, w, h);
 
     ifaceDest.putOriginalData(i18n("Adjust Level"), desData);
     kapp->restoreOverrideCursor();

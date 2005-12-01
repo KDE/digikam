@@ -37,9 +37,10 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
-#include <imagefilters.h>
-#include <imagewidget.h>
+#include "imageiface.h"
+#include "imagefilters.h"
+#include "imagewidget.h"
+#include "dimg.h"
 
 // Local includes.
 
@@ -87,7 +88,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                     "altering its hue. This is often a \"magic fix\" for "
                                     "images that are dim or washed out.<p>"
                                     "<b>Equalize</b>: this option adjusts the brightness of colors across the "
-                                    "active image so that the histogram for the Value channel "
+                                    "active image so that the histogram for the value channel "
                                     "is as nearly as possible flat, that is, so that each possible "
                                     "brightness value appears at about the same number of pixels "
                                     "as each other value. Sometimes Equalize works wonderfully at "
@@ -136,19 +137,13 @@ QPixmap ImageEffect_AutoCorrection::previewEffectPic(QString name)
 void ImageEffect_AutoCorrection::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
+
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    Digikam::DImg image        = iface->getPreviewImage();
 
-    uint * data = iface->getPreviewData();
-    int w       = iface->previewWidth();
-    int h       = iface->previewHeight();
+    autoCorrection(image, m_typeCB->currentItem());
 
-    int type = m_typeCB->currentItem();
-
-    autoCorrection(data, w, h, type);
-
-    iface->putPreviewData(data);
-
-    delete [] data;
+    iface->putPreviewImage(image);
 
     m_previewWidget->update();
     kapp->restoreOverrideCursor();
@@ -157,22 +152,17 @@ void ImageEffect_AutoCorrection::slotEffect()
 void ImageEffect_AutoCorrection::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
 
-    uint* data  = iface->getOriginalData();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-
-    if (data) 
-       {
+    if (!image.isNull())
+    {
        int type = m_typeCB->currentItem();
-
-       autoCorrection(data, w, h, type);
-
+       autoCorrection(image, type);
        QString name;
        
        switch (type)
-          {
+       {
           case AutoLevelsCorrection:
              name = i18n("Auto Levels");
           break;
@@ -188,37 +178,35 @@ void ImageEffect_AutoCorrection::slotOk()
           case StretchContrastCorrection:
              name = i18n("Stretch Contrast");
           break;
-          }
-                                                  
-       iface->putOriginalData(name, data);
-
-       delete [] data;
        }
+                                                  
+       iface.putOriginalImage(name, image);
+    }
 
     kapp->restoreOverrideCursor();
     accept();
 }
 
-void ImageEffect_AutoCorrection::autoCorrection(uint *data, int w, int h, int type)
+void ImageEffect_AutoCorrection::autoCorrection(Digikam::DImg& image, int type)
 {
     switch (type)
-       {
+    {
        case AutoLevelsCorrection:
-          Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h);
+          Digikam::ImageFilters::autoLevelsCorrectionImage(image.bits(), image.width(), image.height(), image.sixteenBit());
           break;
        
        case NormalizeCorrection:
-          Digikam::ImageFilters::normalizeImage(data, w, h);
+          Digikam::ImageFilters::normalizeImage(image.bits(), image.width(), image.height(), image.sixteenBit());
           break;
        
        case EqualizeCorrection:
-          Digikam::ImageFilters::equalizeImage(data, w, h);
+          Digikam::ImageFilters::equalizeImage(image.bits(), image.width(), image.height(), image.sixteenBit());
           break;
        
        case StretchContrastCorrection:
-          Digikam::ImageFilters::stretchContrastImage(data, w, h);
+          Digikam::ImageFilters::stretchContrastImage(image.bits(), image.width(), image.height(), image.sixteenBit());
           break;
-       }
+    }
 }
 
 #include "imageeffect_autocorrection.moc"

@@ -77,6 +77,14 @@ private:    // Private structures used internally.
     double alpha;
     };
 
+    struct int_packet
+    {
+    unsigned int red;
+    unsigned int green;
+    unsigned int blue;
+    unsigned int alpha;
+    };
+
     struct short_packet
     {
     unsigned short int red;
@@ -85,14 +93,14 @@ private:    // Private structures used internally.
     unsigned short int alpha;
     };
 
-    struct NormalizeParam 
+    struct NormalizeParam
     {
-    uchar  lut[256];
+    unsigned short *lut;
     double min;
     double max;
     };
 
-    struct HSLParam 
+    struct HSLParam
     {
     int htransfer[256];
     int ltransfer[256];
@@ -104,39 +112,40 @@ private:    // Private methods used internally.
     // Methods for Channel Mixer.   
        
     static inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
-       {
+    {
        double lfSum = RedGain + GreenGain + BlueGain;
 
        if ((lfSum == 0.0) || (bPreserveLum == false))
            return (1.0);
 
        return( fabs (1.0 / lfSum) );
-       };
+    };
 
     static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, 
                                  uchar R, uchar G, uchar B, double Norm, 
                                  bool overIndicator=false)
-       {
+    {
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
        lfMix *= Norm;
        
        if (overIndicator && lfMix > 255) lfMix = 0;        
        return( (uchar)CLAMP (lfMix, 0, 255) );
-       };      
+    };
        
     static inline int setPositionAdjusted (int Width, int Height, int X, int Y)
-       {
+    {
        X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
        Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
        return (Y*Width*4 + 4*X);
-       };       
+    };
 
 public:   // Public methods.
 
-    static void equalizeImage(uint *data, int w, int h);
-    static void stretchContrastImage(uint *data, int w, int h);
-    static void normalizeImage(uint *data, int w, int h);
-    static void autoLevelsCorrectionImage(uint *data, int w, int h);
+    static void equalizeImage(uchar *data, int w, int h, bool sixteenBit);
+    static void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
+    static void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
+
+    static void autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit);
     static void invertImage(uint *data, int w, int h);
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,

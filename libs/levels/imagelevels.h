@@ -25,12 +25,12 @@
 
 /*  Map RGB to intensity  */
 
-#define GIMP_RGB_INTENSITY_RED    0.30
-#define GIMP_RGB_INTENSITY_GREEN  0.59
-#define GIMP_RGB_INTENSITY_BLUE   0.11
-#define GIMP_RGB_INTENSITY(r,g,b) ((r) * GIMP_RGB_INTENSITY_RED   + \
-                                   (g) * GIMP_RGB_INTENSITY_GREEN + \
-                                   (b) * GIMP_RGB_INTENSITY_BLUE)
+#define LEVELS_RGB_INTENSITY_RED    0.30
+#define LEVELS_RGB_INTENSITY_GREEN  0.59
+#define LEVELS_RGB_INTENSITY_BLUE   0.11
+#define LEVELS_RGB_INTENSITY(r,g,b) ((r) * LEVELS_RGB_INTENSITY_RED   + \
+                                     (g) * LEVELS_RGB_INTENSITY_GREEN + \
+                                     (b) * LEVELS_RGB_INTENSITY_BLUE)
 
 // Qt includes.
 
@@ -71,20 +71,17 @@ struct _Levels
     
     int     low_output[5];
     int     high_output[5];
-    
-    uchar   input[5][256]; // This is used only by the gui : rebuild the color gradient 
-                           // widget colors in according with the new input levels.
 };
 
 struct _Lut
 {
-    uchar **luts;
-    int     nchannels;
+    unsigned short **luts;
+    int              nchannels;
 };
 
 public:
     
-    ImageLevels();
+    ImageLevels(bool sixteenBit);
     ~ImageLevels();
 
     // Methods for to manipulate the levels data.        
@@ -99,9 +96,9 @@ public:
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
     void   levelsLutSetup(int nchannels, bool overIndicator=false);
-    void   levelsLutProcess(uint *srcPR, uint *destPR, int w, int h);
+    void   levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
 
-    // Methods for to set manually the levels values.        
+    // Methods for to set manually the levels values.
     
     void   setLevelGammaValue(int Channel, double val);
     void   setLevelLowInputValue(int Channel, int val);
@@ -127,6 +124,8 @@ private:
     
     // Lut data.
     struct _Lut    *m_lut;
+
+    bool            m_sixteenBit;
 };
 
 }  // NameSpace Digikam

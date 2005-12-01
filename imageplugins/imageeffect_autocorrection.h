@@ -35,6 +35,7 @@ class QComboBox;
 
 namespace Digikam
 {
+class DImg;
 class ImageWidget;
 }
 
@@ -69,7 +70,7 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
     
-    void autoCorrection(uint *data, int w, int h, int type);
+    void autoCorrection(Digikam::DImg& image, int type);
     QPixmap previewEffectPic(QString name);
 
 private slots:

@@ -130,10 +130,12 @@ void AntiVignetting::filterImage(void)
         if (m_parent)
            postProgress( (int) (((double)row * 100.0) / Width) );      
         }
-        
+
+    // FIXME to support 16 bits images properly
+
     // Normalize colors for a best rendering.   
     if (m_normalize)
-       Digikam::ImageFilters::normalizeImage(NewBits, Width, Height);        
+       Digikam::ImageFilters::normalizeImage((uchar*)NewBits, Width, Height, false);
         
     delete [] ldens;        
 }
