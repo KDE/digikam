@@ -17,7 +17,8 @@
 
 // Littlecms library includes.
 
-#include <lcms.h>
+#include <config.h>
+#include LCMS_HEADER
 
 // QT includes
 

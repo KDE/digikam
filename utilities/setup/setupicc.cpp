@@ -19,6 +19,8 @@
  * 
  * ============================================================ */
 
+#include <config.h>
+
 // QT includes.
 
 #include <qlayout.h>
@@ -55,7 +57,7 @@
 
 // Others
 
-#include <lcms.h>
+#include LCMS_HEADER
 
 //--Signatures for device class-------------
 /*
