@@ -684,35 +684,44 @@ void ImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool six
     delete levels;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Performs image colors inversion. This tool is used for negate image 
-// resulting of a positive film scanned.
+/** Performs image colors inversion. This tool is used for negate image
+    resulting of a positive film scanned.*/
 
-void ImageFilters::invertImage(uint *data, int w, int h)
+void ImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
-       {
+    {
        kdWarning() << ("ImageFilters::invertImage: no image data available!")
                    << endl;
        return;
-       }
-       
-    int           i;
-    uchar         red, green, blue;
-    imageData     imagedata;
-    
-    for (i = 0; i < w*h; i++)
+    }
+
+    if (!sixteenBit)        // 8 bits image.
+    {
+        uchar *ptr = data;
+        
+        for (int i = 0 ; i < w*h ; i++)
         {
-        imagedata.raw = data[i];
-        red           = imagedata.channel.red;
-        green         = imagedata.channel.green;
-        blue          = imagedata.channel.blue;
-    
-        imagedata.channel.red   = 255 - red;
-        imagedata.channel.green = 255 - green;
-        imagedata.channel.blue  = 255 - blue;
-        data[i] = imagedata.raw;
+            ptr[0] = 255 - ptr[0];
+            ptr[1] = 255 - ptr[1];
+            ptr[2] = 255 - ptr[2];
+            ptr[3] = 255 - ptr[3];
+            ptr += 4;
         }
+    }
+    else               // 16 bits image.
+    {
+        unsigned short *ptr = (unsigned short *)data;
+        
+        for (int i = 0 ; i < w*h ; i++)
+        {
+            ptr[0] = 65535 - ptr[0];
+            ptr[1] = 65535 - ptr[1];
+            ptr[2] = 65535 - ptr[2];
+            ptr[3] = 65535 - ptr[3];
+            ptr += 4;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

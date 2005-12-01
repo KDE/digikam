@@ -32,8 +32,9 @@
 
 // Local includes.
 
-#include <imageiface.h>
-#include <imagefilters.h>
+#include "dimg.h"
+#include "imageiface.h"
+#include "imagefilters.h"
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
@@ -174,15 +175,9 @@ void ImagePlugin_Core::slotInvert()
     parentWidget()->setCursor( KCursor::waitCursor() );
         
     Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth(); 
-    int   h    = iface.originalHeight();
-    
-    Digikam::ImageFilters::invertImage(data, w, h);
-    
-    iface.putOriginalData(i18n("Invert"), data);
-    delete [] data;
+    Digikam::DImg image = iface.getOriginalImage();
+    Digikam::ImageFilters::invertImage(image.bits(), image.width(), image.height(), image.sixteenBit());
+    iface.putOriginalImage(i18n("Invert"), image);
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }

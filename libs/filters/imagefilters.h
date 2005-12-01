@@ -43,6 +43,8 @@ class DIGIKAMIMAGEFILTERS_EXPORT ImageFilters
 {
 public: // Structures to use for color management filters depending of architectures.
 
+// FIXME remove this endianness rule when all image plugins will support 16 bits images.
+
 #ifdef WORDS_BIGENDIAN  // PPC like
     struct channels
     {
@@ -83,14 +85,6 @@ private:    // Private structures used internally.
     unsigned int green;
     unsigned int blue;
     unsigned int alpha;
-    };
-
-    struct short_packet
-    {
-    unsigned short int red;
-    unsigned short int green;
-    unsigned short int blue;
-    unsigned short int alpha;
     };
 
     struct NormalizeParam
@@ -144,9 +138,10 @@ public:   // Public methods.
     static void equalizeImage(uchar *data, int w, int h, bool sixteenBit);
     static void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
     static void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
-
     static void autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit);
-    static void invertImage(uint *data, int w, int h);
+    static void invertImage(uchar *data, int w, int h, bool sixteenBit);
+
+    // FIXME : support 16 bits images.
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
     static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,

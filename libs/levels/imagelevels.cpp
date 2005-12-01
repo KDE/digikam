@@ -180,6 +180,7 @@ int ImageLevels::levelsInputFromColor(int channel, QColor color)
     return 0;  // just to please the compiler.
 }
 
+// FIXME : support 16 bits image.
 void ImageLevels::levelsBlackToneAdjustByColors(int channel, QColor color)
 {
     if (!m_levels) return;
@@ -187,6 +188,7 @@ void ImageLevels::levelsBlackToneAdjustByColors(int channel, QColor color)
     m_levels->low_input[channel] = levelsInputFromColor(channel, color);
 }
 
+// FIXME : support 16 bits image.
 void ImageLevels::levelsWhiteToneAdjustByColors(int channel, QColor color)
 {
     if (!m_levels) return;
