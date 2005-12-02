@@ -17,6 +17,7 @@
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
+    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
@@ -102,6 +103,7 @@
     <useglobaltypes>
       <type ext="ui" />
       <type ext="cpp" />
+      <type ext="c" />
       <type ext="h" />
     </useglobaltypes>
   </kdevfilecreate>
@@ -220,4 +222,8 @@
       <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
+  <ctagspart>
+    <customArguments/>
+    <customTagfilePath/>
+  </ctagspart>
 </kdevelop>
