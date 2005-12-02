@@ -756,48 +756,82 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     delete threadedFilter;
 }
 
-void ImageFilters::channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
+void ImageFilters::channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
+                                     bool bPreserveLum, bool bMonochrome,
                                      float rrGain, float rgGain, float rbGain,
                                      float grGain, float ggGain, float gbGain,
                                      float brGain, float bgGain, float bbGain, 
                                      bool overIndicator)
 {
     if (!data || !Width || !Height)
-       {
+    {
        kdWarning() << ("ImageFilters::channelMixerImage: no image data available!")
                    << endl;
        return;
-       }
+    }
         
     register int i;
-    uchar        nGray, red, green , blue;
-    imageData    imagedata;
-    
+
     double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
     double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
     double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
-        
-    for (i = 0; i < Width*Height; i++)
+
+    if (!sixteenBit)        // 8 bits image.
+    {
+        uchar  nGray, red, green, blue, alpha;
+        uchar *ptr = data;
+
+        for (i = 0 ; i < Width*Height ; i++)
         {
-        imagedata.raw = data[i];
-        red           = imagedata.channel.red;
-        green         = imagedata.channel.green;
-        blue          = imagedata.channel.blue;
-            
-        if (bMonochrome)
-            {
-            nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-            imagedata.channel.red = imagedata.channel.green = imagedata.channel.blue = nGray;
-            }
-        else
-            {
-            imagedata.channel.red   = MixPixel (rrGain, rgGain, rbGain, red, green, blue, rnorm, overIndicator);
-            imagedata.channel.green = MixPixel (grGain, ggGain, gbGain, red, green, blue, gnorm, overIndicator);
-            imagedata.channel.blue  = MixPixel (brGain, bgGain, bbGain, red, green, blue, bnorm, overIndicator);
-            }
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
         
-        data[i] = imagedata.raw;
+            if (bMonochrome)
+            {
+                nGray = MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                  sixteenBit, rnorm, overIndicator);
+                ptr[0] = ptr[1] = ptr[2] = nGray;
+            }
+            else
+            {
+                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, bnorm, overIndicator);
+                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, gnorm, overIndicator);
+                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, rnorm, overIndicator);
+            }
+                                
+            ptr += 4;
         }
+    }
+    else               // 16 bits image.
+    {
+        unsigned short  nGray, red, green, blue, alpha;
+        unsigned short *ptr = (unsigned short *)data;
+        
+        for (i = 0 ; i < Width*Height ; i++)
+        {
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
+        
+            if (bMonochrome)
+            {
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+                ptr[0] = ptr[1] = ptr[2] = nGray;
+            }
+            else
+            {
+                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm, overIndicator);
+                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm, overIndicator);
+                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+            }
+                            
+            ptr += 4;
+        }
+    }
 }
 
 // Change color tonality of an image to appling a RGB color mask.

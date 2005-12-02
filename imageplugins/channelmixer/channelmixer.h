@@ -38,6 +38,7 @@ namespace Digikam
 class HistogramWidget;
 class ColorGradientWidget;
 class ImageGuideWidget;
+class DColor;
 }
 
 namespace DigikamChannelMixerImagesPlugin
@@ -107,7 +108,7 @@ private:
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
-    uint                         *m_destinationPreviewData;
+    uchar                        *m_destinationPreviewData;
 
     void adjustSliders(void);
     
@@ -123,7 +124,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
-    void slotColorSelectedFromTarget(const QColor &color);    
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
 };
 
 }  // NameSpace DigikamChannelMixerImagesPlugin

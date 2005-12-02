@@ -95,7 +95,7 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
 
     memcpy (pBWBits, data, Width*Height*sizeof(uint));  
     
-    Digikam::ImageFilters::channelMixerImage(pBWBits, Width, Height, // Image data.
+    Digikam::ImageFilters::channelMixerImage((uchar*)pBWBits, Width, Height, false, // Image data.        FIXME
                                              true,                   // Preserve luminosity.    
                                              true,                   // Monochrome.
                                              0.4, greenBoost, -0.8,  // Red channel gains.

@@ -115,15 +115,16 @@ private:    // Private methods used internally.
        return( fabs (1.0 / lfSum) );
     };
 
-    static inline uchar MixPixel(float RedGain, float GreenGain, float BlueGain, 
-                                 uchar R, uchar G, uchar B, double Norm, 
-                                 bool overIndicator=false)
+    static inline unsigned short MixPixel(float RedGain, float GreenGain, float BlueGain,
+                                          unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
+                                          double Norm, bool overIndicator=false)
     {
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
        lfMix *= Norm;
+       int segment = sixteenBit ? 65535 : 255;
        
-       if (overIndicator && lfMix > 255) lfMix = 0;        
-       return( (uchar)CLAMP (lfMix, 0, 255) );
+       if (overIndicator && lfMix > segment) lfMix = 0;
+       return( (unsigned short)CLAMP (lfMix, 0, segment) );
     };
        
     static inline int setPositionAdjusted (int Width, int Height, int X, int Y)
@@ -140,14 +141,15 @@ public:   // Public methods.
     static void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
     static void autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit);
     static void invertImage(uchar *data, int w, int h, bool sixteenBit);
-
-    // FIXME : support 16 bits images.
-    static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
-    static void channelMixerImage(uint *data, int Width, int Height, bool bPreserveLum, bool bMonochrome,
+    static void channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
+                                  bool bPreserveLum, bool bMonochrome,
                                   float rrGain, float rgGain, float rbGain,
                                   float grGain, float ggGain, float gbGain,
                                   float brGain, float bgGain, float bbGain,
                                   bool overIndicator=false);
+
+    // FIXME : support 16 bits images.
+    static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
     static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);
     static void sharpenImage(uint* data, int w, int h, int r);
     static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);

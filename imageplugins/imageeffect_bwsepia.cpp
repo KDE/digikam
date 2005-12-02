@@ -237,7 +237,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uint *data, int w, int h, int 
     switch (type)
        {
        case BWNeutral:
-          Digikam::ImageFilters::channelMixerImage(data, w, h,      // Image data.
+          Digikam::ImageFilters::channelMixerImage((uchar*)data, w, h, false,      // Image data.             FIXME
                    true,                                            // Preserve luminosity.    
                    true,                                            // Monochrome.
                    0.3, 0.59 , 0.11,                                // Red channel gains.
@@ -246,8 +246,8 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uint *data, int w, int h, int 
           break;
        
        case BWGreenFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h,      // Image data.
-                   true,                                            // Preserve luminosity.    
+          Digikam::ImageFilters::channelMixerImage((uchar*)data, w, h, false,      // Image data.             FIXME
+                   true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.1, 0.7, 0.2,                                   // Red channel gains.
                    0.0, 1.0, 0.0,                                   // Green channel gains (not used).
@@ -255,8 +255,8 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uint *data, int w, int h, int 
           break;
        
        case BWOrangeFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h,      // Image data.
-                   true,                                            // Preserve luminosity.    
+          Digikam::ImageFilters::channelMixerImage((uchar*)data, w, h, false,      // Image data.             FIXME
+                   true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.78, 0.22, 0.0,                                 // Red channel gains.
                    0.0,  1.0,  0.0,                                 // Green channel gains (not used).
@@ -264,8 +264,8 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uint *data, int w, int h, int 
           break;
        
        case BWRedFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h,      // Image data.
-                   true,                                            // Preserve luminosity.    
+          Digikam::ImageFilters::channelMixerImage((uchar*)data, w, h, false,      // Image data.             FIXME
+                   true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.9, 0.1, 0.0,                                   // Red channel gains.
                    0.0, 1.0, 0.0,                                   // Green channel gains (not used).
@@ -273,8 +273,8 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uint *data, int w, int h, int 
           break;
        
        case BWYellowFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h,      // Image data.
-                   true,                                            // Preserve luminosity.    
+          Digikam::ImageFilters::channelMixerImage((uchar*)data, w, h, false,      // Image data.             FIXME
+                   true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.6, 0.28, 0.12,                                 // Red channel gains.
                    0.0, 1.0,  0.0,                                  // Green channel gains (not used).
