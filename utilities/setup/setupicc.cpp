@@ -138,6 +138,8 @@ SetupICC::SetupICC(QWidget* parent )
     QPushButton *infoWorkProfiles = new QPushButton("Info", workProfilesSettings);
     infoWorkProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoWorkProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    connect(m_workProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeWorkProfile(int)));
+    connect(infoWorkProfiles, SIGNAL(clicked()), this, SLOT(slotClickedWork()));
 
     QHBox *monitorProfilesSettings = new QHBox(profiles);
     monitorProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -149,6 +151,8 @@ SetupICC::SetupICC(QWidget* parent )
     QPushButton *infoMonitorProfiles = new QPushButton("Info", monitorProfilesSettings);
     infoMonitorProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoMonitorProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    connect(m_monitorProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeMonitorProfile(int)));
+    connect(infoMonitorProfiles, SIGNAL(clicked()), this, SLOT(slotClickedMonitor()) );
 
     QHBox *inProfilesSettings = new QHBox(profiles);
     inProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -160,6 +164,8 @@ SetupICC::SetupICC(QWidget* parent )
     QPushButton *infoInProfiles = new QPushButton("Info", inProfilesSettings);
     infoInProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoInProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    connect(m_inProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeInProfile(int)));
+    connect(infoInProfiles, SIGNAL(clicked()), this, SLOT(slotClickedIn()) );
 
     QHBox *proofProfilesSettings = new QHBox(profiles);
     proofProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -171,6 +177,8 @@ SetupICC::SetupICC(QWidget* parent )
     QPushButton *infoProofProfiles = new QPushButton("Info", proofProfilesSettings);
     infoProofProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoProofProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    connect(m_proofProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeProofProfile(int)));
+    connect(infoProofProfiles, SIGNAL(clicked()), this, SLOT(slotClickedProof()) );
 
     fillCombos();
 
@@ -439,4 +447,80 @@ void SetupICC::slotFillCombos(const QString& url)
     m_proofProfiles->clear();
     m_proofProfiles->insertStringList(m_proofICCFiles_description);
 }
+
+void SetupICC::slotClickedWork()
+{
+   profileInfo(m_ICCfilesPath["WorkProfile"]);
+}
+
+void SetupICC::slotClickedIn()
+{
+    profileInfo(m_ICCfilesPath["InProfile"]);
+}
+
+void SetupICC::slotClickedMonitor()
+{
+    profileInfo(m_ICCfilesPath["MonitorProfile"]);
+}
+
+void SetupICC::slotClickedProof()
+{
+    profileInfo(m_ICCfilesPath["ProofProfile"]);
+}
+
+void SetupICC::profileInfo(const QString& profile)
+{
+    QString intent;
+    cmsHPROFILE selectedProfile;
+    selectedProfile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
+
+    QString  profileName = QString((cmsTakeProductName(selectedProfile)));
+    QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
+    QString profileManufacturer = QString(cmsTakeManufacturer(selectedProfile));
+    int profileIntent = cmsTakeRenderingIntent(selectedProfile);
+    
+    //"Decode" profile rendering intent
+    switch (profileIntent)
+    {
+        case 0:
+            intent = i18n("Perceptual");
+            break;
+        case 1:
+            intent = i18n("Relative Colorimetric");
+            break;
+        case 2:
+            intent = i18n("Saturation");
+            break;
+        case 3:
+            intent = i18n("Absolute Colorimetric");
+            break;
+    }
+
+    KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
+                                 i18n("</p><p><b>Description:</b>  ") + profileDescription +
+                                 i18n("</p><p><b>Manufacturer:</b>  ") + profileManufacturer +
+                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + "</p>",
+                                 i18n("Color Profile Info"));
+}
+
+void SetupICC::slotChangeWorkProfile(int index)
+{
+    m_ICCfilesPath["WorkProfile"] = m_workICCFiles_file[index];
+}
+
+void SetupICC::slotChangeInProfile(int index)
+{
+    m_ICCfilesPath["InProfile"] = m_inICCFiles_file[index];
+}
+
+void SetupICC::slotChangeMonitorProfile(int index)
+{
+    m_ICCfilesPath["MonitorProfile"] = m_monitorICCFiles_file[index];
+}
+
+void SetupICC::slotChangeProofProfile(int index)
+{
+    m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[index];
+}
+
 #include "setupicc.moc"

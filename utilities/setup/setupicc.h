@@ -52,6 +52,7 @@ private:
     void fillCombos();
     void enableWidgets();
     void disableWidgets();
+    void profileInfo(const QString&);
 
     QCheckBox       *m_enableColorManagement;
     QCheckBox       *m_bpcAlgorithm;
@@ -78,6 +79,14 @@ private slots:
 
       void slotToggledWidgets(bool t);
       void slotFillCombos(const QString&);
+      void slotClickedIn();
+      void slotClickedWork();
+      void slotClickedMonitor();
+      void slotClickedProof();
+      void slotChangeWorkProfile(int index);
+      void slotChangeInProfile(int index);
+      void slotChangeMonitorProfile(int index);
+      void slotChangeProofProfile(int index);
 
 };
 
