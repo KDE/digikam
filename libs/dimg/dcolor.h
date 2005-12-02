@@ -32,27 +32,35 @@ class DIGIKAM_EXPORT DColor
 public:
 
     DColor();
-    DColor(uchar *data, bool sixteenBits);
-    DColor(int red, int green, int blue, int alpha);
-    DColor& operator=(const DColor& col);
+    DColor(uchar *data, bool sixteenBit);
+    DColor(int red, int green, int blue, int alpha, bool sixteenBit);
+    DColor(const DColor& color);
+    DColor& operator=(const DColor& color);
     ~DColor();
 
-    int red  ();
-    int green();
-    int blue ();
-    int alpha();
+    int  red  ();
+    int  green();
+    int  blue ();
+    int  alpha();
+    bool sixteenBit();
 
     void setRed  (int red);
     void setGreen(int green);
     void setBlue (int blue);
     void setAlpha(int alpha);
+    void setSixteenBit(bool sixteenBit);
+
+    void getHSL(int* hue, int* sat, int* lig);
+    void setRGB(int hue, int sat, int lig, bool sixteenBit);
 
 private:
 
-    int m_red;
-    int m_green;
-    int m_blue;
-    int m_alpha;
+    int  m_red;
+    int  m_green;
+    int  m_blue;
+    int  m_alpha;
+
+    bool m_sixteenBit;
 };
 
 }  // NameSpace Digikam
