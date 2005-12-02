@@ -74,13 +74,12 @@
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint width, uint height)
+AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uchar *imageData, uint width, uint height, bool sixteenBit)
                  : ImageTabDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", 
                                   true, true, false)
 {
-    // FIXME to support 16 bits image properly
-    // Create an empty instance of levels to use.
-    m_levels = new Digikam::ImageLevels(false);
+    m_histoSegments = sixteenBit ? 65535 : 255;
+    m_levels = new Digikam::ImageLevels(sixteenBit);
 
     // About data and help button.
 
@@ -159,7 +158,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::NoFrame);
     QVBoxLayout* l2 = new QVBoxLayout(frame, 2, 0);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, frame, false);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, sixteenBit, frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l2->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);
@@ -169,7 +168,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMinInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMinInput->setFixedHeight( 20 );
     m_hGradientMinInput->setMinValue(0);
-    m_hGradientMinInput->setMaxValue(255);
+    m_hGradientMinInput->setMaxValue(m_histoSegments);
     QWhatsThis::add( m_hGradientMinInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMinInput, i18n( "Minimal intensity input." ) );
     m_hGradientMinInput->setColors( QColor( "black" ), QColor( "white" ) );
@@ -178,13 +177,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_hGradientMaxInput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
     m_hGradientMaxInput->setFixedHeight( 20 );
     m_hGradientMaxInput->setMinValue(0);
-    m_hGradientMaxInput->setMaxValue(255);
+    m_hGradientMaxInput->setMaxValue(m_histoSegments);
     QWhatsThis::add( m_hGradientMaxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     QToolTip::add( m_hGradientMaxInput, i18n( "Maximal intensity input." ) );
     m_hGradientMaxInput->setColors( QColor( "black" ), QColor( "white" ) );
     grid->addMultiCellWidget(m_hGradientMaxInput, 3, 3, 0, 4);
 
-    m_minInput = new QSpinBox(0, 255, 1, gboxSettings);
+    m_minInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minInput->setValue(0);
     QWhatsThis::add( m_minInput, i18n("<p>Select here the minimal intensity input value of the histogram."));
     QToolTip::add( m_minInput, i18n( "Minimal intensity input." ) );
@@ -194,8 +193,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     m_gammaInput->setValue(1.0);
     QToolTip::add( m_gammaInput, i18n( "Gamma input value." ) );
     QWhatsThis::add( m_gammaInput, i18n("<p>Select here the gamma input value."));
-    m_maxInput = new QSpinBox(0, 255, 1, gboxSettings);
-    m_maxInput->setValue(255);
+    m_maxInput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
+    m_maxInput->setValue(m_histoSegments);
     QToolTip::add( m_maxInput, i18n( "Maximal intensity input." ) );
     QWhatsThis::add( m_maxInput, i18n("<p>Select here the maximal intensity input value of the histogram."));
     grid->addMultiCellWidget(m_minInput, 2, 2, 5, 5);
@@ -208,7 +207,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QToolTip::add( m_hGradientMinOutput, i18n( "Minimal intensity output." ) );
     m_hGradientMinOutput->setFixedHeight( 20 );
     m_hGradientMinOutput->setMinValue(0);
-    m_hGradientMinOutput->setMaxValue(255);
+    m_hGradientMinOutput->setMaxValue(m_histoSegments);
     grid->addMultiCellWidget(m_hGradientMinOutput, 5, 5, 0, 4);
 
     m_hGradientMaxOutput = new KGradientSelector( KSelector::Horizontal, gboxSettings );
@@ -217,15 +216,15 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     QToolTip::add( m_hGradientMaxOutput, i18n( "Maximal intensity output." ) );
     m_hGradientMaxOutput->setFixedHeight( 20 );
     m_hGradientMaxOutput->setMinValue(0);
-    m_hGradientMaxOutput->setMaxValue(255);
+    m_hGradientMaxOutput->setMaxValue(m_histoSegments);
     grid->addMultiCellWidget(m_hGradientMaxOutput, 6, 6, 0, 4);
 
-    m_minOutput = new QSpinBox(0, 255, 1, gboxSettings);
+    m_minOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
     m_minOutput->setValue(0);
     QToolTip::add( m_minOutput, i18n( "Minimal intensity output." ) );
     QWhatsThis::add( m_minOutput, i18n("<p>Select here the minimal intensity output value of the histogram."));
-    m_maxOutput = new QSpinBox(0, 255, 1, gboxSettings);
-    m_maxOutput->setValue(255);
+    m_maxOutput = new QSpinBox(0, m_histoSegments, 1, gboxSettings);
+    m_maxOutput->setValue(m_histoSegments);
     QToolTip::add( m_maxOutput, i18n( "Maximal intensity output." ) );
     QWhatsThis::add( m_maxOutput, i18n("<p>Select here the maximal intensity output value of the histogram."));
     grid->addMultiCellWidget(m_minOutput, 5, 5, 5, 5);
@@ -317,8 +316,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
             
-    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const QColor &, bool )));             
+    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
@@ -381,7 +380,7 @@ void AdjustLevelDialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void AdjustLevelDialog::slotSpotColorChanged(const QColor &color, bool release)
+void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
 {
     if ( m_pickBlack->isOn() )
        {
@@ -402,7 +401,7 @@ void AdjustLevelDialog::slotSpotColorChanged(const QColor &color, bool release)
        m_pickWhite->setOn(!release);
        }
     else
-       m_histogramWidget->setHistogramGuide(color);
+       m_histogramWidget->setHistogramGuideByColor(color);
 
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
@@ -425,9 +424,9 @@ void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
     if ( val < m_hGradientMaxInput->value() )
        val = m_hGradientMaxInput->value();
 
-    m_minInput->setValue(255 - val);
+    m_minInput->setValue(m_histoSegments - val);
     m_hGradientMinInput->setValue( val );
-    m_levels->setLevelLowInputValue(m_channelCB->currentItem(), 255 - val);
+    m_levels->setLevelLowInputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
     slotEffect();
 }
@@ -439,9 +438,9 @@ void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
     if ( val > m_hGradientMinInput->value() )
        val = m_hGradientMinInput->value();
 
-    m_maxInput->setValue(255 - val);
+    m_maxInput->setValue(m_histoSegments - val);
     m_hGradientMaxInput->setValue( val );
-    m_levels->setLevelHighInputValue(m_channelCB->currentItem(), 255 - val);
+    m_levels->setLevelHighInputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
     slotEffect();
 }
@@ -453,9 +452,9 @@ void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
     if ( val < m_hGradientMaxOutput->value() )
        val = m_hGradientMaxOutput->value();
 
-    m_minOutput->setValue(255 - val);
+    m_minOutput->setValue(m_histoSegments - val);
     m_hGradientMinOutput->setValue( val );
-    m_levels->setLevelLowOutputValue(m_channelCB->currentItem(), 255 - val);
+    m_levels->setLevelLowOutputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
     slotEffect();
 }
@@ -467,9 +466,9 @@ void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
     if ( val > m_hGradientMinOutput->value() )
        val = m_hGradientMinOutput->value();
 
-    m_maxOutput->setValue(255 - val);
+    m_maxOutput->setValue(m_histoSegments - val);
     m_hGradientMaxOutput->setValue( val );
-    m_levels->setLevelHighOutputValue(m_channelCB->currentItem(), 255 - val);
+    m_levels->setLevelHighOutputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
     slotEffect();
 }
@@ -483,11 +482,11 @@ void AdjustLevelDialog::slotAdjustSliders()
 
 void AdjustLevelDialog::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
-    m_hGradientMinInput->setValue(255 - minIn);
-    m_hGradientMaxInput->setValue(255 - maxIn);
+    m_hGradientMinInput->setValue(m_histoSegments - minIn);
+    m_hGradientMaxInput->setValue(m_histoSegments - maxIn);
     m_gammaInput->setValue(gamIn);
-    m_hGradientMinOutput->setValue(255 - minOut);
-    m_hGradientMaxOutput->setValue(255 - maxOut);
+    m_hGradientMinOutput->setValue(m_histoSegments - minOut);
+    m_hGradientMaxOutput->setValue(m_histoSegments - maxOut);
 }
 
 void AdjustLevelDialog::slotResetCurrentChannel()
@@ -514,52 +513,70 @@ void AdjustLevelDialog::slotAutoLevels()
 
 void AdjustLevelDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
+    uchar* desData;
 
-    uint* orgData = ifaceDest->getPreviewData();
-    int   w       = ifaceDest->previewWidth();
-    int   h       = ifaceDest->previewHeight();
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::DImg image        = iface->getPreviewImage();
+
+    uchar *orgData = image.bits();
+    int w          = image.width();
+    int h          = image.height();
 
     // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
+    if (m_histoSegments == 65535)
+       desData = new uchar[w*h*8];
+    else
+       desData = new uchar[w*h*4];
 
     // Calculate the LUT to apply on the image.
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
-    // FIXME to support 16 bits image properly
     // Apply the lut to the image.
-    m_levels->levelsLutProcess((uchar*)orgData, (uchar*)desData, w, h);
+    m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    ifaceDest->putPreviewData(desData);
+    if (m_histoSegments == 65535)
+       memcpy (orgData, desData, w*h*8);
+    else
+       memcpy (orgData, desData, w*h*4);
+
+    iface->putPreviewImage(image);
     m_previewTargetWidget->updatePreview();
 
-    delete [] orgData;
     delete [] desData;
 }
 
 void AdjustLevelDialog::slotOk()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface ifaceDest(0, 0);
+    uchar* desData;
 
-    uint* orgData = ifaceDest.getOriginalData();
-    int   w       = ifaceDest.originalWidth();
-    int   h       = ifaceDest.originalHeight();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
+
+    uchar *orgData = image.bits();
+    int w          = image.width();
+    int h          = image.height();
 
     // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
+    if (m_histoSegments == 65535)
+       desData = new uchar[w*h*8];
+    else
+       desData = new uchar[w*h*4];
 
     // Calculate the LUT to apply on the image.
     m_levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
-    // FIXME to support 16 bits image properly
     // Apply the lut to the image.
-    m_levels->levelsLutProcess((uchar*)orgData, (uchar*)desData, w, h);
+    m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    ifaceDest.putOriginalData(i18n("Adjust Level"), desData);
+    if (m_histoSegments == 65535)
+       memcpy (orgData, desData, w*h*8);
+    else
+       memcpy (orgData, desData, w*h*4);
+
+    iface.putOriginalImage(i18n("Adjust Level"), image);
     kapp->restoreOverrideCursor();
 
-    delete [] orgData;
     delete [] desData;
     accept();
 }

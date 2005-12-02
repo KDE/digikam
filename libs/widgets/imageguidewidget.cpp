@@ -35,12 +35,9 @@
 #include <kdebug.h>
 #include <kglobal.h> 
 
-// Digikam includes.
-
-#include <imageiface.h>
-
 // Local includes.
 
+#include "imageiface.h"
 #include "imageguidewidget.h"
 
 namespace Digikam
@@ -63,12 +60,12 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    m_iface = new Digikam::ImageIface(w, h);
-    m_data = m_iface->getPreviewData();
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
-    m_pixmap = new QPixmap(w, h);
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+    m_iface   = new ImageIface(w, h);
+    m_preview = m_iface->getPreviewImage();
+    m_w       = m_preview.width();
+    m_h       = m_preview.height();
+    m_pixmap  = new QPixmap(w, h);
+    m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
     resetSpotPosition();
     setSpotVisible(m_spotVisible);
@@ -76,7 +73,6 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
 
 ImageGuideWidget::~ImageGuideWidget()
 {
-    delete [] m_data;
     delete m_iface;
     
     if (m_timerID) killTimer(m_timerID);
@@ -102,22 +98,18 @@ QPoint ImageGuideWidget::getSpotPosition(void)
                             (int)((float)m_spot.y() * (float)m_iface->originalHeight() / (float)m_h)));
 }
 
-QColor ImageGuideWidget::getSpotColor(void)
+DColor ImageGuideWidget::getSpotColor(void)
 {
     // Get cross position in real image.
     QPoint currentPointPosition = getSpotPosition();
+
+    DImg image = m_iface->getOriginalImage();
     
-    uint *data = m_iface->getOriginalData();
-    
-    uint *currentPointData = data + currentPointPosition.x() + 
-                             (m_iface->originalWidth() * currentPointPosition.y());
-    QColor currentPointColor(
-                             (*currentPointData >> 16) & 0xff,        // Red.
-                             (*currentPointData >>  8) & 0xff,        // Green.
-                             (*currentPointData)       & 0xff         // Blue.
-                             );
-                             
-    delete [] data;                             
+    uchar *currentPointData = image.bits() + currentPointPosition.x()*image.bytesDepth() +
+                             (m_iface->originalWidth() * currentPointPosition.y() * image.bytesDepth());
+
+    DColor currentPointColor(currentPointData, image.sixteenBit());
+
     return(currentPointColor);
 }
 
@@ -128,10 +120,10 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible)
     if (m_spotVisible)
        m_timerID = startTimer(800);
     else
-       {
+    {
        killTimer(m_timerID);
        m_timerID = 0;
-       }
+    }
        
     updatePreview();
 }
@@ -155,15 +147,15 @@ void ImageGuideWidget::updatePixmap( void )
                    m_rect.width(), m_rect.height());
 
     if (m_spotVisible)
-       {
+    {
        // Adapt spot from image coordinate to widget coordinate.
        int xspot = m_spot.x() + m_rect.x();
        int yspot = m_spot.y() + m_rect.y();
        
        switch (m_guideMode)
-          {
+       {
           case HVGuideMode:
-             {
+          {
              QPainter p(m_pixmap);
              p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
              p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
@@ -173,10 +165,10 @@ void ImageGuideWidget::updatePixmap( void )
              p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
              p.end();
              break;
-             }
+          }
             
           case PickColorMode:
-             {
+          {
              QPainter p(m_pixmap);
              p.setPen(QPen(m_guideColor, 1, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
@@ -185,16 +177,16 @@ void ImageGuideWidget::updatePixmap( void )
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
 
              if (m_flicker%2 != 0)
-                {
+             {
                 p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
                 p.drawEllipse( xspot-5, yspot-5, 11, 11 );
-                }
+             }
                 
              p.end();
              break;
-             }
           }
        }
+    }
 }    
 
 void ImageGuideWidget::paintEvent( QPaintEvent * )
@@ -211,13 +203,13 @@ void ImageGuideWidget::updatePreview( void )
 void ImageGuideWidget::timerEvent(QTimerEvent * e)
 {
     if (e->timerId() == m_timerID)
-        {
-        if (m_flicker == 5) m_flicker=0;
-        else m_flicker++;
-        updatePreview();
-        }
+    {
+       if (m_flicker == 5) m_flicker=0;
+       else m_flicker++;
+       updatePreview();
+    }
     else
-        QWidget::timerEvent(e);
+       QWidget::timerEvent(e);
 }
 
 void ImageGuideWidget::resizeEvent(QResizeEvent * e)
@@ -228,11 +220,13 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     int h = e->size().height();
     int old_w = m_w;
     int old_h = m_h;
-    m_data = m_iface->setPreviewSize(w, h);
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
-    m_pixmap = new QPixmap(w, h);
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+
+    m_preview = m_iface->setPreviewImageSize(w, h);
+    m_w       = m_preview.width();
+    m_h       = m_preview.height();
+    m_pixmap  = new QPixmap(w, h);
+    m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+
     m_spot.setX((int)((float)m_spot.x() * ( (float)m_w / (float)old_w)));
     m_spot.setY((int)((float)m_spot.y() * ( (float)m_h / (float)old_h)));
     updatePixmap();
@@ -244,45 +238,45 @@ void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( !m_focus && e->button() == Qt::LeftButton &&
          m_rect.contains( e->x(), e->y() ) && m_spotVisible )
-       {
+    {
        m_focus = true;
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());;
        updatePreview();
-       }
+    }
 }
 
 void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 {
     if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible) 
-       {    
+    {
        m_focus = false;
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());
        
-       QColor color = getSpotColor();
+       DColor color = getSpotColor();
        QPoint point = getSpotPosition();
        emit spotPositionChanged( color, true, m_spot );
-       QToolTip::add( this, i18n("(%1,%2)<br>RGB:%3,%4,%5")
+       QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")
                                  .arg(point.x()).arg(point.y())
-                                 .arg(color.red()).arg(color.green()).arg(color.blue()) );
-       }
+                                 .arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()) );
+    }
 }
 
 void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( m_rect.contains( e->x(), e->y() ) && !m_focus && m_spotVisible )
-        {
-        setCursor( KCursor::crossCursor() );
-        }
+    {
+       setCursor( KCursor::crossCursor() );
+    }
     else if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible )
-        {
-        m_spot.setX(e->x()-m_rect.x());
-        m_spot.setY(e->y()-m_rect.y());
-        updatePreview();
-        }
+    {
+       m_spot.setX(e->x()-m_rect.x());
+       m_spot.setY(e->y()-m_rect.y());
+       updatePreview();
+    }
     else
-        setCursor( KCursor::arrowCursor() );
+       setCursor( KCursor::arrowCursor() );
 }
 
 }  // NameSpace Digikam

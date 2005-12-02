@@ -28,6 +28,9 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
 
 // Local includes.
 
@@ -62,14 +65,11 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
     Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
 
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    
-    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget(), data, w, h);
+    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget(), image.bits(),
+                                                           image.width(), image.height(), image.sixteenBit());
     dlg.exec();
-    delete [] data;
 }
 
 

@@ -32,22 +32,20 @@
                                      (g) * LEVELS_RGB_INTENSITY_GREEN + \
                                      (b) * LEVELS_RGB_INTENSITY_BLUE)
 
-// Qt includes.
-
-#include <qcolor.h>
-                                   
 // KDE includes.
 
 #include <kurl.h>
 
 // Local includes.
 
+#include "dcolor.h"
 #include "digikam_export.h"
-						
+
 namespace Digikam
 {
 
 class ImageHistogram;
+class DColor;
 
 class DIGIKAM_EXPORT ImageLevels
 {
@@ -89,10 +87,10 @@ public:
     void   levelsChannelReset(int channel);
     void   levelsAuto(Digikam::ImageHistogram *hist);
     void   levelsChannelAuto(Digikam::ImageHistogram *hist, int channel);
-    int    levelsInputFromColor(int channel, QColor color);    
-    void   levelsBlackToneAdjustByColors(int channel, QColor color);
-    void   levelsGrayToneAdjustByColors(int channel, QColor color);
-    void   levelsWhiteToneAdjustByColors(int channel, QColor color);
+    int    levelsInputFromColor(int channel, DColor color);
+    void   levelsBlackToneAdjustByColors(int channel, DColor color);
+    void   levelsGrayToneAdjustByColors(int channel, DColor color);
+    void   levelsWhiteToneAdjustByColors(int channel, DColor color);
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int n_channels, int channel, float value);
     void   levelsLutSetup(int nchannels, bool overIndicator=false);

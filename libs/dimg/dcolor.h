@@ -32,14 +32,15 @@ class DIGIKAM_EXPORT DColor
 public:
 
     DColor();
+    DColor(uchar *data, bool sixteenBits);
     DColor(int red, int green, int blue, int alpha);
     DColor& operator=(const DColor& col);
     ~DColor();
 
-    int red();
-    int green ();
-    int blue  ();
-    int alpha ();
+    int red  ();
+    int green();
+    int blue ();
+    int alpha();
 
     void setRed  (int red);
     void setGreen(int green);

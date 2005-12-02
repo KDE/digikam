@@ -31,12 +31,15 @@
 
 // Local includes
 
+#include "dimg.h"
+#include "dcolor.h"
 #include "digikam_export.h"
 
 class QPixmap;
 
 namespace Digikam
 {
+class DColor;
 class ImageIface;
 
 class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
@@ -61,10 +64,10 @@ public:
     Digikam::ImageIface* imageIface();
     
     QPoint getSpotPosition(void);
-    QColor getSpotColor(void);
+    DColor getSpotColor(void);
     void   setSpotVisible(bool v);
     void   resetSpotPosition(void);
-    void   updatePreview( void );
+    void   updatePreview(void);
 
 public slots:
         
@@ -73,9 +76,9 @@ public slots:
 
 signals:
 
-    void spotPositionChanged( const QColor &color, bool release, const QPoint &position ); 
-    void signalResized(void);  
-    
+    void spotPositionChanged( const Digikam::DColor &color, bool release, const QPoint &position );
+    void signalResized(void);
+
 protected:
     
     void paintEvent( QPaintEvent *e );
@@ -87,7 +90,8 @@ protected:
         
 private:
 
-    uint                *m_data;
+    DImg                 m_preview;
+
     int                  m_w;
     int                  m_h;
     
@@ -96,6 +100,7 @@ private:
     int                  m_guideSize;
     int                  m_flicker;
 
+    bool                 m_sixteenBit;
     bool                 m_focus;
     bool                 m_spotVisible;
     

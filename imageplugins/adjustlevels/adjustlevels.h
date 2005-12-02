@@ -41,6 +41,7 @@ namespace Digikam
 class HistogramWidget;
 class ImageLevels;
 class ImageGuideWidget;
+class DColor;
 }
 
 namespace DigikamAdjustLevelsImagesPlugin
@@ -52,7 +53,7 @@ class AdjustLevelDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    AdjustLevelDialog(QWidget *parent, uint *imageData, uint width, uint height);
+    AdjustLevelDialog(QWidget *parent, uchar *imageData, uint width, uint height, bool sixteenBit);
     ~AdjustLevelDialog();
 
 protected:
@@ -82,6 +83,8 @@ private:
     GrayTonal,
     WhiteTonal
     };
+
+    int                        m_histoSegments;
 
     QComboBox                 *m_channelCB;    
     
@@ -136,7 +139,7 @@ private slots:
     void slotAdjustMaxInputSpinBox(int val);
     void slotAdjustMinOutputSpinBox(int val);
     void slotAdjustMaxOutputSpinBox(int val);
-    void slotSpotColorChanged(const QColor &color, bool release);
+    void slotSpotColorChanged(const Digikam::DColor &color, bool release);
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin

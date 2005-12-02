@@ -168,7 +168,7 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool blinkComputation
              this, SLOT(slotBlinkTimerDone()) );
 }
 
-void HistogramWidget::setHistogramGuide(QColor color)
+void HistogramWidget::setHistogramGuideByColor(DColor color)
 {
     m_guideVisible = true;
     m_colorGuide   = color;

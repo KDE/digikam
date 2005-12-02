@@ -28,6 +28,7 @@
 
 // Local includes
 
+#include "dcolor.h"
 #include "digikam_export.h"
 
 class QCustomEvent;
@@ -155,15 +156,19 @@ public:
                              bool i_sixteenBits,               // 8 or 16 bits image.
                              bool blinkComputation=true);
 
-    void setHistogramGuide(QColor color);
+    void setHistogramGuideByColor(DColor color);
+
+    // FIXME : remove this method when all digiKam core will be ported to DImg
+    void setHistogramGuide(QColor ){};
+
     void reset(void);
 
 public:
 
-    int   m_channelType;     // Channel type to draw.
-    int   m_scaleType;       // Scale to use for drawing.
-    int   m_colorType;       // Color to use for drawing in All Colors Channel mode.
-    int   m_renderingType;   // Using full image or image selection for histogram rendering.
+    int  m_channelType;     // Channel type to draw.
+    int  m_scaleType;       // Scale to use for drawing.
+    int  m_colorType;       // Color to use for drawing in All Colors Channel mode.
+    int  m_renderingType;   // Using full image or image selection for histogram rendering.
 
     class ImageHistogram *m_imageHistogram;            // Full image.
     class ImageHistogram *m_selectionHistogram;        // Image selection.
@@ -211,7 +216,7 @@ private:
 
     QTimer *m_blinkTimer;
 
-    QColor  m_colorGuide;
+    DColor  m_colorGuide;
 
     void customEvent(QCustomEvent *event);
 };

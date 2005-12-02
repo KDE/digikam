@@ -23,6 +23,7 @@
 #ifdef HAVE_DIGIKAM_TOPLEVEL
 
 #include <dimg.h>
+#include <dcolor.h>
 #include <imageiface.h>
 #include <imagehistogram.h>
 #include <imagelevels.h>
@@ -44,6 +45,7 @@
 #else
 
 #include <digikam/dimg.h>
+#include <digikam/dcolor.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagehistogram.h>
 #include <digikam/imagelevels.h>

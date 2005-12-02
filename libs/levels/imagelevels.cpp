@@ -23,6 +23,8 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qfile.h>
 
 // C++ includes. 
@@ -39,7 +41,7 @@
 
 // Local includes.
  
-#include <imagehistogram.h>
+#include "imagehistogram.h"
 #include "imagelevels.h"
 
 namespace Digikam
@@ -160,7 +162,7 @@ void ImageLevels::levelsChannelAuto(Digikam::ImageHistogram *hist, int channel)
     }
 }
 
-int ImageLevels::levelsInputFromColor(int channel, QColor color)
+int ImageLevels::levelsInputFromColor(int channel, DColor color)
 {
     switch (channel)
     {
@@ -171,7 +173,7 @@ int ImageLevels::levelsInputFromColor(int channel, QColor color)
           return color.red();
        
        case Digikam::ImageHistogram::GreenChannel:
-          return  color.green();
+          return color.green();
     
        case Digikam::ImageHistogram::BlueChannel:
           return color.blue();
@@ -180,24 +182,21 @@ int ImageLevels::levelsInputFromColor(int channel, QColor color)
     return 0;  // just to please the compiler.
 }
 
-// FIXME : support 16 bits image.
-void ImageLevels::levelsBlackToneAdjustByColors(int channel, QColor color)
+void ImageLevels::levelsBlackToneAdjustByColors(int channel, DColor color)
 {
     if (!m_levels) return;
 
     m_levels->low_input[channel] = levelsInputFromColor(channel, color);
 }
 
-// FIXME : support 16 bits image.
-void ImageLevels::levelsWhiteToneAdjustByColors(int channel, QColor color)
+void ImageLevels::levelsWhiteToneAdjustByColors(int channel, DColor color)
 {
     if (!m_levels) return;
 
     m_levels->high_input[channel] = levelsInputFromColor(channel, color);
 }
 
-// FIXME : support 16 bits image.
-void ImageLevels::levelsGrayToneAdjustByColors(int channel, QColor color)
+void ImageLevels::levelsGrayToneAdjustByColors(int channel, DColor color)
 {
     if (!m_levels) return;
 

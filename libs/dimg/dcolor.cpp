@@ -40,6 +40,25 @@ DColor::DColor(int red, int green, int blue, int alpha)
     m_alpha = alpha;
 }
 
+DColor::DColor(uchar *data, bool sixteenBits)
+{
+    if (!sixteenBits)          // 8 bits image
+    {
+        setBlue (data[0]);
+        setGreen(data[1]);
+        setRed  (data[2]);
+        setAlpha(data[3]);
+    }
+    else                      // 16 bits image
+    {
+        unsigned short* data16 = (unsigned short*)data;
+        setBlue (data16[0]);
+        setGreen(data16[1]);
+        setRed  (data16[2]);
+        setAlpha(data16[3]);
+    }
+}
+
 DColor::~DColor()
 {
 }
