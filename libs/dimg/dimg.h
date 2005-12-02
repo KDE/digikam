@@ -37,6 +37,7 @@ class QVariant;
 
 namespace Digikam
 {
+
 class DImgPrivate;
 
 class DIGIKAM_EXPORT DImg
