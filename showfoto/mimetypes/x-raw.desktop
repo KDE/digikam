@@ -1,6 +1,7 @@
 [Desktop Entry]
 # Base type of RAW images supported by dcraw program
 Name=RAW image
+Name[bg]=Необработена (RAW) снимка
 Name[da]=RAW-billede
 Name[de]=RAW-Bild
 Name[el]=Εικόνα RAW
@@ -9,6 +10,7 @@ Name[pt]=Imagem RAW
 Name[sv]=Obehandlad bild
 Name[xx]=xxRAW imagexx
 Comment=RAW image file format
+Comment[bg]=Файлов формат за необработени (RAW) снимки
 Comment[da]=RAW billedfilformat
 Comment[de]=RAW Bildformat
 Comment[el]=Τύπος αρχείου εικόνας RAW
