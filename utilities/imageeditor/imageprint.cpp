@@ -226,6 +226,8 @@ bool ImagePrint::printImageWithQt()
     int w = metrics.width();
     int h = metrics.height();
 
+    QSize size = m_image.size();
+
     bool printFilename = m_printer.option( "app-imageeditor-printFilename" ) != f;
     if ( printFilename )
     {
@@ -238,7 +240,7 @@ bool ImagePrint::printImageWithQt()
     {
         
         // Scale image to fit pagesize
-        m_image = m_image.smoothScale( w, h, QImage::ScaleMin );
+        size.scale( w, h, QSize::ScaleMin );
     }
     else
     {
@@ -260,7 +262,7 @@ bool ImagePrint::printImageWithQt()
             hresize  = (int)(metrics.logicalDpiY() * hunit);
         }
 
-        m_image = m_image.smoothScale( wresize, hresize, QImage::ScaleMin );
+        size.scale( wresize, hresize, QSize::ScaleMin );
     }
 
     // Align image.
@@ -280,22 +282,22 @@ bool ImagePrint::printImageWithQt()
 
     // x - alignment
     if ( alignment & Qt::AlignHCenter )
-        x = (w - m_image.width())/2;
+        x = (w - size.width())/2;
     else if ( alignment & Qt::AlignLeft )
         x = 0;
     else if ( alignment & Qt::AlignRight )
-        x = w - m_image.width();
+        x = w - size.width();
 
     // y - alignment
     if ( alignment & Qt::AlignVCenter )
-        y = (h - m_image.height())/2;
+        y = (h - size.height())/2;
     else if ( alignment & Qt::AlignTop )
         y = 0;
     else if ( alignment & Qt::AlignBottom )
-        y = h - m_image.height();
+        y = h - size.height();
 
     // Perform the actual drawing.
-    p.drawImage( x, y, m_image );
+    p.drawImage( QRect( x, y, size.width(), size.height()), m_image );;
 
     if ( printFilename )
     {
