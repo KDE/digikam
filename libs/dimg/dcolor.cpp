@@ -211,9 +211,9 @@ void DColor::getHSL(int* h, int* s, int* l)
             hue += 360;
     }
 
-    *h = (int)(hue / 360.0 * (m_sixteenBit ? 65535.0 : 255.0));
-    *s = (int)(sat * (m_sixteenBit ? 65535.0 : 255.0));
-    *l = (int)(lig * (m_sixteenBit ? 65535.0 : 255.0));
+    *h = (int)(hue / 360.0 * 255.0);
+    *s = (int)(sat * 255.0);
+    *l = (int)(lig * 255.0);
 }
 
 void DColor::setRGB(int h, int s, int l, bool sixteenBit)
@@ -224,9 +224,9 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
     double m1, m2;
     double r, g, b;
     
-    hue        = (double)(h * 360.0 / (sixteenBit ? 65535.0 : 255.0));
-    lightness  = (double)(l / (sixteenBit ? 65535.0 : 255.0));
-    saturation = (double)(s / (sixteenBit ? 65535.0 : 255.0));
+    hue        = (double)(h * 360.0 / 255.0);
+    lightness  = (double)(l / 255.0);
+    saturation = (double)(s / 255.0);
     
     if (lightness <= 0.5)
         m2 = lightness * (1 + saturation);

@@ -43,9 +43,10 @@
 
 // Digikam includes.
  
-#include <imagehistogram.h>
-#include <imagelevels.h>
-#include <imageiface.h>
+#include "imagehistogram.h"
+#include "imagelevels.h"
+#include "imageiface.h"
+#include "dcolor.h"
 
 // Local includes.
 
@@ -686,7 +687,6 @@ void ImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool six
 
 /** Performs image colors inversion. This tool is used for negate image
     resulting of a positive film scanned.*/
-
 void ImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
@@ -724,6 +724,139 @@ void ImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
     }
 }
 
+/** Mix RGB channel color from image*/
+void ImageFilters::channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
+                                     bool bPreserveLum, bool bMonochrome,
+                                     float rrGain, float rgGain, float rbGain,
+                                     float grGain, float ggGain, float gbGain,
+                                     float brGain, float bgGain, float bbGain, 
+                                     bool overIndicator)
+{
+    if (!data || !Width || !Height)
+    {
+       kdWarning() << ("ImageFilters::channelMixerImage: no image data available!")
+                   << endl;
+       return;
+    }
+        
+    register int i;
+
+    double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
+    double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
+    double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
+
+    if (!sixteenBit)        // 8 bits image.
+    {
+        uchar  nGray, red, green, blue;
+        uchar *ptr = data;
+
+        for (i = 0 ; i < Width*Height ; i++)
+        {
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
+        
+            if (bMonochrome)
+            {
+                nGray = MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                  sixteenBit, rnorm, overIndicator);
+                ptr[0] = ptr[1] = ptr[2] = nGray;
+            }
+            else
+            {
+                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, bnorm, overIndicator);
+                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, gnorm, overIndicator);
+                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                          sixteenBit, rnorm, overIndicator);
+            }
+                                
+            ptr += 4;
+        }
+    }
+    else               // 16 bits image.
+    {
+        unsigned short  nGray, red, green, blue;
+        unsigned short *ptr = (unsigned short *)data;
+        
+        for (i = 0 ; i < Width*Height ; i++)
+        {
+            blue  = ptr[0];
+            green = ptr[1];
+            red   = ptr[2];
+        
+            if (bMonochrome)
+            {
+                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+                ptr[0] = ptr[1] = ptr[2] = nGray;
+            }
+            else
+            {
+                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm, overIndicator);
+                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm, overIndicator);
+                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
+            }
+                            
+            ptr += 4;
+        }
+    }
+}
+
+/** Change color tonality of an image to appling a RGB color mask.*/
+void ImageFilters::changeTonality(uchar *data, int width, int height, bool sixteenBit, 
+                                  int redMask, int greenMask, int blueMask)
+{
+    if (!data || !width || !height)
+    {
+       kdWarning() << ("ImageFilters::changeTonality: no image data available!")
+                   << endl;
+       return;
+    }
+
+    int hue, sat, lig;
+    
+    DColor mask(redMask, greenMask, blueMask, 0, sixteenBit);
+    mask.getHSL(&hue, &sat, &lig);
+
+    if (!sixteenBit)        // 8 bits image.
+    {
+        uchar *ptr = data;
+        
+        for (int i = 0 ; i < width*height ; i++)
+        {
+            // Convert to grayscale using tonal mask
+                
+            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
+            
+            mask.setRGB(hue, sat, lig, sixteenBit);
+
+            ptr[0] = mask.blue();
+            ptr[1] = mask.green();
+            ptr[2] = mask.red();
+            ptr += 4;
+        }
+    }
+    else               // 16 bits image.
+    {
+        unsigned short *ptr = (unsigned short *)data;
+        
+        for (int i = 0 ; i < width*height ; i++)
+        {
+            // Convert to grayscale using tonal mask
+                
+            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0])/256;
+            
+            mask.setRGB(hue, sat, lig, sixteenBit);
+                                
+            ptr[0] = mask.blue();
+            ptr[1] = mask.green();
+            ptr[2] = mask.red();
+            ptr += 4;
+        }
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 /* Function to apply the GaussianBlur on an image. This method do not use a 
  * dedicaced thread.
@@ -754,133 +887,6 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     QImage imDest = threadedFilter->getTargetImage();
     memcpy( data, imDest.bits(), imDest.numBytes() );
     delete threadedFilter;
-}
-
-void ImageFilters::channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
-                                     bool bPreserveLum, bool bMonochrome,
-                                     float rrGain, float rgGain, float rbGain,
-                                     float grGain, float ggGain, float gbGain,
-                                     float brGain, float bgGain, float bbGain, 
-                                     bool overIndicator)
-{
-    if (!data || !Width || !Height)
-    {
-       kdWarning() << ("ImageFilters::channelMixerImage: no image data available!")
-                   << endl;
-       return;
-    }
-        
-    register int i;
-
-    double rnorm = CalculateNorm (rrGain, rgGain, rbGain, bPreserveLum);
-    double gnorm = CalculateNorm (grGain, ggGain, gbGain, bPreserveLum);
-    double bnorm = CalculateNorm (brGain, bgGain, bbGain, bPreserveLum);
-
-    if (!sixteenBit)        // 8 bits image.
-    {
-        uchar  nGray, red, green, blue, alpha;
-        uchar *ptr = data;
-
-        for (i = 0 ; i < Width*Height ; i++)
-        {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
-        
-            if (bMonochrome)
-            {
-                nGray = MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                  sixteenBit, rnorm, overIndicator);
-                ptr[0] = ptr[1] = ptr[2] = nGray;
-            }
-            else
-            {
-                ptr[0] = (uchar)MixPixel (brGain, bgGain, bbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, bnorm, overIndicator);
-                ptr[1] = (uchar)MixPixel (grGain, ggGain, gbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, gnorm, overIndicator);
-                ptr[2] = (uchar)MixPixel (rrGain, rgGain, rbGain, (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, rnorm, overIndicator);
-            }
-                                
-            ptr += 4;
-        }
-    }
-    else               // 16 bits image.
-    {
-        unsigned short  nGray, red, green, blue, alpha;
-        unsigned short *ptr = (unsigned short *)data;
-        
-        for (i = 0 ; i < Width*Height ; i++)
-        {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
-        
-            if (bMonochrome)
-            {
-                nGray = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
-                ptr[0] = ptr[1] = ptr[2] = nGray;
-            }
-            else
-            {
-                ptr[0] = MixPixel (brGain, bgGain, bbGain, red, green, blue, sixteenBit, bnorm, overIndicator);
-                ptr[1] = MixPixel (grGain, ggGain, gbGain, red, green, blue, sixteenBit, gnorm, overIndicator);
-                ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm, overIndicator);
-            }
-                            
-            ptr += 4;
-        }
-    }
-}
-
-// Change color tonality of an image to appling a RGB color mask.
-
-void ImageFilters::changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask)
-{
-    if (!data || !width || !height)
-       {
-       kdWarning() << ("ImageFilters::changeTonality: no image data available!")
-                   << endl;
-       return;
-       }
-
-    int       hue, sat, lig;
-    float     gray;
-    
-    int       red, green, blue;
-    imageData imagedata;
-    
-    hue = redMask;
-    sat = greenMask;
-    lig = blueMask;
-    
-    Digikam::rgb_to_hsl(hue, sat, lig);
-
-    for (int i = 0; i < width*height; i++) 
-       {
-       imagedata.raw = data[i];
-       red           = (int)imagedata.channel.red;
-       green         = (int)imagedata.channel.green;
-       blue          = (int)imagedata.channel.blue;
-        
-       // Convert to grayscale using tonal mask
-        
-       gray  = 0.3 * red + 0.59 * green + 0.11 * blue;
-       red   = ROUND (gray);
-       green = red;
-       blue  = red;
-
-       red   = hue;
-       green = sat;
-        
-       Digikam::hsl_to_rgb(red, green, blue);
-        
-       imagedata.channel.red   = (uchar)red;
-       imagedata.channel.green = (uchar)green;
-       imagedata.channel.blue  = (uchar)blue;
-       data[i] = imagedata.raw;
-       }
 }
 
 //////////////////////////////////////////////////////////////////////////////

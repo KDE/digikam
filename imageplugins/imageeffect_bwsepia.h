@@ -37,6 +37,7 @@ class QComboBox;
 namespace Digikam
 {
 class ImageWidget;
+class DImg;
 }
 
 class ImageEffect_BWSepia : public KDialogBase
@@ -76,7 +77,7 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
     
-    void blackAndWhiteConversion(uint *data, int w, int h, int type);
+    void blackAndWhiteConversion(Digikam::DImg& image, int type);
     QPixmap previewEffectPic(QString name);
 
 private slots:

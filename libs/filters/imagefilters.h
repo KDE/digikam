@@ -147,10 +147,10 @@ public:   // Public methods.
                                   float grGain, float ggGain, float gbGain,
                                   float brGain, float bgGain, float bbGain,
                                   bool overIndicator=false);
+    static void changeTonality(uchar *data, int width, int height, bool sixteenBit, int redMask, int greenMask, int blueMask);
 
     // FIXME : support 16 bits images.
     static void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
-    static void changeTonality(uint *data, int width, int height, int redMask, int greenMask, int blueMask);
     static void sharpenImage(uint* data, int w, int h, int r);
     static void hueSaturationLightnessImage(uint* data, int w, int h, double hu, double sa, double li);
     
