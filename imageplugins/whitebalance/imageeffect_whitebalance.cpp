@@ -146,7 +146,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uchar *image
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the 
+                                     "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
     
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
