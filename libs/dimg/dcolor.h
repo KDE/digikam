@@ -50,8 +50,8 @@ public:
     void setAlpha(int alpha);
     void setSixteenBit(bool sixteenBit);
 
-    void getHSL(int* hue, int* sat, int* lig);
-    void setRGB(int hue, int sat, int lig, bool sixteenBit);
+    void getHSL(int* h, int* s, int* l);
+    void setRGB(int h, int s, int l, bool sixteenBit);
 
 private:
 
