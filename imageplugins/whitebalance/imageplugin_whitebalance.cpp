@@ -28,6 +28,10 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 // Local includes.
 
 #include "imageeffect_whitebalance.h"
@@ -60,15 +64,12 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
     Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
 
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-
-    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget(), data, w, h);
+    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget(), image.bits(),
+                                                                  image.width(), image.height(), image.sixteenBit());
+    
     dlg.exec();
-    delete [] data;
 }
-
 
 #include "imageplugin_whitebalance.moc"

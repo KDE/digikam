@@ -45,6 +45,7 @@ namespace Digikam
 class ImageGuideWidget;
 class ColorGradientWidget;
 class HistogramWidget;
+class DColor;
 }
 
 namespace DigikamWhiteBalanceImagesPlugin
@@ -56,7 +57,7 @@ class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height);
+    ImageEffect_WhiteBalance(QWidget* parent, uchar *imageData, uint width, uint height, bool sixteenBit);
     ~ImageEffect_WhiteBalance();
     
 protected:
@@ -64,28 +65,7 @@ protected:
     void closeEvent(QCloseEvent *e);    
 
 private:    
-
-    bool                          m_clipSat;
-    bool                          m_overExp;
-    bool                          m_WBind;
     
-    double                        m_saturation;
-    double                        m_temperature;    
-    double                        m_gamma;
-    double                        m_black;
-    double                        m_exposition;
-    double                        m_dark;
-    double                        m_green;
-
-    int                           m_BP, m_WP;
-    
-    uint                          m_rgbMax;
-    
-    float                         m_curve[256];
-    float                         m_mr, m_mg, m_mb;
-        
-private:
-
     enum HistogramScale
     {
     Linear=0,
@@ -113,13 +93,33 @@ private:
     Sky,
     None
     };
+
+    bool                          m_clipSat;
+    bool                          m_overExp;
+    bool                          m_WBind;
+    bool                          m_sixteenBit;
     
-    uint                         *m_originalImageData;
+    double                        m_saturation;
+    double                        m_temperature;    
+    double                        m_gamma;
+    double                        m_black;
+    double                        m_exposition;
+    double                        m_dark;
+    double                        m_green;
+
+    int                           m_BP, m_WP;
+    
+    uint                          m_rgbMax;
+    
+    float                         m_curve[65536];
+    float                         m_mr, m_mg, m_mb;
+        
+    uchar                        *m_originalImageData;
     int                           m_originalWidth;
     int                           m_originalHeight;
     
-    uint                         *m_destinationPreviewData;
-    
+    uchar                        *m_destinationPreviewData;
+
     QPushButton                  *m_pickTemperature;
     QPushButton                  *m_autoAdjustExposure;
     
@@ -158,8 +158,8 @@ private:
         
     void setRGBmult(void);
     void setLUTv(void);
-    void whiteBalance(uint *data, int w, int h);
-    inline uchar pixelColor(int colorMult, int index, int value);
+    void whiteBalance(uchar *data, int w, int h);
+    inline unsigned short pixelColor(int colorMult, int index, int value);
     
 private slots:
 
@@ -168,8 +168,8 @@ private slots:
     void slotUser3();
     void slotEffect();
     void slotOk();
-    void slotColorSelectedFromOriginal(const QColor &color, bool release);
-    void slotColorSelectedFromTarget(const QColor &color);
+    void slotColorSelectedFromOriginal(const Digikam::DColor &color, bool release);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);
     void slotTemperatureChanged(double temperature);
