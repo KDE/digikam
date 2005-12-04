@@ -774,7 +774,7 @@ void ImageEffect_WhiteBalance::whiteBalance(uint *data, int width, int height)
             v = QMAX(rv[0], rv[1]);
             v = QMAX(v, rv[2]); 
             
-            if (m_clipSat) v = QMIN(v, (int)m_rgbMax);
+            if (m_clipSat) v = QMIN(v, (int)m_rgbMax-1);
             i = v;
 
             imagedata.channel.blue  = pixelColor(rv[0], i, v);
