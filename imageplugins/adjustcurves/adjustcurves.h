@@ -26,6 +26,11 @@
 
 #include <qcolor.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
+
 // Local includes.
 
 #include "imagetabdialog.h"
@@ -36,14 +41,6 @@ class QLabel;
 class QHButtonGroup;
 class QCheckBox;
 
-namespace Digikam
-{
-class ImageCurves;
-class ImageGuideWidget;
-class ColorGradientWidget;
-class CurvesWidget;
-}
-
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
@@ -53,7 +50,7 @@ class AdjustCurveDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    AdjustCurveDialog(QWidget *parent, uint *imageData, uint width, uint height);
+    AdjustCurveDialog(QWidget *parent);
     ~AdjustCurveDialog();
 
 protected:
@@ -114,6 +111,7 @@ private:
     Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
     Digikam::ImageCurves         *m_curves;
+    Digikam::DImg                 m_originalImage;
 
 private slots:
 

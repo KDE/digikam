@@ -99,7 +99,8 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
 
-    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves();
+    // FIXME : support 16 bits image properly.
+    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(false);
     
     // We modify only global luminosity of the grain.
     grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
@@ -109,7 +110,8 @@ void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibilit
     // Calculate curves and lut to apply on grain.
     grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
     grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
+    // FIXME : support 16 bits image properly.
+    grainCurves->curvesLutProcess((uchar*)pGrainBits, (uchar*)pMaskBits, Width, Height);
     delete grainCurves;
     
     // Update de progress bar in dialog.

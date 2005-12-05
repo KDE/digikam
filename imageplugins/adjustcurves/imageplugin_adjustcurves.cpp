@@ -60,15 +60,8 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    
-    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget(), data, w, h);
+    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget());
     dlg.exec();
-    delete [] data;
 }
 
 

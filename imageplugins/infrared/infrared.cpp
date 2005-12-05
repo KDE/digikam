@@ -156,7 +156,8 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     
     if (Grain)
        {
-       Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves();
+       // FIXME : support 16 bits image properly.
+       Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(false);
     
        // We modify only global luminosity of the grain.
        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
@@ -166,7 +167,8 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
        // Calculate curves and lut to apply on grain.
        grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
        grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-       grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
+       // FIXME : support 16 bits image properly.
+       grainCurves->curvesLutProcess((uchar*)pGrainBits, (uchar*)pMaskBits, Width, Height);
        delete grainCurves;
        }
     

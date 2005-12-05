@@ -25,12 +25,12 @@
 
 //  Map RGB to intensity  
 
-#define GIMP_RGB_INTENSITY_RED    0.30
-#define GIMP_RGB_INTENSITY_GREEN  0.59
-#define GIMP_RGB_INTENSITY_BLUE   0.11
-#define GIMP_RGB_INTENSITY(r,g,b) ((r) * GIMP_RGB_INTENSITY_RED   + \
-                                   (g) * GIMP_RGB_INTENSITY_GREEN + \
-                                   (b) * GIMP_RGB_INTENSITY_BLUE)
+#define CURVE_RGB_INTENSITY_RED    0.30
+#define CURVE_RGB_INTENSITY_GREEN  0.59
+#define CURVE_RGB_INTENSITY_BLUE   0.11
+#define CURVE_RGB_INTENSITY(r,g,b) ((r) * CURVE_RGB_INTENSITY_RED   + \
+                                   (g) * CURVE_RGB_INTENSITY_GREEN + \
+                                   (b) * CURVE_RGB_INTENSITY_BLUE)
 
 // Qt includes.
 
@@ -62,20 +62,20 @@ private:
 
 struct _Curves
 {
-    CurveType curve_type[5];     // Curve types by channels (Smooth or Free).
-    int       points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
-    uchar     curve[5][256];     // Curve values by channels.
+    CurveType        curve_type[5];     // Curve types by channels (Smooth or Free).
+    int              points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
+    unsigned short   curve[5][256];     // Curve values by channels.
 };
 
 struct _Lut
 {
-    uchar **luts;
-    int     nchannels;
+    unsigned short **luts;
+    int              nchannels;
 };
 
 public:
     
-    ImageCurves();
+    ImageCurves(bool sixteenBit);
     ~ImageCurves();
 
     typedef double CRMatrix[4][4];
@@ -87,7 +87,7 @@ public:
     void   curvesCalculateCurve(int channel);
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels, bool overIndicator=false);
-    void   curvesLutProcess(uint *srcPR, uint *destPR, int w, int h);
+    void   curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
 
     // Methods for to set manually the curves values.        
     
@@ -116,10 +116,12 @@ private:
     // Lut data.
     struct _Lut    *m_lut;
 
-    // Private methods.    
+    bool            m_sixteenBit;
+
+private:
+    
     void curvesPlotCurve(int channel, int p1, int p2, int p3, int p4);
     void curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab);
-
 };
 
 }  // NameSpace Digikam

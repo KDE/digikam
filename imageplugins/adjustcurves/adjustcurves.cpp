@@ -62,10 +62,6 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -74,12 +70,15 @@
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint width, uint height)
+AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                  : ImageTabDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", 
                                   true, true, false)
 {
+    Digikam::ImageIface iface(0, 0);
+    m_originalImage = iface.getOriginalImage();
+
     // Create an empty instance of curves to use.
-    m_curves = new Digikam::ImageCurves();
+    m_curves = new Digikam::ImageCurves(m_originalImage.sixteenBit());
 
     // About data and help button.
 
@@ -173,7 +172,10 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
 
-    m_curvesWidget = new Digikam::CurvesWidget(256, 256, imageData, width, height, m_curves, gboxSettings);
+    // FIXME
+    m_curvesWidget = new Digikam::CurvesWidget(256, 256, (uint*)m_originalImage.bits(), m_originalImage.width(),
+                                               m_originalImage.height(), /*m_originalImage.sixteenBit(),*/
+                                               m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
     grid->addMultiCellWidget(m_curvesWidget, 3, 3, 1, 5);
@@ -379,7 +381,7 @@ void AdjustCurveDialog::slotEffect()
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
     // Apply the lut to the image.
-    m_curves->curvesLutProcess(orgData, desData, w, h);
+    m_curves->curvesLutProcess((uchar*)orgData, (uchar*)desData, w, h);
 
     ifaceDest->putPreviewData(desData);
     m_previewTargetWidget->updatePreview();
@@ -404,7 +406,7 @@ void AdjustCurveDialog::slotOk()
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
-    m_curves->curvesLutProcess(orgData, desData, w, h);
+    m_curves->curvesLutProcess((uchar*)orgData, (uchar*)desData, w, h);
 
     ifaceDest.putOriginalData(i18n("Adjust Curve"), desData);
     kapp->restoreOverrideCursor();
