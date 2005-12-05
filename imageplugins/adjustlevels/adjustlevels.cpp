@@ -74,12 +74,15 @@
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uchar *imageData, uint width, uint height, bool sixteenBit)
+AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                  : ImageTabDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", 
                                   true, true, false)
 {
-    m_histoSegments = sixteenBit ? 65535 : 255;
-    m_levels = new Digikam::ImageLevels(sixteenBit);
+    Digikam::ImageIface iface(0, 0);
+    m_originalImage = iface.getOriginalImage();
+
+    m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
+    m_levels = new Digikam::ImageLevels(m_originalImage.sixteenBit());
 
     // About data and help button.
 
@@ -158,7 +161,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uchar *imageData, uint wid
     QFrame *frame = new QFrame(gboxSettings);
     frame->setFrameStyle(QFrame::NoFrame);
     QVBoxLayout* l2 = new QVBoxLayout(frame, 2, 0);
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, sixteenBit, frame, false);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, m_originalImage.bits(), m_originalImage.width(),
+                                                     m_originalImage.height(), m_originalImage.sixteenBit(), frame, false);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the selected image channel"));
     l2->addWidget(m_histogramWidget, 0);
     grid->addMultiCellWidget(frame, 1, 1, 0, 4);

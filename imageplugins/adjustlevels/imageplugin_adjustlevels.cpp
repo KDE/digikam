@@ -64,13 +64,8 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-
-    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget(), image.bits(),
-                                                           image.width(), image.height(), image.sixteenBit());
+    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget());
     dlg.exec();
 }
-
 
 #include "imageplugin_adjustlevels.moc"

@@ -53,7 +53,7 @@ class AdjustLevelDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    AdjustLevelDialog(QWidget *parent, uchar *imageData, uint width, uint height, bool sixteenBit);
+    AdjustLevelDialog(QWidget *parent);
     ~AdjustLevelDialog();
 
 protected:
@@ -117,6 +117,7 @@ private:
     Digikam::ImageGuideWidget *m_previewTargetWidget;
     
     Digikam::ImageLevels      *m_levels;
+    Digikam::DImg              m_originalImage;
 
 private:
 
