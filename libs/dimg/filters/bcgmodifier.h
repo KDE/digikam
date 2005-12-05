@@ -38,20 +38,22 @@ public:
     BCGModifier();
     ~BCGModifier();
 
-    void   reset();
-    bool   modified() const;
-    
-    void   setGamma(double val);
-    void   setBrightness(double val);
-    void   setContrast(double val);
-    void   applyBCG(DImg& image);
+    void reset();
+    bool modified() const;
+
+    void setOverIndicator(bool overIndicator);
+    void setGamma(double val);
+    void setBrightness(double val);
+    void setContrast(double val);
+    void applyBCG(DImg& image);
     
 private:
 
-    bool           m_modified;
+    bool m_overIndicator;
+    bool m_modified;
     
-    unsigned short m_map16[65536];
-    unsigned char  m_map[256];
+    int  m_map16[65536];
+    int  m_map[256];
     
 };
 

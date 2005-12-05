@@ -51,6 +51,11 @@ bool BCGModifier::modified() const
     return m_modified;
 }
 
+void BCGModifier::setOverIndicator(bool overIndicator)
+{
+    m_overIndicator = overIndicator;
+}
+    
 void BCGModifier::reset()
 {
     // initialize to linear mapping
@@ -65,7 +70,8 @@ void BCGModifier::reset()
         m_map[i] = i;
     }
 
-    m_modified = false;
+    m_modified      = false;
+    m_overIndicator = false;
 }
 
 void BCGModifier::applyBCG(DImg& image)
@@ -73,28 +79,46 @@ void BCGModifier::applyBCG(DImg& image)
     if (!m_modified || image.isNull())
         return;
 
-    if (image.sixteenBit())
-    {
-        ushort* data = (ushort*) image.bits();
-
-        for (uint i=0; i<image.width()*image.height(); i++)
-        {
-            data[0] = m_map16[data[0]];
-            data[1] = m_map16[data[1]];
-            data[2] = m_map16[data[2]];
-
-            data += 4;
-        }
-    }
-    else
+    if (!image.sixteenBit())                    // 8 bits image.
     {
         uchar* data = (uchar*) image.bits();
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            data[0] = m_map[data[0]];
-            data[1] = m_map[data[1]];
-            data[2] = m_map[data[2]];
+            if (m_map[data[0]] == -1 || m_map[data[1]] == -1 || m_map[data[2]] == -1)
+            {
+                data[0] = 0;
+                data[1] = 0;
+                data[2] = 0;
+            }
+            else
+            {            
+                data[0] = m_map[data[0]];
+                data[1] = m_map[data[1]];
+                data[2] = m_map[data[2]];
+            }
+            
+            data += 4;
+        }
+    }
+    else                                        // 16 bits image.
+    {
+        ushort* data = (ushort*) image.bits();
+
+        for (uint i=0; i<image.width()*image.height(); i++)
+        {
+            if (m_map16[data[0]] == -1 || m_map16[data[1]] == -1 || m_map16[data[2]] == -1)
+{
+                data[0] = 0;
+                data[1] = 0;
+                data[2] = 0;
+            }
+            else
+            {            
+                data[0] = m_map16[data[0]];
+                data[1] = m_map16[data[1]];
+                data[2] = m_map16[data[2]];
+            }
 
             data += 4;
         }
@@ -109,13 +133,19 @@ void BCGModifier::setGamma(double val)
     for (int i=0; i<65536; i++)
     {
         val2 = (int)(pow(((double)m_map16[i] / 65535), (1 / val)) * 65535);
-        m_map16[i] = CLAMP_0_65535(val2);
+        if (m_overIndicator && val2 > 65535)
+            m_map16[i] = -1;
+        else
+            m_map16[i] = CLAMP_0_65535(val2);
     }
 
     for (int i=0; i<256; i++)
     {
         val2 = (int)(pow(((double)m_map[i] / 255), (1 / val)) * 255);
-        m_map[i] = CLAMP_0_255(val2);
+        if (m_overIndicator && val2 > 255)
+            m_map[i] = -1;
+        else
+            m_map[i] = CLAMP_0_255(val2);
     }
     
     m_modified = true;
@@ -129,7 +159,10 @@ void BCGModifier::setBrightness(double v)
     for (int i = 0; i < 65536; i++)
     {
         val2 = m_map16[i] + val;
-        m_map16[i] = CLAMP_0_65535(val2);
+        if (m_overIndicator && val2 > 65535)
+            m_map16[i] = -1;
+        else
+            m_map16[i] = CLAMP_0_65535(val2);
     }
 
     val = (int)(v * 255);
@@ -137,7 +170,10 @@ void BCGModifier::setBrightness(double v)
     for (int i = 0; i < 256; i++)
     {
         val2 = m_map[i] + val;
-        m_map[i] = CLAMP_0_255(val2);
+        if (m_overIndicator && val2 > 255)
+            m_map[i] = -1;
+        else
+            m_map[i] = CLAMP_0_255(val2);
     }
     
     m_modified = true;
@@ -150,13 +186,19 @@ void BCGModifier::setContrast(double val)
     for (int i = 0; i < 65536; i++)
     {
         val2 = (int)(((double)m_map16[i] - 32767) * val) + 32767;
-        m_map16[i] = CLAMP_0_65535(val2);
+        if (m_overIndicator && val2 > 65535)
+            m_map16[i] = -1;
+        else
+            m_map16[i] = CLAMP_0_65535(val2);
     }                                 
 
     for (int i = 0; i < 256; i++)
     {
         val2 = (int)(((double)m_map[i] - 127) * val) + 127;
-        m_map[i] = CLAMP_0_255(val2);
+        if (m_overIndicator && val2 > 255)
+            m_map[i] = -1;
+        else
+            m_map[i] = CLAMP_0_255(val2);
     }
     
     m_modified = true;

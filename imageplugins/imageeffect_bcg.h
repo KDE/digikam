@@ -27,6 +27,8 @@
 
 #include <kdialogbase.h>
 
+class QCheckBox;
+
 class KDoubleNumInput;
 
 namespace Digikam
@@ -49,6 +51,8 @@ protected:
         
 private:
 
+    QCheckBox            *m_overExposureIndicatorBox;
+    
     KDoubleNumInput      *m_bInput;
     KDoubleNumInput      *m_cInput;
     KDoubleNumInput      *m_gInput;

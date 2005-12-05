@@ -26,6 +26,7 @@
 #include <qframe.h>
 #include <qvgroupbox.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 #include <qwhatsthis.h>
 
 // KDE includes.
@@ -71,8 +72,8 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_bInput->setPrecision(2);
     m_bInput->setRange(-1.0, 1.0, 0.01, true);
     QWhatsThis::add( m_bInput, i18n("<p>Set here the brightness adjustment of the image."));
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_bInput,5);
+    hlay->addWidget(label, 1);
+    hlay->addWidget(m_bInput, 5);
 
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Contrast:"), plainPage());
@@ -80,8 +81,8 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_cInput->setPrecision(2);
     m_cInput->setRange(-1.0, 1.0, 0.01, true);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_cInput,5);
+    hlay->addWidget(label, 1);
+    hlay->addWidget(m_cInput, 5);
 
     hlay     = new QHBoxLayout(topLayout);
     label    = new QLabel(i18n("Gamma:"), plainPage());
@@ -89,8 +90,15 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_gInput->setPrecision(2);
     m_gInput->setRange(-1.0, 1.0, 0.01, true);
     QWhatsThis::add( m_gInput, i18n("<p>Set here the gamma adjustment of the image."));
-    hlay->addWidget(label,1);
-    hlay->addWidget(m_gInput,5);
+    hlay->addWidget(label, 1);
+    hlay->addWidget(m_gInput, 5);
+
+    hlay     = new QHBoxLayout(topLayout);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), plainPage());
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+                                                      "from the target image preview will be over-colored. "
+                                                      "This will not have an effect on the final rendering."));
+    hlay->addWidget(m_overExposureIndicatorBox, 1);
 
     m_bInput->setValue(0.0);
     m_cInput->setValue(0.0);
@@ -106,7 +114,10 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
             
     connect(m_gInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotEffect()));
-            
+
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));
+                        
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
@@ -147,7 +158,7 @@ void ImageEffect_BCG::slotEffect()
     
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
 
-    iface->setPreviewBCG(b, c, g);
+    iface->setPreviewBCG(b, c, g, m_overExposureIndicatorBox->isChecked());
     m_previewWidget->update();
 }
 

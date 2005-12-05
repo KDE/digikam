@@ -86,7 +86,7 @@ public:
     int  selectedXOrg();
     int  selectedYOrg();
 
-    void setPreviewBCG(double brightness, double contrast, double gamma);
+    void setPreviewBCG(double brightness, double contrast, double gamma, bool overIndicator=false);
     void setOriginalBCG(double brightness, double contrast, double gamma);
 
     void paint(QPaintDevice* device, int x, int y, int w, int h);
