@@ -28,7 +28,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-
 // Local includes.
 
 #include "channelmixer.h"
@@ -61,15 +60,8 @@ void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()
 {
-    Digikam::ImageIface iface(0, 0);
-
-    uint* data = iface.getOriginalData();
-    int w      = iface.originalWidth();
-    int h      = iface.originalHeight();
-    
-    DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget(), data, w, h);
+    DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget());
     dlg.exec();
-    delete [] data;
 }
 
 

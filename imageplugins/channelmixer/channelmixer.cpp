@@ -79,7 +79,7 @@
 namespace DigikamChannelMixerImagesPlugin
 {
 
-ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint width, uint height)
+ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
                   : ImageTabDialog(parent, i18n("Color Channel Mixer"), "channelmixer", 
                                    true, false, true)
 {
@@ -151,7 +151,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
     
     grid->addMultiCellLayout(l1, 0, 0, 0, 4);
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, imageData, width, height, gboxSettings, false, true, true);
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
                                              "selected image channel. This one is re-computed at any mixer "
                                              "settings changes."));
