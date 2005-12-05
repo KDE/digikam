@@ -30,7 +30,7 @@
 // Local includes.
 
 #include "dimginterface.h"
-#include "colormodifier.h"
+#include "bcgmodifier.h"
 #include "imageiface.h"
 
 namespace Digikam
@@ -238,7 +238,7 @@ int ImageIface::selectedYOrg()
 void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma)
 {
     DImg preview = getPreviewImage(); 
-    ColorModifier cmod;
+    BCGModifier cmod;
     cmod.setGamma(gamma);
     cmod.setBrightness(brightness);
     cmod.setContrast(contrast);

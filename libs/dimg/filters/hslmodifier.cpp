@@ -1,15 +1,11 @@
 /* ============================================================
- * File  : colormodifier.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr> 
+ * File  : hslmodifier.h
+ * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-03-06
- * Description : a color modifier methods for DImg framework
- * 
- * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Description : Hue/Saturation/Lightness modifier methods
+ *               for DImg framework
  *
- * Includes code from gimp version 2.0  
- * LIBGIMP - The GIMP Library
- * Copyright (C) 1995-1997 Peter Mattis and Spencer Kimball
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,32 +33,31 @@
 // Local includes.
 
 #include "dimg.h"
-#include "colormodifier.h"
+#include "hslmodifier.h"
 
 namespace Digikam
 {
 
-ColorModifier::ColorModifier()
+HSLModifier::HSLModifier()
 {
     reset();
 }
 
-ColorModifier::~ColorModifier()
+HSLModifier::~HSLModifier()
 {
 }
 
-bool ColorModifier::modified() const
+bool HSLModifier::modified() const
 {
     return m_modified;    
 }
 
-void ColorModifier::reset()
+void HSLModifier::reset()
 {
     // initialize to linear mapping
 
     for (int i=0; i<65536; i++)
     {
-        m_map16[i]     = i;
         htransfer16[i] = i;
         ltransfer16[i] = i;
         stransfer16[i] = i;
@@ -70,7 +65,6 @@ void ColorModifier::reset()
 
     for (int i=0; i<256; i++)
     {
-        m_map[i]     = i;
         htransfer[i] = i;
         ltransfer[i] = i;
         stransfer[i] = i;
@@ -79,107 +73,7 @@ void ColorModifier::reset()
     m_modified = false;
 }
 
-//-------------------------------------------------------------------
-// BCG correction methods
-
-void ColorModifier::applyBCG(DImg& image)
-{
-    if (!m_modified || image.isNull())
-        return;
-
-    if (image.sixteenBit())
-    {
-        ushort* data = (ushort*) image.bits();
-
-        for (uint i=0; i<image.width()*image.height(); i++)
-        {
-            data[0] = m_map16[data[0]];
-            data[1] = m_map16[data[1]];
-            data[2] = m_map16[data[2]];
-
-            data += 4;
-        }
-    }
-    else
-    {
-        uchar* data = (uchar*) image.bits();
-
-        for (uint i=0; i<image.width()*image.height(); i++)
-        {
-            data[0] = m_map[data[0]];
-            data[1] = m_map[data[1]];
-            data[2] = m_map[data[2]];
-
-            data += 4;
-        }
-    }
-}
-
-void ColorModifier::setGamma(double val)
-{
-    val = (val < 0.01) ? 0.01 : val;
-    int val2;
-
-    for (int i=0; i<65536; i++)
-    {
-        val2 = (int)(pow(((double)m_map16[i] / 65535), (1 / val)) * 65535);
-        m_map16[i] = CLAMP_0_65535(val2);
-    }
-
-    for (int i=0; i<256; i++)
-    {
-        val2 = (int)(pow(((double)m_map[i] / 255), (1 / val)) * 255);
-        m_map[i] = CLAMP_0_255(val2);
-    }
-    
-    m_modified = true;
-}
-
-void ColorModifier::setBrightness(double v)
-{
-    int val = (int)(v * 65535);
-    int val2;
-
-    for (int i = 0; i < 65536; i++)
-    {
-        val2 = m_map16[i] + val;
-        m_map16[i] = CLAMP_0_65535(val2);
-    }
-
-    val = (int)(v * 255);
-    
-    for (int i = 0; i < 256; i++)
-    {
-        val2 = m_map[i] + val;
-        m_map[i] = CLAMP_0_255(val2);
-    }
-    
-    m_modified = true;
-}
-
-void ColorModifier::setContrast(double val)
-{
-    int val2;
-
-    for (int i = 0; i < 65536; i++)
-    {
-        val2 = (int)(((double)m_map16[i] - 32767) * val) + 32767;
-        m_map16[i] = CLAMP_0_65535(val2);
-    }                                 
-
-    for (int i = 0; i < 256; i++)
-    {
-        val2 = (int)(((double)m_map[i] - 127) * val) + 127;
-        m_map[i] = CLAMP_0_255(val2);
-    }
-    
-    m_modified = true;
-}
-
-//-------------------------------------------------------------------
-// HSL correction methods
-
-void ColorModifier::applyHSL(DImg& image)
+void HSLModifier::applyHSL(DImg& image)
 {
     int red, green, blue;
     
@@ -238,7 +132,7 @@ void ColorModifier::applyHSL(DImg& image)
     }
 }
 
-void ColorModifier::setHue(double val)
+void HSLModifier::setHue(double val)
 {
     int value;
 
@@ -269,7 +163,7 @@ void ColorModifier::setHue(double val)
     m_modified = true;
 }
 
-void ColorModifier::setSaturation(double val)
+void HSLModifier::setSaturation(double val)
 {
     int value;
     
@@ -292,7 +186,7 @@ void ColorModifier::setSaturation(double val)
     m_modified = true;
 }
 
-void ColorModifier::setLightness(double val)
+void HSLModifier::setLightness(double val)
 {
     int value;
 
@@ -321,7 +215,7 @@ void ColorModifier::setLightness(double val)
     m_modified = true;
 }
 
-int ColorModifier::hsl_value (double n1, double n2, double hue)
+int HSLModifier::hsl_value (double n1, double n2, double hue)
 {
     double value;
 
@@ -342,7 +236,7 @@ int ColorModifier::hsl_value (double n1, double n2, double hue)
     return ROUND(value * 255.0);
 }
 
-int ColorModifier::hsl_value16 (double n1, double n2, double hue)
+int HSLModifier::hsl_value16 (double n1, double n2, double hue)
 {
     double value;
 
@@ -363,7 +257,7 @@ int ColorModifier::hsl_value16 (double n1, double n2, double hue)
     return ROUND(value * 65535.0);
 }
 
-void ColorModifier::rgb_to_hsl (int& r, int& g, int& b)
+void HSLModifier::rgb_to_hsl (int& r, int& g, int& b)
 {
     double h, s, l;
     int    min, max;
@@ -416,7 +310,7 @@ void ColorModifier::rgb_to_hsl (int& r, int& g, int& b)
     b = ROUND (l);
 }
 
-void ColorModifier::rgb_to_hsl16 (int& r, int& g, int& b)
+void HSLModifier::rgb_to_hsl16 (int& r, int& g, int& b)
 {
     double h, s, l;
     int    min, max;
@@ -469,7 +363,7 @@ void ColorModifier::rgb_to_hsl16 (int& r, int& g, int& b)
     b = ROUND (l);
 }
 
-void ColorModifier::hsl_to_rgb (int& hue, int& saturation, int& lightness)
+void HSLModifier::hsl_to_rgb (int& hue, int& saturation, int& lightness)
 {
     double h, s, l;
 
@@ -502,7 +396,7 @@ void ColorModifier::hsl_to_rgb (int& hue, int& saturation, int& lightness)
     }
 }
 
-void ColorModifier::hsl_to_rgb16 (int& hue, int& saturation, int& lightness)
+void HSLModifier::hsl_to_rgb16 (int& hue, int& saturation, int& lightness)
 {
     double h, s, l;
 
@@ -535,7 +429,7 @@ void ColorModifier::hsl_to_rgb16 (int& hue, int& saturation, int& lightness)
     }
 }
 
-int ColorModifier::rgb_to_l (int red, int green, int blue)
+int HSLModifier::rgb_to_l (int red, int green, int blue)
 {
     int min, max;
 
@@ -552,6 +446,5 @@ int ColorModifier::rgb_to_l (int red, int green, int blue)
 
     return ROUND ((max + min) / 2.0);
 }
-
 
 }  // NameSpace Digikam

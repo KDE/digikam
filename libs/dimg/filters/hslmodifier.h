@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : colormodifier.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr> 
+ * File  : hslmodifier.h
+ * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-03-06
- * Description : a color modifier methods for DImg framework
+ * Description : Hue/Saturation/Lightness modifier methods
+ *               for DImg framework
  * 
- * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,8 +19,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-#ifndef COLORMODIFIER_H
-#define COLORMODIFIER_H
+#ifndef HSLMODIFIER_H
+#define HSLMODIFIER_H
 
 // Local includes.
 
@@ -30,20 +31,15 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_EXPORT ColorModifier
+class DIGIKAM_EXPORT HSLModifier
 {
 public:
 
-    ColorModifier();
-    ~ColorModifier();
+    HSLModifier();
+    ~HSLModifier();
 
     void   reset();
     bool   modified() const;
-    
-    void   setGamma(double val);
-    void   setBrightness(double val);
-    void   setContrast(double val);
-    void   applyBCG(DImg& image);
     
     void   setHue(double val);
     void   setSaturation(double val);
@@ -53,10 +49,6 @@ public:
 private:
 
     bool           m_modified;
-    
-    // Used with BCG correction methods.
-    unsigned short m_map16[65536];
-    unsigned char  m_map[256];
     
     // Used with HSL correction methods.
     
@@ -86,4 +78,4 @@ private:
 
 }  // NameSpace Digikam
     
-#endif /* COLORMODIFIER_H */
+#endif /* HSLMODIFIER_H */

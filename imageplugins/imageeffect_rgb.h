@@ -24,6 +24,9 @@
 // KDE includes.
 
 #include <kdialogbase.h>
+
+// Local includes.
+
 #include "digikam_export.h"
 
 class QSpinBox;

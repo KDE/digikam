@@ -43,11 +43,11 @@
 
 // Local includes.
 
-#include "colormodifier.h"
+#include "bcgmodifier.h"
+#include "icctransform.h"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "dimginterface.h"
-#include "icctransform.h"
 
 namespace Digikam
 {
@@ -77,7 +77,7 @@ public:
     bool          exifOrient;
 
     DImg          image;
-    ColorModifier cmod;
+    BCGModifier   cmod;
     QString       filename;
 
     UndoManager*  undoMan;

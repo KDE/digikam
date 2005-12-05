@@ -40,7 +40,7 @@
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "dimg.h"
-#include "colormodifier.h"
+#include "hslmodifier.h"
 #include "imageeffect_hsl.h"
 
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
@@ -165,7 +165,7 @@ void ImageEffect_HSL::slotEffect()
     
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     Digikam::DImg preview = iface->getPreviewImage(); 
-    Digikam::ColorModifier cmod;
+    Digikam::HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
@@ -186,7 +186,7 @@ void ImageEffect_HSL::slotOk()
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     Digikam::DImg original = iface->getOriginalImage(); 
-    Digikam::ColorModifier cmod;
+    Digikam::HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
