@@ -58,22 +58,25 @@ public:
     ImageIface(int w=0, int h=0);
     ~ImageIface();
 
-    // New methods for image plugins using DImg.
+    /** Methods for image plugins using DImg to manage image data*/
     DImg getPreviewImage();
     DImg getOriginalImage();
     DImg getImageSelection();
-
+    
     void putOriginalImage(const QString &caller, DImg& image);
     void putPreviewImage(DImg& image);
     void putImageSelection(DImg& selection);
+
+    /** Original image informations*/
+    int  originalWidth();
+    int  originalHeight();
+    bool originalSixteenBit();
+    bool originalImageHasAlpha();
 
     /** Standard methods to get preview informations.*/
     int  previewWidth();
     int  previewHeight();
     DImg setPreviewImageSize(int w, int h);
-
-    int  originalWidth();
-    int  originalHeight();
 
     /** Standard methods to get image selection informations.*/
     int  selectedWidth();

@@ -197,6 +197,16 @@ int ImageIface::originalHeight()
     return DImgInterface::instance()->origHeight();
 }
 
+bool ImageIface::originalSixteenBit()
+{
+    return DImgInterface::instance()->sixteenBit();
+}
+
+bool ImageIface::originalImageHasAlpha()
+{
+    return DImgInterface::instance()->hasAlpha();
+}
+
 int ImageIface::selectedWidth()
 {
     int x, y, w, h;
