@@ -72,7 +72,7 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
-    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>You can see here the aspect ratio selection preview "
+    QWhatsThis::add( m_imageSelectionWidget, i18n("<p>Here you can see the aspect ratio selection preview "
                                                   "used for cropping. You can use the mouse for moving and "
                                                   "resizing the crop area."));
     l->addWidget(m_imageSelectionWidget, 0);

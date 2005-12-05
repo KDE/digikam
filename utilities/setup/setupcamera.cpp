@@ -58,7 +58,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     listView_->addColumn( i18n("Path") );
     listView_->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( listView_, 0, 4, 0, 0 );
-    QWhatsThis::add( listView_, i18n("<p>You can see here the digital camera list used by digiKam "
+    QWhatsThis::add( listView_, i18n("<p>Here you can see the digital camera list used by digiKam "
                                      "via the Gphoto interface."));
 
     addButton_ = new QPushButton( this );

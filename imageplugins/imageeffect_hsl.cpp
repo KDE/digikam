@@ -56,7 +56,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
-    QWhatsThis::add( m_previewWidget, i18n("<p>You can see here the image Hue/Saturation/Lightness adjustments preview."));
+    QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the image Hue/Saturation/Lightness adjustments preview."));
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame);
         

@@ -58,13 +58,13 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     m_resultsView   = new SearchResultsView( page );
     m_resultsView->setMinimumSize( QSize(200, 200) );
     m_resultsView->setMaximumWidth(  130*2 + m_resultsView->spacing()*3 + 20 );
-    QWhatsThis::add( m_resultsView, i18n("<p>You can see here the items found in album "
+    QWhatsThis::add( m_resultsView, i18n("<p>Here you can see the items found in album "
                                          "library using the current search settings."));
     hbox->addWidget( m_resultsView );
 
     // Box for all the rules
     m_rulesBox = new QVGroupBox( i18n("Search Rules"), page);
-    QWhatsThis::add( m_rulesBox, i18n("<p>You can see here the search rules list used to process items "
+    QWhatsThis::add( m_rulesBox, i18n("<p>Here you can see the search rules list used to process items "
                                       "searching in album library."));
     m_rulesBox->layout()->setSpacing( spacingHint() );
     m_rulesBox->layout()->setMargin( 5 );
