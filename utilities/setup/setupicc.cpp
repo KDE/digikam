@@ -362,7 +362,7 @@ void SetupICC::slotToggledWidgets(bool t)
  
     m_defaultApplyICC->setEnabled(t); 
     m_defaultAskICC->setEnabled(t);
-    m_defaultAskICC->setChecked(t);
+    m_defaultApplyICC->setChecked(t);
     
     m_defaultPath->setEnabled(t); 
     
