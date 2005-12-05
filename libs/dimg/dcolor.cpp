@@ -54,6 +54,15 @@ DColor::DColor(const DColor& color)
     m_sixteenBit = color.m_sixteenBit;
 }
 
+DColor::DColor(const QColor& color)
+{
+    m_red        = color.red();
+    m_green      = color.green();
+    m_blue       = color.blue();
+    m_alpha      = 255;
+    m_sixteenBit = false;
+}
+
 DColor::DColor(int red, int green, int blue, int alpha, bool sixteenBit)
 {
     m_sixteenBit = sixteenBit;
@@ -146,6 +155,14 @@ void DColor::setAlpha(int alpha)
 void DColor::setSixteenBit(bool sixteenBit)
 {
     m_sixteenBit = sixteenBit;
+}
+
+QColor DColor::getQColor()
+{
+    if (m_sixteenBit)
+        return (QColor::QColor(m_red/65535, m_green/65535, m_blue/65535));
+    
+    return (QColor::QColor(m_red, m_green, m_blue));
 }
 
 void DColor::getHSL(int* h, int* s, int* l)
@@ -294,7 +311,12 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
     }
  
     m_sixteenBit = sixteenBit;
-    m_alpha = 0;
+
+    // Full transparent color.
+    if (m_sixteenBit)
+        m_alpha = 65535;
+    else
+        m_alpha = 255;
 }
 
 }  // NameSpace Digikam

@@ -20,6 +20,10 @@
 #ifndef DCOLOR_H
 #define DCOLOR_H
 
+// QT includes.
+
+#include <qcolor.h>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -35,6 +39,7 @@ public:
     DColor(uchar *data, bool sixteenBit);
     DColor(int red, int green, int blue, int alpha, bool sixteenBit);
     DColor(const DColor& color);
+    DColor(const QColor& color);
     DColor& operator=(const DColor& color);
     ~DColor();
 
@@ -50,6 +55,8 @@ public:
     void setAlpha(int alpha);
     void setSixteenBit(bool sixteenBit);
 
+    QColor getQColor();
+    
     void getHSL(int* h, int* s, int* l);
     void setRGB(int h, int s, int l, bool sixteenBit);
 
