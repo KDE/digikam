@@ -361,7 +361,8 @@ void SetupICC::slotToggledWidgets(bool t)
     m_bpcAlgorithm->setEnabled(t); 
  
     m_defaultApplyICC->setEnabled(t); 
-    m_defaultAskICC->setEnabled(t); 
+    m_defaultAskICC->setEnabled(t);
+    m_defaultAskICC->setChecked(t);
     
     m_defaultPath->setEnabled(t); 
     
@@ -446,6 +447,11 @@ void SetupICC::slotFillCombos(const QString& url)
     m_workProfiles->insertStringList(m_workICCFiles_description);
     m_proofProfiles->clear();
     m_proofProfiles->insertStringList(m_proofICCFiles_description);
+    m_ICCfilesPath["WorkProfile"] = m_workICCFiles_file[m_workProfiles->currentItem()];
+    m_ICCfilesPath["InProfile"] = m_inICCFiles_file[m_inProfiles->currentItem()];
+    m_ICCfilesPath["MonitorProfile"] = m_monitorICCFiles_file[m_monitorProfiles->currentItem()];
+    m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[m_proofProfiles->currentItem()];
+//     kdDebug() << "Current Profle: " << m_ICCfilesPath["WorkProfile"] << endl;
 }
 
 void SetupICC::slotClickedWork()
@@ -470,6 +476,11 @@ void SetupICC::slotClickedProof()
 
 void SetupICC::profileInfo(const QString& profile)
 {
+    if (profile.isEmpty())
+    {
+        KMessageBox::error(this, i18n("Sorry, there is not any selected profile"), i18n("Profile Error"));
+        return;
+    }
     QString intent;
     cmsHPROFILE selectedProfile;
     selectedProfile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
