@@ -1214,11 +1214,9 @@ void ShowFoto::slotNewToolbarConfig()
 
 void ShowFoto::slotFilePrint()
 {
-    uint* data   = Digikam::DImgInterface::instance()->getData();
-    int   width  = Digikam::DImgInterface::instance()->origWidth();
-    int   height = Digikam::DImgInterface::instance()->origHeight();
+    Digikam::DImg image = Digikam::DImgInterface::instance()->getImage();
 
-    if (!data || !width || !height)
+    if (image.isNull())
         return;
 
     KPrinter printer;
@@ -1232,9 +1230,6 @@ void ShowFoto::slotFilePrint()
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
     {
-        QImage image((uchar*)data, width, height, 32, 0, 0, QImage::IgnoreEndian);
-        image = image.copy();
-
         ImagePrint printOperations(image, printer, m_currentItem->url().filename());
         if (!printOperations.printImageWithQt())
         {

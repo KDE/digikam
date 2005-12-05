@@ -3,7 +3,7 @@
  * Date  : 2004-07-13
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,17 +32,21 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
+// Digikam includes
+
+#include "dimg.h"
+
 class QCheckBox;
 class QRadioButton;
 
 class KComboBox;
 class KDoubleNumInput;
 
-class ImagePrint  
+class ImagePrint
 {
 public:
 
-    ImagePrint(QImage& image, KPrinter& printer, 
+    ImagePrint(Digikam::DImg& image, KPrinter& printer,
                const QString& fileName);
     ~ImagePrint();
 
@@ -54,9 +58,9 @@ private:
                             int maxWidth );                           
 private:
     
-    QImage    m_image;
-    KPrinter& m_printer;
-    QString   m_filename;
+    Digikam::DImg m_image;
+    KPrinter&     m_printer;
+    QString       m_filename;
     
 };
 

@@ -3,7 +3,7 @@
  * Date  : 2004-07-13
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
  *
  * Original printing code from Kuickshow program.
  * Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
@@ -66,7 +66,6 @@
 
 // Image printdialog class -------------------------------------------------------------
 
-
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
                           : KPrintDialogPage( parent, name )
 {
@@ -103,7 +102,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     group->insert( m_scale );
     
     connect( m_scale, SIGNAL( toggled( bool )),
-             SLOT( toggleScaling( bool )));
+             this, SLOT( toggleScaling( bool )));
 
     m_units = new KComboBox( false, widget, "unit combobox" );
     grid->addWidget( m_units, 0, 2, AlignLeft );
@@ -184,10 +183,9 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
 
 // Image print class -----------------------------------------------------------------
 
-ImagePrint::ImagePrint(QImage& image, KPrinter& printer,
+ImagePrint::ImagePrint(Digikam::DImg& image, KPrinter& printer,
                        const QString& filename)
-          : m_image( image ), m_printer( printer ),
-            m_filename( filename )
+          : m_image( image ), m_printer( printer ), m_filename( filename )
 {
 }
 
@@ -205,13 +203,18 @@ bool ImagePrint::printImageWithQt()
 
     QString t = "true";
     QString f = "false";
-    
+
+    // TODO : perform all prepare to print transformations using DImg methods.
+    // Paco, we will need to apply printer ICC profile here !
+
+    QImage image2Print = m_image.copyQImage();
+
     // Black & white print ?
     if ( m_printer.option( "app-imageeditor-blackwhite" ) != f)
     {
-        m_image = m_image.convertDepth( 1, Qt::MonoOnly |
-                                       Qt::ThresholdDither |
-                                       Qt::AvoidDither );
+        image2Print = image2Print.convertDepth( 1, Qt::MonoOnly |
+                                                Qt::ThresholdDither |
+                                                Qt::AvoidDither );
     }
 
     QPainter p;
@@ -226,7 +229,7 @@ bool ImagePrint::printImageWithQt()
     int w = metrics.width();
     int h = metrics.height();
 
-    QSize size = m_image.size();
+    QSize size = image2Print.size();
 
     bool printFilename = m_printer.option( "app-imageeditor-printFilename" ) != f;
     if ( printFilename )
@@ -297,7 +300,7 @@ bool ImagePrint::printImageWithQt()
         y = h - size.height();
 
     // Perform the actual drawing.
-    p.drawImage( QRect( x, y, size.width(), size.height()), m_image );;
+    p.drawImage( QRect( x, y, size.width(), size.height()), image2Print );
 
     if ( printFilename )
     {
@@ -316,7 +319,6 @@ bool ImagePrint::printImageWithQt()
 
     return true;
 }
-
 
 QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
                                     int maxWidth )
