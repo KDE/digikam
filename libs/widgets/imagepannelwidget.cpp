@@ -63,7 +63,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
     m_imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
     m_imageRegionWidget->setFrameStyle(QFrame::NoFrame);
-    QWhatsThis::add( m_imageRegionWidget, i18n("<p>You can see here the original clip image "
+    QWhatsThis::add( m_imageRegionWidget, i18n("<p>Here you can see the original clip image "
                                                "which will be used for the preview computation."
                                                "<p>Click and drag the mouse cursor in the "
                                                "image to change the clip focus."));
@@ -80,7 +80,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     m_imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
-    QWhatsThis::add( m_imagePanIconWidget, i18n("<p>You can see here the original image panel "
+    QWhatsThis::add( m_imagePanIconWidget, i18n("<p>Here you can see the original image panel "
                                                 "which can help you to select the clip preview."
                                                 "<p>Click and drag the mouse cursor in the "
                                                 "red rectangle to change the clip focus."));

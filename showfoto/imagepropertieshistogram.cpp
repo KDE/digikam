@@ -186,7 +186,7 @@ ImagePropertiesHistogram::ImagePropertiesHistogram(QWidget* page, QRect* selecti
     // -------------------------------------------------------------
     
     QGroupBox *gbox = new QGroupBox(4, Qt::Horizontal, i18n("Statistics"), page);
-    QWhatsThis::add( gbox, i18n("<p>You can see here the statistic results calculated with the "
+    QWhatsThis::add( gbox, i18n("<p>Here you can see the statistic results calculated with the "
                                 "selected histogram part. These values are available for all "
                                 "channels."));
                                 
