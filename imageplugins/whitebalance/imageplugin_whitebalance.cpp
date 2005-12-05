@@ -63,12 +63,7 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-
-    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget(), image.bits(),
-                                                                  image.width(), image.height(), image.sixteenBit());
-    
+    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget());
     dlg.exec();
 }
 

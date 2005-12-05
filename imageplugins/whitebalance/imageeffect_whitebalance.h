@@ -57,7 +57,7 @@ class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    ImageEffect_WhiteBalance(QWidget* parent, uchar *imageData, uint width, uint height, bool sixteenBit);
+    ImageEffect_WhiteBalance(QWidget* parent);
     ~ImageEffect_WhiteBalance();
     
 protected:
@@ -97,8 +97,7 @@ private:
     bool                          m_clipSat;
     bool                          m_overExp;
     bool                          m_WBind;
-    bool                          m_sixteenBit;
-    
+
     double                        m_saturation;
     double                        m_temperature;    
     double                        m_gamma;
@@ -114,10 +113,6 @@ private:
     float                         m_curve[65536];
     float                         m_mr, m_mg, m_mb;
         
-    uchar                        *m_originalImageData;
-    int                           m_originalWidth;
-    int                           m_originalHeight;
-    
     uchar                        *m_destinationPreviewData;
 
     QPushButton                  *m_pickTemperature;
@@ -158,7 +153,7 @@ private:
         
     void setRGBmult(void);
     void setLUTv(void);
-    void whiteBalance(uchar *data, int w, int h);
+    void whiteBalance(uchar *data, int width, int height, bool sixteenBit);
     inline unsigned short pixelColor(int colorMult, int index, int value);
     
 private slots:
