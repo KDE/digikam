@@ -22,6 +22,10 @@
 #ifndef ADJUSTLEVELS_H
 #define ADJUSTLEVELS_H
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 // Local includes.
 
 #include "imagetabdialog.h"
@@ -35,14 +39,6 @@ class QCheckBox;
 class KDoubleSpinBox;
 class KGradientSelector;
 class KDoubleNumInput;
-
-namespace Digikam
-{
-class HistogramWidget;
-class ImageLevels;
-class ImageGuideWidget;
-class DColor;
-}
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
