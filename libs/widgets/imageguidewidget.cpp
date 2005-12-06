@@ -45,7 +45,7 @@ namespace Digikam
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize)
+                                   QColor guideColor, int guideSize, bool blink)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_spotVisible = spotVisible;
@@ -68,7 +68,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
     resetSpotPosition();
-    setSpotVisible(m_spotVisible);
+    setSpotVisible(m_spotVisible, blink);
 }
 
 ImageGuideWidget::~ImageGuideWidget()
@@ -113,16 +113,19 @@ DColor ImageGuideWidget::getSpotColor(void)
     return(currentPointColor);
 }
 
-void ImageGuideWidget::setSpotVisible(bool spotVisible)
+void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
 {
     m_spotVisible = spotVisible;
     
-    if (m_spotVisible)
-       m_timerID = startTimer(800);
-    else
+    if (blink)
     {
-       killTimer(m_timerID);
-       m_timerID = 0;
+        if (m_spotVisible)
+            m_timerID = startTimer(800);
+        else
+        {
+            killTimer(m_timerID);
+            m_timerID = 0;
+        }
     }
        
     updatePreview();

@@ -58,14 +58,14 @@ public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     QColor guideColor=Qt::red, int guideSize=1);
+                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
     
     QPoint getSpotPosition(void);
     DColor getSpotColor(void);
-    void   setSpotVisible(bool v);
+    void   setSpotVisible(bool spotVisible, bool blink=false);
     void   resetSpotPosition(void);
     void   updatePreview(void);
 
