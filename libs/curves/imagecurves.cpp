@@ -102,7 +102,7 @@ void ImageCurves::curvesChannelReset(int channel)
 
     // Contruct a linear curve.
     
-    for (j = 0 ; j < m_segmentMax ; j++)
+    for (j = 0 ; j <= m_segmentMax ; j++)
        m_curves->curve[channel][j] = j;
 
     // Init coordinates points to null.
@@ -369,7 +369,7 @@ void ImageCurves::curvesLutSetup(int nchannels, bool overIndicator)
     {
        m_lut->luts[i] = new unsigned short[m_segmentMax+1];
 
-       for (v = 0 ; v < (uint)m_segmentMax ; v++)
+       for (v = 0 ; v <= (uint)m_segmentMax ; v++)
        {
           // To add gamma correction use func(v ^ g) ^ 1/g instead. 
           
