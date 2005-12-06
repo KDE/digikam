@@ -121,6 +121,12 @@ DImg::~DImg()
         delete m_priv;
 }
 
+bool DImg::create(uint width, uint height, bool sixteenBit, bool alpha)
+{
+    reset();
+    return ( init(width, height, 0, sixteenBit, alpha) );
+}
+
 bool DImg::create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
 {
     reset();
@@ -139,14 +145,22 @@ bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alph
     if (sixteenBit)
     {
         m_priv->data   = new uchar[width*height*8];
-        if (!m_priv->data) return false;
-        memcpy(m_priv->data, data, width*height*8); 
+        if (!m_priv->data)
+            return false;
+        if (data)
+            memcpy(m_priv->data, data, width*height*8);
+        else
+            memset(m_priv->data, 0, width*height*8);
     }
     else
     {
         m_priv->data   = new uchar[width*height*4];
-        if (!m_priv->data) return false;
-        memcpy(m_priv->data, data, width*height*4); 
+        if (!m_priv->data)
+            return false;
+        if (data)
+            memcpy(m_priv->data, data, width*height*4); 
+        else
+            memset(m_priv->data, 0, width*height*4);
     }
     
     return true;

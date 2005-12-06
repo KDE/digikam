@@ -32,7 +32,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
 		        albumpropsedit.cpp albumsettings.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        digikamfirstrun.cpp firstrunUI.ui \
+		        firstrunUI.ui digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
@@ -51,9 +51,6 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) \
 		        $(top_builddir)/digikam/sqlite/libsqlite.la \
-		        $(top_builddir)/digikam/libs/histogram/libhistogram.la \
-		        $(top_builddir)/digikam/libs/levels/liblevels.la \
-		        $(top_builddir)/digikam/libs/curves/libcurves.la \
 		        $(top_builddir)/digikam/libs/filters/libfilters.la \
 		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \

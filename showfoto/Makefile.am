@@ -22,11 +22,9 @@ showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp slideshow.cpp \
 
 showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) \
-		   $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		   $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		   $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
 		   $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
-		   $(top_builddir)/digikam/libs/curves/libcurves.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
 		   $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la 

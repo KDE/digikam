@@ -1,1 +1,1 @@
-SUBDIRS = dcraw dimg histogram levels themeengine widgets curves filters thumbbar jpegutils imageproperties
+SUBDIRS = dcraw histogram levels curves dimg themeengine widgets filters thumbbar jpegutils imageproperties

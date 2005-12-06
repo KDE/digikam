@@ -96,6 +96,7 @@ public:
    ~DImg();
 
     bool        create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
+    bool        create(uint width, uint height, bool sixteenBit, bool alpha=false);
     void        reset(void);
 
     bool        load(const QString& filePath);
