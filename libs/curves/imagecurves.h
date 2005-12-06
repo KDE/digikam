@@ -64,7 +64,7 @@ struct _Curves
 {
     CurveType        curve_type[5];     // Curve types by channels (Smooth or Free).
     int              points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
-    unsigned short   curve[5][256];     // Curve values by channels.
+    unsigned short   curve[5][65536];     // Curve values by channels.
 };
 
 struct _Lut
