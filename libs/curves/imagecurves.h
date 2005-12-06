@@ -23,15 +23,6 @@
 
 #define ROUND(x) ((int) ((x) + 0.5))
 
-//  Map RGB to intensity  
-/*
-#define CURVE_RGB_INTENSITY_RED    0.30
-#define CURVE_RGB_INTENSITY_GREEN  0.59
-#define CURVE_RGB_INTENSITY_BLUE   0.11
-#define CURVE_RGB_INTENSITY(r,g,b) ((r) * CURVE_RGB_INTENSITY_RED   + \
-                                   (g) * CURVE_RGB_INTENSITY_GREEN + \
-                                   (b) * CURVE_RGB_INTENSITY_BLUE)
-*/
 // Qt includes.
 
 #include <qpoint.h>
