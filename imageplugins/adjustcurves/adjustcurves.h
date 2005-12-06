@@ -30,7 +30,6 @@
 
 #include <digikamheaders.h>
 
-
 // Local includes.
 
 #include "imagetabdialog.h"
@@ -86,7 +85,9 @@ private:
     Linear=0,
     Logarithmic
     };
-    
+
+    int                           m_histoSegments;
+        
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_typeCB;  
     
@@ -125,7 +126,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotPositionChanged(int x, int y);
-    void slotSpotColorChanged(const QColor &color, bool release);
+    void slotSpotColorChanged(const Digikam::DColor &color, bool release);
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

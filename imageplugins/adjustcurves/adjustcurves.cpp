@@ -77,7 +77,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     Digikam::ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImage();
 
-    // Create an empty instance of curves to use.
+    m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
     m_curves = new Digikam::ImageCurves(m_originalImage.sixteenBit());
 
     // About data and help button.
@@ -172,9 +172,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
     grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
 
-    // FIXME
-    m_curvesWidget = new Digikam::CurvesWidget(256, 256, (uint*)m_originalImage.bits(), m_originalImage.width(),
-                                               m_originalImage.height(), /*m_originalImage.sixteenBit(),*/
+    m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
+                                               m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
@@ -266,8 +265,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotEffect()));
     
-    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const QColor &, bool, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const QColor &, bool ))); 
+    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
             
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));              
@@ -305,38 +304,40 @@ void AdjustCurveDialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void AdjustCurveDialog::slotSpotColorChanged(const QColor &color, bool release)
+void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
 {
+    Digikam::DColor sc = color;
+
     if ( m_pickBlack->isOn() )
-       {
+    {
        // Black tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 1, 
-                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 42));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(color.red(), 42));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(color.green(), 42));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(color.blue(), 42));      
+                               QPoint::QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 42));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(sc.red(), 42));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(sc.green(), 42));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(sc.blue(), 42));
        m_pickBlack->setOn(!release);
-       }
+    }
     else if ( m_pickGray->isOn() )
-       {
+    {
        // Gray tonal curves point.
        m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8, 
-                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 128));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint::QPoint(color.red(), 128));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint::QPoint(color.green(), 128));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint::QPoint(color.blue(), 128));      
+                               QPoint::QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 128));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint::QPoint(sc.red(), 128));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint::QPoint(sc.green(), 128));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint::QPoint(sc.blue(), 128));
        m_pickGray->setOn(!release);
-       }
+    }
     else if ( m_pickWhite->isOn() )
-       {
+    {
        // White tonal curves point.
-       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 15, 
-                               QPoint::QPoint(QMAX(QMAX(color.red(), color.green()), color.blue()), 213));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(color.red(), 213));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(color.green(), 213));      
-       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(color.blue(), 213));      
+       m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 15,
+                               QPoint::QPoint(QMAX(QMAX(sc.red(), sc.green()), sc.blue()), 213));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(sc.red(), 213));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(sc.green(), 213));
+       m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(sc.blue(), 213));
        m_pickWhite->setOn(!release);
-       }
+    }
     else
        m_curvesWidget->setCurveGuide(color);
 
@@ -368,50 +369,70 @@ void AdjustCurveDialog::slotPositionChanged(int x, int y)
 
 void AdjustCurveDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
+    uchar* desData;
 
-    uint* orgData = ifaceDest->getPreviewData();
-    int   w       = ifaceDest->previewWidth();
-    int   h       = ifaceDest->previewHeight();
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::DImg image        = iface->getPreviewImage();
+
+    uchar *orgData = image.bits();
+    int w          = image.width();
+    int h          = image.height();
 
     // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
+    if (m_histoSegments == 65535)
+       desData = new uchar[w*h*8];
+    else
+       desData = new uchar[w*h*4];
 
     // Calculate the LUT to apply on the image.
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
     // Apply the lut to the image.
-    m_curves->curvesLutProcess((uchar*)orgData, (uchar*)desData, w, h);
+    m_curves->curvesLutProcess(orgData, desData, w, h);
 
-    ifaceDest->putPreviewData(desData);
+    if (m_histoSegments == 65535)
+       memcpy (orgData, desData, w*h*8);
+    else
+       memcpy (orgData, desData, w*h*4);
+
+    iface->putPreviewImage(image);
     m_previewTargetWidget->updatePreview();
 
-    delete [] orgData;
     delete [] desData;
 }
 
 void AdjustCurveDialog::slotOk()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface ifaceDest(0, 0);
+    uchar* desData;
 
-    uint* orgData = ifaceDest.getOriginalData();
-    int   w       = ifaceDest.originalWidth();
-    int   h       = ifaceDest.originalHeight();
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    Digikam::ImageIface iface(0, 0);
+    Digikam::DImg image = iface.getOriginalImage();
+
+    uchar *orgData = image.bits();
+    int w          = image.width();
+    int h          = image.height();
 
     // Create the new empty destination image data space.
-    uint* desData = new uint[w*h];
+    if (m_histoSegments == 65535)
+       desData = new uchar[w*h*8];
+    else
+       desData = new uchar[w*h*4];
 
     // Calculate the LUT to apply on the image.
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
 
     // Apply the lut to the image.
-    m_curves->curvesLutProcess((uchar*)orgData, (uchar*)desData, w, h);
+    m_curves->curvesLutProcess(orgData, desData, w, h);
 
-    ifaceDest.putOriginalData(i18n("Adjust Curve"), desData);
+    if (m_histoSegments == 65535)
+       memcpy (orgData, desData, w*h*8);
+    else
+       memcpy (orgData, desData, w*h*4);
+
+    iface.putOriginalImage(i18n("Adjust Curve"), image);
     kapp->restoreOverrideCursor();
 
-    delete [] orgData;
     delete [] desData;
     accept();
 }
@@ -419,7 +440,7 @@ void AdjustCurveDialog::slotOk()
 void AdjustCurveDialog::slotChannelChanged(int channel)
 {
     switch(channel)
-       {
+    {
        case LuminosityChannel:
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
@@ -444,7 +465,7 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::AlphaChannelHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
-       }
+    }
 
     m_typeCB->setCurrentItem(m_curves->getCurveType(channel));  
                 
@@ -460,21 +481,21 @@ void AdjustCurveDialog::slotScaleChanged(int scale)
 void AdjustCurveDialog::slotCurveTypeChanged(int type)
 {
     switch(type)
-       {
+    {
        case SmoothDrawing:          
-          {
+       {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
           m_pickerColorButtonGroup->setEnabled(true);
           break;
-          }
+       }
        
        case FreeDrawing:          
-          {
+       {
           m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_FREE);
           m_pickerColorButtonGroup->setEnabled(false);
           break;
-          }
        }
+    }
     
     m_curvesWidget->curveTypeChanged();
 }
@@ -501,10 +522,10 @@ void AdjustCurveDialog::slotUser3()
        return;
 
     if ( m_curves->loadCurvesFromGimpCurvesFile( loadCurvesFile ) == false )
-       {
+    {
        KMessageBox::error(this, i18n("Cannot load from the Gimp curves text file."));
        return;
-       }
+    }
 
     // Refresh the current curves config.
     slotChannelChanged(m_channelCB->currentItem());
@@ -523,10 +544,10 @@ void AdjustCurveDialog::slotUser2()
        return;
 
     if ( m_curves->saveCurvesToGimpCurvesFile( saveCurvesFile ) == false )
-       {
+    {
        KMessageBox::error(this, i18n("Cannot save to the Gimp curves text file."));
        return;
-       }
+    }
 
     // Refresh the current curves config.
     slotChannelChanged(m_channelCB->currentItem());

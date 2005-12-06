@@ -25,10 +25,10 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qcolor.h>
 
 // Local includes
 
+#include "dcolor.h"
 #include "digikam_export.h"
 
 class QCustomEvent;
@@ -71,12 +71,13 @@ private:
 
 public:
 
-    CurvesWidget(int w, int h,                                      // Widget size.
-                 uint *i_data, uint i_w, uint i_h,                  // Full image info.
-                 Digikam::ImageCurves *curves,                      // Curves data instance to use.
-                 QWidget *parent=0,                                 // Parent widget instance.
-                 bool readOnly=false);                              // If true : widget with full edition mode capabilities.
-                                                                    // If false : display curve data only without edition.
+    CurvesWidget(int w, int h,                         // Widget size.
+                 uchar *i_data, uint i_w, uint i_h,    // Full image info.
+                 bool i_sixteenBits,                   // 8 or 16 bits image.
+                 Digikam::ImageCurves *curves,         // Curves data instance to use.
+                 QWidget *parent=0,                    // Parent widget instance.
+                 bool readOnly=false);                 // If true : widget with full edition mode capabilities.
+                                                       // If false : display curve data only without edition.
                  
     ~CurvesWidget();
 
@@ -85,7 +86,7 @@ public:
     
     void reset(void);
     void curveTypeChanged(void);
-    void setCurveGuide(QColor color);
+    void setCurveGuide(DColor color);
     
     int m_channelType;     // Channel type to draw.
     int m_scaleType;       // Scale to use for drawing.
@@ -119,11 +120,12 @@ private:
     int                   m_grab_point;
     int                   m_last;
     
+    bool                  m_sixteenBits;    
     bool                  m_blinkFlag;         
     bool                  m_readOnlyMode;
     bool                  m_guideVisible;
     
-    QColor                m_colorGuide;
+    DColor                m_colorGuide;
     
     QTimer               *m_blinkTimer;
     
