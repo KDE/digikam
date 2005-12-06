@@ -135,7 +135,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     m_brightnessInput = new KIntNumInput(gboxSettings);
     m_brightnessInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of target image."));
+    QWhatsThis::add( m_brightnessInput, i18n("<p>Set here the brightness re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label4, 4, 4, 0, 0);
     gridSettings->addMultiCellWidget(m_brightnessInput, 4, 4, 1, 2);
@@ -146,7 +146,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     m_contrastInput = new KIntNumInput(gboxSettings);
     m_contrastInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of target image."));
+    QWhatsThis::add( m_contrastInput, i18n("<p>Set here the contrast re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label5, 5, 5, 0, 0);
     gridSettings->addMultiCellWidget(m_contrastInput, 5, 5, 1, 2);
@@ -157,7 +157,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent)
     
     m_gammaInput = new KIntNumInput(gboxSettings);
     m_gammaInput->setRange(0, 100, 1, true);  
-    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of target image."));
+    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label6, 6, 6, 0, 0);
     gridSettings->addMultiCellWidget(m_gammaInput, 6, 6, 1, 2);

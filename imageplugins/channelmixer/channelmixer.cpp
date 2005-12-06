@@ -183,7 +183,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
     QWhatsThis::add( m_blueGain, i18n("<p>Select here the blue color gain in percent for the current channel."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    QWhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the current selected channel."));
+    QWhatsThis::add( m_resetButton, i18n("Reset color channels' gains settings from the currently selected channel."));
 
     grid->addMultiCellWidget(redLabel, 3, 3, 0, 0);
     grid->addMultiCellWidget(greenLabel, 4, 4, 0, 0);
