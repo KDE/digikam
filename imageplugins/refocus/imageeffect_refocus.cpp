@@ -102,10 +102,10 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_correlation = new KDoubleNumInput(gboxSettings);
     m_correlation->setPrecision(2);
     m_correlation->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help reducing artifacts. The correlation can "
-                                         "range  from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
+    QWhatsThis::add( m_correlation, i18n("<p>Increasing the Correlation may help to reduce artifacts. The correlation can "
+                                         "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                          "Using a high value for the Correlation will reduce the sharpening effect of the "
-                                         "plug-in."));
+                                         "plugin."));
 
     gridSettings->addWidget(label4, 1, 0);
     gridSettings->addWidget(m_correlation, 1, 1);
@@ -116,11 +116,11 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     m_noise = new KDoubleNumInput(gboxSettings);
     m_noise->setPrecision(3);
     m_noise->setRange(0.0, 1.0, 0.001, true);
-    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise Filter parameter may help reducing artifacts. The Noise Filter "
+    QWhatsThis::add( m_noise, i18n("<p>Increasing the Noise Filter parameter may help to reduce artifacts. The Noise Filter "
                                    "can range from 0-1 but values higher than 0.1 are rarely helpful. When the Noise Filter "
-                                   "value is too low, e.g. 0.0 the image quality will be horrible. A useful value is 0.01. "
+                                   "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
                                    "Using a high value for the Noise Filter will reduce the sharpening "
-                                   "effect of the plug-in."));
+                                   "effect of the plugin."));
 
     gridSettings->addWidget(label5, 2, 0);
     gridSettings->addWidget(m_noise, 2, 1);
@@ -134,7 +134,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     QWhatsThis::add( m_gauss, i18n("<p>This is the Sharpness for the Gaussian convolution. Use this parameter when your "
                                    "blurring is of Gaussian type. In most cases you should set this parameter to 0, because "
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
-                                   "increase the Correlation and/or Noise Filter parameters, too."));
+                                   "increase the Correlation and/or Noise Filter parameters too."));
 
     gridSettings->addWidget(label3, 3, 0);
     gridSettings->addWidget(m_gauss, 3, 1);

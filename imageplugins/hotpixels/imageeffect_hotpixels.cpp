@@ -95,7 +95,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
     m_filterMethodCombo->insertItem(i18n("Cubic"));
 
     m_blackFrameButton = new QPushButton(i18n("Black Frame..."), gboxSettings);    
-    setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file witch will "
+    setButtonWhatsThis( Apply, i18n("<p>Use this button to add a new black frame file which will "
                                     "be used by the hot pixels removal filter.") );  
 
     gridSettings->addMultiCellWidget(filterMethodLabel, 0, 0, 0, 0);
