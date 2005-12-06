@@ -32,6 +32,7 @@
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
+#include <qcolor.h>
 #include <qrect.h> 
 #include <qfont.h> 
 #include <qfontmetrics.h> 
@@ -45,7 +46,7 @@
 
 // Digikam includes.
 
-#include <imagehistogram.h>
+#include "imagehistogram.h"
 
 // Local includes.
 

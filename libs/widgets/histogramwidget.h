@@ -23,7 +23,6 @@
 
 // Qt includes.
 
-#include <qcolor.h>
 #include <qwidget.h>
 
 // Local includes
