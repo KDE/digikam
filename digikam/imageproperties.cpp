@@ -62,6 +62,15 @@ ImageProperties::ImageProperties(enum Mode mode, QWidget* parent,
 #if KDE_IS_VERSION(3,3,0)
         setButtonGuiItem(User1, KStdGuiItem::guiItem(KStdGuiItem::Forward));
         setButtonGuiItem(User2, KStdGuiItem::guiItem(KStdGuiItem::Back));
+#else
+        setButtonText( User1,
+            KStdGuiItem::guiItem(KStdGuiItem::Forward).plainText() );
+        setButtonTip( User1,
+            KStdGuiItem::guiItem(KStdGuiItem::Forward).toolTip() );
+        setButtonText(User2,
+            KStdGuiItem::guiItem(KStdGuiItem::Back).plainText() );
+        setButtonTip( User2,
+            KStdGuiItem::guiItem(KStdGuiItem::Back).toolTip() ) 
 #endif
         enableButton(User1, m_currItem->nextItem() != 0);
         enableButton(User2, m_currItem->prevItem() != 0);
