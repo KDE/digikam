@@ -23,16 +23,15 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/ \
 	   $(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
-libdigikam_la_SOURCES = albummanager.cpp album.cpp \
+libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
 			albumlister.cpp dragobjects.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
-		        albumfolderview.cpp \
-		        albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
-		        albumpropsedit.cpp albumsettings.cpp \
-		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        firstrunUI.ui digikamfirstrun.cpp \
+		    albumfolderview.cpp \
+		    albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
+		    albumpropsedit.cpp albumsettings.cpp \
+		    cameralist.cpp cameratype.cpp cameradragobject.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
@@ -45,7 +44,8 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
 			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
 			upgradedb_sqlite2tosqlite3.cpp squeezedcombobox.cpp \
-			ratingwidget.cpp
+			ratingwidget.cpp digikamfirstrun.cpp 
+
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
@@ -56,7 +56,7 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-                        $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
+		        $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
