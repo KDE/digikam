@@ -24,12 +24,13 @@
 // Qt includes.
 
 #include <qscrollview.h>
-#include <qimage.h>
 #include <qrect.h>
+#include <qimage.h>
 #include <qpointarray.h>
 
 // Local includes
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 class QPixmap;
@@ -61,15 +62,18 @@ public:
     void   setCenterContentsPosition(void);
     QRect  getImageRegion(void);
     QRect  getImageRegionToRender(void);
-    QImage getImageRegionData(void);
-
-    void   updatePreviewImage(QImage *img);
+    DImg   getImageRegionImage(void);
+    void   updatePreviewImage(DImg *img);
     void   updateOriginalImage(void);   
 
     void   backupPixmapRegion(void);
     void   restorePixmapRegion(void);
     
     void   setHighLightPoints(QPointArray pointsList);
+             
+    // FIXME remove these methods when all image plugins will be ported to DIMG.
+    QImage getImageRegionData(void);
+    void   updatePreviewImage(QImage *img);
              
 signals:
     
@@ -96,13 +100,16 @@ private:
     
     QPointArray  m_hightlightPoints;    
     
-    QImage       m_img;                // Entire content image.
+    DImg         m_img;                // Entire content image.
     
 private:
     
     void  drawContents(QPainter *p, int x, int y, int w, int h);
-    void  updatePixmap(QImage *img);
+    void  updatePixmap(DImg *img);
     QRect getTargetImageRegion(void);
+
+    // FIXME remove this method when all image plugins will be ported to DIMG.
+    void  updatePixmap(QImage *img);
     
 public slots:
 
