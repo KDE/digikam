@@ -280,7 +280,7 @@ void SetupICC::readSettings()
     m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
     m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
-    m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("WorkProfileFile");
+    m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
     m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
     kdDebug() << "Profile Path: " << m_ICCfilesPath["InProfile"] << endl;
     kdDebug() << "Profile Path: " << m_ICCfilesPath["WorkProfile"] << endl;
