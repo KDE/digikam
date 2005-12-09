@@ -30,6 +30,7 @@
 #include <kiconloader.h>
 #include <kdialogbase.h>
 #include <klocale.h>
+#include <kapplication.h>
  
 // Local includes
 
@@ -43,22 +44,22 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     QHBoxLayout *lay = new QHBoxLayout(this);
-    KIconLoader icon;
+    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     
     m_firstButton = new QPushButton( this );
-    m_firstButton->setPixmap( icon.loadIcon( "start", (KIcon::Group)KIcon::Toolbar ) );
+    m_firstButton->setPixmap( iconLoader->loadIcon( "start", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_firstButton, i18n( "Go to the first item" ) );
     
     m_prevButton = new QPushButton( this );
-    m_prevButton->setPixmap( icon.loadIcon( "back", (KIcon::Group)KIcon::Toolbar ) );
+    m_prevButton->setPixmap( iconLoader->loadIcon( "back", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_prevButton, i18n( "Go to the previous item" ) );
  
     m_nextButton = new QPushButton( this );
-    m_nextButton->setPixmap( icon.loadIcon( "forward", (KIcon::Group)KIcon::Toolbar ) );
+    m_nextButton->setPixmap( iconLoader->loadIcon( "forward", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_nextButton, i18n( "Go to the next item" ) );
 
     m_lastButton = new QPushButton( this );
-    m_lastButton->setPixmap( icon.loadIcon( "finish", (KIcon::Group)KIcon::Toolbar ) );
+    m_lastButton->setPixmap( iconLoader->loadIcon( "finish", (KIcon::Group)KIcon::Toolbar ) );
     QToolTip::add( m_lastButton, i18n( "Go to the last item" ) );        
     
     m_filename = new KSqueezedTextLabel( this );
@@ -98,26 +99,26 @@ void NavigateBarWidget::setFileName(QString filename)
 void NavigateBarWidget::setButtonsState(int itemType)
 {
     if (itemType == ItemFirst)
-       {
+    {
        m_firstButton->setEnabled(false);
        m_prevButton->setEnabled(false);
        m_nextButton->setEnabled(true);
        m_lastButton->setEnabled(true);
-       }
+    }
     else if (itemType == ItemLast)
-       {
+    {
        m_firstButton->setEnabled(true);
        m_prevButton->setEnabled(true);
        m_nextButton->setEnabled(false);
        m_lastButton->setEnabled(false);
-       }
+    }
     else 
-       {
+    {
        m_firstButton->setEnabled(true);
        m_prevButton->setEnabled(true);
        m_nextButton->setEnabled(true);
        m_lastButton->setEnabled(true);
-       }    
+    }
 }
 
 }  // namespace Digikam
