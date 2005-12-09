@@ -136,7 +136,8 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
     d->contrast   = 1.0;
     d->brightness = 0.0;
     d->cmod.reset();
-
+    d->image.reset();
+    
     d->undoMan->clear();
 
     d->image = DImg(filename);
