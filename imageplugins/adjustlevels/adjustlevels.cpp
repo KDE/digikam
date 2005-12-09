@@ -294,13 +294,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
     m_previewOriginalWidget = previewOriginalWidget();
     QWhatsThis::add( m_previewOriginalWidget, i18n("<p>Here you can see the original image. You can pick "
-                                                   "a color on the image using the color "
+                                                   "a color from the image using the color "
                                                    "picker tools to select shadow, middle, and highlight "
                                                    "tones to adjust the curves' points in the Red, "
                                                    "Green, Blue, and Luminosity Channels."));
     m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>Here you can see the image's "
-                                                 "levels-adjustments preview."));
+                                                 "level-adjustments preview."));
     
     // -------------------------------------------------------------
     
