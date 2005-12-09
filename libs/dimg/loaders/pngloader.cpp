@@ -377,6 +377,8 @@ bool PNGLoader::load(const QString& filePath)
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = data;
+    imageSetAttribute("format", "PNG");
+    
     return true;
 }
 
@@ -474,7 +476,7 @@ bool PNGLoader::save(const QString& filePath)
     // -------------------------------------------------------------------
     // Quality to convert to compression 
     
-    QVariant qualityAttr = imageAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute("quality");
     quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
     
     if (quality < 1)

@@ -329,7 +329,8 @@ bool JPEGLoader::load(const QString& filePath)
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = dest;
-
+    imageSetAttribute("format", "JPEG");
+    
     return true;
 }
 
@@ -374,7 +375,7 @@ bool JPEGLoader::save(const QString& filePath)
     cinfo.input_components = 3;
     cinfo.in_color_space   = JCS_RGB;    
     
-    QVariant qualityAttr = imageAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
     
     if (quality < 0)

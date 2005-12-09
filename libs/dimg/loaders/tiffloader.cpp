@@ -261,6 +261,8 @@ bool TIFFLoader::load(const QString& filePath)
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = data;
+    imageSetAttribute("format", "TIFF");
+    
     return true;
 }
 
@@ -303,7 +305,7 @@ bool TIFFLoader::save(const QString& filePath)
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
  
     // Image must be compressed using deflate algorithm ?
-    QVariant compressAttr = imageAttribute("compress");
+    QVariant compressAttr = imageGetAttribute("compress");
     bool compress = compressAttr.isValid() ? compressAttr.toBool() : false;
     
     if (compress)

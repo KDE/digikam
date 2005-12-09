@@ -138,7 +138,8 @@ bool RAWLoader::load8bits(const QString& filePath)
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = data;
-
+    imageSetAttribute("format", "RAW");
+    
     return true;
 }
 
@@ -218,6 +219,7 @@ bool RAWLoader::load16bits(const QString& filePath)
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = (uchar *)data;
+    imageSetAttribute("format", "RAW");
 
     return true;
 }

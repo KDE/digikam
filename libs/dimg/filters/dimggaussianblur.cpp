@@ -100,13 +100,6 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     int nSumR, nSumG, nSumB, nCount, progress;
     int nKernelWidth = radius * 2 + 1;
     
-    uchar* pOutBits = m_destImage.bits();
-    uchar* pBlur    = new uchar[m_destImage.numBytes()];
-    
-    // We need to copy our bits to blur bits
-    
-    memcpy (pBlur, data, m_destImage.numBytes());
-
     // We need to alloc a 2d array to help us to store the values
     
     int** arrMult = Alloc2DArray (nKernelWidth, sixteenBit ? 65536 : 256);
@@ -114,6 +107,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     for (i = 0; !m_cancel && (i < nKernelWidth); i++)
         for (j = 0; !m_cancel && (j < (sixteenBit ? 65536 : 256)); j++)
             arrMult[i][j] = j * Kernel[i];
+
+    // We need to copy our bits to blur bits
+
+    uchar* pOutBits = m_destImage.bits();
+    uchar* pBlur    = new uchar[m_destImage.numBytes()];
+
+    memcpy (pBlur, data, m_destImage.numBytes());
 
     // We need to initialize all the loop and iterator variables
     

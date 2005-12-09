@@ -134,7 +134,8 @@ bool PPMLoader::load(const QString& filePath)
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = (uchar *)data;
-
+    imageSetAttribute("format", "PPM");
+    
     return true;
 }
 

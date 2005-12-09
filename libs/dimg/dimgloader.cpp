@@ -72,7 +72,7 @@ QMap<int, QByteArray>& DImgLoader::imageMetaData()
     return m_image->m_priv->metaData;    
 }
 
-QVariant DImgLoader::imageAttribute(const QString& key)
+QVariant DImgLoader::imageGetAttribute(const QString& key)
 {
     return m_image->attribute(key);
 }
@@ -80,6 +80,11 @@ QVariant DImgLoader::imageAttribute(const QString& key)
 QString DImgLoader::imageGetEmbbededText(const QString& key)
 {
     return m_image->embeddedText(key);
+}
+
+void DImgLoader::imageSetAttribute(const QString& key, const QVariant& value)
+{
+    m_image->setAttribute(key, value);
 }
 
 QMap<QString, QString>& DImgLoader::imageEmbeddedText()

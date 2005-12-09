@@ -68,12 +68,15 @@ bool QImageLoader::load(const QString& filePath)
     imageHeight() = h;
     imageData()   = data;
 
+    // We considering that PNG is the most representative format of an image loaded by Qt
+    imageSetAttribute("format", "PNG");
+
     return true;
 }
 
 bool QImageLoader::save(const QString& filePath)
 {
-    QVariant qualityAttr = imageAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
     
     if (quality < 0)
@@ -81,7 +84,7 @@ bool QImageLoader::save(const QString& filePath)
     if (quality > 100)
         quality = 100;
 
-    QVariant formatAttr = imageAttribute("format");
+    QVariant formatAttr = imageGetAttribute("format");
     QCString format = formatAttr.toCString();
 
     QImage image = m_image->copyQImage();

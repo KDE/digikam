@@ -62,7 +62,8 @@ protected:
     QByteArray&             imageICCProfil();
     
     QMap<int, QByteArray>&  imageMetaData();
-    QVariant                imageAttribute(const QString& key);
+    QVariant                imageGetAttribute(const QString& key);
+    void                    imageSetAttribute(const QString& key, const QVariant& value);
 
     QMap<QString, QString>& imageEmbeddedText();    
     QString                 imageGetEmbbededText(const QString& key);
