@@ -853,42 +853,44 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 
 /** Function to apply the GaussianBlur on an image. This method do not use a
  * dedicaced thread.*/
-void DImgImageFilters::gaussianBlurImage(DImg *orgImage, int Radius)
+void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
-    if (orgImage->isNull())
+    if (!data || !width || !height)
     {
        kdWarning() << ("DImgImageFilters::gaussianBlurImage: no image data available!")
                    << endl;
        return;
     }
 
-    if (Radius > 100) Radius = 100;
-    if (Radius <= 0) return;
+    if (radius > 100) radius = 100;
+    if (radius <= 0) return;
 
-    Digikam::DImgGaussianBlur *threadedFilter = new Digikam::DImgGaussianBlur(orgImage, 0L, Radius);
-    DImg imDest = threadedFilter->getTargetImage();
-    memcpy( orgImage->bits(), imDest.bits(), imDest.numBytes() );
-    delete threadedFilter;
+    DImg orgImage(width, height, data, sixteenBit);
+    Digikam::DImgGaussianBlur *filter = new Digikam::DImgGaussianBlur(&orgImage, 0L, radius);
+    DImg *imDest = filter->getTargetImage();
+    memcpy( data, imDest->bits(), imDest->numBytes() );
+    delete filter;
 }
 
 /** Function to apply the sharpen filter on an image. This method do not use a
  * dedicaced thread.*/
-void DImgImageFilters::sharpenImage(DImg *orgImage, int r)
+void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
-    if (!orgImage->isNull())
+    if (!data || !width || !height)
     {
        kdWarning() << ("DImgImageFilters::sharpenImage: no image data available!")
                    << endl;
        return;
     }
 
-    if (r > 100) r = 100;
-    if (r <= 0) return;
+    if (radius > 100) radius = 100;
+    if (radius <= 0) return;
 
-    Digikam::DImgSharpen *threadedFilter = new Digikam::DImgSharpen(orgImage, 0L, r);
-    DImg imDest = threadedFilter->getTargetImage();
-    memcpy( orgImage->bits(), imDest.bits(), imDest.numBytes() );
-    delete threadedFilter;
+    DImg orgImage(width, height, data, sixteenBit);
+    Digikam::DImgSharpen *filter = new Digikam::DImgSharpen(&orgImage, 0L, radius);
+    DImg *imDest = filter->getTargetImage();
+    memcpy( data, imDest->bits(), imDest->numBytes() );
+    delete filter;
 }
 
 }  // NameSpace Digikam

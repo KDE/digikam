@@ -69,7 +69,7 @@ public:
     
     ~DImgThreadedFilter(){ stopComputation(); };
     
-    DImg getTargetImage(void) { return m_destImage; };
+    DImg* getTargetImage(void) { return &m_destImage; };
     
     void startComputation(void);
     void stopComputation(void);

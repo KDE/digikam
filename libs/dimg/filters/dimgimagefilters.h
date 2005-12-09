@@ -113,8 +113,8 @@ public:   // Public methods.
                                   bool overIndicator=false);
     static void changeTonality(uchar *data, int width, int height, bool sixteenBit,
                                int redMask, int greenMask, int blueMask);
-    static void gaussianBlurImage(DImg *orgImage, int Radius);
-    static void sharpenImage(DImg *orgImage, int r);
+    static void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
+    static void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
 
 };
 

@@ -50,7 +50,7 @@ private:  // Gaussian blur filter methods.
 
     virtual void filterImage(void);
     
-    void gaussianBlurImage(uint *data, int Width, int Height, int Radius);
+    void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
 
     // function to allocate a 2d array   
     static inline int** Alloc2DArray (int Columns, int Rows)

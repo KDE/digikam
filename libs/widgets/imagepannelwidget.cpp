@@ -98,7 +98,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     
     if (separateViewMode == SeparateViewDuplicate ||
         separateViewMode == SeparateViewAll)
-       {
+    {
        QPushButton *duplicateHorButton = new QPushButton( m_separateView );
        m_separateView->insert(duplicateHorButton, Digikam::ImageRegionWidget::SeparateViewDuplicateHorz);
        KGlobal::dirs()->addResourceType("duplicateheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -120,7 +120,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                "preview area to display original and target image "
                                                "at the same time. The target is duplicated from the original on "
                                                "the right of the red dashed line." ) );
-        }
+    }
         
     if (separateViewMode == SeparateViewNormal ||
         separateViewMode == SeparateViewAll)
@@ -221,10 +221,10 @@ void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
     QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
     
     if (separator)
-       {
+    {
        KSeparator *line = new KSeparator (Horizontal, this);
        vLayout->addWidget(line);
-       }
+    }
        
     vLayout->addWidget(w);
     vLayout->addStretch();
@@ -272,12 +272,12 @@ QRect ImagePannelWidget::getOriginalImageRegionToRender(void)
     return ( m_imageRegionWidget->getImageRegionToRender() );
 }
 
-QImage ImagePannelWidget::getOriginalClipImage(void)
+DImg ImagePannelWidget::getOriginalRegionImage(void)
 {
-    return ( m_imageRegionWidget->getImageRegionData() );
+    return ( m_imageRegionWidget->getImageRegionImage() );
 }
 
-void ImagePannelWidget::setPreviewImageData(QImage img)
+void ImagePannelWidget::setPreviewImage(DImg img)
 {
     m_imageRegionWidget->updatePreviewImage(&img);
 }    
@@ -299,10 +299,10 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
     updateSelectionInfo(rect);
     
     if (target)
-        {
+    {
         m_imageRegionWidget->backupPixmapRegion();
         emit signalOriginalClipFocusChanged();
-        }
+    }
 }
 
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
@@ -339,7 +339,19 @@ void ImagePannelWidget::writeSettings(void)
     config->writeEntry( "Separate View", m_separateView->selectedId() );
     config->sync();
 }
-    
+
+// FIXME remove these methods when all image plugins will be ported to DIMG.
+
+QImage ImagePannelWidget::getOriginalClipImage(void)
+{
+    return ( m_imageRegionWidget->getImageRegionData() );
+}
+
+void ImagePannelWidget::setPreviewImageData(QImage img)
+{
+    m_imageRegionWidget->updatePreviewImage(&img);
+}    
+
 }  // NameSpace Digikam
 
 #include "imagepannelwidget.moc"

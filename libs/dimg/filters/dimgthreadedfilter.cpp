@@ -47,7 +47,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, QString 
     
 void DImgThreadedFilter::initFilter(void)
 {            
-    m_destImage.create(m_orgImage.width(), m_orgImage.height(),
+    m_destImage = DImg(m_orgImage.width(), m_orgImage.height(),
                        m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     
     if (m_orgImage.width() && m_orgImage.height())

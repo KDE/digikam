@@ -3,7 +3,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdimgfilters.la
 
 libdimgfilters_la_SOURCES = bcgmodifier.cpp hslmodifier.cpp \
-	                        dimgimagefilters.cpp dimgthreadedfilter.cpp dimggaussianblur.cpp dimgsharpen.cpp
+	                    dimgimagefilters.cpp dimgthreadedfilter.cpp dimggaussianblur.cpp dimgsharpen.cpp
 
 libdimgfilters_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

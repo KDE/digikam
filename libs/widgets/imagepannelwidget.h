@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
 #include "digikam_export.h"
@@ -67,8 +68,8 @@ public:
     
     QRect  getOriginalImageRegion(void);
     QRect  getOriginalImageRegionToRender(void);
-    QImage getOriginalClipImage(void);
-    void   setPreviewImageData(QImage img);
+    DImg   getOriginalRegionImage(void);
+    void   setPreviewImage(DImg img);
     void   setPreviewImageWaitCursor(bool enable);
     void   setCenterImageRegionPosition(void);
     
@@ -83,6 +84,10 @@ public:
     void   setPanIconHighLightPoints(QPointArray pt);
     
     KProgress *progressBar(void) { return m_progressBar; };
+           
+    // FIXME remove these methods when all image plugins will be ported to DIMG.
+    QImage getOriginalClipImage(void);
+    void   setPreviewImageData(QImage img);
            
 public slots:
 

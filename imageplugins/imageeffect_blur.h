@@ -32,7 +32,7 @@ class KIntNumInput;
 namespace Digikam
 {
 class ImagePannelWidget;
-class GaussianBlur;
+class DImgGaussianBlur;
 }
 
 class ImageEffect_Blur : public KDialogBase
@@ -61,7 +61,7 @@ private:
             
     KIntNumInput *m_radiusInput;
     
-    Digikam::GaussianBlur      *m_threadedFilter;
+    Digikam::DImgGaussianBlur  *m_threadedFilter;
     
     Digikam::ImagePannelWidget *m_imagePreviewWidget;
     

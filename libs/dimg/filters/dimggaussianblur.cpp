@@ -48,22 +48,23 @@ DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, int radius)
 
 void DImgGaussianBlur::filterImage(void)
 {
-    gaussianBlurImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_radius);
+    gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                      m_orgImage.sixteenBit(), m_radius);
 }
 
 /** Function to apply the Gaussian Blur on an image*/
 
-void DImgGaussianBlur::gaussianBlurImage(uint *data, int Width, int Height, int Radius)
+void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
-/*    if (!data || !Width || !Height)
+    if (!data || !width || !height)
     {
        kdWarning() << ("DImgGaussianBlur::gaussianBlurImage: no image data available!")
                    << endl;
        return;
     }
 
-    if (Radius > 100) Radius = 100;
-    if (Radius <= 0) 
+    if (radius > 100) radius = 100;
+    if (radius <= 0)
     {
        m_destImage = m_orgImage;
        return;
@@ -75,7 +76,7 @@ void DImgGaussianBlur::gaussianBlurImage(uint *data, int Width, int Height, int 
     double       x, sd, factor, lnsd, lnfactor;
     register int i, j, n, h, w;
 
-    nKSize = 2 * Radius + 1;
+    nKSize = 2 * radius + 1;
     nCenter = nKSize / 2;
     int *Kernel = new int[nKSize];
 
@@ -97,124 +98,212 @@ void DImgGaussianBlur::gaussianBlurImage(uint *data, int Width, int Height, int 
     // previous pixel, so we sum with the other pixels that wasn't get.
     
     int nSumR, nSumG, nSumB, nCount, progress;
-    int nKernelWidth = Radius * 2 + 1;
-    Digikam::ImageFilters::imageData imagedata;
+    int nKernelWidth = radius * 2 + 1;
     
-    uint* pOutBits = (uint*)m_destImage.bits(); 
-    uint* pBlur    = new uint[Width*Height];
+    uchar* pOutBits = m_destImage.bits();
+    uchar* pBlur    = new uchar[m_destImage.numBytes()];
     
     // We need to copy our bits to blur bits
     
-    memcpy (pBlur, data, Width*Height*4);       
+    memcpy (pBlur, data, m_destImage.numBytes());
 
     // We need to alloc a 2d array to help us to store the values
     
-    int** arrMult = Alloc2DArray (nKernelWidth, 256);
+    int** arrMult = Alloc2DArray (nKernelWidth, sixteenBit ? 65536 : 256);
     
     for (i = 0; !m_cancel && (i < nKernelWidth); i++)
-        for (j = 0; !m_cancel && (j < 256); j++)
+        for (j = 0; !m_cancel && (j < (sixteenBit ? 65536 : 256)); j++)
             arrMult[i][j] = j * Kernel[i];
 
     // We need to initialize all the loop and iterator variables
     
     nSumR = nSumG = nSumB = nCount = i = j = 0;
-
+    unsigned short* data16     = (unsigned short*)data;
+    unsigned short* pBlur16    = (unsigned short*)pBlur;
+    unsigned short* pOutBits16 = (unsigned short*)pOutBits;
+    
     // Now, we enter in the main loop
     
-    for (h = 0; !m_cancel && (h < Height); h++)
+    for (h = 0; !m_cancel && (h < height); h++)
+    {
+        for (w = 0; !m_cancel && (w < width); w++, i+=4)
         {
-        for (w = 0; !m_cancel && (w < Width); w++, i++)
+            if (!sixteenBit)        // 8 bits image.
             {
-            // first of all, we need to blur the horizontal lines
-                
-            for (n = -Radius; !m_cancel && (n <= Radius); n++)
-               {
-               // if is inside...
-               if (IsInside (Width, Height, w + n, h))
+                uchar *org, *dst;
+    
+                // first of all, we need to blur the horizontal lines
+                    
+                for (n = -radius; !m_cancel && (n <= radius); n++)
+                {
+                    // if is inside...
+                    if (IsInside (width, height, w + n, h))
                     {
-                    // we points to the pixel
-                    j = i + n;
-                    
-                    // finally, we sum the pixels using a method similar to assigntables
-                    imagedata.raw = data[j];
-                    nSumR += arrMult[n + Radius][imagedata.channel.red];
-                    nSumG += arrMult[n + Radius][imagedata.channel.green];
-                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
-                    
-                    // we need to add to the counter, the kernel value
-                    nCount += Kernel[n + Radius];
+                        // we points to the pixel
+                        j = i + 4*n;
+
+                        // finally, we sum the pixels using a method similar to assigntables
+
+                        org = &data[j];
+                        nSumR += arrMult[n + radius][org[2]];
+                        nSumG += arrMult[n + radius][org[1]];
+                        nSumB += arrMult[n + radius][org[0]];
+
+                        // we need to add to the counter, the kernel value
+                        nCount += Kernel[n + radius];
                     }
                 }
+                    
+                if (nCount == 0) nCount = 1;                    
+                    
+                // now, we return to blur bits the horizontal blur values
+                dst    = &pBlur[i];
+                dst[2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
+                dst[1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
+                dst[0] = (uchar)CLAMP (nSumB / nCount, 0, 255);
                 
-            if (nCount == 0) nCount = 1;                    
-                
-            // now, we return to blur bits the horizontal blur values
-            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
-            pBlur[i]                = imagedata.raw;
-            
-            // ok, now we reinitialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
+                // ok, now we reinitialize the variables
+                nSumR = nSumG = nSumB = nCount = 0;
             }
+            else                 // 16 bits image.
+            {
+                unsigned short *org, *dst;
+    
+                // first of all, we need to blur the horizontal lines
+                    
+                for (n = -radius; !m_cancel && (n <= radius); n++)
+                {
+                    // if is inside...
+                    if (IsInside (width, height, w + n, h))
+                    {
+                        // we points to the pixel
+                        j = i + 4*n;
+
+                        // finally, we sum the pixels using a method similar to assigntables
+
+                        org = &data16[j];
+                        nSumR += arrMult[n + radius][org[2]];
+                        nSumG += arrMult[n + radius][org[1]];
+                        nSumB += arrMult[n + radius][org[0]];
+
+                        // we need to add to the counter, the kernel value
+                        nCount += Kernel[n + radius];
+                    }
+                }
+                    
+                if (nCount == 0) nCount = 1;                    
+                    
+                // now, we return to blur bits the horizontal blur values
+                dst    = &pBlur16[i];
+                dst[2] = (unsigned short)CLAMP (nSumR / nCount, 0, 65535);
+                dst[1] = (unsigned short)CLAMP (nSumG / nCount, 0, 65535);
+                dst[0] = (unsigned short)CLAMP (nSumB / nCount, 0, 65535);
+                
+                // ok, now we reinitialize the variables
+                nSumR = nSumG = nSumB = nCount = 0;
+            }
+        }
         
-        progress = (int) (((double)h * 50.0) / Height);
+        progress = (int) (((double)h * 50.0) / height);
         if ( progress%5 == 0 )
            postProgress( progress );   
-        }
+    }
 
     // getting the blur bits, we initialize position variables
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; !m_cancel && (w < Width); w++, i = w)
+    for (w = 0; !m_cancel && (w < width); w++, i = w*4)
+    {
+        for (h = 0; !m_cancel && (h < height); h++, i += width*4)
         {
-        for (h = 0; !m_cancel && (h < Height); h++, i += Width)
+            if (!sixteenBit)        // 8 bits image.
             {
-            // first of all, we need to blur the vertical lines
-            for (n = -Radius; !m_cancel && (n <= Radius); n++)
+                uchar *org, *dst;
+
+                // first of all, we need to blur the vertical lines
+                for (n = -radius; !m_cancel && (n <= radius); n++)
                 {
-                // if is inside...
-                if (IsInside(Width, Height, w, h + n))
+                    // if is inside...
+                    if (IsInside(width, height, w, h + n))
                     {
-                    // we points to the pixel
-                    j = i + n * Width;
-                      
-                    // finally, we sum the pixels using a method similar to assigntables
-                    imagedata.raw = pBlur[j];
-                    nSumR += arrMult[n + Radius][imagedata.channel.red];
-                    nSumG += arrMult[n + Radius][imagedata.channel.green];
-                    nSumB += arrMult[n + Radius][imagedata.channel.blue];
-                    
-                    // we need to add to the counter, the kernel value
-                    nCount += Kernel[n + Radius];
+                        // we points to the pixel
+                        j = i + n * 4 * width;
+                        
+                        // finally, we sum the pixels using a method similar to assigntables
+                        org = &pBlur[j];
+                        nSumR += arrMult[n + radius][org[2]];
+                        nSumG += arrMult[n + radius][org[1]];
+                        nSumB += arrMult[n + radius][org[0]];
+                        
+                        // we need to add to the counter, the kernel value
+                        nCount += Kernel[n + radius];
                     }
                 }
-                
-            if (nCount == 0) nCount = 1;                    
-                
-            // To preserve Alpha channel.
-            imagedata.raw = data[i];
-                
-            // now, we return to bits the vertical blur values
-            imagedata.channel.red   = (uchar)CLAMP (nSumR / nCount, 0, 255);
-            imagedata.channel.green = (uchar)CLAMP (nSumG / nCount, 0, 255);
-            imagedata.channel.blue  = (uchar)CLAMP (nSumB / nCount, 0, 255);
-            pOutBits[i]             = imagedata.raw;
-                
-            // ok, now we reinitialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
+                    
+                if (nCount == 0) nCount = 1;                    
+                    
+                // To preserve Alpha channel.
+                memcpy (&pOutBits[i], &data[i], 4);
+                    
+                // now, we return to bits the vertical blur values
+                dst    = &pOutBits[i];
+                dst[2] = (uchar)CLAMP (nSumR / nCount, 0, 255);
+                dst[1] = (uchar)CLAMP (nSumG / nCount, 0, 255);
+                dst[0] = (uchar)CLAMP (nSumB / nCount, 0, 255);
+                    
+                // ok, now we reinitialize the variables
+                nSumR = nSumG = nSumB = nCount = 0;
             }
+            else                 // 16 bits image.
+            {
+                unsigned short *org, *dst;
+
+                // first of all, we need to blur the vertical lines
+                for (n = -radius; !m_cancel && (n <= radius); n++)
+                {
+                    // if is inside...
+                    if (IsInside(width, height, w, h + n))
+                    {
+                        // we points to the pixel
+                        j = i + n * 4 * width;
+                        
+                        // finally, we sum the pixels using a method similar to assigntables
+                        org = &pBlur16[j];
+                        nSumR += arrMult[n + radius][org[2]];
+                        nSumG += arrMult[n + radius][org[1]];
+                        nSumB += arrMult[n + radius][org[0]];
+                        
+                        // we need to add to the counter, the kernel value
+                        nCount += Kernel[n + radius];
+                    }
+                }
+                    
+                if (nCount == 0) nCount = 1;                    
+                    
+                // To preserve Alpha channel.
+                memcpy (&pOutBits16[i], &data16[i], 8);
+                    
+                // now, we return to bits the vertical blur values
+                dst    = &pOutBits16[i];
+                dst[2] = (unsigned short)CLAMP (nSumR / nCount, 0, 65535);
+                dst[1] = (unsigned short)CLAMP (nSumG / nCount, 0, 65535);
+                dst[0] = (unsigned short)CLAMP (nSumB / nCount, 0, 65535);
+                    
+                // ok, now we reinitialize the variables
+                nSumR = nSumG = nSumB = nCount = 0;
+            }
+        }
         
-        progress = (int) (50.0 + ((double)w * 50.0) / Width);
+        progress = (int) (50.0 + ((double)w * 50.0) / width);
         if ( progress%5 == 0 )
            postProgress( progress );   
-        }
+    }
 
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);
     delete [] pBlur;
-    delete [] Kernel;*/
+    delete [] Kernel;
 }
 
 }  // NameSpace Digikam
