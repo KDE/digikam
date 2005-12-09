@@ -360,7 +360,10 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     }
     else 
     {
-        if ( m_image.create(imageWidth, imageHeight, imageData, sixteenBit, true) )
+        m_image.reset();
+        m_image = DImg(imageWidth, imageHeight, imageData, sixteenBit, true);
+
+        if ( !m_image.isNull() )
         {
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
