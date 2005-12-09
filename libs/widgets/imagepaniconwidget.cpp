@@ -18,10 +18,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdio>
-
 // Qt includes.
 
 #include <qregion.h>
@@ -39,7 +35,7 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
+#include "imageiface.h"
 
 // Local includes.
 
@@ -54,9 +50,10 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
 {
     m_moveSelection = false;
     m_separateView  = Digikam::ImageRegionWidget::SeparateViewVertical;
-    m_iface  = new ImageIface(w,h);
+    m_iface  = new ImageIface(w, h);
 
-    m_data   = m_iface->getPreviewData();
+    m_iface->getPreviewImage();
+
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
@@ -71,7 +68,6 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
 
 ImagePanIconWidget::~ImagePanIconWidget()
 {
-    delete [] m_data;
     delete m_iface;
     delete m_pixmap;
 }
@@ -119,10 +115,10 @@ void ImagePanIconWidget::setHighLightPoints(QPointArray pointsList)
 void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
 {
     if (targetDone)
-       {
+    {
        updatePixmap();          
        repaint(false);
-       }
+    }
     
     int x = ROUND( ((float)m_localRegionSelection.x() - (float)m_rect.x() ) * 
                    ( (float)m_iface->originalWidth() / (float)m_w ));
@@ -155,11 +151,11 @@ void ImagePanIconWidget::updatePixmap( void )
     // Drawing HighLighted points.
     
     if (!m_hightlightPoints.isEmpty())
-       {
+    {
        QPoint pt;
        
        for (uint i = 0 ; i < m_hightlightPoints.count() ; i++)
-          {
+       {
           pt = m_hightlightPoints.point(i);
           pt.setX((int)(pt.x() * (float)(m_w)/(float)m_iface->originalWidth()));
           pt.setY((int)(pt.y() * (float)(m_h)/(float)m_iface->originalHeight()));
@@ -171,8 +167,8 @@ void ImagePanIconWidget::updatePixmap( void )
           p.drawPoint(pt.x()+1, pt.y()+1);
           p.drawPoint(pt.x()-1, pt.y()+1);
           p.drawPoint(pt.x()+1, pt.y()-1);
-          }
-       }   
+       }
+    }   
     
     // Drawing selection border
     p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
@@ -182,7 +178,7 @@ void ImagePanIconWidget::updatePixmap( void )
                m_localRegionSelection.width()-2, m_localRegionSelection.height()-2);
     
     if (m_separateView == Digikam::ImageRegionWidget::SeparateViewVertical)
-        {
+    {
         p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(m_localRegionSelection.topLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.topLeft().y(),
@@ -193,9 +189,9 @@ void ImagePanIconWidget::updatePixmap( void )
                    m_localRegionSelection.topLeft().y()+1,
                    m_localRegionSelection.bottomLeft().x() + m_localRegionSelection.width()/2,
                    m_localRegionSelection.bottomLeft().y()-1);
-        }
+    }
     else if (m_separateView == Digikam::ImageRegionWidget::SeparateViewHorizontal)
-        {
+    {
         p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(m_localRegionSelection.topLeft().x(),
                    m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
@@ -206,7 +202,7 @@ void ImagePanIconWidget::updatePixmap( void )
                    m_localRegionSelection.topLeft().y() + m_localRegionSelection.height()/2,
                    m_localRegionSelection.topRight().x()-1,
                    m_localRegionSelection.topRight().y() + m_localRegionSelection.height()/2);
-        }
+    }
 
     p.end();
 }
@@ -220,29 +216,29 @@ void ImagePanIconWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton &&
          m_localRegionSelection.contains( e->x(), e->y() ) )
-       {
+    {
        m_xpos = e->x();
        m_ypos = e->y();
        m_moveSelection = true;
        setCursor( KCursor::sizeAllCursor() );           
        emit signalSelectionTakeFocus();
-       }
+    }
 }
 
 void ImagePanIconWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     if ( m_moveSelection ) 
-       {    
+    {    
        setCursor( KCursor::arrowCursor() );           
        regionSelectionMoved(true);
        m_moveSelection = false;
-       }
+    }
 }
 
 void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( m_moveSelection && e->state() == Qt::LeftButton )
-       {
+    {
        int newxpos = e->x();
        int newypos = e->y();
 
@@ -269,14 +265,14 @@ void ImagePanIconWidget::mouseMoveEvent ( QMouseEvent * e )
        repaint(false);
        regionSelectionMoved(false);
        return;
-       }        
+    }        
     else 
-       {
+    {
        if ( m_localRegionSelection.contains( e->x(), e->y() ) )
            setCursor( KCursor::handCursor() );           
        else
            setCursor( KCursor::arrowCursor() );           
-       }
+    }
 }
 
 void ImagePanIconWidget::slotSeparateViewToggled(int t)
@@ -289,4 +285,3 @@ void ImagePanIconWidget::slotSeparateViewToggled(int t)
 }  // NameSpace Digikam
 
 #include "imagepaniconwidget.moc"
-

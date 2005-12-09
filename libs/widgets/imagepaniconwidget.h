@@ -73,7 +73,6 @@ private:
 
     int          m_separateView;
     
-    uint        *m_data;
     int          m_w;
     int          m_h;
     
