@@ -161,7 +161,8 @@ General recommendations
 ========================================================================
 
 Use a decent editor which does auto-indentation/syntax-highlighting for you. 
-I personally use Emacs. There are excellent initializer scripts in the kdesdk
+I personally use Emacs (Renchi) or Kdevelop (Gilles).
+There are excellent initializer scripts in the kdesdk
 package for xemacs and vim which can substantially increase your productivity.
 
 Just to give a taste of what i can do with emacs (and kdesdk):
@@ -173,3 +174,11 @@ Just to give a taste of what i can do with emacs (and kdesdk):
 * go to corresponding definition/declaration with one keystroke
 * tab completion of variable/function names already declared.
 
+========================================================================
+Memory leak 
+========================================================================
+
+To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
+Try this command line to use with valgrind :
+
+valgrind --tool=memcheck --leak-check=full --error-limit=no digikam
