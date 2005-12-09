@@ -314,21 +314,25 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     m_histogramWidget->stopHistogramComputation();
     
     if (url.isEmpty())
-       {
+    {
        m_navigateBar->setFileName("");
        setEnabled(false);
        return;
-       }
+    }
 
     setEnabled(true);
     
     m_navigateBar->setFileName(url.filename());
     m_navigateBar->setButtonsState(itemType);
     m_selectionArea = selectionArea;
-        
+    m_image.reset();
+                
     if (!imageData && !imageWidth && !imageHeight)
     {
-        if ( m_image.load(url.path()) )
+
+        m_image = DImg(url.path());
+        
+        if ( !m_image.isNull() )
         {
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
@@ -354,13 +358,11 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
         else 
         {
             m_imageSelection.reset();
-            m_image.reset();
             m_histogramWidget->updateData(0L, 0, 0, false);
         }
     }
     else 
     {
-        m_image.reset();
         m_image = DImg(imageWidth, imageHeight, imageData, sixteenBit, true);
 
         if ( !m_image.isNull() )
@@ -387,7 +389,6 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
         else 
         {
             m_imageSelection.reset();
-            m_image.reset();
             m_histogramWidget->updateData(0L, 0, 0, false);
         }
     }
