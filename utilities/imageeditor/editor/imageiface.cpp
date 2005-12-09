@@ -138,9 +138,9 @@ DImg ImageIface::getPreviewImage()
         d->qpix.resize(d->previewWidth, d->previewHeight);
     }
 
-    return DImg::DImg(d->previewWidth, d->previewHeight, d->previewData,
-                     (d->previewBytesDepth==4) ? false : true,
-                      d->image.hasAlpha());
+    return DImg(d->previewWidth, d->previewHeight, d->previewData,
+                (d->previewBytesDepth==4) ? false : true,
+                 d->image.hasAlpha());
 }
 
 DImg ImageIface::getOriginalImage()
