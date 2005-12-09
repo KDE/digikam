@@ -77,11 +77,11 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_sixteenBits = i_sixteenBits;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = 0L;
-    m_sixteenBits        = i_sixteenBits;
 }
 
 // Constructor without image selection.
@@ -92,11 +92,11 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_sixteenBits        = false;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram((uchar*)i_data, i_w, i_h, false, this);
     m_selectionHistogram = 0L;
-    m_sixteenBits        = false;
 }
 
 // Constructor with image selection.
@@ -109,11 +109,11 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_sixteenBits        = i_sixteenBits;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
-    m_sixteenBits        = i_sixteenBits;
 }
 
 
@@ -126,11 +126,11 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool blinkComputation, bool statisticsVisible)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    m_sixteenBits        = false;
     setup(w, h, selectMode, blinkComputation, statisticsVisible);
 
     m_imageHistogram     = new ImageHistogram((uchar*)i_data, i_w, i_h, false, this);
     m_selectionHistogram = new ImageHistogram((uchar*)s_data, s_w, s_h, false, this);
-    m_sixteenBits        = false;
 }
 
 HistogramWidget::~HistogramWidget()
@@ -264,7 +264,8 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
                                  bool blinkComputation)
 {
     m_blinkComputation = blinkComputation;
-
+    m_sixteenBits      = i_sixteenBits;
+    
     // Remove old histogram data from memory.
     if (m_imageHistogram)
        delete m_imageHistogram;
