@@ -376,7 +376,7 @@ bool PNGLoader::load(const QString& filePath)
 
     imageWidth()  = width;
     imageHeight() = height;
-    imageData()   = (uchar *)data;
+    imageData()   = data;
     return true;
 }
 
