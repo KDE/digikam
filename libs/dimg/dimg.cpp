@@ -68,6 +68,7 @@ DImg::DImg()
 DImg::DImg(const QString& filePath)
     : m_priv(new DImgPrivate)
 {
+    reset();
     load(filePath);
 }
 
