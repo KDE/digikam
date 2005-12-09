@@ -658,7 +658,7 @@ DImg DImgInterface::getImage()
 {
     if (!d->image.isNull())
     {
-        return d->image.copy();
+        return d->image;
     }
     else
     {
