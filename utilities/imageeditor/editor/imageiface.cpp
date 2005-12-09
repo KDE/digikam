@@ -41,14 +41,10 @@ class ImageIfacePriv
 public:
 
     DImg          image;
-    uchar*        previewData;
+    DImg          previewImage;
 
     int           constrainWidth;
     int           constrainHeight;
-
-    int           previewWidth;
-    int           previewHeight;
-    int           previewBytesDepth;
 
     int           originalWidth;
     int           originalHeight;
@@ -66,19 +62,10 @@ ImageIface::ImageIface(int w, int h)
     d->constrainWidth     = w;
     d->constrainHeight    = h;
 
-    d->originalWidth      = 0;
-    d->originalHeight     = 0;
-    d->originalBytesDepth = 0;
-
-    d->previewWidth       = 0;
-    d->previewHeight      = 0;
-    d->previewData        = 0;
-    d->previewBytesDepth  = 0;
-
     d->originalWidth      = DImgInterface::instance()->origWidth();
     d->originalHeight     = DImgInterface::instance()->origHeight();
     d->originalBytesDepth = DImgInterface::instance()->bytesDepth();
-
+    
     d->qpix.setMask(d->qmask);
     d->qcheck.resize(8, 8);
 
@@ -93,18 +80,14 @@ ImageIface::ImageIface(int w, int h)
 
 ImageIface::~ImageIface()
 {
-    if (d->previewData) 
-        delete [] d->previewData;
-
     delete d;
 }
 
 DImg ImageIface::setPreviewImageSize(int w, int h)
 {
-    if (d->previewData) 
-        delete [] d->previewData;
+    if (!d->previewImage.isNull())
+        d->previewImage.reset();
 
-    d->previewData     = 0;
     d->constrainWidth  = w;
     d->constrainHeight = h;
 
@@ -113,7 +96,7 @@ DImg ImageIface::setPreviewImageSize(int w, int h)
 
 DImg ImageIface::getPreviewImage()
 {
-    if (!d->previewData) 
+    if (d->previewImage.isNull()) 
     {
         DImg im = DImgInterface::instance()->getImage();
 
@@ -124,23 +107,13 @@ DImg ImageIface::getPreviewImage()
         sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
 
         d->image = im.smoothScale(sz.width(), sz.height());
-
-        d->previewWidth      = d->image.width();
-        d->previewHeight     = d->image.height();
-        d->previewBytesDepth = d->image.bytesDepth();
-
-        d->previewData = new uchar[d->previewWidth * d->previewHeight * d->previewBytesDepth];
-
-        memcpy(d->previewData, d->image.bits(),
-               d->previewWidth * d->previewHeight * d->previewBytesDepth);
-
-        d->qmask.resize(d->previewWidth, d->previewHeight);
-        d->qpix.resize(d->previewWidth, d->previewHeight);
+        d->previewImage = d->image;
+        
+        d->qmask.resize(d->previewImage.width(), d->previewImage.height());
+        d->qpix.resize(d->previewImage.width(), d->previewImage.height());
     }
 
-    return DImg(d->previewWidth, d->previewHeight, d->previewData,
-                (d->previewBytesDepth==4) ? false : true,
-                 d->image.hasAlpha());
+    return (d->previewImage);
 }
 
 DImg ImageIface::getOriginalImage()
@@ -179,12 +152,12 @@ void ImageIface::putImageSelection(DImg& selection)
 
 int ImageIface::previewWidth()
 {
-    return d->previewWidth;
+    return d->previewImage.width();
 }
 
 int ImageIface::previewHeight()
 {
-    return d->previewHeight;
+    return d->previewImage.height();
 }
 
 int ImageIface::originalWidth()
@@ -264,7 +237,6 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
         }
 
         QPixmap pixImage = d->image.convertToPixmap();
-        //pixImage.setMask(d->qmask);
         bitBlt ( &d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false );
 
     }
@@ -277,10 +249,10 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 
 uint* ImageIface::getPreviewData()           
 {
-    if (!d->previewData) 
+    if (d->previewImage.isNull()) 
     {
         DImg im = DImgInterface::instance()->getImage();
-        
+
         if ( im.isNull() ) 
             return 0;
 
@@ -288,26 +260,13 @@ uint* ImageIface::getPreviewData()
         sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
 
         d->image = im.smoothScale(sz.width(), sz.height());
-        
-        d->previewWidth      = d->image.width();
-        d->previewHeight     = d->image.height();
-        d->previewBytesDepth = d->image.bytesDepth();
+        d->previewImage = d->image;
 
-        d->previewData = new uchar[d->previewWidth * d->previewHeight * d->previewBytesDepth];
-
-        memcpy(d->previewData, d->image.bits(),
-               d->previewWidth * d->previewHeight * d->previewBytesDepth);
-
-        d->qmask.resize(d->previewWidth, d->previewHeight);
-        d->qpix.resize(d->previewWidth, d->previewHeight);
+        d->qmask.resize(d->previewImage.width(), d->previewImage.height());
+        d->qpix.resize(d->previewImage.width(), d->previewImage.height());
     }
 
-    int size = d->previewWidth * d->previewHeight * d->previewBytesDepth;
-    
-    uchar* data = new uchar[size];
-    memcpy(data, d->previewData, size);
-    
-    return (uint*)data;       
+    return (uint*)d->previewImage.bits();
 }
 
 void ImageIface::putPreviewData(uint* data)  
@@ -341,12 +300,10 @@ uint* ImageIface::getOriginalData()
 
 uint* ImageIface::setPreviewSize(int w, int h)
 {
-    if (d->previewData) 
-        delete [] d->previewData;
-    
-    d->previewData     = 0;
-    d->constrainWidth  = w;
-    d->constrainHeight = h;
+    if (!d->previewImage.isNull())
+        d->previewImage.reset();
+
+    d->previewImage = DImg(w, h, d->image.sixteenBit(), d->image.hasAlpha());
     
     return (getPreviewData());
 }
