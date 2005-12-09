@@ -90,13 +90,12 @@ public:
     DImg();
     DImg(const QString& filePath);
     DImg(const DImg& image);
-    DImg& operator=(const DImg& image);
-    DImg(uint width, uint height, bool sixteenBit=false, bool alpha=false);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha=false);
     DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
    ~DImg();
+    
+    DImg& operator=(const DImg& image);
 
-    bool        create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
-    bool        create(uint width, uint height, bool sixteenBit, bool alpha=false);
     void        reset(void);
 
     bool        load(const QString& filePath);

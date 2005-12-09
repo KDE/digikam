@@ -77,6 +77,24 @@ DImg::DImg(const DImg& image)
     m_priv->ref();
 }
 
+DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
+    : m_priv(new DImgPrivate)
+{
+    init(width, height, 0L, sixteenBit, alpha);
+}
+
+DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
+    : m_priv(new DImgPrivate)
+{
+    init(width, height, data, sixteenBit, alpha);
+}
+
+DImg::~DImg()
+{
+    if (m_priv->deref())
+        delete m_priv;
+}
+
 DImg& DImg::operator=(const DImg& image)
 {
     if (m_priv == image.m_priv)
@@ -94,45 +112,6 @@ DImg& DImg::operator=(const DImg& image)
     return *this;
 }
 
-DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
-    : m_priv(new DImgPrivate)
-{
-    m_priv->null       = (width == 0) || (height == 0);
-    m_priv->width      = width;
-    m_priv->height     = height;
-    m_priv->sixteenBit = sixteenBit;
-    m_priv->alpha      = alpha;
-
-    if (sixteenBit)
-        m_priv->data   = new uchar[width*height*8];
-    else
-        m_priv->data   = new uchar[width*height*4];
-}
-
-DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
-    : m_priv(new DImgPrivate)
-{
-    init(width, height, data, sixteenBit, alpha);
-}
-
-DImg::~DImg()
-{
-    if (m_priv->deref())
-        delete m_priv;
-}
-
-bool DImg::create(uint width, uint height, bool sixteenBit, bool alpha)
-{
-    reset();
-    return ( init(width, height, 0, sixteenBit, alpha) );
-}
-
-bool DImg::create(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
-{
-    reset();
-    return ( init(width, height, data, sixteenBit, alpha) );
-}
-
 bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
 {
     m_priv->null       = (width == 0) || (height == 0);
@@ -144,7 +123,7 @@ bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alph
 
     if (sixteenBit)
     {
-        m_priv->data   = new uchar[width*height*8];
+        m_priv->data = new uchar[width*height*8];
         if (!m_priv->data)
             return false;
         if (data)
@@ -154,7 +133,7 @@ bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alph
     }
     else
     {
-        m_priv->data   = new uchar[width*height*4];
+        m_priv->data = new uchar[width*height*4];
         if (!m_priv->data)
             return false;
         if (data)
@@ -787,12 +766,17 @@ void DImg::detach()
     DImgPrivate* old = m_priv;
 
     m_priv = new DImgPrivate;
-    m_priv->null       = old->null;
-    m_priv->width      = old->width;
-    m_priv->height     = old->height;
-    m_priv->alpha      = old->alpha;
-    m_priv->sixteenBit = old->sixteenBit;
-    m_priv->attributes = old->attributes;
+    m_priv->null              = old->null;
+    m_priv->alpha             = old->alpha;
+    m_priv->sixteenBit        = old->sixteenBit;
+    m_priv->isReadOnly        = old->isReadOnly;
+    m_priv->width             = old->width;
+    m_priv->height            = old->height;
+    m_priv->attributes        = old->attributes;
+    m_priv->embeddedText      = old->embeddedText;
+    m_priv->ICCProfil         = old->ICCProfil;
+    m_priv->cameraModel       = old->cameraModel;
+    m_priv->cameraConstructor = old->cameraConstructor;
 
     // since qbytearrays are explicity shared, we need to make sure that they are
     // detached from any shared references
@@ -804,8 +788,7 @@ void DImg::detach()
 
     if (old->data)
     {
-        int size = m_priv->width * m_priv->height *
-                   (m_priv->sixteenBit ? 8 : 4);
+        int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
         m_priv->data = new uchar[size];
         memcpy(m_priv->data, old->data, size);
     }

@@ -62,14 +62,14 @@ public:
     unsigned int            width;
     unsigned int            height;
     
-    unsigned char*          data;
-    
-    QByteArray              ICCProfil;
-    
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
 
+    unsigned char*          data;
+    
+    QByteArray              ICCProfil;
+    
     /** Save informations about camera witch taking the picture. */
     QString                 cameraModel;
     QString                 cameraConstructor;
