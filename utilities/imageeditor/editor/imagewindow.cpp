@@ -80,6 +80,7 @@
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
 #include "tagspopupmenu.h"
+#include "iccsettingscontainer.h"
 
 ImageWindow* ImageWindow::imagewindow()
 {
@@ -102,6 +103,8 @@ ImageWindow::ImageWindow()
     m_isReadOnly            = false;
     m_dirtyImage            = false;
     m_view                  = 0L;
+
+    m_container             = new ICCSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -526,6 +529,18 @@ void ImageWindow::readSettings()
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
     m_viewHistogramAction->setCurrentItem(histogramType);
     slotViewHistogram(); // update
+
+    // Settings for Color Management stuff
+    config->setGroup("Color Management");
+
+    m_container->enableCMSetting = config->readBoolEntry("EnableCM");
+    m_container->askOrApplySetting = config->readBoolEntry("BehaviourICC");
+    m_container->BPCSetting = config->readBoolEntry("BPCAlgorithm");
+    m_container->renderingSetting = config->readNumEntry("RenderingIntent");
+    m_container->inputSetting = config->readPathEntry("InProfileFile");
+    m_container->workspaceSetting = config->readPathEntry("WorkProfileFile");
+    m_container->monitorSetting = config->readPathEntry("MonitorProfileFile");
+    m_container->proofSetting = config->readPathEntry("ProofProfileFile");
 }
 
 void ImageWindow::saveSettings()
@@ -567,7 +582,17 @@ void ImageWindow::slotLoadCurrent()
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        m_isReadOnly = m_canvas->load(m_urlCurrent.path());
+        // FIXME implement color management here
+        if (m_container->enableCMSetting)
+        {
+            kdDebug() << "enableCMSetting=true" << endl;
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_container, m_instance);
+        }
+        else
+        {
+            kdDebug() << "imagewindow.cpp line 594" << endl;
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path());
+        }
         
         m_rotatedOrFlipped = false;
 

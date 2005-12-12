@@ -45,6 +45,7 @@ class KSelectAction;
 
 class Canvas;
 class AlbumIconView;
+class ICCSettingsContainer;
 
 namespace Digikam
 {
@@ -149,6 +150,8 @@ private:
     static ImageWindow     *m_instance;
 
     Canvas                 *m_canvas;
+
+    ICCSettingsContainer   *m_container;
     
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.
