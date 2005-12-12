@@ -90,8 +90,7 @@ public:
     DImg();
     DImg(const QString& filePath);
     DImg(const DImg& image);
-    DImg(uint width, uint height, bool sixteenBit, bool alpha=false);
-    DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha=false);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0);
    ~DImg();
     
     DImg& operator=(const DImg& image);
@@ -181,7 +180,6 @@ private:
 
 private:
 
-    bool   init(uint width, uint height, uchar* data, bool sixteenBit, bool alpha);
     FORMAT fileFormat(const QString& filePath);
 
     friend class DImgLoader;

@@ -68,7 +68,6 @@ DImg::DImg()
 DImg::DImg(const QString& filePath)
     : m_priv(new DImgPrivate)
 {
-    reset();
     load(filePath);
 }
 
@@ -78,16 +77,31 @@ DImg::DImg(const DImg& image)
     m_priv->ref();
 }
 
-DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha)
+DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data)
     : m_priv(new DImgPrivate)
 {
-    init(width, height, 0L, sixteenBit, alpha);
-}
+    m_priv->null       = (width == 0) || (height == 0);
+    m_priv->width      = width;
+    m_priv->height     = height;
+    m_priv->sixteenBit = sixteenBit;
+    m_priv->alpha      = alpha;
 
-DImg::DImg(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
-    : m_priv(new DImgPrivate)
-{
-    init(width, height, data, sixteenBit, alpha);
+    if (sixteenBit)
+    {
+        m_priv->data = new uchar[width*height*8];
+        if (!m_priv->data)
+            return;
+        if (data)
+            memcpy(m_priv->data, data, width*height*8);
+    }
+    else
+    {
+        m_priv->data = new uchar[width*height*4];
+        if (!m_priv->data)
+            return;
+        if (data)
+            memcpy(m_priv->data, data, width*height*4); 
+    }
 }
 
 DImg::~DImg()
@@ -111,39 +125,6 @@ DImg& DImg::operator=(const DImg& image)
     m_priv->ref();
 
     return *this;
-}
-
-bool DImg::init(uint width, uint height, uchar* data, bool sixteenBit, bool alpha)
-{
-    m_priv->null       = (width == 0) || (height == 0);
-    m_priv->width      = width;
-    m_priv->height     = height;
-    m_priv->sixteenBit = sixteenBit;
-    m_priv->alpha      = alpha;
-    m_priv->data       = 0L;
-
-    if (sixteenBit)
-    {
-        m_priv->data = new uchar[width*height*8];
-        if (!m_priv->data)
-            return false;
-        if (data)
-            memcpy(m_priv->data, data, width*height*8);
-        else
-            memset(m_priv->data, 0, width*height*8);
-    }
-    else
-    {
-        m_priv->data = new uchar[width*height*4];
-        if (!m_priv->data)
-            return false;
-        if (data)
-            memcpy(m_priv->data, data, width*height*4); 
-        else
-            memset(m_priv->data, 0, width*height*4);
-    }
-    
-    return true;
 }
 
 void DImg::reset(void)

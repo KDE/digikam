@@ -363,7 +363,7 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     }
     else 
     {
-        m_image = DImg(imageWidth, imageHeight, imageData, sixteenBit, true);
+        m_image = DImg(imageWidth, imageHeight, sixteenBit, true, imageData);
 
         if ( !m_image.isNull() )
         {
