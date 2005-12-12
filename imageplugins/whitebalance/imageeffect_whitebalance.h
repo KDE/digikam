@@ -59,10 +59,6 @@ public:
 
     ImageEffect_WhiteBalance(QWidget* parent);
     ~ImageEffect_WhiteBalance();
-    
-protected:
-
-    void closeEvent(QCloseEvent *e);    
 
 private:    
     

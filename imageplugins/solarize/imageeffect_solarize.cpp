@@ -140,41 +140,47 @@ void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
 void ImageEffect_Solarize::slotEffect()
 {
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    Digikam::DImg image        = iface->getPreviewImage();
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
 
-    solarize(m_numInput->value(), image);
+    solarize(m_numInput->value(), data, w, h, sb);
 
-    iface->putPreviewImage(image);
+    iface->putPreviewImage(data);
+    delete [] data;
     m_previewWidget->update();
 }
 
 void ImageEffect_Solarize::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
 
-    if (!image.isNull())
-       {
-       solarize(m_numInput->value(), image);
-       iface.putOriginalImage(i18n("Solarize"), image);
-       }
+    if (data)
+    {
+       solarize(m_numInput->value(), data, w, h, sb);
+       iface->putOriginalImage(i18n("Solarize"), data);
+       delete [] data;
+    }
 
     kapp->restoreOverrideCursor();
     accept();
 }
 
-void ImageEffect_Solarize::solarize(double factor, Digikam::DImg& image)
+void ImageEffect_Solarize::solarize(double factor, uchar *data, int w, int h, bool sb)
 {
-    int w        = image.width();
-    int h        = image.height();
     bool stretch = true;
 
-    if (!image.sixteenBit())        // 8 bits image.
+    if (!sb)        // 8 bits image.
     {
         uint threshold = (uint)((100-factor)*(255+1)/100);
         threshold      = QMAX(1, threshold);
-        uchar *ptr = image.bits();
+        uchar *ptr = data;
         uchar  a, r, g, b;
 
         for (int x=0 ; x < w*h ; x++)
@@ -212,7 +218,7 @@ void ImageEffect_Solarize::solarize(double factor, Digikam::DImg& image)
     {
         uint threshold = (uint)((100-factor)*(65535+1)/100);
         threshold      = QMAX(1, threshold);
-        unsigned short *ptr = (unsigned short *)image.bits();
+        unsigned short *ptr = (unsigned short *)data;
         unsigned short  a, r, g, b;
 
         for (int x=0 ; x < w*h ; x++)

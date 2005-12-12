@@ -145,13 +145,15 @@ void ImageEffect_BWSepia::slotEffect()
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    Digikam::DImg image        = iface->getPreviewImage();
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
 
-    int type = m_typeCB->currentItem();
+    blackAndWhiteConversion(data, w, h, sb, m_typeCB->currentItem());
 
-    blackAndWhiteConversion(image, type);
-
-    iface->putPreviewImage(image);
+    iface->putPreviewImage(data);
+    delete [] data;
 
     m_previewWidget->update();
     kapp->restoreOverrideCursor();
@@ -160,13 +162,16 @@ void ImageEffect_BWSepia::slotEffect()
 void ImageEffect_BWSepia::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-
-    if (!image.isNull()) 
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
+    
+    if (data) 
     {
        int type = m_typeCB->currentItem();
-       blackAndWhiteConversion(image, type);
+       blackAndWhiteConversion(data, w, h, sb, type);
        QString name;
        
        switch (type)
@@ -212,7 +217,8 @@ void ImageEffect_BWSepia::slotOk()
           break;
        }
           
-       iface.putOriginalImage(name, image);
+       iface->putOriginalImage(name, data);
+       delete [] data;
     }
 
     kapp->restoreOverrideCursor();
@@ -222,16 +228,15 @@ void ImageEffect_BWSepia::slotOk()
 // This method is based on the Convert to Black & White tutorial (channel mixer method) 
 // from GimpGuru.org web site available at this url : http://www.gimpguru.org/Tutorials/Color2BW/
 
-void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type)
+void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by changeTonality() method.
-    int mul = image.sixteenBit() ? 255 : 1;
+    int mul = sb ? 255 : 1;
 
     switch (type)
     {
        case BWNeutral:
-          Digikam::ImageFilters::channelMixerImage(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(),                              // Image data.            
+          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.    
                    true,                                            // Monochrome.
                    0.3, 0.59 , 0.11,                                // Red channel gains.
@@ -240,8 +245,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type
           break;
        
        case BWGreenFilter:
-          Digikam::ImageFilters::channelMixerImage(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(),                              // Image data.            
+          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.1, 0.7, 0.2,                                   // Red channel gains.
@@ -250,8 +254,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type
           break;
        
        case BWOrangeFilter:
-          Digikam::ImageFilters::channelMixerImage(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(),                              // Image data.            
+          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.78, 0.22, 0.0,                                 // Red channel gains.
@@ -260,8 +263,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type
           break;
        
        case BWRedFilter:
-          Digikam::ImageFilters::channelMixerImage(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(),                              // Image data.            
+          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.9, 0.1, 0.0,                                   // Red channel gains.
@@ -270,8 +272,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type
           break;
        
        case BWYellowFilter:
-          Digikam::ImageFilters::channelMixerImage(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(),                              // Image data.            
+          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.6, 0.28, 0.12,                                 // Red channel gains.
@@ -280,28 +281,23 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(Digikam::DImg& image, int type
           break;
        
        case BWSepia:
-          Digikam::ImageFilters::changeTonality(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(), 162*mul, 132*mul, 101*mul);
+          Digikam::ImageFilters::changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
        
        case BWBrown:
-          Digikam::ImageFilters::changeTonality(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(), 129*mul, 115*mul, 104*mul);
+          Digikam::ImageFilters::changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
           break;
        
        case BWCold:
-          Digikam::ImageFilters::changeTonality(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(), 102*mul, 109*mul, 128*mul);
+          Digikam::ImageFilters::changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
           break;
        
        case BWSelenium:
-          Digikam::ImageFilters::changeTonality(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(), 122*mul, 115*mul, 122*mul);
+          Digikam::ImageFilters::changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
           break;
        
        case BWPlatinum:
-          Digikam::ImageFilters::changeTonality(image.bits(), image.width(), image.height(),
-                   image.sixteenBit(), 115*mul, 110*mul, 106*mul);
+          Digikam::ImageFilters::changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
     }
 }

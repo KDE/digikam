@@ -230,8 +230,13 @@ void ImageEffect_Blur::slotOk()
     m_radiusInput->setEnabled(false);
     
     Digikam::ImageIface iface(0, 0);
-    Digikam::DImg orgImage = iface.getOriginalImage();
-            
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
+    delete [] data;
     m_threadedFilter = new Digikam::DImgGaussianBlur(&orgImage, this, m_radiusInput->value());
 }
 
@@ -256,8 +261,8 @@ void ImageEffect_Blur::customEvent(QCustomEvent *event)
                 case PreviewRendering:
                 {
                     kdDebug() << "Preview Gaussian Blur completed..." << endl;
-                    Digikam::DImg *imDest = m_threadedFilter->getTargetImage();
-                    m_imagePreviewWidget->setPreviewImage(*imDest);
+                    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+                    m_imagePreviewWidget->setPreviewImage(imDest);
                     abortPreview();
                     break;
                 }
@@ -266,8 +271,8 @@ void ImageEffect_Blur::customEvent(QCustomEvent *event)
                 {
                     kdDebug() << "Final Gaussian Blur completed..." << endl;
                     Digikam::ImageIface iface(0, 0);
-                    iface.putOriginalImage(i18n("Gaussian Blur"),
-                                           *m_threadedFilter->getTargetImage());
+                    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+                    iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
                     kapp->restoreOverrideCursor();
                     accept();
                     break;

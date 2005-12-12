@@ -175,9 +175,14 @@ void ImagePlugin_Core::slotInvert()
     parentWidget()->setCursor( KCursor::waitCursor() );
         
     Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-    Digikam::ImageFilters::invertImage(image.bits(), image.width(), image.height(), image.sixteenBit());
-    iface.putOriginalImage(i18n("Invert"), image);
+
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+
+    Digikam::ImageFilters::invertImage(data, w, h, sixteenBit);
+    iface.putOriginalImage(i18n("Invert"), data);
 
     parentWidget()->setCursor( KCursor::arrowCursor()  );
 }

@@ -272,17 +272,12 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
 
 ChannelMixerDialog::~ChannelMixerDialog()
 {
-}
-
-void ChannelMixerDialog::closeEvent(QCloseEvent *e)
-{
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
-    e->accept();
 }
 
 void ChannelMixerDialog::slotResetCurrentChannel()
@@ -412,21 +407,23 @@ void ChannelMixerDialog::slotMonochromeActived(bool mono)
 
 void ChannelMixerDialog::slotEffect()
 {
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
-    Digikam::DImg image            = ifaceDest->getPreviewImage();
-
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
+    
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
     
-    m_destinationPreviewData = new uchar[image.numBytes()];
+    m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     if (m_monochrome->isChecked())
     {
-       Digikam::ImageFilters::channelMixerImage(image.bits(),
-                image.width(), image.height(), image.sixteenBit(),              // Image data.
+       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,                 // Image data.
                 m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,              // Red channel gains.
@@ -436,8 +433,7 @@ void ChannelMixerDialog::slotEffect()
     }
     else
     {
-       Digikam::ImageFilters::channelMixerImage(image.bits(),
-                image.width(), image.height(), image.sixteenBit(),              // Image data.
+       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,                 // Image data.
                 m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,                // Red channel gains.
@@ -446,25 +442,27 @@ void ChannelMixerDialog::slotEffect()
                 m_overExposureIndicatorBox->isChecked());
     }
     
-    ifaceDest->putPreviewImage(image);
+    iface->putPreviewImage(data);
     m_previewTargetWidget->updatePreview();
     
     // Update histogram.
-    memcpy (m_destinationPreviewData, image.bits(), image.numBytes());
-    m_histogramWidget->updateData(m_destinationPreviewData, image.width(), image.height(),
-                                  image.sixteenBit(), 0, 0, 0, false);
+    memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    delete [] data;
 }
 
 void ChannelMixerDialog::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface ifaceDest(0, 0);
-    Digikam::DImg image = ifaceDest.getOriginalImage();
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
 
     if (m_monochrome->isChecked())
     {
-       Digikam::ImageFilters::channelMixerImage(image.bits(),
-                image.width(), image.height(), image.sixteenBit(),  // Image data.
+       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,     // Image data.
                 m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
                 m_monochrome->isChecked(),                          // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,  // Red channel gains.
@@ -473,8 +471,7 @@ void ChannelMixerDialog::slotOk()
     }
     else
     {
-       Digikam::ImageFilters::channelMixerImage(image.bits(),
-                image.width(), image.height(), image.sixteenBit(),  // Image data.
+       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,     // Image data.
                 m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
                 m_monochrome->isChecked(),                          // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,    // Red channel gains.
@@ -482,9 +479,9 @@ void ChannelMixerDialog::slotOk()
                 m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);  // Blue channel gains.
     }
 
-    ifaceDest.putOriginalImage(i18n("Channel Mixer"), image);
+    iface->putOriginalImage(i18n("Channel Mixer"), data);
+    delete [] data;
     kapp->restoreOverrideCursor();
-
     accept();
 }
 

@@ -807,7 +807,7 @@ void DImg::crop(int x, int y, int w, int h)
     m_priv->height = image.height();
     
     delete [] m_priv->data;
-    m_priv->data   = newData;
+    m_priv->data = newData;
 }    
 
 void DImg::resize(int w, int h)

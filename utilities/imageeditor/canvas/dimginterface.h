@@ -111,14 +111,11 @@ public:
     void   getUndoHistory(QStringList &titles);
     void   getRedoHistory(QStringList &titles);
 
-    // New methods for image plugins using DImg.
-    DImg   getImage();
-    void   putImage(DImg& image);
-    void   putImage(const QString &caller, DImg& image);
-    DImg   getImageSelection();
-    void   putImageSelection(DImg& selection, bool saveUndo=true);
-    uchar* getImageData();
-    uchar* getImageSelectionData();
+    uchar* getImage();
+    void   putImage(uchar* data, int w, int h);
+    void   putImage(const QString &caller, uchar* data, int w, int h);
+    uchar* getImageSelection();
+    void   putImageSelection(uchar* data, bool saveUndo=true);
 
     // FIXME : remove these methods when all image plugins will be ported to DImg.
     uint*  getData();

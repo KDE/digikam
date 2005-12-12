@@ -1072,14 +1072,14 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     {
         if (m_currentItem->url().isValid())
         {
-            QRect sel        = m_canvas->getSelectedArea();
-            uchar* data      = Digikam::DImgInterface::instance()->getImageData();
-            int   width      = Digikam::DImgInterface::instance()->origWidth();
-            int   height     = Digikam::DImgInterface::instance()->origHeight();
-            bool  sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
+            QRect sel         = m_canvas->getSelectedArea();
+            uchar* data       = Digikam::DImgInterface::instance()->getImage();
+            int    width      = Digikam::DImgInterface::instance()->origWidth();
+            int    height     = Digikam::DImgInterface::instance()->origHeight();
+            bool   sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
             m_rightSidebar->itemChanged(m_currentItem->url(),
-                                       sel.isNull() ? 0 : &sel, 
-                                       data, width, height, sixteenBit);
+                                        sel.isNull() ? 0 : &sel, 
+                                        data, width, height, sixteenBit);
         }
     }    
 }
@@ -1214,11 +1214,17 @@ void ShowFoto::slotNewToolbarConfig()
 
 void ShowFoto::slotFilePrint()
 {
-    Digikam::DImg image = Digikam::DImgInterface::instance()->getImage();
+    uchar* ptr      = Digikam::DImgInterface::instance()->getImage();
+    int w           = Digikam::DImgInterface::instance()->origWidth();
+    int h           = Digikam::DImgInterface::instance()->origHeight();
+    bool hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
+    bool sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
 
-    if (image.isNull())
+    if (!ptr || !w || !h)
         return;
 
+    Digikam::DImg image(w, h, sixteenBit, hasAlpha, ptr);
+    
     KPrinter printer;
     printer.setDocName( m_currentItem->url().filename() );
     printer.setCreator( "ShowFoto");

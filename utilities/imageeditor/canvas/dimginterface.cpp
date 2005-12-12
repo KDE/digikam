@@ -654,20 +654,7 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
-DImg DImgInterface::getImage()
-{
-    if (!d->image.isNull())
-    {
-        return d->image;
-    }
-    else
-    {
-        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
-        return DImg();
-    }
-}
-
-uchar* DImgInterface::getImageData()
+uchar* DImgInterface::getImage()
 {
     if (!d->image.isNull())
     {
@@ -680,39 +667,39 @@ uchar* DImgInterface::getImageData()
     }
 }
 
-void DImgInterface::putImage(const QString &caller, DImg& image)
+void DImgInterface::putImage(const QString &caller, uchar* data, int w, int h)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImage(image);
+    putImage(data, w, h);
 }
 
-void DImgInterface::putImage(DImg& image)
+void DImgInterface::putImage(uchar* data, int w, int h)
 {
     if (d->image.isNull())
        return;
-
-    d->image = image.copy();
-    d->origWidth  = image.width();
-    d->origHeight = image.height();
+    
+    if (w != -1 && h != -1) 
+    {
+        // New image size !
+            
+        DImg im( w, h, d->image.sixteenBit(), d->image.hasAlpha(), data );
+        d->image = im.copy();
+        
+        d->origWidth  = im.width();
+        d->origHeight = im.height();
+    }
+    else 
+    {
+        // New image data size = original data size !
+        
+        uchar* ptr = d->image.bits();
+        memcpy(ptr, data, d->origWidth * d->origHeight * d->image.bytesDepth());
+    }
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
-DImg DImgInterface::getImageSelection()
-{
-    if (!d->selW || !d->selH)
-        return DImg::DImg();
-
-    if (!d->image.isNull())
-    {
-        DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-        return im;
-    }
-
-    return DImg::DImg();
-}
-
-uchar* DImgInterface::getImageSelectionData()
+uchar* DImgInterface::getImageSelection()
 {
     if (!d->selW || !d->selH)
         return 0;
@@ -720,21 +707,39 @@ uchar* DImgInterface::getImageSelectionData()
     if (!d->image.isNull())
     {
         DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-        return im.bits();
+
+        uchar *data = new uchar[im.width() * im.height() * im.bytesDepth()];
+        memcpy (data, im.bits(), im.width() * im.height() * im.bytesDepth());
+
+        return data;
     }
 
     return 0;
 }
 
-void DImgInterface::putImageSelection(DImg& selection, bool saveUndo)
+void DImgInterface::putImageSelection(uchar* data, bool saveUndo)
 {
-    if (selection.isNull() || d->image.isNull())
+    if (!data || d->image.isNull())
         return;
 
     if (saveUndo)
         d->undoMan->addAction(new UndoActionIrreversible(this));
-
-    d->image.bitBlt(selection, d->selX, d->selY, d->selW, d->selH);
+    
+    uchar *ptr  = d->image.bits();
+    uchar *pptr;
+    uchar *dptr = data;
+        
+    
+    for (int j = d->selY; j < (d->selY + d->selH); j++) 
+    {
+        pptr  = &ptr[ j * d->origWidth * d->image.bytesDepth() ] + 
+                d->selX * d->image.bytesDepth();
+        
+        for (int i = 0; i < d->selW*d->image.bytesDepth() ; i++) 
+        {
+            *(pptr++) = *(dptr++);
+        }
+    }
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }

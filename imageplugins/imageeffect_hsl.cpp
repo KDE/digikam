@@ -133,10 +133,10 @@ void ImageEffect_HSL::closeEvent(QCloseEvent *e)
 void ImageEffect_HSL::slotTimer()
 {
     if (m_timer)
-       {
+    {
        m_timer->stop();
        delete m_timer;
-       }
+    }
     
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL(timeout()),
@@ -156,7 +156,7 @@ void ImageEffect_HSL::slotUser1()
 
 void ImageEffect_HSL::slotEffect()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     double hu  = m_hInput->value();
     double sa  = m_sInput->value();    
     double lu  = m_lInput->value();
@@ -164,13 +164,20 @@ void ImageEffect_HSL::slotEffect()
     enableButtonOK( hu != 0.0 || sa != 0.0 || lu != 0.0);
     
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    Digikam::DImg preview = iface->getPreviewImage(); 
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
+    bool a                     = iface->previewHasAlpha();
+    Digikam::DImg preview(w, h, sb, a, data); 
+    delete [] data;
+    
     Digikam::HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
     cmod.applyHSL(preview);
-    iface->putPreviewImage(preview);
+    iface->putPreviewImage(preview.bits());
     
     m_previewWidget->update();
     kapp->restoreOverrideCursor();
@@ -185,14 +192,21 @@ void ImageEffect_HSL::slotOk()
     double lu  = m_lInput->value();
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    Digikam::DImg original = iface->getOriginalImage(); 
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool a                     = iface->originalHasAlpha();
+    bool sb                    = iface->originalSixteenBit();
+    Digikam::DImg original(w, h, sb, a, data);
+    delete [] data;
+
     Digikam::HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
     cmod.setLightness(lu);
     cmod.applyHSL(original);
 
-    iface->putOriginalImage(i18n("HSL Adjustments"), original);
+    iface->putOriginalImage(i18n("HSL Adjustments"), original.bits());
     kapp->restoreOverrideCursor();
     accept();
 }

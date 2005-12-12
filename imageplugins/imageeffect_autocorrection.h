@@ -70,7 +70,7 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
     
-    void autoCorrection(Digikam::DImg& image, int type);
+    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QPixmap previewEffectPic(QString name);
 
 private slots:

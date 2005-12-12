@@ -370,17 +370,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 {
-}
-
-void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
-{
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
-    e->accept();
 }
 
 void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
@@ -389,24 +384,27 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
 
     // Create an histogram of original image.     
 
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(image.bits(), 
-                                             image.width(), image.height(), image.sixteenBit());
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int width                  = iface->originalWidth();
+    int height                 = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
+    
+    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, width, height, sb);
        
     // Calculate optimal exposition and black level 
     
     int stop, i, scale, w, h;
     double black, expo, sum;
     
-    w = image.width()  / 400;
-    h = image.height() / 400;
+    w = width  / 400;
+    h = height / 400;
     scale = QMAX(w, h);
     scale = QMAX(1, scale);
     
     // Cutoff at 0.5% of the histogram.
     
-    stop = ((uint)(image.width() / scale)*(uint)(image.height() / scale)) / 200;
+    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
     
     for (i = m_rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
@@ -416,7 +414,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     
     // Cutoff at 0.5% of the histogram. 
     
-    stop = ((uint)(image.width() / scale)*(uint)(image.height() / scale)) / 200;
+    stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
     
     for (i = 1, sum = 0; (i < m_rgbMax) && (sum < stop); i++)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
@@ -430,6 +428,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     m_exposureInput->setValue(expo);        
 
     delete histogram;
+    delete [] data;
     
     parentWidget()->setCursor( KCursor::arrowCursor()  );
     slotEffect();  
@@ -621,16 +620,19 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 
 void ImageEffect_WhiteBalance::slotEffect()
 {
-    Digikam::ImageIface* ifaceDest = m_previewTargetWidget->imageIface();
-    Digikam::DImg image            = ifaceDest->getPreviewImage();
-
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
+    
     // Create the new empty destination image data space.
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-    m_destinationPreviewData = new uchar[image.numBytes()];
+    m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Update settings
     m_temperature = m_temperatureInput->value()/1000.0;
@@ -650,22 +652,25 @@ void ImageEffect_WhiteBalance::slotEffect()
     setRGBmult();
        
     // Apply White balance adjustments.
-    whiteBalance(image.bits(), image.width(), image.height(), image.sixteenBit());
+    whiteBalance(data, w, h, sb);
            
-    ifaceDest->putPreviewImage(image);    
+    iface->putPreviewImage(data);
     m_previewTargetWidget->updatePreview();
     
     // Update histogram.
-    memcpy (m_destinationPreviewData, image.bits(), image.numBytes());
-    m_histogramWidget->updateData(m_destinationPreviewData, image.width(), image.height(),
-                                  image.sixteenBit(), 0, 0, 0, false);
+    memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    delete [] data;
 }
 
 void ImageEffect_WhiteBalance::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface ifaceDest(0, 0);
-    Digikam::DImg image = ifaceDest.getOriginalImage();
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
             
     // Update settings
     m_temperature = m_temperatureInput->value()/1000.0;
@@ -686,9 +691,10 @@ void ImageEffect_WhiteBalance::slotOk()
     setRGBmult();
        
     // Apply White balance adjustments.
-    whiteBalance(image.bits(), image.width(), image.height(), image.sixteenBit());
+    whiteBalance(data, w, h, sb);
 
-    ifaceDest.putOriginalImage(i18n("White Balance"), image);
+    iface->putOriginalImage(i18n("White Balance"), data);
+    delete [] data;
     kapp->restoreOverrideCursor();
     accept();       
 }

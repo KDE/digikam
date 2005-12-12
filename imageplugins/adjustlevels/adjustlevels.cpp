@@ -75,7 +75,13 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
                                   true, true, false)
 {
     Digikam::ImageIface iface(0, 0);
-    m_originalImage = iface.getOriginalImage();
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    m_originalImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
+    delete [] data;
 
     m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
     m_levels = new Digikam::ImageLevels(m_originalImage.sixteenBit());
@@ -371,35 +377,30 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
 
 AdjustLevelDialog::~AdjustLevelDialog()
 {
-}
-
-void AdjustLevelDialog::closeEvent(QCloseEvent *e)
-{
     delete m_histogramWidget;
     delete m_levels;
-    e->accept();
 }
 
 void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
 {
     if ( m_pickBlack->isOn() )
-       {
+    {
        // Black tonal levels point.
        m_levels->levelsBlackToneAdjustByColors(m_channelCB->currentItem(), color);      
        m_pickBlack->setOn(!release);
-       }
+    }
     else if ( m_pickGray->isOn() )
-       {
+    {
        // Gray tonal levels point.
        m_levels->levelsGrayToneAdjustByColors(m_channelCB->currentItem(), color);      
        m_pickGray->setOn(!release);
-       }
+    }
     else if ( m_pickWhite->isOn() )
-       {
+    {
        // White tonal levels point.
        m_levels->levelsWhiteToneAdjustByColors(m_channelCB->currentItem(), color);      
        m_pickWhite->setOn(!release);
-       }
+    }
     else
        m_histogramWidget->setHistogramGuideByColor(color);
 
@@ -516,11 +517,9 @@ void AdjustLevelDialog::slotEffect()
     uchar* desData;
 
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
-    Digikam::DImg image        = iface->getPreviewImage();
-
-    uchar *orgData = image.bits();
-    int w          = image.width();
-    int h          = image.height();
+    uchar *orgData             = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
 
     // Create the new empty destination image data space.
     if (m_histoSegments == 65535)
@@ -534,14 +533,10 @@ void AdjustLevelDialog::slotEffect()
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    if (m_histoSegments == 65535)
-       memcpy (orgData, desData, w*h*8);
-    else
-       memcpy (orgData, desData, w*h*4);
-
-    iface->putPreviewImage(image);
+    iface->putPreviewImage(desData);
     m_previewTargetWidget->updatePreview();
 
+    delete [] orgData;
     delete [] desData;
 }
 
@@ -550,12 +545,10 @@ void AdjustLevelDialog::slotOk()
     uchar* desData;
 
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-
-    uchar *orgData = image.bits();
-    int w          = image.width();
-    int h          = image.height();
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *orgData             = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
 
     // Create the new empty destination image data space.
     if (m_histoSegments == 65535)
@@ -569,14 +562,10 @@ void AdjustLevelDialog::slotOk()
     // Apply the lut to the image.
     m_levels->levelsLutProcess(orgData, desData, w, h);
 
-    if (m_histoSegments == 65535)
-       memcpy (orgData, desData, w*h*8);
-    else
-       memcpy (orgData, desData, w*h*4);
-
-    iface.putOriginalImage(i18n("Adjust Level"), image);
+    iface->putOriginalImage(i18n("Adjust Level"), desData);
     kapp->restoreOverrideCursor();
 
+    delete [] orgData;
     delete [] desData;
     accept();
 }

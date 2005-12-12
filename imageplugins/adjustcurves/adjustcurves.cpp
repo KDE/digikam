@@ -75,7 +75,13 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                   true, true, false)
 {
     Digikam::ImageIface iface(0, 0);
-    m_originalImage = iface.getOriginalImage();
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    m_originalImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
+    delete [] data;
 
     m_histoSegments = m_originalImage.sixteenBit() ? 65535 : 255;
     m_curves = new Digikam::ImageCurves(m_originalImage.sixteenBit());
@@ -295,13 +301,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
 AdjustCurveDialog::~AdjustCurveDialog()
 {
-}
-
-void AdjustCurveDialog::closeEvent(QCloseEvent *e)
-{
     delete m_curvesWidget;
     delete m_curves;
-    e->accept();
 }
 
 void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
@@ -372,11 +373,9 @@ void AdjustCurveDialog::slotEffect()
     uchar* desData;
 
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
-    Digikam::DImg image        = iface->getPreviewImage();
-
-    uchar *orgData = image.bits();
-    int w          = image.width();
-    int h          = image.height();
+    uchar *orgData             = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
 
     // Create the new empty destination image data space.
     if (m_histoSegments == 65535)
@@ -390,14 +389,10 @@ void AdjustCurveDialog::slotEffect()
     // Apply the lut to the image.
     m_curves->curvesLutProcess(orgData, desData, w, h);
 
-    if (m_histoSegments == 65535)
-       memcpy (orgData, desData, w*h*8);
-    else
-       memcpy (orgData, desData, w*h*4);
-
-    iface->putPreviewImage(image);
+    iface->putPreviewImage(desData);
     m_previewTargetWidget->updatePreview();
 
+    delete [] orgData;
     delete [] desData;
 }
 
@@ -406,13 +401,11 @@ void AdjustCurveDialog::slotOk()
     uchar* desData;
 
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
-
-    uchar *orgData = image.bits();
-    int w          = image.width();
-    int h          = image.height();
-
+    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    uchar *orgData             = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    
     // Create the new empty destination image data space.
     if (m_histoSegments == 65535)
        desData = new uchar[w*h*8];
@@ -425,14 +418,10 @@ void AdjustCurveDialog::slotOk()
     // Apply the lut to the image.
     m_curves->curvesLutProcess(orgData, desData, w, h);
 
-    if (m_histoSegments == 65535)
-       memcpy (orgData, desData, w*h*8);
-    else
-       memcpy (orgData, desData, w*h*4);
-
-    iface.putOriginalImage(i18n("Adjust Curve"), image);
+    iface->putOriginalImage(i18n("Adjust Curve"), desData);
     kapp->restoreOverrideCursor();
 
+    delete [] orgData;
     delete [] desData;
     accept();
 }

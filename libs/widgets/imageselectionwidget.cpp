@@ -89,8 +89,15 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    m_iface   = new ImageIface(w, h);
-    m_preview = m_iface->getPreviewImage();
+    m_iface         = new ImageIface(w, h);
+    uchar *data     = m_iface->getPreviewImage();
+    int width       = m_iface->previewWidth();
+    int height      = m_iface->previewHeight();
+    bool sixteenBit = m_iface->previewSixteenBit();
+    bool hasAlpha   = m_iface->previewHasAlpha();
+    m_preview       = DImg(width, height, sixteenBit, hasAlpha, data);
+    delete [] data;
+    
     m_pixmap  = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_preview.width()/2, h/2-m_preview.height()/2, m_preview.width(), m_preview.height());
@@ -120,10 +127,18 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
 {
     delete m_pixmap;
 
-    int w     = e->size().width();
-    int h     = e->size().height();
-    m_preview = m_iface->setPreviewImageSize(w, h);
-    m_pixmap  = new QPixmap(w, h);
+    int w           = e->size().width();
+    int h           = e->size().height();
+    
+    uchar *data     = m_iface->setPreviewImageSize(w, h);
+    int width       = m_iface->previewWidth();
+    int height      = m_iface->previewHeight();
+    bool sixteenBit = m_iface->previewSixteenBit();
+    bool hasAlpha   = m_iface->previewHasAlpha();
+    m_preview       = DImg(width, height, sixteenBit, hasAlpha, data);
+    delete [] data;
+    
+    m_pixmap = new QPixmap(w, h);
 
     m_rect = QRect(w/2-m_preview.width()/2, h/2-m_preview.height()/2, m_preview.width(), m_preview.height());
     realToLocalRegion();

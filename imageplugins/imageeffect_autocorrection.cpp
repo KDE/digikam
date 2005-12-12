@@ -139,12 +139,16 @@ void ImageEffect_AutoCorrection::slotEffect()
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-    Digikam::DImg image        = iface->getPreviewImage();
+    uchar *data                = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
 
-    autoCorrection(image, m_typeCB->currentItem());
+    autoCorrection(data, w, h, sb, m_typeCB->currentItem());
 
-    iface->putPreviewImage(image);
-
+    iface->putPreviewImage(data);
+    delete [] data;
+    
     m_previewWidget->update();
     kapp->restoreOverrideCursor();
 }
@@ -152,13 +156,16 @@ void ImageEffect_AutoCorrection::slotEffect()
 void ImageEffect_AutoCorrection::slotOk()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface iface(0, 0);
-    Digikam::DImg image = iface.getOriginalImage();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    uchar *data                = iface->getOriginalImage();
+    int w                      = iface->originalWidth();
+    int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
 
-    if (!image.isNull())
+    if (data)
     {
        int type = m_typeCB->currentItem();
-       autoCorrection(image, type);
+       autoCorrection(data, w, h, sb, type);
        QString name;
        
        switch (type)
@@ -180,31 +187,32 @@ void ImageEffect_AutoCorrection::slotOk()
           break;
        }
                                                   
-       iface.putOriginalImage(name, image);
+       iface->putOriginalImage(name, data);
+       delete [] data;
     }
 
     kapp->restoreOverrideCursor();
     accept();
 }
 
-void ImageEffect_AutoCorrection::autoCorrection(Digikam::DImg& image, int type)
+void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool sb, int type)
 {
     switch (type)
     {
        case AutoLevelsCorrection:
-          Digikam::ImageFilters::autoLevelsCorrectionImage(image.bits(), image.width(), image.height(), image.sixteenBit());
+          Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h, sb);
           break;
        
        case NormalizeCorrection:
-          Digikam::ImageFilters::normalizeImage(image.bits(), image.width(), image.height(), image.sixteenBit());
+          Digikam::ImageFilters::normalizeImage(data, w, h, sb);
           break;
        
        case EqualizeCorrection:
-          Digikam::ImageFilters::equalizeImage(image.bits(), image.width(), image.height(), image.sixteenBit());
+          Digikam::ImageFilters::equalizeImage(data, w, h, sb);
           break;
        
        case StretchContrastCorrection:
-          Digikam::ImageFilters::stretchContrastImage(image.bits(), image.width(), image.height(), image.sixteenBit());
+          Digikam::ImageFilters::stretchContrastImage(data, w, h, sb);
           break;
     }
 }

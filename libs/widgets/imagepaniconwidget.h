@@ -80,6 +80,8 @@ private:
     int          m_ypos;
 
     bool         m_moveSelection;
+
+    uchar *      m_data;
     
     QRect        m_rect;                    
     QRect        m_regionSelection;         // Original size image selection.

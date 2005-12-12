@@ -77,7 +77,7 @@ private:
     
     Digikam::ImageWidget *m_previewWidget;
     
-    void blackAndWhiteConversion(Digikam::DImg& image, int type);
+    void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     QPixmap previewEffectPic(QString name);
 
 private slots:

@@ -55,7 +55,7 @@ public:
 
 protected:
 
-    void solarize(double factor, Digikam::DImg& image);
+    void solarize(double factor, uchar *data, int w, int h, bool sb);
 
     void closeEvent(QCloseEvent *e);
 

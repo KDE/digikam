@@ -66,7 +66,14 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     viewport()->setMouseTracking(true);
 
     ImageIface iface(0, 0);
-    m_img = iface.getOriginalImage();
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    m_img = DImg(w, h, sixteenBit, hasAlpha ,data);
+    delete [] data;
+    
     updateOriginalImage();
 }
 

@@ -58,7 +58,9 @@ protected:
 
 private:
 
-    DImg        m_preview;
+    uchar      *m_data;
+    int         m_w;
+    int         m_h;
 
     QRect       m_rect;
 

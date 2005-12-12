@@ -828,15 +828,15 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         m_rotatedOrFlipped = false;
         
     if (m_urlCurrent.isValid())
-        {
+    {
         KURL u(m_urlCurrent.directory());
         PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
         
-        QRect sel           = m_canvas->getSelectedArea();
-        uchar* data         = Digikam::DImgInterface::instance()->getImageData();
-        int   width         = Digikam::DImgInterface::instance()->origWidth();
-        int   height        = Digikam::DImgInterface::instance()->origHeight();
-        bool  sixteenBit    = Digikam::DImgInterface::instance()->sixteenBit();
+        QRect  sel          = m_canvas->getSelectedArea();
+        uchar* data         = Digikam::DImgInterface::instance()->getImage();
+        int    width        = Digikam::DImgInterface::instance()->origWidth();
+        int    height       = Digikam::DImgInterface::instance()->origHeight();
+        bool   sixteenBit   = Digikam::DImgInterface::instance()->sixteenBit();
         AlbumIconItem* item = 0;
         
         if (palbum)
@@ -845,7 +845,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         m_rightSidebar->itemChanged(m_urlCurrent.url(), m_view, item,
                                    sel.isNull() ? 0 : &sel, 
                                    data, width, height, sixteenBit);
-        }        
+    }
 }
 
 void ImageWindow::slotSelected(bool val)
@@ -944,10 +944,16 @@ void ImageWindow::slotDeleteCurrentItem()
 
 void ImageWindow::slotFilePrint()
 {
-    Digikam::DImg image = Digikam::DImgInterface::instance()->getImage();
+    uchar* ptr      = Digikam::DImgInterface::instance()->getImage();
+    int w           = Digikam::DImgInterface::instance()->origWidth();
+    int h           = Digikam::DImgInterface::instance()->origHeight();
+    bool hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
+    bool sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
 
-    if (image.isNull())
+    if (!ptr || !w || !h)
         return;
+
+    Digikam::DImg image(w, h, sixteenBit, hasAlpha, ptr);
 
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );

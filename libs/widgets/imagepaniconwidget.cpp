@@ -52,8 +52,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
     m_separateView  = Digikam::ImageRegionWidget::SeparateViewVertical;
     m_iface  = new ImageIface(w, h);
 
-    m_iface->getPreviewImage();
-
+    m_data   = m_iface->getPreviewImage();
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
@@ -68,6 +67,7 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
 
 ImagePanIconWidget::~ImagePanIconWidget()
 {
+    delete [] m_data;
     delete m_iface;
     delete m_pixmap;
 }

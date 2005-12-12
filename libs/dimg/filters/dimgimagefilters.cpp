@@ -867,8 +867,8 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 
     DImg orgImage(width, height, data, sixteenBit);
     Digikam::DImgGaussianBlur *filter = new Digikam::DImgGaussianBlur(&orgImage, 0L, radius);
-    DImg *imDest = filter->getTargetImage();
-    memcpy( data, imDest->bits(), imDest->numBytes() );
+    DImg imDest = filter->getTargetImage();
+    memcpy( data, imDest.bits(), imDest.numBytes() );
     delete filter;
 }
 
@@ -888,8 +888,8 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
 
     DImg orgImage(width, height, data, sixteenBit);
     Digikam::DImgSharpen *filter = new Digikam::DImgSharpen(&orgImage, 0L, radius);
-    DImg *imDest = filter->getTargetImage();
-    memcpy( data, imDest->bits(), imDest->numBytes() );
+    DImg imDest = filter->getTargetImage();
+    memcpy( data, imDest.bits(), imDest.numBytes() );
     delete filter;
 }
 

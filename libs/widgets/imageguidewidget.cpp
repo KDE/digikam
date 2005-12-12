@@ -60,10 +60,15 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    m_iface   = new ImageIface(w, h);
-    m_preview = m_iface->getPreviewImage();
-    m_w       = m_preview.width();
-    m_h       = m_preview.height();
+    m_iface         = new ImageIface(w, h);
+    uchar *data     = m_iface->getPreviewImage();
+    m_w             = m_iface->previewWidth();
+    m_h             = m_iface->previewHeight();
+    bool sixteenBit = m_iface->previewSixteenBit();
+    bool hasAlpha   = m_iface->previewHasAlpha();
+    m_preview       = DImg(m_w, m_h, sixteenBit, hasAlpha, data);
+    delete [] data;
+
     m_pixmap  = new QPixmap(w, h);
     m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 
@@ -102,13 +107,14 @@ DColor ImageGuideWidget::getSpotColor(void)
 {
     // Get cross position in real image.
     QPoint currentPointPosition = getSpotPosition();
-
-    DImg image = m_iface->getOriginalImage();
+    int bytesDepth = m_iface->originalSixteenBit() ? 8 : 4;
+    uchar *data    = m_iface->getOriginalImage();
     
-    uchar *currentPointData = image.bits() + currentPointPosition.x()*image.bytesDepth() +
-                             (m_iface->originalWidth() * currentPointPosition.y() * image.bytesDepth());
+    uchar *currentPointData = data + currentPointPosition.x()*bytesDepth +
+                             (m_iface->originalWidth() * currentPointPosition.y() * bytesDepth);
 
-    DColor currentPointColor(currentPointData, image.sixteenBit());
+    DColor currentPointColor(currentPointData, m_iface->originalSixteenBit());
+    delete [] data;
 
     return(currentPointColor);
 }
@@ -224,9 +230,14 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     int old_w = m_w;
     int old_h = m_h;
 
-    m_preview = m_iface->setPreviewImageSize(w, h);
-    m_w       = m_preview.width();
-    m_h       = m_preview.height();
+    uchar *data     = m_iface->setPreviewImageSize(w, h);
+    m_w             = m_iface->previewWidth();
+    m_h             = m_iface->previewHeight();
+    bool sixteenBit = m_iface->previewSixteenBit();
+    bool hasAlpha   = m_iface->previewHasAlpha();
+    m_preview       = DImg(m_w, m_h, sixteenBit, hasAlpha, data);
+    delete [] data;
+
     m_pixmap  = new QPixmap(w, h);
     m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
 

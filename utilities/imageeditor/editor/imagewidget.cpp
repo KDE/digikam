@@ -19,10 +19,6 @@
  * 
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdio>
-
 // Qt includes.
 
 #include <qregion.h>
@@ -42,14 +38,16 @@ ImageWidget::ImageWidget(int w, int h, QWidget *parent)
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
 
-    m_iface   = new ImageIface(w, h);
-    m_preview = m_iface->getPreviewImage();
-    m_rect    = QRect(w/2 - m_preview.width()/2, h/2 - m_preview.height()/2, 
-                      m_preview.width(), m_preview.height());    
+    m_iface = new ImageIface(w, h);
+    m_data = m_iface->getPreviewImage();
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
 }
 
 ImageWidget::~ImageWidget()
 {
+    delete [] m_data;
     delete m_iface;
 }
 
@@ -75,11 +73,13 @@ void ImageWidget::paintEvent(QPaintEvent *)
 
 void ImageWidget::resizeEvent(QResizeEvent * e)
 {
-    int w     = e->size().width();
-    int h     = e->size().height();
-    m_preview = m_iface->setPreviewImageSize(w, h);
-    m_rect    = QRect(w/2 - m_preview.width()/2, h/2 - m_preview.height()/2, 
-                      m_preview.width(), m_preview.height());    
+    int w  = e->size().width();
+    int h  = e->size().height();
+    m_data = m_iface->setPreviewImageSize(w, h);
+    m_w    = m_iface->previewWidth();
+    m_h    = m_iface->previewHeight();
+
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
     emit signalResized();
 }
 
