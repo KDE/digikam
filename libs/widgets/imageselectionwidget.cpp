@@ -616,64 +616,34 @@ void ImageSelectionWidget::updatePixmap(void)
     int ty = m_localRegionSelection.top()    - m_rect.top();
     int by = m_localRegionSelection.bottom() - m_rect.top();
 
-    DImg image = m_preview.copy();
+    QImage image = m_preview.copyQImage();
 
-    if (!image.sixteenBit())               // 8 bits image.
+    uchar* ptr = image.bits();
+    uchar  r, g, b, a;
+
+    for (uint j=0 ; j < m_preview.height() ; j++)
     {
-        uchar* ptr = image.bits();
-        uchar  r, g, b, a;
-
-        for (uint j=0 ; j < m_preview.height() ; j++)
+        for (uint i=0 ; i < m_preview.width() ; i++)
         {
-            for (uint i=0 ; i < m_preview.width() ; i++)
+            if (i < lx || i >= rx || j < ty || j >= by)
             {
-                if (i < lx || i >= rx || j < ty || j >= by)
-                {
-                    a = (*ptr >> 24) & 0xFF;
-                    r = (*ptr >> 16) & 0xFF;
-                    g = (*ptr >> 8)  & 0xFF;
-                    b = (*ptr)       & 0xFF;
+                a = (*ptr >> 24) & 0xFF;
+                r = (*ptr >> 16) & 0xFF;
+                g = (*ptr >> 8)  & 0xFF;
+                b = (*ptr)       & 0xFF;
 
-                    r += (uchar)((RCOL8 - r) * OPACITY);
-                    g += (uchar)((GCOL8 - g) * OPACITY);
-                    b += (uchar)((BCOL8 - b) * OPACITY);
+                r += (uchar)((RCOL8 - r) * OPACITY);
+                g += (uchar)((GCOL8 - g) * OPACITY);
+                b += (uchar)((BCOL8 - b) * OPACITY);
 
-                    *ptr = a << 24 | r << 16 | g << 8 | b;
-                }
-
-                ptr+=4;
+                *ptr = a << 24 | r << 16 | g << 8 | b;
             }
-        }
-    }
-    else                                  // 16 bits image.
-    {
-        unsigned short* ptr = (unsigned short*)image.bits();
-        unsigned short  r, g, b, a;
 
-        for (uint j=0 ; j < m_preview.height() ; j++)
-        {
-            for (uint i=0 ; i < m_preview.width() ; i++)
-            {
-                if (i < lx || i >= rx || j < ty || j >= by)
-                {
-                    a = (*ptr >> 48) & 0xFFFF;
-                    r = (*ptr >> 32) & 0xFFFF;
-                    g = (*ptr >> 16) & 0xFFFF;
-                    b = (*ptr)       & 0xFFFF;
-
-                    r += (unsigned short)((RCOL16 - r) * OPACITY);
-                    g += (unsigned short)((GCOL16 - g) * OPACITY);
-                    b += (unsigned short)((BCOL16 - b) * OPACITY);
-
-                    *ptr = a << 48 | r << 32 | g << 16 | b;
-                }
-
-                ptr+=4;
-            }
+            ptr+=4;
         }
     }
 
-    QPixmap pix = image.convertToPixmap();
+    QPixmap pix(image);
     bitBlt(m_pixmap, m_rect.x(), m_rect.y(), &pix);
     QPainter p(m_pixmap);
 
