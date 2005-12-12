@@ -105,7 +105,7 @@ SetupICC::SetupICC(QWidget* parent )
 
    m_defaultAskICC = new QRadioButton(behaviour);
    m_defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
-   QWhatsThis::add( m_defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, in the image has an embbeded profile, this is not the same that the workspace one.</p>"));
+   QWhatsThis::add( m_defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
 
    layout->addWidget(colorPolicy);
 
@@ -238,8 +238,16 @@ void SetupICC::applySettings()
 
     config->setGroup("Color Management");
     config->writeEntry("EnableCM", m_enableColorManagement->isChecked());
-    config->writeEntry("ApplyICC", m_defaultApplyICC->isChecked());
-    config->writeEntry("AskICC", m_defaultAskICC->isChecked());
+    if (m_defaultApplyICC->isChecked())
+    {
+        config->writeEntry("BehaviourICC", true);
+    }
+    else
+    {
+        config->writeEntry("BehaviourICC", false);
+    }
+//     config->writeEntry("ApplyICC", m_defaultApplyICC->isChecked());
+//     config->writeEntry("AskICC", m_defaultAskICC->isChecked());
     config->writeEntry("DefaultPath", m_defaultPath->url());
     config->writeEntry("WorkSpaceProfile", m_workProfiles->currentItem());
     config->writeEntry("MonitorProfile", m_monitorProfiles->currentItem());
@@ -268,9 +276,17 @@ void SetupICC::readSettings()
         return;
     
     slotToggledWidgets(true);
-    
-    m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
-    m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+
+    if (config->readBoolEntry("BehaviourICC"))
+    {
+        m_defaultApplyICC->setChecked(true);
+    }
+    else
+    {
+        m_defaultAskICC->setChecked(false);
+    }
+//     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
+//     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
     m_defaultPath->setURL(config->readPathEntry("DefaultPath"));
     m_workProfiles->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
     m_monitorProfiles->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
