@@ -66,15 +66,6 @@ public:
     void   putPreviewImage(uchar* data);
     void   putImageSelection(uchar* data);
 
-/*
-    DImg getPreviewImage();
-    DImg getOriginalImage();
-    DImg getImageSelection();
-    
-    void putOriginalImage(const QString &caller, DImg& image);
-    void putPreviewImage(DImg& image);
-    void putImageSelection(DImg& selection);
-*/
     /** Original image informations*/
     int  originalWidth();
     int  originalHeight();
@@ -88,8 +79,6 @@ public:
     bool previewSixteenBit();
     
     uchar* setPreviewImageSize(int w, int h);
-
-/*    DImg setPreviewImageSize(int w, int h);*/
 
     /** Standard methods to get image selection informations.*/
     int  selectedWidth();
