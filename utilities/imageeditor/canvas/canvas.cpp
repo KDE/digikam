@@ -53,6 +53,7 @@
 #include "imagehistogram.h"
 #include "dimginterface.h"
 #include "canvas.h"
+#include "iccsettingscontainer.h"
 
 const int HISTOGRAM_WIDTH  = (256 * 4) / 3;
 const int HISTOGRAM_HEIGHT = (114 * 4) / 3;
@@ -360,6 +361,48 @@ bool Canvas::load(const QString& filename)
 
     bool isReadOnly = true;
     d->im->load(filename, &isReadOnly);
+
+    d->zoom = 1.0;
+    d->im->zoom(d->zoom);
+    
+    if (d->autoZoom)
+        updateAutoZoom();
+
+    updateContentsSize();
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+    if (d->showHistogram)
+       updateHistogram(true);
+   
+    emit signalChanged(false, false);
+    emit signalZoomChanged(d->zoom);
+    
+    return (isReadOnly);
+}
+
+bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *pointer)
+{
+    // FIXME implement this overloaded method
+
+    if (d->rubber) {
+        delete d->rubber;
+        d->rubber = 0;
+        emit signalSelected(false);
+    }
+
+    if (d->imageHistogram)
+    {
+        delete d->imageHistogram;
+        d->imageHistogram = 0;
+    }    
+    
+    viewport()->setUpdatesEnabled(false);
+
+    d->tileCache.clear();
+
+    bool isReadOnly = true;
+    d->im->load( filename, &isReadOnly, settingsContainer, pointer );
 
     d->zoom = 1.0;
     d->im->zoom(d->zoom);

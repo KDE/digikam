@@ -40,6 +40,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 // Local includes.
 
@@ -48,6 +49,7 @@
 #include "undomanager.h"
 #include "undoaction.h"
 #include "dimginterface.h"
+#include "iccsettingscontainer.h"
 
 namespace Digikam
 {
@@ -153,14 +155,6 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
 
         *isReadOnly   = d->image.isReadOnly();
         valRet        = true;
-
-        // Paco, uncomment this code to test ICC profil transformation.
-        // It's harcoded actually until we make a setup dialog tab about ICC profil.
-        /*
-        IccTransform trans;
-        trans.setProfiles("/home/gilles/Canon-EOS10D-linear.icc", "/home/gilles/AdobeRGB1998.icc");
-        trans.apply(d->image);        
-        */
     }
     else
     {
@@ -174,6 +168,128 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly)
     }
 
     return (valRet);
+}
+
+bool DImgInterface::load(const QString& filename, bool *isReadOnly, ICCSettingsContainer *cmSettings, QWidget *pointer)
+{
+
+
+    bool valRet;
+    bool apply;
+
+    *isReadOnly   = true;
+    d->valid      = false;
+
+    d->filename   = filename;
+
+    d->width      = 0;
+    d->height     = 0;
+    d->origWidth  = 0;
+    d->origHeight = 0;
+    d->selX       = 0;
+    d->selY       = 0;
+    d->selW       = 0;
+    d->selH       = 0;
+    d->gamma      = 1.0;
+    d->contrast   = 1.0;
+    d->brightness = 0.0;
+    d->cmod.reset();
+
+    d->undoMan->clear();
+
+    d->image = DImg(filename);
+
+    if (!d->image.isNull())
+    {
+        d->origWidth  = d->image.width();
+        d->origHeight = d->image.height();
+        d->valid      = true;
+
+        d->width      = d->origWidth;
+        d->height     = d->origHeight;
+
+        *isReadOnly   = d->image.isReadOnly();
+        valRet        = true;
+
+        // FIXME Implement  transformations.
+        /*
+        IccTransform trans;
+        trans.setProfiles("/home/gilles/Canon-EOS10D-linear.icc", "/home/gilles/AdobeRGB1998.icc");
+        trans.apply(d->image);
+        */
+
+        if (cmSettings->askOrApplySetting)
+        {
+            apply = true;
+        }
+        else
+        {
+            apply = false;
+        }
+
+        IccTransform trans;
+
+        // First possibility: image has no embedded profile
+        if(d->image.getICCProfil().isNull())
+        {
+            // Ask or apply?
+            if (apply)
+            {
+                trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
+                trans.apply( d->image );
+            }
+            else
+            {
+                QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + "</p>";
+                
+                if (KMessageBox::questionYesNo(pointer, message) == KMessageBox::Yes)
+                {
+                    kdDebug() << "Pressed YES" << endl;
+                    trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
+                    trans.apply( d->image );
+                }
+            }
+        }
+        // Second possibility: image has an embedded profile
+        else
+        {
+            trans.getEmbeddedProfile( d->image );
+            
+            if (apply)
+            {
+                                trans.setProfiles(QFile::encodeName(cmSettings->workspaceSetting));
+                trans.apply( d->image );
+            }
+            else
+            {
+                if (trans.getEmbeddedProfileDescriptor()
+                != trans.getProfileDescription( cmSettings->workspaceSetting ))
+                {
+                    kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+                    QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
+
+                    if (KMessageBox::questionYesNo(pointer, message) == KMessageBox::Yes)
+                    {
+                        trans.setProfiles( QFile::encodeName(cmSettings->workspaceSetting));
+                        trans.apply( d->image );
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        kdWarning() << k_funcinfo << "Failed to load image " << endl;
+        valRet = false;
+    }
+
+    if (d->exifOrient)
+    {
+        exifRotate(filename);
+    }
+
+    return (valRet);
+
 }
 
 bool DImgInterface::exifRotated()

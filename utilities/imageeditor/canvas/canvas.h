@@ -37,6 +37,7 @@ class QKeyEvent;
 class QColor;
 
 class CanvasPrivate;
+class ICCSettingsContainer;
 
 class Canvas : public QScrollView {
 
@@ -48,6 +49,7 @@ public:
     ~Canvas();
 
     bool load(const QString& filename);
+    bool load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *pointer);
     void preload(const QString& filename);
     int  save(const QString& filename, int JPEGcompression, 
               int PNGcompression, bool TIFFcompression);

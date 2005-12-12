@@ -39,6 +39,8 @@ class QWidget;
 class QString;
 class QPixmap;
 
+class ICCSettingsContainer;
+
 namespace Digikam
 {
 
@@ -55,6 +57,7 @@ public:
     ~DImgInterface();
 
     bool   load(const QString& filename, bool *isReadOnly);
+    bool   load(const QString& filename, bool *isReadOnly, ICCSettingsContainer *cmSettings, QWidget *pointer);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();
