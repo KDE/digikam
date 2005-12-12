@@ -50,6 +50,11 @@ public:
     //Embedded input profile
     void setProfiles(QString output_profile);
     //void setProfiles(QString * output_profile, QString * proof_profile);
+
+    //Profile info
+    QString getProfileDescription(QString profile);
+
+    QString getEmbeddedProfileDescriptor();
     
 private:
 

@@ -67,6 +67,7 @@ void IccTransform::getEmbeddedProfile(DImg image)
     {
         m_embedded_profile = image.getICCProfil();
         m_has_profile = true;
+        kdDebug() << "Has profile" << endl;
     }
     else
     {
@@ -93,6 +94,15 @@ void IccTransform::setProfiles(QString output_profile)
     m_output_profile = output_profile;
 }
 
+QString IccTransform::getEmbeddedProfileDescriptor()
+{
+kdDebug() << "First open embedded profile" << endl;
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(m_embedded_profile.data(), (DWORD)m_embedded_profile.size());
+    QString embeddedProfileDescriptor =QString(cmsTakeProductDesc(tmpProfile));
+    cmsCloseProfile(tmpProfile);
+    return embeddedProfileDescriptor;
+}
+
 void IccTransform::apply(DImg& image)
 {
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
@@ -100,9 +110,11 @@ void IccTransform::apply(DImg& image)
 
     if (m_has_profile)
     {
+        kdDebug() << "Second open embedded profile" << endl;
         inprofile = cmsOpenProfileFromMem(m_embedded_profile.data(),
                                           (DWORD)m_embedded_profile.size());
-        kdDebug() << "Profile name: " << cmsTakeProductName(inprofile) << endl;
+//         embeddedProfileDescriptor = QString(cmsTakeProductDesc(inprofile));
+        kdDebug() << "Embedded profile name: " << cmsTakeProductDesc(inprofile) << endl;
     }
     else
     {
@@ -237,6 +249,16 @@ void IccTransform::apply(DImg& image)
     
     if (m_do_proof_profile)
        cmsCloseProfile(proofprofile);
+}
+
+QString IccTransform::getProfileDescription(QString profile)
+{
+
+    cmsHPROFILE _profile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
+    QString _description = cmsTakeProductDesc(_profile);
+    cmsCloseProfile(_profile);
+    return _description;
+
 }
 
 }  // NameSpace Digikam
