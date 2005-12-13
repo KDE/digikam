@@ -26,6 +26,7 @@
 #ifdef HAVE_DIGIKAM_TOPLEVEL
 
 #include <dimg.h>
+#include <dimgthreadedfilter.h>
 #include <dcolor.h>
 #include <imageiface.h>
 #include <imagehistogram.h>
@@ -33,7 +34,6 @@
 #include <imageplugin.h>
 #include <imagecurves.h>
 #include <imagefilters.h>
-#include <dimgthreadedfilter.h>
 #include <thumbbar.h>
 #include <colorgradientwidget.h>
 #include <histogramwidget.h>
@@ -44,6 +44,7 @@
 #include <imageselectionwidget.h>
 #include <imageguidewidget.h>
 #include <imagewidget.h>
+#include <ctrlpaneldlg.h>
 
 // FIXME : Revove this line when all plugins will be ported to DImg
 #include <threadedfilter.h>
@@ -51,6 +52,7 @@
 #else
 
 #include <digikam/dimg.h>
+#include <digikam/dimgthreadedfilter.h>
 #include <digikam/dcolor.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagehistogram.h>
@@ -58,7 +60,6 @@
 #include <digikam/imageplugin.h>
 #include <digikam/imagecurves.h>
 #include <digikam/imagefilters.h>
-#include <digikam/dimgthreadedfilter.h>
 #include <digikam/thumbbar.h>
 #include <digikam/colorgradientwidget.h>
 #include <digikam/histogramwidget.h>
@@ -69,6 +70,7 @@
 #include <digikam/imageselectionwidget.h>
 #include <digikam/imageguidewidget.h>
 #include <digikam/imagewidget.h>
+#include <digikam/ctrlpaneldlg.h>
 
 // FIXME : Revove this line when all plugins will be ported to DImg
 #include <digikam/threadedfilter.h>
