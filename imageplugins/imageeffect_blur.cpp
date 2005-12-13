@@ -26,6 +26,7 @@
 
 // KDE includes.
 
+#include <kaboutdata.h>
 #include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
@@ -45,7 +46,7 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"), 
                                         "gaussianblur")
 {
-    setHelp("blursharpentool.anchor", "digikam");
+    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
