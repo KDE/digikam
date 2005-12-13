@@ -17,19 +17,27 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
 #ifndef ICCSETTINGSCONTAINER_H
 #define ICCSETTINGSCONTAINER_H
+
+// Qt includes.
 
 #include <qstring.h>
 
 /**
 	@author digiKam team <digikam-devel@kde.org>
 */
-class ICCSettingsContainer{
-public:
-    ICCSettingsContainer();
 
-    ~ICCSettingsContainer();
+class ICCSettingsContainer
+{
+
+public:
+    
+    ICCSettingsContainer(){};
+    ~ICCSettingsContainer(){};
+
+public:
 
     bool    enableCMSetting;
     // FALSE -> apply
@@ -43,8 +51,6 @@ public:
     QString monitorSetting;
     QString inputSetting;
     QString proofSetting;
-    
-
 };
 
-#endif
+#endif  // ICCSETTINGSCONTAINER_H
