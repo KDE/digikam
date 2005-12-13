@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
  * Description : A threaded filter control panel dialog for 
- *               image editor plugins
+ *               image editor plugins using DImg
  * 
  * Copyright 2005 by Gilles Caulier
  *

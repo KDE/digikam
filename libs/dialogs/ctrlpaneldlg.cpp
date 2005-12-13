@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-05-07
  * Description : A threaded filter control panel dialog for
- *               image editor plugins
+ *               image editor plugins using DImg
  *
  * Copyright 2005 by Gilles Caulier
  *
@@ -87,6 +87,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
         bannerFrame->reparent( plainPage(), QPoint::QPoint(0,0) );
         topLayout->addWidget(bannerFrame);
     }
+
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
@@ -134,9 +135,9 @@ void CtrlPanelDlg::slotInit()
 
 void CtrlPanelDlg::setAboutData(KAboutData *about)
 {
-    m_aboutData = about;
+    m_aboutData             = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, m_aboutData, false);
+    KHelpMenu* helpMenu     = new KHelpMenu(this, m_aboutData, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
@@ -148,11 +149,11 @@ void CtrlPanelDlg::abortPreview()
     m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);
-    enableButton(Ok, true);
-    enableButton(User1, false);
-    enableButton(User2, true);
-    enableButton(User3, true);
-    enableButton(Try,   true);
+    enableButton(Ok,      true);
+    enableButton(User1,   false);
+    enableButton(User2,   true);
+    enableButton(User3,   true);
+    enableButton(Try,     true);
     enableButton(Default, true);
     renderingFinished();
 }
@@ -244,11 +245,11 @@ void CtrlPanelDlg::slotEffect()
     m_currentRenderingMode = PreviewRendering;
 
     m_imagePreviewWidget->setEnable(false);
-    enableButton(Ok,    false);
-    enableButton(User1, true);
-    enableButton(User2, false);
-    enableButton(User3, false);
-    enableButton(Try,   false);
+    enableButton(Ok,      false);
+    enableButton(User1,   true);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
+    enableButton(Try,     false);
     enableButton(Default, false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
@@ -265,11 +266,11 @@ void CtrlPanelDlg::slotOk()
     m_currentRenderingMode = FinalRendering;
 
     m_imagePreviewWidget->setEnable(false);
-    enableButton(Ok,    false);
-    enableButton(User1, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
-    enableButton(Try,   false);
+    enableButton(Ok,      false);
+    enableButton(User1,   false);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
+    enableButton(Try,     false);
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
