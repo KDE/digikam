@@ -473,7 +473,10 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
         h = height() - y;
 
     if ( w <= 0 || h <= 0)
+    {
+        kdWarning() << k_funcinfo << " : return null image!" << endl;
         return DImg();
+    }
 
     DImg image(w, h, sixteenBit());
 
@@ -499,45 +502,48 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
     return image;
 }
 
-void DImg::bitBlt(DImg& region, int x, int y, int w, int h)
+void DImg::bitBltImage(DImg* src, int dx, int dy)
 {
-    if (isNull() || region.sixteenBit() != sixteenBit() ||
-        w <= 0 || h <= 0)
+    int sw = src->width();
+    int sh = src->height();
+    
+    if (isNull() || src->sixteenBit() != sixteenBit() ||
+        sw <= 0 || sh <= 0)
        return;
 
     // Normalize
 
-    if (x < 0)
+    if (dx < 0)
     {
-       w = w - x;
-       x = 0;
+       sw = sw - dx;
+       dx = 0;
     }
 
-    if (y < 0)
+    if (dy < 0)
     {
-       h = h - y;
-       y = 0;
+       sh = sh - dy;
+       dy = 0;
     }
 
-    if (w > (int)width())
+    if (sw > (int)width())
     {
-       w = width();
+       sw = width();
     }
 
-    if (h > (int)height())
+    if (sh > (int)height())
     {
-       w = height();
+       sh = height();
     }
 
     uchar *pptr;
     uchar *ptr  = bits();
-    uchar *dptr = region.bits();
+    uchar *dptr = src->bits();
 
-    for (int j = y; j < (y + h); j++) 
+    for (int j = dy ; j < (dy + sh) ; j++) 
     {
-        pptr  = &ptr[ j * width() * bytesDepth() ] + x * bytesDepth();
+        pptr  = &ptr[ j * width() * bytesDepth() ] + dx * bytesDepth();
 
-        for (int i = 0; i < w * bytesDepth() ; i++) 
+        for (int i = 0; i < sw * bytesDepth() ; i++) 
         {
             *(pptr++) = *(dptr++);
         }
@@ -1024,124 +1030,124 @@ void DImg::flip(FLIP direction)
     
     switch (direction)
     {
-    case(HORIZONTAL):
-    {
-        uint w  = width();
-        uint h  = height();
-
-        if (sixteenBit())
+        case(HORIZONTAL):
         {
-            ullong  tmp;
-            ullong *beg;
-            ullong *end;
-
-            ullong* data = (ullong*) bits();
-        
-            // can be done inplace
-            for (uint y = 0; y < h; y++)
+            uint w  = width();
+            uint h  = height();
+    
+            if (sixteenBit())
             {
-                beg = data + y * w;
-                end = beg  + w;
-                
-                for (uint x=0; x < w/2; x++)
+                unsigned short  tmp[4];
+                unsigned short *beg;
+                unsigned short *end;
+    
+                unsigned short * data = (unsigned short *)bits();
+    
+                // can be done inplace
+                for (uint y = 0; y < h; y++)
                 {
-                    tmp  = *beg;
-                    *beg = *end;
-                    *end = tmp;
-
-                    beg++;
-                    end--;
+                    beg = data + y * w * 4;
+                    end = beg  + w * 4;
+    
+                    for (uint x=0; x < w/2; x++)
+                    {
+                        memcpy(&tmp, beg, 8);
+                        memcpy(beg, end, 8);
+                        memcpy(end, &tmp, 8);
+    
+                        beg+=4;
+                        end-=4;
+                    }
                 }
             }
-        }
-        else
-        {
-            uint  tmp;
-            uint *beg;
-            uint *end;
-
-            uint* data = (uint*) bits();
-        
-            // can be done inplace
-            for (uint y = 0; y < h; y++)
+            else
             {
-                beg = data + y * w;
-                end = beg  + w;
-                
-                for (uint x=0; x < w/2; x++)
+                uchar  tmp[4];
+                uchar *beg;
+                uchar *end;
+    
+                uchar* data = bits();
+    
+                // can be done inplace
+                for (uint y = 0; y < h; y++)
                 {
-                    tmp  = *beg;
-                    *beg = *end;
-                    *end = tmp;
-
-                    beg++;
-                    end--;
+                    beg = data + y * w * 4;
+                    end = beg  + w * 4;
+    
+                    for (uint x=0; x < w/2; x++)
+                    {
+                        memcpy(&tmp, beg, 4);
+                        memcpy(beg, end, 4);
+                        memcpy(end, &tmp, 4);
+    
+                        beg+=4;
+                        end-=4;
+                    }
                 }
             }
+    
+            break;
         }
-        
-        break;
-    }
-    case(VERTICAL):
-    {
-        uint w  = width();
-        uint h  = height();
-
-        if (sixteenBit())
+        case(VERTICAL):
         {
-            ullong  tmp;
-            ullong *line1;
-            ullong *line2;
-
-            ullong* data = (ullong*) bits();
-        
-            // can be done inplace
-            for (uint y = 0; y < h/2; y++)
+            uint w  = width();
+            uint h  = height();
+    
+            if (sixteenBit())
             {
-                line1 = data + y * w;
-                line2 = data + (h-y-1) * w;
-                
-                for (uint x=0; x < w; x++)
+                unsigned short  tmp[4];
+                unsigned short *line1;
+                unsigned short *line2;
+    
+                unsigned short* data = (unsigned short*) bits();
+            
+                // can be done inplace
+                for (uint y = 0; y < h/2; y++)
                 {
-                    tmp    = *line1;
-                    *line1 = *line2;
-                    *line2 = tmp;
+                    line1 = data + y * w * 4;
+                    line2 = data + (h-y-1) * w * 4;
+                    
+                    for (uint x=0; x < w; x++)
+                    {
+                        memcpy(&tmp, line1, 8);
+                        memcpy(line1, line2, 8);
+                        memcpy(line2, &tmp, 8);
 
-                    line1++;
-                    line2++;
+                        line1+=4;
+                        line2+=4;
+                    }
                 }
             }
-        }
-        else
-        {
-            uint  tmp;
-            uint *line1;
-            uint *line2;
-
-            uint* data = (uint*) bits();
-        
-            // can be done inplace
-            for (uint y = 0; y < h/2; y++)
+            else
             {
-                line1 = data + y * w;
-                line2 = data + (h-y-1) * w;
-                
-                for (uint x=0; x < w; x++)
+                uchar  tmp[4];
+                uchar *line1;
+                uchar *line2;
+    
+                uchar* data = bits();
+            
+                // can be done inplace
+                for (uint y = 0; y < h/2; y++)
                 {
-                    tmp    = *line1;
-                    *line1 = *line2;
-                    *line2 = tmp;
+                    line1 = data + y * w * 4;
+                    line2 = data + (h-y-1) * w * 4;
+                    
+                    for (uint x=0; x < w; x++)
+                    {
+                        memcpy(&tmp, line1, 4);
+                        memcpy(line1, line2, 4);
+                        memcpy(line2, &tmp, 4);
 
-                    line1++;
-                    line2++;
+                        line1+=4;
+                        line2+=4;
+                    }
                 }
             }
+            
+            break;
         }
-        
-        break;
-    }
-    default:
-        break;
+        default:
+            break;
     }
 }
 

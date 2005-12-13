@@ -145,7 +145,7 @@ public:
     DImg       copy(uint x, uint y, uint w, uint h);
 
     /** Copy a pixels region to an image */
-    void       bitBlt(DImg& region, int x, int y, int w, int h);
+    void       bitBltImage(DImg* src, int dx, int dy);
 
     /** Merge a pixels region to an image */
     void       bitBlend(DImg& region, int x, int y, int w, int h);

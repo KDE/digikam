@@ -90,6 +90,8 @@ private:
     QTimer      *m_timer;
     
     QString      m_name;
+
+    KAboutData  *m_aboutData;
     
     bool         m_tryAction;
 

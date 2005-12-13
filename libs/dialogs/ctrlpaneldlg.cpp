@@ -66,6 +66,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_threadedFilter       = 0L;
+    m_aboutData            = 0L;
     QString whatsThis;
 
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
@@ -104,6 +105,9 @@ CtrlPanelDlg::~CtrlPanelDlg()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));
 
+    if (m_aboutData)
+       delete m_aboutData;
+       
     if (m_timer)
        delete m_timer;
 
@@ -130,8 +134,9 @@ void CtrlPanelDlg::slotInit()
 
 void CtrlPanelDlg::setAboutData(KAboutData *about)
 {
+    m_aboutData = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_aboutData, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
