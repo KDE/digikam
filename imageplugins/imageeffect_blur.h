@@ -23,9 +23,7 @@
 
 // KDE include.
 
-#include <kdialogbase.h>
-
-class QTimer;
+#include "ctrlpaneldlg.h"
 
 class KIntNumInput;
 
@@ -35,7 +33,7 @@ class ImagePannelWidget;
 class DImgGaussianBlur;
 }
 
-class ImageEffect_Blur : public KDialogBase
+class ImageEffect_Blur : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
@@ -46,41 +44,17 @@ public:
 
 private:
 
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int           m_currentRenderingMode;
-    
-    QWidget      *m_parent;
-    
-    QTimer       *m_timer;
-            
     KIntNumInput *m_radiusInput;
     
-    Digikam::DImgGaussianBlur  *m_threadedFilter;
-    
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-    
-private slots:
-
-    void slotEffect();
-    void slotOk();
-    void slotTimer();
-    void slotCancel();
-    void slotUser1();
-    void slotDefault();
-    void slotFocusChanged(void);    
-    
 protected:
-
-    void closeEvent(QCloseEvent *e);
-    void customEvent(QCustomEvent *event);
+    
+    void prepareEffect(void);
+    void prepareFinal(void);
     void abortPreview(void);
-    void keyPressEvent(QKeyEvent *e);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 #endif /* IMAGEEFFECT_BLUR_H */
