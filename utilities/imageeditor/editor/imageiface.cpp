@@ -142,10 +142,10 @@ uchar* ImageIface::getPreviewImage()
 
 uchar* ImageIface::getOriginalImage()
 {
-    uint *ptr = DImgInterface::instance()->getData();
-    int   w   = DImgInterface::instance()->origWidth();
-    int   h   = DImgInterface::instance()->origHeight();
-    int   bd  = DImgInterface::instance()->bytesDepth();
+    uchar *ptr = DImgInterface::instance()->getImage();
+    int    w   = DImgInterface::instance()->origWidth();
+    int    h   = DImgInterface::instance()->origHeight();
+    int    bd  = DImgInterface::instance()->bytesDepth();
 
     if (!ptr || !w || !h) 
         return 0;
