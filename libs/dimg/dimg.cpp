@@ -466,10 +466,10 @@ DImg DImg::copy(QRect rect)
 
 DImg DImg::copy(uint x, uint y, uint w, uint h)
 {
-    if (x+w > width())
+    if ( (x+w) > width() )
         w = width() - x;
 
-    if (y+h > height())
+    if ( (y+h) > height() )
         h = height() - y;
 
     if ( w <= 0 || h <= 0)
@@ -480,20 +480,17 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
 
     DImg image(w, h, sixteenBit());
 
-    uint pixWidth = sixteenBit() ? 8 : 4;
-
-    uchar* sptr = 0;
-    uchar* dptr = image.bits();
+    uchar* sptr      = 0;
+    uchar* dptr      = image.bits();
     uchar* origData  = bits();
-    uint   origWidth = width();
 
-    for (uint j=y; j<y+h; j++)
+    for (uint j = y ; j < (y + h) ; j++)
     {
-        sptr = origData + (j*origWidth + x)*pixWidth;
+        sptr = origData + (j * width() + x) * bytesDepth();
 
-        for (uint i=0; i < w*pixWidth; i++)
+        for (uint i=0 ; i < w*bytesDepth() ; i++, *dptr++, *sptr++)
         {
-            *dptr++ = *sptr++;
+            *dptr = *sptr;
         }
     }
 
@@ -543,9 +540,9 @@ void DImg::bitBltImage(DImg* src, int dx, int dy)
     {
         pptr  = &ptr[ j * width() * bytesDepth() ] + dx * bytesDepth();
 
-        for (int i = 0; i < sw * bytesDepth() ; i++) 
+        for (int i = 0; i < sw * bytesDepth() ; i++, *pptr++, *dptr++)
         {
-            *(pptr++) = *(dptr++);
+            *pptr = *dptr;
         }
     }
 }
@@ -1044,12 +1041,12 @@ void DImg::flip(FLIP direction)
                 unsigned short * data = (unsigned short *)bits();
     
                 // can be done inplace
-                for (uint y = 0; y < h; y++)
+                for (uint y = 0 ; y < h ; y++)
                 {
                     beg = data + y * w * 4;
-                    end = beg  + w * 4;
+                    end = beg  + (w-1) * 4;
     
-                    for (uint x=0; x < w/2; x++)
+                    for (uint x=0 ; x < (w/2) ; x++)
                     {
                         memcpy(&tmp, beg, 8);
                         memcpy(beg, end, 8);
@@ -1069,17 +1066,17 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
     
                 // can be done inplace
-                for (uint y = 0; y < h; y++)
+                for (uint y = 0 ; y < h ; y++)
                 {
                     beg = data + y * w * 4;
-                    end = beg  + w * 4;
+                    end = beg  + (w-1) * 4;
     
-                    for (uint x=0; x < w/2; x++)
+                    for (uint x=0 ; x < (w/2) ; x++)
                     {
                         memcpy(&tmp, beg, 4);
                         memcpy(beg, end, 4);
                         memcpy(end, &tmp, 4);
-    
+
                         beg+=4;
                         end-=4;
                     }
@@ -1102,12 +1099,12 @@ void DImg::flip(FLIP direction)
                 unsigned short* data = (unsigned short*) bits();
             
                 // can be done inplace
-                for (uint y = 0; y < h/2; y++)
+                for (uint y = 0 ; y < (h/2) ; y++)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
                     
-                    for (uint x=0; x < w; x++)
+                    for (uint x=0 ; x < w ; x++)
                     {
                         memcpy(&tmp, line1, 8);
                         memcpy(line1, line2, 8);
@@ -1127,12 +1124,12 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
             
                 // can be done inplace
-                for (uint y = 0; y < h/2; y++)
+                for (uint y = 0 ; y < (h/2) ; y++)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
                     
-                    for (uint x=0; x < w; x++)
+                    for (uint x=0 ; x < w ; x++)
                     {
                         memcpy(&tmp, line1, 4);
                         memcpy(line1, line2, 4);
