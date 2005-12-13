@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/filters \
 	   -I$(top_srcdir)/digikam/libs/widgets \
+	   -I$(top_srcdir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/digikam \
