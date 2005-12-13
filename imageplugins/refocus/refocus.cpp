@@ -35,9 +35,9 @@
 namespace DigikamRefocusImagesPlugin
 {
 
-Refocus::Refocus(QImage *orgImage, QObject *parent, int matrixSize, double radius, 
+Refocus::Refocus(Digikam::DImg *orgImage, QObject *parent, int matrixSize, double radius, 
                  double gauss, double correlation, double noise)
-       : Digikam::ThreadedFilter(orgImage, parent, "Refocus")
+       : Digikam::DImgThreadedFilter(orgImage, parent, "Refocus")
 { 
     m_matrixSize  = matrixSize;
     m_radius      = radius;
@@ -49,13 +49,14 @@ Refocus::Refocus(QImage *orgImage, QObject *parent, int matrixSize, double radiu
 
 void Refocus::filterImage(void)
 {
-    refocusImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                 m_matrixSize, m_radius, m_gauss, 
+    refocusImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                 m_orgImage.sixteenBit(), m_matrixSize, m_radius, m_gauss, 
                  m_correlation, m_noise);
 }
 
-void Refocus::refocusImage(const uint* data, int width, int height, int matrixSize, 
-                           double radius, double gauss, double correlation, double noise)
+void Refocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
+                           int matrixSize, double radius, double gauss,
+                           double correlation, double noise)
 {
     CMat *matrix=0;
     
@@ -77,25 +78,24 @@ void Refocus::refocusImage(const uint* data, int width, int height, int matrixSi
 
     // Apply deconvolution kernel to image.
     kdDebug() << "Refocus::Apply Matrix to image..." << endl;
-    convolveImage(data, (uint*)m_destImage.bits(), width, height, matrix->data, 2 * matrixSize + 1);
+    convolveImage(data, m_destImage.bits(), width, height, sixteenBit,
+                  matrix->data, 2 * matrixSize + 1);
     
     // Clean up memory
     delete matrix;   
 }
 
-void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int height, 
-                            const double *const mat, int mat_size)
+void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int height,
+                            bool sixteenBit, const double *const mat, int mat_size)
 {
     Refocus::EventData d;
     int progress;
+    unsigned short *orgData16  = (unsigned short *)orgData;
+    unsigned short *destData16 = (unsigned short *)destData;
     
     double matrix[mat_size][mat_size];
     double valRed, valGreen, valBlue;
     int    x1, y1, x2, y2, index1, index2;
-    
-    // Big/Little Endian color manipulation compatibility.
-    int red, green, blue;
-    Digikam::ImageFilters::imageData imagedata;
     
     const int imageSize  = width*height;
     const int mat_offset = mat_size / 2;
@@ -103,50 +103,95 @@ void Refocus::convolveImage(const uint *orgData, uint *destData, int width, int 
     memcpy (&matrix, mat, mat_size* mat_size * sizeof(double));
     
     for (y1 = 0; !m_cancel && (y1 < height); y1++)
-        {
+    {
         for (x1 = 0; !m_cancel && (x1 < width); x1++)
-            {
+        {
             valRed = valGreen = valBlue = 0.0;
-                
-            for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
+
+            if (!sixteenBit)        // 8 bits image.
+            {
+                uchar red, green, blue;
+                uchar *ptr;  
+
+                for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
                 {
-                for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
+                    for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
                     {
-                    index1 = width * (y1 + y2 - mat_offset) + 
-                             x1 + x2 - mat_offset;
-                        
-                    if ( index1 >= 0 && index1 < imageSize )
-                       {
-                       imagedata.raw = orgData[index1];
-                       red           = (int)imagedata.channel.red;
-                       green         = (int)imagedata.channel.green;
-                       blue          = (int)imagedata.channel.blue;
-                       valRed   += matrix[y2][x2] * red;
-                       valGreen += matrix[y2][x2] * green;
-                       valBlue  += matrix[y2][x2] * blue;
-                       }
+                        index1 = width * (y1 + y2 - mat_offset) +
+                                 x1 + x2 - mat_offset;
+                            
+                        if ( index1 >= 0 && index1 < imageSize )
+                        {
+                            ptr   = &orgData[index1*4];
+                            blue  = ptr[0];
+                            green = ptr[1];
+                            red   = ptr[2];
+                            valRed   += matrix[y2][x2] * red;
+                            valGreen += matrix[y2][x2] * green;
+                            valBlue  += matrix[y2][x2] * blue;
+                        }
                     }
                 }
-            
-            index2 = y1 * width + x1;
-                          
-            if (index2 >= 0 && index2 < imageSize)
-                {
-                // To get Alpha channel value from original (unchanged)
-                imagedata.raw = orgData[index2];
                 
-                // Overwrite RGB values to destination.
-                imagedata.channel.red   = (uchar) CLAMP (valRed, 0, 255);
-                imagedata.channel.green = (uchar) CLAMP (valGreen, 0, 255);
-                imagedata.channel.blue  = (uchar) CLAMP (valBlue, 0, 255);
-                destData[index2]        = imagedata.raw;
+                index2 = y1 * width + x1;
+                            
+                if (index2 >= 0 && index2 < imageSize)
+                {
+                    // To get Alpha channel value from original (unchanged)
+                    memcpy (&destData[index2*4], &orgData[index2*4], 4);                    
+                    ptr = &destData[index2*4];
+                    
+                    // Overwrite RGB values to destination.
+                    ptr[0] = (uchar) CLAMP (valBlue,  0, 255);
+                    ptr[1] = (uchar) CLAMP (valGreen, 0, 255);
+                    ptr[2] = (uchar) CLAMP (valRed,   0, 255);
                 }
             }
-        
+            else                 // 16 bits image.
+            {
+                unsigned short red, green, blue;
+                unsigned short *ptr;  
+
+                for (y2 = 0; !m_cancel && (y2 < mat_size); y2++)
+                {
+                    for (x2 = 0; !m_cancel && (x2 < mat_size); x2++)
+                    {
+                        index1 = width * (y1 + y2 - mat_offset) + 
+                                 x1 + x2 - mat_offset;
+                            
+                        if ( index1 >= 0 && index1 < imageSize )
+                        {
+                            ptr   = &orgData16[index1*4];
+                            blue  = ptr[0];
+                            green = ptr[1];
+                            red   = ptr[2];
+                            valRed   += matrix[y2][x2] * red;
+                            valGreen += matrix[y2][x2] * green;
+                            valBlue  += matrix[y2][x2] * blue;
+                        }
+                    }
+                }
+                
+                index2 = y1 * width + x1;
+                            
+                if (index2 >= 0 && index2 < imageSize)
+                {
+                    // To get Alpha channel value from original (unchanged)
+                    memcpy (&destData16[index2*4], &orgData16[index2*4], 8);                    
+                    ptr = &destData16[index2*4];
+                    
+                    // Overwrite RGB values to destination.
+                    ptr[0] = (unsigned short) CLAMP (valBlue,  0, 65535);
+                    ptr[1] = (unsigned short) CLAMP (valGreen, 0, 65535);
+                    ptr[2] = (unsigned short) CLAMP (valRed,   0, 65535);
+                }
+            }
+        }
+            
         // Update the progress bar in dialog.
         progress = (int)(((double)y1 * 100.0) / height);
         if (progress%5 == 0)
-           postProgress( progress );        
+        postProgress( progress );        
         }
 }
 

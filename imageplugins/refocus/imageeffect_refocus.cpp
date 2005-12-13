@@ -41,10 +41,6 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "refocus.h"
@@ -56,8 +52,10 @@
 namespace DigikamRefocusImagesPlugin
 {
 
-ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Refocus Photograph"), "refocus", true)
+ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame* banner)
+                   : Digikam::CtrlPanelDlg(parent, title, "refocus", true,
+                                           false, true, Digikam::ImagePannelWidget::SeparateViewAll,
+                                           banner)
 {
     QString whatsThis;
         
@@ -177,49 +175,64 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent)
     
     Digikam::ImageIface iface(0, 0);
         
-    uint* data = iface.getOriginalData();
-    int   w    = iface.originalWidth();
-    int   h    = iface.originalHeight();
+    uchar* data = iface.getOriginalImage();
+    int    w    = iface.originalWidth();
+    int    h    = iface.originalHeight();
+    bool   sb   = iface.originalSixteenBit();
+    bool   a    = iface.originalHasAlpha();
     
-    m_img.create( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, 32 );
+    m_img = Digikam::DImg( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
     
-    QImage tmp;
-    QImage org(w, h, 32);
-    memcpy(org.bits(), data, org.numBytes());            
-    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, &org, 0, 0, w, h);
-    
-    // Create dummy top border
-    tmp = org.copy(0, 0, w, 2*MAX_MATRIX_SIZE).mirror(false, true);
-    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 0, &tmp, 0, 0, w, 2*MAX_MATRIX_SIZE);
-    
-    // Create dummy bottom border
-    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE).mirror(false, true);
-    bitBlt(&m_img, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h, &tmp, 0, 0, w, 2*MAX_MATRIX_SIZE);
+    Digikam::DImg tmp;
+    Digikam::DImg org(w, h, sb, a, data);
 
-    // Create dummy right border
-    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, h).mirror(true, false);
-    bitBlt(&m_img, 0, 2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, h);
-    
+    // Copy original.
+    m_img.bitBltImage(&org, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+   
+    // Create dummy top border
+    tmp = org.copy(0, 0, w, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 0);
+
+    // Create dummy bottom border
+    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h);
+
     // Create dummy left border
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h).mirror(true, false);
-    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    m_img.bitBltImage(&tmp, 0, 2*MAX_MATRIX_SIZE);
+    
+    // Create dummy right border
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
     
     // Create dummy top/left corner
-    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
-    bitBlt(&m_img, 0, 0, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-
+    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, 0, 0);
+    
     // Create dummy top/right corner
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
-    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, 0, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 0);
 
     // Create dummy bottom/left corner
-    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
-    bitBlt(&m_img, 0, h+2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-
-    // Create dummy bottom/right corner
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE).mirror(true, true);
-    bitBlt(&m_img, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE, &tmp, 0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, 0, h+2*MAX_MATRIX_SIZE);
     
+    // Create dummy bottom/right corner
+    tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(Digikam::DImg::HORIZONTAL);
+    tmp.flip(Digikam::DImg::VERTICAL);
+    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE);
+ 
     delete [] data;
 }
 
@@ -278,9 +291,9 @@ void ImageEffect_Refocus::prepareEffect()
     tmpRect.setTop(area.top()-2*ms);
     tmpRect.setBottom(area.bottom()+2*ms);
     tmpRect.moveBy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    QImage imTemp = m_img.copy(tmpRect);
+    Digikam::DImg imTemp = m_img.copy(tmpRect);
         
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Refocus(&imTemp, this, ms, r, g, c, n));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Refocus(&imTemp, this, ms, r, g, c, n));
 }
 
 void ImageEffect_Refocus::prepareFinal()
@@ -297,16 +310,17 @@ void ImageEffect_Refocus::prepareFinal()
     double c    = m_correlation->value();
     double n    = m_noise->value();
     
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Refocus(&m_img, this, ms, r, g, c, n));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Refocus(&m_img, this, ms, r, g, c, n));
 }
 
 void ImageEffect_Refocus::putPreviewData(void)
 {
     int   ms   = m_matrixSize->value();
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
-    QImage imDest = m_threadedFilter->getTargetImage()
-                    .copy(2*ms, 2*ms, area.width(), area.height());
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage()
+                              .copy(2*ms, 2*ms, area.width(), area.height());
+    m_imagePreviewWidget->setPreviewImage(imDest);
 }
 
 void ImageEffect_Refocus::putFinalData(void)
@@ -314,11 +328,11 @@ void ImageEffect_Refocus::putFinalData(void)
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalData(i18n("Refocus"), 
-            (uint*)m_threadedFilter->getTargetImage()
-                        .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 
-                            iface.originalWidth(), iface.originalHeight())
-                        .bits());
+    iface.putOriginalImage(i18n("Refocus"), m_threadedFilter->getTargetImage()
+                                                .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE,
+                                                        iface.originalWidth(),
+                                                        iface.originalHeight())
+                                                .bits());
 }
 
 void ImageEffect_Refocus::slotUser3()
@@ -332,16 +346,16 @@ void ImageEffect_Refocus::slotUser3()
     QFile file(loadRestorationFile.path());
     
     if ( file.open(IO_ReadOnly) )   
-        {
+    {
         QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Refocus Configuration File" )
-           {
+        {
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Photograph Refocus settings text file.")
                         .arg(loadRestorationFile.fileName()));
            file.close();            
            return;
-           }
+        }
         
         blockSignals(true);
         m_matrixSize->setValue( stream.readLine().toInt() );
@@ -351,7 +365,7 @@ void ImageEffect_Refocus::slotUser3()
         m_noise->setValue( stream.readLine().toDouble() );
         blockSignals(false);
         slotEffect();  
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Refocus text file."));
 
@@ -369,7 +383,7 @@ void ImageEffect_Refocus::slotUser2()
     QFile file(saveRestorationFile.path());
     
     if ( file.open(IO_WriteOnly) )   
-        {
+    {
         QTextStream stream( &file );        
         stream << "# Photograph Refocus Configuration File\n";    
         stream << m_matrixSize->value() << "\n";    
@@ -377,7 +391,7 @@ void ImageEffect_Refocus::slotUser2()
         stream << m_gauss->value() << "\n";    
         stream << m_correlation->value() << "\n";    
         stream << m_noise->value() << "\n";    
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Refocus text file."));
     

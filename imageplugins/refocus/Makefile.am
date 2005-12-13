@@ -4,7 +4,7 @@ COMPILE_FIRST = clapack
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      -I$(top_srcdir)/digikamimageplugins/refocus/clapack \
 	      -I$(top_srcdir)/digikam/digikam \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
@@ -17,7 +17,7 @@ digikamimageplugin_refocus_la_SOURCES = imageplugin_refocus.cpp imageeffect_refo
 
 digikamimageplugin_refocus_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/refocus/clapack/liblapack.la \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_refocus_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

@@ -23,13 +23,9 @@
 #ifndef IMAGEEFFECT_REFOCUS_H
 #define IMAGEEFFECT_REFOCUS_H
 
-// Qt include.
-
-#include <qimage.h>
-
 // Local includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -37,18 +33,18 @@ class KDoubleNumInput;
 namespace DigikamRefocusImagesPlugin
 {
 
-class ImageEffect_Refocus : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Refocus : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Refocus(QWidget* parent);
+    ImageEffect_Refocus(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Refocus();
 
 private:
     
-    QImage           m_img;
+    Digikam::DImg    m_img;
     
     KIntNumInput    *m_matrixSize;
     

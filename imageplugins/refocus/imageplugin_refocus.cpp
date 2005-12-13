@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_refocus.h"
 #include "imageplugin_refocus.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_Refocus::setEnabledActions(bool enable)
 
 void ImagePlugin_Refocus::slotRefocus()
 {
-    DigikamRefocusImagesPlugin::ImageEffect_Refocus dlg(parentWidget());
+    QString title = i18n("Refocus Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamRefocusImagesPlugin::ImageEffect_Refocus dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_refocus.moc"

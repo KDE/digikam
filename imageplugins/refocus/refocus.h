@@ -29,19 +29,19 @@
 namespace DigikamRefocusImagesPlugin
 {
 
-class Refocus : public Digikam::ThreadedFilter
+class Refocus : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    Refocus(QImage *orgImage, QObject *parent=0, int matrixSize=5, double radius=0.9, 
+    Refocus(Digikam::DImg *orgImage, QObject *parent=0, int matrixSize=5, double radius=0.9, 
             double gauss=0.0, double correlation=0.5, double noise=0.01);
     
     ~Refocus(){};
 
 private:  // Refocus filter data.
 
-    int m_matrixSize;
+    int    m_matrixSize;
     
     double m_radius;
     double m_gauss;
@@ -52,11 +52,12 @@ private:  // Refocus filter methods.
 
     virtual void filterImage(void);
     
-    void refocusImage(const uint* data, int width, int height, int matrixSize, 
-                      double radius, double gauss, double correlation, double noise);
+    void refocusImage(uchar* data, int width, int height, bool sixteenBit,
+                      int matrixSize, double radius, double gauss, 
+                      double correlation, double noise);
                                
-    void convolveImage(const uint *orgData, uint *destData, int width, int height, 
-                       const double *const mat, int mat_size);
+    void convolveImage(uchar *orgData, uchar *destData, int width, int height,
+                       bool sixteenBit, const double *const mat, int mat_size);
     
 };    
 
