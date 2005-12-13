@@ -220,7 +220,13 @@ void CtrlPanelDlg::slotFocusChanged(void)
 
 void CtrlPanelDlg::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
+    // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
+
+    if (m_aboutData)
+        KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
+    else
+        KDialogBase::slotHelp();
 }
 
 void CtrlPanelDlg::slotTimer()
