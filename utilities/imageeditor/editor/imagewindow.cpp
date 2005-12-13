@@ -74,13 +74,13 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "syncjob.h"
-#include "imagewindow.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
 #include "tagspopupmenu.h"
 #include "iccsettingscontainer.h"
+#include "imagewindow.h"
 
 ImageWindow* ImageWindow::imagewindow()
 {
