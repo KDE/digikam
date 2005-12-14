@@ -84,21 +84,6 @@ HistogramWidget::HistogramWidget(int w, int h,
     m_selectionHistogram = 0L;
 }
 
-// Constructor without image selection.
-// FIXME : remove this constructor when all digiKam core will be ported to DImg
-HistogramWidget::HistogramWidget(int w, int h,
-                                 uint *i_data, uint i_w, uint i_h,
-                                 QWidget *parent, bool selectMode,
-                                 bool blinkComputation, bool statisticsVisible)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
-{
-    m_sixteenBits        = false;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
-
-    m_imageHistogram     = new ImageHistogram((uchar*)i_data, i_w, i_h, false, this);
-    m_selectionHistogram = 0L;
-}
-
 // Constructor with image selection.
 
 HistogramWidget::HistogramWidget(int w, int h, 
@@ -114,23 +99,6 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
-}
-
-
-// Constructor with image selection.
-// FIXME : remove this constructor when all digiKam core will be ported to DImg
-HistogramWidget::HistogramWidget(int w, int h, 
-                                 uint *i_data, uint i_w, uint i_h, 
-                                 uint *s_data, uint s_w, uint s_h,
-                                 QWidget *parent, bool selectMode, 
-                                 bool blinkComputation, bool statisticsVisible)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
-{
-    m_sixteenBits        = false;
-    setup(w, h, selectMode, blinkComputation, statisticsVisible);
-
-    m_imageHistogram     = new ImageHistogram((uchar*)i_data, i_w, i_h, false, this);
-    m_selectionHistogram = new ImageHistogram((uchar*)s_data, s_w, s_h, false, this);
 }
 
 HistogramWidget::~HistogramWidget()
@@ -250,14 +218,6 @@ void HistogramWidget::stopHistogramComputation(void)
     m_blinkTimer->stop();
 }
 
-// FIXME : remove this constructor when all digiKam core will be ported to DImg
-void HistogramWidget::updateData(uint *i_data, uint i_w, uint i_h,
-                                 uint *s_data, uint s_w, uint s_h,
-                                 bool blinkComputation)
-{
-    updateData((uchar*)i_data, i_w, i_h, false, (uchar*)s_data, s_w, s_h, blinkComputation);
-}
-
 void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
                                  bool i_sixteenBits,
                                  uchar *s_data, uint s_w, uint s_h,
@@ -280,13 +240,6 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
         m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits, this);
     else 
         m_selectionHistogram = 0L;
-}
-
-// FIXME : remove this constructor when all digiKam core will be ported to DImg
-void HistogramWidget::updateSelectionData(uint *s_data, uint s_w, uint s_h,
-                                          bool blinkComputation)
-{
-    updateSelectionData((uchar*)s_data, s_w, s_h, false, blinkComputation);
 }
 
 void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,

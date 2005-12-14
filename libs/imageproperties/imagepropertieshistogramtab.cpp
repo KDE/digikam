@@ -405,8 +405,8 @@ void ImagePropertiesHistogramTab::setSelection(QRect *selectionArea)
     if (m_selectionArea)
     {
         m_imageSelection = m_image.copy(*m_selectionArea);
-        m_histogramWidget->updateSelectionData((uint *)m_imageSelection.bits(), m_imageSelection.width(),
-                                               m_imageSelection.height());
+        m_histogramWidget->updateSelectionData(m_imageSelection.bits(), m_imageSelection.width(),
+                                               m_imageSelection.height(), m_imageSelection.sixteenBit());
         m_regionBG->show();                                         
     }
     else 

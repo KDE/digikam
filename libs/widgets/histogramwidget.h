@@ -90,27 +90,10 @@ public:
                     bool blinkComputation=true,
                     bool statisticsVisible=false);
 
-    // FIXME : remove this constructor when all digiKam core will be ported to DImg
-    /** Constructor with image data and without image selection data.*/
-    HistogramWidget(int w, int h,                              // Widget size.
-                    uint *i_data, uint i_w, uint i_h,          // Full image info.
-                    QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
-                    bool statisticsVisible=false);
-
     /** Constructor with image data and without image selection data.*/
     HistogramWidget(int w, int h,                              // Widget size.
                     uchar *i_data, uint i_w, uint i_h,         // Full image info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget *parent=0, bool selectMode=true,
-                    bool blinkComputation=true,
-                    bool statisticsVisible=false);
-
-    // FIXME : remove this constructor when all digiKam core will be ported to DImg
-    /** Constructor with image data and image selection data.*/
-    HistogramWidget(int w, int h,                              // Widget size.
-                    uint *i_data, uint i_w, uint i_h,          // Full image info.
-                    uint *s_data, uint s_w, uint s_h,          // Image selection info.
                     QWidget *parent=0, bool selectMode=true,
                     bool blinkComputation=true,
                     bool statisticsVisible=false);
@@ -133,22 +116,11 @@ public:
     /** Stop current histogram computations.*/
     void stopHistogramComputation(void);
 
-    // FIXME : remove this constructor when all digiKam core will be ported to DImg
-    /** Update full image histogram data methods.*/
-    void updateData(uint *i_data, uint i_w, uint i_h,
-                    uint *s_data=0, uint s_w=0, uint s_h=0,
-                    bool blinkComputation=true);
-
     /** Update full image histogram data methods.*/
     void updateData(uchar *i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
                     uchar *s_data=0, uint s_w=0, uint s_h=0, 
                     bool blinkComputation=true);
-
-    // FIXME : remove this constructor when all digiKam core will be ported to DImg
-    /** Update image selection histogram data methods.*/
-    void updateSelectionData(uint *s_data, uint s_w, uint s_h,
-                             bool blinkComputation=true);
 
     /** Update image selection histogram data methods.*/
     void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
@@ -156,9 +128,6 @@ public:
                              bool blinkComputation=true);
 
     void setHistogramGuideByColor(DColor color);
-
-    // FIXME : remove this method when all digiKam core will be ported to DImg
-    void setHistogramGuide(QColor ){};
 
     void reset(void);
 
