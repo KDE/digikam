@@ -98,6 +98,8 @@ private:
     KProgress    *m_progressBar;
         
     KColorButton *m_guideColorBt;
+
+    KAboutData   *m_about;
     
 private slots:
     

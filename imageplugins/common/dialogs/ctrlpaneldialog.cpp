@@ -67,6 +67,7 @@ CtrlPanelDialog::CtrlPanelDialog(QWidget* parent, QString title, QString name,
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_threadedFilter       = 0L;
+    m_about                = 0L;
     QString whatsThis;
 
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );

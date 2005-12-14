@@ -60,7 +60,9 @@ private:
     QWidget        *m_parent;
     
     QString         m_name;
-    
+
+    KAboutData     *m_about;
+        
 private slots:
 
     void slotHelp();
