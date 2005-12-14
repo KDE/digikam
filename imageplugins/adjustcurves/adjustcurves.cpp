@@ -294,13 +294,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, uint *imageData, uint widt
 
 AdjustCurveDialog::~AdjustCurveDialog()
 {
-}
-
-void AdjustCurveDialog::closeEvent(QCloseEvent *e)
-{
     delete m_curvesWidget;
     delete m_curves;
-    e->accept();
 }
 
 void AdjustCurveDialog::slotSpotColorChanged(const QColor &color, bool release)

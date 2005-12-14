@@ -67,10 +67,6 @@ private:
     Logarithmic
     };
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
     double                        m_redRedGain;

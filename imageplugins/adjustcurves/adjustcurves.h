@@ -56,10 +56,6 @@ public:
     AdjustCurveDialog(QWidget *parent, uint *imageData, uint width, uint height);
     ~AdjustCurveDialog();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
     enum ColorPicker

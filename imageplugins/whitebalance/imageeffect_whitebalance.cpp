@@ -378,17 +378,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, uint *imageD
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
 {
-}
-
-void ImageEffect_WhiteBalance::closeEvent(QCloseEvent *e)
-{
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
-    e->accept();
 }
 
 void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)

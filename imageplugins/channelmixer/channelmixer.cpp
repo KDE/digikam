@@ -272,17 +272,12 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, uint *imageData, uint wi
 
 ChannelMixerDialog::~ChannelMixerDialog()
 {
-}
-
-void ChannelMixerDialog::closeEvent(QCloseEvent *e)
-{
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
-    e->accept();
 }
 
 void ChannelMixerDialog::slotResetCurrentChannel()

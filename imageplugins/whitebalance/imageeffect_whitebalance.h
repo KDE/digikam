@@ -59,11 +59,7 @@ public:
     ImageEffect_WhiteBalance(QWidget* parent, uint *imageData, uint width, uint height);
     ~ImageEffect_WhiteBalance();
     
-protected:
-
-    void closeEvent(QCloseEvent *e);    
-
-private:    
+private:
 
     bool                          m_clipSat;
     bool                          m_overExp;

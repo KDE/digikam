@@ -371,13 +371,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, uint *imageData, uint widt
 
 AdjustLevelDialog::~AdjustLevelDialog()
 {
-}
-
-void AdjustLevelDialog::closeEvent(QCloseEvent *e)
-{
     delete m_histogramWidget;
     delete m_levels;
-    e->accept();
 }
 
 void AdjustLevelDialog::slotSpotColorChanged(const QColor &color, bool release)

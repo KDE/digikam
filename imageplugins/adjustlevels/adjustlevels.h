@@ -55,10 +55,6 @@ public:
     AdjustLevelDialog(QWidget *parent, uint *imageData, uint width, uint height);
     ~AdjustLevelDialog();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-    
 private:
     
     enum HistogramScale
