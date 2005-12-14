@@ -72,6 +72,7 @@ ImageGuideDialog::ImageGuideDialog(QWidget* parent, QString title, QString name,
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
     m_threadedFilter       = 0L;
+    m_about                = 0L;    
     QString whatsThis;
 
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
@@ -164,6 +165,9 @@ ImageGuideDialog::~ImageGuideDialog()
 
     if (m_threadedFilter)
        delete m_threadedFilter;
+
+    if (m_about)
+       delete m_about;                    
 }
 
 void ImageGuideDialog::readSettings(void)
@@ -212,8 +216,9 @@ void ImageGuideDialog::setUserAreaWidget(QWidget *w)
 
 void ImageGuideDialog::setAboutData(KAboutData *about)
 {
+    m_about = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
@@ -234,15 +239,15 @@ void ImageGuideDialog::abortPreview()
 void ImageGuideDialog::slotResized(void)
 {
     if (m_currentRenderingMode == FinalRendering)
-       {
+    {
        m_imagePreviewWidget->update();
        return;
-       }
+    }
     else if (m_currentRenderingMode == PreviewRendering)
-       {
+    {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
-       }
+    }
 
     QTimer::singleShot(0, this, SLOT(slotEffect()));
 }
@@ -263,12 +268,12 @@ void ImageGuideDialog::slotDefault()
 void ImageGuideDialog::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
 
        kapp->restoreOverrideCursor();
-       }
+    }
     
     done(Cancel);
 }
@@ -276,12 +281,12 @@ void ImageGuideDialog::slotCancel()
 void ImageGuideDialog::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
 
        kapp->restoreOverrideCursor();
-       }
+    }
 
     e->accept();
 }
@@ -294,10 +299,10 @@ void ImageGuideDialog::slotHelp()
 void ImageGuideDialog::slotTimer()
 {
     if (m_timer)
-       {
+    {
        m_timer->stop();
        delete m_timer;
-       }
+    }
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL(timeout()),
@@ -353,50 +358,50 @@ void ImageGuideDialog::customEvent(QCustomEvent *event)
     if (!d) return;
 
     if (d->starting)           // Computation in progress !
-        {
+    {
         m_progressBar->setValue(d->progress);
-        }
+    }
     else
-        {
+    {
         if (d->success)        // Computation Completed !
-            {
+        {
             switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview " << m_name << " completed..." << endl;
-                 putPreviewData();
-                 abortPreview();
-                 break;
-                 }
-
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final" << m_name << " completed..." << endl;
-                 putFinalData();
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
             {
-            switch (m_currentRenderingMode)
-                {
                 case PreviewRendering:
-                    {
-                    kdDebug() << "Preview " << m_name << " failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
+                {
+                    kdDebug() << "Preview " << m_name << " completed..." << endl;
+                    putPreviewData();
                     abortPreview();
                     break;
-                    }
+                }
 
                 case FinalRendering:
+                {
+                    kdDebug() << "Final" << m_name << " completed..." << endl;
+                    putFinalData();
+                    kapp->restoreOverrideCursor();
+                    accept();
                     break;
                 }
             }
         }
+        else                   // Computation Failed !
+        {
+            switch (m_currentRenderingMode)
+            {
+                case PreviewRendering:
+                {
+                    kdDebug() << "Preview " << m_name << " failed..." << endl;
+                    // abortPreview() must be call here for set progress bar to 0 properly.
+                    abortPreview();
+                    break;
+                }
+
+                case FinalRendering:
+                    break;
+            }
+        }
+    }
 
     delete d;
 }

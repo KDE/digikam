@@ -68,6 +68,8 @@ ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, b
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
+    m_about = 0L;
+    
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
@@ -94,6 +96,9 @@ ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, b
 ImageDialogBase::~ImageDialogBase()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));
+
+    if (m_about)
+       delete m_about;           
 }
 
 void ImageDialogBase::slotHelp()
@@ -103,8 +108,9 @@ void ImageDialogBase::slotHelp()
 
 void ImageDialogBase::setAboutData(KAboutData *about)
 {
+    m_about = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
