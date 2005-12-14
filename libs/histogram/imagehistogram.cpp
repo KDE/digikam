@@ -57,12 +57,6 @@ ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteen
     setup(i_data, i_w, i_h, i_sixteenBits, parent);
 }
 
-ImageHistogram::ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent)
-              : QThread()
-{
-    setup((uchar*)i_data, i_w, i_h, false, parent);
-}
-
 void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
 {
     m_imageData     = i_data;

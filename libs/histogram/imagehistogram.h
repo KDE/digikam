@@ -80,9 +80,6 @@ private:
 
 public:
 
-    // FIXME : remove this cpnstructor when all digiKam core will be ported to DImg.
-    ImageHistogram(uint *i_data, uint i_w, uint i_h, QObject *parent=0);
-
     ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent=0);
 
     ImageHistogram(const DImg& image, QObject *parent=0);

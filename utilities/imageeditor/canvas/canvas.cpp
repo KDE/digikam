@@ -276,13 +276,14 @@ void Canvas::drawHistogramPixmap()
 
     p.fillRect(QRect(0, 0, wWidth, wHeight), QBrush(qRgba(0xff, 0xff, 0xff, 127)));
 
-    // logic stolen from histogramwidget.c 
+    // logic stolen from histogramwidget.cpp
+     
     for (x = 0 ; x < wWidth ; ++x)
     {
         double value = 0.0; 
         int    i, j;
 
-        i = (x * 256) / wWidth;
+        i = (x * histogram->getHistogramSegment()) / wWidth;
         j = i + 1;
 
         do
@@ -301,19 +302,20 @@ void Canvas::drawHistogramPixmap()
 
         QColor hiscolor;
 
-        switch (type) {
-        case ImageHistogram::RedChannel:
-            hiscolor = qRgba(0xFF, 0, 0, 127);
-            break;
-        case ImageHistogram::GreenChannel:
-            hiscolor = qRgba(0, 0xFF, 0, 127);
-            break;
-        case ImageHistogram::BlueChannel:
-            hiscolor = qRgba(0, 0, 0xFF, 127);
-            break;
-        default:
-            hiscolor = qRgba(0, 0, 0, 127);
-            break;
+        switch (type)
+        {
+            case ImageHistogram::RedChannel:
+                hiscolor = qRgba(0xFF, 0, 0, 127);
+                break;
+            case ImageHistogram::GreenChannel:
+                hiscolor = qRgba(0, 0xFF, 0, 127);
+                break;
+            case ImageHistogram::BlueChannel:
+                hiscolor = qRgba(0, 0, 0xFF, 127);
+                break;
+            default:
+                hiscolor = qRgba(0, 0, 0, 127);
+                break;
         }
 
         p.setPen(QPen::QPen(hiscolor, 1, Qt::SolidLine));
@@ -520,11 +522,13 @@ bool Canvas::updateHistogram(bool invalidate)
         d->imageHistogram = 0;
     }
 
-    if (d->imageHistogram == 0) {
+    if (d->imageHistogram == 0)
+    {
         d->histogramReady = false;
-        d->imageHistogram = new ImageHistogram(d->im->getData(),
+        d->imageHistogram = new ImageHistogram(d->im->getImage(),
                                                d->im->origWidth(),
                                                d->im->origHeight(),
+                                               d->im->sixteenBit(),
                                                this);
         // paint busy
         drawHistogramPixmapBusy();
@@ -1428,15 +1432,12 @@ void Canvas::slotCopy()
         return;
 
     QApplication::setOverrideCursor (Qt::waitCursor);
-    uint* data = d->im->getSelectedData();
-    
-    QImage selImg;
-    selImg.create(w, h, 32);
-    memcpy(selImg.bits(), data, selImg.numBytes());
-    
-    QApplication::clipboard()->setData(new QImageDrag(selImg), QClipboard::Clipboard);
-
+    uchar* data = d->im->getImageSelection();
+    DImg selDImg = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data);
     delete [] data;
+
+    QImage selImg = selDImg.copyQImage();
+    QApplication::clipboard()->setData(new QImageDrag(selImg), QClipboard::Clipboard);
     QApplication::restoreOverrideCursor ();
 }
 
