@@ -98,26 +98,26 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Blowup Photograph"),
-                                       digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to blowup a photograph."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier",
-                                       0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
+    m_about = new KAboutData("digikamimageplugins",
+                             I18N_NOOP("Blowup Photograph"),
+                             digikamimageplugins_version,
+                             I18N_NOOP("A digiKam image plugin to blowup a photograph."),
+                             KAboutData::License_GPL,
+                             "(c) 2005, Gilles Caulier",
+                             0,
+                             "http://extragear.kde.org/apps/digikamimageplugins");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+    m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                       "caulier dot gilles at free.fr");
 
-    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://cimg.sourceforge.net");
+    m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                       "http://cimg.sourceforge.net");
 
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
-                     "gerhard at kulzer.net");
+    m_about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
+                       "gerhard at kulzer.net");
 
     m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
@@ -299,6 +299,8 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
 {
+    delete m_about;
+
     if (m_cimgInterface)
        delete m_cimgInterface;
 }

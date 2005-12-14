@@ -30,6 +30,7 @@
 class QPushButton;
 
 class KDoubleNumInput;
+class KAboutData;
 
 namespace Digikam
 {
@@ -51,9 +52,7 @@ public:
 protected:
 
     void solarize(double factor, uint *data, int w, int h);
-    
-    void closeEvent(QCloseEvent *e);
-    
+
 private:
     
     QWidget              *m_parent;
@@ -61,6 +60,8 @@ private:
     QPushButton          *m_helpButton;
 
     KDoubleNumInput      *m_numInput;
+    
+    KAboutData           *m_about;
     
     Digikam::ImageWidget *m_previewWidget;
 

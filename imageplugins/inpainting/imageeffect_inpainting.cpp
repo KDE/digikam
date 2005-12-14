@@ -101,11 +101,10 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
 
     Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface.getSelectedData();
-    int   w    = iface.selectedWidth();
-    int   h    = iface.selectedHeight();
+    int w = iface.selectedWidth();
+    int h = iface.selectedHeight();
 
-    if (!data || !w || !h)
+    if (!w || !h)
     {
         InPaintingPassivePopup* popup = new InPaintingPassivePopup(parent);
         popup->setView(i18n("Inpainting Photograph Tool"),
@@ -120,9 +119,7 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
     // -- run the dlg ----------------------------------------------
 
     ImageEffect_InPainting_Dialog dlg(parent);
-
-    if (dlg.exec() != QDialog::Accepted)
-        return;
+    dlg.exec();
 }
 
 //------------------------------------------------------------------------------------------
@@ -146,7 +143,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikamimageplugins",
+    m_about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Photograph Inpainting"),
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
@@ -155,17 +152,17 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+    m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                       "caulier dot gilles at free.fr");
 
-    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://cimg.sourceforge.net");
+    m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                       "http://cimg.sourceforge.net");
 
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
-                     "gerhard at kulzer.net");
+    m_about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
+                       "gerhard at kulzer.net");
 
     m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
@@ -341,8 +338,8 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
 {
-    // No need to delete m_previewData because it's driving by QImage.
-
+    delete m_about;
+    
     if (m_cimgInterface)
        delete m_cimgInterface;
 }
