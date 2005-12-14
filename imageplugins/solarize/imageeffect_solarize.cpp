@@ -63,20 +63,20 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 {
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Solarize a Photograph"),
-                                       digikamimageplugins_version,
-                                       I18N_NOOP("A solarize image plugin for digiKam."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2004, Renchi Raju",
-                                       0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
+    m_about = new KAboutData("digikamimageplugins",
+                             I18N_NOOP("Solarize a Photograph"),
+                             digikamimageplugins_version,
+                             I18N_NOOP("A solarize image plugin for digiKam."),
+                             KAboutData::License_GPL,
+                             "(c) 2004, Renchi Raju",
+                             0,
+                             "http://extragear.kde.org/apps/digikamimageplugins");
 
-    about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),
-                     "renchi@pooh.tam.uiuc.edu");
+    m_about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),
+                       "renchi@pooh.tam.uiuc.edu");
 
     m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
@@ -122,19 +122,15 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 ImageEffect_Solarize::~ImageEffect_Solarize()
 {
     saveDialogSize("Solarize Tool Dialog");
+
+    delete m_about;
+    delete m_numInput;
+    delete m_previewWidget;
 }
 
 void ImageEffect_Solarize::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("solarizeimage", "digikamimageplugins");
-}
-
-void ImageEffect_Solarize::closeEvent(QCloseEvent *e)
-{
-    delete m_numInput;
-    delete m_previewWidget;
-
-    e->accept();
 }
 
 void ImageEffect_Solarize::slotEffect()
