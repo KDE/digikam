@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_restoration.h"
 #include "imageplugin_restoration.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_Restoration::setEnabledActions(bool enable)
 
 void ImagePlugin_Restoration::slotRestoration()
 {
-    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget());
+    QString title = i18n("Photograph Restoration");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamRestorationImagesPlugin::ImageEffect_Restoration dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_restoration.moc"

@@ -98,26 +98,26 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Blowup Photograph"),
-                                       digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to blowup a photograph."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier",
-                                       0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
+    m_about = new KAboutData("digikamimageplugins",
+                             I18N_NOOP("Blowup Photograph"),
+                             digikamimageplugins_version,
+                             I18N_NOOP("A digiKam image plugin to blowup a photograph."),
+                             KAboutData::License_GPL,
+                             "(c) 2005, Gilles Caulier",
+                             0,
+                             "http://extragear.kde.org/apps/digikamimageplugins");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+    m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                       "caulier dot gilles at free.fr");
 
-    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://cimg.sourceforge.net");
+    m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                       "http://cimg.sourceforge.net");
 
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
-                     "gerhard at kulzer.net");
+    m_about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
+                       "gerhard at kulzer.net");
 
     m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
@@ -299,6 +299,8 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
 
 ImageEffect_BlowUp::~ImageEffect_BlowUp()
 {
+    delete m_about;
+    
     if (m_cimgInterface)
        delete m_cimgInterface;
 }
@@ -337,30 +339,30 @@ void ImageEffect_BlowUp::slotDefault()
 void ImageEffect_BlowUp::slotAdjustRatioFromWidth(int w)
 {
     if ( m_preserveRatioBox->isChecked() )
-       {
+    {
        m_newHeight->blockSignals(true);
        m_newHeight->setValue( (int) (w / m_aspectRatio) );
        m_newHeight->blockSignals(false);
-       }
+    }
 }
 
 void ImageEffect_BlowUp::slotAdjustRatioFromHeight(int h)
 {
     if ( m_preserveRatioBox->isChecked() )
-       {
+    {
        m_newWidth->blockSignals(true);
        m_newWidth->setValue( (int)(m_aspectRatio * h) );
        m_newWidth->blockSignals(false);
-       }
+    }
 }
 
 void ImageEffect_BlowUp::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
-       }
+    }
 
     done(Cancel);
 }
@@ -378,10 +380,10 @@ void ImageEffect_BlowUp::processCImgURL(const QString& url)
 void ImageEffect_BlowUp::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
-       }
+    }
 
     e->accept();
 }
@@ -412,9 +414,10 @@ void ImageEffect_BlowUp::slotOk()
     m_progressBar->setValue(0);
 
     Digikam::ImageIface iface(0, 0);
-    QImage originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( originalImage.bits(), data, originalImage.numBytes() );
+    uchar *data = iface.getOriginalImage();
+    Digikam::DImg originalImage = Digikam::DImg(iface.originalWidth(), iface.originalHeight(),
+                                  iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    delete [] data;
 
     if (m_cimgInterface)
        delete m_cimgInterface;
@@ -433,7 +436,6 @@ void ImageEffect_BlowUp::slotOk()
                                     false, false, true, NULL,
                                     m_newWidth->value(),
                                     m_newHeight->value(), 0, this);
-    delete [] data;
 }
 
 void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
@@ -445,37 +447,39 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
     if (!d) return;
 
     if (d->starting)           // Computation in progress !
-        {
+    {
         m_progressBar->setValue(d->progress);
-        }
+    }
     else
-        {
+    {
         if (d->success)        // Computation Completed !
-            {
+        {
             switch (m_currentRenderingMode)
-              {
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final BlowUp completed..." << endl;
-                 Digikam::ImageIface iface(0, 0);
-                 QImage resizedImage = m_cimgInterface->getTargetImage();
-                 iface.putOriginalData(i18n("BlowUp"), (uint*)resizedImage.bits(),
-                                       resizedImage.width(), resizedImage.height());
-                 m_parent->setCursor( KCursor::arrowCursor() );
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
             {
-            switch (m_currentRenderingMode)
-                {
                 case FinalRendering:
+                {
+                    kdDebug() << "Final BlowUp completed..." << endl;
+                    
+                    Digikam::ImageIface iface(0, 0);
+                    Digikam::DImg resizedImage = m_cimgInterface->getTargetImage();
+
+                    iface.putOriginalImage(i18n("BlowUp"), resizedImage.bits(),
+                                           resizedImage.width(), resizedImage.height());
+                    m_parent->setCursor( KCursor::arrowCursor() );
+                    accept();
                     break;
                 }
             }
         }
+        else                   // Computation Failed !
+        {
+            switch (m_currentRenderingMode)
+            {
+                case FinalRendering:
+                    break;
+            }
+        }
+    }
 
     delete d;
 }

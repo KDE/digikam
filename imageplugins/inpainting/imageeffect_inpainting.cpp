@@ -64,10 +64,6 @@
 #include <kdebug.h>
 #include <kpassivepopup.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -101,11 +97,10 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
 
     Digikam::ImageIface iface(0, 0);
 
-    uint* data = iface.getSelectedData();
-    int   w    = iface.selectedWidth();
-    int   h    = iface.selectedHeight();
+    int w = iface.selectedWidth();
+    int h = iface.selectedHeight();
 
-    if (!data || !w || !h)
+    if (!w || !h)
     {
         InPaintingPassivePopup* popup = new InPaintingPassivePopup(parent);
         popup->setView(i18n("Inpainting Photograph Tool"),
@@ -120,9 +115,7 @@ void ImageEffect_InPainting::inPainting(QWidget* parent)
     // -- run the dlg ----------------------------------------------
 
     ImageEffect_InPainting_Dialog dlg(parent);
-
-    if (dlg.exec() != QDialog::Accepted)
-        return;
+    dlg.exec();
 }
 
 //------------------------------------------------------------------------------------------
@@ -146,26 +139,26 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
     // About data and help button.
 
-    KAboutData* about = new KAboutData("digikamimageplugins",
-                                       I18N_NOOP("Photograph Inpainting"),
-                                       digikamimageplugins_version,
-                                       I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
-                                       KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier",
-                                       0,
-                                       "http://extragear.kde.org/apps/digikamimageplugins");
+    m_about = new KAboutData("digikamimageplugins",
+                             I18N_NOOP("Photograph Inpainting"),
+                             digikamimageplugins_version,
+                             I18N_NOOP("A digiKam image plugin to inpaint a photograph."),
+                             KAboutData::License_GPL,
+                             "(c) 2005, Gilles Caulier",
+                             0,
+                             "http://extragear.kde.org/apps/digikamimageplugins");
 
-    about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+    m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
+                       "caulier dot gilles at free.fr");
 
-    about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
-                     "http://cimg.sourceforge.net");
+    m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
+                       "http://cimg.sourceforge.net");
 
-    about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
-                     "gerhard at kulzer.net");
+    m_about->addAuthor("Gerhard Kulzer", I18N_NOOP("Feedback and plugin polishing"),
+                       "gerhard at kulzer.net");
 
     m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     m_helpButton->setPopup( helpMenu->menu() );
@@ -341,7 +334,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
 
 ImageEffect_InPainting_Dialog::~ImageEffect_InPainting_Dialog()
 {
-    // No need to delete m_previewData because it's driving by QImage.
+    delete m_about;
 
     if (m_cimgInterface)
        delete m_cimgInterface;
@@ -378,28 +371,28 @@ void ImageEffect_InPainting_Dialog::slotDefault()
     m_normalizeBox->setChecked(false);
 
     switch(m_inpaintingTypeCB->currentItem())
-        {
+    {
         case RemoveSmallArtefact:
-            {
+        {
             m_timeStepInput->setValue(20.0);
             m_blurItInput->setValue(30.0);
             break;
-            }
+        }
 
         case RemoveMediumArtefact:
-            {
+        {
             m_timeStepInput->setValue(50.0);
             m_blurItInput->setValue(50.0);
             break;
-            }
+        }
 
         case RemoveLargeArtefact:
-            {
+        {
             m_timeStepInput->setValue(100.0);
             m_blurItInput->setValue(100.0);
             break;
-            }
         }
+    }
 
     m_detailInput->blockSignals(false);
     m_gradientInput->blockSignals(false);
@@ -416,10 +409,10 @@ void ImageEffect_InPainting_Dialog::slotDefault()
 void ImageEffect_InPainting_Dialog::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
-       }
+    }
 
     done(Cancel);
 }
@@ -437,10 +430,10 @@ void ImageEffect_InPainting_Dialog::processCImgURL(const QString& url)
 void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
-       {
+    {
        m_cimgInterface->stopComputation();
        m_parent->setCursor( KCursor::arrowCursor() );
-       }
+    }
 
     e->accept();
 }
@@ -468,9 +461,10 @@ void ImageEffect_InPainting_Dialog::slotOk()
     m_progressBar->setValue(0);
 
     Digikam::ImageIface iface(0, 0);
-    m_originalImage = QImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( m_originalImage.bits(), data, m_originalImage.numBytes() );
+    uchar *data = iface.getOriginalImage();
+    m_originalImage = Digikam::DImg(iface.originalWidth(), iface.originalHeight(),
+                                    iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    delete [] data;
 
     // Selected area from the image and mask creation:
     //
@@ -527,7 +521,6 @@ void ImageEffect_InPainting_Dialog::slotOk()
                                     m_linearInterpolationBox->isChecked(),
                                     false, true, false, NULL, 0, 0,
                                     &m_maskImage, this);
-    delete [] data;
 }
 
 void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
@@ -539,31 +532,30 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
     if (!d) return;
 
     if (d->starting)           // Computation in progress !
-        {
+    {
         m_progressBar->setValue(d->progress);
-        }
+    }
     else
-        {
+    {
         if (d->success)        // Computation Completed !
-            {
+        {
             switch (m_currentRenderingMode)
-              {
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final InPainting completed..." << endl;
-                 Digikam::ImageIface iface(0, 0);
-                 QImage target = m_cimgInterface->getTargetImage();
-                 bitBlt(&m_originalImage, m_maskRect.left(), m_maskRect.top(),
-                        &target, 0, 0, target.width(), target.height());
-
-                 iface.putOriginalData(i18n("InPainting"), (uint*)m_originalImage.bits());
-
-                 m_parent->setCursor( KCursor::arrowCursor() );
-                 accept();
-                 break;
-                 }
-              }
+            {
+                case FinalRendering:
+                {
+                    kdDebug() << "Final InPainting completed..." << endl;
+                    Digikam::ImageIface iface(0, 0);
+                    Digikam::DImg target = m_cimgInterface->getTargetImage();
+                    m_originalImage.bitBltImage(&target, m_maskRect.left(), m_maskRect.top());
+    
+                    iface.putOriginalImage(i18n("InPainting"), m_originalImage.bits());
+    
+                    m_parent->setCursor( KCursor::arrowCursor() );
+                    accept();
+                    break;
+                }
             }
+        }
         else                   // Computation Failed !
             {
             switch (m_currentRenderingMode)
@@ -588,16 +580,16 @@ void ImageEffect_InPainting_Dialog::slotUser3()
     QFile file(loadInpaintingFile.path());
 
     if ( file.open(IO_ReadOnly) )
-        {
+    {
         QTextStream stream( &file );
         if ( stream.readLine() != "# Photograph Inpainting Configuration File" )
-           {
+        {
            KMessageBox::error(this,
                         i18n("\"%1\" is not a Photograph Inpainting settings text file.")
                         .arg(loadInpaintingFile.fileName()));
            file.close();
            return;
-           }
+        }
 
         blockSignals(true);
         m_normalizeBox->setChecked( stream.readLine().toInt() );
@@ -612,7 +604,7 @@ void ImageEffect_InPainting_Dialog::slotUser3()
         m_integralStepInput->setValue( stream.readLine().toDouble() );
         m_gaussianInput->setValue( stream.readLine().toDouble() );
         blockSignals(false);
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Inpainting text file."));
 
@@ -630,7 +622,7 @@ void ImageEffect_InPainting_Dialog::slotUser2()
     QFile file(saveRestorationFile.path());
 
     if ( file.open(IO_WriteOnly) )
-        {
+    {
         QTextStream stream( &file );
         stream << "# Photograph Inpainting Configuration File\n";
         stream << m_normalizeBox->isChecked() << "\n";
@@ -643,7 +635,7 @@ void ImageEffect_InPainting_Dialog::slotUser2()
         stream << m_angularStepInput->value() << "\n";
         stream << m_integralStepInput->value() << "\n";
         stream << m_gaussianInput->value() << "\n";
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Inpainting text file."));
 

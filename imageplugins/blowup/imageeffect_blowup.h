@@ -42,6 +42,7 @@ class QTabWidget;
 class KIntNumInput;
 class KDoubleNumInput;
 class KProgress;
+class KAboutData;
 
 namespace DigikamImagePlugins
 {
@@ -113,6 +114,8 @@ private:
     QTabWidget      *m_mainTab;
     
     KProgress       *m_progressBar;
+    
+    KAboutData      *m_about;
     
     DigikamImagePlugins::CimgIface *m_cimgInterface;
     

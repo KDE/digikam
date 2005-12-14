@@ -33,6 +33,10 @@
 
 #include <kdialogbase.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 class QPushButton;
 class QLabel;
 class QCheckBox;
@@ -40,6 +44,7 @@ class QTimer;
 class QCustomEvent;
 class QComboBox;
 class QTabWidget;
+class QFrame;
 
 class KDoubleNumInput;
 class KProgress;
@@ -97,14 +102,10 @@ private:
 
     int              m_currentRenderingMode;
     
-    QImage           m_originalImage;
-    QImage           m_cropImage;
-    QImage           m_maskImage;
-    
     QRect            m_maskRect;
     
-    QImage           m_previewImage;
-    
+    QImage           m_maskImage;
+        
     QWidget         *m_parent;
     
     QPushButton     *m_helpButton;
@@ -136,11 +137,19 @@ private:
     QTabWidget      *m_mainTab;
     
     KProgress       *m_progressBar;
+
+    KAboutData      *m_about;
     
     DigikamImagePlugins::CimgIface *m_cimgInterface;
     
     Digikam::ImageIface            *m_iface;    
+
+    Digikam::DImg                   m_originalImage;
+    Digikam::DImg                   m_cropImage;
+    Digikam::DImg                   m_previewImage;
     
+private:
+        
     void customEvent(QCustomEvent *event);
     
 private slots:

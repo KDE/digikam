@@ -18,9 +18,12 @@
  * 
  * ============================================================ */
  
- 
 #ifndef CIMGIFACE_H
 #define CIMGIFACE_H
+
+// QT includes.
+
+#include <qimage.h>
 
 // Digikam includes.
 
@@ -35,12 +38,12 @@ class QObject;
 namespace DigikamImagePlugins
 {
 
-class CimgIface : public Digikam::ThreadedFilter
+class CimgIface : public Digikam::DImgThreadedFilter
 {
 
 public:
 
-    CimgIface(QImage *orgImage,
+    CimgIface(Digikam::DImg *orgImage,
               uint blurIt, double timeStep, double integralStep,
               double angularStep, double blur, double detail,
               double gradient, double gaussian, bool normalize, bool linearInterpolation, 
@@ -53,10 +56,10 @@ public:
 private:
 
     // Inpainting temp mask file path.
-    QString      m_tmpMaskFile;
+    QString       m_tmpMaskFile;
     
     // Inpainting temp mask data.
-    QImage       m_inPaintingMask;
+    QImage        m_inPaintingMask;
 
 private:  // CImg filter data.
     

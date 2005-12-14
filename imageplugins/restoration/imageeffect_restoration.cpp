@@ -47,10 +47,6 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -60,9 +56,9 @@
 namespace DigikamRestorationImagesPlugin
 {
 
-ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent)
-                       : CtrlPanelDialog(parent, i18n("Photograph Restoration"), 
-                                         "restoration", true, true)
+ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title, QFrame* banner)
+                       : Digikam::CtrlPanelDlg(parent, title, "restoration", true, true, true,
+                                               Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
 
@@ -277,31 +273,31 @@ void ImageEffect_Restoration::resetValues()
     m_normalizeBox->setChecked(false);
     
     switch(m_restorationTypeCB->currentItem())
-        {
+    {
         case ReduceUniformNoise:
-            {
+        {
             m_timeStepInput->setValue(40.0);
             break;
-            }
+        }
         
         case ReduceJPEGArtefacts:
-            {
+        {
             m_detailInput->setValue(0.3);
             m_blurInput->setValue(1.0);
             m_timeStepInput->setValue(100.0);
             m_blurItInput->setValue(2.0);
             break;
-            }
+        }
         
         case ReduceTexturing:
-            {
+        {
             m_detailInput->setValue(0.5);
             m_blurInput->setValue(1.5);
             m_timeStepInput->setValue(100.0);
             m_blurItInput->setValue(2.0);
             break;
-            }
-        }                       
+        }
+    }
                     
     m_detailInput->blockSignals(false);
     m_gradientInput->blockSignals(false);
@@ -334,9 +330,9 @@ void ImageEffect_Restoration::prepareEffect()
     m_linearInterpolationBox->setEnabled(false);
     m_normalizeBox->setEnabled(false);
     
-    QImage previewImage = m_imagePreviewWidget->getOriginalClipImage();
+    Digikam::DImg previewImage = m_imagePreviewWidget->getOriginalRegionImage();
     
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new DigikamImagePlugins::CimgIface(&previewImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
@@ -366,11 +362,11 @@ void ImageEffect_Restoration::prepareFinal()
     m_normalizeBox->setEnabled(false);
     
     Digikam::ImageIface iface(0, 0);
-    QImage originalImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( originalImage.bits(), data, originalImage.numBytes() );
+    uchar *data = iface.getOriginalImage();
+    Digikam::DImg originalImage(iface.originalWidth(), iface.originalHeight(),
+                                iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new DigikamImagePlugins::CimgIface(&originalImage, 
                                     (uint)m_blurItInput->value(),
                                     m_timeStepInput->value(),
@@ -388,16 +384,16 @@ void ImageEffect_Restoration::prepareFinal()
 
 void ImageEffect_Restoration::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImage(imDest);
 }
 
 void ImageEffect_Restoration::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalData(i18n("Restoration"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Restoration"),
+                           m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_Restoration::slotUser3()
@@ -411,16 +407,17 @@ void ImageEffect_Restoration::slotUser3()
     QFile file(loadRestorationFile.path());
     
     if ( file.open(IO_ReadOnly) )   
-        {
+    {
         QTextStream stream( &file );
+        
         if ( stream.readLine() != "# Photograph Restoration Configuration File" )
-           {
+        {
            KMessageBox::error(this, 
                         i18n("\"%1\" is not a Photograph Restoration settings text file.")
                         .arg(loadRestorationFile.fileName()));
            file.close();            
            return;
-           }
+        }
         
         blockSignals(true);
         m_normalizeBox->setChecked( stream.readLine().toInt() );
@@ -436,7 +433,7 @@ void ImageEffect_Restoration::slotUser3()
         m_gaussianInput->setValue( stream.readLine().toDouble() );
         blockSignals(false);
         slotEffect();  
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Photograph Restoration text file."));
 
@@ -454,7 +451,7 @@ void ImageEffect_Restoration::slotUser2()
     QFile file(saveRestorationFile.path());
     
     if ( file.open(IO_WriteOnly) )   
-        {
+    {
         QTextStream stream( &file );        
         stream << "# Photograph Restoration Configuration File\n";    
         stream << m_normalizeBox->isChecked() << "\n";    
@@ -467,7 +464,7 @@ void ImageEffect_Restoration::slotUser2()
         stream << m_angularStepInput->value() << "\n";    
         stream << m_integralStepInput->value() << "\n";    
         stream << m_gaussianInput->value() << "\n";    
-        }
+    }
     else
         KMessageBox::error(this, i18n("Cannot save settings to the Photograph Restoration text file."));
     

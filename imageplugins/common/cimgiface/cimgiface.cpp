@@ -53,7 +53,7 @@ using namespace cimg_library;
 namespace DigikamImagePlugins
 {
 
-CimgIface::CimgIface(QImage *orgImage, 
+CimgIface::CimgIface(Digikam::DImg *orgImage,
                      uint blurIt, double timeStep, double integralStep,
                      double angularStep, double blur, double detail,
                      double gradient, double gaussian, 
@@ -61,7 +61,7 @@ CimgIface::CimgIface(QImage *orgImage,
                      bool restoreMode, bool inpaintMode, bool resizeMode, 
                      char* visuflowMode, int newWidth, int newHeight,
                      QImage *inPaintingMask, QObject *parent)
-         : Digikam::ThreadedFilter(orgImage, parent)
+         : Digikam::DImgThreadedFilter(orgImage, parent)
 { 
     m_restore    = restoreMode;
     m_inpaint    = inpaintMode;
@@ -82,19 +82,19 @@ CimgIface::CimgIface(QImage *orgImage,
     m_linear     = linearInterpolation;
 
     if (m_resize)
-        {
-        m_destImage.create(newWidth, newHeight, 32);
+    {
+        m_destImage = Digikam::DImg(newWidth, newHeight, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         kdDebug() << "CimgIface::m_resize is on, new size: (" << newWidth << ", " << newHeight << ")" << endl;
-        }
+    }
     else 
-        {
-        m_destImage.create(m_orgImage.width(), m_orgImage.height(), 32);
-        }
+    {
+        m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+    }
     
     m_tmpMaskFile = QString::null;
     
     if (m_inpaint && inPaintingMask)
-       {
+    {
        KStandardDirs dir;
        m_tmpMaskFile = dir.saveLocation("tmp");
        m_tmpMaskFile.append(QString::number(getpid()));
@@ -102,7 +102,7 @@ CimgIface::CimgIface(QImage *orgImage,
        m_inPaintingMask = inPaintingMask->copy();
        m_inPaintingMask.save(m_tmpMaskFile, "PNG");
        kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
-       }
+    }
     
     initFilter();       
 }
@@ -110,33 +110,33 @@ CimgIface::CimgIface(QImage *orgImage,
 CimgIface::~CimgIface()
 { 
     if (m_tmpMaskFile != QString::null)
-       {
+    {
        // Remove temporary inpainting mask.
        QFile maskFile(m_tmpMaskFile);
        maskFile.remove();
-       }
+    }
 }
 
-// We re-implemente this method from ThreadedFilter class because
+// We need to re-implemente this method from DImgThreadedFilter class because
 // target image size can be different from original if m_resize is enable.
 
 void CimgIface::initFilter(void)
 {
     if (m_orgImage.width() && m_orgImage.height())
-       {
+    {
        if (m_parent)
           start();             // m_parent is valide, start thread ==> run()
        else
           startComputation();  // no parent : no using thread.
-       }
+    }
     else  // No image data 
-       {
+    {
        if (m_parent)           // If parent then send event about a problem.
-          {
+       {
           postProgress(0, false, false);
           kdDebug() << m_name << "::No valid image data !!! ..." << endl;
-          }
        }
+    }
 }
 
 void CimgIface::cleanupFilter(void)
@@ -149,35 +149,53 @@ void CimgIface::cleanupFilter(void)
 void CimgIface::filterImage()
 {
     kdDebug() << "CimgIface::Initialization..." << endl;
-    // Big/Little Endian color manipulation compatibility.
-    Digikam::ImageFilters::imageData imagedata;
                    
     // Copy the src data into a CImg type image with three channels and no alpha. 
     // This means that a CImg is always RGBA.
 
-    uint* imageData = (uint*)m_orgImage.bits();
-    int imageWidth  = m_orgImage.width();
-    int imageHeight = m_orgImage.height();
+    uchar* imageData = m_orgImage.bits();
+    int imageWidth   = m_orgImage.width();
+    int imageHeight  = m_orgImage.height();
     
     img   = CImg<>(imageWidth, imageHeight, 1, 3);
     eigen = CImgl<>(CImg<>(2,1), CImg<>(2,2));    
-    register int x, y, i=0;
+    register int x, y;
 
-    for (y = 0; y < imageHeight; y++) 
-       {
-       for (x = 0; x < imageWidth; x++, i++) 
-          {
-          imagedata.raw = imageData[i];
-          img(x, y, 0) = (int)imagedata.channel.blue;
-          img(x, y, 1) = (int)imagedata.channel.green;
-          img(x, y, 2) = (int)imagedata.channel.red;
-          }
-       }
-
+    if (!m_orgImage.sixteenBit())           // 8 bits image.
+    {
+        uchar *ptr = imageData;
+        
+        for (y = 0; y < imageHeight; y++)
+        {
+            for (x = 0; x < imageWidth; x++) 
+            {
+                img(x, y, 0) = ptr[0];        // blue.
+                img(x, y, 1) = ptr[1];        // green.
+                img(x, y, 2) = ptr[2];        // red.
+                ptr += 4;
+            }
+        }
+    }
+    else                                // 16 bits image.
+    {
+        unsigned short *ptr = (unsigned short *)imageData;
+        
+        for (y = 0; y < imageHeight; y++)
+        {
+            for (x = 0; x < imageWidth; x++) 
+            {
+                img(x, y, 0) = ptr[0];        // blue.
+                img(x, y, 1) = ptr[1];        // green.
+                img(x, y, 2) = ptr[2];        // red.
+                ptr += 4;
+            }
+        }
+    }
+    
     kdDebug() << "CimgIface::Process Computation..." << endl;
               
     if (!process()) 
-       {
+    {
        kdDebug() << "CimgIface::Error during CImg filter computation!" << endl;
        // Everything went wrong.
        
@@ -185,31 +203,48 @@ void CimgIface::filterImage()
           postProgress( 0, false, false );   
           
        return;
-       }
+    }
     
     // Copy CImg onto destination.
     
     kdDebug() << "CimgIface::Finalization..." << endl;
 
-    i = 0;
-    uint* newData = (uint*)m_destImage.bits();
-    int newWidth  = m_destImage.width();
-    int newHeight = m_destImage.height();
+    uchar* newData = m_destImage.bits();
+    int newWidth   = m_destImage.width();
+    int newHeight  = m_destImage.height();
        
-    for (y = 0; y < newHeight; y++) 
-       {
-       for (x = 0; x < newWidth; x++, i++) 
-          {
-          // To get Alpha channel value from original (unchanged)
-          imagedata.raw = newData[i];  
-          
-          // Overwrite RGB values to destination.
-          imagedata.channel.blue  = (uchar) img(x, y, 0);
-          imagedata.channel.green = (uchar) img(x, y, 1);
-          imagedata.channel.red   = (uchar) img(x, y, 2);
-          newData[i]              = imagedata.raw;
-          }
+    if (!m_orgImage.sixteenBit())           // 8 bits image.
+    {
+        uchar *ptr = newData;
+        
+        for (y = 0; y < newHeight; y++) 
+        {
+            for (x = 0; x < newWidth; x++) 
+            {
+                // Overwrite RGB values to destination.
+                ptr[0] = (uchar) img(x, y, 0);        // Blue
+                ptr[1] = (uchar) img(x, y, 1);        // Green
+                ptr[2] = (uchar) img(x, y, 2);        // Red
+                ptr += 4;
+            }
        }
+    } 
+    else                                     // 16 bits image.
+    {
+        unsigned short *ptr = (unsigned short *)newData;
+        
+        for (y = 0; y < newHeight; y++) 
+        {
+            for (x = 0; x < newWidth; x++) 
+            {
+                // Overwrite RGB values to destination.
+                ptr[0] = (unsigned short) img(x, y, 0);        // Blue
+                ptr[1] = (unsigned short) img(x, y, 1);        // Green
+                ptr[2] = (unsigned short) img(x, y, 2);        // Red
+                ptr += 4;
+            }
+       }
+    }
 }
 
 bool CimgIface::process()
@@ -221,7 +256,7 @@ bool CimgIface::process()
     int counter = 0;
      
     for (unsigned int iter = 0; !m_cancel && (iter < m_nb_iter); iter++)
-        {
+    {
         // Compute smoothed structure tensor field G
         compute_smoothed_tensor();
 
@@ -236,7 +271,7 @@ bool CimgIface::process()
 
         // Next step
         img = dest;
-        }
+    }
     
     // Save result and end program
         
@@ -246,10 +281,10 @@ bool CimgIface::process()
     cleanup();
     
     if (m_cancel) 
-      {
+    {
       kdDebug() << "CImg filter arborted!" << endl;
       return false;    
-      }
+    }
 
     return true;
 }
@@ -263,10 +298,10 @@ void CimgIface::cleanup()
 bool CimgIface::prepare()
 {
     if (!m_restore && !m_inpaint && !m_resize && !m_visuflow) 
-       {
+    {
        kdDebug() << "Unspecified CImg filter computation Mode!" << endl;
        return false;
-       }
+    }
 
     // Init algorithm parameters
     
@@ -289,10 +324,10 @@ bool CimgIface::prepare()
 bool CimgIface::check_args()
 {
     if (m_power2 < m_power1)
-       {
+    {
        kdDebug() << "Error : p2<p1 !" << endl;
        return false;
-       }
+    }
        
     return true;
 }
@@ -309,16 +344,16 @@ bool CimgIface::prepare_restore()
 bool CimgIface::prepare_resize()
 {
     if (!m_destImage.width() && !m_destImage.height())
-       {
+    {
        kdDebug() << "Invalid output geometry (" << m_destImage.width() 
                  << "x" << m_destImage.height() << ")!" << endl;
        return false;
-       }
+    }
     else 
-       {
+    {
        kdDebug() << "Output geometry (" << m_destImage.width() 
                  << "x" << m_destImage.height() << ")" << endl;
-       }
+    }
               
     mask = CImg<uchar>(img.dimx(), img.dimy(), 1, 1, 255);
     mask.resize(m_destImage.width(), m_destImage.height(), 1, 1, 1);
@@ -334,10 +369,10 @@ bool CimgIface::prepare_inpaint()
     const char *file_m = m_tmpMaskFile.latin1();  // Input inpainting mask.
     
     if (!file_m) 
-       {
+    {
        kdDebug() << "Unspecified CImg inpainting mask !" << endl;
        return false;
-       }
+    }
 
     const unsigned int dilate  = 0; // Inpainting mask dilatation.
     const unsigned int ip_init = 3; // Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol).
@@ -345,12 +380,12 @@ bool CimgIface::prepare_inpaint()
     if (cimg::strncasecmp("block",file_m,5)) 
         mask = CImg<uchar>(file_m);
     else 
-       {
+    {
        int l = 16;
        std::sscanf(file_m,"block%d",&l);
        mask = CImg<uchar>(img.width/l,img.height/l);
        cimg_mapXY(mask,x,y) mask(x,y)=(x+y)%2;
-       }
+    }
        
     mask.resize(img.width,img.height,1,1);
     
@@ -358,33 +393,33 @@ bool CimgIface::prepare_inpaint()
     
     switch (ip_init) 
     {
-    case 0 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 0; } break;
-    case 1 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255; } break;
-    case 2 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand()); } break;
-    case 3 : break;
-    case 4 : 
+        case 0 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 0; } break;
+        case 1 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255; } break;
+        case 2 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand()); } break;
+        case 3 : break;
+        case 4 : 
         {
-        CImg<uchar> tmask(mask),ntmask(tmask);
-        CImg_3x3(M,uchar);
-        CImg_3x3(I,float);
-        while (!m_cancel && CImgStats(ntmask,false).max>0) 
-        {
-            cimg_map3x3(tmask,x,y,0,0,M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) 
+            CImg<uchar> tmask(mask),ntmask(tmask);
+            CImg_3x3(M,uchar);
+            CImg_3x3(I,float);
+            while (!m_cancel && CImgStats(ntmask,false).max>0) 
             {
-                const float ccp = Mcp?0.0f:1.0f, cpc = Mpc?0.0f:1.0f,
-                    cnc = Mnc?0.0f:1.0f, ccn = Mcn?0.0f:1.0f, csum = ccp + cpc + cnc + ccn;
-                cimg_mapV(img,k) 
+                cimg_map3x3(tmask,x,y,0,0,M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) 
                 {
-                    cimg_get3x3(img,x,y,0,k,I);
-                    img(x,y,k) = (ccp*Icp + cpc*Ipc + cnc*Inc + ccn*Icn)/csum;
+                    const float ccp = Mcp?0.0f:1.0f, cpc = Mpc?0.0f:1.0f,
+                        cnc = Mnc?0.0f:1.0f, ccn = Mcn?0.0f:1.0f, csum = ccp + cpc + cnc + ccn;
+                    cimg_mapV(img,k) 
+                    {
+                        cimg_get3x3(img,x,y,0,k,I);
+                        img(x,y,k) = (ccp*Icp + cpc*Ipc + cnc*Inc + ccn*Icn)/csum;
+                    }
+                    ntmask(x,y) = 0;
                 }
-                ntmask(x,y) = 0;
+                tmask = ntmask;
             }
-            tmask = ntmask;
-        }
-        } break;    
-    
-    default: break;
+        } break;
+        
+        default: break;
     }
     
     img0=img;
@@ -392,11 +427,11 @@ bool CimgIface::prepare_inpaint()
     CImg_3x3(g,uchar);
     CImg_3x3(I,float);
     cimg_map3x3(mask,x,y,0,0,g) if (!gcc && !(gnc-gcc) && !(gcc-gpc) && !(gcn-gcc) && !(gcc-gcp)) cimg_mapV(img,k) 
-        {
+    {
         cimg_get3x3(img,x,y,0,k,I);
         const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
         G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;    
-        }
+    }
     G.blur(m_sigma);
     { cimg_mapXY(G,x,y) 
         {
@@ -468,17 +503,17 @@ inline void CimgIface::compute_smoothed_tensor()
     CImg_3x3(I,float);
     G.fill(0);
     cimg_mapV(img,k) cimg_map3x3(img,x,y,0,k,I) 
-        {
+    {
         const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
         G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;    
-        }
+    }
     G.blur(m_sigma);
 }
 
 inline void CimgIface::compute_normalized_tensor()
 {
     if (m_restore || m_resize) cimg_mapXY(G,x,y) 
-        {
+    {
         G.get_tensor(x,y).symeigen(eigen(0),eigen(1));
         const float
             l1 = eigen(0)[0],
@@ -490,10 +525,10 @@ inline void CimgIface::compute_normalized_tensor()
         G(x,y,0) = n1*u*u + n2*v*v;
         G(x,y,1) = u*v*(n1-n2);
         G(x,y,2) = n1*v*v + n2*u*u;
-        }    
+    }    
     
     if (m_visuflow) cimg_mapXY(G,x,y) 
-        {
+    {
         const float 
             u = flow(x,y,0),
             v = flow(x,y,1),
@@ -502,7 +537,7 @@ inline void CimgIface::compute_normalized_tensor()
         G(x,y,0) = u*u/nn;
         G(x,y,1) = u*v/nn;
         G(x,y,2) = v*v/nn;
-        }
+    }
 
     const CImgStats stats(G,false);
     G /= cimg::max(std::fabs(stats.max), std::fabs(stats.min));
@@ -511,7 +546,7 @@ inline void CimgIface::compute_normalized_tensor()
 inline void CimgIface::compute_W(float cost, float sint)
 {
     cimg_mapXY(W,x,y) 
-        {
+    {
         const float 
             a = G(x,y,0),
             b = G(x,y,1),
@@ -520,7 +555,7 @@ inline void CimgIface::compute_W(float cost, float sint)
             v = b*cost + c*sint;
         W(x,y,0) = u;
         W(x,y,1) = v;
-        }
+    }
 }
 
 inline void CimgIface::compute_LIC_back_forward(int x, int y)
@@ -530,56 +565,56 @@ inline void CimgIface::compute_LIC_back_forward(int x, int y)
     const float length = m_gauss_prec*(float)std::sqrt(fsigma2);
 
     if (m_linear) 
-        {
+    {
         // Integrate with linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y;
         
         for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
-            {
+        {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
             X+=m_dlength*u; Y+=m_dlength*v; cu=u; cv=v; lsum+=coef;
-            }
+        }
             
         cu = W(x,y,0); cv = W(x,y,1); X=x-m_dlength*cu; Y=y-m_dlength*cv;
         
         for (l=m_dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
-            {
+        {
             float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
             X-=m_dlength*u; Y-=m_dlength*v; cu=u; cv=v; lsum+=coef;
-            }
-        } 
+        }
+    } 
     else 
-        {
+    {
         // Integrate with non linear interpolation
         cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y; 
         
         for (l=0; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
-            {
+        {
             const int xi = (int)(X+0.5f), yi = (int)(Y+0.5f);
             float u = W(xi,yi,0), v = W(xi,yi,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=coef*img(xi,yi,k);
             X+=m_dlength*u; Y+=m_dlength*v; cu=u; cv=v; lsum+=coef;
-            }
+        }
                 
         cu = W(x,y,0); cv = W(x,y,1); X=x-m_dlength*cu; Y=y-m_dlength*cv;
         
         for (l = m_dlength; !m_cancel && l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=m_dlength) 
-            {
+        {
             const int xi = (int)(X+0.5f), yi = (int)(Y+0.5f);
             float u = W(xi,yi,0), v = W(xi,yi,1);
             const float coef = (float)std::exp(-l*l/fsigma2);
             if ((cu*u+cv*v)<0) { u=-u; v=-v; }
             cimg_mapV(dest,k) dest(x,y,k)+=coef*img(xi,yi,k);
             X-=m_dlength*u; Y-=m_dlength*v; cu=u; cv=v; lsum+=coef;
-            }
+        }
     }
     sum(x,y)+=lsum;
 }
@@ -590,7 +625,7 @@ inline void CimgIface::compute_LIC(int &counter)
     sum.fill(0);
     
     for (float theta = (180%(int)m_dtheta)/2.0f; !m_cancel && (theta < 180); theta += m_dtheta) 
-        {
+    {
         const float rad = (float)(theta*cimg::PI/180.0);
         const float cost = (float)std::cos(rad);
         const float sint = (float)std::sin(rad);
@@ -600,21 +635,21 @@ inline void CimgIface::compute_LIC(int &counter)
 
         // Compute the LIC along w in backward and forward directions
         cimg_mapXY(dest,x,y) 
-           {
+        {
            counter++;
 
            if (m_parent && !m_cancel)
-              {
+           {
               // Update the progress bar in dialog.
               
               double progress = counter;
               progress /= (double)dest.width * dest.height * m_nb_iter * (180 / m_dtheta);
               postProgress( (int)(100*progress) );   
-              }
+           }
         
            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
-           }
         }
+    }
 }
 
 inline void CimgIface::compute_average_LIC()
@@ -629,4 +664,3 @@ inline void CimgIface::compute_average_LIC()
 }
 
 }  // NameSpace DigikamImagePlugins
-

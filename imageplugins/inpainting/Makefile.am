@@ -17,7 +17,7 @@ digikamimageplugin_inpainting_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/common/cimgiface/libcimgiface.la \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
 
-digikamimageplugin_inpainting_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
+digikamimageplugin_inpainting_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) -no-undefined
 
 kde_services_DATA = digikamimageplugin_inpainting.desktop
 

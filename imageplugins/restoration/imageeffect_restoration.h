@@ -27,14 +27,15 @@
 
 #include <qstring.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class QLabel;
 class QCheckBox;
 class QComboBox;
 class QTabWidget;
+class QFrame;
 
 class KDoubleNumInput;
 class KIntNumInput;
@@ -42,13 +43,13 @@ class KIntNumInput;
 namespace DigikamRestorationImagesPlugin
 {
 
-class ImageEffect_Restoration : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Restoration : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Restoration(QWidget* parent);
+    ImageEffect_Restoration(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Restoration();
     
 private:
