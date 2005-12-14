@@ -100,7 +100,7 @@ private:
     
     QPointArray  m_hightlightPoints;    
     
-    DImg         m_img;                // Entire content image.
+    DImg        *m_img;                // Entire content image.
     
 private:
     
