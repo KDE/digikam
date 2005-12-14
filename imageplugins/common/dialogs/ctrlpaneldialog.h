@@ -84,6 +84,8 @@ private:
     QTimer          *m_timer;
     
     QString          m_name;
+
+    KAboutData      *m_about;
     
     bool             m_tryAction;
     

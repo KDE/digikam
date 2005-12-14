@@ -110,6 +110,9 @@ CtrlPanelDialog::~CtrlPanelDialog()
 
     if (m_threadedFilter)
        delete m_threadedFilter;
+
+    if (m_about)
+       delete m_about;       
 }
 
 void CtrlPanelDialog::slotInit()
@@ -131,8 +134,9 @@ void CtrlPanelDialog::slotInit()
 
 void CtrlPanelDialog::setAboutData(KAboutData *about)
 {
+    m_about = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, about, false);
+    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
