@@ -79,14 +79,20 @@ void DImgSharpen::sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r
     int negLUT[sixteenBit ? 65536 : 256];
     int posLUT[sixteenBit ? 65536 : 256];
     
+    // FIXME : something is wrong with 16 bits image LUT !!!
+
     for (int i = 0; !m_cancel && (i < (sixteenBit ? 65536 : 256)); i++)
     {
-     /*   posLUT[i] = 800 * i / fact;
-        negLUT[i] = (4 + posLUT[i] - (i * 8)) / 8;
-    */
-        posLUT[i] = 800 * i / (fact*256);
-        negLUT[i] = (4 + 256*posLUT[i] - (i * 8)) / (8*256);
-    
+        if (!sixteenBit)                // 8 bits image.    
+        {
+            posLUT[i] = 800 * i / fact;
+            negLUT[i] = (4 + posLUT[i] - (i * 8)) / 8;
+        }
+      else                              // 16 bits image.
+        {
+            posLUT[i] = 400 * i / fact;
+            negLUT[i] = (4 + posLUT[i] - (i * 8)) / 8;
+        }
     }
 
     int   *neg_rows[4];
