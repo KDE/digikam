@@ -112,11 +112,15 @@ void DImgSharpen::sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r
 
     memcpy(src_rows[0], data, width); 
 
-    int i;
-    for (i = width, src_ptr = src_rows[0], neg_ptr = neg_rows[0];
-         !m_cancel && (i > 0);
-         i--, src_ptr++, neg_ptr++)
-        *neg_ptr = negLUT[*src_ptr]; 
+    src_ptr = src_rows[0];
+    neg_ptr = neg_rows[0];
+
+    for (int i = width; !m_cancel && (i > 0); i--)
+    {
+        *neg_ptr = negLUT[*src_ptr];
+        src_ptr++;
+        neg_ptr++;
+    }
 
     row   = 1;
     count = 1;                                    
@@ -136,12 +140,17 @@ void DImgSharpen::sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r
             // Grab the next row...
 
             memcpy(src_rows[row], data + y*width, width);
-            
-            for (i = width, src_ptr = src_rows[row], neg_ptr = neg_rows[row];
-                 !m_cancel && (i > 0);
-                 i--, src_ptr++, neg_ptr++)
-                *neg_ptr = negLUT[*src_ptr];
 
+            src_ptr = src_rows[row];
+            neg_ptr = neg_rows[row];
+
+            for (int i = width; !m_cancel && (i > 0); i--)
+            {
+                *neg_ptr = negLUT[*src_ptr];
+                src_ptr++;
+                neg_ptr++;
+            }
+            
             count++;
             row = (row + 1) & 3;
         }
