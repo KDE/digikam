@@ -343,47 +343,47 @@ Canvas::~Canvas()
     delete d;
 }
 
-bool Canvas::load(const QString& filename)
-{
-    if (d->rubber) {
-        delete d->rubber;
-        d->rubber = 0;
-        emit signalSelected(false);
-    }
+// bool Canvas::load(const QString& filename)
+// {
+//     if (d->rubber) {
+//         delete d->rubber;
+//         d->rubber = 0;
+//         emit signalSelected(false);
+//     }
+// 
+//     if (d->imageHistogram)
+//     {
+//         delete d->imageHistogram;
+//         d->imageHistogram = 0;
+//     }    
+//     
+//     viewport()->setUpdatesEnabled(false);
+// 
+//     d->tileCache.clear();
+// 
+//     bool isReadOnly = true;
+//     d->im->load(filename, &isReadOnly);
+// 
+//     d->zoom = 1.0;
+//     d->im->zoom(d->zoom);
+//     
+//     if (d->autoZoom)
+//         updateAutoZoom();
+// 
+//     updateContentsSize();
+// 
+//     viewport()->setUpdatesEnabled(true);
+//     viewport()->update();
+//     if (d->showHistogram)
+//        updateHistogram(true);
+//    
+//     emit signalChanged(false, false);
+//     emit signalZoomChanged(d->zoom);
+//     
+//     return (isReadOnly);
+// }
 
-    if (d->imageHistogram)
-    {
-        delete d->imageHistogram;
-        d->imageHistogram = 0;
-    }    
-    
-    viewport()->setUpdatesEnabled(false);
-
-    d->tileCache.clear();
-
-    bool isReadOnly = true;
-    d->im->load(filename, &isReadOnly);
-
-    d->zoom = 1.0;
-    d->im->zoom(d->zoom);
-    
-    if (d->autoZoom)
-        updateAutoZoom();
-
-    updateContentsSize();
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
-    if (d->showHistogram)
-       updateHistogram(true);
-   
-    emit signalChanged(false, false);
-    emit signalZoomChanged(d->zoom);
-    
-    return (isReadOnly);
-}
-
-bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *pointer)
+bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *parent)
 {
     // FIXME implement this overloaded method
 
@@ -404,7 +404,7 @@ bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContain
     d->tileCache.clear();
 
     bool isReadOnly = true;
-    d->im->load( filename, &isReadOnly, settingsContainer, pointer );
+    d->im->load( filename, &isReadOnly, settingsContainer, parent );
 
     d->zoom = 1.0;
     d->im->zoom(d->zoom);

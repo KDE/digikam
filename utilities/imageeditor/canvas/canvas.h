@@ -48,8 +48,8 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    bool load(const QString& filename);
-    bool load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *pointer);
+//     bool load(const QString& filename);
+    bool load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *parent);
     void preload(const QString& filename);
     int  save(const QString& filename, int JPEGcompression, 
               int PNGcompression, bool TIFFcompression);

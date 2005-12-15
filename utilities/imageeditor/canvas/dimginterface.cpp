@@ -117,60 +117,60 @@ DImgInterface::~DImgInterface()
     m_instance = 0;
 }
 
-bool DImgInterface::load(const QString& filename, bool *isReadOnly)
-{
-    bool valRet;
+// bool DImgInterface::load(const QString& filename, bool *isReadOnly)
+// {
+//     bool valRet;
+// 
+//     *isReadOnly   = true;
+//     d->valid      = false;
+// 
+//     d->filename   = filename;
+// 
+//     d->width      = 0;
+//     d->height     = 0;
+//     d->origWidth  = 0;
+//     d->origHeight = 0;
+//     d->selX       = 0;
+//     d->selY       = 0;
+//     d->selW       = 0;
+//     d->selH       = 0;
+//     d->gamma      = 1.0;
+//     d->contrast   = 1.0;
+//     d->brightness = 0.0;
+//     d->cmod.reset();
+//     d->image.reset();
+//     
+//     d->undoMan->clear();
+// 
+//     d->image = DImg(filename);
+// 
+//     if (!d->image.isNull())
+//     {
+//         d->origWidth  = d->image.width();
+//         d->origHeight = d->image.height();
+//         d->valid      = true;
+// 
+//         d->width      = d->origWidth;
+//         d->height     = d->origHeight;
+// 
+//         *isReadOnly   = d->image.isReadOnly();
+//         valRet        = true;
+//     }
+//     else
+//     {
+//         kdWarning() << k_funcinfo << "Failed to load image " << endl;
+//         valRet = false;
+//     }
+// 
+//     if (d->exifOrient)
+//     {
+//         exifRotate(filename);
+//     }
+// 
+//     return (valRet);
+// }
 
-    *isReadOnly   = true;
-    d->valid      = false;
-
-    d->filename   = filename;
-
-    d->width      = 0;
-    d->height     = 0;
-    d->origWidth  = 0;
-    d->origHeight = 0;
-    d->selX       = 0;
-    d->selY       = 0;
-    d->selW       = 0;
-    d->selH       = 0;
-    d->gamma      = 1.0;
-    d->contrast   = 1.0;
-    d->brightness = 0.0;
-    d->cmod.reset();
-    d->image.reset();
-    
-    d->undoMan->clear();
-
-    d->image = DImg(filename);
-
-    if (!d->image.isNull())
-    {
-        d->origWidth  = d->image.width();
-        d->origHeight = d->image.height();
-        d->valid      = true;
-
-        d->width      = d->origWidth;
-        d->height     = d->origHeight;
-
-        *isReadOnly   = d->image.isReadOnly();
-        valRet        = true;
-    }
-    else
-    {
-        kdWarning() << k_funcinfo << "Failed to load image " << endl;
-        valRet = false;
-    }
-
-    if (d->exifOrient)
-    {
-        exifRotate(filename);
-    }
-
-    return (valRet);
-}
-
-bool DImgInterface::load(const QString& filename, bool *isReadOnly, ICCSettingsContainer *cmSettings, QWidget *pointer)
+bool DImgInterface::load(const QString& filename, bool *isReadOnly, ICCSettingsContainer *cmSettings, QWidget *parent)
 {
 
 
@@ -218,60 +218,63 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly, ICCSettingsC
         trans.apply(d->image);
         */
 
-        if (cmSettings->askOrApplySetting)
+        if (cmSettings)
         {
-            apply = true;
-        }
-        else
-        {
-            apply = false;
-        }
-
-        IccTransform trans;
-
-        // First possibility: image has no embedded profile
-        if(d->image.getICCProfil().isNull())
-        {
-            // Ask or apply?
-            if (apply)
+            if (cmSettings->askOrApplySetting)
             {
-                trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
-                trans.apply( d->image );
+                apply = true;
             }
             else
             {
-                QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + "</p>";
-                
-                if (KMessageBox::questionYesNo(pointer, message) == KMessageBox::Yes)
+                apply = false;
+            }
+    
+            IccTransform trans;
+    
+            // First possibility: image has no embedded profile
+            if(d->image.getICCProfil().isNull())
+            {
+                // Ask or apply?
+                if (apply)
                 {
-                    kdDebug() << "Pressed YES" << endl;
                     trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
                     trans.apply( d->image );
                 }
+                else
+                {
+                    QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + "</p>";
+                    
+                    if (KMessageBox::questionYesNo(parent, message) == KMessageBox::Yes)
+                    {
+                        kdDebug() << "Pressed YES" << endl;
+                        trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
+                        trans.apply( d->image );
+                    }
+                }
             }
-        }
-        // Second possibility: image has an embedded profile
-        else
-        {
-            trans.getEmbeddedProfile( d->image );
-            
-            if (apply)
-            {
-                                trans.setProfiles(QFile::encodeName(cmSettings->workspaceSetting));
-                trans.apply( d->image );
-            }
+            // Second possibility: image has an embedded profile
             else
             {
-                if (trans.getEmbeddedProfileDescriptor()
-                != trans.getProfileDescription( cmSettings->workspaceSetting ))
+                trans.getEmbeddedProfile( d->image );
+                
+                if (apply)
                 {
-                    kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-                    QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
-
-                    if (KMessageBox::questionYesNo(pointer, message) == KMessageBox::Yes)
+                                    trans.setProfiles(QFile::encodeName(cmSettings->workspaceSetting));
+                    trans.apply( d->image );
+                }
+                else
+                {
+                    if (trans.getEmbeddedProfileDescriptor()
+                    != trans.getProfileDescription( cmSettings->workspaceSetting ))
                     {
-                        trans.setProfiles( QFile::encodeName(cmSettings->workspaceSetting));
-                        trans.apply( d->image );
+                        kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+                        QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
+    
+                        if (KMessageBox::questionYesNo(parent, message) == KMessageBox::Yes)
+                        {
+                            trans.setProfiles( QFile::encodeName(cmSettings->workspaceSetting));
+                            trans.apply( d->image );
+                        }
                     }
                 }
             }
@@ -391,7 +394,7 @@ void DImgInterface::restore()
     bool isReadOnly;
     d->undoMan->clear();
 
-    load(d->filename, &isReadOnly);
+    load(d->filename, &isReadOnly, 0, 0);
     emit signalModified(false, false);
 }
 
