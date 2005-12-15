@@ -873,7 +873,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #else
     KIO::NetAccess::download(url, localFile);
 #endif
-    m_isReadOnly = m_canvas->load(localFile);
+    m_isReadOnly = m_canvas->load(localFile, 0, 0);
 
     slotUpdateItemInfo();
     QApplication::restoreOverrideCursor();
@@ -1402,7 +1402,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         m_rightSidebar->noCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
-        m_canvas->load(QString::null);
+        m_canvas->load(QString::null,0 ,0);
         m_currentItem = 0;
         m_isReadOnly = false;
     }
@@ -1492,7 +1492,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     if (!promptUserSave())
         return;
 
-    m_canvas->load(QString::null);
+    m_canvas->load(QString::null, 0, 0);
     m_bar->clear(true);
     m_rightSidebar->noCurrentItem();
     m_currentItem = 0;
