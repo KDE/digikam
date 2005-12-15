@@ -233,8 +233,17 @@ void Sharpen::sharpenImage(uint* data, int w, int h, int r)
     progress = (int) (((double)y * 100.0) / h);
     if ( progress%5 == 0 )
         postProgress( progress );   
-        
     }
+
+    // Free memory.
+    
+    for (row = 0; !m_cancel && (row < 4); row++)
+    {
+        delete [] src_rows[row];
+        delete [] neg_rows[row];
+    }       
+
+    delete [] dst_row;
 }
 
 }  // NameSpace Digikam
