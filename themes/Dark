@@ -12,32 +12,32 @@ banner.colorTo:				#567594
 banner.bevel:				FLAT
 banner.gradient:				SOLID
 banner.border:				false
-banner.borderColor			#000000
+banner.borderColor:			#000000
 
 thumbnail.regular.color:		#131313
 thumbnail.regular.colorTo:		#191919
 thumbnail.regular.bevel:		RAISED
 thumbnail.regular.gradient:		SOLID
 thumbnail.regular.border:		false
-thumbnail.regular.borderColor		#e0e0ef
+thumbnail.regular.borderColor:		#e0e0ef
 
 thumbnail.selected.color:		#819ebb
 thumbnail.selected.colorTo:		#2c3c4c
 thumbnail.selected.bevel:		RAISED
 thumbnail.selected.gradient:		VERTICAL
 thumbnail.selected.border:		false
-thumbnail.selected.borderColor		#e0e0ef
+thumbnail.selected.borderColor:		#e0e0ef
 
 listview.regular.color:			#030303
 listview.regular.colorTo:		#474644
 listview.regular.bevel:			RAISED
 listview.regular.gradient:		HORIZONTAL
 listview.regular.border:		false
-listview.regular.borderColor		#000000
+listview.regular.borderColor:		#000000
 
 listview.selected.color:		#678cb2
 listview.selected.colorTo:		#37485a
 listview.selected.bevel:		SUNKEN
 listview.selected.gradient:		HORIZONTAL
 listview.selected.border:		true
-listview.selected.borderColor		#000000
+listview.selected.borderColor:		#000000
