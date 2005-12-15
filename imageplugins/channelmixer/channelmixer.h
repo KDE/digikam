@@ -70,6 +70,8 @@ private:
 
 private:
     
+    uchar                        *m_destinationPreviewData;
+ 
     double                        m_redRedGain;
     double                        m_redGreenGain;
     double                        m_redBlueGain;
@@ -104,7 +106,7 @@ private:
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageGuideWidget    *m_previewTargetWidget;
     
-    uchar                        *m_destinationPreviewData;
+private:
 
     void adjustSliders(void);
     
