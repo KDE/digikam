@@ -21,7 +21,7 @@
 #ifndef IMAGEEFFECT_BLUR_H
 #define IMAGEEFFECT_BLUR_H
 
-// KDE include.
+// Digikam include.
 
 #include "ctrlpaneldlg.h"
 

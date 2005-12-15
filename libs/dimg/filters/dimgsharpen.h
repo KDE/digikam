@@ -50,7 +50,7 @@ private:  // DImgSharpen filter methods.
 
     virtual void filterImage(void);
     
-    void sharpenImage(uint *data, int Width, int Height, int Radius);
+    void sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r);
 };    
 
 }  // NameSpace Digikam

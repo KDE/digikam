@@ -21,9 +21,9 @@
 #ifndef IMAGEEFFECT_SHARPEN_H
 #define IMAGEEFFECT_SHARPEN_H
 
-// KDE include.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "ctrlpaneldlg.h"
 
 class QTimer;
 
@@ -32,10 +32,10 @@ class KIntNumInput;
 namespace Digikam
 {
 class ImagePannelWidget;
-class Sharpen;
+class DImgSharpen;
 }
 
-class ImageEffect_Sharpen : public KDialogBase
+class ImageEffect_Sharpen : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
@@ -46,41 +46,17 @@ public:
 
 private:
     
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int           m_currentRenderingMode;
-
-    QWidget      *m_parent;
-    
-    QTimer       *m_timer;
-    
     KIntNumInput *m_radiusInput;
-        
-    Digikam::Sharpen           *m_threadedFilter;
-
-    Digikam::ImagePannelWidget *m_imagePreviewWidget;
-    
-private slots:
-
-    void slotEffect();
-    void slotOk();
-    void slotTimer();
-    void slotCancel();
-    void slotUser1();
-    void slotDefault();
-    void slotFocusChanged(void);    
     
 protected:
 
-    void closeEvent(QCloseEvent *e);
-    void customEvent(QCustomEvent *event);
+    void prepareEffect(void);
+    void prepareFinal(void);
     void abortPreview(void);
-    void keyPressEvent(QKeyEvent *e);
+    void putPreviewData(void);
+    void putFinalData(void);
+    void resetValues(void);   
+    void renderingFinished(void);
 };
 
 #endif /* IMAGEEFFECT_SHARPEN_H */

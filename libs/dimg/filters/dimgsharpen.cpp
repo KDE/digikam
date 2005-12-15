@@ -21,8 +21,8 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
- 
-// C++ includes. 
+
+// C++ includes.
  
 #include <cmath>
 #include <cstdlib>
@@ -48,26 +48,27 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, int radius)
 
 void DImgSharpen::filterImage(void)
 {
-    sharpenImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_radius);
+    sharpenImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                 m_orgImage.sixteenBit(), m_radius);
 }
 
 /** Function to apply the sharpen filter on an image*/
 
-void DImgSharpen::sharpenImage(uint* data, int w, int h, int r)
+void DImgSharpen::sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r)
 {
-/*    if (!data || !w || !h)
-       {
-       kdWarning() << ("DImgSharpen::sharpenImage: no image data available!")
+    if (!data || !w || !h)
+    {
+       kdWarning() << ("Sharpen::sharpenImage: no image data available!")
                    << endl;
        return;
-       }
+    }
 
     if (r > 100) r = 100;
     if (r <= 0) 
-       {
+    {
        m_destImage = m_orgImage;
        return;
-       }
+    }
            
     // initialize the LUTs
 
@@ -84,35 +85,35 @@ void DImgSharpen::sharpenImage(uint* data, int w, int h, int r)
         negLUT[i] = (4 + posLUT[i] - (i << 3)) >> 3;
     }
 
-    unsigned int* dstData = (uint*)m_destImage.bits(); 
+    uchar* dstData = m_destImage.bits();
     
     // work with four rows at one time
 
-    unsigned char* src_rows[4];
-    unsigned char* src_ptr;
-    unsigned char* dst_row;
-    int*           neg_rows[4]; 
-    int*           neg_ptr;
-    int            row;
-    int            count;
-    int            progress;
+    uchar *src_rows[4];
+    uchar *src_ptr;
+    uchar *dst_row;
+    int   *neg_rows[4];
+    int   *neg_ptr;
+    int    row;
+    int    count;
+    int    progress;
 
-    int  width = sizeof(unsigned int)*w;
+    int  width = w * m_orgImage.bytesDepth();
 
     for (row = 0; !m_cancel && (row < 4); row++)
     {
-        src_rows[row] = new unsigned char[width];
+        src_rows[row] = new uchar[width];
         neg_rows[row] = new int[width];
     }       
 
-    dst_row = new unsigned char[width];
+    dst_row = new uchar[width];
     
     // Pre-load the first row for the filter...
 
     memcpy(src_rows[0], data, width); 
 
     int i;
-    for ( i = width, src_ptr = src_rows[0], neg_ptr = neg_rows[0];
+    for (i = width, src_ptr = src_rows[0], neg_ptr = neg_rows[0];
          !m_cancel && (i > 0);
          i--, src_ptr++, neg_ptr++)
         *neg_ptr = negLUT[*src_ptr]; 
@@ -134,7 +135,7 @@ void DImgSharpen::sharpenImage(uint* data, int w, int h, int r)
 
             // Grab the next row...
 
-            memcpy(src_rows[row], data + y*w, width); 
+            memcpy(src_rows[row], data + y*width, width);
             
             for (i = width, src_ptr = src_rows[row], neg_ptr = neg_rows[row];
                  !m_cancel && (i > 0);
@@ -179,19 +180,19 @@ void DImgSharpen::sharpenImage(uint* data, int w, int h, int r)
                          neg1[-4] - neg1[4] -
                          neg2[-4] - neg2[0] - neg2[4]);
                 pixel = (pixel + 4) >> 3;
-                *dst++ = CLAMP0255 (pixel);
+                *dst++ = CLAMP(pixel, 0, 255);
 
                 pixel = (posLUT[*src++] - neg0[-3] - neg0[1] - neg0[5] -
                          neg1[-3] - neg1[5] -
                          neg2[-3] - neg2[1] - neg2[5]);
                 pixel = (pixel + 4) >> 3;
-                *dst++ = CLAMP0255 (pixel);
+                *dst++ = CLAMP(pixel, 0, 255);
 
                 pixel = (posLUT[*src++] - neg0[-2] - neg0[2] - neg0[6] -
                          neg1[-2] - neg1[6] -
                          neg2[-2] - neg2[2] - neg2[6]);
                 pixel = (pixel + 4) >> 3;
-                *dst++ = CLAMP0255 (pixel);
+                *dst++ = CLAMP(pixel, 0, 255);
 
                 *dst++ = *src++;
 
@@ -207,27 +208,36 @@ void DImgSharpen::sharpenImage(uint* data, int w, int h, int r)
             *dst++ = *src++;
             
             // Set the row...
-            memcpy(dstData + y*w, dst_row, width); 
+            memcpy(dstData + y*width, dst_row, width);
         }
         else if (count == 2)
         {
             if (y == 0)
             {
                 // first row 
-                memcpy(dstData + y*w, src_rows[0], width);
+                memcpy(dstData + y*width, src_rows[0], width);
             }
             else
             {
                 // last row 
-                memcpy(dstData + y*w, src_rows[(h-1) & 3], width);
+                memcpy(dstData + y*width, src_rows[(h-1) & 3], width);
             }
         }
         
     progress = (int) (((double)y * 100.0) / h);
     if ( progress%5 == 0 )
         postProgress( progress );   
-        
-    }*/
+    }
+
+    // Free memory.
+    
+    for (row = 0; !m_cancel && (row < 4); row++)
+    {
+        delete [] src_rows[row];
+        delete [] neg_rows[row];
+    }       
+
+    delete [] dst_row;
 }
 
 }  // NameSpace Digikam

@@ -21,14 +21,12 @@
 // Qt includes.
 
 #include <qlayout.h>
-#include <qframe.h>
-#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
-#include <qtimer.h>
 
 // KDE includes.
 
+#include <kaboutdata.h>
 #include <knuminput.h>
 #include <kcursor.h>
 #include <klocale.h>
@@ -37,306 +35,92 @@
 
 // Digikam includes.
 
-#include <imageiface.h>
-#include <imagepannelwidget.h>
-#include <imagefilters.h>
-#include <sharpen.h>
+#include "imageiface.h"
+#include "dimgsharpen.h"
 
 // Local includes.
 
 #include "imageeffect_sharpen.h"
 
 ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Sharpening Photograph"),
-                                 Help|Default|User1|Ok|Cancel, Ok,
-                                 parent, 0, true, true,
-                                 i18n("&Abort")),                                 
-                     m_parent(parent)
-{
-    m_currentRenderingMode = NoneRendering;
-    m_timer                = 0L;
-    m_threadedFilter       = 0L;
-    
-    setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
-    setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
-    setHelp("blursharpentool.anchor", "digikam");
-    resize(configDialogSize("Sharpen Tool Dialog"));       
-    
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
-
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, "Sharpen Tool Dialog", plainPage(), true);
-    hlay1->addWidget(m_imagePreviewWidget);
-
-    // -------------------------------------------------------------
+                   : Digikam::CtrlPanelDlg(parent, i18n("Sharpening Photograph"),
+                                           "sharpen")
+ {
+    setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
     QLabel *label = new QLabel(i18n("Sharpness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
-    m_radiusInput->setRange(0, 100, 1, true);
+    m_radiusInput->setRange(0, 20, 1, true);
     m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
-                                         
+
     gridSettings->addWidget(label, 0, 0);
     gridSettings->addWidget(m_radiusInput, 0, 1);
-        
+    
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-    
+        
     // -------------------------------------------------------------
     
-    QTimer::singleShot(0, this, SLOT(slotDefault()));
-
-    // -------------------------------------------------------------
-                                                             
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
-    
-    connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotFocusChanged()));
 }
 
 ImageEffect_Sharpen::~ImageEffect_Sharpen()
 {
-    saveDialogSize("Sharpen Tool Dialog");    
-    
-    if (m_timer)
-       delete m_timer;
-    
-    if (m_threadedFilter)
-       delete m_threadedFilter;    
 }
 
-void ImageEffect_Sharpen::slotTimer()
+void ImageEffect_Sharpen::renderingFinished(void)
 {
-    if (m_timer)
-       {
-       m_timer->stop();
-       delete m_timer;
-       }
-    
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
-             this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
-}
-
-void ImageEffect_Sharpen::abortPreview()
-{
-    m_currentRenderingMode = NoneRendering;
-    m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(false);
-    m_imagePreviewWidget->setEnable(true);    
-    enableButton(Ok, true);  
-    enableButton(Default, true);  
-    enableButton(User1, false);  
     m_radiusInput->setEnabled(true);
 }
 
-void ImageEffect_Sharpen::slotUser1()
-{
-    if (m_currentRenderingMode != NoneRendering)
-       m_threadedFilter->stopComputation();
-
-} 
-
-void ImageEffect_Sharpen::slotDefault()
+void ImageEffect_Sharpen::resetValues(void)
 {
     m_radiusInput->blockSignals(true);
     m_radiusInput->setValue(0);
     m_radiusInput->blockSignals(false);
-    slotEffect();    
 } 
 
-void ImageEffect_Sharpen::slotCancel()
+void ImageEffect_Sharpen::prepareEffect()
 {
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_threadedFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    done(Cancel);
-}
-
-void ImageEffect_Sharpen::closeEvent(QCloseEvent *e)
-{
-    if (m_currentRenderingMode != NoneRendering)
-       {
-       m_threadedFilter->stopComputation();
-       kapp->restoreOverrideCursor();
-       }
-       
-    e->accept();    
-}
-
-void ImageEffect_Sharpen::slotFocusChanged(void)
-{
-    if (m_currentRenderingMode == FinalRendering)
-       {
-       m_imagePreviewWidget->update();
-       return;
-       }
-    else if (m_currentRenderingMode == PreviewRendering)
-       {
-       m_threadedFilter->stopComputation();
-       }
-       
-    QTimer::singleShot(0, this, SLOT(slotEffect()));        
-}
-
-void ImageEffect_Sharpen::slotEffect()
-{
-    // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;     
-    
-    m_currentRenderingMode = PreviewRendering;
-
-    m_imagePreviewWidget->setEnable(false);
-    enableButton(Default, false);  
-    enableButton(User1, true);  
-    enableButton(Ok,    false);
-    m_imagePreviewWidget->setPreviewImageWaitCursor(true);
-    m_imagePreviewWidget->setProgress(0);
-    
-    if (m_threadedFilter)
-       delete m_threadedFilter;
-
     m_radiusInput->setEnabled(false);
     
-    QImage img = m_imagePreviewWidget->getOriginalClipImage();
-    
-    int r = m_radiusInput->value();
-            
-    m_threadedFilter = new Digikam::Sharpen(&img, this, r);    
+    Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
+        
+    m_threadedFilter = new Digikam::DImgSharpen(&img, this, m_radiusInput->value()*4);
 }
 
-void ImageEffect_Sharpen::slotOk()
+void ImageEffect_Sharpen::prepareFinal()
 {
-    m_currentRenderingMode = FinalRendering;
-
-    m_imagePreviewWidget->setEnable(false);
-    enableButton(Ok,    false);
-    enableButton(User1, false);
-    enableButton(Default, false);  
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    m_imagePreviewWidget->setProgress(0);
-    
-    if (m_threadedFilter)
-       delete m_threadedFilter;
-    
     m_radiusInput->setEnabled(false);
-    
-    int r = m_radiusInput->value();
-    
+
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-            
-    m_threadedFilter = new Digikam::Sharpen(&orgImage, this, r);    
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
+    m_threadedFilter = new Digikam::DImgSharpen(&orgImage, this, m_radiusInput->value()*4);
 }
 
-void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
+void ImageEffect_Sharpen::putPreviewData(void)
 {
-    if (!event) return;
-
-    Digikam::ThreadedFilter::EventData *d = (Digikam::ThreadedFilter::EventData*) event->data();
-
-    if (!d) return;
-    
-    if (d->starting)           // Computation in progress !
-        {
-        m_imagePreviewWidget->setProgress(d->progress);
-        }  
-    else 
-        {
-        if (d->success)        // Computation Completed !
-            {
-            switch (m_currentRenderingMode)
-              {
-              case PreviewRendering:
-                 {
-                 kdDebug() << "Preview Sharpen completed..." << endl;
-                 QImage imDest = m_threadedFilter->getTargetImage();
-                 m_imagePreviewWidget->setPreviewImageData(imDest);
-                 abortPreview();
-                 break;
-                 }
-              
-              case FinalRendering:
-                 {
-                 kdDebug() << "Final Sharpen completed..." << endl;
-                 Digikam::ImageIface iface(0, 0);
-                 iface.putOriginalData(i18n("Sharpen"), 
-                                       (uint*)m_threadedFilter->getTargetImage().bits());
-                 kapp->restoreOverrideCursor();
-                 accept();
-                 break;
-                 }
-              }
-            }
-        else                   // Computation Failed !
-            {
-            switch (m_currentRenderingMode)
-                {
-                case PreviewRendering:
-                    {
-                    kdDebug() << "Preview Sharpen failed..." << endl;
-                    // abortPreview() must be call here for set progress bar to 0 properly.
-                    abortPreview();
-                    break;
-                    }
-                
-                case FinalRendering:
-                    break;
-                }
-            }
-        }
-    
-    delete d;        
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImage(imDest);
 }
 
-// Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
-// to prevent any conflicts between dialog keys events and SpinBox keys events.
-
-void ImageEffect_Sharpen::keyPressEvent(QKeyEvent *e)
+void ImageEffect_Sharpen::putFinalData(void)
 {
-    if ( e->state() == 0 )
-    {
-        switch ( e->key() )
-        {
-        case Key_Escape:
-            e->accept();
-            reject();
-        break;
-        case Key_Enter:            
-        case Key_Return:     
-            e->ignore();              
-        break;
-        default:
-            e->ignore();
-            return;
-        }
-    }
-    else
-    {
-        // accept the dialog when Ctrl-Return is pressed
-        if ( e->state() == ControlButton &&
-            (e->key() == Key_Return || e->key() == Key_Enter) )
-        {
-            e->accept();
-            accept();
-        }
-        else
-        {
-            e->ignore();
-        }
-    }
+    Digikam::ImageIface iface(0, 0);
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    iface.putOriginalImage(i18n("Sharpen"), imDest.bits());
 }
 
 #include "imageeffect_sharpen.moc"
