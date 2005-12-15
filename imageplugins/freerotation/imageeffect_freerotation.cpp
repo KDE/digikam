@@ -141,8 +141,8 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
     m_autoCropCB->insertItem( i18n("None") );
     m_autoCropCB->insertItem( i18n("Widest Area") );
     m_autoCropCB->insertItem( i18n("Largest Area") );
-    QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process an image auto-cropping "
-                                            "to remove black frames around rotated image."));
+    QWhatsThis::add( m_antialiasInput, i18n("<p>Select here the method to process image auto-cropping "
+                                            "to remove black frames around a rotated image."));
     gridSettings->addMultiCellWidget(label5, 8, 8, 0, 0);
     gridSettings->addMultiCellWidget(m_autoCropCB, 8, 8, 1, 2);
 
