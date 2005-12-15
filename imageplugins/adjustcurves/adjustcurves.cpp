@@ -72,8 +72,10 @@ namespace DigikamAdjustCurvesImagesPlugin
 
 AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                  : ImageTabDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", 
-                                  true, true, false)
+                                  true, true, true)
 {
+    m_destinationPreviewData = 0L;
+
     Digikam::ImageIface iface(0, 0);
     uchar *data     = iface.getOriginalImage();
     int w           = iface.originalWidth();
@@ -105,7 +107,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 7, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 8, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -168,26 +170,23 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                     "<b>Smooth</b>: this mode constrains the curve type to a smooth line with tension.<p>"
                                     "<b>Free</b>: with this mode, you can draw your curve free-hand with the mouse."));
 
-    m_labelPos = new QLabel(gboxSettings);
-                                     
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
-    grid->addMultiCellWidget(m_labelPos, 2, 2, 1, 5);
     
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
+    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
-    grid->addMultiCellWidget(m_curvesWidget, 3, 3, 1, 5);
+    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 4, 4, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
     
     // -------------------------------------------------------------
     
@@ -233,7 +232,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
     
-    grid->addMultiCellLayout(l3, 5, 5, 1, 5);
+    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
     
     // -------------------------------------------------------------
             
@@ -241,9 +240,22 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 6, 6, 1, 5);
-    grid->setRowStretch(7, 10);
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
+
+    // -------------------------------------------------------------
+
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
+                                             "selected image channel. This one is re-computed at any curves "
+                                             "settings changes."));
     
+    m_hGradient2 = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
+    m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );
+    
+    grid->addMultiCellWidget(m_histogramWidget, 6, 6, 1, 5);
+    grid->addMultiCellWidget(m_hGradient2, 7, 7, 1, 5);
+    
+    grid->setRowStretch(8, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -256,7 +268,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                                    "Green, Blue, and Luminosity Channels."));
     m_previewTargetWidget   = previewTargetWidget();
     QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
-                                                 "curve-adjustments preview."));
+                                                 "curve-adjustments preview.You can pick color on image "
+                                                 "to see the color level corresponding on histogram."));
 
     // -------------------------------------------------------------
     
@@ -273,6 +286,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
+
+    connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
             
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));              
@@ -301,6 +317,12 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
 AdjustCurveDialog::~AdjustCurveDialog()
 {
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+       
+    delete m_histogramWidget;
     delete m_curvesWidget;
     delete m_curves;
 }
@@ -352,65 +374,66 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool 
     slotEffect();  
 }
 
+void AdjustCurveDialog::slotColorSelectedFromTarget( const Digikam::DColor &color )
+{
+    m_histogramWidget->setHistogramGuideByColor(color);
+}
+
 void AdjustCurveDialog::slotResetCurrentChannel()
 {
     m_curves->curvesChannelReset(m_channelCB->currentItem());
 
     m_curvesWidget->reset();
     slotEffect();
+    m_histogramWidget->reset();
 }
 
 void AdjustCurveDialog::slotPositionChanged(int x, int y)
 {
-    if ( x == -1 && y == -1)
-       m_labelPos->clear();
-    else
-       m_labelPos->setText(i18n("Position: x:%1  y:%2").arg(x).arg(y));
+    QToolTip::add( m_curvesWidget, i18n("Position: x:%1  y:%2").arg(x).arg(y) );
 }
 
 void AdjustCurveDialog::slotEffect()
 {
-    uchar* desData;
-
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
     uchar *orgData             = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
+    bool sb                    = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
-    if (m_histoSegments == 65535)
-       desData = new uchar[w*h*8];
-    else
-       desData = new uchar[w*h*4];
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+    
+    m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
 
     // Apply the lut to the image.
-    m_curves->curvesLutProcess(orgData, desData, w, h);
+    m_curves->curvesLutProcess(orgData, m_destinationPreviewData, w, h);
 
-    iface->putPreviewImage(desData);
+    iface->putPreviewImage(m_destinationPreviewData);
     m_previewTargetWidget->updatePreview();
 
+    // Update histogram.
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] orgData;
-    delete [] desData;
 }
 
 void AdjustCurveDialog::slotOk()
 {
-    uchar* desData;
-
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
     uchar *orgData             = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
+    bool sb                    = iface->originalSixteenBit();
     
     // Create the new empty destination image data space.
-    if (m_histoSegments == 65535)
-       desData = new uchar[w*h*8];
-    else
-       desData = new uchar[w*h*4];
+    uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
     m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
@@ -431,26 +454,36 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     switch(channel)
     {
        case LuminosityChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+          m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );  
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
        
-       case RedChannel:
+        case RedChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+          m_hGradient2->setColors( QColor( "black" ), QColor( "red" ) );     
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
           m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
        case GreenChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+          m_hGradient2->setColors( QColor( "black" ), QColor( "green" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
           m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
        case BlueChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+          m_hGradient2->setColors( QColor( "black" ), QColor( "blue" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
           m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
 
        case AlphaChannel:
+          m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+          m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );  
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::AlphaChannelHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
@@ -459,11 +492,14 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     m_typeCB->setCurrentItem(m_curves->getCurveType(channel));  
                 
     m_curvesWidget->repaint(false);
+    m_histogramWidget->repaint(false);
 }
 
 void AdjustCurveDialog::slotScaleChanged(int scale)
 {
     m_curvesWidget->m_scaleType = scale;
+    m_histogramWidget->m_scaleType = scale;
+    m_histogramWidget->repaint(false);
     m_curvesWidget->repaint(false);
 }
 
@@ -496,6 +532,7 @@ void AdjustCurveDialog::slotDefault()
        m_curves->curvesChannelReset(channel);
 
     m_curvesWidget->reset();
+    m_histogramWidget->reset();
     slotEffect();
 }
 
@@ -545,4 +582,3 @@ void AdjustCurveDialog::slotUser2()
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
 
 #include "adjustcurves.moc"
-

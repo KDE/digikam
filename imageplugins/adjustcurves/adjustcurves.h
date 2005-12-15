@@ -36,9 +36,17 @@
 
 class QComboBox;
 class QPushButton;
-class QLabel;
 class QHButtonGroup;
 class QCheckBox;
+
+namespace Digikam
+{
+class CurvesWidget;
+class ColorGradientWidget;
+class ImageGuideWidget;
+class ImageCurves;
+class HistogramWidget;
+}
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
@@ -81,13 +89,13 @@ private:
     Linear=0,
     Logarithmic
     };
+    
+    uchar                        *m_destinationPreviewData;
 
     int                           m_histoSegments;
         
     QComboBox                    *m_channelCB;    
     QComboBox                    *m_typeCB;  
-    
-    QLabel                       *m_labelPos;
     
     QPushButton                  *m_resetButton;
     QPushButton                  *m_pickBlack;
@@ -100,13 +108,16 @@ private:
     QHButtonGroup                *m_scaleBG;  
     
     Digikam::CurvesWidget        *m_curvesWidget;
+
+    Digikam::HistogramWidget     *m_histogramWidget;
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;
-            
+    Digikam::ColorGradientWidget *m_hGradient2;    
+        
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageGuideWidget    *m_previewTargetWidget;
-    
+
     Digikam::ImageCurves         *m_curves;
     Digikam::DImg                 m_originalImage;
 
@@ -123,6 +134,7 @@ private slots:
     void slotCurveTypeChanged(int type);
     void slotPositionChanged(int x, int y);
     void slotSpotColorChanged(const Digikam::DColor &color, bool release);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin
