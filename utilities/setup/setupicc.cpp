@@ -437,6 +437,8 @@ void SetupICC::slotFillCombos(const QString& url)
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_monitorICCFiles_file.append(fileName);
                     m_workICCFiles_file.append(fileName);
+                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_inICCFiles_file.append(fileName);
                     break;
                 case OUTPUT_ICC:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
@@ -526,7 +528,8 @@ void SetupICC::profileInfo(const QString& profile)
     KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
                                  i18n("</p><p><b>Description:</b>  ") + profileDescription +
                                  i18n("</p><p><b>Manufacturer:</b>  ") + profileManufacturer +
-                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + "</p>",
+                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path: ") +
+                                 profile + "</b></p>",
                                  i18n("Color Profile Info"));
 }
 
