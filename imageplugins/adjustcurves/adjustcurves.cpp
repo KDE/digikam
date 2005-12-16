@@ -128,9 +128,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                        "is supported by some image formats, such as PNG or GIF."));
 
     m_scaleBG = new QHButtonGroup(gboxSettings);
-    m_scaleBG->setExclusive(true);
-    m_scaleBG->setFrameShape(QFrame::NoFrame);
-    m_scaleBG->setInsideMargin( 0 );
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
@@ -150,7 +147,12 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setToggleButton(true);
+    
+    m_scaleBG->setExclusive(true);
+    m_scaleBG->setButton(Digikam::CurvesWidget::LogScaleHistogram);
+    m_scaleBG->setFrameShape(QFrame::NoFrame);
+    m_scaleBG->setInsideMargin( 0 );
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(m_scaleBG);
@@ -178,8 +180,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, gboxSettings);
-    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
-                                          "histogram channel"));
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected channel from original image"));
     grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
@@ -208,6 +209,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QToolTip::add( m_curveSmooth, i18n( "Curve smooth mode" ) );
     QWhatsThis::add( m_curveSmooth, i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
     m_curveType->setExclusive(true);
+    m_curveType->setButton(SmoothDrawing);
     m_curveType->setFrameShape(QFrame::NoFrame);
     
     // -------------------------------------------------------------

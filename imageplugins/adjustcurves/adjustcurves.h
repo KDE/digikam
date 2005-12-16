@@ -46,6 +46,7 @@ class ColorGradientWidget;
 class ImageGuideWidget;
 class ImageCurves;
 class HistogramWidget;
+class DImg;
 }
 
 namespace DigikamAdjustCurvesImagesPlugin
