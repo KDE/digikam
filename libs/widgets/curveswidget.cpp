@@ -449,21 +449,22 @@ void CurvesWidget::paintEvent( QPaintEvent * )
       
       if (guidePos != -1)
       {
-          p1.drawLine(guidePos, 0, guidePos, wHeight);  
+          int xGuide = (guidePos * wWidth) / histogram->getHistogramSegment();
+          p1.drawLine(xGuide, 0, xGuide, wHeight);        
 
           QString string = i18n("x:%1").arg(guidePos);
           QFontMetrics fontMt( string );       
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
           rect.setBottom(wHeight - 10);
-      
+
           if (guidePos < wWidth/2)
           {
-             rect.moveLeft(guidePos + 3);
+             rect.moveLeft(xGuide + 3);
              p1.drawText(rect, Qt::AlignLeft, string);
           }
           else
           {
-             rect.moveRight(guidePos - 3);
+             rect.moveRight(xGuide - 3);
              p1.drawText(rect, Qt::AlignRight, string);
           }
       }
