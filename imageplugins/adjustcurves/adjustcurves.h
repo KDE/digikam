@@ -113,7 +113,6 @@ private:
     
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;
-    Digikam::ColorGradientWidget *m_hGradient2;    
         
     Digikam::ImageGuideWidget    *m_previewOriginalWidget;
     Digikam::ImageGuideWidget    *m_previewTargetWidget;

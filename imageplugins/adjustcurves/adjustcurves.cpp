@@ -107,7 +107,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 8, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 7, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -173,20 +173,31 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     grid->addMultiCellWidget(label5, 1, 1, 1, 1);
     grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
     
+    // -------------------------------------------------------------
+
+    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
+                                             "selected image channel. This one is re-computed at any curves "
+                                             "settings changes."));
+    
+    grid->addMultiCellWidget(m_histogramWidget, 2, 2, 1, 5);
+
+    // -------------------------------------------------------------
+
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
+    grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
-    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
+    grid->addMultiCellWidget(m_curvesWidget, 3, 3, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 4, 4, 1, 5);
     
     // -------------------------------------------------------------
     
@@ -232,7 +243,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
     
-    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
+    grid->addMultiCellLayout(l3, 5, 5, 1, 5);
     
     // -------------------------------------------------------------
             
@@ -240,22 +251,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 6, 6, 1, 5);
 
     // -------------------------------------------------------------
 
-    m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any curves "
-                                             "settings changes."));
-    
-    m_hGradient2 = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
-    m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );
-    
-    grid->addMultiCellWidget(m_histogramWidget, 6, 6, 1, 5);
-    grid->addMultiCellWidget(m_hGradient2, 7, 7, 1, 5);
-    
-    grid->setRowStretch(8, 10);
+    grid->setRowStretch(7, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -455,35 +455,35 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     {
        case LuminosityChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
-          m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );  
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
        
         case RedChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-          m_hGradient2->setColors( QColor( "black" ), QColor( "red" ) );     
+          m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
           m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
        case GreenChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-          m_hGradient2->setColors( QColor( "black" ), QColor( "green" ) );
+          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
           m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
        case BlueChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-          m_hGradient2->setColors( QColor( "black" ), QColor( "blue" ) );
+          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
           m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
 
        case AlphaChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
-          m_hGradient2->setColors( QColor( "black" ), QColor( "white" ) );  
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::AlphaChannelHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
