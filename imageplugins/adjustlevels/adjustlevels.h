@@ -40,6 +40,15 @@ class KDoubleSpinBox;
 class KGradientSelector;
 class KDoubleNumInput;
 
+namespace Digikam
+{
+class ColorGradientWidget;
+class ImageGuideWidget;
+class ImageLevels;
+class HistogramWidget;
+class DImg;
+}
+
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
@@ -76,6 +85,8 @@ private:
     WhiteTonal
     };
 
+    uchar                     *m_destinationPreviewData;
+    
     int                        m_histoSegments;
 
     QComboBox                 *m_channelCB;    
@@ -103,6 +114,7 @@ private:
     KGradientSelector         *m_hGradientMinOutput;
     KGradientSelector         *m_hGradientMaxOutput;
     
+    Digikam::HistogramWidget  *m_levelsHistogramWidget;
     Digikam::HistogramWidget  *m_histogramWidget;
     
     Digikam::ImageGuideWidget *m_previewOriginalWidget;
@@ -133,6 +145,7 @@ private slots:
     void slotAdjustMinOutputSpinBox(int val);
     void slotAdjustMaxOutputSpinBox(int val);
     void slotSpotColorChanged(const Digikam::DColor &color, bool release);
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin
