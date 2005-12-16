@@ -120,7 +120,8 @@ void CurvesWidget::curveTypeChanged(void)
           
           for (int i = 0; i <= 8; i++)
           {
-             int index = CLAMP(i * 32, 0, m_imageHistogram->getHistogramSegment()-1);
+             int index = CLAMP(i * m_imageHistogram->getHistogramSegment()/8,
+                               0, m_imageHistogram->getHistogramSegment()-1);
              
              m_curves->setCurvePoint( m_channelType,
                                       i * 2, QPoint::QPoint(index, 
