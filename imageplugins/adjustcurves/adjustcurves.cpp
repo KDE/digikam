@@ -107,7 +107,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gboxSettings, 7, 5, marginHint(), spacingHint());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 6, 5, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -160,19 +160,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
     grid->addMultiCellLayout(l1, 0, 0, 4, 5);
     
-    QLabel *label5 = new QLabel(i18n("Type:"), gboxSettings);
-    label5->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_typeCB = new QComboBox( false, gboxSettings );
-    m_typeCB->insertItem( i18n("Smooth") );
-    m_typeCB->insertItem( i18n("Free") );
-    m_typeCB->setCurrentText( i18n("Smooth") );
-    QWhatsThis::add( m_typeCB, i18n("<p>Select here the curve type to draw for the current channel.<p>"
-                                    "<b>Smooth</b>: this mode constrains the curve type to a smooth line with tension.<p>"
-                                    "<b>Free</b>: with this mode, you can draw your curve free-hand with the mouse."));
-
-    grid->addMultiCellWidget(label5, 1, 1, 1, 1);
-    grid->addMultiCellWidget(m_typeCB, 1, 1, 2, 2);
-    
     // -------------------------------------------------------------
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
@@ -180,24 +167,48 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                              "selected image channel. This one is re-computed at any curves "
                                              "settings changes."));
     
-    grid->addMultiCellWidget(m_histogramWidget, 2, 2, 1, 5);
+    grid->addMultiCellWidget(m_histogramWidget, 1, 1, 1, 5);
 
     // -------------------------------------------------------------
 
     m_vGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Vertical, 10, gboxSettings );
     m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    grid->addMultiCellWidget(m_vGradient, 3, 3, 0, 0);
+    grid->addMultiCellWidget(m_vGradient, 2, 2, 0, 0);
 
     m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage.bits(), m_originalImage.width(),
                                                m_originalImage.height(), m_originalImage.sixteenBit(),
                                                m_curves, gboxSettings);
     QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve drawing of the selected image "
                                           "histogram channel"));
-    grid->addMultiCellWidget(m_curvesWidget, 3, 3, 1, 5);
+    grid->addMultiCellWidget(m_curvesWidget, 2, 2, 1, 5);
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    grid->addMultiCellWidget(m_hGradient, 4, 4, 1, 5);
+    grid->addMultiCellWidget(m_hGradient, 3, 3, 1, 5);
+    
+    // -------------------------------------------------------------
+    
+    m_curveType = new QHButtonGroup(gboxSettings);
+    m_curveFree = new QPushButton(m_curveType);
+    m_curveType->insert(m_curveFree, FreeDrawing);
+    KGlobal::dirs()->addResourceType("curvefree", KGlobal::dirs()->kde_default("data") +
+                                     "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("curvefree", "curvefree.png");
+    m_curveFree->setPixmap( QPixmap( directory + "curvefree.png" ) );
+    m_curveFree->setToggleButton(true);
+    QToolTip::add( m_curveFree, i18n( "Curve free mode" ) );
+    QWhatsThis::add( m_curveFree, i18n("<p>With this button, you can draw your curve free-hand with the mouse."));
+    m_curveSmooth = new QPushButton(m_curveType);
+    m_curveType->insert(m_curveSmooth, SmoothDrawing);
+    KGlobal::dirs()->addResourceType("curvemooth", KGlobal::dirs()->kde_default("data") +
+                                     "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("curvemooth", "curvemooth.png");
+    m_curveSmooth->setPixmap( QPixmap( directory + "curvemooth.png" ) );
+    m_curveSmooth->setToggleButton(true);
+    QToolTip::add( m_curveSmooth, i18n( "Curve smooth mode" ) );
+    QWhatsThis::add( m_curveSmooth, i18n("<p>With this button, you constrains the curve type to a smooth line with tension."));
+    m_curveType->setExclusive(true);
+    m_curveType->setFrameShape(QFrame::NoFrame);
     
     // -------------------------------------------------------------
     
@@ -234,16 +245,19 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
                                        "smooth curves point on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);
+    
+    // -------------------------------------------------------------
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     QWhatsThis::add( m_resetButton, i18n("<p>Reset curves' values from the current selected channel."));
 
     QHBoxLayout* l3 = new QHBoxLayout();
+    l3->addWidget(m_curveType);
     l3->addWidget(m_pickerColorButtonGroup);
     l3->addWidget(m_resetButton);
     l3->addStretch(10);
     
-    grid->addMultiCellLayout(l3, 5, 5, 1, 5);
+    grid->addMultiCellLayout(l3, 4, 4, 1, 5);
     
     // -------------------------------------------------------------
             
@@ -251,11 +265,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
-    grid->addMultiCellWidget(m_overExposureIndicatorBox, 6, 6, 1, 5);
+    grid->addMultiCellWidget(m_overExposureIndicatorBox, 5, 5, 1, 5);
 
     // -------------------------------------------------------------
 
-    grid->setRowStretch(7, 10);
+    grid->setRowStretch(6, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -278,9 +292,6 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    connect(m_curvesWidget, SIGNAL(signalMouseMoved(int, int)),
-            this, SLOT(slotPositionChanged(int, int)));
-                        
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotEffect()));
     
@@ -305,7 +316,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
             
-    connect(m_typeCB, SIGNAL(activated(int)),
+    connect(m_curveType, SIGNAL(clicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
     
     // -------------------------------------------------------------
@@ -386,11 +397,6 @@ void AdjustCurveDialog::slotResetCurrentChannel()
     m_curvesWidget->reset();
     slotEffect();
     m_histogramWidget->reset();
-}
-
-void AdjustCurveDialog::slotPositionChanged(int x, int y)
-{
-    QToolTip::add( m_curvesWidget, i18n("Position: x:%1  y:%2").arg(x).arg(y) );
 }
 
 void AdjustCurveDialog::slotEffect()
@@ -489,7 +495,7 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
           break;
     }
 
-    m_typeCB->setCurrentItem(m_curves->getCurveType(channel));  
+    m_curveType->setButton(m_curves->getCurveType(channel));
                 
     m_curvesWidget->repaint(false);
     m_histogramWidget->repaint(false);

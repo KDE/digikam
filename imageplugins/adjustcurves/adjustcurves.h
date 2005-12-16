@@ -95,17 +95,19 @@ private:
     int                           m_histoSegments;
         
     QComboBox                    *m_channelCB;    
-    QComboBox                    *m_typeCB;  
     
     QPushButton                  *m_resetButton;
     QPushButton                  *m_pickBlack;
     QPushButton                  *m_pickGray;
     QPushButton                  *m_pickWhite;
+    QPushButton                  *m_curveFree;
+    QPushButton                  *m_curveSmooth;
     
     QCheckBox                    *m_overExposureIndicatorBox;
 
     QHButtonGroup                *m_pickerColorButtonGroup;
     QHButtonGroup                *m_scaleBG;  
+    QHButtonGroup                *m_curveType;
     
     Digikam::CurvesWidget        *m_curvesWidget;
 
@@ -131,7 +133,6 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
-    void slotPositionChanged(int x, int y);
     void slotSpotColorChanged(const Digikam::DColor &color, bool release);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);    
 };
