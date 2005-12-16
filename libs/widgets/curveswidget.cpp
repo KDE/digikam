@@ -73,7 +73,9 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_readOnlyMode   = readOnly;
     m_guideVisible   = false;
     m_sixteenBits    = i_sixteenBits;
-
+    m_xMouseOver     = -1;
+    m_yMouseOver     = -1;
+   
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -295,9 +297,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
              
       do
       {
-          double v;
-
-          v  = 0.0;
+          double v = 0.0;
           
           switch(m_channelType)
           {
@@ -404,9 +404,22 @@ void CurvesWidget::paintEvent( QPaintEvent * )
    p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
    p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
             
+   // Drawing X,Y point position draged by mouse over widget.
+   
+   p1.setPen(QPen::QPen(Qt::black, 1, Qt::DotLine));      
+
+   if (m_xMouseOver != -1 && m_yMouseOver != -1)
+   {
+        QString string = i18n("x:%1\ny:%2").arg(m_xMouseOver).arg(m_yMouseOver);
+        QFontMetrics fontMt( string );
+        QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
+        rect.moveRight(wWidth);
+        rect.moveBottom(wHeight);
+        p1.drawText(rect, Qt::AlignLeft||Qt::AlignTop, string);
+   }
+
    // Drawing color guide.
 
-   p1.setPen(QPen::QPen(Qt::black, 1, Qt::DotLine));      
    int guidePos;
 
    if (m_guideVisible)   
@@ -675,14 +688,19 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
          break;
       }
    }
-   
-   emit signalMouseMoved(x, m_imageHistogram->getHistogramSegment()-1 - y);
+
+   m_xMouseOver = x;
+   m_yMouseOver = m_imageHistogram->getHistogramSegment()-1 - y;
+   emit signalMouseMoved(m_xMouseOver, m_yMouseOver);
    repaint(false);
 }
 
 void CurvesWidget::leaveEvent( QEvent * )
 {
-      emit signalMouseMoved(-1, -1);
+   m_xMouseOver = -1;
+   m_yMouseOver = -1;
+   emit signalMouseMoved(m_xMouseOver, m_yMouseOver);
+   repaint(false);
 }
 
 }  // NameSpace Digikam

@@ -119,6 +119,8 @@ private:
     int                   m_rightmost;
     int                   m_grab_point;
     int                   m_last;
+    int                   m_xMouseOver;
+    int                   m_yMouseOver;
     
     bool                  m_sixteenBits;    
     bool                  m_blinkFlag;         
