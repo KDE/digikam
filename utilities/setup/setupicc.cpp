@@ -528,8 +528,8 @@ void SetupICC::profileInfo(const QString& profile)
     KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
                                  i18n("</p><p><b>Description:</b>  ") + profileDescription +
                                  i18n("</p><p><b>Manufacturer:</b>  ") + profileManufacturer +
-                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path: ") +
-                                 profile + "</b></p>",
+                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
+                                 profile + "</p>",
                                  i18n("Color Profile Info"));
 }
 
