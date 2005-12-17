@@ -49,7 +49,7 @@ public:
 
     ~ImlibInterface();
 
-    bool load(const QString& filename);
+    bool load(const QString& filename, bool *isReadOnly);
     void preload(const QString& filename);
     void setExifOrient(bool exifOrient);
     void undo();

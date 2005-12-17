@@ -338,7 +338,7 @@ Canvas::~Canvas()
     delete d;
 }
 
-void Canvas::load(const QString& filename)
+bool Canvas::load(const QString& filename)
 {
     if (d->rubber) {
         delete d->rubber;
@@ -355,7 +355,9 @@ void Canvas::load(const QString& filename)
     viewport()->setUpdatesEnabled(false);
 
     d->tileCache.clear();
-    d->im->load(filename);
+
+    bool isReadOnly;
+    d->im->load(filename, &isReadOnly);
 
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
@@ -372,6 +374,8 @@ void Canvas::load(const QString& filename)
    
     emit signalChanged(false, false);
     emit signalZoomChanged(d->zoom);
+    
+    return (isReadOnly);
 }
 
 void Canvas::preload(const QString& filename)
