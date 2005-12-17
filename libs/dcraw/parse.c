@@ -1258,81 +1258,12 @@ int main(int argc, char **argv)
 }
 */
 
-/**
-   Identify which camera has created this file, and set global variables
-   accordingly. Return nonzero if the file cannot be decoded. You can use 
-   this method with cameraConstructor=cameraModel=NULL if you just want test 
-   if infile is a RAW file (return  0).
-*/
+/*
+   Identify which camera created this file, and set global variables
+   accordingly.	 Return nonzero if the file cannot be decoded.
+ */
 
-int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* cameraModel)
-{
-    char head[32], *cp;
-    unsigned hlen, fsize, toff, tlen;
-
-    ifp = fopen (infile,"rb");
-
-    make[0] = model[0] = model2[0] = is_dng = 0;
-    thumb_head[0] = thumb_offset = thumb_length = thumb_layers = 0;
-    order = get2();
-    hlen = get4();
-    fseek (ifp, 0, SEEK_SET);
-    fread (head, 1, 32, ifp);
-    fseek (ifp, 0, SEEK_END);
-    fsize = ftell(ifp);
-    if ((cp = memmem (head, 32, "MMMM", 4)) ||
-        (cp = memmem (head, 32, "IIII", 4))) {
-        parse_phase_one (cp-head);
-        if (cp-head) parse_tiff (0);
-    } else if (order == 0x4949 || order == 0x4d4d) {
-        if (!memcmp(head+6,"HEAPCCDR",8)) {
-        parse_ciff (hlen, fsize - hlen, 0);
-        fseek (ifp, hlen, SEEK_SET);
-        } else
-        parse_tiff (0);
-    } else if (!memcmp (head,"\0MRM",4)) {
-        parse_minolta();
-    } else if (!memcmp (head,"FUJIFILM",8)) {
-        fseek (ifp, 84, SEEK_SET);
-        toff = get4();
-        tlen = get4();
-        parse_fuji (92);
-        if (toff > 120) parse_fuji (120);
-        parse_tiff (toff+12);
-        thumb_offset = toff;
-        thumb_length = tlen;
-    } else if (!memcmp (head,"RIFF",4)) {
-        fseek (ifp, 0, SEEK_SET);
-        parse_riff(0);
-    } else if (!memcmp (head,"DSC-Image",9))
-        parse_rollei();
-    else if (!memcmp (head,"FOVb",4))
-        parse_foveon();
-    fseek (ifp, 8, SEEK_SET);
-    parse_mos(0);
-    fseek (ifp, 3472, SEEK_SET);
-    parse_mos(0);
-    parse_jpeg(0);
-
-    if (model[0] == 0)
-    {
-        return 1;
-    }
-
-    if (cameraConstructor != NULL)
-        strcpy (cameraConstructor, make);
-
-    if (cameraModel != NULL)
-        strcpy (cameraModel, model);
-
-    return 0;
-}
-
-/**
-   Get embedded thumbnail in RAW file.  Return nonzero if the file cannot be decoded.
-*/
-
-int dcraw_getThumbnail(const char* infile, const char* outfile)
+int dcraw_identify(const char* infile, const char* outfile)
 {
   char head[32], *thumb, *rgb, *cp;
   unsigned hlen, fsize, toff, tlen, lsize, i;
