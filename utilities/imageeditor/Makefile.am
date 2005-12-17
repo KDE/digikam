@@ -9,8 +9,6 @@ libimagecanvas_la_SOURCES = imlibinterface.cpp canvas.cpp \
                            undoaction.cpp undomanager.cpp \
                            imagepluginloader.cpp imageplugin.cpp
 
-libimagecanvas_la_LIBADD = $(top_builddir)/digikam/libs/dcraw
-
 libimagecanvas_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_IMLIB2) \
                            $(LIBKEXIF_LIBS) $(LIB_TIFF)
 
