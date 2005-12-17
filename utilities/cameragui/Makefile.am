@@ -13,7 +13,7 @@ libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 libcameragui_la_LIBADD  = $(LIB_GPHOTO) $(LIBKEXIF_LIBS) $(LIBJPEG)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	-I$(top_srcdir)/digikam/utilities/imageeditor \
+	-I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	-I$(top_srcdir)/digikam/libs/jpegutils \
 	$(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 
