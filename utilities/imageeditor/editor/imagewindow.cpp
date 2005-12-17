@@ -189,6 +189,11 @@ ImageWindow::ImageWindow()
     
     readSettings();
     applySettings();
+
+    // This is just a bloody workaround until we have found the problem
+    // which leads the imagewindow to open in a wrong size
+    resize(640, 480);
+    
     setAutoSaveSettings("ImageViewer Settings");    
     m_rightSidebar->populateTags();
 }
