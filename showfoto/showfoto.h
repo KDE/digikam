@@ -42,6 +42,7 @@ class Canvas;
 class ImagePluginLoader;
 class SplashScreen;
 class SlideShow;
+class ICCSettingsContainer;
 
 namespace KIO
 {
@@ -151,6 +152,8 @@ private:
     KToolBarPopupAction             *m_redoAction;
         
     KSelectAction                   *m_viewHistogramAction;
+
+    ICCSettingsContainer   *m_container;
 
 private:
 
