@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-13
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004-2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEPRINT_H
@@ -53,15 +53,15 @@ public:
     bool printImageWithQt();
 
 private:
-    
+
     QString minimizeString( QString text, const QFontMetrics& metrics,
-                            int maxWidth );                           
+                            int maxWidth );
 private:
-    
+
     Digikam::DImg m_image;
     KPrinter&     m_printer;
     QString       m_filename;
-    
+
 };
 
 
@@ -92,6 +92,7 @@ private:
     KComboBox       *m_units;
     QCheckBox       *m_addFileName;
     QCheckBox       *m_blackwhite;
+    QCheckBox       *m_autoRotate;
 };
 
-#endif // IMAGEPRINT_H 
+#endif // IMAGEPRINT_H

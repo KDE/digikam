@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-13
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004-2005 by Gilles Caulier
  *
  * Original printing code from Kuickshow program.
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt lib includes
@@ -83,6 +83,10 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_blackwhite->setChecked( false );
     layout->addWidget (m_blackwhite );
 
+    m_autoRotate = new QCheckBox( i18n("&Auto-rotate page"), this );
+    m_autoRotate->setChecked( false );
+    layout->addWidget( m_autoRotate );
+
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );
@@ -100,7 +104,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_scale = new QRadioButton( i18n("Print e&xact size: "), widget );
     grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
     group->insert( m_scale );
-    
+
     connect( m_scale, SIGNAL( toggled( bool )),
              this, SLOT( toggleScaling( bool )));
 
@@ -137,6 +141,7 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
     opts["app-imageeditor-scale-unit"] = m_units->currentText();
     opts["app-imageeditor-scale-width"] = QString::number( m_width->value() );
     opts["app-imageeditor-scale-height"] = QString::number( m_height->value() );
+    opts["app-imageeditor-auto-rotate"] = m_autoRotate->isChecked() ? t : f;
 }
 
 
@@ -152,6 +157,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     m_blackwhite->setChecked ( false );
     m_scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
     m_scale->setChecked( opts["app-imageeditor-scale"] == t );
+    m_autoRotate->setChecked( opts["app-imageeditor-auto-rotate"] == t );
 
     m_units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
 
@@ -159,12 +165,12 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     double val;
 
     val = opts["app-imageeditor-scale-width"].toDouble( &ok );
-    
+
     if ( ok )
         m_width->setValue( val );
-    
+
     val = opts["app-imageeditor-scale-height"].toDouble( &ok );
-    
+
     if ( ok )
         m_height->setValue( val );
 
@@ -195,7 +201,7 @@ ImagePrint::~ImagePrint()
 
 bool ImagePrint::printImageWithQt()
 {
-    if ( m_image.isNull() ) 
+    if ( m_image.isNull() )
     {
         kdWarning() << "Supplied Image for printing is null" << endl;
         return false;
@@ -224,10 +230,9 @@ bool ImagePrint::printImageWithQt()
     p.setFont( KGlobalSettings::generalFont() );
     QFontMetrics fm = p.fontMetrics();
 
-
+    int w, h; // will be set to the width and height of the printer
+              // when the orientation is decided.
     int filenameOffset = 0;
-    int w = metrics.width();
-    int h = metrics.height();
 
     QSize size = image2Print.size();
 
@@ -236,13 +241,17 @@ bool ImagePrint::printImageWithQt()
     {
         // filename goes into one line!
         filenameOffset = fm.lineSpacing() + 14;
-        h -= filenameOffset; 
+        h -= filenameOffset;
     }
-    
+
     if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
     {
-        
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait : KPrinter::Landscape );
+
         // Scale image to fit pagesize
+        w = metrics.width();
+        h = metrics.height();
         size.scale( w, h, QSize::ScaleMin );
     }
     else
@@ -251,6 +260,13 @@ bool ImagePrint::printImageWithQt()
         QString unit  = m_printer.option("app-imageeditor-scale-unit");
         double  wunit = m_printer.option("app-imageeditor-scale-width").toDouble();
         double  hunit = m_printer.option("app-imageeditor-scale-height").toDouble();
+
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( wunit <= hunit ? KPrinter::Portrait : KPrinter::Landscape );
+
+        w = metrics.width();
+        h = metrics.height();
+
         int     wresize, hresize;
         if (unit == i18n("Centimeters"))
         {
@@ -271,11 +287,11 @@ bool ImagePrint::printImageWithQt()
     // Align image.
     bool ok = false;
     int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
-    
+
     if ( !ok )
     {
         // default
-        alignment = Qt::AlignCenter; 
+        alignment = Qt::AlignCenter;
     }
 
     int x = 0;
@@ -305,7 +321,7 @@ bool ImagePrint::printImageWithQt()
     if ( printFilename )
     {
         QString fname = minimizeString( m_filename, fm, w );
-        
+
         if ( !fname.isEmpty() )
         {
             int fw = fm.width( fname );
@@ -328,22 +344,22 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
         return QString();
 
     bool changed = false;
-    
+
     while ( metrics.width( text ) > maxWidth )
     {
         int mid = text.length() / 2;
         // remove 2 characters in the middle
-        text.remove( mid, 2 ); 
+        text.remove( mid, 2 );
         changed = true;
     }
 
     // add "..." in the middle
-    if ( changed ) 
+    if ( changed )
     {
         int mid = text.length() / 2;
-        
+
         // sanity check
-        if ( mid <= 5 ) 
+        if ( mid <= 5 )
             return QString();
 
         text.replace( mid - 1, 3, "..." );
