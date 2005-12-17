@@ -503,7 +503,7 @@ void SetupICC::profileInfo(const QString& profile)
 
     QString  profileName = QString((cmsTakeProductName(selectedProfile)));
     QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
-    QString profileManufacturer = QString(cmsTakeManufacturer(selectedProfile));
+    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
     int profileIntent = cmsTakeRenderingIntent(selectedProfile);
     
     //"Decode" profile rendering intent
@@ -525,7 +525,7 @@ void SetupICC::profileInfo(const QString& profile)
 
     KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
                                  i18n("</p><p><b>Description:</b>  ") + profileDescription +
-                                 i18n("</p><p><b>Manufacturer:</b>  ") + profileManufacturer +
+                                 i18n("</p><p><b>Copyright:</b>  ") + profileManufacturer +
                                  i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
                                  profile + "</p>",
                                  i18n("Color Profile Info"));
