@@ -386,7 +386,35 @@ void SetupICC::slotToggledWidgets(bool t)
     m_workProfiles->setEnabled(t); 
     m_proofProfiles->setEnabled(t); 
     m_monitorProfiles->setEnabled(t); 
-    m_renderingIntent->setEnabled(t); 
+    m_renderingIntent->setEnabled(t);
+
+    if (t)
+    {
+        KConfig* config = kapp->config();
+
+        config->setGroup("Color Management");
+        if (config->readBoolEntry("BehaviourICC"))
+        {
+            m_defaultApplyICC->setChecked(true);
+        }
+        else
+        {
+            m_defaultAskICC->setChecked(false);
+        }
+    //     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
+    //     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+        m_defaultPath->setURL(config->readPathEntry("DefaultPath"));
+        m_workProfiles->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+        m_monitorProfiles->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
+        m_inProfiles->setCurrentItem(config->readNumEntry("InProfile", 0));
+        m_proofProfiles->setCurrentItem(config->readNumEntry("ProofProfile", 0));
+        m_bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+        m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+        m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
+        m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
+        m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+        m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+    }
 }
 
 void SetupICC::slotFillCombos(const QString& url)
@@ -505,7 +533,7 @@ void SetupICC::profileInfo(const QString& profile)
 
     QString  profileName = QString((cmsTakeProductName(selectedProfile)));
     QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
-    QString profileManufacturer = QString(cmsTakeManufacturer(selectedProfile));
+    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
     int profileIntent = cmsTakeRenderingIntent(selectedProfile);
     
     //"Decode" profile rendering intent
@@ -527,7 +555,7 @@ void SetupICC::profileInfo(const QString& profile)
 
     KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
                                  i18n("</p><p><b>Description:</b>  ") + profileDescription +
-                                 i18n("</p><p><b>Manufacturer:</b>  ") + profileManufacturer +
+                                 i18n("</p><p><b>Copyright:</b>  ") + profileManufacturer +
                                  i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
                                  profile + "</p>",
                                  i18n("Color Profile Info"));
