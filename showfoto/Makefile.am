@@ -7,8 +7,8 @@ bin_PROGRAMS = showfoto
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor \
 	   -I$(top_srcdir)/digikam/libs/thumbbar/ \
 	   -I$(top_srcdir)/digikam/libs/widgets \
-	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/libs/histogram \
+	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
@@ -22,7 +22,6 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) \
 		   $(top_builddir)/digikam/libs/histogram/libhistogram.la \
 		   $(top_builddir)/digikam/libs/widgets/libwidgets.la \
-		   $(top_builddir)/digikam/libs/dcraw/libdcraw.la \
 		   $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		   $(top_builddir)/digikam/libs/curves/libcurves.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/libimageeditor.la \

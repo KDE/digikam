@@ -59,7 +59,6 @@ libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
-		        $(top_builddir)/digikam/libs/dcraw/libdcraw.la \
 		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		        $(top_builddir)/digikam/utilities/imageeditor/libimagecanvas.la \

@@ -10,7 +10,9 @@ libimagecanvas_la_SOURCES = imlibinterface.cpp canvas.cpp \
                            imagepluginloader.cpp imageplugin.cpp
 
 libimagecanvas_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_IMLIB2) \
-                           $(LIBKEXIF_LIBS) $(LIB_TIFF)
+                           $(LIBKEXIF_LIBS) $(LIB_TIFF) 
+
+libimagecanvas_la_LIBADD = $(top_builddir)/digikam/libs/dcraw/libdcraw.la
 
 libimageeditor_la_SOURCES = imageiface.cpp imagewidget.cpp \
                            imagewindow.cpp \
