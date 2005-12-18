@@ -135,6 +135,7 @@ private slots:
     void slotImageListerClear();
 
     void slotDoubleClicked(IconItem *item);
+    void slotRightButtonClicked(const QPoint& pos);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
     void slotGotThumbnail(const KURL& url);
@@ -162,6 +163,8 @@ public slots:
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
+    void slotCopy();
+    void slotPaste();
     
 signals:
 
