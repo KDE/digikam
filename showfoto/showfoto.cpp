@@ -71,6 +71,7 @@
 // Local includes.
 
 #include "exifrestorer.h"
+#include "rawfiles.h"
 #include "canvas.h"
 #include "thumbbar.h"
 #include "imageplugin.h"
@@ -94,6 +95,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_splash                 = 0;
     m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
+    m_isReadOnly             = false;
+    m_dirtyImage             = false;
     m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
@@ -250,6 +253,15 @@ void ShowFoto::setupActions()
 {
     m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
                        actionCollection(), "open_file");
+
+     m_openFilesInFolderAction = new KAction(i18n("Open folder"),
+                                            "folder_image",
+                                            CTRL+SHIFT+Key_O,
+                                            this,
+                                            SLOT(slotOpenFilesInFolder()),
+                                            actionCollection(),
+                                            "open_files_in_folder");
+      
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
 
@@ -516,6 +528,9 @@ void ShowFoto::applySettings()
     bool autoFit = true;
 
     m_config->setGroup("MainWindow");
+    m_lastOpenedDirectory.setPath( m_config->readEntry("Last Opened Directory",
+                                   KGlobalSettings::documentPath()) );
+       
     showBar = m_config->readBoolEntry("Show Thumbnails", true);
     autoFit = m_config->readBoolEntry("Zoom Autofit", true);
 
@@ -538,6 +553,7 @@ void ShowFoto::applySettings()
 void ShowFoto::saveSettings()
 {
     m_config->setGroup("MainWindow");
+    m_config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
     m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
     m_config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
 
@@ -569,9 +585,13 @@ void ShowFoto::slotOpenFile()
     if (!promptUserSave())
         return;
 
-    QString mimes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+    QString mimetypes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+
+    // Added RAW file format type mimes supported by dcraw program.
+    mimetypes.append (" image/x-raw");
+      
     KURL::List urls =  KFileDialog::getOpenURLs(KGlobalSettings::documentPath(),
-                                                mimes,
+                                                mimetypes,
                                                 this,
                                                 i18n("Open Images"));
 
@@ -649,17 +669,12 @@ void ShowFoto::slotPrev()
     }
 }
 
-void ShowFoto::slotSave()
-{
-    save();
-}
-
-void ShowFoto::slotSaveAs()
+bool ShowFoto::saveAs()
 {
     if (!m_currentItem)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
-        return;
+        return false;
     }
 
     KURL url(m_currentItem->url());
@@ -682,7 +697,7 @@ void ShowFoto::slotSaveAs()
 
     if ( saveDialog.exec() != KFileDialog::Accepted )
     {
-        return;
+        return false;
     }
 
     KURL saveAsURL = saveDialog.selectedURL();
@@ -691,7 +706,7 @@ void ShowFoto::slotSaveAs()
     if (!saveAsURL.isValid())
     {
         KMessageBox::error(this, i18n("Invalid target selected"));
-        return;
+        return false;
     }
 
     url.cleanPath();
@@ -700,7 +715,7 @@ void ShowFoto::slotSaveAs()
     if (url.equals(saveAsURL))
     {
         slotSave();
-        return;
+        return false;
     }
 
     QFileInfo fi(saveAsURL.path());
@@ -712,7 +727,7 @@ void ShowFoto::slotSaveAs()
                                        .arg(saveAsURL.filename()) );
 
         if (result != KMessageBox::Yes)
-            return;
+            return false;
     }
     
     kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -726,7 +741,7 @@ void ShowFoto::slotSaveAs()
         KMessageBox::error(this, i18n("Failed to save file '%1'")
                            .arg(saveAsURL.filename()));
         ::unlink(QFile::encodeName(tmpFile));
-        return;
+        return false;
     }
 
     // only try to write exif if both src and destination are jpeg files
@@ -758,7 +773,7 @@ void ShowFoto::slotSaveAs()
         kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to overwrite original file"));
         ::unlink(QFile::encodeName(tmpFile));
-        return;
+        return false;
     }
 
     m_canvas->setModified( false );
@@ -772,6 +787,7 @@ void ShowFoto::slotSaveAs()
     
     m_bar->setSelected(foundItem);
     kapp->restoreOverrideCursor();
+    return true;
 }
 
 bool ShowFoto::promptUserSave()
@@ -779,7 +795,7 @@ bool ShowFoto::promptUserSave()
     if (!m_currentItem)
         return true;
 
-    if (m_saveAction->isEnabled())
+    if (m_dirtyImage)
     {
         int result =
             KMessageBox::warningYesNoCancel(this,
@@ -791,7 +807,10 @@ bool ShowFoto::promptUserSave()
                                             KStdGuiItem::discard());
         if (result == KMessageBox::Yes)
         {
-            return save();
+            if (m_isReadOnly)
+                return saveAs();
+            else
+                return save();
         }
         else if (result == KMessageBox::No)
         {
@@ -801,6 +820,7 @@ bool ShowFoto::promptUserSave()
         else
             return false;
     }
+     m_dirtyImage = false;
     return true;
 }
 
@@ -889,10 +909,11 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #else
     KIO::NetAccess::download(url, localFile);
 #endif
-    m_canvas->load(localFile);
+     m_isReadOnly = m_canvas->load(localFile);
 
     slotUpdateItemInfo();
     QApplication::restoreOverrideCursor();
+    m_dirtyImage = false;
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -1070,6 +1091,7 @@ void ShowFoto::slotImagePluginsHelp()
 
 void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
 {
+    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -1080,6 +1102,9 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(moreUndo);
+
+    if (!m_isReadOnly)
+        m_saveAction->setEnabled(moreUndo);
 }
 
 void ShowFoto::slotAboutToShowUndoMenu()
@@ -1150,6 +1175,7 @@ void ShowFoto::toggleActions(bool val, bool slideShow)
     {
        // if slideshow mode then toogle file open actions.
        m_fileOpenAction->setEnabled(val);
+       m_openFilesInFolderAction->setEnabled(val);
     }
 
     if (m_BCGAction)
@@ -1389,12 +1415,14 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         toggleActions(false);
         m_canvas->load(QString::null);
         m_currentItem = 0;
+        m_isReadOnly = false;
     }
     else
     {
         m_currentItem = m_bar->currentItem();
         slotOpenURL(m_currentItem->url());
     }
+     m_dirtyImage = false;
 }
 
 void ShowFoto::slotUpdateItemInfo(void)
@@ -1460,6 +1488,95 @@ void ShowFoto::slotToggleSlideShow()
         {
             m_fullScreenAction->activate();
         }
+    }
+}
+
+void ShowFoto::slotOpenFolder(const KURL& url)
+{
+    if (!promptUserSave())
+        return;
+
+    m_canvas->load(QString::null);
+    m_bar->clear(true);
+    m_currentItem = 0;
+    m_isReadOnly = false;
+    
+    if (!url.isValid() || !url.isLocalFile())
+       return;
+
+    // Parse KDE image IO mime types registration to get files filter pattern.
+
+    QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
+    QString filter;
+
+    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; it++)
+    {    
+        QString format = KImageIO::typeForMime(*it);
+        filter.append ("*.");
+        filter.append (format);
+        filter.append (" ");
+    }    
+
+    // Because KImageIO return only *.JPEG and *.TIFF mime types.
+    if ( filter.contains("*.TIFF") )
+        filter.append (" *.TIF");
+    if ( filter.contains("*.JPEG") )
+        filter.append (" *.JPG");
+
+    // Added RAW files estentions supported by dcraw program and 
+    // defines to digikam/libs/dcraw/rawfiles.h
+    filter.append (" ");
+    filter.append ( QString::QString(raw_file_extentions) );  
+    filter.append (" ");
+
+    QString patterns = filter.lower();
+    patterns.append (" ");
+    patterns.append (filter.upper());
+
+    kdDebug () << "patterns=" << patterns << endl;    
+
+    // Get all image files from directory.
+
+    QDir dir(url.path(), patterns);
+    
+    if (!dir.exists())
+       return;
+    
+    // Directory items sorting. Perhaps we need to add any settings in config dialog.
+    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
+    dir.setSorting ( QDir::Time );
+
+    const QFileInfoList* fileinfolist = dir.entryInfoList();
+    if (!fileinfolist)
+       return;
+    
+    QFileInfoListIterator it(*fileinfolist);
+    QFileInfo* fi;
+
+    // And open all items in image editor.
+
+    while( (fi = it.current() ) )
+    {
+        new Digikam::ThumbBarItem( m_bar, KURL::KURL(fi->filePath()) );
+        ++it;
+    }
+        
+    toggleActions(true);
+    toggleNavigation(1);
+}
+    
+void ShowFoto::slotOpenFilesInFolder()
+{
+    if (!promptUserSave())
+        return;
+
+    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.path(), 
+                                               this, i18n("Open Images From Directory")));
+
+    if (!url.isEmpty())
+    {
+       m_lastOpenedDirectory = url;
+       slotOpenFolder(url);
     }
 }
 

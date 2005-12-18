@@ -5,7 +5,8 @@
 
  <Menu name="file" >
    <text>&amp;File</text>
-     <Action name="open_file" /> 
+     <Action name="open_file" />
+     <Action name="open_files_in_folder" />
      <Separator/>
      <Action name="file_bwd" /> 
      <Action name="file_fwd" /> 

@@ -80,6 +80,17 @@ private:
     // Allow to use Image properties and Comments/Tags dialogs from main window.
     AlbumIconView*         m_view;
     
+    // If image editor is launched by camera interface, current
+    // image cannot be saved.
+    bool                   m_allowSaving;
+
+    // If current image file format is only available in read only,
+    // typicially all RAW image file formats.
+    bool                    m_isReadOnly;
+    
+    // 'true' if current image have been modified, else 'false'.
+    bool                    m_dirtyImage;
+    
     int                    m_JPEGCompression;
     int                    m_PNGCompression;
     
@@ -87,7 +98,6 @@ private:
     bool                   m_rotatedOrFlipped;
     bool                   m_fullScreen;
     bool                   m_fullScreenHideToolBar;
-    bool                   m_allowSaving;
     bool                   m_removeFullScreenButton;
 
     // Actions
@@ -141,6 +151,7 @@ private:
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
     bool save();
+    bool saveAs();
 
 signals:
 
@@ -171,8 +182,8 @@ private slots:
 
     void slotRotatedOrFlipped();
     
-    void slotSave();
-    void slotSaveAs();
+    void slotSave()   { save();   };
+    void slotSaveAs() { saveAs(); };
 
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();

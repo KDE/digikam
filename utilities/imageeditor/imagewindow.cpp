@@ -101,6 +101,9 @@ ImageWindow::ImageWindow()
     m_allowSaving           = true;
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
+    m_isReadOnly            = false;
+    m_dirtyImage            = false;
+     
     m_view                  = 0L;
     
     // -- construct the view ---------------------------------
@@ -548,7 +551,7 @@ void ImageWindow::slotLoadCurrent()
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        m_canvas->load(m_urlCurrent.path());
+        m_isReadOnly = m_canvas->load(m_urlCurrent.path());
         m_rotatedOrFlipped = false;
 
         QString text = m_urlCurrent.filename() +
@@ -605,6 +608,8 @@ void ImageWindow::slotLoadCurrent()
        m_fileDelete->setEnabled(true);
        m_commentedit->setEnabled(true);
     }
+
+    m_dirtyImage = false;
 }
 
 void ImageWindow::slotLoadNext()
@@ -784,6 +789,7 @@ void ImageWindow::slotZoomChanged(float zoom)
 
 void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 {
+    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -794,7 +800,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
-    if (m_allowSaving)
+    if (m_allowSaving && !m_isReadOnly)
     {
         m_saveAction->setEnabled(moreUndo);
     }
@@ -960,11 +966,6 @@ void ImageWindow::slotFilePrint()
     }
 }
 
-void ImageWindow::slotSave()
-{
-    save();
-}
-
 bool ImageWindow::save()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -1012,10 +1013,11 @@ bool ImageWindow::save()
     emit signalFileModified(m_urlCurrent);
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
     kapp->restoreOverrideCursor();
+    m_dirtyImage = false;
     return true;
 }
 
-void ImageWindow::slotSaveAs()
+bool ImageWindow::saveAs()
 {
     // Get the new filename.
 
@@ -1040,7 +1042,7 @@ void ImageWindow::slotSaveAs()
     // Check for cancel.
     if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
     {
-       return;
+       return false;
     }
 
     KURL newURL = imageFileSaveDialog.selectedURL();
@@ -1058,7 +1060,7 @@ void ImageWindow::slotSaveAs()
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
         kdWarning() << k_funcinfo << "target URL isn't valid !" << endl;
-        return;
+        return false;
     }
 
     // if new and original url are save use slotSave() ------------------------------
@@ -1070,7 +1072,7 @@ void ImageWindow::slotSaveAs()
     if (currURL.equals(newURL))
     {
         slotSave();
-        return;
+        return false;
     }
 
     // Check for overwrite ----------------------------------------------------------
@@ -1091,7 +1093,7 @@ void ImageWindow::slotSaveAs()
                                        KStdGuiItem::cancel() );
 
         if (result != KMessageBox::Yes)
-            return;
+            return false;
 
         fileExists = true;
     }
@@ -1113,7 +1115,7 @@ void ImageWindow::slotSaveAs()
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
 
-        return;
+        return false;
     }
 
     // only try to write exif if both src and destination are jpeg files
@@ -1145,7 +1147,7 @@ void ImageWindow::slotSaveAs()
         kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save to new file"),
                            i18n("Error Saving File"));
-        return;
+        return false;
     }
 
     // Find the src and dest albums ------------------------------------------
@@ -1156,7 +1158,7 @@ void ImageWindow::slotSaveAs()
     {
         kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
-        return;
+        return false;
     }
 
     KURL dstDirURL(QDir::cleanDirPath(newURL.directory()));
@@ -1165,7 +1167,7 @@ void ImageWindow::slotSaveAs()
     {
         kapp->restoreOverrideCursor();
         kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
-        return;
+        return false;
     }
         
     // Now copy the metadata of the original file to the new file ------------
@@ -1192,6 +1194,8 @@ void ImageWindow::slotSaveAs()
     m_canvas->setModified( false );
     kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    m_dirtyImage = false;
+    return true;
 }
 
 void ImageWindow::slotToggleFullScreen()
@@ -1297,7 +1301,7 @@ void ImageWindow::slotEscapePressed()
 
 bool ImageWindow::promptUserSave()
 {
-    if (m_saveAction->isEnabled())
+    if (m_dirtyImage)
     {
         int result =
             KMessageBox::warningYesNoCancel(this,
@@ -1309,7 +1313,10 @@ bool ImageWindow::promptUserSave()
                                             KStdGuiItem::discard());
         if (result == KMessageBox::Yes)
         {
-            return save();
+            if (m_isReadOnly)
+                return saveAs();
+            else
+                return save();
         }
         else if (result == KMessageBox::No)
         {

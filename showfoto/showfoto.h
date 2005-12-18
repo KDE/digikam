@@ -75,10 +75,11 @@ private slots:
     void slotPrev();
     void slotLast();
     void slotFirst();
-    void slotSave();
-    void slotSaveAs();
     void slotFilePrint();
     void slotOpenURL(const KURL& url);
+    void slotOpenFolder(const KURL& url);
+    void slotOpenFilesInFolder();
+       
     void slotDeleteCurrentItem();
     void slotFileProperties();
     
@@ -107,6 +108,10 @@ private slots:
     void slotContextMenu();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
+
+    void slotSave()   { save();   };
+    void slotSaveAs() { saveAs(); };
+     
                
 private:
 
@@ -115,6 +120,7 @@ private:
     void saveSettings();
     bool promptUserSave();
     bool save();
+    bool saveAs();
     void toggleActions(bool val, bool slideShow=false);
     void toggleNavigation(int index);
     void loadPlugins();
@@ -132,6 +138,8 @@ private:
     SplashScreen          *m_splash;
     
     SlideShow             *m_slideShow;
+
+    KURL                  m_lastOpenedDirectory;
                           
     QLabel                *m_nameLabel;
     QLabel                *m_zoomLabel;
@@ -158,6 +166,7 @@ private:
     KAction               *m_filePrintAction;    
     KAction               *m_fileDeleteAction;
     KAction               *m_fileOpenAction;
+    KAction               *m_openFilesInFolderAction;
     
     KAction               *m_forwardAction;
     KAction               *m_backAction;
@@ -181,6 +190,13 @@ private:
     KToolBarPopupAction   *m_redoAction;
         
     KSelectAction         *m_viewHistogramAction;
+    
+    // If current image file format is only available in read only,
+    // typicially all RAW image file formats.
+    bool                             m_isReadOnly;
+    
+    // 'true' if current image have been modified, else 'false'.
+    bool                             m_dirtyImage;
     
     int                    m_JPEGCompression;
     int                    m_PNGCompression;
