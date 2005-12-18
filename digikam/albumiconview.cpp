@@ -48,6 +48,7 @@
 #include <qdict.h>
 #include <qdatastream.h>
 #include <qtimer.h>
+#include <qclipboard.h>
 
 // KDE includes.
 
@@ -212,6 +213,9 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint &)),
             this, SLOT(slotRightButtonClicked(IconItem*, const QPoint &)));
+
+    connect(this, SIGNAL(signalRightButtonClicked(const QPoint &)),
+            this, SLOT(slotRightButtonClicked(const QPoint &)));
 
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -417,13 +421,34 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
     slotDisplayItem(static_cast<AlbumIconItem *>(item));
 }
 
+void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
+{
+    if(d->currentAlbum->isRoot() ||
+         (   d->currentAlbum->type() != Album::PHYSICAL
+          && d->currentAlbum->type() != Album::TAG))
+    {
+        return;
+    }
+            
+    QPopupMenu popmenu(this);
+    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+    {
+        paste->setEnabled(false);
+    }
+    paste->plug(&popmenu);
+    popmenu.exec(pos);
+    delete paste;    
+}
+
 void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 {
-    if (!item) return;
-
+    if (!item)
+        return;
+    
     AlbumIconItem* iconItem
         = static_cast<AlbumIconItem *>(item);
-
 
     // --------------------------------------------------------
 
@@ -469,6 +494,18 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             popmenu.insertItem(i18n("Set as Tag Thumbnail"), 17);
     }
 
+    popmenu.insertSeparator();
+    
+    KAction *copy = KStdAction::copy(this, SLOT(slotCopy()), 0);
+    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+    {
+        paste->setEnabled(false);
+    }    
+    copy->plug(&popmenu);
+    paste->plug(&popmenu);
+    
     popmenu.insertSeparator();
 
     // Bulk assignment/removal of tags --------------------------
@@ -628,6 +665,63 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     serviceVector.clear();
     delete assignTagsPopup;
     delete removeTagsPopup;
+    delete copy;
+    delete paste;
+}
+
+void AlbumIconView::slotCopy()
+{
+    if (!d->currentAlbum)
+        return;
+
+    KURL::List      urls;
+    KURL::List      kioURLs;
+    QValueList<int> albumIDs;
+    QValueList<int> imageIDs;
+
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+            urls.append(albumItem->imageInfo()->kurl());
+            kioURLs.append(albumItem->imageInfo()->kurlForKIO());
+            imageIDs.append(albumItem->imageInfo()->id());
+        }
+    }
+    albumIDs.append(d->currentAlbum->id());
+
+    if (urls.isEmpty())
+        return;
+
+    QDragObject* drag = 0;
+
+    drag = new ItemDrag(urls, kioURLs, albumIDs, imageIDs, this);
+    kapp->clipboard()->setData(drag);
+}
+
+void AlbumIconView::slotPaste()
+{
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+        return;
+
+    if(d->currentAlbum->type() == Album::PHYSICAL)
+    {
+        if (QUriDrag::canDecode(data) &&
+            d->currentAlbum->type() == Album::PHYSICAL)
+        {
+            PAlbum* palbum = (PAlbum*)d->currentAlbum;
+            KURL destURL(palbum->kurl());
+
+            KURL::List srcURLs;
+            KURLDrag::decode(data, srcURLs);
+
+            KIO::Job* job = DIO::copy(srcURLs, destURL);
+            connect(job, SIGNAL(result(KIO::Job*)),
+                    SLOT(slotDIOResult(KIO::Job*)));
+        }
+    }
 }
 
 void AlbumIconView::slotSetAlbumThumbnail(AlbumIconItem *iconItem)
