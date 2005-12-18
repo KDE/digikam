@@ -1,9 +1,9 @@
 /* ============================================================
- * File  : imagedialogbase.cpp
+ * File  : imagedlgbase.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
  * Description : simple plugins dialog without threadable
- *               filter interface. The dialog laytou is
+ *               filter interface. The dialog layout is
  *               designed to accept custom widgets in
  *               preview and settings area.
  *
@@ -45,26 +45,21 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
-#include "version.h"
-#include "bannerwidget.h"
-#include "imagedialogbase.h"
+#include "imagedlgbase.h"
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
-ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, bool loadFileSettings)
-               : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
-                             parent, 0, true, true,
-                             QString::null,
-                             i18n("&Save As..."),
-                             i18n("&Load...")),
-                 m_parent(parent), m_name(name)
+ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
+                                 bool loadFileSettings, QFrame* bannerFrame)
+            : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
+                          parent, 0, true, true,
+                          QString::null,
+                          i18n("&Save As..."),
+                          i18n("&Load...")),
+              m_parent(parent), m_name(name)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
@@ -81,9 +76,11 @@ ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, b
     // -------------------------------------------------------------
 
     m_mainLayout = new QGridLayout( plainPage(), 2, 1 , marginHint(), spacingHint());
-
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), title);
-    m_mainLayout->addMultiCellWidget(headerFrame, 0, 0, 0, 1);
+    if (bannerFrame)
+    {
+        bannerFrame->reparent( plainPage(), QPoint::QPoint(0,0) );
+        m_mainLayout->addMultiCellWidget(bannerFrame, 0, 0, 0, 1);
+    }
 
     // -------------------------------------------------------------
 
@@ -93,7 +90,7 @@ ImageDialogBase::ImageDialogBase(QWidget* parent, QString title, QString name, b
     kapp->restoreOverrideCursor();
 }
 
-ImageDialogBase::~ImageDialogBase()
+ImageDlgBase::~ImageDlgBase()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));
 
@@ -101,12 +98,18 @@ ImageDialogBase::~ImageDialogBase()
        delete m_about;           
 }
 
-void ImageDialogBase::slotHelp()
+void ImageDlgBase::slotHelp()
 {
-    KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
+    // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
+
+    if (m_about)
+        KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
+    else
+        KDialogBase::slotHelp();
 }
 
-void ImageDialogBase::setAboutData(KAboutData *about)
+void ImageDlgBase::setAboutData(KAboutData *about)
 {
     m_about = about;
     QPushButton *helpButton = actionButton( Help );
@@ -116,16 +119,16 @@ void ImageDialogBase::setAboutData(KAboutData *about)
     helpButton->setPopup( helpMenu->menu() );
 }
 
-void ImageDialogBase::setPreviewAreaWidget(QWidget *w)
+void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 {
     m_mainLayout->addMultiCellWidget(w, 1, 2, 0, 0);
 }
 
-void ImageDialogBase::setUserAreaWidget(QWidget *w)
+void ImageDlgBase::setUserAreaWidget(QWidget *w)
 {
     m_mainLayout->addMultiCellWidget(w, 1, 2, 1, 1);
 }
 
-}  // NameSpace DigikamImagePlugins
+}  // NameSpace Digikam
 
-#include "imagedialogbase.moc"
+#include "imagedlgbase.moc"

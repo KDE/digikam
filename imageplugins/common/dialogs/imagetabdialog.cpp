@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
  * Description : simple plugins dialog based on 
- *               ImageDialogBase using ImageTabWidget 
+ *               ImageDlgBase using ImageTabWidget 
  *               for preview.
  *
  * Copyright 2005 by Gilles Caulier
@@ -21,10 +21,6 @@
  *
  * ============================================================ */
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -36,7 +32,7 @@ namespace DigikamImagePlugins
 
 ImageTabDialog::ImageTabDialog(QWidget* parent, QString title, QString name, bool loadFileSettings,
                                bool orgGuideVisible, bool targGuideVisible)
-              : ImageDialogBase(parent, title, name, loadFileSettings)
+              : Digikam::ImageDlgBase(parent, title, name, loadFileSettings)
 {
     m_imageTabPreviewWidget = new DigikamImagePlugins::ImageTabWidget(plainPage(), 
                               orgGuideVisible, targGuideVisible);

@@ -23,20 +23,25 @@
 #ifndef IMAGEEFFECT_BCG_H
 #define IMAGEEFFECT_BCG_H
 
-// KDE includes.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "imagedlgbase.h"
 
 class QCheckBox;
+class QComboBox;
+class QHButtonGroup;
 
 class KDoubleNumInput;
 
 namespace Digikam
 {
+class HistogramWidget;
+class ColorGradientWidget;
 class ImageWidget;
+class DColor;
 }
 
-class ImageEffect_BCG : public KDialogBase
+class ImageEffect_BCG : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -45,25 +50,40 @@ public:
     ImageEffect_BCG(QWidget *parent);
     ~ImageEffect_BCG();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-        
 private:
 
-    QCheckBox            *m_overExposureIndicatorBox;
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+
+    uchar                        *m_destinationPreviewData;
+
+    QComboBox                    *m_channelCB;    
     
-    KDoubleNumInput      *m_bInput;
-    KDoubleNumInput      *m_cInput;
-    KDoubleNumInput      *m_gInput;
+    QHButtonGroup                *m_scaleBG;  
+
+    QCheckBox                    *m_overExposureIndicatorBox;
     
-    Digikam::ImageWidget *m_previewWidget;
+    KDoubleNumInput              *m_bInput;
+    KDoubleNumInput              *m_cInput;
+    KDoubleNumInput              *m_gInput;
+    
+    Digikam::ImageWidget         *m_previewWidget;
+
+    Digikam::ColorGradientWidget *m_hGradient;
+    
+    Digikam::HistogramWidget     *m_histogramWidget;
 
 private slots:
 
     void slotUser1();
     void slotEffect();
     void slotOk();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+
 };
 
 #endif /* IMAGEEFFECT_BCG_H */

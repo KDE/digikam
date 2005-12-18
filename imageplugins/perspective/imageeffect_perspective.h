@@ -27,9 +27,9 @@
 
 #include <qrect.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "imagedialogbase.h"
+#include <digikamheaders.h>
 
 class QPushButton;
 class QLabel;
@@ -39,13 +39,13 @@ namespace DigikamPerspectiveImagesPlugin
 
 class PerspectiveWidget;
 
-class ImageEffect_Perspective : public DigikamImagePlugins::ImageDialogBase
+class ImageEffect_Perspective : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Perspective(QWidget* parent);
+    ImageEffect_Perspective(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Perspective();
 
 private:

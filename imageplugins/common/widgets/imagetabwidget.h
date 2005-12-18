@@ -25,10 +25,9 @@
 
 #include <qtabwidget.h>
 
-namespace Digikam
-{
-class ImageGuideWidget;
-}
+// Digikam includes.
+
+#include <digikamheaders.h>
 
 namespace DigikamImagePlugins
 {

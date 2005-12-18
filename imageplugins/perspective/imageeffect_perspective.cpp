@@ -43,10 +43,6 @@
 #include <kstandarddirs.h>
 #include <kseparator.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -56,9 +52,8 @@
 namespace DigikamPerspectiveImagesPlugin
 {
 
-ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent)
-                      : DigikamImagePlugins::ImageDialogBase(parent, i18n("Perspective Adjustement"),
-                                                             "perspective", false)
+ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title, QFrame* banner)
+                      : Digikam::ImageDlgBase(parent, title, "perspective", false, banner)
 {
     QString whatsThis;
     

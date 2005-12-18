@@ -53,10 +53,6 @@
 #include <kcolorbutton.h>
 #include <ktextedit.h> 
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -67,9 +63,8 @@
 namespace DigikamInsertTextImagesPlugin
 {
 
-ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent)
-                      : DigikamImagePlugins::ImageDialogBase(parent, i18n("Insert Text on Photograph"),
-                                                             "inserttext", false)
+ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, QFrame* banner)
+                      : Digikam::ImageDlgBase(parent, title, "inserttext", false, banner)
 {
     QString whatsThis;
     

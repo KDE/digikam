@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_superimpose.h"
 #include "imageplugin_superimpose.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_SuperImpose::setEnabledActions(bool enable)
 
 void ImagePlugin_SuperImpose::slotSuperImpose()
 {
-    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(parentWidget());
+    QString title = i18n("Template Superimpose to Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamSuperImposeImagesPlugin::ImageEffect_SuperImpose dlg(parentWidget(),
+                                    title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_superimpose.moc"

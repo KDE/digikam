@@ -31,9 +31,9 @@
 
 #include <kurl.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "imagedialogbase.h"
+#include <digikamheaders.h>
 
 class QPushButton;
 
@@ -49,13 +49,13 @@ namespace DigikamSuperImposeImagesPlugin
 
 class SuperImposeWidget;
 
-class ImageEffect_SuperImpose : public DigikamImagePlugins::ImageDialogBase
+class ImageEffect_SuperImpose : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_SuperImpose(QWidget* parent);
+    ImageEffect_SuperImpose(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_SuperImpose();
 
 private:

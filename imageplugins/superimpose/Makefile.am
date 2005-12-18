@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      -I$(top_srcdir)/digikam/digikam \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
@@ -12,7 +12,7 @@ digikamimageplugin_superimpose_la_SOURCES = imageplugin_superimpose.cpp dirselec
 	                                    imageeffect_superimpose.cpp superimposewidget.cpp 
 
 digikamimageplugin_superimpose_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_superimpose_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

@@ -25,10 +25,6 @@
 #include <qlayout.h>
 #include <qframe.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes
 
 #include "imagetabwidget.h"

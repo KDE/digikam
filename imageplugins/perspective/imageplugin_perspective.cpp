@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_perspective.h"
 #include "imageplugin_perspective.h"
 
@@ -59,9 +60,12 @@ void ImagePlugin_Perspective::setEnabledActions(bool enable)
 
 void ImagePlugin_Perspective::slotPerspective()
 {
-    DigikamPerspectiveImagesPlugin::ImageEffect_Perspective dlg(parentWidget());
+    QString title = i18n("Adjust Photograph Perspective");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamPerspectiveImagesPlugin::ImageEffect_Perspective dlg(parentWidget(),
+                                    title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
-
 
 #include "imageplugin_perspective.moc"

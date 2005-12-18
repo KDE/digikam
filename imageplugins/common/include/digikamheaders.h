@@ -45,6 +45,7 @@
 #include <imageguidewidget.h>
 #include <imagewidget.h>
 #include <ctrlpaneldlg.h>
+#include <imagedlgbase.h>
 
 // FIXME : Revove this line when all plugins will be ported to DImg
 #include <threadedfilter.h>
@@ -71,6 +72,7 @@
 #include <digikam/imageguidewidget.h>
 #include <digikam/imagewidget.h>
 #include <digikam/ctrlpaneldlg.h>
+#include <digikam/imagedlgbase.h>
 
 // FIXME : Revove this line when all plugins will be ported to DImg
 #include <digikam/threadedfilter.h>

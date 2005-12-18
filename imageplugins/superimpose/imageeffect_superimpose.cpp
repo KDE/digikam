@@ -53,10 +53,6 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -67,10 +63,9 @@
 namespace DigikamSuperImposeImagesPlugin
 {
 
-ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent)
-                       : DigikamImagePlugins::ImageDialogBase(parent, 
-                                              i18n("Template Superimpose to Photograph"),
-                                              "superimpose", false)
+ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent, 
+                                                 QString title, QFrame* banner)
+                       : Digikam::ImageDlgBase(parent, title, "superimpose", false, banner)
 {
     QString whatsThis;
            

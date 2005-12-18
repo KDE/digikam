@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      -I$(top_srcdir)/digikam/digikam \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
@@ -13,7 +13,7 @@ digikamimageplugin_inserttext_la_SOURCES = imageplugin_inserttext.cpp \
 	                                   inserttextwidget.cpp fontchooserwidget.cpp 
 
 digikamimageplugin_inserttext_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_inserttext_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

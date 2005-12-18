@@ -32,7 +32,6 @@
 
 // Qt includes.
 
-#include <qlayout.h>
 #include <qcolor.h>
 #include <qgroupbox.h>
 #include <qhgroupbox.h>

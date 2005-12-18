@@ -1,9 +1,9 @@
 /* ============================================================
- * File  : imagedialogbase.h
+ * File  : imagedlgbase.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
  * Description : simple plugins dialog without threadable 
- *               filter interface. The dialog laytou is 
+ *               filter interface. The dialog layout is 
  *               designed to accept custom widgets in 
  *               preview and settings area.
  * 
@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEDIALOGBASE_H
-#define IMAGEDIALOGBASE_H
+#ifndef IMAGEDLGBASE_H
+#define IMAGEDLGBASE_H
 
 // Qt includes
 
@@ -33,21 +33,26 @@
 
 #include <kdialogbase.h>
 
+// Local includes.
+
+#include "digikam_export.h"
+
 class QGridLayout;
 
 class KAboutData;
 
-namespace DigikamImagePlugins
+namespace Digikam
 {
 
-class ImageDialogBase : public KDialogBase
+class DIGIKAM_EXPORT ImageDlgBase : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
-    ImageDialogBase(QWidget *parent, QString title, QString name, bool loadFileSettings=true);
-    ~ImageDialogBase();
+    ImageDlgBase(QWidget *parent, QString title, QString name, 
+                    bool loadFileSettings=true, QFrame* bannerFrame=0);
+    ~ImageDlgBase();
 
     void setAboutData(KAboutData *about);
     void setPreviewAreaWidget(QWidget *w);
@@ -68,6 +73,6 @@ private slots:
     void slotHelp();
 };
 
-}  // NameSpace DigikamImagePlugins
+}  // NameSpace Digikam
 
-#endif /* IMAGEDIALOGBASE */
+#endif /* IMAGEDLGBASE */

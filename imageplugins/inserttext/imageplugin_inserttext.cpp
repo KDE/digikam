@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_inserttext.h"
 #include "imageplugin_inserttext.h"
 
@@ -59,9 +60,12 @@ void ImagePlugin_InsertText::setEnabledActions(bool enable)
 
 void ImagePlugin_InsertText::slotInsertText()
 {
-    DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(parentWidget());
+    QString title = i18n("Insert Text on Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamInsertTextImagesPlugin::ImageEffect_InsertText dlg(parentWidget(),
+                                    title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
-
 
 #include "imageplugin_inserttext.moc"

@@ -28,9 +28,9 @@
 #include <qcolor.h>
 #include <qimage.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "imagedialogbase.h"
+#include <digikamheaders.h>
 
 class QLabel;
 class QFont;
@@ -47,13 +47,13 @@ namespace DigikamInsertTextImagesPlugin
 class InsertTextWidget;
 class FontChooserWidget;
 
-class ImageEffect_InsertText : public DigikamImagePlugins::ImageDialogBase
+class ImageEffect_InsertText : public Digikam::ImageDlgBase
 {
     Q_OBJECT
     
 public:
 
-    ImageEffect_InsertText(QWidget *parent);
+    ImageEffect_InsertText(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_InsertText();
 
 private:

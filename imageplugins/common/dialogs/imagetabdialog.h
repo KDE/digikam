@@ -3,7 +3,7 @@
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-23
  * Description : simple plugins dialog based on 
- *               ImageDialogBase using ImageTabWidget 
+ *               ImageDlgBase using ImageTabWidget 
  *               for preview.
  * 
  * Copyright 2005 by Gilles Caulier
@@ -24,9 +24,9 @@
 #ifndef IMAGETABDIALOG_H
 #define IMAGETABDIALOG_H
 
-// Local includes.
+// Digikam includes.
 
-#include "imagedialogbase.h"
+#include <digikamheaders.h>
 
 namespace Digikam
 {
@@ -38,7 +38,7 @@ namespace DigikamImagePlugins
 
 class ImageTabWidget;
 
-class ImageTabDialog : public ImageDialogBase
+class ImageTabDialog : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -58,4 +58,4 @@ private:
 
 }  // NameSpace DigikamImagePlugins
 
-#endif /* IMAGEDIALOG */
+#endif /* IMAGETABDIALOG */
