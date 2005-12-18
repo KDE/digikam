@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-13
- * Description : 
- * 
+ * Description :
+ *
  * Copyright 2004 by Gilles Caulier
  *
  * Original printing code from Kuickshow program.
@@ -13,12 +13,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt lib includes
@@ -101,7 +101,7 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_scale = new QRadioButton( i18n("Print e&xact size: "), widget );
     grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
     group->insert( m_scale );
-    
+
     connect( m_scale, SIGNAL( toggled( bool )),
              SLOT( toggleScaling( bool )));
 
@@ -160,12 +160,12 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     double val;
 
     val = opts["app-imageeditor-scale-width"].toDouble( &ok );
-    
+
     if ( ok )
         m_width->setValue( val );
-    
+
     val = opts["app-imageeditor-scale-height"].toDouble( &ok );
-    
+
     if ( ok )
         m_height->setValue( val );
 
@@ -197,7 +197,7 @@ ImagePrint::~ImagePrint()
 
 bool ImagePrint::printImageWithQt()
 {
-    if ( m_image.isNull() ) 
+    if ( m_image.isNull() )
     {
         kdWarning() << "Supplied Image for printing is null" << endl;
         return false;
@@ -205,7 +205,7 @@ bool ImagePrint::printImageWithQt()
 
     QString t = "true";
     QString f = "false";
-    
+
     // Black & white print ?
     if ( m_printer.option( "app-imageeditor-blackwhite" ) != f)
     {
@@ -231,12 +231,12 @@ bool ImagePrint::printImageWithQt()
     {
         // filename goes into one line!
         filenameOffset = fm.lineSpacing() + 14;
-        h -= filenameOffset; 
+        h -= filenameOffset;
     }
-    
+
     if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
     {
-        
+
         // Scale image to fit pagesize
         m_image = m_image.smoothScale( w, h, QImage::ScaleMin );
     }
@@ -266,11 +266,11 @@ bool ImagePrint::printImageWithQt()
     // Align image.
     bool ok = false;
     int alignment = m_printer.option("app-imageeditor-alignment").toInt( &ok );
-    
+
     if ( !ok )
     {
         // default
-        alignment = Qt::AlignCenter; 
+        alignment = Qt::AlignCenter;
     }
 
     int x = 0;
@@ -300,7 +300,7 @@ bool ImagePrint::printImageWithQt()
     if ( printFilename )
     {
         QString fname = minimizeString( m_filename, fm, w );
-        
+
         if ( !fname.isEmpty() )
         {
             int fw = fm.width( fname );
@@ -324,22 +324,22 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
         return QString();
 
     bool changed = false;
-    
+
     while ( metrics.width( text ) > maxWidth )
     {
         int mid = text.length() / 2;
         // remove 2 characters in the middle
-        text.remove( mid, 2 ); 
+        text.remove( mid, 2 );
         changed = true;
     }
 
     // add "..." in the middle
-    if ( changed ) 
+    if ( changed )
     {
         int mid = text.length() / 2;
-        
+
         // sanity check
-        if ( mid <= 5 ) 
+        if ( mid <= 5 )
             return QString();
 
         text.replace( mid - 1, 3, "..." );
