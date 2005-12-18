@@ -84,6 +84,10 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_blackwhite->setChecked( false );
     layout->addWidget (m_blackwhite );
 
+    m_autoRotate = new QCheckBox( i18n("&Auto-rotate page"), this );
+    m_autoRotate->setChecked( false );
+    layout->addWidget( m_autoRotate );
+
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );
@@ -138,6 +142,7 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
     opts["app-imageeditor-scale-unit"] = m_units->currentText();
     opts["app-imageeditor-scale-width"] = QString::number( m_width->value() );
     opts["app-imageeditor-scale-height"] = QString::number( m_height->value() );
+    opts["app-imageeditor-auto-rotate"] = m_autoRotate->isChecked() ? t : f;
 }
 
 
@@ -153,6 +158,7 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     m_blackwhite->setChecked ( false );
     m_scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
     m_scale->setChecked( opts["app-imageeditor-scale"] == t );
+    m_autoRotate->setChecked( opts["app-imageeditor-auto-rotate"] == t );
 
     m_units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
 
@@ -222,9 +228,9 @@ bool ImagePrint::printImageWithQt()
     QFontMetrics fm = p.fontMetrics();
 
 
+    int w, h; // will be set to the width and height of the printer
+              // when the orientation is decided.
     int filenameOffset = 0;
-    int w = metrics.width();
-    int h = metrics.height();
 
     QSize size = m_image.size();
 
@@ -239,7 +245,12 @@ bool ImagePrint::printImageWithQt()
     if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
     {
         
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait : KPrinter::Landscape );
+
         // Scale image to fit pagesize
+        w = metrics.width();
+        h = metrics.height();
         size.scale( w, h, QSize::ScaleMin );
     }
     else
@@ -248,6 +259,13 @@ bool ImagePrint::printImageWithQt()
         QString unit  = m_printer.option("app-imageeditor-scale-unit");
         double  wunit = m_printer.option("app-imageeditor-scale-width").toDouble();
         double  hunit = m_printer.option("app-imageeditor-scale-height").toDouble();
+
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( wunit <= hunit ? KPrinter::Portrait : KPrinter::Landscape );
+
+        w = metrics.width();
+        h = metrics.height();
+
         int     wresize, hresize;
         if (unit == i18n("Centimeters"))
         {

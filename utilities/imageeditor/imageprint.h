@@ -88,6 +88,7 @@ private:
     KComboBox       *m_units;
     QCheckBox       *m_addFileName;
     QCheckBox       *m_blackwhite;
+    QCheckBox       *m_autoRotate;
 };
 
 #endif // IMAGEPRINT_H 
