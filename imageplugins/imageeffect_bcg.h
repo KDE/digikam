@@ -1,5 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-05
  * Description : digiKam image editor Brightness/Contrast/Gamma 
  *               correction tool
@@ -37,7 +38,7 @@ namespace Digikam
 {
 class HistogramWidget;
 class ColorGradientWidget;
-class ImageWidget;
+class ImageGuideWidget;
 class DColor;
 }
 
@@ -58,6 +59,14 @@ private:
     Logarithmic
     };
 
+    enum ColorChannel
+    {
+    LuminosityChannel=0,
+    RedChannel,
+    GreenChannel,
+    BlueChannel
+    };
+
     uchar                        *m_destinationPreviewData;
 
     QComboBox                    *m_channelCB;    
@@ -70,7 +79,7 @@ private:
     KDoubleNumInput              *m_cInput;
     KDoubleNumInput              *m_gInput;
     
-    Digikam::ImageWidget         *m_previewWidget;
+    Digikam::ImageGuideWidget    *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
@@ -78,12 +87,12 @@ private:
 
 private slots:
 
-    void slotUser1();
+    void slotDefault();
     void slotEffect();
     void slotOk();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
-
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
 
 #endif /* IMAGEEFFECT_BCG_H */

@@ -22,20 +22,24 @@
 #ifndef IMAGEEFFECT_HSL_H
 #define IMAGEEFFECT_HSL_H
 
-// KDE includes.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "imagedlgbase.h"
 
-class QTimer;
+class QComboBox;
+class QHButtonGroup;
 
 class KDoubleNumInput;
 
 namespace Digikam
 {
-class ImageWidget;
+class HistogramWidget;
+class ColorGradientWidget;
+class ImageGuideWidget;
+class DColor;
 }
 
-class ImageEffect_HSL : public KDialogBase
+class ImageEffect_HSL : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -44,26 +48,46 @@ public:
     ImageEffect_HSL(QWidget *parent);
     ~ImageEffect_HSL();
 
-protected:
-
-    void closeEvent(QCloseEvent *e);
-        
 private:
-    
-    QTimer               *m_timer;
 
-    KDoubleNumInput      *m_hInput;
-    KDoubleNumInput      *m_sInput;
-    KDoubleNumInput      *m_lInput;
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+
+    enum ColorChannel
+    {
+    LuminosityChannel=0,
+    RedChannel,
+    GreenChannel,
+    BlueChannel
+    };
+
+    uchar                        *m_destinationPreviewData;
+
+    QComboBox                    *m_channelCB;    
     
-    Digikam::ImageWidget *m_previewWidget;
+    QHButtonGroup                *m_scaleBG;  
+    
+    KDoubleNumInput              *m_hInput;
+    KDoubleNumInput              *m_sInput;
+    KDoubleNumInput              *m_lInput;
+    
+    Digikam::ImageGuideWidget    *m_previewWidget;
+
+    Digikam::ColorGradientWidget *m_hGradient;
+    
+    Digikam::HistogramWidget     *m_histogramWidget;
     
 private slots:
 
-    void slotUser1();
+    void slotDefault();
     void slotEffect();
     void slotOk();
-    void slotTimer(); 
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
 
 #endif /* IMAGEEFFECT_HSL_H */

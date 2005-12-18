@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
@@ -63,6 +64,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
+    m_timer = 0L;
     m_about = 0L;
     
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
@@ -93,6 +95,9 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 ImageDlgBase::~ImageDlgBase()
 {
     saveDialogSize(m_name + QString::QString(" Tool Dialog"));
+
+    if (m_timer)
+       delete m_timer;
 
     if (m_about)
        delete m_about;           
@@ -127,6 +132,20 @@ void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 void ImageDlgBase::setUserAreaWidget(QWidget *w)
 {
     m_mainLayout->addMultiCellWidget(w, 1, 2, 1, 1);
+}
+
+void ImageDlgBase::slotTimer()
+{
+    if (m_timer)
+    {
+       m_timer->stop();
+       delete m_timer;
+    }
+
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()),
+             this, SLOT(slotEffect()) );
+    m_timer->start(500, true);
 }
 
 }  // NameSpace Digikam

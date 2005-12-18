@@ -32,6 +32,8 @@
 
 // Local includes.
 
+#include "imageiface.h"
+#include "dcolor.h"
 #include "dimg.h"
 #include "hslmodifier.h"
 
@@ -56,7 +58,7 @@ void HSLModifier::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; i++)
+/*    for (int i=0; i<65536; i++)
     {
         htransfer16[i] = i;
         ltransfer16[i] = i;
@@ -69,7 +71,7 @@ void HSLModifier::reset()
         ltransfer[i] = i;
         stransfer[i] = i;
     }
-    
+  */  
     m_modified = false;
 }
 
@@ -80,52 +82,70 @@ void HSLModifier::applyHSL(DImg& image)
     if (!m_modified || image.isNull())
         return;
 
-    if (image.sixteenBit())
+    if (image.sixteenBit())                   // 16 bits image.
     {
         ushort* data = (ushort*) image.bits();
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            red   = data[2];
-            green = data[1];
-            blue  = data[0];
-            
-            rgb_to_hsl16(red, green, blue);
-         
-            red   = htransfer16[red];
-            green = stransfer16[green];
-            blue  = ltransfer16[blue];
-
-            hsl_to_rgb16(red, green, blue);
+/*            DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
+            color.getHSL(&hue, &sat, &lig);
+            color.setRGB(htransfer16[hue], stransfer16[sat], ltransfer16[lig], image.sixteenBit());
         
-            data[2] = red;
-            data[1] = green;
-            data[0] = blue;
+            data[2] = color.red();
+            data[1] = color.green();
+            data[0] = color.blue();*/
 
+            red   = data[2]/256;
+            green = data[1]/256;
+            blue  = data[0]/256;
+
+            rgb_to_hsl(red, green, blue);
+        
+            red   = htransfer[red];
+            green = stransfer[green];
+            blue  = ltransfer[blue];
+        
+            hsl_to_rgb(red, green, blue);
+
+            data[2] = red*256;
+            data[1] = green*256;
+            data[0] = blue*256;    
+            
             data += 4;
         }
     }
-    else
+    else                                      // 8 bits image.
     {
         uchar* data = (uchar*) image.bits();
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
+            /*
+            DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
+            color.getHSL(&hue, &sat, &lig);
+            color.setRGB(htransfer[hue], stransfer[sat], ltransfer[lig], image.sixteenBit());
+        
+            data[2] = color.red();
+            data[1] = color.green();
+            data[0] = color.blue();
+            */
+
             red   = data[2];
             green = data[1];
             blue  = data[0];
-            
+
             rgb_to_hsl(red, green, blue);
-         
+        
             red   = htransfer[red];
             green = stransfer[green];
             blue  = ltransfer[blue];
-
-            hsl_to_rgb(red, green, blue);
         
+            hsl_to_rgb(red, green, blue);
+
             data[2] = red;
             data[1] = green;
-            data[0] = blue;
+            data[0] = blue;    
 
             data += 4;
         }
@@ -157,7 +177,7 @@ void HSLModifier::setHue(double val)
        else if ((i + value) > 255)
           htransfer[i] = i + value - 255;
        else
-          htransfer[i] = i + value;      
+          htransfer[i] = i + value;
     }
     
     m_modified = true;
@@ -234,27 +254,6 @@ int HSLModifier::hsl_value (double n1, double n2, double hue)
 	value = n1;
 
     return ROUND(value * 255.0);
-}
-
-int HSLModifier::hsl_value16 (double n1, double n2, double hue)
-{
-    double value;
-
-    if (hue > 65535)
-	hue -= 65535;
-    else if (hue < 0)
-	hue += 65535;
-
-    if (hue < 10922.5)
-	value = n1 + (n2 - n1) * (hue / 42.5);
-    else if (hue < 32767.5)
-	value = n2;
-    else if (hue < 43690)
-	value = n1 + (n2 - n1) * ((43690 - hue) / 10922.5);
-    else
-	value = n1;
-
-    return ROUND(value * 65535.0);
 }
 
 void HSLModifier::rgb_to_hsl (int& r, int& g, int& b)
@@ -427,24 +426,6 @@ void HSLModifier::hsl_to_rgb16 (int& hue, int& saturation, int& lightness)
         saturation = hsl_value (m1, m2, h);
         lightness  = hsl_value (m1, m2, h - 21760);
     }
-}
-
-int HSLModifier::rgb_to_l (int red, int green, int blue)
-{
-    int min, max;
-
-    if (red > green)
-    {
-        max = QMAX (red,   blue);
-        min = QMIN (green, blue);
-    }
-    else
-    {
-        max = QMAX (green, blue);
-        min = QMIN (red,   blue);
-    }
-
-    return ROUND ((max + min) / 2.0);
 }
 
 }  // NameSpace Digikam

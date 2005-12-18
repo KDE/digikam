@@ -63,16 +63,12 @@ private:
 private:
 
     int  hsl_value (double n1, double n2, double hue);
-    int  hsl_value16 (double n1, double n2, double hue);
-    
+
     void rgb_to_hsl (int& r, int& g, int& b);
-    
     void rgb_to_hsl16 (int& r, int& g, int& b);
     
     void hsl_to_rgb (int& hue, int& saturation, int& lightness);
-    
     void hsl_to_rgb16 (int& hue, int& saturation, int& lightness);
-    int  rgb_to_l (int red, int green, int blue);
 
 };
 

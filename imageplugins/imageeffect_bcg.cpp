@@ -1,5 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-05
  * Description : digiKam image editor Brightness/Contrast/Gamma 
  *               correction tool
@@ -48,9 +49,11 @@
 // Digikam includes.
 
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "bcgmodifier.h"
+#include "dimg.h"
 
 // Local includes.
 
@@ -65,7 +68,8 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true, 
+                                                    Digikam::ImageGuideWidget::PickColorMode);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the image "
                                            "Brightness/Contrast/Gamma adjustments preview. "
@@ -76,16 +80,17 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     // -------------------------------------------------------------
                 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 10, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, gboxSettings );
+    m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
     m_channelCB->insertItem( i18n("Blue") );
-    m_channelCB->setCurrentText( i18n("Red") );
-    QWhatsThis::add( m_channelCB, i18n("<p>Select here the color channel to mix:<p>"
+    QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
+                                       "<b>Luminosity</b>: display the image's luminosity values.<p>"
                                        "<b>Red</b>: display the red image-channel values.<p>"
                                        "<b>Green</b>: display the green image-channel values.<p>"
                                        "<b>Blue</b>: display the blue image-channel values.<p>"));
@@ -127,11 +132,11 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
-                                             "selected image channel. This one is re-computed at any mixer "
+                                             "selected image channel. This one is re-computed at any "
                                              "settings changes."));
     
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
-    m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+    m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
@@ -186,13 +191,13 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_bInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));                        
             
     connect(m_cInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));                        
             
     connect(m_gInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));                        
 
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
@@ -218,26 +223,30 @@ ImageEffect_BCG::~ImageEffect_BCG()
 
 void ImageEffect_BCG::slotChannelChanged(int channel)
 {
-/*    switch(channel)
+    switch(channel)
     {
-       case GreenChannelGains:           // Green.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
-          break;
-
-       case BlueChannelGains:            // Blue.
-          m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
-          break;
-
-       default:                          // Red.
-             m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-             m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );          
-          break;
+        case LuminosityChannel:
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+            break;
+    
+        case RedChannel:
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
+            break;
+    
+        case GreenChannel:         
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
+            break;
+    
+        case BlueChannel:         
+            m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+            m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
+            break;
     }
 
     m_histogramWidget->repaint(false);
-    slotEffect();*/
 }
 
 void ImageEffect_BCG::slotScaleChanged(int scale)
@@ -246,41 +255,65 @@ void ImageEffect_BCG::slotScaleChanged(int scale)
     m_histogramWidget->repaint(false);
 }
 
-void ImageEffect_BCG::slotUser1()
+void ImageEffect_BCG::slotColorSelectedFromTarget( const Digikam::DColor &color )
 {
-    blockSignals(true);	
+    m_histogramWidget->setHistogramGuideByColor(color);
+}
+
+void ImageEffect_BCG::slotDefault()
+{
+    m_bInput->blockSignals(true);	
+    m_cInput->blockSignals(true);	
+    m_gInput->blockSignals(true);	
     m_bInput->setValue(0.0);
     m_cInput->setValue(0.0);
     m_gInput->setValue(0.0);
-    blockSignals(false);	
+    m_bInput->blockSignals(false);	
+    m_cInput->blockSignals(false);	
+    m_gInput->blockSignals(false);	
     slotEffect();
 } 
 
 void ImageEffect_BCG::slotEffect()
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+
     double b = m_bInput->value();
     double c = m_cInput->value() + (double)(1.00);    
     double g = m_gInput->value() + (double)(1.00);
+    bool   o = m_overExposureIndicatorBox->isChecked();
 
     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
-
-    iface->setPreviewBCG(b, c, g, m_overExposureIndicatorBox->isChecked());
-    m_previewWidget->update();
-
-    // Update histogram.
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
-    
-    m_destinationPreviewData = iface->getPreviewImage();
-    int w                    = iface->previewWidth();
-    int h                    = iface->previewHeight();
-    bool sb                  = iface->previewSixteenBit();
 
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    m_destinationPreviewData   = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
+
+    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    Digikam::BCGModifier cmod;
+    cmod.setOverIndicator(o);
+    cmod.setGamma(g);
+    cmod.setBrightness(b);
+    cmod.setContrast(c);
+    cmod.applyBCG(preview);
+    iface->putPreviewImage(preview.bits());
+
+    m_previewWidget->updatePreview();
+
+    // Update histogram.
+   
+    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_BCG::slotOk()

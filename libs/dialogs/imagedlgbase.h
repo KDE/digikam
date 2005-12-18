@@ -38,6 +38,8 @@
 #include "digikam_export.h"
 
 class QGridLayout;
+class QTimer;
+class QWidget;
 
 class KAboutData;
 
@@ -66,11 +68,15 @@ private:
     
     QString         m_name;
 
+    QTimer         *m_timer;
+
     KAboutData     *m_about;
     
 private slots:
 
     void slotHelp();
+    void slotTimer();       
+    virtual void slotEffect(){};
 };
 
 }  // NameSpace Digikam
