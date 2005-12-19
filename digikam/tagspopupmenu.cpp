@@ -28,6 +28,7 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qstyle.h>
+#include <qvaluevector.h>
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -169,36 +170,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
         }
     }
     
-    for (Album* a = album->firstChild(); a; a = a->next())
-    {
-        if (m_mode == REMOVE)
-        {
-            IntList::iterator it = qFind(m_assignedTags.begin(),
-                                         m_assignedTags.end(),
-                                         a->id());
-            if (it == m_assignedTags.end())
-                continue;
-        }
-
-        QPixmap pix = SyncJob::getTagThumbnail(((TAlbum*)a)->icon(), KIcon::SizeSmall);
-        if (a->firstChild())
-        {
-            popup->insertItem(pix, a->title(), buildSubMenu(a->id()));
-        }
-        else
-        {
-            //popup->insertItem(pix, a->title(), m_addToID + a->id());
-            if ((m_mode == ASSIGN) && (m_assignedTags.contains(a->id())))
-            {
-                popup->insertItem(new TagsPopupCheckedMenuItem(popup, a->title(), pix),
-                                  m_addToID + a->id());
-            }
-            else
-            {
-                popup->insertItem(pix, a->title(), m_addToID + a->id());
-            }
-        }
-    }
+    iterateAndBuildMenu(popup, album);
 
     return popup;
 }
@@ -263,8 +235,31 @@ void TagsPopupMenu::slotAboutToShow()
         }
     }
     
+    iterateAndBuildMenu(this, album);
+}
+
+// for qHeapSort
+typedef QPair<QString, Album*> TagsMenuSortType;
+bool operator<(const TagsMenuSortType &lhs, const TagsMenuSortType &rhs)
+{
+    return lhs.first < rhs.first;
+}
+
+void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
+{
+    QValueVector<TagsMenuSortType> sortedTags;
+
     for (Album* a = album->firstChild(); a; a = a->next())
     {
+        sortedTags.push_back(qMakePair(a->title(), a));
+    }
+
+    qHeapSort(sortedTags);
+    
+    for (QValueVector<TagsMenuSortType>::Iterator i = sortedTags.begin(); i != sortedTags.end(); ++i)
+    {
+        Album *a = i->second;
+        
         if (m_mode == REMOVE)
         {
             IntList::iterator it = qFind(m_assignedTags.begin(),
@@ -277,18 +272,18 @@ void TagsPopupMenu::slotAboutToShow()
         QPixmap pix = SyncJob::getTagThumbnail(((TAlbum*)a)->icon(), KIcon::SizeSmall);
         if (a->firstChild())
         {
-            insertItem(pix, a->title(), buildSubMenu(a->id()));
+            menu->insertItem(pix, a->title(), buildSubMenu(a->id()));
         }
         else
         {
             if ((m_mode == ASSIGN) && (m_assignedTags.contains(a->id())))
             {
-                insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
+                menu->insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
                            m_addToID + a->id());
             }
             else
             {
-                insertItem(pix, a->title(), m_addToID + a->id());
+                menu->insertItem(pix, a->title(), m_addToID + a->id());
             }
         }
     }

@@ -350,11 +350,17 @@ void TagFolderView::slotABCContextMenu()
 
     int counter = 100;
     KABC::AddressBook* ab = KABC::StdAddressBook::self();
-    KABC::AddressBook::Iterator it;
-    for ( it = ab->begin(); it != ab->end(); ++it )
+    QStringList names;
+    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
     {
-        KABC::Addressee addr = (*it);
-        QString name = addr.formattedName();
+        names.push_back(it->formattedName());
+    }
+
+    qHeapSort(names);
+
+    for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
+    {
+        QString name = *it;
         if ( !name.isNull() )
             d->ABCMenu->insertItem( name, ++counter );
     }
