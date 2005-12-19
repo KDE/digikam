@@ -25,6 +25,8 @@
 #include <qvaluelist.h>
 #include <qpixmap.h>
 
+class TAlbum;
+
 class TagsPopupMenu : public QPopupMenu
 {
     Q_OBJECT
@@ -45,6 +47,7 @@ private:
 
     void        clearPopup();
     QPopupMenu* buildSubMenu(int tagid);
+    void        iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album);
     bool        showThisTag(int tagid);
 
     QValueList<Q_LLONG>  m_selectedImageIDs;
