@@ -50,7 +50,7 @@ class ChannelMixerDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    ChannelMixerDialog(QWidget *parent);
+    ChannelMixerDialog(QWidget *parent, QString title, QFrame* banner);
     ~ChannelMixerDialog();
 
 private:

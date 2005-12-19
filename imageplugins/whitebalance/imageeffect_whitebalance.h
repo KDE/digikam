@@ -57,7 +57,7 @@ class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    ImageEffect_WhiteBalance(QWidget* parent);
+    ImageEffect_WhiteBalance(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_WhiteBalance();
 
 private:    

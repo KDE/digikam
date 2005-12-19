@@ -31,8 +31,8 @@ namespace DigikamImagePlugins
 {
 
 ImageTabDialog::ImageTabDialog(QWidget* parent, QString title, QString name, bool loadFileSettings,
-                               bool orgGuideVisible, bool targGuideVisible)
-              : Digikam::ImageDlgBase(parent, title, name, loadFileSettings)
+                               bool orgGuideVisible, bool targGuideVisible, QFrame* bannerFrame)
+              : Digikam::ImageDlgBase(parent, title, name, loadFileSettings, bannerFrame)
 {
     m_imageTabPreviewWidget = new DigikamImagePlugins::ImageTabWidget(plainPage(), 
                               orgGuideVisible, targGuideVisible);

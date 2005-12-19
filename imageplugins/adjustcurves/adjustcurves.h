@@ -58,7 +58,7 @@ class AdjustCurveDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    AdjustCurveDialog(QWidget *parent);
+    AdjustCurveDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustCurveDialog();
 
 private:

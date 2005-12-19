@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "adjustlevels.h"
 #include "imageplugin_adjustlevels.h"
 
@@ -64,8 +65,12 @@ void ImagePlugin_AdjustLevels::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustLevels::slotLevelsAdjust()
 {
-    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget());
+    QString title = i18n("Adjust Color Levels");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamAdjustLevelsImagesPlugin::AdjustLevelDialog dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;    
 }
 
 #include "imageplugin_adjustlevels.moc"

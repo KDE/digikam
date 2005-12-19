@@ -28,8 +28,13 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 // Local includes.
 
+#include "bannerwidget.h"
 #include "channelmixer.h"
 #include "imageplugin_channelmixer.h"
 
@@ -60,9 +65,12 @@ void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()
 {
-    DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget());
+    QString title = i18n("White Color Balance Correction");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame; 
 }
-
 
 #include "imageplugin_channelmixer.moc"

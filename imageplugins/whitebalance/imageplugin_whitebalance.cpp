@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_whitebalance.h"
 #include "imageplugin_whitebalance.h"
 
@@ -63,8 +64,12 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget());
+    QString title = i18n("Color Channel Mixer");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame; 
 }
 
 #include "imageplugin_whitebalance.moc"

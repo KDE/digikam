@@ -78,9 +78,9 @@
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent)
-                        : ImageTabDialog(parent, i18n("White Color Balance Correction"), "whitebalance",
-                                         true, true, true)
+ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString title, QFrame* banner)
+                        : ImageTabDialog(parent, title, "whitebalance",
+                                         true, true, true, banner)
 {
     QString whatsThis;
     

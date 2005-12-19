@@ -78,9 +78,9 @@
 namespace DigikamChannelMixerImagesPlugin
 {
 
-ChannelMixerDialog::ChannelMixerDialog(QWidget* parent)
-                  : ImageTabDialog(parent, i18n("Color Channel Mixer"), "channelmixer", 
-                                   true, false, true)
+ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* banner)
+                  : ImageTabDialog(parent, title, "channelmixer", 
+                                   true, false, true, banner)
 {
     m_destinationPreviewData = 0L;
     

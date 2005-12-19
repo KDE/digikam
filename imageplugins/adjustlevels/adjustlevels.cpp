@@ -70,9 +70,9 @@
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-AdjustLevelDialog::AdjustLevelDialog(QWidget* parent)
-                 : ImageTabDialog(parent, i18n("Adjust Color Levels"), "adjustlevels", 
-                                  true, true, true)
+AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* banner)
+                 : ImageTabDialog(parent, title, "adjustlevels", 
+                                  true, true, true, banner)
 {
     m_destinationPreviewData = 0L;
 

@@ -45,7 +45,7 @@ class ImageTabDialog : public Digikam::ImageDlgBase
 public:
 
     ImageTabDialog(QWidget *parent, QString title, QString name, bool loadFileSettings=true,
-                   bool orgGuideVisible=false, bool targGuideVisible=false);
+                   bool orgGuideVisible=false, bool targGuideVisible=false, QFrame* bannerFrame=0);
     ~ImageTabDialog();
 
     Digikam::ImageGuideWidget *previewOriginalWidget(void);

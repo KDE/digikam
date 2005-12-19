@@ -2,6 +2,7 @@ METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
 	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)   
 
 # Install this plugin in the KDE modules directory

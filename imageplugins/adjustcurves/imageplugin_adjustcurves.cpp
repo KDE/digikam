@@ -28,8 +28,13 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 // Local includes.
 
+#include "bannerwidget.h"
 #include "adjustcurves.h"
 #include "imageplugin_adjustcurves.h"
 
@@ -60,8 +65,12 @@ void ImagePlugin_AdjustCurves::setEnabledActions(bool enable)
 
 void ImagePlugin_AdjustCurves::slotCurvesAdjust()
 {
-    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget());
+    QString title = i18n("Adjust Color Curves");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamAdjustCurvesImagesPlugin::AdjustCurveDialog dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

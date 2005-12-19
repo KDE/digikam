@@ -70,9 +70,9 @@
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-AdjustCurveDialog::AdjustCurveDialog(QWidget* parent)
-                 : ImageTabDialog(parent, i18n("Adjust Color Curves"), "adjustcurves", 
-                                  true, true, true)
+AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* banner)
+                 : ImageTabDialog(parent, title, "adjustcurves", 
+                                  true, true, true, banner)
 {
     m_destinationPreviewData = 0L;
 

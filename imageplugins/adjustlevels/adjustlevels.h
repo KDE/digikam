@@ -58,7 +58,7 @@ class AdjustLevelDialog : public DigikamImagePlugins::ImageTabDialog
 
 public:
 
-    AdjustLevelDialog(QWidget *parent);
+    AdjustLevelDialog(QWidget *parent, QString title, QFrame* banner);
     ~AdjustLevelDialog();
 
 private:
