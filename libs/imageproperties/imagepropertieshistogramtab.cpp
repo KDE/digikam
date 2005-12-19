@@ -52,6 +52,7 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
+#include "loadsavethread.h"
 #include "imagepropertieshistogramtab.h"
 
 namespace Digikam
@@ -60,7 +61,8 @@ namespace Digikam
 ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect* selectionArea, bool navBar)
                            : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_selectionArea = selectionArea;
+    m_imageLoaderThreaded = 0;
+    m_selectionArea       = selectionArea;
    
     QGridLayout *topLayout = new QGridLayout(this, 7, 3, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -332,7 +334,7 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
                 
     if (!imageData && !imageWidth && !imageHeight)
     {
-        loadDataFromUrl(url);
+        loadImageFromUrl(url);
     }
     else 
     {
@@ -366,16 +368,28 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     }
 }
 
-void ImagePropertiesHistogramTab::loadDataFromUrl(const KURL& url)
+void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
 {
-    // TODO : use a separate thread to load image.
-
-    m_image = DImg(url.path());
-
-    if ( !m_image.isNull() )
+    if (m_imageLoaderThreaded)
     {
+        delete m_imageLoaderThreaded;
+    }
+
+    m_imageLoaderThreaded = new LoadSaveThread();
+
+    connect(m_imageLoaderThreaded, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
+            this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
+
+    m_imageLoaderThreaded->load(url.path());
+}
+
+void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
+{
+    if ( !img.isNull() )
+    {
+        m_image = img;
         m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(),
-                                        m_image.sixteenBit());
+                                      m_image.sixteenBit());
         m_regionBG->hide();
         m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
     }
