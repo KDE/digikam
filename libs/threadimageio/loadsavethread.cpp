@@ -57,15 +57,17 @@ class LoadedEvent : public NotifyEvent
 {
 public:
 
-    LoadedEvent(const QString &filePath, DImg &img) : filePath(filePath), img(img) {};
+    LoadedEvent(const QString &filePath, DImg &img)
+        : m_filePath(filePath), m_img(img)
+        {};
         
     virtual void notify(LoadSaveThread *thread)
-        { thread->imageLoaded(filePath, img); };
+        { thread->imageLoaded(m_filePath, m_img); };
         
 private:
     
-    QString filePath;
-    DImg    img;
+    QString m_filePath;
+    DImg    m_img;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -74,17 +76,19 @@ class LoadingTask : public Task
 {
 public:
     
-    LoadingTask(const QString &filePath) : filePath(filePath) {}
+    LoadingTask(const QString &filePath)
+        : m_filePath(filePath)
+        {}
 
     virtual void execute(LoadSaveThread *thread)
     {
-        DImg img(filePath);
-        QApplication::postEvent(thread, new LoadedEvent(filePath, img));
+        DImg img(m_filePath);
+        QApplication::postEvent(thread, new LoadedEvent(m_filePath, img));
     };
     
 private:
 
-    QString filePath;
+    QString m_filePath;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -93,16 +97,18 @@ class SavedEvent : public NotifyEvent
 {
 public:
     
-    SavedEvent(const QString &filePath) : filePath(filePath) {};
+    SavedEvent(const QString &filePath)
+        : m_filePath(filePath)
+        {};
     
     virtual void notify(LoadSaveThread *thread)
     {
-        thread->imageSaved(filePath);
+        thread->imageSaved(m_filePath);
     };
     
 private:
 
-    QString filePath;
+    QString m_filePath;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -111,35 +117,37 @@ class SavingTask : public Task
 {
 public:
 
-    SavingTask(DImg &img, const QString &filePath, const char* format) : img(img), filePath(filePath), format(format) {};
+    SavingTask(DImg &img, const QString &filePath, const char* format)
+        : m_img(img), m_filePath(filePath), m_format(format)
+        {};
     
     virtual void execute(LoadSaveThread *thread)
     {
-        img.save(filePath, format);
-        QApplication::postEvent(thread, new SavedEvent(filePath));
+        m_img.save(m_filePath, m_format);
+        QApplication::postEvent(thread, new SavedEvent(m_filePath));
     };
     
 private:
 
-    DImg        img;
-    QString     filePath;
-    const char* format;
+    DImg        m_img;
+    QString     m_filePath;
+    const char* m_format;
 };
 
 //---------------------------------------------------------------------------------------------------
 
 LoadSaveThread::LoadSaveThread()
 {
-    running = true;
+    m_running = true;
     start();
 }
 
 LoadSaveThread::~LoadSaveThread()
 {
-    running = false;
+    m_running = false;
     {
-        QMutexLocker lock(&mutex);
-        condVar.wakeAll();
+        QMutexLocker lock(&m_mutex);
+        m_condVar.wakeAll();
     }
     
     // put some sort of stop function into DImg loading?
@@ -148,30 +156,30 @@ LoadSaveThread::~LoadSaveThread()
 
 void LoadSaveThread::load(const QString& filePath)
 {
-    QMutexLocker lock(&mutex);
-    todo.append(new LoadingTask(filePath));
-    condVar.wakeAll();
+    QMutexLocker lock(&m_mutex);
+    m_todo.append(new LoadingTask(filePath));
+    m_condVar.wakeAll();
 }
 
 void LoadSaveThread::save(DImg &image, const QString& filePath, const char* format)
 {
-    QMutexLocker lock(&mutex);
-    todo.append(new SavingTask(image, filePath, format));
-    condVar.wakeAll();
+    QMutexLocker lock(&m_mutex);
+    m_todo.append(new SavingTask(image, filePath, format));
+    m_condVar.wakeAll();
 }
 
 void LoadSaveThread::run()
 {
-    while (running)
+    while (m_running)
     {
         Task *task = 0;
         {
-            QMutexLocker lock(&mutex);
-            task = todo.getFirst();
+            QMutexLocker lock(&m_mutex);
+            task = m_todo.getFirst();
             if (task)
-                todo.removeFirst();
+                m_todo.removeFirst();
             else
-                condVar.wait(1000);
+                m_condVar.wait(1000);
         }
         if (task)
         {

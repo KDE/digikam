@@ -79,13 +79,13 @@ protected:
 
 private:
 
-    QMutex               mutex;
+    QMutex               m_mutex;
 
-    QWaitCondition       condVar;
+    QWaitCondition       m_condVar;
 
-    QPtrList<class Task> todo;
+    QPtrList<class Task> m_todo;
 
-    bool                 running;
+    bool                 m_running;
 };
 
 }      // namespace Digikam
