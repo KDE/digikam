@@ -48,12 +48,20 @@ extern "C"
 {
     static void dimg_tiff_warning(const char* module, const char* fmt, va_list ap)
     {
-        kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+        // This line must be commented to prevent any latency time
+        // when we use threaded image loader interface for each image
+        // files io. Uncomment this line only for debugging.
+        
+        //kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
     }
   
     static void dimg_tiff_error(const char* module, const char* fmt, va_list ap)
     {
-        kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+        // This line must be commented to prevent any latency time
+        // when we use threaded image loader interface for each image
+        // files io. Uncomment this line only for debugging.
+        
+        //kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
     }
 }
 
@@ -79,11 +87,14 @@ bool TIFFLoader::load(const QString& filePath)
     TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
     if (!tif)
     {
-        kdWarning() << k_funcinfo << "Cannot open image file." << endl;
+        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
         return false;
     }
 
-    // Comment this line to increase loading speed.
+    // This line must be commented to prevent any latency time
+    // when we use threaded image loader interface for each image
+    // files io. Uncomment this line only for debugging.
+
     //TIFFPrintDirectory(tif, stdout, 0);
     
     // -------------------------------------------------------------------
@@ -106,7 +117,7 @@ bool TIFFLoader::load(const QString& filePath)
 
     if (TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0)
     {
-        kdWarning() << k_funcinfo << "Can't handle non-stripped images." << endl;
+        kdDebug() << k_funcinfo << "Can't handle non-stripped images." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -151,7 +162,7 @@ bool TIFFLoader::load(const QString& filePath)
     
             if (bytesRead == -1)
             {
-                kdWarning() << k_funcinfo << "Failed to read strip" << endl;
+                kdDebug() << k_funcinfo << "Failed to read strip" << endl;
                 delete [] data;
                 TIFFClose(tif);
                 return false;
@@ -211,7 +222,7 @@ bool TIFFLoader::load(const QString& filePath)
 
         if (ret != 1)
             {
-                kdWarning() << k_funcinfo << "Failed to read image on RGBA mode" << endl;
+                kdDebug() << k_funcinfo << "Failed to read image on RGBA mode" << endl;
                 delete [] data;
                 TIFFClose(tif);
                 return false;
@@ -240,7 +251,6 @@ bool TIFFLoader::load(const QString& filePath)
     
     if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
     {
-        kdDebug() << "Reading TIFF ICC Profil" << endl;
         QByteArray profile_rawdata = imageICCProfil();
         profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
@@ -290,7 +300,7 @@ bool TIFFLoader::save(const QString& filePath)
         
     if (!tif)
     {
-        kdWarning() << k_funcinfo << "Cannot open target image file." << endl;
+        kdDebug() << k_funcinfo << "Cannot open target image file." << endl;
         return false;
     }
     
@@ -342,7 +352,7 @@ bool TIFFLoader::save(const QString& filePath)
 
     if (!buf)
     {
-        kdWarning() << k_funcinfo << "Cannot allocate memory buffer." << endl;
+        kdDebug() << k_funcinfo << "Cannot allocate memory buffer." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -417,7 +427,7 @@ bool TIFFLoader::save(const QString& filePath)
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            kdWarning() << k_funcinfo << "Cannot write to target file." << endl;
+            kdDebug() << k_funcinfo << "Cannot write to target file." << endl;
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -440,8 +450,7 @@ bool TIFFLoader::save(const QString& filePath)
     
     if (profile_rawdata.data() != 0)
     {
-        kdDebug() << "Writing TIFF ICC Profil" << endl;
-        TIFFSetField (tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());        
+        TIFFSetField (tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
     }    
     
     // -------------------------------------------------------------------

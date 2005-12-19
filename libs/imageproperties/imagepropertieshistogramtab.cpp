@@ -301,6 +301,9 @@ ImagePropertiesHistogramTab::~ImagePropertiesHistogramTab()
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->writeEntry("Histogram Color", m_colorsCB->currentItem());
     config->writeEntry("Histogram Rendering", m_regionBG->selectedId());
+
+    if (m_imageLoaderThreaded)
+       delete m_imageLoaderThreaded;
     
     if ( m_histogramWidget )
        delete m_histogramWidget;
@@ -370,6 +373,8 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
 
 void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
 {
+    m_histogramWidget->setEnabled(false);
+    
     if (m_imageLoaderThreaded)
     {
         delete m_imageLoaderThreaded;
@@ -385,6 +390,8 @@ void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
 
 void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
 {
+    m_histogramWidget->setEnabled(true);
+    
     if ( !img.isNull() )
     {
         m_image = img;

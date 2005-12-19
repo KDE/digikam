@@ -143,13 +143,13 @@ bool DImg::load(const QString& filePath)
     {
         case(NONE):
         {
-            kdWarning() << filePath << " : Unknown image format !!!" << endl;
+            kdDebug() << filePath << " : Unknown image format !!!" << endl;
             return false;
             break;
         }
         case(JPEG):
         {
-            kdWarning() << filePath << " : JPEG file identified" << endl;
+            kdDebug() << filePath << " : JPEG file identified" << endl;
             JPEGLoader loader(this);
             if (loader.load(filePath))
             {
@@ -163,7 +163,7 @@ bool DImg::load(const QString& filePath)
         }
         case(TIFF):
         {
-            kdWarning() << filePath << " : TIFF file identified" << endl;
+            kdDebug() << filePath << " : TIFF file identified" << endl;
             TIFFLoader loader(this);
             if (loader.load(filePath))
             {
@@ -177,7 +177,7 @@ bool DImg::load(const QString& filePath)
         }
         case(PNG):
         {
-            kdWarning() << filePath << " : PNG file identified" << endl;
+            kdDebug() << filePath << " : PNG file identified" << endl;
             PNGLoader loader(this);
             if (loader.load(filePath))
             {
@@ -191,7 +191,7 @@ bool DImg::load(const QString& filePath)
         }
         case(PPM):
         {
-            kdWarning() << filePath << " : PPM file identified" << endl;
+            kdDebug() << filePath << " : PPM file identified" << endl;
             PPMLoader loader(this);
             if (loader.load(filePath))
             {
@@ -205,7 +205,7 @@ bool DImg::load(const QString& filePath)
         }
         case(RAW):
         {
-            kdWarning() << filePath << " : RAW file identified" << endl;
+            kdDebug() << filePath << " : RAW file identified" << endl;
             RAWLoader loader(this);
             if (loader.load(filePath))
             {
@@ -219,7 +219,7 @@ bool DImg::load(const QString& filePath)
         }
         default:
         {
-            kdWarning() << filePath << " : QIMAGE file identified" << endl;
+            kdDebug() << filePath << " : QIMAGE file identified" << endl;
             QImageLoader loader(this);
             if (loader.load(filePath))
             {
@@ -282,7 +282,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     if (!f)
     {
-        kdWarning() << k_funcinfo << "Failed to open file" << endl;
+        kdDebug() << k_funcinfo << "Failed to open file" << endl;
         return NONE;
     }
 
@@ -291,7 +291,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, 8, 1, f) != 1)
     {
-        kdWarning() << k_funcinfo << "Failed to read header" << endl;
+        kdDebug() << k_funcinfo << "Failed to read header" << endl;
         fclose(f);
         return NONE;
     }
@@ -474,7 +474,7 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
 
     if ( w <= 0 || h <= 0)
     {
-        kdWarning() << k_funcinfo << " : return null image!" << endl;
+        kdDebug() << k_funcinfo << " : return null image!" << endl;
         return DImg();
     }
 
@@ -546,6 +546,8 @@ void DImg::bitBltImage(DImg* src, int dx, int dy)
         }
     }
 }
+
+// This method come from imlib2 and do not yet work properly with red eyes correction tool.
 
 void DImg::bitBlend(DImg& region, int x, int y, int w, int h)
 {
@@ -1019,6 +1021,8 @@ void DImg::rotate(ANGLE angle)
         break;
     }
 }
+
+// This method have been tested with valgring by Gilles.
 
 void DImg::flip(FLIP direction)
 {

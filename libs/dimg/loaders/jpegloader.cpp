@@ -71,7 +71,13 @@ extern "C"
 
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
-        kdWarning() << k_funcinfo << buffer << endl;
+
+        // This line must be commented to prevent any latency time
+        // when we use threaded image loader interface for each image
+        // files io. Uncomment this line only for debugging.
+        
+        //kdDebug() << k_funcinfo << buffer << endl;
+
         longjmp(myerr->setjmp_buffer, 1);
     }
 
@@ -79,14 +85,24 @@ extern "C"
     {
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
-        kdDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+
+        // This line must be commented to prevent any latency time
+        // when we use threaded image loader interface for each image
+        // files io. Uncomment this line only for debugging.
+
+        //kdDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
     }
 
     static void dimg_jpeg_output_message(j_common_ptr cinfo)
     {
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
-        kdDebug() << k_funcinfo << buffer << endl;
+
+        // This line must be commented to prevent any latency time
+        // when we use threaded image loader interface for each image
+        // files io. Uncomment this line only for debugging.
+
+        //kdDebug() << k_funcinfo << buffer << endl;
     }
 }
 
@@ -310,7 +326,6 @@ bool JPEGLoader::load(const QString& filePath)
 
     if (profile_data != NULL) 
     {
-        kdDebug() << "Reading JPEG ICC Profil" << endl;
         QByteArray profile_rawdata = imageICCProfil();
         profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
@@ -426,8 +441,7 @@ bool JPEGLoader::save(const QString& filePath)
     
     if (profile_rawdata.data() != 0)
     {
-        kdDebug() << "Writing JPEG ICC Profil" << endl;
-        write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());        
+        write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());
     }    
         
     // -------------------------------------------------------------------

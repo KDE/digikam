@@ -67,7 +67,7 @@ bool PNGLoader::load(const QString& filePath)
     f = fopen(QFile::encodeName(filePath), "rb");
     if ( !f )
     {
-        kdWarning() << k_funcinfo << "Cannot open image file." << endl;
+        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
         return false;
     }
 
@@ -76,7 +76,7 @@ bool PNGLoader::load(const QString& filePath)
     fread(buf, 1, PNG_BYTES_TO_CHECK, f);
     if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
     {
-        kdWarning() << k_funcinfo << "Not a PNG image file." << endl;
+        kdDebug() << k_funcinfo << "Not a PNG image file." << endl;
         fclose(f);
         return false;
     }
@@ -88,7 +88,7 @@ bool PNGLoader::load(const QString& filePath)
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        kdWarning() << k_funcinfo << "Invalid PNG image file structure." << endl;
+        kdDebug() << k_funcinfo << "Invalid PNG image file structure." << endl;
         fclose(f);
         return false;
     }
@@ -96,7 +96,7 @@ bool PNGLoader::load(const QString& filePath)
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        kdWarning() << k_funcinfo << "Cannot reading PNG image file structure." << endl;
+        kdDebug() << k_funcinfo << "Cannot reading PNG image file structure." << endl;
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         fclose(f);
         return false;
@@ -108,7 +108,7 @@ bool PNGLoader::load(const QString& filePath)
     
     if (setjmp(png_ptr->jmpbuf))
     {
-        kdWarning() << k_funcinfo << "Cannot acces to PNG image data." << endl;
+        kdDebug() << k_funcinfo << "Cannot acces to PNG image data." << endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         fclose(f);
         return false;
@@ -130,7 +130,7 @@ bool PNGLoader::load(const QString& filePath)
 
     if (bit_depth == 16)                       
     {
-        kdWarning() << "PNG in 16 bits/color/pixel." << endl;
+        kdDebug() << "PNG in 16 bits/color/pixel." << endl;
         m_sixteenBit = true;
         
         switch (color_type)
@@ -275,7 +275,7 @@ bool PNGLoader::load(const QString& filePath)
     lines = (uchar **)malloc(height * sizeof(uchar *));
     if (!lines)
     {
-        kdWarning() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
+        kdDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
         png_read_end(png_ptr, info_ptr);
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
         fclose(f);
@@ -327,7 +327,6 @@ bool PNGLoader::load(const QString& filePath)
     
     if (profile_data != NULL) 
     {
-        kdDebug() << "Reading PNG ICC Profil (" << profile_name << ")" << endl;
         QByteArray profile_rawdata = imageICCProfil();
         profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
@@ -357,7 +356,7 @@ bool PNGLoader::load(const QString& filePath)
     for (int i = 0; i < num_comments; i++)
     {
         imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
-        kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
+        //kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
 
         QString key(text_ptr[i].key);
 
@@ -400,7 +399,7 @@ bool PNGLoader::save(const QString& filePath)
     f = fopen(QFile::encodeName(filePath), "wb");
     if ( !f )
     {
-        kdWarning() << k_funcinfo << "Cannot open target image file." << endl;
+        kdDebug() << k_funcinfo << "Cannot open target image file." << endl;
         return false;
     }
     
@@ -410,7 +409,7 @@ bool PNGLoader::save(const QString& filePath)
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        kdWarning() << k_funcinfo << "Invalid target PNG image file structure." << endl;
+        kdDebug() << k_funcinfo << "Invalid target PNG image file structure." << endl;
         fclose(f);
         return false;
     }
@@ -418,7 +417,7 @@ bool PNGLoader::save(const QString& filePath)
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-        kdWarning() << k_funcinfo << "Cannot create PNG image file structure." << endl;
+        kdDebug() << k_funcinfo << "Cannot create PNG image file structure." << endl;
         png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
         fclose(f);
         return false;
@@ -430,7 +429,7 @@ bool PNGLoader::save(const QString& filePath)
         
     if (setjmp(png_ptr->jmpbuf))
     {
-        kdWarning() << k_funcinfo << "Internal PNG error during writing file." << endl;
+        kdDebug() << k_funcinfo << "Internal PNG error during writing file." << endl;
         fclose(f);
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
         png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
@@ -501,7 +500,6 @@ bool PNGLoader::save(const QString& filePath)
     
     if (profile_rawdata.data() != 0)
     {
-        kdDebug() << "Writing PNG ICC Profil" << endl;
         png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
     }    
 
@@ -517,7 +515,7 @@ bool PNGLoader::save(const QString& filePath)
 
         text.key  = (char*)it.key().ascii();
         text.text = (char*)it.data().ascii();
-        kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
+        //kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
         text.compression = PNG_TEXT_COMPRESSION_zTXt;
         png_set_text(png_ptr, info_ptr, &(text), 1);
     }

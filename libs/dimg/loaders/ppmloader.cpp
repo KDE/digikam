@@ -58,7 +58,7 @@ bool PPMLoader::load(const QString& filePath)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        kdWarning() << k_funcinfo << "Cannot open image file." << endl;
+        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
         return false;
     }
 
@@ -66,7 +66,7 @@ bool PPMLoader::load(const QString& filePath)
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        kdWarning() << k_funcinfo << "Cannot read header of file." << endl;
+        kdDebug() << k_funcinfo << "Cannot read header of file." << endl;
         fclose(file);
         return false;
     }
@@ -74,7 +74,7 @@ bool PPMLoader::load(const QString& filePath)
     uchar* c = (uchar*) &header;
     if (*c != 'P')
     {
-        kdWarning() << k_funcinfo << "Not a PPM file." << endl;
+        kdDebug() << k_funcinfo << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -82,7 +82,7 @@ bool PPMLoader::load(const QString& filePath)
     c++;
     if (*c != '6')
     {
-        kdWarning() << k_funcinfo << "Not a PPM file." << endl;
+        kdDebug() << k_funcinfo << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -91,14 +91,14 @@ bool PPMLoader::load(const QString& filePath)
     
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
     {
-        kdWarning() << "Corrupted PPM file." << endl;
+        kdDebug() << "Corrupted PPM file." << endl;
         pclose (file);
         return false;
     }
     
     if (rgbmax <= 255)
     {
-        kdWarning() << k_funcinfo << "Not a 16 bits per color per pixel PPM file." << endl;
+        kdDebug() << k_funcinfo << "Not a 16 bits per color per pixel PPM file." << endl;
         pclose (file);
         return false;
     }
@@ -108,7 +108,7 @@ bool PPMLoader::load(const QString& filePath)
     uchar src[6];
     float fac = 65535.0 / rgbmax;
     
-    kdWarning() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+    kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
 
     for (int i = 0; i < width*height; i++)
     { 

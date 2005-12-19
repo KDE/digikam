@@ -79,19 +79,19 @@ bool RAWLoader::load8bits(const QString& filePath)
     command += "'";
     command += QFile::encodeName( filePath );
     command += "'";
-    kdWarning() << "Running dcraw command : " << command << endl;
+    kdDebug() << "Running dcraw command : " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
 
     if ( !f )
     {
-        kdWarning() << "dcraw program unvailable." << endl;
+        kdDebug() << "dcraw program unvailable." << endl;
         return false;
     }
 
     if (fscanf (f, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
     {
-        kdWarning() << "Not a raw digital camera image." << endl;
+        kdDebug() << "Not a raw digital camera image." << endl;
         pclose (f);
         return false;
     }
@@ -160,19 +160,19 @@ bool RAWLoader::load16bits(const QString& filePath)
     command += "'";
     command += QFile::encodeName( filePath );
     command += "'";
-    kdWarning() << "Running dcraw command " << command << endl;
+    kdDebug() << "Running dcraw command " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
 
     if ( !f )
     {
-        kdWarning() << "dcraw program unvailable." << endl;
+        kdDebug() << "dcraw program unvailable." << endl;
         return false;
     }
 
     if (fscanf (f, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
     {
-        kdWarning() << "Not a raw digital camera image." << endl;
+        kdDebug() << "Not a raw digital camera image." << endl;
         pclose (f);
         return false;
     }
@@ -182,7 +182,7 @@ bool RAWLoader::load16bits(const QString& filePath)
     uchar src[6];
     float fac = 65535.0 / rgbmax;
 
-    kdWarning() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+    kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
 
     for (int i = 0; i < width*height; i++)
     { 
