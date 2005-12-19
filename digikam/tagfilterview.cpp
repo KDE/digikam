@@ -421,6 +421,9 @@ void TagFilterView::slotTagDeleted(Album* album)
 void TagFilterView::slotClear()
 {
     clear();
+    
+    TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
+    notTaggedItem->setPixmap(0, getBlendedIcon(0));
 }
 
 void TagFilterView::slotTimeOut()
