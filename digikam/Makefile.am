@@ -46,7 +46,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
 			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
 			upgradedb_sqlite2tosqlite3.cpp squeezedcombobox.cpp \
-			ratingwidget.cpp
+			ratingwidget.cpp dcopiface.cpp dcopiface.skel
 
 
 libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
@@ -97,3 +97,4 @@ include_HEADERS = digikam_export.h
 KDE_OPTIONS = nofinal
 
 include ../../admin/Doxyfile.am
+noinst_HEADERS = dcopiface.h
