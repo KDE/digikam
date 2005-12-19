@@ -600,17 +600,17 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
  
        case RedChannel:
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
-          m_hGradient->setColors( QColor( "red" ), QColor( "black" ) );
+          m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           break;
 
        case GreenChannel:         
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
-          m_hGradient->setColors( QColor( "green" ), QColor( "black" ) );
+          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           break;
 
        case BlueChannel:         
           m_histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
-          m_hGradient->setColors( QColor( "blue" ), QColor( "black" ) );
+          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
           break;
        }
 

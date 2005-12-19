@@ -414,26 +414,31 @@ void AdjustCurveDialog::slotChannelChanged(int channel)
     switch(channel)
        {
        case LuminosityChannel:
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
        
        case RedChannel:
+          m_hGradient->setColors( QColor( "black" ), QColor( "red" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::RedChannelHistogram;
           m_vGradient->setColors( QColor( "red" ), QColor( "black" ) );
           break;
 
        case GreenChannel:
+          m_hGradient->setColors( QColor( "black" ), QColor( "green" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::GreenChannelHistogram;
           m_vGradient->setColors( QColor( "green" ), QColor( "black" ) );
           break;
 
        case BlueChannel:
+          m_hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::BlueChannelHistogram;
           m_vGradient->setColors( QColor( "blue" ), QColor( "black" ) );
           break;
 
        case AlphaChannel:
+          m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
           m_curvesWidget->m_channelType = Digikam::CurvesWidget::AlphaChannelHistogram;
           m_vGradient->setColors( QColor( "white" ), QColor( "black" ) );
           break;
