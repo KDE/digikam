@@ -145,8 +145,8 @@ signals:
 
     void signalMousePressed( int );
     void signalMouseReleased( int );
-    void signalHistogramComputationDone(void);
-    void signalHistogramComputationFailed(void);
+    void signalHistogramComputationDone( bool );
+    void signalHistogramComputationFailed( void );
 
 public slots:
 

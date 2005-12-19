@@ -180,10 +180,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             {
                // No current selection. Do not using ImageHistogram::getHistogramSegment()
                // method here because histogram haven't yet computed.
-               if (m_sixteenBits)
-                  emit signalMouseReleased( 65535 );      
-               else
-                  emit signalMouseReleased( 255 );  
+               emit signalMouseReleased( m_sixteenBits ? 65535 : 255 );
             }
             else
             {
@@ -192,7 +189,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
                emit signalMouseReleased( m_xmax );  
             }
 
-            emit signalHistogramComputationDone();
+            emit signalHistogramComputationDone(m_sixteenBits);
         }
         else
         {

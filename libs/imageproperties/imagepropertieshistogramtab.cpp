@@ -259,9 +259,12 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     connect(m_histogramWidget, SIGNAL(signalMouseReleased( int )),
             this, SLOT(slotUpdateMaxInterv(int)));
 
-    connect(m_histogramWidget, SIGNAL(signalHistogramComputationDone()),
-            this, SLOT(slotRefreshOptions()));
-            
+    connect(m_histogramWidget, SIGNAL(signalHistogramComputationDone(bool)),
+            this, SLOT(slotRefreshOptions(bool)));
+
+    connect(m_histogramWidget, SIGNAL(signalHistogramComputationFailed(void)),
+            this, SLOT(slotHistogramComputationFailed(void)));
+                        
     connect(m_minInterv, SIGNAL(valueChanged (int)),
             m_histogramWidget, SLOT(slotMinValueChanged(int)));
 
@@ -329,37 +332,7 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
                 
     if (!imageData && !imageWidth && !imageHeight)
     {
-
-        m_image = DImg(url.path());
-        
-        if ( !m_image.isNull() )
-        {
-            // If a selection area is done in Image Editor and if the current image is the same 
-            // in Image Editor, then compute too the histogram for this selection.
-            
-            if (m_selectionArea)
-            {
-                m_imageSelection = m_image.copy(*m_selectionArea);
-                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), 
-                                              m_image.sixteenBit(), 
-                                              m_imageSelection.bits(), m_imageSelection.width(),
-                                              m_imageSelection.height());
-                m_regionBG->show();                                      
-                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
-            }
-            else 
-            {
-                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(),
-                                              m_image.sixteenBit());
-                m_regionBG->hide();
-                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
-            }
-        }
-        else 
-        {
-            m_imageSelection.reset();
-            m_histogramWidget->updateData(0L, 0, 0, false);
-        }
+        loadDataFromUrl(url);
     }
     else 
     {
@@ -388,9 +361,27 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
         }
         else 
         {
-            m_imageSelection.reset();
-            m_histogramWidget->updateData(0L, 0, 0, false);
+            slotHistogramComputationFailed();
         }
+    }
+}
+
+void ImagePropertiesHistogramTab::loadDataFromUrl(const KURL& url)
+{
+    // TODO : use a separate thread to load image.
+
+    m_image = DImg(url.path());
+
+    if ( !m_image.isNull() )
+    {
+        m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(),
+                                        m_image.sixteenBit());
+        m_regionBG->hide();
+        m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
+    }
+    else
+    {
+        slotHistogramComputationFailed();
     }
 }
 
@@ -416,14 +407,24 @@ void ImagePropertiesHistogramTab::setSelection(QRect *selectionArea)
     }
 }
 
-void ImagePropertiesHistogramTab::slotRefreshOptions()
+void ImagePropertiesHistogramTab::slotRefreshOptions(bool sixteenBit)
 {
+    m_minInterv->setValue(0);
+    m_maxInterv->setValue(sixteenBit ? 65535 : 255);
+    m_maxInterv->setMaxValue(sixteenBit ? 65535 : 255);
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
     slotColorsChanged(m_colorsCB->currentItem());
     
     if (m_selectionArea)
        slotRenderingChanged(m_regionBG->selectedId());
+}
+
+void ImagePropertiesHistogramTab::slotHistogramComputationFailed()
+{
+    m_imageSelection.reset();
+    m_image.reset();
+    m_histogramWidget->updateData(0L, 0, 0, false);
 }
 
 void ImagePropertiesHistogramTab::slotChannelChanged(int channel)

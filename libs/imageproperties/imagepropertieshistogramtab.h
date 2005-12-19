@@ -71,11 +71,13 @@ signals:
 
 private:
 
+    void loadDataFromUrl(const KURL& url);
     void updateInformation();
     
 private slots:
 
-    void slotRefreshOptions();
+    void slotRefreshOptions(bool sixteenBit);
+    void slotHistogramComputationFailed(void);
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
