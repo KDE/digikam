@@ -72,10 +72,13 @@ private:
 
     KAboutData     *m_about;
     
-private slots:
+protected slots:
 
-    void slotHelp();
     void slotTimer();       
+    
+private slots:
+    
+    void slotHelp();
     virtual void slotEffect(){};
 };
 

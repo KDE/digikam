@@ -353,7 +353,7 @@ void ChannelMixerDialog::slotGainsChanged()
           break;
     }
 
-    slotEffect();
+    slotTimer();
 }
 
 void ChannelMixerDialog::adjustSliders(void)

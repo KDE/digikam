@@ -295,7 +295,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     // -------------------------------------------------------------
     
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
     
     connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));

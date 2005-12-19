@@ -436,7 +436,7 @@ void AdjustLevelDialog::slotGammaInputchanged(double val)
     blockSignals(true);
     m_levels->setLevelGammaValue(m_channelCB->currentItem(), val);
     blockSignals(false);
-    slotEffect();
+    slotTimer();
 }
 
 void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
@@ -450,7 +450,7 @@ void AdjustLevelDialog::slotAdjustMinInputSpinBox(int val)
     m_hGradientMinInput->setValue( val );
     m_levels->setLevelLowInputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
-    slotEffect();
+    slotTimer();
 }
 
 void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
@@ -464,7 +464,7 @@ void AdjustLevelDialog::slotAdjustMaxInputSpinBox(int val)
     m_hGradientMaxInput->setValue( val );
     m_levels->setLevelHighInputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
-    slotEffect();
+    slotTimer();
 }
 
 void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
@@ -478,7 +478,7 @@ void AdjustLevelDialog::slotAdjustMinOutputSpinBox(int val)
     m_hGradientMinOutput->setValue( val );
     m_levels->setLevelLowOutputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
-    slotEffect();
+    slotTimer();
 }
 
 void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
@@ -492,7 +492,7 @@ void AdjustLevelDialog::slotAdjustMaxOutputSpinBox(int val)
     m_hGradientMaxOutput->setValue( val );
     m_levels->setLevelHighOutputValue(m_channelCB->currentItem(), m_histoSegments - val);
     blockSignals(false);
-    slotEffect();
+    slotTimer();
 }
 
 void AdjustLevelDialog::slotAdjustSliders()
