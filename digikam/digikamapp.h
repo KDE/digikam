@@ -36,6 +36,7 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 #include "digikam_export.h"
+#include "dcopiface.h"
 
 namespace KIPI
 {
@@ -178,6 +179,7 @@ private:
     KAction       *mTipAction;
     KAction       *mKipiHelpAction;
     KAction       *mGammaAdjustmentAction;
+    DCOPIface     *mDcopIface;
 
 private slots:
 
