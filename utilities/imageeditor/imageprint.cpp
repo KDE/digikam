@@ -43,6 +43,7 @@
 #include <qvbuttongroup.h>
 #include <qcolor.h>
 #include <qcombobox.h>
+#include <qstyle.h>
 
 // KDE lib includes
 
@@ -95,34 +96,31 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_scaleToFit = new QRadioButton( i18n("Scale image to &fit"), group );
     m_scaleToFit->setChecked( true );
 
-    QWidget *widget = new QWidget( group );
-    QGridLayout *grid = new QGridLayout( widget, 3, 3 );
-    grid->addColSpacing( 0, 30 );
-    grid->setColStretch( 0, 0 );
-    grid->setColStretch( 1, 1 );
-    grid->setColStretch( 2, 10 );
-
-    m_scale = new QRadioButton( i18n("Print e&xact size: "), widget );
-    grid->addMultiCellWidget( m_scale, 0, 0, 0, 1 );
-    group->insert( m_scale );
+    m_scale = new QRadioButton( i18n("Print e&xact size: "), group );
     
     connect( m_scale, SIGNAL( toggled( bool )),
              SLOT( toggleScaling( bool )));
 
-    m_units = new KComboBox( false, widget, "unit combobox" );
-    grid->addWidget( m_units, 0, 2, AlignLeft );
+    QHBox *hb = new QHBox( group );
+    layout->addWidget( hb );
+    hb->setSpacing( KDialog::spacingHint() );
+    QWidget *w = new QWidget(hb);
+    w->setFixedWidth(m_scale->style().subRect( QStyle::SR_RadioButtonIndicator, m_scale ).width());
+
+    m_width = new KDoubleNumInput( hb, "exact width" );
+    m_width->setMinValue( 1 );
+
+    new QLabel( "x", hb );
+
+    m_height = new KDoubleNumInput( hb, "exact height" );
+    m_height->setMinValue( 1 );
+
+    m_units = new KComboBox( false, hb, "unit combobox" );
     m_units->insertItem( i18n("Centimeters") );
     m_units->insertItem( i18n("Inches") );
 
-    m_width = new KDoubleNumInput( widget, "exact width" );
-    grid->addWidget( m_width, 1, 1 );
-    m_width->setLabel( i18n("&Width:" ) );
-    m_width->setMinValue( 1 );
-
-    m_height = new KDoubleNumInput( widget, "exact height" );
-    grid->addWidget( m_height, 2, 1 );
-    m_height->setLabel( i18n("&Height:" ) );
-    m_height->setMinValue( 1 );
+    w = new QWidget(hb);
+    hb->setStretchFactor( w, 1 );
 }
 
 ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
@@ -245,6 +243,9 @@ bool ImagePrint::printImageWithQt()
     if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
     {
         
+        if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
+            m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait : KPrinter::Landscape );
+
         if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
             m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait : KPrinter::Landscape );
 
