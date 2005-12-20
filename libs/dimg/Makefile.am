@@ -17,7 +17,8 @@ libdimg_la_LIBADD  = $(top_builddir)/digikam/libs/dcraw/libdcraw.la \
 
 INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	                       -I$(top_srcdir)/digikam/libs/dimg/filters \
-	                       -I$(top_srcdir)/digikam/digikam 
+   	                       -I$(top_srcdir)/digikam/libs/dcraw \
+	                       -I$(top_srcdir)/digikam/digikam
 
 digikaminclude_HEADERS = dimg.h dimgloader.h icctransform.h dcolor.h 
 digikamincludedir = $(includedir)/digikam

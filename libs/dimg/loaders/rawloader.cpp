@@ -39,14 +39,8 @@ extern "C"
 // Local includes.
 
 #include "dimg.h"
+#include "dcraw_parse.h"
 #include "rawloader.h"
-
-// From dcraw program (parse.c) to identify camera model and constructor
-
-extern "C"
-{
-    int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* cameraModel);
-}
 
 namespace Digikam
 {
@@ -124,9 +118,10 @@ bool RAWLoader::load8bits(const QString& filePath)
 
     //----------------------------------------------------------
 
-    char model[256], constructor[256];
-
-    if ( dcraw_getCameraModel(QFile::encodeName(filePath), &constructor[0], &model[0]) == 0 )
+    char       model[256], constructor[256];
+    DcrawParse rawFileParser;
+    
+    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), &constructor[0], &model[0]) == 0 )
     {
         imageSetCameraModel(QString::QString(model));
         imageSetCameraConstructor(QString::QString(constructor));
@@ -204,8 +199,9 @@ bool RAWLoader::load16bits(const QString& filePath)
     //----------------------------------------------------------
 
     char model[256], constructor[256];
-
-    if ( dcraw_getCameraModel(QFile::encodeName(filePath), constructor, model) == 0 )
+    DcrawParse rawFileParser;
+    
+    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), constructor, model) == 0 )
     {
         imageSetCameraModel(QString::QString(model));
         imageSetCameraConstructor(QString::QString(constructor));

@@ -37,6 +37,7 @@ extern "C"
 
 // Local includes.
 
+#include "dcraw_parse.h"
 #include "jpegloader.h"
 #include "tiffloader.h"
 #include "pngloader.h"
@@ -48,14 +49,6 @@ extern "C"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
-
-
-// From dcraw program (parse.c) to identify RAW files
-
-extern "C"
-{
-    int dcraw_getCameraModel(const char* infile, char* cameraConstructor, char* cameraModel);
-}
 
 namespace Digikam
 {
@@ -298,6 +291,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     fclose(f);
 
+    DcrawParse     rawFileParser;
     unsigned short jpegID    = 0xD8FF;
     unsigned short tiffBigID = 0x4d4d;
     unsigned short tiffLilID = 0x4949;
@@ -328,7 +322,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         }
         pclose (file);
     }
-    else if (dcraw_getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0) 
+    else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
     {
         // RAW File test using dcraw.  
         // Need to test it before TIFF because any RAW file 

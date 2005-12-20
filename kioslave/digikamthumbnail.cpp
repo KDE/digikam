@@ -52,6 +52,7 @@
 
 // Local includes
 
+#include "dcraw_parse.h"
 #include "dimg.h"
 #include "exiforientation_p.h"
 #include "digikamthumbnail.h"
@@ -75,11 +76,6 @@ extern "C"
 }
 
 using namespace KIO;
-
-extern "C"
-{
-int dcraw_getThumbnail(const char* infile, const char* outfile);
-}
 
 static void exifRotate(const QString& filePath, QImage& thumb)
 {
@@ -585,11 +581,12 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 
     KTempFile thumbFile(QString::null, "rawthumb");
     thumbFile.setAutoDelete(true);
-
+    Digikam::DcrawParse rawFileParser;
+    
     if (thumbFile.status() == 0)
     {
-        if (dcraw_getThumbnail(QFile::encodeName(path),
-                               QFile::encodeName(thumbFile.name())) == 0)
+        if (rawFileParser.getThumbnail(QFile::encodeName(path),
+                                       QFile::encodeName(thumbFile.name())) == 0)
         {
             image.load(thumbFile.name());
             if (!image.isNull())

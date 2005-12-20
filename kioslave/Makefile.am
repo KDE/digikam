@@ -1,7 +1,8 @@
 INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
-	      -I$(top_srcdir)/digikam/libs/dimg \
-	      -I$(top_srcdir)/digikam/digikam \
-	      $(LIBKEXIF_CFLAGS) $(all_includes) 
+	          -I$(top_srcdir)/digikam/libs/dimg \
+	          -I$(top_srcdir)/digikam/libs/dcraw \
+	          -I$(top_srcdir)/digikam/digikam \
+	          $(LIBKEXIF_CFLAGS) $(all_includes)
 
 METASOURCES = AUTO  
 KDE_CFLAGS  = -w
