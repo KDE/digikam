@@ -42,6 +42,7 @@ private:
 
     typedef unsigned char uchar;
     typedef unsigned short ushort;
+    typedef long long INT64;
 
     struct decode
     {

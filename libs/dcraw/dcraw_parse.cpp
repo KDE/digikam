@@ -25,6 +25,7 @@
 extern "C" 
 {
 #include <ctype.h>
+#include <netinet/in.h>
 }
 
 // C++ includes
@@ -37,14 +38,6 @@ extern "C"
  
 #include "dcraw_parse.h"
 
-#ifdef WIN32
-#include <winsock2.h>
-typedef __int64 INT64;
-#else
-#include <netinet/in.h>
-typedef long long INT64;
-#endif
-
 /*
    TIFF and CIFF data blocks can be quite large.
    Display only the first DLEN bytes.
@@ -52,8 +45,6 @@ typedef long long INT64;
 #ifndef DLEN
 #define DLEN 768
 #endif
-
-//#define ushort UshORt
 
 namespace Digikam
 {
