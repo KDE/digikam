@@ -1,3 +1,5 @@
+INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes)
+
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdcraw.la
