@@ -182,8 +182,6 @@ bool RAWLoader::load16bits(const QString& filePath)
     uchar src[6];
     float fac = 65535.0 / rgbmax;
 
-    kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
-
     for (int i = 0; i < width*height; i++)
     { 
         fread (src, 6 *sizeof(unsigned char), 1, f);
