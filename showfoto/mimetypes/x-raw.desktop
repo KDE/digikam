@@ -1,11 +1,15 @@
 [Desktop Entry]
 # Base type of RAW images supported by dcraw program
 Name=RAW image
+Name[da]=RAW-billede
+Name[el]=Εικόνα RAW
 Name[et]=Toorpilt
 Name[it]=Immagine grezza
 Name[pt]=Imagem RAW
 Name[sv]=Obehandlad bild
 Comment=RAW image file format
+Comment[da]=Ubehandlet billedfilformat
+Comment[el]=Τύπος αρχείου εικόνας RAW
 Comment[es]=archivo con el format de la imagen en bruto (RAW)
 Comment[et]=Toorpildi failivorming (RAW)
 Comment[it]=Formato di file di immagini grezze
