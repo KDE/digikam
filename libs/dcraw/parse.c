@@ -97,32 +97,32 @@ void tiff_dump(int base, int tag, int type, int count, int level)
   if (count * size[type < 13 ? type:0] > 4)
     fseek (ifp, get4()+base, SEEK_SET);
   save = ftell(ifp);
-  printf("%*stag=0x%x %d, type=%d, count=%d, offset=%06x, data=",
-	level*2, "", tag, tag, type, count, save);
-  if (type==2) putchar('\"');
+  /*printf("%*stag=0x%x %d, type=%d, count=%d, offset=%06x, data=",
+	level*2, "", tag, tag, type, count, save)*/;
+  if (type==2) /*putchar('\"')*/;
   for (j = 0; j < count && j < DLEN; j++)
     switch (type) {
       case 1: case 6: case 7:		/* byte values */
-	printf ("%c%02x",(j & 31) || count < 17 ? ' ':'\n', fgetc(ifp) & 0xff);
+	/*printf ("%c%02x",(j & 31) || count < 17 ? ' ':'\n', */fgetc(ifp)/* & 0xff)*/;
 	break;
       case 2:				/* null-terminated ASCII strings */
 	c = fgetc(ifp);
-	putchar(isprint(c) ? c:'.');
+	/*putchar(isprint(c) ? c:'.')*/;
 	break;
       case 3: case 8:			/* word values */
-	printf ("%c%04x",(j & 15) || count < 9 ? ' ':'\n', get2());
+	/*printf ("%c%04x",(j & 15) || count < 9 ? ' ':'\n',*/ get2()/*)*/;
 	break;
       case 4: case 9:			/* dword values */
-	printf ("%c%08x",(j & 7) || count < 5 ? ' ':'\n', get4());
+	/*printf ("%c%08x",(j & 7) || count < 5 ? ' ':'\n',*/ get4()/*)*/;
 	break;
       case 5: case 10:			/* rationals */
 	num = get4();
 	den = get4();
-	printf (" %d/%d", num, den);
+	/*printf (" %d/%d", num, den)*/;
 	break;
     }
-  if (type==2) putchar('\"');
-  putchar('\n');
+  if (type==2) /*putchar('\"')*/;
+  /*putchar('\n')*/;
   fseek (ifp, save, SEEK_SET);
 }
 
@@ -130,7 +130,7 @@ void parse_nikon_capture_note (int length)
 {
   unsigned sorder, offset, tag, j, size;
 
-  puts ("    Nikon Capture Note:");
+  /*puts ("    Nikon Capture Note:")*/;
   sorder = order;
   order = 0x4949;
   fseek (ifp, 22, SEEK_CUR);
@@ -138,10 +138,10 @@ void parse_nikon_capture_note (int length)
     tag = get4();
     fseek (ifp, 14, SEEK_CUR);
     size = get4()-4;
-    printf("      tag=0x%08x, size=%d", tag, size);
+    /*printf("      tag=0x%08x, size=%d", tag, size)*/;
     for (j=0; j < size; j++)
-      printf ("%s%02x", j & 31 ? " ":"\n\t", fgetc(ifp));
-    puts("");
+      /*printf ("%s%02x", j & 31 ? " ":"\n\t",*/ fgetc(ifp)/*)*/;
+    /*puts("")*/;
   }
   order = sorder;
 }
@@ -186,10 +186,10 @@ void nikon_decrypt (uchar ci, uchar cj, int tag, int i, int size, uchar *buf)
   if (strncmp ((char *)buf, "02", 2)) return;
   ci = xlat[0][ci];
   cj = xlat[1][cj];
-  printf("Decrypted tag 0x%x:\n%*s", tag, (i & 31)*3, "");
+  /*printf("Decrypted tag 0x%x:\n%*s", tag, (i & 31)*3, "")*/;
   for (; i < size; i++)
-    printf("%02x%c", buf[i] ^ (cj += ci * ck++), (i & 31) == 31 ? '\n':' ');
-  if (size & 31) puts("");
+    /*printf("%02x%c", */buf[i] ^ (cj += ci * ck++)/*, (i & 31) == 31 ? '\n':' ')*/;
+  if (size & 31) /*puts("")*/;
 }
 
 int parse_tiff_ifd (int base, int level);
@@ -202,7 +202,7 @@ void nef_parse_makernote (base)
   short sorder;
   char buf[10];
 
-  puts("  Nikon MakerNote:");
+  /*puts("  Nikon MakerNote:")*/;
 /*
    The MakerNote might have its own TIFF header (possibly with
    its own byte-order!), or it might just be a table.
@@ -289,7 +289,7 @@ void nef_parse_exif(int base)
 {
   int entries, tag, type, count, save;
 
-  puts("Nikon EXIF tag:");
+  /*puts("Nikon EXIF tag:")*/;
   entries = get2();
   while (entries--) {
     save = ftell(ifp);
@@ -396,7 +396,7 @@ int parse_tiff_ifd (int base, int level)
       case 0x14a:			/* SubIFD tag */
 	save2 = ftell(ifp);
 	for (i=0; i < count; i++) {
-	  printf ("SubIFD #%d:\n", i+1);
+	  /*printf ("SubIFD #%d:\n", i+1)*/;
 	  fseek (ifp, save2 + i*4, SEEK_SET);
 	  fseek (ifp, get4()+base, SEEK_SET);
 	  parse_tiff_ifd (base, level+1);
@@ -427,7 +427,7 @@ int parse_tiff_ifd (int base, int level)
 	break;
       case 50740:
 	if (count != 4 || type != 1) break;
-	puts("Sony SR2 private IFD:");
+	/*puts("Sony SR2 private IFD:")*/;
 	fseek (ifp, get4()+base, SEEK_SET);
 	parse_tiff_ifd (base, level+1);
     }
@@ -442,7 +442,7 @@ cont:
     if ((ifp = tmpfile())) {
       fwrite (buf, sony_length, 1, ifp);
       fseek (ifp, 0, SEEK_SET);
-      puts ("Sony SR2 encrypted IFD:");
+      /*puts ("Sony SR2 encrypted IFD:")*/;
       parse_tiff_ifd (-sony_offset, level);
       fclose (ifp);
     }
@@ -471,7 +471,7 @@ void parse_tiff (int base)
   get2();
   while ((doff = get4())) {
     fseek (ifp, doff+base, SEEK_SET);
-    printf ("IFD #%d:\n", ifd++);
+    /*printf ("IFD #%d:\n", ifd++)*/;
     if (parse_tiff_ifd (base, 0)) break;
   }
   if (is_dng) return;
@@ -480,7 +480,7 @@ void parse_tiff (int base)
     thumb_layers = 0;
   if (!strncmp(make,"Kodak",5)) {
     fseek (ifp, 12+base, SEEK_SET);
-    puts ("\nSpecial Kodak image directory:");
+    /*puts ("\nSpecial Kodak image directory:")*/;
     parse_tiff_ifd (base, 0);
   }
   if (!strncmp(model,"DCS460A",7)) {
@@ -504,8 +504,8 @@ void parse_minolta()
   while ((save=ftell(ifp)) < data_offset) {
     tag = get4();
     len = get4();
-    printf ("Tag %c%c%c offset %06x length %06x\n",
-	tag>>16, tag>>8, tag, save, len);
+    /*printf ("Tag %c%c%c offset %06x length %06x\n",
+	tag>>16, tag>>8, tag, save, len)*/;
     switch (tag) {
       case 0x545457:				/* TTW */
 	parse_tiff (ftell(ifp));
@@ -530,11 +530,11 @@ void parse_ciff (int offset, int length, int level)
   fseek (ifp, tboff, SEEK_SET);
   nrecs = get2();
   if (nrecs > 100) return;
-  printf ("%*s%d records:\n", level*2, "", nrecs);
+  /*printf ("%*s%d records:\n", level*2, "", nrecs)*/;
   for (i = 0; i < nrecs; i++) {
     save = ftell(ifp);
     type = get2();
-    printf ("%*stype=0x%04x", level*2, "", type);
+    /*printf ("%*stype=0x%04x", level*2, "", type)*/;
     if (type & 0x4000) {
       len = 8;
       type &= 0x3fff;
@@ -542,43 +542,43 @@ void parse_ciff (int offset, int length, int level)
       len  = get4();
       roff = get4();
       aoff = offset + roff;
-      printf (", length=%d, reloff=%d, absoff=%d",
-		len, roff, aoff);
+      /*printf (", length=%d, reloff=%d, absoff=%d",
+		len, roff, aoff)*/;
       fseek (ifp, aoff, SEEK_SET);
     }
     if ((type & 0xe700) == 0)
-      printf (", data=");
+      /*printf (", data=")*/;
     if (type == 0x0032)			/* display as words */
 	type |= 0x1000;
     dlen = len < DLEN ? len:DLEN;
     switch (type >> 8) {
       case 0x28:
       case 0x30:
-	putchar('\n');
+	/*putchar('\n')*/;
 	parse_ciff (aoff, len, level+1);
 	fseek (ifp, save+10, SEEK_SET);
 	continue;
       case 0x00:			/* byte values */
 	for (j = 0; j < dlen; j++)
-	  printf ("%c%02x",(j & 31) || dlen < 16 ? ' ':'\n', fgetc(ifp) & 0xff);
+	  /*printf ("%c%02x",(j & 31) || dlen < 16 ? ' ':'\n', */fgetc(ifp)/* & 0xff)*/;
 	break;
       case 0x08:			/* null-terminated ASCII strings */
-	putchar('\"');
+	/*putchar('\"')*/;
 	for (j = 0; j < dlen; j++) {
 	  c = fgetc(ifp);
-	  putchar( isprint(c) ? c:'.');
+	  /*putchar( isprint(c) ? c:'.')*/;
 	}
-	putchar('\"');
+	/*putchar('\"')*/;
 	break;
       case 0x10:			/* word values */
 	for (j = 0; j < dlen; j+=2)
-	  printf ("%c%5u",(j & 31) || dlen < 16 ? ' ':'\n', get2());
+	  /*printf ("%c%5u",(j & 31) || dlen < 16 ? ' ':'\n', */get2()/*)*/;
 	break;
       case 0x18:			/* dword values */
 	for (j = 0; j < dlen; j+=4)
-	  printf ("%c%08x",(j & 31) || dlen < 16 ? ' ':'\n', get4());
+	  /*printf ("%c%08x",(j & 31) || dlen < 16 ? ' ':'\n', */get4()/*)*/;
     }
-    putchar('\n');
+    /*putchar('\n')*/;
     fseek (ifp, save+10, SEEK_SET);
     if (type == 0x080a) {		/* Get the camera name */
       fseek (ifp, aoff, SEEK_SET);
@@ -634,20 +634,20 @@ void parse_riff (int level)
     fseek (ifp, size, SEEK_CUR);
     return;
   }
-  printf ("%*.4s size %d", level*4+4, tag, size);
+  /*printf ("%*.4s size %d", level*4+4, tag, size)*/;
   if (!memcmp(tag,"RIFF",4) || !memcmp(tag,"LIST",4)) {
     end = ftell(ifp) + size;
     fread (type, 4, 1, ifp);
-    printf (" type %.4s:\n", type);
+    /*printf (" type %.4s:\n", type)*/;
     while (ftell(ifp) < end)
       parse_riff (level+1);
   } else {
     save = ftell(ifp);
     fread (buf, 1, 40, ifp);
-    printf (": ");
+    /*printf (": ")*/;
     for (i=0; i < 40 && isprint(buf[i]); i++)
-      putchar (buf[i]);
-    putchar ('\n');
+      /*putchar (buf[i])*/;
+    /*putchar ('\n')*/;
     fseek (ifp, save+size, SEEK_SET);
   }
 }
@@ -663,14 +663,14 @@ void parse_mos(int level)
     fread (data, 1, 8, ifp);
     if (strcmp(data,"PKTS")) break;
     strcpy (model, "Valeo");
-    printf ("%*s%s ", level, "", data);
+    /*printf ("%*s%s ", level, "", data)*/;
     fread (data, 1, 40, ifp);
     skip = get4();
-    printf ("%s %d bytes: ", data, skip);
+    /*printf ("%s %d bytes: ", data, skip)*/;
     if (!strcmp(data,"icc_camera_to_tone_matrix")) {
       for (i=0; i < skip/4; i++)
-	printf ("%f ", int_to_float(get4()));
-      putchar('\n');
+	/*printf ("%f ", int_to_float(*/get4()/*))*/;
+      /*putchar('\n')*/;
       continue;
     }
     if (!strcmp(data,"JPEG_preview_data")) {
@@ -683,7 +683,7 @@ void parse_mos(int level)
     data[sizeof data - 1] = 0;
     while ((cp=strchr(data,'\n')))
       *cp = ' ';
-    printf ("%s\n",data);
+    /*printf ("%s\n",data)*/;
     parse_mos(level+2);
     fseek (ifp, skip, SEEK_CUR);
   }
@@ -762,7 +762,7 @@ void parse_foveon()
   fseek (ifp, -4, SEEK_END);
   fseek (ifp, get4(), SEEK_SET);
   if (get4() != 0x64434553) {	/* SECd */
-    printf ("Bad Section identifier at %6x\n", (int)ftell(ifp)-4);
+    /*printf ("Bad Section identifier at %6x\n", (int)*/ftell(ifp)-4/*)*/;
     return;
   }
   get4();
@@ -773,22 +773,22 @@ void parse_foveon()
     tag = get4();
     save = ftell(ifp);
     fseek (ifp, off, SEEK_SET);
-    printf ("%c%c%c%c at offset %06x, length %06x, ",
-	tag, tag >> 8, tag >> 16, tag >> 24, off, len);
+    /*printf ("%c%c%c%c at offset %06x, length %06x, ",
+	tag, tag >> 8, tag >> 16, tag >> 24, off, len)*/;
     if (get4() != (0x20434553 | (tag << 24))) {
-      printf ("Bad Section identifier at %6x\n", off);
+      /*printf ("Bad Section identifier at %6x\n", off)*/;
       goto next;
     }
     val = get4();
-    printf ("version %d.%d, ",val >> 16, val & 0xffff);
+    /*printf ("version %d.%d, ",val >> 16, val & 0xffff)*/;
     switch (tag) {
       case 0x32414d49:			/* IMA2 */
       case 0x47414d49:			/* IMAG */
-	printf ("type %d, "	, get4());
-	printf ("format %2d, "	, get4());
-	printf ("columns %4d, "	, get4());
-	printf ("rows %4d, "	, get4());
-	printf ("rowsize %d\n"	, get4());
+	/*printf ("type %d, "	,*/ get4()/*)*/;
+	/*printf ("format %2d, "	,*/ get4()/*)*/;
+	/*printf ("columns %4d, "	,*/get4()/*)*/;
+	/*printf ("rows %4d, "	,*/ get4()/*)*/;
+	/*printf ("rowsize %d\n"	,*/ get4()/*)*/;
 	if (parse_jpeg (off+28)) {
 	  thumb_offset = off+28;
 	  thumb_length = len-28;
@@ -800,12 +800,12 @@ void parse_foveon()
 	}
 	break;
       case 0x464d4143:			/* CAMF */
-	printf ("type %d, ", get4());
+	/*printf ("type %d, ",*/ get4()/*)*/;
 	get4();
 	for (i=0; i < 4; i++)
 	  putchar(fgetc(ifp));
 	val = get4();
-	printf (" version %d.%d:\n",val >> 16, val & 0xffff);
+	/*printf (" version %d.%d:\n",val >> 16, val & 0xffff)*/;
 	key = get4();
 	if ((len -= 28) > 0x20000)
 	  len = 0x20000;
@@ -817,24 +817,24 @@ void parse_foveon()
 	}
 	for (pos=camf; (unsigned) (pos-camf) < len; pos += sget4(pos+8)) {
 	  if (strncmp (pos, "CMb", 3)) {
-	    printf("Bad CAMF tag \"%.4s\"\n", pos);
+	    /*printf("Bad CAMF tag \"%.4s\"\n", pos)*/;
 	    break;
 	  }
 	  val = sget4(pos+4);
-	  printf ("  %4.4s version %d.%d: ", pos, val >> 16, val & 0xffff);
+	  /*printf ("  %4.4s version %d.%d: ", pos, val >> 16, val & 0xffff)*/;
 	  switch (pos[3]) {
 	    case 'M':
 	      cp = pos + sget4(pos+16);
 	      type = sget4(cp);
 	      ndim = sget4(cp+4);
 	      dim[0] = dim[1] = dim[2] = 1;
-	      printf ("%d-dimensonal array %s of type %d:\n    Key: (",
-		ndim, pos+sget4(pos+12), sget4(cp));
+	      /*printf ("%d-dimensonal array %s of type %d:\n    Key: (",
+		ndim, pos+sget4(pos+12),*/ sget4(cp)/*)*/;
 	      dp = pos + sget4(cp+8);
 	      for (i=ndim; i--; ) {
 		cp += 12;
 		dim[i] = sget4(cp);
-		printf ("%s %d%s", pos+sget4(cp+4), dim[i], i ? ", ":")\n");
+		/*printf ("%s %d%s", pos+*/sget4(cp+4)/*, dim[i], i ? ", ":")\n")*/;
 	      }
 	      for (i=0; i < dim[2]; i++) {
 		for (j=0; j < dim[1]; j++) {
@@ -842,52 +842,52 @@ void parse_foveon()
 		  for (k=0; k < dim[0]; k++)
 		    switch (type) {
 		      case 5:
-			printf ("%7d", *(uchar *)dp++);
+			/*printf ("%7d", */*(uchar *)dp++/*)*/;
 			break;
 		      case 0:
 		      case 6:
-			printf ("%7d", (short) sget2(dp));
+			/*printf ("%7d", */(short) sget2(dp)/*)*/;
 			dp += 2;
 			break;
 		      case 1:
 		      case 2:
-			printf (" %d", sget4(dp));
+			/*printf (" %d",*/ sget4(dp)/*)*/;
 			dp += 4;
 			break;
 		      case 3:
 			val = sget4(dp);
-			printf (" %9f", int_to_float(val));
+			/*printf (" %9f", int_to_float(val))*/;
 			dp += 4;
 		    }
-		  printf ("\n");
+		  /*printf ("\n")*/;
 		}
-		printf ("\n");
+		/*printf ("\n")*/;
 	      }
 	      break;
 	    case 'P':
 	      val = sget4(pos+16);
 	      num = sget4(pos+val);
-	      printf ("%s, %d parameters:\n", pos+sget4(pos+12), num);
+	      /*printf ("%s, %d parameters:\n", pos+*/sget4(pos+12)/*, num)*/;
 	      cp = pos+val+8 + num*8;
 	      for (i=0; i < num; i++) {
 		val += 8;
-		printf ("    %s = %s\n", cp+sget4(pos+val), cp+sget4(pos+val+4));
+		/*printf ("    %s = %s\n", cp+*/sget4(pos+val);/*, cp+*/sget4(pos+val+4)/*)*/;
 	      }
 	      break;
 	    case 'T':
 	      cp = pos + sget4(pos+16);
-	      printf ("%s = %.*s\n", pos+sget4(pos+12), sget4(cp), cp+4);
+	      /*printf ("%s = %.*s\n", pos+*/sget4(pos+12);/*,*/ sget4(cp)/*, cp+4)*/;
 	      break;
 	    default:
-	      printf ("\n");
+	      /*printf ("\n")*/;
 	  }
 	}
 	break;
       case 0x504f5250:			/* PROP */
-	printf ("entries %d, ", pent=get4());
-	printf ("charset %d, ", get4());
+	/*printf ("entries %d, ", */pent=get4()/*)*/;
+	/*printf ("charset %d, ", */get4()/*)*/;
 	get4();
-	printf ("nchars %d\n", get4());
+	/*printf ("nchars %d\n",*/ get4()/*)*/;
 	off += pent*8 + 24;
 	if (pent > 256) pent=256;
 	for (i=0; i < pent*2; i++)
@@ -989,7 +989,7 @@ void kodak_yuv_decode (FILE *tfp)
   fprintf (tfp, "P6\n%d %d\n65535\n", width, height);
   out = malloc (width * 12);
   if (!out) {
-    fprintf (stderr, "kodak_yuv_decode() malloc failed!\n");
+    /*fprintf (stderr, "kodak_yuv_decode() malloc failed!\n")*/;
     exit(1);
   }
 
@@ -1050,17 +1050,17 @@ void parse_fuji (int offset)
 
   fseek (ifp, offset, SEEK_SET);
   if (!(len = get4())) return;
-  printf ("Fuji table at %d:\n",len);
+  /*printf ("Fuji table at %d:\n",len)*/;
   fseek (ifp, len, SEEK_SET);
   entries = get4();
   if (entries > 255) return;
   while (entries--) {
     tag = get2();
     len = get2();
-    printf ("Fuji tag=0x%x, len=%d, data =",tag,len);
+    /*printf ("Fuji tag=0x%x, len=%d, data =",tag,len)*/;
     while (len--)
-      printf (" %02x",fgetc(ifp));
-    putchar ('\n');
+      /*printf (" %02x",*/fgetc(ifp)/*)*/;
+    /*putchar ('\n')*/;
   }
 }
 
@@ -1081,18 +1081,18 @@ void parse_phase_one (int base)
     len  = get4();
     data = get4();
     save = ftell(ifp);
-    printf ("Phase One tag=0x%x, type=%d, len=%2d, data = 0x%x\n",
-		tag, type, len, data);
+    /*printf ("Phase One tag=0x%x, type=%d, len=%2d, data = 0x%x\n",
+		tag, type, len, data)*/;
     if (len > 4)
       fseek (ifp, base+data, SEEK_SET);
     if (type == 1 && len < 256) {
       fread (str, 256, 1, ifp);
-      puts (str);
+      /*puts (str)*/;
     }
     if (tag != 0x21c && type == 4 && len > 4) {
       for ( ; len > 0; len -= 4)
-	printf ("%f ", int_to_float(get4()));
-      puts ("");
+	/*printf ("%f ", int_to_float(*/get4()/*))*/;
+      /*puts ("")*/;
     }
     if (tag == 0x110) {
       thumb_offset = data + base;
