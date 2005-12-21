@@ -35,6 +35,7 @@ extern "C"
 // KDE includes.
 
 #include <kdebug.h>
+#include <kprocess.h>
 
 // Local includes.
 
@@ -70,9 +71,7 @@ bool RAWLoader::load8bits(const QString& filePath)
     // -w : Use camera white balance, if possible  
     // -a : Use automatic white balance
     command  = "dcraw -c -h -2 -w -a ";
-    command += "'";
-    command += QFile::encodeName( filePath );
-    command += "'";
+    command += KProcess::quote(QFile::encodeName( filePath ) );
     kdDebug() << "Running dcraw command : " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
