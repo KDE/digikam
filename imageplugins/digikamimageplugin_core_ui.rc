@@ -14,6 +14,8 @@
       <Action name="implugcore_autocorrection" /> 
       <Action name="implugcore_invert" /> 
       <Separator />
+      <Action name="implugcore_colormanagement" />
+      <Separator />
    </Menu>
     <Action name="implugcore_colors" /> 
     <Separator />

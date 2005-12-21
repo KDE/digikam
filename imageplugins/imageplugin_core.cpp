@@ -44,6 +44,7 @@
 #include "imageeffect_sharpen.h"
 #include "imageeffect_ratiocrop.h"
 #include "imageeffect_autocorrection.h"
+#include "imageeffect_iccproof.h"
 #include "imageplugin_core.h"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
@@ -89,7 +90,10 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     m_invertAction = new KAction(i18n("Invert"), "invertimage", 0,
                          this, SLOT(slotInvert()),
                          actionCollection(), "implugcore_invert");
-                                                           
+
+    m_colorManagementAction = new KAction(i18n("Color Management..."), "colormanagement", 0,
+                                          this, SLOT(slotColorManagement()),
+                                          actionCollection(), "implugcore_colormanagement");
     //-------------------------------
     // Filters menu actions.
 
@@ -132,6 +136,7 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_aspectRatioCropAction->setEnabled(enable);
     m_sharpenAction->setEnabled(enable);
     m_blurAction->setEnabled(enable);
+    m_colorManagementAction->setEnabled(enable);
 }
 
 void ImagePlugin_Core::slotBlur()
@@ -201,6 +206,12 @@ void ImagePlugin_Core::slotRedEye()
 void ImagePlugin_Core::slotRatioCrop()
 {
     ImageEffect_RatioCrop dlg(parentWidget());
+    dlg.exec();
+}
+
+void ImagePlugin_Core::slotColorManagement()
+{
+    ImageEffect_ICCProof dlg(parentWidget());
     dlg.exec();
 }
 

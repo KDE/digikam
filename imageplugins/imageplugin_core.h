@@ -55,6 +55,7 @@ private:
     KAction *m_aspectRatioCropAction;
     KAction *m_sharpenAction;
     KAction *m_blurAction;
+    KAction *m_colorManagementAction;
         
 private slots:
 
@@ -70,6 +71,8 @@ private slots:
     
     void slotRedEye();
     void slotRatioCrop();
+
+    void slotColorManagement();
 
 };
     
