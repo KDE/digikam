@@ -48,6 +48,7 @@
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmimetype.h>
+#include <kprocess.h>
 #include <kio/thumbcreator.h>
 
 // Local includes
@@ -603,9 +604,7 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
     command  = "dcraw -c -h -2 -w -a ";
-    command += "'";
-    command += QFile::encodeName( path );
-    command += "'";
+    command += KProcess::quote( QFile::encodeName( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
