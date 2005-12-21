@@ -229,7 +229,7 @@ bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
         // -w : Use camera white balance, if possible  
         // -a : Use automatic white balance
         command  = "dcraw -c -h -2 -w -a ";
-        command += KProcess::quote( QFile::encodeName( filename ) );
+        command += QFile::encodeName( KProcess::quote( filename ) );
         kdWarning() << "Running dcraw command : " << command << endl;
     
         FILE* f = popen( command.data(), "r" );

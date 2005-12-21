@@ -604,7 +604,7 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
     command  = "dcraw -c -h -2 -w -a ";
-    command += KProcess::quote( QFile::encodeName( path ) );
+    command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
