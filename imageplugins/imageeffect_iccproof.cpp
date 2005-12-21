@@ -40,6 +40,7 @@
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <ktabwidget.h>
 
 // Digikam includes.
 
@@ -47,7 +48,6 @@
 #include "imageguidewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
-#include "bcgmodifier.h"
 #include "dimg.h"
 
 // Local includes.
@@ -64,7 +64,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout *l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true,
+    m_previewWidget = new Digikam::ImageGuideWidget(375, 250, frame, true,
                                                     Digikam::ImageGuideWidget::PickColorMode);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add(m_previewWidget, i18n("<p>Here you can see the image preview after convert it with a color profile</p>"));
@@ -142,9 +142,31 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
                                                       "This will not have an effect on the final rendering."));
     gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
 
+;
+        
+    // -------------------------------------------------------------
+
+    m_tabsWidgets = new KTabWidget(gboxSettings);
+    QWidget *softProof = new QWidget(m_tabsWidgets);
+    QWidget *transform = new QWidget(m_tabsWidgets);
+    
+    m_tabsWidgets->addTab(softProof, i18n("SoftProofing"));
+    //---------- First Page Setup ----------------------------------
+
+    QVBoxLayout *firstPageLayout = new QVBoxLayout(softProof, 0, KDialog::spacingHint());
+
+    //---------- End First Page ------------------------------------
+    
+    m_tabsWidgets->addTab(transform, i18n("Transform"));
+    //---------- Second Page Setup ---------------------------------
+
+    //---------- End Second Page -----------------------------------
+
+    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
+
     gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
-        
+
     // -------------------------------------------------------------
 
     connect(m_channelCB, SIGNAL(activated(int)),

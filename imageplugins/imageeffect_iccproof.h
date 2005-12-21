@@ -25,6 +25,8 @@ class QVButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
 
+class KTabWidget;
+
 namespace Digikam
 {
 class ICCTransform;
@@ -61,6 +63,8 @@ private:
     };
 
     uchar                           *m_destinationPreviewData;
+
+    KTabWidget                      *m_tabsWidgets;
 
     QComboBox                       *m_channelCB;
     QComboBox                       *m_profilesCB;
