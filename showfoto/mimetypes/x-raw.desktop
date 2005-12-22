@@ -18,6 +18,6 @@ Comment[sv]=Filformat för obehandlad bild
 Encoding=UTF-8
 Icon=raw
 MimeType=image/x-raw
-Patterns=*.bay;*.bmq;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.tif;*.x3f;;*.DDS;*.PBM;*.PCX;*.PGM;*.XBM;*.XCF;*.TGA;*.ICO;*.PPM;*.PSD;*.XPM;*.EPS;*.TIFF;*.EXR;*.JP2;*.RGB;*.TIF;*.BAY;*.BMQ;*.CR2;*.CRW;*.CS1;*.DC2;*.DCR;*.DNG;*.ERF;*.FFF;*.HDR;*.K25;*.KDC;*.MDC;*.MOS;*.MRW;*.NEF;*.ORF;*.PEF;*.PXN;*.RAF;*.RAW;*.RDC;*.SR2;*.SRF;*.TIF;*.X3F
+Patterns=*.bay;*.bmq;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.tif;*.x3f;;*.DDS;*.PBM;*.PCX;*.PGM;*.XBM;*.XCF;*.TGA;*.PPM;*.PSD;*.XPM;*.EPS;*.TIFF;*.EXR;*.JP2;*.RGB;*.TIF;*.BAY;*.BMQ;*.CR2;*.CRW;*.CS1;*.DC2;*.DCR;*.DNG;*.ERF;*.FFF;*.HDR;*.K25;*.KDC;*.MDC;*.MOS;*.MRW;*.NEF;*.ORF;*.PEF;*.PXN;*.RAF;*.RAW;*.RDC;*.SR2;*.SRF;*.TIF;*.X3F
 Type=MimeType
 Exec=showfoto %F
