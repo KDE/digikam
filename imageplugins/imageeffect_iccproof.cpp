@@ -20,8 +20,10 @@
 #include <qcolor.h>
 #include <qgroupbox.h>
 #include <qhgroupbox.h>
+#include <qhbox.h>
 #include <qvgroupbox.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
+#include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -31,6 +33,7 @@
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qradiobutton.h>
 
 // KDE includes.
 
@@ -136,34 +139,117 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
 
     // -------------------------------------------------------------
 
-    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-                                                      "from the target image preview will be over-colored. "
-                                                      "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
+//     m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
+//     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+//                                                       "from the target image preview will be over-colored. "
+//                                                       "This will not have an effect on the final rendering."));
+//     gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
 
-;
         
     // -------------------------------------------------------------
 
-    m_tabsWidgets = new KTabWidget(gboxSettings);
-    QWidget *softProof = new QWidget(m_tabsWidgets);
-    QWidget *transform = new QWidget(m_tabsWidgets);
+//     m_tabsWidgets = new KTabWidget(gboxSettings);
+//     QWidget *softProof = new QWidget(m_tabsWidgets);
+//     QWidget *transform = new QWidget(m_tabsWidgets);
+//     
+//     m_tabsWidgets->addTab(softProof, i18n("SoftProofing"));
+//     //---------- First Page Setup ----------------------------------
+// 
+//     QVBoxLayout *firstPageLayout = new QVBoxLayout(softProof, 0, KDialog::spacingHint());
+// 
+//     //---------- End First Page ------------------------------------
+//     
+//     m_tabsWidgets->addTab(transform, i18n("Transform"));
+//     //---------- Second Page Setup ---------------------------------
+// 
+//     //---------- End Second Page -----------------------------------
+// 
+//     gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
+
+    //-- Build options group -----------------------------------------
     
-    m_tabsWidgets->addTab(softProof, i18n("SoftProofing"));
-    //---------- First Page Setup ----------------------------------
+    QButtonGroup *m_optionsBG = new QButtonGroup(2, Qt::Vertical, i18n("Options"), gboxSettings);
+//     m_optionsBG->setTitle(i18n("Options"));
 
-    QVBoxLayout *firstPageLayout = new QVBoxLayout(softProof, 0, KDialog::spacingHint());
+    QCheckBox *m_doSoftProofBox = new QCheckBox(m_optionsBG);
+    m_doSoftProofBox->setText(i18n("Soft-proofing"));
+    QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described"
+                                           " by the \"Proofing\" profile. Useful to preview final"
+                                           " result whithout rendering to physical medium.</p>"));
 
-    //---------- End First Page ------------------------------------
+    QCheckBox *m_checkGamutBox = new QCheckBox(m_optionsBG);
+    m_checkGamutBox->setText(i18n("Check gamut"));
+    QWhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show"
+                                          " the colors that are out of the printer gamut<p>"));
+
+    QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
+    m_embeddProfileBox->setText(i18n("Embedd color profile"));
+    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embedd"
+                                             " into the image the selected profile.</p>"));
+
+    QCheckBox *m_BPCBox = new QCheckBox(m_optionsBG);
+    m_BPCBox->setText(i18n("Use Black Point Comensation algorithm"));
+    QWhatsThis::add(m_BPCBox, i18n("<p>The black point compensation feature does work in conjunction "
+                                   "with relative colorimetric intent. Perceptual intent should make no "
+                                   "difference, although it affects some profiles.</p>"
+                                   "<p>The mechanics are simple. BPC does scale full image across gray "
+                                   "axis in order to accommodate the darkest tone origin media can "
+                                   "render to darkest tone destination media can render. As a such, "
+                                   "BPC is primarily targeting CMYK.</p>"));
     
-    m_tabsWidgets->addTab(transform, i18n("Transform"));
-    //---------- Second Page Setup ---------------------------------
+    gridSettings->addMultiCellWidget(m_optionsBG, 10, 10, 0, 4);
 
-    //---------- End Second Page -----------------------------------
+    //-- Build color profiles options group ---------------------------
 
-    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
+    QVButtonGroup *m_profilesBG = new QVButtonGroup(gboxSettings);
+    m_profilesBG->setTitle(i18n("Select Color Profiles"));
 
+    QButtonGroup *m_inProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select input profile"), m_profilesBG);
+
+    QRadioButton *m_useEmbeddedProfile = new QRadioButton(m_inProfile);
+    m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
+
+    QRadioButton *m_useInDefaultProfile = new QRadioButton(m_inProfile);
+    m_useInDefaultProfile->setText(i18n("Use default profile"));
+
+    QRadioButton *m_useInSelectedProfile = new QRadioButton(m_inProfile);
+    m_useInSelectedProfile->setText(i18n("Use selected profile"));
+
+    QPushButton *m_inProfilesInfo = new QPushButton(i18n("Info"), m_inProfile);
+    //---------------------------------------------------------------------------
+    QButtonGroup *m_proofProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select proofing profile"), m_profilesBG);
+
+    QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
+    m_useOutDefaultProfile->setText(i18n("Use default proof (output) profile"));
+
+    QRadioButton *m_useOutSelectedProfile = new QRadioButton(m_proofProfile);
+    m_useOutSelectedProfile->setText(i18n("Use selected profile"));
+
+    QPushButton *m_outProfilesInfo = new QPushButton(i18n("Info"), m_proofProfile);
+    //---------------------------------------------------------------------------
+    QButtonGroup *m_displayProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select display profile"), m_profilesBG);
+
+    QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(m_displayProfile);
+    m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
+
+    QRadioButton *m_useDisplaySelectedProfile = new QRadioButton(m_displayProfile);
+    m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
+
+    QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), m_displayProfile);
+    //---------------------------------------------------------------------------
+
+    gridSettings->addMultiCellWidget(m_profilesBG, 11, 11, 0, 4);
+
+    //-- Build rendering intents options group -----------------------
+
+    QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
+    m_intentsBG->setTitle(i18n("Select Rendering Intent"));
+
+
+
+
+    gridSettings->addMultiCellWidget(m_intentsBG, 12, 12, 0, 4);
+    
     gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
 
@@ -175,8 +261,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));
+//     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+//             this, SLOT(slotEffect()));
                         
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
@@ -243,7 +329,7 @@ void ImageEffect_ICCProof::slotEffect()
 //     double b = m_bInput->value();
 //     double c = m_cInput->value() + (double)(1.00);    
 //     double g = m_gInput->value() + (double)(1.00);
-    bool   o = m_overExposureIndicatorBox->isChecked();
+//     bool   o = m_overExposureIndicatorBox->isChecked();
 
 //     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
     

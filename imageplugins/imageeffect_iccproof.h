@@ -22,6 +22,7 @@
 class QCheckBox;
 class QComboBox;
 class QVButtonGroup;
+class QButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
 
@@ -67,20 +68,31 @@ private:
     KTabWidget                      *m_tabsWidgets;
 
     QComboBox                       *m_channelCB;
-    QComboBox                       *m_profilesCB;
-    QComboBox                       *m_inprofilesCB;
+    QComboBox                       *m_displayProfilesCB;
+    QComboBox                       *m_inProfilesCB;
+    QComboBox                       *m_outProfilesCB;
+    QComboBox                       *m_renderingIntentCB;
 
     QCheckBox                       *m_softProofBox;
     QCheckBox                       *m_overExposureIndicatorBox;
+    QCheckBox                       *m_doSofProfBox;
+    QCheckBox                       *m_checkGamutBox;
+    QCheckBox                       *m_BPCBox;
+    QCheckBox                       *m_embeddProfileBox;
+
+    QRadioButton                    *m_useEmbeddedProfile;
+    QRadioButton                    *m_useInDefaultProfile;
+    QRadioButton                    *m_useInSelectedProfile;
+    QRadioButton                    *m_useOutDefaultProfile;
+    QRadioButton                    *m_useOutSelectedProfile;
+    QRadioButton                    *m_useDisplayDefaultProfile;
+    QRadioButton                    *m_useDisplaySelectedProfile;
 
     QHButtonGroup                   *m_scaleBG;
 
     QVButtonGroup                   *m_renderingIntentBG;
-
-    QRadioButton                    *m_perceptualRB;
-    QRadioButton                    *m_absoluteRB;
-    QRadioButton                    *m_relativeRB;
-    QRadioButton                    *m_saturationRB;
+    QButtonGroup                   *m_optionsBG;
+    QVButtonGroup                   *m_profilesBG;
 
     Digikam::ImageGuideWidget       *m_previewWidget;
 
