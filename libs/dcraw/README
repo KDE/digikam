@@ -1,0 +1,6 @@
+This folder contain dcraw C ansi souce code ported to C++ class.
+
+parse.c ==> dcraw_parse.cpp/.h  ==> port complete.
+dcraw.c ==> dcraw_decode.cpp/.h ==> port uncomplete.
+
+Gilles Caulier, 22/12/2005

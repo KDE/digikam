@@ -51,6 +51,7 @@ namespace Digikam
 
 DcrawParse::DcrawParse()
 {
+    order = 0;
 }
     
 DcrawParse::~DcrawParse()
