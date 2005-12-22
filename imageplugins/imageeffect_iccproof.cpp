@@ -137,35 +137,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
 
-    // -------------------------------------------------------------
-
-//     m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
-//     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-//                                                       "from the target image preview will be over-colored. "
-//                                                       "This will not have an effect on the final rendering."));
-//     gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
-
-        
-    // -------------------------------------------------------------
-
-//     m_tabsWidgets = new KTabWidget(gboxSettings);
-//     QWidget *softProof = new QWidget(m_tabsWidgets);
-//     QWidget *transform = new QWidget(m_tabsWidgets);
-//     
-//     m_tabsWidgets->addTab(softProof, i18n("SoftProofing"));
-//     //---------- First Page Setup ----------------------------------
-// 
-//     QVBoxLayout *firstPageLayout = new QVBoxLayout(softProof, 0, KDialog::spacingHint());
-// 
-//     //---------- End First Page ------------------------------------
-//     
-//     m_tabsWidgets->addTab(transform, i18n("Transform"));
-//     //---------- Second Page Setup ---------------------------------
-// 
-//     //---------- End Second Page -----------------------------------
-// 
-//     gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
-
     //-- Build options group -----------------------------------------
     
     QButtonGroup *m_optionsBG = new QButtonGroup(2, Qt::Vertical, i18n("Options"), gboxSettings);
@@ -197,11 +168,28 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
                                    "render to darkest tone destination media can render. As a such, "
                                    "BPC is primarily targeting CMYK.</p>"));
     
-    gridSettings->addMultiCellWidget(m_optionsBG, 10, 10, 0, 4);
+    gridSettings->addMultiCellWidget(m_optionsBG, 8, 8, 0, 4);
 
-    //-- Build color profiles options group ---------------------------
+    //-- Build rendering intents options group -----------------------
 
-    QVButtonGroup *m_profilesBG = new QVButtonGroup(gboxSettings);
+    QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
+    m_intentsBG->setTitle(i18n("Select Rendering Intent"));
+
+    gridSettings->addMultiCellWidget(m_intentsBG, 9, 9, 0, 4);
+
+    // -------------------------------------------------------------
+
+    m_tabsWidgets = new KTabWidget(gboxSettings);
+    QWidget *inProfiles = new QWidget(m_tabsWidgets);
+    QWidget *proofProfiles = new QWidget(m_tabsWidgets);
+    QWidget *displayProfiles = new QWidget(m_tabsWidgets);
+
+    m_tabsWidgets->addTab(inProfiles, i18n("Input Profiles"));
+    //---------- First Page Setup ----------------------------------
+
+//     QWidget *firstPageLayout = new QWidget(plainPage());
+    
+    QVButtonGroup *m_profilesBG = new QVButtonGroup(inProfiles);
     m_profilesBG->setTitle(i18n("Select Color Profiles"));
 
     QButtonGroup *m_inProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select input profile"), m_profilesBG);
@@ -216,8 +204,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
 
     QPushButton *m_inProfilesInfo = new QPushButton(i18n("Info"), m_inProfile);
-    //---------------------------------------------------------------------------
-    QButtonGroup *m_proofProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select proofing profile"), m_profilesBG);
+
+    //---------- End First Page ------------------------------------
+
+    m_tabsWidgets->addTab(proofProfiles, i18n("Proofing Profiles"));
+    //---------- Second Page Setup ---------------------------------
+
+//     QWidget *secondPageLayout = new QWidget(plainPage());
+
+    QButtonGroup *m_proofProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select proofing profile"), proofProfiles);
 
     QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
     m_useOutDefaultProfile->setText(i18n("Use default proof (output) profile"));
@@ -226,8 +221,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     m_useOutSelectedProfile->setText(i18n("Use selected profile"));
 
     QPushButton *m_outProfilesInfo = new QPushButton(i18n("Info"), m_proofProfile);
-    //---------------------------------------------------------------------------
-    QButtonGroup *m_displayProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select display profile"), m_profilesBG);
+
+    //---------- End Second Page -----------------------------------
+
+    m_tabsWidgets->addTab(displayProfiles, i18n("Display Profiles"));
+    //---------- Third Page Setup ----------------------------------
+
+//     QWidget *thirdPageLayout = new QWidget(plainPage());
+
+    QButtonGroup *m_displayProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select display profile"), displayProfiles);
 
     QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(m_displayProfile);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
@@ -236,19 +238,24 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
     QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), m_displayProfile);
+    //---------- End Third Page ------------------------------------
+
+    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
+
+
+
+    //-- Build color profiles options group ---------------------------
+
+
     //---------------------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(m_profilesBG, 11, 11, 0, 4);
+    //---------------------------------------------------------------------------
 
-    //-- Build rendering intents options group -----------------------
+    //---------------------------------------------------------------------------
 
-    QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
-    m_intentsBG->setTitle(i18n("Select Rendering Intent"));
-
+//     gridSettings->addMultiCellWidget(m_profilesBG, 11, 11, 0, 4);
 
 
-
-    gridSettings->addMultiCellWidget(m_intentsBG, 12, 12, 0, 4);
     
     gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
