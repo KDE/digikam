@@ -139,7 +139,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
 
     //-- Build options group -----------------------------------------
     
-    QButtonGroup *m_optionsBG = new QButtonGroup(2, Qt::Vertical, i18n("Options"), gboxSettings);
+    QButtonGroup *m_optionsBG = new QButtonGroup(4, Qt::Vertical, i18n("Options"), gboxSettings);
 //     m_optionsBG->setTitle(i18n("Options"));
 
     QCheckBox *m_doSoftProofBox = new QCheckBox(m_optionsBG);
@@ -175,6 +175,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
     m_intentsBG->setTitle(i18n("Select Rendering Intent"));
 
+    QComboBox *m_renderingIntestCB = new QComboBox(m_intentsBG);
+
     gridSettings->addMultiCellWidget(m_intentsBG, 9, 9, 0, 4);
 
     // -------------------------------------------------------------
@@ -187,15 +189,18 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     m_tabsWidgets->addTab(inProfiles, i18n("Input Profiles"));
     //---------- First Page Setup ----------------------------------
 
-//     QWidget *firstPageLayout = new QWidget(plainPage());
+    QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
     
-    QVButtonGroup *m_profilesBG = new QVButtonGroup(inProfiles);
-    m_profilesBG->setTitle(i18n("Select Color Profiles"));
+//     QVButtonGroup *m_profilesBG = new QVButtonGroup(inProfiles);
+//     m_profilesBG->setTitle(i18n("Select Color Profiles"));
 
-    QButtonGroup *m_inProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select input profile"), m_profilesBG);
+    QButtonGroup *m_inProfile = new QButtonGroup(6,Qt::Vertical, i18n("Select input profile"), inProfiles);
 
     QRadioButton *m_useEmbeddedProfile = new QRadioButton(m_inProfile);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
+
+    QRadioButton *m_useSRGBDefaultProfile = new QRadioButton(m_inProfile);
+    m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
 
     QRadioButton *m_useInDefaultProfile = new QRadioButton(m_inProfile);
     m_useInDefaultProfile->setText(i18n("Use default profile"));
@@ -203,33 +208,44 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     QRadioButton *m_useInSelectedProfile = new QRadioButton(m_inProfile);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
 
+    QComboBox *m_inProfilesCB = new QComboBox(m_inProfile);
+    
     QPushButton *m_inProfilesInfo = new QPushButton(i18n("Info"), m_inProfile);
+
+    firstPageLayout->addWidget(m_inProfile);
+    firstPageLayout->addStretch();
 
     //---------- End First Page ------------------------------------
 
     m_tabsWidgets->addTab(proofProfiles, i18n("Proofing Profiles"));
     //---------- Second Page Setup ---------------------------------
 
-//     QWidget *secondPageLayout = new QWidget(plainPage());
+    QVBoxLayout *secondPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_proofProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select proofing profile"), proofProfiles);
+    QButtonGroup *m_proofProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select proofing profile"), proofProfiles);
 
     QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
     m_useOutDefaultProfile->setText(i18n("Use default proof (output) profile"));
 
     QRadioButton *m_useOutSelectedProfile = new QRadioButton(m_proofProfile);
     m_useOutSelectedProfile->setText(i18n("Use selected profile"));
+    
+    QComboBox *m_outProfileCB = new QComboBox(m_proofProfile);
 
     QPushButton *m_outProfilesInfo = new QPushButton(i18n("Info"), m_proofProfile);
+
+
+    secondPageLayout->addWidget(m_proofProfile);
+    secondPageLayout->addStretch();
 
     //---------- End Second Page -----------------------------------
 
     m_tabsWidgets->addTab(displayProfiles, i18n("Display Profiles"));
     //---------- Third Page Setup ----------------------------------
 
-//     QWidget *thirdPageLayout = new QWidget(plainPage());
+    QVBoxLayout *thirdPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_displayProfile = new QButtonGroup(3,Qt::Vertical, i18n("Select display profile"), displayProfiles);
+    QButtonGroup *m_displayProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select display profile"), displayProfiles);
 
     QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(m_displayProfile);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
@@ -237,26 +253,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     QRadioButton *m_useDisplaySelectedProfile = new QRadioButton(m_displayProfile);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
+    QComboBox *m_displayProfileCB = new QComboBox(m_displayProfile);
+
     QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), m_displayProfile);
+
+    thirdPageLayout->addWidget(m_displayProfile);
+    thirdPageLayout->addStretch();
+    
     //---------- End Third Page ------------------------------------
 
-    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 4);
+    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 8, 4);
 
-
-
-    //-- Build color profiles options group ---------------------------
-
-
-    //---------------------------------------------------------------------------
-
-    //---------------------------------------------------------------------------
-
-    //---------------------------------------------------------------------------
-
-//     gridSettings->addMultiCellWidget(m_profilesBG, 11, 11, 0, 4);
-
-
-    
     gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
 
