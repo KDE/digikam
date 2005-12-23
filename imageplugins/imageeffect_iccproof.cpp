@@ -140,10 +140,47 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
 
-    //-- Build options group -----------------------------------------
+    //-- Build rendering intents options group -----------------------
+
+    QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
+    m_intentsBG->setTitle(i18n("Select Rendering Intent"));
+
+    QComboBox *m_renderingIntentsCB = new QComboBox(false, m_intentsBG);
     
-    QButtonGroup *m_optionsBG = new QButtonGroup(4, Qt::Vertical, i18n("Options"), gboxSettings);
-//     m_optionsBG->setTitle(i18n("Options"));
+    m_renderingIntentsCB->insertItem("Perceptual");
+    m_renderingIntentsCB->insertItem("Absolute Colorimetric");
+    m_renderingIntentsCB->insertItem("Relative Colorimetric");
+    m_renderingIntentsCB->insertItem("Saturation");
+
+    QWhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be compressed or expanded to fill the gamut of the destination device, so that gray balance is preserved but colorimetric accuracy may not be preserved.\n"
+    "In other words, if certain colors in an image fall outside of the range of colors that the output device can render, the picture intent will cause all the colors in the image to be adjusted so that the every color in the image falls within the range that can be rendered and so that the relationship between colors is preserved as much as possible.\n"
+    "This intent is most suitable for display of photographs and images, and is the default intent.</li>"
+    "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the output device can render are adjusted to the closest color that can be rendered, while all other colors are left unchanged.\n"
+    "This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, logo colors, ...).</li>"
+    "<li>Relative Colorimetric intent is defined such that any colors that fall outside the range that the output device can render are adjusted to the closest color that can be rendered, while all other colors are left unchanged. Proof intent does not preserve the white point.</li>"
+    "<li>Saturarion intent preserves the saturation of colors in the image at the possible expense of hue and lightness.\n"
+    "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to achieve the desired effects.\n"
+    "This intent is most suitable for business graphics such as charts, where it is more important that the colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
+
+    gridSettings->addMultiCellWidget(m_intentsBG, 9, 9, 0, 4);
+
+    // -------------------------------------------------------------
+
+    m_tabsWidgets = new KTabWidget(gboxSettings);
+    QWidget *generalOptions = new QWidget(m_tabsWidgets);
+    QWidget *inProfiles = new QWidget(m_tabsWidgets);
+    QWidget *proofProfiles = new QWidget(m_tabsWidgets);
+    QWidget *displayProfiles = new QWidget(m_tabsWidgets);
+
+    m_tabsWidgets->addTab(generalOptions, i18n("General"));
+    QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
+
+    //---------- Zero Page Setup ----------------------------------
+
+    QVBoxLayout *zeroPageLayout = new QVBoxLayout(generalOptions, 0, KDialog::spacingHint());
+
+    QButtonGroup *m_optionsBG = new QButtonGroup(4, Qt::Vertical, generalOptions);
+    m_optionsBG->setFrameStyle(QFrame::NoFrame);
 
     QCheckBox *m_doSoftProofBox = new QCheckBox(m_optionsBG);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
@@ -162,7 +199,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                              " into the image the selected color profile.</p>"));
 
     QCheckBox *m_BPCBox = new QCheckBox(m_optionsBG);
-    m_BPCBox->setText(i18n("Use Black Point"));
+    m_BPCBox->setText(i18n("Use BPC"));
     QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with relative colorimetric intent. Perceptual intent should make no "
                                    "difference, although it affects some profiles.</p>"
@@ -170,24 +207,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    "axis in order to accommodate the darkest tone origin media can "
                                    "render to darkest tone destination media can render. As a such, "
                                    "BPC is primarily targeting CMYK.</p>"));
-    
-    gridSettings->addMultiCellWidget(m_optionsBG, 8, 8, 0, 4);
 
-    //-- Build rendering intents options group -----------------------
+    zeroPageLayout->addWidget(m_optionsBG);
+    zeroPageLayout->addStretch();
 
-    QVButtonGroup *m_intentsBG = new QVButtonGroup(gboxSettings);
-    m_intentsBG->setTitle(i18n("Select Rendering Intent"));
-
-    QComboBox *m_renderingIntestCB = new QComboBox(m_intentsBG);
-
-    gridSettings->addMultiCellWidget(m_intentsBG, 9, 9, 0, 4);
-
-    // -------------------------------------------------------------
-
-    m_tabsWidgets = new KTabWidget(gboxSettings);
-    QWidget *inProfiles = new QWidget(m_tabsWidgets);
-    QWidget *proofProfiles = new QWidget(m_tabsWidgets);
-    QWidget *displayProfiles = new QWidget(m_tabsWidgets);
+    //---------- End Zero Page -----------------------------------
 
     m_tabsWidgets->addTab(inProfiles, i18n("Input"));
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color Profiles.</p>"));
@@ -195,9 +219,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- First Page Setup ----------------------------------
 
     QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
-    
-//     QVButtonGroup *m_profilesBG = new QVButtonGroup(inProfiles);
-//     m_profilesBG->setTitle(i18n("Select Color Profiles"));
 
     QButtonGroup *m_inProfile = new QButtonGroup(6, Qt::Vertical, inProfiles);
     m_inProfile->setFrameStyle(QFrame::NoFrame);
