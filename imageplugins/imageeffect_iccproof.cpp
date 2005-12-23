@@ -232,7 +232,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QButtonGroup *m_proofProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select proofing profile"), proofProfiles);
 
     QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
-    m_useOutDefaultProfile->setText(i18n("Use default proof (output) profile"));
+    m_useOutDefaultProfile->setText(i18n("Use default proof profile"));
 
     QRadioButton *m_useOutSelectedProfile = new QRadioButton(m_proofProfile);
     m_useOutSelectedProfile->setText(i18n("Use selected profile"));
