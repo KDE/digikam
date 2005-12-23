@@ -199,7 +199,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 //     QVButtonGroup *m_profilesBG = new QVButtonGroup(inProfiles);
 //     m_profilesBG->setTitle(i18n("Select Color Profiles"));
 
-    QButtonGroup *m_inProfile = new QButtonGroup(6,Qt::Vertical, i18n("Select input profile"), inProfiles);
+    QButtonGroup *m_inProfile = new QButtonGroup(6, Qt::Vertical, inProfiles);
+    m_inProfile->setFrameStyle(QFrame::NoFrame);
 
     QRadioButton *m_useEmbeddedProfile = new QRadioButton(m_inProfile);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
@@ -229,7 +230,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *secondPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_proofProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select proofing profile"), proofProfiles);
+    QButtonGroup *m_proofProfile = new QButtonGroup(4,Qt::Vertical, proofProfiles);
+    m_proofProfile->setFrameStyle(QFrame::NoFrame);
 
     QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
     m_useOutDefaultProfile->setText(i18n("Use default proof profile"));
@@ -254,7 +256,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *thirdPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_displayProfile = new QButtonGroup(4,Qt::Vertical, i18n("Select display profile"), displayProfiles);
+    QButtonGroup *m_displayProfile = new QButtonGroup(4,Qt::Vertical, displayProfiles);
+    m_displayProfile->setFrameStyle(QFrame::NoFrame);
 
     QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(m_displayProfile);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
