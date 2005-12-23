@@ -14,10 +14,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * ============================================================ */
+
 #ifndef IMAGEEFFECT_ICCPROOF_H
 #define IMAGEEFFECT_ICCPROOF_H
 
-#include <imagedlgbase.h>
+// Digikam include.
+
+#include "imagedlgbase.h"
 
 class QCheckBox;
 class QComboBox;
@@ -34,6 +37,7 @@ class ICCTransform;
 class ImageGuideWidget;
 class HistogramWidget;
 class ColorGradientWidget;
+class DColor;
 }
 
 class ImageEffect_ICCProof : public Digikam::ImageDlgBase
@@ -91,7 +95,7 @@ private:
     QHButtonGroup                   *m_scaleBG;
 
     QVButtonGroup                   *m_renderingIntentBG;
-    QButtonGroup                   *m_optionsBG;
+    QButtonGroup                    *m_optionsBG;
     QVButtonGroup                   *m_profilesBG;
 
     Digikam::ImageGuideWidget       *m_previewWidget;
@@ -107,7 +111,8 @@ private slots:
     void slotOk();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 };
 
-#endif
+#endif  // IMAGEEFFECT_ICCPROOF_H

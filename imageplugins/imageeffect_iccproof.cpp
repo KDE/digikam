@@ -57,12 +57,14 @@
 
 #include "imageeffect_iccproof.h"
 
-ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBase(parent,i18n("Color Management"), "colormanagement", false)
+ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
+                    : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
+                                            "colormanagement", false)
 {
 
     m_destinationPreviewData = 0L;
 
-//     setHelp("colormanagement.anchor", "digikam");
+    setHelp("colormanagement.anchor", "digikam");
 
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -70,7 +72,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     m_previewWidget = new Digikam::ImageGuideWidget(375, 250, frame, true,
                                                     Digikam::ImageGuideWidget::PickColorMode);
     l->addWidget(m_previewWidget, 0);
-    QWhatsThis::add(m_previewWidget, i18n("<p>Here you can see the image preview after convert it with a color profile</p>"));
+    QWhatsThis::add(m_previewWidget, i18n("<p>Here you can see the image preview after "
+                                          "convert it with a color profile</p>"));
     setPreviewAreaWidget( frame );
     
     // -------------------------------------------------------------------
@@ -154,13 +157,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
                                           " the colors that are out of the printer gamut<p>"));
 
     QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
-    m_embeddProfileBox->setText(i18n("Embedd color profile"));
+    m_embeddProfileBox->setText(i18n("Embedd profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embedd"
-                                             " into the image the selected profile.</p>"));
+                                             " into the image the selected color profile.</p>"));
 
     QCheckBox *m_BPCBox = new QCheckBox(m_optionsBG);
-    m_BPCBox->setText(i18n("Use Black Point Comensation algorithm"));
-    QWhatsThis::add(m_BPCBox, i18n("<p>The black point compensation feature does work in conjunction "
+    m_BPCBox->setText(i18n("Use Black Point"));
+    QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with relative colorimetric intent. Perceptual intent should make no "
                                    "difference, although it affects some profiles.</p>"
                                    "<p>The mechanics are simple. BPC does scale full image across gray "
@@ -186,7 +189,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     QWidget *proofProfiles = new QWidget(m_tabsWidgets);
     QWidget *displayProfiles = new QWidget(m_tabsWidgets);
 
-    m_tabsWidgets->addTab(inProfiles, i18n("Input Profiles"));
+    m_tabsWidgets->addTab(inProfiles, i18n("Input"));
+    QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color Profiles.</p>"));
+
     //---------- First Page Setup ----------------------------------
 
     QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
@@ -217,7 +222,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
 
     //---------- End First Page ------------------------------------
 
-    m_tabsWidgets->addTab(proofProfiles, i18n("Proofing Profiles"));
+    m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
+    QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color Profiles.</p>"));
+
     //---------- Second Page Setup ---------------------------------
 
     QVBoxLayout *secondPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
@@ -240,7 +247,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
 
     //---------- End Second Page -----------------------------------
 
-    m_tabsWidgets->addTab(displayProfiles, i18n("Display Profiles"));
+    m_tabsWidgets->addTab(displayProfiles, i18n("Display"));
+    QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color Profiles.</p>"));
+
     //---------- Third Page Setup ----------------------------------
 
     QVBoxLayout *thirdPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
@@ -281,6 +290,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent): Digikam::ImageDlgBa
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
+    connect(m_previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+
+    // -------------------------------------------------------------
 
     enableButtonOK( false );
 }
@@ -294,6 +307,11 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
        
     delete m_histogramWidget;
     delete m_previewWidget;
+}
+
+void ImageEffect_ICCProof::slotColorSelectedFromTarget( const Digikam::DColor &color )
+{
+    m_histogramWidget->setHistogramGuideByColor(color);
 }
 
 void ImageEffect_ICCProof::slotChannelChanged( int channel )
