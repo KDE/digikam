@@ -78,7 +78,7 @@ DigikamFirstRun::DigikamFirstRun( KConfig* config,
     config_ = config;
     ui = new DigikamFirstFirstRunWidget(this);
     setMainWidget(ui);
-    ui->path->setURL(QDir::homeDirPath() + "/Pictures");
+    ui->path->setURL(QDir::homeDirPath() + i18n("/Pictures"));
     ui->path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
