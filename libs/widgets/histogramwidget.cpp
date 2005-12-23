@@ -33,6 +33,7 @@
 #include <qevent.h>
 #include <qtimer.h>
 #include <qcolor.h>
+#include <qbrush.h>
 #include <qrect.h> 
 #include <qfont.h> 
 #include <qfontmetrics.h> 
@@ -692,7 +693,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
     // Drawing color guide.
 
-    p1.setPen(QPen::QPen(Qt::lightGray, 1, Qt::DotLine));
+    p1.setPen(QPen::QPen(Qt::red, 1, Qt::DotLine));
     int guidePos;
 
     if (m_guideVisible)
@@ -730,7 +731,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
           rect.setBottom(wHeight - 10);
 
-          if (guidePos < wWidth/2)
+          if (xGuide < wWidth/2)
           {
              rect.moveLeft(xGuide + 3);
              p1.drawText(rect, Qt::AlignLeft, string);

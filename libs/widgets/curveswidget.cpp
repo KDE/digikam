@@ -405,9 +405,9 @@ void CurvesWidget::paintEvent( QPaintEvent * )
    p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
    p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
             
-   // Drawing X,Y point position draged by mouse over widget.
+   // Drawing X,Y point position dragged by mouse over widget.
    
-   p1.setPen(QPen::QPen(Qt::black, 1, Qt::DotLine));      
+   p1.setPen(QPen::QPen(Qt::red, 1, Qt::DotLine));      
 
    if (m_xMouseOver != -1 && m_yMouseOver != -1)
    {
