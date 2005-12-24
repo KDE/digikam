@@ -1,10 +1,12 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2004-12-21
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2005 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,13 +20,7 @@
  * 
  * ============================================================ */
 
-#include <kdebug.h>
-
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qdeepcopy.h>
+// C Ansi includes.
 
 extern "C"
 {
@@ -34,10 +30,27 @@ extern "C"
 #include <utime.h>
 }
 
+// QT includes.
+
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qfile.h>
+#include <qstringlist.h>
+#include <qdeepcopy.h>
+
+// KDE includes.
+
+#include <ktempfile.h>
+#include <kdebug.h>
+
+// LibKExif includes.
+
 #include <libkexif/kexifdata.h>
 
-#include "albumsettings.h"
+// Local includes.
 
+#include "dcraw_parse.h"
+#include "albumsettings.h"
 #include "umscamera.h"
 
 UMSCamera::UMSCamera(const QString& model,
@@ -130,17 +143,38 @@ bool UMSCamera::getThumbnail(const QString& folder,
                              QImage& thumbnail)
 {
     m_cancel = false;
-    KExifData exifData;
-    if (!exifData.readFromFile(folder + "/" + itemName))
-    {
-        return false;
-    }
 
-    thumbnail = exifData.getThumbnail();
+    // Trying to get thumbnail from Exif data.
+
+    KExifData exifData;
+    
+    if (exifData.readFromFile(folder + "/" + itemName))
+    {
+        thumbnail = exifData.getThumbnail();
+        if (!thumbnail.isNull())
+           return true;
+    }
+ 
+   // Trying to get thumbnail from RAW file using dcraw parse utility.
+
+    KTempFile thumbFile(QString::null, "camerarawthumb");
+    thumbFile.setAutoDelete(true);
+    Digikam::DcrawParse rawFileParser;
+    
+    if (thumbFile.status() == 0)
+    {
+        if (rawFileParser.getThumbnail(QFile::encodeName(folder + "/" + itemName),
+                                    QFile::encodeName(thumbFile.name())) == 0)
+        {
+            thumbnail.load(thumbFile.name());
+            if (!thumbnail.isNull())
+                return true;
+        }
+    }
 
     // TODO: check for thm files if we didn't manage to get thumbnail from exif
     
-    return true;
+    return false;
 }
 
 bool UMSCamera::getExif(const QString& ,
