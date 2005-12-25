@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-11-17
- * Description :
+ * Description : image properties side bar using data from 
+ *               digiKam database.
  *
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -167,36 +168,59 @@ void ImagePropertiesSideBarDB::populateTags(void)
 
 void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 {
-    if (!m_currentView || !m_currentItem)
-        return;
-    
     setCursor(KCursor::waitCursor());
 
-    int currentItemType = NavigateBarWidget::ItemCurrent;
-    
-    if (m_currentView->firstItem() == m_currentItem) 
-       currentItemType = NavigateBarWidget::ItemFirst;
-    else if (m_currentView->lastItem() == m_currentItem) 
-       currentItemType = NavigateBarWidget::ItemLast;
-       
-    if (tab == m_exifTab && !m_dirtyExifTab)
-       {
-       m_exifTab->setCurrentURL(m_currentURL, currentItemType);
-       m_dirtyExifTab = true;
-       }
-    else if (tab == m_histogramTab && !m_dirtyHistogramTab)
-       {
-       m_histogramTab->setData(m_currentURL, m_currentRect, 
-                               m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit,
-                               currentItemType);
-       m_dirtyHistogramTab = true;
-       }
-    else if (tab == m_desceditTab && !m_dirtyDesceditTab)
-       {
-       m_desceditTab->setItem(m_currentView, m_currentItem, currentItemType);
-       m_dirtyDesceditTab = true;
-       }
-    
+    // No database data available, for example in the case of image editor is 
+    // launched from camera GUI.
+    if (!m_currentView || !m_currentItem)
+    {
+        if (tab == m_exifTab && !m_dirtyExifTab)
+        {
+            m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_dirtyExifTab = true;
+        }
+        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+        {
+            m_histogramTab->setData(m_currentURL, m_currentRect, 
+                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit,
+                                    NavigateBarWidget::ItemCurrent);
+            m_dirtyHistogramTab = true;
+        }
+        else if (tab == m_desceditTab && !m_dirtyDesceditTab)
+        {
+            // Do nothing here. We cannot get data from database !
+            m_desceditTab->setItem();
+            m_dirtyDesceditTab = true;
+        }
+    }
+    else    // Data from database available...
+    {
+        int currentItemType = NavigateBarWidget::ItemCurrent;
+        
+        if (m_currentView->firstItem() == m_currentItem) 
+           currentItemType = NavigateBarWidget::ItemFirst;
+        else if (m_currentView->lastItem() == m_currentItem) 
+            currentItemType = NavigateBarWidget::ItemLast;
+        
+        if (tab == m_exifTab && !m_dirtyExifTab)
+        {
+            m_exifTab->setCurrentURL(m_currentURL, currentItemType);
+            m_dirtyExifTab = true;
+        }
+        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+        {
+            m_histogramTab->setData(m_currentURL, m_currentRect, 
+                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit,
+                                    currentItemType);
+            m_dirtyHistogramTab = true;
+        }
+        else if (tab == m_desceditTab && !m_dirtyDesceditTab)
+        {
+            m_desceditTab->setItem(m_currentView, m_currentItem, currentItemType);
+           m_dirtyDesceditTab = true;
+        }
+    }
+
     setCursor( KCursor::arrowCursor() );
 }
 

@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-11-17
- * Description :
+ * Description : image properties side bar using data from 
+ *               digiKam database.
  *
  * Copyright 2004-2005 by Gilles Caulier
  *
