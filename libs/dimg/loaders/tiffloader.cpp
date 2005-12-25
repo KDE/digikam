@@ -19,6 +19,11 @@
  * 
  * ============================================================ */
 
+// This line must be commented to prevent any latency time
+// when we use threaded image loader interface for each image
+// files io. Uncomment this line only for debugging.
+//#define ENABLE_DEBUG_MESSAGES 
+
 // C ansi includes.
 
 extern "C" 
@@ -44,25 +49,18 @@ namespace Digikam
 
 // To manage Errors/Warnings handling provide by libtiff
 
-extern "C"
+void TIFFLoader::dimg_tiff_warning(const char* module, const char* fmt, va_list ap)
 {
-    static void dimg_tiff_warning(const char* module, const char* fmt, va_list ap)
-    {
-        // This line must be commented to prevent any latency time
-        // when we use threaded image loader interface for each image
-        // files io. Uncomment this line only for debugging.
-        
-        //kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
-    }
-  
-    static void dimg_tiff_error(const char* module, const char* fmt, va_list ap)
-    {
-        // This line must be commented to prevent any latency time
-        // when we use threaded image loader interface for each image
-        // files io. Uncomment this line only for debugging.
-        
-        //kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
-    }
+#ifdef ENABLE_DEBUG_MESSAGES    
+    kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+#endif
+}
+
+void TIFFLoader::dimg_tiff_error(const char* module, const char* fmt, va_list ap)
+{
+#ifdef ENABLE_DEBUG_MESSAGES    
+    kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+#endif
 }
 
 TIFFLoader::TIFFLoader(DImg* image)
@@ -91,11 +89,9 @@ bool TIFFLoader::load(const QString& filePath)
         return false;
     }
 
-    // This line must be commented to prevent any latency time
-    // when we use threaded image loader interface for each image
-    // files io. Uncomment this line only for debugging.
-
-    //TIFFPrintDirectory(tif, stdout, 0);
+#ifdef ENABLE_DEBUG_MESSAGES    
+    TIFFPrintDirectory(tif, stdout, 0);
+#endif
     
     // -------------------------------------------------------------------
     // Get image informations.

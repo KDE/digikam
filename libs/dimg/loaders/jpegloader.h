@@ -65,7 +65,7 @@ private:
         jmp_buf setjmp_buffer;
     };
   
-    static void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo);
+    static void dimg_jpeg_error_exit(j_common_ptr cinfo);
     static void dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level);
     static void dimg_jpeg_output_message(j_common_ptr cinfo);
   

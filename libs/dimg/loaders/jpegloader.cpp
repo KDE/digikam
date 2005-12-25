@@ -59,6 +59,8 @@ extern "C"
 namespace Digikam
 {
 
+// To manage Errors/Warnings handling provide by libjpeg
+
 void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
 {
     dimg_jpeg_error_mgr* myerr = (dimg_jpeg_error_mgr*) cinfo->err;
@@ -122,7 +124,7 @@ bool JPEGLoader::load(const QString& filePath)
     fseek(file, 0L, SEEK_SET);
 
     struct jpeg_decompress_struct cinfo;
-    struct dimg_jpeg_error_mgr  jerr;
+    struct dimg_jpeg_error_mgr    jerr;
 
     // -------------------------------------------------------------------
     // JPEG error handling.

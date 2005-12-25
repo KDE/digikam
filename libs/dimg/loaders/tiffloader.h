@@ -59,6 +59,10 @@ private:
 
     void getTiffTextTag(TIFF* tif, int tag);
     void setTiffTextTag(TIFF* tif, int tag);
+    
+    static void dimg_tiff_warning(const char* module, const char* fmt, va_list ap);
+    static void dimg_tiff_error(const char* module, const char* fmt, va_list ap);
+
         
 };
 

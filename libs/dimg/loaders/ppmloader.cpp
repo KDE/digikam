@@ -20,6 +20,11 @@
  * 
  * ============================================================ */
 
+// This line must be commented to prevent any latency time
+// when we use threaded image loader interface for each image
+// files io. Uncomment this line only for debugging.
+//#define ENABLE_DEBUG_MESSAGES 
+
 // C ansi includes.
 
 extern "C" 
@@ -108,7 +113,9 @@ bool PPMLoader::load(const QString& filePath)
     uchar src[6];
     float fac = 65535.0 / rgbmax;
     
+#ifdef ENABLE_DEBUG_MESSAGES    
     kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+#endif
 
     for (int i = 0; i < width*height; i++)
     { 
