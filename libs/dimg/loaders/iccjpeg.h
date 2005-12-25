@@ -40,10 +40,10 @@
  */
 
 #include <stdio.h>		/* needed to define "FILE", "NULL" */
-#include "jpeglib.h"
+#include <jpeglib.h>
 
 
-/*
+/**
  * This routine writes the given ICC profile data into a JPEG file.
  * It *must* be called AFTER calling jpeg_start_compress() and BEFORE
  * the first call to jpeg_write_scanlines().
@@ -56,7 +56,7 @@ extern void write_icc_profile JPP((j_compress_ptr cinfo,
 				   unsigned int icc_data_len));
 
 
-/*
+/**
  * Reading a JPEG file that may contain an ICC profile requires two steps:
  *
  * 1. After jpeg_create_decompress() but before jpeg_read_header(),
@@ -68,14 +68,14 @@ extern void write_icc_profile JPP((j_compress_ptr cinfo,
  */
 
 
-/*
+/**
  * Prepare for reading an ICC profile
  */
 
 extern void setup_read_icc_profile JPP((j_decompress_ptr cinfo));
 
 
-/*
+/**
  * See if there was an ICC profile in the JPEG file being read;
  * if so, reassemble and return the profile data.
  *

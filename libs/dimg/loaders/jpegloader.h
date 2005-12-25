@@ -21,6 +21,14 @@
 #ifndef JPEGLOADER_H
 #define JPEGLOADER_H
 
+// C ansi includes.
+
+extern "C" 
+{
+#include <setjmp.h>
+#include <jpeglib.h>
+}
+
 // Qt includes.
 
 #include <qstring.h>
@@ -47,7 +55,20 @@ public:
     virtual bool hasAlpha()   const { return false; }
     virtual bool sixteenBit() const { return false; }
     virtual bool isReadOnly() const { return false; };
+
+private:
+
+    // To manage Errors/Warnings handling provide by libjpeg
     
+    struct dimg_jpeg_error_mgr : public jpeg_error_mgr
+    {
+        jmp_buf setjmp_buffer;
+    };
+  
+    static void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo);
+    static void dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level);
+    static void dimg_jpeg_output_message(j_common_ptr cinfo);
+  
 };
 
 }  // NameSpace Digikam

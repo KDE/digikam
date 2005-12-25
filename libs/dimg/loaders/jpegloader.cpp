@@ -28,14 +28,17 @@
 
 #define XMD_H 
 
+// This line must be commented to prevent any latency time
+// when we use threaded image loader interface for each image
+// files io. Uncomment this line only for debugging.
+//#define ENABLE_DEBUG_MESSAGES 
+
 // C ansi includes.
 
 extern "C" 
 {
 #include <stdio.h>
 #include <stdlib.h>
-#include <setjmp.h>
-#include <jpeglib.h>
 #include "iccjpeg.h"
 }
 
@@ -56,54 +59,38 @@ extern "C"
 namespace Digikam
 {
 
-// To manage Errors/Warnings handling provide by libjpeg
-
-struct dimg_jpeg_error_mgr : public jpeg_error_mgr
+void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
 {
-    jmp_buf setjmp_buffer;
-};
+    dimg_jpeg_error_mgr* myerr = (dimg_jpeg_error_mgr*) cinfo->err;
 
-extern "C"
+    char buffer[JMSG_LENGTH_MAX];
+    (*cinfo->err->format_message)(cinfo, buffer);
+
+#ifdef ENABLE_DEBUG_MESSAGES
+    kdDebug() << k_funcinfo << buffer << endl;
+#endif
+
+    longjmp(myerr->setjmp_buffer, 1);
+}
+
+void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
 {
-    static void dimg_jpeg_error_exit(j_common_ptr cinfo)
-    {
-        dimg_jpeg_error_mgr* myerr = (dimg_jpeg_error_mgr*) cinfo->err;
+    char buffer[JMSG_LENGTH_MAX];
+    (*cinfo->err->format_message)(cinfo, buffer);
 
-        char buffer[JMSG_LENGTH_MAX];
-        (*cinfo->err->format_message)(cinfo, buffer);
+#ifdef ENABLE_DEBUG_MESSAGES
+    kdDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+#endif
+}
 
-        // This line must be commented to prevent any latency time
-        // when we use threaded image loader interface for each image
-        // files io. Uncomment this line only for debugging.
-        
-        //kdDebug() << k_funcinfo << buffer << endl;
+void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
+{
+    char buffer[JMSG_LENGTH_MAX];
+    (*cinfo->err->format_message)(cinfo, buffer);
 
-        longjmp(myerr->setjmp_buffer, 1);
-    }
-
-    static void dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
-    {
-        char buffer[JMSG_LENGTH_MAX];
-        (*cinfo->err->format_message)(cinfo, buffer);
-
-        // This line must be commented to prevent any latency time
-        // when we use threaded image loader interface for each image
-        // files io. Uncomment this line only for debugging.
-
-        //kdDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
-    }
-
-    static void dimg_jpeg_output_message(j_common_ptr cinfo)
-    {
-        char buffer[JMSG_LENGTH_MAX];
-        (*cinfo->err->format_message)(cinfo, buffer);
-
-        // This line must be commented to prevent any latency time
-        // when we use threaded image loader interface for each image
-        // files io. Uncomment this line only for debugging.
-
-        //kdDebug() << k_funcinfo << buffer << endl;
-    }
+#ifdef ENABLE_DEBUG_MESSAGES
+    kdDebug() << k_funcinfo << buffer << endl;
+#endif
 }
 
 JPEGLoader::JPEGLoader(DImg* image)
@@ -145,7 +132,7 @@ bool JPEGLoader::load(const QString& filePath)
     cinfo.err->emit_message   = dimg_jpeg_emit_message;
     cinfo.err->output_message = dimg_jpeg_output_message;
 
-    // If an error occurs during writing, libjpeg will jump here
+    // If an error occurs during reading, libjpeg will jump here
 
     if (setjmp(jerr.setjmp_buffer)) 
     {
