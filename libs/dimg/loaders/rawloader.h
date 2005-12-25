@@ -21,6 +21,14 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
+// C ansi includes.
+
+extern "C" 
+{
+#include <setjmp.h>
+#include <jpeglib.h>
+}
+
 // Local includes.
 
 #include "dimgloader.h"
@@ -50,13 +58,23 @@ private:
     
 private:
 
+    // To manage Errors/Warnings handling provide by libjpeg
+    
+    struct dimg_jpeg_error_mgr : public jpeg_error_mgr
+    {
+        jmp_buf setjmp_buffer;
+    };
+
     // Methods to load RAW image using external dcraw instance.
+
     bool load8bits(const QString& filePath);
     bool load16bits(const QString& filePath);
 
-    // Method to load RAW image using dcraw include in digiKam.
-    bool loadDCraw(const QString& filePath);
-    
+    // Get ICC profiles from RAW files. Any RAW file formats are JPEG like,
+    // anothers are TIFF like.
+
+    bool getICCProfileFromJPEG(const QString& filePath);
+    bool getICCProfileFromTIFF(const QString& filePath);
 };
     
 }  // NameSpace Digikam

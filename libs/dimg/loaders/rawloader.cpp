@@ -19,11 +19,18 @@
  *
  * ============================================================ */
 
+// This line must be commented to prevent any latency time
+// when we use threaded image loader interface for each image
+// files io. Uncomment this line only for debugging.
+//#define ENABLE_DEBUG_MESSAGES 
+
 extern "C"
 {
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
+#include "iccjpeg.h"
 }
 
 // QT includes.
@@ -72,13 +79,16 @@ bool RAWLoader::load8bits(const QString& filePath)
     // -a : Use automatic white balance
     command  = "dcraw -c -h -2 -w -a ";
     command += QFile::encodeName( KProcess::quote( filePath ) );
+
+#ifdef ENABLE_DEBUG_MESSAGES
     kdDebug() << "Running dcraw command : " << command << endl;
+#endif
 
     FILE* f = popen( command.data(), "r" );
 
     if ( !f )
     {
-        kdDebug() << "dcraw program unvailable." << endl;
+        kdDebug() << "dcraw program unavailable." << endl;
         return false;
     }
 
@@ -154,13 +164,16 @@ bool RAWLoader::load16bits(const QString& filePath)
     command += "'";
     command += QFile::encodeName( filePath );
     command += "'";
+
+#ifdef ENABLE_DEBUG_MESSAGES
     kdDebug() << "Running dcraw command " << command << endl;
+#endif
 
     FILE* f = popen( command.data(), "r" );
 
     if ( !f )
     {
-        kdDebug() << "dcraw program unvailable." << endl;
+        kdDebug() << "dcraw program unavailable." << endl;
         return false;
     }
 
@@ -214,7 +227,67 @@ bool RAWLoader::load16bits(const QString& filePath)
     imageData()   = (uchar *)data;
     imageSetAttribute("format", "RAW");
 
+/*
+    if (!getICCProfileFromTIFF(filePath))
+       getICCProfileFromJPEG(filePath);
+*/
+
     return true;
+}
+
+bool RAWLoader::getICCProfileFromJPEG(const QString& filePath)
+{
+    FILE *file = fopen(QFile::encodeName(filePath), "rb");
+    if (!file)
+        return false;
+
+    fseek(file, 0L, SEEK_SET);
+    struct jpeg_decompress_struct cinfo;
+    struct dimg_jpeg_error_mgr    jerr;
+
+    // -------------------------------------------------------------------
+    // JPEG error handling.
+
+    cinfo.err = jpeg_std_error(&jerr);
+
+    // If an error occurs during reading, libjpeg will jump here
+
+    if (setjmp(jerr.setjmp_buffer)) 
+    {
+        jpeg_destroy_decompress(&cinfo);
+        fclose(file);
+        return false;
+    }
+
+    jpeg_create_decompress(&cinfo);
+    jpeg_stdio_src(&cinfo, file);
+    jpeg_read_header(&cinfo, true);
+    jpeg_start_decompress(&cinfo);
+
+    JOCTET *profile_data=NULL;
+    uint    profile_size;
+
+    read_icc_profile (&cinfo, &profile_data, &profile_size);
+
+    if (profile_data != NULL) 
+    {
+        QByteArray profile_rawdata = imageICCProfil();
+        profile_rawdata.resize(profile_size);
+        memcpy(profile_rawdata.data(), profile_data, profile_size);
+        free (profile_data);
+    }
+
+    jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
+
+    fclose(file);    
+ 
+    return true;
+}
+
+bool RAWLoader::getICCProfileFromTIFF(const QString& filePath)
+{
+    return false;
 }
 
 bool RAWLoader::save(const QString& /*filePath*/)
