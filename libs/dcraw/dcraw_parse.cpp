@@ -34,6 +34,10 @@ extern "C"
 #include <cstdio>
 #include <cstdlib>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
  
 #include "dcraw_parse.h"
@@ -1251,17 +1255,17 @@ int DcrawParse::getThumbnail(const char* infile, const char* outfile)
   parse_mos(0);
   parse_jpeg(0);
   if (model[0] == 0) {
-    fprintf (stderr, "unsupported file format.\n");
+    kdDebug() << "unsupported file format." << endl;
     return 1;
   }
-  fprintf (stderr, "Findings for %s:\n", infile);
-  fprintf (stderr, "Make   is \"%s\"\n", make);
-  fprintf (stderr, "Model  is \"%s\"\n", model);
+  kdDebug() << "Findings for " << infile << ":" << endl;
+  kdDebug() << "Make is \"" << make << "\"" << endl;
+  kdDebug() << "Model is \"" << model << "\"" << endl;
   if (model2[0])
-    fprintf (stderr, "Model2 is \"%s\"\n", model2);
+    kdDebug() << "Model2 is \"" << model2 << "\"" << endl;
 
   if (!thumb_length) {
-    fprintf (stderr, "Thumbnail image not found\n");
+    kdDebug() << "Thumbnail image not found" << endl;
     return 1;
   }
   tfp = fopen (outfile, "wb");
@@ -1286,7 +1290,7 @@ int DcrawParse::getThumbnail(const char* infile, const char* outfile)
 dng_skip:
   thumb = (char *) malloc(thumb_length);
   if (!thumb) {
-    fprintf (stderr, "Cannot allocate %d bytes!!\n", thumb_length);
+    kdDebug() << "Cannot allocate " << thumb_length << " bytes!!!" << endl;
     return 1;
   }
   fseek (ifp, thumb_offset, SEEK_SET);
@@ -1294,7 +1298,7 @@ dng_skip:
   if (thumb_layers && !is_dng) {
     rgb = (char *) malloc(thumb_length);
     if (!rgb) {
-      fprintf (stderr, "Cannot allocate %d bytes!!\n", thumb_length);
+      kdDebug() << "Cannot allocate " << thumb_length << " bytes!!!" << endl;
       return 1;
     }
     lsize = thumb_length/3;
