@@ -225,6 +225,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
          it != urlList.end(); ++it)
     {
         new Digikam::ThumbBarItem(m_bar, *it);
+        m_lastOpenedDirectory=(*it);
     }
 
     setAutoSaveSettings();
@@ -270,13 +271,13 @@ void ShowFoto::setupActions()
     m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
                        actionCollection(), "open_file");
     
-    m_openFilesInFolderAction = new KAction(i18n("Open all files in folders"),
+    m_openFilesInFolderAction = new KAction(i18n("Open folder"),
                                             "folder_image",
                                             CTRL+SHIFT+Key_O,
                                             this,
                                             SLOT(slotOpenFilesInFolder()),
                                             actionCollection(),
-                                            "open_files_in_folder");
+                                            "open_folder");
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
 
@@ -614,7 +615,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file format type mimes supported by dcraw program.
     mimetypes.append (" image/x-raw");
     
-    KURL::List urls =  KFileDialog::getOpenURLs(KGlobalSettings::documentPath(),
+    KURL::List urls =  KFileDialog::getOpenURLs(m_lastOpenedDirectory.path(),
                                                 mimetypes,
                                                 this,
                                                 i18n("Open Images"));
@@ -626,10 +627,12 @@ void ShowFoto::slotOpenFile()
              it != urls.end(); ++it)
         {
             new Digikam::ThumbBarItem(m_bar, *it);
+            m_lastOpenedDirectory=(*it);
         }
-
         toggleActions(true);
     }
+    
+    
 }
 
 void ShowFoto::slotFirst()
@@ -1592,7 +1595,7 @@ void ShowFoto::slotOpenFilesInFolder()
     if (!promptUserSave())
         return;
 
-    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.path(), 
+    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
                                                this, i18n("Open Images From Directory")));
 
     if (!url.isEmpty())
