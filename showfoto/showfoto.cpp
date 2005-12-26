@@ -220,6 +220,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
          it != urlList.end(); ++it)
     {
         new Digikam::ThumbBarItem(m_bar, *it);
+        m_lastOpenedDirectory=(*it);
     }
 
     resize(640,480);
@@ -260,7 +261,7 @@ void ShowFoto::setupActions()
                                             this,
                                             SLOT(slotOpenFilesInFolder()),
                                             actionCollection(),
-                                            "open_files_in_folder");
+                                            "open_folder");
       
     KStdAction::quit(this, SLOT(close()),
                      actionCollection());
@@ -590,7 +591,7 @@ void ShowFoto::slotOpenFile()
     // Added RAW file format type mimes supported by dcraw program.
     mimetypes.append (" image/x-raw");
       
-    KURL::List urls =  KFileDialog::getOpenURLs(KGlobalSettings::documentPath(),
+    KURL::List urls =  KFileDialog::getOpenURLs(m_lastOpenedDirectory.path(),
                                                 mimetypes,
                                                 this,
                                                 i18n("Open Images"));
@@ -602,6 +603,7 @@ void ShowFoto::slotOpenFile()
              it != urls.end(); ++it)
         {
             new Digikam::ThumbBarItem(m_bar, *it);
+            m_lastOpenedDirectory=(*it);
         }
 
         toggleActions(true);
@@ -1570,7 +1572,7 @@ void ShowFoto::slotOpenFilesInFolder()
     if (!promptUserSave())
         return;
 
-    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.path(), 
+    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
                                                this, i18n("Open Images From Directory")));
 
     if (!url.isEmpty())

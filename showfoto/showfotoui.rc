@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="3" name="showfoto" >
+<gui version="4" name="showfoto" >
 
 <MenuBar>
 
  <Menu name="file" >
    <text>&amp;File</text>
      <Action name="open_file" />
-     <Action name="open_files_in_folder" />
+     <Action name="open_folder" />
      <Separator/>
      <Action name="file_bwd" /> 
      <Action name="file_fwd" /> 
