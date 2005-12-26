@@ -28,6 +28,8 @@
 
 #include "sqlitedb.h"
 
+#include "config.h" // Needed for NFS_HACK
+
 SqliteDB::SqliteDB()
 {
     m_db = 0;

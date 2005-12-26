@@ -25,6 +25,8 @@
 #include <qfileinfo.h>
 
 #include <kdebug.h>
+#include <kstandarddirs.h>
+#include <kio/global.h>
 #include <iostream>
 
 #include "albumdb.h"
@@ -85,9 +87,15 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
 {
     QString libraryPath = QDir::cleanDirPath(_libraryPath);
 
-    AlbumDB db3;
-    db3.setDBPath(libraryPath + "/digikam3.db");
+    QString newDB= libraryPath + "/digikam3.db";
+
+#ifdef NFS_HACK
+    newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(newDB)));
+    kdDebug() << "NFS: " << newDB << endl;
+#endif
     
+    AlbumDB db3;
+    db3.setDBPath(newDB);
     if (!db3.isValid())
     {
 	kdWarning() << "Failed to open new Album Database" << endl;
@@ -97,7 +105,15 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     if (db3.getSetting("UpgradedFromSqlite2") == "yes")
 	return true;
 
-    QFileInfo fi(libraryPath + "/digikam.db");
+    QString dbPath = libraryPath + "/digikam.db";
+
+#ifdef NFS_HACK
+    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanDirPath(dbPath)));
+    kdDebug() << "From NFS: " << dbPath << endl;
+#endif
+        
+    QFileInfo fi(dbPath);
+
     if (!fi.exists())
     {
 	kdDebug() << "No old database present. Not upgrading" << endl;
@@ -106,7 +122,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     }
 
     AlbumDB_Sqlite2 db2;
-    db2.setDBPath(libraryPath + "/digikam.db");
+    db2.setDBPath( dbPath );
     if (!db2.isValid())
     {
 	kdDebug() << "Failed to initialize Old Album Database" << endl;
