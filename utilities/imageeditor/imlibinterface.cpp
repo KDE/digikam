@@ -224,11 +224,11 @@ bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
         
         // run dcraw with options:
         // -c : write to stdout
-        // -h : Half-size color image (3x faster than -q)
+        // -q : Use simple bilinear interpolation for quick results
         // -2 : 8bit ppm output
         // -w : Use camera white balance, if possible  
         // -a : Use automatic white balance
-        command  = "dcraw -c -h -2 -w -a ";
+        command  = "dcraw -c -q -2 -w -a ";
         command += QFile::encodeName( KProcess::quote( filename ) );
         kdWarning() << "Running dcraw command : " << command << endl;
     
