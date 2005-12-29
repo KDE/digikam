@@ -74,6 +74,7 @@
 #include "digikamapp.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
+#include "scanlib.h"
 
 DigikamApp::DigikamApp(bool detectCamera)
           : KMainWindow( 0, "Digikam" )
@@ -570,6 +571,10 @@ void DigikamApp::setupActions()
                                   actionCollection(), "search_advanced");
     findAction->setText(i18n("Advanced Search..."));
     findAction->setShortcut("Ctrl+Alt+F");
+
+    new KAction(i18n("Scan for New Images"), "reload_page", 0,
+                this, SLOT(slotDatabaseRescan()), actionCollection(), 
+                "database_rescan");
 
     // -----------------------------------------------------------
 
@@ -1177,6 +1182,12 @@ void DigikamApp::updateDeleteTrashMenu()
         mImageDeleteAction->setText(i18n("Delete"));
         mImageDeleteAction->setIcon("editdelete");
     }
+}
+
+void DigikamApp::slotDatabaseRescan()
+{
+    ScanLib sLib;
+    sLib.startScan();
 }
 
 DigikamApp* DigikamApp::m_instance = 0;

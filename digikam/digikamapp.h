@@ -212,6 +212,7 @@ private slots:
     void slotEditKeys();
     void slotConfToolbars();
     void slotToggleFullScreen();
+    void slotDatabaseRescan();
 
     void slotChangeTheme(const QString& theme);
 };
