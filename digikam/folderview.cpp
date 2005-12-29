@@ -314,8 +314,8 @@ void FolderView::loadViewState()
     }
     
     FolderItem *item;    
-    QListViewItemIterator it(this);
-    for( ; it.current(); ++it)
+    QListViewItemIterator it(this->lastItem());
+    for( ; it.current(); --it)
     {
         item = dynamic_cast<FolderItem*>(it.current());
         if(!item)
