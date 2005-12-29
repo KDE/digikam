@@ -355,6 +355,19 @@ KURL::List DigikamImageCollection::images()
         {
             return imagesFromTAlbum(dynamic_cast<TAlbum*>(album_));
         }
+        else if (album_->type() == Album::DATE || 
+                 album_->type() == Album::SEARCH)
+        {
+            AlbumItemHandler* handler =
+                    AlbumManager::instance()->getItemHandler();
+
+            if (handler)
+            {
+                return handler->allItems();
+            }
+
+            return KURL::List();
+       }
         else
         {
             kdWarning() << k_funcinfo
