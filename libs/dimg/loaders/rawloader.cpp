@@ -73,11 +73,11 @@ bool RAWLoader::load8bits(const QString& filePath)
 
     // run dcraw with options:
     // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
+    // -q : Use simple bilinear interpolation for quick results
     // -2 : 8bit ppm output
     // -w : Use camera white balance, if possible  
     // -a : Use automatic white balance
-    command  = "dcraw -c -h -2 -w -a ";
+    command  = "dcraw -c -q -2 -w -a ";
     command += QFile::encodeName( KProcess::quote( filePath ) );
 
 #ifdef ENABLE_DEBUG_MESSAGES
@@ -156,11 +156,11 @@ bool RAWLoader::load16bits(const QString& filePath)
 
     // run dcraw with options:
     // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
+    // -q : Use simple bilinear interpolation for quick results
     // -4 : 16bit ppm output
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
-    command  = "dcraw -c -h -4 -w -a ";
+    command  = "dcraw -c -q -4 -w -a ";
     command += "'";
     command += QFile::encodeName( filePath );
     command += "'";
