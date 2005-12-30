@@ -115,7 +115,7 @@ void (*write_fun)(FILE *) = write_ppm;
 jmp_buf failure;
 
 #ifdef USE_LCMS
-#include <lcms.h>
+#include LCMS_HEADER
 int profile_offset, profile_length;
 #endif
 

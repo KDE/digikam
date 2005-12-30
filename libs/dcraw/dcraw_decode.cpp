@@ -38,7 +38,7 @@ extern "C"
 #include <limits.h>
 #include <utime.h>
 #include <netinet/in.h>
-#include <lcms.h>
+#include LCMS_HEADER
 }
 
 // C++ includes
