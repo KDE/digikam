@@ -85,48 +85,33 @@ have_lcms_header='no'
 KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
 if test "$have_lcms_header" = 'yes'
 then
-    LCMS_LIBS='-llcms'
     AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
 else
     # Alternative! Debian does it this way...
     KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
     if test "$have_lcms_header" = 'yes'
     then
-        LCMS_LIBS='-llcms'
         AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
+    fi
+fi
 
-        # Try to find the full path of lcms.h
-        for a in $includedir $prefix/include /usr/include /usr/local/include $kde_extra_includes; do
-            for b in lcms.h lcms/lcms.h ; do
-                if test -d "$a"  && test -f "$a/$b" ; then
-                    LCMSHDR="$a/$b"
-                fi
-            done
-        done
-        # Check if lcms.h was found. If not then it means that we didn't search
-        # the right dirs since the kde check already found a usable lcms.h
-        if test -n "$LCMSHDR" ; then
-            # Get lcms version
-            lcms_ver_line=`cat $LCMSHDR | grep '^// Version' `
-            if test -z "$lcms_ver_line" ; then
-                # Some versions of lcms have the version in /* */
-                lcms_ver_line=`cat $LCMSHDR | grep '^/\* Version' `
-            fi
-            lcms_ver=`echo "$lcms_ver_line" | head -n 1 | cut -d ' ' -f 3 `
- 
-            # Get major and minor version numbers
-            lcms_var_maj=`echo $lcms_ver | cut -d . -f 1`
- 
-            # Some versions have a character attached to the end of minor version
-            lcms_var_min=`echo $lcms_ver | cut -d . -f 2 | sed 's,[^0-9],,g'`
- 
-            if test "$lcms_var_maj" -gt 1 || test "$lcms_var_min" -lt 9 ; then
-                LCMS_LIBS=''
-        fi
-    fi
-    else
-        LCMS_LIBS=''
-    fi
+LCMS_LIBS=''
+have_lcms='no'
+if test "$have_lcms_header" = 'yes'
+then
+    saved_libs=$LIBS
+    LIBS="$LIBS -llcms"
+    AC_TRY_LINK([
+#define inline __inline /* gcc is in ansi mode */
+#include LCMS_HEADER
+#if LCMS_VERSION < 112
+choke!
+#endif
+], [
+cmsOpenProfileFromFile("foo", "r");
+],
+        [LCMS_LIBS='-llcms'; have_lcms='yes'])
+    LIBS=$saved_libs
 fi
 
 if test -z "$LCMS_LIBS"; then
@@ -134,6 +119,7 @@ if test -z "$LCMS_LIBS"; then
 fi
 
 AC_SUBST(LCMS_LIBS)
+
 
 # -------------------------------------------------------
 # Check endianness
@@ -322,53 +308,6 @@ if test "x$have_png" != "xyes"; then
   AC_WARN([digiKam requires libpng >= 1.2.7; digiKam will not be compiled.])
   DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
 fi  
-
-#------------------------------------------------------------------
-# Check for lcms (backported from krita)
-#------------------------------------------------------------------
-
-AC_MSG_CHECKING([for lcms >= 1.12])
-
-have_lcms_header='no'
-KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
-if test "$have_lcms_header" = 'yes'
-then
-        AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
-
-	echo "#include <lcms/lcms.h>" > conftest.$ac_ext
-	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
-	echo "#error Need lcms < 1.12" >> conftest.$ac_ext
-	echo "#endif" >> conftest.$ac_ext
-	echo "int main() {}" >> conftest.$ac_ext
-
-else
-        # Alternative! Debian does it this way...
-	KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
-
-       	AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
-
-	echo "#include <lcms.h>" > conftest.$ac_ext
-	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
-	echo "#error Need lcms < 1.12" >> conftest.$ac_ext
-	echo "#endif" >> conftest.$ac_ext
-	echo "int main() {}" >> conftest.$ac_ext
-fi
-
-ac_link='$LIBTOOL_SHELL --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext -llcms 1>&5'
-
-if AC_TRY_EVAL(ac_link) && test -s conftest; then
-    	AC_MSG_RESULT(yes)
-        have_lcms="yes"
-        LCMS_LIBS="-llcms"
-else
-	AC_MSG_RESULT(no)
-	have_lcms="no"
-	LCMS_LIBS=""
-        AC_WARN([LCMS library not found, digiKam will not be compiled.])
-        DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi
-
-AC_SUBST(LCMS_LIBS)
 
 #------------------------------------------------------------------
 # NFS is Evil (sqlite makes use of file locking for allowing 
