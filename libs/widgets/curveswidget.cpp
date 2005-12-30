@@ -400,10 +400,12 @@ void CurvesWidget::paintEvent( QPaintEvent * )
    // Drawing black/middle/highlight tone grid separators.
       
    p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-   p1.drawLine(wWidth/3, 0, wWidth/3, wHeight);                 
-   p1.drawLine(2*wWidth/3, 0, 2*wWidth/3, wHeight);                 
-   p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
-   p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
+   p1.drawLine(wWidth/4, 0, wWidth/4, wHeight);                 
+   p1.drawLine(wWidth/2, 0, wWidth/2, wHeight);                 
+   p1.drawLine(3*wWidth/4, 0, 3*wWidth/4, wHeight);                 
+   p1.drawLine(0, wHeight/4, wWidth, wHeight/4);                 
+   p1.drawLine(0, wHeight/2, wWidth, wHeight/2);                 
+   p1.drawLine(0, 3*wHeight/4, wWidth, 3*wHeight/4);     
             
    // Drawing X,Y point position dragged by mouse over widget.
    
