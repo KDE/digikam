@@ -370,9 +370,9 @@ bool JPEGLoader::save(const QString& filePath)
     jpeg_create_compress(&cinfo);
     jpeg_stdio_dest(&cinfo, file);
 
-    uint&              w = imageWidth();
-    uint&              h = imageHeight();
-    unsigned char*& data = imageData();
+    uint&              w   = imageWidth();
+    uint&              h   = imageHeight();
+    unsigned char*& data   = imageData();
     
     cinfo.image_width      = w;
     cinfo.image_height     = h;
@@ -438,23 +438,48 @@ bool JPEGLoader::save(const QString& filePath)
     
     uchar* line   = new uchar[w*3];
     uchar* dstPtr = 0;
-    uchar* srcPtr = data;
 
-    for (uint j=0; j<h; j++)
+    if (!imageSixteenBit())     // 8 bits image.
     {
-        dstPtr = line;
-        
-        for (uint i = 0; i < w; i++)
+        uchar* srcPtr = data;
+
+        for (uint j=0; j<h; j++)
         {
-            dstPtr[2] = srcPtr[0];
-            dstPtr[1] = srcPtr[1];
-            dstPtr[0] = srcPtr[2];
+            dstPtr = line;
+            
+            for (uint i = 0; i < w; i++)
+            {
+                dstPtr[2] = srcPtr[0];
+                dstPtr[1] = srcPtr[1];
+                dstPtr[0] = srcPtr[2];
+        
+                srcPtr += 4;
+                dstPtr += 3;
+            }
 
-            srcPtr += 4;
-            dstPtr += 3;
+            jpeg_write_scanlines(&cinfo, &line, 1);
         }
+    }
+    else
+    {
+        unsigned short* srcPtr = (unsigned short*)data;
 
-        jpeg_write_scanlines(&cinfo, &line, 1);
+        for (uint j=0; j<h; j++)
+        {
+            dstPtr = line;
+            
+            for (uint i = 0; i < w; i++)
+            {
+                dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;
+                dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;
+                dstPtr[0] = (srcPtr[2] * 255UL)/65535UL;
+        
+                srcPtr += 4;
+                dstPtr += 3;
+            }
+    
+            jpeg_write_scanlines(&cinfo, &line, 1);
+        }
     }
 
     delete [] line;
