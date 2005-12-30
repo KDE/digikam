@@ -34,6 +34,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qtimer.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -703,7 +704,22 @@ bool ShowFoto::saveAs()
     }
 
     KURL saveAsURL = saveDialog.selectedURL();
+
+    // Check if target image format have been selected from Combo List of SaveAs dialog.
     QString format = KImageIO::typeForMime(saveDialog.currentMimeFilter());
+
+    if (format.isEmpty())
+    {
+        // Else, check if target image format have been add to target image file name using extension.
+        QFileInfo fi(saveAsURL.path());
+        format = fi.extension(false);
+
+        if (format.isEmpty())
+        {
+            // Else, the format is empty then file format is same as that of the original file.
+            format = QImageIO::imageFormat(url.path());
+        }
+    }
 
     if (!saveAsURL.isValid())
     {
