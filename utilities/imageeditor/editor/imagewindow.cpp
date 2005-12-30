@@ -1072,12 +1072,21 @@ bool ImageWindow::saveAs()
     }
 
     KURL newURL = imageFileSaveDialog.selectedURL();
+
+    // Check if target image format have been selected from Combo List of SaveAs dialog.
     QString format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
+
     if (format.isEmpty())
     {
-        // if the format is empty then file format is same as that of the
-        // original file
-        format = QImageIO::imageFormat(m_urlCurrent.path());
+        // Else, check if target image format have been add to target image file name using extension.
+        QFileInfo fi(newURL.path());
+        format = fi.extension(false);
+
+        if (format.isEmpty())
+        {
+            // Else, the format is empty then file format is same as that of the original file.
+            format = QImageIO::imageFormat(m_urlCurrent.path());
+        }
     }
     
     if (!newURL.isValid())
