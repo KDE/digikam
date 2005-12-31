@@ -1049,9 +1049,7 @@ bool ImageWindow::saveAs()
     // FIXME : Add 16 bits file formats and others files format like TIFF not supported by kimgio.
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
-
     mimetypes.append(" image/tiff");
-
     kdDebug () << "mimetypes=" << mimetypes << endl;    
 
     KFileDialog imageFileSaveDialog(m_urlCurrent.directory(),
@@ -1076,16 +1074,39 @@ bool ImageWindow::saveAs()
     // Check if target image format have been selected from Combo List of SaveAs dialog.
     QString format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
 
-    if (format.isEmpty())
+    if ( format.isEmpty() )
     {
         // Else, check if target image format have been add to target image file name using extension.
+
         QFileInfo fi(newURL.path());
         format = fi.extension(false);
-
-        if (format.isEmpty())
+        
+        if ( format.isEmpty() )
         {
-            // Else, the format is empty then file format is same as that of the original file.
+            // If format is empty then file format is same as that of the original file.
             format = QImageIO::imageFormat(m_urlCurrent.path());
+        }
+        else
+        {
+            // Else, check if format from file name extension is include on file mime type list.
+
+            QString imgExtPattern;
+            QStringList imgExtList = QStringList::split(" ", mimetypes);
+            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; it++)
+            {    
+                imgExtPattern.append (KImageIO::typeForMime(*it));
+                imgExtPattern.append (" ");
+            }    
+            if ( imgExtPattern.contains("*.TIFF") ) imgExtPattern.append (" *.TIF");
+            if ( imgExtPattern.contains("*.JPEG") ) imgExtPattern.append (" *.JPG");
+    
+            if ( !imgExtPattern.contains( format.upper() ) )
+            {
+                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported!")
+                        .arg(format));
+                kdWarning() << k_funcinfo << "target image file format " << format << " unsupported!" << endl;
+                return false;
+            }
         }
     }
     
