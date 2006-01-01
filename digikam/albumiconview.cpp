@@ -879,7 +879,9 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     QString currentFileExtension =
         item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper();
+                          settings->getImageFileFilter().upper() + 
+                          settings->getRawFileFilter().lower() +
+                          settings->getRawFileFilter().upper();
 
     // If the current item isn't an image file.
     if ( !imagefilter.contains(currentFileExtension) )
