@@ -1,4 +1,5 @@
 INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
+              -I$(top_srcdir)/digikam/libs/dcraw \
               -I$(top_srcdir)/digikam/digikam \
 		$(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
 METASOURCES = AUTO  

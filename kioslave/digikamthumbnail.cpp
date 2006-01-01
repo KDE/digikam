@@ -74,6 +74,7 @@ extern "C"
 
 // Local includes
 
+#include "dcraw_parse.h"
 #include "exiforientation_p.h"
 #include "digikamthumbnail.h"
 
@@ -81,11 +82,6 @@ extern "C"
 #include <Imlib2.h>
 
 using namespace KIO;
-
-extern "C"
-{
-int dcraw_identify(const char* infile, const char* outfile);
-}
 
 static void exifRotate(const QString& filePath, QImage& thumb)
 {
@@ -594,22 +590,26 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
-    // first try with Dave Coffin's "parse" utility
+    // Trying to get embedded thumbnail from RAW file using dcraw parse utility.
 
     kdDebug() << k_funcinfo << "Parsing file: " << path << endl;
 
     KTempFile thumbFile(QString::null, "rawthumb");
     thumbFile.setAutoDelete(true);
+    Digikam::DcrawParse rawFileParser;
+    
     if (thumbFile.status() == 0)
     {
-        if (dcraw_identify(QFile::encodeName(path),
-                           QFile::encodeName(thumbFile.name())) == 0)
+        if (rawFileParser.getThumbnail(QFile::encodeName(path),
+                                       QFile::encodeName(thumbFile.name())) == 0)
         {
             image.load(thumbFile.name());
             if (!image.isNull())
                 return true;
         }
     }
+
+    // Else using dcraw instance to compute thumbnail.
     
     QCString command;
 

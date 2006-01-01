@@ -45,10 +45,23 @@ class DIGIKAM_EXPORT ImlibInterface : public QObject
     
 public:
 
+    enum FORMAT
+    {
+        NONE_IMAGE = 0,
+        JPEG_IMAGE,
+        PNG_IMAGE,
+        RAW_IMAGE,
+        TIFF_IMAGE,
+        QIMAGE_IMAGE
+    };
+
+public:
+    
     static ImlibInterface* instance();
 
     ~ImlibInterface();
 
+    int  fileFormat(const QString& filePath);
     bool load(const QString& filename, bool *isReadOnly);
     void preload(const QString& filename);
     void setExifOrient(bool exifOrient);
