@@ -59,27 +59,6 @@
 
 #include LCMS_HEADER
 
-//--Signatures for device class-------------
-/*
-    0x73636E72L     input
-    0x6D6E7472L     monitor
-    0x70727472L     output
-    0x6C696E6BL     link
-    0x61627374L     abstract
-    0x73706163L     color space
-    0x6e6d636cL     named color
-*/
-
-#define INPUT_ICC        1935896178
-#define MONITOR_ICC      1835955314
-#define OUTPUT_ICC       1886549106
-#define LINK_ICC         1818848875
-#define ABST_ICC         1633842036
-#define SPAC_ICC         1936744803
-#define NMD_COLOR_ICC    1852662636
-
-//--End signatures---------------------------
-
 SetupICC::SetupICC(QWidget* parent )
         : QWidget(parent)
 {
@@ -283,7 +262,7 @@ void SetupICC::readSettings()
     }
     else
     {
-        m_defaultAskICC->setChecked(false);
+        m_defaultAskICC->setChecked(true);
     }
 //     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
 //     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
@@ -339,21 +318,21 @@ void SetupICC::fillCombos()
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
-                case INPUT_ICC:
+                case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_inICCFiles_file.append(fileName);
                     break;
-                case MONITOR_ICC:
+                case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_monitorICCFiles_file.append(fileName);
                     m_workICCFiles_file.append(fileName);
                     break;
-                case OUTPUT_ICC:
+                case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_proofICCFiles_file.append(fileName);
                     break;
-                case SPAC_ICC:
+                case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_file.append(fileName);
                     break;
@@ -456,23 +435,21 @@ void SetupICC::slotFillCombos(const QString& url)
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
-                case INPUT_ICC:
+                case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_inICCFiles_file.append(fileName);
                     break;
-                case MONITOR_ICC:
+                case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_monitorICCFiles_file.append(fileName);
                     m_workICCFiles_file.append(fileName);
-                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_inICCFiles_file.append(fileName);
                     break;
-                case OUTPUT_ICC:
+                case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_proofICCFiles_file.append(fileName);
                     break;
-                case SPAC_ICC:
+                case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_file.append(fileName);
                     break;
