@@ -10,7 +10,9 @@ kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 			 kio_digikamsearch.la
 
 kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp parse.c
-kio_digikamthumbnail_la_LIBADD = $(LIB_KIO) $(LIBJPEG) $(LIBPNG)
+kio_digikamthumbnail_la_LIBADD = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) \
+	                         $(top_builddir)/digikam/libs/dcraw/libdcraw.la
+
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(all_libraries) \
 	$(KDE_PLUGIN) $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
 
