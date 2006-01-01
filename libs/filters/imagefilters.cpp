@@ -883,10 +883,10 @@ void ImageFilters::gaussianBlurImage(uint *data, int Width, int Height, int Radi
     QImage orgImage(Width, Height, 32);
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
 
-    Digikam::GaussianBlur *threadedFilter = new Digikam::GaussianBlur(&orgImage, 0L, Radius);
-    QImage imDest = threadedFilter->getTargetImage();
+    Digikam::GaussianBlur *threadedFilterVar = new Digikam::GaussianBlur(&orgImage, 0L, Radius);
+    QImage imDest = threadedFilterVar->getTargetImage();
     memcpy( data, imDest.bits(), imDest.numBytes() );
-    delete threadedFilter;
+    delete threadedFilterVar;
 }
 
 //////////////////////////////////////////////////////////////////////////////
