@@ -1,0 +1,9 @@
+This folder contain dcraw C ANSI source code ported to C++ class.
+
+parse.c ==> dcraw_parse.cpp/.h  ==> port complete.
+
+TODO : get thumbnail orientation.
+NOTE : parse.c file is never compiled and is used to backport future 
+       implementation from dcraw usinf diff program.
+
+Gilles Caulier, 01/01/2006
