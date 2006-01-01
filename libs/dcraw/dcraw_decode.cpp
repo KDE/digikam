@@ -2707,7 +2707,9 @@ void DcrawDecode::scale_colors()
   FORC4 pre_mul[c] *= 1 << shift;
   maximum <<= shift;
 
-  if (write_fun != write_ppm || bright < 1) {
+// Here we don't use write_fun because output is always ppm 16 bits format in this class.
+//  if (write_fun != write_ppm || bright < 1) {
+  if (bright < 1) {
     maximum *= bright;
     if (maximum > 0xffff)
     maximum = 0xffff;
@@ -2986,8 +2988,8 @@ void DcrawDecode::ahd_interpolate()
   buffer = (char*)malloc (26*TS*TS);           /* 1664 kB */
   merror (buffer, "ahd_interpolate()");
   rgb  = reinterpret_cast<ushort (*)[TS][TS][3]>(buffer);
-  lab  = (void *) (buffer + 12*TS*TS);
-  homo = (void *) (buffer + 24*TS*TS);
+  lab  = (short (*)[256][256][3])(buffer + 12*TS*TS);          // C->C++ : cast !
+  homo = (char (*)[256][256])(buffer + 24*TS*TS);              // C->C++ : cast !
 
   for (top=0; top < height; top += TS-6)
     for (left=0; left < width; left += TS-6) {
@@ -3089,7 +3091,7 @@ void DcrawDecode::bilateral_filter()
 
   wr = ceil(sigma_d*2);     /* window radius */
   ws = 2*wr + 1;        /* window size */
-  window = calloc ((ws+1)*sizeof  *window +
+  window = (float (**)[7])calloc ((ws+1)*sizeof  *window +    // C->C++ : cast
          ws*width*sizeof **window + ws*sizeof *kernel, 1);
   merror (window, "bilateral_filter()");
   for (i=0; i <= ws; i++)
@@ -3534,7 +3536,7 @@ int DcrawDecode::parse_tiff_ifd (int base, int level)
     break;
       case 50454:           /* Sinar tag */
       case 50455:
-    if (!(cbuf = malloc(len))) break;
+    if (!(cbuf = (char*)malloc(len))) break;       // C->C++ : cast
     fread (cbuf, 1, len, ifp);
     for (cp = cbuf-1; cp && cp < cbuf+len; cp = strchr(cp,'\n'))
       if (!strncmp (++cp,"Neutral ",8))

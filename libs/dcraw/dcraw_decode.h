@@ -234,9 +234,8 @@ private:
     void     write_psd (FILE *ofp);
     void     write_ppm16 (FILE *ofp);
 
-
-    
-    
+    void (DcrawDecode::*load_raw)();
+	
     const int*     make_decoder_int (const int *source, int level);
     unsigned char* make_decoder (const unsigned char *source, int level);
     
