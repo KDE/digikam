@@ -265,6 +265,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
     if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible) 
     {
        m_focus = false;
+       updatePreview();
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());
        
@@ -287,7 +288,6 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
     {
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());
-       updatePreview();
     }
     else
        setCursor( KCursor::arrowCursor() );
