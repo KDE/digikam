@@ -97,6 +97,7 @@ private:
     CameraController* m_controller;
     
     KURL              m_lastDestURL;
+    QStringList       m_foldersToScan;
 
 private slots:
 

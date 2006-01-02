@@ -71,6 +71,13 @@ public:
     */
     void findMissingItems();
 
+    
+    /**
+     * This calls allFiles with a given path.
+     * @param path the path to scan.
+     */
+    void findMissingItems(const QString &path);
+            
     /** 
      * This queries the db for items that have no date
      * for each item found, storeItemInDatabase is called.

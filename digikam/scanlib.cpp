@@ -150,6 +150,11 @@ void ScanLib::findFoldersWhichDoNotExist()
     }
 }
 
+void ScanLib::findMissingItems(const QString &path)
+{
+    allFiles(path);
+}
+
 void ScanLib::findMissingItems()
 {
     QString albumPath = AlbumManager::instance()->getLibraryPath();
