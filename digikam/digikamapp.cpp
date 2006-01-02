@@ -66,6 +66,7 @@
 #include "setup.h"
 #include "setupplugins.h"
 #include "setupeditor.h"
+#include "setupimgplugins.h"
 #include "digikamview.h"
 #include "imagepluginloader.h"
 #include "imagewindow.h"
@@ -891,7 +892,7 @@ void DigikamApp::slotSetup()
         return;
 
     setup.pluginsPage_->applyPlugins();
-    m_ImagePluginsLoader->loadPluginsFromList(setup.editorPage_->getImagePluginsListEnable());
+    m_ImagePluginsLoader->loadPluginsFromList(setup.imgPluginsPage_->getImagePluginsListEnable());
 
     slotSetupChanged();
 }
@@ -909,7 +910,7 @@ void DigikamApp::slotSetupCamera()
         return;
 
     setup.pluginsPage_->applyPlugins();
-    m_ImagePluginsLoader->loadPluginsFromList(setup.editorPage_->getImagePluginsListEnable());
+    m_ImagePluginsLoader->loadPluginsFromList(setup.imgPluginsPage_->getImagePluginsListEnable());
 
     slotSetupChanged();
 }
