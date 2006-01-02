@@ -46,6 +46,7 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 #include <khelpmenu.h>
+#include <kdebug.h>
 
 #include <kcalendarsystem.h>
 
@@ -67,6 +68,7 @@ extern "C"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
 #include "cameraui.h"
+#include "scanlib.h"
 
 CameraUI::CameraUI(QWidget* parent, const QString& title,
                    const QString& model, const QString& port,
@@ -269,12 +271,26 @@ bool CameraUI::isBusy() const
 
 void CameraUI::closeEvent(QCloseEvent* e)
 {
+    // When a directory is created, a watch is put on it to spot new files
+    // but it can occur that the file is copied there before the watch is
+    // completely setup. That is why as an extra safeguard run scanlib
+    // over the folders we used. Bug: 119201
+    ScanLib sLib;
+    for (QStringList::iterator it = m_foldersToScan.begin(); 
+         it != m_foldersToScan.end(); ++it)
+    {
+        kdDebug() << "Scanning " << (*it) << endl;
+        sLib.findMissingItems( (*it) );
+    }
+    
+    //---------------------------------------------------
+
     if(!m_lastDestURL.isEmpty())
         emit signalLastDestination(m_lastDestURL);
 
     delete m_controller;
     saveSettings();
-    e->accept();    
+    e->accept();
 }
 
 
@@ -469,10 +485,12 @@ void CameraUI::slotDownload(bool onlySelected)
             }
 
             u.addPath(dirName);
+            m_foldersToScan.append(u.path());
             u.addPath(downloadName.isEmpty() ? name : downloadName);
         }
         else
         {
+            m_foldersToScan.append(u.path());
             u.addPath(downloadName.isEmpty() ? name : downloadName);
         }
         m_controller->download(folder, name, u.path(), autoRotate);
@@ -482,7 +500,7 @@ void CameraUI::slotDownload(bool onlySelected)
 
     if (total <= 0)
         return;
-
+    
     m_lastDestURL = url;            
     m_progress->setProgress(0);
     m_progress->setTotalSteps(total);
