@@ -67,14 +67,14 @@
     0x73706163L     color space
     0x6e6d636cL     named color
 */
-
+/*
 #define INPUT_ICC        1935896178
 #define MONITOR_ICC      1835955314
 #define OUTPUT_ICC       1886549106
 #define LINK_ICC         1818848875
 #define ABST_ICC         1633842036
 #define SPAC_ICC         1936744803
-#define NMD_COLOR_ICC    1852662636
+#define NMD_COLOR_ICC    1852662636*/
 
 //--End signatures---------------------------
 
@@ -278,7 +278,7 @@ void SetupICC::readSettings()
     }
     else
     {
-        m_defaultAskICC->setChecked(false);
+        m_defaultAskICC->setChecked(true);
     }
 //     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
 //     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
@@ -334,23 +334,25 @@ void SetupICC::fillCombos()
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
-                case INPUT_ICC:
+                case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_inICCFiles_file.append(fileName);
                     break;
-                case MONITOR_ICC:
+                case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_monitorICCFiles_file.append(fileName);
                     m_workICCFiles_file.append(fileName);
                     break;
-                case OUTPUT_ICC:
+                case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_proofICCFiles_file.append(fileName);
                     break;
-                case SPAC_ICC:
+                case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_file.append(fileName);
+                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_inICCFiles_file.append(fileName);
                     break;
             }
 
@@ -383,8 +385,34 @@ void SetupICC::slotToggledWidgets(bool t)
     m_monitorProfiles->setEnabled(t); 
     m_renderingIntent->setEnabled(t);
 
-//     if (t)
-//         readSettings();
+    if (t)
+    {
+        KConfig* config = kapp->config();
+
+        config->setGroup("Color Management");
+        if (config->readBoolEntry("BehaviourICC"))
+        {
+            m_defaultApplyICC->setChecked(true);
+        }
+        else
+        {
+            m_defaultAskICC->setChecked(true);
+        }
+    //     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
+    //     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+        m_defaultPath->setURL(config->readPathEntry("DefaultPath"));
+        m_workProfiles->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+        m_monitorProfiles->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
+        m_inProfiles->setCurrentItem(config->readNumEntry("InProfile", 0));
+        m_proofProfiles->setCurrentItem(config->readNumEntry("ProofProfile", 0));
+        m_bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+        m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+        m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
+        m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
+        m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+        m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+    }
+
 }
 
 void SetupICC::slotFillCombos(const QString& url)
@@ -426,25 +454,25 @@ void SetupICC::slotFillCombos(const QString& url)
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
-                case INPUT_ICC:
+                case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_inICCFiles_file.append(fileName);
                     break;
-                case MONITOR_ICC:
+                case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_monitorICCFiles_file.append(fileName);
                     m_workICCFiles_file.append(fileName);
-                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_inICCFiles_file.append(fileName);
                     break;
-                case OUTPUT_ICC:
+                case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_proofICCFiles_file.append(fileName);
                     break;
-                case SPAC_ICC:
+                case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_file.append(fileName);
+                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    m_inICCFiles_file.append(fileName);
                     break;
             }
 
