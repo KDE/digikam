@@ -20,7 +20,7 @@
  * ============================================================ */
   
 #ifndef DIMGGAUSSIAN_BLUR_H
-#define GAUSSIAN_BLUR_H
+#define DIMGGAUSSIAN_BLUR_H
 
 // Digikam Includes.
 
