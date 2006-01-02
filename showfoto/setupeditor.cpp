@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-04-02
- * Description : setup tab for showfoto image editor options.
+ * Description : setup showfoto tab.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -109,6 +109,8 @@ SetupEditor::SetupEditor(QWidget* parent )
    layout->addWidget(interfaceOptionsGroup);
       
    // --------------------------------------------------------
+
+   layout->addStretch();
 
    readSettings();
 }
