@@ -725,8 +725,7 @@ bool ShowFoto::saveAs()
             // Else, check if format from file name extension is include on file mime type list.
 
             QString imgExtPattern;
-            QStringList imgExtList = QStringList::split(" ", mimetypes);
-            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; it++)
+            for (QStringList::ConstIterator it = mimetypes.begin() ; it != mimetypes.end() ; it++)
             {    
                 imgExtPattern.append (KImageIO::typeForMime(*it));
                 imgExtPattern.append (" ");
