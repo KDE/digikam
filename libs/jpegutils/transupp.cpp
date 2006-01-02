@@ -21,6 +21,11 @@ extern "C"
 {
 #include "jinclude.h"
 #include "jpeglib.h"
+
+#ifdef KDE_USE_FINAL
+#include "jpegint.h"
+#include "jerror.h"
+#endif
 }
 #include "transupp.h"		/* My own external interface */
 
