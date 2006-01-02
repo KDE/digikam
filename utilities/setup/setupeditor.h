@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-03
- * Description : setup tab for ImageEditor.
+ * Description : setup Image Editor tab.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,13 +25,10 @@
 
 #include <qwidget.h>
 
-class QLabel;
-class QStringList;
 class QCheckBox;
 
 class KColorButton;
 class KIntNumInput;
-class KListView;
 
 class SetupEditor : public QWidget
 {
@@ -43,13 +40,9 @@ public:
     ~SetupEditor();
 
     void applySettings();
-    QStringList getImagePluginsListEnable();
 
 private:
 
-    QStringList   m_availableImagePluginList;
-    QStringList   m_enableImagePluginList;
-    
     KColorButton *m_backgroundColor;
     
     KIntNumInput *m_JPEGcompression;
@@ -58,13 +51,9 @@ private:
     QCheckBox    *m_TIFFcompression;
     QCheckBox    *m_hideToolBar;
 
-    QLabel       *m_pluginsNumber;
-    
-    KListView    *m_pluginList;
-    
+private:
+
     void readSettings();
-    void initImagePluginsList();
-    void updateImagePluginsList(QStringList lista, QStringList listl);
     
 };
 

@@ -6,7 +6,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 
 noinst_LTLIBRARIES = libsetup.la
 
-libsetup_la_SOURCES = setup.cpp setupcamera.cpp \
+libsetup_la_SOURCES = setup.cpp setupcamera.cpp setupimgplugins.cpp \
 	              cameraselection.cpp setupgeneral.cpp \
 	              gpiface.cpp setupmime.cpp setupplugins.cpp \
 		      setupcollections.cpp setupexif.cpp \

@@ -5,6 +5,7 @@
  * Description : digiKam setup dialog.
  * 
  * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,12 +38,12 @@
 #include "setupcollections.h"
 #include "setupmime.h"
 #include "setupeditor.h"
+#include "setupimgplugins.h"
 #include "setupicc.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
 #include "setupmisc.h"
 #include "setup.h"
-
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
@@ -66,15 +67,19 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                         BarIcon("filetypes", KIcon::SizeMedium));
     mimePage_ = new SetupMime(page_mime);
 
-    page_editor = addPage(i18n("Image Editor"), i18n("Image Editor"),
+    page_editor = addPage(i18n("Image Editor"), i18n("Image Editor Settings"),
                           BarIcon("image", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
+
+    page_imgPlugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
+                          BarIcon("digikamimageplugins", KIcon::SizeMedium));
+    imgPluginsPage_ = new SetupImgPlugins(page_imgPlugins);
 
     page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
     iccPage_ = new SetupICC(page_icc);
 
-    page_plugins = addPage(i18n("Kipi Plugins"), i18n("Kipi Plugins"),
+    page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
                            BarIcon("kipi", KIcon::SizeMedium));
     pluginsPage_ = new SetupPlugins(page_plugins);
 
@@ -105,6 +110,7 @@ void Setup::slotOkClicked()
     cameraPage_->applySettings();
     exifPage_->applySettings();
     editorPage_->applySettings();
+    imgPluginsPage_->applySettings();
     iccPage_->applySettings();
     miscPage_->applySettings();
     close();

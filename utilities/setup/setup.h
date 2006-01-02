@@ -5,6 +5,7 @@
  * Description : digiKam setup dialog.
  * 
  * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +34,7 @@ class SetupExif;
 class SetupCollections;
 class SetupMime;
 class SetupEditor;
+class SetupImgPlugins;
 class SetupPlugins;
 class SetupICC;
 class SetupCamera;
@@ -51,6 +53,7 @@ public:
         Collections,
         Mime,
         Editor,
+        ImagePlugins,
         Icc,
         Plugins,
         Camera,
@@ -62,7 +65,7 @@ public:
     ~Setup();
 
     SetupPlugins     *pluginsPage_;
-    SetupEditor      *editorPage_;
+    SetupImgPlugins  *imgPluginsPage_;
 
 private:
 
@@ -71,6 +74,7 @@ private:
     QFrame           *page_collections;
     QFrame           *page_mime;
     QFrame           *page_editor;
+    QFrame           *page_imgPlugins;
     QFrame           *page_icc;
     QFrame           *page_plugins;
     QFrame           *page_camera;
@@ -80,6 +84,7 @@ private:
     SetupExif        *exifPage_;
     SetupCollections *collectionsPage_;
     SetupMime        *mimePage_;
+    SetupEditor      *editorPage_;
     SetupICC         *iccPage_;
     SetupCamera      *cameraPage_;
     SetupMisc        *miscPage_;

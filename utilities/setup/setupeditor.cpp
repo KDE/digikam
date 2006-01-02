@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-03
- * Description : setup tab for ImageEditor.
+ * Description : setup Image Editor tab.
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -111,93 +111,13 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"),
-                                                      parent);
-
-   m_pluginsNumber = new QLabel(imagePluginsListGroup);
-
-   m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
-   m_pluginList->addColumn( i18n( "Name" ) );
-   m_pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
-   m_pluginList->addColumn( i18n( "Description" ) );
-   m_pluginList->setResizeMode( QListView::LastColumn );
-   m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
-                                       "which must be enabled/disabled for the future "
-                                       "digiKam image editor instances."
-                                       "<p>Note: the core image plugin cannot be disabled."));
-
-   layout->addWidget( imagePluginsListGroup );
-
-   // --------------------------------------------------------
+   layout->addStretch();
 
    readSettings();
-   initImagePluginsList();
-   updateImagePluginsList(m_availableImagePluginList, m_enableImagePluginList);
 }
 
 SetupEditor::~SetupEditor()
 {
-}
-
-void SetupEditor::initImagePluginsList()
-{
-    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
-    KTrader::OfferList::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-        {
-        KService::Ptr service = *iter;
-        m_availableImagePluginList.append(service->name());      // Plugin name translated.
-        m_availableImagePluginList.append(service->library());   // Plugin system library name.
-        m_availableImagePluginList.append(service->comment());   // Plugin comments translated.
-        }
-}
-
-void SetupEditor::updateImagePluginsList(QStringList lista, QStringList listl)
-{
-    QStringList::Iterator it = lista.begin();
-    m_pluginsNumber->setText(i18n("Plugins found: %1")
-                             .arg(lista.count()/3));
-
-    while( it != lista.end() )
-        {
-        QString pluginName = *it;
-        it++;
-        QString libraryName = *it;
-        it++;
-        QString pluginComments = *it;
-        QCheckListItem *item = new QCheckListItem (m_pluginList, pluginName, QCheckListItem::CheckBox);
-
-        if (listl.contains(libraryName))
-           item->setOn(true);
-
-        if (libraryName == "digikamimageplugin_core")  // Always enable the digiKam core plugin.
-           {
-           item->setOn(true);
-           item->setEnabled(false);
-           }
-
-        item->setText(0, pluginName);        // Added plugin name.
-        item->setText(1, libraryName);       // Added library plugin name.
-        item->setText(2, pluginComments);    // Added plugin comments.
-        it++;
-        }
-}
-
-QStringList SetupEditor::getImagePluginsListEnable()
-{
-    QStringList imagePluginList;
-    QCheckListItem *item = (QCheckListItem*)m_pluginList->firstChild();
-
-    while( item )
-        {
-        if (item->isOn())
-        imagePluginList.append(item->text(1));        // Get the plugin library name.
-        item = (QCheckListItem*)item->nextSibling();
-        }
-
-    return imagePluginList;
 }
 
 void SetupEditor::applySettings()
@@ -209,7 +129,6 @@ void SetupEditor::applySettings()
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
     config->writeEntry("PNGCompression", m_PNGcompression->value());
     config->writeEntry("TIFFCompression", m_TIFFcompression->isChecked());
-    config->writeEntry("ImagePlugins List", getImagePluginsListEnable());
     config->writeEntry("FullScreen Hide ToolBar", m_hideToolBar->isChecked());
     config->sync();
 }
@@ -224,11 +143,9 @@ void SetupEditor::readSettings()
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
-    m_enableImagePluginList = config->readListEntry("ImagePlugins List");
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
 
     delete Black;
 }
-
 
 #include "setupeditor.moc"
