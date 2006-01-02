@@ -45,9 +45,11 @@ private:
 
     KColorButton *m_backgroundColor;
     
+    KIntNumInput *m_RAWquality;
     KIntNumInput *m_JPEGcompression;
     KIntNumInput *m_PNGcompression;
     
+    QCheckBox    *m_enableRAWQuality;
     QCheckBox    *m_TIFFcompression;
     QCheckBox    *m_hideToolBar;
 

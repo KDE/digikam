@@ -51,6 +51,31 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
 
+   QVGroupBox *RAWfileOptionsGroup = new QVGroupBox(i18n("RAW Image Decoding Options"),
+                                                   parent);
+
+   m_enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"),
+                                      RAWfileOptionsGroup);
+   
+   QWhatsThis::add( m_enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images.<p>"));
+
+   m_RAWquality = new KIntNumInput(0, RAWfileOptionsGroup);
+   m_RAWquality->setRange(0, 3, 1, true );
+   m_RAWquality->setLabel( i18n("&RAW file decoding quality:"), AlignLeft|AlignVCenter );
+
+   QWhatsThis::add( m_RAWquality, i18n("<p>The decoding quality value for RAW images:<p>"
+                                       "<b>0</b>: medium quality (default - for slow computer)<p>"
+                                       "<b>1</b>: good quality<p>"
+				       "<b>2</b>: high quality<p>"
+                                       "<b>3</b>: very high quality (for speed computer)</b>"));
+
+   layout->addWidget(RAWfileOptionsGroup);
+
+   connect(m_enableRAWQuality, SIGNAL(toggled(bool)), 
+           m_RAWquality, SLOT(setEnabled(bool)));
+
+   // --------------------------------------------------------
+
    QVGroupBox *savingOptionsGroup = new QVGroupBox(i18n("Saving Images Options"),
                                                    parent);
 
@@ -126,6 +151,8 @@ void SetupEditor::applySettings()
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
+    config->writeEntry("RAWquality", m_RAWquality->value());
+    config->writeEntry("EnableRAWQuality", m_enableRAWQuality->isChecked());
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
     config->writeEntry("PNGCompression", m_PNGcompression->value());
     config->writeEntry("TIFFCompression", m_TIFFcompression->isChecked());
@@ -140,11 +167,14 @@ void SetupEditor::readSettings()
 
     config->setGroup("ImageViewer Settings");
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
+    m_RAWquality->setValue( config->readNumEntry("RAWquality", 0) );
+    m_enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-
+    
+    m_RAWquality->setEnabled(m_enableRAWQuality->isChecked());
     delete Black;
 }
 
