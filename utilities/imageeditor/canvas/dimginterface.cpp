@@ -203,7 +203,8 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
 
     d->undoMan->clear();
 
-    d->image = DImg(filename);
+    d->image = DImg(filename, iofileSettings->enableRAWQuality,
+                    iofileSettings->RAWQuality);
 
     if (!d->image.isNull())
     {

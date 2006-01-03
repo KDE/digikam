@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT RAWLoader : public DImgLoader
 {
 public:
 
-    RAWLoader(DImg* image);
+    RAWLoader(DImg* image, bool enableRAWQuality=false, int RAWquality=0);
 
     bool load(const QString& filePath);
     bool save(const QString& filePath);
@@ -55,6 +55,9 @@ private:
 
     bool m_sixteenBit;
     bool m_hasAlpha;
+
+    bool m_enableRAWQuality;
+    int  m_RAWquality;
     
 private:
 

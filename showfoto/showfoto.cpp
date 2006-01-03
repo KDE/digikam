@@ -536,7 +536,7 @@ void ShowFoto::applySettings()
     m_IOFileSettings->TIFFCompression  = m_config->readBoolEntry("TIFFCompression", false);
 
     m_IOFileSettings->enableRAWQuality = m_config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->RAWquality       = m_config->readNumEntry("RAWquality", 0);
+    m_IOFileSettings->RAWQuality       = m_config->readNumEntry("RAWquality", 0);
     
     // Slideshow Settings.
     m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);

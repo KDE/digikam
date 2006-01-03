@@ -47,7 +47,7 @@ public:
     bool enableRAWQuality;
 
     // RAW quality decoding factor value.
-    int  RAWquality;
+    int  RAWQuality;
     
 };
 

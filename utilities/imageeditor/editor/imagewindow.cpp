@@ -487,7 +487,7 @@ void ImageWindow::applySettings()
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
     m_IOFileSettings->enableRAWQuality = config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->RAWquality       = config->readNumEntry("RAWquality", 0);
+    m_IOFileSettings->RAWQuality       = config->readNumEntry("RAWquality", 0);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
@@ -597,7 +597,6 @@ void ImageWindow::slotLoadCurrent()
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        // FIXME implement color management here
         if (m_ICCSettings->enableCMSetting)
         {
             kdDebug() << "enableCMSetting=true" << endl;

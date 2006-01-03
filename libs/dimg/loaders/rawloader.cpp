@@ -22,7 +22,7 @@
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES 
+#define ENABLE_DEBUG_MESSAGES
 
 extern "C"
 {
@@ -53,10 +53,12 @@ extern "C"
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image)
+RAWLoader::RAWLoader(DImg* image, bool enableRAWQuality, int RAWquality)
          : DImgLoader(image)
 {
-    m_hasAlpha   = false;
+    m_hasAlpha         = false;
+    m_enableRAWQuality = enableRAWQuality;
+    m_RAWquality       = RAWquality;   
 }
 
 bool RAWLoader::load(const QString& filePath)
@@ -73,11 +75,21 @@ bool RAWLoader::load8bits(const QString& filePath)
 
     // run dcraw with options:
     // -c : write to stdout
-    // -q : Use simple bilinear interpolation for quick results
     // -2 : 8bit ppm output
     // -w : Use camera white balance, if possible  
     // -a : Use automatic white balance
-    command  = "dcraw -c -q -2 -w -a ";
+    // -q : Use simple bilinear interpolation for quick results
+
+    if (!m_enableRAWQuality)
+        command  = "dcraw -c -2 -w -a -q ";
+    else
+    {
+        QCString rawQuality;
+        command  = "dcraw -c -2 -w -a -q ";
+        command += rawQuality.setNum(m_RAWquality);
+        command += " ";
+    }
+    
     command += QFile::encodeName( KProcess::quote( filePath ) );
 
 #ifdef ENABLE_DEBUG_MESSAGES
@@ -156,11 +168,22 @@ bool RAWLoader::load16bits(const QString& filePath)
 
     // run dcraw with options:
     // -c : write to stdout
-    // -q : Use simple bilinear interpolation for quick results
     // -4 : 16bit ppm output
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
-    command  = "dcraw -c -q -4 -w -a ";
+    // -q : Use simple bilinear interpolation for quick results
+
+    if (!m_enableRAWQuality)
+        command  = "dcraw -c -4 -w -a -q ";
+    else
+    {
+        QCString rawQuality;
+        command  = "dcraw -c -4 -w -a -q ";
+        command += rawQuality.setNum(m_RAWquality);
+        command += " ";
+    }
+
+    
     command += "'";
     command += QFile::encodeName( filePath );
     command += "'";

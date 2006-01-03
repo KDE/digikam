@@ -88,7 +88,7 @@ public:
     };
 
     DImg();
-    DImg(const QString& filePath);
+    DImg(const QString& filePath, bool enableRAWQuality=false, int RAWquality=0);
     DImg(const DImg& image);
     DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0);
    ~DImg();
@@ -97,7 +97,7 @@ public:
 
     void        reset(void);
 
-    bool        load(const QString& filePath);
+    bool        load(const QString& filePath, bool enableRAWQuality, int RAWquality);
     bool        save(const QString& filePath, const char* format);
 
     bool        isNull()     const;
