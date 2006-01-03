@@ -232,6 +232,10 @@ void SetupICC::applySettings()
     KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
+    if (!m_enableColorManagement->isChecked())
+    {
+        return;
+    }
     config->writeEntry("EnableCM", m_enableColorManagement->isChecked());
     if (m_defaultApplyICC->isChecked())
     {
@@ -239,11 +243,21 @@ void SetupICC::applySettings()
     }
     else
     {
-        config->writeEntry("BehaviourICC", false);
+        config->writeEntry("BehaviourICC", "false");
     }
 //     config->writeEntry("ApplyICC", m_defaultApplyICC->isChecked());
 //     config->writeEntry("AskICC", m_defaultAskICC->isChecked());
+    if (m_defaultPath->url().isEmpty())
+    {
+        QString message = QString(i18n("<p>You must set a default path to color profiles files.</p>"));
+        message.append(i18n("<p>This settings will not be written.</p>"));
+        KMessageBox::error(this, message );
+        config->writeEntry("EnableCM", false);
+        config->sync();
+        return;
+    }
     config->writeEntry("DefaultPath", m_defaultPath->url());
+//     config->writeEntry("DefaultPath", m_defaultPath->url());
     config->writeEntry("WorkSpaceProfile", m_workProfiles->currentItem());
     config->writeEntry("MonitorProfile", m_monitorProfiles->currentItem());
     config->writeEntry("InProfile", m_inProfiles->currentItem());
