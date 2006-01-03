@@ -38,8 +38,10 @@ class QColor;
 
 namespace Digikam
 {
+
 class CanvasPrivate;
 class ICCSettingsContainer;
+class IOFileSettingsContainer;
 
 class Canvas : public QScrollView
 {
@@ -51,15 +53,12 @@ public:
     ~Canvas();
 
 //     bool load(const QString& filename);
-    bool load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *parent);
+    bool load(const QString& filename, ICCSettingsContainer *ICCSettings, QWidget *parent);
     void preload(const QString& filename);
-    int  save(const QString& filename, int JPEGcompression, 
-              int PNGcompression, bool TIFFcompression);
-    int  saveAs(const QString& filename, int JPEGcompression, 
-                int PNGcompression, bool TIFFcompression, 
+    int  save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    int  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                 const QString& mimeType);
-    int  saveAsTmpFile(const QString& filename, int JPEGcompression, 
-                       int PNGcompression, bool TIFFcompression, 
+    int  saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                        const QString& mimeType=0);
     void setModified(bool val);
         

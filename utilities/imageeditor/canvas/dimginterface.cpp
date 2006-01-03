@@ -48,8 +48,9 @@
 #include "icctransform.h"
 #include "undomanager.h"
 #include "undoaction.h"
-#include "dimginterface.h"
 #include "iccsettingscontainer.h"
+#include "iofilesettingscontainer.h"
+#include "dimginterface.h"
 
 namespace Digikam
 {
@@ -173,7 +174,8 @@ DImgInterface::~DImgInterface()
 //     return (valRet);
 // }
 
-bool DImgInterface::load(const QString& filename, bool *isReadOnly, ICCSettingsContainer *cmSettings, QWidget *parent)
+bool DImgInterface::load(const QString& filename, bool *isReadOnly,
+                         ICCSettingsContainer *cmSettings, QWidget *parent)
 {
 
 
@@ -401,8 +403,7 @@ void DImgInterface::restore()
     emit signalModified(false, false);
 }
 
-bool DImgInterface::save(const QString& file, int JPEGcompression, 
-                         int PNGcompression, bool TIFFcompression)
+bool DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
 {
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -417,8 +418,7 @@ bool DImgInterface::save(const QString& file, int JPEGcompression,
 
     QString currentMimeType(QImageIO::imageFormat(d->filename));
 
-    bool result = saveAction(file, JPEGcompression, PNGcompression, 
-                             TIFFcompression, currentMimeType);
+    bool result = saveAction(file, iofileSettings, currentMimeType);
 
     if (result)
     {
@@ -429,8 +429,7 @@ bool DImgInterface::save(const QString& file, int JPEGcompression,
     return result;
 }
 
-bool DImgInterface::saveAs(const QString& file, int JPEGcompression, 
-                           int PNGcompression, bool TIFFcompression, 
+bool DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
                            const QString& mimeType)
 {
     bool result;
@@ -442,30 +441,27 @@ bool DImgInterface::saveAs(const QString& file, int JPEGcompression,
     d->cmod.applyBCG(d->image);
 
     if (mimeType.isEmpty())
-        result = saveAction(file, JPEGcompression, PNGcompression, 
-                            TIFFcompression, d->image.attribute("format").toString());
+        result = saveAction(file, iofileSettings, d->image.attribute("format").toString());
     else
-        result = saveAction(file, JPEGcompression, PNGcompression, 
-                            TIFFcompression, mimeType);
+        result = saveAction(file, iofileSettings, mimeType);
 
     return result;
 }
 
-bool DImgInterface::saveAction(const QString& fileName, int JPEGcompression,
-                               int PNGcompression, bool TIFFcompression,
+bool DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                                const QString& mimeType) 
 {
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType.ascii() << ")" << endl;
 
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
-       d->image.setAttribute("quality", JPEGcompression);
+       d->image.setAttribute("quality", iofileSettings->JPEGCompression);
 
     if ( mimeType.upper() == QString("PNG") ) 
-       d->image.setAttribute("quality", PNGcompression);
+       d->image.setAttribute("quality", iofileSettings->PNGCompression);
 
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
-       d->image.setAttribute("compress", TIFFcompression);
+       d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     if( !d->image.save(fileName, mimeType.ascii()) ) 
     {

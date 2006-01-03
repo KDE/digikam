@@ -41,7 +41,9 @@ class QPixmap;
 
 namespace Digikam
 {
+
 class ICCSettingsContainer;
+class IOFileSettingsContainer;
 class DImgInterfacePrivate;
 
 class DImgInterface : public QObject
@@ -60,10 +62,8 @@ public:
     void   undo();
     void   redo();
     void   restore();
-    bool   save(const QString& file, int JPEGcompression, 
-                int PNGcompression, bool TIFFcompression);
-    bool   saveAs(const QString& file, int JPEGcompression, 
-                  int PNGcompression, bool TIFFcompression,
+    bool   save(const QString& file, IOFileSettingsContainer *iofileSettings);
+    bool   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   const QString& mimeType=0);
     void   setModified (bool val);
 
@@ -131,8 +131,7 @@ signals:
 
 private:
 
-    bool   saveAction(const QString& fileName, int JPEGcompression, 
-                      int PNGcompression, bool TIFFcompression, 
+    bool   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                       const QString& mimeType); 
     void   exifRotate(const QString& filename);
 

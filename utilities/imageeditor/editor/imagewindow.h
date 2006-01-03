@@ -78,7 +78,6 @@ signals:
 
 private:
 
-    bool                    m_TIFFCompression;
     bool                    m_rotatedOrFlipped;
     bool                    m_fullScreen;
     bool                    m_fullScreenHideToolBar;
@@ -94,9 +93,6 @@ private:
 
     // 'true' if current image have been modified, else 'false'.
     bool                    m_dirtyImage;
-
-    int                     m_JPEGCompression;
-    int                     m_PNGCompression;
 
     QPopupMenu             *m_contextMenu;
 

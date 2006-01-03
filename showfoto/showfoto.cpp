@@ -86,8 +86,9 @@
 #include "setupeditor.h"
 #include "setupplugins.h"
 #include "slideshow.h"
-#include "showfoto.h"
 #include "iccsettingscontainer.h"
+#include "iofilesettingscontainer.h"
+#include "showfoto.h"
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
@@ -114,7 +115,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         m_splash = new SplashScreen("showfoto-splash.png");
     }
 
-    m_ICCSettings             = new Digikam::ICCSettingsContainer();
+    // Settings containers instance.
+    
+    m_ICCSettings    = new Digikam::ICCSettingsContainer();
+    m_IOFileSettings = new Digikam::IOFileSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -254,6 +258,7 @@ ShowFoto::~ShowFoto()
     delete m_slideShow;
     delete m_rightSidebar;
     delete m_ICCSettings;
+    delete m_IOFileSettings;
 }
 
 void ShowFoto::closeEvent(QCloseEvent* e)
@@ -520,18 +525,15 @@ void ShowFoto::applySettings()
     m_fullScreenHideToolBar = m_config->readBoolEntry("FullScreenHideToolBar", false);
     m_fullScreenHideThumbBar = m_config->readBoolEntry("FullScreenHideThumbBar", true);
 
-    // JPEG quality value.
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_JPEGCompression = (int)((75.0/99.0)*(float)m_config->readNumEntry("JPEGCompression", 75)
-                              + 25.0 - (75.0/99.0));
+    m_IOFileSettings->JPEGCompression = (int)((75.0/99.0)*(float)m_config->readNumEntry("JPEGCompression", 75)
+                                              + 25.0 - (75.0/99.0));
 
-    // PNG compression value.
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)m_config->readNumEntry("PNGCompression", 1)
-                             + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression = (int)(((1.0-100.0)/8.0)*(float)m_config->readNumEntry("PNGCompression", 1)
+                                             + 100.0 - ((1.0-100.0)/8.0));
 
-    // TIFF compression.
-    m_TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
 
     // Slideshow Settings.
     m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);
@@ -782,8 +784,7 @@ bool ShowFoto::saveAs()
 
     QString tmpFile = saveAsURL.directory() + QString("/.showfoto-tmp-")
                       + saveAsURL.filename();
-    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
-                                 m_TIFFCompression, format.lower()))
+    if (!m_canvas->saveAsTmpFile(tmpFile, m_IOFileSettings, format.lower()))
     {
         kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save file '%1'")
@@ -877,8 +878,7 @@ bool ShowFoto::save()
     QString tmpFile = url.directory() + QString("/.showfoto-tmp-")
                       + url.filename();
     
-    if (!m_canvas->saveAsTmpFile(tmpFile, m_JPEGCompression, m_PNGCompression,
-                                 m_TIFFCompression))
+    if (!m_canvas->saveAsTmpFile(tmpFile, m_IOFileSettings))
     {
         kapp->restoreOverrideCursor();
         KMessageBox::error(this, i18n("Failed to save file '%1'")

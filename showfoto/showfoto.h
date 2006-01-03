@@ -54,6 +54,7 @@ class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
 class ICCSettingsContainer;
+class IOFileSettingsContainer;
 }
 
 class ShowFoto : public KMainWindow
@@ -71,7 +72,6 @@ private:
     
     bool                             m_removeFullScreenButton;
     bool                             m_fullScreen;
-    bool                             m_TIFFCompression;
     bool                             m_fullScreenHideToolBar;
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
@@ -84,8 +84,6 @@ private:
     // 'true' if current image have been modified, else 'false'.
     bool                             m_dirtyImage;
 
-    int                              m_JPEGCompression;
-    int                              m_PNGCompression;
     int                              m_itemsNb;
 
     SplashScreen                    *m_splash;
@@ -145,12 +143,13 @@ private:
         
     KSelectAction                   *m_viewHistogramAction;
 
-    Digikam::ImagePluginLoader      *m_imagePluginLoader;
-    Digikam::Canvas                 *m_canvas;
-    Digikam::ThumbBarView           *m_bar;
-    Digikam::ThumbBarItem           *m_currentItem;
-    Digikam::ImagePropertiesSideBar *m_rightSidebar;
-    Digikam::ICCSettingsContainer   *m_ICCSettings;
+    Digikam::ImagePluginLoader       *m_imagePluginLoader;
+    Digikam::Canvas                  *m_canvas;
+    Digikam::ThumbBarView            *m_bar;
+    Digikam::ThumbBarItem            *m_currentItem;
+    Digikam::ImagePropertiesSideBar  *m_rightSidebar;
+    Digikam::ICCSettingsContainer    *m_ICCSettings;
+    Digikam::IOFileSettingsContainer *m_IOFileSettings;
 
 private:
 

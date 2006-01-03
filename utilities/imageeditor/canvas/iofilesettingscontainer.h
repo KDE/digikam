@@ -34,6 +34,14 @@ public:
 
 public:
 
+    // JPEG quality value.
+    int  JPEGCompression;
+
+    // PNG compression value.
+    int  PNGCompression;
+
+    // TIFF deflat compression.
+    bool TIFFCompression;
 };
 
 }  // namespace Digikam

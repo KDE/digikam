@@ -120,8 +120,8 @@ ImageWindow::ImageWindow()
     
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
-    m_rightSidebar   = new Digikam::ImagePropertiesSideBarDB(widget, m_splitter, 
-                                    Digikam::Sidebar::Right, true, false);
+    m_rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter,
+                                                    Sidebar::Right, true, false);
     
     lay->addWidget(m_splitter);
     lay->addWidget(m_rightSidebar);
@@ -143,9 +143,9 @@ ImageWindow::ImageWindow()
 
     buildGUI();
         
-    QPtrList<Digikam::ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
 
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin) 
@@ -209,9 +209,9 @@ ImageWindow::~ImageWindow()
 {
     m_instance = 0;
 
-    QPtrList<Digikam::ImagePlugin> pluginList
+    QPtrList<ImagePlugin> pluginList
         = ImagePluginLoader::instance()->pluginList();
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin) 
@@ -476,18 +476,15 @@ void ImageWindow::applySettings()
     m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
     m_canvas->update();
 
-    // JPEG quality value.
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
-                              + 25.0 - (75.0/99.0));
+    m_IOFileSettings->JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
+                                              + 25.0 - (75.0/99.0));
 
-    // PNG compression value.
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
-                             + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
+                                               + 100.0 - ((1.0-100.0)/8.0));
 
-    // TIFF compression.
-    m_TIFFCompression = config->readBoolEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression = config->readBoolEntry("TIFFCompression", false);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
@@ -523,7 +520,8 @@ void ImageWindow::readSettings()
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
                                                     false);
 
-    if (autoZoom) {
+    if (autoZoom)
+    {
         m_zoomFitAction->activate();
         m_zoomPlusAction->setEnabled(false);
         m_zoomMinusAction->setEnabled(false);
@@ -872,10 +870,10 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
         
         QRect  sel          = m_canvas->getSelectedArea();
-        uchar* data         = Digikam::DImgInterface::instance()->getImage();
-        int    width        = Digikam::DImgInterface::instance()->origWidth();
-        int    height       = Digikam::DImgInterface::instance()->origHeight();
-        bool   sixteenBit   = Digikam::DImgInterface::instance()->sixteenBit();
+        uchar* data         = DImgInterface::instance()->getImage();
+        int    width        = DImgInterface::instance()->origWidth();
+        int    height       = DImgInterface::instance()->origHeight();
+        bool   sixteenBit   = DImgInterface::instance()->sixteenBit();
         AlbumIconItem* item = 0;
         
         if (palbum)
@@ -893,7 +891,7 @@ void ImageWindow::slotSelected(bool val)
     m_copyAction->setEnabled(val);
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+    for (ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next()) {
         if (plugin) {
             plugin->setEnabledSelectionActions(val);
@@ -983,16 +981,16 @@ void ImageWindow::slotDeleteCurrentItem()
 
 void ImageWindow::slotFilePrint()
 {
-    uchar* ptr      = Digikam::DImgInterface::instance()->getImage();
-    int w           = Digikam::DImgInterface::instance()->origWidth();
-    int h           = Digikam::DImgInterface::instance()->origHeight();
-    bool hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
-    bool sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
+    uchar* ptr      = DImgInterface::instance()->getImage();
+    int w           = DImgInterface::instance()->origWidth();
+    int h           = DImgInterface::instance()->origHeight();
+    bool hasAlpha   = DImgInterface::instance()->hasAlpha();
+    bool sixteenBit = DImgInterface::instance()->sixteenBit();
 
     if (!ptr || !w || !h)
         return;
 
-    Digikam::DImg image(w, h, sixteenBit, hasAlpha, ptr);
+    DImg image(w, h, sixteenBit, hasAlpha, ptr);
 
     KPrinter printer;
     printer.setDocName( m_urlCurrent.filename() );
@@ -1020,8 +1018,7 @@ bool ImageWindow::save()
     KTempFile tmpFile(m_urlCurrent.directory(false), QString::null);
     tmpFile.setAutoDelete(true);
 
-    bool result = m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression, 
-                                          m_PNGCompression, m_TIFFCompression);
+    bool result = m_canvas->saveAsTmpFile(tmpFile.name(), m_IOFileSettings);
     
     if (!result)
     {
@@ -1169,9 +1166,7 @@ bool ImageWindow::saveAs()
     KTempFile tmpFile(newURL.directory(false), QString::null);
     tmpFile.setAutoDelete(true);
 
-    int result = m_canvas->saveAsTmpFile(tmpFile.name(), m_JPEGCompression,
-                                         m_PNGCompression, m_TIFFCompression,
-                                         format.lower());
+    int result = m_canvas->saveAsTmpFile(tmpFile.name(), m_IOFileSettings, format.lower());
 
     if (result == false)
     {
@@ -1404,7 +1399,7 @@ void ImageWindow::slotEditKeys()
     dialog.insert( actionCollection(), i18n( "General" ) );
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (Digikam::ImagePlugin* plugin = loader->pluginList().first();
+    for (ImagePlugin* plugin = loader->pluginList().first();
          plugin; plugin = loader->pluginList().next())
     {
         if (plugin)

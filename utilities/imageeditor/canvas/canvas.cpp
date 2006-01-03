@@ -52,8 +52,9 @@
 
 #include "imagehistogram.h"
 #include "dimginterface.h"
-#include "canvas.h"
 #include "iccsettingscontainer.h"
+#include "iofilesettingscontainer.h"
+#include "canvas.h"
 
 namespace Digikam
 {
@@ -75,7 +76,7 @@ public:
     }
 
     
-    DImgInterface    *im;
+    DImgInterface     *im;
     QPixmap            qcheck;
     QColor             bgColor;
                      
@@ -207,7 +208,8 @@ void Canvas::customEvent(QCustomEvent *event)
 
     if (!ed) return;
 
-    if (ed->success) {
+    if (ed->success)
+    {
         d->histogramReady = true;
         drawHistogramPixmap();
         QRect rc;
@@ -385,11 +387,12 @@ Canvas::~Canvas()
 //     return (isReadOnly);
 // }
 
-bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContainer, QWidget *parent)
+bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings, QWidget *parent)
 {
     // FIXME implement this overloaded method
 
-    if (d->rubber) {
+    if (d->rubber)
+    {
         delete d->rubber;
         d->rubber = 0;
         emit signalSelected(false);
@@ -406,7 +409,7 @@ bool Canvas::load(const QString& filename, ICCSettingsContainer *settingsContain
     d->tileCache.clear();
 
     bool isReadOnly = true;
-    d->im->load( filename, &isReadOnly, settingsContainer, parent );
+    d->im->load( filename, &isReadOnly, ICCSettings, parent );
 
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
@@ -432,11 +435,9 @@ void Canvas::preload(const QString& /*filename*/)
 //    d->im->preload(filename);
 }
 
-int Canvas::save(const QString& filename, int JPEGcompression,
-                 int PNGcompression, bool TIFFcompression)
+int Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
 {
-    int result = d->im->save(filename, JPEGcompression, PNGcompression, 
-                             TIFFcompression);
+    int result = d->im->save(filename, IOFileSettings);
     
     if ( result == true ) 
         emit signalChanged(false, false);
@@ -444,12 +445,10 @@ int Canvas::save(const QString& filename, int JPEGcompression,
     return result;
 }
 
-int Canvas::saveAs(const QString& filename, int JPEGcompression, 
-                   int PNGcompression, bool TIFFcompression, 
+int Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings, 
                    const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, JPEGcompression, PNGcompression, 
-                               TIFFcompression, mimeType);
+    int result = d->im->saveAs(filename, IOFileSettings, mimeType);
     
     if ( result == true ) 
         emit signalChanged(false, false);
@@ -457,12 +456,10 @@ int Canvas::saveAs(const QString& filename, int JPEGcompression,
     return result;
 }
 
-int Canvas::saveAsTmpFile(const QString& filename, int JPEGcompression,
-                          int PNGcompression, bool TIFFcompression, 
+int Canvas::saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                           const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, JPEGcompression, PNGcompression, 
-                               TIFFcompression, mimeType);
+    int result = d->im->saveAs(filename, IOFileSettings, mimeType);
     return result;
 }
 
