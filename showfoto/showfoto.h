@@ -2,7 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Description : 
+ * Description : stand alone digiKam image editor GUI
  * 
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
@@ -153,7 +153,7 @@ private:
         
     KSelectAction                   *m_viewHistogramAction;
 
-    ICCSettingsContainer   *m_container;
+    ICCSettingsContainer            *m_ICCSettings;
 
 private:
 

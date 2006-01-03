@@ -2,7 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
- * Description :
+ * Description : digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
@@ -104,7 +104,7 @@ ImageWindow::ImageWindow()
     m_dirtyImage            = false;
     m_view                  = 0L;
 
-    m_container             = new ICCSettingsContainer();
+    m_ICCSettings             = new ICCSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -538,14 +538,14 @@ void ImageWindow::readSettings()
     // Settings for Color Management stuff
     config->setGroup("Color Management");
 
-    m_container->enableCMSetting = config->readBoolEntry("EnableCM");
-    m_container->askOrApplySetting = config->readBoolEntry("BehaviourICC");
-    m_container->BPCSetting = config->readBoolEntry("BPCAlgorithm");
-    m_container->renderingSetting = config->readNumEntry("RenderingIntent");
-    m_container->inputSetting = config->readPathEntry("InProfileFile");
-    m_container->workspaceSetting = config->readPathEntry("WorkProfileFile");
-    m_container->monitorSetting = config->readPathEntry("MonitorProfileFile");
-    m_container->proofSetting = config->readPathEntry("ProofProfileFile");
+    m_ICCSettings->enableCMSetting = config->readBoolEntry("EnableCM");
+    m_ICCSettings->askOrApplySetting = config->readBoolEntry("BehaviourICC");
+    m_ICCSettings->BPCSetting = config->readBoolEntry("BPCAlgorithm");
+    m_ICCSettings->renderingSetting = config->readNumEntry("RenderingIntent");
+    m_ICCSettings->inputSetting = config->readPathEntry("InProfileFile");
+    m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
+    m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
+    m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
 }
 
 void ImageWindow::saveSettings()
@@ -588,10 +588,10 @@ void ImageWindow::slotLoadCurrent()
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
         // FIXME implement color management here
-        if (m_container->enableCMSetting)
+        if (m_ICCSettings->enableCMSetting)
         {
             kdDebug() << "enableCMSetting=true" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_container, m_instance);
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_instance);
         }
         else
         {

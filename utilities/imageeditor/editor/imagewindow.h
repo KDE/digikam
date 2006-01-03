@@ -2,9 +2,9 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-02-12
- * Description : 
+ * Description : digiKam image editor GUI
  * 
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -151,7 +151,7 @@ private:
 
     Canvas                 *m_canvas;
 
-    ICCSettingsContainer   *m_container;
+    ICCSettingsContainer   *m_ICCSettings;
     
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.

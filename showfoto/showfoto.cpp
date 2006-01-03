@@ -2,7 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Description :
+ * Description : stand alone digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  *
@@ -114,7 +114,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         m_splash = new SplashScreen("showfoto-splash.png");
     }
 
-    m_container             = new ICCSettingsContainer();
+    m_ICCSettings             = new ICCSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -575,14 +575,14 @@ void ShowFoto::applySettings()
     // Settings for Color Management stuff
     m_config->setGroup("Color Management");
 
-    m_container->enableCMSetting = m_config->readBoolEntry("EnableCM");
-    m_container->askOrApplySetting = m_config->readBoolEntry("BehaviourICC");
-    m_container->BPCSetting = m_config->readBoolEntry("BPCAlgorithm");
-    m_container->renderingSetting = m_config->readNumEntry("RenderingIntent");
-    m_container->inputSetting = m_config->readPathEntry("InProfileFile");
-    m_container->workspaceSetting = m_config->readPathEntry("WorkProfileFile");
-    m_container->monitorSetting = m_config->readPathEntry("MonitorProfileFile");
-    m_container->proofSetting = m_config->readPathEntry("ProofProfileFile");
+    m_ICCSettings->enableCMSetting = m_config->readBoolEntry("EnableCM");
+    m_ICCSettings->askOrApplySetting = m_config->readBoolEntry("BehaviourICC");
+    m_ICCSettings->BPCSetting = m_config->readBoolEntry("BPCAlgorithm");
+    m_ICCSettings->renderingSetting = m_config->readNumEntry("RenderingIntent");
+    m_ICCSettings->inputSetting = m_config->readPathEntry("InProfileFile");
+    m_ICCSettings->workspaceSetting = m_config->readPathEntry("WorkProfileFile");
+    m_ICCSettings->monitorSetting = m_config->readPathEntry("MonitorProfileFile");
+    m_ICCSettings->proofSetting = m_config->readPathEntry("ProofProfileFile");
 }
 
 void ShowFoto::saveSettings()
@@ -931,10 +931,10 @@ void ShowFoto::slotOpenURL(const KURL& url)
     KIO::NetAccess::download(url, localFile);
 #endif
     m_isReadOnly = m_canvas->load(localFile, 0, 0);
-    if (m_container->enableCMSetting)
+    if (m_ICCSettings->enableCMSetting)
     {
         kdDebug() << "enableCMSetting=true" << endl;
-        m_isReadOnly = m_canvas->load(localFile, m_container, this);
+        m_isReadOnly = m_canvas->load(localFile, m_ICCSettings, this);
     }
     else
     {
