@@ -2,13 +2,13 @@
 
 Native DIMG Loaders status (Gilles Caulier - 2005-11-28)
 
-Format   Read   Write   ICC     MetaData   8bits    16bits  depency     Remarks
+Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency     Remarks
 
-JPG      Done   Done    Done    Done       yes      N.A     libjpeg     Metadata are EXIF/IPTC/APP13 - ICC profil automatic or manual
-PNG      Done   Done    Done    Done       yes      yes     libpng      Metadata are Embedded text - ICC profil automatic or manual
-TIF      Done   Done    Done    Done       yes      yes     libtiff     Metadata are IPTC - ICC profil automatic or manual
-RAW      Done   N.A     TODO    N.A        yes      yes     dcraw       RAW file formats supported by dcraw program
-PPM      Done   TODO    N.A     TODO       yes      yes     none        Metadata is just an embedded comment - no embedded ICC profil
+JPG     Done  Done   Done  Done      TODO    yes      N.A     libjpeg     Metadata are EXIF/IPTC/APP13 - ICC profil automatic or manual
+PNG     Done  Done   Done  Done      N.A     yes      yes     libpng      Metadata are Embedded text - ICC profil automatic or manual
+TIF     Done  Done   Done  Done      TODO    yes      yes     libtiff     Metadata are IPTC - ICC profil automatic or manual
+RAW     Done  N.A    TODO  TODO      TODO    yes      yes     dcraw       RAW file formats supported by dcraw program
+PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 
 JP2  ==> TODO
 EXR  ==> TODO
@@ -41,4 +41,6 @@ GIF      yes        no
 
 TODO list :
 
-JPEGLoader : add a metho to get 'make' and model' exif markers.
+JPEG Loader : add a method to get 'make' and model' exif markers.
+All loaders : give separate methods to get ICC profile, metadata, embedded thumnail, etc).
+
