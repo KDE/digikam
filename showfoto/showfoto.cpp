@@ -526,15 +526,18 @@ void ShowFoto::applySettings()
     m_fullScreenHideThumbBar = m_config->readBoolEntry("FullScreenHideThumbBar", true);
 
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression = (int)((75.0/99.0)*(float)m_config->readNumEntry("JPEGCompression", 75)
-                                              + 25.0 - (75.0/99.0));
+    m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)m_config->readNumEntry("JPEGCompression", 75)
+                                               + 25.0 - (75.0/99.0));
 
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_IOFileSettings->PNGCompression = (int)(((1.0-100.0)/8.0)*(float)m_config->readNumEntry("PNGCompression", 1)
-                                             + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)m_config->readNumEntry("PNGCompression", 1)
+                                               + 100.0 - ((1.0-100.0)/8.0));
 
-    m_IOFileSettings->TIFFCompression = m_config->readBoolEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression  = m_config->readBoolEntry("TIFFCompression", false);
 
+    m_IOFileSettings->enableRAWQuality = m_config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->RAWquality       = m_config->readNumEntry("RAWquality", 0);
+    
     // Slideshow Settings.
     m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);
     m_slideShow->setStartWithCurrent(m_config->readBoolEntry("SlideShowStartCurrent", false));

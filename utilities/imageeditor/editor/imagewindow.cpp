@@ -477,14 +477,17 @@ void ImageWindow::applySettings()
     m_canvas->update();
 
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
-                                              + 25.0 - (75.0/99.0));
+    m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
+                                               + 25.0 - (75.0/99.0));
 
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_IOFileSettings->PNGCompression = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
-                                               + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
+                                                 + 100.0 - ((1.0-100.0)/8.0));
 
-    m_IOFileSettings->TIFFCompression = config->readBoolEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
+
+    m_IOFileSettings->enableRAWQuality = config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->RAWquality       = config->readNumEntry("RAWquality", 0);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())

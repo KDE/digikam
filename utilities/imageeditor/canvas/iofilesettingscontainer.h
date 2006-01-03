@@ -42,6 +42,13 @@ public:
 
     // TIFF deflat compression.
     bool TIFFCompression;
+
+    // RAW file decoding using quality factor. 
+    bool enableRAWQuality;
+
+    // RAW quality decoding factor value.
+    int  RAWquality;
+    
 };
 
 }  // namespace Digikam
