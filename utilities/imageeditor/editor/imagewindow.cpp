@@ -604,7 +604,7 @@ void ImageWindow::slotLoadCurrent()
         }
         else
         {
-            kdDebug() << "imagewindow.cpp line 594" << endl;
+            kdDebug() << "enableCMSetting=false" << endl;
             m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings, 0);
         }
         

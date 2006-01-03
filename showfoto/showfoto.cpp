@@ -942,7 +942,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
     }
     else
     {
-        kdDebug() << "imagewindow.cpp line 594" << endl;
+        kdDebug() << "enableCMSetting=false" << endl;
         m_isReadOnly = m_canvas->load(localFile, 0, m_IOFileSettings, 0);
     }
 
