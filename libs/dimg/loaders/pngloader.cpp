@@ -113,7 +113,7 @@ bool PNGLoader::load(const QString& filePath)
     
     if (setjmp(png_ptr->jmpbuf))
     {
-        kdDebug() << k_funcinfo << "Cannot acces to PNG image data." << endl;
+        kdDebug() << k_funcinfo << "Internal libPNG error during reading file. Process aborted!" << endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         fclose(f);
         return false;
@@ -464,7 +464,7 @@ bool PNGLoader::save(const QString& filePath)
         
     if (setjmp(png_ptr->jmpbuf))
     {
-        kdDebug() << k_funcinfo << "Internal PNG error during writing file." << endl;
+        kdDebug() << k_funcinfo << "Internal libPNG error during writing file. Process aborted!" << endl;
         fclose(f);
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
         png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
