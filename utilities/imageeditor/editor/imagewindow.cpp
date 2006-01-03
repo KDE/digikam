@@ -605,7 +605,7 @@ void ImageWindow::slotLoadCurrent()
         else
         {
             kdDebug() << "imagewindow.cpp line 594" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, 0, 0);
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings, 0);
         }
         
         m_rotatedOrFlipped = false;
