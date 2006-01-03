@@ -53,12 +53,13 @@ extern "C"
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image, bool enableRAWQuality, int RAWquality)
+RAWLoader::RAWLoader(DImg* image, bool enableRAWQuality, int RAWquality, bool RGBInterpolate4Colors)
          : DImgLoader(image)
 {
-    m_hasAlpha         = false;
-    m_enableRAWQuality = enableRAWQuality;
-    m_RAWquality       = RAWquality;   
+    m_hasAlpha              = false;
+    m_enableRAWQuality      = enableRAWQuality;
+    m_RAWquality            = RAWquality;
+    m_RGBInterpolate4Colors = RGBInterpolate4Colors;
 }
 
 bool RAWLoader::load(const QString& filePath)
@@ -76,16 +77,21 @@ bool RAWLoader::load8bits(const QString& filePath)
     // run dcraw with options:
     // -c : write to stdout
     // -2 : 8bit ppm output
+    // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -w : Use camera white balance, if possible  
     // -a : Use automatic white balance
     // -q : Use simple bilinear interpolation for quick results
 
-    if (!m_enableRAWQuality)
-        command  = "dcraw -c -2 -w -a -q ";
-    else
+    command  = "dcraw -c -2 -w -a ";
+    
+    if (m_RGBInterpolate4Colors)
+        command += "-f ";
+    
+    command += "-q ";
+
+    if (m_enableRAWQuality)
     {
         QCString rawQuality;
-        command  = "dcraw -c -2 -w -a -q ";
         command += rawQuality.setNum(m_RAWquality);
         command += " ";
     }
@@ -169,24 +175,26 @@ bool RAWLoader::load16bits(const QString& filePath)
     // run dcraw with options:
     // -c : write to stdout
     // -4 : 16bit ppm output
+    // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
     // -q : Use simple bilinear interpolation for quick results
 
-    if (!m_enableRAWQuality)
-        command  = "dcraw -c -4 -w -a -q ";
-    else
+    command  = "dcraw -c -4 -w -a ";
+    
+    if (m_RGBInterpolate4Colors)
+        command += "-f ";
+    
+    command += "-q ";
+
+    if (m_enableRAWQuality)
     {
         QCString rawQuality;
-        command  = "dcraw -c -4 -w -a -q ";
         command += rawQuality.setNum(m_RAWquality);
         command += " ";
     }
-
     
-    command += "'";
-    command += QFile::encodeName( filePath );
-    command += "'";
+    command += QFile::encodeName( KProcess::quote( filePath ) );
 
 #ifdef ENABLE_DEBUG_MESSAGES
     kdDebug() << "Running dcraw command " << command << endl;

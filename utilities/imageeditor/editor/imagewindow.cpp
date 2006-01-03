@@ -486,8 +486,9 @@ void ImageWindow::applySettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
-    m_IOFileSettings->enableRAWQuality = config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->RAWQuality       = config->readNumEntry("RAWquality", 0);
+    m_IOFileSettings->RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->RAWQuality            = config->readNumEntry("RAWquality", 0);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
@@ -520,8 +521,7 @@ void ImageWindow::readSettings()
     // GUI options.
     autoZoom = config->readBoolEntry("AutoZoom", true);
     m_fullScreen = config->readBoolEntry("FullScreen", false);
-    m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar",
-                                                    false);
+    m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     if (autoZoom)
     {

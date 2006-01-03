@@ -50,6 +50,7 @@ private:
     KIntNumInput *m_PNGcompression;
     
     QCheckBox    *m_enableRAWQuality;
+    QCheckBox    *m_RGBInterpolate4Colors;
     QCheckBox    *m_TIFFcompression;
     QCheckBox    *m_hideToolBar;
 

@@ -51,12 +51,13 @@ SetupEditor::SetupEditor(QWidget* parent )
 
    // --------------------------------------------------------
 
-   QVGroupBox *RAWfileOptionsGroup = new QVGroupBox(i18n("RAW Image Decoding Options"),
-                                                   parent);
+   QVGroupBox *RAWfileOptionsGroup = new QVGroupBox(i18n("RAW Image Decoding Options"), parent);
 
-   m_enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"),
-                                      RAWfileOptionsGroup);
+   m_RGBInterpolate4Colors = new QCheckBox(i18n("Interpolate RGB as four colors"), RAWfileOptionsGroup);
+   QWhatsThis::add( m_RGBInterpolate4Colors, i18n("<p>Interpolate RGB as four colors. This blurs the image a little, "
+                                                  "but it eliminates false 2x2 mesh patterns.<p>"));
    
+   m_enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
    QWhatsThis::add( m_enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images.<p>"));
 
    m_RAWquality = new KIntNumInput(0, RAWfileOptionsGroup);
@@ -66,7 +67,7 @@ SetupEditor::SetupEditor(QWidget* parent )
    QWhatsThis::add( m_RAWquality, i18n("<p>The decoding quality value for RAW images:<p>"
                                        "<b>0</b>: medium quality (default - for slow computer)<p>"
                                        "<b>1</b>: good quality<p>"
-                       "<b>2</b>: high quality<p>"
+                                       "<b>2</b>: high quality<p>"
                                        "<b>3</b>: very high quality (for speed computer)</b>"));
 
    layout->addWidget(RAWfileOptionsGroup);
@@ -152,6 +153,7 @@ void SetupEditor::applySettings()
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("RAWquality", m_RAWquality->value());
     config->writeEntry("EnableRAWQuality", m_enableRAWQuality->isChecked());
+    config->writeEntry("RGBInterpolate4Colors", m_RGBInterpolate4Colors->isChecked());    
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
     config->writeEntry("PNGCompression", m_PNGcompression->value());
     config->writeEntry("TIFFCompression", m_TIFFcompression->isChecked());
@@ -171,6 +173,7 @@ void SetupEditor::readSettings()
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_RAWquality->setValue( config->readNumEntry("RAWquality", 0) );
     m_enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
+    m_RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));    
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));

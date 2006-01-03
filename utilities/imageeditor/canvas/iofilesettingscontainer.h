@@ -43,6 +43,12 @@ public:
     // TIFF deflat compression.
     bool TIFFCompression;
 
+    // ------------------------------------------------------
+    // RAW File decoding options :
+
+    // RAW file decoding using RGB interpolation as four colors.
+    bool RGBInterpolate4Colors;
+    
     // RAW file decoding using quality factor. 
     bool enableRAWQuality;
 

@@ -121,65 +121,11 @@ DImgInterface::~DImgInterface()
     m_instance = 0;
 }
 
-// bool DImgInterface::load(const QString& filename, bool *isReadOnly)
-// {
-//     bool valRet;
-// 
-//     *isReadOnly   = true;
-//     d->valid      = false;
-// 
-//     d->filename   = filename;
-// 
-//     d->width      = 0;
-//     d->height     = 0;
-//     d->origWidth  = 0;
-//     d->origHeight = 0;
-//     d->selX       = 0;
-//     d->selY       = 0;
-//     d->selW       = 0;
-//     d->selH       = 0;
-//     d->gamma      = 1.0;
-//     d->contrast   = 1.0;
-//     d->brightness = 0.0;
-//     d->cmod.reset();
-//     d->image.reset();
-//     
-//     d->undoMan->clear();
-// 
-//     d->image = DImg(filename);
-// 
-//     if (!d->image.isNull())
-//     {
-//         d->origWidth  = d->image.width();
-//         d->origHeight = d->image.height();
-//         d->valid      = true;
-// 
-//         d->width      = d->origWidth;
-//         d->height     = d->origHeight;
-// 
-//         *isReadOnly   = d->image.isReadOnly();
-//         valRet        = true;
-//     }
-//     else
-//     {
-//         kdWarning() << k_funcinfo << "Failed to load image " << endl;
-//         valRet = false;
-//     }
-// 
-//     if (d->exifOrient)
-//     {
-//         exifRotate(filename);
-//     }
-// 
-//     return (valRet);
-// }
-
 bool DImgInterface::load(const QString& filename, bool *isReadOnly,
-                         ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings,
+                         ICCSettingsContainer *cmSettings,
+                         IOFileSettingsContainer* iofileSettings,
                          QWidget *parent)
 {
-
-
     bool valRet;
     bool apply;
 
@@ -203,8 +149,9 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
 
     d->undoMan->clear();
 
-    d->image = DImg(filename, iofileSettings->enableRAWQuality,
-                    iofileSettings->RAWQuality);
+    d->image = DImg(filename,
+                    iofileSettings->enableRAWQuality, iofileSettings->RAWQuality,
+                    iofileSettings->RGBInterpolate4Colors);
 
     if (!d->image.isNull())
     {
