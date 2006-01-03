@@ -293,7 +293,7 @@ bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
             // -2 : 8bit ppm output
             // -w : Use camera white balance, if possible  
             // -a : Use automatic white balance
-            command  = "dcraw -c -q -2 -w -a ";
+            command  = "dcraw -c -2 -w -a -q 0 ";
             command += QFile::encodeName( KProcess::quote( filename ) );
             kdWarning() << "Running dcraw command : " << command << endl;
         
