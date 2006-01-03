@@ -30,6 +30,9 @@ class QCheckBox;
 class KIntSpinBox;
 class KDoubleSpinBox;
 
+namespace Digikam
+{
+
 class ImageResizeDlg : public KDialogBase
 {
     Q_OBJECT
@@ -60,5 +63,7 @@ private slots:
     void slotOk();
     void slotChanged();
 };
+
+}  // namespace Digikam
 
 #endif /* IMAGERESIZEDLG_H */

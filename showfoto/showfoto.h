@@ -38,11 +38,8 @@ class KSelectAction;
 class KConfig;
 class KToolBarPopupAction;
 
-class Canvas;
-class ImagePluginLoader;
 class SplashScreen;
 class SlideShow;
-class ICCSettingsContainer;
 
 namespace KIO
 {
@@ -51,9 +48,12 @@ class Job;
 
 namespace Digikam
 {
+class ImagePluginLoader;
+class Canvas;
 class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
+class ICCSettingsContainer;
 }
 
 class ShowFoto : public KMainWindow
@@ -88,20 +88,12 @@ private:
     int                              m_PNGCompression;
     int                              m_itemsNb;
 
-    Canvas                          *m_canvas;
-    
-    ImagePluginLoader               *m_imagePluginLoader;
-    
     SplashScreen                    *m_splash;
     
     SlideShow                       *m_slideShow;
 
     KURL                             m_lastOpenedDirectory;
 
-    Digikam::ThumbBarView           *m_bar;
-    Digikam::ThumbBarItem           *m_currentItem;
-    Digikam::ImagePropertiesSideBar *m_rightSidebar;
-    
     QLabel                          *m_nameLabel;
     QLabel                          *m_zoomLabel;
     QLabel                          *m_resLabel;
@@ -153,7 +145,12 @@ private:
         
     KSelectAction                   *m_viewHistogramAction;
 
-    ICCSettingsContainer            *m_ICCSettings;
+    Digikam::ImagePluginLoader      *m_imagePluginLoader;
+    Digikam::Canvas                 *m_canvas;
+    Digikam::ThumbBarView           *m_bar;
+    Digikam::ThumbBarItem           *m_currentItem;
+    Digikam::ImagePropertiesSideBar *m_rightSidebar;
+    Digikam::ICCSettingsContainer   *m_ICCSettings;
 
 private:
 

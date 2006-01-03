@@ -36,11 +36,13 @@ class QWheelEvent;
 class QKeyEvent;
 class QColor;
 
+namespace Digikam
+{
 class CanvasPrivate;
 class ICCSettingsContainer;
 
-class Canvas : public QScrollView {
-
+class Canvas : public QScrollView
+{
     Q_OBJECT
     
 public:
@@ -162,5 +164,7 @@ signals:
     void signalShowPrevImage();
 };
     
+}  // namespace Digikam
+
 #endif /* CANVAS_H */
 

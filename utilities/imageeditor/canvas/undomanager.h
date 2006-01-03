@@ -19,17 +19,20 @@
 #ifndef UNDOMANAGER_H
 #define UNDOMANAGER_H
 
+// QT includes.
+
 #include <qvaluelist.h>
 
-class UndoManagerPriv;
-class UndoAction;
-class UndoCache;
 class QStringList;
 
 namespace Digikam
 {
+
+class UndoManagerPriv;
+class UndoAction;
+class UndoCache;
+
 class DImgInterface;
-}
 
 class UndoManager
 {
@@ -54,12 +57,16 @@ private:
     void clearUndoActions();
     void clearRedoActions();
 
-    Digikam::DImgInterface* m_iface;
+private:
+    
+    DImgInterface           *m_iface;
     
     QValueList<UndoAction*>  m_undoActions;
     QValueList<UndoAction*>  m_redoActions;
     
     UndoCache*               m_cache;
 };
+
+}  // namespace Digikam
 
 #endif /* UNDOMANAGER_H */

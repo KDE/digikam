@@ -65,6 +65,9 @@
 
 #include "imageprint.h"
 
+namespace Digikam
+{
+
 // Image printdialog class -------------------------------------------------------------
 
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
@@ -187,8 +190,7 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
 
 // Image print class -----------------------------------------------------------------
 
-ImagePrint::ImagePrint(Digikam::DImg& image, KPrinter& printer,
-                       const QString& filename)
+ImagePrint::ImagePrint(DImg& image, KPrinter& printer, const QString& filename)
           : m_image( image ), m_printer( printer ), m_filename( filename )
 {
 }
@@ -365,5 +367,7 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
 
     return text;
 }
+
+}  // namespace Digikam
 
 #include "imageprint.moc"

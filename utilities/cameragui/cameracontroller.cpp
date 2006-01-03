@@ -758,7 +758,7 @@ void CameraController::customEvent(QCustomEvent* e)
         KURL::List urlList;
         urlList << url;
 
-        ImageWindow *im = ImageWindow::imagewindow();
+        Digikam::ImageWindow *im = Digikam::ImageWindow::imagewindow();
         im->loadURL(urlList, url, file, false);
         if (im->isHidden())
             im->show();

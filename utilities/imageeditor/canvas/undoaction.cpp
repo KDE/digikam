@@ -29,7 +29,10 @@
 #include "dimginterface.h"
 #include "undoaction.h"
 
-UndoAction::UndoAction(Digikam::DImgInterface* iface)
+namespace Digikam
+{
+
+UndoAction::UndoAction(DImgInterface* iface)
     : m_iface(iface)
 {
     m_title = i18n("unknown");
@@ -44,7 +47,7 @@ QString UndoAction::getTitle() const
     return m_title;
 }
 
-UndoActionRotate::UndoActionRotate(Digikam::DImgInterface* iface,
+UndoActionRotate::UndoActionRotate(DImgInterface* iface,
                                    UndoActionRotate::Angle angle)
     : UndoAction(iface), m_angle(angle)
 {
@@ -102,7 +105,7 @@ void UndoActionRotate::execute()
     }
 }
 
-UndoActionFlip::UndoActionFlip(Digikam::DImgInterface* iface,
+UndoActionFlip::UndoActionFlip(DImgInterface* iface,
                                UndoActionFlip::Direction dir)
     : UndoAction(iface), m_dir(dir)
 {
@@ -137,7 +140,7 @@ void UndoActionFlip::execute()
     rollBack();
 }
 
-UndoActionBCG::UndoActionBCG(Digikam::DImgInterface* iface,
+UndoActionBCG::UndoActionBCG(DImgInterface* iface,
                              double oldGamma, double oldBrightness,
                              double oldContrast, double newGamma,
                              double newBrightness, double newContrast)
@@ -163,7 +166,7 @@ void UndoActionBCG::execute()
     m_iface->changeBCG(m_newGamma, m_newBrightness, m_newContrast);
 }
 
-UndoActionIrreversible::UndoActionIrreversible(Digikam::DImgInterface* iface, 
+UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface,
                                                const QString &title)
     : UndoAction(iface)
 {
@@ -183,3 +186,4 @@ void UndoActionIrreversible::execute()
 {
 }
 
+}  // namespace Digikam

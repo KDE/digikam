@@ -114,7 +114,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         m_splash = new SplashScreen("showfoto-splash.png");
     }
 
-    m_ICCSettings             = new ICCSettingsContainer();
+    m_ICCSettings             = new Digikam::ICCSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -122,7 +122,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     QHBoxLayout *lay = new QHBoxLayout(widget);
     
     m_splitter     = new QSplitter(widget);
-    m_canvas       = new Canvas(m_splitter);
+    m_canvas       = new Digikam::Canvas(m_splitter);
     m_rightSidebar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
     m_bar          = new Digikam::ThumbBarView(widget);
     
@@ -149,7 +149,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // Load image plugins.
 
-    m_imagePluginLoader = new ImagePluginLoader(this, m_splash);
+    m_imagePluginLoader = new Digikam::ImagePluginLoader(this, m_splash);
     loadPlugins();
 
     // If plugin core isn't available, plug BCG actions to collection instead.
@@ -253,6 +253,7 @@ ShowFoto::~ShowFoto()
     delete m_imagePluginLoader;
     delete m_slideShow;
     delete m_rightSidebar;
+    delete m_ICCSettings;
 }
 
 void ShowFoto::closeEvent(QCloseEvent* e)
@@ -1299,11 +1300,11 @@ void ShowFoto::slotFilePrint()
     printer.setUsePrinterResolution(true);
 #endif
 
-    KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ShowFoto page"));
+    KPrinter::addDialogPage( new Digikam::ImageEditorPrintDialogPage( this, "ShowFoto page"));
 
     if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
     {
-        ImagePrint printOperations(image, printer, m_currentItem->url().filename());
+        Digikam::ImagePrint printOperations(image, printer, m_currentItem->url().filename());
         if (!printOperations.printImageWithQt())
         {
             KMessageBox::error(this, i18n("Failed to print file: '%1'")
@@ -1317,7 +1318,7 @@ void ShowFoto::slotResize()
     int width  = m_canvas->imageWidth();
     int height = m_canvas->imageHeight();
 
-    ImageResizeDlg dlg(this, &width, &height);
+    Digikam::ImageResizeDlg dlg(this, &width, &height);
     if (dlg.exec() == QDialog::Accepted &&
         (width != m_canvas->imageWidth() ||
          height != m_canvas->imageHeight()))

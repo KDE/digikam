@@ -19,18 +19,20 @@
 #ifndef UNDOACTION_H
 #define UNDOACTION_H
 
+// KDE includes.
+
 #include <klocale.h>
 
 namespace Digikam
 {
+
 class DImgInterface;
-}
 
 class UndoAction
 {
 public:
 
-    UndoAction(Digikam::DImgInterface* iface);
+    UndoAction(DImgInterface* iface);
     virtual ~UndoAction();
 
     virtual void rollBack() = 0;
@@ -40,8 +42,8 @@ public:
     
 protected:
 
-    Digikam::DImgInterface* m_iface;
-    QString                  m_title;
+    DImgInterface *m_iface;
+    QString        m_title;
 };
 
 class UndoActionRotate : public UndoAction
@@ -55,7 +57,7 @@ public:
         R270
     };
     
-    UndoActionRotate(Digikam::DImgInterface* iface, Angle angle);
+    UndoActionRotate(DImgInterface* iface, Angle angle);
     ~UndoActionRotate();
 
     void rollBack();
@@ -76,7 +78,7 @@ public:
         Vertical
     };
     
-    UndoActionFlip(Digikam::DImgInterface* iface, Direction dir);
+    UndoActionFlip(DImgInterface* iface, Direction dir);
     ~UndoActionFlip();
 
     void rollBack();
@@ -91,7 +93,7 @@ class UndoActionBCG : public UndoAction
 {
 public:
 
-    UndoActionBCG(Digikam::DImgInterface* iface,
+    UndoActionBCG(DImgInterface* iface,
                   double oldGamma, double oldBrightness,
                   double oldContrast, double newGamma,
                   double newBrightness, double newContrast);
@@ -114,7 +116,7 @@ class UndoActionIrreversible : public UndoAction
 {
 public:
 
-    UndoActionIrreversible(Digikam::DImgInterface* iface, 
+    UndoActionIrreversible(DImgInterface* iface,
                            const QString &caller=i18n("Unknown"));
     ~UndoActionIrreversible();
 
@@ -122,5 +124,7 @@ public:
     void execute();
 
 };
+
+}  // namespace Digikam
 
 #endif /* UNDOACTION_H */

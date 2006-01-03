@@ -20,16 +20,27 @@
  * 
  * ============================================================ */
 
+// C++ includes.
+
 #include <typeinfo>
 
+// Qt includes.
+
 #include <qstringlist.h>
+
+// KDE includes.
+
+#include <kdebug.h>
+
+// Local includes.
 
 #include "dimginterface.h"
 #include "undoaction.h"
 #include "undocache.h"
 #include "undomanager.h"
 
-#include <kdebug.h>
+namespace Digikam
+{
 
 UndoManager::UndoManager(Digikam::DImgInterface* iface)
     : m_iface(iface)
@@ -192,3 +203,5 @@ void UndoManager::getRedoHistory(QStringList &titles)
         titles.push_front((*it)->getTitle());
     }
 }
+
+}  // namespace Digikam

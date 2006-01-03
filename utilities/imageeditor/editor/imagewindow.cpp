@@ -19,6 +19,10 @@
  *
  * ============================================================ */
 
+// C++ Includes.
+
+#include <cstdio>
+
 // Qt includes.
 
 #include <qpopupmenu.h>
@@ -54,8 +58,6 @@
 #include <kedittoolbar.h>
 #include <kpopupmenu.h>
 
-#include <cstdio>
-
 // LibKexif includes.
 
 #include <libkexif/kexifdata.h>
@@ -80,7 +82,11 @@
 #include "imagepropertiessidebardb.h"
 #include "tagspopupmenu.h"
 #include "iccsettingscontainer.h"
+#include "iofilesettingscontainer.h"
 #include "imagewindow.h"
+
+namespace Digikam
+{
 
 ImageWindow* ImageWindow::imagewindow()
 {
@@ -104,7 +110,8 @@ ImageWindow::ImageWindow()
     m_dirtyImage            = false;
     m_view                  = 0L;
 
-    m_ICCSettings             = new ICCSettingsContainer();
+    m_ICCSettings           = new ICCSettingsContainer();
+    m_IOFileSettings        = new IOFileSettingsContainer();
 
     // -- construct the view ---------------------------------
 
@@ -217,6 +224,8 @@ ImageWindow::~ImageWindow()
     
     delete m_canvas; 
     delete m_rightSidebar;
+    delete m_ICCSettings;
+    delete m_IOFileSettings;
 }
 
 void ImageWindow::closeEvent(QCloseEvent *e)
@@ -1440,6 +1449,8 @@ void ImageWindow::slotRemoveTag(int tagID)
                 
     }
 }
+
+}  // namespace Digikam
 
 #include "imagewindow.moc"
 

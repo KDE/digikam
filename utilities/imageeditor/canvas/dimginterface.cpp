@@ -54,10 +54,13 @@
 namespace Digikam
 {
 
+class UndoManager;
+
 #define MaxRGB 255L
 
 class DImgInterfacePrivate 
 {
+
 public:
 
     bool          valid;
@@ -608,7 +611,7 @@ void DImgInterface::rotate90(bool saveUndo)
 {
     if (saveUndo)
     {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));    
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
     }
 
     d->image.rotate(DImg::ROT90);
@@ -622,7 +625,7 @@ void DImgInterface::rotate180(bool saveUndo)
 {
     if (saveUndo)
     {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));    
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
     }
 
     d->image.rotate(DImg::ROT180);
@@ -636,7 +639,7 @@ void DImgInterface::rotate270(bool saveUndo)
 {
     if (saveUndo)
     {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));    
+        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
     }
 
     d->image.rotate(DImg::ROT270);
@@ -650,7 +653,7 @@ void DImgInterface::flipHoriz(bool saveUndo)
 {
     if (saveUndo)
     {
-        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));    
+        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));
     }
 
     d->image.flip(DImg::HORIZONTAL);

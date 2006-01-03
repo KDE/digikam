@@ -20,11 +20,14 @@
  * 
  * ============================================================ */
 
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kaboutdata.h>
-#include <kinstance.h>
-#include <kglobal.h>
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+}
+
+// QT includes.
 
 #include <qcstring.h>
 #include <qstring.h>
@@ -32,12 +35,20 @@
 #include <qdatastream.h>
 #include <qstringlist.h>
 
-extern "C"
-{
-#include <unistd.h>
-}
+// KDE includes.
+
+#include <kdebug.h>
+#include <kstandarddirs.h>
+#include <kaboutdata.h>
+#include <kinstance.h>
+#include <kglobal.h>
+
+// Local includes.
 
 #include "undocache.h"
+
+namespace Digikam
+{
 
 class UndoCachePriv
 {
@@ -159,3 +170,5 @@ void UndoCache::erase(int level)
     
     ::unlink(QFile::encodeName(cacheFile));
 }
+
+}  // namespace Digikam

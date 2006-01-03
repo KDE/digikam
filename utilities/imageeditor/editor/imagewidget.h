@@ -68,6 +68,6 @@ private:
 
 };
 
-}
+}  // namespace Digikam
 
 #endif /* IMAGEWIDGET_H */

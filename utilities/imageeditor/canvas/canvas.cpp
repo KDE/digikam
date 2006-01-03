@@ -55,12 +55,14 @@
 #include "canvas.h"
 #include "iccsettingscontainer.h"
 
+namespace Digikam
+{
+
 const int HISTOGRAM_WIDTH  = (256 * 4) / 3;
 const int HISTOGRAM_HEIGHT = (114 * 4) / 3;
 
-using namespace Digikam;
-
-class CanvasPrivate {
+class CanvasPrivate
+{
 
 public:
 
@@ -1559,5 +1561,7 @@ void Canvas::slotPaintSmooth()
 
     paintViewport(contentsRect(), true);
 }
+
+}  // namespace Digikam
 
 #include "canvas.moc"

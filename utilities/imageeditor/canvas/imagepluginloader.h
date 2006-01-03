@@ -36,6 +36,9 @@
 
 class SplashScreen;
 
+namespace Digikam
+{
+
 class ImagePluginLoader : public QObject
 {
     
@@ -58,11 +61,15 @@ private:
     typedef QPair<QString,Digikam::ImagePlugin*> PluginType;
     typedef QValueList< PluginType >             PluginList;
     
-    SplashScreen                         *m_splash;
-    static ImagePluginLoader             *m_instance;
-    PluginList                            m_pluginList;
+    SplashScreen                                *m_splash;
+    static ImagePluginLoader                    *m_instance;
+    PluginList                                   m_pluginList;
     
-    Digikam::ImagePlugin* pluginIsLoaded(const QString& name);
+private:
+    
+    ImagePlugin* pluginIsLoaded(const QString& name);
 };
+
+}  // namespace Digikam
 
 #endif /* IMAGEPLUGINLOADER_H */

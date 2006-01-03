@@ -39,11 +39,9 @@ class QWidget;
 class QString;
 class QPixmap;
 
-class ICCSettingsContainer;
-
 namespace Digikam
 {
-
+class ICCSettingsContainer;
 class DImgInterfacePrivate;
 
 class DImgInterface : public QObject
@@ -140,6 +138,8 @@ private:
 
     DImgInterface();
 
+private:
+
     DImgInterfacePrivate *d;
 
     static DImgInterface *m_instance;
@@ -147,6 +147,6 @@ private:
     bool                  m_rotatedOrFlipped;
 };
 
-}
+}  // namespace Digikam
 
 #endif /* DIMGINTERFACE_H */

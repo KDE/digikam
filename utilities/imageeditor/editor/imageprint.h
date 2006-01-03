@@ -42,11 +42,14 @@ class QRadioButton;
 class KComboBox;
 class KDoubleNumInput;
 
+namespace Digikam
+{
+
 class ImagePrint
 {
 public:
 
-    ImagePrint(Digikam::DImg& image, KPrinter& printer,
+    ImagePrint(DImg& image, KPrinter& printer,
                const QString& fileName);
     ~ImagePrint();
 
@@ -58,7 +61,7 @@ private:
                             int maxWidth );
 private:
 
-    Digikam::DImg m_image;
+    DImg          m_image;
     KPrinter&     m_printer;
     QString       m_filename;
 
@@ -94,5 +97,7 @@ private:
     QCheckBox       *m_blackwhite;
     QCheckBox       *m_autoRotate;
 };
+
+}  // namespace Digikam
 
 #endif // IMAGEPRINT_H

@@ -28,6 +28,8 @@
 /**
 	@author digiKam team <digikam-devel@kde.org>
 */
+namespace Digikam
+{
 
 class ICCSettingsContainer
 {
@@ -52,5 +54,7 @@ public:
     QString inputSetting;
     QString proofSetting;
 };
+
+}  // namespace Digikam
 
 #endif  // ICCSETTINGSCONTAINER_H

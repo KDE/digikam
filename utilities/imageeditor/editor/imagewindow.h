@@ -24,11 +24,11 @@
 
 // Qt includes.
 
-#include <kmainwindow.h>
 #include <qstring.h>
 
 // Kde includes.
 
+#include <kmainwindow.h>
 #include <kurl.h>
 
 class QPopupMenu;
@@ -43,14 +43,15 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KSelectAction;
 
-class Canvas;
 class AlbumIconView;
-class ICCSettingsContainer;
 
 namespace Digikam
 {
+
+class Canvas;
 class ImagePropertiesSideBarDB;
-}
+class ICCSettingsContainer;
+class IOFileSettingsContainer;
 
 class ImageWindow : public KMainWindow
 {
@@ -138,7 +139,7 @@ private:
     KAction                *m_resizeAction;
     KAction                *m_cropAction;
     
-    KAction                *m_fileprint;    
+    KAction                *m_fileprint;
     KAction                *m_fileDelete;
     
     KAction                *m_copyAction;
@@ -151,11 +152,13 @@ private:
 
     Canvas                 *m_canvas;
 
-    ICCSettingsContainer   *m_ICCSettings;
+    ICCSettingsContainer    *m_ICCSettings;
+    
+    IOFileSettingsContainer *m_IOFileSettings;
     
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.
-    AlbumIconView          *m_view;
+    AlbumIconView           *m_view;
     
     Digikam::ImagePropertiesSideBarDB *m_rightSidebar;
     
@@ -217,5 +220,7 @@ protected:
 
     void closeEvent(QCloseEvent *e);
 };
+
+}  // namespace Digikam
 
 #endif /* IMAGEWINDOW_H */

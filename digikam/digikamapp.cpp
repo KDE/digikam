@@ -136,8 +136,8 @@ DigikamApp::DigikamApp(bool detectCamera)
 
 DigikamApp::~DigikamApp()
 {
-    if (ImageWindow::imagewindow())
-        delete ImageWindow::imagewindow();
+    if (Digikam::ImageWindow::imagewindow())
+        delete Digikam::ImageWindow::imagewindow();
 
     if (mView)
         delete mView;
@@ -924,8 +924,8 @@ void DigikamApp::slotSetupChanged()
 
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();
-    if (ImageWindow::imagewindow())
-        ImageWindow::imagewindow()->applySettings();
+    if (Digikam::ImageWindow::imagewindow())
+        Digikam::ImageWindow::imagewindow()->applySettings();
 
     m_config->sync();
 }
@@ -1025,7 +1025,7 @@ void DigikamApp::loadPlugins()
     // Setting the initial menu options after all plugins have been loaded
     mView->slot_albumSelected(mAlbumManager->currentAlbum());
 
-    m_ImagePluginsLoader = new ImagePluginLoader(this, mSplash);
+    m_ImagePluginsLoader = new Digikam::ImagePluginLoader(this, mSplash);
 }
 
 void DigikamApp::slotKipiPluginPlug()

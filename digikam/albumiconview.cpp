@@ -887,7 +887,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
             urlList.append(iconItem->imageInfo()->kurl());
     }
 
-    ImageWindow *imview = ImageWindow::imagewindow();
+    Digikam::ImageWindow *imview = Digikam::ImageWindow::imagewindow();
     
     imview->disconnect(this);
 

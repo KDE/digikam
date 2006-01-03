@@ -1,8 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Jörn Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-02-05
- * Copyright 2005 by Renchi Raju, Jörn Ahrens
+ * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2006-01-03
+ * Description : IO file Settings Container.
+ * 
+ * Copyright 2005 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -14,38 +15,27 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ * 
  * ============================================================ */
 
-#ifndef UNDOCACHE_H
-#define UNDOCACHE_H
-
-// QT includes.
-
-#include <qglobal.h>
+#ifndef IOFILESETTINGSCONTAINER_H
+#define IOFILESETTINGSCONTAINER_H
 
 namespace Digikam
 {
 
-class UndoCachePriv;
-
-class UndoCache
+class IOFileSettingsContainer
 {
+
+public:
+    
+    IOFileSettingsContainer(){};
+    ~IOFileSettingsContainer(){};
+
 public:
 
-    UndoCache();
-    ~UndoCache();
-
-    void clear();
-    bool putData(int level, int w, int h, uint* data);
-    bool getData(int level, int& w, int& h, uint*& data, bool del=true);
-
-    void erase(int level);
-
-private:
-
-    UndoCachePriv* d;
 };
 
 }  // namespace Digikam
 
-#endif /* UNDOCACHE_H */
+#endif  // IOFILESETTINGSCONTAINER_H

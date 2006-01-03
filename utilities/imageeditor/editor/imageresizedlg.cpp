@@ -34,6 +34,9 @@
 
 #include "imageresizedlg.h"
 
+namespace Digikam
+{
+
 ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
               : KDialogBase(Plain, i18n("Resize Image"), Help|Ok|Cancel, Ok,
                             parent, 0, true, true)
@@ -181,5 +184,7 @@ void ImageResizeDlg::slotChanged()
     m_wpInput->blockSignals(false);
     m_hpInput->blockSignals(false);
 }
+
+}  // namespace Digikam
 
 #include "imageresizedlg.moc"

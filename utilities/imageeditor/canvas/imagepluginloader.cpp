@@ -35,6 +35,9 @@
 #include "imagepluginloader.h"
 #include "splashscreen.h"
 
+namespace Digikam
+{
+
 ImagePluginLoader* ImagePluginLoader::m_instance=0;
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
@@ -76,7 +79,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
-        Digikam::ImagePlugin *plugin;
+        ImagePlugin *plugin;
 
         if (service->library() == "digikamimageplugin_core")
         {
@@ -84,7 +87,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             {
                 int error;
                 plugin = KParts::ComponentFactory
-                         ::createInstanceFromService<Digikam::ImagePlugin>(service, this,
+                         ::createInstanceFromService<ImagePlugin>(service, this,
                                                                            service->name().local8Bit(),
                                                                            0, &error);
 
@@ -121,7 +124,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
     for (iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
-        Digikam::ImagePlugin *plugin;
+        ImagePlugin *plugin;
 
         if (!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
         {
@@ -135,7 +138,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             else
             {
                 plugin = KParts::ComponentFactory
-                         ::createInstanceFromService<Digikam::ImagePlugin>(service, this,
+                         ::createInstanceFromService<ImagePlugin>(service, this,
                                                                            service->name().local8Bit(),
                                                                            0);
 
@@ -162,7 +165,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                          // use the old splashscreen instance.
 }
 
-Digikam::ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
+ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
 {
     if ( m_pluginList.isEmpty() )
         return 0;
@@ -205,9 +208,9 @@ ImagePluginLoader* ImagePluginLoader::instance()
     return m_instance;
 }
 
-QPtrList<Digikam::ImagePlugin> ImagePluginLoader::pluginList()
+QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
 {
-    QPtrList<Digikam::ImagePlugin> list;
+    QPtrList<ImagePlugin> list;
 
     for (PluginList::iterator it = m_pluginList.begin(); it != m_pluginList.end(); ++it)
     {
@@ -216,3 +219,5 @@ QPtrList<Digikam::ImagePlugin> ImagePluginLoader::pluginList()
         
     return list;
 }
+
+}  // namespace Digikam

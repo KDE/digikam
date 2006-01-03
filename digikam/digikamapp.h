@@ -43,10 +43,14 @@ namespace KIPI
 class PluginLoader;
 }
 
+namespace Digikam
+{
+class ImagePluginLoader;
+}
+
 class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
 class DigikamKipiInterface;
-class ImagePluginLoader;
 
 class KAction;
 class KActionMenu;
@@ -100,10 +104,10 @@ protected:
 
 private:
 
-    static DigikamApp     *m_instance;
-    AlbumManager          *mAlbumManager;
+    static DigikamApp          *m_instance;
+    AlbumManager               *mAlbumManager;
     
-    ImagePluginLoader     *m_ImagePluginsLoader;
+    Digikam::ImagePluginLoader *m_ImagePluginsLoader;
     
     // For KIPI plugins support 
     KIPI::PluginLoader    *KipiPluginLoader_;
