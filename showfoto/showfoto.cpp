@@ -934,7 +934,7 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #else
     KIO::NetAccess::download(url, localFile);
 #endif
-    m_isReadOnly = m_canvas->load(localFile, 0, 0, 0);
+    
     if (m_ICCSettings->enableCMSetting)
     {
         kdDebug() << "enableCMSetting=true" << endl;
