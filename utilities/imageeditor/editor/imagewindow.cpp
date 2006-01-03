@@ -601,12 +601,12 @@ void ImageWindow::slotLoadCurrent()
         if (m_ICCSettings->enableCMSetting)
         {
             kdDebug() << "enableCMSetting=true" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_instance);
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings, m_instance);
         }
         else
         {
             kdDebug() << "imagewindow.cpp line 594" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, 0);
+            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, 0, 0);
         }
         
         m_rotatedOrFlipped = false;

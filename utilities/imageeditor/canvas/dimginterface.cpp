@@ -175,7 +175,8 @@ DImgInterface::~DImgInterface()
 // }
 
 bool DImgInterface::load(const QString& filename, bool *isReadOnly,
-                         ICCSettingsContainer *cmSettings, QWidget *parent)
+                         ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings,
+                         QWidget *parent)
 {
 
 
@@ -215,13 +216,6 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
 
         *isReadOnly   = d->image.isReadOnly();
         valRet        = true;
-
-        // FIXME Implement  transformations.
-        /*
-        IccTransform trans;
-        trans.setProfiles("/home/gilles/Canon-EOS10D-linear.icc", "/home/gilles/AdobeRGB1998.icc");
-        trans.apply(d->image);
-        */
 
         if (cmSettings)
         {
@@ -399,7 +393,7 @@ void DImgInterface::restore()
     bool isReadOnly;
     d->undoMan->clear();
 
-    load(d->filename, &isReadOnly, 0, 0);
+    load(d->filename, &isReadOnly, 0, 0, 0);
     emit signalModified(false, false);
 }
 

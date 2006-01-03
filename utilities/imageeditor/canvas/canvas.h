@@ -53,7 +53,8 @@ public:
     ~Canvas();
 
 //     bool load(const QString& filename);
-    bool load(const QString& filename, ICCSettingsContainer *ICCSettings, QWidget *parent);
+    bool load(const QString& filename, ICCSettingsContainer *ICCSettings,
+              IOFileSettingsContainer *IOFileSettings, QWidget *parent);
     void preload(const QString& filename);
     int  save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
     int  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,

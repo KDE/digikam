@@ -387,7 +387,8 @@ Canvas::~Canvas()
 //     return (isReadOnly);
 // }
 
-bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings, QWidget *parent)
+bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
+                  IOFileSettingsContainer *IOFileSettings, QWidget *parent)
 {
     // FIXME implement this overloaded method
 
@@ -409,7 +410,7 @@ bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings, QW
     d->tileCache.clear();
 
     bool isReadOnly = true;
-    d->im->load( filename, &isReadOnly, ICCSettings, parent );
+    d->im->load( filename, &isReadOnly, ICCSettings, IOFileSettings, parent );
 
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
