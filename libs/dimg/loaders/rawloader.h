@@ -44,8 +44,8 @@ public:
 
     RAWLoader(DImg* image, bool enableRAWQuality=false, int RAWquality=0, bool RGBInterpolate4Colors=false);
 
-    bool load(const QString& filePath);
-    bool save(const QString& filePath);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
@@ -71,8 +71,8 @@ private:
 
     // Methods to load RAW image using external dcraw instance.
 
-    bool load8bits(const QString& filePath);
-    bool load16bits(const QString& filePath);
+    bool load8bits(const QString& filePath, DImgLoaderObserver *observer);
+    bool load16bits(const QString& filePath, DImgLoaderObserver *observer);
 
     // Get ICC profiles from RAW files. Any RAW file formats are JPEG like,
     // anothers are TIFF like.

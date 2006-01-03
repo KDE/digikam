@@ -205,6 +205,16 @@ void HistogramWidget::customEvent(QCustomEvent *event)
     delete d;
 }
 
+void HistogramWidget::setDataLoadingProgress(float) {
+    if (m_clearFlag != HistogramDataLoading)
+    {
+        setCursor( KCursor::waitCursor() );
+        m_clearFlag = HistogramDataLoading;
+        m_blinkTimer->start( 200 );
+        repaint(false);
+    }
+}
+
 void HistogramWidget::stopHistogramComputation(void)
 {
     if (m_imageHistogram)
@@ -278,7 +288,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        return;
     }
 
-    if (m_clearFlag == HistogramStarted && m_blinkComputation)
+    if ( (m_clearFlag == HistogramStarted || m_clearFlag == HistogramDataLoading) && m_blinkComputation)
     {
        QPixmap pm(size());
        QPainter p1;
@@ -290,7 +300,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        else 
            p1.setPen(Qt::darkGreen);
 
-       p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+       if (m_clearFlag == HistogramDataLoading)
+           p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                       i18n("Loading image..."));
+       else //(m_clearFlag == HistogramStarted)
+           p1.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
                   i18n("Histogram\ncalculation\nin progress..."));
        p1.end();
        bitBlt(this, 0, 0, &pm);

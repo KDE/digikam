@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "dimgloaderobserver.h"
 
 class QString;
 class QVariant;
@@ -89,7 +90,7 @@ public:
 
     DImg();
     
-    DImg(const QString& filePath,
+    DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
          bool  enableRAWQuality=false, int RAWquality=0,
          bool  RGBInterpolate4Colors=false);
          
@@ -101,11 +102,10 @@ public:
 
     void        reset(void);
 
-    bool        load(const QString& filePath,
-                     bool  enableRAWQuality, int RAWquality,
-                     bool  RGBInterpolate4Colors);
-                     
-    bool        save(const QString& filePath, const char* format);
+    bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
+                     bool  enableRAWQuality = false, int RAWquality = 0,
+                     bool  RGBInterpolate4Colors = false);
+    bool        save(const QString& filePath, const char* format, DImgLoaderObserver *observer = 0);
 
     bool        isNull()     const;
     uint        width()      const;

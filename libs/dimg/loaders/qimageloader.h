@@ -33,8 +33,8 @@ public:
 
     QImageLoader(DImg* image);
     
-    virtual bool load(const QString& filePath);
-    virtual bool save(const QString& filePath);
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer);
+    virtual bool save(const QString& filePath, DImgLoaderObserver *observer);
     
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const { return false; };

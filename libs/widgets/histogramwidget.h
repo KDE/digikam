@@ -77,6 +77,7 @@ private:
     enum RepaintType
     {
     HistogramNone = 0,        // No current histogram values calculation.
+    HistogramDataLoading,     // The image is being loaded
     HistogramStarted,         // Histogram values calculation started.
     HistogramCompleted,       // Histogram values calculation completed.
     HistogramFailed           // Histogram values calculation failed.
@@ -126,6 +127,8 @@ public:
     void updateSelectionData(uchar *s_data, uint s_w, uint s_h,
                              bool i_sixteenBits,               // 8 or 16 bits image.
                              bool blinkComputation=true);
+
+    void setDataLoadingProgress(float progress);
 
     void setHistogramGuideByColor(DColor color);
 

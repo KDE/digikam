@@ -46,6 +46,7 @@ extern "C"
 // Local includes.
 
 #include "ppmloader.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -55,8 +56,9 @@ PPMLoader::PPMLoader(DImg* image)
 {
 }
 
-bool PPMLoader::load(const QString& filePath)
+bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
+    //TODO: progress information
     int	 width, height, rgbmax;
     char nl;
     
@@ -108,33 +110,55 @@ bool PPMLoader::load(const QString& filePath)
         return false;
     }
     
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     unsigned short *data = new unsigned short[width*height*4];
     unsigned short *dst  = data;
     uchar src[6];
     float fac = 65535.0 / rgbmax;
+    int checkpoint = 0;
     
 #ifdef ENABLE_DEBUG_MESSAGES    
     kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
 #endif
 
-    for (int i = 0; i < width*height; i++)
-    { 
-        fread (src, 6 *sizeof(unsigned char), 1, file);
+    for (int h = 0; h < height; h++)
+    {
 
-        // Swap byte order to preserve compatibility with PPC.
-    
-        if (QImage::systemByteOrder() == QImage::BigEndian)
-            swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
- 
-        dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-        dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-        dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-        dst[3] = 0xFFFF;
+        if (observer && h == checkpoint)
+        {
+            checkpoint += granularity(observer, height, 0.9);
+            if (!observer->continueQuery(m_image))
+            {
+                delete [] data;
+                pclose( file );
+                return false;
+            }
+            observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
+        }
 
-        dst += 4;
+        for (int w = 0; w < width; w++)
+        {
+
+            fread (src, 6 *sizeof(unsigned char), 1, file);
+
+            // Swap byte order to preserve compatibility with PPC.
+
+            if (QImage::systemByteOrder() == QImage::BigEndian)
+                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
+
+            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+            dst[3] = 0xFFFF;
+
+            dst += 4;
+        }
     }
 
-    pclose( file );
+    fclose( file );
 
     //----------------------------------------------------------
 
@@ -146,7 +170,7 @@ bool PPMLoader::load(const QString& filePath)
     return true;
 }
 
-bool PPMLoader::save(const QString& /*filePath*/)
+bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver */*observer*/)
 {
     return false;
 }

@@ -57,7 +57,7 @@ PNGLoader::PNGLoader(DImg* image)
     m_sixteenBit = false;
 }
 
-bool PNGLoader::load(const QString& filePath)
+bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     png_uint_32  w32, h32;
     int          width, height;
@@ -281,13 +281,16 @@ bool PNGLoader::load(const QString& filePath)
     }
 
     if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-	png_set_tRNS_to_alpha(png_ptr);
+        png_set_tRNS_to_alpha(png_ptr);
 
     if (QImage::systemByteOrder() == QImage::LittleEndian)  // Intel 
         png_set_bgr(png_ptr);
     else                                                    // PPC
         png_set_swap_alpha(png_ptr);
-    
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     // -------------------------------------------------------------------
     // Allocate DImg image data container depending pixels depth.
     
@@ -323,7 +326,39 @@ bool PNGLoader::load(const QString& filePath)
             lines[i] = data + (i * width * 4);
     }
 
-    png_read_image(png_ptr, lines);
+    // The easy way to read the whole image
+    // png_read_image(png_ptr, lines);
+    // The other way to read images is row by row. Necessary for observer.
+    // Now we need to deal with interlacing.
+
+    // for non-interlaced images number_passes will be 1
+    int number_passes = png_set_interlace_handling(png_ptr);
+    for (int pass = 0; pass < number_passes; pass++)
+    {
+        int y;
+        int checkPoint = 0;
+        for (y = 0; y < height; y++)
+        {
+            if (observer && y == checkPoint)
+            {
+                checkPoint += granularity(observer, height, 0.7);
+                if (!observer->continueQuery(m_image))
+                {
+                    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+                    fclose(f);
+                    delete [] data;
+                    free(lines);
+                    return false;
+                }
+                // use 10% - 80% for progress while reading rows
+                observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
+            }
+
+            png_read_rows(png_ptr, lines+y, NULL, 1);
+
+        }
+    }
+
     free(lines);
 
     // -------------------------------------------------------------------
@@ -348,6 +383,9 @@ bool PNGLoader::load(const QString& filePath)
         }
     }
     
+    if (observer)
+        observer->progressInfo(m_image, 0.9);
+
     // -------------------------------------------------------------------
     // Read image ICC profile
     
@@ -408,6 +446,9 @@ bool PNGLoader::load(const QString& filePath)
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
     fclose(f);
 
+    if (observer)
+        observer->progressInfo(m_image, 1.0);
+
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = data;
@@ -416,7 +457,7 @@ bool PNGLoader::load(const QString& filePath)
     return true;
 }
 
-bool PNGLoader::save(const QString& filePath)
+bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     FILE          *f;
     png_structp    png_ptr;
@@ -437,7 +478,8 @@ bool PNGLoader::save(const QString& filePath)
         kdDebug() << k_funcinfo << "Cannot open target image file." << endl;
         return false;
     }
-    
+
+
     // -------------------------------------------------------------------
     // Initialize the internal structures
     
@@ -557,6 +599,10 @@ bool PNGLoader::save(const QString& filePath)
         png_set_text(png_ptr, info_ptr, &(text), 1);
     }
 
+
+    if (observer)
+        observer->progressInfo(m_image, 0.2);
+
     // -------------------------------------------------------------------
     // Write image data
 
@@ -565,8 +611,24 @@ bool PNGLoader::save(const QString& filePath)
     png_set_packing(png_ptr);
     ptr = imageData();
     
+    uint checkPoint = 0;
     for (y = 0; y < imageHeight(); y++)
     {
+
+        if (observer && y == checkPoint)
+        {
+            checkPoint += granularity(observer, imageHeight(), 0.8);
+            if (!observer->continueQuery(m_image))
+            {
+                delete [] data;
+                fclose(f);
+                png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
+                png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
+                return false;
+            }
+            observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
+        }
+
         j = 0;
         
         for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
@@ -618,8 +680,7 @@ bool PNGLoader::save(const QString& filePath)
         ptr += (imageWidth() * imageBytesDepth());
     }
     
-    if (data) 
-        delete [] data;
+    delete [] data;
         
     // -------------------------------------------------------------------
             

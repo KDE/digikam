@@ -58,12 +58,12 @@ DImg::DImg()
 {
 }
 
-DImg::DImg(const QString& filePath,
+DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
            bool  enableRAWQuality, int RAWquality,
            bool  RGBInterpolate4Colors)
     : m_priv(new DImgPrivate)
 {
-    load(filePath, enableRAWQuality, RAWquality, RGBInterpolate4Colors);
+    load(filePath, observer, enableRAWQuality, RAWquality, RGBInterpolate4Colors);
 }
 
 DImg::DImg(const DImg& image)
@@ -130,9 +130,10 @@ void DImg::reset(void)
     m_priv = new DImgPrivate;
 }
 
-bool DImg::load(const QString& filePath,
+bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
                 bool  enableRAWQuality, int RAWquality,
                 bool  RGBInterpolate4Colors)
+
 {
     FORMAT format = fileFormat(filePath);
 
@@ -148,7 +149,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : JPEG file identified" << endl;
             JPEGLoader loader(this);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -162,7 +163,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : TIFF file identified" << endl;
             TIFFLoader loader(this);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -176,7 +177,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : PNG file identified" << endl;
             PNGLoader loader(this);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -190,7 +191,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : PPM file identified" << endl;
             PPMLoader loader(this);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -204,7 +205,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : RAW file identified" << endl;
             RAWLoader loader(this, enableRAWQuality, RAWquality, RGBInterpolate4Colors);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -218,7 +219,7 @@ bool DImg::load(const QString& filePath,
         {
             kdDebug() << filePath << " : QIMAGE file identified" << endl;
             QImageLoader loader(this);
-            if (loader.load(filePath))
+            if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;
                 m_priv->alpha      = loader.hasAlpha();
@@ -233,7 +234,7 @@ bool DImg::load(const QString& filePath,
     return false;
 }
 
-bool DImg::save(const QString& filePath, const char* format)
+bool DImg::save(const QString& filePath, const char* format, DImgLoaderObserver *observer)
 {
     if (isNull())
         return false;
@@ -244,28 +245,28 @@ bool DImg::save(const QString& filePath, const char* format)
     if (frm == "JPEG" || frm == "JPG")
     {
         JPEGLoader loader(this);
-        return loader.save(filePath);
+        return loader.save(filePath, observer);
     }
     else if (frm == "PNG")
     {
         PNGLoader loader(this);
-        return loader.save(filePath);
+        return loader.save(filePath, observer);
     }
     else if (frm == "TIFF" || frm == "TIF")
     {
         TIFFLoader loader(this);
-        return loader.save(filePath);
+        return loader.save(filePath, observer);
     }
     else if (frm == "PPM")
     {
         PPMLoader loader(this);
-        return loader.save(filePath);
+        return loader.save(filePath, observer);
     }
     else
     {
         setAttribute("format", format);
         QImageLoader loader(this);
-        return loader.save(filePath);
+        return loader.save(filePath, observer);
     }
 
     return false;

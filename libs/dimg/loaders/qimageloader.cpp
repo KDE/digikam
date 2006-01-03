@@ -35,10 +35,15 @@ QImageLoader::QImageLoader(DImg* image)
 {
 }
 
-bool QImageLoader::load(const QString& filePath)
+bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
+    // Loading is opaque to us. No support for stopping from observer,
+    // progress info are only pseudo values
     QImage image(filePath);
-    
+
+    if (observer)
+        observer->progressInfo(m_image, 0.9);
+
     if (image.isNull())
         return false;
 
@@ -64,6 +69,9 @@ bool QImageLoader::load(const QString& filePath)
         sptr++;
     }
 
+    if (observer)
+        observer->progressInfo(m_image, 1.0);
+
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = data;
@@ -74,7 +82,7 @@ bool QImageLoader::load(const QString& filePath)
     return true;
 }
 
-bool QImageLoader::save(const QString& filePath)
+bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
@@ -88,7 +96,16 @@ bool QImageLoader::save(const QString& filePath)
     QCString format = formatAttr.toCString();
 
     QImage image = m_image->copyQImage();
-    return image.save(filePath, format.upper(), quality);
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
+    // Saving is opaque to us. No support for stopping from observer,
+    // progress info are only pseudo values
+    bool success = image.save(filePath, format.upper(), quality);
+    if (observer && success)
+        observer->progressInfo(m_image, 1.0);
+    return success;
 }
 
 bool QImageLoader::hasAlpha() const

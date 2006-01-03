@@ -46,7 +46,7 @@ namespace Digikam
 class HistogramWidget;
 class ColorGradientWidget;
 class NavigateBarWidget;
-class LoadSaveThread;
+class ManagedLoadSaveThread;
 
 class DIGIKAM_EXPORT ImagePropertiesHistogramTab : public QWidget
 {
@@ -89,6 +89,7 @@ private slots:
     void slotUpdateMaxInterv(int max);
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
+    void slotProgressInfo(const QString& filePath, float progress);
 
 private:
 
@@ -117,7 +118,7 @@ private:
     ColorGradientWidget *m_hGradient;
     HistogramWidget     *m_histogramWidget;
     NavigateBarWidget   *m_navigateBar;
-    LoadSaveThread      *m_imageLoaderThreaded;
+    ManagedLoadSaveThread *m_imageLoaderThreaded;
     
 };
 

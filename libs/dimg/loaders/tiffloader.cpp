@@ -70,7 +70,7 @@ TIFFLoader::TIFFLoader(DImg* image)
     m_sixteenBit = false;
 }
 
-bool TIFFLoader::load(const QString& filePath)
+bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     // -------------------------------------------------------------------
     // TIFF error handling. If an errors/warnings occurs during reading, 
@@ -136,7 +136,10 @@ bool TIFFLoader::load(const QString& filePath)
     {
         m_hasAlpha = false;
     }
-    
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     // -------------------------------------------------------------------
     // Get image data.
     
@@ -151,9 +154,24 @@ bool TIFFLoader::load(const QString& filePath)
         uchar* strip   = new uchar[strip_size];
         long offset    = 0;
         long bytesRead = 0;
-    
+
+        uint checkpoint = 0;
+
         for (tstrip_t st=0; st < num_of_strips; st++)
         {
+
+            if (observer && st == checkpoint)
+            {
+                checkpoint += granularity(observer, num_of_strips, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    TIFFClose(tif);
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
+            }
+
             bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
     
             if (bytesRead == -1)
@@ -207,6 +225,86 @@ bool TIFFLoader::load(const QString& filePath)
         
         delete [] strip;
     }
+    else          // 8 bits image.
+    {
+        data           = new uchar[w*h*4];
+        m_sixteenBit   = false;
+        uchar* strip   = new uchar[strip_size];
+        long offset    = 0;
+        long bytesRead = 0;
+
+        uint checkpoint = 0;
+
+        for (tstrip_t st=0; st < num_of_strips; st++)
+        {
+
+            if (observer && st == checkpoint)
+            {
+                checkpoint += granularity(observer, num_of_strips, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    TIFFClose(tif);
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
+            }
+
+            bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
+    
+            if (bytesRead == -1)
+            {
+                kdDebug() << k_funcinfo << "Failed to read strip" << endl;
+                delete [] data;
+                TIFFClose(tif);
+                return false;
+            }
+            
+            uchar *stripPtr = (uchar*)(strip);
+            uchar *dataPtr  = (uchar*)(data + offset);
+            uchar *p;
+    
+            // tiff data is read as BGR or ABGR
+            
+            if (samples_per_pixel == 3)
+            {
+                for (int i=0; i < bytesRead/3; i++)
+                {
+                    p = dataPtr;
+                    
+                    p[2] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[3] = 0xFFFF;
+                    
+                    dataPtr += 4;
+                }
+                
+                offset += bytesRead/3 * 4;
+            }
+            else
+            {
+                for (int i=0; i < bytesRead/4; i++)
+                {
+                    p = dataPtr;
+                    
+                    p[2] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[3] = *stripPtr++;
+                    
+                    dataPtr += 4;
+                }
+                
+                offset += bytesRead;
+            }
+        
+        }
+        
+        delete [] strip;
+    }
+    /*
+    // this is the easier method, but not suitable for observer / progress info
     else       // Non 16 bits images ==> get it on BGRA 8 bits.
     {
         data         = new uchar[w*h*4];
@@ -238,6 +336,7 @@ bool TIFFLoader::load(const QString& filePath)
             data[p+3] = ptr[3];  // Alpha
         }
     }
+    */
 
     // -------------------------------------------------------------------
     // Read image ICC profile
@@ -264,6 +363,9 @@ bool TIFFLoader::load(const QString& filePath)
     
     TIFFClose(tif);
 
+    if (observer)
+        observer->progressInfo(m_image, 1.0);
+
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = data;
@@ -272,7 +374,7 @@ bool TIFFLoader::load(const QString& filePath)
     return true;
 }
 
-bool TIFFLoader::save(const QString& filePath)
+bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     TIFF   *tif;
     uchar  *data;
@@ -299,7 +401,7 @@ bool TIFFLoader::save(const QString& filePath)
         kdDebug() << k_funcinfo << "Cannot open target image file." << endl;
         return false;
     }
-    
+
     // -------------------------------------------------------------------
     // Set image properties
     
@@ -332,7 +434,10 @@ bool TIFFLoader::save(const QString& filePath)
 
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, imageBitsDepth());
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tif, 0));
-    
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     // -------------------------------------------------------------------
     // Write image data
     
@@ -353,8 +458,23 @@ bool TIFFLoader::save(const QString& filePath)
         return false;
     }
 
+    uint checkpoint = 0;
+
     for (y = 0; y < h; y++)
     {
+
+        if (observer && y == checkpoint)
+        {
+            checkpoint += granularity(observer, h, 0.8);
+            if (!observer->continueQuery(m_image))
+            {
+                _TIFFfree(buf);
+                TIFFClose(tif);
+                return false;
+            }
+            observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)h) )));
+        }
+
         i = 0;
         
         for (x = 0; x < w; x++)
@@ -452,6 +572,9 @@ bool TIFFLoader::save(const QString& filePath)
     // -------------------------------------------------------------------
         
     TIFFClose(tif);
+
+    if (observer)
+        observer->progressInfo(m_image, 1.0);
 
     return true;
 }

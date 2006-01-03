@@ -28,6 +28,7 @@
 #include <qobject.h>
 #include <qmutex.h>
 #include <qptrlist.h>
+#include <qdatetime.h>
 #include <qwaitcondition.h>
 
 // Digikam includes.
@@ -40,16 +41,30 @@ namespace Digikam
 
 class DIGIKAM_EXPORT LoadSaveThread : public QObject, public QThread
 {
-    
+
     Q_OBJECT
 
 public:
 
+    enum NotificationPolicy
+    {
+        // Always send notification, unless the last event is still in the event queue
+        NotificationPolicyDirect,
+        // Always wait for a certain amount of time after the last event sent.
+        // This is the default.
+        NotificationPolicyTimeLimited
+    };
+
     LoadSaveThread();
+    // The thread will execute all pending tasks and wait for this upon destruction
     ~LoadSaveThread();
-    
+
+    // Append a task to load the given file to the task list
     void load(const QString& filePath);
+    // Append a task to save the image to the task list
     void save(DImg &image, const QString& filePath, const char* format);
+
+    void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
 signals:
 
@@ -57,27 +72,27 @@ signals:
     void signalLoadingProgress(const QString& filePath, float progress);
     void signalImageSaved(const QString& filePath);
     void signalSavingProgress(const QString& filePath, float progress);
-    
+
 public:
 
-    virtual void imageLoaded(const QString& filePath, const DImg& img)
+    void imageLoaded(const QString& filePath, const DImg& img)
             { emit signalImageLoaded(filePath, img); };
-            
-    virtual void loadingProgress(const QString& filePath, float progress)
+
+    void loadingProgress(const QString& filePath, float progress)
             { emit signalLoadingProgress(filePath, progress); };
-            
-    virtual void imageSaved(const QString& filePath)
+
+    void imageSaved(const QString& filePath)
             { emit signalImageSaved(filePath); };
-            
-    virtual void savingProgress(const QString& filePath, float progress)
+
+    void savingProgress(const QString& filePath, float progress)
             { emit signalSavingProgress(filePath, progress); };
 
+    virtual bool querySendNotifyEvent();
+
 protected:
-    
+
     virtual void run();
     virtual void customEvent(QCustomEvent *event);
-
-private:
 
     QMutex               m_mutex;
 
@@ -85,7 +100,87 @@ private:
 
     QPtrList<class Task> m_todo;
 
+    class Task          *m_currentTask;
+
+    NotificationPolicy   m_notificationPolicy;
+
+private:
+
     bool                 m_running;
+    QTime                m_notificationTime;
+    bool                 m_blockNotification;
+};
+
+class DIGIKAM_EXPORT ManagedLoadSaveThread : public LoadSaveThread
+{
+
+public:
+
+    // Termination is controlled by setting the TerminationPolicy
+    // Default is TerminationPolicyTerminateLoading
+    ManagedLoadSaveThread();
+    ~ManagedLoadSaveThread();
+
+    enum LoadingPolicy
+    {
+        // Load image immediately, remove and stop all previous loading tasks.
+        LoadingPolicyFirstRemovePrevious,
+        // Prepend loading in front of all other tasks, but wait for the current task to finish.
+        // No other tasks will be removed, preloading tasks will be stopped and postponed.
+        LoadingPolicyPrepend,
+        // Append loading task to the end of the list, but in front of all preloading tasks.
+        // No other tasks will be removed, preloading tasks will be stopped and postponed.
+        // This is similar to the simple load() operation from LoadSaveThread, except for the
+        // special care taken for preloading.
+        LoadingPolicyAppend,
+        // Preload image, i.e. load it with low priority when no other tasks are scheduled.
+        // All other tasks will take precedence, and preloading tasks will be stopped and
+        // postponed when another task is added.
+        // No progress info will be sent for preloaded images
+        LoadingPolicyPreload
+    };
+
+    enum TerminationPolicy
+    {
+        // Wait for saving tasks, stop and remove loading tasks
+        // This is the default.
+        TerminationPolicyTerminateLoading,
+        // Wait for loading and saving tasks, stop and remove preloading tasks
+        TerminationPolicyTerminatePreloading,
+        // Wait for all pending tasks
+        TerminationPolicyWait
+    };
+
+    enum LoadingTaskFilter
+    {
+        // filter all loading tasks
+        LoadingTaskFilterAll,
+        // filter only tasks with preloading policy
+        LoadingTaskFilterPreloading
+    };
+
+    // Append a task to load the given file to the task list.
+    // If there is already a task for the given file, it will possibly be rescheduled,
+    // but no second task will be added.
+    // Only loading tasks will - if required by the policy - be stopped or removed,
+    // saving tasks will not be touched.
+    void load(const QString& filePath, LoadingPolicy policy = LoadingPolicyAppend);
+    // Stop and remove tasks filtered by filePath and policy.
+    // If filePath isNull, applies to all file paths.
+    void stopLoading(const QString& filePath = QString(), LoadingTaskFilter filter = LoadingTaskFilterAll);
+
+    // Append a task to save the image to the task list
+    void save(DImg &image, const QString& filePath, const char* format);
+
+    void setTerminationPolicy(TerminationPolicy terminationPolicy);
+
+private:
+
+    class LoadingTask *checkLoadingTask(class Task *task, LoadingTaskFilter filter);
+    class LoadingTask *findExistingTask(const QString& filePath);
+    void removeLoadingTasks(const QString& filePath, LoadingTaskFilter filter);
+
+    TerminationPolicy m_terminationPolicy;
 };
 
 }      // namespace Digikam

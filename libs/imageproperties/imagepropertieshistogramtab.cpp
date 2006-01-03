@@ -45,6 +45,7 @@
 #include <kdialogbase.h>
 #include <kfileitem.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes.
 
@@ -373,30 +374,32 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
 
 void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
 {
-    m_histogramWidget->setEnabled(false);
-    
-    if (m_imageLoaderThreaded)
-    {
-        delete m_imageLoaderThreaded;
+    //m_histogramWidget->setEnabled(false);
+
+    // create thread on demand
+    if (!m_imageLoaderThreaded) {
+        m_imageLoaderThreaded = new ManagedLoadSaveThread();
+
+        connect(m_imageLoaderThreaded, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
+                this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
+        connect(m_imageLoaderThreaded, SIGNAL(signalLoadingProgress(const QString&, float)),
+                this, SLOT(slotProgressInfo(const QString&, float)));
     }
 
-    m_imageLoaderThreaded = new LoadSaveThread();
-
-    connect(m_imageLoaderThreaded, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
-            this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
-
-    m_imageLoaderThreaded->load(url.path());
+    m_imageLoaderThreaded->load(url.path(), ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
 void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
 {
-    m_histogramWidget->setEnabled(true);
-    
+    //m_histogramWidget->setEnabled(true);
+
     if ( !img.isNull() )
     {
+        m_histogramWidget->updateData(img.bits(), img.width(), img.height(),
+                                      img.sixteenBit());
+        // As a safety precaution, this must be changed only after updateData is called,
+        // which stops computation because m_image.bits() is currently used by threaded histogram algorithm.
         m_image = img;
-        m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(),
-                                      m_image.sixteenBit());
         m_regionBG->hide();
         m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
     }
@@ -404,6 +407,13 @@ void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, c
     {
         slotHistogramComputationFailed();
     }
+}
+
+void ImagePropertiesHistogramTab::slotProgressInfo(const QString&, float progress)
+{
+    //kdDebug() << "Progress loading is " << progress << endl;
+    //m_histogramWidget->setEnabled(true);
+    m_histogramWidget->setDataLoadingProgress(progress);
 }
 
 void ImagePropertiesHistogramTab::setSelection(QRect *selectionArea)

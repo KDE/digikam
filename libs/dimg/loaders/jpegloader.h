@@ -49,8 +49,8 @@ public:
 
     JPEGLoader(DImg* image);
     
-    bool load(const QString& filePath);
-    bool save(const QString& filePath);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const { return false; }
     virtual bool sixteenBit() const { return false; }

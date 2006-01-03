@@ -100,7 +100,7 @@ JPEGLoader::JPEGLoader(DImg* image)
 {
 }
 
-bool JPEGLoader::load(const QString& filePath)
+bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
@@ -162,6 +162,10 @@ bool JPEGLoader::load(const QString& filePath)
     cinfo.out_color_space     = JCS_RGB;
     jpeg_start_decompress(&cinfo);
 
+    // some pseudo-progress
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     // -------------------------------------------------------------------
     // Get image data.
 
@@ -218,8 +222,24 @@ bool JPEGLoader::load(const QString& filePath)
         for (i = 0; i < cinfo.rec_outbuf_height; i++)
             line[i] = data + (i * w * 3);
 
+        int checkPoint = 0;
         for (l = 0; l < h; l += cinfo.rec_outbuf_height)
         {
+            // use 0-10% and 90-100% for pseudo-progress
+            if (observer && l >= checkPoint)
+            {
+                checkPoint += granularity(observer, h, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    delete [] ptr2;
+                    jpeg_destroy_decompress(&cinfo);
+                    fclose(file);
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+            }
+
             jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
             scans = cinfo.rec_outbuf_height;
 
@@ -248,8 +268,23 @@ bool JPEGLoader::load(const QString& filePath)
         for (i = 0; i < cinfo.rec_outbuf_height; i++)
             line[i] = data + (i * w);
 
+        int checkPoint = 0;
         for (l = 0; l < h; l += cinfo.rec_outbuf_height)
         {
+            if (observer && l >= checkPoint)
+            {
+                checkPoint += granularity(observer, h, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    delete [] ptr2;
+                    jpeg_destroy_decompress(&cinfo);
+                    fclose(file);
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+            }
+
             jpeg_read_scanlines(&cinfo, line, cinfo.rec_outbuf_height);
             scans = cinfo.rec_outbuf_height;
 
@@ -330,6 +365,9 @@ bool JPEGLoader::load(const QString& filePath)
 
     fclose(file);
 
+    if (observer)
+        observer->progressInfo(m_image, 1.0);
+
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = dest;
@@ -338,7 +376,7 @@ bool JPEGLoader::load(const QString& filePath)
     return true;
 }
 
-bool JPEGLoader::save(const QString& filePath)
+bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     FILE *file = fopen(QFile::encodeName(filePath), "wb");
     if (!file)
@@ -391,6 +429,9 @@ bool JPEGLoader::save(const QString& filePath)
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     // -------------------------------------------------------------------
     // Write the markers that we have.
     
@@ -433,18 +474,38 @@ bool JPEGLoader::save(const QString& filePath)
         write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());
     }    
         
+    if (observer)
+        observer->progressInfo(m_image, 0.2);
+    
     // -------------------------------------------------------------------
     // Write Image data.
     
     uchar* line   = new uchar[w*3];
     uchar* dstPtr = 0;
+    uint   checkPoint = 0;
 
     if (!imageSixteenBit())     // 8 bits image.
     {
+
         uchar* srcPtr = data;
 
         for (uint j=0; j<h; j++)
         {
+
+            if (observer && j == checkPoint)
+            {
+                checkPoint += granularity(observer, h, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] line;
+                    jpeg_destroy_compress(&cinfo);
+                    fclose(file);
+                    return false;
+                }
+                // use 0-20% for pseudo-progress, now fill 20-100%
+                observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
+            }
+
             dstPtr = line;
             
             for (uint i = 0; i < w; i++)
@@ -466,6 +527,21 @@ bool JPEGLoader::save(const QString& filePath)
 
         for (uint j=0; j<h; j++)
         {
+
+            if (observer && j == checkPoint)
+            {
+                checkPoint += granularity(observer, h, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] line;
+                    jpeg_destroy_compress(&cinfo);
+                    fclose(file);
+                    return false;
+                }
+                // use 0-20% for pseudo-progress, now fill 20-100%
+                observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
+            }
+
             dstPtr = line;
             
             for (uint i = 0; i < w; i++)

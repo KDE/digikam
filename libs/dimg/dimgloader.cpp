@@ -32,6 +32,17 @@ DImgLoader::DImgLoader(DImg* image)
 {
 }
 
+int DImgLoader::granularity(DImgLoaderObserver *observer, int total, float progressSlice)
+{
+    // Splits expect total value into the chunks where checks shall occur
+    // and combines this with a possible correction factor from observer.
+    // Progress slice is the part of 100% concerned with the current granularity
+    // (E.g. in a loop only the values from 10% to 90% are used, then progressSlice is 0.8)
+    // Current default is 1/20, that is progress info every 5%
+    int granularity = (total / (20 * progressSlice)) / observer->granularity();
+    return granularity ? granularity : 1;
+}
+
 unsigned char*& DImgLoader::imageData()
 {
     return m_image->m_priv->data;

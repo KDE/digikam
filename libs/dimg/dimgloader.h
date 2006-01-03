@@ -33,13 +33,14 @@ namespace Digikam
 {
 
 class DImg;
+class DImgLoaderObserver;
 
 class DIGIKAM_EXPORT DImgLoader
 {
 public:
 
-    virtual bool load(const QString& filePath) = 0;
-    virtual bool save(const QString& filePath) = 0;
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer) = 0;
+    virtual bool save(const QString& filePath, DImgLoaderObserver *observer) = 0;
     
     virtual bool hasAlpha()   const = 0;
     virtual bool sixteenBit() const = 0;
@@ -71,6 +72,8 @@ protected:
 
     void                    imageSetCameraModel(const QString& model);
     void                    imageSetCameraConstructor(const QString& constructor);
+    
+    virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);
     
 protected:
     
