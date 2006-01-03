@@ -6,5 +6,7 @@ TODO : get thumbnail orientation.
 
 dcraw.c ==> dcraw_decode.cpp/.h ==> port uncomplete !!!
 
+NOTE : parse.c and dcraw.c files are never compiled and used to backport future
+       implementation from dcraw using diff program.
 
-Gilles Caulier, 25/12/2005
+Gilles Caulier, 01/03/2006
