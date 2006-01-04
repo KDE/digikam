@@ -5,6 +5,7 @@
  * Description : Black and White conversion tool.
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,20 +28,23 @@
 #include <qstring.h>
 #include <qpixmap.h>
 
-// KDE include.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "imagedlgbase.h"
 
-class QLabel;
+class QHButtonGroup;
 class QComboBox;
 
 namespace Digikam
 {
-class ImageWidget;
+class HistogramWidget;
+class ColorGradientWidget;
+class ImageGuideWidget;
+class DColor;
 class DImg;
 }
 
-class ImageEffect_BWSepia : public KDialogBase
+class ImageEffect_BWSepia : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -64,26 +68,47 @@ private:
     BWSelenium,
     BWPlatinum
     };
-        
-protected:
 
-    void closeEvent(QCloseEvent *e);
+    enum HistogramScale
+    {
+    Linear=0,
+    Logarithmic
+    };
+
+    enum ColorChannel
+    {
+    LuminosityChannel=0,
+    RedChannel,
+    GreenChannel,
+    BlueChannel
+    };
+
+    uchar                        *m_destinationPreviewData;
     
+    QComboBox                    *m_channelCB;
+    QComboBox                    *m_typeCB;
+    
+    QHButtonGroup                *m_scaleBG;
+
+    Digikam::ImageGuideWidget    *m_previewWidget;
+
+    Digikam::ColorGradientWidget *m_hGradient;
+    
+    Digikam::HistogramWidget     *m_histogramWidget;    
+
 private:
 
-    QWidget              *m_parent;
-    
-    QComboBox            *m_typeCB;
-    
-    Digikam::ImageWidget *m_previewWidget;
-    
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     QPixmap previewEffectPic(QString name);
 
 private slots:
 
+    void slotDefault();    
     void slotEffect();
     void slotOk();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
 
 #endif /* IMAGEEFFECT_BWSEPIA_H */
