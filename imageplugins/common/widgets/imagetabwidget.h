@@ -3,7 +3,7 @@
  * Date  : 2005-07-23
  * Description : a tabulate image previews widget
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

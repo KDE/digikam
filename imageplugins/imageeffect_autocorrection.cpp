@@ -68,7 +68,9 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true, 
-                                                    Digikam::ImageGuideWidget::PickColorMode);
+                                                    Digikam::ImageGuideWidget::PickColorMode,
+                                                    Qt::red, 1, false,
+                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add( m_previewWidget, i18n("<p>Here you can seethe auto-color correction tool preview. "
                                            "You can pick color on image "

@@ -4,7 +4,7 @@
  * Date  : 2004-08-20
  * Description : 
  * 
- * Copyright 2004-2005 Gilles Caulier
+ * Copyright 2004-2006 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,17 +54,25 @@ public:
     PickColorMode
     };
 
+    enum ColorPointSrc
+    {
+    OriginalImage=0,
+    PreviewImage,
+    TargetPreviewImage
+    };
+
 public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false);
+                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false,
+                     int getColorFrom=OriginalImage);
     ~ImageGuideWidget();
         
     Digikam::ImageIface* imageIface();
     
     QPoint getSpotPosition(void);
-    DColor getSpotColor(void);
+    DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
     void   resetSpotPosition(void);
     void   updatePreview(void);
@@ -99,6 +107,7 @@ private:
     int                  m_guideMode;
     int                  m_guideSize;
     int                  m_flicker;
+    int                  m_getColorFrom;
 
     bool                 m_sixteenBit;
     bool                 m_focus;

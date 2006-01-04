@@ -4,7 +4,7 @@
  * Date  : 2004-11-16
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,16 +45,18 @@ namespace Digikam
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize, bool blink)
+                                   QColor guideColor, int guideSize, bool blink,
+                                   int getColorFrom)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_spotVisible = spotVisible;
-    m_guideMode   = guideMode;
-    m_guideColor  = guideColor;
-    m_guideSize   = guideSize;
-    m_focus       = false;
-    m_flicker     = 0;
-    m_timerID     = 0;
+    m_spotVisible  = spotVisible;
+    m_guideMode    = guideMode;
+    m_guideColor   = guideColor;
+    m_guideSize    = guideSize;
+    m_getColorFrom = getColorFrom;
+    m_focus        = false;
+    m_flicker      = 0;
+    m_timerID      = 0;
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -103,20 +105,15 @@ QPoint ImageGuideWidget::getSpotPosition(void)
                             (int)((float)m_spot.y() * (float)m_iface->originalHeight() / (float)m_h)));
 }
 
-DColor ImageGuideWidget::getSpotColor(void)
+DColor ImageGuideWidget::getSpotColor(int getColorFrom)
 {
-    // Get cross position in real image.
-    QPoint currentPointPosition = getSpotPosition();
-    int bytesDepth = m_iface->originalSixteenBit() ? 8 : 4;
-    uchar *data    = m_iface->getOriginalImage();
-    
-    uchar *currentPointData = data + currentPointPosition.x()*bytesDepth +
-                             (m_iface->originalWidth() * currentPointPosition.y() * bytesDepth);
+    if (getColorFrom == OriginalImage)                          // Get point color from original image
+        return (m_iface->getColorInfoFromOriginalImage(getSpotPosition()));
+    else if (getColorFrom == PreviewImage)                      // Get point color from preview image
+        return (m_iface->getColorInfoFromPreviewImage(m_spot));
 
-    DColor currentPointColor(currentPointData, m_iface->originalSixteenBit());
-    delete [] data;
-
-    return(currentPointColor);
+    // In other cases, get point color from target preview image
+    return (m_iface->getColorInfoFromTargetPreviewImage(m_spot));
 }
 
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
@@ -269,7 +266,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
        m_spot.setX(e->x()-m_rect.x());
        m_spot.setY(e->y()-m_rect.y());
        
-       DColor color = getSpotColor();
+       DColor color = getSpotColor(m_getColorFrom);
        QPoint point = getSpotPosition();
        emit spotPositionChanged( color, true, m_spot );
        QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")

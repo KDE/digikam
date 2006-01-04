@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2004-02-14
- * Description :
+ * Description : image data interface for image plugins
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * Includes code from gimp version 2.0
  * LIBGIMP - The GIMP Library
@@ -37,6 +38,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dcolor.h"
 #include "digikam_export.h"
 
 #define MAX3(a, b, c) (QMAX(QMAX(a,b),b))
@@ -66,7 +68,13 @@ public:
     void   putPreviewImage(uchar* data);
     void   putImageSelection(uchar* data);
 
-    /** Original image informations*/
+    /** Color point information method.*/
+
+    DColor getColorInfoFromOriginalImage(QPoint point);
+    DColor getColorInfoFromPreviewImage(QPoint point);
+    DColor getColorInfoFromTargetPreviewImage(QPoint point);
+    
+    /** Original image informations.*/
     int  originalWidth();
     int  originalHeight();
     bool originalSixteenBit();

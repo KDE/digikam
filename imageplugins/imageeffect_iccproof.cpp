@@ -61,7 +61,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
                                             "colormanagement", false)
 {
-
     m_destinationPreviewData = 0L;
 
     setHelp("colormanagement.anchor", "digikam");
@@ -70,7 +69,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout *l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(375, 250, frame, true,
-                                                    Digikam::ImageGuideWidget::PickColorMode);
+                                                    Digikam::ImageGuideWidget::PickColorMode,
+                                                    Qt::red, 1, false,
+                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add(m_previewWidget, i18n("<p>Here you can see the image preview after "
                                           "convert it with a color profile</p>"));

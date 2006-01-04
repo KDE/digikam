@@ -4,7 +4,7 @@
  * Description : digiKam image editor Hue/Saturation/Lightness 
  *               correction tool
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,9 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true, 
-                                                    Digikam::ImageGuideWidget::PickColorMode);
+                                                    Digikam::ImageGuideWidget::PickColorMode,
+                                                    Qt::red, 1, false,
+                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the image "
                                            "Hue/Saturation/Lightness adjustments preview. "

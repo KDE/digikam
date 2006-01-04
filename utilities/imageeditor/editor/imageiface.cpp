@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2004-02-14
- * Description :
+ * Description : image data interface for image plugins
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +27,10 @@
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qpainter.h>
+
+// KDE includes.
+
+#include <kdebug.h>
 
 // Local includes.
 
@@ -92,6 +97,47 @@ ImageIface::~ImageIface()
     delete d;
 }
 
+DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
+{
+    if ( !DImgInterface::instance()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
+    {
+        kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        return DColor::DColor();
+    }
+    
+    int bytesDepth = originalSixteenBit() ? 8 : 4;
+    uchar *currentPointData = DImgInterface::instance()->getImage() + point.x()*bytesDepth +
+                              (originalWidth() * point.y() * bytesDepth);
+    return DColor::DColor(currentPointData, originalSixteenBit());
+}
+
+DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
+{
+    if ( !d->previewData || point.x() > previewWidth() || point.y() > previewHeight() )
+    {
+        kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        return DColor::DColor();
+    }
+        
+    int bytesDepth = previewSixteenBit() ? 8 : 4;
+    uchar *currentPointData = d->previewData + point.x()*bytesDepth +
+                              (previewWidth() * point.y() * bytesDepth);
+    return DColor::DColor(currentPointData, previewSixteenBit());
+}
+
+DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
+{
+    if ( d->image.isNull() || point.x() > d->image.width() || point.y() > d->image.height() )
+    {
+        kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
+        return DColor::DColor();
+    }
+        
+    uchar *currentPointData = d->image.bits() + point.x()*d->image.bytesDepth() +
+                              (d->image.width() * point.y() * d->image.bytesDepth());
+    return DColor::DColor(currentPointData, d->image.sixteenBit());
+}
+
 uchar* ImageIface::setPreviewImageSize(int w, int h)
 {
     if (d->previewData)
@@ -138,7 +184,6 @@ uchar* ImageIface::getPreviewImage()
     
     return data;
 }
-
 
 uchar* ImageIface::getOriginalImage()
 {
