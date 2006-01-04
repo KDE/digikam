@@ -75,7 +75,7 @@
 #include "thumbnailsize.h"
 #include "scanlib.h"
 
-DigikamApp::DigikamApp(bool detectCamera)
+DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
     m_instance = this;
@@ -124,14 +124,6 @@ DigikamApp::DigikamApp(bool detectCamera)
     
     mDcopIface = new DCOPIface(this, "camera");
     connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), this, SLOT(slotCameraAutoDetect()));
-
-    // Auto-detect camera if requested so
-    if (detectCamera)
-    {
-        if(mSplash)
-            mSplash->message(i18n("Auto-detect camera"), AlignLeft, white);
-        QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
-    }
 }
 
 DigikamApp::~DigikamApp()
@@ -189,6 +181,32 @@ const QPtrList<KAction> DigikamApp::menuImportActions()
     importMenu.append( mAlbumImportAction );
     importMenu.append( mAddImagesAction );
     return importMenu;
+}
+
+void DigikamApp::autoDetect()
+{
+    // Auto-detect camera if requested so
+    if(mSplash)
+        mSplash->message(i18n("Auto-detect camera"), AlignLeft, white);
+    QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
+}
+
+void DigikamApp::downloadFrom(const QString &cameraGuiPath)
+{   
+    mCameraGuiPath=cameraGuiPath;
+
+    if (!mCameraGuiPath.isNull())
+    {
+        if(mSplash)
+            mSplash->message(i18n("Opening Download Dialog"), AlignLeft, white);
+        
+        KAction *cAction = new KAction(
+                            i18n("Browse %1").arg(mCameraGuiPath), 0,
+                            this, SLOT(slotDownloadImages()), actionCollection() );
+        mCameraMenuAction->insert(cAction, 0);
+        
+        QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
+    }
 }
 
 bool DigikamApp::queryClose()
@@ -824,6 +842,21 @@ void DigikamApp::slot_exit()
     close();
 }
 
+void DigikamApp::slotDownloadImages()
+{
+    if (mCameraGuiPath.isNull())
+            return;
+
+    CameraUI* cgui = new CameraUI(this, 
+                        i18n("Images found in %1").arg(mCameraGuiPath),
+                        "directory browse","Fixed", mCameraGuiPath);
+    cgui->show();
+    connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
+            mView, SLOT(slotSelectAlbum(const KURL&)));
+    connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+            SLOT(slotSetupChanged()));
+}
+
 void DigikamApp::slotCameraConnect()
 {
     CameraType* ctype = mCameraList->find(QString::fromUtf8(sender()->name()));
@@ -1114,6 +1147,7 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::loadCameras()
 {
     mCameraList->load();
+    
     mCameraMenuAction->popupMenu()->insertSeparator();
     mCameraMenuAction->insert(new KAction(i18n("Add Camera..."), 0,
                                           this, SLOT(slotSetupCamera()),
