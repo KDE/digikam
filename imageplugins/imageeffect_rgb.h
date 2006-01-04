@@ -3,7 +3,7 @@
  * Date  : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,10 +25,6 @@
 
 #include <kdialogbase.h>
 
-// Local includes.
-
-#include "digikam_export.h"
-
 class QSpinBox;
 class QSlider;
 
@@ -37,7 +33,10 @@ namespace Digikam
 class ImageWidget;
 }
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImageEffect_RGB : public KDialogBase
+namespace DigikamImagesPluginCore
+{
+
+class ImageEffect_RGB : public KDialogBase
 {
     Q_OBJECT
 
@@ -71,5 +70,7 @@ private slots:
     void slotEffect();
     void slotOk();
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_RGB_H */

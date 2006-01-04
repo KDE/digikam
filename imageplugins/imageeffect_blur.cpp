@@ -3,7 +3,7 @@
  * Date  : 2004-07-09
  * Description : Blur image filter for ImageEditor
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +41,9 @@
 // Local includes.
 
 #include "imageeffect_blur.h"
+
+namespace DigikamImagesPluginCore
+{
 
 ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
                 : Digikam::CtrlPanelDlg(parent, i18n("Apply Gaussian Blur on Photograph"), 
@@ -122,5 +125,7 @@ void ImageEffect_Blur::putFinalData(void)
     Digikam::DImg imDest = m_threadedFilter->getTargetImage();
     iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_blur.moc"

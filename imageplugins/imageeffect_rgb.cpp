@@ -3,7 +3,7 @@
  * Date  : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,9 @@
 // Local includes.
 
 #include "imageeffect_rgb.h"
+
+namespace DigikamImagesPluginCore
+{
 
 ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
                : KDialogBase(Plain, i18n("Color Balance"),
@@ -304,5 +307,7 @@ void ImageEffect_RGB::adjustRGB(double r, double g, double b, double a, uint *da
     imlib_context_free(context);
     delete [] newData;
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_rgb.moc"

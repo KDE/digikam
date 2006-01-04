@@ -22,9 +22,14 @@
 #ifndef IMAGEEFFECT_REDEYE_H
 #define IMAGEEFFECT_REDEYE_H
 
+// KDE includes.
+
 #include <kdialogbase.h>
 
 class QRadioButton;
+
+namespace DigikamImagesPluginCore
+{
 
 class ImageEffect_RedEye
 {
@@ -56,5 +61,7 @@ private:
 
     int      m_selectedId;
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_REDEYE_H */

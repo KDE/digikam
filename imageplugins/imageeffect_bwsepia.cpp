@@ -57,6 +57,8 @@
 
 #include "imageeffect_bwsepia.h"
 
+namespace DigikamImagesPluginCore
+{
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                    : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), "convertbw", false)
@@ -436,6 +438,8 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
     }
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_bwsepia.moc"
 

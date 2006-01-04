@@ -55,6 +55,8 @@
 
 #include "imageeffect_autocorrection.h"
 
+namespace DigikamImagesPluginCore
+{
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                           : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"), "autocorrection", false)
@@ -352,5 +354,7 @@ void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool 
           break;
     }
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_autocorrection.moc"

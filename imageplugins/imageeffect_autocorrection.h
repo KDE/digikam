@@ -42,6 +42,9 @@ class DColor;
 class DImg;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_AutoCorrection : public Digikam::ImageDlgBase
 {
     Q_OBJECT
@@ -102,5 +105,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_AUTOCORRECTION_H */

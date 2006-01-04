@@ -40,9 +40,11 @@ class ColorGradientWidget;
 class DColor;
 }
 
-class ImageEffect_ICCProof : public Digikam::ImageDlgBase
+namespace DigikamImagesPluginCore
 {
 
+class ImageEffect_ICCProof : public Digikam::ImageDlgBase
+{
     Q_OBJECT
 
 public:
@@ -114,5 +116,7 @@ private slots:
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif  // IMAGEEFFECT_ICCPROOF_H

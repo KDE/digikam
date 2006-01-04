@@ -42,6 +42,9 @@ class ImageGuideWidget;
 class DColor;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_BCG : public Digikam::ImageDlgBase
 {
     Q_OBJECT
@@ -94,5 +97,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_BCG_H */

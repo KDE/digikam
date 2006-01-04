@@ -59,6 +59,9 @@
 
 #include "imageeffect_bcg.h"
 
+namespace DigikamImagesPluginCore
+{
+
 ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
                : Digikam::ImageDlgBase(parent, i18n("Brightness/Contrast/Gamma"), "bcgadjust", false)
 {
@@ -331,5 +334,7 @@ void ImageEffect_BCG::slotOk()
     kapp->restoreOverrideCursor();
     accept();
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_bcg.moc"

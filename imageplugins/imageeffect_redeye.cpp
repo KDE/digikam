@@ -53,6 +53,9 @@
 
 #include "imageeffect_redeye.h"
 
+namespace DigikamImagesPluginCore
+{
+
 class RedEyePassivePopup : public KPassivePopup
 {
 public:
@@ -414,5 +417,7 @@ void ImageEffect_RedEyeDlg::slotClicked(int id)
 {
     m_selectedId = id;
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_redeye.moc"

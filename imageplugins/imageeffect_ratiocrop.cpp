@@ -52,6 +52,9 @@
 
 #include "imageeffect_ratiocrop.h"
 
+namespace DigikamImagesPluginCore
+{
+
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
                      : KDialogBase(Plain, i18n("Aspect Ratio Crop & Composition Guide"),
                                    Help|User1|User2|Ok|Cancel, Ok,
@@ -671,5 +674,7 @@ void ImageEffect_RatioCrop::slotOk()
     kapp->restoreOverrideCursor();
     accept();
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_ratiocrop.moc"

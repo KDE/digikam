@@ -44,6 +44,9 @@ class DColor;
 class DImg;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_BWSepia : public Digikam::ImageDlgBase
 {
     Q_OBJECT
@@ -110,5 +113,7 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_BWSEPIA_H */

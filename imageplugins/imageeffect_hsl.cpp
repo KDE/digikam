@@ -57,6 +57,9 @@
 
 #include "imageeffect_hsl.h"
 
+namespace DigikamImagesPluginCore
+{
+
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
                : Digikam::ImageDlgBase(parent, i18n("Hue/Saturation/Lightness"), "hdladjust", false)
 {
@@ -332,5 +335,7 @@ void ImageEffect_HSL::slotOk()
     kapp->restoreOverrideCursor();
     accept();
 }
+
+}  // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_hsl.moc"

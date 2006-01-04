@@ -40,6 +40,9 @@ namespace Digikam
 class ImageSelectionWidget;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_RatioCrop : public KDialogBase
 {
     Q_OBJECT
@@ -114,5 +117,7 @@ private slots:
     void slotGuideTypeChanged(int t);
     void slotGoldenGuideTypeChanged(void);
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_RATIOCROP_H */

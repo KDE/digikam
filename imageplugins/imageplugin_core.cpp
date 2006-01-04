@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
- * Description :
+ * Description : digiKam image editor plugin core
  *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -141,37 +142,37 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
 
 void ImagePlugin_Core::slotBlur()
 {
-    ImageEffect_Blur dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_Blur dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotSharpen()
 {
-    ImageEffect_Sharpen dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_Sharpen dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotBCG()
 {
-    ImageEffect_BCG dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_BCG dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotRGB()
 {
-    ImageEffect_RGB dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_RGB dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    ImageEffect_HSL dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_HSL dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    ImageEffect_AutoCorrection dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_AutoCorrection dlg(parentWidget());
     dlg.exec();
 }
 
@@ -194,24 +195,24 @@ void ImagePlugin_Core::slotInvert()
 
 void ImagePlugin_Core::slotBW()
 {
-    ImageEffect_BWSepia dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_BWSepia dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotRedEye()
 {
-    ImageEffect_RedEye::removeRedEye(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_RedEye::removeRedEye(parentWidget());
 }
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    ImageEffect_RatioCrop dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_RatioCrop dlg(parentWidget());
     dlg.exec();
 }
 
 void ImagePlugin_Core::slotColorManagement()
 {
-    ImageEffect_ICCProof dlg(parentWidget());
+    DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
     dlg.exec();
 }
 

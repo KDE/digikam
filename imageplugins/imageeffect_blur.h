@@ -3,7 +3,7 @@
  * Date  : 2004-07-09
  * Description : Blur image filter for ImageEditor
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,9 @@ class ImagePannelWidget;
 class DImgGaussianBlur;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_Blur : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
@@ -56,5 +59,7 @@ protected:
     void resetValues(void);   
     void renderingFinished(void);
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_BLUR_H */

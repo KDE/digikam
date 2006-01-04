@@ -57,6 +57,9 @@
 
 #include "imageeffect_iccproof.h"
 
+namespace DigikamImagesPluginCore
+{
+
 ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
                                             "colormanagement", false)
@@ -424,5 +427,8 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::slotOk()
 {
-
 }
+
+}  // NameSpace DigikamImagesPluginCore
+
+#include "imageeffect_iccproof.moc"

@@ -35,6 +35,9 @@ class ImagePannelWidget;
 class DImgSharpen;
 }
 
+namespace DigikamImagesPluginCore
+{
+
 class ImageEffect_Sharpen : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
@@ -58,5 +61,7 @@ protected:
     void resetValues(void);   
     void renderingFinished(void);
 };
+
+}  // NameSpace DigikamImagesPluginCore
 
 #endif /* IMAGEEFFECT_SHARPEN_H */
