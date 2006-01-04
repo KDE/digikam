@@ -122,7 +122,7 @@ DigikamApp::DigikamApp(bool detectCamera)
 
     setAutoSaveSettings();
     
-    mDcopIface = new DCOPIface(this, "DCOPIface");
+    mDcopIface = new DCOPIface(this, "camera");
     connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), this, SLOT(slotCameraAutoDetect()));
 
     // Auto-detect camera if requested so
