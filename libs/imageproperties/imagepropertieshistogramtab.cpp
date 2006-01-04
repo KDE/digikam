@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
-#include <kfileitem.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
@@ -285,7 +284,7 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LinScaleHistogram)); 
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
     m_colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
     m_regionBG->setButton(config->readNumEntry("Histogram Rendering", Digikam::HistogramWidget::FullImageHistogram));
 }
