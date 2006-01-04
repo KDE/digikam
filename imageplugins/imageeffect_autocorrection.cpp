@@ -72,7 +72,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                                     Qt::red, 1, false,
                                                     Digikam::ImageGuideWidget::TargetPreviewImage);
     l->addWidget(m_previewWidget, 0);
-    QWhatsThis::add( m_previewWidget, i18n("<p>Here you can seethe auto-color correction tool preview. "
+    QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the auto-color correction tool preview. "
                                            "You can pick color on image "
                                            "to see the color level corresponding on histogram."));
     setPreviewAreaWidget(frame); 
