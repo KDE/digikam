@@ -57,6 +57,7 @@
 static KCmdLineOptions options[] =
 {
     { "detect-camera", I18N_NOOP("Automatically detect and open camera"), 0 },
+    { "download-from <path>", I18N_NOOP("Open camera dialog at <path>"), 0 },
     KCmdLineLastOption
 };
 
@@ -202,13 +203,6 @@ int main(int argc, char *argv[])
 
     KApplication app;
 
-    bool detectCamera = false;
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    if (args && args->isSet("detect-camera"))
-    {
-        detectCamera = true;
-    }
-    
     KConfig* config = KGlobal::config();
     config->setGroup("General Settings");
     QString version = config->readEntry("Version");
@@ -237,10 +231,17 @@ int main(int argc, char *argv[])
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 
-    DigikamApp *digikam = new DigikamApp(detectCamera);
+    DigikamApp *digikam = new DigikamApp();
 
     app.setMainWidget(digikam);
     digikam->show();
+    
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    if (args && args->isSet("detect-camera"))
+        digikam->autoDetect();
+    else if (args && args->isSet("download-from"))
+        digikam->downloadFrom(args->getOption("download-from"));
+    
 
 #if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;

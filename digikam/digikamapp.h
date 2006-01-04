@@ -68,11 +68,11 @@ class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 
 public:
 
-    DigikamApp(bool detectCamera=false);
+    DigikamApp();
     ~DigikamApp();
 
     virtual void show();
-    
+
     static DigikamApp* getinstance();
 
     // KIPI Actions collections access.
@@ -82,6 +82,8 @@ public:
     
     const QPtrList<KAction> menuImportActions();
 
+    void autoDetect();
+    void downloadFrom(const QString &cameraGuiPath);
     void enableThumbSizePlusAction(bool val);
     void enableThumbSizeMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
@@ -124,6 +126,8 @@ private:
     bool                   mFullScreen;
 
     SplashScreen          *mSplash;
+    
+    QString               mCameraGuiPath;
     
     // Album Settings
     AlbumSettings *mAlbumSettings;
@@ -205,6 +209,7 @@ private slots:
 
     void slotKipiPluginPlug();
     
+    void slotDownloadImages();
     void slotCameraConnect();
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
