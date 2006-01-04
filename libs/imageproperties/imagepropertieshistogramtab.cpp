@@ -45,6 +45,7 @@
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
@@ -59,19 +60,25 @@ namespace Digikam
 {
 
 ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect* selectionArea, bool navBar)
-                           : QWidget(parent, 0, Qt::WDestructiveClose)
+                           : QWidget(parent)
 {
     m_imageLoaderThreaded = 0;
     m_selectionArea       = selectionArea;
-   
-    QGridLayout *topLayout = new QGridLayout(this, 7, 3, KDialog::marginHint(), KDialog::spacingHint());
-
-    m_navigateBar  = new NavigateBarWidget(this, navBar);
-    topLayout->addMultiCellWidget(m_navigateBar, 0, 0, 0, 3);
     
-    QLabel *label1 = new QLabel(i18n("Channel:"), this);
+    QVBoxLayout *vLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    m_navigateBar        = new NavigateBarWidget(this, navBar);
+    KTabWidget *tab      = new KTabWidget(this);
+    vLayout->addWidget(m_navigateBar);
+    vLayout->addWidget(tab);
+       
+    // Histogram tab area -----------------------------------------------------
+       
+    QWidget* histogramPage = new QWidget( tab );
+    QGridLayout *topLayout = new QGridLayout(histogramPage, 7, 3, KDialog::marginHint(), KDialog::spacingHint());
+
+    QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_channelCB = new QComboBox( false, this );
+    m_channelCB = new QComboBox( false, histogramPage );
     m_channelCB->insertItem( i18n("Luminosity") );
     m_channelCB->insertItem( i18n("Red") );
     m_channelCB->insertItem( i18n("Green") );
@@ -88,7 +95,7 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
                                        "is supported by some image formats such as PNG or GIF.<p>"
                                        "<b>Colors</b>: drawing all color channels values at the same time."));
     
-    m_scaleBG = new QHButtonGroup(this);
+    m_scaleBG = new QHButtonGroup(histogramPage);
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
@@ -114,9 +121,9 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
     logHistoButton->setToggleButton(true);       
     
-    QLabel *label10 = new QLabel(i18n("Colors:"), this);
+    QLabel *label10 = new QLabel(i18n("Colors:"), histogramPage);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-    m_colorsCB = new QComboBox( false, this );
+    m_colorsCB = new QComboBox( false, histogramPage );
     m_colorsCB->insertItem( i18n("Red") );
     m_colorsCB->insertItem( i18n("Green") );
     m_colorsCB->insertItem( i18n("Blue") );
@@ -126,7 +133,7 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
                                        
-    m_regionBG = new QHButtonGroup(this);
+    m_regionBG = new QHButtonGroup(histogramPage);
     m_regionBG->setExclusive(true);
     m_regionBG->setFrameShape(QFrame::NoFrame);
     m_regionBG->setInsideMargin( 0 );
@@ -162,11 +169,11 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     
     // -------------------------------------------------------------
     
-    m_histogramWidget = new HistogramWidget(256, 140, this);
+    m_histogramWidget = new HistogramWidget(256, 140, histogramPage);
     QWhatsThis::add( m_histogramWidget, i18n("<p>This is the histogram drawing of the "
                                              "selected image channel"));
         
-    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, this );
+    m_hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histogramPage );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     topLayout->addMultiCellWidget(m_histogramWidget, 3, 3, 0, 3);
     topLayout->addMultiCellWidget(m_hGradient, 4, 4, 0, 3);
@@ -174,13 +181,13 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(KDialog::spacingHint());
-    QLabel *label3 = new QLabel(i18n("Range:"), this);
+    QLabel *label3 = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    m_minInterv = new QSpinBox(0, 255, 1, this);
+    m_minInterv = new QSpinBox(0, 255, 1, histogramPage);
     m_minInterv->setValue(0);
     QWhatsThis::add( m_minInterv, i18n("<p>Select here the minimal intensity "
                                        "value of the histogram selection."));    
-    m_maxInterv = new QSpinBox(0, 255, 1, this);
+    m_maxInterv = new QSpinBox(0, 255, 1, histogramPage);
     m_maxInterv->setValue(255);
     QWhatsThis::add( m_minInterv, i18n("<p>Select here the maximal intensity value "
                                        "of the histogram selection."));
@@ -191,7 +198,7 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     
     // -------------------------------------------------------------
     
-    QGroupBox *gbox = new QGroupBox(2, Qt::Horizontal, i18n("Statistics"), this);
+    QGroupBox *gbox = new QGroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
     QWhatsThis::add( gbox, i18n("<p>Here you can see the statistic results calculated with the "
                                 "selected histogram part. These values are available for all "
                                 "channels."));
@@ -229,6 +236,16 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
     topLayout->setRowStretch(7, 10);
 
+    tab->addTab(histogramPage, i18n("Histogram") );
+
+    // ICC Profiles tab area ---------------------------------------
+    
+    QWidget* iccprofilePage = new QWidget( tab );
+
+    // TODO
+    
+    tab->addTab(iccprofilePage, i18n("ICC profile") );
+
     // -------------------------------------------------------------
 
     connect(m_navigateBar, SIGNAL(signalFirstItem()),
@@ -243,6 +260,8 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     connect(m_navigateBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
                             
+    // -------------------------------------------------------------
+                                
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
     

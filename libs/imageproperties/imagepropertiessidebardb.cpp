@@ -66,7 +66,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
     setSplitter(splitter);
          
     appendTab(m_exifTab, SmallIcon("exifinfo"), i18n("EXIF"));    
-    appendTab(m_histogramTab, SmallIcon("histogram"), i18n("Histogram"));
+    appendTab(m_histogramTab, SmallIcon("blend"), i18n("Colors"));
     appendTab(m_desceditTab, SmallIcon("imagecomment"), i18n("Comments && Tags"));
     loadViewState();
 

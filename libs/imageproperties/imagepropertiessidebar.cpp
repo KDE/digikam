@@ -57,7 +57,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *split
     setSplitter(splitter);
          
     appendTab(m_exifTab, SmallIcon("exifinfo"), i18n("EXIF"));    
-    appendTab(m_histogramTab, SmallIcon("histogram"), i18n("Histogram"));
+    appendTab(m_histogramTab, SmallIcon("blend"), i18n("Colors"));
     loadViewState();
     
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
