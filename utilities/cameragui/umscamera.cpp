@@ -49,6 +49,7 @@ extern "C"
 
 // Local includes.
 
+#include "dimg.h"
 #include "dcraw_parse.h"
 #include "albumsettings.h"
 #include "umscamera.h"
@@ -154,8 +155,10 @@ bool UMSCamera::getThumbnail(const QString& folder,
         if (!thumbnail.isNull())
            return true;
     }
- 
-   // Trying to get thumbnail from RAW file using dcraw parse utility.
+
+    // TODO: check for thm files if we didn't manage to get thumbnail from exif
+
+    // Trying to get thumbnail from RAW file using dcraw parse utility.
 
     KTempFile thumbFile(QString::null, "camerarawthumb");
     thumbFile.setAutoDelete(true);
@@ -172,8 +175,17 @@ bool UMSCamera::getThumbnail(const QString& folder,
         }
     }
 
-    // TODO: check for thm files if we didn't manage to get thumbnail from exif
-    
+    // Trying to get thumbnail using DImg.
+    // TODO : in the future, we need to use future DImg::getEmbeddedThumnail method instead !
+
+    Digikam::DImg dimg_im(QFile::encodeName(folder + "/" + itemName));
+
+    if (!dimg_im.isNull()) 
+    {
+        thumbnail = dimg_im.copyQImage();
+        return true;
+    }
+
     return false;
 }
 
