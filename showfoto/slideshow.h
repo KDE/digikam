@@ -28,6 +28,9 @@ class QTimer;
 class KAction;
 class KConfig;
 
+namespace ShowFoto
+{
+
 class SlideShow : public QObject
 {
 Q_OBJECT
@@ -67,5 +70,7 @@ private:
     bool     m_loop;
     bool     m_startWithCurrent;
 };
+
+}   // namespace ShowFoto
 
 #endif // SLIDESHOW_H

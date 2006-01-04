@@ -19,7 +19,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef SETUPICC_H
 #define SETUPICC_H
 
@@ -33,6 +32,10 @@ class QRadioButton;
 class KURLRequester;
 class KComboBox;
 // class QStringList;
+
+namespace ShowFoto
+{
+
 typedef QMap<QString, QString> ICCfilesPath;
 
 class SetupICC : public QWidget
@@ -89,5 +92,7 @@ private slots:
       void slotChangeProofProfile(int index);
 
 };
+
+}   // namespace ShowFoto
 
 #endif // SETUPICC_H 

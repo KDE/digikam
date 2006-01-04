@@ -3,7 +3,7 @@
  * Date   : 2005-04-02
  * Description : showfoto setup dialog.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +26,9 @@
 #include <kdialogbase.h>
 
 class QFrame;
+
+namespace ShowFoto
+{
 
 class SetupEditor;
 class SetupPlugins;
@@ -66,5 +69,7 @@ private slots:
 
     void slotOkClicked();
 };
+
+}   // namespace ShowFoto
 
 #endif  /* SETUP_H  */

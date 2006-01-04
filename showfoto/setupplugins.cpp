@@ -42,6 +42,8 @@
 
 #include "setupplugins.h"
 
+namespace ShowFoto
+{
 
 SetupPlugins::SetupPlugins(QWidget* parent )
             : QWidget(parent)
@@ -151,5 +153,7 @@ void SetupPlugins::readSettings()
     config->setGroup("ImageViewer Settings");
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
 }
+
+}   // namespace ShowFoto
 
 #include "setupplugins.moc"

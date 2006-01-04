@@ -32,6 +32,9 @@
 
 #include "slideshow.h"
 
+namespace ShowFoto
+{
+
 SlideShow::SlideShow(KAction* first, KAction* next)
          : m_first(first), m_next(next), m_delay(5), 
            m_loop(false), m_startWithCurrent(false)
@@ -99,5 +102,7 @@ void SlideShow::slotTimeout()
 
     m_next->activate();
 }
+
+}   // namespace ShowFoto
 
 #include "slideshow.moc"

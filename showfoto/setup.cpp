@@ -3,7 +3,7 @@
  * Date   : 2005-04-02
  * Description : showfoto setup dialog.
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,9 @@
 #include "setupslideshow.h"
 #include "setupicc.h"
 #include "setup.h"
+
+namespace ShowFoto
+{
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
@@ -78,5 +81,7 @@ void Setup::slotOkClicked()
     iccPage_->applySettings();
     close();
 }
+
+}   // namespace ShowFoto
 
 #include "setup.moc"

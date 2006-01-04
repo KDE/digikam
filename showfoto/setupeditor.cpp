@@ -43,6 +43,8 @@
 
 #include "setupeditor.h"
 
+namespace ShowFoto
+{
 
 SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
@@ -184,5 +186,7 @@ void SetupEditor::readSettings()
 
     delete Black;
 }
+
+}   // namespace ShowFoto
 
 #include "setupeditor.moc"

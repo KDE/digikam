@@ -90,6 +90,9 @@
 #include "iofilesettingscontainer.h"
 #include "showfoto.h"
 
+namespace ShowFoto
+{
+
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
 {
@@ -1648,5 +1651,7 @@ void ShowFoto::slotOpenFilesInFolder()
        slotOpenFolder(url);
     }
 }
+
+}   // namespace ShowFoto
 
 #include "showfoto.moc"

@@ -37,6 +37,8 @@
 
 #include "setupslideshow.h"
 
+namespace ShowFoto
+{
 
 SetupSlideShow::SetupSlideShow(QWidget* parent )
               : QWidget(parent)
@@ -93,5 +95,7 @@ void SetupSlideShow::readSettings()
     m_loopMode->setChecked(config->readBoolEntry("SlideShowLoop", false));
     m_fullScreenMode->setChecked(config->readBoolEntry("SlideShowFullScreen", true));
 }
+
+}   // namespace ShowFoto
 
 #include "setupslideshow.moc"

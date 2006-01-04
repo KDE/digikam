@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     }
     args->clear();
 
-    ShowFoto *w = new ShowFoto(urlList);
+    ShowFoto::ShowFoto *w = new ShowFoto::ShowFoto(urlList);
     app.setMainWidget(w);
     w->show();
     

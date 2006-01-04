@@ -30,6 +30,9 @@ class QCheckBox;
 class KColorButton;
 class KIntNumInput;
 
+namespace ShowFoto
+{
+
 class SetupEditor : public QWidget
 {
     Q_OBJECT
@@ -61,5 +64,7 @@ private:
 
     void readSettings();
 };
+
+}   // namespace ShowFoto
 
 #endif /* SETUPEDITOR_H */

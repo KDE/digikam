@@ -29,6 +29,9 @@ class QCheckBox;
 
 class KIntNumInput;
 
+namespace ShowFoto
+{
+
 class SetupSlideShow : public QWidget
 {
     Q_OBJECT
@@ -50,5 +53,7 @@ private:
     
     void readSettings();
 };
+
+}   // namespace ShowFoto
 
 #endif /* SETUPSLIDESHOW_H */

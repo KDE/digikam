@@ -50,8 +50,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-
-// // Local includes.
+// Local includes.
 
 #include "setupicc.h"
 
@@ -77,6 +76,9 @@
 #define NMD_COLOR_ICC    1852662636*/
 
 //--End signatures---------------------------
+
+namespace ShowFoto
+{
 
 SetupICC::SetupICC(QWidget* parent )
         : QWidget(parent)
@@ -592,5 +594,7 @@ void SetupICC::slotChangeProofProfile(int index)
 {
     m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[index];
 }
+
+}   // namespace ShowFoto
 
 #include "setupicc.moc"

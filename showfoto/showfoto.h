@@ -39,7 +39,6 @@ class KConfig;
 class KToolBarPopupAction;
 
 class SplashScreen;
-class SlideShow;
 
 namespace KIO
 {
@@ -56,6 +55,11 @@ class ImagePropertiesSideBar;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 }
+
+namespace ShowFoto
+{
+
+class SlideShow;
 
 class ShowFoto : public KMainWindow
 {
@@ -210,5 +214,7 @@ protected:
 
     void closeEvent(QCloseEvent* e);
 };
+
+}   // namespace ShowFoto
 
 #endif /* SHOWFOTO_H */

@@ -31,6 +31,9 @@ class QCheckBox;
 
 class KListView;
 
+namespace ShowFoto
+{
+
 class SetupPlugins : public QWidget
 {
     Q_OBJECT
@@ -56,5 +59,7 @@ private:
     void initImagePluginsList();
     void updateImagePluginsList(QStringList lista, QStringList listl);    
 };
+
+}   // namespace ShowFoto
 
 #endif /* SETUPEDITOR_H */
