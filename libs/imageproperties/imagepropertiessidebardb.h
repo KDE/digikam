@@ -4,7 +4,7 @@
  * Description : image properties side bar using data from 
  *               digiKam database.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class AlbumIconView;
 namespace Digikam
 {
 class ImagePropertiesEXIFTab;
-class ImagePropertiesHistogramTab;
+class ImagePropertiesColorsTab;
 class ImageDescEditTab;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public Digikam::Sidebar
@@ -92,7 +92,7 @@ private:
     AlbumIconItem               *m_currentItem;
     
     ImagePropertiesEXIFTab      *m_exifTab;   
-    ImagePropertiesHistogramTab *m_histogramTab;
+    ImagePropertiesColorsTab *m_histogramTab;
     ImageDescEditTab            *m_desceditTab;
 
 private slots:

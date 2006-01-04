@@ -54,12 +54,12 @@
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
 #include "loadsavethread.h"
-#include "imagepropertieshistogramtab.h"
+#include "imagepropertiescolorstab.h"
 
 namespace Digikam
 {
 
-ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect* selectionArea, bool navBar)
+ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar)
                            : QWidget(parent)
 {
     m_imageLoaderThreaded = 0;
@@ -308,7 +308,7 @@ ImagePropertiesHistogramTab::ImagePropertiesHistogramTab(QWidget* parent, QRect*
     m_regionBG->setButton(config->readNumEntry("Histogram Rendering", Digikam::HistogramWidget::FullImageHistogram));
 }
 
-ImagePropertiesHistogramTab::~ImagePropertiesHistogramTab()
+ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 {
     // If there is a currently histogram computation when dialog is closed,
     // stop it before the m_image data are deleted automaticly!
@@ -331,7 +331,7 @@ ImagePropertiesHistogramTab::~ImagePropertiesHistogramTab()
        delete m_hGradient;
 }
 
-void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
+void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                           uchar* imageData, int imageWidth, int imageHeight, 
                                           bool sixteenBit, int itemType)
 {
@@ -390,7 +390,7 @@ void ImagePropertiesHistogramTab::setData(const KURL& url, QRect *selectionArea,
     }
 }
 
-void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
+void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 {
     //m_histogramWidget->setEnabled(false);
 
@@ -407,7 +407,7 @@ void ImagePropertiesHistogramTab::loadImageFromUrl(const KURL& url)
     m_imageLoaderThreaded->load(url.path(), ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
-void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
+void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
 {
     //m_histogramWidget->setEnabled(true);
 
@@ -427,14 +427,14 @@ void ImagePropertiesHistogramTab::slotLoadImageFromUrlComplete(const QString&, c
     }
 }
 
-void ImagePropertiesHistogramTab::slotProgressInfo(const QString&, float progress)
+void ImagePropertiesColorsTab::slotProgressInfo(const QString&, float progress)
 {
     //kdDebug() << "Progress loading is " << progress << endl;
     //m_histogramWidget->setEnabled(true);
     m_histogramWidget->setDataLoadingProgress(progress);
 }
 
-void ImagePropertiesHistogramTab::setSelection(QRect *selectionArea)
+void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
 {
     // This is necessary to stop computation because m_image.bits() is currently used by
     // threaded histogram algorithm.
@@ -456,7 +456,7 @@ void ImagePropertiesHistogramTab::setSelection(QRect *selectionArea)
     }
 }
 
-void ImagePropertiesHistogramTab::slotRefreshOptions(bool sixteenBit)
+void ImagePropertiesColorsTab::slotRefreshOptions(bool sixteenBit)
 {
     m_minInterv->setValue(0);
     m_maxInterv->setValue(sixteenBit ? 65535 : 255);
@@ -469,14 +469,14 @@ void ImagePropertiesHistogramTab::slotRefreshOptions(bool sixteenBit)
        slotRenderingChanged(m_regionBG->selectedId());
 }
 
-void ImagePropertiesHistogramTab::slotHistogramComputationFailed()
+void ImagePropertiesColorsTab::slotHistogramComputationFailed()
 {
     m_imageSelection.reset();
     m_image.reset();
     m_histogramWidget->updateData(0L, 0, 0, false);
 }
 
-void ImagePropertiesHistogramTab::slotChannelChanged(int channel)
+void ImagePropertiesColorsTab::slotChannelChanged(int channel)
 {
     switch(channel)
     {
@@ -521,13 +521,13 @@ void ImagePropertiesHistogramTab::slotChannelChanged(int channel)
     updateInformation();
 }
 
-void ImagePropertiesHistogramTab::slotScaleChanged(int scale)
+void ImagePropertiesColorsTab::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
 }
 
-void ImagePropertiesHistogramTab::slotColorsChanged(int color)
+void ImagePropertiesColorsTab::slotColorsChanged(int color)
 {
     switch(color)
     {
@@ -548,32 +548,32 @@ void ImagePropertiesHistogramTab::slotColorsChanged(int color)
     updateInformation();
 }
 
-void ImagePropertiesHistogramTab::slotRenderingChanged(int rendering)
+void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
     m_histogramWidget->m_renderingType = rendering;
     m_histogramWidget->repaint(false);
     updateInformation();
 }
 
-void ImagePropertiesHistogramTab::slotIntervChanged(int)
+void ImagePropertiesColorsTab::slotIntervChanged(int)
 {
     m_maxInterv->setMinValue(m_minInterv->value());
     m_minInterv->setMaxValue(m_maxInterv->value());
     updateInformation();
 }
 
-void ImagePropertiesHistogramTab::slotUpdateMinInterv(int min)
+void ImagePropertiesColorsTab::slotUpdateMinInterv(int min)
 {
     m_minInterv->setValue(min);
 }
 
-void ImagePropertiesHistogramTab::slotUpdateMaxInterv(int max)
+void ImagePropertiesColorsTab::slotUpdateMaxInterv(int max)
 {
     m_maxInterv->setValue(max);
     updateInformation();
 }
 
-void ImagePropertiesHistogramTab::updateInformation()
+void ImagePropertiesColorsTab::updateInformation()
 {
     QString value;
     int min = m_minInterv->value();
@@ -604,4 +604,4 @@ void ImagePropertiesHistogramTab::updateInformation()
 
 }  // NameSpace Digikam
 
-#include "imagepropertieshistogramtab.moc"
+#include "imagepropertiescolorstab.moc"

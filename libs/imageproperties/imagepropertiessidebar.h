@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 class ImagePropertiesEXIFTab;
-class ImagePropertiesHistogramTab;
+class ImagePropertiesColorsTab;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Digikam::Sidebar
 {
@@ -72,7 +72,7 @@ private:
     KURL                         m_currentURL;
 
     ImagePropertiesEXIFTab      *m_exifTab;   
-    ImagePropertiesHistogramTab *m_histogramTab;
+    ImagePropertiesColorsTab *m_histogramTab;
     
 private slots:
 

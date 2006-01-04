@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESHISTOGRAMTAB_H
-#define IMAGEPROPERTIESHISTOGRAMTAB_H
+#ifndef IMAGEPROPERTIESCOLORSTAB_H
+#define IMAGEPROPERTIESCOLORSTAB_H
 
 // Qt includes.
 
@@ -46,14 +46,14 @@ class ColorGradientWidget;
 class NavigateBarWidget;
 class ManagedLoadSaveThread;
 
-class DIGIKAM_EXPORT ImagePropertiesHistogramTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesHistogramTab(QWidget* parent, QRect* selectionArea, bool navBar=true);
-    ~ImagePropertiesHistogramTab();
+    ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar=true);
+    ~ImagePropertiesColorsTab();
 
     void setData(const KURL& url=KURL::KURL(), QRect *selectionArea=0, 
                  uchar* imageData=0, int imageWidth=0, int imageHeight=0, 
@@ -113,13 +113,13 @@ private:
     
     QRect               *m_selectionArea;
     
-    ColorGradientWidget *m_hGradient;
-    HistogramWidget     *m_histogramWidget;
-    NavigateBarWidget   *m_navigateBar;
+    ColorGradientWidget   *m_hGradient;
+    HistogramWidget       *m_histogramWidget;
+    NavigateBarWidget     *m_navigateBar;
     ManagedLoadSaveThread *m_imageLoaderThreaded;
     
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPROPERTIESHISTOGRAMTAB_H */
+#endif /* IMAGEPROPERTIESCOLORSTAB_H */

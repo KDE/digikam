@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@
 // Local includes.
 
 #include "imagepropertiesexiftab.h"
-#include "imagepropertieshistogramtab.h"
+#include "imagepropertiescolorstab.h"
 #include "imagepropertiessidebar.h"
 
 namespace Digikam
@@ -52,7 +52,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *split
     m_dirtyHistogramTab = false;
     
     m_exifTab      = new ImagePropertiesEXIFTab(parent, false);
-    m_histogramTab = new ImagePropertiesHistogramTab(parent, 0, false);
+    m_histogramTab = new ImagePropertiesColorsTab(parent, 0, false);
     
     setSplitter(splitter);
          
