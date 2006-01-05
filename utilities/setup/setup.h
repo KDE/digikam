@@ -29,6 +29,9 @@
 
 class QFrame;
 
+namespace Digikam
+{
+
 class SetupGeneral;
 class SetupExif;
 class SetupCollections;
@@ -93,5 +96,7 @@ private slots:
 
     void slotOkClicked();
 };
+
+}  // namespace Digikam
 
 #endif  // SETUP_H

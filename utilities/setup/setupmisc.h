@@ -21,9 +21,14 @@
 #ifndef SETUPMISC_H
 #define SETUPMISC_H
 
+// Qt includes.
+
 #include <qwidget.h>
 
 class QCheckBox;
+
+namespace Digikam
+{
 
 class SetupMisc : public QWidget
 {
@@ -42,5 +47,7 @@ private:
     QCheckBox* m_useTrashCheck;
     QCheckBox* m_scanAtStart;
 };
+
+}  // namespace Digikam
 
 #endif /* SETUPMISC_H */

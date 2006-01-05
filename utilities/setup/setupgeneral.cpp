@@ -51,6 +51,8 @@
 #include "albumsettings.h"
 #include "setupgeneral.h"
 
+namespace Digikam
+{
 
 SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
             : QWidget(parent)
@@ -216,5 +218,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
     mainDialog_->enableButtonOK(dir.exists() &&
                                 dir != QDir(QDir::homeDirPath ()));
 }
+
+}  // namespace Digikam
 
 #include "setupgeneral.moc"

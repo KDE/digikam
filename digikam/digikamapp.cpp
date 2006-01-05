@@ -914,9 +914,9 @@ void DigikamApp::slotCameraAutoDetect()
 
 void DigikamApp::slotSetup()
 {
-    Setup setup(this);
+    Digikam::Setup setup(this);
 
-    // For to show the number of KIPI plugins in the setup dialog.
+    // To show the number of KIPI plugins in the setup dialog.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
     setup.pluginsPage_->initPlugins((int)list.count());
@@ -932,7 +932,7 @@ void DigikamApp::slotSetup()
 
 void DigikamApp::slotSetupCamera()
 {
-    Setup setup(this, 0, Setup::Camera);
+    Digikam::Setup setup(this, 0, Digikam::Setup::Camera);
 
     // For to show the number of KIPI plugins in the setup dialog.
 

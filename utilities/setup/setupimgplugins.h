@@ -33,6 +33,9 @@ class KColorButton;
 class KIntNumInput;
 class KListView;
 
+namespace Digikam
+{
+
 class SetupImgPlugins : public QWidget
 {
     Q_OBJECT
@@ -61,5 +64,7 @@ private:
     void updateImagePluginsList(QStringList lista, QStringList listl);
     
 };
+
+}  // namespace Digikam
 
 #endif // SETUPIMGPLUGINS_H 

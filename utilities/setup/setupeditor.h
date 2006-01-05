@@ -30,6 +30,9 @@ class QCheckBox;
 class KColorButton;
 class KIntNumInput;
 
+namespace Digikam
+{
+
 class SetupEditor : public QWidget
 {
     Q_OBJECT
@@ -59,5 +62,7 @@ private:
     void readSettings();
     
 };
+
+}  // namespace Digikam
 
 #endif // SETUPEDITOR_H 

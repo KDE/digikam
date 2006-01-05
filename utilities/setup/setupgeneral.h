@@ -19,7 +19,6 @@
  *
  * ============================================================ */
 
-
 #ifndef SETUPGENERAL_H
 #define SETUPGENERAL_H
 
@@ -33,6 +32,9 @@ class QCheckBox;
 class QLineEdit;
 
 class KDialogBase;
+
+namespace Digikam
+{
 
 class SetupGeneral : public QWidget
 {
@@ -72,5 +74,7 @@ private slots:
     void slotPathEdited(const QString& newPath);
 
 };
+
+}  // namespace Digikam
 
 #endif // SETUPGENERAL_H

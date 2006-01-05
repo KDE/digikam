@@ -18,15 +18,24 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
 #include <qlayout.h>
 #include <qvgroupbox.h>
 #include <qcheckbox.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kdialog.h>
 
+// Local includes.
+
 #include "albumsettings.h"
 #include "setupmisc.h"
+
+namespace Digikam
+{
 
 SetupMisc::SetupMisc(QWidget* parent)
     : QWidget( parent )
@@ -60,7 +69,6 @@ SetupMisc::SetupMisc(QWidget* parent)
 
 SetupMisc::~SetupMisc()
 {
-
 }
 
 void SetupMisc::applySettings()
@@ -81,3 +89,5 @@ void SetupMisc::readSettings()
     m_useTrashCheck->setChecked(settings->getUseTrash());
     m_scanAtStart->setChecked(settings->getScanAtStart());
 }
+
+}  // namespace Digikam

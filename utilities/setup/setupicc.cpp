@@ -4,7 +4,7 @@
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
- * Copyright 2005 by Gilles Caulier and F.J. Cruz
+ * Copyright 2005-2006 by Gilles Caulier and F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,9 @@
 // Others
 
 #include LCMS_HEADER
+
+namespace Digikam
+{
 
 SetupICC::SetupICC(QWidget* parent )
         : QWidget(parent)
@@ -572,5 +575,7 @@ void SetupICC::slotChangeProofProfile(int index)
 {
     m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[index];
 }
+
+}  // namespace Digikam
 
 #include "setupicc.moc"

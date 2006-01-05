@@ -3,7 +3,7 @@
  * Date  : 2003-05-03
  * Description : mime types setup tab.
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,9 @@
 
 class QLineEdit;
 
+namespace Digikam
+{
+
 class SetupMime : public QWidget
 {
     Q_OBJECT
@@ -47,5 +50,7 @@ private:
     QLineEdit *m_audioFileFilterEdit;
     QLineEdit *m_rawFileFilterEdit;
 };
+
+}  // namespace Digikam
 
 #endif // SETUPMIME_H 

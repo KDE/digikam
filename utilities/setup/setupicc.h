@@ -4,7 +4,7 @@
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
- * Copyright 2005 by Gilles Caulier and F.J. Cruz
+ * Copyright 2005-2006 by Gilles Caulier and F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,9 @@ class KComboBox;
 // class QStringList;
 typedef QMap<QString, QString> ICCfilesPath;
 
+namespace Digikam
+{
+
 class SetupICC : public QWidget
 {
     Q_OBJECT
@@ -53,6 +56,8 @@ private:
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
+
+private:
 
     QCheckBox       *m_enableColorManagement;
     QCheckBox       *m_bpcAlgorithm;
@@ -77,17 +82,19 @@ private:
 
 private slots:
 
-      void slotToggledWidgets(bool t);
-      void slotFillCombos(const QString&);
-      void slotClickedIn();
-      void slotClickedWork();
-      void slotClickedMonitor();
-      void slotClickedProof();
-      void slotChangeWorkProfile(int index);
-      void slotChangeInProfile(int index);
-      void slotChangeMonitorProfile(int index);
-      void slotChangeProofProfile(int index);
+    void slotToggledWidgets(bool t);
+    void slotFillCombos(const QString&);
+    void slotClickedIn();
+    void slotClickedWork();
+    void slotClickedMonitor();
+    void slotClickedProof();
+    void slotChangeWorkProfile(int index);
+    void slotChangeInProfile(int index);
+    void slotChangeMonitorProfile(int index);
+    void slotChangeProofProfile(int index);
 
 };
+
+}  // namespace Digikam
 
 #endif // SETUPICC_H 

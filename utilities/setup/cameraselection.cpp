@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -30,10 +32,17 @@
 #include <qstringlist.h>
 #include <qlineedit.h>
 
+// KDE includes.
+
 #include <klocale.h>
+
+// Local includes.
 
 #include "cameraselection.h"
 #include "gpiface.h"
+
+namespace Digikam
+{
 
 CameraSelection::CameraSelection( QWidget* parent )
     : KDialogBase(parent, 0, true, i18n("Camera Selection"),
@@ -333,5 +342,7 @@ void CameraSelection::slotOkClicked()
     emit signalOkClicked(currentTitle(), currentModel(),
                          currentPortPath(), currentCameraPath());
 }
+
+}  // namespace Digikam
 
 #include "cameraselection.moc"

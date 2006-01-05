@@ -43,6 +43,8 @@
 
 #include "setupeditor.h"
 
+namespace Digikam
+{
 
 SetupEditor::SetupEditor(QWidget* parent )
            : QWidget(parent)
@@ -180,5 +182,7 @@ void SetupEditor::readSettings()
     m_RAWquality->setEnabled(m_enableRAWQuality->isChecked());
     delete Black;
 }
+
+}  // namespace Digikam
 
 #include "setupeditor.moc"

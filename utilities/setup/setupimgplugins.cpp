@@ -43,6 +43,9 @@
 
 #include "setupimgplugins.h"
 
+namespace Digikam
+{
+
 SetupImgPlugins::SetupImgPlugins(QWidget* parent )
                : QWidget(parent)
 {
@@ -153,5 +156,7 @@ void SetupImgPlugins::readSettings()
     config->setGroup("ImageViewer Settings");
     m_enableImagePluginList = config->readListEntry("ImagePlugins List");
 }
+
+}  // namespace Digikam
 
 #include "setupimgplugins.moc"

@@ -3,7 +3,7 @@
  * Date  : 2003-05-03
  * Description : mime types setup tab
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,8 @@
 #include "albumsettings.h"
 #include "setupmime.h"
 
+namespace Digikam
+{
 
 SetupMime::SetupMime(QWidget* parent )
          : QWidget(parent)
@@ -142,5 +144,6 @@ void SetupMime::readSettings()
     m_rawFileFilterEdit->setText(settings->getRawFileFilter());
 }
 
+}  // namespace Digikam
 
 #include "setupmime.moc"

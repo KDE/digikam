@@ -24,6 +24,9 @@
 class QString;
 class QStringList;
 
+namespace Digikam
+{
+
 class GPIface
 {
 public:
@@ -34,5 +37,7 @@ public:
     static void getCameraSupportedPorts(const QString& model,
                                         QStringList& plist);
 };
+
+}  // namespace Digikam
 
 #endif /* GPIFACE_H */

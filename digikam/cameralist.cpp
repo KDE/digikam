@@ -189,13 +189,13 @@ CameraType* CameraList::autoDetect(bool& retry)
     retry = false;
     
     QString model, port;
-    if (GPIface::autoDetect(model, port) != 0)
+    if (Digikam::GPIface::autoDetect(model, port) != 0)
     {
-       retry = ( KMessageBox::warningYesNo(0,
-                                           i18n("Failed to auto-detect camera; "
-                                                "please make sure it is connected "
-                                                "properly and is turned on. "
-                                                "Would you like to try again?"))
+        retry = ( KMessageBox::warningYesNo(0,
+                                            i18n("Failed to auto-detect camera; "
+                                                 "please make sure it is connected "
+                                                 "properly and is turned on. "
+                                                 "Would you like to try again?"))
                  == KMessageBox::Yes );
         return 0;
     }

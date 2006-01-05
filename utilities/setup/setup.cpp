@@ -45,6 +45,9 @@
 #include "setupmisc.h"
 #include "setup.h"
 
+namespace Digikam
+{
+
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                    name, true, true )
@@ -115,5 +118,7 @@ void Setup::slotOkClicked()
     miscPage_->applySettings();
     close();
 }
+
+}  // namespace Digikam
 
 #include "setup.moc"

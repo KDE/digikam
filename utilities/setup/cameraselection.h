@@ -21,8 +21,13 @@
 #ifndef CAMERASELECTION_H
 #define CAMERASELECTION_H
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qstringlist.h>
+
+// KDE includes.
+
 #include <kdialogbase.h>
 
 class QComboBox;
@@ -33,6 +38,8 @@ class QVButtonGroup;
 class QLabel;
 class QLineEdit;
 
+namespace Digikam
+{
 
 class CameraSelection : public KDialogBase
 {
@@ -56,6 +63,8 @@ private:
     void getCameraList();
     void getSerialPortList();
     
+private:
+    
     QListView* listView_;
     QLineEdit* titleEdit_;
     QVButtonGroup* portButtonGroup_;
@@ -68,7 +77,6 @@ private:
     QString UMSCameraNameActual_;
     QString UMSCameraNameShown_;
     QStringList serialPortList_;
-
 
 private slots:
 
@@ -85,5 +93,7 @@ signals:
                          const QString& path);
         
 };
+
+}  // namespace Digikam
 
 #endif // CAMERASELECTION_H

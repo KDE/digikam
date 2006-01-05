@@ -18,15 +18,24 @@
  * 
  * ============================================================ */
 
-#include <qstring.h>
-#include <qstringlist.h>
+// C Ansi includes.
 
-extern "C" {
+extern "C"
+{
 #include <gphoto2.h>
 }
 
+// Qt includes.
+
+#include <qstring.h>
+#include <qstringlist.h>
+
+// Local includes
+
 #include "gpiface.h"
 
+namespace Digikam
+{
 
 int GPIface::autoDetect(QString& model, QString& port)
 {
@@ -168,6 +177,6 @@ void GPIface::getCameraSupportedPorts(const QString& model,
         plist.append("usb");
 
     gp_context_unref( context );
-
-    
 }
+
+}  // namespace Digikam
