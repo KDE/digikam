@@ -19,6 +19,17 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qheader.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qtimer.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
+
+// KDE includes.
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
@@ -27,12 +38,7 @@
 #include <kcursor.h>
 #include <kmessagebox.h>
 
-#include <qheader.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qpopupmenu.h>
-#include <qcursor.h>
+// Local includes.
 
 #include "albummanager.h"
 #include "albumlister.h"
@@ -44,10 +50,15 @@
 #include "tagcreatedlg.h"
 #include "tagfilterview.h"
 
+// X11 includes.
+
 extern "C"
 {
 #include <X11/Xlib.h>
 }
+
+namespace Digikam
+{
 
 static QPixmap getBlendedIcon(TAlbum* album)
 {
@@ -607,5 +618,7 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
         }
     }
 }
+
+}  // namespace Digikam
 
 #include "tagfilterview.moc"

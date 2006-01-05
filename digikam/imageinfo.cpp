@@ -21,8 +21,7 @@
 
 /** @file imageinfo.cpp */
 
-#include <qfile.h>
-#include <kdebug.h>
+// C Ansi includes.
 
 extern "C"
 {
@@ -31,11 +30,24 @@ extern "C"
 #include <unistd.h>
 }
 
+// Qt includes.
+
+#include <qfile.h>
+
+// KDE includes.
+
+#include <kdebug.h>
+
+// Local includes.
+
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "dio.h"
 #include "imageinfo.h"
+
+namespace Digikam
+{
 
 AlbumManager* ImageInfo::m_man = 0;
 
@@ -250,4 +262,6 @@ void ImageInfo::refresh()
     stat(QFile::encodeName(filePath()), &stbuf);
     m_size = stbuf.st_size;
 }
+
+}  // namespace Digikam
 

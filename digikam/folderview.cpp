@@ -14,7 +14,15 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
+
+// Qt includes.
+
+#include <qpixmap.h>
+#include <qvaluelist.h>
+
+// KDE includes.
 
 #include <kglobalsettings.h>
 #include <kcursor.h>
@@ -22,8 +30,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 
-#include <qpixmap.h>
-#include <qvaluelist.h>
+// Local includes.
 
 #include "albummanager.h"
 #include "themeengine.h"
@@ -31,8 +38,11 @@
 #include "folderitem.h"
 #include "dragobjects.h"
 
+namespace Digikam
+{
+
 //-----------------------------------------------------------------------------
-// FolderViewPriv
+// FolderViewPriv class
 //-----------------------------------------------------------------------------
 
 class FolderViewPriv
@@ -52,7 +62,7 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// FolderViewPriv
+// FolderView class
 //-----------------------------------------------------------------------------
 
 FolderView::FolderView(QWidget *parent, const char *name)
@@ -363,5 +373,7 @@ void FolderView::slotSelectionChanged()
 void FolderView::selectItem(int)
 {
 }
+
+}  // namespace Digikam
     
 #include "folderview.moc"

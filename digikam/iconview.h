@@ -13,10 +13,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef ICONVIEW_H
 #define ICONVIEW_H
+
+// Qt includes.
 
 #include <qscrollview.h>
 
@@ -25,6 +28,9 @@ class QMouseEvent;
 class QPaintEvent;
 class QDropEvent;
 class QPoint;
+
+namespace Digikam
+{
 
 class IconItem;
 class IconGroupItem;
@@ -135,5 +141,7 @@ private:
     IconViewPriv* d;
 
 };
+
+}  // namespace Digikam
     
 #endif /* ICONVIEW_H */

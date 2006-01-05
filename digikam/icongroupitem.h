@@ -13,12 +13,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef ICONGROUPITEM_H
 #define ICONGROUPITEM_H
 
+// Qt includes.
+
 #include <qrect.h>
+
+namespace Digikam
+{
 
 class IconView;
 class IconItem;
@@ -66,5 +72,7 @@ private:
     IconGroupItem*     m_next;
     IconGroupItem*     m_prev;
 };
+
+}  // namespace Digikam
 
 #endif /* ICONGROUPITEM_H */

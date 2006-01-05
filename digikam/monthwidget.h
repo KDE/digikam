@@ -13,14 +13,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef MONTHWIDGET_H
 #define MONTHWIDGET_H
 
+// Qt includes.
+
 #include <qframe.h>
 
+// Local includes.
+
 #include "imageinfo.h"
+
+namespace Digikam
+{
 
 class MonthWidget : public QFrame
 {
@@ -70,6 +78,7 @@ private:
     int          m_currh;
     struct Month m_days[42];
 };
-    
+
+}  // namespace Digikam
 
 #endif /* MONTHWIDGET_H */

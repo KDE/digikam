@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,9 +21,14 @@
 #ifndef CAMERATYPE_H
 #define CAMERATYPE_H
 
+// Qt includes.
+
 #include <qstring.h>
 
 class KAction;
+
+namespace Digikam
+{
 
 class CameraType
 {
@@ -55,7 +60,6 @@ public:
     QString path()  const;
     KAction* action();
     bool valid();
-    
 
 private:
     
@@ -66,8 +70,8 @@ private:
 
     KAction *action_;
     bool     valid_;
-    
-
 };
+
+}  // namespace Digikam
 
 #endif /* CAMERATYPE_H */

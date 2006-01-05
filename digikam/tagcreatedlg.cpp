@@ -18,10 +18,7 @@
  *
  * ============================================================ */
 
-#include <klocale.h>
-#include <kicondialog.h>
-#include <kapplication.h>
-#include <kdeversion.h>
+// Qt includes.
 
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -29,9 +26,21 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 
+// KDE includes.
+
+#include <klocale.h>
+#include <kicondialog.h>
+#include <kapplication.h>
+#include <kdeversion.h>
+
+// Local includes.
+
 #include "album.h"
 #include "tagcreatedlg.h"
 #include "syncjob.h"
+
+namespace Digikam
+{
 
 TagCreateDlg::TagCreateDlg(TAlbum* parent)
     : KDialogBase( Plain, i18n("Create New Tag"), Help|Ok|Cancel, Ok,
@@ -265,6 +274,7 @@ bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
     return ok;
 }
 
+}  // namespace Digikam
 
 #include "tagcreatedlg.moc"
 

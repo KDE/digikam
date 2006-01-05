@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 /** @file imageinfo.h */
@@ -20,11 +21,19 @@
 #ifndef IMAGEINFO_H
 #define IMAGEINFO_H
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qptrlist.h>
 #include <qsize.h>
+
+// KDE includes.
+
 #include <kurl.h>
+
+namespace Digikam
+{
 
 class PAlbum;
 class AlbumManager;
@@ -231,5 +240,7 @@ private:
 
 typedef QPtrList<ImageInfo>         ImageInfoList;
 typedef QPtrListIterator<ImageInfo> ImageInfoListIterator;
+
+}  // namespace Digikam
 
 #endif /* IMAGEINFO_H */

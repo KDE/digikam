@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -20,6 +20,8 @@
 
 /** @file searchquickdialog.cpp */
 
+// Qt includes.
+
 #include <qlineedit.h>
 #include <qtimer.h>
 #include <qlayout.h>
@@ -30,12 +32,19 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>
 
+// Local includes.
+
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
+
+namespace Digikam
+{
 
 SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     : KDialogBase(parent, 0, true, i18n("Quick Search"),
@@ -158,5 +167,7 @@ void SearchQuickDialog::hideEvent(QHideEvent* e)
                        i18n("Last Search") : m_nameEdit->text());
     KDialogBase::hideEvent(e);
 }
+
+}  // namespace Digikam
 
 #include "searchquickdialog.moc"

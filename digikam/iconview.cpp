@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,6 +19,17 @@
  * 
  * ============================================================ */
 
+#define RECT_EXTENSION 300
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <stdlib.h>
+}
+
+// Qt includes.
+
 #include <qtimer.h>
 #include <qpainter.h>
 #include <qvaluelist.h>
@@ -27,20 +38,20 @@
 #include <qapplication.h>
 #include <qdrawutil.h>
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
-extern "C"
-{
-#include <stdlib.h>
-}
+// Local includes.
 
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"
 
-#define RECT_EXTENSION 300
+namespace Digikam
+{
 
 class IconViewPriv
 {
@@ -1767,5 +1778,7 @@ void IconView::itemClickedToOpen(IconItem* item)
     item->setSelected(true);
     emit signalDoubleClicked(item);
 }
+
+}  // namespace Digikam
 
 #include "iconview.moc"

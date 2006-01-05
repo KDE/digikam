@@ -18,7 +18,12 @@
 #ifndef SEARCHFOLDERVIEW_H
 #define SEARCHFOLDERVIEW_H
 
+// Local includes.
+
 #include "folderview.h"
+
+namespace Digikam
+{
 
 class SAlbum;
 class SearchFolderItem;
@@ -59,5 +64,6 @@ private:
     SearchFolderItem* m_lastAddedItem;
 };
     
+}  // namespace Digikam
 
 #endif /* SEARCHFOLDERVIEW_H */

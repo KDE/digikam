@@ -22,14 +22,22 @@
 #ifndef DRAGOBJECTS_H
 #define DRAGOBJECTS_H
 
+// Qt includes.
+
 #include <qdragobject.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
+
+// KDE includes.
+
 #include <kurldrag.h>
+
+class QWidget;
 
 /** @file */
 
-class QWidget;
+namespace Digikam
+{
 
 /**
  * Provides a drag object for a list of KURLs with its related database IDs.
@@ -138,5 +146,7 @@ private:
 
     QValueList<int> m_tagIDs;
 };
+
+}  // namespace Digikam
 
 #endif /* DRAGOBJECTS_H */

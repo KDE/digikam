@@ -18,6 +18,16 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include <qfont.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
+
+// KDe includes.
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -28,12 +38,7 @@
 #include <klineeditdlg.h>
 #endif
 
-
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstyle.h>
-#include <qpopupmenu.h>
-#include <qcursor.h>
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -41,6 +46,9 @@
 #include "searchadvanceddialog.h"
 #include "folderitem.h"
 #include "searchfolderview.h"
+
+namespace Digikam
+{
 
 class SearchFolderItem : public FolderItem
 {
@@ -411,5 +419,7 @@ void SearchFolderView::selectItem(int id)
         ensureItemVisible(item);
     }
 }
+
+}  // namespace Digikam
 
 #include "searchfolderview.moc"

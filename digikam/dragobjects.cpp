@@ -19,12 +19,18 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <kdebug.h>
+
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"
-
 #include "dragobjects.h"
+
+namespace Digikam
+{
 
 ItemDrag::ItemDrag(const KURL::List &urls,
                    const KURL::List &kioURLs,
@@ -274,3 +280,5 @@ const char* TagListDrag::format(int i) const
 
     return 0;
 }
+
+}  // namespace Digikam

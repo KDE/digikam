@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,11 +23,18 @@
 #ifndef ALBUM_H
 #define ALBUM_H
 
-#include <kurl.h>
+// Qt includes.
 
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qmap.h>
+
+// KDE includes.
+
+#include <kurl.h>
+
+namespace Digikam
+{
 
 /**
  * \class Album
@@ -424,4 +431,6 @@ private:
     Album* m_root;
 };
     
+}  // namespace Digikam
+
 #endif /* ALBUM_H */

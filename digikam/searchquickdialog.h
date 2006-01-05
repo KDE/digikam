@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 /** @file searchquickdialog.h */
@@ -20,12 +21,22 @@
 #ifndef SEARCHQUICKDIALOG_H
 #define SEARCHQUICKDIALOG_H
 
-#include <kdialogbase.h>
+// Qt includes.
+
 #include <qcstring.h>
 
-class KURL;
+// KDE includes.
+
+#include <kdialogbase.h>
+
 class QLineEdit;
 class QTimer;
+
+class KURL;
+
+namespace Digikam
+{
+
 class SearchResultsView;
 
 /** @class SearchQuickDialog
@@ -69,5 +80,6 @@ private slots:
     void slotSearchChanged(const QString&);
 };
 
+}  // namespace Digikam
 
 #endif /* SEARCHQUICKDIALOG_H */

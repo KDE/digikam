@@ -21,12 +21,20 @@
 #ifndef TAGCREATEDLG_H
 #define TAGCREATEDLG_H
 
-#include <kdialogbase.h>
+// Qt includes.
+
 #include <qstring.h>
+
+// KDE includes.
+
+#include <kdialogbase.h>
 
 class QComboBox;
 class QLineEdit;
 class QPushButton;
+
+namespace Digikam
+{
 
 class TagCreateDlg : public KDialogBase
 {
@@ -81,5 +89,7 @@ private:
     QString       m_icon;
     QPushButton*  m_iconButton;
 };
+
+}  // namespace Digikam
 
 #endif /* TAGCREATEDLG_H */

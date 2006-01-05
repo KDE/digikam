@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,13 +19,18 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qpainter.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kglobal.h>
-
 #include <kcalendarsystem.h>
+
+// Local includes.
 
 #include "albummanager.h"
 #include "album.h"
@@ -33,6 +38,9 @@
 #include "albumsettings.h"
 #include "albumiconview.h"
 #include "albumicongroupitem.h"
+
+namespace Digikam
+{
 
 AlbumIconGroupItem::AlbumIconGroupItem(AlbumIconView* view,
                                        int albumID)
@@ -152,3 +160,5 @@ void AlbumIconGroupItem::paintBanner()
     bitBlt(iconView()->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
+
+}  // namespace Digikam

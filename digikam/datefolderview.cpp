@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,6 +19,16 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include <qdatetime.h>
+#include <qlistview.h>
+#include <qfont.h>
+#include <qpainter.h>
+#include <qstyle.h>
+
+// KDE includes.
+
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -31,11 +41,7 @@
 #include <kcalendarsystem.h>
 #endif
 
-#include <qdatetime.h>
-#include <qlistview.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstyle.h>
+// Local includes.
 
 #include "album.h"
 #include "albummanager.h"
@@ -43,6 +49,9 @@
 #include "folderitem.h"
 #include "folderview.h"
 #include "datefolderview.h"
+
+namespace Digikam
+{
 
 class DateFolderViewPriv
 {
@@ -305,5 +314,7 @@ void DateFolderView::setSelected(QListViewItem *item)
     d->listview->setSelected(item, true);
     d->listview->ensureItemVisible(item);
 }
+
+}  // namespace Digikam
 
 #include "datefolderview.moc"

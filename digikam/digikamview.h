@@ -19,16 +19,19 @@
  * 
  * ============================================================ */
 
-
 #ifndef DIGIKAMVIEW_H
 #define DIGIKAMVIEW_H
 
 // Qt includes.
+
 #include <qhbox.h>
 #include <qstringlist.h>
 #include <qmap.h>
 
-// KDE includes.
+class QString;
+class QIconViewItem;
+
+class KURL;
 
 namespace KIO
 {
@@ -39,12 +42,6 @@ namespace Digikam
 {
 class Sidebar;
 class ImagePropertiesSideBarDB;
-};
-
-class QString;
-class QIconViewItem;
-class KURL;
-
 class DigikamApp;
 class AlbumFolderView;
 class AlbumIconView;
@@ -158,5 +155,7 @@ signals:
     void signal_tagSelected(bool val);
     void signal_imageSelected(bool val);
 };
+
+}  // namespace Digikam
 
 #endif // DIGIKAMVIEW_H

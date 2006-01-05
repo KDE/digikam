@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,13 +23,29 @@
 #ifndef ALBUMMANAGER_H
 #define ALBUMMANAGER_H
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
 
+// KDE includes.
+
 #include <kurl.h>
 
+// Local includes.
+
 #include "digikam_export.h"
+
+class QDate;
+
+namespace KIO
+{
+class Job;
+}
+
+namespace Digikam
+{
 
 class Album;
 class PAlbum;
@@ -39,13 +55,6 @@ class SAlbum;
 class AlbumDB;
 class AlbumItemHandler;
 class AlbumManagerPriv;
-
-class QDate;
-
-namespace KIO
-{
-class Job;
-}
 
 typedef QValueList<Album*> AlbumList;
 
@@ -424,5 +433,7 @@ signals:
     void signalAlbumRenamed(Album* album);
     void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMMANAGER_H */

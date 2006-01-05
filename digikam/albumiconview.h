@@ -19,7 +19,6 @@
  * 
  * ============================================================ */
 
-
 #ifndef ALBUMICONVIEW_H
 #define ALBUMICONVIEW_H
 
@@ -28,17 +27,11 @@
 #include <qrect.h>
 #include <qfont.h>
 
-#include "iconview.h"
-
 // Local includes.
 
+#include "iconview.h"
 #include "imageinfo.h"
 #include "albumitemhandler.h"
-
-namespace KIO
-{
-class Job;
-}
 
 class QMouseEvent;
 class QResizeEvent;
@@ -49,6 +42,14 @@ class QString;
 class QPainter;
 class QPixmap;
 
+namespace KIO
+{
+class Job;
+}
+
+namespace Digikam
+{
+
 class AlbumIconItem;
 class AlbumSettings;
 class AlbumIconViewPrivate;
@@ -56,8 +57,8 @@ class ThumbnailSize;
 class Album;
 class PixmapManager;
 
-class AlbumIconView : public IconView,
-                      public AlbumItemHandler
+class AlbumIconView : public Digikam::IconView,
+                      public Digikam::AlbumItemHandler
 {
     Q_OBJECT
 
@@ -172,5 +173,7 @@ signals:
     void signalItemDeleted(AlbumIconItem* iconItem);
     void signalCleared();
 };
+
+}  // namespace Digikam
 
 #endif // ALBUMICONVIEW_H

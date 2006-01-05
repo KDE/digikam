@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -48,6 +48,9 @@ extern "C"
 // Local includes.
 
 #include "thumbnailjob.h"
+
+namespace Digikam
+{
 
 class ThumbnailJobPriv
 {
@@ -294,6 +297,8 @@ void ThumbnailJob::emitThumbnail(QImage& thumb)
 
     emit signalThumbnail(d->curr_url, pix);
 }
+
+}  // namespace Digikam
 
 #include "thumbnailjob.moc"
 

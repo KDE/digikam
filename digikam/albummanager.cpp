@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,34 +18,9 @@
  * 
  * ============================================================ */
 
-#include <kconfig.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kdeversion.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kio/netaccess.h>
-#include <kio/global.h>
-#include <kio/job.h>
-#include <kdirwatch.h>
-
-#include <qfile.h>
-#include <qdir.h>
-#include <qdict.h>
-#include <qintdict.h>
-#include <qcstring.h>
-#include <qtextcodec.h>
-
 #include <config.h>
 
-#include "album.h"
-#include "albumdb.h"
-#include "albumitemhandler.h"
-#include "dio.h"
-#include "albumsettings.h"
-#include "scanlib.h"
-#include "upgradedb_sqlite2tosqlite3.h"
-#include "albummanager.h"
+// C Ansi includes.
 
 extern "C"
 {
@@ -57,6 +32,42 @@ extern "C"
 #include <stdlib.h>
 #include <locale.h>
 }
+
+// Qt includes.
+
+#include <qfile.h>
+#include <qdir.h>
+#include <qdict.h>
+#include <qintdict.h>
+#include <qcstring.h>
+#include <qtextcodec.h>
+
+// KDE includes.
+
+#include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kdeversion.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <kio/global.h>
+#include <kio/job.h>
+#include <kdirwatch.h>
+
+// Local includes.
+
+#include "album.h"
+#include "albumdb.h"
+#include "albumitemhandler.h"
+#include "dio.h"
+#include "albumsettings.h"
+#include "scanlib.h"
+#include "upgradedb_sqlite2tosqlite3.h"
+#include "albummanager.h"
+
+namespace Digikam
+{
 
 typedef QDict<PAlbum>    PAlbumDict;
 typedef QIntDict<Album>  AlbumIntDict;
@@ -1340,5 +1351,6 @@ void AlbumManager::slotDirty(const QString& path)
     DIO::scan(u);
 }
 
+}  // namespace Digikam
 
 #include "albummanager.moc"

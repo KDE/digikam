@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,8 +23,12 @@
 
 /** @file albumlister.h */
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qcstring.h>
+
+// Local includes.
 
 #include "imageinfo.h"
 
@@ -32,6 +36,9 @@ namespace KIO
 {
 class Job;
 }
+
+namespace Digikam
+{
 
 class Album;
 class AlbumListerPriv;
@@ -96,5 +103,7 @@ private slots:
     void slotResult(KIO::Job* job);
     void slotData(KIO::Job* job, const QByteArray& data);
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMLISTER_H */

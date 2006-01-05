@@ -4,7 +4,7 @@
  * Description :
  *
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,6 +18,17 @@
  *
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <sys/time.h>
+#include <time.h>
+#include <stdio.h>
+}
+
+// Qt includes.
+
 #include <qstring.h>
 #include <qcstring.h>
 #include <qdatastream.h>
@@ -28,22 +39,21 @@
 #include <qvaluelist.h>
 #include <qtimer.h>
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
 
+// Local includes.
+
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-
 #include "albumlister.h"
 
-extern "C"
+namespace Digikam
 {
-#include <sys/time.h>
-#include <time.h>
-#include <stdio.h>
-}
 
 class AlbumListerPriv
 {
@@ -358,6 +368,8 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     if (!newItemsList.isEmpty())
         emit signalNewItems(newItemsList);
 }
+
+}  // namespace Digikam
 
 #include "albumlister.moc"
 

@@ -35,8 +35,17 @@
 
 #include <kapplication.h>
 #include <kmainwindow.h>
+
+// Local includes.
+
 #include "digikam_export.h"
 #include "dcopiface.h"
+
+class KAction;
+class KActionMenu;
+class KToolBarPopupAction;
+class KSelectAction;
+class KConfig;
 
 namespace KIPI
 {
@@ -46,27 +55,14 @@ class PluginLoader;
 namespace Digikam
 {
 class ImagePluginLoader;
-}
-
 class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
 class DigikamKipiInterface;
-
-class KAction;
-class KActionMenu;
-class KToolBarPopupAction;
-class KSelectAction;
-class KConfig;
-
 class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
-
-namespace Digikam
-{
 class SplashScreen;
-}
 
 class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 {
@@ -224,5 +220,7 @@ private slots:
 
     void slotChangeTheme(const QString& theme);
 };
+
+}  // namespace Digikam
 
 #endif  // DIGIKAMAPP_H

@@ -18,13 +18,21 @@
   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor, 
   Boston, MA  02110-1301  USA
 */
+
 #ifndef KDATEPICKERPOPUP_H
 #define KDATEPICKERPOPUP_H
+
+// Qt includes.
 
 #include <qdatetime.h>
 #include <qpopupmenu.h>
 
+// KDE includes.
+
 #include <kdatepicker.h>
+
+namespace Digikam
+{
 
 /**
    @short This menu helps the user to select a date quickly.
@@ -101,4 +109,6 @@ class KDatePickerPopup: public QPopupMenu
     int mItems;
 };
 
-#endif
+}  // namespace Digikam
+
+#endif // KDATEPICKERPOPUP_H

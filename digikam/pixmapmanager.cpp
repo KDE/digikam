@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,21 +19,29 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+}
+
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qtimer.h>
 #include <qimage.h>
 
+// KDE includes.
+
 #include <kurl.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kmdcodec.h>
 
-extern "C"
-{
-#include <unistd.h>
-}
+// Local includes.
 
 #include "thumbnailjob.h"
 #include "albumiconview.h"
@@ -42,6 +50,9 @@ extern "C"
 #include "pixmapmanager.h"
 
 /** @file pixmapmanager.cpp */
+
+namespace Digikam
+{
 
 PixmapManager::PixmapManager(AlbumIconView* view)
 {
@@ -186,5 +197,6 @@ int PixmapManager::cacheSize() const
     return m_cache->maxCost();    
 }
 
+}  // namespace Digikam
 
 #include "pixmapmanager.moc"

@@ -1,25 +1,27 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
-//    Copyright (C) 2005 Renchi Raju <renchi@pooh.tam.uiuc.edu>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301  USA
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/* ============================================================
+ * Author: Tom Albers <tomalbers@kde.nl>
+ *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date  : 2005-01-01
+ * Description : 
+ * 
+ * Copyright 2005 by Tom Albers and Renchi Raju
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+ 
 /** @file searchadvanceddialog.cpp */
+
+// Qt includes.
 
 #include <qvbox.h>
 #include <qlayout.h>
@@ -32,13 +34,20 @@
 #include <qtimer.h>
 #include <qwhatsthis.h>
 
+// KDE includes.
+
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
 
+// Local includes.
+
 #include "searchwidgets.h"
 #include "searchadvanceddialog.h"
 #include "searchresultsview.h"
+
+namespace Digikam
+{
 
 SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     : KDialogBase(parent, 0, true, i18n("Advanced Search"),
@@ -581,5 +590,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
 
     enableButtonOK( true );
 }
+
+}  // namespace Digikam
 
 #include "searchadvanceddialog.moc"

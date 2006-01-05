@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -32,6 +32,9 @@
 
 class QPixmap;
 class QImage;
+
+namespace Digikam
+{
 
 class ThumbnailJobPriv;
 
@@ -74,5 +77,7 @@ protected slots:
     void slotResult(KIO::Job *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
 };
+
+}  // namespace Digikam
 
 #endif /* THUMBNAILJOB_H */

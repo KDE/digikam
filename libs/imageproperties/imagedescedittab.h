@@ -42,15 +42,14 @@ class KTextEdit;
 class KLineEdit;
 class KDateTimeEdit;
 
+namespace Digikam
+{
 class AlbumIconView;
 class AlbumIconItem;
 class TAlbum;
 class Album;
 class ThumbnailJob;
 class RatingWidget;
-
-namespace Digikam
-{
 class NavigateBarWidget;
 
 class TAlbumListView : public QListView

@@ -13,12 +13,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef TAGFILTERVIEW_H
 #define TAGFILTERVIEW_H
 
+// Local includes.
+
 #include "folderview.h"
+
+namespace Digikam
+{
 
 class Album;
 class TagFilterViewItem;
@@ -64,5 +70,6 @@ private:
     TagFilterViewPriv *d;
 };
 
+}  // namespace Digikam
 
 #endif /* TAGFILTERVIEW_H */

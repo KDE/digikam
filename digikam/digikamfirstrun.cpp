@@ -63,7 +63,9 @@ extern "C"
 #include "version.h"
 #include "firstrunUI.h"
 
-#include <iostream>
+namespace Digikam
+{
+
 using namespace std;
 
 DigikamFirstRun::DigikamFirstRun( KConfig* config,
@@ -162,5 +164,7 @@ void DigikamFirstRun::slotOk()
                                    "Please restart Digikam manually."));
     }
 }
+
+}  // namespace Digikam
 
 #include "digikamfirstrun.moc"

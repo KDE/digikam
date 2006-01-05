@@ -16,6 +16,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qguardedptr.h>
 #include <qdir.h>
@@ -24,6 +26,8 @@
 #include <qdatastream.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
+
+// KDE includes.
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -34,6 +38,8 @@
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kfiledialog.h>
+
+// Local includes.
 
 #include "digikamapp.h"
 #include "album.h"
@@ -50,11 +56,15 @@
 #include "dio.h"
 #include "dragobjects.h"
 
+// X11 C Ansi includes.
+
 extern "C"
 {
 #include <X11/Xlib.h>
 }
 
+namespace Digikam
+{
 
 //-----------------------------------------------------------------------------
 // AlbumFolderViewItem
@@ -1344,5 +1354,7 @@ void AlbumFolderView::clearEmptyGroupItems()
         delete *it;
     }
 }
+
+}  // namespace Digikam
 
 #include "albumfolderview.moc"

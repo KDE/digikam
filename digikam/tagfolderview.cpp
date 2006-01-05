@@ -14,13 +14,17 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
+
+// Qt includes.
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qlistview.h>
-//#include
+
+// KDE includes.
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,6 +32,8 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+
+// Local includes.
 
 #include "tagfolderview.h"
 #include "album.h"
@@ -39,11 +45,15 @@
 #include "folderitem.h"
 #include "dio.h"
 
+// X11 Includes.
+
 extern "C"
 {
 #include <X11/Xlib.h>
 }
 
+namespace Digikam
+{
 
 static QPixmap getBlendedIcon(TAlbum* tag)
 {
@@ -723,6 +733,7 @@ void TagFolderView::selectItem(int id)
     }
 }
 
+}  // namespace Digikam
 
 #include "tagfolderview.moc"
 

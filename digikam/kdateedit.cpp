@@ -21,17 +21,26 @@
     Boston, MA  02110-1301  USA
 */
 
+// Qt includes.
+
 #include <qapplication.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qvalidator.h>
+
+// KDE includes.
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 
+// Local includes.
+
 #include "kdateedit.h"
+
+namespace Digikam
+{
 
 class DateValidator : public QValidator
 {
@@ -363,5 +372,7 @@ void KDateEdit::updateView()
   changeItem( dateString, 0 );
   blockSignals( blocked );
 }
+
+}  // namespace Digikam
 
 #include "kdateedit.moc"

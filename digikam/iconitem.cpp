@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,12 +19,19 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qpainter.h>
+
+// Local includes.
 
 #include "icongroupitem.h"
 #include "iconview.h"
 #include "iconitem.h"
+
+namespace Digikam
+{
 
 IconItem::IconItem(IconGroupItem* parent)
     : m_group(parent)
@@ -157,3 +164,5 @@ void IconItem::paintItem()
     bitBlt(view->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
+
+}  // namespace Digikam

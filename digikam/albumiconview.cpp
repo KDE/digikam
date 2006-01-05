@@ -23,6 +23,15 @@
 #include <config.h>
 #endif
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}
+
 // C++ includes.
 
 #include <cstdio>
@@ -84,13 +93,6 @@
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
 
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
 // Local includes.
 
 #include "album.h"
@@ -99,21 +101,20 @@ extern "C"
 #include "albumlister.h"
 #include "albumfiletip.h"
 #include "tagspopupmenu.h"
-
 #include "albumsettings.h"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "pixmapmanager.h"
-
 #include "cameradragobject.h"
 #include "dragobjects.h"
-
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
 #include "albumiconview.h"
-
 #include "albumdb.h"
+
+namespace Digikam
+{
 
 class AlbumIconViewPrivate
 {
@@ -1659,5 +1660,7 @@ void AlbumIconView::slotDIOResult(KIO::Job* job)
     if (job->error())
         job->showErrorDialog(this);
 }
+
+}  // namespace Digikam
 
 #include "albumiconview.moc"

@@ -1,6 +1,9 @@
 /* ============================================================
+ * File  : albumicongroupitem.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-25
+ * Description : 
+ * 
  * Copyright 2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -13,12 +16,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef ALBUMICONGROUPITEM_H
 #define ALBUMICONGROUPITEM_H
 
+// Local includes.
+
 #include "icongroupitem.h"
+
+namespace Digikam
+{
 
 class AlbumIconView;
 
@@ -42,5 +51,7 @@ private:
     int            m_albumID;
     AlbumIconView* m_view;
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMICONGROUPITEM_H */

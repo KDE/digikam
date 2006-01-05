@@ -14,6 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 /** @file tagfoldeview.h */
@@ -21,13 +22,19 @@
 #ifndef _TAGFOLDERVIEW_H_
 #define _TAGFOLDERVIEW_H_
 
+// Local includes.
+
 #include "folderview.h"
+
+class QDropEvent;
+
+namespace Digikam
+{
 
 class Album;
 class TAlbum;
 class TagFolderViewPriv;
 class TagFolderViewItem;
-class QDropEvent;
 
 class TagFolderView : public FolderView
 {
@@ -76,5 +83,6 @@ private:
     TagFolderViewPriv   *d;
 };
 
+}  // namespace Digikam
 
 #endif // _TAGFOLDEVIEW_H_

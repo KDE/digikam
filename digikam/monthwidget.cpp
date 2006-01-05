@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,20 +19,29 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qdatetime.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
 
+// Local includes.
+
 #include "imageinfo.h"
 #include "albumlister.h"
 #include "monthwidget.h"
+
+namespace Digikam
+{
 
 MonthWidget::MonthWidget(QWidget* parent)
     : QFrame(parent, 0, Qt::WNoAutoErase)
@@ -48,7 +57,6 @@ MonthWidget::MonthWidget(QWidget* parent)
 
 MonthWidget::~MonthWidget()
 {
-    
 }
 
 void MonthWidget::init()
@@ -228,7 +236,6 @@ void MonthWidget::drawContents(QPainter *)
                 .arg(QString::number(m_year)));
 #endif
 
-
     p.end();
 
     bitBlt(this, cr.x(), cr.y(), &pix);
@@ -379,5 +386,7 @@ void MonthWidget::slotDeleteItem(ImageInfo* item)
     
     update();
 }
+
+}  // namespace Digikam
 
 #include "monthwidget.moc"

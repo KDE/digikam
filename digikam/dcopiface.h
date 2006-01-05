@@ -1,5 +1,8 @@
-/*
- * Author: Leonid Zeitlin <lz@europe.com>, (C) 2005
+/* ============================================================
+ * Author: Leonid Zeitlin <lz@europe.com>
+ * Date  : 2005-01-12
+ * Description : 
+ * 
  * Copyright 2005 by Leonid Zeitlin
  *
  * This program is free software; you can redistribute it
@@ -7,47 +10,62 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-*/
-
+ * 
+ * ============================================================ */
+ 
 #ifndef DCOPIFACE_H
 #define DCOPIFACE_H
+
+// Qt includes.
 
 #include <qobject.h>
 #include <dcopobject.h>
 
+namespace Digikam
+{
+
 /**
-* This class imlements a DCOP interface for DigiKam.
+* This class implements a DCOP interface for DigiKam.
 * At the moment it supports only one method, @ref cameraAutoDetect to open camera dialog
 *
 * @short DCOP interface for DigiKam
 * @author Leonid Zeitlin
 */
+
 class DCOPIface : public QObject, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
+
 public:
+
     /**
      * Standard constructor.
      * @param parent Parent object reference, passed to @ref QObject constructor
      * @param name Specifis the name of the object, passed to @ref QObject constructor
      */
     DCOPIface(QObject *parent = 0, const char *name = 0);
+
     /**
      * Standard destructor
     */
     ~DCOPIface();
+
 signals:
+    
     /**
      * This signal is emitted when @ref cameraAutoDetect() is called via DCOP
      */
     void signalCameraAutoDetect();
+
+
 public:
+
 k_dcop:
     /**
      * This method can be called via DCOP to auto-detect attached camera and show DigiKam camera dialog
@@ -56,4 +74,6 @@ k_dcop:
     ASYNC cameraAutoDetect();
 };
 
-#endif
+}  // namespace Digikam
+
+#endif // DCOPIFACE_H

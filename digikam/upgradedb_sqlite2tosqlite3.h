@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef UPGRADEDB_SQLITE2TOSQLITE3_H
@@ -22,7 +23,11 @@
 
 class QString;
 
+namespace Digikam
+{
+
 extern bool DIGIKAM_EXPORT upgradeDB_Sqlite2ToSqlite3(const QString& libraryPath);
 
+}  // namespace Digikam
 
 #endif /* UPGRADEDB_SQLITE2TOSQLITE3_H */

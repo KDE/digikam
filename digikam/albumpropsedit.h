@@ -31,12 +31,16 @@
 
 #include <kdialogbase.h>
 
-class KDatePicker;
 class QComboBox;
 class QLineEdit;
 class QCheckBox;
 class QCheckListItem;
+
 class KTextEdit;
+class KDatePicker;
+
+namespace Digikam
+{
 
 class PAlbum;
 
@@ -83,8 +87,11 @@ private:
     QCheckListItem *rootCollectionItem_;
 
 private slots:
+
    void slotTitleChanged(const QString& newtitle);
    void slotAverageButtonClicked();
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMPROPSEDIT_H */

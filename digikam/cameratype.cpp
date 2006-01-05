@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,9 +18,16 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <kaction.h>
 
+// Local includes.
+
 #include "cameratype.h"
+
+namespace Digikam
+{
 
 CameraType::CameraType()
 {
@@ -128,3 +135,5 @@ void CameraType::setValid(bool valid)
 {
     valid_ = valid;    
 }
+
+}  // namespace Digikam

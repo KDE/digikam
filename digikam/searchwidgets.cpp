@@ -1,25 +1,27 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
-//    Copyright (C) 2005 Renchi Raju <renchi@pooh.tam.uiuc.edu>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301  USA
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Author: Tom Albers <tomalbers@kde.nl>
+ *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date  : 2005-01-01
+ * Description : 
+ * 
+ * Copyright 2005 by Tom Albers and Renchi Raju
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
 /** @file searchwidgets.cpp */
+
+// Qt includes.
 
 #include <qhbox.h>
 #include <qvbox.h>
@@ -32,11 +34,15 @@
 #include <qlayout.h>
 #include <qdatetime.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kdateedit.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
+
+// Local includes.
 
 #include <album.h>
 #include <albuminfo.h>
@@ -45,12 +51,16 @@
 #include <ratingwidget.h>
 #include <squeezedcombobox.h>
 
+namespace Digikam
+{
+
 static struct
 {
     const char *keyText;
     QString key;
     SearchAdvancedRule::valueWidgetTypes cat;
 }
+
 RuleKeyTable[] =
 {
     { I18N_NOOP("Album"),            "album",           SearchAdvancedRule::ALBUMS },
@@ -65,6 +75,7 @@ RuleKeyTable[] =
     { I18N_NOOP("Keyword"),          "keyword",         SearchAdvancedRule::LINEEDIT },
     { I18N_NOOP("Rating"),           "rating",          SearchAdvancedRule::RATING   },
 };
+
 static const int RuleKeyTableCount = 11;
 
 static struct
@@ -91,6 +102,7 @@ RuleOpTable[] =
     { I18N_NOOP("Lower Than"),         "LT",           SearchAdvancedRule::RATING },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::RATING },
 };
+
 static const int RuleOpTableCount = 14;
 
 SearchRuleLabel::SearchRuleLabel( const QString & text,
@@ -220,7 +232,6 @@ void SearchAdvancedRule::setValues(const KURL& url)
 
 
 }
-
 
 SearchAdvancedRule::~SearchAdvancedRule()
 {
@@ -547,5 +558,7 @@ void SearchAdvancedGroup::removeOption()
     m_option = NONE;
     m_groupbox->setTitle("");
 }
+
+}  // namespace Digikam
 
 #include "searchwidgets.moc"

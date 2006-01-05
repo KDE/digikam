@@ -21,10 +21,15 @@
 #ifndef ALBUMDB_SQLITE2_H
 #define ALBUMDB_SQLITE2_H
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+
+namespace Digikam
+{
 
 typedef struct sqlite sqleet2; // hehe.
 
@@ -71,5 +76,7 @@ private:
     sqleet2*  m_db;
     bool      m_valid;
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMDB_SQLITE2_H */

@@ -13,21 +13,31 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef PIXMAPMANAGER_H
 #define PIXMAPMANAGER_H
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qcache.h>
 #include <qguardedptr.h>
 #include <qpixmap.h>
+
+// KDE includes.
+
 #include <kurl.h>
 
 /** @file pixmapmanager.h */
 
 class QPixmap;
 class QTimer;
+
+namespace Digikam
+{
+
 class AlbumIconView;
 class ThumbnailJob;
 
@@ -73,5 +83,7 @@ private slots:
     void slotFailedThumbnail(const KURL& url);
     void slotCompleted();
 };
+
+}  // namespace Digikam
 
 #endif /* PIXMAPMANAGER_H */

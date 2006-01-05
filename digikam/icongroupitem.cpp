@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,14 +19,23 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+#include <cstdlib>
+
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qpalette.h>
 
-#include <cstdlib>
+// Local includes.
 
 #include "iconview.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
+
+namespace Digikam
+{
 
 class IconGroupItemPriv
 {
@@ -297,3 +306,4 @@ int IconGroupItem::compare(IconGroupItem*)
     return 0;
 }
 
+}  // namespace Digikam

@@ -51,6 +51,10 @@
 #include <klineeditdlg.h>
 #endif
 
+// Lib Kexif includes.
+
+#include <libkexif/kexifdata.h>
+
 // Local includes.
 
 #include "album.h"
@@ -59,7 +63,8 @@
 #include "albumsettings.h"
 #include "albumpropsedit.h"
 
-#include <libkexif/kexifdata.h>
+namespace Digikam
+{
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
@@ -287,5 +292,7 @@ void AlbumPropsEdit::slotAverageButtonClicked()
                                 i18n( "Could not calculate an average."),
                                 i18n( "Could Not Calculate Average" ) );
 }
+
+}  // namespace Digikam
 
 #include "albumpropsedit.moc"

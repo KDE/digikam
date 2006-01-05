@@ -18,15 +18,22 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qstyle.h>
 
+// Local includes.
+
 #include "folderview.h"
 #include "folderitem.h"
 #include "thumbnailsize.h"
+
+namespace Digikam
+{
 
 FolderItem::FolderItem(QListView* parent, const QString& text, bool special)
     : QListViewItem(parent, text)
@@ -240,3 +247,5 @@ void FolderCheckListItem::setup()
 
     setHeight(h);
 }
+
+}  // namespace Digikam

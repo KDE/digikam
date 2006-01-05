@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,14 +21,20 @@
 #ifndef CAMERADRAGOBJECT_H
 #define CAMERADRAGOBJECT_H
 
+// Qt includes.
+
 #include <qdragobject.h>
 
 class QMimeSource;
 class QWidget;
 
+namespace Digikam
+{
+
 class CameraType;
 
-class CameraDragObject : public QStoredDrag {
+class CameraDragObject : public QStoredDrag
+{
 
 public:
 
@@ -43,8 +49,8 @@ public:
 private:
 
     void setCameraType(const CameraType& ctype);
-
 };
 
+}  // namespace Digikam
 
 #endif

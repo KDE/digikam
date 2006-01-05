@@ -21,18 +21,26 @@
 #ifndef _ALBUMFOLDERVIEW_H_
 #define _ALBUMFOLDERVIEW_H_
 
+// KDE includes.
+
 #include <kio/job.h>
+
+// Local includes.
 
 #include "folderview.h"
 
-class KURL;
 class QPixmap;
+class QDataStream;
+
+class KURL;
+
+namespace Digikam
+{
 
 class Album;
 class PAlbum;
 class AlbumFolderViewPriv;
 class AlbumFolderViewItem;
-class QDataStream;
 
 class AlbumFolderView : public FolderView
 {
@@ -96,5 +104,6 @@ signals:
     void signalAlbumModified();
 };
 
+}  // namespace Digikam
 
 #endif // _ALBUMFOLDEVIEW_H_

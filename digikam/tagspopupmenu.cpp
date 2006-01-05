@@ -18,17 +18,25 @@
  * 
  * ============================================================ */
 
-#include <kapplication.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
+#define ADDTAGID 10000
+
+// Qt includes.
 
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qvaluevector.h>
+
+// KDE includes.
+
+#include <kapplication.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+
+// Local includes.
 
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -38,9 +46,12 @@
 #include "syncjob.h"
 #include "tagcreatedlg.h"
 
+// Local includes.
+
 #include "tagspopupmenu.h"
 
-#define ADDTAGID 10000
+namespace Digikam
+{
 
 class TagsPopupCheckedMenuItem : public QCustomMenuItem
 {
@@ -325,5 +336,7 @@ void TagsPopupMenu::slotActivated(int id)
         emit signalTagActivated(tagID);
     }
 }
+
+}  // namespace Digikam
 
 #include "tagspopupmenu.moc"

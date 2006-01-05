@@ -6,7 +6,7 @@
  *
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>
- * Copyright (C) 2004 by Renchi Raju<renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Qt includes. 
+// Qt includes.
  
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -47,8 +47,10 @@
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "album.h"
-
 #include "albumfiletip.h"
+
+namespace Digikam
+{
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
             : QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
@@ -411,3 +413,5 @@ QString AlbumFileTip::breakString(const QString& input)
 
     return br;
 }
+
+}  // namespace Digikam

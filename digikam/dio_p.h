@@ -13,10 +13,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIO_P_H
 #define DIO_P_H
+
+// QT includes.
 
 #include <qobject.h>
 
@@ -43,6 +46,6 @@ private slots:
    void slotDone(KIO::Job* job);
 };
 
-}
+} // namespace DIO
 
 #endif /* DIO_P_H */

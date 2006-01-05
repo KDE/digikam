@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,10 +18,17 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpainter.h>
 #include <qpixmap.h>
 
+// Local includes.
+
 #include "searchresultsitem.h"
+
+namespace Digikam
+{
 
 QPixmap* SearchResultsItem::m_basePixmap = 0;
 
@@ -73,3 +80,5 @@ void SearchResultsItem::paintFocus(QPainter* p, const QColorGroup&)
     p->drawRect(rect());
     p->restore();
 }
+
+}  // namespace Digikam

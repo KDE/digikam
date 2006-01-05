@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,17 +18,26 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qfile.h>
 #include <qdom.h>
 #include <qtextstream.h>
 
+// KDE includes.
+
 #include <kmessagebox.h>
 #include <klocale.h>
+
+// Local includes.
 
 #include "gpiface.h"
 #include "cameratype.h"
 #include "cameralist.h"
+
+namespace Digikam
+{
 
 CameraList* CameraList::instance_ = 0;
 
@@ -237,5 +246,6 @@ void CameraList::clear()
     }
 }
 
+}  // namespace Digikam
 
 #include "cameralist.moc"

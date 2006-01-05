@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2004 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,9 +21,14 @@
 #ifndef TAGSPOPUPMENU_H
 #define TAGSPOPUPMENU_H
 
+// Qt includes.
+
 #include <qpopupmenu.h>
 #include <qvaluelist.h>
 #include <qpixmap.h>
+
+namespace Digikam
+{
 
 class TAlbum;
 
@@ -65,5 +70,7 @@ signals:
 
     void signalTagActivated(int id);
 };
+
+}  // namespace Digikam
 
 #endif /* TAGSPOPUPMENU_H */

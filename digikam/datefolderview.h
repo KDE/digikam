@@ -13,12 +13,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DATEFOLDERVIEW_H
 #define DATEFOLDERVIEW_H
 
+// Qt includes.
+
 #include <qvbox.h>
+
+namespace Digikam
+{
 
 class DateFolderViewPriv;
 class DAlbum;
@@ -58,5 +64,7 @@ private:
     
     DateFolderViewPriv* d;
 };
+
+}  // namespace Digikam
 
 #endif /* DATEFOLDERVIEW_H */

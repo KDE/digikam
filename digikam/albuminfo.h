@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef ALBUMINFO_H
@@ -20,10 +21,18 @@
 
 /** @file albuminfo.h */
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
+
+// KDE includes.
+
 #include <kurl.h>
+
+namespace Digikam
+{
 
 /**
  * \class AlbumInfo
@@ -92,5 +101,7 @@ public:
         return id < info.id;
     }
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMINFO_H */

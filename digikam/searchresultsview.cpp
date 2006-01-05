@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,16 +18,25 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qdatastream.h>
+
+// KDE includes.
 
 #include <kio/job.h>
 #include <kfileitem.h>
 #include <kurl.h>
 
+// Local includes.
+
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "searchresultsitem.h"
 #include "searchresultsview.h"
+
+namespace Digikam
+{
 
 SearchResultsView::SearchResultsView(QWidget* parent)
     : QIconView(parent)
@@ -164,6 +173,8 @@ void SearchResultsView::slotFailedThumbnail(const KURL&)
 {
     m_thumbJob = 0;    
 }
+
+}  // namespace Digikam
 
 #include "searchresultsview.moc"
 

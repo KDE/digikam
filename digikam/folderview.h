@@ -14,6 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 /** @file foldeview.h */
@@ -21,7 +22,12 @@
 #ifndef _FOLDERVIEW_H_
 #define _FOLDERVIEW_H_
 
+// Qt includes.
+
 #include <qlistview.h>
+
+namespace Digikam
+{
 
 class FolderViewPriv;
 class FolderItem;
@@ -95,5 +101,7 @@ private:
 
     FolderViewPriv      *d;
 };
+
+}  // namespace Digikam
 
 #endif // _FOLDERVIEW_H

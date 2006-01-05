@@ -19,12 +19,21 @@
   Boston, MA  02110-1301  USA
 */
 
+// Qt includes.
+
 #include <qdatetime.h>
 #include <qpopupmenu.h>
 
+// KDE includes.
+
 #include <klocale.h>
 
+// Local includes.
+
 #include "kdatepickerpopup.h"
+
+namespace Digikam
+{
 
 KDatePickerPopup::KDatePickerPopup( int items, const QDate &date, QWidget *parent,
                                     const char *name )
@@ -139,5 +148,7 @@ void KDatePickerPopup::slotNextMonth()
 {
   emit dateChanged( QDate::currentDate().addMonths( 1 ) );
 }
+
+}  // namespace Digikam
 
 #include "kdatepickerpopup.moc"

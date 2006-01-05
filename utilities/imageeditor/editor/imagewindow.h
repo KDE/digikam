@@ -43,11 +43,10 @@ class KToolBarPopupAction;
 class KToggleAction;
 class KSelectAction;
 
-class AlbumIconView;
-
 namespace Digikam
 {
 
+class AlbumIconView;
 class Canvas;
 class ImagePropertiesSideBarDB;
 class ICCSettingsContainer;

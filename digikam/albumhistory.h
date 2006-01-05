@@ -24,9 +24,14 @@
 
 /** @file albumhistory.h */
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
+
+namespace Digikam
+{
 
 class Album;
 class HistoryItem;
@@ -42,6 +47,7 @@ class AlbumHistory : public QObject
     Q_OBJECT
 
 public:
+
     AlbumHistory();
     ~AlbumHistory();
 
@@ -70,5 +76,6 @@ private:
     bool             m_moving;
 };
 
+}  // namespace Digikam
 
 #endif /* ALBUMHISTORY_H */

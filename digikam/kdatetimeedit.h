@@ -22,10 +22,16 @@
 #ifndef KDATETIMEEDIT_H
 #define KDATETIMEEDIT_H
 
+// Qt includes.
+
 #include <qhbox.h>
 
-class KDateEdit;
 class QTimeEdit;
+
+namespace Digikam
+{
+
+class KDateEdit;
 
 /**
  * @class KDateTimeEdit
@@ -83,4 +89,6 @@ private slots:
     void slotDateTimeChanged();
 };
 
-#endif
+}  // namespace Digikam
+
+#endif // KDATETIMEEDIT_H

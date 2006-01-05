@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,14 +18,21 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qmime.h>
 #include <qstring.h>
 #include <qcstring.h>
 #include <qwidget.h>
 #include <qdatastream.h>
 
+// Local includes.
+
 #include "cameratype.h"
 #include "cameradragobject.h"
+
+namespace Digikam
+{
 
 CameraDragObject::CameraDragObject(const CameraType& ctype,
                                    QWidget *dragSource)
@@ -78,3 +85,5 @@ bool CameraDragObject::decode(const QMimeSource* e,
     else
         return false;
 }
+
+}  // namespace Digikam

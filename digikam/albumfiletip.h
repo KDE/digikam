@@ -6,7 +6,7 @@
  *
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>  
- * Copyright (C) 2004 by Renchi Raju<renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,10 @@
 
 class QLabel;
 class QDateTime;
+
+namespace Digikam
+{
+
 class AlbumIconView;
 class AlbumIconItem;
 
@@ -63,5 +67,7 @@ private:
     int            m_corner;
     QPixmap        m_corners[4];
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMFILETIP_H */

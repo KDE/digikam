@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -19,17 +19,7 @@
  * 
  * ============================================================ */
 
-
-#include <kprotocolinfo.h>
-#include <kglobalsettings.h>
-#include <kio/renamedlg.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-
-#include <qfile.h>
-#include <qcstring.h>
-#include <qdatastream.h>
+// C Ansi includes.
 
 extern "C"
 {
@@ -38,6 +28,23 @@ extern "C"
 #include <unistd.h>
 #include <stdio.h>
 }
+
+// QT includes.
+
+#include <qfile.h>
+#include <qcstring.h>
+#include <qdatastream.h>
+
+// KDE includes.
+
+#include <kprotocolinfo.h>
+#include <kglobalsettings.h>
+#include <kio/renamedlg.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+
+// Local includes.
 
 #include "albumsettings.h"
 #include "albummanager.h"
@@ -86,7 +93,7 @@ KIO::Job* del(const KURL& src)
 {
     KIO::Job* job = 0;
     
-    if (AlbumSettings::instance()->getUseTrash())
+    if (Digikam::AlbumSettings::instance()->getUseTrash())
     {
         KURL dest("trash:/");
 
@@ -110,7 +117,7 @@ KIO::Job* del(const KURL::List& srcList)
 {
     KIO::Job* job = 0;
     
-    if (AlbumSettings::instance()->getUseTrash())
+    if (Digikam::AlbumSettings::instance()->getUseTrash())
     {
         KURL dest("trash:/");
 
@@ -132,16 +139,16 @@ KIO::Job* del(const KURL::List& srcList)
 
 bool renameFile(const KURL& src, const KURL& dest)
 {
-    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(src.directory());
-    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dest.directory());
+    Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::instance()->findPAlbum(src.directory());
+    Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dest.directory());
     if (!srcAlbum || !dstAlbum)
     {
         kdWarning() << "Source Album " << src.directory() << " not found" << endl;
         return false;
     }
 
-    QString srcPath = AlbumManager::instance()->getLibraryPath() + src.path();
-    QString dstPath = AlbumManager::instance()->getLibraryPath() + dest.path();
+    QString srcPath = Digikam::AlbumManager::instance()->getLibraryPath() + src.path();
+    QString dstPath = Digikam::AlbumManager::instance()->getLibraryPath() + dest.path();
     QString newDstPath;
 
     bool overwrite = false;
@@ -176,7 +183,7 @@ bool renameFile(const KURL& src, const KURL& dest)
             break;
     }
 
-    AlbumDB* db = AlbumManager::instance()->albumDB();
+    Digikam::AlbumDB* db = Digikam::AlbumManager::instance()->albumDB();
     if (::rename(QFile::encodeName(srcPath), QFile::encodeName(dstPath)) == 0)
     {
         db->moveItem(srcAlbum->id(), src.fileName(),
@@ -193,7 +200,7 @@ KIO::Job* scan(const KURL& albumURL)
 {
     QByteArray ba;
     QDataStream ds(ba, IO_WriteOnly);
-    ds << AlbumManager::instance()->getLibraryPath();
+    ds << Digikam::AlbumManager::instance()->getLibraryPath();
     ds << albumURL;
     ds << QString();
     ds << 0;
@@ -222,8 +229,8 @@ Watch::Watch(KIO::Job* job)
 
 void Watch::slotDone(KIO::Job*)
 {
-    AlbumManager::instance()->refresh();
-    AlbumLister::instance()->refresh();
+    Digikam::AlbumManager::instance()->refresh();
+    Digikam::AlbumLister::instance()->refresh();
     m_runCount--;
 
     delete this;
@@ -231,6 +238,6 @@ void Watch::slotDone(KIO::Job*)
 
 uint Watch::m_runCount = 0;
 
-}
+}  // namespace DIO
 
 #include "dio_p.moc"

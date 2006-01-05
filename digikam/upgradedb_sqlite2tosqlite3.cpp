@@ -4,7 +4,7 @@
  * Description :
  *
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,21 +18,29 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
 #include <qmap.h>
 #include <qpair.h>
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <iostream>
 
+// Local includes.
+
 #include "albumdb.h"
 #include "albumdb_sqlite2.h"
-
 #include "upgradedb_sqlite2tosqlite3.h"
+
+namespace Digikam
+{
 
 struct _Album
 {
@@ -43,7 +51,6 @@ struct _Album
     QString collection;
     QString icon;
 };
-
 
 struct _Tag
 {
@@ -594,3 +601,5 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     
     return true;
 }
+
+}  // namespace Digikam

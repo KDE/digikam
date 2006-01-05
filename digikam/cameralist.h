@@ -21,10 +21,16 @@
 #ifndef CAMERALIST_H
 #define CAMERALIST_H
 
+// Qt includes.
+
 #include <qptrlist.h>
 #include <qobject.h>
 
 class QString;
+
+namespace Digikam
+{
+
 class CameraType;
 class CameraListPrivate;
 
@@ -64,5 +70,7 @@ signals:
     void signalCameraRemoved(CameraType*);
 
 };
+
+}  // namespace Digikam
 
 #endif /* CAMERALIST_H */

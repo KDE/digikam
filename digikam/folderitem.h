@@ -13,12 +13,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef FOLDERITEM_H
 #define FOLDERITEM_H
 
+// Qt includes.
+
 #include <qlistview.h>
+
+namespace Digikam
+{
 
 class FolderItem : public QListViewItem
 {
@@ -62,5 +68,6 @@ protected:
     void setup();
 };
     
+}  // namespace Digikam
 
 #endif /* FOLDERITEM_H */

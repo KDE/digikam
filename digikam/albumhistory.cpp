@@ -19,14 +19,23 @@
  * 
  * ============================================================ */
 
-#include <kdebug.h>
+// Qt includes.
 
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qwidget.h>
 
+// KDE includes.
+
+#include <kdebug.h>
+
+// Local includes.
+
 #include "album.h"
 #include "albumhistory.h"
+
+namespace Digikam
+{
 
 /**
  * Stores an album along with the sidebar view, where the album
@@ -321,5 +330,7 @@ bool AlbumHistory::isBackwardEmpty() const
     // album, and therfore not really a previous album
     return (m_backwardStack->count() <= 1) ? true : false;
 }
+
+}  // namespace Digikam
 
 #include "albumhistory.moc"

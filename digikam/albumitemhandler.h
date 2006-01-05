@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,7 +21,12 @@
 #ifndef ALBUMITEMHANDLER_H
 #define ALBUMITEMHANDLER_H
 
+// KDE includes.
+
 #include <kurl.h>
+
+namespace Digikam
+{
 
 /*! 
   AlbumItemHandler
@@ -47,5 +52,6 @@ protected:
     void emitItemsSelected(bool val);
 };
 
+}  // namespace Digikam
 
 #endif /* ALBUMITEMHANDLER_H */

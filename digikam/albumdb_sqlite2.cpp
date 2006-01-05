@@ -18,20 +18,34 @@
  * 
  * ============================================================ */
 
-#include <kdebug.h>
+// C Ansi includes.
 
-#include <qfile.h>
-
-#include <cstdio>
-#include <cstdlib>
-
-extern "C" {
+extern "C"
+{
 #include <sqlite.h>
 #include <sys/time.h>
 #include <time.h>
 }
 
+// C++ includes.
+
+#include <cstdio>
+#include <cstdlib>
+
+// Qt includes.
+
+#include <qfile.h>
+
+// KDE includes.
+
+#include <kdebug.h>
+
+// Local includes.
+
 #include "albumdb_sqlite2.h"
+
+namespace Digikam
+{
 
 typedef struct sqlite_vm sqlite_vm;
 
@@ -125,4 +139,6 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     return true;
 }
+
+}  // namespace Digikam
 

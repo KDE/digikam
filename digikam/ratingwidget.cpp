@@ -1,31 +1,40 @@
-// ============================================================
-// Author: Owen Hirst <n8rider@sbcglobal.net>
-// Date  : 2005-08-15
-// Description : 
-// 
-// Copyright 2005 by Owen Hirst
-//
-// This program is free software; you can redistribute it
-// and/or modify it under the terms of the GNU General
-// Public License as published by the Free Software Foundation;
-// either version 2, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// ============================================================ 
+/* ============================================================
+ * Author: Owen Hirst <n8rider@sbcglobal.net>
+ * Date  : 2005-08-15
+ * Description :
+ * 
+ * Copyright 2005 by Owen Hirst
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+// Qt includes.
 
 #include <qpainter.h>
 #include <qpalette.h>
 
+// KDE includes.
+
+#include <kglobal.h>
+#include <kstandarddirs.h>
+
+// Local includes.
+
 #include "themeengine.h"
 #include "ratingwidget.h"
+
+namespace Digikam
+{
 
 RatingWidget::RatingWidget(QWidget* parent)
     : QWidget(parent)
@@ -123,5 +132,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
 
     p.end();
 }
+
+}  // namespace Digikam
 
 #include "ratingwidget.moc"

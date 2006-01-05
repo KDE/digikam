@@ -20,24 +20,38 @@
 
 /** @file albumdb.cpp */
 
-#include <kdebug.h>
-#include <klocale.h>
+// C Ansi includes.
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-
-#include <cstdio>
-#include <cstdlib>
-
-extern "C" {
+extern "C"
+{
 #include <sqlite3.h>
 #include <sys/time.h>
 #include <time.h>
 }
 
+// C++ includes.
+
+#include <cstdio>
+#include <cstdlib>
+
+// Qt includes.
+
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
+
+// KDE includes.
+
+#include <kdebug.h>
+#include <klocale.h>
+
+// Local includes.
+
 #include "albummanager.h"
 #include "albumdb.h"
+
+namespace Digikam
+{
 
 typedef struct sqlite3_stmt sqlite3_stmt;
 
@@ -1161,4 +1175,6 @@ Q_LLONG AlbumDB::lastInsertedRow()
 {
     return sqlite3_last_insert_rowid(m_db);    
 }
+
+}  // namespace Digikam
 

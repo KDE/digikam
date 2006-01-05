@@ -24,6 +24,13 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qapplication.h>
+#include <qpixmap.h>
+
+// KDE includes.
+
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 #include <kglobalsettings.h>
@@ -31,13 +38,18 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-#include <qapplication.h>
-#include <qpixmap.h>
+// Local includes.
 
 #include "albumsettings.h"
 #include "syncjob.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
+
+void qt_enter_modal( QWidget *widget );
+void qt_leave_modal( QWidget *widget );
+
+namespace Digikam
+{
 
 QString* SyncJob::lastErrorMsg_  = 0;
 int      SyncJob::lastErrorCode_ = 0;
@@ -128,9 +140,6 @@ bool SyncJob::fileMovePriv(const KURL &src, const KURL &dest)
     return success_;
 }
 
-void qt_enter_modal( QWidget *widget );
-void qt_leave_modal( QWidget *widget );
-
 void SyncJob::enter_loop()
 {
     QWidget dummy(0,0,WType_Dialog | WShowModal);
@@ -220,5 +229,7 @@ int SyncJob::lastErrorCode()
 {
     return lastErrorCode_;
 }
+
+}  // namespace Digikam
 
 #include "syncjob.moc"

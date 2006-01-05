@@ -5,7 +5,7 @@
  * Date   : 2004-08-02
  * Description : 
  * 
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +19,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef DIGIKAM_KIPIINTERFACE_H
 #define DIGIKAM_KIPIINTERFACE_H
@@ -49,13 +48,6 @@
 
 class QDateTime;
 
-class AlbumManager;
-class Album;
-class PAlbum;
-class TAlbum;
-class AlbumDB;
-class AlbumSettings;
-
 namespace KIPI
 {
 class Interface;
@@ -63,6 +55,15 @@ class ImageCollection;
 class ImageInfo;
 }
 
+namespace Digikam
+{
+
+class AlbumManager;
+class Album;
+class PAlbum;
+class TAlbum;
+class AlbumDB;
+class AlbumSettings;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -167,6 +168,7 @@ private:
     AlbumDB      *albumDB_;
 };
 
+}  // namespace Digikam
 
 #endif  // DIGIKAM_KIPIINTERFACE_H
 

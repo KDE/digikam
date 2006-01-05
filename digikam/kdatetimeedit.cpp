@@ -17,10 +17,17 @@
     Boston, MA  02110-1301  USA
 */
 
+// Qt includes.
+
 #include <qdatetimeedit.h>
+
+// KDE includes.
 
 #include "kdatetimeedit.h"
 #include "kdateedit.h"
+
+namespace Digikam
+{
 
 KDateTimeEdit::KDateTimeEdit(QWidget *parent, const char *name)
     : QHBox(parent, name)
@@ -58,5 +65,7 @@ void KDateTimeEdit::slotDateTimeChanged()
 {
     emit dateTimeChanged(dateTime());
 }
+
+}  // namespace Digikam
 
 #include "kdatetimeedit.moc"

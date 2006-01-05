@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>DigikamFirstFirstRunWidget</class>
+<class>Digikam::DigikamFirstFirstRunWidget</class>
 <widget class="QWidget">
     <property name="name">
         <cstring>DigikamFirstFirstRunWidget</cstring>

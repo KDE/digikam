@@ -23,13 +23,24 @@
 #ifndef ALBUMDB_H
 #define ALBUMDB_H
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+
+// KDE includes.
+
 #include <kurl.h>
+
+// Local includes.
+
 #include "albuminfo.h"
 #include "digikam_export.h"
+
+namespace Digikam
+{
 
 typedef struct sqlite3 sqleet3; // hehe.
 
@@ -509,5 +520,7 @@ private:
     bool     m_valid;
     IntList  m_recentlyAssignedTags;
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMDB_H */

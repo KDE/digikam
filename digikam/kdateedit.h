@@ -23,13 +23,20 @@
 #ifndef KDATEEDIT_H
 #define KDATEEDIT_H
 
+// Qt includes.
+
 #include <qcombobox.h>
 #include <qdatetime.h>
 #include <qmap.h>
 
+// KDE includes.
+
 #include "kdatepickerpopup.h"
 
 class QEvent;
+
+namespace Digikam
+{
 
 /**
   A date editing widget that consists of an editable combo box.
@@ -53,6 +60,7 @@ class KDateEdit : public QComboBox
   Q_OBJECT
 
   public:
+
     KDateEdit( QWidget *parent = 0, const char *name = 0 );
     virtual ~KDateEdit();
 
@@ -94,12 +102,14 @@ class KDateEdit : public QComboBox
     void setDate( const QDate &date );
 
   protected slots:
+
     void lineEnterPressed();
     void slotTextChanged( const QString& );
     void dateEntered( QDate );
     void dateSelected( QDate );
 
   protected:
+
     virtual bool eventFilter( QObject*, QEvent* );
     virtual void mousePressEvent( QMouseEvent* );
 
@@ -123,6 +133,7 @@ class KDateEdit : public QComboBox
     void setupKeywords();
 
   private:
+    
     QDate parseDate( bool* = 0 ) const;
     void updateView();
 
@@ -136,4 +147,6 @@ class KDateEdit : public QComboBox
     QMap<QString, int> mKeywordMap;
 };
 
-#endif
+}  // namespace Digikam
+
+#endif // KDATEEDIT_H

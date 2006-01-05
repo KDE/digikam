@@ -18,6 +18,8 @@
 #ifndef SEARCHRESULTSVIEW_H
 #define SEARCHRESULTSVIEW_H
 
+// Qt includes.
+
 #include <qiconview.h>
 #include <qcstring.h>
 #include <qdict.h>
@@ -35,6 +37,9 @@ namespace KIO
 class TransferJob;
 class Job;
 }
+
+namespace Digikam
+{
 
 class SearchResultsView : public QIconView
 {
@@ -66,5 +71,7 @@ private slots:
     void slotGotThumbnail(const KURL& url, const QPixmap& pix);
     void slotFailedThumbnail(const KURL& url);
 };
+
+}  // namespace Digikam
 
 #endif /* SEARCHRESULTSVIEW_H */

@@ -48,7 +48,6 @@
 
 #include "albummanager.h"
 #include "album.h"
-
 #include "albumfolderview.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -62,9 +61,11 @@
 #include "tagfilterview.h"
 #include "thumbnailsize.h"
 #include "dio.h"
-
 #include "digikamapp.h"
 #include "digikamview.h"
+
+namespace Digikam
+{
 
 DigikamView::DigikamView(QWidget *parent)
            : QHBox(parent)
@@ -724,5 +725,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     mTagFolderView->setActive(w == mTagFolderView);
     mSearchFolderView->setActive(w == mSearchFolderView);
 }
+
+}  // namespace Digikam
 
 #include "digikamview.moc"

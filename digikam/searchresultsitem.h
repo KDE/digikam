@@ -18,7 +18,12 @@
 #ifndef SEARCHRESULTSITEM_H
 #define SEARCHRESULTSITEM_H
 
+// Qt includes.
+
 #include <qiconview.h>
+
+namespace Digikam
+{
 
 class SearchResultsItem : public QIconViewItem
 {
@@ -42,5 +47,6 @@ private:
     QString         m_path;
 };    
     
+}  // namespace Digikam
 
 #endif /* SEARCHRESULTSITEM_H */

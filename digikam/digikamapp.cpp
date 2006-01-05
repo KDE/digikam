@@ -19,7 +19,7 @@
  * 
  * ============================================================ */
 
-// QT includes.
+// Qt includes.
 
 #include <qcstring.h>
 #include <qdatastream.h>
@@ -47,7 +47,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-// Includes files for plugins support.
+// libKipi includes.
 
 #include "kipiinterface.h"
 #include <libkipi/pluginloader.h>
@@ -74,6 +74,9 @@
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "scanlib.h"
+
+namespace Digikam
+{
 
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
@@ -1199,5 +1202,7 @@ void DigikamApp::slotDatabaseRescan()
 }
 
 DigikamApp* DigikamApp::m_instance = 0;
+
+}  // namespace Digikam
 
 #include "digikamapp.moc"

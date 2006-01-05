@@ -27,8 +27,13 @@
 #ifndef SYNCJOB_H
 #define SYNCJOB_H
 
+// Qt includes.
+
 #include <qobject.h>
 #include <qpixmap.h>
+
+// KDe includes.
+
 #include <kurl.h>
 
 class QString;
@@ -37,6 +42,9 @@ namespace KIO
 {
 class Job;
 }
+
+namespace Digikam
+{
 
 class SyncJob : public QObject
 {
@@ -92,5 +100,7 @@ private slots:
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix);
     void slotLoadThumbnailFailed();
 };
+
+}  // namespace Digikam
 
 #endif /* SYNCJOB_H */

@@ -13,34 +13,37 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIO_H
 #define DIO_H
+
+// KDE includes.
 
 #include <kio/job.h>
 
 namespace DIO
 {
 
-KIO::Job* copy(const KURL& src, const KURL& dest);
+    KIO::Job* copy(const KURL& src, const KURL& dest);
+    
+    KIO::Job* copy(const KURL::List& srcList, const KURL& dest);
+    
+    KIO::Job* move(const KURL& src, const KURL& dest);
+    
+    KIO::Job* move(const KURL::List& srcList, const KURL& dest);
+    
+    KIO::Job* del(const KURL& src);
+    
+    KIO::Job* del(const KURL::List& srcList);
+    
+    bool      renameFile(const KURL& src, const KURL& dest);
+    
+    KIO::Job* scan(const KURL& albumURL);
+    
+    bool      running();
 
-KIO::Job* copy(const KURL::List& srcList, const KURL& dest);
-
-KIO::Job* move(const KURL& src, const KURL& dest);
-
-KIO::Job* move(const KURL::List& srcList, const KURL& dest);
-
-KIO::Job* del(const KURL& src);
-
-KIO::Job* del(const KURL::List& srcList);
-
-bool      renameFile(const KURL& src, const KURL& dest);
-
-KIO::Job* scan(const KURL& albumURL);
-
-bool      running();
-
-}
+}  // namespace DIO
 
 #endif /* DIO_H */

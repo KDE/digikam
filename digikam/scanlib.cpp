@@ -1,29 +1,33 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301  USA
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Author: Tom Albers <tomalbers@kde.nl>
+ * Date  : 2005-01-01
+ * Description : 
+ * 
+ * Copyright 2005-2006 by Tom Albers
 
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
 
-#include <kdebug.h>
-#include <kprogress.h>
-#include <kmessagebox.h>
-#include <kapplication.h>
-#include <klocale.h>
+// C Ansi includes.
+
+extern "C"
+{
+#include <sys/time.h>
+#include <time.h>
+#include <stdlib.h>
+}
+
+// Qt includes.
 
 #include <qapplication.h>
 #include <qstring.h>
@@ -33,19 +37,25 @@
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
 
-extern "C" {
-#include <sys/time.h>
-#include <time.h>
-#include <stdlib.h>
-}
+// KDE includes.
 
-#include <jpegmetadata.h>
+#include <kdebug.h>
+#include <kprogress.h>
+#include <kmessagebox.h>
+#include <kapplication.h>
+#include <klocale.h>
 
+// Local includes.
+
+#include "jpegmetadata.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "scanlib.h"
 
 /** @file scanlib.cpp*/
+
+namespace Digikam
+{
 
 ScanLib::ScanLib()
 {
@@ -470,3 +480,5 @@ void ScanLib::timing(const QString& text, struct timeval tv1, struct timeval tv2
                    (tv2.tv_usec-tv1.tv_usec))/1000)
               << " ms" << endl;
 }
+
+}  // namespace Digikam

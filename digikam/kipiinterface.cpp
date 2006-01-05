@@ -5,7 +5,7 @@
  * Date   : 2004-08-02
  * Description :
  *
- * Copyright 2004 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +19,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -63,6 +62,8 @@ extern "C"
 #include "albumsettings.h"
 #include "kipiinterface.h"
 
+namespace Digikam
+{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// IMAGE INFO IMPLEMENTATION CLASS ////////////////////////////////////////
@@ -703,6 +704,7 @@ QString DigikamKipiInterface::fileExtensions()
             s->getRawFileFilter());
 }
 
+}  // namespace Digikam
 
 #include "kipiinterface.moc"
 

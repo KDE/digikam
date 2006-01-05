@@ -4,7 +4,7 @@
  * Date   : 2002-07-28
  * Description : 
  * 
- * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2002-2006 by Renchi Raju and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
                           digikam_version,        
                           description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2005, digiKam developers team"),
+                          I18N_NOOP("(c) 2002-2006, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
@@ -219,19 +219,19 @@ int main(int argc, char *argv[])
         !dirInfo.isDir())
     {
         // Run the first run
-        DigikamFirstRun *firstRun = new DigikamFirstRun(config);
+        Digikam::DigikamFirstRun *firstRun = new Digikam::DigikamFirstRun(config);
         app.setMainWidget(firstRun);
         firstRun->show();
         return app.exec();
     }
 
-    AlbumManager* man = new AlbumManager();
+    Digikam::AlbumManager* man = new Digikam::AlbumManager();
     man->setLibraryPath(albumPath);
 
     // Register image formats (especially for TIFF )
     KImageIO::registerFormats();
 
-    DigikamApp *digikam = new DigikamApp();
+    Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
 
     app.setMainWidget(digikam);
     digikam->show();
@@ -241,7 +241,6 @@ int main(int argc, char *argv[])
         digikam->autoDetect();
     else if (args && args->isSet("download-from"))
         digikam->downloadFrom(args->getOption("download-from"));
-    
 
 #if KDE_IS_VERSION(3,2,0)
     QStringList tipsFiles;

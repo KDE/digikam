@@ -22,12 +22,20 @@
 #ifndef DIGIKAMFIRSTRUN_H
 #define DIGIKAMFIRSTRUN_H
 
-// Qt includes.
+// KDE includes.
 
 #include <kdialogbase.h>
+
+// Local includes.
+
 #include "digikam_export.h"
+
 class KConfig;
 class KURLRequester;
+
+namespace Digikam
+{
+
 class DigikamFirstFirstRunWidget;
 
 class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
@@ -35,6 +43,7 @@ class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
     Q_OBJECT
 
 public:
+
     DigikamFirstRun( KConfig* config,
                      QWidget* parent = 0,
                      const char* name = 0,
@@ -43,11 +52,15 @@ public:
     ~DigikamFirstRun();
 
 private:
+
     KConfig*     config_;
     DigikamFirstFirstRunWidget *ui;
 
 protected slots:
+    
     void slotOk();
 };
+
+}  // namespace Digikam
 
 #endif // DIGIKAMFIRSTRUN_H

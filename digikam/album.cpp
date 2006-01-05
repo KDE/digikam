@@ -18,12 +18,19 @@
  *
  * ============================================================ */
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <klocale.h>
+
+// Local includes.
 
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
+
+namespace Digikam
+{
 
 Album::Album(Album::Type type, int id, bool root)
 {
@@ -507,3 +514,6 @@ Album* AlbumIterator::current() const
 {
     return m_current;
 }
+
+}  // namespace Digikam
+
