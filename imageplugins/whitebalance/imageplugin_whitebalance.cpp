@@ -64,7 +64,7 @@ void ImagePlugin_WhiteBalance::setEnabledActions(bool enable)
 
 void ImagePlugin_WhiteBalance::slotWhiteBalance()
 {
-    QString title = i18n("Color Channel Mixer");
+    QString title = i18n("White Color Balance Correction");
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
     DigikamWhiteBalanceImagesPlugin::ImageEffect_WhiteBalance dlg(parentWidget(),
                                 title, headerFrame);

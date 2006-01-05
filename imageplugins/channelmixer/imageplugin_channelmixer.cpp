@@ -65,7 +65,7 @@ void ImagePlugin_ChannelMixer::setEnabledActions(bool enable)
 
 void ImagePlugin_ChannelMixer::slotChannelMixer()
 {
-    QString title = i18n("White Color Balance Correction");
+    QString title = i18n("Color Channel Mixer");
     QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
     DigikamChannelMixerImagesPlugin::ChannelMixerDialog dlg(parentWidget(),
                                 title, headerFrame);
