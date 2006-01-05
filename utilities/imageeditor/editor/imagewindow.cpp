@@ -871,11 +871,12 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         KURL u(m_urlCurrent.directory());
         PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
         
-        QRect  sel          = m_canvas->getSelectedArea();
-        uchar* data         = DImgInterface::instance()->getImage();
-        int    width        = DImgInterface::instance()->origWidth();
-        int    height       = DImgInterface::instance()->origHeight();
-        bool   sixteenBit   = DImgInterface::instance()->sixteenBit();
+        QRect  sel        = m_canvas->getSelectedArea();
+        uchar* data       = DImgInterface::instance()->getImage();
+        int    width      = DImgInterface::instance()->origWidth();
+        int    height     = DImgInterface::instance()->origHeight();
+        bool   sixteenBit = DImgInterface::instance()->sixteenBit();
+        bool   hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
         AlbumIconItem* item = 0;
         
         if (palbum)
@@ -883,7 +884,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
             
         m_rightSidebar->itemChanged(m_urlCurrent.url(), m_view, item,
                                    sel.isNull() ? 0 : &sel, 
-                                   data, width, height, sixteenBit);
+                                   data, width, height, sixteenBit, hasAlpha);
     }
 }
 
