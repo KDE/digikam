@@ -88,7 +88,7 @@ DigikamApp::DigikamApp()
     if(m_config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
     {
-        mSplash = new SplashScreen("digikam-splash.png");
+        mSplash = new Digikam::SplashScreen("digikam-splash.png");
     }
 
     mAlbumSettings = new AlbumSettings();

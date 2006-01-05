@@ -1,9 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-02-10
  * Description :
  *
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +36,13 @@
 
 #include "splashscreen.h"
 
+#if defined(Q_WS_X11)
+void qt_wait_for_window_manager( QWidget *widget );
+#endif
+
+namespace Digikam
+{
+
 SplashScreen::SplashScreen(const QString& splash)
             : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
 {
@@ -65,10 +73,6 @@ SplashScreen::~SplashScreen()
     delete pix_;
     delete timer_;
 }
-
-#if defined(Q_WS_X11)
-void qt_wait_for_window_manager( QWidget *widget );
-#endif
 
 void SplashScreen::finish( QWidget *mainWin )
 {
@@ -110,7 +114,6 @@ void SplashScreen::message(const QString &message, int alignment,
     currColor_ = color;
     animate();
 }
-
 
 void SplashScreen::animate()
 {
@@ -173,5 +176,7 @@ void SplashScreen::drawContents( QPainter *painter )
     r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
     painter->drawText(r, currAlign_, currStatus_);
 }
+
+}   // namespace Digikam
 
 #include "splashscreen.moc"

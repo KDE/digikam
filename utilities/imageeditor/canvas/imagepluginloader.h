@@ -34,10 +34,9 @@
 
 #include "imageplugin.h"
 
-class SplashScreen;
-
 namespace Digikam
 {
+class SplashScreen;
 
 class ImagePluginLoader : public QObject
 {

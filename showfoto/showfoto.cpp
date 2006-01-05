@@ -115,7 +115,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     if(m_config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
     {
-        m_splash = new SplashScreen("showfoto-splash.png");
+        m_splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
 
     // Settings containers instance.

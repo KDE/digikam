@@ -38,8 +38,6 @@ class KSelectAction;
 class KConfig;
 class KToolBarPopupAction;
 
-class SplashScreen;
-
 namespace KIO
 {
 class Job;
@@ -54,6 +52,7 @@ class ThumbBarItem;
 class ImagePropertiesSideBar;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
+class SplashScreen;
 }
 
 namespace ShowFoto
@@ -90,8 +89,6 @@ private:
 
     int                              m_itemsNb;
 
-    SplashScreen                    *m_splash;
-    
     SlideShow                       *m_slideShow;
 
     KURL                             m_lastOpenedDirectory;
@@ -154,6 +151,7 @@ private:
     Digikam::ImagePropertiesSideBar  *m_rightSidebar;
     Digikam::ICCSettingsContainer    *m_ICCSettings;
     Digikam::IOFileSettingsContainer *m_IOFileSettings;
+    Digikam::SplashScreen            *m_splash;
 
 private:
 

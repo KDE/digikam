@@ -62,7 +62,11 @@ class CameraList;
 class CameraType;
 class DigikamView;
 class AlbumSettings;
+
+namespace Digikam
+{
 class SplashScreen;
+}
 
 class DIGIKAM_EXPORT DigikamApp : public KMainWindow
 {
@@ -127,7 +131,7 @@ private:
     CameraList            *mCameraList;
     bool                   mFullScreen;
 
-    SplashScreen          *mSplash;
+    Digikam::SplashScreen *mSplash;
     
     QString               mCameraGuiPath;
     

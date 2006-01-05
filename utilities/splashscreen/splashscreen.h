@@ -3,7 +3,7 @@
  * Date  : 2003-02-10
  * Description :
  *
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,9 @@
 
 class QPixmap;
 class QTimer;
+
+namespace Digikam
+{
 
 class SplashScreen : public QWidget
 {
@@ -66,5 +69,7 @@ private slots:
     void slotClose();
 
 };
+
+}   // namespace Digikam
 
 #endif /* SPLASHSCREEN_H */
