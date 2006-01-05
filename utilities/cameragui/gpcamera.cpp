@@ -18,20 +18,32 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <stdio.h>
+#include <gphoto2.h>
+}
+
+// C++ includes.
+
+#include <iostream>
+
+// QT includes.
+
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qimage.h>
 #include <qdom.h>
 #include <qfile.h>
 
-#include <iostream>
-
-extern "C" {
-#include <stdio.h>
-#include <gphoto2.h>
-}
+// Local includes.
 
 #include "gpcamera.h"
+
+namespace Digikam
+{
 
 class GPCameraPrivate
 {
@@ -852,3 +864,5 @@ QString GPCamera::path() const
 {
     return d->globalPath;   
 }
+
+}  // namespace Digikam

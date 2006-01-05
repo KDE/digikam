@@ -21,13 +21,20 @@
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H
 
+// Qt includes.
+
 #include <qobject.h>
+
+// Local includes.
 
 #include "gpiteminfo.h"
 
 class QString;
 class QStringList;
 class QImage;
+
+namespace Digikam
+{
 
 class CameraControllerPriv;
 
@@ -89,5 +96,6 @@ signals:
     void signalExif(const QString& folder, const QString& file);
 };
     
+}  // namespace Digikam
 
 #endif /* CAMERACONTROLLER_H */

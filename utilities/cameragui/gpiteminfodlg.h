@@ -21,7 +21,12 @@
 #ifndef GPITEMINFODLG_H
 #define GPITEMINFODLG_H
 
+// KDE includes.
+
 #include <kdialogbase.h>
+
+namespace Digikam
+{
 
 class GPItemInfo;
 
@@ -32,5 +37,7 @@ public:
     GPItemInfoDlg(QWidget* parent, const GPItemInfo* itemInfo);
     ~GPItemInfoDlg();
 };
+
+}  // namespace Digikam
 
 #endif /* GPITEMINFODLG_H */

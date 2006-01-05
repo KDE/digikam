@@ -18,15 +18,23 @@
  * 
  * ============================================================ */
 
-#include <klocale.h>
+// Qt includes.
 
 #include <qstring.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtextedit.h>
 
+// KDE includes.
+
+#include <klocale.h>
+
+// Local includes.
+
 #include "camerainfodialog.h"
 
+namespace Digikam
+{
 
 CameraInfoDialog::CameraInfoDialog(const QString& summary,
                                    const QString& manual,
@@ -74,5 +82,6 @@ CameraInfoDialog::CameraInfoDialog(const QString& summary,
 
 CameraInfoDialog::~CameraInfoDialog()
 {
-    
 }
+
+}  // namespace Digikam

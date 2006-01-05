@@ -54,6 +54,9 @@ extern "C"
 #include "albumsettings.h"
 #include "umscamera.h"
 
+namespace Digikam
+{
+
 UMSCamera::UMSCamera(const QString& model,
                      const QString& port,
                      const QString& path)
@@ -334,3 +337,5 @@ QString UMSCamera::mimeType(const QString& fileext) const
         return QString();
     }
 }
+
+}  // namespace Digikam

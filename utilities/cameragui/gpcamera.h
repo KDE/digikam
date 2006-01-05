@@ -21,9 +21,15 @@
 #ifndef GPCAMERA_H
 #define GPCAMERA_H
 
+// Local includes.
+
 #include "dkcamera.h"
 
 class QImage;
+
+namespace Digikam
+{
+
 class GPCameraPrivate;
 class GPStatus;
 
@@ -97,5 +103,7 @@ private:
     GPCameraPrivate *d;
     GPStatus        *status;
 };
+
+}  // namespace Digikam
 
 #endif /* GPCAMERA_H */

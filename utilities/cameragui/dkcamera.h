@@ -18,12 +18,19 @@
 #ifndef DKCAMERA_H
 #define DKCAMERA_H
 
+// Qt includes.
+
 #include <qstring.h>
+
+// Local includes.
 
 #include "gpiteminfo.h"
 
 class QStringList;
 class QImage;
+
+namespace Digikam
+{
 
 class DKCamera
 {
@@ -67,5 +74,7 @@ private:
     QString m_port;
     QString m_path;
 };
+
+}  // namespace Digikam
 
 #endif /* DKCAMERA_H */

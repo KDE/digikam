@@ -21,9 +21,17 @@
 #ifndef CAMERAICONVIEW_H
 #define CAMERAICONVIEW_H
 
-#include <iconview.h>
+// Qt includes.
+
 #include <qdict.h>
-#include <renamecustomizer.h>
+
+// Local includes.
+
+#include "iconview.h"
+#include "renamecustomizer.h"
+
+namespace Digikam
+{
 
 class GPItemInfo;
 class RenameCustomizer;
@@ -91,5 +99,7 @@ private slots:
     void slotContextMenu(IconItem* item, const QPoint& pos);
     void slotDoubleClicked(IconItem* item);
 };    
+
+}  // namespace Digikam
 
 #endif /* CAMERAICONVIEW_H */

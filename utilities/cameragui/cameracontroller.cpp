@@ -18,6 +18,22 @@
  * 
  * ============================================================ */
 
+// C Ansi
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdio.h>
+}
+
+// C++ includes.
+
+#include <typeinfo>
+
+// Qt includes.
+
 #include <qthread.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
@@ -30,6 +46,8 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kurl.h>
 #include <kmessagebox.h>
@@ -37,23 +55,21 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-#include <typeinfo>
+// Lib Kexif includes.
+
 #include <libkexif/kexifdialog.h>
 
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdio.h>
-}
+// Local includes.
 
-#include <imagewindow.h>
+#include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "exifrotate.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
+
+namespace Digikam
+{
 
 class CameraThread;
 
@@ -897,5 +913,7 @@ void CameraController::slotProcessNext()
     d->thread->start();
     d->timer->start(50, false);
 }
+
+}  // namespace Digikam
 
 #include "cameracontroller.moc"

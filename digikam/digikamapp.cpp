@@ -847,9 +847,9 @@ void DigikamApp::slotDownloadImages()
     if (mCameraGuiPath.isNull())
             return;
 
-    CameraUI* cgui = new CameraUI(this, 
-                        i18n("Images found in %1").arg(mCameraGuiPath),
-                        "directory browse","Fixed", mCameraGuiPath);
+    Digikam::CameraUI* cgui = new Digikam::CameraUI(this, 
+                              i18n("Images found in %1").arg(mCameraGuiPath),
+                              "directory browse","Fixed", mCameraGuiPath);
     cgui->show();
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
@@ -863,8 +863,8 @@ void DigikamApp::slotCameraConnect()
 
     if (ctype)
     {
-        CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
-                                      ctype->port(), ctype->path());
+        Digikam::CameraUI* cgui = new Digikam::CameraUI(this, ctype->title(), ctype->model(),
+                                  ctype->port(), ctype->path());
         cgui->show();
         connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
                 mView, SLOT(slotSelectAlbum(const KURL&)));

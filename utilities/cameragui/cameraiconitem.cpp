@@ -18,12 +18,19 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <iconview.h>
 
+// Local includes.
+
+#include "iconview.h"
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
+
+namespace Digikam
+{
 
 const char* CameraIconViewItem::new_xpm[] =
 {
@@ -257,3 +264,6 @@ QRect CameraIconViewItem::clickToOpenRect()
     pixRect.moveBy(r.x(), r.y());
     return pixRect;
 }
+
+}  // namespace Digikam
+

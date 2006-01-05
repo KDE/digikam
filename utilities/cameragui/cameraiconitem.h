@@ -21,9 +21,17 @@
 #ifndef CAMERAICONITEM_H
 #define CAMERAICONITEM_H
 
-#include <iconitem.h>
+// Qt includes.
+
 #include <qstring.h>
 #include <qpixmap.h>
+
+// Local includes.
+
+#include "iconitem.h"
+
+namespace Digikam
+{
 
 class GPItemInfo;
 
@@ -70,5 +78,7 @@ private:
     friend class CameraUI;
     friend class CameraIconView;
 };
+
+}  // namespace Digikam
 
 #endif /* CAMERAICONITEM_H */

@@ -18,6 +18,17 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+}
+
+// Qt includes.
+
 #include <qvgroupbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -37,6 +48,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
+// KDE includes.
+
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -47,15 +60,9 @@
 #include <kpopupmenu.h>
 #include <khelpmenu.h>
 #include <kdebug.h>
-
 #include <kcalendarsystem.h>
 
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
+// Local includes.
 
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -69,6 +76,9 @@ extern "C"
 #include "cameracontroller.h"
 #include "cameraui.h"
 #include "scanlib.h"
+
+namespace Digikam
+{
 
 CameraUI::CameraUI(QWidget* parent, const QString& title,
                    const QString& model, const QString& port,
@@ -723,5 +733,7 @@ void CameraUI::addFileExtension(const QString& ext)
                                  QString(" *.") + ext);
     emit signalAlbumSettingsChanged();
 }
+
+}  // namespace Digikam
 
 #include "cameraui.moc"

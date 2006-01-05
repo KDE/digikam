@@ -21,8 +21,12 @@
 #ifndef CAMERAUI_H
 #define CAMERAUI_H
 
+// Qt includes.
+
 #include <qdialog.h>
 #include <qstring.h>
+
+// Local includes.
 
 #include "gpiteminfo.h"
 
@@ -38,6 +42,9 @@ class QPopupMenu;
 class QProgressBar;
 class QDate;
 class KURL;
+
+namespace Digikam
+{
 
 class CameraIconView;
 class CameraIconViewItem;
@@ -134,5 +141,7 @@ signals:
     void signalLastDestination(const KURL&);
     void signalAlbumSettingsChanged();
 };
+
+}  // namespace Digikam
 
 #endif /* CAMERAUI_H */

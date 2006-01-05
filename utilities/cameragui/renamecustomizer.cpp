@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
@@ -27,11 +29,18 @@
 #include <qlabel.h>
 #include <qtimer.h>
 
+// KDE includes.
+
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
 
+// Local includes.
+
 #include "renamecustomizer.h"
+
+namespace Digikam
+{
 
 RenameCustomizer::RenameCustomizer(QWidget* parent)
     : QButtonGroup(parent)
@@ -254,5 +263,7 @@ void RenameCustomizer::saveSettings()
                        m_renameCustomPrefix->text());
     config->sync();
 }
+
+}  // namespace Digikam
 
 #include "renamecustomizer.moc"

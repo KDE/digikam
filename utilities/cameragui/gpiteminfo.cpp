@@ -18,9 +18,16 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qdatastream.h>
 
+// Local includes.
+
 #include "gpiteminfo.h"
+
+namespace Digikam
+{
 
 QDataStream& operator<<( QDataStream& ds, const GPItemInfo& info)
 {
@@ -53,3 +60,5 @@ QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
 
     return ds;
 }
+
+}  // namespace Digikam

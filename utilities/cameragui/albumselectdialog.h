@@ -1,6 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-06-16
+ * Description :
+ * 
  * Copyright 2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -13,17 +15,26 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef ALBUMSELECTDIALOG_H
 #define ALBUMSELECTDIALOG_H
 
-#include <kdialogbase.h>
+// Qt includes.
+
 #include <qmap.h>
+
+// KDE includes.
+
+#include <kdialogbase.h>
 
 class FolderView;
 class FolderItem;
 class PAlbum;
+
+namespace Digikam
+{
 
 class AlbumSelectDialog : public KDialogBase
 {
@@ -59,5 +70,7 @@ private:
     QString                    m_newAlbumString;
     QMap<FolderItem*, PAlbum*> m_albumMap;
 };
+
+}  // namespace Digikam
 
 #endif /* ALBUMSELECTDIALOG_H */

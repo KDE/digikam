@@ -18,15 +18,24 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qlabel.h>
 #include <qvgroupbox.h>
+
+// KDE includes.
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kio/global.h>
 
+// Local includes.
+
 #include "gpiteminfo.h"
 #include "gpiteminfodlg.h"
+
+namespace Digikam
+{
 
 GPItemInfoDlg::GPItemInfoDlg(QWidget* parent, const GPItemInfo* itemInfo)
     : KDialogBase(parent, 0, true, itemInfo->name, Close, Close)
@@ -111,3 +120,5 @@ GPItemInfoDlg::GPItemInfoDlg(QWidget* parent, const GPItemInfo* itemInfo)
 GPItemInfoDlg::~GPItemInfoDlg()
 {
 }
+
+}  // namespace Digikam

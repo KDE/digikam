@@ -21,13 +21,22 @@
 #ifndef GPITEMINFO_H
 #define GPITEMINFO_H
 
-#include <qvaluelist.h>
-#include <qcstring.h>
+// C Ansi includes.
 
 extern "C"
 {
 #include <time.h>
 }
+
+// Qt includes.
+
+#include <qvaluelist.h>
+#include <qcstring.h>
+
+class QDataStream;
+
+namespace Digikam
+{
 
 class GPItemInfo
 {
@@ -45,10 +54,11 @@ public:
     int     writePermissions;
 };
 
-class QDataStream;
 QDataStream& operator<<( QDataStream &, const GPItemInfo & );
 QDataStream& operator>>( QDataStream &, GPItemInfo & );
 
 typedef QValueList<GPItemInfo> GPItemInfoList;
+
+}  // namespace Digikam
 
 #endif /* GPITEMINFO_H */

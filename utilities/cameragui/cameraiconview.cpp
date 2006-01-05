@@ -18,6 +18,15 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <time.h>
+}
+
+// Qt includes.
+
 #include <qfile.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
@@ -25,14 +34,13 @@
 #include <qfontmetrics.h>
 #include <qfont.h>
 
+// KDE includes.
+
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
-extern "C"
-{
-#include <time.h>
-}
+// Local includes.
 
 #include "cameraui.h"
 #include "gpiteminfo.h"
@@ -40,6 +48,9 @@ extern "C"
 #include "cameraiconview.h"
 #include "renamecustomizer.h"
 #include "icongroupitem.h"
+
+namespace Digikam
+{
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     : IconView(parent), m_renamer(0), m_ui(ui),
@@ -383,5 +394,7 @@ QRect CameraIconView::itemRect() const
 
     return r;
 }
+
+}  // namespace Digikam
 
 #include "cameraiconview.moc"

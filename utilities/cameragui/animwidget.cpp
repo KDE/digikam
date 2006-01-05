@@ -18,12 +18,19 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
 #include <qtimer.h>
 
+// Local includes.
+
 #include "animwidget.h"
+
+namespace Digikam
+{
 
 AnimWidget::AnimWidget(QWidget* parent, int size )
     : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
@@ -97,5 +104,7 @@ bool AnimWidget::running() const
 {
     return m_timer->isActive();    
 }
+
+}  // namespace Digikam
 
 #include "animwidget.moc"

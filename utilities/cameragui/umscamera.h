@@ -1,6 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-12-21
+ * Description :
+ * 
  * Copyright 2004 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -18,9 +20,16 @@
 #ifndef UMSCAMERA_H
 #define UMSCAMERA_H
 
+// Qt includes.
+
 #include <qstringlist.h>
 
+// Local includes.
+
 #include "dkcamera.h"
+
+namespace Digikam
+{
 
 // USB Mass Storage Implementation of abstract type DKCamera
 
@@ -70,5 +79,7 @@ private:
     QString m_audioFilter;
     QString m_rawFilter;
 };
+
+}  // namespace Digikam
 
 #endif /* UMSCAMERA_H */

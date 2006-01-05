@@ -18,7 +18,12 @@
  * 
  * ============================================================ */
 
+// Local includes.
+
 #include "dkcamera.h"
+
+namespace Digikam
+{
 
 DKCamera::DKCamera(const QString& model,
                const QString& port,
@@ -47,3 +52,5 @@ QString DKCamera::path() const
 {
     return m_path;
 }
+
+}  // namespace Digikam

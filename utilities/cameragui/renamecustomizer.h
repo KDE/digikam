@@ -21,6 +21,8 @@
 #ifndef RENAMECUSTOMIZER_H
 #define RENAMECUSTOMIZER_H
 
+// Qt includes.
+
 #include <qbuttongroup.h>
 
 class QLineEdit;
@@ -29,6 +31,9 @@ class QRadioButton;
 class QComboBox;
 class QTimer;
 class QHBox;
+
+namespace Digikam
+{
 
 class RenameCustomizer : public QButtonGroup
 {
@@ -84,5 +89,7 @@ private slots:
     void slotSeqChanged(bool);
     void slotCaseTypeChanged(const QString&);
 };
+
+}  // namespace Digikam
 
 #endif /* RENAMECUSTOMIZER_H */

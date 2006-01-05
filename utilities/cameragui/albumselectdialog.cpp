@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,13 +18,7 @@
  * 
  * ============================================================ */
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-#include <kaction.h>
-#include <kinputdialog.h>
-#include <kmessagebox.h>
+// Qt includes.
 
 #include <qlabel.h>
 #include <qframe.h>
@@ -33,11 +27,26 @@
 #include <qcursor.h>
 #include <qdatetime.h>
 
+// KDE includes.
+
+#include <klocale.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <kapplication.h>
+#include <kaction.h>
+#include <kinputdialog.h>
+#include <kmessagebox.h>
+
+// Local includes.
+
 #include "folderview.h"
 #include "folderitem.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectdialog.h"
+
+namespace Digikam
+{
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
@@ -273,5 +282,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     
     return dlg.m_albumMap[item];
 }
+
+}  // namespace Digikam
 
 #include "albumselectdialog.moc"

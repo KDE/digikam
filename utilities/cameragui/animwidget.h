@@ -21,10 +21,15 @@
 #ifndef ANIMWIDGET_H
 #define ANIMWIDGET_H
 
+// Qt includes.
+
 #include <qwidget.h>
 
 class QTimer;
 class QPixmap;
+
+namespace Digikam
+{
 
 class AnimWidget : public QWidget
 {
@@ -54,5 +59,7 @@ private:
     int      m_pos;
     int      m_size;
 };
+
+}  // namespace Digikam
 
 #endif /* ANIMWIDGET_H */
