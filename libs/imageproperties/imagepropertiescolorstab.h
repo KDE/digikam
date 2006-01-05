@@ -71,7 +71,8 @@ signals:
 private:
 
     void loadImageFromUrl(const KURL& url);
-    void updateInformation();
+    void updateInformations();
+    void updateStatistiques();
     
 private slots:
 
@@ -91,27 +92,29 @@ private slots:
 
 private:
 
-    QComboBox           *m_channelCB;    
-    QComboBox           *m_colorsCB;    
-    QComboBox           *m_renderingCB;    
+    QComboBox             *m_channelCB;    
+    QComboBox             *m_colorsCB;    
+    QComboBox             *m_renderingCB;    
 
-    QHButtonGroup       *m_scaleBG;
-    QHButtonGroup       *m_regionBG;
+    QHButtonGroup         *m_scaleBG;
+    QHButtonGroup         *m_regionBG;
     
-    QSpinBox            *m_minInterv;
-    QSpinBox            *m_maxInterv;
+    QSpinBox              *m_minInterv;
+    QSpinBox              *m_maxInterv;
     
-    QLabel              *m_labelMeanValue;
-    QLabel              *m_labelPixelsValue;
-    QLabel              *m_labelStdDevValue;
-    QLabel              *m_labelCountValue;
-    QLabel              *m_labelMedianValue;
-    QLabel              *m_labelPercentileValue;
+    QLabel                *m_labelMeanValue;
+    QLabel                *m_labelPixelsValue;
+    QLabel                *m_labelStdDevValue;
+    QLabel                *m_labelCountValue;
+    QLabel                *m_labelMedianValue;
+    QLabel                *m_labelPercentileValue;
+    QLabel                *m_labelColorDepth;
+    QLabel                *m_labelAlphaChannel;
     
-    DImg                 m_image;
-    DImg                 m_imageSelection;
+    DImg                   m_image;
+    DImg                   m_imageSelection;
     
-    QRect               *m_selectionArea;
+    QRect                 *m_selectionArea;
     
     ColorGradientWidget   *m_hGradient;
     HistogramWidget       *m_histogramWidget;

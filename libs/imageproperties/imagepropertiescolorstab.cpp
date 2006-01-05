@@ -74,7 +74,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // Histogram tab area -----------------------------------------------------
        
     QWidget* histogramPage = new QWidget( tab );
-    QGridLayout *topLayout = new QGridLayout(histogramPage, 7, 3, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -234,8 +234,24 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     m_labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     
     topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
-    topLayout->setRowStretch(7, 10);
 
+    // -------------------------------------------------------------
+
+    QGroupBox *gbox2 = new QGroupBox(2, Qt::Horizontal, histogramPage);
+    gbox2->setFrameStyle( QFrame::NoFrame );
+
+    QLabel *label11     = new QLabel(i18n("Color depth:"), gbox2);
+    label11->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    m_labelColorDepth   = new QLabel(gbox2);
+    m_labelColorDepth->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel *label12     = new QLabel(i18n("Alpha Channel:"), gbox2);
+    label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    m_labelAlphaChannel = new QLabel(gbox2);
+    m_labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    
+    topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
+
+    topLayout->setRowStretch(8, 10);
     tab->addTab(histogramPage, i18n("Histogram") );
 
     // ICC Profiles tab area ---------------------------------------
@@ -343,6 +359,14 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     if (url.isEmpty())
     {
        m_navigateBar->setFileName("");
+       m_labelMeanValue->clear();
+       m_labelPixelsValue->clear();
+       m_labelStdDevValue->clear();
+       m_labelCountValue->clear();
+       m_labelMedianValue->clear();
+       m_labelPercentileValue->clear();
+       m_labelColorDepth->clear();
+       m_labelAlphaChannel->clear();       
        setEnabled(false);
        return;
     }
@@ -375,12 +399,14 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                               m_imageSelection.height());
                 m_regionBG->show();                                         
                 m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
+                updateInformations();
             }
             else 
             {
                 m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit);
                 m_regionBG->hide();
                 m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
+                updateInformations();
             }
         }
         else 
@@ -392,10 +418,9 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
 
 void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 {
-    //m_histogramWidget->setEnabled(false);
-
     // create thread on demand
-    if (!m_imageLoaderThreaded) {
+    if (!m_imageLoaderThreaded)
+    {
         m_imageLoaderThreaded = new ManagedLoadSaveThread();
 
         connect(m_imageLoaderThreaded, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
@@ -409,8 +434,6 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 
 void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
 {
-    //m_histogramWidget->setEnabled(true);
-
     if ( !img.isNull() )
     {
         m_histogramWidget->updateData(img.bits(), img.width(), img.height(),
@@ -420,6 +443,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString&, cons
         m_image = img;
         m_regionBG->hide();
         m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
+        updateInformations();
     }
     else
     {
@@ -518,7 +542,7 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
     }
    
     m_histogramWidget->repaint(false);
-    updateInformation();
+    updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotScaleChanged(int scale)
@@ -545,21 +569,21 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
     }
 
     m_histogramWidget->repaint(false);
-    updateInformation();
+    updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
     m_histogramWidget->m_renderingType = rendering;
     m_histogramWidget->repaint(false);
-    updateInformation();
+    updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotIntervChanged(int)
 {
     m_maxInterv->setMinValue(m_minInterv->value());
     m_minInterv->setMaxValue(m_maxInterv->value());
-    updateInformation();
+    updateStatistiques();
 }
 
 void ImagePropertiesColorsTab::slotUpdateMinInterv(int min)
@@ -570,10 +594,16 @@ void ImagePropertiesColorsTab::slotUpdateMinInterv(int min)
 void ImagePropertiesColorsTab::slotUpdateMaxInterv(int max)
 {
     m_maxInterv->setValue(max);
-    updateInformation();
+    updateStatistiques();
 }
 
-void ImagePropertiesColorsTab::updateInformation()
+void ImagePropertiesColorsTab::updateInformations()
+{
+    m_labelColorDepth->setText(m_image.sixteenBit() ? i18n("16 bits") : i18n("8 bits"));
+    m_labelAlphaChannel->setText(m_image.hasAlpha() ? i18n("Yes") : i18n("No"));
+}
+
+void ImagePropertiesColorsTab::updateStatistiques()
 {
     QString value;
     int min = m_minInterv->value();
