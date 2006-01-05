@@ -1152,9 +1152,10 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
             int    width      = Digikam::DImgInterface::instance()->origWidth();
             int    height     = Digikam::DImgInterface::instance()->origHeight();
             bool   sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
+            bool   hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
             m_rightSidebar->itemChanged(m_currentItem->url(),
                                         sel.isNull() ? 0 : &sel, 
-                                        data, width, height, sixteenBit);
+                                        data, width, height, sixteenBit, hasAlpha);
         }
     }    
 }
