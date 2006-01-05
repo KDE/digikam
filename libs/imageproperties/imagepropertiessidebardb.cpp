@@ -119,7 +119,7 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view, 
                                            AlbumIconItem* item, QRect *rect, 
                                            uchar *imageData, int imageWidth, int imageHeight,
-                                           bool sixteenBit)
+                                           bool sixteenBit, bool hasAlpha)
 {
     if (!url.isValid())
         return;
@@ -130,6 +130,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view,
     m_imageWidth        = imageWidth;
     m_imageHeight       = imageHeight;
     m_sixteenBit        = sixteenBit;
+    m_hasAlpha          = hasAlpha;
     m_currentView       = view; 
     m_currentItem       = item;
     m_dirtyExifTab      = false;
@@ -182,7 +183,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
             m_histogramTab->setData(m_currentURL, m_currentRect, 
-                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit,
+                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit, m_hasAlpha,
                                     NavigateBarWidget::ItemCurrent);
             m_dirtyHistogramTab = true;
         }
@@ -210,7 +211,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
             m_histogramTab->setData(m_currentURL, m_currentRect, 
-                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit,
+                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit, m_hasAlpha,
                                     currentItemType);
             m_dirtyHistogramTab = true;
         }

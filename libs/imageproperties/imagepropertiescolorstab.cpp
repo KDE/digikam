@@ -348,8 +348,8 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 }
 
 void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
-                                          uchar* imageData, int imageWidth, int imageHeight, 
-                                          bool sixteenBit, int itemType)
+                                       uchar* imageData, int imageWidth, int imageHeight, 
+                                       bool sixteenBit, bool hasAlpha, int itemType)
 {
     // This is necessary to stop computation because m_image.bits() is currently used by
     // threaded histogram algorithm.
@@ -384,7 +384,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     }
     else 
     {
-        m_image = DImg(imageWidth, imageHeight, sixteenBit, true, imageData);
+        m_image = DImg(imageWidth, imageHeight, sixteenBit, hasAlpha, imageData);
 
         if ( !m_image.isNull() )
         {

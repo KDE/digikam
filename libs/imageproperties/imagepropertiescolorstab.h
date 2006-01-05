@@ -57,7 +57,7 @@ public:
 
     void setData(const KURL& url=KURL::KURL(), QRect *selectionArea=0, 
                  uchar* imageData=0, int imageWidth=0, int imageHeight=0, 
-                 bool sixteenBit=false, int itemType=0);
+                 bool sixteenBit=false, bool hasAlpha=true, int itemType=0);
 
     void setSelection(QRect *selectionArea);
 

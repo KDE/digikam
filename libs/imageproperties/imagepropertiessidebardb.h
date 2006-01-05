@@ -57,7 +57,7 @@ public:
     
     void itemChanged(const KURL& url, AlbumIconView* view, AlbumIconItem* item, 
                      QRect *rect=0, uchar *imageData=0, int imageWidth=0, int imageHeight=0, 
-                     bool sixteenBit=false);
+                     bool sixteenBit=false, bool hasAlpha=true);
                     
     void imageSelectionChanged(QRect *rect);                 
     
@@ -78,6 +78,7 @@ private:
     bool                         m_dirtyHistogramTab;
     bool                         m_dirtyDesceditTab;
     bool                         m_sixteenBit;
+    bool                         m_hasAlpha;
 
     int                          m_imageWidth;
     int                          m_imageHeight;

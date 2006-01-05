@@ -51,7 +51,7 @@ public:
     ~ImagePropertiesSideBar();
     
     void itemChanged(const KURL& url, QRect *rect, 
-                     uchar *imageData, int imageWidth, int imageHeight, bool sixteenBit);
+                     uchar *imageData, int imageWidth, int imageHeight, bool sixteenBit, bool hasAlpha);
                     
     void imageSelectionChanged(QRect *rect);                 
     
@@ -62,6 +62,7 @@ private:
     bool                         m_dirtyExifTab;
     bool                         m_dirtyHistogramTab;
     bool                         m_sixteenBit;
+    bool                         m_hasAlpha;
     
     int                          m_imageWidth;
     int                          m_imageHeight;
