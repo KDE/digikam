@@ -153,7 +153,7 @@ void SetupEditor::applySettings()
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
-    config->writeEntry("RAWquality", m_RAWquality->value());
+    config->writeEntry("RAWQuality", m_RAWquality->value());
     config->writeEntry("EnableRAWQuality", m_enableRAWQuality->isChecked());
     config->writeEntry("RGBInterpolate4Colors", m_RGBInterpolate4Colors->isChecked());    
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
@@ -173,7 +173,7 @@ void SetupEditor::readSettings()
 
     config->setGroup("ImageViewer Settings");
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
-    m_RAWquality->setValue( config->readNumEntry("RAWquality", 0) );
+    m_RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
     m_enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
     m_RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));    
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );

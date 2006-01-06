@@ -52,13 +52,13 @@ extern "C"
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image, bool enableRAWQuality, int RAWquality, bool RGBInterpolate4Colors)
+RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
     m_hasAlpha              = false;
-    m_enableRAWQuality      = enableRAWQuality;
-    m_RAWquality            = RAWquality;
-    m_RGBInterpolate4Colors = RGBInterpolate4Colors;
+    m_enableRAWQuality      = rawDecodingSettings.enableRAWQuality;
+    m_RAWQuality            = rawDecodingSettings.RAWQuality;
+    m_RGBInterpolate4Colors = rawDecodingSettings.RGBInterpolate4Colors;
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
@@ -91,7 +91,7 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     if (m_enableRAWQuality)
     {
         QCString rawQuality;
-        command += rawQuality.setNum(m_RAWquality);
+        command += rawQuality.setNum(m_RAWQuality);
         command += " ";
     }
     
@@ -218,7 +218,7 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     if (m_enableRAWQuality)
     {
         QCString rawQuality;
-        command += rawQuality.setNum(m_RAWquality);
+        command += rawQuality.setNum(m_RAWQuality);
         command += " ";
     }
     

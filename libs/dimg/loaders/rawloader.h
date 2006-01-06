@@ -25,6 +25,7 @@
 // Local includes.
 
 #include "dimgloader.h"
+#include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -35,7 +36,7 @@ class DIGIKAM_EXPORT RAWLoader : public DImgLoader
 {
 public:
 
-    RAWLoader(DImg* image, bool enableRAWQuality=false, int RAWquality=0, bool RGBInterpolate4Colors=false);
+    RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
 
     bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
@@ -51,7 +52,7 @@ private:
 
     bool m_RGBInterpolate4Colors;
     bool m_enableRAWQuality;
-    int  m_RAWquality;
+    int  m_RAWQuality;
     
 private:
 

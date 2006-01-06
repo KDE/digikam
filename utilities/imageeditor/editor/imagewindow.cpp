@@ -486,9 +486,9 @@ void ImageWindow::applySettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
-    m_IOFileSettings->RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->RAWQuality            = config->readNumEntry("RAWquality", 0);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality            = config->readNumEntry("RAWQuality", 0);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())

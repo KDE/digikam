@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "rawdecodingsettings.h"
 #include "dimgloaderobserver.h"
 
 class QString;
@@ -91,8 +92,7 @@ public:
     DImg();
     
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
-         bool  enableRAWQuality=false, int RAWquality=0,
-         bool  RGBInterpolate4Colors=false);
+         RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
          
     DImg(const DImg& image);
     DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0);
@@ -103,8 +103,8 @@ public:
     void        reset(void);
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
-                     bool  enableRAWQuality = false, int RAWquality = 0,
-                     bool  RGBInterpolate4Colors = false);
+                     RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
+                     
     bool        save(const QString& filePath, const char* format, DImgLoaderObserver *observer = 0);
 
     bool        isNull()     const;

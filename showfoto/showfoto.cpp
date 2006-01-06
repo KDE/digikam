@@ -538,9 +538,9 @@ void ShowFoto::applySettings()
 
     m_IOFileSettings->TIFFCompression  = m_config->readBoolEntry("TIFFCompression", false);
 
-    m_IOFileSettings->RGBInterpolate4Colors = m_config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->enableRAWQuality      = m_config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->RAWQuality            = m_config->readNumEntry("RAWquality", 0);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = m_config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = m_config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality            = m_config->readNumEntry("RAWQuality", 0);
     
     // Slideshow Settings.
     m_slideShowInFullScreen = m_config->readBoolEntry("SlideShowFullScreen", true);

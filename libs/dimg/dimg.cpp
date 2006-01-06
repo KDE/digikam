@@ -59,11 +59,10 @@ DImg::DImg()
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver *observer,
-           bool  enableRAWQuality, int RAWquality,
-           bool  RGBInterpolate4Colors)
+           RawDecodingSettings rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
-    load(filePath, observer, enableRAWQuality, RAWquality, RGBInterpolate4Colors);
+    load(filePath, observer, rawDecodingSettings);
 }
 
 DImg::DImg(const DImg& image)
@@ -131,8 +130,7 @@ void DImg::reset(void)
 }
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
-                bool  enableRAWQuality, int RAWquality,
-                bool  RGBInterpolate4Colors)
+                RawDecodingSettings rawDecodingSettings)
 
 {
     FORMAT format = fileFormat(filePath);
@@ -204,7 +202,7 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
         case(RAW):
         {
             kdDebug() << filePath << " : RAW file identified" << endl;
-            RAWLoader loader(this, enableRAWQuality, RAWquality, RGBInterpolate4Colors);
+            RAWLoader loader(this, rawDecodingSettings);
             if (loader.load(filePath, observer))
             {
                 m_priv->null       = false;

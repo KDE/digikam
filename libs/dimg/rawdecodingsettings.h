@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2006-01-03
- * Description : IO file Settings Container.
+ * Date  : 2006-01-06
+ * Description : Raw file decoding options used with dcraw.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,42 +18,41 @@
  * 
  * ============================================================ */
 
-#ifndef IOFILESETTINGSCONTAINER_H
-#define IOFILESETTINGSCONTAINER_H
+#ifndef RAWDECODINGSETTINGS_H
+#define RAWDECODINGSETTINGS_H
 
-// Local includes.
-
-#include "rawdecodingsettings.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class IOFileSettingsContainer
+class DIGIKAM_EXPORT RawDecodingSettings
 {
 
 public:
     
-    IOFileSettingsContainer(){};
-    ~IOFileSettingsContainer(){};
+    RawDecodingSettings()
+    {
+        enableRAWQuality      = false;
+        RAWQuality            = 0;
+        RGBInterpolate4Colors = false;
+    };
+    
+    ~RawDecodingSettings(){};
 
 public:
 
-    // JPEG quality value.
-    int  JPEGCompression;
+    // RAW file decoding using RGB interpolation as four colors.
+    bool RGBInterpolate4Colors;
+    
+    // RAW file decoding using quality factor. 
+    bool enableRAWQuality;
 
-    // PNG compression value.
-    int  PNGCompression;
-
-    // TIFF deflat compression.
-    bool TIFFCompression;
-
-    // ------------------------------------------------------
-    // RAW File decoding options :
-
-    RawDecodingSettings rawDecodingSettings;
+    // RAW quality decoding factor value.
+    int  RAWQuality;
     
 };
 
 }  // namespace Digikam
 
-#endif  // IOFILESETTINGSCONTAINER_H
+#endif  // RAWDECODINGSETTINGS_H

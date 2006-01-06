@@ -149,9 +149,7 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
 
     d->undoMan->clear();
 
-    d->image = DImg(filename, 0,
-                    iofileSettings->enableRAWQuality, iofileSettings->RAWQuality,
-                    iofileSettings->RGBInterpolate4Colors);
+    d->image = DImg(filename, 0, iofileSettings->rawDecodingSettings);
 
     if (!d->image.isNull())
     {
