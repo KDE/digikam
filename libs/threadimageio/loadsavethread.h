@@ -51,6 +51,8 @@ public:
         // Always send notification, unless the last event is still in the event queue
         NotificationPolicyDirect,
         // Always wait for a certain amount of time after the last event sent.
+        // In particular, the first event will be sent only after waiting for this time span.
+        // (Or no event will be sent, when the loading has finished before)
         // This is the default.
         NotificationPolicyTimeLimited
     };

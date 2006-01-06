@@ -305,7 +305,16 @@ void LoadSaveThread::run()
                 delete m_currentTask;
             m_currentTask = m_todo.getFirst();
             if (m_currentTask)
+            {
                 m_todo.removeFirst();
+                if (m_notificationPolicy == NotificationPolicyTimeLimited)
+                {
+                    // set timing values so that first event is sent only
+                    // after an initial time span.
+                    m_notificationTime = QTime::currentTime();
+                    m_blockNotification = true;
+                }
+            }
             else
                 m_condVar.wait(&m_mutex, 1000);
         }
@@ -353,6 +362,7 @@ bool LoadSaveThread::querySendNotifyEvent()
             }
             break;
         case NotificationPolicyTimeLimited:
+            // Current default time value: 100 millisecs.
             if (m_blockNotification)
                 m_blockNotification = m_notificationTime.msecsTo(QTime::currentTime()) < 100;
 

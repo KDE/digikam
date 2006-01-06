@@ -123,7 +123,7 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     // -------------------------------------------------------------------
     // Get image data
     
-    uchar *data;
+    uchar *data = 0;
 
     if (loadImageData)
     {
@@ -140,7 +140,7 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
                 checkpoint += granularity(observer, height);
                 if (!observer->continueQuery(m_image))
                 {
-                    delete data;
+                    delete [] data;
                     //TODO: real shutdown! pclose() waits!
                     pclose( f );
                     return false;
@@ -238,6 +238,11 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     kdDebug() << "Running dcraw command " << command << endl;
 #endif
 
+    // post one progress info before starting the program.
+    // There may be a delay before the first data is read.
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
+
     FILE* f = popen( command.data(), "r" );
 
     if ( !f )
@@ -256,7 +261,7 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -------------------------------------------------------------------
     // Get image data
     
-    unsigned short  *data;
+    unsigned short  *data = 0;
 
     if (loadImageData)
     {
@@ -271,15 +276,15 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     
             if (observer && h == checkpoint)
             {
-                checkpoint += granularity(observer, height);
+                checkpoint += granularity(observer, height, 0.9);
                 if (!observer->continueQuery(m_image))
                 {
-                    delete data;
+                    delete [] data;
                     //TODO: real shutdown! pclose() waits!
                     pclose( f );
                     return false;
                 }
-                observer->progressInfo(m_image, ((float)h)/((float)height) );
+                observer->progressInfo(m_image, 0.1 + 0.9*(((float)h)/((float)height)) );
             }
     
             for (int w = 0; w < width; w++)

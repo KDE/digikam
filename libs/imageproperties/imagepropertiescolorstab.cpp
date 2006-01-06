@@ -429,11 +429,17 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
                 this, SLOT(slotProgressInfo(const QString&, float)));
     }
 
-    m_imageLoaderThreaded->load(url.path(), ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    //TODO or not TODO: Network transparency?
+    m_currentFilePath = url.path();
+    m_imageLoaderThreaded->load(m_currentFilePath, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
-void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString&, const DImg& img)
+void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& filePath, const DImg& img)
 {
+    // Discard any leftover messages from previous, possibly aborted loads
+    if ( filePath != m_currentFilePath )
+        return;
+
     if ( !img.isNull() )
     {
         m_histogramWidget->updateData(img.bits(), img.width(), img.height(),

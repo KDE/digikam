@@ -120,6 +120,7 @@ private:
     HistogramWidget       *m_histogramWidget;
     NavigateBarWidget     *m_navigateBar;
     ManagedLoadSaveThread *m_imageLoaderThreaded;
+    QString                m_currentFilePath;
     
 };
 
