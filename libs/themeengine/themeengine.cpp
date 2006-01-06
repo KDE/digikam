@@ -18,9 +18,7 @@
  * 
  * ============================================================ */
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+// Qt includes.
 
 #include <qdict.h>
 #include <qptrlist.h>
@@ -30,15 +28,28 @@
 #include <qpalette.h>
 #include <qtimer.h>
 
+// KDE includes.
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+
+// X11 includes.
+
 extern "C"
 {
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
 }    
 
+// Local includes.
+
 #include "theme.h"
 #include "texture.h"
 #include "themeengine.h"
+
+namespace Digikam
+{
 
 class ThemeEnginePriv
 {
@@ -50,7 +61,6 @@ public:
     Theme*          defaultTheme;
     XrmDatabase     db;
 };
-
 
 ThemeEngine* ThemeEngine::m_instance = 0;
 
@@ -565,5 +575,7 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
                 d->currTheme->listSelBorder, d->currTheme->listSelBorderColor);
     return tex.renderPixmap();
 }
+
+}  // NameSpace Digikam
 
 #include "themeengine.moc"

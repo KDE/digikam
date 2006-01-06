@@ -28,14 +28,22 @@
  * 
  * ============================================================ */
 
-#include <qpainter.h>
-#include <qimage.h>
+// C++ includes.
 
 #include <cstring>
 #include <cstdio>
 
+// Qt includes.
+
+#include <qpainter.h>
+#include <qimage.h>
+
+// Local includes.
+
 #include "texture.h"
 
+namespace Digikam
+{
 
 Texture::Texture(int w, int h, const QColor& from, const QColor& to,
                  Theme::Bevel bevel, Theme::Gradient gradient,
@@ -441,3 +449,5 @@ void Texture::buildImage()
 
     m_pixmap = QPixmap(image);
 }
+
+}  // NameSpace Digikam

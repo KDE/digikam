@@ -30,13 +30,22 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+// Qt includes.
+
 #include <qpixmap.h>
 #include <qcolor.h>
 
+// Local includes.
+
+#include "digikam_export.h"
 #include "theme.h"
 
-class Texture
+namespace Digikam
 {
+
+class DIGIKAM_EXPORT Texture
+{
+
 public:
 
     Texture(int w, int h, const QColor& from, const QColor& to,
@@ -72,5 +81,7 @@ private:
     Theme::Bevel    m_bevel;
     Theme::Gradient m_gradient;
 };
+
+}  // NameSpace Digikam
 
 #endif /* TEXTURE_H */

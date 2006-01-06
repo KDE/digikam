@@ -21,20 +21,31 @@
 #ifndef THEME_H
 #define THEME_H
 
+// Qt includes.
+
 #include <qstring.h>
 #include <qcolor.h>
 
-class Theme
+// Digikam includes.
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+class DIGIKAM_EXPORT Theme
 {
 public:
 
-    enum Bevel {
+    enum Bevel 
+    {
         FLAT =     0x00001,
         SUNKEN =   0x00002,
         RAISED =   0x00004
     };
     
-    enum Gradient {
+    enum Gradient 
+    {
         SOLID      = 0x00000,
         HORIZONTAL = 0x00010,
         VERTICAL   = 0x00020,
@@ -91,5 +102,7 @@ public:
     bool     listSelBorder;
     QColor   listSelBorderColor;
 };
+
+}  // NameSpace Digikam
 
 #endif /* THEME_H */

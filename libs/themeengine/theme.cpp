@@ -18,8 +18,16 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <kdebug.h>
+
+// Local includes.
+
 #include "theme.h"
+
+namespace Digikam
+{
 
 Theme::Theme(const QString& _name, const QString& _path)
 {
@@ -169,3 +177,5 @@ void Theme::print()
     kdDebug() << "ListSel Border Color :      " << listSelBorderColor << endl;
     */
 }
+
+}  // NameSpace Digikam
