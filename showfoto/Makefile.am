@@ -1,4 +1,4 @@
-SUBDIRS = pics
+SUBDIRS = pics icons 
 
 METASOURCES = AUTO  
 
