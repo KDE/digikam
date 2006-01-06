@@ -17,6 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef PPMLOADER_H
@@ -37,12 +38,12 @@ public:
 
     PPMLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const { return false; };
     virtual bool sixteenBit() const { return true;  };
-    virtual bool isReadOnly() const { return true;  };    // FIXME
+    virtual bool isReadOnly() const { return true;  };    
     
 private:
 

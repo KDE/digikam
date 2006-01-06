@@ -16,18 +16,11 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
-
-// C ansi includes.
-
-extern "C" 
-{
-#include <setjmp.h>
-#include <jpeglib.h>
-}
 
 // Local includes.
 
@@ -44,7 +37,7 @@ public:
 
     RAWLoader(DImg* image, bool enableRAWQuality=false, int RAWquality=0, bool RGBInterpolate4Colors=false);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;
@@ -62,23 +55,10 @@ private:
     
 private:
 
-    // To manage Errors/Warnings handling provide by libjpeg
-    
-    struct dimg_jpeg_error_mgr : public jpeg_error_mgr
-    {
-        jmp_buf setjmp_buffer;
-    };
-
     // Methods to load RAW image using external dcraw instance.
 
-    bool load8bits(const QString& filePath, DImgLoaderObserver *observer);
-    bool load16bits(const QString& filePath, DImgLoaderObserver *observer);
-
-    // Get ICC profiles from RAW files. Any RAW file formats are JPEG like,
-    // anothers are TIFF like.
-
-    bool getICCProfileFromJPEG(const QString& filePath);
-    bool getICCProfileFromTIFF(const QString& filePath);
+    bool load8bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    bool load16bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
 };
     
 }  // NameSpace Digikam

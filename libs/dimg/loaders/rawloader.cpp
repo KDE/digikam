@@ -30,7 +30,6 @@ extern "C"
 #include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
-#include "iccjpeg.h"
 }
 
 // QT includes.
@@ -62,12 +61,12 @@ RAWLoader::RAWLoader(DImg* image, bool enableRAWQuality, int RAWquality, bool RG
     m_RGBInterpolate4Colors = RGBInterpolate4Colors;
 }
 
-bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
 {
-    return ( load16bits(filePath, observer) );
+    return ( load16bits(filePath, observer, loadImageData) );
 }
 
-bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
 {
     int  width, height, rgbmax;
     char nl;
@@ -117,52 +116,61 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    uchar *data = new uchar[width*height*4];
-    uchar *dst = data;
-    uchar src[3];
-    int   checkpoint = 0;
+    // -------------------------------------------------------------------
+    // Get image data
+    
+    uchar *data;
 
-    for (int h = 0; h < height; h++)
+    if (loadImageData)
     {
-
-        if (observer && h == checkpoint)
+        data = new uchar[width*height*4];
+        uchar *dst = data;
+        uchar src[3];
+        int   checkpoint = 0;
+    
+        for (int h = 0; h < height; h++)
         {
-            checkpoint += granularity(observer, height);
-            if (!observer->continueQuery(m_image))
+    
+            if (observer && h == checkpoint)
             {
-                delete data;
-                //TODO: real shutdown! pclose() waits!
-                pclose( f );
-                return false;
+                checkpoint += granularity(observer, height);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete data;
+                    //TODO: real shutdown! pclose() waits!
+                    pclose( f );
+                    return false;
+                }
+                observer->progressInfo(m_image, ((float)h)/((float)height) );
             }
-            observer->progressInfo(m_image, ((float)h)/((float)height) );
-        }
-
-        for (int w = 0; w < width; w++)
-        {
-            fread (src, 3 *sizeof(uchar), 1, f);
-
-            // Swap byte order to preserve compatibility with PPC.
-
-            if (QImage::systemByteOrder() == QImage::BigEndian)
-                swab((const char *) src, (char *) src, 3 *sizeof(uchar));
-
-            // No need to adapt RGB components accordinly with rgbmax value because dcraw
-            // always return rgbmax to 255 in 8 bits/color/pixels.
-
-            dst[0] = src[2];    // Blue
-            dst[1] = src[1];    // Green
-            dst[2] = src[0];    // Red
-            dst[3] = 0xFF;      // Alpha
-
-            dst += 4;
+    
+            for (int w = 0; w < width; w++)
+            {
+                fread (src, 3 *sizeof(uchar), 1, f);
+    
+                // Swap byte order to preserve compatibility with PPC.
+    
+                if (QImage::systemByteOrder() == QImage::BigEndian)
+                    swab((const char *) src, (char *) src, 3 *sizeof(uchar));
+    
+                // No need to adapt RGB components accordinly with rgbmax value because dcraw
+                // always return rgbmax to 255 in 8 bits/color/pixels.
+    
+                dst[0] = src[2];    // Blue
+                dst[1] = src[1];    // Green
+                dst[2] = src[0];    // Red
+                dst[3] = 0xFF;      // Alpha
+    
+                dst += 4;
+            }
         }
     }
-
+    
     pclose( f );
 
     //----------------------------------------------------------
-
+    // Get Camera and Constructor model
+    
     char       model[256], constructor[256];
     DcrawParse rawFileParser;
     
@@ -177,13 +185,15 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     m_sixteenBit  = false;
     imageWidth()  = width;
     imageHeight() = height;
-    imageData()   = data;
     imageSetAttribute("format", "RAW");
+
+    if (loadImageData)
+        imageData()   = data;
     
     return true;
 }
 
-bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
 {
     int	 width, height, rgbmax;
     char nl;
@@ -233,49 +243,58 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
         return false;
     }
 
-    unsigned short *data = new unsigned short[width*height*4];
-    unsigned short *dst  = data;
-    uchar src[6];
-    float fac = 65535.0 / rgbmax;
-    int   checkpoint = 0;
+    // -------------------------------------------------------------------
+    // Get image data
+    
+    unsigned short  *data;
 
-    for (int h = 0; h < height; h++)
+    if (loadImageData)
     {
-
-        if (observer && h == checkpoint)
+        data = new unsigned short[width*height*4];
+        unsigned short *dst  = data;
+        uchar src[6];
+        float fac = 65535.0 / rgbmax;
+        int   checkpoint = 0;
+    
+        for (int h = 0; h < height; h++)
         {
-            checkpoint += granularity(observer, height);
-            if (!observer->continueQuery(m_image))
+    
+            if (observer && h == checkpoint)
             {
-                delete data;
-                //TODO: real shutdown! pclose() waits!
-                pclose( f );
-                return false;
+                checkpoint += granularity(observer, height);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete data;
+                    //TODO: real shutdown! pclose() waits!
+                    pclose( f );
+                    return false;
+                }
+                observer->progressInfo(m_image, ((float)h)/((float)height) );
             }
-            observer->progressInfo(m_image, ((float)h)/((float)height) );
-        }
-
-        for (int w = 0; w < width; w++)
-        {
-            fread (src, 6 *sizeof(unsigned char), 1, f);
-
-            // Swap byte order to preserve compatibility with PPC.
-
-            if (QImage::systemByteOrder() == QImage::BigEndian)
-                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-
-            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-            dst[3] = 0xFFFF;
-
-            dst += 4;
+    
+            for (int w = 0; w < width; w++)
+            {
+                fread (src, 6 *sizeof(unsigned char), 1, f);
+    
+                // Swap byte order to preserve compatibility with PPC.
+    
+                if (QImage::systemByteOrder() == QImage::BigEndian)
+                    swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
+    
+                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+                dst[3] = 0xFFFF;
+    
+                dst += 4;
+            }
         }
     }
 
     pclose( f );
 
     //----------------------------------------------------------
+    // Get Camera and Constructor model
 
     char model[256], constructor[256];
     DcrawParse rawFileParser;
@@ -291,70 +310,12 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     m_sixteenBit  = true;
     imageWidth()  = width;
     imageHeight() = height;
-    imageData()   = (uchar *)data;
     imageSetAttribute("format", "RAW");
 
-/*
-    if (!getICCProfileFromTIFF(filePath))
-       getICCProfileFromJPEG(filePath);
-*/
-
+    if (loadImageData)
+        imageData() = (uchar *)data;
+        
     return true;
-}
-
-bool RAWLoader::getICCProfileFromJPEG(const QString& filePath)
-{
-    FILE *file = fopen(QFile::encodeName(filePath), "rb");
-    if (!file)
-        return false;
-
-    fseek(file, 0L, SEEK_SET);
-    struct jpeg_decompress_struct cinfo;
-    struct dimg_jpeg_error_mgr    jerr;
-
-    // -------------------------------------------------------------------
-    // JPEG error handling.
-
-    cinfo.err = jpeg_std_error(&jerr);
-
-    // If an error occurs during reading, libjpeg will jump here
-
-    if (setjmp(jerr.setjmp_buffer)) 
-    {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(file);
-        return false;
-    }
-
-    jpeg_create_decompress(&cinfo);
-    jpeg_stdio_src(&cinfo, file);
-    jpeg_read_header(&cinfo, true);
-    jpeg_start_decompress(&cinfo);
-
-    JOCTET *profile_data=NULL;
-    uint    profile_size;
-
-    read_icc_profile (&cinfo, &profile_data, &profile_size);
-
-    if (profile_data != NULL) 
-    {
-        QByteArray profile_rawdata = imageICCProfil();
-        profile_rawdata.resize(profile_size);
-        memcpy(profile_rawdata.data(), profile_data, profile_size);
-        free (profile_data);
-    }
-
-    jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-
-    fclose(file);    
- 
-    return true;
-}
-
-bool RAWLoader::getICCProfileFromTIFF(const QString& filePath)
-{
-    return false;
 }
 
 bool RAWLoader::save(const QString& /*filePath*/, DImgLoaderObserver *)

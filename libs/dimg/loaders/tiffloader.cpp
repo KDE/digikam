@@ -70,7 +70,7 @@ TIFFLoader::TIFFLoader(DImg* image)
     m_sixteenBit = false;
 }
 
-bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
 {
     // -------------------------------------------------------------------
     // TIFF error handling. If an errors/warnings occurs during reading, 
@@ -129,13 +129,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
   */  
     
     if (samples_per_pixel == 4)
-    {
         m_hasAlpha = true;
-    }
-    else 
-    {
+    else
         m_hasAlpha = false;
-    }
+
+    if (bits_per_sample == 16)
+        m_sixteenBit = true;
+    else
+        m_sixteenBit = false;
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
@@ -144,214 +145,182 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Get image data.
     
     uchar* data   = 0;
-    strip_size    = TIFFStripSize(tif);
-    num_of_strips = TIFFNumberOfStrips(tif);
     
-    if (bits_per_sample == 16)          // 16 bits image.
+    if (loadImageData)
     {
-        data           = new uchar[w*h*8];
-        m_sixteenBit   = true;
-        uchar* strip   = new uchar[strip_size];
-        long offset    = 0;
-        long bytesRead = 0;
-
-        uint checkpoint = 0;
-
-        for (tstrip_t st=0; st < num_of_strips; st++)
+        strip_size    = TIFFStripSize(tif);
+        num_of_strips = TIFFNumberOfStrips(tif);
+        
+        if (bits_per_sample == 16)          // 16 bits image.
         {
-
-            if (observer && st == checkpoint)
+            data           = new uchar[w*h*8];
+            uchar* strip   = new uchar[strip_size];
+            long offset    = 0;
+            long bytesRead = 0;
+    
+            uint checkpoint = 0;
+    
+            for (tstrip_t st=0; st < num_of_strips; st++)
             {
-                checkpoint += granularity(observer, num_of_strips, 0.8);
-                if (!observer->continueQuery(m_image))
+    
+                if (observer && st == checkpoint)
                 {
+                    checkpoint += granularity(observer, num_of_strips, 0.8);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        delete [] data;
+                        delete [] strip;
+                        TIFFClose(tif);
+                        return false;
+                    }
+                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
+                }
+    
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
+        
+                if (bytesRead == -1)
+                {
+                    kdDebug() << k_funcinfo << "Failed to read strip" << endl;
                     delete [] data;
-                    delete [] strip;
                     TIFFClose(tif);
                     return false;
                 }
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
-            }
-
-            bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
-    
-            if (bytesRead == -1)
-            {
-                kdDebug() << k_funcinfo << "Failed to read strip" << endl;
-                delete [] data;
-                TIFFClose(tif);
-                return false;
+                
+                ushort *stripPtr = (ushort*)(strip);
+                ushort *dataPtr  = (ushort*)(data + offset);
+                ushort *p;
+        
+                // tiff data is read as BGR or ABGR
+                
+                if (samples_per_pixel == 3)
+                {
+                    for (int i=0; i < bytesRead/6; i++)
+                    {
+                        p = dataPtr;
+                        
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = 0xFFFF;
+                        
+                        dataPtr += 4;
+                    }
+                    
+                    offset += bytesRead/6 * 8;
+                }
+                else
+                {
+                    for (int i=0; i < bytesRead/8; i++)
+                    {
+                        p = dataPtr;
+                        
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = *stripPtr++;
+                        
+                        dataPtr += 4;
+                    }
+                    
+                    offset += bytesRead;
+                }
+            
             }
             
-            ushort *stripPtr = (ushort*)(strip);
-            ushort *dataPtr  = (ushort*)(data + offset);
-            ushort *p;
-    
-            // tiff data is read as BGR or ABGR
-            
-            if (samples_per_pixel == 3)
-            {
-                for (int i=0; i < bytesRead/6; i++)
-                {
-                    p = dataPtr;
-                    
-                    p[2] = *stripPtr++;
-                    p[1] = *stripPtr++;
-                    p[0] = *stripPtr++;
-                    p[3] = 0xFFFF;
-                    
-                    dataPtr += 4;
-                }
-                
-                offset += bytesRead/6 * 8;
-            }
-            else
-            {
-                for (int i=0; i < bytesRead/8; i++)
-                {
-                    p = dataPtr;
-                    
-                    p[2] = *stripPtr++;
-                    p[1] = *stripPtr++;
-                    p[0] = *stripPtr++;
-                    p[3] = *stripPtr++;
-                    
-                    dataPtr += 4;
-                }
-                
-                offset += bytesRead;
-            }
-        
-        }
-        
-        delete [] strip;
-    }
-    else       // Non 16 bits images ==> get it on BGRA 8 bits.
-    {
-        data            = new uchar[w*h*4];
-        m_sixteenBit    = false;
-        uchar* strip    = new uchar[w*rows_per_strip*4];
-        long offset     = 0;
-        long pixelsRead = 0;
-
-        // this is inspired by TIFFReadRGBAStrip, tif_getimage.c
-        char          emsg[1024] = "";
-        TIFFRGBAImage img;
-        uint32        rows_to_read;
-
-        uint checkpoint = 0;
-
-        // test whether libtiff can read format and initiate reading
-
-        if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
-        {
-            kdDebug() << k_funcinfo << "Failed to set up RGBA reading of image, filename " 
-                      << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
-            delete [] data;
             delete [] strip;
-            TIFFClose(tif);
-            return false;
         }
-
-        img.req_orientation = ORIENTATION_TOPLEFT;
-
-        // read strips from image: read rows_per_strip, so always start at beginning of a strip
-        for (uint row = 0; row < h; row += rows_per_strip)
+        else       // Non 16 bits images ==> get it on BGRA 8 bits.
         {
-
-            if (observer && row >= checkpoint)
+            data            = new uchar[w*h*4];
+            uchar* strip    = new uchar[w*rows_per_strip*4];
+            long offset     = 0;
+            long pixelsRead = 0;
+    
+            // this is inspired by TIFFReadRGBAStrip, tif_getimage.c
+            char          emsg[1024] = "";
+            TIFFRGBAImage img;
+            uint32        rows_to_read;
+    
+            uint checkpoint = 0;
+    
+            // test whether libtiff can read format and initiate reading
+    
+            if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
-                checkpoint += granularity(observer, h, 0.8);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    delete [] strip;
-                    TIFFClose(tif);
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)row)/((float)h) )));
-            }
-
-            img.row_offset  = row;
-            img.col_offset  = 0;
-
-            if( row + rows_per_strip > img.height )
-                rows_to_read = img.height - row;
-            else
-                rows_to_read = rows_per_strip;
-
-            // Read data
-
-            if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
-            {
-                kdDebug() << k_funcinfo << "Failed to read image data" << endl;
+                kdDebug() << k_funcinfo << "Failed to set up RGBA reading of image, filename " 
+                        << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
                 delete [] data;
                 delete [] strip;
                 TIFFClose(tif);
                 return false;
             }
-
-            pixelsRead = rows_to_read * img.width;
-
-            uchar *stripPtr = (uchar*)(strip);
-            uchar *dataPtr  = (uchar*)(data + offset);
-            uchar *p;
-
-            // Reverse red and blue
-
-            for (int i=0; i < pixelsRead; i++)
+    
+            img.req_orientation = ORIENTATION_TOPLEFT;
+    
+            // read strips from image: read rows_per_strip, so always start at beginning of a strip
+            for (uint row = 0; row < h; row += rows_per_strip)
             {
-                p = dataPtr;
-
-                p[2] = *stripPtr++;
-                p[1] = *stripPtr++;
-                p[0] = *stripPtr++;
-                p[3] = *stripPtr++;
-
-                dataPtr += 4;
+    
+                if (observer && row >= checkpoint)
+                {
+                    checkpoint += granularity(observer, h, 0.8);
+                    if (!observer->continueQuery(m_image))
+                    {
+                        delete [] data;
+                        delete [] strip;
+                        TIFFClose(tif);
+                        return false;
+                    }
+                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)row)/((float)h) )));
+                }
+    
+                img.row_offset  = row;
+                img.col_offset  = 0;
+    
+                if( row + rows_per_strip > img.height )
+                    rows_to_read = img.height - row;
+                else
+                    rows_to_read = rows_per_strip;
+    
+                // Read data
+    
+                if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
+                {
+                    kdDebug() << k_funcinfo << "Failed to read image data" << endl;
+                    delete [] data;
+                    delete [] strip;
+                    TIFFClose(tif);
+                    return false;
+                }
+    
+                pixelsRead = rows_to_read * img.width;
+    
+                uchar *stripPtr = (uchar*)(strip);
+                uchar *dataPtr  = (uchar*)(data + offset);
+                uchar *p;
+    
+                // Reverse red and blue
+    
+                for (int i=0; i < pixelsRead; i++)
+                {
+                    p = dataPtr;
+    
+                    p[2] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[3] = *stripPtr++;
+    
+                    dataPtr += 4;
+                }
+    
+                offset += pixelsRead * 4;
             }
-
-            offset += pixelsRead * 4;
-        }
-
-        TIFFRGBAImageEnd(&img);
-        delete [] strip;
-
-    }
-    /*
-    // this is the easier method, but not suitable for observer / progress info
-    else       // Non 16 bits images ==> get it on BGRA 8 bits.
-    {
-        data         = new uchar[w*h*4];
-        m_sixteenBit = false;
-      	
-      	// Read the image
-      	
-      	int ret = TIFFReadRGBAImageOriented( tif, w, h, (uint32*)data, ORIENTATION_TOPLEFT, 0 );
-
-        if (ret != 1)
-            {
-                kdDebug() << k_funcinfo << "Failed to read image on RGBA mode" << endl;
-                delete [] data;
-                TIFFClose(tif);
-                return false;
-            }
-        
-        // Reverse red and blue
-        
-        uchar ptr[4];   // One pixel to swap
-        
-        for (uint p = 0; p < w*h*4; p+=4)
-        {
-            memcpy (&ptr[0], &data[p], 4);  // Current pixel 
-                
-            data[ p ] = ptr[2];  // Blue
-            data[p+1] = ptr[1];  // Green
-            data[p+2] = ptr[0];  // Red
-            data[p+3] = ptr[3];  // Alpha
+    
+            TIFFRGBAImageEnd(&img);
+            delete [] strip;
+    
         }
     }
-    */
 
     // -------------------------------------------------------------------
     // Read image ICC profile
@@ -383,9 +352,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     imageWidth()  = w;
     imageHeight() = h;
-    imageData()   = data;
     imageSetAttribute("format", "TIFF");
-    
+        
+    if (loadImageData)
+        imageData()   = data;
+
     return true;
 }
 

@@ -35,8 +35,11 @@ QImageLoader::QImageLoader(DImg* image)
 {
 }
 
-bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
 {
+    if (!loadImageData)     
+        return true;     // There is nothing to do.
+    
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
     QImage image(filePath);

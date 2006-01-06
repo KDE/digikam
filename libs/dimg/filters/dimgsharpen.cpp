@@ -6,8 +6,8 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Original sharpening filter from from gimp 2.2
- * copyright 1997-1998 Michael Sweet (mike@easysw.com)
+ * Original Sharpen algorithm copyrighted 2004 by
+ * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-// C++ includes.
+ 
+// C++ includes. 
  
 #include <cmath>
 #include <cstdlib>
@@ -54,367 +54,110 @@ void DImgSharpen::filterImage(void)
 
 /** Function to apply the sharpen filter on an image*/
 
-void DImgSharpen::sharpenImage(uchar *data, int w, int h, bool sixteenBit, int r)
+void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
-    if (!data || !w || !h)
+    double Offset = 0.0;
+
+    if (!data || !width || !height)
     {
-       kdWarning() << ("Sharpen::sharpenImage: no image data available!")
+       kdWarning() << ("DImgSharpen::sharpenImage: no image data available!")
                    << endl;
        return;
     }
 
-    if (r > 100) r = 100;
-    if (r <= 0) 
+    if (radius <= 0)
     {
        m_destImage = m_orgImage;
        return;
     }
-           
-    // initialize the LUTs
 
-    int fact = 100 - r;
-    if (fact < 1)
-        fact = 1;
-
-    int negLUT[sixteenBit ? 65536 : 256];
-    int posLUT[sixteenBit ? 65536 : 256];
+    const int Kernel[] = {-1,     -1,    -1,
+                          -1,  /*radius+*/8, -1,
+                          -1,     -1,    -1};
     
-    // FIXME : something is wrong with 16 bits image LUT !!!
+    double DivCoeff = (double)radius;
 
-    for (int i = 0; !m_cancel && (i < (sixteenBit ? 65536 : 256)); i++)
+    int nSumR=0, nSumG=0, nSumB=0, progress;
+    int nKernelSize = 9;
+    int depth = /*sixteenBit ? 65536 : */256;
+
+    // We need to alloc a 2d array to help us to store the values
+    
+    int** arrMult = alloc2DArray (nKernelSize, depth);
+    
+    for (int i = 0; !m_cancel && (i < nKernelSize); i++)
+        for (int j = 0; !m_cancel && (j < depth); j++)
+            arrMult[i][j] = j * Kernel[i];
+
+    // We need to initialize all the loop and iterator variables
+    
+    int i = 0, j = 0;
+    uchar*          pOutBits   = m_destImage.bits();
+    unsigned short* data16     = (unsigned short*)data;
+    unsigned short* pOutBits16 = (unsigned short*)pOutBits;
+    uchar *org, *dst;
+    
+    // now, we enter in the main loop
+
+    for (int h = 0; !m_cancel && (h < height); h++)
     {
-        if (!sixteenBit)                // 8 bits image.    
+        for (int w = 0; !m_cancel && (w < width); w++, i+=4)
         {
-            posLUT[i] = 800 * i / fact;
-            negLUT[i] = (4 + posLUT[i] - (i * 8)) / 8;
-        }
-      else                              // 16 bits image.
-        {
-            posLUT[i] = 400 * i / fact;
-            negLUT[i] = (4 + posLUT[i] - (i * 8)) / 8;
-        }
-    }
+            if (!sixteenBit)        // 8 bits image.
+            {
+               // first of all, we need to sharp the horizontal lines
+                
+                for (int a = -1, k = 0 ; a <= 1 ; a++)
+                {
+           /*         for (int b = -1 ; b <= 1 ; b++, k++)
+                    {
 
-    int   *neg_rows[4];
-    int   *neg_ptr;
-    int    row;
-    int    count;
-    int    progress;
+                        // if is inside...
+                        if (IsInside (width, height, w + b, h + a))
+                        
+                        {
+                            // we points to the pixel
 
-    if (!sixteenBit)                                // 8 bits image.
-    {
-        uchar* dstData = m_destImage.bits();
-        
-        // work with four rows at one time
+                            j = SetPosition(width, w + b, h + a);
+
+                            // finally, we sum the pixels using a method
+                            // similar to assigntables
     
-        uchar *src_rows[4];
-        uchar *src_ptr;
-        uchar *dst_row;
-    
-        for (row = 0; !m_cancel && (row < 4); row++)
-        {
-            src_rows[row] = new uchar[w*4];
-            neg_rows[row] = new int[w*4];
-        }       
-    
-        dst_row = new uchar[w*4];
-        
-        // Pre-load the first row for the filter...
-    
-        memcpy(src_rows[0], data, w * m_orgImage.bytesDepth()); 
-    
-        src_ptr = src_rows[0];
-        neg_ptr = neg_rows[0];
-    
-        for (int i = w*4; !m_cancel && (i > 0); i--)
-        {
-            *neg_ptr = negLUT[*src_ptr];
-            src_ptr++;
-            neg_ptr++;
-        }
-    
-        row   = 1;
-        count = 1;                                    
-    
-        for (int y = 0; !m_cancel && (y < h); y++)
-        {
-            // Load the next pixel row...
-    
-            if ((y + 1) < h)
-            {
-                
-                // Check to see if our src_rows[] array is overflowing yet...
-    
-                if (count >= 3)
-                    count--;
-    
-                // Grab the next row...
-    
-                memcpy(src_rows[row], data + y * w * 4, w * m_orgImage.bytesDepth());
-    
-                src_ptr = src_rows[row];
-                neg_ptr = neg_rows[row];
-    
-                for (int i = w*4; !m_cancel && (i > 0); i--)
-                {
-                    *neg_ptr = negLUT[*src_ptr];
-                    src_ptr++;
-                    neg_ptr++;
+                            org = &data[j];
+                            nSumR += arrMult[k][org[2]];
+                            nSumG += arrMult[k][org[1]];
+                            nSumB += arrMult[k][org[0]];
+                        }
+                        else
+                        {
+                            org = &data[i];
+                            nSumR += arrMult[k][org[2]];
+                            nSumG += arrMult[k][org[1]];
+                            nSumB += arrMult[k][org[0]];
+                        }
+                    }*/
                 }
                 
-                count++;
-                row = (row + 1) & 3;
-            }
-            else
-            {
-                // No more pixels at the bottom...  Drop the oldest samples...
-    
-                count--;
-            }
-    
-            // Now sharpen pixels and save the results...
-    
-            if (count == 3)
-            {
-                uchar* src  = src_rows[(row + 2) & 3];
-                uchar* dst  = dst_row;
-                int*   neg0 = neg_rows[(row + 1) & 3] + 4;
-                int*   neg1 = neg_rows[(row + 2) & 3] + 4;
-                int*   neg2 = neg_rows[(row + 3) & 3] + 4;
-                
-                // New pixel value 
-                int pixel;         
-    
-                int wm = w;
-                
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                wm -= 2;
-    
-                while (wm > 0)
-                {
-                    pixel = (posLUT[*src++] - neg0[-4] - neg0[0] - neg0[4] -
-                            neg1[-4] - neg1[4] -
-                            neg2[-4] - neg2[0] - neg2[4]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 255);
-    
-                    pixel = (posLUT[*src++] - neg0[-3] - neg0[1] - neg0[5] -
-                            neg1[-3] - neg1[5] -
-                            neg2[-3] - neg2[1] - neg2[5]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 255);
-    
-                    pixel = (posLUT[*src++] - neg0[-2] - neg0[2] - neg0[6] -
-                            neg1[-2] - neg1[6] -
-                            neg2[-2] - neg2[2] - neg2[6]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 255);
-    
-                    *dst++ = *src++;
-    
-                    neg0 += 4;
-                    neg1 += 4;
-                    neg2 += 4;
-                    wm --;
-                }
-    
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                
-                // Set the row...
-                memcpy(dstData + y * w * 4, dst_row, w * m_orgImage.bytesDepth());
-            }
-            else if (count == 2)
-            {
-                if (y == 0)
-                {
-                    // first row 
-                    memcpy(dstData + y * w * 4, src_rows[0], w * m_orgImage.bytesDepth());
-                }
-                else
-                {
-                    // last row 
-                    memcpy(dstData + y * w * 4, src_rows[(h-1) & 3], w * m_orgImage.bytesDepth());
-                }
+                // now, we return to sharp bits the horizontal sharpen values
+
+                /*dst    = &pOutBits[i];
+                dst[2] = (uchar)CLAMP (nSumR / DivCoeff + Offset, 0, 255);
+                dst[1] = (uchar)CLAMP (nSumG / DivCoeff + Offset, 0, 255);
+                dst[0] = (uchar)CLAMP (nSumB / DivCoeff + Offset, 0, 255);*/
+
+                // ok, now we reinitialize the variables
+                nSumR = nSumG = nSumB = 0;
             }
             
-        progress = (int) (((double)y * 100.0) / h);
+        progress = (int) (((double)h * 100.0) / height);
         if ( progress%5 == 0 )
-            postProgress( progress );   
+           postProgress( progress );           
         }
-    
-        // Free memory.
-        
-        for (row = 0; !m_cancel && (row < 4); row++)
-        {
-            delete [] src_rows[row];
-            delete [] neg_rows[row];
-        }       
-    
-        delete [] dst_row;    
     }
-    else                                            // 16 bits image.
-    {
-        unsigned short* dstData = (unsigned short*)m_destImage.bits();
-        unsigned short* data16  = (unsigned short*)data;
-        
-        // work with four rows at one time
+
+    // now, we must free memory
     
-        unsigned short *src_rows[4];
-        unsigned short *src_ptr;
-        unsigned short *dst_row;
-    
-        for (row = 0; !m_cancel && (row < 4); row++)
-        {
-            src_rows[row] = new unsigned short[w*4];
-            neg_rows[row] = new int[w*4];
-        }       
-    
-        dst_row = new unsigned short[w*4];
-        
-        // Pre-load the first row for the filter...
-    
-        memcpy(src_rows[0], data16, w * m_orgImage.bytesDepth());
-    
-        src_ptr = src_rows[0];
-        neg_ptr = neg_rows[0];
-    
-        for (int i = w*4; !m_cancel && (i > 0); i--)
-        {
-            *neg_ptr = negLUT[*src_ptr];
-            src_ptr++;
-            neg_ptr++;
-        }
-    
-        row   = 1;
-        count = 1;                                    
-    
-        for (int y = 0; !m_cancel && (y < h); y++)
-        {
-            // Load the next pixel row...
-    
-            if ((y + 1) < h)
-            {
-                // Check to see if our src_rows[] array is overflowing yet...
-    
-                if (count >= 3)
-                    count--;
-    
-                // Grab the next row...
-    
-                memcpy(src_rows[row], data16 + y * w * 4, w * m_orgImage.bytesDepth());
-    
-                src_ptr = src_rows[row];
-                neg_ptr = neg_rows[row];
-    
-                for (int i = w*4; !m_cancel && (i > 0); i--)
-                {
-                    *neg_ptr = negLUT[*src_ptr];
-                    src_ptr++;
-                    neg_ptr++;
-                }
-                
-                count++;
-                row = (row + 1) & 3;
-            }
-            else
-            {
-                // No more pixels at the bottom...  Drop the oldest samples...
-    
-                count--;
-            }
-    
-            // Now sharpen pixels and save the results...
-    
-            if (count == 3)
-            {
-                unsigned short* src  = src_rows[(row + 2) & 3];
-                unsigned short* dst  = dst_row;
-                int*   neg0 = neg_rows[(row + 1) & 3] + 4;
-                int*   neg1 = neg_rows[(row + 2) & 3] + 4;
-                int*   neg2 = neg_rows[(row + 3) & 3] + 4;
-                
-                // New pixel value 
-                int pixel;         
-    
-                int wm = w;
-                
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                wm -= 2;
-    
-                while (wm > 0)
-                {
-                    pixel = (posLUT[*src++] - neg0[-4] - neg0[0] - neg0[4] -
-                            neg1[-4] - neg1[4] -
-                            neg2[-4] - neg2[0] - neg2[4]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 65536);
-    
-                    pixel = (posLUT[*src++] - neg0[-3] - neg0[1] - neg0[5] -
-                            neg1[-3] - neg1[5] -
-                            neg2[-3] - neg2[1] - neg2[5]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 65536);
-    
-                    pixel = (posLUT[*src++] - neg0[-2] - neg0[2] - neg0[6] -
-                            neg1[-2] - neg1[6] -
-                            neg2[-2] - neg2[2] - neg2[6]);
-                    pixel = (pixel + 4) >> 3;
-                    *dst++ = CLAMP(pixel, 0, 65536);
-    
-                    *dst++ = *src++;
-    
-                    neg0 += 4;
-                    neg1 += 4;
-                    neg2 += 4;
-                    wm --;
-                }
-    
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                *dst++ = *src++;
-                
-                // Set the row...
-                memcpy(dstData + y * w * 4, dst_row, w * m_orgImage.bytesDepth());
-            }
-            else if (count == 2)
-            {
-                if (y == 0)
-                {
-                    // first row 
-                    memcpy(dstData + y * w * 4, src_rows[0], w * m_orgImage.bytesDepth());
-                }
-                else
-                {
-                    // last row 
-                    memcpy(dstData + y * w * 4, src_rows[(h-1) & 3], w * m_orgImage.bytesDepth());
-                }
-            }
-            
-        progress = (int) (((double)y * 100.0) / h);
-        if ( progress%5 == 0 )
-            postProgress( progress );   
-        }
-        
-        // Free memory.
-        
-        for (row = 0; !m_cancel && (row < 4); row++)
-        {
-            delete [] src_rows[row];
-            delete [] neg_rows[row];
-        }       
-    
-        delete [] dst_row;    
-    }
+    free2DArray (arrMult, nKernelSize);
 }
 
 }  // NameSpace Digikam

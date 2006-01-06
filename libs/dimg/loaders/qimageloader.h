@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef QIMAGELOADER_H
@@ -33,7 +34,7 @@ public:
 
     QImageLoader(DImg* image);
     
-    virtual bool load(const QString& filePath, DImgLoaderObserver *observer);
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer);
     
     virtual bool hasAlpha()   const;

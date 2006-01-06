@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-06-14
- * Copyright 2005 by Renchi Raju
+ * Copyright 2005 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -13,6 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIMGLOADER_H
@@ -39,7 +41,7 @@ class DIGIKAM_EXPORT DImgLoader
 {
 public:
 
-    virtual bool load(const QString& filePath, DImgLoaderObserver *observer) = 0;
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true) = 0;
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer) = 0;
     
     virtual bool hasAlpha()   const = 0;

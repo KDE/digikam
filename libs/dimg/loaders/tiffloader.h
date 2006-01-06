@@ -16,6 +16,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef TIFFLOADER_H
@@ -43,7 +44,7 @@ public:
 
     TIFFLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;
@@ -63,7 +64,6 @@ private:
     static void dimg_tiff_warning(const char* module, const char* fmt, va_list ap);
     static void dimg_tiff_error(const char* module, const char* fmt, va_list ap);
 
-        
 };
 
 }  // NameSpace Digikam
