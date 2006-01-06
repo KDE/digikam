@@ -538,6 +538,8 @@ void ShowFoto::applySettings()
 
     m_IOFileSettings->TIFFCompression  = m_config->readBoolEntry("TIFFCompression", false);
 
+    m_IOFileSettings->rawDecodingSettings.automaticColorBalance = m_config->readBoolEntry("AutomaticColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.cameraColorBalance    = m_config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = m_config->readBoolEntry("RGBInterpolate4Colors", false);
     m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = m_config->readBoolEntry("EnableRAWQuality", false);
     m_IOFileSettings->rawDecodingSettings.RAWQuality            = m_config->readNumEntry("RAWQuality", 0);

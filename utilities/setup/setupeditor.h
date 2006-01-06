@@ -52,6 +52,8 @@ private:
     KIntNumInput *m_JPEGcompression;
     KIntNumInput *m_PNGcompression;
     
+    QCheckBox    *m_cameraColorBalance;
+    QCheckBox    *m_automaticColorBalance;
     QCheckBox    *m_enableRAWQuality;
     QCheckBox    *m_RGBInterpolate4Colors;
     QCheckBox    *m_TIFFcompression;

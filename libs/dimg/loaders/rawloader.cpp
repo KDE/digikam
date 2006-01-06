@@ -55,10 +55,8 @@ namespace Digikam
 RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
-    m_hasAlpha              = false;
-    m_enableRAWQuality      = rawDecodingSettings.enableRAWQuality;
-    m_RAWQuality            = rawDecodingSettings.RAWQuality;
-    m_RGBInterpolate4Colors = rawDecodingSettings.RGBInterpolate4Colors;
+    m_hasAlpha            = false;
+    m_rawDecodingSettings = rawDecodingSettings;
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
@@ -81,17 +79,23 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     // -a : Use automatic white balance
     // -q : Use simple bilinear interpolation for quick results
 
-    command  = "dcraw -c -2 -w -a ";
+    command  = "dcraw -c -2 ";
     
-    if (m_RGBInterpolate4Colors)
+    if (m_rawDecodingSettings.cameraColorBalance)
+        command += "-w ";
+    
+    if (m_rawDecodingSettings.automaticColorBalance)
+        command += "-a ";
+
+    if (m_rawDecodingSettings.RGBInterpolate4Colors)
         command += "-f ";
     
     command += "-q ";
 
-    if (m_enableRAWQuality)
+    if (m_rawDecodingSettings.enableRAWQuality)
     {
         QCString rawQuality;
-        command += rawQuality.setNum(m_RAWQuality);
+        command += rawQuality.setNum(m_rawDecodingSettings.RAWQuality);
         command += " ";
     }
     
@@ -208,17 +212,23 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -w : Use camera white balance, if possible
     // -q : Use simple bilinear interpolation for quick results
 
-    command  = "dcraw -c -4 -w -a ";
+    command  = "dcraw -c -4 ";
     
-    if (m_RGBInterpolate4Colors)
+    if (m_rawDecodingSettings.cameraColorBalance)
+        command += "-w ";
+    
+    if (m_rawDecodingSettings.automaticColorBalance)
+        command += "-a ";
+
+    if (m_rawDecodingSettings.RGBInterpolate4Colors)
         command += "-f ";
     
     command += "-q ";
 
-    if (m_enableRAWQuality)
+    if (m_rawDecodingSettings.enableRAWQuality)
     {
         QCString rawQuality;
-        command += rawQuality.setNum(m_RAWQuality);
+        command += rawQuality.setNum(m_rawDecodingSettings.RAWQuality);
         command += " ";
     }
     

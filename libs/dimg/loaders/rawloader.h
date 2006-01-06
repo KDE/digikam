@@ -47,12 +47,10 @@ public:
 
 private:
 
-    bool m_sixteenBit;
-    bool m_hasAlpha;
+    bool                m_sixteenBit;
+    bool                m_hasAlpha;
 
-    bool m_RGBInterpolate4Colors;
-    bool m_enableRAWQuality;
-    int  m_RAWQuality;
+    RawDecodingSettings m_rawDecodingSettings;
     
 private:
 

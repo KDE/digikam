@@ -58,7 +58,15 @@ SetupEditor::SetupEditor(QWidget* parent )
    m_RGBInterpolate4Colors = new QCheckBox(i18n("Interpolate RGB as four colors"), RAWfileOptionsGroup);
    QWhatsThis::add( m_RGBInterpolate4Colors, i18n("<p>Interpolate RGB as four colors. This blurs the image a little, "
                                                   "but it eliminates false 2x2 mesh patterns.<p>"));
+
+   m_automaticColorBalance = new QCheckBox(i18n("Automatic color balance"), RAWfileOptionsGroup);
+   QWhatsThis::add( m_automaticColorBalance, i18n("<p>Automatic color balance. The default is to use a fixed color "
+                                                  "balance based on a white card photographed in sunlight.<p>"));
    
+   m_cameraColorBalance = new QCheckBox(i18n("Camera color balance"), RAWfileOptionsGroup);
+   QWhatsThis::add( m_cameraColorBalance, i18n("<p>Use the color balance specified by the camera. If this can't "
+                                               "be found, reverts to the default.<p>"));
+                                                  
    m_enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
    QWhatsThis::add( m_enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images.<p>"));
 
@@ -155,6 +163,8 @@ void SetupEditor::applySettings()
     config->writeEntry("BackgroundColor", m_backgroundColor->color());
     config->writeEntry("RAWQuality", m_RAWquality->value());
     config->writeEntry("EnableRAWQuality", m_enableRAWQuality->isChecked());
+    config->writeEntry("AutomaticColorBalance", m_automaticColorBalance->isChecked());
+    config->writeEntry("CameraColorBalance", m_cameraColorBalance->isChecked());    
     config->writeEntry("RGBInterpolate4Colors", m_RGBInterpolate4Colors->isChecked());    
     config->writeEntry("JPEGCompression", m_JPEGcompression->value());
     config->writeEntry("PNGCompression", m_PNGcompression->value());
@@ -175,6 +185,8 @@ void SetupEditor::readSettings()
     m_backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     m_RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
     m_enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
+    m_cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
+    m_automaticColorBalance->setChecked(config->readBoolEntry("CameraColorBalance", true));    
     m_RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));    
     m_JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     m_PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );

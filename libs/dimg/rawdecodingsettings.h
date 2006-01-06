@@ -36,12 +36,21 @@ public:
         enableRAWQuality      = false;
         RAWQuality            = 0;
         RGBInterpolate4Colors = false;
+        cameraColorBalance    = true;
+        automaticColorBalance = true;
     };
     
     ~RawDecodingSettings(){};
 
 public:
 
+    // Use the color balance specified by the camera. If this can't be found, reverts to the default.
+    bool cameraColorBalance;
+    
+    // Automatic color balance. The default is to use a fixed color balance
+    // based on a white card photographed in sunlight.
+    bool automaticColorBalance;
+    
     // RAW file decoding using RGB interpolation as four colors.
     bool RGBInterpolate4Colors;
     
