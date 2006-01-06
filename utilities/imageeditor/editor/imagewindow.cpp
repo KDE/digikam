@@ -878,7 +878,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         int    width      = DImgInterface::instance()->origWidth();
         int    height     = DImgInterface::instance()->origHeight();
         bool   sixteenBit = DImgInterface::instance()->sixteenBit();
-        bool   hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
+        bool   hasAlpha   = DImgInterface::instance()->hasAlpha();
         AlbumIconItem* item = 0;
         
         if (palbum)
