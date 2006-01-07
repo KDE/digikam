@@ -3,7 +3,8 @@
  * Date  : 2005-01-12
  * Description : 
  * 
- * Copyright 2005 by Leonid Zeitlin
+ * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com>
+ * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -5,6 +5,7 @@
  * Description : 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ *           2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -208,6 +209,8 @@ private slots:
 
     void slotKipiPluginPlug();
     
+    QString convertToLocalUrl( const QString& folder );
+    void slotDownloadImages( const QString& folder );
     void slotDownloadImages();
     void slotCameraConnect();
     void slotCameraAdded(CameraType *ctype);
