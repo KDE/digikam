@@ -1,6 +1,7 @@
 /*
  * Author: Leonid Zeitlin <lz@europe.com>, (C) 2005
- * Copyright 2005 by Leonid Zeitlin
+ * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com>
+ * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,11 @@ DCOPIface::~DCOPIface()
 void DCOPIface::cameraAutoDetect()
 {
     emit signalCameraAutoDetect();
+}
+
+void DCOPIface::downloadFrom( const QString &folder)
+{
+    emit signalDownloadImages( folder );
 }
 
 

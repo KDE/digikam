@@ -1,6 +1,7 @@
 /*
  * Author: Leonid Zeitlin <lz@europe.com>, (C) 2005
- * Copyright 2005 by Leonid Zeitlin
+ * Copyright (C) 2005 by Leonid Zeitlin <lz@europe.com>
+ * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,39 +22,62 @@
 #include <dcopobject.h>
 
 /**
-* This class imlements a DCOP interface for DigiKam.
-* At the moment it supports only one method, @ref cameraAutoDetect to open camera dialog
-*
-* @short DCOP interface for DigiKam
-* @author Leonid Zeitlin
-*/
+ * This class imlements a DCOP interface for DigiKam.
+ * At the moment it supports only one method, @ref cameraAutoDetect to open
+ * camera dialog
+ *
+ * @short DCOP interface for DigiKam
+ * @author Leonid Zeitlin
+ */
 class DCOPIface : public QObject, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
+            
 public:
     /**
      * Standard constructor.
-     * @param parent Parent object reference, passed to @ref QObject constructor
-     * @param name Specifis the name of the object, passed to @ref QObject constructor
+     * @param parent Parent object reference, passed to QObject constructor
+     * @param name Specifis the name of the object, passed to QObject 
+     * constructor
      */
     DCOPIface(QObject *parent = 0, const char *name = 0);
+    
     /**
      * Standard destructor
-    */
+     */
     ~DCOPIface();
+    
 signals:
+    
     /**
      * This signal is emitted when @ref cameraAutoDetect() is called via DCOP
      */
     void signalCameraAutoDetect();
+    
+    
+    /**
+     * This signal is emitted when @ref downloadFrom() is called via DCOP
+     * @param the path to download from
+     */
+    void signalDownloadImages( const QString& folder);
+    
 public:
 k_dcop:
+    
     /**
-     * This method can be called via DCOP to auto-detect attached camera and show DigiKam camera dialog
-     * For example, a hotplug script can call it when a USB camera is attached to the computer 
-     */
+    * This method can be called via DCOP to auto-detect attached camera and 
+    * show DigiKam camera dialog. For example, a hotplug script can call it 
+    * when a USB camera is attached to the computer 
+    */
     ASYNC cameraAutoDetect();
+    
+    /**
+    * This method can be called via DCOP to auto-detect attached camera and 
+    * show DigiKam camera dialog. For example, a hotplug script can call it 
+    * when a USB camera is attached to the computer 
+    */
+    ASYNC downloadFrom( const QString &folder );
 };
 
 #endif

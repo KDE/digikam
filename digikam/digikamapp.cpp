@@ -4,6 +4,7 @@
 //
 //    Copyright (C) 2002-2005 Renchi Raju <renchi at pooh.tam.uiuc.edu>
 //                            Gilles Caulier <caulier dot gilles at free.fr>
+//    Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -48,6 +49,7 @@
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kio/netaccess.h>
 
 // Includes files for plugins support.
 
@@ -124,7 +126,10 @@ DigikamApp::DigikamApp()
     setAutoSaveSettings();
     
     mDcopIface = new DCOPIface(this, "camera");
-    connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), this, SLOT(slotCameraAutoDetect()));
+    connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), 
+            this, SLOT(slotCameraAutoDetect()));
+    connect(mDcopIface, SIGNAL(signalDownloadImages( const QString & )),
+            this, SLOT(slotDownloadImages(const QString &)));
 }
 
 DigikamApp::~DigikamApp()
@@ -193,18 +198,13 @@ void DigikamApp::autoDetect()
 }
 
 void DigikamApp::downloadFrom(const QString &cameraGuiPath)
-{   
-    mCameraGuiPath=cameraGuiPath;
-
-    if (!mCameraGuiPath.isNull())
+{
+    if (!cameraGuiPath.isNull())
     {
+        mCameraGuiPath = cameraGuiPath;
+        
         if(mSplash)
             mSplash->message(i18n("Opening Download Dialog"), AlignLeft, white);
-        
-        KAction *cAction = new KAction(
-                            i18n("Browse %1").arg(mCameraGuiPath), 0,
-                            this, SLOT(slotDownloadImages()), actionCollection() );
-        mCameraMenuAction->insert(cAction, 0);
         
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
@@ -868,14 +868,63 @@ void DigikamApp::slot_exit()
     close();
 }
 
+
+QString DigikamApp::convertToLocalUrl( const QString& folder )
+{
+    // This function is copied from k3b.
+    
+    KURL url( path );
+    if( !url.isLocalFile() ) 
+    {
+#if KDE_IS_VERSION(3,4,91)
+        return KIO::NetAccess::mostLocalURL( url, 0 ).path();
+#else
+#ifndef UDS_LOCAL_PATH
+#define UDS_LOCAL_PATH (72 | KIO::UDS_STRING)
+#else
+        using namespace KIO;
+#endif
+        KIO::UDSEntry e;
+        if( KIO::NetAccess::stat( url, e, 0 ) ) 
+        {
+            const KIO::UDSEntry::ConstIterator end = e.end();
+            for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) 
+            {
+                if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+                    return KURL::fromPathOrURL( (*it).m_str ).path();
+            }
+        }
+ #endif
+     }
+    return url.path();
+}
+
+void DigikamApp::slotDownloadImages( const QString& folder)
+{
+    if (!folder.isNull())
+    {
+        mCameraGuiPath = folder;
+        QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
+    }
+}
+
+    
 void DigikamApp::slotDownloadImages()
 {
     if (mCameraGuiPath.isNull())
             return;
 
+    QString cameraGuiPath = convertToLocalUrl(mCameraGuiPath);
+    
+    KAction *cAction = new KAction( i18n("Browse %1").arg(mCameraGuiPath), 0,
+                                    this, SLOT(slotDownloadImages()), 
+                                    actionCollection() );
+    mCameraMenuAction->insert(cAction, 0);
+        
+
     CameraUI* cgui = new CameraUI(this, 
-                        i18n("Images found in %1").arg(mCameraGuiPath),
-                        "directory browse","Fixed", mCameraGuiPath);
+                        i18n("Images found in %1").arg(cameraGuiPath),
+                        "directory browse","Fixed", cameraGuiPath);
     cgui->show();
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
