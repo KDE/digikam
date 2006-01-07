@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+#include <kconfig.h>
+
 // C++ include.
 
 #include <cstring>
@@ -55,6 +57,8 @@
 #include "navigatebarwidget.h"
 #include "loadsavethread.h"
 #include "imagepropertiescolorstab.h"
+
+#include LCMS_HEADER
 
 namespace Digikam
 {
@@ -257,6 +261,29 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // ICC Profiles tab area ---------------------------------------
     
     QWidget* iccprofilePage = new QWidget( tab );
+    QGridLayout *iccLayout = new QGridLayout(iccprofilePage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
+    
+    QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
+    iccbox->setFrameStyle (QFrame::NoFrame);
+
+    m_infoHeader = new QLabel(0, iccbox);
+
+    QGroupBox *iccdetail = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
+
+    QLabel *labelName = new QLabel(i18n("Name: "), iccdetail);
+    m_labelICCName = new QLabel(0, iccdetail);
+    QLabel *labelDescription = new QLabel(i18n("Description: "), iccdetail);
+    m_labelICCDescription = new QLabel(0, iccdetail);
+    QLabel *labelCright = new QLabel(i18n("Copyright: "), iccdetail);
+    m_labelICCCopyright = new QLabel(0, iccdetail);
+    QLabel *labelIntent = new QLabel(i18n("Rendering Intent: "), iccdetail);
+    m_labelICCIntent = new QLabel(0, iccdetail);
+    QLabel *labelColor = new QLabel(i18n("Color Space: "), iccdetail);
+    m_labelICCColorSpace = new QLabel(0, iccdetail);
+
+    iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
+    iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 5);
+    iccLayout->setRowStretch(8, 10);
 
     // TODO
     
@@ -390,7 +417,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
         {
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
-            
+            getICCData();
             if (m_selectionArea)
             {
                 m_imageSelection = m_image.copy(*m_selectionArea);
@@ -450,6 +477,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
         m_regionBG->hide();
         m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
         updateInformations();
+        getICCData();
     }
     else
     {
@@ -636,6 +664,87 @@ void ImagePropertiesColorsTab::updateStatistiques()
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     m_labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
+}
+
+void ImagePropertiesColorsTab::getICCData()
+{
+    //TODO
+    if (m_image.getICCProfil().isNull())
+    {
+        m_infoHeader->setText(i18n("This image has not embedded Color Profile."));
+
+        m_labelICCName->setText(i18n("N.A."));
+        m_labelICCDescription->setText(i18n("N.A."));
+        m_labelICCCopyright->setText(i18n("N.A."));
+        m_labelICCIntent->setText(i18n("N.A."));
+        m_labelICCColorSpace->setText(i18n("N.A."));
+    }
+    else
+    {
+        cmsHPROFILE   embProfile=0;
+        QString intent, colorSpace;
+        m_infoHeader->setText(i18n("Image Color Profile Info:"));
+        
+        m_embedded_profile = m_image.getICCProfil();
+        embProfile = cmsOpenProfileFromMem(m_embedded_profile.data(),
+                                          (DWORD)m_embedded_profile.size());
+        m_labelICCName->setText(QString(cmsTakeProductName(embProfile)));
+        m_labelICCDescription->setText(QString(cmsTakeProductDesc(embProfile)));
+        m_labelICCCopyright->setText(QString(cmsTakeCopyright(embProfile)));
+
+        switch (cmsTakeRenderingIntent(embProfile))
+        {
+            case 0:
+                intent = i18n("Perceptual");
+                break;
+            case 1:
+                intent = i18n("Relative Colorimetric");
+                break;
+            case 2:
+                intent = i18n("Saturation");
+                break;
+            case 3:
+                intent = i18n("Absolute Colorimetric");
+                break;
+        }
+
+        switch (cmsGetColorSpace(embProfile))
+        {
+            case icSigLabData:
+                colorSpace = i18n("Lab");
+                break;
+            case icSigLuvData:
+                colorSpace = i18n("Luv");
+                break;
+            case icSigRgbData:
+                colorSpace = i18n("RGB");
+                break;
+            case icSigGrayData:
+                colorSpace = i18n("GRAY");
+                break;
+            case icSigHsvData:
+                colorSpace = i18n("HSV");
+                break;
+            case icSigHlsData:
+                colorSpace = i18n("HLS");
+                break;
+            case icSigCmykData:
+                colorSpace = i18n("CMYK");
+                break;
+            case icSigCmyData:
+                colorSpace= i18n("CMY");
+                break;
+            default:
+                colorSpace = i18n("Other");
+                break;
+        }
+
+        m_labelICCIntent->setText(intent);
+
+        m_labelICCColorSpace->setText(colorSpace);
+
+        cmsCloseProfile(embProfile);
+    }
 }
 
 }  // NameSpace Digikam

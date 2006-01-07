@@ -73,6 +73,7 @@ private:
     void loadImageFromUrl(const KURL& url);
     void updateInformations();
     void updateStatistiques();
+    void getICCData();
     
 private slots:
 
@@ -110,6 +111,13 @@ private:
     QLabel                *m_labelPercentileValue;
     QLabel                *m_labelColorDepth;
     QLabel                *m_labelAlphaChannel;
+    QLabel                *m_labelICCName;
+    QLabel                *m_labelICCDescription;
+    QLabel                *m_labelICCCopyright;
+    QLabel                *m_labelICCIntent;
+    QLabel                *m_labelICCColorSpace;
+    QLabel                *m_infoHeader;
+    
     
     DImg                   m_image;
     DImg                   m_imageSelection;
@@ -121,6 +129,8 @@ private:
     NavigateBarWidget     *m_navigateBar;
     ManagedLoadSaveThread *m_imageLoaderThreaded;
     QString                m_currentFilePath;
+
+    QByteArray             m_embedded_profile;
     
 };
 
