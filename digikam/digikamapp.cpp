@@ -873,7 +873,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
 {
     // This function is copied from k3b.
     
-    KURL url( path );
+    KURL url( folder );
     if( !url.isLocalFile() ) 
     {
 #if KDE_IS_VERSION(3,4,91)
