@@ -51,6 +51,10 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 
+using KIO::Job;
+using KIO::UDSEntryList;
+using KIO::UDSEntry;
+
 // Includes files for plugins support.
 
 #include "kipiinterface.h"
@@ -99,7 +103,11 @@ DigikamApp::DigikamApp()
 
     mAlbumManager = AlbumManager::instance();
     AlbumLister::instance();
-
+    
+    mCameraMediaList = new QPopupMenu;
+    connect( mCameraMediaList, SIGNAL( aboutToShow() ),
+             SLOT( slotCameraMediaMenu() ) );
+    
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
     connect(mCameraList, SIGNAL(signalCameraAdded(CameraType *)),
@@ -872,7 +880,6 @@ void DigikamApp::slot_exit()
 QString DigikamApp::convertToLocalUrl( const QString& folder )
 {
     // This function is copied from k3b.
-    
     KURL url( folder );
     if( !url.isLocalFile() ) 
     {
@@ -907,20 +914,41 @@ void DigikamApp::slotDownloadImages( const QString& folder)
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
 }
-
     
 void DigikamApp::slotDownloadImages()
 {
     if (mCameraGuiPath.isNull())
             return;
 
+    // Fetch the contents of the device. This is needed to make sure that the 
+    // media:/device gets mounted.
+    KIO::ListJob *job = KIO::listDir(KURL(mCameraGuiPath), false, false);
+    KIO::NetAccess::synchronousRun(job,0);
+
     QString cameraGuiPath = convertToLocalUrl(mCameraGuiPath);
+    kdDebug() << "IN: " << mCameraGuiPath << " OUT: " << cameraGuiPath << endl;
     
-    KAction *cAction = new KAction( i18n("Browse %1").arg(mCameraGuiPath), 0,
-                                    this, SLOT(slotDownloadImages()), 
-                                    actionCollection() );
-    mCameraMenuAction->insert(cAction, 0);
-        
+    
+    bool alreadyThere = false;
+    for (uint i = 0 ; i != actionCollection()->count() ; i++)
+    {
+        if (actionCollection()->action(i)->name() == mCameraGuiPath)
+            alreadyThere = true;
+    }
+    
+    if (!alreadyThere)
+    {
+        KAction *cAction  = new KAction(
+                i18n("Browse %1").arg(mCameraGuiPath),
+                "kipi",
+                0,
+                this,
+                SLOT(slotDownloadImages()),
+                actionCollection(),
+                mCameraGuiPath.latin1() );
+
+        mCameraMenuAction->insert(cAction, 0);
+    }
 
     CameraUI* cgui = new CameraUI(this, 
                         i18n("Images found in %1").arg(cameraGuiPath),
@@ -958,6 +986,55 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
                                    ctype->title().utf8());
     mCameraMenuAction->insert(cAction, 0);
     ctype->setAction(cAction);
+}
+
+void DigikamApp::slotCameraMediaMenu()
+{
+    mMediaItems.clear();
+    
+    mCameraMediaList->clear();
+    mCameraMediaList->insertItem(i18n("No Media Devices Found"),1);
+    mCameraMediaList->setItemEnabled(1,false);
+        
+    KURL kurl("media:/");
+    KIO::ListJob *job = KIO::listDir(kurl, false, false);
+    connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
+             SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
+}
+
+void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
+{
+    int i=0;
+    for(KIO::UDSEntryList::ConstIterator it = list.begin();
+                  it!=list.end(); ++it)
+    {
+        QString name;
+        QString path;
+        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++ et ) {
+            if ( (*et).m_uds == KIO::UDS_NAME)
+                name = ( *et ).m_str;
+            if ( (*et).m_uds == KIO::UDS_URL)
+                path = ( *et ).m_str;
+            kdDebug() << ( *et ).m_str << endl;
+       }
+       if (!name.isEmpty() && !path.isEmpty())
+       {
+            if (i==0)
+                mCameraMediaList->clear();
+            
+            mMediaItems[i] = path;
+            
+            mCameraMediaList->insertItem( name,  this, 
+                               SLOT(slotDownloadImagesFromMedia( int )),i,0);
+            mCameraMediaList->setItemParameter(i, i);
+            i++;
+       }
+    }
+}
+
+void DigikamApp::slotDownloadImagesFromMedia( int id )
+{
+    slotDownloadImages( mMediaItems[id] );
 }
 
 void DigikamApp::slotCameraRemoved(CameraType *ctype)
@@ -1224,6 +1301,11 @@ void DigikamApp::loadCameras()
     mCameraList->load();
     
     mCameraMenuAction->popupMenu()->insertSeparator();
+    
+    mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
+    
+    mCameraMenuAction->popupMenu()->insertSeparator();
+    
     mCameraMenuAction->insert(new KAction(i18n("Add Camera..."), 0,
                                           this, SLOT(slotSetupCamera()),
                                           actionCollection(),

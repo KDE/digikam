@@ -40,6 +40,7 @@
 #include <kmainwindow.h>
 #include "digikam_export.h"
 #include "dcopiface.h"
+#include <kio/global.h>
 
 namespace KIPI
 {
@@ -103,6 +104,9 @@ protected:
 
     bool queryClose();
 
+protected slots:
+    void slotCameraMediaMenuEntries( KIO::Job *, const KIO::UDSEntryList & );
+
 private:
 
     static DigikamApp     *m_instance;
@@ -124,11 +128,13 @@ private:
     
     DigikamView           *mView;
     CameraList            *mCameraList;
+    QPopupMenu            *mCameraMediaList;
     bool                   mFullScreen;
 
     SplashScreen          *mSplash;
 
     QString               mCameraGuiPath;
+    QMap<int, QString>    mMediaItems;
 
     // Album Settings
     AlbumSettings *mAlbumSettings;
@@ -214,6 +220,8 @@ private slots:
     void slotDownloadImages( const QString& folder );
     void slotDownloadImages();
     void slotCameraConnect();
+    void slotCameraMediaMenu();
+    void slotDownloadImagesFromMedia( int id );
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();
