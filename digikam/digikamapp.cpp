@@ -890,11 +890,11 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
             const KIO::UDSEntry::ConstIterator end = e.end();
             for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) 
             {
-                if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+                if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
                     return KURL::fromPathOrURL( (*it).m_str ).path();
             }
         }
- #endif
+#endif
      }
     return url.path();
 }
