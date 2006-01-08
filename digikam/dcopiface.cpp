@@ -38,6 +38,11 @@ void DCOPIface::cameraAutoDetect()
 {
     emit signalCameraAutoDetect();
 }
+ 
+void DCOPIface::downloadFrom( const QString &folder)
+{
+      emit signalDownloadImages( folder );
+}
 
 }  // namespace Digikam
 

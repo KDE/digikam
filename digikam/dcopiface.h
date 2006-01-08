@@ -64,6 +64,12 @@ signals:
      */
     void signalCameraAutoDetect();
 
+    /**
+     * This signal is emitted when @ref downloadFrom() is called via DCOP
+     * @param the path to download from
+     */
+    void signalDownloadImages( const QString& folder);
+
 
 public:
 
@@ -73,6 +79,13 @@ k_dcop:
      * For example, a hotplug script can call it when a USB camera is attached to the computer 
      */
     ASYNC cameraAutoDetect();
+
+    /**
+     * This method can be called via DCOP to auto-detect attached camera and 
+     * show DigiKam camera dialog. For example, a hotplug script can call it 
+     * when a USB camera is attached to the computer 
+     */
+    ASYNC downloadFrom( const QString &folder );
 };
 
 }  // namespace Digikam
