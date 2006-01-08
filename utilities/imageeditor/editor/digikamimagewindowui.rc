@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="2" name="digikamimagewindow" >
+<gui version="3" name="digikamimagewindow" >
 
  <MenuBar>
 
@@ -99,7 +99,9 @@
     <Action name="imageview_next" />
     <Separator/>
     <Action name="imageview_rotate" /> 
-    <Action name="imageview_crop" />    
+    <Action name="imageview_crop" /> 
+    <Separator/>
+    <Action name="imageview_delete" />
 </Menu>
  
  <ActionProperties/>
