@@ -146,8 +146,8 @@ public:
 
 signals:
 
-    void signalMousePressed( int );
-    void signalMouseReleased( int );
+    void signalIntervalChanged( int min, int max );
+    void signalMaximumValueChanged( int );
     void signalHistogramComputationDone( bool );
     void signalHistogramComputationFailed( void );
 
@@ -170,9 +170,11 @@ protected:
 private:
 
     // Current selection informations.
-    int     m_xmin;
-    int     m_xminOrg; 
-    int     m_xmax;
+    double  m_xmin;
+    double  m_xminOrg; 
+    double  m_xmax;
+    int     m_range;
+    //bool    m_hasSelection;
     int     m_clearFlag;          // Clear drawing zone with message.
 
     bool    m_sixteenBits;
@@ -190,6 +192,7 @@ private:
     DColor  m_colorGuide;
 
     void customEvent(QCustomEvent *event);
+    void notifyValuesChanged();
 };
 
 }

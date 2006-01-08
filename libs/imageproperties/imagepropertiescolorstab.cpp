@@ -317,11 +317,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     connect(m_regionBG, SIGNAL(released(int)),
             this, SLOT(slotRenderingChanged(int)));       
              
-    connect(m_histogramWidget, SIGNAL(signalMousePressed( int )),
-            this, SLOT(slotUpdateMinInterv(int)));
+    connect(m_histogramWidget, SIGNAL(signalIntervalChanged( int, int )),
+            this, SLOT(slotUpdateInterval(int, int)));
        
-    connect(m_histogramWidget, SIGNAL(signalMouseReleased( int )),
-            this, SLOT(slotUpdateMaxInterv(int)));
+    connect(m_histogramWidget, SIGNAL(signalMaximumValueChanged( int )),
+            this, SLOT(slotUpdateIntervRange(int)));
 
     connect(m_histogramWidget, SIGNAL(signalHistogramComputationDone(bool)),
             this, SLOT(slotRefreshOptions(bool)));
@@ -330,16 +330,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
             this, SLOT(slotHistogramComputationFailed(void)));
                         
     connect(m_minInterv, SIGNAL(valueChanged (int)),
-            m_histogramWidget, SLOT(slotMinValueChanged(int)));
-
-    connect(m_minInterv, SIGNAL(valueChanged (int)),
-            this, SLOT(slotIntervChanged(int)));
+            this, SLOT(slotMinValueChanged(int)));
 
     connect(m_maxInterv, SIGNAL(valueChanged (int)),
-            m_histogramWidget, SLOT(slotMaxValueChanged(int)));
-
-    connect(m_maxInterv, SIGNAL(valueChanged (int)),
-            this, SLOT(slotIntervChanged(int)));
+            this, SLOT(slotMaxValueChanged(int)));
 
     // -- read config ---------------------------------------------------------
 
@@ -424,15 +418,13 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                 m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit,
                                               m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
-                m_regionBG->show();                                         
-                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
+                m_regionBG->show();
                 updateInformations();
             }
             else 
             {
                 m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit);
                 m_regionBG->hide();
-                m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
                 updateInformations();
             }
         }
@@ -475,7 +467,6 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
         // which stops computation because m_image.bits() is currently used by threaded histogram algorithm.
         m_image = img;
         m_regionBG->hide();
-        m_maxInterv->setMaxValue(m_image.sixteenBit() ? 65535 : 255);
         updateInformations();
         getICCData();
     }
@@ -516,9 +507,6 @@ void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
 
 void ImagePropertiesColorsTab::slotRefreshOptions(bool sixteenBit)
 {
-    m_minInterv->setValue(0);
-    m_maxInterv->setValue(sixteenBit ? 65535 : 255);
-    m_maxInterv->setMaxValue(sixteenBit ? 65535 : 255);
     slotChannelChanged(m_channelCB->currentItem());
     slotScaleChanged(m_scaleBG->selectedId());
     slotColorsChanged(m_colorsCB->currentItem());
@@ -531,7 +519,6 @@ void ImagePropertiesColorsTab::slotHistogramComputationFailed()
 {
     m_imageSelection.reset();
     m_image.reset();
-    m_histogramWidget->updateData(0L, 0, 0, false);
 }
 
 void ImagePropertiesColorsTab::slotChannelChanged(int channel)
@@ -613,22 +600,49 @@ void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
     updateStatistiques();
 }
 
-void ImagePropertiesColorsTab::slotIntervChanged(int)
+void ImagePropertiesColorsTab::slotMinValueChanged(int min)
 {
-    m_maxInterv->setMinValue(m_minInterv->value());
-    m_minInterv->setMaxValue(m_maxInterv->value());
+    // Called when user changes values of spin box.
+    // Communicate the change to histogram widget.
+
+    // make the one control "push" the other
+    if (min == m_maxInterv->value()+1)
+        m_maxInterv->setValue(min);
+    m_maxInterv->setMinValue(min-1);
+    m_histogramWidget->slotMinValueChanged(min);
     updateStatistiques();
 }
 
-void ImagePropertiesColorsTab::slotUpdateMinInterv(int min)
+void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
 {
+    if (max == m_minInterv->value()-1)
+        m_minInterv->setValue(max);
+    m_minInterv->setMaxValue(max+1);
+    m_histogramWidget->slotMaxValueChanged(max);
+    updateStatistiques();
+}
+
+void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
+{
+    // Called when value is set from within histogram widget.
+    // Block signals to prevent slotMinValueChanged and
+    // slotMaxValueChanged being called. 
+    m_minInterv->blockSignals(true);
+    m_minInterv->setMaxValue(max+1);
     m_minInterv->setValue(min);
+    m_minInterv->blockSignals(false);
+
+    m_maxInterv->blockSignals(true);
+    m_maxInterv->setMinValue(min-1);
+    m_maxInterv->setValue(max);
+    m_maxInterv->blockSignals(false);
+
+    updateStatistiques();
 }
 
-void ImagePropertiesColorsTab::slotUpdateMaxInterv(int max)
+void ImagePropertiesColorsTab::slotUpdateIntervRange(int range)
 {
-    m_maxInterv->setValue(max);
-    updateStatistiques();
+    m_maxInterv->setMaxValue( range );
 }
 
 void ImagePropertiesColorsTab::updateInformations()

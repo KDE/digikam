@@ -83,10 +83,11 @@ private slots:
     void slotScaleChanged(int scale);
     void slotColorsChanged(int color);
     void slotRenderingChanged(int rendering);
-    void slotIntervChanged(int);
+    void slotMinValueChanged(int);
+    void slotMaxValueChanged(int);
 
-    void slotUpdateMinInterv(int min);
-    void slotUpdateMaxInterv(int max);
+    void slotUpdateInterval(int min, int max);
+    void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
     void slotProgressInfo(const QString& filePath, float progress);
