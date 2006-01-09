@@ -537,9 +537,9 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
         album->isAncestorOf(albumMan->currentAlbum()))
     {
         KMessageBox::error(this, i18n("You are currently viewing items in the "
-                                      "tag '%1' that you are about to delete? "
+                                      "tag '%1' that you are about to delete. "
                                       "You will need to close this dialog first "
-                                      "if you want to delete the tag" )
+                                      "if you want to delete the tag." )
                            .arg(album->title()));
         return;
     }

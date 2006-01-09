@@ -62,9 +62,9 @@ ScanLib::ScanLib()
     m_progressBar = new KProgressDialog(0);
     m_progressBar->setInitialSize(QSize(300,100), true);
     QWhatsThis::add( m_progressBar, i18n("This shows the progress of the "
-        "scanning. During the scanning all files on disk are put in a "
-        "database. This is needed for sorting on exif-date and speeds up "
-        "overall performance of digiKam.") );
+        "scan. During the scan, all files on disk are put in a "
+        "database. This is required for sorting on exif-date and speeds up "
+        "the overall performance of digiKam.") );
 
     // these two lines prevent the dialog to be shown in
     // findFoldersWhichDoNotExist();
@@ -128,22 +128,22 @@ void ScanLib::findFoldersWhichDoNotExist()
     if (!toBeDeleted.isEmpty())
     {
         int rc = KMessageBox::warningYesNoList(   0,
-            i18n("There seem to be an album in the database which does not "
-                 "appear to be on disk. This album should be removed from "
-                 "the database, but that means you might loose information, "
-                 "because all images related to this album will be removed "
-                 "from the database as well. digiKam can not continue "
-                 "without removing the items from the database because all "
-                 "views depends on the information in the database. Do you "
-                 "want them to be removed from the database?",
-                 "There seem to be %n albums in the database which do not "
-                 "appear to be on disk. These albums should be removed from "
-                 "the database, but that means you might loose information, "
-                 "because all images related to this albums will be removed "
-                 "from the database as well. digiKam can not continue "
-                 "without removing the items from the database because all "
-                 "views depends on the information in the database. Do you "
-                 "want them to be removed from the database?",
+            i18n("There is an album in the database which does not appear to "
+                 "be on disk. This album should be removed from the database, "
+                 "however you may lose information because all images "
+                 "associated with this album will be removed from the database "
+                 "as well. digiKam cannot continue without removing the items "
+                 "from the database because all views depend on the information "
+                 "in the database. Do you want them to be removed from the "
+                 "database?",
+                 "There are %n albums in the database which do not appear to "
+                 "be on disk. These albums should be removed from the database, "
+                 "however you may lose information because all images "
+                 "associated with these albums will be removed from the database "
+                 "as well. digiKam cannot continue without removing the items "
+                 "from the database because all views depend on the information "
+                 "in the database. Do you want them to be removed from the "
+                 "database?",
                  toBeDeleted.count()),
             toBeDeleted.keys(),
             i18n("Albums are Missing"));
@@ -436,20 +436,20 @@ void ScanLib::deleteStaleEntries()
     if ( !m_filesToBeDeleted.isEmpty() )
     {
         int rc = KMessageBox::warningYesNoList(   0,
-          i18n("There seem to be an item in the database which does not "
+          i18n("There is an item in the database which does not "
                "appear to be on disk or is located in the root album of "
                "the path. This file should be removed from the "
-               "database, but that means you might loose information. "
-               "digiKam can not continue without removing the item from "
-               "the database because all views depends on the information "
+               "database, however you may lose information. "
+               "digiKam cannot continue without removing the item from "
+               "the database because all views depend on the information "
                "in the database. Do you want it to be removed from the "
                "database?",
-               "There seem to be %n items in the database which do not "
+               "There are %n items in the database which do not "
                "appear to be on disk or are located in the root album of "
                "the path. These files should be removed from the "
-               "database, but that means you might loose information. "
-               "digiKam can not continue without removing these item from "
-               "the database because all views depends on the information "
+               "database, however you may lose information. "
+               "digiKam cannot continue without removing these items from "
+               "the database because all views depend on the information "
                "in the database. Do you want them to be removed from the "
                "database?",
                listToBeDeleted.count()),
