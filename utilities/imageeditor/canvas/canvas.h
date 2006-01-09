@@ -52,7 +52,6 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-//     bool load(const QString& filename);
     bool load(const QString& filename, ICCSettingsContainer *ICCSettings,
               IOFileSettingsContainer *IOFileSettings, QWidget *parent);
     void preload(const QString& filename);
