@@ -3,9 +3,10 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Description : 
- * 
+ * Description : a bar widget to display image thumbnails
+ *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -3,9 +3,10 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-22
- * Description : 
+ * Description : a bar widget to display image thumbnails
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +58,8 @@ class ThumbBarViewPriv
 {
 public:
 
-    ThumbBarViewPriv() {
+    ThumbBarViewPriv()
+    {
         firstItem = 0;
         lastItem  = 0;
         currItem  = 0;
@@ -65,21 +67,20 @@ public:
         itemDict.setAutoDelete(false);
     }
     
-    ThumbBarItem *firstItem;
-    ThumbBarItem *lastItem;
-    ThumbBarItem *currItem;
-    int           count;
+    ThumbBarItem    *firstItem;
+    ThumbBarItem    *lastItem;
+    ThumbBarItem    *currItem;
+    int              count;
 
-    QDict<ThumbBarItem> itemDict;
-    
-    bool          clearing;
-    int           margin;
-    int           tileSize;
-    int           orientation;
+    bool             clearing;
+    int              margin;
+    int              tileSize;
+    int              orientation;
     
     QTimer*          timer;
     ThumbBarToolTip* tip;
     
+    QDict<ThumbBarItem>       itemDict;
     QGuardedPtr<ThumbnailJob> thumbJob;
 };
 
@@ -91,8 +92,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
     d->tileSize    = 64;
     d->orientation = orientation;
 
-    d->tip = new ThumbBarToolTip(this);
-    
+    d->tip   = new ThumbBarToolTip(this);
     d->timer = new QTimer(this);
     
     connect(d->timer, SIGNAL(timeout()),
@@ -103,17 +103,17 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
     setFrameStyle(QFrame::NoFrame);
     
     if (d->orientation == Vertical)
-       {
+    {
        setHScrollBarMode(QScrollView::AlwaysOff);
        setFixedWidth(d->tileSize + 2*d->margin
                      + verticalScrollBar()->sizeHint().width());
-       }
+    }
     else
-       {
+    {
        setVScrollBarMode(QScrollView::AlwaysOff);
        setFixedHeight(d->tileSize + 2*d->margin
                       + horizontalScrollBar()->sizeHint().height());
-       }
+    }
 }
 
 ThumbBarView::~ThumbBarView()
@@ -262,7 +262,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     QRect er(e->rect());
     
     if (d->orientation == Vertical)
-       {
+    {
        cy = viewportToContents(er.topLeft()).y();
         
        bgPix.resize(contentsRect().width(), er.height());
@@ -272,9 +272,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
-       }
+    }
     else
-       {
+    {
        cx = viewportToContents(er.topLeft()).x();
         
        bgPix.resize(er.width(), contentsRect().height());
@@ -284,16 +284,16 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
-       }
+    }
     
     bgPix.fill(colorGroup().background());
     
     for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
-        {
+    {
         if (d->orientation == Vertical)
-            {
+        {
             if (y1 <= item->m_pos && item->m_pos <= y2)
-                {
+            {
                 if (item == d->currItem)
                     tile.fill(colorGroup().highlight());
                 else
@@ -305,19 +305,19 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.end();
                 
                 if (item->m_pixmap)
-                    {
+                {
                     int x = (tile.width() -item->m_pixmap->width())/2;
                     int y = (tile.height()-item->m_pixmap->height())/2;
                     bitBlt(&tile, x, y, item->m_pixmap);
-                    }
+                }
                 
                 bitBlt(&bgPix, 0, item->m_pos - cy, &tile);
-                }
             }
+        }
         else
-            {
+        {
             if (x1 <= item->m_pos && item->m_pos <= x2)
-                {
+            {
                 if (item == d->currItem)
                     tile.fill(colorGroup().highlight());
                 else
@@ -329,16 +329,16 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.end();
                 
                 if (item->m_pixmap)
-                    {
+                {
                     int x = (tile.width() -item->m_pixmap->width())/2;
                     int y = (tile.height()-item->m_pixmap->height())/2;
                     bitBlt(&tile, x, y, item->m_pixmap);
-                    }
+                }
                 
                 bitBlt(&bgPix, item->m_pos - cx, 0, &tile);
-                }
             }
         }
+    }
 
     if (d->orientation == Vertical)
        bitBlt(viewport(), 0, er.y(), &bgPix);
@@ -351,33 +351,33 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     ThumbBarItem* barItem = 0;
     
     if (d->orientation == Vertical)
-       {
+    {
        int y = e->pos().y();
        
        for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
-           {
+       {
            if (y >= item->m_pos &&
                y <= (item->m_pos + d->tileSize + 2*d->margin))
-                {
+           {
                 barItem = item;
                 break;
-                }
            }
        }
+    }
     else
-       {
+    {
        int x = e->pos().x();
        
        for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
-           {
+       {
            if (x >= item->m_pos &&
                x <= (item->m_pos + d->tileSize + 2*d->margin))
-                {
+           {
                 barItem = item;
                 break;
-                }
            }
        }
+    }
 
     if (!barItem || barItem == d->currItem)
         return;
@@ -453,14 +453,17 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     else
     {
         ThumbBarItem *i = item;
-        if (i) {
-            if (i->m_prev ){
+        if (i)
+        {
+            if (i->m_prev )
+            {
                 i->m_prev->m_next = d->currItem = i->m_next;
-                }
-            if ( i->m_next ){
-                i->m_next->m_prev = d->currItem = i->m_prev;
-                }
             }
+            if ( i->m_next )
+            {
+                i->m_next->m_prev = d->currItem = i->m_prev;
+            }
+        }
     }
 
     d->itemDict.remove(item->url().url());
@@ -509,12 +512,12 @@ void ThumbBarView::rearrangeItems()
 void ThumbBarView::repaintItem(ThumbBarItem* item)
 {
     if (item)
-       {
+    {
        if (d->orientation == Vertical)
            repaintContents(0, item->m_pos, visibleWidth(), d->tileSize+2*d->margin);
        else
            repaintContents(item->m_pos, 0, d->tileSize+2*d->margin, visibleHeight());
-       }
+    }
 }
 
 void ThumbBarView::slotUpdate()
