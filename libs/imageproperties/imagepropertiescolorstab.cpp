@@ -685,7 +685,7 @@ void ImagePropertiesColorsTab::getICCData()
     //TODO
     if (m_image.getICCProfil().isNull())
     {
-        m_infoHeader->setText(i18n("This image has not embedded Color Profile."));
+        m_infoHeader->setText(i18n("This image has not\nembedded Color Profile."));
 
         m_labelICCName->setText(i18n("N.A."));
         m_labelICCDescription->setText(i18n("N.A."));
