@@ -727,11 +727,11 @@ bool ShowFoto::saveAs()
             QString imgExtPattern;
             for (QStringList::ConstIterator it = mimetypes.begin() ; it != mimetypes.end() ; it++)
             {    
-                imgExtPattern.append (KImageIO::typeForMime(*it));
+                imgExtPattern.append (KImageIO::typeForMime(*it).upper());
                 imgExtPattern.append (" ");
             }    
-            if ( imgExtPattern.contains("*.TIFF") ) imgExtPattern.append (" *.TIF");
-            if ( imgExtPattern.contains("*.JPEG") ) imgExtPattern.append (" *.JPG");
+            if ( imgExtPattern.contains("TIFF") ) imgExtPattern.append (" TIF");
+            if ( imgExtPattern.contains("JPEG") ) imgExtPattern.append (" JPG");
     
             if ( !imgExtPattern.contains( format.upper() ) )
             {
