@@ -178,16 +178,21 @@ ThumbBarItem* ThumbBarView::lastItem() const
 
 ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 {
-    int y = pos.y();
+    int itemPos;
+    
+    if (d->orientation == Vertical)
+        itemPos = pos.y();
+    else
+        itemPos = pos.x();
+    
     for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
     {
-        if (y >= item->m_pos &&
-            y <= (item->m_pos+d->tileSize+2*d->margin))
+        if (itemPos >= item->m_pos && itemPos <= (item->m_pos+d->tileSize+2*d->margin))
         {
             return item;
         }
     }
-
+    
     return 0;
 }
 
@@ -596,7 +601,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KURL& url)
-            : m_view(view), m_url(url), m_next(0), m_prev(0), m_pos(0), m_pixmap(0)
+            : m_pos(0), m_pixmap(0), m_url(url), m_next(0), m_prev(0), m_view(view)
 {
     m_view->insertItem(this);
 }
@@ -652,8 +657,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
         return;
 
     QRect r(item->rect());
-    r = QRect( m_view->contentsToViewport(r.topLeft()),
-               r.size() );
+    r = QRect( m_view->contentsToViewport(r.topLeft()), r.size() );
 
     QString cellBeg("<tr><td><nobr><font size=-1>");
     QString cellMid("</font></nobr></td>"
@@ -668,8 +672,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
     tipText += cellBeg + i18n("Type:") + cellMid;
     tipText += KMimeType::findByURL(item->url())->comment() + cellEnd;
 
-    KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown,
-                       item->url());
+    KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, item->url());
 
     QDateTime date;
     date.setTime_t(fileItem.time(KIO::UDS_MODIFICATION_TIME));
