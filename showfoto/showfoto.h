@@ -84,9 +84,6 @@ private:
     // typicially all RAW image file formats.
     bool                             m_isReadOnly;
 
-    // 'true' if current image have been modified, else 'false'.
-    bool                             m_dirtyImage;
-
     int                              m_itemsNb;
 
     SlideShow                       *m_slideShow;

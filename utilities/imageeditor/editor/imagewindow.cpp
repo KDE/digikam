@@ -107,7 +107,6 @@ ImageWindow::ImageWindow()
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
     m_isReadOnly            = false;
-    m_dirtyImage            = false;
     m_view                  = 0L;
 
     m_ICCSettings           = new ICCSettingsContainer();
@@ -667,8 +666,6 @@ void ImageWindow::slotLoadCurrent()
     {
        m_fileDelete->setEnabled(true);
     }
-    
-    m_dirtyImage = false;
 }
 
 void ImageWindow::slotLoadNext()
@@ -849,7 +846,6 @@ void ImageWindow::slotZoomChanged(float zoom)
 
 void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 {
-    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -1051,7 +1047,6 @@ bool ImageWindow::save()
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
     
     kapp->restoreOverrideCursor();
-    m_dirtyImage = false;
     return true;
 }
 
@@ -1245,7 +1240,6 @@ bool ImageWindow::saveAs()
     kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 
-    m_dirtyImage = false;
     return true;
 }
 
@@ -1348,7 +1342,7 @@ void ImageWindow::slotEscapePressed()
 
 bool ImageWindow::promptUserSave()
 {
-    if (m_dirtyImage)
+    if (m_saveAction->isEnabled())
     {
         int result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image \"%1\" has been modified.\n"
@@ -1367,6 +1361,7 @@ bool ImageWindow::promptUserSave()
         }
         else if (result == KMessageBox::No)
         {
+            m_saveAction->setEnabled(false);
             return true;
         }
         else

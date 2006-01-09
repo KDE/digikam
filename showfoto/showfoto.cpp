@@ -105,7 +105,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
     m_isReadOnly             = false;
-    m_dirtyImage             = false;
     m_config                 = kapp->config();
 
     m_config->setGroup("ImageViewer Settings");
@@ -662,8 +661,6 @@ void ShowFoto::slotOpenFile()
         }
         toggleActions(true);
     }
-    
-    
 }
 
 void ShowFoto::slotFirst()
@@ -839,7 +836,7 @@ bool ShowFoto::saveAs()
     }
 
     m_canvas->setModified( false );
-    
+
     // add the file to the list of images if it's not there already
     Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(saveAsURL);
     m_bar->invalidateThumb(foundItem);
@@ -849,6 +846,7 @@ bool ShowFoto::saveAs()
     
     m_bar->setSelected(foundItem);
     kapp->restoreOverrideCursor();
+
     return true;
 }
 
@@ -857,7 +855,7 @@ bool ShowFoto::promptUserSave()
     if (!m_currentItem)
         return true;
 
-    if (m_dirtyImage)
+    if (m_saveAction->isEnabled())
     {
         int result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image '%1\' has been modified.\n"
@@ -930,9 +928,8 @@ bool ShowFoto::save()
     m_canvas->setModified( false );
     m_bar->invalidateThumb(m_currentItem);
     kapp->restoreOverrideCursor();
-    slotOpenURL(m_currentItem->url());
+    QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
 
-    m_dirtyImage = false;
     return true;
 }
 
@@ -972,8 +969,6 @@ void ShowFoto::slotOpenURL(const KURL& url)
 
     slotUpdateItemInfo();
     QApplication::restoreOverrideCursor();
-
-    m_dirtyImage = false;
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -1149,7 +1144,6 @@ void ShowFoto::slotImagePluginsHelp()
 
 void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
 {
-    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -1507,8 +1501,6 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         m_currentItem = m_bar->currentItem();
         slotOpenURL(m_currentItem->url());
     }
-
-    m_dirtyImage = false;
 }
 
 void ShowFoto::slotUpdateItemInfo(void)
