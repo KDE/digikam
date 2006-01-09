@@ -280,7 +280,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
        bgPix.resize(er.width(), contentsRect().height());
     
        ts = d->tileSize + 2*d->margin;
-       tile.resize(visibleHeight(), ts);
+       tile.resize(ts, visibleHeight());
     
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
@@ -480,6 +480,7 @@ void ThumbBarView::rearrangeItems()
 
     int pos = 0;
     ThumbBarItem *item = d->firstItem;
+    
     while (item)
     {
         item->m_pos = pos;
@@ -595,7 +596,7 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KURL& url)
-            : m_view(view), m_url(url), m_next(0), m_prev(0), m_pixmap(0)
+            : m_view(view), m_url(url), m_next(0), m_prev(0), m_pos(0), m_pixmap(0)
 {
     m_view->insertItem(this);
 }
