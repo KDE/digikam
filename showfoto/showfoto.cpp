@@ -107,10 +107,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_isReadOnly             = false;
     m_dirtyImage             = false;
     m_config                 = kapp->config();
+
     m_config->setGroup("ImageViewer Settings");
-
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
-
     KGlobal::iconLoader()->addAppDir("digikam");
     
     if(m_config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
@@ -126,20 +125,39 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // -- construct the view ---------------------------------
 
     QWidget* widget  = new QWidget(this);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    
-    m_splitter     = new QSplitter(widget);
-    m_canvas       = new Digikam::Canvas(m_splitter);
-    m_rightSidebar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
-    m_bar          = new Digikam::ThumbBarView(widget);
-    
-    lay->addWidget(m_bar);
-    lay->addWidget(m_splitter);
-    lay->addWidget(m_rightSidebar);
-    
-    m_splitter->setOpaqueResize(false);
-    setCentralWidget(widget);
+
+    if(!m_config->readBoolEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
+    {
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        m_splitter        = new QSplitter(widget);
+        m_canvas          = new Digikam::Canvas(m_splitter);
+        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
+        m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
         
+        hlay->addWidget(m_bar);
+        hlay->addWidget(m_splitter);
+        hlay->addWidget(m_rightSidebar);
+    }
+    else                                                     // Horizontal thumbbar layout
+    {
+        m_splitter        = new QSplitter(widget);
+        QWidget* widget2  = new QWidget(m_splitter);
+        QVBoxLayout *vlay = new QVBoxLayout(widget2);
+        m_canvas          = new Digikam::Canvas(widget2);
+        m_bar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
+
+        vlay->addWidget(m_canvas);
+        vlay->addWidget(m_bar);
+                
+        QHBoxLayout *hlay = new QHBoxLayout(widget);
+        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
+
+        hlay->addWidget(m_splitter);
+        hlay->addWidget(m_rightSidebar);        
+    }        
+
+    m_splitter->setOpaqueResize(false);
+    setCentralWidget(widget);        
     m_nameLabel = new QLabel(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);

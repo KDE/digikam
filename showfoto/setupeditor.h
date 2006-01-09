@@ -59,6 +59,7 @@ private:
     QCheckBox    *m_TIFFcompression;
     QCheckBox    *m_hideToolBar;
     QCheckBox    *m_hideThumbBar;
+    QCheckBox    *m_horThumbBar;
     QCheckBox    *m_showSplashCheck;
     QCheckBox    *m_useTrashCheck;
     

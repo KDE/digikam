@@ -137,9 +137,12 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             "for image editor area.") );
    backgroundColorlabel->setBuddy( m_backgroundColor );
 
-   m_hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-   m_hideThumbBar = new QCheckBox(i18n("H&ide thumbbar in fullscreen mode"), interfaceOptionsGroup);
-   m_useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
+   m_hideToolBar     = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+   m_hideThumbBar    = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+   m_horThumbBar     = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
+   QWhatsThis::add( m_horThumbBar, i18n("<p>If this option is enable, thumbnails bar will be displayed horizontally behind "
+                                        "image area. You need to restart showFoto for this option take effect.<p>"));
+   m_useTrashCheck   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
    m_showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
    
    layout->addWidget(interfaceOptionsGroup);
@@ -171,6 +174,7 @@ void SetupEditor::applySettings()
     config->writeEntry("TIFFCompression", m_TIFFcompression->isChecked());
     config->writeEntry("FullScreenHideToolBar", m_hideToolBar->isChecked());
     config->writeEntry("FullScreenHideThumbBar", m_hideThumbBar->isChecked());
+    config->writeEntry("HorizontalThumbbar", m_horThumbBar->isChecked());
     config->writeEntry("DeleteItem2Trash", m_useTrashCheck->isChecked());
     config->writeEntry("ShowSplash", m_showSplashCheck->isChecked());
     config->sync();
@@ -193,6 +197,7 @@ void SetupEditor::readSettings()
     m_TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     m_hideToolBar->setChecked(config->readBoolEntry("FullScreenHideToolBar", false));
     m_hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
+    m_horThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
     m_useTrashCheck->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
     m_showSplashCheck->setChecked(config->readBoolEntry("ShowSplash", true));
 
