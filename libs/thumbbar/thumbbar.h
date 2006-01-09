@@ -116,8 +116,7 @@ class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
-    ThumbBarItem(ThumbBarView* view,
-                 const KURL& url);
+    ThumbBarItem(ThumbBarView* view, const KURL& url);
     ~ThumbBarItem();
 
     KURL url() const;
@@ -131,12 +130,16 @@ public:
 
 private:
 
-    ThumbBarView*     m_view;
+    int               m_pos;
+        
+    QPixmap*          m_pixmap;
+
     KURL              m_url;
+    
     ThumbBarItem*     m_next;
     ThumbBarItem*     m_prev;
-    int               m_pos;
-    QPixmap*          m_pixmap;
+    
+    ThumbBarView*     m_view;
 
     friend class ThumbBarView;
 };
