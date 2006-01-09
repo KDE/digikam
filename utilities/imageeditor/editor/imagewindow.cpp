@@ -1108,7 +1108,7 @@ bool ImageWindow::saveAs()
                 imgExtPattern.append (KImageIO::typeForMime(*it).upper());
                 imgExtPattern.append (" ");
             }    
-            if ( imgExtPattern.contains("TIFF") ) imgExtPattern.append (" TIF");
+            imgExtPattern.append (" TIF TIFF");
             if ( imgExtPattern.contains("JPEG") ) imgExtPattern.append (" JPG");
     
             if ( !imgExtPattern.contains( format.upper() ) )
