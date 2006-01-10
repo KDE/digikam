@@ -35,11 +35,11 @@
 #include <qhbuttongroup.h> 
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qimage.h>
 
 // KDE includes.
 
 #include <klocale.h>
+#include <ksqueezedtextlabel.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
@@ -270,15 +270,15 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QGroupBox *iccdetail = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
 
     QLabel *labelName = new QLabel(i18n("Name: "), iccdetail);
-    m_labelICCName = new QLabel(0, iccdetail);
+    m_labelICCName = new KSqueezedTextLabel(0, iccdetail);
     QLabel *labelDescription = new QLabel(i18n("Description: "), iccdetail);
-    m_labelICCDescription = new QLabel(0, iccdetail);
+    m_labelICCDescription = new KSqueezedTextLabel(0, iccdetail);
     QLabel *labelCright = new QLabel(i18n("Copyright: "), iccdetail);
-    m_labelICCCopyright = new QLabel(0, iccdetail);
+    m_labelICCCopyright = new KSqueezedTextLabel(0, iccdetail);
     QLabel *labelIntent = new QLabel(i18n("Rendering Intent: "), iccdetail);
-    m_labelICCIntent = new QLabel(0, iccdetail);
+    m_labelICCIntent = new KSqueezedTextLabel(0, iccdetail);
     QLabel *labelColor = new QLabel(i18n("Color Space: "), iccdetail);
-    m_labelICCColorSpace = new QLabel(0, iccdetail);
+    m_labelICCColorSpace = new KSqueezedTextLabel(0, iccdetail);
 
     iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
     iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 5);

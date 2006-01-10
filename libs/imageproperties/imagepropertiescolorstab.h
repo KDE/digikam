@@ -39,6 +39,8 @@ class QPixmap;
 class QLabel;
 class QHButtonGroup;
 
+class KSqueezedTextLabel;
+
 namespace Digikam
 {
 class DImg;
@@ -112,13 +114,13 @@ private:
     QLabel                *m_labelPercentileValue;
     QLabel                *m_labelColorDepth;
     QLabel                *m_labelAlphaChannel;
-    QLabel                *m_labelICCName;
-    QLabel                *m_labelICCDescription;
-    QLabel                *m_labelICCCopyright;
-    QLabel                *m_labelICCIntent;
-    QLabel                *m_labelICCColorSpace;
     QLabel                *m_infoHeader;
     
+    KSqueezedTextLabel    *m_labelICCName;
+    KSqueezedTextLabel    *m_labelICCDescription;
+    KSqueezedTextLabel    *m_labelICCCopyright;
+    KSqueezedTextLabel    *m_labelICCIntent;
+    KSqueezedTextLabel    *m_labelICCColorSpace;
     
     DImg                   m_image;
     DImg                   m_imageSelection;
