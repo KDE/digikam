@@ -255,8 +255,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
     {
-       intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
-                                            (unsigned char)high.red);
+       intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)high.red);
        
        if( intensity.red > threshold_intensity )
           break;
@@ -269,8 +268,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         
        for(low.red = 0 ; low.red < histogram->getHistogramSegment()-1 ; low.red++)
        {
-          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
-                                               (unsigned char)low.red);
+          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)low.red);
           
           if( intensity.red > threshold_intensity )
               break;
@@ -280,8 +278,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
        {
-          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, 
-                                               (unsigned char)high.red);
+          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)high.red);
           
           if( intensity.red > threshold_intensity )
              break;
@@ -294,8 +291,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
     {
-       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, 
-                                              (unsigned char)high.green);
+       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)high.green);
        
        if( intensity.green > threshold_intensity )
           break;
@@ -308,8 +304,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(low.green = 0 ; low.green < histogram->getHistogramSegment()-1 ; low.green++)
        {
-          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel,
-                                                 (unsigned char)low.green);
+          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)low.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -319,8 +314,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
        {
-          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel,
-                                                 (unsigned char)high.green);
+          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)high.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -333,8 +327,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
     {
-       intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
-                                             (unsigned char)high.blue);
+       intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)high.blue);
        
        if( intensity.blue > threshold_intensity )
           break;
@@ -347,8 +340,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         
        for(low.blue = 0 ; low.blue < histogram->getHistogramSegment()-1 ; low.blue++)
        {
-          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
-                                                (unsigned char)low.blue);
+          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)low.blue);
           
           if( intensity.blue > threshold_intensity )
               break;
@@ -358,8 +350,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
        {
-          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, 
-                                                (unsigned char)high.blue);
+          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)high.blue);
           
           if( intensity.blue > threshold_intensity )
              break;
@@ -372,8 +363,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
     {
-       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
-                                              (unsigned char)high.alpha);
+       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)high.alpha);
        
        if( intensity.alpha > threshold_intensity )
           break;
@@ -386,8 +376,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegment()-1 ; low.alpha++)
        {
-          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
-                                                 (unsigned char)low.alpha);
+          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)low.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
@@ -397,8 +386,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
        {
-          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, 
-                                                 (unsigned char)high.alpha);
+          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)high.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
@@ -416,30 +404,30 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        if(i < (long) low.red)
           normalize_map[i].red = 0;
        else if (i > (long) high.red)
-          normalize_map[i].red = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].red = 65535;
        else if (low.red != high.red)
-          normalize_map[i].red = (uint)(((256*histogram->getHistogramSegment() -1)*(i-low.red))/(high.red-low.red));
+          normalize_map[i].red = (unsigned short)((65535*(i-low.red))/(high.red-low.red));
 
        if(i < (long) low.green)
           normalize_map[i].green = 0;
        else if (i > (long) high.green)
-          normalize_map[i].green = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].green = 65535;
        else if (low.green != high.green)
-          normalize_map[i].green = (uint)(((256*histogram->getHistogramSegment() -1)*(i-low.green))/(high.green-low.green));
+          normalize_map[i].green = (unsigned short)((65535*(i-low.green))/(high.green-low.green));
 
        if(i < (long) low.blue)
           normalize_map[i].blue = 0;
        else if (i > (long) high.blue)
-          normalize_map[i].blue = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].blue = 65535;
        else if (low.blue != high.blue)
-          normalize_map[i].blue = (uint)(((256*histogram->getHistogramSegment() -1)*(i-low.blue))/(high.blue-low.blue));
+          normalize_map[i].blue = (unsigned short)((65535*(i-low.blue))/(high.blue-low.blue));
 
        if(i < (long) low.alpha)
           normalize_map[i].alpha = 0;
        else if (i > (long) high.alpha)
-          normalize_map[i].alpha = (256*histogram->getHistogramSegment() -1);
+          normalize_map[i].alpha = 65535;
        else if (low.alpha != high.alpha)
-          normalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegment() -1)*(i-low.alpha))/(high.alpha-low.alpha));
+          normalize_map[i].alpha = (unsigned short)((65535*(i-low.alpha))/(high.alpha-low.alpha));
     }
 
     // Apply result to image.
