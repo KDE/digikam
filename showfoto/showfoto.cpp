@@ -695,6 +695,7 @@ bool ShowFoto::saveAs()
                            false);
     saveDialog.setOperationMode( KFileDialog::Saving );
     saveDialog.setMode( KFile::File );
+    saveDialog.setSelection(url.fileName());    
     saveDialog.setCaption( i18n("New Image File Name") );
     saveDialog.setMimeFilter(mimetypes);
 
