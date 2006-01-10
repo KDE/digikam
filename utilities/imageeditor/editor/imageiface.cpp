@@ -320,6 +320,11 @@ void ImageIface::setOriginalBCG(double brightness, double contrast, double gamma
     DImgInterface::instance()->setBCG(brightness, contrast, gamma);    
 }
 
+void ImageIface::convertOriginalColorDepth(int depth)
+{
+    DImgInterface::instance()->convertDepth(depth);
+}
+
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 {
     if ( !d->image.isNull() ) 

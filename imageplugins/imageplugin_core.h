@@ -57,6 +57,8 @@ private:
     KAction *m_sharpenAction;
     KAction *m_blurAction;
     KAction *m_colorManagementAction;
+    KAction *m_convertTo8Bits;
+    KAction *m_convertTo16Bits;
         
 private slots:
 
@@ -74,6 +76,9 @@ private slots:
     void slotRatioCrop();
 
     void slotColorManagement();
+
+    void slotConvertTo8Bits();
+    void slotConvertTo16Bits();
 
 };
     

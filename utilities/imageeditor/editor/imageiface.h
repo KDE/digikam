@@ -99,6 +99,8 @@ public:
     void setPreviewBCG(double brightness, double contrast, double gamma, bool overIndicator=false);
     void setOriginalBCG(double brightness, double contrast, double gamma);
 
+    void convertOriginalColorDepth(int depth);
+
     void paint(QPaintDevice* device, int x, int y, int w, int h);
 
     // FIXME : remove these methods when all image plugins will be ported to DImg.

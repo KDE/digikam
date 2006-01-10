@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_core" >
+<kpartgui version="3" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -13,6 +13,11 @@
       <Separator />
       <Action name="implugcore_autocorrection" /> 
       <Action name="implugcore_invert" /> 
+      <Menu name="Depth">
+        <text>&amp;Depth</text>
+        <Action name="implugcore_convertto8bits" />
+        <Action name="implugcore_convertto16bits" />
+      </Menu>
       <Separator />
       <Action name="implugcore_colormanagement" />
       <Separator />

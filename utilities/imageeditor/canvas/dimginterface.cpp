@@ -4,7 +4,7 @@
  * Date  : 2003-01-15
  * Description :
  *
- * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2003-2006 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -708,6 +708,14 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     d->gamma      = 1.0;
     d->contrast   = 1.0;
     d->brightness = 0.0;
+
+    emit signalModified(true, d->undoMan->anyMoreRedo());
+}
+
+void DImgInterface::convertDepth(int depth)
+{
+    d->undoMan->addAction(new UndoActionIrreversible(this, "Convert Color Depth"));
+    d->image.convertDepth(depth);
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }

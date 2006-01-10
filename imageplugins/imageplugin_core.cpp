@@ -20,15 +20,16 @@
  *
  * ============================================================ */
 
-// KDE includes.
-
 #include <config.h>
+
+// KDE includes.
 
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -91,6 +92,14 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
     m_invertAction = new KAction(i18n("Invert"), "invertimage", 0,
                          this, SLOT(slotInvert()),
                          actionCollection(), "implugcore_invert");
+    
+    m_convertTo8Bits = new KAction(i18n("8 bits"), 0, 0,
+                           this, SLOT(slotConvertTo8Bits()),
+                           actionCollection(), "implugcore_convertto8bits");
+
+    m_convertTo8Bits = new KAction(i18n("16 bits"), 0, 0,
+                           this, SLOT(slotConvertTo16Bits()),
+                           actionCollection(), "implugcore_convertto16bits");
 
     m_colorManagementAction = new KAction(i18n("Color Management..."), "colormanagement", 0,
                                           this, SLOT(slotColorManagement()),
@@ -138,6 +147,8 @@ void ImagePlugin_Core::setEnabledActions(bool enable)
     m_sharpenAction->setEnabled(enable);
     m_blurAction->setEnabled(enable);
     m_colorManagementAction->setEnabled(enable);
+    m_convertTo8Bits->setEnabled(enable);
+    m_convertTo16Bits->setEnabled(enable);
 }
 
 void ImagePlugin_Core::slotBlur()
@@ -189,8 +200,9 @@ void ImagePlugin_Core::slotInvert()
 
     Digikam::ImageFilters::invertImage(data, w, h, sixteenBit);
     iface.putOriginalImage(i18n("Invert"), data);
+    delete data;
 
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    parentWidget()->setCursor( KCursor::arrowCursor() );
 }
 
 void ImagePlugin_Core::slotBW()
@@ -214,6 +226,43 @@ void ImagePlugin_Core::slotColorManagement()
 {
     DigikamImagesPluginCore::ImageEffect_ICCProof dlg(parentWidget());
     dlg.exec();
+}
+
+void ImagePlugin_Core::slotConvertTo8Bits()
+{
+    Digikam::ImageIface iface(0, 0);
+
+    if (!iface.originalSixteenBit())
+    {
+       KMessageBox::error(parentWidget(), i18n("This picture already using a depth of 8 bits / color / pixel!"));
+       return;
+    }
+    else
+    {
+       if (KMessageBox::warningContinueCancel(parentWidget(),
+                                              i18n("Performing this operation will reduce image color quality! "
+                                                   "Do you want to continue?")) == KMessageBox::Cancel)
+           return;
+    }
+    
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    iface.convertOriginalColorDepth(32);
+    parentWidget()->setCursor( KCursor::arrowCursor() );
+}
+
+void ImagePlugin_Core::slotConvertTo16Bits()
+{
+    Digikam::ImageIface iface(0, 0);
+    
+    if (iface.originalSixteenBit())
+    {
+       KMessageBox::error(parentWidget(), i18n("This picture already using a depth of 16 bits / color / pixel!"));
+       return;
+    }
+    
+    parentWidget()->setCursor( KCursor::waitCursor() );
+    iface.convertOriginalColorDepth(64);
+    parentWidget()->setCursor( KCursor::arrowCursor() );
 }
 
 #include "imageplugin_core.moc"

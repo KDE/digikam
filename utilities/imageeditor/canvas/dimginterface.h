@@ -4,7 +4,7 @@
  * Date  : 2003-01-15
  * Description :
  *
- * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2003-2006 by Renchi Raju, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,6 +110,8 @@ public:
 
     void   setBCG(double brightness, double contrast, double gamma);
 
+    void   convertDepth(int depth);
+    
     void   getUndoHistory(QStringList &titles);
     void   getRedoHistory(QStringList &titles);
 
