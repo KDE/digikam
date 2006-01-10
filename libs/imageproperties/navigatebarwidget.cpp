@@ -70,8 +70,7 @@ NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
     lay->addWidget(m_lastButton);
     lay->addSpacing( KDialog::spacingHint() );
     lay->addWidget(m_filename);
-    lay->addStretch();    
-    
+
     if (!show) hide();
     
     connect(m_firstButton, SIGNAL(clicked()),
