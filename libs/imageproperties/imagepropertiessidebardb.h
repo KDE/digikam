@@ -32,14 +32,14 @@
 
 // Local includes.
 
-#include "digikam_export.h"
 #include "sidebar.h"
-
-class AlbumIconItem;
-class AlbumIconView;
+#include "digikam_export.h"
 
 namespace Digikam
 {
+class DImg;
+class AlbumIconItem;
+class AlbumIconView;
 class ImagePropertiesEXIFTab;
 class ImagePropertiesColorsTab;
 class ImageDescEditTab;
@@ -56,8 +56,7 @@ public:
     ~ImagePropertiesSideBarDB();
     
     void itemChanged(const KURL& url, AlbumIconView* view, AlbumIconItem* item, 
-                     QRect *rect=0, uchar *imageData=0, int imageWidth=0, int imageHeight=0, 
-                     bool sixteenBit=false, bool hasAlpha=true);
+                     QRect *rect=0, DImg *img=0);
                     
     void imageSelectionChanged(QRect *rect);                 
     
@@ -74,27 +73,23 @@ signals:
                                    
 private:
 
-    bool                         m_dirtyExifTab;
-    bool                         m_dirtyHistogramTab;
-    bool                         m_dirtyDesceditTab;
-    bool                         m_sixteenBit;
-    bool                         m_hasAlpha;
+    bool                      m_dirtyExifTab;
+    bool                      m_dirtyHistogramTab;
+    bool                      m_dirtyDesceditTab;
+    
+    QRect                    *m_currentRect;
 
-    int                          m_imageWidth;
-    int                          m_imageHeight;
-    uchar                       *m_imageData;
+    KURL                      m_currentURL;
     
-    QRect                       *m_currentRect;
+    AlbumIconView            *m_currentView;
+    
+    AlbumIconItem            *m_currentItem;
 
-    KURL                         m_currentURL;
+    DImg                     *m_img;
     
-    AlbumIconView               *m_currentView; 
-    
-    AlbumIconItem               *m_currentItem;
-    
-    ImagePropertiesEXIFTab      *m_exifTab;   
+    ImagePropertiesEXIFTab   *m_exifTab;
     ImagePropertiesColorsTab *m_histogramTab;
-    ImageDescEditTab            *m_desceditTab;
+    ImageDescEditTab         *m_desceditTab;
 
 private slots:
 

@@ -36,7 +36,7 @@
 
 namespace Digikam
 {
-
+class DImg;
 class ImagePropertiesEXIFTab;
 class ImagePropertiesColorsTab;
 
@@ -50,8 +50,7 @@ public:
                     
     ~ImagePropertiesSideBar();
     
-    void itemChanged(const KURL& url, QRect *rect, 
-                     uchar *imageData, int imageWidth, int imageHeight, bool sixteenBit, bool hasAlpha);
+    void itemChanged(const KURL& url, QRect *rect, DImg *img=0);
                     
     void imageSelectionChanged(QRect *rect);                 
     
@@ -59,20 +58,16 @@ public:
 
 private:
 
-    bool                         m_dirtyExifTab;
-    bool                         m_dirtyHistogramTab;
-    bool                         m_sixteenBit;
-    bool                         m_hasAlpha;
-    
-    int                          m_imageWidth;
-    int                          m_imageHeight;
-    uchar                       *m_imageData;
-    
-    QRect                       *m_currentRect;
+    bool                      m_dirtyExifTab;
+    bool                      m_dirtyHistogramTab;
 
-    KURL                         m_currentURL;
+    QRect                    *m_currentRect;
 
-    ImagePropertiesEXIFTab      *m_exifTab;   
+    KURL                      m_currentURL;
+
+    DImg                     *m_img;
+    
+    ImagePropertiesEXIFTab   *m_exifTab;
     ImagePropertiesColorsTab *m_histogramTab;
     
 private slots:

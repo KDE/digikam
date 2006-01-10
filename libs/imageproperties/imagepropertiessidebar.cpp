@@ -35,6 +35,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "imagepropertiesexiftab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiessidebar.h"
@@ -46,7 +47,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *split
                                                Side side, bool mimimizedDefault)
                       : Digikam::Sidebar(parent, side, mimimizedDefault)
 {
-    m_imageData         = 0;
+    m_img               = 0;
     m_currentRect       = 0;
     m_dirtyExifTab      = false;
     m_dirtyHistogramTab = false;
@@ -68,20 +69,14 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, 
-                                         uchar *imageData, int imageWidth, int imageHeight, 
-                                         bool sixteenBit, bool hasAlpha)
+void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img)
 {
     if (!url.isValid())
         return;
     
     m_currentURL        = url;
     m_currentRect       = rect;
-    m_imageData         = imageData;
-    m_imageWidth        = imageWidth;
-    m_imageHeight       = imageHeight;
-    m_sixteenBit        = sixteenBit;
-    m_hasAlpha          = hasAlpha;
+    m_img               = img;
     m_dirtyExifTab      = false;
     m_dirtyHistogramTab = false;
     
@@ -115,16 +110,15 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     setCursor(KCursor::waitCursor());
     
     if (tab == m_exifTab && !m_dirtyExifTab)
-       {
+    {
        m_exifTab->setCurrentURL(m_currentURL);
        m_dirtyExifTab = true;
-       }
+    }
     else if (tab == m_histogramTab && !m_dirtyHistogramTab)
-       {
-       m_histogramTab->setData(m_currentURL, m_currentRect, 
-                               m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit, m_hasAlpha);
+    {
+       m_histogramTab->setData(m_currentURL, m_currentRect, m_img);
        m_dirtyHistogramTab = true;
-       }
+    }
     
     setCursor( KCursor::arrowCursor() );
 }

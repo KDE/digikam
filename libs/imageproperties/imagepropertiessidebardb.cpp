@@ -36,6 +36,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
 #include "imagepropertiesexiftab.h"
@@ -51,7 +52,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *s
                                                    Side side, bool mimimizedDefault, bool navBar)
                         : Digikam::Sidebar(parent, side, mimimizedDefault)
 {
-    m_imageData         = 0;
+    m_img               = 0;
     m_currentRect       = 0;
     m_currentView       = 0;
     m_currentItem       = 0;
@@ -117,21 +118,15 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view, 
-                                           AlbumIconItem* item, QRect *rect, 
-                                           uchar *imageData, int imageWidth, int imageHeight,
-                                           bool sixteenBit, bool hasAlpha)
+                                           AlbumIconItem* item, QRect *rect, DImg *img)
 {
     if (!url.isValid())
         return;
     
     m_currentURL        = url;
     m_currentRect       = rect;
-    m_imageData         = imageData;
-    m_imageWidth        = imageWidth;
-    m_imageHeight       = imageHeight;
-    m_sixteenBit        = sixteenBit;
-    m_hasAlpha          = hasAlpha;
-    m_currentView       = view; 
+    m_img               = img;
+    m_currentView       = view;
     m_currentItem       = item;
     m_dirtyExifTab      = false;
     m_dirtyHistogramTab = false;
@@ -142,8 +137,8 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view,
 
 void ImagePropertiesSideBarDB::noCurrentItem(void)
 {
-    m_currentURL  = KURL::KURL();
-    m_currentItem = 0;
+    m_currentURL        = KURL::KURL();
+    m_currentItem       = 0;
     m_exifTab->setCurrentURL();
     m_histogramTab->setData();
     m_desceditTab->setItem();
@@ -182,9 +177,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
-            m_histogramTab->setData(m_currentURL, m_currentRect, 
-                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit, m_hasAlpha,
-                                    NavigateBarWidget::ItemCurrent);
+            m_histogramTab->setData(m_currentURL, m_currentRect, m_img, NavigateBarWidget::ItemCurrent);
             m_dirtyHistogramTab = true;
         }
         else if (tab == m_desceditTab && !m_dirtyDesceditTab)
@@ -210,9 +203,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
-            m_histogramTab->setData(m_currentURL, m_currentRect, 
-                                    m_imageData, m_imageWidth, m_imageHeight, m_sixteenBit, m_hasAlpha,
-                                    currentItemType);
+            m_histogramTab->setData(m_currentURL, m_currentRect, m_img, currentItemType);
             m_dirtyHistogramTab = true;
         }
         else if (tab == m_desceditTab && !m_dirtyDesceditTab)

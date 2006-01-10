@@ -41,6 +41,7 @@ class QHButtonGroup;
 
 namespace Digikam
 {
+class DImg;
 class HistogramWidget;
 class ColorGradientWidget;
 class NavigateBarWidget;
@@ -56,8 +57,7 @@ public:
     ~ImagePropertiesColorsTab();
 
     void setData(const KURL& url=KURL::KURL(), QRect *selectionArea=0, 
-                 uchar* imageData=0, int imageWidth=0, int imageHeight=0, 
-                 bool sixteenBit=false, bool hasAlpha=true, int itemType=0);
+                 DImg *img=0, int itemType=0);
 
     void setSelection(QRect *selectionArea);
 

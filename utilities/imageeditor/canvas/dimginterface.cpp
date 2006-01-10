@@ -712,6 +712,19 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
+DImg* DImgInterface::getImg()
+{
+    if (!d->image.isNull())
+    {
+        return &d->image;
+    }
+    else
+    {
+        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+        return 0;
+    }
+}
+
 uchar* DImgInterface::getImage()
 {
     if (!d->image.isNull())

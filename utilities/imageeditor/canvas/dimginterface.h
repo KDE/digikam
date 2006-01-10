@@ -56,7 +56,6 @@ public:
 
     ~DImgInterface();
 
-//     bool   load(const QString& filename, bool *isReadOnly);
     bool   load(const QString& filename, bool *isReadOnly,
                 ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings,
                 QWidget *parent);
@@ -114,6 +113,7 @@ public:
     void   getUndoHistory(QStringList &titles);
     void   getRedoHistory(QStringList &titles);
 
+    DImg*  getImg();
     uchar* getImage();
     void   putImage(uchar* data, int w, int h);
     void   putImage(const QString &caller, uchar* data, int w, int h);

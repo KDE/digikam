@@ -18,8 +18,6 @@
  * 
  * ============================================================ */
 
-#include <kconfig.h>
-
 // C++ include.
 
 #include <cstring>
@@ -51,6 +49,7 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
@@ -285,8 +284,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 5);
     iccLayout->setRowStretch(8, 10);
 
-    // TODO
-    
     tab->addTab(iccprofilePage, i18n("ICC profile") );
 
     // -------------------------------------------------------------
@@ -369,8 +366,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 }
 
 void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
-                                       uchar* imageData, int imageWidth, int imageHeight, 
-                                       bool sixteenBit, bool hasAlpha, int itemType)
+                                       DImg *img, int itemType)
 {
     // This is necessary to stop computation because m_image.bits() is currently used by
     // threaded histogram algorithm.
@@ -399,23 +395,24 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     m_selectionArea = selectionArea;
     m_image.reset();
                 
-    if (!imageData && !imageWidth && !imageHeight)
+    if (!img)
     {
         loadImageFromUrl(url);
     }
     else 
     {
-        m_image = DImg(imageWidth, imageHeight, sixteenBit, hasAlpha, imageData);
+        m_image = img->copy();
 
         if ( !m_image.isNull() )
         {
+            getICCData();
+
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
-            getICCData();
             if (m_selectionArea)
             {
                 m_imageSelection = m_image.copy(*m_selectionArea);
-                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit,
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), m_image.sixteenBit(),
                                               m_imageSelection.bits(), m_imageSelection.width(),
                                               m_imageSelection.height());
                 m_regionBG->show();
@@ -423,7 +420,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
             }
             else 
             {
-                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), sixteenBit);
+                m_histogramWidget->updateData(m_image.bits(), m_image.width(), m_image.height(), m_image.sixteenBit());
                 m_regionBG->hide();
                 updateInformations();
             }
