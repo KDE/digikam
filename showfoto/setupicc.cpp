@@ -4,7 +4,7 @@
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
- * Copyright 2005 by Gilles Caulier and F.J. Cruz
+ * Copyright 2005-2006 by Gilles Caulier and F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -230,15 +230,14 @@ SetupICC::~SetupICC()
 
 void SetupICC::applySettings()
 {
-    // TODO
     KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
-    if (!m_enableColorManagement->isChecked())
-    {
-        return;
-    }
     config->writeEntry("EnableCM", m_enableColorManagement->isChecked());
+    
+    if (!m_enableColorManagement->isChecked())
+        return;          // No need to write settings in this case.
+
     if (m_defaultApplyICC->isChecked())
     {
         config->writeEntry("BehaviourICC", true);
@@ -276,15 +275,14 @@ void SetupICC::applySettings()
 
 void SetupICC::readSettings()
 {
-    // TODO
-     KConfig* config = kapp->config();
+    KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
 
     m_enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     
     if (!m_enableColorManagement->isChecked())
-        return;
+        return;          // No need to read settings in this case.
     
     slotToggledWidgets(true);
 

@@ -122,7 +122,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/usr/bin/</customdirectory>
-      <mainprogram>digikam/showfoto/showfoto</mainprogram>
+      <mainprogram>digikam/digikam/digikam</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>false</autocompile>

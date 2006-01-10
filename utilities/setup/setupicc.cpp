@@ -219,11 +219,11 @@ void SetupICC::applySettings()
     KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
-    if (!m_enableColorManagement->isChecked())
-    {
-        return;
-    }
     config->writeEntry("EnableCM", m_enableColorManagement->isChecked());
+    
+    if (!m_enableColorManagement->isChecked())
+        return;          // No need to write settings in this case.
+
     if (m_defaultApplyICC->isChecked())
     {
         config->writeEntry("BehaviourICC", true);
@@ -256,7 +256,6 @@ void SetupICC::applySettings()
     config->writeEntry("ProofProfileFile", m_proofICCFiles_file[m_proofProfiles->currentItem()]);
 
     config->sync();
-    
 }
 
 void SetupICC::readSettings()
@@ -268,7 +267,7 @@ void SetupICC::readSettings()
     m_enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     
     if (!m_enableColorManagement->isChecked())
-        return;
+        return;          // No need to read settings in this case.
     
     slotToggledWidgets(true);
 

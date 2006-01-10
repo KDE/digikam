@@ -4,7 +4,7 @@
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
- * Copyright 2005 by Gilles Caulier and F.J. Cruz
+ * Copyright 2005-2006 by Gilles Caulier and F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
