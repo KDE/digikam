@@ -97,9 +97,9 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                            this, SLOT(slotConvertTo8Bits()),
                            actionCollection(), "implugcore_convertto8bits");
 
-    m_convertTo8Bits = new KAction(i18n("16 bits"), 0, 0,
-                           this, SLOT(slotConvertTo16Bits()),
-                           actionCollection(), "implugcore_convertto16bits");
+    m_convertTo16Bits = new KAction(i18n("16 bits"), 0, 0,
+                            this, SLOT(slotConvertTo16Bits()),
+                            actionCollection(), "implugcore_convertto16bits");
 
     m_colorManagementAction = new KAction(i18n("Color Management..."), "colormanagement", 0,
                                           this, SLOT(slotColorManagement()),
