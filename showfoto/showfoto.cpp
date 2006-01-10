@@ -1153,9 +1153,7 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     m_revertAction->setEnabled(moreUndo);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
-    
-    if (!m_isReadOnly)
-        m_saveAction->setEnabled(moreUndo);
+    m_saveAction->setEnabled(moreUndo);
 
     if (m_currentItem)
     {

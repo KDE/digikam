@@ -189,7 +189,7 @@ private slots:
 
     void slotRotatedOrFlipped();
     
-    void slotSave()   { save();   };
+    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
 
     void slotAboutToShowUndoMenu();

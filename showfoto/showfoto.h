@@ -176,7 +176,7 @@ private slots:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotSave()   { save();   };
+    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
     
     void slotToggleFullScreen();

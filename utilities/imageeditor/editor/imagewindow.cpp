@@ -856,7 +856,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
-    if (m_allowSaving && !m_isReadOnly)
+    if (m_allowSaving)
     {
         m_saveAction->setEnabled(moreUndo);
     }
