@@ -1036,6 +1036,7 @@ bool ImageWindow::saveAs()
 
     imageFileSaveDialog.setOperationMode( KFileDialog::Saving );
     imageFileSaveDialog.setMode( KFile::File );
+    imageFileSaveDialog.setSelection(m_urlCurrent.fileName());    
     imageFileSaveDialog.setCaption( i18n("New Image File Name") );
     imageFileSaveDialog.setMimeFilter(mimetypes);
 
