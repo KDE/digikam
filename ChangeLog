@@ -1,3 +1,550 @@
+v0.8.1   		18-01-2006
+----------------------------------------------------------------------------
+2006-01-11 18:20  cgilles
+
+	* branches/stable/extragear/graphics/digikam/AUTHORS: update
+
+2006-01-11 18:11  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/splashscreen/digikam-splash.png:
+	   Digikam from stable : new digikam 0.8.1 splashscreen from  
+	  Andrea Gagliardi
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-11 10:47  cgilles
+
+	* branches/stable/extragear/graphics/digikam/digikam/main.cpp: fix 
+	  date
+
+2006-01-11 10:46  cgilles
+
+	* branches/stable/extragear/graphics/digikam/digikam.lsm, 
+	  branches/stable/extragear/graphics/digikam/version.h: fix 
+	  release number
+
+2006-01-11 10:44  cgilles
+
+	* branches/stable/extragear/graphics/digikam/showfoto/main.cpp: 
+	  fix release number
+
+2006-01-11 10:41  cgilles
+
+	* branches/stable/extragear/graphics/digikam/AUTHORS: fix
+
+2006-01-11 10:39  cgilles
+
+	* branches/stable/extragear/graphics/digikam/AUTHORS: update
+
+2006-01-11 10:38  cgilles
+
+	* branches/stable/extragear/graphics/digikam/showfoto/pics/showfoto-splash.png:
+	   digikam from stable : updated 0.3.1 showfoto splashscreen from  
+	  Maxime Delorme
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-11 07:27  cgilles
+
+	* branches/stable/extragear/graphics/digikam/AUTHORS: digikam from 
+	  stable : updated authors list for 0.8.x serie
+
+2006-01-11 01:57  ach
+	
+	* all png files...
+	    digikam stable branch:  Add new iconset contributed
+	  	by  Tung NGUYEN <ntung@free.fr>. Thanks!
+
+2006-01-10 11:47  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	   digikam from stable : IE saveAs() method : we will use current 
+	  image filename to set default filename in saveAs dialog.
+	  
+2006-01-10 11:46  cgilles
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	   digikam from stable : Showfoto saveAs() method : we will use 
+	  current image filename to set default filename in saveAs dialog.
+	  
+2006-01-09 12:32  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	   digikam from stable : IE/showfoto bug fix about image file 
+	  format pattern to use in saveAs method
+
+2006-01-08 20:24  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h: 
+	  Add even more support for the media kioslave:
+	  o Menu entry under camera lists all media devices attached at 
+	  that moment, it will update the info everytime you expand the 
+	  menu.
+	  o Fix: dont plugin the same entry in the menu more then once 
+	  (directly under camera menu)
+	  o When a media:/ device is not yet mounted, it will mount it.
+	  
+	  It is really difficult for me to test all corner cases. It would 
+	  be great if some people could give feedback. I will mark this 
+	  feature experimental in the release mail or remove it when there 
+	  is no feedback.
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-08 13:38  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	   Fix compile KDE < 3.5
+
+2006-01-07 22:46  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	   SVN_SILENT typo
+
+2006-01-07 22:41  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/dcopiface.cpp,
+	   branches/stable/extragear/graphics/digikam/digikam/dcopiface.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h: 
+	  - Add a second dcop call, which makes it possible to open up the 
+	  camera dialog at a location
+	  - Added a subroutine from k3b which converts system:/ and 
+	  media:/ etc. to a abs path, this makes 
+	    it possible to use digiKam in combination with a service menu 
+	  when a camera is inserted in the 
+	    system. Thanks to Albert Astals Cid for the idea how to do 
+	  this.
+	  CCMAIL: aacid@kde.org
+
+2006-01-05 06:23  scripty
+
+	* branches/stable/extragear/graphics/digikam/showfoto/mimetypes/x-raw.desktop:
+	   SVN_SILENT made messages (.desktop file)
+
+2006-01-04 23:24  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/main.cpp: Add 
+	  a command line option to digiKam so you can start the camera 
+	  dialog at a certain path. Now you can do digikam --download-from 
+	  /a/path/to/camera. This can be used in conjuction with a media:/ 
+	  service menu so you can automatically start digiKam and open up 
+	  the camera.... 
+	  CCMAIL:digikam-devel@kde.org
+
+2006-01-04 00:11  ach
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	   digikam stable: backport from trunk:
+	  	give the dcop if a meaningful name:
+	          'camera' instead of 'DCOPIface'.
+
+2006-01-03 15:48  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp:
+	   Digikam from stable : find a solution to solve command line 
+	  incompatibility between old dcraw release and last dcraw release 
+	  about -q option. No need to backport RAW file decoding options 
+	  from trunk!
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-03 14:22  cgilles
+
+	* branches/stable/extragear/graphics/digikam/libs/dcraw/README: fix
+
+2006-01-02 20:21  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/scanlib.cpp, 
+	  branches/stable/extragear/graphics/digikam/digikam/scanlib.h, 
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+	   Backport of the fix for the camergui:
+	  When a directory is created, a watch is put on it to spot new 
+	  files 
+	  but it can occur that the file is copied there before the watch 
+	  is 
+	  completely setup. That is why as an extra safeguard run scanlib 
+	  over the folders we used when the cameragui is closed. 
+	  CCBUG: 119201
+
+2006-01-02 18:11  toma
+
+	* branches/stable/extragear/graphics/digikam/libs/jpegutils/transupp.cpp:
+	   Restore the possibility to compile with --enable-final. Would 
+	  be nice to know if some people confirmed.
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-02 16:39  toma
+
+	* branches/stable/extragear/graphics/digikam/libs/widgets/imageguidewidget.cpp:
+	   Backport of SVN commit 493185 by cgilles:
+	  
+	  > digikam from trunk : no need to redraw image guide widget 
+	  content if mouse
+	  > is not released. This is reduce CPU time require to redraw 
+	  content.
+
+2006-01-02 16:20  toma
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	   Mimetypes is already a QStringList in this branch, error from 
+	  me in backporting code from trunk.
+
+2006-01-01 23:57  toma
+
+	* branches/stable/extragear/graphics/digikam/libs/filters/imagefilters.cpp:
+	   Rename a variable, because it is also the name of a class, 
+	  which collides when using --enable-final.
+
+2006-01-01 16:32  toma
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	   Backport of SVN commit 492900 by cgilles:
+	  
+	  digikam from trunk : missing to check in saveAs method if user 
+	  image file extension is supported by Image editor.
+
+2006-01-01 16:28  toma
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	   backport of SVN commit 492902 by cgilles:
+	  
+	  digikam from trunk : missing to check in saveAs method if user 
+	  image file extension is supported by showfoto.
+
+2006-01-01 09:52  cgilles
+
+	* branches/stable/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	   Digikam 0.9.0 from stable : fix RAW file support backported 
+	  from trunk. Launch image editor if RAW file is selected to open 
+	  from an album.
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-01 09:17  cgilles
+
+	* branches/stable/extragear/graphics/digikam/kioslave/Makefile.am: 
+	  fix linking
+
+2006-01-01 08:58  cgilles
+
+	* branches/stable/extragear/graphics/digikam/kioslave/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.h:
+	   Digikam 0.9.0 from stable : fix RAW file support backported 
+	  from trunk. Removed static dcraw_parse method depency and added 
+	  an image file format analys in imlibinterface to prevent any 
+	  loading order problem with dcraw.
+	  CCBUG: 119315
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-01 08:41  cgilles
+
+	* branches/stable/extragear/graphics/digikam/libs/dcraw/README, 
+	  branches/stable/extragear/graphics/digikam/libs/dcraw/parse_old.c:
+	   remove old implementation. 
+	  add any comments
+
+2005-12-30 22:30  toma
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp:
+	   Backport of SVN commit 492732 by 
+	  cgilles-still-on-vacation-in-italy-but-i-thing-we-must-disable-his-account:
+	  digikam from trunk : Image editor BUGFIX in SaveAs method : when 
+	  an user set an image file name with an extension without using 
+	  mime type combo list from save as dialog, we need to check this 
+	  file name extension before to perform image saving, else image 
+	  editor will failed.
+
+2005-12-30 22:24  toma
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp:
+	   backport of SVN commit 492733 by cgilles:
+	  
+	  digikam from trunk : Showfoto BUGFIX in SaveAs method : when an 
+	  user set an image file name with an extension without using mime 
+	  type combo list from save as dialog, we need to check this file 
+	  name extension before to perform image saving, else image editor 
+	  will failed.
+
+2005-12-30 13:15  cgilles
+
+	* branches/stable/extragear/graphics/digikam/digikam/pics/histogram-lin.png,
+	  branches/stable/extragear/graphics/digikam/digikam/pics/histogram-log.png,
+	  branches/stable/extragear/graphics/digikam/digikam/pics/image-full.png,
+	  branches/stable/extragear/graphics/digikam/digikam/pics/image-selection.png:
+	   digikam from stable : optimize icons size
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-29 23:37  jahrens
+
+	* branches/stable/extragear/graphics/digikam/digikam/folderview.cpp:
+	   backported...
+	  CCBUG: 117401
+
+2005-12-29 21:10  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+	   backport
+	  
+	  r492401 | toma | 2005-12-29 21:51:32 +0100 (do, 29 dec 2005) | 4 
+	  lines
+	  
+	  Make the kipi plugins also work on all images in a search folder 
+	  or date folder.
+	  CCBUG: 116520
+
+2005-12-29 18:42  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/digikamui.rc: 
+	  Backport of SVN commit 492366 by toma:
+	  
+	  Add a rescan possibility to the menu, so you dont have to close 
+	  and start digiKam again when the app does not detect changes in 
+	  the album library path (which it should detect in all cases by 
+	  the way, so if you spot a logic, please open a new bugreport)
+	  
+	  Also makes it possible to turn off scan at start in the settings 
+	  and do it manually when needed, this will gain a bit in the 
+	  startup time of digiKam.
+	  
+	  CCBUG: 119073
+
+2005-12-29 13:38  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp:
+	   digikam from stable : using -q dcraw option to decode RAW file 
+	  under Image Editor is better than -h : right image size, good 
+	  image quality, and suitable image decoding speed.
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-26 20:20  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/upgradedb_sqlite2tosqlite3.cpp,
+	  branches/stable/extragear/graphics/digikam/kioslave/sqlitedb.cpp:
+	   backport of the fix for --enable-nfs-hack
+
+2005-12-26 18:12  toma
+
+	* branches/stable/extragear/graphics/digikam/libs/dcraw/Makefile.am,
+	  branches/stable/extragear/graphics/digikam/libs/dcraw/dcraw_parse.cpp,
+	  branches/stable/extragear/graphics/digikam/libs/dcraw/dcraw_parse.h,
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+	   - Copy over the dcraw_parse.* files from trunk, needed for the 
+	  backport of 491071
+	  - backport SVN commit 491071 by cgilles: Camera Interface can 
+	  display RAW file thumbnails.
+
+2005-12-26 15:03  toma
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  branches/stable/extragear/graphics/digikam/showfoto/showfotoui.rc:
+	   Backport (SVN commit 491561 by toma: Several changes which make 
+	  sure the open file and open folder dialog always open in the 
+	  last used folder.)
+
+2005-12-22 19:08  gianni
+
+	* branches/stable/extragear/graphics/digikam/showfoto/mimetypes/x-raw.desktop:
+	   PNG, GIF, JPEG, MNG and BMP cannot be RAW images. We need to 
+	  open and previe into Konqueror. This commit fix it.
+	  CCMAIL:caulier.gilles@free.fr,tomalbers@kde.nl
+
+2005-12-21 03:49  mueller
+
+	* branches/stable/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp:
+	   fix shell quoting
+
+2005-12-19 19:07  toma
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imageprint.cpp:
+	   backport SVN commit 489461 by alund:
+	  Reorganize the print dialog so that the widgets for configuring 
+	  an exact size works like a sencence:
+	  o Scale to exact size:
+	  [  ] x [  ] [Centimeters v]
+
+2005-12-19 10:55  jahrens
+
+	* branches/stable/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/tagspopupmenu.h:
+	   Backported the patch from Craig Howard to stable branch.
+	  CCBUG: 113807
+
+2005-12-19 10:32  jahrens
+
+	* branches/stable/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+	   Adding the "Not Tagged" entry, when the tag filter was cleared.
+	  (backported to stable branch)
+	  BUG: 116343
+
+
+2005-12-19 00:06  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam, 
+	  branches/stable/extragear/graphics/digikam/digikam/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/digikam/dcopiface.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/dcopiface.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h: 
+	  backport: SVN commit 489526 by toma:
+	  Patch received from Leonid Zeitlin:
+	  Adds a dcop possibility for digiKam, so the hotplug script can 
+	  send a DCOP call to a running instance of DigiKam to show the
+	  camera dialog. Needed to prevent starting another digiKam 
+	  instance.
+
+2005-12-18 23:46  toma
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imageprint.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imageprint.h:
+	   backport from trunk: a patch wich adds the auto-rotate page 
+	  option for printing from Anders Lund 
+
+2005-12-18 01:58  toma
+
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	  branches/stable/extragear/graphics/digikam/showfoto/showfoto.h, 
+	  branches/stable/extragear/graphics/digikam/showfoto/showfotoui.rc,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.h:
+	   Changes to handle raw support properly. Raw support has 
+	  completed.
+
+2005-12-18 01:07  jahrens
+
+	* branches/stable/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/albumiconview.h:
+	   Added copy/paste to AlbumIconView (backported to 0.8 from trunk)
+	  Now its possible to copy images from outside digikam (like 
+	  konqi) or between albums via copy/paste.
+	  
+	  Todo: cut
+
+2005-12-18 00:19  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/showfoto/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/Makefile.am:
+	   Finally it compiles!!!!!
+
+2005-12-17 20:58  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/libs/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/libs/dcraw, 
+	  branches/stable/extragear/graphics/digikam/showfoto/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/showfoto/mimetypes, 
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/Makefile.am,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/canvas.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/canvas.h,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imlibinterface.h:
+	   First step of 8 bit raw support. It does not link properly yet, 
+	  but Gilles will look at that later tonight.
+
+2005-12-15 09:57  cgilles
+
+	* branches/stable/extragear/graphics/digikam/imageplugins/imageeffect_sharpen.cpp:
+	   Optimize sharpen settings.
+
+2005-12-15 09:53  cgilles
+
+	* branches/stable/extragear/graphics/digikam/libs/filters/sharpen.cpp:
+	   Fix memory leak. Thanks Mr valgrind
+
+2005-12-15 09:29  cgilles
+
+	* branches/stable/extragear/graphics/digikam/themes/Dessert, 
+	  branches/stable/extragear/graphics/digikam/themes/Makefile.am: 
+	  import Dessert theme from trunk 
+
+2005-12-07 19:00  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/imageproperties.cpp:
+	   Mike Seymour sent us this patch for < KDE 3.3
+
+2005-12-05 17:15  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/imagepropertieshistogram.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/searchquickdialog.cpp,
+	  branches/stable/extragear/graphics/digikam/imageplugins/imageeffect_bcg.cpp,
+	  branches/stable/extragear/graphics/digikam/imageplugins/imageeffect_hsl.cpp,
+	  branches/stable/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+	  branches/stable/extragear/graphics/digikam/imageplugins/imageeffect_rgb.cpp,
+	  branches/stable/extragear/graphics/digikam/libs/widgets/imagepannelwidget.cpp,
+	  branches/stable/extragear/graphics/digikam/showfoto/imagepropertieshistogram.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/setup/setupcamera.cpp:
+	   backport: (SVN commit 485597 by mhunter: Typographical 
+	  corrections and changes)
+
+2005-12-04 17:34  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imageprint.cpp:
+	   Digikam 0.8.x from stable : patch from Anders Lund for making 
+	  printing possible/faster
+	  CCMAIL: digikam-devel@kde.org, anders@alweb.dk
+
+2005-11-29 20:38  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/searchwidgets.cpp:
+	   Backport Better Wording
+
+2005-11-29 20:31  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/albumdb.h: 
+	  backport: 'daily unbreak compilation' from (SVN commit 483974 by 
+	  uga: gcc 4.1 build fix)
+
+2005-11-27 18:12  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/Makefile.am, 
+	  branches/stable/extragear/graphics/digikam/digikam/albumdb.cpp, 
+	  branches/stable/extragear/graphics/digikam/digikam/albumdb.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/albumicongroupitem.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/albumiconview.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/albumiconview.h,
+	  branches/stable/extragear/graphics/digikam/digikam/albumsettings.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/albumsettings.h,
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/imagedescedit.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/imagedescedit.h,
+	  branches/stable/extragear/graphics/digikam/digikam/imageinfo.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/imageinfo.h, 
+	  branches/stable/extragear/graphics/digikam/digikam/pics/Makefile.am,
+	  branches/stable/extragear/graphics/digikam/digikam/pics/rating.png,
+	  branches/stable/extragear/graphics/digikam/digikam/ratingwidget.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/ratingwidget.h,
+	  branches/stable/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+	  branches/stable/extragear/graphics/digikam/digikam/searchwidgets.h,
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamsearch.cpp,
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamsearch.h,
+	  branches/stable/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp,
+	  branches/stable/extragear/graphics/digikam/utilities/setup/setupgeneral.h:
+	   Backport from trunk: digikam meets Rating. Now it is possible 
+	  to rate your images. The initial patch was sent a couple of 
+	  months ago to the mailinglist by Owen Hirst. I removed the dust 
+	  and added the possibility to make a search based on the rating. 
+	  You can sort on the rating and you can turn it off in the 
+	  settings. 
+	  
+	  It would be nice to have some feedback!
+	  CCMAIL:digikam-devel@kde.org
+
 v0.8.0   		11/21/05
 ----------------------------------------------------------------------------
 2005-11-19 23:01  jahrens
