@@ -49,10 +49,10 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "showfoto",
                           I18N_NOOP("showFoto"),
-                          "0.3.0",
+                          "0.3.1",
                           Description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2004-2005, digiKam developers team"),
+                          I18N_NOOP("(c) 2004-2006, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
