@@ -1300,9 +1300,12 @@ void DigikamApp::loadCameras()
 {
     mCameraList->load();
     
-    mCameraMenuAction->popupMenu()->insertSeparator();
-    
-    mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
+    /* 
+     * Disabled, not fished 
+     *
+     * mCameraMenuAction->popupMenu()->insertSeparator();
+     * mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
+     */
     
     mCameraMenuAction->popupMenu()->insertSeparator();
     
