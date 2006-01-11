@@ -18,6 +18,8 @@
  * 
  * ============================================================ */
 
+#include <config.h>
+
 // C++ include.
 
 #include <cstring>
@@ -55,6 +57,7 @@
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
 #include "loadsavethread.h"
+#include "cietongewidget.h"
 #include "imagepropertiescolorstab.h"
 
 #include LCMS_HEADER
@@ -260,7 +263,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // ICC Profiles tab area ---------------------------------------
     
     QWidget* iccprofilePage = new QWidget( tab );
-    QGridLayout *iccLayout = new QGridLayout(iccprofilePage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *iccLayout = new QGridLayout(iccprofilePage, 9, 3, KDialog::marginHint(), KDialog::spacingHint());
     
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
     iccbox->setFrameStyle (QFrame::NoFrame);
@@ -280,9 +283,12 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QLabel *labelColor = new QLabel(i18n("Color Space: "), iccdetail);
     m_labelICCColorSpace = new KSqueezedTextLabel(0, iccdetail);
 
+    m_cieTonge = new CIETongeWidget(256, 256, iccprofilePage);
+    
     iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
-    iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 5);
-    iccLayout->setRowStretch(8, 10);
+    iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 2);
+    iccLayout->addMultiCellWidget(m_cieTonge, 8, 8, 0, 2);
+    iccLayout->setRowStretch(9, 10);
 
     tab->addTab(iccprofilePage, i18n("ICC profile") );
 
@@ -697,6 +703,7 @@ void ImagePropertiesColorsTab::getICCData()
         m_infoHeader->setText(i18n("Image Color Profile Info:"));
         
         m_embedded_profile = m_image.getICCProfil();
+        m_cieTonge->setProfileData(&m_embedded_profile);
         embProfile = cmsOpenProfileFromMem(m_embedded_profile.data(),
                                           (DWORD)m_embedded_profile.size());
         m_labelICCName->setText(QString(cmsTakeProductName(embProfile)));

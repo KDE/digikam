@@ -48,6 +48,7 @@ class HistogramWidget;
 class ColorGradientWidget;
 class NavigateBarWidget;
 class ManagedLoadSaveThread;
+class CIETongeWidget;
 
 class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
 {
@@ -116,6 +117,10 @@ private:
     QLabel                *m_labelAlphaChannel;
     QLabel                *m_infoHeader;
     
+    QString                m_currentFilePath;
+
+    QRect                 *m_selectionArea;
+        
     KSqueezedTextLabel    *m_labelICCName;
     KSqueezedTextLabel    *m_labelICCDescription;
     KSqueezedTextLabel    *m_labelICCCopyright;
@@ -125,14 +130,12 @@ private:
     DImg                   m_image;
     DImg                   m_imageSelection;
     
-    QRect                 *m_selectionArea;
-    
     ColorGradientWidget   *m_hGradient;
     HistogramWidget       *m_histogramWidget;
     NavigateBarWidget     *m_navigateBar;
     ManagedLoadSaveThread *m_imageLoaderThreaded;
-    QString                m_currentFilePath;
-
+    CIETongeWidget        *m_cieTonge;
+    
     QByteArray             m_embedded_profile;
     
 };
