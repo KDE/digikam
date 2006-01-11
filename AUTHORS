@@ -1,16 +1,28 @@
-COORDINATORS :
-
-Renchi Raju <renchi.raju at kdemail.net>                              : Main coordinator and developer.
-Gilles Caulier <caulier dot gilles at free.fr>                        : Co-coordinator, developer,
-                                                                        French translations.
-
 DEVELOPERS :
 
-Joern Ahrens <kde at jokele.de>                                       : Developer.
-Tom Albers <tomalbers at kde.nl>                                      : Developer.
+Gilles Caulier <caulier dot gilles at free.fr>                        : Coordinator, lead developer, French translations.
+Joern Ahrens <kde at jokele.de>                                       : Developer, digiKam webpage maintainer.
+Tom Albers <tomalbers at kde.nl>                                      : Developer, digiKam webpage maintainer.
 
+CURRENTS CONTRIBUTORS :
 
-TRANSLATORS :
+Achim Bohnet <ach at mpe dot mpg dot de>                              : Bugs reports and patchs.
+Gerhard Kulzer <gerhard at kulzer dot net>                            : Feedback, patchs, and handbook writter.
+Tung NGUYEN <ntung at free dot fr>                                    : Bugs reports, French translations
+Oliver Dörr <oliver at doerr-privat dot de>                           : Beta tester, German translations.
+
+OLD CONTRIBUTORS :
+
+Renchi Raju <renchi.raju at kdemail.net>                              : 0.1.0 to 0.8.0 : main coordinator and lead developer.
+Ralf Holzer <kde at ralfhoelzer.com>                                  : Developer (0.7.x).
+Todd Shoemaker <todd at theshoemakers.net>                            : Developer (0.6.x).
+Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Feedback and patchs (0.6.x).
+Richard Taylor <r dot taylor at bcs.org.uk>                           : Feedback, patchs, and handbook writter (0.7.x).
+Yves Chaufour <yves dot chaufour at wanadoo.fr>                       : digiKam webpage maintainer (0.7.x).
+Charles Bouveyron <c dot bouveyron at tuxfamily.org>                  : Beta tester (0.6.x).
+Sebastian Rooder <seppelrockt at web.de>                              : Crystal icons style (0.6.2).
+
+OLD TRANSLATORS :
 
 Stefano Rivoir <s dot rivoir at gts.it>                               : Italian translations.
 Jan Toenjes <jan dot toenjes at web.de>                               : German translations.
@@ -22,15 +34,23 @@ Rune Laursen <runerl at skjoldhoej.dk>                                : Danish t
 Jasper van der Marel <jasper dot van dot der dot marel at wanadoo.nl> : Dutch translations.
 Anna Sawicka <ania at kajak.org.pl>                                   : Polish translations.
 
-CONTRIBUTORS :
+DIGIKAM SPLASHSCREENS CREDITS :
 
-Richard Taylor <r dot taylor at bcs.org.uk>                           : Feedback, patchs, and handbook writting.
-Achim Bohnet <ach at mpe.mpg.de>                                      : Bugs reports and patchs.
-Charles Bouveyron <c dot bouveyron at tuxfamily.org>                  : Beta tester.
-Oliver Dörr <oliver at doerr-privat.de>                               : Beta tester.
-Jens Gassmann <jens dot gassmann at atomix.de>                        : Splashscreen for 0.6.1.
-Yves Chaufour <yves dot chaufour at wanadoo.fr>                       : digiKam webpage maintainer, Splashscreen for 0.6.2 and 0.7.0.
-Sebastian Rooder <seppelrockt at web.de>                              : New Crystal icons style for 0.6.2.
-Todd Shoemaker <todd at theshoemakers.net>                            : Feedback and patchs.
-Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Feedback and patchs.
-Ralf Holzer <kde at ralfhoelzer.com>                                  : Developer.
+0.8.1 : TODO
+0.8.0 : Tom Albers      <tomalbers at kde dot nl>
+0.7.3 : Andreas Fischer
+0.7.2 : Caulier Gilles  <caulier dot gilles at free dot fr>
+0.7.1 : Yemu
+0.7.0 : Yves Chaufour   <yves dot chaufour at wanadoo dot fr>
+0.6.2 : Yves Chaufour   <yves dot chaufour at wanadoo dot fr>
+0.6.1 : Jens Gassmann   <jens dot gassmann at atomix dot de>
+0.6.0 : Renchi Raju     <renchi dot raju at kdemail dot net>
+0.5.0 : Renchi Raju     <renchi dot raju at kdemail dot net>
+0.4.0 : NONE
+
+SHOWFOTO SPLASHSCREENS CREDITS :
+
+0.3.1 : TODO
+0.3.0 : Caulier Gilles  <caulier dot gilles at free dot fr>
+0.2.0 : Joern Ahrens    <kde at jokele dot de>
+0.1.0 : none
