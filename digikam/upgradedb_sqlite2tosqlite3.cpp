@@ -133,7 +133,7 @@ bool upgradeDB_Sqlite2ToSqlite3(const QString& _libraryPath)
     if (!db2.isValid())
     {
 	kdDebug() << "Failed to initialize Old Album Database" << endl;
-	return false;
+//	return false;
     }
 
     // delete entries from sqlite3 database

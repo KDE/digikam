@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
                           0);
 
     aboutData.addCredit ( "Tung Nguyen",
-                          I18N_NOOP("Bug reports and Feedback"),
+                          I18N_NOOP("Bug reports, feedback and icons"),
                           "ntung at free.fr",
                           0);
 
