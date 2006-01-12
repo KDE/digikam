@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2006-01-10
- * Description : a widget to display CIE tonge from
+ * Description : a widget to display CIE tongue from
  * an ICC profile.
  * 
  * Copyright 2006 by Gilles Caulier
@@ -141,11 +141,11 @@ namespace Digikam
         { 0.7347, 0.2653 }  // 780 nm 
     };
 
-class CIETongeWidgetPriv
+class CIETongueWidgetPriv
 {
 public:
 
-    CIETongeWidgetPriv()
+    CIETongueWidgetPriv()
     {
         hMonitorProfile      = 0;
         hXYZProfile          = 0;
@@ -168,10 +168,10 @@ public:
     bool profileDataAvailable;
 };
 
-CIETongeWidget::CIETongeWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
-              : QWidget(parent, 0, Qt::WDestructiveClose)
+CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
+               : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    d = new CIETongeWidgetPriv;
+    d = new CIETongueWidgetPriv;
     setMinimumSize(w, h);
     
     if (hMonitor)
@@ -185,7 +185,7 @@ CIETongeWidget::CIETongeWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonit
                                         INTENT_PERCEPTUAL, 0);
 }
 
-CIETongeWidget::~CIETongeWidget()
+CIETongueWidget::~CIETongueWidget()
 {
     if (d->Measurement.Patches)
         free(d->Measurement.Patches);
@@ -199,7 +199,7 @@ CIETongeWidget::~CIETongeWidget()
     delete d;
 }
 
-void CIETongeWidget::setProfileData(QByteArray *profileData)
+void CIETongueWidget::setProfileData(QByteArray *profileData)
 {
     if (profileData)
     {
@@ -277,23 +277,23 @@ void CIETongeWidget::setProfileData(QByteArray *profileData)
     repaint(false);
 }
 
-void CIETongeWidget::MapPoint(int& icx, int& icy, LPcmsCIExyY xyY)
+void CIETongueWidget::MapPoint(int& icx, int& icy, LPcmsCIExyY xyY)
 {
     icx = (int) floor((xyY->x * (m_pxcols - 1)) + .5);
     icy = (int) floor(((m_pxrows - 1) - xyY->y * (m_pxrows - 1)) + .5);
 }
 
-void CIETongeWidget::BiasedLine(int x1, int y1, int x2, int y2)
+void CIETongueWidget::BiasedLine(int x1, int y1, int x2, int y2)
 {
     m_pnt.drawLine(x1 + m_xBias, y1, x2 + m_xBias, y2);
 }
 
-void CIETongeWidget::BiasedText(int x, int y, QString Txt)
+void CIETongueWidget::BiasedText(int x, int y, QString Txt)
 {
     m_pnt.drawText(QPoint(m_xBias + x, y), Txt);
 }
 
-QRgb CIETongeWidget::ColorByCoord(double x, double y)
+QRgb CIETongueWidget::ColorByCoord(double x, double y)
 {
     // Get xyz components scaled from coordinates
 
@@ -315,7 +315,7 @@ QRgb CIETongeWidget::ColorByCoord(double x, double y)
     return qRgb(RGB[0], RGB[1], RGB[2]);
 }
 
-void CIETongeWidget::OutlineTonge()
+void CIETongueWidget::OutlineTongue()
 {   
     int lx = 0, ly = 0;
     int fx=0, fy=0;
@@ -348,7 +348,7 @@ void CIETongeWidget::OutlineTonge()
     BiasedLine(lx, ly, fx, fy);
 }
 
-void CIETongeWidget::FillTonge()
+void CIETongueWidget::FillTongue()
 {
 
     QImage Img = m_pix.convertToImage();
@@ -390,7 +390,7 @@ void CIETongeWidget::FillTonge()
     m_pix.convertFromImage(Img, QPixmap::AvoidDither );
 }
 
-void CIETongeWidget::DrawTongeAxis()
+void CIETongueWidget::DrawTongueAxis()
 {
     QFont font;
 
@@ -419,7 +419,7 @@ void CIETongeWidget::DrawTongeAxis()
     }
 }
 
-void CIETongeWidget::DrawTongeGrid()
+void CIETongueWidget::DrawTongueGrid()
 {       
     m_pnt.setPen(qRgb(80, 80, 80));
     
@@ -433,7 +433,7 @@ void CIETongeWidget::DrawTongeGrid()
     }
 }
 
-void CIETongeWidget::DrawLabels()
+void CIETongueWidget::DrawLabels()
 {
     QFont font;
 
@@ -483,7 +483,7 @@ void CIETongeWidget::DrawLabels()
     }
 }
 
-void CIETongeWidget::DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz)
+void CIETongueWidget::DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz)
 {
     int icx, icy;
 
@@ -492,7 +492,7 @@ void CIETongeWidget::DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, in
     m_pnt.drawEllipse(icx + m_xBias- sz/2, icy-sz/2, sz, sz);
 }
 
-void CIETongeWidget::DrawPatches(void)
+void CIETongueWidget::DrawPatches(void)
 {
     for (int i=0; i < d->Measurement.nPatches; i++)
     {
@@ -531,7 +531,7 @@ void CIETongeWidget::DrawPatches(void)
     }
 }
 
-void CIETongeWidget::DrawColorantTriangle(void)
+void CIETongueWidget::DrawColorantTriangle(void)
 {
     DrawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
     DrawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
@@ -550,7 +550,7 @@ void CIETongeWidget::DrawColorantTriangle(void)
     BiasedLine(x3, y3, x1, y1);
 }
 
-void CIETongeWidget::Sweep_sRGB(void)
+void CIETongueWidget::Sweep_sRGB(void)
 {
     int r, g, b;
     cmsHPROFILE hXYZ, hsRGB;
@@ -589,18 +589,31 @@ void CIETongeWidget::Sweep_sRGB(void)
     cmsCloseProfile(hsRGB);
 }
 
-void CIETongeWidget::DrawWhitePoint(void)
+void CIETongueWidget::DrawWhitePoint(void)
 {
     cmsCIExyY Whitem_pntxyY;
     cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
     DrawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
 }       
 
-void CIETongeWidget::paintEvent( QPaintEvent * )
+void CIETongueWidget::paintEvent( QPaintEvent * )
 {
     m_pix = QPixmap(size());
-            
     m_pix.setOptimization(QPixmap::BestOptim);
+
+    // Widget is disable : drawing grayed frame.
+    if ( !isEnabled() )
+    {
+        QPainter p1;
+        m_pnt.begin(&m_pix);
+        m_pnt.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
+        m_pnt.setPen(QPen::QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        m_pnt.drawRect(0, 0, width(), height());
+        m_pnt.end();
+        bitBlt(this, 0, 0, &m_pix);
+        return;
+    }
+
     m_pix.fill(Qt::black);
 
     m_pnt.begin(&m_pix);
@@ -621,16 +634,16 @@ void CIETongeWidget::paintEvent( QPaintEvent * )
 
     if (d->profileDataAvailable)
     {
-        OutlineTonge();
-        FillTonge();
+        OutlineTongue();
+        FillTongue();
     }
 
-    DrawTongeAxis();
+    DrawTongueAxis();
 
     if (d->profileDataAvailable)
         DrawLabels();
     
-    DrawTongeGrid();
+    DrawTongueGrid();
 
     if (d->profileDataAvailable)
     {

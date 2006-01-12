@@ -48,7 +48,7 @@ class HistogramWidget;
 class ColorGradientWidget;
 class NavigateBarWidget;
 class ManagedLoadSaveThread;
-class CIETongeWidget;
+class CIETongueWidget;
 
 class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
 {
@@ -134,7 +134,7 @@ private:
     HistogramWidget       *m_histogramWidget;
     NavigateBarWidget     *m_navigateBar;
     ManagedLoadSaveThread *m_imageLoaderThreaded;
-    CIETongeWidget        *m_cieTonge;
+    CIETongueWidget       *m_cieTongue;
     
     QByteArray             m_embedded_profile;
     

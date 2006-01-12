@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2006-01-10
- * Description : a widget to display CIE tonge from
+ * Description : a widget to display CIE tongue from
  * an ICC profile.
  * 
  * Copyright 2006 by Gilles Caulier
@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
 
-#ifndef CIETONGEWIDGET_H
-#define CIETONGEWIDGET_H
+#ifndef CIETONGUEWIDGET_H
+#define CIETONGUEWIDGET_H
 
 #include <config.h>
 
@@ -45,16 +45,16 @@
 namespace Digikam
 {
 
-class CIETongeWidgetPriv;
+class CIETongueWidgetPriv;
 
-class DIGIKAM_EXPORT CIETongeWidget : public QWidget
+class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 {
 Q_OBJECT
 
 public:
 
-    CIETongeWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
-    ~CIETongeWidget();
+    CIETongueWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
+    ~CIETongueWidget();
 
     void setProfileData(QByteArray *profileData=0);
 
@@ -73,10 +73,10 @@ protected:
 
     int  Grids(double d) const { return (int) floor(d * m_gridside + .5); };
 
-    void OutlineTonge();
-    void FillTonge();
-    void DrawTongeAxis();
-    void DrawTongeGrid();
+    void OutlineTongue();
+    void FillTongue();
+    void DrawTongueAxis();
+    void DrawTongueGrid();
     void DrawLabels();
 
     QRgb ColorByCoord(double x, double y);  
@@ -92,16 +92,16 @@ private:
     
     void MapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void BiasedLine(int x1, int y1, int x2, int y2);
-    void CIETongeWidget::BiasedText(int x, int y, QString Txt);
+    void CIETongueWidget::BiasedText(int x, int y, QString Txt);
 
     void Sweep_sRGB(void);
 
 private :
 
-    CIETongeWidgetPriv* d;
+    CIETongueWidgetPriv* d;
 
 };
 
 }  // namespace Digikam
 
-#endif /* CIETONGEWIDGET_H */
+#endif /* CIETONGUEWIDGET_H */

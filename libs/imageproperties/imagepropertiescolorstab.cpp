@@ -283,11 +283,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QLabel *labelColor = new QLabel(i18n("Color Space: "), iccdetail);
     m_labelICCColorSpace = new KSqueezedTextLabel(0, iccdetail);
 
-    m_cieTonge = new CIETongeWidget(256, 256, iccprofilePage);
+    m_cieTongue = new CIETongueWidget(256, 256, iccprofilePage);
     
     iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
     iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 2);
-    iccLayout->addMultiCellWidget(m_cieTonge, 8, 8, 0, 2);
+    iccLayout->addMultiCellWidget(m_cieTongue, 8, 8, 0, 2);
     iccLayout->setRowStretch(9, 10);
 
     tab->addTab(iccprofilePage, i18n("ICC profile") );
@@ -694,7 +694,7 @@ void ImagePropertiesColorsTab::getICCData()
         m_labelICCCopyright->setText(i18n("N.A."));
         m_labelICCIntent->setText(i18n("N.A."));
         m_labelICCColorSpace->setText(i18n("N.A."));
-        m_cieTonge->setProfileData();
+        m_cieTongue->setProfileData();
     }
     else
     {
@@ -703,7 +703,7 @@ void ImagePropertiesColorsTab::getICCData()
         m_infoHeader->setText(i18n("Embedded color profile info:"));
         
         m_embedded_profile = m_image.getICCProfil();
-        m_cieTonge->setProfileData(&m_embedded_profile);
+        m_cieTongue->setProfileData(&m_embedded_profile);
         embProfile = cmsOpenProfileFromMem(m_embedded_profile.data(),
                                           (DWORD)m_embedded_profile.size());
         m_labelICCName->setText(QString(cmsTakeProductName(embProfile)));
