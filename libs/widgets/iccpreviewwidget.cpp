@@ -96,3 +96,5 @@ void ICCPreviewWidget::getICCData( const KURL &url)
 }
 
 }
+
+#include "iccpreviewwidget.moc"
