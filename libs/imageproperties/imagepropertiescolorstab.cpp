@@ -57,7 +57,7 @@
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
 #include "loadsavethread.h"
-#include "cietongewidget.h"
+#include "cietonguewidget.h"
 #include "imagepropertiescolorstab.h"
 
 #include LCMS_HEADER

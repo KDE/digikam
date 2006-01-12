@@ -37,7 +37,7 @@
 // Local includes.
 
 #include "lcmsprf.h"
-#include "cietongewidget.h"
+#include "cietonguewidget.h"
 
 namespace Digikam
 {
