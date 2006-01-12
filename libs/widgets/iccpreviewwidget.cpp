@@ -69,6 +69,11 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
     deviceClass->setFrameStyle(QFrame::NoFrame);
     QLabel *label4 = new QLabel(i18n("Device class: "), deviceClass);
     m_deviceClass = new QLabel(0, deviceClass);
+
+    QHGroupBox *renderingIntent = new QHGroupBox(metaData);
+    renderingIntent->setFrameStyle(QFrame::NoFrame);
+    QLabel *label5 = new QLabel(i18n("Rendering intent: "), renderingIntent);
+    m_renderingIntent = new QLabel(0, renderingIntent);
     
     layout->addWidget(metaData);
 }
@@ -81,6 +86,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 void ICCPreviewWidget::showPreview( const KURL &url)
 {
     //TODO
+    getICCData(url);
 }
 
 void ICCPreviewWidget::clearPreview()
@@ -92,7 +98,86 @@ void ICCPreviewWidget::getICCData( const KURL &url)
 {
     //TODO
     cmsHPROFILE tmpProfile=0;
+    QString space, device, intent;
     tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(url.path()), "r");
+
+    m_name->setText(QString(cmsTakeProductName(tmpProfile)));
+    m_description->setText(QString(cmsTakeProductDesc(tmpProfile)));
+
+    switch (cmsGetColorSpace(tmpProfile))
+        {
+            case icSigLabData:
+                space = i18n("Lab");
+                break;
+            case icSigLuvData:
+                space = i18n("Luv");
+                break;
+            case icSigRgbData:
+                space = i18n("RGB");
+                break;
+            case icSigGrayData:
+                space = i18n("GRAY");
+                break;
+            case icSigHsvData:
+                space = i18n("HSV");
+                break;
+            case icSigHlsData:
+                space = i18n("HLS");
+                break;
+            case icSigCmykData:
+                space = i18n("CMYK");
+                break;
+            case icSigCmyData:
+                space= i18n("CMY");
+                break;
+            default:
+                space = i18n("Other");
+                break;
+        }
+
+    m_colorSpace->setText(space);
+
+     switch ((int)cmsGetDeviceClass(tmpProfile))
+            {
+                case icSigInputClass:
+                    device = i18n("Input device");
+                    break;
+                case icSigDisplayClass:
+                    device = i18n("Display device");
+                    break;
+                case icSigOutputClass:
+                    device = i18n("Output device");
+                    break;
+                case icSigColorSpaceClass:
+                    device = i18n("Color space");
+                    break;
+                case icSigLinkClass:
+                    device = i18n("Link device");
+                    break;
+            }
+     m_deviceClass->setText(device);
+
+     int profileIntent = cmsTakeRenderingIntent(tmpProfile);
+    
+    //"Decode" profile rendering intent
+    switch (cmsTakeRenderingIntent(tmpProfile))
+    {
+        case 0:
+            intent = i18n("Perceptual");
+            break;
+        case 1:
+            intent = i18n("Relative Colorimetric");
+            break;
+        case 2:
+            intent = i18n("Saturation");
+            break;
+        case 3:
+            intent = i18n("Absolute Colorimetric");
+            break;
+    }
+    m_renderingIntent->setText(intent);
+
+    cmsCloseProfile(tmpProfile);
 }
 
 }

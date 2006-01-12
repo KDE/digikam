@@ -57,6 +57,7 @@ private:
     QLabel  *m_description;
     QLabel  *m_colorSpace;
     QLabel  *m_deviceClass;
+    QLabel  *m_renderingIntent;
 
 private:
 
