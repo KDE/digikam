@@ -28,6 +28,7 @@ class QVButtonGroup;
 class QButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
+class QPushButton;
 
 class KTabWidget;
 
@@ -100,11 +101,19 @@ private:
     QButtonGroup                    *m_optionsBG;
     QVButtonGroup                   *m_profilesBG;
 
+    QPushButton                     *m_testItBt;
+
     Digikam::ImageGuideWidget       *m_previewWidget;
 
     Digikam::ColorGradientWidget    *m_hGradient;
 
     Digikam::HistogramWidget        *m_histogramWidget;
+
+private:
+
+    void                            readSettings();
+    void                            fillCombos();
+
 
 private slots:
 
@@ -114,6 +123,8 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotTestIt();
+    void slotToggledWidgets(bool t);
 
 };
 

@@ -44,6 +44,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ktabwidget.h>
+#include <kconfig.h>
 
 // Digikam includes.
 
@@ -299,7 +300,19 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     
     //---------- End Third Page ------------------------------------
 
-    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 8, 4);
+    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 0);
+
+     //-- Build rendering intents options group -----------------------
+
+    QHButtonGroup *m_testItBG = new QHButtonGroup(gboxSettings);
+    m_testItBG->setFrameStyle(QFrame::NoFrame);
+
+    m_testItBt = new QPushButton(i18n("Test"),m_testItBG);
+    
+
+    gridSettings->addMultiCellWidget(m_testItBG, 11, 11, 0, 0);
+
+    // -------------------------------------------------------------
 
     gridSettings->setRowStretch(10, 10);    
     setUserAreaWidget(gboxSettings);
@@ -320,6 +333,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
             
     connect(m_previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+
+    connect(m_testItBt, SIGNAL(clicked()), this, SLOT(slotTestIt()));
 
     // -------------------------------------------------------------
 
@@ -427,8 +442,32 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::slotOk()
 {
+
+    //TODO
 }
 
-}  // NameSpace DigikamImagesPluginCore
+void ImageEffect_ICCProof::slotTestIt()
+{
+    //TODO
+}
+
+void ImageEffect_ICCProof::readSettings()
+{
+    KConfig* config = kapp->config();
+
+    config->setGroup("Color Management");
+}
+
+void ImageEffect_ICCProof::fillCombos()
+{
+    //TODO
+}
+
+void ImageEffect_ICCProof::slotToggledWidgets( bool t)
+{
+    //TODO
+}
+
+}// NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_iccproof.moc"
