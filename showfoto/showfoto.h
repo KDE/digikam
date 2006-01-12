@@ -5,6 +5,7 @@
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,51 +68,6 @@ public:
 protected:
 
     void closeEvent(QCloseEvent* e);
-    
-private slots:
-
-    void slotOpenFile();
-    void slotNext();
-    void slotPrev();
-    void slotLast();
-    void slotFirst();
-    void slotFilePrint();
-    void slotOpenURL(const KURL& url);
-    void slotOpenFolder(const KURL& url);
-    void slotOpenFilesInFolder();
-       
-    void slotDeleteCurrentItem();
-    void slotFileProperties();
-    
-    void slotToggleFullScreen();
-    void slotToggleSlideShow();
-    void slotAutoFit();
-    void slotZoomChanged(float zoom);
-    void slotResize();
-    void slotEscapePressed();
-    void slotToggleShowBar();
-    void slotViewHistogram();
-    void slotChangeBCG();
-    void slotImagePluginsHelp();
-    
-    void slotChanged(bool, bool);
-    void slotSelected(bool);
-    void slotUpdateItemInfo(void);
-    
-    void slotAboutToShowUndoMenu();
-    void slotAboutToShowRedoMenu();
-
-    void slotEditKeys();
-    void slotConfToolbars();
-    void slotNewToolbarConfig();
-    void slotSetup();
-    void slotContextMenu();
-        
-    void slotDeleteCurrentItemResult( KIO::Job * job );
-
-    void slotSave()   { save();   };
-    void slotSaveAs() { saveAs(); };
-     
                
 private:
 
@@ -193,10 +149,7 @@ private:
     
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.
-    bool                             m_isReadOnly;
-    
-    // 'true' if current image have been modified, else 'false'.
-    bool                             m_dirtyImage;
+    bool                   m_isReadOnly;
     
     int                    m_JPEGCompression;
     int                    m_PNGCompression;
@@ -209,6 +162,51 @@ private:
     bool                   m_fullScreenHideThumbBar;
     bool                   m_deleteItem2Trash;
     bool                   m_slideShowInFullScreen;
+
+private slots:
+
+    void slotOpenFile();
+    void slotNext();
+    void slotPrev();
+    void slotLast();
+    void slotFirst();
+    void slotFilePrint();
+    void slotOpenURL(const KURL& url);
+    void slotOpenFolder(const KURL& url);
+    void slotOpenFilesInFolder();
+       
+    void slotDeleteCurrentItem();
+    void slotFileProperties();
+    
+    void slotToggleFullScreen();
+    void slotToggleSlideShow();
+    void slotAutoFit();
+    void slotZoomChanged(float zoom);
+    void slotResize();
+    void slotEscapePressed();
+    void slotToggleShowBar();
+    void slotViewHistogram();
+    void slotChangeBCG();
+    void slotImagePluginsHelp();
+    
+    void slotChanged(bool, bool);
+    void slotSelected(bool);
+    void slotUpdateItemInfo(void);
+    
+    void slotAboutToShowUndoMenu();
+    void slotAboutToShowRedoMenu();
+
+    void slotEditKeys();
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
+    void slotSetup();
+    void slotContextMenu();
+        
+    void slotDeleteCurrentItemResult( KIO::Job * job );
+
+    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
+    void slotSaveAs() { saveAs(); };
+
 };
 
 #endif /* SHOWFOTO_H */

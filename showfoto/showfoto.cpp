@@ -5,6 +5,7 @@
  * Description :
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,7 +98,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
     m_isReadOnly             = false;
-    m_dirtyImage             = false;
     m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
@@ -836,7 +836,7 @@ bool ShowFoto::promptUserSave()
     if (!m_currentItem)
         return true;
 
-    if (m_dirtyImage)
+    if (m_saveAction->isEnabled())
     {
         int result =
             KMessageBox::warningYesNoCancel(this,
@@ -861,7 +861,7 @@ bool ShowFoto::promptUserSave()
         else
             return false;
     }
-     m_dirtyImage = false;
+    
     return true;
 }
 
@@ -923,7 +923,7 @@ bool ShowFoto::save()
     m_canvas->setModified( false );
     m_bar->invalidateThumb(m_currentItem);
     kapp->restoreOverrideCursor();
-    slotOpenURL(m_currentItem->url());
+    QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
 
     return true;
 }
@@ -954,7 +954,6 @@ void ShowFoto::slotOpenURL(const KURL& url)
 
     slotUpdateItemInfo();
     QApplication::restoreOverrideCursor();
-    m_dirtyImage = false;
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -1132,7 +1131,6 @@ void ShowFoto::slotImagePluginsHelp()
 
 void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
 {
-    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -1143,9 +1141,6 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(moreUndo);
-
-    if (!m_isReadOnly)
-        m_saveAction->setEnabled(moreUndo);
 }
 
 void ShowFoto::slotAboutToShowUndoMenu()
@@ -1461,9 +1456,8 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     else
     {
         m_currentItem = m_bar->currentItem();
-        slotOpenURL(m_currentItem->url());
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
     }
-     m_dirtyImage = false;
 }
 
 void ShowFoto::slotUpdateItemInfo(void)
