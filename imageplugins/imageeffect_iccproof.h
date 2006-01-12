@@ -31,6 +31,7 @@ class QRadioButton;
 class QPushButton;
 
 class KTabWidget;
+class KURLRequester;
 
 namespace Digikam
 {
@@ -39,6 +40,7 @@ class ImageGuideWidget;
 class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
+class ICCPreviewWidget;
 }
 
 namespace DigikamImagesPluginCore
@@ -75,7 +77,8 @@ private:
     KTabWidget                      *m_tabsWidgets;
 
     QComboBox                       *m_channelCB;
-    QComboBox                       *m_displayProfilesCB;
+//     QComboBox                       *m_displayProfilesCB;
+    KURLRequester                   *m_displayProfilesCB;
     QComboBox                       *m_inProfilesCB;
     QComboBox                       *m_outProfilesCB;
     QComboBox                       *m_renderingIntentCB;
@@ -103,11 +106,15 @@ private:
 
     QPushButton                     *m_testItBt;
 
+    
+
     Digikam::ImageGuideWidget       *m_previewWidget;
 
     Digikam::ColorGradientWidget    *m_hGradient;
 
     Digikam::HistogramWidget        *m_histogramWidget;
+
+    Digikam::ICCPreviewWidget       *m_iccPreviewWidget;
 
 private:
 

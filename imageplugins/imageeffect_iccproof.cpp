@@ -45,6 +45,8 @@
 #include <kdebug.h>
 #include <ktabwidget.h>
 #include <kconfig.h>
+#include <kurlrequester.h>
+#include <kfiledialog.h>
 
 // Digikam includes.
 
@@ -53,6 +55,7 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
+#include "iccpreviewwidget.h"
 
 // Local includes.
 
@@ -66,6 +69,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                             "colormanagement", false)
 {
     m_destinationPreviewData = 0L;
+
+    
 
     setHelp("colormanagement.anchor", "digikam");
 
@@ -291,7 +296,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QRadioButton *m_useDisplaySelectedProfile = new QRadioButton(m_displayProfile);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
-    QComboBox *m_displayProfileCB = new QComboBox(m_displayProfile);
+//     QComboBox *m_displayProfileCB = new QComboBox(m_displayProfile);
+    KURLRequester *m_displayProfileCB = new KURLRequester(m_displayProfile);
+    KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
+    m_iccPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
+    displayProfiles_dialog->setPreviewWidget(m_iccPreviewWidget);
 
     QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), m_displayProfile);
 
