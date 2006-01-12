@@ -664,5 +664,5 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
 }  // namespace Digikam
 
-#include "cietongewidget.moc"
+#include "cietonguewidget.moc"
 
