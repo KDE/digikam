@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#define xmin(a,b) (a > b ? b : a)
-
 // C++ includes.
 
 #include <cmath>
@@ -38,6 +36,7 @@
 
 // Local includes.
 
+#include "lcmsprf.h"
 #include "cietongewidget.h"
 
 namespace Digikam
@@ -142,101 +141,139 @@ namespace Digikam
         { 0.7347, 0.2653 }  // 780 nm 
     };
 
+class CIETongeWidgetPriv
+{
+public:
+
+    CIETongeWidgetPriv()
+    {
+        hMonitorProfile      = 0;
+        hXYZProfile          = 0;
+        hXFORM               = 0;
+
+        Measurement.Patches  = 0;
+        Measurement.Allowed  = 0;
+        profileDataAvailable = true;
+    }
+
+    cmsHPROFILE     hMonitorProfile;
+    cmsHPROFILE     hXYZProfile;
+    cmsHTRANSFORM   hXFORM;
+    
+    MEASUREMENT     Measurement;
+
+    cmsCIExyYTRIPLE Primaries;
+    cmsCIEXYZ       MediaWhite;
+
+    bool profileDataAvailable;
+};
+
 CIETongeWidget::CIETongeWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
               : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    d = new CIETongeWidgetPriv;
     setMinimumSize(w, h);
     
     if (hMonitor)
-        m_hMonitorProfile = hMonitor;
+        d->hMonitorProfile = hMonitor;
     else
-        m_hMonitorProfile = cmsCreate_sRGBProfile();
+        d->hMonitorProfile = cmsCreate_sRGBProfile();
 
-    m_hXYZProfile = cmsCreateXYZProfile();
-    m_hXFORM      = cmsCreateTransform(m_hXYZProfile, TYPE_XYZ_16,
-                                       m_hMonitorProfile, TYPE_RGB_8,
-                                       INTENT_PERCEPTUAL, 0);
+    d->hXYZProfile = cmsCreateXYZProfile();
+    d->hXFORM      = cmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
+                                        d->hMonitorProfile, TYPE_RGB_8,
+                                        INTENT_PERCEPTUAL, 0);
 }
 
 CIETongeWidget::~CIETongeWidget()
 {
-    if (Measurement.Patches)
-        free(Measurement.Patches);
+    if (d->Measurement.Patches)
+        free(d->Measurement.Patches);
 
-    if (Measurement.Allowed)
-        free(Measurement.Allowed);
+    if (d->Measurement.Allowed)
+        free(d->Measurement.Allowed);
         
-    cmsDeleteTransform(m_hXFORM);
-    cmsCloseProfile(m_hXYZProfile);
-    cmsCloseProfile(m_hMonitorProfile);
+    cmsDeleteTransform(d->hXFORM);
+    cmsCloseProfile(d->hXYZProfile);
+    cmsCloseProfile(d->hMonitorProfile);
+    delete d;
 }
 
 void CIETongeWidget::setProfileData(QByteArray *profileData)
 {
-    cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
-                                                 (DWORD)profileData->size());
-
-    // Get the white point.
-    ZeroMemory(&MediaWhite, sizeof(cmsCIEXYZ)); 
-    cmsTakeMediaWhitePoint(&MediaWhite, hProfile);
-    cmsCIExyY White;
-    cmsXYZ2xyY(&White, &MediaWhite);
-
-    // Get the colorant matrix.
-    ZeroMemory(&Primaries, sizeof(cmsCIExyYTRIPLE));
-    
-    if (cmsIsTag(hProfile, icSigRedColorantTag) &&
-        cmsIsTag(hProfile, icSigGreenColorantTag) &&
-        cmsIsTag(hProfile, icSigBlueColorantTag))
-        {
-        MAT3 Mat;
-
-        if (cmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
-        {
-            // Undo chromatic adaptation
-            if (cmsAdaptMatrixFromD50(&Mat, &White))
-            {
-                cmsCIEXYZ tmp;
-
-                tmp.X = Mat.v[0].n[0];
-                tmp.Y = Mat.v[1].n[0];
-                tmp.Z = Mat.v[2].n[0];
-
-                // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&Primaries.Red, &tmp);
-
-                tmp.X = Mat.v[0].n[1];
-                tmp.Y = Mat.v[1].n[1];
-                tmp.Z = Mat.v[2].n[1];
-                // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&Primaries.Green, &tmp);
-                
-                tmp.X = Mat.v[0].n[2];
-                tmp.Y = Mat.v[1].n[2];
-                tmp.Z = Mat.v[2].n[2];
-                // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&Primaries.Blue, &tmp);
-            }
-        }       
-    }
-
-    // Get target data stored in profile
-    ZeroMemory(&Measurement, sizeof(MEASUREMENT));
-    char*  CharTarget;
-    size_t CharTargetSize;
-
-    if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
+    if (profileData)
     {
-        LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
-        if (hSheet != NULL)
-        {
-            cmsxPCollLoadFromSheet(&Measurement,  hSheet);
-            cmsxIT8Free(hSheet);
-            cmsxPCollValidatePatches(&Measurement, PATCH_HAS_XYZ|PATCH_HAS_RGB);
+        d->profileDataAvailable = true;
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
+                                                    (DWORD)profileData->size());
+    
+        // Get the white point.
+        ZeroMemory(&(d->MediaWhite), sizeof(cmsCIEXYZ)); 
+        cmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
+        cmsCIExyY White;
+        cmsXYZ2xyY(&White, &(d->MediaWhite));
+    
+        // Get the colorant matrix.
+        ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
+        
+        if (cmsIsTag(hProfile, icSigRedColorantTag) &&
+            cmsIsTag(hProfile, icSigGreenColorantTag) &&
+            cmsIsTag(hProfile, icSigBlueColorantTag))
+            {
+            MAT3 Mat;
+    
+            if (cmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
+            {
+                // Undo chromatic adaptation
+                if (cmsAdaptMatrixFromD50(&Mat, &White))
+                {
+                    cmsCIEXYZ tmp;
+    
+                    tmp.X = Mat.v[0].n[0];
+                    tmp.Y = Mat.v[1].n[0];
+                    tmp.Z = Mat.v[2].n[0];
+    
+                    // ScaleToWhite(&MediaWhite, &tmp);
+                    cmsXYZ2xyY(&(d->Primaries.Red), &tmp);
+    
+                    tmp.X = Mat.v[0].n[1];
+                    tmp.Y = Mat.v[1].n[1];
+                    tmp.Z = Mat.v[2].n[1];
+                    // ScaleToWhite(&MediaWhite, &tmp);
+                    cmsXYZ2xyY(&(d->Primaries.Green), &tmp);
+                    
+                    tmp.X = Mat.v[0].n[2];
+                    tmp.Y = Mat.v[1].n[2];
+                    tmp.Z = Mat.v[2].n[2];
+                    // ScaleToWhite(&MediaWhite, &tmp);
+                    cmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
+                }
+            }       
         }
+    
+        // Get target data stored in profile
+        ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
+        char*  CharTarget;
+        size_t CharTargetSize;
+    
+        if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
+        {
+            LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
+            if (hSheet != NULL)
+            {
+                cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
+                cmsxIT8Free(hSheet);
+                cmsxPCollValidatePatches(&(d->Measurement), PATCH_HAS_XYZ|PATCH_HAS_RGB);
+            }
+        }
+    
+        cmsCloseProfile(hProfile);
     }
-
-    cmsCloseProfile(hProfile);
+    else
+    {
+        d->profileDataAvailable = false;
+    }
+    
     repaint(false);
 }
 
@@ -251,7 +288,7 @@ void CIETongeWidget::BiasedLine(int x1, int y1, int x2, int y2)
     m_pnt.drawLine(x1 + m_xBias, y1, x2 + m_xBias, y2);
 }
 
-void CIETongeWidget::BiasedText(int x, int y, const char* Txt)
+void CIETongeWidget::BiasedText(int x, int y, QString Txt)
 {
     m_pnt.drawText(QPoint(m_xBias + x, y), Txt);
 }
@@ -273,7 +310,7 @@ QRgb CIETongeWidget::ColorByCoord(double x, double y)
     BYTE RGB[3];
 
     cmsFloat2XYZEncoded(XYZW, &XYZ);
-    cmsDoTransform(m_hXFORM, XYZW, RGB, 1);
+    cmsDoTransform(d->hXFORM, XYZW, RGB, 1);
 
     return qRgb(RGB[0], RGB[1], RGB[2]);
 }
@@ -357,7 +394,7 @@ void CIETongeWidget::DrawTongeAxis()
 {
     QFont font;
 
-    font.setPointSize(8);
+    font.setPointSize(6);
     m_pnt.setFont(font);
     
     m_pnt.setPen(qRgb(255, 255, 255));
@@ -367,16 +404,16 @@ void CIETongeWidget::DrawTongeAxis()
 
     for (int y = 1; y <= 9; y += 1)
     {
-        char s[20];
-        int xstart =  (y * (m_pxcols - 1)) / 10;
-        int ystart =  (y * (m_pxrows - 1)) / 10;
+        QString s;
+        int xstart = (y * (m_pxcols - 1)) / 10;
+        int ystart = (y * (m_pxrows - 1)) / 10;
 
 
-        sprintf(s, "0.%d", y);                   // FIXME
+        s.sprintf("0.%d", y);     
         BiasedLine(xstart, m_pxrows - Grids(1), xstart,   m_pxrows - Grids(4));
         BiasedText(xstart - Grids(11), m_pxrows + Grids(15), s);
         
-        sprintf(s, "0.%d", 10 - y);              // FIXME
+        s.sprintf("0.%d", 10 - y);
         BiasedLine(0, ystart, Grids(3), ystart);    
         BiasedText(Grids(-25), ystart + Grids(5), s);
     }
@@ -405,7 +442,7 @@ void CIETongeWidget::DrawLabels()
     
     for (int x = 450; x <= 650; x += (x > 470 && x < 600) ? 5 : 10)
     {
-        char wl[20];
+        QString wl;
         int bx = 0, by = 0, tx, ty;
         
         if (x < 520)
@@ -441,7 +478,7 @@ void CIETongeWidget::DrawLabels()
         QRgb Color = ColorByCoord(icx, icy);
         m_pnt.setPen(Color);
         
-        sprintf(wl, "%d", x);
+        wl.sprintf("%d", x);
         BiasedText(icx+bx, icy+by, wl);
     }
 }
@@ -455,13 +492,13 @@ void CIETongeWidget::DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, in
     m_pnt.drawEllipse(icx + m_xBias- sz/2, icy-sz/2, sz, sz);
 }
 
-void CIETongeWidget::DrawPatches(LPMEASUREMENT m)
+void CIETongeWidget::DrawPatches(void)
 {
-    for (int i=0; i < m->nPatches; i++)
+    for (int i=0; i < d->Measurement.nPatches; i++)
     {
-        LPPATCH p = m->Patches + i;
+        LPPATCH p = d->Measurement.Patches + i;
 
-        if (m->Allowed[i])
+        if (d->Measurement.Allowed[i])
         {
             LPcmsCIEXYZ XYZ = &p ->XYZ;
             cmsCIExyY xyY;              
@@ -494,26 +531,17 @@ void CIETongeWidget::DrawPatches(LPMEASUREMENT m)
     }
 }
 
-void CIETongeWidget::DrawTonge()
-{   
-    OutlineTonge();
-    FillTonge();
-    DrawTongeAxis();
-    DrawLabels();
-    DrawTongeGrid();
-}
-
-void CIETongeWidget::DrawColorantTriangle(LPcmsCIExyYTRIPLE Primaries)
+void CIETongeWidget::DrawColorantTriangle(void)
 {
-    DrawSmallElipse(&Primaries->Red,   255, 128, 128, 6);
-    DrawSmallElipse(&Primaries->Green, 128, 255, 128, 6);
-    DrawSmallElipse(&Primaries->Blue,  128, 128, 255, 6);
+    DrawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
+    DrawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
+    DrawSmallElipse(&(d->Primaries.Blue),  128, 128, 255, 6);
 
     int x1, y1, x2, y2, x3, y3;
 
-    MapPoint(x1, y1, &Primaries->Red);
-    MapPoint(x2, y2, &Primaries->Green);
-    MapPoint(x3, y3, &Primaries->Blue);
+    MapPoint(x1, y1, &(d->Primaries.Red));
+    MapPoint(x2, y2, &(d->Primaries.Green));
+    MapPoint(x3, y3, &(d->Primaries.Blue));
 
     m_pnt.setPen(qRgb(255, 255, 255));
 
@@ -561,10 +589,10 @@ void CIETongeWidget::Sweep_sRGB(void)
     cmsCloseProfile(hsRGB);
 }
 
-void CIETongeWidget::DrawWhitePoint(LPcmsCIEXYZ WhitePoint)
+void CIETongeWidget::DrawWhitePoint(void)
 {
     cmsCIExyY Whitem_pntxyY;
-    cmsXYZ2xyY(&Whitem_pntxyY, WhitePoint);
+    cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
     DrawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
 }       
 
@@ -580,7 +608,7 @@ void CIETongeWidget::paintEvent( QPaintEvent * )
     int pixcols = m_pix.width();
     int pixrows = m_pix.height();
 
-    m_gridside = (xmin(pixcols, pixrows)) / 512.0;
+    m_gridside = (QMIN(pixcols, pixrows)) / 512.0;
     
     m_xBias = Grids(32);
     m_yBias = Grids(20);
@@ -590,17 +618,31 @@ void CIETongeWidget::paintEvent( QPaintEvent * )
     
     m_pnt.setBackgroundColor(qRgb(0, 0, 0));
     m_pnt.setPen(qRgb(255, 255, 255));
+
+    if (d->profileDataAvailable)
+    {
+        OutlineTonge();
+        FillTonge();
+    }
+
+    DrawTongeAxis();
+
+    if (d->profileDataAvailable)
+        DrawLabels();
     
-    DrawTonge();
+    DrawTongeGrid();
 
-    if (MediaWhite.Y > 0.0)
-        DrawWhitePoint(&MediaWhite);
-
-    if (Primaries.Red.Y != 0.0)
-        DrawColorantTriangle(&Primaries);
-
-    if (Measurement.Patches && Measurement.Allowed)
-        DrawPatches(&Measurement);
+    if (d->profileDataAvailable)
+    {
+        if (d->MediaWhite.Y > 0.0)
+            DrawWhitePoint();
+    
+        if (d->Primaries.Red.Y != 0.0)
+            DrawColorantTriangle();
+    
+        if (d->Measurement.Patches && d->Measurement.Allowed)
+            DrawPatches();
+    }
     
     m_pnt.end();
 

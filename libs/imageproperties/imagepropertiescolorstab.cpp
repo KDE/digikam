@@ -685,22 +685,22 @@ void ImagePropertiesColorsTab::updateStatistiques()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    //TODO
     if (m_image.getICCProfil().isNull())
     {
-        m_infoHeader->setText(i18n("This image has not\nembedded Color Profile."));
+        m_infoHeader->setText(i18n("No embedded ICC profile available."));
 
         m_labelICCName->setText(i18n("N.A."));
         m_labelICCDescription->setText(i18n("N.A."));
         m_labelICCCopyright->setText(i18n("N.A."));
         m_labelICCIntent->setText(i18n("N.A."));
         m_labelICCColorSpace->setText(i18n("N.A."));
+        m_cieTonge->setProfileData();
     }
     else
     {
-        cmsHPROFILE   embProfile=0;
+        cmsHPROFILE embProfile=0;
         QString intent, colorSpace;
-        m_infoHeader->setText(i18n("Image Color Profile Info:"));
+        m_infoHeader->setText(i18n("Embedded color profile info:"));
         
         m_embedded_profile = m_image.getICCProfil();
         m_cieTonge->setProfileData(&m_embedded_profile);

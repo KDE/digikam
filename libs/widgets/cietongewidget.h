@@ -27,10 +27,6 @@
 
 #include <config.h>
 
-// C++ includes.
-
-#include <cmath>
-
 // Qt includes.
 
 #include <qwidget.h>
@@ -40,7 +36,6 @@
 
 // Local includes
 
-#include "lcmsprf.h"
 #include "digikam_export.h"
 
 // Others
@@ -50,19 +45,18 @@
 namespace Digikam
 {
 
+class CIETongeWidgetPriv;
+
 class DIGIKAM_EXPORT CIETongeWidget : public QWidget
 {
 Q_OBJECT
-
-private:
-    
 
 public:
 
     CIETongeWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongeWidget();
 
-    void setProfileData(QByteArray *profileData);
+    void setProfileData(QByteArray *profileData=0);
 
 protected:
     
@@ -75,10 +69,6 @@ protected:
     QPainter      m_pnt;
     QPixmap       m_pix;
     
-    cmsHPROFILE   m_hMonitorProfile;
-    cmsHPROFILE   m_hXYZProfile;
-    cmsHTRANSFORM m_hXFORM;
-
 protected:
 
     int  Grids(double d) const { return (int) floor(d * m_gridside + .5); };
@@ -96,25 +86,20 @@ protected:
 
 private:
 
-    void DrawTonge();
-    void DrawColorantTriangle(LPcmsCIExyYTRIPLE Primaries);
-    void DrawWhitePoint(LPcmsCIEXYZ WhitePoint);
-    void DrawPatches(LPMEASUREMENT m);
+    void DrawColorantTriangle(void);
+    void DrawWhitePoint(void);
+    void DrawPatches(void);
     
     void MapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void BiasedLine(int x1, int y1, int x2, int y2);
-    void BiasedText(int x, int y, const char* Txt);
+    void CIETongeWidget::BiasedText(int x, int y, QString Txt);
 
     void Sweep_sRGB(void);
 
 private :
-    
-    MEASUREMENT     Measurement;
 
-    cmsCIExyYTRIPLE Primaries;
-    
-    cmsCIEXYZ       MediaWhite;
-    
+    CIETongeWidgetPriv* d;
+
 };
 
 }  // namespace Digikam

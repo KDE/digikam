@@ -26,7 +26,6 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/widgets \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \
-	       -I$(top_srcdir)/digikam/libs/lprof \
 	       -I$(top_srcdir)/digikam/digikam \
 	       $(LIBKEXIF_CFLAGS) $(all_includes)
 
