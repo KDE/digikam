@@ -436,7 +436,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     KActionMenu menuImport(i18n("Import"));
     KActionMenu menuKIPIBatch(i18n("Batch Processes"));
 
-    popmenu.insertItem(SmallIcon("album"), i18n("New Album..."), 10);
+    popmenu.insertItem(SmallIcon("albumfoldernew"), i18n("New Album..."), 10);
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if (item && !item->getAlbum())
