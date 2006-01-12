@@ -4,7 +4,8 @@
  * Date  : 2004-02-12
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,10 +87,7 @@ private:
 
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.
-    bool                    m_isReadOnly;
-    
-    // 'true' if current image have been modified, else 'false'.
-    bool                    m_dirtyImage;
+    bool                   m_isReadOnly;
     
     int                    m_JPEGCompression;
     int                    m_PNGCompression;
@@ -181,8 +179,8 @@ private slots:
     void slotSelected(bool);
 
     void slotRotatedOrFlipped();
-    
-    void slotSave()   { save();   };
+
+    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
 
     void slotAboutToShowUndoMenu();

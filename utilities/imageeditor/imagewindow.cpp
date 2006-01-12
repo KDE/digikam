@@ -5,6 +5,7 @@
  * Description :
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -102,8 +103,6 @@ ImageWindow::ImageWindow()
     m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
     m_isReadOnly            = false;
-    m_dirtyImage            = false;
-     
     m_view                  = 0L;
     
     // -- construct the view ---------------------------------
@@ -608,8 +607,6 @@ void ImageWindow::slotLoadCurrent()
        m_fileDelete->setEnabled(true);
        m_commentedit->setEnabled(true);
     }
-
-    m_dirtyImage = false;
 }
 
 void ImageWindow::slotLoadNext()
@@ -789,7 +786,6 @@ void ImageWindow::slotZoomChanged(float zoom)
 
 void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 {
-    m_dirtyImage = true;
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
@@ -800,7 +796,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
-    if (m_allowSaving && !m_isReadOnly)
+    if (m_allowSaving)
     {
         m_saveAction->setEnabled(moreUndo);
     }
@@ -1011,9 +1007,8 @@ bool ImageWindow::save()
     
     m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    slotLoadCurrent();
     kapp->restoreOverrideCursor();
-    m_dirtyImage = false;
     return true;
 }
 
@@ -1225,8 +1220,7 @@ bool ImageWindow::saveAs()
 
     m_canvas->setModified( false );
     kapp->restoreOverrideCursor();
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-    m_dirtyImage = false;
+    slotLoadCurrent();
     return true;
 }
 
@@ -1333,7 +1327,7 @@ void ImageWindow::slotEscapePressed()
 
 bool ImageWindow::promptUserSave()
 {
-    if (m_dirtyImage)
+    if (m_saveAction->isEnabled())
     {
         int result =
             KMessageBox::warningYesNoCancel(this,
@@ -1352,6 +1346,7 @@ bool ImageWindow::promptUserSave()
         }
         else if (result == KMessageBox::No)
         {
+            m_saveAction->setEnabled(false);
             return true;
         }
         else
