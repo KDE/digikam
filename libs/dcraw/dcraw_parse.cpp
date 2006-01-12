@@ -1189,6 +1189,7 @@ int DcrawParse::getCameraModel(const char* infile, char* cameraConstructor, char
 
     if (model[0] == 0)
     {
+        fclose(ifp);
         return 1;
     }
 
@@ -1256,6 +1257,7 @@ int DcrawParse::getThumbnail(const char* infile, const char* outfile)
   parse_jpeg(0);
   if (model[0] == 0) {
     kdDebug() << "unsupported file format." << endl;
+    fclose(ifp);
     return 1;
   }
   kdDebug() << "Findings for " << infile << ":" << endl;
