@@ -5,6 +5,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1039,7 +1040,7 @@ bool ImageWindow::save()
     
     m_canvas->setModified( false );
     emit signalFileModified(m_urlCurrent);
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    slotLoadCurrent();
     
     kapp->restoreOverrideCursor();
     return true;
@@ -1234,7 +1235,7 @@ bool ImageWindow::saveAs()
 
     m_canvas->setModified( false );
     kapp->restoreOverrideCursor();
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    slotLoadCurrent();
 
     return true;
 }

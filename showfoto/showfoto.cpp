@@ -5,6 +5,7 @@
  * Description : stand alone digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1493,7 +1494,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     else
     {
         m_currentItem = m_bar->currentItem();
-        slotOpenURL(m_currentItem->url());
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
     }
 }
 
