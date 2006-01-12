@@ -526,15 +526,21 @@ void BlurFX::focusBlur(uchar *data, int Width, int Height, int X, int Y, int Blu
 
             if (bInversed)
                 {
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Red.
+                pResBits[i] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Blue.
+	        i++;
+                pResBits[i] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Green.
+		i++;
+                pResBits[i] = (pResBits[i] * (255 - nBlendFactor) + data[i] * nBlendFactor) >> 8;    // Red.
+		i++;
                 }
             else
                 {
-                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
-                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
-                pResBits[i++] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
+                pResBits[i] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Blue.
+		i++;
+                pResBits[i] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Green.
+		i++;
+                pResBits[i] = (data[i] * (255 - nBlendFactor) + pResBits[i] * nBlendFactor) >> 8;    // Red.
+		i++;
                 }
                 
             pResBits[i++] = data[i];       // Alpha channel.
