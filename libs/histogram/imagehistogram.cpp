@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -45,6 +45,51 @@
 namespace Digikam
 {
 
+class ImageHistogramPriv
+{
+    
+public:
+
+    // Using a structure instead a class is more fast
+    // (access with memset() and bytes manipulation).
+
+    struct double_packet
+    {
+        double value;
+        double red;
+        double green;
+        double blue;
+        double alpha;
+    };
+
+public:
+
+    ImageHistogramPriv()
+    {
+        parent      = 0;
+        imageData   = 0;
+        histogram   = 0;
+        runningFlag = true;
+    }
+
+    /** The histogram data.*/
+    struct double_packet *histogram;
+ 
+    /** Image informations.*/
+    uchar   *imageData;
+    uint     imageWidth;
+    uint     imageHeight;
+ 
+    /** Numbers of histogram segments dependaing of image bytes depth*/
+    int      histoSegments;
+ 
+    /** To post event from thread to parent.*/
+    QObject *parent;
+ 
+    /** Used to stop thread during calculations.*/
+    bool     runningFlag;
+};
+
 ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
               : QThread()
 {
@@ -59,24 +104,23 @@ ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteen
 
 void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
 {
-    m_imageData     = i_data;
-    m_imageWidth    = i_w;
-    m_imageHeight   = i_h;
-    m_parent        = parent;
-    m_histogram     = 0L;
-    m_runningFlag   = true;
-    m_histoSegments = i_sixteenBits ? 65536 : 256;
+    d = new ImageHistogramPriv;
+    d->imageData     = i_data;
+    d->imageWidth    = i_w;
+    d->imageHeight   = i_h;
+    d->parent        = parent;
+    d->histoSegments = i_sixteenBits ? 65536 : 256;
 
-    if (m_imageData && m_imageWidth && m_imageHeight)
+    if (d->imageData && d->imageWidth && d->imageHeight)
     {
-       if (m_parent)
+       if (d->parent)
           start();
        else
           calcHistogramValues();
     }
     else
     {
-       if (m_parent)
+       if (d->parent)
           postProgress(false, false);
     }
 }
@@ -85,13 +129,15 @@ ImageHistogram::~ImageHistogram()
 {
     stopCalcHistogramValues();
 
-    if (m_histogram)
-       delete [] m_histogram;
+    if (d->histogram)
+       delete [] d->histogram;
+
+    delete d;       
 }
 
 int ImageHistogram::getHistogramSegment(void)
 {
-    return m_histoSegments;
+    return d->histoSegments;
 }
 
 void ImageHistogram::postProgress(bool starting, bool success)
@@ -99,12 +145,12 @@ void ImageHistogram::postProgress(bool starting, bool success)
     EventData *eventData = new EventData();
     eventData->starting  = starting;
     eventData->success   = success;
-    QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
+    QApplication::postEvent(d->parent, new QCustomEvent(QEvent::User, eventData));
 }
 
 void ImageHistogram::stopCalcHistogramValues(void)
 {
-    m_runningFlag = false;
+    d->runningFlag = false;
     wait();
 }
 
@@ -120,75 +166,75 @@ void ImageHistogram::calcHistogramValues()
     register uint  i;
     int            max;
 
-    if (m_parent)
+    if (d->parent)
        postProgress(true, false);
 
-    m_histogram = new double_packet[m_histoSegments];
+    d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
 
-    if ( !m_histogram )
+    if ( !d->histogram )
     {
        kdWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
 
-       if (m_parent)
+       if (d->parent)
           postProgress(false, false);
 
        return;
     }
 
-    memset(m_histogram, 0, m_histoSegments*sizeof(struct double_packet));
+    memset(d->histogram, 0, d->histoSegments*sizeof(struct ImageHistogramPriv::double_packet));
 
-    if (m_histoSegments == 65536)         // 16 bits image.
+    if (d->histoSegments == 65536)         // 16 bits image.
     {
         unsigned short blue, green, red, alpha;
-        unsigned short *data = (unsigned short*)m_imageData;
+        unsigned short *data = (unsigned short*)d->imageData;
 
-        for (i = 0 ; (i < m_imageHeight*m_imageWidth*4) && m_runningFlag ; i+=4)
+        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
         {
             blue  = data[ i ];
             green = data[i+1];
             red   = data[i+2];
             alpha = data[i+3];
 
-            m_histogram[blue].blue++;
-            m_histogram[green].green++;
-            m_histogram[red].red++;
-            m_histogram[alpha].alpha++;
+            d->histogram[blue].blue++;
+            d->histogram[green].green++;
+            d->histogram[red].red++;
+            d->histogram[alpha].alpha++;
 
             max = (blue > green) ? blue : green;
 
             if (red > max) 
-                m_histogram[red].value++;
+                d->histogram[red].value++;
             else 
-                m_histogram[max].value++;
+                d->histogram[max].value++;
         }
     }
     else                                  // 8 bits images.
     {
         uchar blue, green, red, alpha;
-        uchar *data = m_imageData;
+        uchar *data = d->imageData;
 
-        for (i = 0 ; (i < m_imageHeight*m_imageWidth*4) && m_runningFlag ; i+=4)
+        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
         {
             blue  = data[ i ];
             green = data[i+1];
             red   = data[i+2];
             alpha = data[i+3];
 
-            m_histogram[blue].blue++;
-            m_histogram[green].green++;
-            m_histogram[red].red++;
-            m_histogram[alpha].alpha++;
+            d->histogram[blue].blue++;
+            d->histogram[green].green++;
+            d->histogram[red].red++;
+            d->histogram[alpha].alpha++;
 
             max = (blue > green) ? blue : green;
 
             if (red > max) 
-                m_histogram[red].value++;
+                d->histogram[red].value++;
             else 
-                m_histogram[max].value++;
+                d->histogram[max].value++;
         }
     }
 
-    if (m_parent && m_runningFlag)
+    if (d->parent && d->runningFlag)
        postProgress(false, true);
 }
 
@@ -197,35 +243,35 @@ double ImageHistogram::getCount(int channel, int start, int end)
     int    i;
     double count = 0.0;
 
-    if ( !m_histogram || start < 0 || 
-        end > m_histoSegments-1 || start > end )
+    if ( !d->histogram || start < 0 ||
+        end > d->histoSegments-1 || start > end )
         return 0.0;
 
     switch(channel)
     {
     case Digikam::ImageHistogram::ValueChannel:
         for (i = start ; i <= end ; i++)
-            count += m_histogram[i].value;
+            count += d->histogram[i].value;
         break;
 
     case Digikam::ImageHistogram::RedChannel:
         for (i = start ; i <= end ; i++)
-            count += m_histogram[i].red;
+            count += d->histogram[i].red;
         break;
 
     case Digikam::ImageHistogram::GreenChannel:
         for (i = start ; i <= end ; i++)
-            count += m_histogram[i].green;
+            count += d->histogram[i].green;
         break;
 
     case Digikam::ImageHistogram::BlueChannel:
         for (i = start ; i <= end ; i++)
-            count += m_histogram[i].blue;
+            count += d->histogram[i].blue;
         break;
 
     case Digikam::ImageHistogram::AlphaChannel:
         for (i = start ; i <= end ; i++)
-            count += m_histogram[i].alpha;
+            count += d->histogram[i].alpha;
         break;
 
     default:
@@ -238,10 +284,10 @@ double ImageHistogram::getCount(int channel, int start, int end)
 
 double ImageHistogram::getPixels()
 {
-  if ( !m_histogram )
+  if ( !d->histogram )
        return 0.0;
 
-  return(m_imageWidth * m_imageHeight);
+  return(d->imageWidth * d->imageHeight);
 }
 
 double ImageHistogram::getMean(int channel, int start, int end)
@@ -250,35 +296,35 @@ double ImageHistogram::getMean(int channel, int start, int end)
     double mean = 0.0;
     double count;
 
-    if ( !m_histogram || start < 0 || 
-        end > m_histoSegments-1 || start > end )
+    if ( !d->histogram || start < 0 ||
+        end > d->histoSegments-1 || start > end )
         return 0.0;
 
     switch(channel)
     {
         case Digikam::ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * m_histogram[i].value;
+                mean += i * d->histogram[i].value;
             break;
 
         case Digikam::ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * m_histogram[i].red;
+                mean += i * d->histogram[i].red;
             break;
 
         case Digikam::ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * m_histogram[i].green;
+                mean += i * d->histogram[i].green;
             break;
 
         case Digikam::ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * m_histogram[i].blue;
+                mean += i * d->histogram[i].blue;
             break;
 
         case Digikam::ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++)
-                mean += i * m_histogram[i].alpha;
+                mean += i * d->histogram[i].alpha;
             break;
 
         default:
@@ -300,8 +346,8 @@ int ImageHistogram::getMedian(int channel, int start, int end)
     double sum = 0.0;
     double count;
 
-    if ( !m_histogram || start < 0 || 
-        end > m_histoSegments-1 || start > end )
+    if ( !d->histogram || start < 0 ||
+        end > d->histoSegments-1 || start > end )
         return 0;
 
     count = getCount(channel, start, end);
@@ -311,7 +357,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case Digikam::ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += m_histogram[i].value;
+                sum += d->histogram[i].value;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -319,7 +365,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case Digikam::ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += m_histogram[i].red;
+                sum += d->histogram[i].red;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -327,7 +373,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case Digikam::ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += m_histogram[i].green;
+                sum += d->histogram[i].green;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -335,7 +381,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case Digikam::ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
             {
-                sum += m_histogram[i].blue;
+                sum += d->histogram[i].blue;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -343,7 +389,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
         case Digikam::ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++) 
             {
-                sum += m_histogram[i].alpha;
+                sum += d->histogram[i].alpha;
                 if (sum * 2 > count) return i;
             }
             break;
@@ -363,8 +409,8 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
     double count;
     double mean;
 
-    if ( !m_histogram || start < 0 || 
-        end > m_histoSegments-1 || start > end )
+    if ( !d->histogram || start < 0 ||
+        end > d->histoSegments-1 || start > end )
         return 0.0;
 
     mean  = getMean(channel, start, end);
@@ -377,27 +423,27 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
     {
         case Digikam::ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * m_histogram[i].value;
+                dev += (i - mean) * (i - mean) * d->histogram[i].value;
             break;
 
         case Digikam::ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * m_histogram[i].red;
+                dev += (i - mean) * (i - mean) * d->histogram[i].red;
             break;
 
         case Digikam::ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * m_histogram[i].green;
+                dev += (i - mean) * (i - mean) * d->histogram[i].green;
             break;
 
         case Digikam::ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * m_histogram[i].blue;
+                dev += (i - mean) * (i - mean) * d->histogram[i].blue;
             break;
 
         case Digikam::ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++)
-                dev += (i - mean) * (i - mean) * m_histogram[i].alpha;
+                dev += (i - mean) * (i - mean) * d->histogram[i].alpha;
             break;
 
         default:
@@ -412,29 +458,29 @@ double ImageHistogram::getValue(int channel, int bin)
 {
     double value;
 
-    if ( !m_histogram || bin < 0 || bin > m_histoSegments-1 )
+    if ( !d->histogram || bin < 0 || bin > d->histoSegments-1 )
         return 0.0;
 
     switch(channel)
     {
        case Digikam::ImageHistogram::ValueChannel:
-          value = m_histogram[bin].value;
+          value = d->histogram[bin].value;
           break;
 
        case Digikam::ImageHistogram::RedChannel:
-          value = m_histogram[bin].red;
+          value = d->histogram[bin].red;
           break;
 
        case Digikam::ImageHistogram::GreenChannel:
-          value = m_histogram[bin].green;
+          value = d->histogram[bin].green;
           break;
 
        case Digikam::ImageHistogram::BlueChannel:
-          value = m_histogram[bin].blue;
+          value = d->histogram[bin].blue;
           break;
 
        case Digikam::ImageHistogram::AlphaChannel:
-          value = m_histogram[bin].alpha;
+          value = d->histogram[bin].alpha;
           break;
 
        default:
@@ -450,39 +496,39 @@ double ImageHistogram::getMaximum(int channel)
     double max = 0.0;
     int    x;
 
-    if ( !m_histogram )
+    if ( !d->histogram )
         return 0.0;
 
     switch(channel)
     {
        case Digikam::ImageHistogram::ValueChannel:
-          for (x = 0 ; x < m_histoSegments ; x++)
-             if (m_histogram[x].value > max)
-                max = m_histogram[x].value;
+          for (x = 0 ; x < d->histoSegments ; x++)
+             if (d->histogram[x].value > max)
+                max = d->histogram[x].value;
           break;
 
        case Digikam::ImageHistogram::RedChannel:
-          for (x = 0 ; x < m_histoSegments ; x++)
-             if (m_histogram[x].red > max)
-                max = m_histogram[x].red;
+          for (x = 0 ; x < d->histoSegments ; x++)
+             if (d->histogram[x].red > max)
+                max = d->histogram[x].red;
           break;
 
        case Digikam::ImageHistogram::GreenChannel:
-          for (x = 0 ; x < m_histoSegments ; x++)
-             if (m_histogram[x].green > max)
-                max = m_histogram[x].green;
+          for (x = 0 ; x < d->histoSegments ; x++)
+             if (d->histogram[x].green > max)
+                max = d->histogram[x].green;
           break;
 
        case Digikam::ImageHistogram::BlueChannel:
-          for (x = 0 ; x < m_histoSegments ; x++)
-             if (m_histogram[x].blue > max)
-                max = m_histogram[x].blue;
+          for (x = 0 ; x < d->histoSegments ; x++)
+             if (d->histogram[x].blue > max)
+                max = d->histogram[x].blue;
           break;
 
        case Digikam::ImageHistogram::AlphaChannel:
-          for (x = 0 ; x < m_histoSegments ; x++)
-             if (m_histogram[x].alpha > max)
-                max = m_histogram[x].alpha;
+          for (x = 0 ; x < d->histoSegments ; x++)
+             if (d->histogram[x].alpha > max)
+                max = d->histogram[x].alpha;
           break;
 
        default:

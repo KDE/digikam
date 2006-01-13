@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,8 @@ class QObject;
 
 namespace Digikam
 {
+
+class ImageHistogramPriv;
 class DImg;
 
 class DIGIKAM_EXPORT ImageHistogram : public QThread
@@ -55,28 +57,14 @@ class EventData
 public:
 
     EventData() 
-       {
+    {
        starting = false;
        success = false; 
-       }
+    }
 
     bool starting;
     bool success;
 };
-
-private:
-
-    // Using a structure instead a class is more fast 
-    // (access with memset() and bytes manipulation).
-
-    struct double_packet
-    {
-        double value;
-        double red;
-        double green;
-        double blue;
-        double alpha;
-    };
 
 public:
 
@@ -103,23 +91,8 @@ public:
 
 private:
 
-    /** The histogram data.*/
-    struct double_packet *m_histogram;
-
-    /** Image informations.*/
-    uchar                *m_imageData;
-    uint                  m_imageWidth;
-    uint                  m_imageHeight;
-
-    /** Numbers of histogram segments dependaing of image bytes depth*/
-    int                   m_histoSegments;
-
-    /** To post event from thread to parent.*/
-    QObject              *m_parent;
-
-    /** Used to stop thread during calculations.*/
-    bool m_runningFlag;
-
+    ImageHistogramPriv* d;
+    
 private:
 
     void calcHistogramValues();
