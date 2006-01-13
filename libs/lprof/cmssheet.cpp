@@ -1079,7 +1079,7 @@ void WriteDataFormat(FILE *fp, LPIT8 it8)
        for (i = 0; i < nSamples; i++) {
 
               WriteStr(fp, it8->DataFormat[i]);
-              WriteStr(fp, ((i == (nSamples-1)) ? "\n" : "\t"));
+              WriteStr(fp, (char*)((i == (nSamples-1)) ? "\n" : "\t"));      // C->C++ : cast
           }
 
        WriteStr (fp, "END_DATA_FORMAT\n");
@@ -1104,8 +1104,8 @@ void WriteData(FILE *fp, LPIT8 it8)
 
                      char *ptr = it8->Data[i*it8->nSamples+j];
 
-                     WriteStr(fp, ((ptr == NULL) ? "0.00" : ptr));
-                     WriteStr(fp, ((j == (it8->nSamples-1)) ? "\n" : "\t"));
+                     WriteStr(fp, (char*)((ptr == NULL) ? "0.00" : ptr));            // C->C++ : cast
+                     WriteStr(fp, (char*)((j == (it8->nSamples-1)) ? "\n" : "\t"));  // C->C++ : cast
               }
        }
        WriteStr (fp, "END_DATA\n");
@@ -1147,7 +1147,7 @@ BOOL ReadFileInMemory(const char *cFileName, char **Buffer, size_t *Len)
            return FALSE;
        }
 
-       Ptr  = malloc(Size+1);
+       Ptr  = (char*)malloc(Size+1);      // C->C++ : cast
 
        Size = fread(Ptr, 1, Size, fp);
        fclose(fp);
@@ -1436,7 +1436,7 @@ LCMSHANDLE cmsxIT8LoadFromMem(void *Ptr, size_t len)
     if (!hIT8) return NULL;
 	it8 ->FileBuffer = (char*) malloc(len + 1);
 
-	strncpy(it8 ->FileBuffer, Ptr, len);
+	strncpy(it8 ->FileBuffer, (const char*)Ptr, len);     // C->C++ : cast
     strncpy(it8->FileName, "", MAX_PATH-1);
     it8-> Source = it8 -> FileBuffer;
 

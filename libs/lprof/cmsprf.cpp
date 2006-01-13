@@ -147,7 +147,7 @@ BOOL cmsxEmbedCharTarget(LPPROFILERCOMMONDATA hdr)
 
 		f = fopen("TMP00.IT8", "rb");
 		size = xfilelength(fileno(f));
-		mem = (char*) malloc(size + 1);
+		mem = (unsigned char*) malloc(size + 1);          // C->C++ : fixed cast
 		readed = fread(mem, 1, size, f);
 		fclose(f);
 

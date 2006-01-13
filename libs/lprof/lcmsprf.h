@@ -35,17 +35,15 @@ the same distribution terms that you use for the rest of that program.
 
 /* Version 1.09a */
 
-#include <config.h>
-
 #ifndef __cmsprf_H
 
+#include <config.h>
 #include LCMS_HEADER
-/*#include "lcms.h"*/
+
 #include <ctype.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <sys/stat.h>
-
 
 #ifdef __cplusplus
 extern "C" {

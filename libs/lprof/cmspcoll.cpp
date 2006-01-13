@@ -225,7 +225,7 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
     if (m -> nPatches == 0) {
 
             m -> nPatches = (int) cmsxIT8GetPropertyDbl(hSheet, "NUMBER_OF_SETS");				
-            m -> Patches  = calloc(m -> nPatches, sizeof(PATCH));
+            m -> Patches  = (PATCH*)calloc(m -> nPatches, sizeof(PATCH));            // C->C++ : cast
 
             if (m -> Patches == NULL) {
                 cmsxIT8Free(hSheet);
