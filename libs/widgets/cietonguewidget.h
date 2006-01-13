@@ -31,8 +31,6 @@
 
 #include <qwidget.h>
 #include <qcolor.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 
 // Local includes
 
@@ -59,19 +57,8 @@ public:
     void setProfileData(QByteArray *profileData=0);
 
 protected:
-    
-    double        m_gridside;
-    int           m_xBias;
-    int           m_yBias;
-    int           m_pxcols;
-    int           m_pxrows;
-    
-    QPainter      m_pnt;
-    QPixmap       m_pix;
-    
-protected:
 
-    int  Grids(double d) const { return (int) floor(d * m_gridside + .5); };
+    int Grids(double val) const;
 
     void OutlineTongue();
     void FillTongue();
