@@ -42,23 +42,44 @@
 
 namespace Digikam
 {
+class ImagePropertiesSideBarPriv
+{
+public:
+
+    ImagePropertiesSideBarPriv()
+    {
+        image             = 0;
+        currentRect       = 0;
+        dirtyExifTab      = false;
+        dirtyHistogramTab = false;
+    }
+
+    bool                      dirtyExifTab;
+    bool                      dirtyHistogramTab;
+ 
+    QRect                    *currentRect;
+ 
+    KURL                      currentURL;
+ 
+    DImg                     *image;
+     
+    ImagePropertiesEXIFTab   *exifTab;
+    ImagePropertiesColorsTab *histogramTab;
+};
 
 ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *splitter, 
                                                Side side, bool mimimizedDefault)
                       : Digikam::Sidebar(parent, side, mimimizedDefault)
 {
-    m_img               = 0;
-    m_currentRect       = 0;
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    d = new ImagePropertiesSideBarPriv;
     
-    m_exifTab      = new ImagePropertiesEXIFTab(parent, false);
-    m_histogramTab = new ImagePropertiesColorsTab(parent, 0, false);
+    d->exifTab      = new ImagePropertiesEXIFTab(parent, false);
+    d->histogramTab = new ImagePropertiesColorsTab(parent, 0, false);
     
     setSplitter(splitter);
          
-    appendTab(m_exifTab, SmallIcon("exifinfo"), i18n("EXIF"));    
-    appendTab(m_histogramTab, SmallIcon("blend"), i18n("Colors"));
+    appendTab(d->exifTab, SmallIcon("exifinfo"), i18n("EXIF"));
+    appendTab(d->histogramTab, SmallIcon("blend"), i18n("Colors"));
     loadViewState();
     
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -67,6 +88,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *split
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
+    delete d;
 }
 
 void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img)
@@ -74,50 +96,50 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     if (!url.isValid())
         return;
     
-    m_currentURL        = url;
-    m_currentRect       = rect;
-    m_img               = img;
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    d->currentURL        = url;
+    d->currentRect       = rect;
+    d->image               = img;
+    d->dirtyExifTab      = false;
+    d->dirtyHistogramTab = false;
     
     slotChangedTab( getActiveTab() );    
 }
 
 void ImagePropertiesSideBar::noCurrentItem(void)
 {
-    m_currentURL = KURL::KURL();
-    m_exifTab->setCurrentURL();
-    m_histogramTab->setData();
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;    
+    d->currentURL = KURL::KURL();
+    d->exifTab->setCurrentURL();
+    d->histogramTab->setData();
+    d->dirtyExifTab      = false;
+    d->dirtyHistogramTab = false;
 }
 
 void ImagePropertiesSideBar::imageSelectionChanged(QRect *rect)
 {
-    m_currentRect = rect;
+    d->currentRect = rect;
     
-    if (m_dirtyHistogramTab)
-       m_histogramTab->setSelection(rect);
+    if (d->dirtyHistogramTab)
+       d->histogramTab->setSelection(rect);
     else
-       slotChangedTab(m_histogramTab);
+       slotChangedTab(d->histogramTab);
 }
 
 void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
-    if (!m_currentURL.isValid())
+    if (!d->currentURL.isValid())
         return;
     
     setCursor(KCursor::waitCursor());
     
-    if (tab == m_exifTab && !m_dirtyExifTab)
+    if (tab == d->exifTab && !d->dirtyExifTab)
     {
-       m_exifTab->setCurrentURL(m_currentURL);
-       m_dirtyExifTab = true;
+       d->exifTab->setCurrentURL(d->currentURL);
+       d->dirtyExifTab = true;
     }
-    else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+    else if (tab == d->histogramTab && !d->dirtyHistogramTab)
     {
-       m_histogramTab->setData(m_currentURL, m_currentRect, m_img);
-       m_dirtyHistogramTab = true;
+       d->histogramTab->setData(d->currentURL, d->currentRect, d->image);
+       d->dirtyHistogramTab = true;
     }
     
     setCursor( KCursor::arrowCursor() );

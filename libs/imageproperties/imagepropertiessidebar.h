@@ -21,10 +21,6 @@
 #ifndef IMAGEPROPERTIESSIDEBAR_H
 #define IMAGEPROPERTIESSIDEBAR_H
 
-// Qt includes.
-
-#include <qrect.h>
-
 // KDE includes.
 
 #include <kurl.h>
@@ -34,11 +30,15 @@
 #include "sidebar.h"
 #include "digikam_export.h"
 
+class QSplitter;
+class QWidget;
+class QRect;
+
 namespace Digikam
 {
+
 class DImg;
-class ImagePropertiesEXIFTab;
-class ImagePropertiesColorsTab;
+class ImagePropertiesSideBarPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Digikam::Sidebar
 {
@@ -56,23 +56,14 @@ public:
     
     void noCurrentItem(void);                               
 
-private:
-
-    bool                      m_dirtyExifTab;
-    bool                      m_dirtyHistogramTab;
-
-    QRect                    *m_currentRect;
-
-    KURL                      m_currentURL;
-
-    DImg                     *m_img;
-    
-    ImagePropertiesEXIFTab   *m_exifTab;
-    ImagePropertiesColorsTab *m_histogramTab;
-    
 private slots:
 
     void slotChangedTab(QWidget* tab);
+
+private :
+
+    ImagePropertiesSideBarPriv* d;
+        
 };
 
 }  // NameSpace Digikam
