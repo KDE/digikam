@@ -1,10 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : 
+ * Description : simple widget to display an image 
  * 
  * Copyright 2004 by Renchi Raju
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,7 @@ namespace Digikam
 {
 
 class ImageIface;
+class ImageWidgetPriv;
 
 class DIGIKAMIMAGEEDITOR_EXPORT ImageWidget : public QWidget
 {
@@ -56,16 +57,10 @@ protected:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent * e);
 
-private:
+private :
 
-    uchar      *m_data;
-    int         m_w;
-    int         m_h;
-
-    QRect       m_rect;
-
-    ImageIface *m_iface;
-
+    ImageWidgetPriv* d;
+    
 };
 
 }  // namespace Digikam

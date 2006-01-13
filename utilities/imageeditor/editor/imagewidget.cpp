@@ -1,10 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-02-14
- * Description : 
+ * Description : simple widget to display an image 
  * 
  * Copyright 2004 by Renchi Raju
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,38 +32,59 @@
 namespace Digikam
 {
 
+class ImageWidgetPriv
+{
+public:
+
+    ImageWidgetPriv()
+    {
+        data  = 0;
+        iface = 0;
+    }
+
+    uchar      *data;
+    int         width;
+    int         height;
+
+    QRect       rect;
+
+    ImageIface *iface;
+};
+
 ImageWidget::ImageWidget(int w, int h, QWidget *parent)
            : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    d = new ImageWidgetPriv;
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
 
-    m_iface = new ImageIface(w, h);
-    m_data = m_iface->getPreviewImage();
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);   
+    d->iface  = new ImageIface(w, h);
+    d->data   = d->iface->getPreviewImage();
+    d->width  = d->iface->previewWidth();
+    d->height = d->iface->previewHeight();
+    d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 }
 
 ImageWidget::~ImageWidget()
 {
-    delete [] m_data;
-    delete m_iface;
+    delete [] d->data;
+    delete d->iface;
+    delete d;
 }
 
 ImageIface* ImageWidget::imageIface()
 {
-    return m_iface;
+    return d->iface;
 }
 
 void ImageWidget::paintEvent(QPaintEvent *)
 {
-    m_iface->paint(this, m_rect.x(), m_rect.y(),
-                   m_rect.width(), m_rect.height());
+    d->iface->paint(this, d->rect.x(), d->rect.y(),
+                   d->rect.width(), d->rect.height());
 
     QRect r(0, 0, width(), height());
     QRegion reg(r);
-    reg -= m_rect;
+    reg -= d->rect;
 
     QPainter p(this);
     p.setClipRegion(reg);
@@ -73,13 +94,13 @@ void ImageWidget::paintEvent(QPaintEvent *)
 
 void ImageWidget::resizeEvent(QResizeEvent * e)
 {
-    int w  = e->size().width();
-    int h  = e->size().height();
-    m_data = m_iface->setPreviewImageSize(w, h);
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
+    int w     = e->size().width();
+    int h     = e->size().height();
+    d->data   = d->iface->setPreviewImageSize(w, h);
+    d->width  = d->iface->previewWidth();
+    d->height = d->iface->previewHeight();
 
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
+    d->rect = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
     emit signalResized();
 }
 
