@@ -47,6 +47,7 @@
 #include <kconfig.h>
 #include <kurlrequester.h>
 #include <kfiledialog.h>
+#include <kfile.h>
 
 // Digikam includes.
 
@@ -298,6 +299,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
 //     QComboBox *m_displayProfileCB = new QComboBox(m_displayProfile);
     KURLRequester *m_displayProfileCB = new KURLRequester(m_displayProfile);
+    m_displayProfileCB->setMode(KFile::File|KFile::ExistingOnly);
+    m_displayProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
     m_iccPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccPreviewWidget);
