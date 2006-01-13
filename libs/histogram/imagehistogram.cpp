@@ -198,7 +198,7 @@ double ImageHistogram::getCount(int channel, int start, int end)
     double count = 0.0;
 
     if ( !m_histogram || start < 0 || 
-        end > m_histoSegments || start > end )
+        end > m_histoSegments-1 || start > end )
         return 0.0;
 
     switch(channel)
@@ -251,7 +251,7 @@ double ImageHistogram::getMean(int channel, int start, int end)
     double count;
 
     if ( !m_histogram || start < 0 || 
-        end > m_histoSegments || start > end )
+        end > m_histoSegments-1 || start > end )
         return 0.0;
 
     switch(channel)
@@ -301,7 +301,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
     double count;
 
     if ( !m_histogram || start < 0 || 
-        end > m_histoSegments || start > end )
+        end > m_histoSegments-1 || start > end )
         return 0;
 
     count = getCount(channel, start, end);
@@ -364,7 +364,7 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
     double mean;
 
     if ( !m_histogram || start < 0 || 
-        end > m_histoSegments || start > end )
+        end > m_histoSegments-1 || start > end )
         return 0.0;
 
     mean  = getMean(channel, start, end);
@@ -412,7 +412,7 @@ double ImageHistogram::getValue(int channel, int bin)
 {
     double value;
 
-    if ( !m_histogram || bin < 0 || bin > m_histoSegments )
+    if ( !m_histogram || bin < 0 || bin > m_histoSegments-1 )
         return 0.0;
 
     switch(channel)
