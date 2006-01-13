@@ -5,7 +5,7 @@
  * Description : A threaded filter control panel dialog for
  *               image editor plugins using DImg
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,21 +52,53 @@
 namespace Digikam
 {
 
+class CtrlPanelDlgPriv
+{
+public:
+
+    enum RunningMode
+    {
+    NoneRendering=0,
+    PreviewRendering,
+    FinalRendering
+    };
+    
+    CtrlPanelDlgPriv()
+    {
+        parent    = 0;
+        timer     = 0;
+        aboutData = 0;
+    }
+
+    bool         tryAction;
+
+    int          currentRenderingMode;
+
+    QWidget     *parent;
+
+    QTimer      *timer;
+
+    QString      name;
+
+    KAboutData  *aboutData;
+};
+
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, bool progressBar,
                            int separateViewMode, QFrame* bannerFrame)
-               : KDialogBase(Plain, title,
-                             Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
-                             parent, 0, true, true,
-                             i18n("&Abort"),
-                             i18n("&Save As..."),
-                             i18n("&Load...")),
-                 m_parent(parent), m_name(name), m_tryAction(tryAction)
+            : KDialogBase(Plain, title,
+                          Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
+                          parent, 0, true, true,
+                          i18n("&Abort"),
+                          i18n("&Save As..."),
+                          i18n("&Load..."))
 {
-    m_currentRenderingMode = NoneRendering;
-    m_timer                = 0L;
-    m_threadedFilter       = 0L;
-    m_aboutData            = 0L;
+    d = new CtrlPanelDlgPriv;
+    d->parent               = parent;
+    d->name                 = name;
+    d->tryAction            = tryAction;
+    d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
+    m_threadedFilter        = 0;
     QString whatsThis;
 
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
@@ -104,16 +136,18 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
 CtrlPanelDlg::~CtrlPanelDlg()
 {
-    saveDialogSize(m_name + QString::QString(" Tool Dialog"));
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
 
-    if (m_aboutData)
-       delete m_aboutData;
+    if (d->aboutData)
+       delete d->aboutData;
        
-    if (m_timer)
-       delete m_timer;
+    if (d->timer)
+       delete d->timer;
 
     if (m_threadedFilter)
        delete m_threadedFilter;
+
+    delete d;
 }
 
 void CtrlPanelDlg::slotInit()
@@ -121,7 +155,7 @@ void CtrlPanelDlg::slotInit()
     // Reset values to defaults.
     QTimer::singleShot(0, this, SLOT(readUserSettings()));
 
-    if (!m_tryAction)
+    if (!d->tryAction)
     {
        connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
                this, SLOT(slotFocusChanged()));
@@ -135,9 +169,9 @@ void CtrlPanelDlg::slotInit()
 
 void CtrlPanelDlg::setAboutData(KAboutData *about)
 {
-    m_aboutData             = about;
+    d->aboutData             = about;
     QPushButton *helpButton = actionButton( Help );
-    KHelpMenu* helpMenu     = new KHelpMenu(this, m_aboutData, false);
+    KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
     helpMenu->menu()->removeItemAt(0);
     helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
     helpButton->setPopup( helpMenu->menu() );
@@ -145,7 +179,7 @@ void CtrlPanelDlg::setAboutData(KAboutData *about)
 
 void CtrlPanelDlg::abortPreview()
 {
-    m_currentRenderingMode = NoneRendering;
+    d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
     m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);
@@ -165,7 +199,7 @@ void CtrlPanelDlg::slotTry()
 
 void CtrlPanelDlg::slotUser1()
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
         if (m_threadedFilter)
            m_threadedFilter->stopComputation();
 }
@@ -178,7 +212,7 @@ void CtrlPanelDlg::slotDefault()
 
 void CtrlPanelDlg::slotCancel()
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
@@ -191,7 +225,7 @@ void CtrlPanelDlg::slotCancel()
 
 void CtrlPanelDlg::closeEvent(QCloseEvent *e)
 {
-    if (m_currentRenderingMode != NoneRendering)
+    if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
     {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
@@ -204,12 +238,12 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
 
 void CtrlPanelDlg::slotFocusChanged(void)
 {
-    if (m_currentRenderingMode == FinalRendering)
+    if (d->currentRenderingMode == CtrlPanelDlgPriv::FinalRendering)
     {
        m_imagePreviewWidget->update();
        return;
     }
-    else if (m_currentRenderingMode == PreviewRendering)
+    else if (d->currentRenderingMode == CtrlPanelDlgPriv::PreviewRendering)
     {
        if (m_threadedFilter)
           m_threadedFilter->stopComputation();
@@ -223,32 +257,32 @@ void CtrlPanelDlg::slotHelp()
     // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
-    if (m_aboutData)
-        KApplication::kApplication()->invokeHelp(m_name, "digikamimageplugins");
+    if (d->aboutData)
+        KApplication::kApplication()->invokeHelp(d->name, "digikamimageplugins");
     else
         KDialogBase::slotHelp();
 }
 
 void CtrlPanelDlg::slotTimer()
 {
-    if (m_timer)
+    if (d->timer)
     {
-       m_timer->stop();
-       delete m_timer;
+       d->timer->stop();
+       delete d->timer;
     }
 
-    m_timer = new QTimer( this );
-    connect( m_timer, SIGNAL(timeout()),
+    d->timer = new QTimer( this );
+    connect( d->timer, SIGNAL(timeout()),
              this, SLOT(slotEffect()) );
-    m_timer->start(500, true);
+    d->timer->start(500, true);
 }
 
 void CtrlPanelDlg::slotEffect()
 {
     // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;
+    if (d->currentRenderingMode == CtrlPanelDlgPriv::PreviewRendering) return;
 
-    m_currentRenderingMode = PreviewRendering;
+    d->currentRenderingMode = CtrlPanelDlgPriv::PreviewRendering;
 
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,      false);
@@ -269,7 +303,7 @@ void CtrlPanelDlg::slotEffect()
 void CtrlPanelDlg::slotOk()
 {
     writeUserSettings();
-    m_currentRenderingMode = FinalRendering;
+    d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
 
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,      false);
@@ -291,31 +325,31 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    DImgThreadedFilter::EventData *d = (DImgThreadedFilter::EventData*) event->data();
+    DImgThreadedFilter::EventData *e = (DImgThreadedFilter::EventData*) event->data();
 
-    if (!d) return;
+    if (!e) return;
 
-    if (d->starting)           // Computation in progress !
+    if (e->starting)           // Computation in progress !
     {
-        m_imagePreviewWidget->setProgress(d->progress);
+        m_imagePreviewWidget->setProgress(e->progress);
     }
     else
     {
-        if (d->success)        // Computation Completed !
+        if (e->success)        // Computation Completed !
         {
-            switch (m_currentRenderingMode)
+            switch (d->currentRenderingMode)
             {
-              case PreviewRendering:
+              case CtrlPanelDlgPriv::PreviewRendering:
               {
-                 kdDebug() << "Preview " << m_name << " completed..." << endl;
+                 kdDebug() << "Preview " << d->name << " completed..." << endl;
                  putPreviewData();
                  abortPreview();
                  break;
               }
 
-              case FinalRendering:
+              case CtrlPanelDlgPriv::FinalRendering:
               {
-                 kdDebug() << "Final" << m_name << " completed..." << endl;
+                 kdDebug() << "Final" << d->name << " completed..." << endl;
                  putFinalData();
                  kapp->restoreOverrideCursor();
                  accept();
@@ -325,23 +359,23 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
         }
         else                   // Computation Failed !
         {
-            switch (m_currentRenderingMode)
+            switch (d->currentRenderingMode)
             {
-                case PreviewRendering:
+                case CtrlPanelDlgPriv::PreviewRendering:
                 {
-                    kdDebug() << "Preview " << m_name << " failed..." << endl;
+                    kdDebug() << "Preview " << d->name << " failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;
                 }
 
-                case FinalRendering:
+                case CtrlPanelDlgPriv::FinalRendering:
                     break;
             }
         }
     }
 
-    delete d;
+    delete e;
 }
 
 // Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 

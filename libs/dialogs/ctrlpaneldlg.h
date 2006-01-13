@@ -5,7 +5,7 @@
  * Description : A threaded filter control panel dialog for 
  *               image editor plugins using DImg
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,15 +36,12 @@
 #include "imagepannelwidget.h"
 #include "digikam_export.h"
 
-class QTimer;
 class QFrame;
-class QWidget;
-
-class KAboutData;
 
 namespace Digikam
 {
 
+class CtrlPanelDlgPriv;
 class DImgThreadedFilter;
 
 class DIGIKAM_EXPORT CtrlPanelDlg : public KDialogBase
@@ -76,24 +73,7 @@ public slots:
 
 private:
     
-    enum RunningMode
-    {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
-    };
-    
-    int          m_currentRenderingMode;
-
-    QWidget     *m_parent;
-    
-    QTimer      *m_timer;
-    
-    QString      m_name;
-
-    KAboutData  *m_aboutData;
-    
-    bool         m_tryAction;
+    CtrlPanelDlgPriv* d;
 
 private slots:
     
