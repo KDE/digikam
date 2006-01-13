@@ -57,7 +57,7 @@ protected:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent * e);
 
-private :
+private:
 
     ImageWidgetPriv* d;
     
