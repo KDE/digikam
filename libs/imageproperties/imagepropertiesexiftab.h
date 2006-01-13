@@ -3,7 +3,7 @@
  * Date  : 2004-11-17
  * Description :
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,15 +32,10 @@
 
 #include "digikam_export.h"
 
-class QComboBox;
-
-class KFileItem;
-
-class KExifWidget;
-
 namespace Digikam
 {
-class NavigateBarWidget;
+
+class ImagePropertiesEXIFTabPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesEXIFTab : public QWidget
 {
@@ -60,19 +55,13 @@ signals:
     void signalNextItem(void);    
     void signalLastItem(void); 
         
-private:
-
-    QComboBox         *m_levelCombo;
-
-    QString            m_currItem;
-    
-    KExifWidget       *m_exifWidget;
-    
-    NavigateBarWidget *m_navigateBar;    
-        
 private slots:
 
     void slotLevelChanged(int);
+
+private:
+
+    ImagePropertiesEXIFTabPriv* d;
 };
 
 }  // NameSpace Digikam
