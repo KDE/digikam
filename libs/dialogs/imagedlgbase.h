@@ -7,7 +7,7 @@
  *               designed to accept custom widgets in 
  *               preview and settings area.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,14 +37,14 @@
 
 #include "digikam_export.h"
 
-class QGridLayout;
-class QTimer;
 class QWidget;
 
 class KAboutData;
 
 namespace Digikam
 {
+
+class ImageDlgBasePriv;
 
 class DIGIKAM_EXPORT ImageDlgBase : public KDialogBase
 {
@@ -59,19 +59,11 @@ public:
     void setAboutData(KAboutData *about);
     void setPreviewAreaWidget(QWidget *w);
     void setUserAreaWidget(QWidget *w);
-    
+
 private:
 
-    QGridLayout    *m_mainLayout;
-    
-    QWidget        *m_parent;
-    
-    QString         m_name;
-
-    QTimer         *m_timer;
-
-    KAboutData     *m_about;
-    
+    ImageDlgBasePriv* d;
+        
 protected slots:
 
     void slotTimer();       
