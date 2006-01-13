@@ -580,31 +580,31 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
 {
     switch(channel)
     {
-    case 1:           // Red.
+    case RedChannel: 
         d->histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
         d->colorsCB->setEnabled(false);
         break;
        
-    case 2:           // Green.
+    case GreenChannel:
         d->histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
         d->colorsCB->setEnabled(false);
         break;
           
-    case 3:           // Blue.
+    case BlueChannel:        
         d->histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
         d->colorsCB->setEnabled(false);
         break;
 
-    case 4:           // Alpha.
+    case AlphaChannel:
         d->histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(false);
         break;
           
-    case 5:           // All color channels.
+    case ColorChannels:
         d->histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(true);
@@ -631,11 +631,11 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
 {
     switch(color)
     {
-    case 1:           // Green.
+    case AllColorsGreen:
         d->histogramWidget->m_colorType = Digikam::HistogramWidget::GreenColor;
         break;
        
-    case 2:           // Blue.
+    case AllColorsBlue:
         d->histogramWidget->m_colorType = Digikam::HistogramWidget::BlueColor;
         break;
 
