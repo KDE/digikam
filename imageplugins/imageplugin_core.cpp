@@ -93,11 +93,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                          this, SLOT(slotInvert()),
                          actionCollection(), "implugcore_invert");
     
-    m_convertTo8Bits = new KAction(i18n("8 bits"), 0, 0,
+    m_convertTo8Bits = new KAction(i18n("8 bits"), "depth16to8", 0,
                            this, SLOT(slotConvertTo8Bits()),
                            actionCollection(), "implugcore_convertto8bits");
 
-    m_convertTo16Bits = new KAction(i18n("16 bits"), 0, 0,
+    m_convertTo16Bits = new KAction(i18n("16 bits"), "depth8to16", 0,
                             this, SLOT(slotConvertTo16Bits()),
                             actionCollection(), "implugcore_convertto16bits");
 
