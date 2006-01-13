@@ -30,7 +30,8 @@
 
 #include LCMS_HEADER
 
-class QLabel;
+class KSqueezedTextLabel;
+class KURL;
 
 namespace Digikam
 {
@@ -51,13 +52,19 @@ public slots:
     virtual void showPreview(const KURL &url);
     virtual void clearPreview();
 
+protected:
+
+    virtual void virtual_hook(int id, void* data);
+
 private:
 
-    QLabel  *m_name;
-    QLabel  *m_description;
-    QLabel  *m_colorSpace;
-    QLabel  *m_deviceClass;
-    QLabel  *m_renderingIntent;
+    KSqueezedTextLabel  *m_name;
+    KSqueezedTextLabel  *m_description;
+    KSqueezedTextLabel  *m_colorSpace;
+    KSqueezedTextLabel  *m_deviceClass;
+    KSqueezedTextLabel  *m_renderingIntent;
+
+    KURL                currentUrl;
 
 private:
 
