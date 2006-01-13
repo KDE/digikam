@@ -37,6 +37,7 @@ class QCheckListItem;
 class QCheckBox;
 class QPushButton;
 class QToolButton;
+class QLabel;
 
 class KTextEdit;
 class KLineEdit;

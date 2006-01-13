@@ -33,22 +33,13 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-class QComboBox;
-class QSpinBox;
-class QPixmap;
-class QLabel;
-class QHButtonGroup;
-
-class KSqueezedTextLabel;
+class QRect;
 
 namespace Digikam
 {
+
 class DImg;
-class HistogramWidget;
-class ColorGradientWidget;
-class NavigateBarWidget;
-class ManagedLoadSaveThread;
-class CIETongueWidget;
+class ImagePropertiesColorsTabPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
 {
@@ -97,46 +88,7 @@ private slots:
 
 private:
 
-    QComboBox             *m_channelCB;    
-    QComboBox             *m_colorsCB;    
-    QComboBox             *m_renderingCB;    
-
-    QHButtonGroup         *m_scaleBG;
-    QHButtonGroup         *m_regionBG;
-    
-    QSpinBox              *m_minInterv;
-    QSpinBox              *m_maxInterv;
-    
-    QLabel                *m_labelMeanValue;
-    QLabel                *m_labelPixelsValue;
-    QLabel                *m_labelStdDevValue;
-    QLabel                *m_labelCountValue;
-    QLabel                *m_labelMedianValue;
-    QLabel                *m_labelPercentileValue;
-    QLabel                *m_labelColorDepth;
-    QLabel                *m_labelAlphaChannel;
-    QLabel                *m_infoHeader;
-    
-    QString                m_currentFilePath;
-
-    QRect                 *m_selectionArea;
-        
-    KSqueezedTextLabel    *m_labelICCName;
-    KSqueezedTextLabel    *m_labelICCDescription;
-    KSqueezedTextLabel    *m_labelICCCopyright;
-    KSqueezedTextLabel    *m_labelICCIntent;
-    KSqueezedTextLabel    *m_labelICCColorSpace;
-    
-    DImg                   m_image;
-    DImg                   m_imageSelection;
-    
-    ColorGradientWidget   *m_hGradient;
-    HistogramWidget       *m_histogramWidget;
-    NavigateBarWidget     *m_navigateBar;
-    ManagedLoadSaveThread *m_imageLoaderThreaded;
-    CIETongueWidget       *m_cieTongue;
-    
-    QByteArray             m_embedded_profile;
+    ImagePropertiesColorsTabPriv* d;
     
 };
 
