@@ -2,10 +2,11 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2004-12-21
- * Description : 
+ * Description : USB Mass Storage Implementation of abstract
+ * type DKCamera
  * 
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,27 +58,45 @@ extern "C"
 namespace Digikam
 {
 
+class UMSCameraPriv
+{
+public:
+
+    UMSCameraPriv()
+    {
+        cancel = false;
+    }
+
+    bool    cancel;
+    
+    QString imageFilter;
+    QString movieFilter;
+    QString audioFilter;
+    QString rawFilter;
+};
+
 UMSCamera::UMSCamera(const QString& model,
                      const QString& port,
                      const QString& path)
     : DKCamera(model, port, path)
 {
-    m_cancel = false;    
-
+    d = new UMSCameraPriv;
+    
     AlbumSettings* settings = AlbumSettings::instance();
-    m_imageFilter = QDeepCopy<QString>(settings->getImageFileFilter());
-    m_movieFilter = QDeepCopy<QString>(settings->getMovieFileFilter());
-    m_audioFilter = QDeepCopy<QString>(settings->getAudioFileFilter());
-    m_rawFilter   = QDeepCopy<QString>(settings->getRawFileFilter());
+    d->imageFilter = QDeepCopy<QString>(settings->getImageFileFilter());
+    d->movieFilter = QDeepCopy<QString>(settings->getMovieFileFilter());
+    d->audioFilter = QDeepCopy<QString>(settings->getAudioFileFilter());
+    d->rawFilter   = QDeepCopy<QString>(settings->getRawFileFilter());
 
-    m_imageFilter = m_imageFilter.lower(); 
-    m_movieFilter = m_movieFilter.lower();     
-    m_audioFilter = m_audioFilter.lower();     
-    m_rawFilter   = m_rawFilter.lower();     
+    d->imageFilter = d->imageFilter.lower();
+    d->movieFilter = d->movieFilter.lower();
+    d->audioFilter = d->audioFilter.lower();
+    d->rawFilter   = d->rawFilter.lower();
 }
 
 UMSCamera::~UMSCamera()
 {
+    delete d;
 }
 
 bool UMSCamera::connect()
@@ -88,13 +107,13 @@ bool UMSCamera::connect()
 void UMSCamera::cancel()
 {
     // set the cancel flag
-    m_cancel = true;
+    d->cancel = true;
 }
 
 void UMSCamera::getAllFolders(const QString& folder,
                               QStringList& subFolderList)
 {
-    m_cancel = false;
+    d->cancel = false;
     subFolderList.clear();
     subFolderList.append(folder);
     listFolders(folder, subFolderList);
@@ -103,7 +122,7 @@ void UMSCamera::getAllFolders(const QString& folder,
 bool UMSCamera::getItemsInfoList(const QString& folder,
                                  GPItemInfoList& infoList)
 {
-    m_cancel = false;
+    d->cancel = false;
     infoList.clear();
 
     QDir dir(folder);
@@ -116,7 +135,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder,
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
 
-    while ((fi = it.current()) != 0 && !m_cancel)
+    while ((fi = it.current()) != 0 && !d->cancel)
     {
         ++it;
 
@@ -129,8 +148,8 @@ bool UMSCamera::getItemsInfoList(const QString& folder,
             info.mime             = mime;
             info.mtime            = fi->lastModified().toTime_t();
             info.size             = fi->size();
-            info.width            = -1; // todo
-            info.height           = -1; // todo
+            info.width            = -1; // TODO
+            info.height           = -1; // TODO
             info.downloaded       = -1; 
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
@@ -146,7 +165,7 @@ bool UMSCamera::getThumbnail(const QString& folder,
                              const QString& itemName,
                              QImage& thumbnail)
 {
-    m_cancel = false;
+    d->cancel = false;
 
     // Trying to get thumbnail from Exif data.
 
@@ -165,7 +184,7 @@ bool UMSCamera::getThumbnail(const QString& folder,
 
     KTempFile thumbFile(QString::null, "camerarawthumb");
     thumbFile.setAutoDelete(true);
-    Digikam::DcrawParse rawFileParser;
+    DcrawParse rawFileParser;
     
     if (thumbFile.status() == 0)
     {
@@ -179,13 +198,13 @@ bool UMSCamera::getThumbnail(const QString& folder,
     }
 
     // Trying to get thumbnail using DImg.
-    // TODO : in the future, we need to use future DImg::getEmbeddedThumnail method instead !
+    // TODO : in the future, we need to use a new DImg::getEmbeddedThumbnail() method instead !
 
-    Digikam::DImg dimg_im(QFile::encodeName(folder + "/" + itemName));
+    DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
 
-    if (!dimg_im.isNull()) 
+    if (!dimgThumb.isNull())
     {
-        thumbnail = dimg_im.copyQImage();
+        thumbnail = dimgThumb.copyQImage();
         return true;
     }
 
@@ -206,7 +225,7 @@ bool UMSCamera::downloadItem(const QString& folder,
                              const QString& itemName,
                              const QString& saveFile)
 {
-    m_cancel = false;
+    d->cancel = false;
 
     QString src  = folder + "/" + itemName;
     QString dest = saveFile;
@@ -233,7 +252,7 @@ bool UMSCamera::downloadItem(const QString& folder,
     char buffer[MAX_IPC_SIZE];
 
     Q_LONG len;
-    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !d->cancel)
     {
         if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
         {
@@ -263,7 +282,7 @@ bool UMSCamera::downloadItem(const QString& folder,
 bool UMSCamera::deleteItem(const QString& folder,
                            const QString& itemName)
 {
-    m_cancel = false;
+    d->cancel = false;
 
     return (::unlink(QFile::encodeName(folder + "/" + itemName)) == 0);
 }
@@ -279,7 +298,7 @@ bool UMSCamera::uploadItem(const QString& ,
 void UMSCamera::listFolders(const QString& folder,
                             QStringList& subFolderList)
 {
-    if (m_cancel)
+    if (d->cancel)
         return;
 
     QDir dir(folder);
@@ -292,7 +311,7 @@ void UMSCamera::listFolders(const QString& folder,
     QFileInfoListIterator it( *list );
     QFileInfo *fi;
 
-    while ((fi = it.current()) != 0 && !m_cancel)
+    while ((fi = it.current()) != 0 && !d->cancel)
     {
         ++it;
         
@@ -316,19 +335,19 @@ QString UMSCamera::mimeType(const QString& fileext) const
     else if (ext == "tif")
         ext = "tiff";
     
-    if (m_imageFilter.contains(ext))
+    if (d->imageFilter.contains(ext))
     {
         return "image/" + ext;
     }
-    else if (m_movieFilter.contains(ext))
+    else if (d->movieFilter.contains(ext))
     {
         return "video/" + ext;
     }
-    else if (m_audioFilter.contains(ext))
+    else if (d->audioFilter.contains(ext))
     {
         return "audio/" + ext;
     }
-    else if (m_rawFilter.contains(ext))
+    else if (d->rawFilter.contains(ext))
     {
         return "image/" + ext;
     }

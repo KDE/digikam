@@ -1,9 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-12-21
- * Description :
+ * Description : USB Mass Storage Implementation of abstract
+ * type DKCamera
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +33,7 @@
 namespace Digikam
 {
 
-// USB Mass Storage Implementation of abstract type DKCamera
+class UMSCameraPriv;
 
 class UMSCamera : public DKCamera
 {
@@ -71,13 +73,10 @@ private:
                         QStringList& subFolderList);
     QString mimeType(const QString& fileext) const;
 
-private:
+private :
 
-    bool    m_cancel;
-    QString m_imageFilter;
-    QString m_movieFilter;
-    QString m_audioFilter;
-    QString m_rawFilter;
+    UMSCameraPriv* d;
+
 };
 
 }  // namespace Digikam
