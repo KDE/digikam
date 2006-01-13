@@ -60,7 +60,7 @@ private slots:
 
     void slotChangedTab(QWidget* tab);
 
-private :
+private:
 
     ImagePropertiesSideBarPriv* d;
         
