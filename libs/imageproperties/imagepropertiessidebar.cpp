@@ -42,6 +42,7 @@
 
 namespace Digikam
 {
+
 class ImagePropertiesSideBarPriv
 {
 public:
@@ -98,7 +99,7 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     
     d->currentURL        = url;
     d->currentRect       = rect;
-    d->image               = img;
+    d->image             = img;
     d->dirtyExifTab      = false;
     d->dirtyHistogramTab = false;
     
