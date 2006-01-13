@@ -18,23 +18,25 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
+
 #ifndef ICCPREVIEWWIDGET_H
 #define ICCPREVIEWWIDGET_H
 
-#include <config.h>
+// KDE includes.
 
 #include <kpreviewwidgetbase.h>
 #include <kurl.h>
+
+// Local includes.
 
 #include "digikam_export.h"
 
 #include LCMS_HEADER
 
-class KSqueezedTextLabel;
-class KURL;
-
 namespace Digikam
 {
+
+class ICCPreviewWidgetPriv;
 
 class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
 {
@@ -44,7 +46,6 @@ Q_OBJECT
 public:
 
     ICCPreviewWidget(QWidget *parent);
-
     ~ICCPreviewWidget();
 
 public slots:
@@ -58,17 +59,12 @@ protected:
 
 private:
 
-    KSqueezedTextLabel  *m_name;
-    KSqueezedTextLabel  *m_description;
-    KSqueezedTextLabel  *m_colorSpace;
-    KSqueezedTextLabel  *m_deviceClass;
-    KSqueezedTextLabel  *m_renderingIntent;
-
-    KURL                currentUrl;
-
-private:
-
     void getICCData(const KURL &url);
+
+private :
+
+    ICCPreviewWidgetPriv* d;
+
 };
 
 } // namespace Digikam
