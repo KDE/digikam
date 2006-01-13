@@ -40,83 +40,100 @@
 namespace Digikam
 {
 
+class NavigateBarWidgetPriv
+{
+public:
+
+    NavigateBarWidgetPriv(){}
+
+    QPushButton        *firstButton;
+    QPushButton        *prevButton;
+    QPushButton        *nextButton;
+    QPushButton        *lastButton;
+    
+    KSqueezedTextLabel *filename;
+};
+
 NavigateBarWidget::NavigateBarWidget(QWidget *parent, bool show)
                  : QWidget(parent, 0, Qt::WDestructiveClose)
 {
+    d = new NavigateBarWidgetPriv;
+    
     QHBoxLayout *lay = new QHBoxLayout(this);
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     
-    m_firstButton = new QPushButton( this );
-    m_firstButton->setPixmap( iconLoader->loadIcon( "start", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_firstButton, i18n( "Go to the first item" ) );
+    d->firstButton = new QPushButton( this );
+    d->firstButton->setPixmap( iconLoader->loadIcon( "start", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( d->firstButton, i18n( "Go to the first item" ) );
     
-    m_prevButton = new QPushButton( this );
-    m_prevButton->setPixmap( iconLoader->loadIcon( "back", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_prevButton, i18n( "Go to the previous item" ) );
+    d->prevButton = new QPushButton( this );
+    d->prevButton->setPixmap( iconLoader->loadIcon( "back", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( d->prevButton, i18n( "Go to the previous item" ) );
  
-    m_nextButton = new QPushButton( this );
-    m_nextButton->setPixmap( iconLoader->loadIcon( "forward", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_nextButton, i18n( "Go to the next item" ) );
+    d->nextButton = new QPushButton( this );
+    d->nextButton->setPixmap( iconLoader->loadIcon( "forward", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( d->nextButton, i18n( "Go to the next item" ) );
 
-    m_lastButton = new QPushButton( this );
-    m_lastButton->setPixmap( iconLoader->loadIcon( "finish", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_lastButton, i18n( "Go to the last item" ) );        
+    d->lastButton = new QPushButton( this );
+    d->lastButton->setPixmap( iconLoader->loadIcon( "finish", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( d->lastButton, i18n( "Go to the last item" ) );
     
-    m_filename = new KSqueezedTextLabel( this );
+    d->filename = new KSqueezedTextLabel( this );
     
-    lay->addWidget(m_firstButton);
-    lay->addWidget(m_prevButton);
-    lay->addWidget(m_nextButton);
-    lay->addWidget(m_lastButton);
+    lay->addWidget(d->firstButton);
+    lay->addWidget(d->prevButton);
+    lay->addWidget(d->nextButton);
+    lay->addWidget(d->lastButton);
     lay->addSpacing( KDialog::spacingHint() );
-    lay->addWidget(m_filename);
+    lay->addWidget(d->filename);
 
     if (!show) hide();
     
-    connect(m_firstButton, SIGNAL(clicked()),
+    connect(d->firstButton, SIGNAL(clicked()),
             this, SIGNAL(signalFirstItem()));
     
-    connect(m_prevButton, SIGNAL(clicked()),
+    connect(d->prevButton, SIGNAL(clicked()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(m_nextButton, SIGNAL(clicked()),
+    connect(d->nextButton, SIGNAL(clicked()),
             this, SIGNAL(signalNextItem()));
     
-    connect(m_lastButton, SIGNAL(clicked()),
+    connect(d->lastButton, SIGNAL(clicked()),
             this, SIGNAL(signalLastItem()));
 }      
 
 NavigateBarWidget::~NavigateBarWidget()
 {
+    delete d;
 }
 
 void NavigateBarWidget::setFileName(QString filename)
 {
-    m_filename->setText( filename );
+    d->filename->setText( filename );
 }
 
 void NavigateBarWidget::setButtonsState(int itemType)
 {
     if (itemType == ItemFirst)
     {
-       m_firstButton->setEnabled(false);
-       m_prevButton->setEnabled(false);
-       m_nextButton->setEnabled(true);
-       m_lastButton->setEnabled(true);
+       d->firstButton->setEnabled(false);
+       d->prevButton->setEnabled(false);
+       d->nextButton->setEnabled(true);
+       d->lastButton->setEnabled(true);
     }
     else if (itemType == ItemLast)
     {
-       m_firstButton->setEnabled(true);
-       m_prevButton->setEnabled(true);
-       m_nextButton->setEnabled(false);
-       m_lastButton->setEnabled(false);
+       d->firstButton->setEnabled(true);
+       d->prevButton->setEnabled(true);
+       d->nextButton->setEnabled(false);
+       d->lastButton->setEnabled(false);
     }
     else 
     {
-       m_firstButton->setEnabled(true);
-       m_prevButton->setEnabled(true);
-       m_nextButton->setEnabled(true);
-       m_lastButton->setEnabled(true);
+       d->firstButton->setEnabled(true);
+       d->prevButton->setEnabled(true);
+       d->nextButton->setEnabled(true);
+       d->lastButton->setEnabled(true);
     }
 }
 

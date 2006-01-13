@@ -30,11 +30,10 @@
 
 #include "digikam_export.h"
 
-class QPushButton;
-class KSqueezedTextLabel;
-
 namespace Digikam
 {
+
+class NavigateBarWidgetPriv;
 
 class DIGIKAM_EXPORT NavigateBarWidget : public QWidget
 {
@@ -64,15 +63,10 @@ signals:
     void signalNextItem(void);    
     void signalLastItem(void);    
         
-private:    
+private :
 
-    QPushButton        *m_firstButton;
-    QPushButton        *m_prevButton;
-    QPushButton        *m_nextButton;
-    QPushButton        *m_lastButton;
+    NavigateBarWidgetPriv* d;
     
-    KSqueezedTextLabel *m_filename;
-
 };
 
 }  // namespace Digikam
