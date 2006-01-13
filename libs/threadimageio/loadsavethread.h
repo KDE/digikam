@@ -4,7 +4,7 @@
  * Date  : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright 2005 by Marcel Wiesweg, Gilles Caulier
+ * Copyright 2005-2006 by Marcel Wiesweg, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,8 @@
 
 namespace Digikam
 {
+
+class LoadSaveThreadPriv;
 
 class DIGIKAM_EXPORT LoadSaveThread : public QObject, public QThread
 {
@@ -108,9 +110,8 @@ protected:
 
 private:
 
-    bool                 m_running;
-    QTime                m_notificationTime;
-    bool                 m_blockNotification;
+    LoadSaveThreadPriv* d;
+    
 };
 
 class DIGIKAM_EXPORT ManagedLoadSaveThread : public LoadSaveThread

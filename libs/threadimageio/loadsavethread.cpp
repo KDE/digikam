@@ -4,7 +4,7 @@
  * Date  : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright 2005 by Marcel Wiesweg, Gilles Caulier
+ * Copyright 2005-2006 by Marcel Wiesweg, Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -259,26 +259,41 @@ private:
 
 //---------------------------------------------------------------------------------------------------
 
+class LoadSaveThreadPriv
+{
+public:
+
+    LoadSaveThreadPriv()
+    {
+        running           = true;
+        blockNotification = false;
+    }
+
+    bool  running;
+    bool  blockNotification;
+    
+    QTime notificationTime;
+};
+
 LoadSaveThread::LoadSaveThread()
 {
+    d = new LoadSaveThreadPriv;
     m_currentTask        = 0;
-    m_running            = true;
-
     m_notificationPolicy = NotificationPolicyTimeLimited;
-    m_blockNotification  = false;
-
+    
     start();
 }
 
 LoadSaveThread::~LoadSaveThread()
 {
-    m_running = false;
+    d->running = false;
     {
         QMutexLocker lock(&m_mutex);
         m_condVar.wakeAll();
     }
 
     wait();
+    delete d;
 }
 
 void LoadSaveThread::load(const QString& filePath)
@@ -297,7 +312,7 @@ void LoadSaveThread::save(DImg &image, const QString& filePath, const char* form
 
 void LoadSaveThread::run()
 {
-    while (m_running)
+    while (d->running)
     {
         {
             QMutexLocker lock(&m_mutex);
@@ -311,8 +326,8 @@ void LoadSaveThread::run()
                 {
                     // set timing values so that first event is sent only
                     // after an initial time span.
-                    m_notificationTime = QTime::currentTime();
-                    m_blockNotification = true;
+                    d->notificationTime = QTime::currentTime();
+                    d->blockNotification = true;
                 }
             }
             else
@@ -330,7 +345,7 @@ void LoadSaveThread::customEvent(QCustomEvent *event)
         switch (m_notificationPolicy)
         {
             case NotificationPolicyDirect:
-                m_blockNotification = false;
+                d->blockNotification = false;
                 break;
             case NotificationPolicyTimeLimited:
                 break;
@@ -342,7 +357,7 @@ void LoadSaveThread::customEvent(QCustomEvent *event)
 void LoadSaveThread::setNotificationPolicy(NotificationPolicy notificationPolicy)
 {
     m_notificationPolicy = notificationPolicy;
-    m_blockNotification  = false;
+    d->blockNotification  = false;
 }
 
 bool LoadSaveThread::querySendNotifyEvent()
@@ -353,25 +368,25 @@ bool LoadSaveThread::querySendNotifyEvent()
         case NotificationPolicyDirect:
             // Note that m_blockNotification is not protected by a mutex. However, if there is a
             // race condition, the worst case is that one event is not sent, which is no problem.
-            if (m_blockNotification)
+            if (d->blockNotification)
                 return false;
             else
             {
-                m_blockNotification = true;
+                d->blockNotification = true;
                 return true;
             }
             break;
         case NotificationPolicyTimeLimited:
             // Current default time value: 100 millisecs.
-            if (m_blockNotification)
-                m_blockNotification = m_notificationTime.msecsTo(QTime::currentTime()) < 100;
+            if (d->blockNotification)
+                d->blockNotification = d->notificationTime.msecsTo(QTime::currentTime()) < 100;
 
-            if (m_blockNotification)
+            if (d->blockNotification)
                 return false;
             else
             {
-                m_notificationTime = QTime::currentTime();
-                m_blockNotification = true;
+                d->notificationTime = QTime::currentTime();
+                d->blockNotification = true;
                 return true;
             }
             break;
