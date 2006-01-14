@@ -928,6 +928,8 @@ void DigikamApp::slotDownloadImages()
     QString cameraGuiPath = convertToLocalUrl(mCameraGuiPath);
     kdDebug() << "IN: " << mCameraGuiPath << " OUT: " << cameraGuiPath << endl;
     
+    if (cameraGuiPath.isNull())
+        return;
     
     bool alreadyThere = false;
     for (uint i = 0 ; i != actionCollection()->count() ; i++)
