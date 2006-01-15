@@ -133,6 +133,7 @@ signals:
     
     void signalLastDestination(const KURL&);
     void signalAlbumSettingsChanged();
+    void close();
 };
 
 #endif /* CAMERAUI_H */

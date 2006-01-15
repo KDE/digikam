@@ -49,6 +49,7 @@
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kautomount.h>
 #include <kio/netaccess.h>
 
 using KIO::Job;
@@ -960,6 +961,22 @@ void DigikamApp::slotDownloadImages()
             mView, SLOT(slotSelectAlbum(const KURL&)));
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
             SLOT(slotSetupChanged()));
+    connect(cgui, SIGNAL(close()), SLOT(slotCameraUmount()));
+}
+
+void DigikamApp::slotCameraUmount()
+{
+    int items = mMediaItems.count();
+    for (int i=0 ; i != items ; i++)
+    {
+        if (mMediaItems[i].first == mCameraGuiPath && mMediaItems[i].second)
+        {
+            // Ok, item is now mounted and not before, umount it.
+            kdDebug() << "Trying to umount device" << endl;
+            KIO::SimpleJob *job = KIO::unmount(convertToLocalUrl(mCameraGuiPath));
+            KIO::NetAccess::synchronousRun(job,0);
+        }
+    }
 }
 
 void DigikamApp::slotCameraConnect()
@@ -1012,19 +1029,24 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
     {
         QString name;
         QString path;
+        bool unmounted=false;
         for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++ et ) {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
-            kdDebug() << ( *et ).m_str << endl;
+            if ( (*et).m_uds == KIO::UDS_MIME_TYPE &&
+                   ( (*et).m_str == "media/removable_unmounted" || 
+                     (*et).m_str == "media/camera_unmounted" ) )
+                unmounted=true;
+            //kdDebug() << ( *et ).m_str << unmounted << endl;
        }
        if (!name.isEmpty() && !path.isEmpty())
        {
             if (i==0)
                 mCameraMediaList->clear();
             
-            mMediaItems[i] = path;
+            mMediaItems[i] = qMakePair(path,unmounted);
             
             mCameraMediaList->insertItem( name,  this, 
                                SLOT(slotDownloadImagesFromMedia( int )),i,0);
@@ -1036,7 +1058,7 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
 
 void DigikamApp::slotDownloadImagesFromMedia( int id )
 {
-    slotDownloadImages( mMediaItems[id] );
+    slotDownloadImages( mMediaItems[id].first );
 }
 
 void DigikamApp::slotCameraRemoved(CameraType *ctype)
@@ -1302,12 +1324,8 @@ void DigikamApp::loadCameras()
 {
     mCameraList->load();
     
-    /* 
-     * Disabled, not fished 
-     *
-     * mCameraMenuAction->popupMenu()->insertSeparator();
-     * mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
-     */
+    mCameraMenuAction->popupMenu()->insertSeparator();
+    mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
     
     mCameraMenuAction->popupMenu()->insertSeparator();
     

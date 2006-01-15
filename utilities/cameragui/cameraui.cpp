@@ -288,6 +288,7 @@ void CameraUI::closeEvent(QCloseEvent* e)
     if(!m_lastDestURL.isEmpty())
         emit signalLastDestination(m_lastDestURL);
 
+    emit close();
     delete m_controller;
     saveSettings();
     e->accept();

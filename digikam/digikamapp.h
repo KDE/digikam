@@ -134,7 +134,7 @@ private:
     SplashScreen          *mSplash;
 
     QString               mCameraGuiPath;
-    QMap<int, QString>    mMediaItems;
+    QMap<int, QPair<QString, bool> >   mMediaItems;
 
     // Album Settings
     AlbumSettings *mAlbumSettings;
@@ -220,6 +220,7 @@ private slots:
     void slotDownloadImages( const QString& folder );
     void slotDownloadImages();
     void slotCameraConnect();
+    void slotCameraUmount();
     void slotCameraMediaMenu();
     void slotDownloadImagesFromMedia( int id );
     void slotCameraAdded(CameraType *ctype);
