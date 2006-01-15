@@ -3,7 +3,7 @@
  * Date  : 2004-07-29
  * Description : image levels manipulation methods.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,38 +44,12 @@
 namespace Digikam
 {
 
+class ImageLevelsPriv;
 class ImageHistogram;
 class DColor;
 
 class DIGIKAM_EXPORT ImageLevels
 {
-
-private:
-
-enum PixelType
-{
-    RedPixel = 0,  
-    GreenPixel,
-    BluePixel, 
-    AlphaPixel
-};
-
-struct _Levels
-{
-    double  gamma[5];
-    
-    int     low_input[5];
-    int     high_input[5];
-    
-    int     low_output[5];
-    int     high_output[5];
-};
-
-struct _Lut
-{
-    unsigned short **luts;
-    int              nchannels;
-};
 
 public:
     
@@ -114,16 +88,11 @@ public:
     
     bool   saveLevelsToGimpLevelsFile(KURL fileUrl);
     bool   loadLevelsFromGimpLevelsFile(KURL fileUrl);
-    
+
 private:
 
-    // Levels data.
-    struct _Levels *m_levels;
+    ImageLevelsPriv* d;
     
-    // Lut data.
-    struct _Lut    *m_lut;
-
-    bool            m_sixteenBit;
 };
 
 }  // NameSpace Digikam
