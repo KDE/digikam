@@ -1,0 +1,8 @@
+[Desktop Action digiKam Detect and Download]
+Exec=@digikamhelper_dir@/digikam-camera detect
+Icon=digikam
+Name=digiKam Detect and Download
+
+[Desktop Entry]
+Actions=digiKam Detect and Download
+ServiceTypes=media/gphoto2camera
