@@ -132,14 +132,15 @@ void ICCPreviewWidget::clearPreview()
 
 void ICCPreviewWidget::getICCData( const KURL &url)
 {
-    //TODO
     cmsHPROFILE tmpProfile=0;
     QString space, device, intent;
     if (!url.hasPath())
         return;
     
+    if (!QFileInfo::QFileInfo(url.path()).isFile())
+        return;
+    
     tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(url.path()), "r");
-
     
     d->name->setText(QString(cmsTakeProductName(tmpProfile)));
     d->description->setText(QString(cmsTakeProductDesc(tmpProfile)));
