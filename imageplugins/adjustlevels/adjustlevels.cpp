@@ -4,7 +4,7 @@
  * Date  : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,7 +95,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image-histogram-levels adjustment plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier",
+                                       "(c) 2004-2006, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -288,8 +288,8 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
     m_resetButton->setPixmap( icon.loadIcon( "locationbar_erase", (KIcon::Group)KIcon::Toolbar ) );
-    QToolTip::add( m_resetButton, i18n( "Reset current channel levels values." ) );
-    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels values from the current selected channel "
+    QToolTip::add( m_resetButton, i18n( "Reset current channel levels' values." ) );
+    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values from the current selected channel "
                                          "will be reset to the default values."));
     
     QHBoxLayout* l3 = new QHBoxLayout();
