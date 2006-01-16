@@ -2,8 +2,8 @@
  * File  : imageguidewidget.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-11-16
- * Description : 
- * 
+ * Description : a widget to display an image with a guide
+ *
  * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -27,6 +27,7 @@
 #include <qpixmap.h>
 #include <qtooltip.h>
 #include <qtimer.h>
+#include <qrect.h>
 
 // KDE include.
 
@@ -37,97 +38,140 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
 namespace Digikam
 {
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent, 
+class ImageGuideWidgetPriv
+{
+public:
+
+    ImageGuideWidgetPriv()
+    {
+        pixmap  = 0;
+        iface   = 0;
+        flicker = 0;
+        timerID = 0;
+        focus   = false;
+    }
+
+    int                  width;
+    int                  height;
+    
+    int                  timerID;
+    int                  guideMode;
+    int                  guideSize;
+    int                  flicker;
+    int                  getColorFrom;
+
+    bool                 sixteenBit;
+    bool                 focus;
+    bool                 spotVisible;
+    
+    // Current spot position in preview coordinates.
+    QPoint               spot;
+    
+    QRect                rect;
+    
+    QColor               guideColor;
+        
+    QPixmap             *pixmap;
+    
+    ImageIface          *iface;
+    
+    DImg                 preview;
+};
+
+ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
                                    QColor guideColor, int guideSize, bool blink,
                                    int getColorFrom)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_spotVisible  = spotVisible;
-    m_guideMode    = guideMode;
-    m_guideColor   = guideColor;
-    m_guideSize    = guideSize;
-    m_getColorFrom = getColorFrom;
-    m_focus        = false;
-    m_flicker      = 0;
-    m_timerID      = 0;
+    d = new ImageGuideWidgetPriv;
+    d->spotVisible  = spotVisible;
+    d->guideMode    = guideMode;
+    d->guideColor   = guideColor;
+    d->guideSize    = guideSize;
+    d->getColorFrom = getColorFrom;
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    m_iface         = new ImageIface(w, h);
-    uchar *data     = m_iface->getPreviewImage();
-    m_w             = m_iface->previewWidth();
-    m_h             = m_iface->previewHeight();
-    bool sixteenBit = m_iface->previewSixteenBit();
-    bool hasAlpha   = m_iface->previewHasAlpha();
-    m_preview       = DImg(m_w, m_h, sixteenBit, hasAlpha, data);
+    d->iface         = new ImageIface(w, h);
+    uchar *data     = d->iface->getPreviewImage();
+    d->width             = d->iface->previewWidth();
+    d->height             = d->iface->previewHeight();
+    bool sixteenBit = d->iface->previewSixteenBit();
+    bool hasAlpha   = d->iface->previewHasAlpha();
+    d->preview       = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     delete [] data;
 
-    m_pixmap  = new QPixmap(w, h);
-    m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+    d->pixmap  = new QPixmap(w, h);
+    d->rect    = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
     resetSpotPosition();
-    setSpotVisible(m_spotVisible, blink);
+    setSpotVisible(d->spotVisible, blink);
 }
 
 ImageGuideWidget::~ImageGuideWidget()
 {
-    delete m_iface;
+    delete d->iface;
     
-    if (m_timerID) killTimer(m_timerID);
+    if (d->timerID)
+        killTimer(d->timerID);
            
-    if (m_pixmap) delete m_pixmap;
+    if (d->pixmap)
+        delete d->pixmap;
+        
+    delete d;
 }
 
 Digikam::ImageIface* ImageGuideWidget::imageIface()
 {
-    return m_iface;
+    return d->iface;
 }
 
 void ImageGuideWidget::resetSpotPosition(void)
 {
-    m_spot.setX( m_w / 2 );
-    m_spot.setY( m_h / 2 );
+    d->spot.setX( d->width / 2 );
+    d->spot.setY( d->height / 2 );
     updatePreview();
 }
 
 QPoint ImageGuideWidget::getSpotPosition(void)
 {
-    return (QPoint::QPoint( (int)((float)m_spot.x() * (float)m_iface->originalWidth() / (float)m_w), 
-                            (int)((float)m_spot.y() * (float)m_iface->originalHeight() / (float)m_h)));
+    return (QPoint::QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth() / (float)d->width),
+                            (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
 }
 
 DColor ImageGuideWidget::getSpotColor(int getColorFrom)
 {
     if (getColorFrom == OriginalImage)                          // Get point color from original image
-        return (m_iface->getColorInfoFromOriginalImage(getSpotPosition()));
+        return (d->iface->getColorInfoFromOriginalImage(getSpotPosition()));
     else if (getColorFrom == PreviewImage)                      // Get point color from preview image
-        return (m_iface->getColorInfoFromPreviewImage(m_spot));
+        return (d->iface->getColorInfoFromPreviewImage(d->spot));
 
     // In other cases, get point color from target preview image
-    return (m_iface->getColorInfoFromTargetPreviewImage(m_spot));
+    return (d->iface->getColorInfoFromTargetPreviewImage(d->spot));
 }
 
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
 {
-    m_spotVisible = spotVisible;
+    d->spotVisible = spotVisible;
     
     if (blink)
     {
-        if (m_spotVisible)
-            m_timerID = startTimer(800);
+        if (d->spotVisible)
+            d->timerID = startTimer(800);
         else
         {
-            killTimer(m_timerID);
-            m_timerID = 0;
+            killTimer(d->timerID);
+            d->timerID = 0;
         }
     }
        
@@ -136,53 +180,53 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
 
 void ImageGuideWidget::slotChangeGuideColor(const QColor &color)
 {
-    m_guideColor = color;
+    d->guideColor = color;
     updatePreview();
 }
 
 void ImageGuideWidget::slotChangeGuideSize(int size)
 {
-    m_guideSize = size;
+    d->guideSize = size;
     updatePreview();
 }
 
 void ImageGuideWidget::updatePixmap( void )
 {
-    m_pixmap->fill(colorGroup().background());
-    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
-                   m_rect.width(), m_rect.height());
+    d->pixmap->fill(colorGroup().background());
+    d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
+                   d->rect.width(), d->rect.height());
 
-    if (m_spotVisible)
+    if (d->spotVisible)
     {
        // Adapt spot from image coordinate to widget coordinate.
-       int xspot = m_spot.x() + m_rect.x();
-       int yspot = m_spot.y() + m_rect.y();
+       int xspot = d->spot.x() + d->rect.x();
+       int yspot = d->spot.y() + d->rect.y();
        
-       switch (m_guideMode)
+       switch (d->guideMode)
        {
           case HVGuideMode:
           {
-             QPainter p(m_pixmap);
-             p.setPen(QPen(Qt::white, m_guideSize, Qt::SolidLine));
-             p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
-             p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
-             p.setPen(QPen(m_guideColor, m_guideSize, Qt::DotLine));
-             p.drawLine(xspot, m_rect.top() + m_flicker, xspot, m_rect.bottom() - m_flicker);
-             p.drawLine(m_rect.left() + m_flicker, yspot, m_rect.right() - m_flicker, yspot);
+             QPainter p(d->pixmap);
+             p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
+             p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
+             p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
+             p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
+             p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
+             p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
              p.end();
              break;
           }
             
           case PickColorMode:
           {
-             QPainter p(m_pixmap);
-             p.setPen(QPen(m_guideColor, 1, Qt::SolidLine));
+             QPainter p(d->pixmap);
+             p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
-             p.setPen(QPen(m_guideColor, 3, Qt::SolidLine));
+             p.setPen(QPen(d->guideColor, 3, Qt::SolidLine));
              p.drawEllipse( xspot-5, yspot-5, 11, 11 );
 
-             if (m_flicker%2 != 0)
+             if (d->flicker%2 != 0)
              {
                 p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
                 p.drawEllipse( xspot-5, yspot-5, 11, 11 );
@@ -197,7 +241,7 @@ void ImageGuideWidget::updatePixmap( void )
 
 void ImageGuideWidget::paintEvent( QPaintEvent * )
 {
-    bitBlt(this, 0, 0, m_pixmap);
+    bitBlt(this, 0, 0, d->pixmap);
 }
 
 void ImageGuideWidget::updatePreview( void )
@@ -208,10 +252,10 @@ void ImageGuideWidget::updatePreview( void )
 
 void ImageGuideWidget::timerEvent(QTimerEvent * e)
 {
-    if (e->timerId() == m_timerID)
+    if (e->timerId() == d->timerID)
     {
-       if (m_flicker == 5) m_flicker=0;
-       else m_flicker++;
+       if (d->flicker == 5) d->flicker=0;
+       else d->flicker++;
        updatePreview();
     }
     else
@@ -221,25 +265,25 @@ void ImageGuideWidget::timerEvent(QTimerEvent * e)
 void ImageGuideWidget::resizeEvent(QResizeEvent * e)
 {
     blockSignals(true);
-    delete m_pixmap;
+    delete d->pixmap;
     int w = e->size().width();
     int h = e->size().height();
-    int old_w = m_w;
-    int old_h = m_h;
+    int old_w = d->width;
+    int old_h = d->height;
 
-    uchar *data     = m_iface->setPreviewImageSize(w, h);
-    m_w             = m_iface->previewWidth();
-    m_h             = m_iface->previewHeight();
-    bool sixteenBit = m_iface->previewSixteenBit();
-    bool hasAlpha   = m_iface->previewHasAlpha();
-    m_preview       = DImg(m_w, m_h, sixteenBit, hasAlpha, data);
+    uchar *data     = d->iface->setPreviewImageSize(w, h);
+    d->width             = d->iface->previewWidth();
+    d->height             = d->iface->previewHeight();
+    bool sixteenBit = d->iface->previewSixteenBit();
+    bool hasAlpha   = d->iface->previewHasAlpha();
+    d->preview       = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     delete [] data;
 
-    m_pixmap  = new QPixmap(w, h);
-    m_rect    = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+    d->pixmap  = new QPixmap(w, h);
+    d->rect    = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
-    m_spot.setX((int)((float)m_spot.x() * ( (float)m_w / (float)old_w)));
-    m_spot.setY((int)((float)m_spot.y() * ( (float)m_h / (float)old_h)));
+    d->spot.setX((int)((float)d->spot.x() * ( (float)d->width / (float)old_w)));
+    d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
     updatePixmap();
     blockSignals(false);
     emit signalResized();
@@ -247,28 +291,28 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
 
 void ImageGuideWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( !m_focus && e->button() == Qt::LeftButton &&
-         m_rect.contains( e->x(), e->y() ) && m_spotVisible )
+    if ( !d->focus && e->button() == Qt::LeftButton &&
+         d->rect.contains( e->x(), e->y() ) && d->spotVisible )
     {
-       m_focus = true;
-       m_spot.setX(e->x()-m_rect.x());
-       m_spot.setY(e->y()-m_rect.y());;
+       d->focus = true;
+       d->spot.setX(e->x()-d->rect.x());
+       d->spot.setY(e->y()-d->rect.y());;
        updatePreview();
     }
 }
 
 void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible) 
+    if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible)
     {
-       m_focus = false;
+       d->focus = false;
        updatePreview();
-       m_spot.setX(e->x()-m_rect.x());
-       m_spot.setY(e->y()-m_rect.y());
+       d->spot.setX(e->x()-d->rect.x());
+       d->spot.setY(e->y()-d->rect.y());
        
-       DColor color = getSpotColor(m_getColorFrom);
+       DColor color = getSpotColor(d->getColorFrom);
        QPoint point = getSpotPosition();
-       emit spotPositionChanged( color, true, m_spot );
+       emit spotPositionChanged( color, true, d->spot );
        QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")
                                  .arg(point.x()).arg(point.y())
                                  .arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()) );
@@ -277,14 +321,14 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
 
 void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( m_rect.contains( e->x(), e->y() ) && !m_focus && m_spotVisible )
+    if ( d->rect.contains( e->x(), e->y() ) && !d->focus && d->spotVisible )
     {
        setCursor( KCursor::crossCursor() );
     }
-    else if ( m_rect.contains( e->x(), e->y() ) && m_focus && m_spotVisible )
+    else if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible )
     {
-       m_spot.setX(e->x()-m_rect.x());
-       m_spot.setY(e->y()-m_rect.y());
+       d->spot.setX(e->x()-d->rect.x());
+       d->spot.setY(e->y()-d->rect.y());
     }
     else
        setCursor( KCursor::arrowCursor() );

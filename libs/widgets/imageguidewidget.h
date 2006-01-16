@@ -2,7 +2,7 @@
  * File  : imageguidewidget.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-20
- * Description : 
+ * Description : a widget to display an image with a guide
  * 
  * Copyright 2004-2006 Gilles Caulier
  *
@@ -25,13 +25,11 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qrect.h>
 #include <qpoint.h>
 #include <qcolor.h>
 
 // Local includes
 
-#include "dimg.h"
 #include "dcolor.h"
 #include "digikam_export.h"
 
@@ -39,8 +37,10 @@ class QPixmap;
 
 namespace Digikam
 {
+
 class DColor;
 class ImageIface;
+class ImageGuideWidgetPriv;
 
 class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
@@ -50,15 +50,15 @@ public:
 
     enum GuideToolMode 
     {
-    HVGuideMode=0,
-    PickColorMode
+        HVGuideMode=0,
+        PickColorMode
     };
 
     enum ColorPointSrc
     {
-    OriginalImage=0,
-    PreviewImage,
-    TargetPreviewImage
+        OriginalImage=0,
+        PreviewImage,
+        TargetPreviewImage
     };
 
 public:
@@ -69,7 +69,7 @@ public:
                      int getColorFrom=OriginalImage);
     ~ImageGuideWidget();
         
-    Digikam::ImageIface* imageIface();
+    ImageIface* imageIface();
     
     QPoint getSpotPosition(void);
     DColor getSpotColor(int getColorFrom);
@@ -95,38 +95,15 @@ protected:
     void mousePressEvent( QMouseEvent * e );
     void mouseReleaseEvent( QMouseEvent * e );
     void mouseMoveEvent( QMouseEvent * e );
-        
-private:
-
-    DImg                 m_preview;
-
-    int                  m_w;
-    int                  m_h;
-    
-    int                  m_timerID;
-    int                  m_guideMode;
-    int                  m_guideSize;
-    int                  m_flicker;
-    int                  m_getColorFrom;
-
-    bool                 m_sixteenBit;
-    bool                 m_focus;
-    bool                 m_spotVisible;
-    
-    // Current spot position in preview coordinates.
-    QPoint               m_spot;
-    
-    QRect                m_rect;       
-    
-    QColor               m_guideColor;
-        
-    QPixmap             *m_pixmap;
-    
-    Digikam::ImageIface *m_iface;    
 
 private:
 
     void updatePixmap( void );
+
+private:
+
+    ImageGuideWidgetPriv* d;
+    
 };
 
 }  // NameSpace Digikam
