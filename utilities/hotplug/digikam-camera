@@ -19,13 +19,13 @@ storage)
 	;;
 esac
 
-dcop | while read app; do
+for app in `dcop`; do
 	case "$app" in
 	    digikam-*)
 		echo "recycling running $app: $dcopcall $@"
 		exec dcop "$app" camera  "$dcopcall" "$@"
 	    ;;
 	esac
-       done;
+done;
 echo "starting digikam with $cmdoption $@"
 exec digikam  "$cmdoption" "$@"
