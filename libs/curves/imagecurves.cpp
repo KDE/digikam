@@ -611,6 +611,8 @@ void ImageCurves::setCurveType(int channel, CurveType type)
 
 bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
 {
+    // TODO : support KURL !
+    
     FILE *file;
     int   i, j;
     int   fields;
@@ -638,21 +640,25 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(KURL fileUrl)
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
           {
-             kdWarning() <<  "fields != 2" << endl;
+             kdWarning() <<  "Invalid Gimp curves file!" << endl;
              fclose(file);
              return false;
           }
        }
     }
 
-    for (i = 0  ; i < 5 ; i++)
+    curvesReset();
+    
+    for (i = 0 ; i < 5 ; i++)
     {
        d->curves->curve_type[i] = CURVE_SMOOTH;
 
        for (j = 0 ; j < 17 ; j++)
        {
-          d->curves->points[i][j][0] = index[i][j];
-          d->curves->points[i][j][1] = value[i][j];
+          d->curves->points[i][j][0] = ((d->segmentMax == 65535) && (index[i][j] !=-1) ?
+                                         index[i][j]*255 : index[i][j]);
+          d->curves->points[i][j][1] = ((d->segmentMax == 65535) && (value[i][j] !=-1) ?
+                                         value[i][j]*255 : value[i][j]);
        }
     }
 
@@ -698,8 +704,10 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(KURL fileUrl)
        for (j = 0 ; j < 17 ; j++)
        {
           fprintf (file, "%d %d ",
-                   d->curves->points[i][j][0],
-                   d->curves->points[i][j][1]);
+                   ((d->segmentMax == 65535) && (d->curves->points[i][j][0]!=-1) ?
+                     d->curves->points[i][j][0]/255 : d->curves->points[i][j][0]),
+                   ((d->segmentMax == 65535) && (d->curves->points[i][j][1]!=-1) ?
+                     d->curves->points[i][j][1]/255 : d->curves->points[i][j][1]));
 
           fprintf (file, "\n");
        }
