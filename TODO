@@ -1,6 +1,18 @@
 0.9.x TODO LIST
 ------------------------------------------------------------------------------------
 
+* Media support
+       o Make media menu, cmdline option and dcop call itentical:
+               + usbdisk camera: dcop call should magicly umount as cmdline
+                 option and Media menu
+       o download dialog when opened via dcop do
+               o goto desktop digikam is currently running, and unminimize and
+                 put on top
+       o CRASH: with 2 download dialog
+               digikam --detect-camera         # don't close download dialog
+               dcop digikam-<pid> camera cameraAutodetect # dialog open with error; closing
+                                                       the dialog ==> CRASH
+
 * Image Properties SideBar:
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
