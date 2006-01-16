@@ -3,7 +3,7 @@
  * Date  : 2004-12-01
  * Description : image curves manipulation methods.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,40 +38,27 @@
 namespace Digikam
 {
 
+class ImageCurvesPriv;
+
 class DIGIKAM_EXPORT ImageCurves
 {
 
 public:
 
-enum CurveType
-{
-    CURVE_SMOOTH = 0,            // Smooth curve type
-    CURVE_FREE                   // Freehand curve type.
-};
+    enum CurveType
+    {
+        CURVE_SMOOTH = 0,            // Smooth curve type
+        CURVE_FREE                   // Freehand curve type.
+    };
 
-private:
-
-struct _Curves
-{
-    CurveType        curve_type[5];     // Curve types by channels (Smooth or Free).
-    int              points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
-    unsigned short   curve[5][65536];   // Curve values by channels.
-};
-
-struct _Lut
-{
-    unsigned short **luts;
-    int              nchannels;
-};
+    typedef double CRMatrix[4][4];
 
 public:
     
     ImageCurves(bool sixteenBit);
     ~ImageCurves();
 
-    typedef double CRMatrix[4][4];
-
-    // Methods for to manipulate the curves data.        
+    // Methods for to manipulate the curves data.
     
     void   curvesReset(void);
     void   curvesChannelReset(int channel);
@@ -98,21 +85,16 @@ public:
     
     bool   saveCurvesToGimpCurvesFile(KURL fileUrl);
     bool   loadCurvesFromGimpCurvesFile(KURL fileUrl);
-    
-private:
-
-    // Curves data.
-    struct _Curves *m_curves;
-    
-    // Lut data.
-    struct _Lut    *m_lut;
-
-    int             m_segmentMax;
 
 private:
     
     void curvesPlotCurve(int channel, int p1, int p2, int p3, int p4);
     void curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab);
+
+private:
+
+    ImageCurvesPriv* d;
+
 };
 
 }  // NameSpace Digikam
