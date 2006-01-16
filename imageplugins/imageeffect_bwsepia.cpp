@@ -43,6 +43,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <knuminput.h>
 
 // Digikam includes.
 
@@ -52,6 +53,7 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
+#include "bcgmodifier.h"
 
 // Local includes.
 
@@ -183,8 +185,19 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     gridSettings->addMultiCellWidget(labelType, 3, 3, 0, 4);
     gridSettings->addMultiCellWidget(m_typeCB, 4, 4, 0, 4);
+
+    // -------------------------------------------------------------
     
-    gridSettings->setRowStretch(5, 10);
+    QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
+    m_cInput       = new KDoubleNumInput(gboxSettings);
+    m_cInput->setPrecision(2);
+    m_cInput->setRange(-1.0, 1.0, 0.01, true);
+    m_cInput->setValue(0.0);
+    QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
+    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
+    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
+
+    gridSettings->setRowStretch(7, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -200,6 +213,9 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     connect(m_typeCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
+
+    connect(m_cInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));                        
     
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -264,7 +280,10 @@ QPixmap ImageEffect_BWSepia::previewEffectPic(QString name)
 void ImageEffect_BWSepia::slotDefault()
 {
     m_typeCB->blockSignals(true);
+    m_cInput->blockSignals(true);
     m_typeCB->setCurrentItem( BWNeutral );
+    m_cInput->setValue(0.0);
+    m_cInput->blockSignals(false);
     m_typeCB->blockSignals(false);
     slotEffect();
 }
@@ -282,15 +301,22 @@ void ImageEffect_BWSepia::slotEffect()
     uchar *m_destinationPreviewData = iface->getPreviewImage();
     int w                           = iface->previewWidth();
     int h                           = iface->previewHeight();
+    bool a                          = iface->previewHasAlpha();
     bool sb                         = iface->previewSixteenBit();
 
     blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_typeCB->currentItem());
 
-    iface->putPreviewImage(m_destinationPreviewData);
+    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    Digikam::BCGModifier cmod;
+    cmod.setContrast(m_cInput->value() + (double)(1.00));
+    cmod.applyBCG(preview);
+    iface->putPreviewImage(preview.bits());
+
     m_previewWidget->updatePreview();
 
     // Update histogram.
-   
+    
+    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();

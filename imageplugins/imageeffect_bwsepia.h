@@ -35,6 +35,8 @@
 class QHButtonGroup;
 class QComboBox;
 
+class KDoubleNumInput;
+
 namespace Digikam
 {
 class HistogramWidget;
@@ -60,30 +62,30 @@ private:
 
     enum BlackWhiteConversionType
     {
-    BWNeutral=0,
-    BWGreenFilter,
-    BWOrangeFilter,
-    BWRedFilter,
-    BWYellowFilter,
-    BWSepia,
-    BWBrown,
-    BWCold,
-    BWSelenium,
-    BWPlatinum
+        BWNeutral=0,
+        BWGreenFilter,
+        BWOrangeFilter,
+        BWRedFilter,
+        BWYellowFilter,
+        BWSepia,
+        BWBrown,
+        BWCold,
+        BWSelenium,
+        BWPlatinum
     };
 
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
 
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
     };
 
     uchar                        *m_destinationPreviewData;
@@ -93,6 +95,8 @@ private:
     
     QHButtonGroup                *m_scaleBG;
 
+    KDoubleNumInput              *m_cInput;
+    
     Digikam::ImageGuideWidget    *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
