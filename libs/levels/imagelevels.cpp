@@ -569,15 +569,15 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 {
     // TODO : support KURL !
     
-    FILE          *file;
-    int            low_input[5];
-    int            high_input[5];
-    int            low_output[5];
-    int            high_output[5];
-    double         gamma[5];
-    int            i, fields;
-    char           buf[50];
-    char          *nptr;
+    FILE   *file;
+    int     low_input[5];
+    int     high_input[5];
+    int     low_output[5];
+    int     high_output[5];
+    double  gamma[5];
+    int     i, fields;
+    char    buf[50];
+    char   *nptr;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "r");
     
@@ -606,12 +606,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 
        if (fields != 4)
        {
+          kdWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }
 
-       if (! fgets (buf, 50, file))
+       if (!fgets (buf, 50, file))
        {
+          kdWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }
@@ -620,6 +622,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 
        if (buf == nptr || errno == ERANGE)
        {
+          kdWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }
@@ -628,10 +631,10 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
     for (i = 0 ; i < 5 ; i++)
     {
        setLevelGammaValue(i, gamma[i]);
-       setLevelLowInputValue(i, low_input[i]);
-       setLevelHighInputValue(i, high_input[i]);
-       setLevelLowOutputValue(i, low_output[i]);
-       setLevelHighOutputValue(i, high_output[i]);
+       setLevelLowInputValue(i, d->sixteenBit ? low_input[i]*255 : low_input[i]);
+       setLevelHighInputValue(i, d->sixteenBit ? high_input[i]*255 : high_input[i]);
+       setLevelLowOutputValue(i, d->sixteenBit ? low_output[i]*255 : low_output[i]);
+       setLevelHighOutputValue(i, d->sixteenBit ? high_output[i]*255 : high_output[i]);
     }
 
     fclose(file);
@@ -642,8 +645,8 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
 {
     // TODO : support KURL !
   
-    FILE          *file;
-    int            i;
+    FILE *file;
+    int   i;
 
     file = fopen(QFile::encodeName(fileUrl.path()), "w");
     
@@ -658,10 +661,10 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(KURL fileUrl)
        sprintf (buf, "%f", getLevelGammaValue(i));
       
        fprintf (file, "%d %d %d %d %s\n",
-                getLevelLowInputValue(i),
-                getLevelHighInputValue(i),
-                getLevelLowOutputValue(i),
-                getLevelHighInputValue(i), 
+                d->sixteenBit ? getLevelLowInputValue(i)/255 : getLevelLowInputValue(i),
+                d->sixteenBit ? getLevelHighInputValue(i)/255 : getLevelHighInputValue(i),
+                d->sixteenBit ? getLevelLowOutputValue(i)/255 : getLevelLowOutputValue(i),
+                d->sixteenBit ? getLevelHighInputValue(i)/255 : getLevelHighInputValue(i),
                 buf);
     }
 
