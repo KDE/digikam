@@ -211,7 +211,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
         setCursor( KCursor::waitCursor() );
         d->clearFlag = HistogramWidgetPriv::HistogramStarted;
         d->blinkTimer->start( 200 );
-        repaint(false);
+        //repaint(false);
     }
     else 
     {
@@ -252,14 +252,21 @@ void HistogramWidget::customEvent(QCustomEvent *event)
     delete ed;
 }
 
-void HistogramWidget::setDataLoadingProgress(float) {
+void HistogramWidget::setDataLoading() {
     if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
     {
         setCursor( KCursor::waitCursor() );
         d->clearFlag = HistogramWidgetPriv::HistogramDataLoading;
         d->blinkTimer->start( 200 );
-        repaint(false);
+        //repaint(false);
     }
+}
+
+void HistogramWidget::setLoadingFailed() {
+    d->clearFlag = HistogramWidgetPriv::HistogramFailed;
+    d->blinkTimer->stop();
+    repaint(false);
+    setCursor( KCursor::arrowCursor() );
 }
 
 void HistogramWidget::stopHistogramComputation(void)

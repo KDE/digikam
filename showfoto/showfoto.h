@@ -60,6 +60,7 @@ namespace ShowFoto
 {
 
 class SlideShow;
+class ShowFotoSavingContext;
 
 class ShowFoto : public KMainWindow
 {
@@ -151,6 +152,8 @@ private:
     Digikam::IOFileSettingsContainer *m_IOFileSettings;
     Digikam::SplashScreen            *m_splash;
 
+    ShowFotoSavingContext            *m_savingContext;
+
 private:
 
     void setupActions();
@@ -163,6 +166,7 @@ private:
     void toggleNavigation(int index);
     void loadPlugins();
     void unLoadPlugins();
+    void finishSaving(bool success);
 
 private slots:
 
@@ -205,6 +209,13 @@ private slots:
     void slotContextMenu();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
+
+    void slotLoadingStarted(const QString &filename);
+    void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    void slotLoadingProgress(const QString& filePath, float progress);
+    void slotSavingStarted(const QString &filename);
+    void slotSavingFinished(const QString &filename, bool success);
+    void slotSavingProgress(const QString& filePath, float progress);
 
 protected:
 

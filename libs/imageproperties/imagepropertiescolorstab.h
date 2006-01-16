@@ -84,7 +84,7 @@ private slots:
     void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
-    void slotProgressInfo(const QString& filePath, float progress);
+    void slotStartedLoading(const QString& filePath);
 
 private:
 

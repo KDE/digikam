@@ -52,13 +52,13 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    bool load(const QString& filename, ICCSettingsContainer *ICCSettings,
+    void load(const QString& filename, ICCSettingsContainer *ICCSettings,
               IOFileSettingsContainer *IOFileSettings, QWidget *parent);
     void preload(const QString& filename);
-    int  save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
-    int  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+    void save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                 const QString& mimeType);
-    int  saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+    void saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                        const QString& mimeType=0);
     void setModified(bool val);
         
@@ -150,6 +150,8 @@ private slots:
     void slotContentsMoving(int, int);
     void slotContentsMovingPaintHistogram();
     void slotHistoMovingPaintHistogram();
+    void slotImageLoaded(const QString& filePath, bool success, bool isReadOnly);
+    void slotImageSaved(const QString& filePath, bool success);
     
 signals:
 
@@ -161,6 +163,12 @@ signals:
     void signalRightButtonClicked();
     void signalShowNextImage();
     void signalShowPrevImage();
+    void signalLoadingStarted(const QString &filename);
+    void signalLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    void signalLoadingProgress(const QString& filePath, float progress);
+    void signalSavingStarted(const QString &filename);
+    void signalSavingFinished(const QString &filename, bool success);
+    void signalSavingProgress(const QString& filePath, float progress);
 };
     
 }  // namespace Digikam

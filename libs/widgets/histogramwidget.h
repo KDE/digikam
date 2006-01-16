@@ -118,7 +118,8 @@ public:
                              bool i_sixteenBits,               // 8 or 16 bits image.
                              bool blinkComputation=true);
 
-    void setDataLoadingProgress(float progress);
+    void setDataLoading();
+    void setLoadingFailed();
 
     void setHistogramGuideByColor(DColor color);
 

@@ -56,15 +56,15 @@ public:
 
     ~DImgInterface();
 
-    bool   load(const QString& filename, bool *isReadOnly,
+    void   load(const QString& filename,
                 ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings,
                 QWidget *parent);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();
     void   restore();
-    bool   save(const QString& file, IOFileSettingsContainer *iofileSettings);
-    bool   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
+    void   save(const QString& file, IOFileSettingsContainer *iofileSettings);
+    void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   const QString& mimeType=0);
     void   setModified (bool val);
 
@@ -129,13 +129,23 @@ public:
     uint*  getSelectedData();
     void   putSelectedData(uint* data, bool saveUndo=true);
 
+protected slots:
+
+    void   slotImageLoaded(const QString&, const DImg& img);
+    void   slotImageSaved(const QString& filePath, bool success);
+
 signals:
 
     void   signalModified(bool moreUndo, bool moreRedo);
 
+    void signalLoadingProgress(const QString& filePath, float progress);
+    void signalImageLoaded(const QString& filePath, bool success, bool isReadOnly);
+    void signalSavingProgress(const QString& filePath, float progress);
+    void signalImageSaved(const QString& filePath, bool success);
+
 private:
 
-    bool   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
+    void   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                       const QString& mimeType); 
     void   exifRotate(const QString& filename);
 

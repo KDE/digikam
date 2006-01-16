@@ -51,6 +51,7 @@
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "dimginterface.h"
+#include "sharedloadsavethread.h"
 
 namespace Digikam
 {
@@ -86,7 +87,12 @@ public:
     BCGModifier   cmod;
     QString       filename;
 
+    ICCSettingsContainer *cmSettings;
+    QWidget*      parent;
+    bool          needClearUndoManager;
+
     UndoManager*  undoMan;
+    SharedLoadSaveThread *thread;
 };
 
 DImgInterface::DImgInterface()
@@ -110,7 +116,24 @@ DImgInterface::DImgInterface()
     d->zoom       = 1.0;
     d->exifOrient = false;
 
+    d->cmSettings = 0;
+    d->parent     = 0;
+    d->needClearUndoManager = false;
+
     m_rotatedOrFlipped = false;
+
+    d->thread     = new SharedLoadSaveThread;
+
+    connect( d->thread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
+             this, SLOT(slotImageLoaded(const QString&, const DImg&)) );
+    connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
+             this, SLOT(slotImageSaved(const QString&, bool)) );
+
+    // progress for preloaded images will not be sent anyway, so these can directly be connected
+    connect( d->thread, SIGNAL(signalLoadingProgress(const QString&, float)),
+             this, SIGNAL(signalLoadingProgress(const QString &, float)) );
+    connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
+             this, SIGNAL(signalSavingProgress(const QString &, float)) );
 }
 
 DImgInterface::~DImgInterface()
@@ -121,15 +144,11 @@ DImgInterface::~DImgInterface()
     m_instance = 0;
 }
 
-bool DImgInterface::load(const QString& filename, bool *isReadOnly,
+void DImgInterface::load(const QString& filename,
                          ICCSettingsContainer *cmSettings,
                          IOFileSettingsContainer* iofileSettings,
                          QWidget *parent)
 {
-    bool valRet;
-    bool apply;
-
-    *isReadOnly   = true;
     d->valid      = false;
 
     d->filename   = filename;
@@ -147,9 +166,27 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
     d->brightness = 0.0;
     d->cmod.reset();
 
+    d->cmSettings = cmSettings;
+    d->parent     = parent;
+
     d->undoMan->clear();
 
-    d->image = DImg(filename, 0, iofileSettings->rawDecodingSettings);
+    d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
+                     SharedLoadSaveThread::AccessModeReadWrite,
+                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+
+}
+
+void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
+{
+    if (fileName != d->filename)
+        return;
+
+    bool apply;
+    bool valRet = false;
+    bool isReadOnly = true;
+
+    d->image = img;
 
     if (!d->image.isNull())
     {
@@ -160,12 +197,12 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
         d->width      = d->origWidth;
         d->height     = d->origHeight;
 
-        *isReadOnly   = d->image.isReadOnly();
+        isReadOnly   = d->image.isReadOnly();
         valRet        = true;
 
-        if (cmSettings)
+        if (d->cmSettings)
         {
-            if (cmSettings->askOrApplySetting)
+            if (d->cmSettings->askOrApplySetting)
             {
                 apply = true;
             }
@@ -182,17 +219,17 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
                 // Ask or apply?
                 if (apply)
                 {
-                    trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
+                    trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting), QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
                 }
                 else
                 {
-                    QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + "</p>";
+                    QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + "</p>";
                     
-                    if (KMessageBox::questionYesNo(parent, message) == KMessageBox::Yes)
+                    if (KMessageBox::questionYesNo(d->parent, message) == KMessageBox::Yes)
                     {
                         kdDebug() << "Pressed YES" << endl;
-                        trans.setProfiles( QFile::encodeName(cmSettings->inputSetting), QFile::encodeName(cmSettings->workspaceSetting));
+                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting), QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
                     }
                 }
@@ -204,20 +241,20 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
                 
                 if (apply)
                 {
-                                    trans.setProfiles(QFile::encodeName(cmSettings->workspaceSetting));
+                                    trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
                 }
                 else
                 {
                     if (trans.getEmbeddedProfileDescriptor()
-                    != trans.getProfileDescription( cmSettings->workspaceSetting ))
+                    != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-                        QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
+                        QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
     
-                        if (KMessageBox::questionYesNo(parent, message) == KMessageBox::Yes)
+                        if (KMessageBox::questionYesNo(d->parent, message) == KMessageBox::Yes)
                         {
-                            trans.setProfiles( QFile::encodeName(cmSettings->workspaceSetting));
+                            trans.setProfiles( QFile::encodeName(d->cmSettings->workspaceSetting));
                             trans.apply( d->image );
                         }
                     }
@@ -233,10 +270,14 @@ bool DImgInterface::load(const QString& filename, bool *isReadOnly,
 
     if (d->exifOrient)
     {
-        exifRotate(filename);
+        // TODO: Create a new method in DImg to do it, put it into LoadSaveThread
+        // (into LoadDescription)
+        //exifRotate(filename);
     }
 
-    return (valRet);
+    emit signalImageLoaded(d->filename, valRet, isReadOnly);
+    //TODO: undo manager was cleared. Is it correct to emit this here?
+    emit signalModified(false, false);
 
 }
 
@@ -336,14 +377,14 @@ void DImgInterface::redo()
 
 void DImgInterface::restore()
 {
-    bool isReadOnly;
     d->undoMan->clear();
 
-    load(d->filename, &isReadOnly, 0, 0, 0);
-    emit signalModified(false, false);
+    load(d->filename, 0, 0, 0);
+    //this is now emitted in slotImageLoaded. Correct?
+    //emit signalModified(false, false);
 }
 
-bool DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
+void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
 {
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -358,18 +399,12 @@ bool DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 
     QString currentMimeType(QImageIO::imageFormat(d->filename));
 
-    bool result = saveAction(file, iofileSettings, currentMimeType);
+    d->needClearUndoManager = true;
 
-    if (result)
-    {
-        d->undoMan->clear();
-        emit signalModified(false, false);
-    }
-
-    return result;
+    saveAction(file, iofileSettings, currentMimeType);
 }
 
-bool DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
+void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
                            const QString& mimeType)
 {
     bool result;
@@ -380,15 +415,15 @@ bool DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileS
     d->cmod.setContrast(d->contrast);
     d->cmod.applyBCG(d->image);
 
-    if (mimeType.isEmpty())
-        result = saveAction(file, iofileSettings, d->image.attribute("format").toString());
-    else
-        result = saveAction(file, iofileSettings, mimeType);
+    d->needClearUndoManager = false;
 
-    return result;
+    if (mimeType.isEmpty())
+        saveAction(file, iofileSettings, d->image.attribute("format").toString());
+    else
+        saveAction(file, iofileSettings, mimeType);
 }
 
-bool DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
+void DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                                const QString& mimeType) 
 {
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
@@ -403,14 +438,31 @@ bool DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer 
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
-    if( !d->image.save(fileName, mimeType.ascii()) ) 
+    d->image.save(fileName, mimeType.ascii());
+}
+
+void DImgInterface::slotImageSaved(const QString& filePath, bool success)
+{
+    if (filePath != d->filename)
+        return;
+
+    if (success)
     {
-        kdWarning() << "error saving image '" << QFile::encodeName(fileName).data() << endl;
-        return false;  // Do not reload the file if saving failed !
+        if (d->needClearUndoManager)
+        {
+            d->needClearUndoManager = false;
+            d->undoMan->clear();
+            emit signalModified(false, false);
+        }
+    }
+    else
+    {
+        kdWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
     }
 
-    return true;
+    emit signalImageSaved(filePath, success);
 }
+
 
 void DImgInterface::setModified(bool val)
 {

@@ -58,6 +58,7 @@
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kpopupmenu.h>
+#include <kprogress.h>
 
 // LibKexif includes.
 
@@ -89,11 +90,37 @@
 namespace Digikam
 {
 
+class ImageWindowSavingContext
+{
+public:
+    ImageWindowSavingContext()
+    {
+        fromSave                = false;
+        saveTempFile            = 0;
+        fileExists              = false;
+        progressDialog          = 0;
+        synchronousSavingResult = false;
+    }
+
+    bool                     fromSave;
+    KURL                     saveURL;
+    KTempFile               *saveTempFile;
+    QString                  format;
+    bool                     fileExists;
+    KProgressDialog         *progressDialog;
+    bool                     synchronousSavingResult;
+};
+
 ImageWindow* ImageWindow::imagewindow()
 {
     if (!m_instance)
         new ImageWindow();
 
+    return m_instance;
+}
+
+bool ImageWindow::imagewindowCreated()
+{
     return m_instance;
 }
 
@@ -112,6 +139,8 @@ ImageWindow::ImageWindow()
 
     m_ICCSettings           = new ICCSettingsContainer();
     m_IOFileSettings        = new IOFileSettingsContainer();
+
+    m_savingContext         = new ImageWindowSavingContext;
 
     // -- construct the view ---------------------------------
 
@@ -185,6 +214,24 @@ ImageWindow::ImageWindow()
             
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotLoadPrev()));
+
+    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
+            this, SLOT(slotLoadingStarted(const QString &)));
+
+    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool, bool)),
+            this, SLOT(slotLoadingFinished(const QString &, bool, bool)));
+
+    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
+            this, SLOT(slotLoadingProgress(const QString &, float)));
+
+    connect(m_canvas, SIGNAL(signalSavingStarted(const QString &)),
+            this, SLOT(slotSavingStarted(const QString &)));
+
+    connect(m_canvas, SIGNAL(signalSavingFinished(const QString &, bool)),
+            this, SLOT(slotSavingFinished(const QString &, bool)));
+
+    connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
+            this, SLOT(slotSavingProgress(const QString&, float)));
 
     connect(m_rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotLoadNext()));
@@ -593,37 +640,53 @@ void ImageWindow::slotLoadCurrent()
            m_view->setCurrentItem(item);
     }
 
-    uint index = m_urlList.findIndex(m_urlCurrent);
-
     if (it != m_urlList.end()) 
     {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        //QApplication::setOverrideCursor(Qt::WaitCursor);
 
         if (m_ICCSettings->enableCMSetting)
         {
             kdDebug() << "enableCMSetting=true" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings, m_instance);
+            m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings, m_instance);
         }
         else
         {
             kdDebug() << "enableCMSetting=false" << endl;
-            m_isReadOnly = m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings, 0);
+            m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings, 0);
         }
         
-        m_rotatedOrFlipped = false;
-
-        QString text = m_urlCurrent.filename() +
-                       i18n(" (%2 of %3)")
-                       .arg(QString::number(index+1))
-                       .arg(QString::number(m_urlList.count()));
-        m_nameLabel->setText(text);
-
         ++it;
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
 
-        QApplication::restoreOverrideCursor();
+        //QApplication::restoreOverrideCursor();
     }
+
+}
+
+void ImageWindow::slotLoadingStarted(const QString &filename)
+{
+    //TODO: Disable actions as appropriate
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+void ImageWindow::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
+{
+    //TODO: enable actions as appropriate
+    //TODO: handle success == false
+
+    QApplication::restoreOverrideCursor();
+    m_isReadOnly = isReadOnly;
+
+    uint index = m_urlList.findIndex(m_urlCurrent);
+
+    m_rotatedOrFlipped = false;
+
+    QString text = m_urlCurrent.filename() +
+            i18n(" (%2 of %3)")
+            .arg(QString::number(index+1))
+            .arg(QString::number(m_urlList.count()));
+    m_nameLabel->setText(text);
 
     if (m_urlList.count() == 1) 
     {
@@ -661,12 +724,17 @@ void ImageWindow::slotLoadCurrent()
 
     if (!palbum)
     {
-       m_fileDelete->setEnabled(false);
+        m_fileDelete->setEnabled(false);
     }
     else
     {
-       m_fileDelete->setEnabled(true);
+        m_fileDelete->setEnabled(true);
     }
+}
+
+void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
+{
+    //TODO: progress display in status bar
 }
 
 void ImageWindow::slotLoadNext()
@@ -1011,38 +1079,12 @@ void ImageWindow::slotFilePrint()
 
 bool ImageWindow::save()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    KTempFile tmpFile(m_urlCurrent.directory(false), QString::null);
-    tmpFile.setAutoDelete(true);
+    m_savingContext->saveTempFile = new KTempFile(m_urlCurrent.directory(false), QString::null);
+    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->saveURL = KURL();
+    m_savingContext->fromSave = true;
 
-    bool result = m_canvas->saveAsTmpFile(tmpFile.name(), m_IOFileSettings);
-    
-    if (!result)
-    {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                                .arg(m_urlCurrent.filename())
-                                .arg(m_urlCurrent.path().section('/', -2, -2)));
-        return false;
-    }
-
-    if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-        KExifUtils::writeOrientation(tmpFile.name(), KExifData::NORMAL);
-
-    if (::rename(QFile::encodeName(tmpFile.name()),
-                 QFile::encodeName(m_urlCurrent.path())) != 0)
-    {
-        kapp->restoreOverrideCursor();
-        KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                           i18n("Error Saving File"));
-        return false;
-    }
-    
-    m_canvas->setModified( false );
-    emit signalFileModified(m_urlCurrent);
-    slotLoadCurrent();
-    
-    kapp->restoreOverrideCursor();
+    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
     return true;
 }
 
@@ -1075,19 +1117,19 @@ bool ImageWindow::saveAs()
     KURL newURL = imageFileSaveDialog.selectedURL();
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
-    QString format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
+    m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
 
-    if ( format.isEmpty() )
+    if ( m_savingContext->format.isEmpty() )
     {
         // Else, check if target image format have been add to target image file name using extension.
 
         QFileInfo fi(newURL.path());
-        format = fi.extension(false);
+        m_savingContext->format = fi.extension(false);
         
-        if ( format.isEmpty() )
+        if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
-            format = QImageIO::imageFormat(m_urlCurrent.path());
+            m_savingContext->format = QImageIO::imageFormat(m_urlCurrent.path());
         }
         else
         {
@@ -1103,11 +1145,11 @@ bool ImageWindow::saveAs()
             imgExtPattern.append (" TIF TIFF");
             if ( imgExtPattern.contains("JPEG") ) imgExtPattern.append (" JPG");
     
-            if ( !imgExtPattern.contains( format.upper() ) )
+            if ( !imgExtPattern.contains( m_savingContext->format.upper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
-                        .arg(format));
-                kdWarning() << k_funcinfo << "target image file format " << format << " unsupported!" << endl;
+                        .arg(m_savingContext->format));
+                kdWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
                 return false;
             }
         }
@@ -1137,7 +1179,7 @@ bool ImageWindow::saveAs()
     // Check for overwrite ----------------------------------------------------------
     
     QFileInfo fi(newURL.path());
-    bool fileExists = false;
+    m_savingContext->fileExists = false;
     if ( fi.exists() )
     {
         int result =
@@ -1154,90 +1196,168 @@ bool ImageWindow::saveAs()
         if (result != KMessageBox::Yes)
             return false;
 
-        fileExists = true;
+        m_savingContext->fileExists = true;
     }
 
     // Now do the actual saving -----------------------------------------------------
 
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    KTempFile tmpFile(newURL.directory(false), QString::null);
-    tmpFile.setAutoDelete(true);
+    m_savingContext->saveTempFile = new KTempFile(newURL.directory(false), QString::null);
+    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->saveURL = newURL;
+    m_savingContext->fromSave = false;
 
-    int result = m_canvas->saveAsTmpFile(tmpFile.name(), m_IOFileSettings, format.lower());
-
-    if (result == false)
-    {
-        kapp->restoreOverrideCursor();
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                           .arg(newURL.filename())
-                           .arg(newURL.path().section('/', -2, -2)));
-
-        return false;
-    }
-
-    // only try to write exif if both src and destination are jpeg files
-    if (QString(QImageIO::imageFormat(m_urlCurrent.path())).upper() == "JPEG" &&
-        format.upper() == "JPEG")
-    {
-        if( m_rotatedOrFlipped )
-            KExifUtils::writeOrientation(tmpFile.name(), KExifData::NORMAL);
-    }
-
-    if (::rename(QFile::encodeName(tmpFile.name()),
-                 QFile::encodeName(newURL.path())) != 0)
-    {
-        kapp->restoreOverrideCursor();
-        KMessageBox::error(this, i18n("Failed to save to new file"),
-                           i18n("Error Saving File"));
-        return false;
-    }
-
-    // Find the src and dest albums ------------------------------------------
-
-    KURL srcDirURL(QDir::cleanDirPath(m_urlCurrent.directory()));
-    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
-    if (!srcAlbum)
-    {
-        kapp->restoreOverrideCursor();
-        kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
-        return false;
-    }
-
-    KURL dstDirURL(QDir::cleanDirPath(newURL.directory()));
-    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
-    if (!dstAlbum)
-    {
-        kapp->restoreOverrideCursor();
-        kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
-        return false;
-    }
-        
-    // Now copy the metadata of the original file to the new file ------------
-
-    AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->copyItem(srcAlbum->id(), m_urlCurrent.fileName(),
-                 dstAlbum->id(), newURL.fileName());
-
-    // Add new file URL into list if the new file has been added in the current Album
-    
-    if ( srcAlbum == dstAlbum &&                        // Target Album = current Album ?
-         m_urlList.find(newURL) == m_urlList.end() )    // The image file not already exist
-    {                                                   // in the list.
-        KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-        m_urlList.insert(it, newURL);
-        m_urlCurrent = newURL;
-    }
-
-    if(fileExists)
-        emit signalFileModified(newURL);
-    else
-        emit signalFileAdded(newURL);
-
-    m_canvas->setModified( false );
-    kapp->restoreOverrideCursor();
-    slotLoadCurrent();
+    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
+}
+
+void ImageWindow::slotSavingStarted(const QString &filename)
+{
+    //TODO: disable actions as appropriate
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+}
+
+void ImageWindow::slotSavingFinished(const QString &filename, bool success)
+{
+    //TODO: enable actions as appropriate
+    if (m_savingContext->fromSave)
+    {
+        // from save()
+        if (!success)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
+                            .arg(m_urlCurrent.filename())
+                            .arg(m_urlCurrent.path().section('/', -2, -2)));
+            finishSaving(false);
+            return;
+        }
+
+        if( m_rotatedOrFlipped || m_canvas->exifRotated() )
+            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_urlCurrent.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to overwrite original file"),
+                               i18n("Error Saving File"));
+            finishSaving(false);
+            return;
+        }
+
+        delete m_savingContext->saveTempFile;
+        m_savingContext->saveTempFile = 0;
+
+        m_canvas->setModified( false );
+        emit signalFileModified(m_urlCurrent);
+        slotLoadCurrent();
+
+        kapp->restoreOverrideCursor();
+    }
+    else
+    {
+        // from saveAs()
+        if (success == false)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
+                            .arg(m_savingContext->saveURL.filename())
+                            .arg(m_savingContext->saveURL.path().section('/', -2, -2)));
+
+            finishSaving(false);
+            return;
+        }
+
+        // only try to write exif if both src and destination are jpeg files
+        if (QString(QImageIO::imageFormat(m_urlCurrent.path())).upper() == "JPEG" &&
+            m_savingContext->format.upper() == "JPEG")
+        {
+            if( m_rotatedOrFlipped )
+                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+        }
+
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_savingContext->saveURL.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save to new file"),
+                               i18n("Error Saving File"));
+            finishSaving(false);
+            return;
+        }
+
+        delete m_savingContext->saveTempFile;
+        m_savingContext->saveTempFile = 0;
+
+        // Find the src and dest albums ------------------------------------------
+
+        KURL srcDirURL(QDir::cleanDirPath(m_urlCurrent.directory()));
+        PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+        if (!srcAlbum)
+        {
+            kapp->restoreOverrideCursor();
+            kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
+            finishSaving(false);
+            return;
+        }
+
+        KURL dstDirURL(QDir::cleanDirPath(m_savingContext->saveURL.directory()));
+        PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+        if (!dstAlbum)
+        {
+            kapp->restoreOverrideCursor();
+            kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
+            finishSaving(false);
+            return;
+        }
+
+        // Now copy the metadata of the original file to the new file ------------
+
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        db->copyItem(srcAlbum->id(), m_urlCurrent.fileName(),
+                     dstAlbum->id(), m_savingContext->saveURL.fileName());
+
+        // Add new file URL into list if the new file has been added in the current Album
+
+        if ( srcAlbum == dstAlbum &&                        // Target Album = current Album ?
+             m_urlList.find(m_savingContext->saveURL) == m_urlList.end() )    // The image file not already exist
+        {                                                   // in the list.
+            KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+            m_urlList.insert(it, m_savingContext->saveURL);
+            m_urlCurrent = m_savingContext->saveURL;
+        }
+
+        if(m_savingContext->fileExists)
+            emit signalFileModified(m_savingContext->saveURL);
+        else
+            emit signalFileAdded(m_savingContext->saveURL);
+
+        m_canvas->setModified( false );
+        kapp->restoreOverrideCursor();
+        slotLoadCurrent();
+    }
+
+    finishSaving(true);
+}
+
+void ImageWindow::finishSaving(bool success)
+{
+    if (m_savingContext->progressDialog)
+    {
+        m_savingContext->synchronousSavingResult = success;
+        m_savingContext->progressDialog->close();
+    }
+}
+
+void ImageWindow::slotSavingProgress(const QString& filePath, float progress)
+{
+    //TODO: progress display in status bar
+    if (m_savingContext->progressDialog)
+    {
+        // in synchronous saving mode
+        m_savingContext->progressDialog->progressBar()->setProgress((int)(100 * progress));
+    }
 }
 
 void ImageWindow::slotToggleFullScreen()
@@ -1351,10 +1471,30 @@ bool ImageWindow::promptUserSave()
 
         if (result == KMessageBox::Yes)
         {
-            if (m_isReadOnly)    
-                return saveAs();
+            m_savingContext->progressDialog = new KProgressDialog(this, 0, QString::null,
+                        i18n("Saving \"%1\"").arg(m_urlCurrent.filename()), true );
+            m_savingContext->progressDialog->setAllowCancel(false);
+
+            bool saving;
+            if (m_isReadOnly)
+                saving = saveAs();
             else
-                return save();
+                saving = save();
+
+            // we must return a value here, and we must wait on asynchronous saving
+            //TODO: test this, think about this
+            // What is enter_loop() good for?
+            if (saving)
+            {
+                // if saving has started, enter modal dialog to synchronize
+                // on the saving operation. When saving is finished, the dialog is closed.
+                m_savingContext->progressDialog->exec();
+                delete m_savingContext->progressDialog;
+                m_savingContext->progressDialog = 0;
+                return m_savingContext->synchronousSavingResult;
+            }
+            else
+                return false;
         }
         else if (result == KMessageBox::No)
         {

@@ -18,6 +18,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	  -I$(top_srcdir)/digikam/libs/dimg \
 	  -I$(top_srcdir)/digikam/libs/dimg/filters \
 	  -I$(top_srcdir)/digikam/libs/imageproperties \
+	  -I$(top_srcdir)/digikam/libs/threadimageio \
 	  -I$(top_srcdir)/digikam/utilities/splashscreen \
 	  -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	  $(LIBKEXIF_CFLAGS) $(all_includes) 

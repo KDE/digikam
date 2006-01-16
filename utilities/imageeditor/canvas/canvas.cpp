@@ -128,6 +128,8 @@ public:
     bool               histoMovingRepainting;               //!< is about to repaint
 
     int                histoChannelType;                    //!< histogram type; \sa setHistogramType
+
+    bool               needEmitSignalChanged;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -182,10 +184,24 @@ Canvas::Canvas(QWidget *parent)
     d->histoMovingDirtyRect = QRect(0, 0, 0, 0);
     d->histoMovingRepainting = false;
 
-    d->histoChannelType = Digikam::ImageHistogram::ValueChannel; 
+    d->histoChannelType = Digikam::ImageHistogram::ValueChannel;
+
+    d->needEmitSignalChanged = false;
     
     connect(d->im, SIGNAL(signalModified(bool, bool)),
             SLOT(slotModified(bool, bool)));
+    
+    connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool, bool)),
+            SLOT(slotImageLoaded(const QString&, bool, bool)));
+
+    connect(d->im, SIGNAL(signalImageSaved(const QString&, bool)),
+            SLOT(slotImageSaved(const QString&, bool)));
+
+    connect( d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
+             this, SIGNAL(signalLoadingProgress(const QString &, float)) );
+
+    connect( d->im, SIGNAL(signalSavingProgress(const QString&, float)),
+             this, SIGNAL(signalSavingProgress(const QString &, float)) );
             
     connect(this, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected()));
@@ -387,11 +403,9 @@ Canvas::~Canvas()
 //     return (isReadOnly);
 // }
 
-bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
+void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
                   IOFileSettingsContainer *IOFileSettings, QWidget *parent)
 {
-    // FIXME implement this overloaded method
-
     if (d->rubber)
     {
         delete d->rubber;
@@ -409,9 +423,12 @@ bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
 
     d->tileCache.clear();
 
-    bool isReadOnly = true;
-    d->im->load( filename, &isReadOnly, ICCSettings, IOFileSettings, parent );
+    d->im->load( filename, ICCSettings, IOFileSettings, parent );
+    emit signalLoadingStarted(filename);
+}
 
+void Canvas::slotImageLoaded(const QString& filePath, bool success, bool isReadOnly)
+{
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
     
@@ -423,12 +440,12 @@ bool Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
     if (d->showHistogram)
-       updateHistogram(true);
+        updateHistogram(true);
    
     emit signalChanged(false, false);
     emit signalZoomChanged(d->zoom);
     
-    return (isReadOnly);
+    emit signalLoadingFinished(filePath, success, isReadOnly);
 }
 
 void Canvas::preload(const QString& /*filename*/)
@@ -436,32 +453,36 @@ void Canvas::preload(const QString& /*filename*/)
 //    d->im->preload(filename);
 }
 
-int Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
+void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
 {
-    int result = d->im->save(filename, IOFileSettings);
-    
-    if ( result == true ) 
-        emit signalChanged(false, false);
-       
-    return result;
+    d->needEmitSignalChanged = true;
+    d->im->save(filename, IOFileSettings);
+    emit signalSavingStarted(filename);
 }
 
-int Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings, 
+void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings,
                    const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, IOFileSettings, mimeType);
-    
-    if ( result == true ) 
-        emit signalChanged(false, false);
-        
-    return result;
+    d->needEmitSignalChanged = true;
+    d->im->saveAs(filename, IOFileSettings, mimeType);
+    emit signalSavingStarted(filename);
 }
 
-int Canvas::saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+void Canvas::saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                           const QString& mimeType)
 {
-    int result = d->im->saveAs(filename, IOFileSettings, mimeType);
-    return result;
+    d->im->saveAs(filename, IOFileSettings, mimeType);
+    emit signalSavingStarted(filename);
+}
+
+void Canvas::slotImageSaved(const QString& filePath, bool success)
+{
+    if (success && d->needEmitSignalChanged)
+    {
+        d->needEmitSignalChanged = false;
+        emit signalChanged(false, false);
+    }
+    emit signalSavingFinished(filePath, success);
 }
 
 void Canvas::setModified(bool val) 

@@ -56,7 +56,7 @@
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
-#include "loadsavethread.h"
+#include "sharedloadsavethread.h"
 #include "cietonguewidget.h"
 #include "imagepropertiescolorstab.h"
 
@@ -71,7 +71,7 @@ public:
 
     ImagePropertiesColorsTabPriv()
     {
-        imageLoaderThreaded = 0;
+        imageLoaderThread = 0;
     }
 
     QComboBox             *channelCB;
@@ -110,7 +110,7 @@ public:
     ColorGradientWidget   *hGradient;
     HistogramWidget       *histogramWidget;
     NavigateBarWidget     *navigateBar;
-    ManagedLoadSaveThread *imageLoaderThreaded;
+    SharedLoadSaveThread  *imageLoaderThread;
     CIETongueWidget       *cieTongue;
     
     QByteArray             embedded_profile;
@@ -411,8 +411,8 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     config->writeEntry("Histogram Color", d->colorsCB->currentItem());
     config->writeEntry("Histogram Rendering", d->regionBG->selectedId());
 
-    if (d->imageLoaderThreaded)
-       delete d->imageLoaderThreaded;
+    if (d->imageLoaderThread)
+       delete d->imageLoaderThread;
     
     if ( d->histogramWidget )
        delete d->histogramWidget;
@@ -485,6 +485,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
         }
         else 
         {
+            d->histogramWidget->setLoadingFailed();
             slotHistogramComputationFailed();
         }
     }
@@ -493,19 +494,20 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
 void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 {
     // create thread on demand
-    if (!d->imageLoaderThreaded)
+    if (!d->imageLoaderThread)
     {
-        d->imageLoaderThreaded = new ManagedLoadSaveThread();
+        d->imageLoaderThread = new SharedLoadSaveThread();
 
-        connect(d->imageLoaderThreaded, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
+        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
                 this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
-        connect(d->imageLoaderThreaded, SIGNAL(signalLoadingProgress(const QString&, float)),
-                this, SLOT(slotProgressInfo(const QString&, float)));
+        //connect(d->imageLoaderThread, SIGNAL(signalImageStartedLoading(const QString&)),
+          //      this, SLOT(slotStartedLoading(const QString&)));
     }
 
-    //TODO or not TODO: Network transparency?
     d->currentFilePath = url.path();
-    d->imageLoaderThreaded->load(d->currentFilePath, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    d->imageLoaderThread->load(d->currentFilePath, SharedLoadSaveThread::AccessModeRead,
+                               SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    slotStartedLoading(d->currentFilePath);
 }
 
 void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& filePath, const DImg& img)
@@ -527,15 +529,15 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
     }
     else
     {
+        d->histogramWidget->setLoadingFailed();
         slotHistogramComputationFailed();
     }
 }
 
-void ImagePropertiesColorsTab::slotProgressInfo(const QString&, float progress)
+void ImagePropertiesColorsTab::slotStartedLoading(const QString& filePath)
 {
-    //kdDebug() << "Progress loading is " << progress << endl;
-    //d->histogramWidget->setEnabled(true);
-    d->histogramWidget->setDataLoadingProgress(progress);
+    if ( filePath == d->currentFilePath )
+        d->histogramWidget->setDataLoading();
 }
 
 void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)

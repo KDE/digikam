@@ -35,6 +35,7 @@
 
 #include "dimg.h"
 #include "digikam_export.h"
+#include "loadingdescription.h"
 
 namespace Digikam
 {
@@ -59,12 +60,21 @@ public:
         NotificationPolicyTimeLimited
     };
 
+    // used by SharedLoadSaveThread only
+    enum AccessMode
+    {
+        // image will only be used for reading
+        AccessModeRead,
+        // image data will possibly be changed
+        AccessModeReadWrite
+    };
+
     LoadSaveThread();
     // The thread will execute all pending tasks and wait for this upon destruction
     ~LoadSaveThread();
 
     // Append a task to load the given file to the task list
-    void load(const QString& filePath);
+    void load(LoadingDescription description);
     // Append a task to save the image to the task list
     void save(DImg &image, const QString& filePath, const char* format);
 
@@ -72,24 +82,39 @@ public:
 
 signals:
 
-    void signalImageLoaded(const QString& filePath, const DImg& img);
+    // This signal is emitted when the loading process begins.
+    void signalImageStartedLoading(const QString& filePath);
+    // This signal is emitted whenever new progress info is available
+    // and the notification policy allows emitting the signal.
+    // No progress info will be sent for preloaded images (ManagedLoadSaveThread).
     void signalLoadingProgress(const QString& filePath, float progress);
-    void signalImageSaved(const QString& filePath);
+    // This signal is emitted when the loading process has finished.
+    // If the process failed, img is null.
+    void signalImageLoaded(const QString& filePath, const DImg& img);
+
+    void signalImageStartedSaving(const QString& filePath);
     void signalSavingProgress(const QString& filePath, float progress);
+    void signalImageSaved(const QString& filePath, bool success);
 
 public:
 
-    void imageLoaded(const QString& filePath, const DImg& img)
-            { emit signalImageLoaded(filePath, img); };
+    void imageStartedLoading(const QString& filePath)
+            { emit signalImageStartedLoading(filePath); };
 
     void loadingProgress(const QString& filePath, float progress)
             { emit signalLoadingProgress(filePath, progress); };
 
-    void imageSaved(const QString& filePath)
-            { emit signalImageSaved(filePath); };
+    void imageLoaded(const QString& filePath, const DImg& img)
+            { emit signalImageLoaded(filePath, img); };
+
+    void imageStartedSaving(const QString& filePath)
+            { emit signalImageStartedSaving(filePath); };
 
     void savingProgress(const QString& filePath, float progress)
             { emit signalSavingProgress(filePath, progress); };
+
+    void imageSaved(const QString& filePath, bool success)
+            { emit signalImageSaved(filePath, success); };
 
     virtual bool querySendNotifyEvent();
 
@@ -111,79 +136,7 @@ protected:
 private:
 
     LoadSaveThreadPriv* d;
-    
-};
 
-class DIGIKAM_EXPORT ManagedLoadSaveThread : public LoadSaveThread
-{
-
-public:
-
-    // Termination is controlled by setting the TerminationPolicy
-    // Default is TerminationPolicyTerminateLoading
-    ManagedLoadSaveThread();
-    ~ManagedLoadSaveThread();
-
-    enum LoadingPolicy
-    {
-        // Load image immediately, remove and stop all previous loading tasks.
-        LoadingPolicyFirstRemovePrevious,
-        // Prepend loading in front of all other tasks, but wait for the current task to finish.
-        // No other tasks will be removed, preloading tasks will be stopped and postponed.
-        LoadingPolicyPrepend,
-        // Append loading task to the end of the list, but in front of all preloading tasks.
-        // No other tasks will be removed, preloading tasks will be stopped and postponed.
-        // This is similar to the simple load() operation from LoadSaveThread, except for the
-        // special care taken for preloading.
-        LoadingPolicyAppend,
-        // Preload image, i.e. load it with low priority when no other tasks are scheduled.
-        // All other tasks will take precedence, and preloading tasks will be stopped and
-        // postponed when another task is added.
-        // No progress info will be sent for preloaded images
-        LoadingPolicyPreload
-    };
-
-    enum TerminationPolicy
-    {
-        // Wait for saving tasks, stop and remove loading tasks
-        // This is the default.
-        TerminationPolicyTerminateLoading,
-        // Wait for loading and saving tasks, stop and remove preloading tasks
-        TerminationPolicyTerminatePreloading,
-        // Wait for all pending tasks
-        TerminationPolicyWait
-    };
-
-    enum LoadingTaskFilter
-    {
-        // filter all loading tasks
-        LoadingTaskFilterAll,
-        // filter only tasks with preloading policy
-        LoadingTaskFilterPreloading
-    };
-
-    // Append a task to load the given file to the task list.
-    // If there is already a task for the given file, it will possibly be rescheduled,
-    // but no second task will be added.
-    // Only loading tasks will - if required by the policy - be stopped or removed,
-    // saving tasks will not be touched.
-    void load(const QString& filePath, LoadingPolicy policy = LoadingPolicyAppend);
-    // Stop and remove tasks filtered by filePath and policy.
-    // If filePath isNull, applies to all file paths.
-    void stopLoading(const QString& filePath = QString(), LoadingTaskFilter filter = LoadingTaskFilterAll);
-
-    // Append a task to save the image to the task list
-    void save(DImg &image, const QString& filePath, const char* format);
-
-    void setTerminationPolicy(TerminationPolicy terminationPolicy);
-
-private:
-
-    class LoadingTask *checkLoadingTask(class Task *task, LoadingTaskFilter filter);
-    class LoadingTask *findExistingTask(const QString& filePath);
-    void removeLoadingTasks(const QString& filePath, LoadingTaskFilter filter);
-
-    TerminationPolicy m_terminationPolicy;
 };
 
 }      // namespace Digikam

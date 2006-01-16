@@ -52,6 +52,7 @@ class Canvas;
 class ImagePropertiesSideBarDB;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
+class ImageWindowSavingContext;
 
 class ImageWindow : public KMainWindow
 {
@@ -69,6 +70,7 @@ public:
     void applySettings();
     
     static ImageWindow* imagewindow();
+    static bool         imagewindowCreated();
     
 signals:
 
@@ -154,6 +156,8 @@ private:
     AlbumIconView           *m_view;
     
     Digikam::ImagePropertiesSideBarDB *m_rightSidebar;
+
+    ImageWindowSavingContext *m_savingContext;
     
 private:
 
@@ -166,6 +170,7 @@ private:
     void unplugActionAccel(KAction* action);
     bool save();
     bool saveAs();
+    void finishSaving(bool success);
 
 private slots:
 
@@ -209,6 +214,12 @@ private slots:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     
+    void slotLoadingStarted(const QString &filename);
+    void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    void slotLoadingProgress(const QString& filePath, float progress);
+    void slotSavingStarted(const QString &filename);
+    void slotSavingFinished(const QString &filename, bool success);
+    void slotSavingProgress(const QString& filePath, float progress);
 protected:
 
     void closeEvent(QCloseEvent *e);

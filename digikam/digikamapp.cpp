@@ -144,7 +144,7 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
-    if (Digikam::ImageWindow::imagewindow())
+    if (Digikam::ImageWindow::imagewindowCreated())
         delete Digikam::ImageWindow::imagewindow();
 
     if (mView)
@@ -1089,7 +1089,7 @@ void DigikamApp::slotSetupChanged()
 
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();
-    if (Digikam::ImageWindow::imagewindow())
+    if (Digikam::ImageWindow::imagewindowCreated())
         Digikam::ImageWindow::imagewindow()->applySettings();
 
     m_config->sync();
