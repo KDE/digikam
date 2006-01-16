@@ -1,5 +1,124 @@
 v0.8.1   		18-01-2006
 ----------------------------------------------------------------------------
+2006-01-16 toma
+    * disabled media support for 0.8.1
+
+2006-01-16 01:23  ach
+
+	* branches/stable/extragear/graphics/digikam/utilities/Makefile.am:
+	   digikam stable: disable installation of media service menu
+	  	support files.  Digikam media support not ready for
+	  	0.8.1 release.
+
+2006-01-16 00:24  ach
+
+	* branches/stable/extragear/graphics/digikam/utilities/hotplug/digikam-camera:
+	   digikam stable: backport of brown pager bag commit r498720 of
+	  	digikam-camera: Fixed: second instance of digikam always
+	  	started when one is already running.
+
+2006-01-15 13:55  ach
+
+	* branches/stable/extragear/graphics/digikam/utilities/Makefile.am,
+	   branches/stable/extragear/graphics/digikam/utilities/hotplug, 
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/Makefile.am,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/configure.in.in,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/digikam-camera,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/digikam-download.desktop.in,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/digikam-gphoto2-camera.desktop.in,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/hotplug/digikam-mount-and-download.desktop.in:
+	   digikam stable: new digikam media services and helper script
+
+2006-01-15 01:00  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/digikam/digikamapp.h, 
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+	   Auto unmount the camera if it was unmounted before. Needs 
+	  testing....
+
+2006-01-14 22:38  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	   Achim always makes digiKam crash...
+
+2006-01-12 11:14  cgilles
+
+	* branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.cpp,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/imagewindow.h:
+	   digikam from stable : backport commits #496058 and #496316 from 
+	  trunk:
+	  
+	  SVN commit 496058 by cgilles:
+	  digikam from trunk : simplify and fix dirty image flag if 
+	  current image has changed. Removed m_dirtyImage flag witch 
+	  cannot be use properly with any flag event from canvas (race 
+	  condition). Sometimes IE/showfoto said if user want saving 
+	  current image more than one time...
+	  
+	  SVN commit 496316 by cgilles: 
+	  digikam from trunk : IE/ Showfoto : if current image is read 
+	  only (RAW file for example), we need to use saveAs() method 
+	  instead save() method.
+	  
+	  CCMAIL: digikam-devel@kde.org
+	* branches/stable/extragear/graphics/digikam/showfoto/showfoto.cpp,
+	   branches/stable/extragear/graphics/digikam/showfoto/showfoto.h: 
+	  digikam from stable : backport commits #496058 and #496316 from 
+	  trunk:
+	  
+	  SVN commit 496058 by cgilles:
+	  digikam from trunk : simplify and fix dirty image flag if 
+	  current image has changed. Removed m_dirtyImage flag witch 
+	  cannot be use properly with any flag event from canvas (race 
+	  condition). Sometimes IE/showfoto said if user want saving 
+	  current image more than one time...
+	  
+	  SVN commit 496316 by cgilles: 
+	  digikam from trunk : IE/ Showfoto : if current image is read 
+	  only (RAW file for example), we need to use saveAs() method 
+	  instead save() method.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-12 06:35  cgilles
+
+	* branches/stable/extragear/graphics/digikam/libs/dcraw/dcraw_parse.cpp:
+	   digikam from stable : fix unclosed file if dcraw parse method 
+	  failed
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-01-12 00:01  ach
+
+	* branches/stable/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	   digikam stable: use Tung's new albumfoldernew icon
+	  	in RMB menu of albumfolderview too. Looks
+	  	better and is consistent with task bar.
+
+2006-01-11 22:34  toma
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikamapp.cpp:
+	   Disable the media-feature. It is not finished and has awkward 
+	  corner cases...
+
+2006-01-11 22:16  toma
+
+	* branches/stable/extragear/graphics/digikam/ChangeLog, 
+	  branches/stable/extragear/graphics/digikam/PACKAGING, 
+	  branches/stable/extragear/graphics/digikam/digikam.lsm, 
+	  branches/stable/extragear/graphics/digikam/release_digikam.rb: 
+	  Prep for release
+
 2006-01-11 18:20  cgilles
 
 	* branches/stable/extragear/graphics/digikam/AUTHORS: update
