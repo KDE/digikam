@@ -3,7 +3,7 @@
  * Date  : 2004-07-21
  * Description : a widget to display an image histogram.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@ namespace Digikam
 {
 
 class ImageHistogram;
+class HistogramWidgetPriv;
 
 class DIGIKAM_EXPORT HistogramWidget : public QWidget
 {
@@ -45,42 +46,31 @@ public:
 
     enum HistogramType
     {
-    ValueHistogram = 0,       // Luminosity.
-    RedChannelHistogram,      // Red channel.
-    GreenChannelHistogram,    // Green channel.
-    BlueChannelHistogram,     // Blue channel.
-    AlphaChannelHistogram,    // Alpha channel.
-    ColorChannelsHistogram    // All color channels.
+        ValueHistogram = 0,       // Luminosity.
+        RedChannelHistogram,      // Red channel.
+        GreenChannelHistogram,    // Green channel.
+        BlueChannelHistogram,     // Blue channel.
+        AlphaChannelHistogram,    // Alpha channel.
+        ColorChannelsHistogram    // All color channels.
     };
 
     enum HistogramScale
     {
-    LinScaleHistogram=0,      // Linear scale.
-    LogScaleHistogram         // Logarithmic scale.
+        LinScaleHistogram=0,      // Linear scale.
+        LogScaleHistogram         // Logarithmic scale.
     };
 
     enum HistogramAllColorMode
     {
-    RedColor=0,               // Red color to foreground in All Colors Channel mode.
-    GreenColor,               // Green color to foreground in All Colors Channel mode.
-    BlueColor                 // Blue color to foreground in All Colors Channel mode.
+        RedColor=0,               // Red color to foreground in All Colors Channel mode.
+        GreenColor,               // Green color to foreground in All Colors Channel mode.
+        BlueColor                 // Blue color to foreground in All Colors Channel mode.
     };
 
     enum HistogramRenderingType
     {
-    FullImageHistogram=0,     // Full image histogram rendering.
-    ImageSelectionHistogram   // Image selection histogram rendering.
-    };
-
-private:
-
-    enum RepaintType
-    {
-    HistogramNone = 0,        // No current histogram values calculation.
-    HistogramDataLoading,     // The image is being loaded
-    HistogramStarted,         // Histogram values calculation started.
-    HistogramCompleted,       // Histogram values calculation completed.
-    HistogramFailed           // Histogram values calculation failed.
+        FullImageHistogram=0,     // Full image histogram rendering.
+        ImageSelectionHistogram   // Image selection histogram rendering.
     };
 
 public:
@@ -136,13 +126,13 @@ public:
 
 public:
 
-    int  m_channelType;     // Channel type to draw.
-    int  m_scaleType;       // Scale to use for drawing.
-    int  m_colorType;       // Color to use for drawing in All Colors Channel mode.
-    int  m_renderingType;   // Using full image or image selection for histogram rendering.
+    int             m_channelType;         // Channel type to draw.
+    int             m_scaleType;           // Scale to use for drawing.
+    int             m_colorType;           // Color to use for drawing in All Colors Channel mode.
+    int             m_renderingType;       // Using full image or image selection for histogram rendering.
 
-    class ImageHistogram *m_imageHistogram;            // Full image.
-    class ImageHistogram *m_selectionHistogram;        // Image selection.
+    ImageHistogram *m_imageHistogram;      // Full image.
+    ImageHistogram *m_selectionHistogram;  // Image selection.
 
 signals:
 
@@ -167,34 +157,17 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
-private:
-
-    // Current selection informations.
-    double  m_xmin;
-    double  m_xminOrg; 
-    double  m_xmax;
-    int     m_range;
-    //bool    m_hasSelection;
-    int     m_clearFlag;          // Clear drawing zone with message.
-
-    bool    m_sixteenBits;
-    bool    m_guideVisible;       // Display color guide.
-    bool    m_statisticsVisible;  // Display tooltip histogram statistics.
-    bool    m_inSelected;
-    bool    m_selectMode;         // If true, a part of the histogram can be selected !
-    bool    m_blinkFlag; 
-    bool    m_blinkComputation;   // If true, a message will be displayed during histogram computation,
-                                  // else nothing (limit flicker effect in widget especially for small
-                                  // image/computation time).
-
-    QTimer *m_blinkTimer;
-
-    DColor  m_colorGuide;
+private :
 
     void customEvent(QCustomEvent *event);
     void notifyValuesChanged();
+
+private:
+
+    HistogramWidgetPriv* d;
+
 };
 
-}
+}  // namespace Digikam
 
 #endif /* HISTOGRAMWIDGET_H */
