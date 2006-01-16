@@ -1323,9 +1323,10 @@ void DigikamApp::slotKipiPluginPlug()
 void DigikamApp::loadCameras()
 {
     mCameraList->load();
-    
-    mCameraMenuAction->popupMenu()->insertSeparator();
-    mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
+  
+//    TA: unfinished  
+//    mCameraMenuAction->popupMenu()->insertSeparator();
+//    mCameraMenuAction->popupMenu()->insertItem(i18n("Media Browse"), mCameraMediaList);
     
     mCameraMenuAction->popupMenu()->insertSeparator();
     
