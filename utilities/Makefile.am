@@ -1,1 +1,1 @@
-SUBDIRS = imageeditor splashscreen setup cameragui hotplug
+SUBDIRS = imageeditor splashscreen setup cameragui
