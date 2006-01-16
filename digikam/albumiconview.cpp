@@ -120,7 +120,8 @@ class AlbumIconViewPrivate
 {
 public:
 
-    void init() {
+    void init()
+    {
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
@@ -780,6 +781,8 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     {
         d->imageLister->setNameFilter(settings->getAllFileFilter());
     }
+
+    signalItemsAdded();
 }
 
 void AlbumIconView::slotDeleteSelectedItems()

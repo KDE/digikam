@@ -70,18 +70,14 @@ namespace Digikam
 DigikamView::DigikamView(QWidget *parent)
            : QHBox(parent)
 {
-    mParent = static_cast<DigikamApp *>(parent);
-
-    mAlbumMan = AlbumManager::instance();
-
+    mParent      = static_cast<DigikamApp *>(parent);
+    mAlbumMan    = AlbumManager::instance();
     mMainSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Left);
-    
-    mSplitter = new QSplitter(this);
+    mSplitter    = new QSplitter(this);
     
     mMainSidebar->setSplitter(mSplitter);
     
-    mIconView = new AlbumIconView(mSplitter);
-    
+    mIconView     = new AlbumIconView(mSplitter);
     mRightSidebar = new Digikam::ImagePropertiesSideBarDB(this, mSplitter, Digikam::Sidebar::Right, true, true);
     
     // To the left.
@@ -140,12 +136,15 @@ void DigikamView::setupConnections()
     
     // -- IconView Connections -------------------------------------
 
-    connect(mIconView,  SIGNAL(signalSelectionChanged()),
+    connect(mIconView, SIGNAL(signalSelectionChanged()),
             this, SLOT(slot_imageSelected()));
 
-    connect(mIconView,  SIGNAL(signalItemsAdded()),
-            this, SLOT(slot_albumHighlight()));
+    connect(mIconView, SIGNAL(signalItemsAdded()),
+            this, SLOT(slot_imageSelected()));
 
+    connect(mIconView, SIGNAL(signalItemsAdded()),
+            this, SLOT(slot_albumHighlight()));
+    
     connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
 
@@ -225,11 +224,11 @@ void DigikamView::slotPrevItem(void)
     IconItem* prevItem = 0;
     AlbumIconItem *currItem = mIconView->firstSelectedItem();
     if (currItem) 
-       {
+    {
        prevItem = currItem->prevItem();
        if (prevItem)
            mIconView->setCurrentItem(prevItem);
-       }
+    }
 }
 
 void DigikamView::slotNextItem(void)
@@ -237,11 +236,11 @@ void DigikamView::slotNextItem(void)
     IconItem* nextItem = 0;
     AlbumIconItem *currItem = mIconView->firstSelectedItem();
     if (currItem) 
-       {
+    {
        nextItem = currItem->nextItem();
        if (nextItem)
            mIconView->setCurrentItem(nextItem);
-       }
+    }
 }
 
 void DigikamView::slotLastItem(void)
@@ -452,7 +451,8 @@ void DigikamView::slot_albumSelected(Album* album)
 {
     mRightSidebar->noCurrentItem();
     
-    if (!album) {
+    if (!album)
+    {
         mIconView->setAlbum(0);
         emit signal_albumSelected(false);
         emit signal_tagSelected(false);
@@ -524,29 +524,34 @@ void DigikamView::slot_thumbSizePlus()
 
     ThumbnailSize thumbSize;
 
-    switch(mIconView->thumbnailSize().size()) {
+    switch(mIconView->thumbnailSize().size())
+    {
+        case (ThumbnailSize::Small):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
+            break;
+        }
+        case (ThumbnailSize::Medium):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Large);
+            break;
+        }
+        case (ThumbnailSize::Large):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
+            break;
+        }
+        case (ThumbnailSize::Huge):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
+            break;
+        }
+        default:
+            return;
+    }
 
-    case (ThumbnailSize::Small): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Medium);
-        break;
-    }
-    case (ThumbnailSize::Medium): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Large);
-        break;
-    }
-    case (ThumbnailSize::Large): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Huge);
-        break;
-    }
-    case (ThumbnailSize::Huge): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Huge);
-        break;
-    }
-    default:
-        return;
-    }
-
-    if (thumbSize.size() == ThumbnailSize::Huge) {
+    if (thumbSize.size() == ThumbnailSize::Huge)
+    {
         mParent->enableThumbSizePlusAction(false);
     }
     mParent->enableThumbSizeMinusAction(true);
@@ -565,29 +570,34 @@ void DigikamView::slot_thumbSizeMinus()
     
     ThumbnailSize thumbSize;
 
-    switch(mIconView->thumbnailSize().size()) {
+    switch(mIconView->thumbnailSize().size())
+    {
+        case (ThumbnailSize::Small):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Small);
+            break;
+        }
+        case (ThumbnailSize::Medium):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Small);
+            break;
+        }
+        case (ThumbnailSize::Large):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
+            break;
+        }
+        case (ThumbnailSize::Huge):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Large);
+            break;
+        }
+        default:
+            return;
+    }
 
-    case (ThumbnailSize::Small): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Small);
-        break;
-    }
-    case (ThumbnailSize::Medium): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Small);
-        break;
-    }
-    case (ThumbnailSize::Large): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Medium);
-        break;
-    }
-    case (ThumbnailSize::Huge): {
-        thumbSize = ThumbnailSize(ThumbnailSize::Large);
-        break;
-    }
-    default:
-        return;
-    }
-
-    if (thumbSize.size() == ThumbnailSize::Small) {
+    if (thumbSize.size() == ThumbnailSize::Small)
+    {
         mParent->enableThumbSizeMinusAction(false);
     }
     mParent->enableThumbSizePlusAction(true);
@@ -658,11 +668,13 @@ void DigikamView::slot_imageView(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 
-    if (!iconItem) {
+    if (!iconItem)
+    {
         item = mIconView->firstSelectedItem();
         if (!item) return;
     }
-    else {
+    else
+    {
         item = iconItem;
     }
 
@@ -678,11 +690,13 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 
-    if (!iconItem) {
+    if (!iconItem)
+    {
         item = mIconView->firstSelectedItem();
         if (!item) return;
     }
-    else {
+    else
+    {
         item = iconItem;
     }
 
