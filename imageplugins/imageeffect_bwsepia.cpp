@@ -329,12 +329,18 @@ void ImageEffect_BWSepia::slotOk()
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
+    bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
     
     if (data) 
     {
        int type = m_typeCB->currentItem();
        blackAndWhiteConversion(data, w, h, sb, type);
+       Digikam::DImg img(w, h, sb, a, data);
+       Digikam::BCGModifier cmod;
+       cmod.setContrast(m_cInput->value() + (double)(1.00));
+       cmod.applyBCG(img);
+       
        QString name;
        
        switch (type)
@@ -380,7 +386,7 @@ void ImageEffect_BWSepia::slotOk()
           break;
        }
           
-       iface->putOriginalImage(name, data);
+       iface->putOriginalImage(name, img.bits());
        delete [] data;
     }
 
