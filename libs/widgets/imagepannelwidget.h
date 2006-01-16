@@ -3,7 +3,7 @@
  * Date  : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
- * Copyright 2005 Gilles Caulier
+ * Copyright 2005-2006 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,25 +26,19 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
-#include <qsize.h>
-#include <qlayout.h>
-#include <qpixmap.h>
 #include <qstring.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "imageregionwidget.h"
-#include "imagepaniconwidget.h"
 #include "digikam_export.h"
-
-class QHButtonGroup;
 
 class KProgress;
 
 namespace Digikam
 {
 
+class ImagePannelWidgetPriv;
 class ImageRegionWidget;
 
 class DIGIKAM_EXPORT ImagePannelWidget : public QWidget
@@ -55,9 +49,9 @@ public:
 
     enum SeparateViewOptions 
     {
-    SeparateViewNormal=0,
-    SeparateViewDuplicate,
-    SeparateViewAll
+        SeparateViewNormal=0,
+        SeparateViewDuplicate,
+        SeparateViewAll
     };
     
 public:
@@ -83,7 +77,7 @@ public:
     
     void   setPanIconHighLightPoints(QPointArray pt);
     
-    KProgress *progressBar(void) { return m_progressBar; };
+    KProgress *progressBar(void);
            
     // FIXME remove these methods when all image plugins will be ported to DIMG.
     QImage getOriginalClipImage(void);
@@ -112,23 +106,15 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
-    
-    Digikam::ImageRegionWidget  *m_imageRegionWidget;
-    Digikam::ImagePanIconWidget *m_imagePanIconWidget;
-    
-    QGridLayout                 *m_mainLayout;
-    
-    QHButtonGroup               *m_separateView;
-    
-    KProgress                   *m_progressBar;
-    
-    QString                      m_settingsSection;
-
-private:
         
     void updateSelectionInfo(QRect rect);
     void readSettings(void);
     void writeSettings(void);
+
+private:
+
+    ImagePannelWidgetPriv* d;
+        
 };
 
 }  // NameSpace Digikam
