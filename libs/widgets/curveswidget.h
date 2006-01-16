@@ -35,8 +35,10 @@ class QCustomEvent;
 
 namespace Digikam
 {
+
 class ImageHistogram;
 class ImageCurves;
+class CurvesWidgetPriv;
 
 class DIGIKAM_EXPORT CurvesWidget : public QWidget
 {
@@ -46,29 +48,19 @@ public:
 
     enum HistogramType
     {
-    ValueHistogram = 0,       // Luminosity.
-    RedChannelHistogram,      // Red channel.
-    GreenChannelHistogram,    // Green channel.
-    BlueChannelHistogram,     // Blue channel.
-    AlphaChannelHistogram,    // Alpha channel.
+        ValueHistogram = 0,       // Luminosity.
+        RedChannelHistogram,      // Red channel.
+        GreenChannelHistogram,    // Green channel.
+        BlueChannelHistogram,     // Blue channel.
+        AlphaChannelHistogram,    // Alpha channel.
     };
 
     enum HistogramScale
     {
-    LinScaleHistogram=0,      // Linear scale.
-    LogScaleHistogram         // Logarithmic scale.
+        LinScaleHistogram=0,      // Linear scale.
+        LogScaleHistogram         // Logarithmic scale.
     };
     
-private:
-
-    enum RepaintType
-    {
-    HistogramNone = 0,        // No current histogram values calculation.
-    HistogramStarted,         // Histogram values calculation started.
-    HistogramCompleted,       // Histogram values calculation completed.
-    HistogramFailed           // Histogram values calculation failed.
-    };    
-
 public:
 
     CurvesWidget(int w, int h,                         // Widget size.
@@ -88,10 +80,12 @@ public:
     void curveTypeChanged(void);
     void setCurveGuide(DColor color);
     
-    int m_channelType;     // Channel type to draw.
-    int m_scaleType;       // Scale to use for drawing.
+public:
+    
+    int             m_channelType;     // Channel type to draw.
+    int             m_scaleType;       // Scale to use for drawing.
 
-    class Digikam::ImageHistogram *m_imageHistogram;          
+    ImageHistogram *m_imageHistogram;
 
 signals:
     
@@ -113,29 +107,13 @@ protected:
     void leaveEvent ( QEvent * );
     
 private:
-
-    int                   m_clearFlag;          // Clear drawing zone with message.
-    int                   m_leftmost;
-    int                   m_rightmost;
-    int                   m_grab_point;
-    int                   m_last;
-    int                   m_xMouseOver;
-    int                   m_yMouseOver;
-    
-    bool                  m_sixteenBits;    
-    bool                  m_blinkFlag;         
-    bool                  m_readOnlyMode;
-    bool                  m_guideVisible;
-    
-    DColor                m_colorGuide;
-    
-    QTimer               *m_blinkTimer;
-    
-    Digikam::ImageCurves *m_curves;             // Curves data instance.
-    
-private:
         
     void customEvent(QCustomEvent *event);
+
+private:
+
+    CurvesWidgetPriv* d;
+    
 };
 
 }  // NameSpace Digikam
