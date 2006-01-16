@@ -278,11 +278,19 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
                                        "levels input on Red, Green, Blue, and Luminosity channels."));
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
-    
-    m_autoButton = new QPushButton(i18n("&Auto"), gboxSettings);
-    QWhatsThis::add( m_autoButton, i18n("<p>Adjust all levels automatically."));
+
+    KIconLoader icon;
+    m_autoButton = new QPushButton(gboxSettings);
+    m_autoButton->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
+    QWhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
+                                        "automatically."));
+
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    QWhatsThis::add( m_resetButton, i18n("<p>Reset levels values from the current selected channel."));
+    m_resetButton->setPixmap( icon.loadIcon( "locationbar_erase", (KIcon::Group)KIcon::Toolbar ) );
+    QToolTip::add( m_resetButton, i18n( "Reset current channel levels values." ) );
+    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels values from the current selected channel "
+                                         "will be reset to the default values."));
     
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(m_pickerColorButtonGroup);
