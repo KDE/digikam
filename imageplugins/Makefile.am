@@ -1,5 +1,5 @@
 METASOURCES = AUTO
-SUBDIRS = pics
+SUBDIRS = pics icons 
 
 INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
@@ -30,6 +30,6 @@ kde_services_DATA = digikamimageplugin_core.desktop
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_core_ui.rc
 
-digikamimageplugin_coreicondir = $(kde_datadir)/digikam/icons
-digikamimageplugin_coreicon_ICON = AUTO
-noinst_HEADERS = imageeffect_iccproof.h imageeffect_iccproof.h
+noinst_HEADERS = imageeffect_autocorrection.h imageeffect_blur.h imageeffect_hsl.h \
+		         imageeffect_ratiocrop.h imageeffect_rgb.h imageplugin_core.h imageeffect_bcg.h \
+		         imageeffect_bwsepia.h imageeffect_iccproof.h imageeffect_redeye.h imageeffect_sharpen.h 
