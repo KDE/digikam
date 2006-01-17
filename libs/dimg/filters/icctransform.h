@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-18
- * Copyright 2005 by F.J. Cruz
+ * Copyright 2005-2006 by F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
  
 #ifndef ICCTRANSFORM_H
@@ -21,16 +22,16 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qcstring.h>
 
 // Local includes.
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DImg;
+class IccTransformPriv;
 
 class DIGIKAM_EXPORT IccTransform
 {
@@ -58,14 +59,8 @@ public:
     
 private:
 
-    bool        m_do_proof_profile;
-    bool        m_has_profile; 
+    IccTransformPriv* d;
     
-    QString     m_input_profile;
-    QString     m_output_profile;
-    QString     m_proof_profile;
-    
-    QByteArray  m_embedded_profile;
 };
 
 }  // NameSpace Digikam

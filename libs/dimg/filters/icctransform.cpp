@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-18
- * Copyright 2005 by F.J. Cruz
+ * Copyright 2005-2006 by F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 // Littlecms library includes.
@@ -33,31 +34,49 @@
 // Local includes
 
 #include "icctransform.h"
-#include "dimgloader.h"
-#include "dimg.h"
 
 namespace Digikam
 {
 
+class IccTransformPriv
+{
+public:
+
+    IccTransformPriv()
+    {
+        has_profile      = false;
+        do_proof_profile = false;
+    }
+
+    bool       do_proof_profile;
+    bool       has_profile; 
+    
+    QString    input_profile;
+    QString    output_profile;
+    QString    proof_profile;
+    
+    QByteArray embedded_profile;
+};
+
 IccTransform::IccTransform()
 {
-    m_has_profile      = false;
-    m_do_proof_profile = false;
+    d = new IccTransformPriv;
 }
 
 IccTransform::~IccTransform()
 {
+    delete d;
 }
 
 void IccTransform::getTransformType(bool do_proof_profile)
 {
     if (do_proof_profile)
     {
-        m_do_proof_profile = true;
+        d->do_proof_profile = true;
     }
     else
     {
-        m_do_proof_profile = false;
+        d->do_proof_profile = false;
     }
 }
 
@@ -65,8 +84,8 @@ void IccTransform::getEmbeddedProfile(DImg image)
 {
     if (!image.getICCProfil().isNull())
     {
-        m_embedded_profile = image.getICCProfil();
-        m_has_profile = true;
+        d->embedded_profile = image.getICCProfil();
+        d->has_profile = true;
         kdDebug() << "Has profile" << endl;
     }
     else
@@ -77,27 +96,27 @@ void IccTransform::getEmbeddedProfile(DImg image)
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile)
 {
-    m_input_profile  = input_profile;
-    m_output_profile = output_profile;
+    d->input_profile  = input_profile;
+    d->output_profile = output_profile;
 }
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile, 
                                QString proof_profile)
 {
-    m_input_profile  = input_profile;
-    m_output_profile = output_profile;
-    m_proof_profile  = proof_profile;
+    d->input_profile  = input_profile;
+    d->output_profile = output_profile;
+    d->proof_profile  = proof_profile;
 }
 
 void IccTransform::setProfiles(QString output_profile)
 {
-    m_output_profile = output_profile;
+    d->output_profile = output_profile;
 }
 
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
 kdDebug() << "First open embedded profile" << endl;
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(m_embedded_profile.data(), (DWORD)m_embedded_profile.size());
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(), (DWORD)d->embedded_profile.size());
     QString embeddedProfileDescriptor =QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
     return embeddedProfileDescriptor;
@@ -108,22 +127,22 @@ void IccTransform::apply(DImg& image)
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
     cmsHTRANSFORM transform;
 
-    if (m_has_profile)
+    if (d->has_profile)
     {
         kdDebug() << "Second open embedded profile" << endl;
-        inprofile = cmsOpenProfileFromMem(m_embedded_profile.data(),
-                                          (DWORD)m_embedded_profile.size());
+        inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
+                                          (DWORD)d->embedded_profile.size());
 //         embeddedProfileDescriptor = QString(cmsTakeProductDesc(inprofile));
         kdDebug() << "Embedded profile name: " << cmsTakeProductDesc(inprofile) << endl;
     }
     else
     {
-        inprofile = cmsOpenProfileFromFile(QFile::encodeName( m_input_profile ), "r");
+        inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
     }
 
-    outprofile = cmsOpenProfileFromFile(QFile::encodeName( m_output_profile ), "r");
+    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
 
-    if (!m_do_proof_profile)
+    if (!d->do_proof_profile)
     {
         if (image.sixteenBit())
         {
@@ -172,7 +191,7 @@ void IccTransform::apply(DImg& image)
     }
     else
     {
-        proofprofile = cmsOpenProfileFromFile(QFile::encodeName( m_proof_profile ), "r");
+        proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
 
         if (image.sixteenBit())
         {
@@ -247,7 +266,7 @@ void IccTransform::apply(DImg& image)
     cmsCloseProfile(inprofile);
     cmsCloseProfile(outprofile);
     
-    if (m_do_proof_profile)
+    if (d->do_proof_profile)
        cmsCloseProfile(proofprofile);
 }
 
