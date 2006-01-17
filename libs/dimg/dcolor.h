@@ -3,7 +3,7 @@
  * Date  : 2005-12-02
  * Description : 16 bits color management class
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -15,6 +15,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DCOLOR_H
@@ -30,6 +31,8 @@
 
 namespace Digikam
 {
+
+class DColorPriv;
 
 class DIGIKAM_EXPORT DColor
 {
@@ -62,12 +65,8 @@ public:
 
 private:
 
-    int  m_red;
-    int  m_green;
-    int  m_blue;
-    int  m_alpha;
-
-    bool m_sixteenBit;
+    DColorPriv* d;
+    
 };
 
 }  // NameSpace Digikam
