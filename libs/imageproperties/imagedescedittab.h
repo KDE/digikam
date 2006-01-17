@@ -2,9 +2,10 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2003-03-09
- * Description :
+ * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,25 +34,14 @@
 #include "digikam_export.h"
 
 class QListViewItem;
-class QCheckListItem;
-class QCheckBox;
-class QPushButton;
-class QToolButton;
-class QLabel;
-
-class KTextEdit;
-class KLineEdit;
-class KDateTimeEdit;
 
 namespace Digikam
 {
 class AlbumIconView;
 class AlbumIconItem;
-class TAlbum;
 class Album;
-class ThumbnailJob;
-class RatingWidget;
-class NavigateBarWidget;
+class TAlbum;
+class ImageDescEditTabPriv;
 
 class TAlbumListView : public QListView
 {
@@ -93,23 +83,6 @@ protected:
 
     bool eventFilter(QObject *o, QEvent *e);
 
-private:
-
-    AlbumIconView   *m_view;
-    AlbumIconItem   *m_currItem;
-    QLabel          *m_thumbLabel;
-    QLabel          *m_nameLabel;
-    KTextEdit       *m_commentsEdit;
-    TAlbumListView  *m_tagsView;
-    QPushButton     *m_recentTagsBtn;
-    KLineEdit       *m_tagsSearchEdit;
-    QToolButton     *m_tagsSearchClearBtn;
-    KDateTimeEdit   *m_dateTimeEdit;
-    RatingWidget    *m_ratingWidget;
-    bool             m_modified;
-    
-    NavigateBarWidget *m_navigateBar;
-    
 private:    
 
     void applyChanges();
@@ -134,6 +107,11 @@ private slots:
 
     void slotItemDeleted(AlbumIconItem* iconItem);
     void slotCleared();
+
+private:
+
+    ImageDescEditTabPriv* d;
+
 };
 
 }  // NameSpace Digikam

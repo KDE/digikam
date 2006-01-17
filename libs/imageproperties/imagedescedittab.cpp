@@ -2,9 +2,10 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2003-03-09
- * Description :
+ * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -103,37 +104,79 @@ protected:
     }
 };
 
+// ------------------------------------------------------------------------
+
+class ImageDescEditTabPriv
+{
+public:
+
+    ImageDescEditTabPriv()
+    {
+        modified           = false;
+        recentTagsBtn      = 0;
+        tagsSearchClearBtn = 0 ;
+        commentsEdit       = 0;
+        tagsSearchEdit     = 0;
+        dateTimeEdit       = 0;
+        view               = 0;
+        currItem           = 0;
+        tagsView           = 0;
+        ratingWidget       = 0;
+        navigateBar        = 0;
+    }
+
+    bool               modified;
+
+    QPushButton       *recentTagsBtn;
+
+    QToolButton       *tagsSearchClearBtn;
+
+    KTextEdit         *commentsEdit;
+
+    KLineEdit         *tagsSearchEdit;
+
+    KDateTimeEdit     *dateTimeEdit;
+
+    AlbumIconView     *view;
+
+    AlbumIconItem     *currItem;
+
+    TAlbumListView    *tagsView;
+
+    RatingWidget      *ratingWidget;
+    
+    NavigateBarWidget *navigateBar;
+};
+
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_view     = 0;
-    m_currItem = 0;
-    m_modified = false;
+    d = new ImageDescEditTabPriv;
     
     QGridLayout *topLayout = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
-    m_navigateBar  = new NavigateBarWidget(this, navBar);
-    topLayout->addMultiCellWidget(m_navigateBar, 0, 0, 0, 2);
+    d->navigateBar  = new NavigateBarWidget(this, navBar);
+    topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
     
     // Comments view ---------------------------------------------------
     
     QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), this);
-    m_commentsEdit = new KTextEdit(commentsBox);
-    m_commentsEdit->setTextFormat(QTextEdit::PlainText);
-    m_commentsEdit->setCheckSpellingEnabled(true);
+    d->commentsEdit = new KTextEdit(commentsBox);
+    d->commentsEdit->setTextFormat(QTextEdit::PlainText);
+    d->commentsEdit->setCheckSpellingEnabled(true);
     topLayout->addMultiCellWidget(commentsBox, 1, 1, 0, 2);
 
     // Date and Time view ---------------------------------------------------
     
     QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), this);
-    m_dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
+    d->dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
     topLayout->addMultiCellWidget(dateTimeBox, 2, 2, 0, 2);
 
     // Rating view --------------------------------------------------
 
     QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), this);
     ratingBox->layout()->setAlignment(Qt::AlignCenter);
-    m_ratingWidget = new RatingWidget(ratingBox);
+    d->ratingWidget = new RatingWidget(ratingBox);
     topLayout->addMultiCellWidget(ratingBox, 3, 3, 0, 2);
         
     // Tags view ---------------------------------------------------
@@ -141,80 +184,80 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     QGroupBox* tagsBox = new QGroupBox(i18n("Tags"), this);
     QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
 
-    m_tagsSearchClearBtn = new QToolButton(tagsBox);
-    m_tagsSearchClearBtn->setAutoRaise(true);
-    m_tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
+    d->tagsSearchClearBtn = new QToolButton(tagsBox);
+    d->tagsSearchClearBtn->setAutoRaise(true);
+    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
                                                                   KIcon::Toolbar,
                                                                   KIcon::SizeSmall));
 
     QLabel* tagsSearchTextBtn = new QLabel(i18n("Search:"), tagsBox);
-    m_tagsSearchEdit = new KLineEdit(tagsBox);
+    d->tagsSearchEdit = new KLineEdit(tagsBox);
 
     QHBoxLayout* tagsSearchLayout = new QHBoxLayout(0, 5, 5);
-    tagsSearchLayout->addWidget(m_tagsSearchClearBtn);
+    tagsSearchLayout->addWidget(d->tagsSearchClearBtn);
     tagsSearchLayout->addWidget(tagsSearchTextBtn);
-    tagsSearchLayout->addWidget(m_tagsSearchEdit);
+    tagsSearchLayout->addWidget(d->tagsSearchEdit);
     tagsBoxLayout->addLayout(tagsSearchLayout);
 
-    m_tagsView = new TAlbumListView(tagsBox);
-    tagsBoxLayout->addWidget(m_tagsView);
+    d->tagsView = new TAlbumListView(tagsBox);
+    tagsBoxLayout->addWidget(d->tagsView);
 
-    m_recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
-    tagsBoxLayout->addWidget(m_recentTagsBtn);
+    d->recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
+    tagsBoxLayout->addWidget(d->recentTagsBtn);
 
     topLayout->addMultiCellWidget(tagsBox, 4, 4, 0, 2);
 
-    m_tagsView->addColumn(i18n( "Tags" ));
-    m_tagsView->header()->hide();
-    m_tagsView->setSelectionMode(QListView::Single);
-    m_tagsView->setResizeMode(QListView::LastColumn);
+    d->tagsView->addColumn(i18n( "Tags" ));
+    d->tagsView->header()->hide();
+    d->tagsView->setSelectionMode(QListView::Single);
+    d->tagsView->setResizeMode(QListView::LastColumn);
 
     // --------------------------------------------------
     
-    connect(m_tagsView, SIGNAL(signalItemStateChanged()),
+    connect(d->tagsView, SIGNAL(signalItemStateChanged()),
             this, SLOT(slotModified()));
     
-    connect(m_navigateBar, SIGNAL(signalFirstItem()),
+    connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(m_navigateBar, SIGNAL(signalPrevItem()),
+    connect(d->navigateBar, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(m_navigateBar, SIGNAL(signalNextItem()),
+    connect(d->navigateBar, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(m_navigateBar, SIGNAL(signalLastItem()),
+    connect(d->navigateBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 
-    connect(m_commentsEdit, SIGNAL(textChanged()),
+    connect(d->commentsEdit, SIGNAL(textChanged()),
             this, SLOT(slotModified()));
     
-    connect(m_dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
+    connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
             this, SLOT(slotModified()));
 
-    connect(m_ratingWidget, SIGNAL(signalRatingChanged(int)),
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotModified()));
      
-    connect(m_tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
+    connect(d->tagsView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(QListViewItem*, const QPoint&, int)));
             
-    connect(m_tagsSearchClearBtn, SIGNAL(clicked()),
-            m_tagsSearchEdit, SLOT(clear()));
+    connect(d->tagsSearchClearBtn, SIGNAL(clicked()),
+            d->tagsSearchEdit, SLOT(clear()));
             
-    connect(m_tagsSearchEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged()));
             
-    connect(m_recentTagsBtn, SIGNAL(clicked()),
+    connect(d->recentTagsBtn, SIGNAL(clicked()),
             this, SLOT(slotRecentTags()));
 
     // Initalize ---------------------------------------------
 
-    m_commentsEdit->installEventFilter(this);
-    m_dateTimeEdit->installEventFilter(this);
-    m_ratingWidget->installEventFilter(this);
-    m_tagsView->installEventFilter(this);
+    d->commentsEdit->installEventFilter(this);
+    d->dateTimeEdit->installEventFilter(this);
+    d->ratingWidget->installEventFilter(this);
+    d->tagsView->installEventFilter(this);
 
-    m_commentsEdit->setFocus();
+    d->commentsEdit->setFocus();
 
     // Connect to album manager -----------------------------
 
@@ -244,6 +287,8 @@ ImageDescEditTab::~ImageDescEditTab()
         (*it)->removeExtraData(this);
     }
     */
+
+    delete d;
 }
 
 bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
@@ -271,7 +316,7 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
 
 void ImageDescEditTab::populateTags()
 {
-    m_tagsView->clear();
+    d->tagsView->clear();
 
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
@@ -282,7 +327,7 @@ void ImageDescEditTab::populateTags()
 
         if (tag->isRoot())
         {
-            viewItem = new TAlbumCheckListItem(m_tagsView, tag);
+            viewItem = new TAlbumCheckListItem(d->tagsView, tag);
         }
         else
         {
@@ -309,22 +354,22 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotModified()
 {
-    m_modified = true;
+    d->modified = true;
 }
 
 void ImageDescEditTab::applyChanges()
 {
-    if (!m_currItem)
+    if (!d->currItem)
         return;
 
-    ImageInfo* info = m_currItem->imageInfo();
+    ImageInfo* info = d->currItem->imageInfo();
 
-    if (!m_modified)
+    if (!d->modified)
         return;
 
-    info->setCaption(m_commentsEdit->text());
-    info->setDateTime(m_dateTimeEdit->dateTime());
-    info->setRating(m_ratingWidget->rating());
+    info->setCaption(d->commentsEdit->text());
+    info->setDateTime(d->dateTimeEdit->dateTime());
+    info->setRating(d->ratingWidget->rating());
 
     if (AlbumSettings::instance() &&
         AlbumSettings::instance()->getSaveExifComments())
@@ -339,13 +384,13 @@ void ImageDescEditTab::applyChanges()
             kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
                       << endl;
             metaInfo["Jpeg EXIF Data"].item("Comment")
-                .setValue(m_commentsEdit->text());
+                .setValue(d->commentsEdit->text());
             metaInfo.applyChanges();
         }
     }
 
     info->removeAllTags();
-    QListViewItemIterator it(m_tagsView);
+    QListViewItemIterator it(d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -356,48 +401,48 @@ void ImageDescEditTab::applyChanges()
         ++it;
     }
 
-    m_modified = false;
+    d->modified = false;
 }
 
 void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int itemType)
 {
     applyChanges();
     
-    if (m_view)
+    if (d->view)
        {        
-       disconnect(m_view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+       disconnect(d->view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
                   this, SLOT(slotItemDeleted(AlbumIconItem*)));
         
-       disconnect(m_view, SIGNAL(signalCleared()),
+       disconnect(d->view, SIGNAL(signalCleared()),
                   this, SLOT(slotCleared()));
        }
                 
     if (!currItem || !view)
        {
-       m_navigateBar->setFileName("");
-       m_commentsEdit->clear();
-       m_view     = 0;
-       m_currItem = 0;
+       d->navigateBar->setFileName("");
+       d->commentsEdit->clear();
+       d->view     = 0;
+       d->currItem = 0;
        setEnabled(false);
        return;
        }
 
     setEnabled(true);
-    m_view     = view;
-    m_currItem = currItem;
-    m_modified = false;
+    d->view     = view;
+    d->currItem = currItem;
+    d->modified = false;
     
-    connect(m_view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+    connect(d->view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
             this, SLOT(slotItemDeleted(AlbumIconItem*)));
     
-    connect(m_view, SIGNAL(signalCleared()),
+    connect(d->view, SIGNAL(signalCleared()),
             this, SLOT(slotCleared()));
 
     ImageInfo* info = currItem->imageInfo();
     KURL fileURL;
     fileURL.setPath(info->filePath());
-    m_navigateBar->setFileName(info->name());
-    m_navigateBar->setButtonsState(itemType);
+    d->navigateBar->setFileName(info->name());
+    d->navigateBar->setButtonsState(itemType);
 
     PAlbum *album = currItem->imageInfo()->album();
     if (!album)
@@ -407,17 +452,17 @@ void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int
         return;
     }
 
-    m_commentsEdit->blockSignals(true);
-    m_dateTimeEdit->blockSignals(true);
-    m_tagsView->blockSignals(true);
+    d->commentsEdit->blockSignals(true);
+    d->dateTimeEdit->blockSignals(true);
+    d->tagsView->blockSignals(true);
 
-    m_commentsEdit->setText(info->caption());
-    m_dateTimeEdit->setDateTime(info->dateTime());
-    m_ratingWidget->setRating(info->rating());
+    d->commentsEdit->setText(info->caption());
+    d->dateTimeEdit->setDateTime(info->dateTime());
+    d->ratingWidget->setRating(info->rating());
 
     QValueList<int> tagIDs = info->tagIDs();
 
-    QListViewItemIterator it( m_tagsView);
+    QListViewItemIterator it( d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* tItem =
@@ -433,9 +478,9 @@ void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int
         ++it;
     }
 
-    m_commentsEdit->blockSignals(false);
-    m_dateTimeEdit->blockSignals(false);
-    m_tagsView->blockSignals(false);
+    d->commentsEdit->blockSignals(false);
+    d->dateTimeEdit->blockSignals(false);
+    d->tagsView->blockSignals(false);
 }
 
 void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint &, int )
@@ -520,8 +565,8 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum)
         if (viewItem)
         {
             viewItem->setOn(true);
-            m_tagsView->setSelected(viewItem, true);
-            m_tagsView->ensureItemVisible(viewItem);
+            d->tagsView->setSelected(viewItem, true);
+            d->tagsView->ensureItemVisible(viewItem);
         }
     }
 }
@@ -678,11 +723,11 @@ QPixmap ImageDescEditTab::tagThumbnail(TAlbum* album) const
 
 void ImageDescEditTab::slotItemDeleted(AlbumIconItem* iconItem)
 {
-    if (m_currItem != iconItem)
+    if (d->currItem != iconItem)
         return;
 
     // uh oh. our current item got deleted. close
-    m_currItem = 0;
+    d->currItem = 0;
     close();
 }
 
@@ -734,8 +779,8 @@ void ImageDescEditTab::slotRecentTags()
             if (viewItem)
             {
                 viewItem->setOn(true);
-                m_tagsView->setSelected(viewItem, true);
-                m_tagsView->ensureItemVisible(viewItem);
+                d->tagsView->setSelected(viewItem, true);
+                d->tagsView->ensureItemVisible(viewItem);
             }
         }
     }
@@ -743,7 +788,7 @@ void ImageDescEditTab::slotRecentTags()
 
 void ImageDescEditTab::slotTagsSearchChanged()
 {
-    QString search(m_tagsSearchEdit->text());
+    QString search(d->tagsSearchEdit->text());
     search = search.lower();
 
     bool atleastOneMatch = false;
@@ -810,7 +855,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 
     if (search.isEmpty())
     {
-        m_tagsSearchEdit->unsetPalette();
+        d->tagsSearchEdit->unsetPalette();
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
         TAlbumCheckListItem* rootItem =
             (TAlbumCheckListItem*)(root->extraData(this));
@@ -825,11 +870,11 @@ void ImageDescEditTab::slotTagsSearchChanged()
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
 
-        QPalette pal = m_tagsSearchEdit->palette();
+        QPalette pal = d->tagsSearchEdit->palette();
         pal.setColor(QPalette::Active, QColorGroup::Base,
                      atleastOneMatch ?  QColor(200,255,200) :
                      QColor(255,200,200));
-        m_tagsSearchEdit->setPalette(pal);
+        d->tagsSearchEdit->setPalette(pal);
     }
 }
 
