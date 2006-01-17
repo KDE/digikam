@@ -48,7 +48,7 @@
 // Digikam includes.
 
 #include "imageiface.h"
-#include "imagefilters.h"
+#include "dimgimagefilters.h"
 #include "imageguidewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
@@ -401,11 +401,12 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
 {
     // Value to multiply RGB 8 bits component of mask used by changeTonality() method.
     int mul = sb ? 255 : 1;
-
+    Digikam::DImgImageFilters filter;
+    
     switch (type)
     {
        case BWNeutral:
-          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
+          filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.    
                    true,                                            // Monochrome.
                    0.3, 0.59 , 0.11,                                // Red channel gains.
@@ -414,7 +415,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
        
        case BWGreenFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
+          filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.1, 0.7, 0.2,                                   // Red channel gains.
@@ -423,7 +424,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
        
        case BWOrangeFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
+          filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.78, 0.22, 0.0,                                 // Red channel gains.
@@ -432,7 +433,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
        
        case BWRedFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
+          filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.9, 0.1, 0.0,                                   // Red channel gains.
@@ -441,7 +442,7 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
        
        case BWYellowFilter:
-          Digikam::ImageFilters::channelMixerImage(data, w, h, sb,  // Image data.
+          filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
                    0.6, 0.28, 0.12,                                 // Red channel gains.
@@ -450,23 +451,23 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
           break;
        
        case BWSepia:
-          Digikam::ImageFilters::changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
+          filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
        
        case BWBrown:
-          Digikam::ImageFilters::changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
+          filter.changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
           break;
        
        case BWCold:
-          Digikam::ImageFilters::changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
+          filter.changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
           break;
        
        case BWSelenium:
-          Digikam::ImageFilters::changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
+          filter.changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
           break;
        
        case BWPlatinum:
-          Digikam::ImageFilters::changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
+          filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
     }
 }

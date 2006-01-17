@@ -35,8 +35,8 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dimgimagefilters.h"
 #include "imageiface.h"
-#include "imagefilters.h"
 #include "imageeffect_rgb.h"
 #include "imageeffect_hsl.h"
 #include "imageeffect_bcg.h"
@@ -198,7 +198,8 @@ void ImagePlugin_Core::slotInvert()
     int h           = iface.originalHeight();
     bool sixteenBit = iface.originalSixteenBit();
 
-    Digikam::ImageFilters::invertImage(data, w, h, sixteenBit);
+    Digikam::DImgImageFilters filter;
+    filter.invertImage(data, w, h, sixteenBit);
     iface.putOriginalImage(i18n("Invert"), data);
     delete data;
 
