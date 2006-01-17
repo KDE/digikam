@@ -30,6 +30,7 @@ namespace Digikam
 {
 
 class DImg;
+class BCGModifierPriv;
 
 class DIGIKAM_EXPORT BCGModifier
 {
@@ -49,11 +50,7 @@ public:
     
 private:
 
-    bool m_overIndicator;
-    bool m_modified;
-    
-    int  m_map16[65536];
-    int  m_map[256];
+    BCGModifierPriv* d;
     
 };
 

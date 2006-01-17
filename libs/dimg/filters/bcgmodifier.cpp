@@ -24,10 +24,10 @@
 #define CLAMP_0_255(x)   QMAX(QMIN(x, 255), 0)
 #define CLAMP_0_65535(x) QMAX(QMIN(x, 65535), 0)
 
-// C ansi includes.
+// C++ includes.
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 // Local includes.
 
@@ -36,6 +36,23 @@
 
 namespace Digikam
 {
+
+class BCGModifierPriv
+{
+public:
+
+    BCGModifierPriv()
+    {
+        modified      = false;
+        overIndicator = false;
+    }
+
+    bool overIndicator;
+    bool modified;
+    
+    int  map16[65536];
+    int  map[256];
+};
 
 BCGModifier::BCGModifier()
 {
@@ -48,12 +65,12 @@ BCGModifier::~BCGModifier()
 
 bool BCGModifier::modified() const
 {
-    return m_modified;
+    return d->modified;
 }
 
 void BCGModifier::setOverIndicator(bool overIndicator)
 {
-    m_overIndicator = overIndicator;
+    d->overIndicator = overIndicator;
 }
     
 void BCGModifier::reset()
@@ -62,21 +79,21 @@ void BCGModifier::reset()
 
     for (int i=0; i<65536; i++)
     {
-        m_map16[i] = i;
+        d->map16[i] = i;
     }
 
     for (int i=0; i<256; i++)
     {
-        m_map[i] = i;
+        d->map[i] = i;
     }
 
-    m_modified      = false;
-    m_overIndicator = false;
+    d->modified      = false;
+    d->overIndicator = false;
 }
 
 void BCGModifier::applyBCG(DImg& image)
 {
-    if (!m_modified || image.isNull())
+    if (!d->modified || image.isNull())
         return;
 
     if (!image.sixteenBit())                    // 8 bits image.
@@ -85,7 +102,7 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            if (m_map[data[0]] == -1 || m_map[data[1]] == -1 || m_map[data[2]] == -1)
+            if (d->map[data[0]] == -1 || d->map[data[1]] == -1 || d->map[data[2]] == -1)
             {
                 data[0] = 0;
                 data[1] = 0;
@@ -93,9 +110,9 @@ void BCGModifier::applyBCG(DImg& image)
             }
             else
             {            
-                data[0] = m_map[data[0]];
-                data[1] = m_map[data[1]];
-                data[2] = m_map[data[2]];
+                data[0] = d->map[data[0]];
+                data[1] = d->map[data[1]];
+                data[2] = d->map[data[2]];
             }
             
             data += 4;
@@ -107,7 +124,7 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            if (m_map16[data[0]] == -1 || m_map16[data[1]] == -1 || m_map16[data[2]] == -1)
+            if (d->map16[data[0]] == -1 || d->map16[data[1]] == -1 || d->map16[data[2]] == -1)
 {
                 data[0] = 0;
                 data[1] = 0;
@@ -115,9 +132,9 @@ void BCGModifier::applyBCG(DImg& image)
             }
             else
             {            
-                data[0] = m_map16[data[0]];
-                data[1] = m_map16[data[1]];
-                data[2] = m_map16[data[2]];
+                data[0] = d->map16[data[0]];
+                data[1] = d->map16[data[1]];
+                data[2] = d->map16[data[2]];
             }
 
             data += 4;
@@ -132,23 +149,23 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<65536; i++)
     {
-        val2 = (int)(pow(((double)m_map16[i] / 65535), (1 / val)) * 65535);
-        if (m_overIndicator && val2 > 65535)
-            m_map16[i] = -1;
+        val2 = (int)(pow(((double)d->map16[i] / 65535), (1 / val)) * 65535);
+        if (d->overIndicator && val2 > 65535)
+            d->map16[i] = -1;
         else
-            m_map16[i] = CLAMP_0_65535(val2);
+            d->map16[i] = CLAMP_0_65535(val2);
     }
 
     for (int i=0; i<256; i++)
     {
-        val2 = (int)(pow(((double)m_map[i] / 255), (1 / val)) * 255);
-        if (m_overIndicator && val2 > 255)
-            m_map[i] = -1;
+        val2 = (int)(pow(((double)d->map[i] / 255), (1 / val)) * 255);
+        if (d->overIndicator && val2 > 255)
+            d->map[i] = -1;
         else
-            m_map[i] = CLAMP_0_255(val2);
+            d->map[i] = CLAMP_0_255(val2);
     }
     
-    m_modified = true;
+    d->modified = true;
 }
 
 void BCGModifier::setBrightness(double v)
@@ -158,25 +175,25 @@ void BCGModifier::setBrightness(double v)
 
     for (int i = 0; i < 65536; i++)
     {
-        val2 = m_map16[i] + val;
-        if (m_overIndicator && val2 > 65535)
-            m_map16[i] = -1;
+        val2 = d->map16[i] + val;
+        if (d->overIndicator && val2 > 65535)
+            d->map16[i] = -1;
         else
-            m_map16[i] = CLAMP_0_65535(val2);
+            d->map16[i] = CLAMP_0_65535(val2);
     }
 
     val = (int)(v * 255);
     
     for (int i = 0; i < 256; i++)
     {
-        val2 = m_map[i] + val;
-        if (m_overIndicator && val2 > 255)
-            m_map[i] = -1;
+        val2 = d->map[i] + val;
+        if (d->overIndicator && val2 > 255)
+            d->map[i] = -1;
         else
-            m_map[i] = CLAMP_0_255(val2);
+            d->map[i] = CLAMP_0_255(val2);
     }
     
-    m_modified = true;
+    d->modified = true;
 }
 
 void BCGModifier::setContrast(double val)
@@ -185,23 +202,23 @@ void BCGModifier::setContrast(double val)
 
     for (int i = 0; i < 65536; i++)
     {
-        val2 = (int)(((double)m_map16[i] - 32767) * val) + 32767;
-        if (m_overIndicator && val2 > 65535)
-            m_map16[i] = -1;
+        val2 = (int)(((double)d->map16[i] - 32767) * val) + 32767;
+        if (d->overIndicator && val2 > 65535)
+            d->map16[i] = -1;
         else
-            m_map16[i] = CLAMP_0_65535(val2);
+            d->map16[i] = CLAMP_0_65535(val2);
     }                                 
 
     for (int i = 0; i < 256; i++)
     {
-        val2 = (int)(((double)m_map[i] - 127) * val) + 127;
-        if (m_overIndicator && val2 > 255)
-            m_map[i] = -1;
+        val2 = (int)(((double)d->map[i] - 127) * val) + 127;
+        if (d->overIndicator && val2 > 255)
+            d->map[i] = -1;
         else
-            m_map[i] = CLAMP_0_255(val2);
+            d->map[i] = CLAMP_0_255(val2);
     }
     
-    m_modified = true;
+    d->modified = true;
 }
 
 }  // NameSpace Digikam
