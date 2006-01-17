@@ -16,10 +16,53 @@
 * Image Properties SideBar:
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
-     Comments & tags set from main must be updated in IE and vis versa.
+     Comments & tags set from main must be updated in IE and vise-versa.
+   - There is a bug releavant of sidebar (?) implementation. when an album item is selected
+     from main interface, and if "Comments & Tag" tab is selected, if this item is deleted, "Comments
+     & Tags" tab is lost!
+     
+* 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
 
-* 16 bits/color/pixels support :
-   - Any Image plugins must be adapted.
+   - BCG Adjust    (core plugin) : Done.
+   - HSL Adjust    (core plugin) : Incomplete. There is a problem in DImg::DColor with 16 bits images.
+   - RGB Adjust    (core plugin) : TODO.
+   - Red Eyes      (core plugin) : Incomplete. Need to backport blending pixels method from imlib2.
+   - B&W Tool      (core plugin) : Done.
+   - Blur Tool     (core plugin) : Done.
+   - Sharpen Tool  (core plugin) : TODO.
+   - ICC Tool      (core plugin) : under development.
+   - Ratio Crop    (core plugin) : Done.
+   - Auto-Colors   (core plugin) : Done.
+
+   - Adjust Curves   (digikamimageplugins) : Done.
+   - Adjust Levels   (digikamimageplugins) : Done.
+   - Anti Vignetting (digikamimageplugins) : TODO.
+   - Blowup          (digikamimageplugins) : Done.
+   - Blur FX         (digikamimageplugins) : TODO.
+   - Add Border      (digikamimageplugins) : TODO.
+   - Channel Mixer   (digikamimageplugins) : Done.
+   - Charcoal        (digikamimageplugins) : TODO.
+   - Distortion FX   (digikamimageplugins) : TODO.
+   - Emboss          (digikamimageplugins) : TODO.
+   - Film Grain      (digikamimageplugins) : TODO.
+   - Free Rotation   (digikamimageplugins) : TODO.
+   - Hot Pixels      (digikamimageplugins) : TODO.
+   - Infrared        (digikamimageplugins) : TODO.
+   - Inpainting      (digikamimageplugins) : Done.
+   - Insert Text     (digikamimageplugins) : TODO.
+   - Lens Distortion (digikamimageplugins) : TODO.
+   - Noise Reduction (digikamimageplugins) : TODO.
+   - Oil Paint       (digikamimageplugins) : TODO.
+   - Perspective     (digikamimageplugins) : TODO.
+   - Rain Drops      (digikamimageplugins) : TODO.
+   - Refocus         (digikamimageplugins) : Done.
+   - Restoration     (digikamimageplugins) : Done.
+   - Shear Tool      (digikamimageplugins) : TODO.
+   - Solarize        (digikamimageplugins) : Done.
+   - Superimpose     (digikamimageplugins) : TODO.
+   - Texture         (digikamimageplugins) : TODO.
+   - Unsharp         (digikamimageplugins) : TODO.
+   - White Balance   (digikamimageplugins) : Done.
 
 * Improving metadata support:
    - Using Exiv2 lib instead libexif
