@@ -3,7 +3,7 @@
  * Date  : 2004-12-09
  * Description : image selection widget used by ratio crop tool.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,16 +29,12 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "digikam_export.h"
-
-class QPixmap;
-class QTimer;
 
 namespace Digikam
 {
 
-class ImageIface;
+class ImageSelectionWidgetPriv;
 
 class DIGIKAM_EXPORT ImageSelectionWidget : public QWidget
 {
@@ -48,28 +44,28 @@ public:
 
     enum RatioAspect           // Contrained Aspect Ratio list.
     {
-    RATIOCUSTOM=0,             // Custom aspect ratio.
-    RATIO01X01,                // 1:1
-    RATIO02x03,                // 2:3
-    RATIO03X04,                // 3:4
-    RATIO04X05,                // 4:5
-    RATIO05x07,                // 5:7
-    RATIO07x10,                // 7:10
-    RATIOGOLDEN,               // Golden ratio : 1:1.618
-    RATIONONE                  // No aspect ratio.
+        RATIOCUSTOM=0,             // Custom aspect ratio.
+        RATIO01X01,                // 1:1
+        RATIO02x03,                // 2:3
+        RATIO03X04,                // 3:4
+        RATIO04X05,                // 4:5
+        RATIO05x07,                // 5:7
+        RATIO07x10,                // 7:10
+        RATIOGOLDEN,               // Golden ratio : 1:1.618
+        RATIONONE                  // No aspect ratio.
     };
 
     enum Orient
     {
-    Landscape = 0,
-    Portrait
+        Landscape = 0,
+        Portrait
     };
 
     enum CenterType
     {
-    CenterWidth = 0,           // Center selection to the center of image width.
-    CenterHeight,              // Center selection to the center of image height.
-    CenterImage                // Center selection to the center of image.
+        CenterWidth = 0,           // Center selection to the center of image width.
+        CenterHeight,              // Center selection to the center of image height.
+        CenterImage                // Center selection to the center of image.
     };
 
     // Proportion : Golden Ratio and Rule of Thirds. More information at this url: 
@@ -77,10 +73,10 @@ public:
 
     enum GuideLineType
     {
-    RulesOfThirds = 0,         // Line guides position to 1/3 width and height.
-    HarmoniousTriangles,       // Harmonious Triangle to improve composition.
-    GoldenMean,                // Guides tools using Phi ratio (1.618).
-    GuideNone                  // No guide line.
+        RulesOfThirds = 0,         // Line guides position to 1/3 width and height.
+        HarmoniousTriangles,       // Harmonious Triangle to improve composition.
+        GoldenMean,                // Guides tools using Phi ratio (1.618).
+        GuideNone                  // No guide line.
     };
 
 public:
@@ -141,61 +137,6 @@ protected slots:
 
 private:
 
-    enum ResizingMode
-    {
-    ResizingNone = 0,
-    ResizingTopLeft,
-    ResizingTopRight, 
-    ResizingBottomLeft,
-    ResizingBottomRight
-    };
-
-    ImageIface *m_iface;
-
-    // Golden guide types.
-    bool        m_drawGoldenSection;
-    bool        m_drawGoldenSpiralSection;
-    bool        m_drawGoldenSpiral;
-    bool        m_drawGoldenTriangle;
-
-    // Golden guide translations.
-    bool        m_flipHorGoldenGuide;
-    bool        m_flipVerGoldenGuide;
-
-    int         m_guideLinesType;
-    int         m_guideSize;
-
-    DImg        m_preview;
-
-    int         m_xpos;
-    int         m_ypos;
-
-    int         m_currentAspectRatioType;
-    int         m_currentAspectRatio;
-    int         m_currentResizing;
-    int         m_currentOrientation;
-
-    float       m_currentAspectRatioValue;
-
-    QRect       m_rect;
-    QRect       m_regionSelection;         // Real size image selection.
-    QRect       m_localRegionSelection;    // Local size selection.
-
-    // Draggable local region selection corners.
-    QRect       m_localTopLeftCorner;
-    QRect       m_localBottomLeftCorner;
-    QRect       m_localTopRightCorner;
-    QRect       m_localBottomRightCorner;
-
-    QPixmap    *m_pixmap;
-
-    QTimer     *m_timerW;
-    QTimer     *m_timerH;
-
-    QColor      m_guideColor;
-
-private:
-
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     void regionSelectionMoved( bool targetDone );
 
@@ -204,6 +145,11 @@ private:
     void localToRealRegion(void);
     void applyAspectRatio(bool WOrH, bool repaintWidget=true, bool updateChange=true);
     void updatePixmap(void);
+
+private:
+
+    ImageSelectionWidgetPriv* d;
+
 };
 
 }  // NameSpace Digikam
