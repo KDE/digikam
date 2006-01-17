@@ -56,11 +56,13 @@ public:
 
 BCGModifier::BCGModifier()
 {
+    d = new BCGModifierPriv;    
     reset();
 }
 
 BCGModifier::~BCGModifier()
 {
+    delete d;
 }
 
 bool BCGModifier::modified() const
