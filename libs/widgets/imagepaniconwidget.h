@@ -1,9 +1,10 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-08-22
- * Description : 
+ * Description : a widget to display a panel to choose
+ *               a rectangular image area.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,14 +26,12 @@
 
 #include <qwidget.h>
 #include <qrect.h>
-#include <qsize.h>
-#include <qpixmap.h>
 #include <qpointarray.h>
 
 namespace Digikam
 {
 
-class ImageIface;
+class ImagePanIconWidgetPriv;
 
 class ImagePanIconWidget : public QWidget
 {
@@ -70,36 +69,16 @@ protected:
     void mouseMoveEvent ( QMouseEvent * e );
         
 private:
-
-    int          m_separateView;
-    
-    int          m_w;
-    int          m_h;
-    
-    int          m_xpos;
-    int          m_ypos;
-
-    bool         m_moveSelection;
-
-    uchar *      m_data;
-    
-    QRect        m_rect;                    
-    QRect        m_regionSelection;         // Original size image selection.
-    QRect        m_localRegionSelection;    // Thumbnail size selection.
-    
-    QPixmap     *m_pixmap;
-    
-    QPointArray  m_hightlightPoints;
-    
-    ImageIface  *m_iface;
-        
-private:
     
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     
     void regionSelectionMoved( bool targetDone );
     void updatePixmap( void );
 
+private:
+
+    ImagePanIconWidgetPriv* d;
+        
 };
 
 }  // NameSpace Digikam
