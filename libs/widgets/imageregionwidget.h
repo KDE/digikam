@@ -3,7 +3,7 @@
  * Date  : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,18 +25,16 @@
 
 #include <qscrollview.h>
 #include <qrect.h>
-#include <qimage.h>
-#include <qpointarray.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"
 
-class QPixmap;
-
 namespace Digikam
 {
+
+class ImageRegionWidgetPriv;
 
 class DIGIKAM_EXPORT ImageRegionWidget : public QScrollView
 {
@@ -46,11 +44,11 @@ public:
     
     enum SeparateViewMode 
     {
-    SeparateViewHorizontal=0,
-    SeparateViewVertical,
-    SeparateViewNone,
-    SeparateViewDuplicateVert,
-    SeparateViewDuplicateHorz
+        SeparateViewHorizontal=0,
+        SeparateViewVertical,
+        SeparateViewNone,
+        SeparateViewDuplicateVert,
+        SeparateViewDuplicateHorz
     };
     
 public:
@@ -89,21 +87,6 @@ protected:
 
 private:
     
-    bool         m_movingInProgress;
-
-    int          m_separateView;
-    int          m_xpos;
-    int          m_ypos;
-
-    QPixmap     *m_pix;                // Entire content widget pixmap.
-    QPixmap     *m_pixRegion;          // Pixmap of current region to render.
-    
-    QPointArray  m_hightlightPoints;    
-    
-    DImg        *m_img;                // Entire content image.
-    
-private:
-    
     void  drawContents(QPainter *p, int x, int y, int w, int h);
     void  updatePixmap(DImg *img);
     QRect getTargetImageRegion(void);
@@ -118,6 +101,10 @@ public slots:
 private slots:
     
     void slotTimerResizeEvent();
+
+private:
+    
+    ImageRegionWidgetPriv* d;
 
 };
 

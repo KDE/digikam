@@ -3,7 +3,7 @@
  * Date  : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,9 +25,11 @@
 #include <qtimer.h>
 #include <qpainter.h>
 #include <qpen.h>
+#include <qimage.h>
 #include <qbrush.h>
 #include <qfont.h> 
 #include <qfontmetrics.h> 
+#include <qpointarray.h>
 
 // KDE includes.
 
@@ -37,26 +39,45 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-// Digikam includes.
+// Local includes
 
 #include "imageiface.h"
-
-// Local includes.
-
 #include "imageregionwidget.h"
 
 namespace Digikam
 {
+class ImageRegionWidgetPriv
+{
+public:
+
+    ImageRegionWidgetPriv()
+    {
+        movingInProgress = false;
+        image            = 0;
+        pixmap           = 0;
+        pixmapRegion     = 0;
+        separateView     = ImageRegionWidget::SeparateViewVertical;
+    }
+
+    bool         movingInProgress;
+
+    int          separateView;
+    int          xpos;
+    int          ypos;
+
+    QPixmap     *pixmap;                // Entire content widget pixmap.
+    QPixmap     *pixmapRegion;          // Pixmap of current region to render.
+    
+    QPointArray  hightlightPoints;
+    
+    DImg        *image;                // Entire content image.
+};
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
                  : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
-    m_separateView     = SeparateViewVertical;
-    m_movingInProgress = false;
-    m_pix              = 0L;
-    m_pixRegion        = 0L;
-    m_img              = 0L;
-    
+    d = new ImageRegionWidgetPriv;
+
     if( !scrollBar ) 
     {
        setVScrollBarMode( QScrollView::AlwaysOff );
@@ -72,7 +93,7 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     int h           = iface.originalHeight();
     bool sixteenBit = iface.originalSixteenBit();
     bool hasAlpha   = iface.originalHasAlpha();
-    m_img = new DImg(w, h, sixteenBit, hasAlpha, data);
+    d->image = new DImg(w, h, sixteenBit, hasAlpha, data);
     delete [] data;
     
     updateOriginalImage();
@@ -80,9 +101,10 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    if (m_pix) delete m_pix;
-    if (m_pixRegion) delete m_pixRegion;
-    if (m_img) delete m_img;
+    if (d->pixmap) delete d->pixmap;
+    if (d->pixmapRegion) delete d->pixmapRegion;
+    if (d->image) delete d->image;
+    delete d;
 }
 
 void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
@@ -98,27 +120,27 @@ void ImageRegionWidget::slotTimerResizeEvent()
 
 void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
 {
-    m_hightlightPoints = pointsList;
+    d->hightlightPoints = pointsList;
     repaintContents(false);   
 }
 
 void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
-    m_separateView = mode;
+    d->separateView = mode;
     updateOriginalImage();
     QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
 }
 
 void ImageRegionWidget::updateOriginalImage()
 {
-    updatePixmap(m_img);
+    updatePixmap(d->image);
 }
 
 void ImageRegionWidget::updatePreviewImage(DImg *img)
 {
     QPixmap pix = img->convertToPixmap();
     QRect area  = getTargetImageRegion();
-    copyBlt( m_pix, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
+    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
 }
 
 void ImageRegionWidget::updatePixmap(DImg *img)
@@ -131,38 +153,38 @@ void ImageRegionWidget::updatePixmap(DImg *img)
     int w = img->width();
     int h = img->height();
     
-    if (m_pix)
+    if (d->pixmap)
     {
-        delete m_pix;
-        m_pix = 0;
+        delete d->pixmap;
+        d->pixmap = 0;
     }
     
-    switch (m_separateView)
+    switch (d->separateView)
     {
         case SeparateViewVertical:
         case SeparateViewHorizontal:
         case SeparateViewNone:
         {
-            m_pix = new QPixmap(w, h);
-            m_pix->convertFromImage(img->copyQImage());
+            d->pixmap = new QPixmap(w, h);
+            d->pixmap->convertFromImage(img->copyQImage());
             resizeContents(w, h);
         }
             break;
         case SeparateViewDuplicateVert:
         {
             QPixmap pix = img->convertToPixmap();
-            m_pix = new QPixmap(w+visibleWidth()/2, h);
-            m_pix->fill(paletteBackgroundColor().rgb());
-            copyBlt( m_pix, 0, 0, &pix, 0, 0, w, h );
+            d->pixmap = new QPixmap(w+visibleWidth()/2, h);
+            d->pixmap->fill(paletteBackgroundColor().rgb());
+            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w+visibleWidth()/2, h);
             break;
         }
         case SeparateViewDuplicateHorz:
         {
             QPixmap pix = img->convertToPixmap();
-            m_pix = new QPixmap(w, h+visibleHeight()/2);
-            m_pix->fill(paletteBackgroundColor().rgb());
-            copyBlt( m_pix, 0, 0, &pix, 0, 0, w, h );
+            d->pixmap = new QPixmap(w, h+visibleHeight()/2);
+            d->pixmap->fill(paletteBackgroundColor().rgb());
+            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w, h+visibleHeight()/2);
             break;
         }
@@ -176,34 +198,34 @@ void ImageRegionWidget::updatePixmap(DImg *img)
 
 DImg ImageRegionWidget::getImageRegionImage(void)
 {
-    return ( m_img->copy(getImageRegionToRender()) );
+    return ( d->image->copy(getImageRegionToRender()) );
 }
 
 void ImageRegionWidget::backupPixmapRegion(void)
 {
-    if (m_pixRegion) delete m_pixRegion;
+    if (d->pixmapRegion) delete d->pixmapRegion;
     QRect area = getTargetImageRegion();
-    m_pixRegion = new QPixmap(area.size());
-    copyBlt( m_pixRegion, 0, 0, m_pix, area.x(), area.y(), area.width(), area.height() );
+    d->pixmapRegion = new QPixmap(area.size());
+    copyBlt( d->pixmapRegion, 0, 0, d->pixmap, area.x(), area.y(), area.width(), area.height() );
 }
 
 void ImageRegionWidget::restorePixmapRegion(void)
 {
-    if (!m_pixRegion) return;
+    if (!d->pixmapRegion) return;
     QRect area = getTargetImageRegion();
-    copyBlt( m_pix, area.x(), area.y(), m_pixRegion, 0, 0, m_pix->width(), m_pix->height() );
+    copyBlt( d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, d->pixmap->width(), d->pixmap->height() );
 }
 
 void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
-    if(!m_pix) return;
-    else p->drawPixmap(x, y, *m_pix, x, y, w, h);
+    if(!d->pixmap) return;
+    else p->drawPixmap(x, y, *d->pixmap, x, y, w, h);
     
-    if (!m_movingInProgress)
+    if (!d->movingInProgress)
     {
         // Drawing separate view.
         
-        switch (m_separateView)
+        switch (d->separateView)
         {
             case SeparateViewVertical:
             case SeparateViewDuplicateVert:
@@ -281,14 +303,14 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
         
         // Drawing HighLighted points.
         
-        if (!m_hightlightPoints.isEmpty())
+        if (!d->hightlightPoints.isEmpty())
         {
             QPoint pt;
             QRect  ptArea;
             
-            for (uint i = 0 ; i < m_hightlightPoints.count() ; i++)
+            for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
             {
-                pt = m_hightlightPoints.point(i);
+                pt = d->hightlightPoints.point(i);
                 
                 if ( getImageRegionToRender().contains(pt) )
                 {
@@ -323,9 +345,9 @@ void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
     setContentsPos(x, y);    
     
     if( targetDone )
-       m_movingInProgress = false;
+       d->movingInProgress = false;
     else
-       m_movingInProgress = true;
+       d->movingInProgress = true;
     
     repaintContents(false);    
     
@@ -337,24 +359,24 @@ QRect ImageRegionWidget::getImageRegion(void)
 {
     QRect region;    
 
-    switch (m_separateView)
+    switch (d->separateView)
     {
         case SeparateViewVertical:
         case SeparateViewHorizontal:
         case SeparateViewNone:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < m_img->width()) ? visibleWidth()  : m_img->width(),
-                (visibleHeight() < m_img->height()) ? visibleHeight() : m_img->height());
+                (visibleWidth()  < d->image->width()) ? visibleWidth()  : d->image->width(),
+                (visibleHeight() < d->image->height()) ? visibleHeight() : d->image->height());
             break;
         case SeparateViewDuplicateVert:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()/2  < m_img->width()) ? visibleWidth()/2  : m_img->width(),
-                (visibleHeight() < m_img->height()) ? visibleHeight() : m_img->height());
+                (visibleWidth()/2  < d->image->width()) ? visibleWidth()/2  : d->image->width(),
+                (visibleHeight() < d->image->height()) ? visibleHeight() : d->image->height());
             break;
         case SeparateViewDuplicateHorz:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < m_img->width()) ? visibleWidth()  : m_img->width(),
-                (visibleHeight()/2 < m_img->height()) ? visibleHeight()/2 : m_img->height());
+                (visibleWidth()  < d->image->width()) ? visibleWidth()  : d->image->width(),
+                (visibleHeight()/2 < d->image->height()) ? visibleHeight()/2 : d->image->height());
             break;
     }
         
@@ -366,20 +388,20 @@ QRect ImageRegionWidget::getImageRegionToRender(void)
     int normalizedW, normalizedH;
     
     // For large screen.
-    if (visibleWidth()  > m_img->width())  normalizedW = m_img->width();
+    if (visibleWidth()  > d->image->width())  normalizedW = d->image->width();
     else normalizedW = visibleWidth();
-    if (visibleHeight() > m_img->height()) normalizedH = m_img->height();
+    if (visibleHeight() > d->image->height()) normalizedH = d->image->height();
     else normalizedH = visibleHeight();
 
     QRect region;
     
-    if (m_separateView == SeparateViewVertical)
+    if (d->separateView == SeparateViewVertical)
         region = QRect::QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
-    else if (m_separateView == SeparateViewHorizontal)        
+    else if (d->separateView == SeparateViewHorizontal)
         region = QRect::QRect(contentsX(), contentsY()+normalizedH/2, normalizedW, normalizedH/2);
-    else if (m_separateView == SeparateViewDuplicateVert)        
+    else if (d->separateView == SeparateViewDuplicateVert)
         region = QRect::QRect(contentsX(), contentsY(), normalizedW/2, normalizedH);
-    else if (m_separateView == SeparateViewDuplicateHorz)        
+    else if (d->separateView == SeparateViewDuplicateHorz)
         region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH/2);
     else 
         region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH);
@@ -391,9 +413,9 @@ QRect ImageRegionWidget::getTargetImageRegion(void)
 {
     QRect region = getImageRegionToRender();
     
-    if (m_separateView == SeparateViewDuplicateVert)        
+    if (d->separateView == SeparateViewDuplicateVert)
         region.moveBy(region.width(), 0);
-    else if (m_separateView == SeparateViewDuplicateHorz)        
+    else if (d->separateView == SeparateViewDuplicateHorz)
         region.moveBy(0, region.height());
     
     return region;
@@ -403,9 +425,9 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton )
     {
-       m_xpos = e->x();
-       m_ypos = e->y();
-       m_movingInProgress = true;
+       d->xpos = e->x();
+       d->ypos = e->y();
+       d->movingInProgress = true;
        setCursor( KCursor::sizeAllCursor() );    
        restorePixmapRegion();
     }
@@ -413,7 +435,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
-    m_movingInProgress = false;
+    d->movingInProgress = false;
     setCursor( KCursor::arrowCursor() ); 
     backupPixmapRegion();
     emit contentsMovedEvent(true);
@@ -426,11 +448,11 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
        uint newxpos = e->x();
        uint newypos = e->y();
        
-       scrollBy (-(newxpos - m_xpos), -(newypos - m_ypos));
+       scrollBy (-(newxpos - d->xpos), -(newypos - d->ypos));
        repaintContents(false);    
        
-       m_xpos = newxpos - (newxpos-m_xpos);
-       m_ypos = newypos - (newypos-m_ypos);
+       d->xpos = newxpos - (newxpos-d->xpos);
+       d->ypos = newypos - (newypos-d->ypos);
        emit contentsMovedEvent(false);
        return;
     }
@@ -446,7 +468,7 @@ void ImageRegionWidget::updatePreviewImage(QImage *img)
     QPixmap pix(img->width(), img->height());
     pix.convertFromImage(*img);
     QRect area = getTargetImageRegion();
-    copyBlt( m_pix, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
+    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
 }
 
 void ImageRegionWidget::updatePixmap(QImage *img)
@@ -459,38 +481,38 @@ void ImageRegionWidget::updatePixmap(QImage *img)
     int w = img->width();
     int h = img->height();
     
-    if (m_pix)
+    if (d->pixmap)
     {
-        delete m_pix;
-        m_pix = 0;
+        delete d->pixmap;
+        d->pixmap = 0;
     }
     
-    switch (m_separateView)
+    switch (d->separateView)
         {
         case SeparateViewVertical:
         case SeparateViewHorizontal:
         case SeparateViewNone:
             {
-            m_pix = new QPixmap(w, h);
-            m_pix->convertFromImage(*img);
+            d->pixmap = new QPixmap(w, h);
+            d->pixmap->convertFromImage(*img);
             resizeContents(w, h);
             }
             break;
         case SeparateViewDuplicateVert:
             {
             QPixmap pix(*img); 
-            m_pix = new QPixmap(w+visibleWidth()/2, h);
-            m_pix->fill(paletteBackgroundColor().rgb());
-            copyBlt( m_pix, 0, 0, &pix, 0, 0, w, h );
+            d->pixmap = new QPixmap(w+visibleWidth()/2, h);
+            d->pixmap->fill(paletteBackgroundColor().rgb());
+            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w+visibleWidth()/2, h);
             break;
             }
         case SeparateViewDuplicateHorz:
             {
             QPixmap pix(*img); 
-            m_pix = new QPixmap(w, h+visibleHeight()/2);
-            m_pix->fill(paletteBackgroundColor().rgb());
-            copyBlt( m_pix, 0, 0, &pix, 0, 0, w, h );
+            d->pixmap = new QPixmap(w, h+visibleHeight()/2);
+            d->pixmap->fill(paletteBackgroundColor().rgb());
+            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
             resizeContents(w, h+visibleHeight()/2);
             break;
             }
@@ -504,7 +526,7 @@ void ImageRegionWidget::updatePixmap(QImage *img)
 
 QImage ImageRegionWidget::getImageRegionData(void)
 {
-    return ( m_img->copyQImage(getImageRegionToRender()) );
+    return ( d->image->copyQImage(getImageRegionToRender()) );
 }
 
 }  // NameSpace Digikam
