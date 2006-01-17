@@ -32,21 +32,42 @@
 namespace DigikamImagePlugins
 {
 
+class ImageTabWidgetPriv
+{
+public:
+
+    ImageTabWidgetPriv()
+    {
+        previewOriginalWidget = 0;
+        previewTargetWidget   = 0;
+    }
+
+    ~ImageTabWidgetPriv()
+    {
+        delete previewOriginalWidget;
+        delete previewTargetWidget;
+    }
+    
+    Digikam::ImageGuideWidget *previewOriginalWidget;
+    Digikam::ImageGuideWidget *previewTargetWidget;
+};
+
 ImageTabWidget::ImageTabWidget(QWidget *parent,
                                bool orgGuideVisible, bool targGuideVisible, 
                                int orgGuideMode, int targGuideMode)
               : QTabWidget(parent)
 {
+    d = new ImageTabWidgetPriv;
     QFrame *targetFrame = new QFrame(this);
     targetFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l2 = new QVBoxLayout(targetFrame, 5, 0);
-    m_previewTargetWidget = new Digikam::ImageGuideWidget(480, 320, targetFrame,
-                                         targGuideVisible, targGuideMode,
-                                         Qt::red, 1, false,
-                                         Digikam::ImageGuideWidget::TargetPreviewImage);
+    d->previewTargetWidget = new Digikam::ImageGuideWidget(480, 320, targetFrame,
+                                          targGuideVisible, targGuideMode,
+                                          Qt::red, 1, false,
+                                          Digikam::ImageGuideWidget::TargetPreviewImage);
                                          
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the target image."));
-    l2->addWidget(m_previewTargetWidget, 0);
+    QWhatsThis::add( d->previewTargetWidget, i18n("<p>You can see here the target image."));
+    l2->addWidget(d->previewTargetWidget, 0);
     addTab( targetFrame, i18n("Target") );
     
     // -------------------------------------------------------------
@@ -54,20 +75,30 @@ ImageTabWidget::ImageTabWidget(QWidget *parent,
     QFrame *originalFrame = new QFrame(this);
     originalFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(originalFrame, 5, 0);
-    m_previewOriginalWidget = new Digikam::ImageGuideWidget(480, 320, originalFrame,
-                                           orgGuideVisible, orgGuideMode,
-                                           Qt::red, 1, false,
-                                           Digikam::ImageGuideWidget::OriginalImage);
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image."));
-    l->addWidget(m_previewOriginalWidget, 0);
+    d->previewOriginalWidget = new Digikam::ImageGuideWidget(480, 320, originalFrame,
+                                            orgGuideVisible, orgGuideMode,
+                                            Qt::red, 1, false,
+                                            Digikam::ImageGuideWidget::OriginalImage);
+    QWhatsThis::add( d->previewOriginalWidget, i18n("<p>You can see here the original image."));
+    l->addWidget(d->previewOriginalWidget, 0);
     addTab( originalFrame, i18n("Original") );
-    
 }      
 
 ImageTabWidget::~ImageTabWidget()
 {
+    delete d;
 }
 
+Digikam::ImageGuideWidget *ImageTabWidget::previewOriginal(void)
+{
+    return d->previewOriginalWidget;
+}
+
+Digikam::ImageGuideWidget *ImageTabWidget::previewTarget(void)
+{
+    return d->previewTargetWidget;
+};
+    
 }  // namespace DigikamImagePlugins
 
 #include "imagetabwidget.moc"

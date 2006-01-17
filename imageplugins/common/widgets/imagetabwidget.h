@@ -32,6 +32,8 @@
 namespace DigikamImagePlugins
 {
 
+class ImageTabWidgetPriv;
+
 class ImageTabWidget : public QTabWidget
 {
 Q_OBJECT
@@ -44,13 +46,13 @@ public:
                    int targGuideMode=Digikam::ImageGuideWidget::PickColorMode);
     ~ImageTabWidget();
     
-    Digikam::ImageGuideWidget *previewOriginal(void){ return m_previewOriginalWidget; };
-    Digikam::ImageGuideWidget *previewTarget(void)  { return m_previewTargetWidget;   };
+    Digikam::ImageGuideWidget *previewOriginal(void);
+    Digikam::ImageGuideWidget *previewTarget(void);
     
 private:
-    
-    Digikam::ImageGuideWidget *m_previewOriginalWidget;
-    Digikam::ImageGuideWidget *m_previewTargetWidget;    
+
+    ImageTabWidgetPriv* d;
+
 };
 
 }  // namespace DigikamImagePlugins
