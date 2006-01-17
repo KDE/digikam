@@ -3,7 +3,7 @@
  * Date  : 2005-24-01
  * Description : image filters. 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * Original Equalise and StretchContrast Algorithms copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -298,7 +298,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     }
     
     if( low.green == high.green )
-       {
+    {
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
        
@@ -404,30 +404,30 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        if(i < (long) low.red)
           normalize_map[i].red = 0;
        else if (i > (long) high.red)
-          normalize_map[i].red = 65535;
+          normalize_map[i].red = (256*histogram->getHistogramSegment() -1);
        else if (low.red != high.red)
-          normalize_map[i].red = (unsigned short)((65535*(i-low.red))/(high.red-low.red));
+          normalize_map[i].red = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.red))/(high.red-low.red));
 
        if(i < (long) low.green)
           normalize_map[i].green = 0;
        else if (i > (long) high.green)
-          normalize_map[i].green = 65535;
+          normalize_map[i].green = (256*histogram->getHistogramSegment() -1);
        else if (low.green != high.green)
-          normalize_map[i].green = (unsigned short)((65535*(i-low.green))/(high.green-low.green));
+          normalize_map[i].green = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.green))/(high.green-low.green));
 
        if(i < (long) low.blue)
           normalize_map[i].blue = 0;
        else if (i > (long) high.blue)
-          normalize_map[i].blue = 65535;
+          normalize_map[i].blue = (256*histogram->getHistogramSegment() -1);
        else if (low.blue != high.blue)
-          normalize_map[i].blue = (unsigned short)((65535*(i-low.blue))/(high.blue-low.blue));
+          normalize_map[i].blue = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.blue))/(high.blue-low.blue));
 
        if(i < (long) low.alpha)
           normalize_map[i].alpha = 0;
        else if (i > (long) high.alpha)
-          normalize_map[i].alpha = 65535;
+          normalize_map[i].alpha = (256*histogram->getHistogramSegment() -1);
        else if (low.alpha != high.alpha)
-          normalize_map[i].alpha = (unsigned short)((65535*(i-low.alpha))/(high.alpha-low.alpha));
+          normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegment() -1)*(i-low.alpha))/(high.alpha-low.alpha));
     }
 
     // Apply result to image.

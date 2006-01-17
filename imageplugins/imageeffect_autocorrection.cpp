@@ -45,10 +45,10 @@
 // Digikam includes.
 
 #include "imageiface.h"
-#include "imagefilters.h"
 #include "imageguidewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
+#include "dimgimagefilters.h"
 #include "dimg.h"
 
 // Local includes.
@@ -335,22 +335,24 @@ void ImageEffect_AutoCorrection::slotOk()
 
 void ImageEffect_AutoCorrection::autoCorrection(uchar *data, int w, int h, bool sb, int type)
 {
+    Digikam::DImgImageFilters filter;
+
     switch (type)
     {
        case AutoLevelsCorrection:
-          Digikam::ImageFilters::autoLevelsCorrectionImage(data, w, h, sb);
+          filter.autoLevelsCorrectionImage(data, w, h, sb);
           break;
        
        case NormalizeCorrection:
-          Digikam::ImageFilters::normalizeImage(data, w, h, sb);
+          filter.normalizeImage(data, w, h, sb);
           break;
        
        case EqualizeCorrection:
-          Digikam::ImageFilters::equalizeImage(data, w, h, sb);
+          filter.equalizeImage(data, w, h, sb);
           break;
        
        case StretchContrastCorrection:
-          Digikam::ImageFilters::stretchContrastImage(data, w, h, sb);
+          filter.stretchContrastImage(data, w, h, sb);
           break;
     }
 }
