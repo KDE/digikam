@@ -1,1 +1,1 @@
-SUBDIRS = pics canvas editor 
+SUBDIRS = icons canvas editor 
