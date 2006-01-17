@@ -231,26 +231,26 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_inProfile = new QButtonGroup(6, Qt::Vertical, inProfiles);
-    m_inProfile->setFrameStyle(QFrame::NoFrame);
+    QButtonGroup *inProfileBG = new QButtonGroup(6, Qt::Vertical, inProfiles);
+    inProfileBG->setFrameStyle(QFrame::NoFrame);
 
-    QRadioButton *m_useEmbeddedProfile = new QRadioButton(m_inProfile);
+    QRadioButton *m_useEmbeddedProfile = new QRadioButton(inProfileBG);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
 
-    QRadioButton *m_useSRGBDefaultProfile = new QRadioButton(m_inProfile);
+    QRadioButton *m_useSRGBDefaultProfile = new QRadioButton(inProfileBG);
     m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
 
-    QRadioButton *m_useInDefaultProfile = new QRadioButton(m_inProfile);
+    QRadioButton *m_useInDefaultProfile = new QRadioButton(inProfileBG);
     m_useInDefaultProfile->setText(i18n("Use default profile"));
 
-    QRadioButton *m_useInSelectedProfile = new QRadioButton(m_inProfile);
+    QRadioButton *m_useInSelectedProfile = new QRadioButton(inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
 
-    QComboBox *m_inProfilesCB = new QComboBox(m_inProfile);
+    QComboBox *m_inProfilesCB = new QComboBox(inProfileBG);
     
-    QPushButton *m_inProfilesInfo = new QPushButton(i18n("Info"), m_inProfile);
+    QPushButton *m_inProfilesInfo = new QPushButton(i18n("Info"), inProfileBG);
 
-    firstPageLayout->addWidget(m_inProfile);
+    firstPageLayout->addWidget(inProfileBG);
     firstPageLayout->addStretch();
 
     //---------- End First Page ------------------------------------
@@ -262,21 +262,21 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *secondPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_proofProfile = new QButtonGroup(4,Qt::Vertical, proofProfiles);
-    m_proofProfile->setFrameStyle(QFrame::NoFrame);
+    QButtonGroup *proofProfileBG = new QButtonGroup(4,Qt::Vertical, proofProfiles);
+    proofProfileBG->setFrameStyle(QFrame::NoFrame);
 
-    QRadioButton *m_useOutDefaultProfile = new QRadioButton(m_proofProfile);
+    QRadioButton *m_useOutDefaultProfile = new QRadioButton(proofProfileBG);
     m_useOutDefaultProfile->setText(i18n("Use default proof profile"));
 
-    QRadioButton *m_useOutSelectedProfile = new QRadioButton(m_proofProfile);
+    QRadioButton *m_useOutSelectedProfile = new QRadioButton(proofProfileBG);
     m_useOutSelectedProfile->setText(i18n("Use selected profile"));
     
-    QComboBox *m_outProfileCB = new QComboBox(m_proofProfile);
+    QComboBox *m_outProfileCB = new QComboBox(proofProfileBG);
 
-    QPushButton *m_outProfilesInfo = new QPushButton(i18n("Info"), m_proofProfile);
+    QPushButton *m_outProfilesInfo = new QPushButton(i18n("Info"), proofProfileBG);
 
 
-    secondPageLayout->addWidget(m_proofProfile);
+    secondPageLayout->addWidget(proofProfileBG);
     secondPageLayout->addStretch();
 
     //---------- End Second Page -----------------------------------
@@ -288,26 +288,26 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *thirdPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *m_displayProfile = new QButtonGroup(4,Qt::Vertical, displayProfiles);
-    m_displayProfile->setFrameStyle(QFrame::NoFrame);
+    QButtonGroup *displayProfileBG = new QButtonGroup(4,Qt::Vertical, displayProfiles);
+    displayProfileBG->setFrameStyle(QFrame::NoFrame);
 
-    QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(m_displayProfile);
+    QRadioButton *m_useDisplayDefaultProfile = new QRadioButton(displayProfileBG);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
 
-    QRadioButton *m_useDisplaySelectedProfile = new QRadioButton(m_displayProfile);
+    QRadioButton *m_useDisplaySelectedProfile = new QRadioButton(displayProfileBG);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
-//     QComboBox *m_displayProfileCB = new QComboBox(m_displayProfile);
-    KURLRequester *m_displayProfileCB = new KURLRequester(m_displayProfile);
+//     QComboBox *m_displayProfileCB = new QComboBox(displayProfileBG);
+    KURLRequester *m_displayProfileCB = new KURLRequester(displayProfileBG);
     m_displayProfileCB->setMode(KFile::File|KFile::ExistingOnly);
     m_displayProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
     m_iccPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccPreviewWidget);
 
-    QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), m_displayProfile);
+    QPushButton *m_DisplayProfilesInfo = new QPushButton(i18n("Info"), displayProfileBG);
 
-    thirdPageLayout->addWidget(m_displayProfile);
+    thirdPageLayout->addWidget(displayProfileBG);
     thirdPageLayout->addStretch();
     
     //---------- End Third Page ------------------------------------
