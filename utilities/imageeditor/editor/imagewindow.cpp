@@ -273,6 +273,7 @@ ImageWindow::~ImageWindow()
     delete m_rightSidebar;
     delete m_ICCSettings;
     delete m_IOFileSettings;
+    delete m_savingContext;
 }
 
 void ImageWindow::closeEvent(QCloseEvent *e)

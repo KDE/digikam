@@ -292,7 +292,10 @@ public:
                 // break loop when either the loading has completed, or this task is being stopped
                 while ( !usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
                     lock.timedWait();
+                // remove listener from process
                 usedProcess->removeListener(this);
+                // wake up the process which is waiting until all listeners have removed themselves
+                lock.wakeAll();
                 kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
                 return;
             }
@@ -359,6 +362,9 @@ public:
             cache->putImage(m_loadingDescription.filePath, new DImg(img));
             // wake all listeners waiting on cache condVar
             lock.wakeAll();
+            // wait until all listeners have removed themselves
+            while (m_listeners.count() != 0)
+                lock.timedWait();
         }
     };
 
