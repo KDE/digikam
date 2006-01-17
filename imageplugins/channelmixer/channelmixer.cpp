@@ -419,10 +419,11 @@ void ChannelMixerDialog::slotEffect()
        delete [] m_destinationPreviewData;
     
     m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
+    Digikam::DImgImageFilters filter;
 
     if (m_monochrome->isChecked())
     {
-       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,                 // Image data.
+       filter.channelMixerImage(data, w, h, sb,                                 // Image data.
                 m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,              // Red channel gains.
@@ -432,7 +433,7 @@ void ChannelMixerDialog::slotEffect()
     }
     else
     {
-       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,                 // Image data.
+       filter.channelMixerImage(data, w, h, sb,                                 // Image data.
                 m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
                 m_monochrome->isChecked(),                                      // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,                // Red channel gains.
@@ -459,9 +460,11 @@ void ChannelMixerDialog::slotOk()
     int h                      = iface->originalHeight();
     bool sb                    = iface->originalSixteenBit();
 
+    Digikam::DImgImageFilters filter;
+
     if (m_monochrome->isChecked())
     {
-       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,     // Image data.
+       filter.channelMixerImage(data, w, h, sb,                     // Image data.
                 m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
                 m_monochrome->isChecked(),                          // Monochrome.
                 m_blackRedGain, m_blackGreenGain, m_blackBlueGain,  // Red channel gains.
@@ -470,7 +473,7 @@ void ChannelMixerDialog::slotOk()
     }
     else
     {
-       Digikam::ImageFilters::channelMixerImage(data, w, h, sb,     // Image data.
+       filter.channelMixerImage(data, w, h, sb,                     // Image data.
                 m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
                 m_monochrome->isChecked(),                          // Monochrome.
                 m_redRedGain,   m_redGreenGain,   m_redBlueGain,    // Red channel gains.

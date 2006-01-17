@@ -4,7 +4,7 @@
  * Date  : 2004-12-22
  *
  * Copyright 2004 by Renchi Raju
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 #ifdef HAVE_DIGIKAM_TOPLEVEL
 
 #include <dimg.h>
+#include <dimgimagefilters.h>
 #include <dimgthreadedfilter.h>
 #include <dcolor.h>
 #include <imageiface.h>
@@ -33,7 +34,6 @@
 #include <imagelevels.h>
 #include <imageplugin.h>
 #include <imagecurves.h>
-#include <imagefilters.h>
 #include <thumbbar.h>
 #include <colorgradientwidget.h>
 #include <histogramwidget.h>
@@ -47,12 +47,14 @@
 #include <ctrlpaneldlg.h>
 #include <imagedlgbase.h>
 
-// FIXME : Revove this line when all plugins will be ported to DImg
+// FIXME : Revove these lines when all plugins will be ported to DImg
 #include <threadedfilter.h>
+#include <imagefilters.h>
 
 #else
 
 #include <digikam/dimg.h>
+#include <digikam/dimgimagefilters.h>
 #include <digikam/dimgthreadedfilter.h>
 #include <digikam/dcolor.h>
 #include <digikam/imageiface.h>
@@ -60,7 +62,6 @@
 #include <digikam/imagelevels.h>
 #include <digikam/imageplugin.h>
 #include <digikam/imagecurves.h>
-#include <digikam/imagefilters.h>
 #include <digikam/thumbbar.h>
 #include <digikam/colorgradientwidget.h>
 #include <digikam/histogramwidget.h>
@@ -74,9 +75,10 @@
 #include <digikam/ctrlpaneldlg.h>
 #include <digikam/imagedlgbase.h>
 
-// FIXME : Revove this line when all plugins will be ported to DImg
+// FIXME : Revove these lines when all plugins will be ported to DImg
 #include <digikam/threadedfilter.h>
+#include <digikam/imagefilters.h>
 
-#endif
+#endif /* HAVE_DIGIKAM_TOPLEVEL */
 
 #endif /* DIGIKAMHEADERS_H */
