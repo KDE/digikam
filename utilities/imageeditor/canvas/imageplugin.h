@@ -28,7 +28,11 @@
 // KDE includes.
 
 #include <kxmlguiclient.h>
+
+// Local includes.
+
 #include "digikam_export.h"
+
 class QWidget;
 
 namespace Digikam
