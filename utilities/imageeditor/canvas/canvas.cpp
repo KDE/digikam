@@ -149,12 +149,12 @@ Canvas::Canvas(QWidget *parent)
     d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
 
     d->rubber = 0;
-    d->pressedMoved  = false;
-    d->pressedMoving = false;
-    d->ltActive      = false;
-    d->rtActive      = false;
-    d->lbActive      = false;
-    d->rbActive      = false;
+    d->pressedMoved     = false;
+    d->pressedMoving    = false;
+    d->ltActive         = false;
+    d->rtActive         = false;
+    d->lbActive         = false;
+    d->rbActive         = false;
     d->midButtonPressed = false;
     d->midButtonX       = 0;
     d->midButtonY       = 0;
@@ -365,46 +365,6 @@ Canvas::~Canvas()
     delete d;
 }
 
-// bool Canvas::load(const QString& filename)
-// {
-//     if (d->rubber) {
-//         delete d->rubber;
-//         d->rubber = 0;
-//         emit signalSelected(false);
-//     }
-// 
-//     if (d->imageHistogram)
-//     {
-//         delete d->imageHistogram;
-//         d->imageHistogram = 0;
-//     }    
-//     
-//     viewport()->setUpdatesEnabled(false);
-// 
-//     d->tileCache.clear();
-// 
-//     bool isReadOnly = true;
-//     d->im->load(filename, &isReadOnly);
-// 
-//     d->zoom = 1.0;
-//     d->im->zoom(d->zoom);
-//     
-//     if (d->autoZoom)
-//         updateAutoZoom();
-// 
-//     updateContentsSize();
-// 
-//     viewport()->setUpdatesEnabled(true);
-//     viewport()->update();
-//     if (d->showHistogram)
-//        updateHistogram(true);
-//    
-//     emit signalChanged(false, false);
-//     emit signalZoomChanged(d->zoom);
-//     
-//     return (isReadOnly);
-// }
-
 void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
                   IOFileSettingsContainer *IOFileSettings, QWidget *parent)
 {
@@ -571,7 +531,8 @@ void Canvas::updateContentsSize()
     viewport()->unsetCursor();
     viewport()->setMouseTracking(false);
 
-    if (d->rubber) {
+    if (d->rubber)
+    {
         delete d->rubber;
         d->rubber = 0;
         d->pressedMoved = false;
@@ -581,8 +542,8 @@ void Canvas::updateContentsSize()
     int wZ = int(d->im->width());
     int hZ = int(d->im->height());
     
-    if (visibleWidth() > wZ || visibleHeight() > hZ) {
-
+    if (visibleWidth() > wZ || visibleHeight() > hZ)
+    {
         // Center the image
         int centerx = contentsRect().width()/2;
         int centery = contentsRect().height()/2;
@@ -594,7 +555,8 @@ void Canvas::updateContentsSize()
         d->pixmapRect = QRect(xoffset, yoffset,
                               wZ, hZ);
     }
-    else {
+    else
+    {
         d->pixmapRect = QRect(0, 0, wZ, hZ);
     }
 
@@ -603,14 +565,14 @@ void Canvas::updateContentsSize()
     viewport()->setUpdatesEnabled(true);
 }
 
-
 void Canvas::resizeEvent(QResizeEvent* e)
 {
     if (!e)
         return;
 
     QScrollView::resizeEvent(e);
-    if (d->autoZoom) {
+    if (d->autoZoom)
+    {
         updateAutoZoom();
     }
     
@@ -773,7 +735,8 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
  */
 void Canvas::getHistogramRect(QRect &hrect)
 {
-    if (d->histogramRect.isNull()) {
+    if (d->histogramRect.isNull())
+    {
         QRect phis(contentsX(), contentsY(), HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT);
         QRect rc(contentsX(), contentsY(), visibleWidth(), visibleHeight());
         QPoint p;
@@ -786,7 +749,8 @@ void Canvas::getHistogramRect(QRect &hrect)
         d->histogramRect.setWidth(0);
         d->histogramRect.setHeight(0);
         hrect = phis;
-    } else
+    }
+    else
         hrect = QRect(d->histogramRect.x(), d->histogramRect.y(),
                       HISTOGRAM_WIDTH, HISTOGRAM_HEIGHT);
 }
@@ -812,7 +776,8 @@ void Canvas::paintHistogram(const QRect& cr)
     rctmp.setBottomRight(contentsToViewport(rctmp.bottomRight()));
     
     rcexposed = rcexposed.intersect(rctmp);
-    if (!rcexposed.isEmpty()) {
+    if (!rcexposed.isEmpty())
+    {
         bitBlt(viewport(), rcexposed.x(), rcexposed.y(),
                d->histogramPixmap, 
                rcexposed.x() - rc.x(), rcexposed.y() - rc.y(),
@@ -853,7 +818,6 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::LeftButton)
     {
-
         // if histogram, and not while repainting histogram
         // because of a contents moving event, check whether
         // the histogram should be moved...
@@ -883,8 +847,8 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         }
     
         if (d->ltActive || d->rtActive ||
-            d->lbActive || d->rbActive) {
-
+            d->lbActive || d->rbActive)
+        {
             Q_ASSERT( d->rubber );
             if (!d->rubber)
                 return;
@@ -893,19 +857,23 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         
             QRect r(d->rubber->normalize());
 
-            if (d->ltActive) {
+            if (d->ltActive)
+            {
                 d->rubber->setTopLeft(r.bottomRight());
                 d->rubber->setBottomRight(r.topLeft());
             }
-            else if (d->rtActive) {
+            else if (d->rtActive)
+            {
                 d->rubber->setTopLeft(r.bottomLeft());
                 d->rubber->setBottomRight(r.topRight());
             }
-            else if (d->lbActive) {
+            else if (d->lbActive)
+            {
                 d->rubber->setTopLeft(r.topRight());
                 d->rubber->setBottomRight(r.bottomLeft());
             }
-            else if (d->rbActive) {
+            else if (d->rbActive)
+            {
                 d->rubber->setTopLeft(r.topLeft());
                 d->rubber->setBottomRight(r.bottomLeft());
             }
@@ -929,7 +897,8 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
     
-    if (d->rubber) {
+    if (d->rubber)
+    {
         delete d->rubber;
         d->rubber = 0;        
     }
@@ -988,7 +957,8 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             // if histogramRect unchanged, record offset change - but keep 
             // the histogram at this spot
             getHistogramRect(rc);
-            if (rc_org == rc) {
+            if (rc_org == rc)
+            {
                 QPoint tmp = pt_org - rc.topLeft();
                 // clip within histogram's width and size
                 if (tmp.x() < 0) tmp.setX(0);
@@ -1037,8 +1007,8 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         drawRubber();
     }
-    else {
-
+    else
+    {
         if (!d->rubber)
             return;
         
@@ -1054,19 +1024,23 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         d->lbActive = false;
         d->rbActive = false;
         
-        if (lt.contains(e->x(), e->y())) {
+        if (lt.contains(e->x(), e->y()))
+        {
             viewport()->setCursor(Qt::SizeFDiagCursor);
             d->ltActive = true;
         }
-        else if (rb.contains(e->x(), e->y())) {
+        else if (rb.contains(e->x(), e->y()))
+        {
             viewport()->setCursor(Qt::SizeFDiagCursor);
             d->rbActive = true;
         }
-        else if (lb.contains(e->x(), e->y())) {
+        else if (lb.contains(e->x(), e->y()))
+        {
             viewport()->setCursor(Qt::SizeBDiagCursor);
             d->lbActive = true;
         }
-        else if (rt.contains(e->x(), e->y())) {
+        else if (rt.contains(e->x(), e->y()))
+        {
             viewport()->setCursor(Qt::SizeBDiagCursor);
             d->rtActive = true;
         }
@@ -1082,7 +1056,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
 
     d->midButtonPressed = false;
     
-    if (d->pressedMoving) {
+    if (d->pressedMoving)
+    {
         d->pressedMoving = false;
         viewport()->update();
     }
@@ -1110,7 +1085,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         viewport()->setMouseTracking(true);
         emit signalSelected(true);
     }
-    else {
+    else
+    {
         d->ltActive = false;
         d->rtActive = false;
         d->lbActive = false;
@@ -1130,21 +1106,20 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-
 void Canvas::contentsWheelEvent(QWheelEvent *e)
 {
     e->accept();
 
-    if (e->state() == Qt::ShiftButton) {
-
+    if (e->state() == Qt::ShiftButton)
+    {
         if (e->delta() < 0)
             emit signalShowNextImage();
         else if (e->delta() > 0)
             emit signalShowPrevImage();
         return;
     }
-    else if (e->state() == Qt::ControlButton) {
-
+    else if (e->state() == Qt::ControlButton)
+    {
         if (e->delta() < 0)
             slotIncreaseZoom();
         else if (e->delta() > 0)
@@ -1208,7 +1183,8 @@ void Canvas::slotSetAutoZoom(bool val)
     d->autoZoom = val;
     if (d->autoZoom)
         updateAutoZoom();
-    else {
+    else
+    {
         d->zoom = 1.0;
         emit signalZoomChanged(d->zoom);
     }
@@ -1235,7 +1211,8 @@ void Canvas::slotShowHistogram(bool show)
     if (d->showHistogram) 
 	    update = updateHistogram(false);
     
-    if (update) { 
+    if (update)
+    { 
 	    QRect rc;
 	    getHistogramRect(rc);
         drawHistogramPixmap();
@@ -1399,10 +1376,13 @@ bool Canvas::getHistogramPosition(QPoint &pos)
  */
 int Canvas::setHistogramType(int t)
 {
-    if (t == 0) {
+    if (t == 0)
+    {
         d->histoChannelType = t;
         slotShowHistogram(false);
-    } else if (t != d->histoChannelType && t > 0 && t < 6) {
+    }
+    else if (t != d->histoChannelType && t > 0 && t < 6)
+    {
         d->histoChannelType = t;
         slotShowHistogram(true);
         QRect rc;
@@ -1528,7 +1508,8 @@ void Canvas::slotContentsMoving(int x, int y)
     int dx = pn.x() - po.x(), 
         dy = pn.y() - po.y();
 
-    if (dx || dy) {
+    if (dx || dy)
+    {
         QRect rchisto, rcdirty;
             
         getHistogramRect(rchisto);
