@@ -110,7 +110,12 @@ private:
 
     QPushButton                     *m_testItBt;
 
-    
+    QString                         inPath;
+    QString                         displayPath;
+    QString                         spacePath;
+    QString                         proofPath;
+
+    bool                            cmEnabled;
 
     Digikam::ImageGuideWidget       *m_previewWidget;
 

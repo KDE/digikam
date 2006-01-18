@@ -72,7 +72,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 {
     m_destinationPreviewData = 0L;
 
-    
+    cmEnabled = true;
+    inPath = QString::null;
+    spacePath = QString::null;
+    proofPath = QString::null;
+    displayPath = QString::null;
 
     setHelp("colormanagement.anchor", "digikam");
 
@@ -400,7 +404,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
+//     slotToggledWidgets(true);
+
     enableButtonOK( false );
+
+    readSettings();
 }
 
 ImageEffect_ICCProof::~ImageEffect_ICCProof()
@@ -518,11 +526,31 @@ void ImageEffect_ICCProof::readSettings()
     KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
+
+    if (!config->readBoolEntry("EnableCM", false))
+    {
+        QString message = QString(i18n("<p>You don't have enabled Color Management in Digikam preferences, so you won't be able"));
+        message.append( i18n("to use the \"Use default profile...\" options</p>"));
+        KMessageBox::information(this, message);
+        slotToggledWidgets(false);
+        cmEnabled = false;
+    }
+    else
+    {
+        inPath = config->readPathEntry("InProfileFile");
+        spacePath = config->readPathEntry("WorkProfileFile");
+        displayPath = config->readPathEntry("MonitorProfileFile");
+        proofPath = config->readPathEntry("ProofProfileFile");
+    }
 }
 
 void ImageEffect_ICCProof::slotToggledWidgets( bool t)
 {
-    /// @todo implement me
+    if (m_useInDefaultProfile->isVisible())
+        m_useInDefaultProfile->setEnabled(t);
+//     m_useProofDefaultProfile->setEnabled(t);
+//     m_useDisplayDefaultProfile->setEnabled(t);
+//     m_useSpaceDefaultProfile->setEnabled(t);
 }
 
 /*!
