@@ -63,7 +63,7 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Brightness/Contrast/Gamma"), "bcgadjust", false)
+               : Digikam::ImageDlgBase(parent, i18n("Brightness Contrast Gamma Adjustments"), "bcgadjust", false)
 {
     m_destinationPreviewData = 0L;
     setHelp("bcgadjusttool.anchor", "digikam");
@@ -77,7 +77,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
                                                     Digikam::ImageGuideWidget::TargetPreviewImage);
     l->addWidget(m_previewWidget, 0);
     QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the image "
-                                           "Brightness/Contrast/Gamma adjustments preview. "
+                                           "brightness-contrast-gamma adjustments preview. "
                                            "You can pick color on image "
                                            "to see the color level corresponding on histogram."));
     setPreviewAreaWidget(frame); 
