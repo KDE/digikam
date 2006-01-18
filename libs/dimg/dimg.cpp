@@ -23,9 +23,12 @@
 
 extern "C"
 {
-#include <stdio.h>
 #include <stdint.h>
 }
+
+// C++ includes.
+
+#include <cstdio>
 
 // Qt includes.
 
@@ -544,7 +547,7 @@ void DImg::bitBltImage(DImg* src, int dx, int dy)
     }
 }
 
-// This method come from imlib2 and do not yet work properly with red eyes correction tool.
+// FIXME : This method come from imlib2 and do not yet work properly with red eyes correction tool.
 
 void DImg::bitBlend(DImg& region, int x, int y, int w, int h)
 {
@@ -1019,7 +1022,7 @@ void DImg::rotate(ANGLE angle)
     }
 }
 
-// This method have been tested with valgring by Gilles.
+// 15-11-2005: This method have been tested indeep with valgrind by Gilles.
 
 void DImg::flip(FLIP direction)
 {
