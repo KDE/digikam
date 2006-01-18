@@ -58,16 +58,16 @@ private:
 
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
 
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
     };
 
     uchar                        *m_destinationPreviewData;
