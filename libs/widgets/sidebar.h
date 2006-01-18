@@ -25,17 +25,20 @@
 #include <config.h>
 #endif
 
-#include "digikam_export.h"
+// KDE includes.
 
 #include <kmultitabbar.h>
 
-class KMultiTabBar;
-class QWidgetStack;
-class QDataStream;
+// Local includes.
+
+#include "digikam_export.h"
+
 class QSplitter;
 
 namespace Digikam
 {
+
+class SidebarPriv;
 
 /**
  * This class handles a sidebar view
@@ -49,7 +52,8 @@ public:
     /**
      * The side where the bar should be visible
      */
-    enum Side {
+    enum Side
+    {
         Left,
         Right
     };    
@@ -117,17 +121,6 @@ private:
      */
     void saveViewState();
     
-    Side             m_side;
-    QWidgetStack    *m_stack;
-    QSplitter       *m_splitter;
-    QSize            m_bigSize;
-    int              m_minSize;
-    int              m_maxSize;
-    bool             m_minimized;
-    int              m_tabs;
-    int              m_activeTab;
-    bool             m_minimizedDefault;
-    
 private slots:
     
     /**
@@ -140,8 +133,14 @@ signals:
     /**
      * is emitted, when another tab is activated
      */
-    void            signalChangedTab(QWidget *w);
+    void signalChangedTab(QWidget *w);
+
+private:
+    
+    SidebarPriv* d;
+
 };
-};
+
+}  // namespace Digikam
 
 #endif // _SIDEBAR_H_

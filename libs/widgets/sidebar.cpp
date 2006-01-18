@@ -18,11 +18,13 @@
 
 /** @file sidebar.cpp */
 
-#include "sidebar.h"
+// QT includes.
 
 #include <qsplitter.h>
 #include <qwidgetstack.h>
 #include <qdatastream.h>
+
+// KDE includes.
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -30,21 +32,53 @@
 #include <kmultitabbar.h>
 #include <kiconloader.h>
 
-using namespace Digikam;
+// Local includes.
+
+#include "sidebar.h"
+
+namespace Digikam
+{
+    
+class SidebarPriv
+{
+public:
+
+    SidebarPriv()
+    {
+        stack     = 0;
+        splitter  = 0;
+        tabs      = 0;
+        activeTab = -1;
+        minimized = false;
+    }
+
+    bool          minimizedDefault;
+    bool          minimized;
+
+    int           tabs;
+    int           activeTab;
+    int           minSize;
+    int           maxSize;
+        
+    QWidgetStack *stack;
+    QSplitter    *splitter;
+    QSize         bigSize;
+
+    Sidebar::Side side;
+};
 
 Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
     : KMultiTabBar(KMultiTabBar::Vertical, parent, "Sidebar")
 {
-    m_tabs = 0;
-    m_activeTab = -1;
-    m_minimized = false;
-    m_minimizedDefault = minimizedDefault;
-    m_side = side;
+    d = new SidebarPriv;
+    d->minimizedDefault = minimizedDefault;
+    d->side = side;
 }
 
 Sidebar::~Sidebar()
 {
     saveViewState();
+    delete d;
 }
 
 void Sidebar::setSplitter(QSplitter *sp)
@@ -55,9 +89,9 @@ void Sidebar::setSplitter(QSplitter *sp)
     setStyle(KMultiTabBar::KDEV3);
 #endif
     showActiveTabTexts(true);
-    m_stack = new QWidgetStack(sp);
+    d->stack = new QWidgetStack(sp);
             
-    if(m_side == Left)
+    if(d->side == Left)
         setPosition(KMultiTabBar::Left);
     else
         setPosition(KMultiTabBar::Right);
@@ -69,21 +103,21 @@ void Sidebar::loadViewState()
     int minimized;
     
     KConfig *config = kapp->config();
-    config->setGroup(QString("%1-%2").arg(name()).arg(m_side));
+    config->setGroup(QString("%1-%2").arg(name()).arg(d->side));
    
     tab = config->readNumEntry("ActiveTab", 0);
-    minimized = config->readNumEntry("Minimized", m_minimizedDefault);
+    minimized = config->readNumEntry("Minimized", d->minimizedDefault);
         
     if(minimized)
     {
-        m_activeTab = tab;
-        setTab(m_activeTab, true);
-        m_stack->raiseWidget(m_activeTab);
+        d->activeTab = tab;
+        setTab(d->activeTab, true);
+        d->stack->raiseWidget(d->activeTab);
 
-        emit signalChangedTab(m_stack->visibleWidget());        
+        emit signalChangedTab(d->stack->visibleWidget());
     }
     else
-        m_activeTab = -1;
+        d->activeTab = -1;
     
     clicked(tab);
 }
@@ -91,32 +125,32 @@ void Sidebar::loadViewState()
 void Sidebar::saveViewState()
 {
     KConfig *config = kapp->config();
-    config->setGroup(QString("%1-%2").arg(name()).arg(m_side));
+    config->setGroup(QString("%1-%2").arg(name()).arg(d->side));
     
-    config->writeEntry("ActiveTab", m_activeTab);
-    config->writeEntry("Minimized", (int)m_minimized);
+    config->writeEntry("ActiveTab", d->activeTab);
+    config->writeEntry("Minimized", (int)d->minimized);
 }
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
 {
-    w->reparent(m_stack, QPoint(0,0));
-    KMultiTabBar::appendTab(pic, m_tabs, title);
-    m_stack->addWidget(w, m_tabs);
+    w->reparent(d->stack, QPoint(0,0));
+    KMultiTabBar::appendTab(pic, d->tabs, title);
+    d->stack->addWidget(w, d->tabs);
 
-    connect(tab(m_tabs), SIGNAL(clicked(int)),
+    connect(tab(d->tabs), SIGNAL(clicked(int)),
             this, SLOT(clicked(int)));
     
-    m_tabs++;
+    d->tabs++;
 }
 
 void Sidebar::deleteTab(QWidget *w)
 {
-    int tab = m_stack->id(w);
+    int tab = d->stack->id(w);
     if(tab < 0)
         return;
     
-    if(tab == m_activeTab)
-        m_activeTab = -1;
+    if(tab == d->activeTab)
+        d->activeTab = -1;
     
     removeTab(tab);
     //TODO show another widget
@@ -124,61 +158,61 @@ void Sidebar::deleteTab(QWidget *w)
  
 void Sidebar::clicked(int tab)
 {
-    if(tab >= m_tabs || tab < 0)
+    if(tab >= d->tabs || tab < 0)
         return;
     
-    if(tab == m_activeTab)
+    if(tab == d->activeTab)
     {
-        m_stack->isHidden() ? expand() : shrink();
+        d->stack->isHidden() ? expand() : shrink();
     }
     else
     {
-        if(m_activeTab >= 0)
-            setTab(m_activeTab, false);
+        if(d->activeTab >= 0)
+            setTab(d->activeTab, false);
     
-        m_activeTab = tab;    
-        setTab(m_activeTab, true);
-        m_stack->raiseWidget(m_activeTab);
+        d->activeTab = tab;
+        setTab(d->activeTab, true);
+        d->stack->raiseWidget(d->activeTab);
         
-        if(m_minimized)
+        if(d->minimized)
             expand();
 
-        emit signalChangedTab(m_stack->visibleWidget());
+        emit signalChangedTab(d->stack->visibleWidget());
     }
 }
 
 void Sidebar::setActiveTab(QWidget *w)
 {
-    int tab = m_stack->id(w);
+    int tab = d->stack->id(w);
     if(tab < 0)
         return;
     
-    if(m_activeTab >= 0)
-        setTab(m_activeTab, false);
+    if(d->activeTab >= 0)
+        setTab(d->activeTab, false);
     
-    m_activeTab = tab;    
-    setTab(m_activeTab, true);
-    m_stack->raiseWidget(m_activeTab);
+    d->activeTab = tab;
+    setTab(d->activeTab, true);
+    d->stack->raiseWidget(d->activeTab);
         
-    if(m_minimized)
+    if(d->minimized)
         expand();    
 
-    emit signalChangedTab(m_stack->visibleWidget());
+    emit signalChangedTab(d->stack->visibleWidget());
 }
 
 QWidget* Sidebar::getActiveTab()
 {
-    return m_stack->visibleWidget();
+    return d->stack->visibleWidget();
 }
 
 void Sidebar::shrink()
 {
-    m_minimized = true;
-    m_bigSize = size();
-    m_minSize = minimumWidth();
-    m_maxSize = maximumWidth();
+    d->minimized = true;
+    d->bigSize = size();
+    d->minSize = minimumWidth();
+    d->maxSize = maximumWidth();
             
-    m_stack->hide();
+    d->stack->hide();
 
     KMultiTabBarTab* tab = tabs()->first();
     if (tab)
@@ -193,11 +227,13 @@ void Sidebar::shrink()
 
 void Sidebar::expand()
 {
-    m_minimized = false;
-    m_stack->show();
-    resize(m_bigSize);
-    setMinimumWidth(m_minSize);
-    setMaximumWidth(m_maxSize);
+    d->minimized = false;
+    d->stack->show();
+    resize(d->bigSize);
+    setMinimumWidth(d->minSize);
+    setMaximumWidth(d->maxSize);
 }
+
+}  // namespace Digikam
 
 #include "sidebar.moc"
