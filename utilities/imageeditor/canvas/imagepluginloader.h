@@ -2,9 +2,11 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-06-04
- * Description : 
- * 
- * Copyright 2004 by Renchi Raju and Gilles Caulier
+ * Description : load digiKam image editor plugins list 
+ *               configured in setup dialog.
+ *
+ * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +38,7 @@
 
 namespace Digikam
 {
+
 class SplashScreen;
 
 class ImagePluginLoader : public QObject
@@ -56,17 +59,20 @@ public:
     bool pluginLibraryIsLoaded(const QString& libraryName);
 
 private:
+    
+    ImagePlugin* pluginIsLoaded(const QString& name);
+
+private:
 
     typedef QPair<QString,Digikam::ImagePlugin*> PluginType;
     typedef QValueList< PluginType >             PluginList;
     
-    SplashScreen                                *m_splash;
     static ImagePluginLoader                    *m_instance;
+    
+    SplashScreen                                *m_splash;
+
     PluginList                                   m_pluginList;
     
-private:
-    
-    ImagePlugin* pluginIsLoaded(const QString& name);
 };
 
 }  // namespace Digikam

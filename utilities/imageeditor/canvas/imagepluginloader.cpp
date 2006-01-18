@@ -6,6 +6,7 @@
  *               configured in setup dialog.
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,13 +33,18 @@
 
 // Local includes.
 
-#include "imagepluginloader.h"
 #include "splashscreen.h"
+#include "imagepluginloader.h"
 
 namespace Digikam
 {
 
 ImagePluginLoader* ImagePluginLoader::m_instance=0;
+
+ImagePluginLoader* ImagePluginLoader::instance()
+{
+    return m_instance;
+}
 
 ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
                  : QObject(parent)
@@ -65,6 +71,11 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
         imagePluginsList2Load = config->readListEntry("ImagePlugins List");
 
     loadPluginsFromList(imagePluginsList2Load);
+}
+
+ImagePluginLoader::~ImagePluginLoader()
+{
+    m_instance = 0;
 }
 
 void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
@@ -196,16 +207,6 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
     }
     
     return false;
-}
-
-ImagePluginLoader::~ImagePluginLoader()
-{
-    m_instance = 0;
-}
-
-ImagePluginLoader* ImagePluginLoader::instance()
-{
-    return m_instance;
 }
 
 QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
