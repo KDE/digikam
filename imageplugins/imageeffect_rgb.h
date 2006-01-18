@@ -21,22 +21,28 @@
 #ifndef IMAGEEFFECT_RGB_H
 #define IMAGEEFFECT_RGB_H
 
-// KDE includes.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "imagedlgbase.h"
+
+class QComboBox;
+class QHButtonGroup;
 
 class QSpinBox;
 class QSlider;
 
 namespace Digikam
 {
-class ImageWidget;
+class HistogramWidget;
+class ColorGradientWidget;
+class ImageGuideWidget;
+class DColor;
 }
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_RGB : public KDialogBase
+class ImageEffect_RGB : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -45,30 +51,53 @@ public:
     ImageEffect_RGB(QWidget *parent);
     ~ImageEffect_RGB();
 
-protected:
+    enum HistogramScale
+    {
+        Linear=0,
+        Logarithmic
+    };
 
-    void closeEvent(QCloseEvent *e);
+    enum ColorChannel
+    {
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
+    };
+
+    uchar                        *m_destinationPreviewData;
+
+    QComboBox                    *m_channelCB;    
+    
+    QHButtonGroup                *m_scaleBG;  
+
+    QSpinBox                     *m_rInput;
+    QSpinBox                     *m_gInput;
+    QSpinBox                     *m_bInput;
+    
+    QSlider                      *m_rSlider;
+    QSlider                      *m_gSlider;
+    QSlider                      *m_bSlider;
+    
+    Digikam::ImageGuideWidget    *m_previewWidget;
+
+    Digikam::ColorGradientWidget *m_hGradient;
+    
+    Digikam::HistogramWidget     *m_histogramWidget;
         
 private:
 
-    QSpinBox             *m_rInput;
-    QSpinBox             *m_gInput;
-    QSpinBox             *m_bInput;
-    
-    QSlider              *m_rSlider;
-    QSlider              *m_gSlider;
-    QSlider              *m_bSlider;
-    
-    Digikam::ImageWidget *m_previewWidget;
-
-    void adjustRGB(double r, double g, double b, double a, uint *data, int w, int h);
     void adjustSliders(int r, int g, int b);
     
 private slots:
 
-    void slotUser1();
+    void slotDefault();
     void slotEffect();
     void slotOk();
+    void slotChannelChanged(int channel);
+    void slotScaleChanged(int scale);
+    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    
 };
 
 }  // NameSpace DigikamImagesPluginCore
