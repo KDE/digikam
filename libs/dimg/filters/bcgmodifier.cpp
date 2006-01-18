@@ -7,6 +7,7 @@
  *               for DImg framework
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -170,25 +171,25 @@ void BCGModifier::setGamma(double val)
     d->modified = true;
 }
 
-void BCGModifier::setBrightness(double v)
+void BCGModifier::setBrightness(double val)
 {
-    int val = (int)(v * 65535);
+    int val1 = (int)(val * 65535);
     int val2;
 
     for (int i = 0; i < 65536; i++)
     {
-        val2 = d->map16[i] + val;
+        val2 = d->map16[i] + val1;
         if (d->overIndicator && val2 > 65535)
             d->map16[i] = -1;
         else
             d->map16[i] = CLAMP_0_65535(val2);
     }
 
-    val = (int)(v * 255);
+    val1 = (int)(val * 255);
     
     for (int i = 0; i < 256; i++)
     {
-        val2 = d->map[i] + val;
+        val2 = d->map[i] + val1;
         if (d->overIndicator && val2 > 255)
             d->map[i] = -1;
         else
