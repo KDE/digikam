@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-01-09
- * Description : 
- * 
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Description : image editor canvas management class
+ *
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -114,8 +115,6 @@ private:
     void drawHistogramPixmapBusy();
     void drawHistogramPixmap();
 
-    CanvasPrivate *d;
-
 public slots:
 
     void slotIncreaseZoom();
@@ -169,6 +168,11 @@ signals:
     void signalSavingStarted(const QString &filename);
     void signalSavingFinished(const QString &filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
+
+private:
+    
+    CanvasPrivate *d;
+    
 };
     
 }  // namespace Digikam

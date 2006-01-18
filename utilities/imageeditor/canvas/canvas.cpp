@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-01-09
- * Description : 
+ * Description : image editor canvas management class
  * 
- * Copyright 2004 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +25,6 @@
 #include <cstdio>
 #include <cmath>
 
-#include <kdebug.h>
- 
 // Qt includes.
  
 #include <qfile.h>
@@ -46,7 +45,10 @@
 #include <qdragobject.h> 
 #include <qclipboard.h>
 
+// KDE includes.
+
 #include <kcursor.h>
+#include <kdebug.h>
 
 // Local includes.
 
