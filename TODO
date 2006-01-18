@@ -17,9 +17,6 @@
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
-   - There is a bug releavant of sidebar (?) implementation. when an album item is selected
-     from main interface, and if "Comments & Tag" tab is selected, if this item is deleted, "Comments
-     & Tags" tab is lost!
      
 * 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
 

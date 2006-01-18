@@ -144,6 +144,9 @@ void DigikamView::setupConnections()
 
     connect(mIconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slot_albumHighlight()));
+
+    connect(mIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+            this, SLOT(slot_imageDeleted()));
     
     connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
@@ -508,6 +511,11 @@ void DigikamView::slot_imageSelected()
        mRightSidebar->noCurrentItem();
     
     emit signal_imageSelected(selected);
+}
+
+void DigikamView::slot_imageDeleted()
+{
+    mRightSidebar->noCurrentItem();
 }
 
 void DigikamView::slot_albumsCleared()

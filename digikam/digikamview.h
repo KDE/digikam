@@ -136,6 +136,7 @@ private slots:
     void slotAllAlbumsLoaded();
     
     void slot_imageSelected();
+    void slot_imageDeleted();
 
     void slot_albumsCleared();
     void slot_albumHighlight();
