@@ -17,6 +17,8 @@
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
+   - Added a new option in IE/Showfoto to catch Image Properties side bar in fullscreen mode.
+   
      
 * 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
 
