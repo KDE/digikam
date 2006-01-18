@@ -840,7 +840,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 }
 
 /** Function to apply the GaussianBlur on an image. This method do not use a
- * dedicaced thread.*/
+    dedicaced thread.*/
 void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
     if (!data || !width || !height)
@@ -861,7 +861,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 }
 
 /** Function to apply the sharpen filter on an image. This method do not use a
- * dedicaced thread.*/
+    dedicaced thread.*/
 void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
 {
     if (!data || !width || !height)
@@ -880,5 +880,79 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
     memcpy( data, imDest.bits(), imDest.numBytes() );
     delete filter;
 }
+
+/** Function to perform pixel antialiasing.This method is used to smooth target 
+    image in transformation  method like free rotation or shear tool. */
+void DImgImageFilters::pixelAntiAliasing (uchar *data, int Width, int Height, bool sixteenBit,
+                                          double X, double Y, unsigned short *A, unsigned short *R, 
+                                          unsigned short *G, unsigned short *B)
+{
+    int nX, nY, j;
+    double lfWeightX[2], lfWeightY[2], lfWeight;
+    double lfTotalR = 0.0, lfTotalG = 0.0, lfTotalB = 0.0, lfTotalA = 0.0;
+
+    nX = (int)X;
+    nY = (int)Y;
+
+    if (Y >= 0.0)
+        lfWeightY[0] = 1.0 - (lfWeightY[1] = Y - (double)nY);
+    else
+        lfWeightY[1] = 1.0 - (lfWeightY[0] = -(Y - (double)nY));
+
+    if (X >= 0.0)
+        lfWeightX[0] = 1.0 - (lfWeightX[1] = X - (double)nX);
+    else
+        lfWeightX[1] = 1.0 - (lfWeightX[0] = -(X - (double)nX));
+
+    unsigned short *data16 = (unsigned short *)data;
+
+    for (int loopx = 0; loopx <= 1; loopx++)
+    {
+        for (int loopy = 0; loopy <= 1; loopy++)
+        {
+            lfWeight = lfWeightX[loopx] * lfWeightY[loopy];
+            j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
+
+            if (!sixteenBit)        // 8 bits image.
+            {
+                lfTotalB += ((double)data[j] * lfWeight);
+                j++;
+                lfTotalG += ((double)data[j] * lfWeight);
+                j++;
+                lfTotalR += ((double)data[j] * lfWeight);
+                j++;
+                lfTotalA += ((double)data[j] * lfWeight);
+                j++;
+            }
+            else               // 16 bits image.
+            {
+                lfTotalB += ((double)data16[j] * lfWeight);
+                j++;
+                lfTotalG += ((double)data16[j] * lfWeight);
+                j++;
+                lfTotalR += ((double)data16[j] * lfWeight);
+                j++;
+                lfTotalA += ((double)data16[j] * lfWeight);
+                j++;
+            }
+        }
+    }
+
+    if (!sixteenBit)   // 8 bits image.
+    {         
+        *B = CLAMP(0,255,(int)lfTotalB);
+        *G = CLAMP(0,255,(int)lfTotalG);
+        *R = CLAMP(0,255,(int)lfTotalR);
+        *A = CLAMP(0,255,(int)lfTotalA);
+    }
+    else               // 16 bits image.
+    {
+        *B = CLAMP(0,65535,(int)lfTotalB);
+        *G = CLAMP(0,65535,(int)lfTotalG);
+        *R = CLAMP(0,65535,(int)lfTotalR);
+        *A = CLAMP(0,65535,(int)lfTotalA);
+    }       
+}
+
 
 }  // NameSpace Digikam

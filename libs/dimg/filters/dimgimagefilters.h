@@ -117,7 +117,9 @@ public:   // Public methods.
                                int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-
+    void pixelAntiAliasing (uchar *data, int Width, int Height, bool sixteenBit,
+                            double X, double Y, unsigned short *A, unsigned short *R, 
+                            unsigned short *G, unsigned short *B);
 };
 
 }  // NameSpace Digikam
