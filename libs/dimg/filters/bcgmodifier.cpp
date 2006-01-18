@@ -128,7 +128,7 @@ void BCGModifier::applyBCG(DImg& image)
         for (uint i=0; i<image.width()*image.height(); i++)
         {
             if (d->map16[data[0]] == -1 || d->map16[data[1]] == -1 || d->map16[data[2]] == -1)
-{
+            {
                 data[0] = 0;
                 data[1] = 0;
                 data[2] = 0;
