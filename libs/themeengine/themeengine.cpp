@@ -55,10 +55,18 @@ class ThemeEnginePriv
 {
 public:
 
+    ThemeEnginePriv()
+    {
+        currTheme = 0;
+        db        = 0;
+    }
+
     QPtrList<Theme> themeList;
     QDict<Theme>    themeDict;
+    
     Theme*          currTheme;
     Theme*          defaultTheme;
+
     XrmDatabase     db;
 };
 
@@ -82,11 +90,9 @@ ThemeEngine::ThemeEngine()
     XrmInitialize();
     
     d = new ThemeEnginePriv;
+
     d->themeList.setAutoDelete(false);
     d->themeDict.setAutoDelete(false);
-    d->currTheme = 0;
-    d->db        = 0;
-
     d->defaultTheme = new Theme(i18n("Default"), QString::null);
     d->themeList.append(d->defaultTheme);
     d->themeDict.insert(i18n("Default"), d->defaultTheme);

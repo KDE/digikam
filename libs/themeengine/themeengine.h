@@ -73,8 +73,6 @@ private:
     void    loadTheme();
     QString resourceValue(const QString& name, const QString& altName);
     
-    ThemeEnginePriv* d;
-
 signals:
 
     void signalThemeChanged();
@@ -82,6 +80,10 @@ signals:
 public slots:
 
     void slotChangeTheme(const QString& name);
+
+private:
+    
+    ThemeEnginePriv* d;
 };
 
 }  // NameSpace Digikam

@@ -1,7 +1,10 @@
 /* ============================================================
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-07-26
  * Description : 
- * 
+ *
+ * Copyright 2004 by Renchi Raju
+ *
  * Adapted from fluxbox: Texture/TextureRender
  *
  * Texture.cc for Fluxbox Window Manager
@@ -37,50 +40,80 @@
 
 #include <qpainter.h>
 #include <qimage.h>
+#include <qpixmap.h>
 
 // Local includes.
 
+#include "theme.h"
 #include "texture.h"
 
 namespace Digikam
 {
 
+class TexturePriv
+{
+public:
+
+    TexturePriv()
+    {
+        red   = 0;
+        green = 0;
+        blue  = 0;
+    }
+
+    bool            border;
+
+    unsigned char  *red;
+    unsigned char  *green;
+    unsigned char  *blue;
+    
+    int             width;
+    int             height;
+        
+    QPixmap         pixmap;
+
+    QColor          color0;
+    QColor          color1;
+    QColor          borderColor;
+
+    Theme::Bevel    bevel;
+    Theme::Gradient gradient;
+};
+    
 Texture::Texture(int w, int h, const QColor& from, const QColor& to,
                  Theme::Bevel bevel, Theme::Gradient gradient,
                  bool border, const QColor& borderColor)
 {
-    m_bevel       = bevel;
-    m_gradient    = gradient;
-    m_red         = 0;
-    m_green       = 0;
-    m_blue        = 0;
-    m_border      = border;
-    m_borderColor = borderColor;
+    d = new TexturePriv;
+    
+    d->bevel       = bevel;
+    d->gradient    = gradient;
+    d->border      = border;
+    d->borderColor = borderColor;
 
     if (!border)
     {
-        m_width  = w;
-        m_height = h;
+        d->width  = w;
+        d->height = h;
     }
     else
     {
-        m_width  = w-2;
-        m_height = h-2;
+        d->width  = w-2;
+        d->height = h-2;
     }
 
-    if (m_width <= 0 || m_height <= 0)
+    if (d->width <= 0 || d->height <= 0)
         return;
-    
     
     if (bevel & Theme::SUNKEN)
     {
-        m_color0 = to;
-        m_color1 = from;
+        d->color0 = to;
+        d->color1 = from;
     }
     else
     {
-        m_color0 = from;
-        m_color1 = to;
+        d->color0 = from;
+        d->color1 = to;
     }
 
     if (gradient == Theme::SOLID)
@@ -89,9 +122,9 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
     }
     else
     {
-        m_red   = new unsigned char[w*h];
-        m_green = new unsigned char[w*h];
-        m_blue  = new unsigned char[w*h];
+        d->red   = new unsigned char[w*h];
+        d->green = new unsigned char[w*h];
+        d->blue  = new unsigned char[w*h];
 
         if (gradient == Theme::HORIZONTAL)
             doHgradient();
@@ -109,27 +142,29 @@ Texture::Texture(int w, int h, const QColor& from, const QColor& to,
 
 Texture::~Texture()
 {
-    if (m_red)
-        delete [] m_red;
-    if (m_green)
-        delete [] m_green;
-    if (m_blue)
-        delete [] m_blue;
+    if (d->red)
+        delete [] d->red;
+    if (d->green)
+        delete [] d->green;
+    if (d->blue)
+        delete [] d->blue;
+
+    delete d;    
 }
 
 QPixmap Texture::renderPixmap() const
 {
-    if (m_width <= 0 || m_height <= 0)
+    if (d->width <= 0 || d->height <= 0)
         return QPixmap();
 
-    if (!m_border)
-        return m_pixmap;
+    if (!d->border)
+        return d->pixmap;
 
-    QPixmap pix(m_width+2, m_height+2);
-    bitBlt(&pix, 1, 1, &m_pixmap, 0, 0);
+    QPixmap pix(d->width+2, d->height+2);
+    bitBlt(&pix, 1, 1, &d->pixmap, 0, 0);
     QPainter p(&pix);
-    p.setPen(m_borderColor);
-    p.drawRect(0, 0, m_width+2, m_height+2);
+    p.setPen(d->borderColor);
+    p.drawRect(0, 0, d->width+2, d->height+2);
     p.end();
 
     return pix;
@@ -137,26 +172,26 @@ QPixmap Texture::renderPixmap() const
 
 void Texture::doSolid()
 {
-    m_pixmap.resize(m_width, m_height);
-    QPainter p(&m_pixmap);
-    p.fillRect(0, 0, m_width, m_height, m_color0);
-    if (m_bevel == Theme::RAISED)
+    d->pixmap.resize(d->width, d->height);
+    QPainter p(&d->pixmap);
+    p.fillRect(0, 0, d->width, d->height, d->color0);
+    if (d->bevel == Theme::RAISED)
     {
-        p.setPen(m_color0.light(120));
-        p.drawLine(0, 0, m_width-1, 0);  // top
-        p.drawLine(0, 0, 0, m_height-1); // left
-        p.setPen(m_color0.dark(120));
-        p.drawLine(0, m_height-1, m_width-1, m_height-1); // bottom
-        p.drawLine(m_width-1, 0, m_width-1, m_height-1);  // right
+        p.setPen(d->color0.light(120));
+        p.drawLine(0, 0, d->width-1, 0);  // top
+        p.drawLine(0, 0, 0, d->height-1); // left
+        p.setPen(d->color0.dark(120));
+        p.drawLine(0, d->height-1, d->width-1, d->height-1); // bottom
+        p.drawLine(d->width-1, 0, d->width-1, d->height-1);  // right
     }
-    else if (m_bevel == Theme::SUNKEN)
+    else if (d->bevel == Theme::SUNKEN)
     {
-        p.setPen(m_color0.dark(120));
-        p.drawLine(0, 0, m_width-1, 0);  // top
-        p.drawLine(0, 0, 0, m_height-1); // left
-        p.setPen(m_color0.light(120));
-        p.drawLine(0, m_height-1, m_width-1, m_height-1); // bottom
-        p.drawLine(m_width-1, 0, m_width-1, m_height-1);  // right
+        p.setPen(d->color0.dark(120));
+        p.drawLine(0, 0, d->width-1, 0);  // top
+        p.drawLine(0, 0, 0, d->height-1); // left
+        p.setPen(d->color0.light(120));
+        p.drawLine(0, d->height-1, d->width-1, d->height-1); // bottom
+        p.drawLine(d->width-1, 0, d->width-1, d->height-1);  // right
     }
     p.end();
 }
@@ -164,22 +199,23 @@ void Texture::doSolid()
 void Texture::doHgradient()
 {
     float drx, dgx, dbx,
-        xr = (float) m_color0.red(),
-        xg = (float) m_color0.green(),
-        xb = (float) m_color0.blue();
-    unsigned char *pr = m_red, *pg = m_green, *pb = m_blue;
+        xr = (float) d->color0.red(),
+        xg = (float) d->color0.green(),
+        xb = (float) d->color0.blue();
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
     register int x, y;
 
-    drx = (float) (m_color1.red()   - m_color0.red());
-    dgx = (float) (m_color1.green() - m_color0.green());
-    dbx = (float) (m_color1.blue()  - m_color0.blue());
+    drx = (float) (d->color1.red()   - d->color0.red());
+    dgx = (float) (d->color1.green() - d->color0.green());
+    dbx = (float) (d->color1.blue()  - d->color0.blue());
 
-    drx /= m_width;
-    dgx /= m_width;
-    dbx /= m_width;
+    drx /= d->width;
+    dgx /= d->width;
+    dbx /= d->width;
 
-    for (x = 0; x < m_width; x++) {
+    for (x = 0; x < d->width; x++)
+    {
         *(pr++) = (unsigned char) (xr);
         *(pg++) = (unsigned char) (xg);
         *(pb++) = (unsigned char) (xb);
@@ -189,35 +225,36 @@ void Texture::doHgradient()
         xb += dbx;
     }
 
-    for (y = 1; y < m_height; y++, pr += m_width, pg += m_width, pb += m_width) {
-        memcpy(pr, m_red, m_width);
-        memcpy(pg, m_green, m_width);
-        memcpy(pb, m_blue, m_width);
+    for (y = 1; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width)
+    {
+        memcpy(pr, d->red, d->width);
+        memcpy(pg, d->green, d->width);
+        memcpy(pb, d->blue, d->width);
     }
 }
 
 void Texture::doVgradient()
 {
     float dry, dgy, dby,
-        yr = (float) m_color0.red(),
-        yg = (float) m_color0.green(),
-        yb = (float) m_color0.blue();
+        yr = (float) d->color0.red(),
+        yg = (float) d->color0.green(),
+        yb = (float) d->color0.blue();
 
-    dry = (float) (m_color1.red()   - m_color0.red());
-    dgy = (float) (m_color1.green() - m_color0.green());
-    dby = (float) (m_color1.blue()  - m_color0.blue());
+    dry = (float) (d->color1.red()   - d->color0.red());
+    dgy = (float) (d->color1.green() - d->color0.green());
+    dby = (float) (d->color1.blue()  - d->color0.blue());
 
-    dry /= m_height;
-    dgy /= m_height;
-    dby /= m_height;
+    dry /= d->height;
+    dgy /= d->height;
+    dby /= d->height;
 
-    unsigned char *pr = m_red, *pg = m_green, *pb = m_blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     register int y;
     
-    for (y = 0; y < m_height; y++, pr += m_width, pg += m_width, pb += m_width) {
-        memset(pr, (unsigned char) yr, m_width);
-        memset(pg, (unsigned char) yg, m_width);
-        memset(pb, (unsigned char) yb, m_width);
+    for (y = 0; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width) {
+        memset(pr, (unsigned char) yr, d->width);
+        memset(pg, (unsigned char) yg, d->width);
+        memset(pb, (unsigned char) yb, d->width);
 
         yr += dry;
         yg += dgy;
@@ -225,34 +262,33 @@ void Texture::doVgradient()
     }
 }
 
-
 void Texture::doDgradient()
 {
-    unsigned int* xtable = new unsigned int[m_width*3]; 
-    unsigned int* ytable = new unsigned int[m_height*3];
+    unsigned int* xtable = new unsigned int[d->width*3];
+    unsigned int* ytable = new unsigned int[d->height*3];
  
     float drx, dgx, dbx, dry, dgy, dby, yr = 0.0, yg = 0.0, yb = 0.0,
-                                        xr = (float) m_color0.red(),
-                                        xg = (float) m_color0.green(),
-                                        xb = (float) m_color0.blue();
-    unsigned char *pr = m_red, *pg = m_green, *pb = m_blue;
-    unsigned int w = m_width * 2, h = m_height * 2;
+                                        xr = (float) d->color0.red(),
+                                        xg = (float) d->color0.green(),
+                                        xb = (float) d->color0.blue();
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned int w = d->width * 2, h = d->height * 2;
     unsigned int *xt = xtable; 
     unsigned int *yt = ytable; 
 
-
     register int x, y;
 
-    dry = drx = (float) (m_color1.red()   - m_color0.red());
-    dgy = dgx = (float) (m_color1.green() - m_color0.green());
-    dby = dbx = (float) (m_color1.blue()  - m_color0.blue());
+    dry = drx = (float) (d->color1.red()   - d->color0.red());
+    dgy = dgx = (float) (d->color1.green() - d->color0.green());
+    dby = dbx = (float) (d->color1.blue()  - d->color0.blue());
 
     // Create X table
     drx /= w;
     dgx /= w;
     dbx /= w;
 
-    for (x = 0; x < m_width; x++) {
+    for (x = 0; x < d->width; x++)
+    {
         *(xt++) = (unsigned char) (xr);
         *(xt++) = (unsigned char) (xg);
         *(xt++) = (unsigned char) (xb);
@@ -267,7 +303,8 @@ void Texture::doDgradient()
     dgy /= h;
     dby /= h;
 
-    for (y = 0; y < m_height; y++) {
+    for (y = 0; y < d->height; y++)
+    {
         *(yt++) = ((unsigned char) yr);
         *(yt++) = ((unsigned char) yg);
         *(yt++) = ((unsigned char) yb);
@@ -279,9 +316,9 @@ void Texture::doDgradient()
 
     // Combine tables to create gradient
 
-    for (yt = ytable, y = 0; y < m_height; y++, yt += 3)
+    for (yt = ytable, y = 0; y < d->height; y++, yt += 3)
     {
-        for (xt = xtable, x = 0; x < m_width; x++)
+        for (xt = xtable, x = 0; x < d->width; x++)
         {
             *(pr++) = *(xt++) + *(yt);
             *(pg++) = *(xt++) + *(yt + 1);
@@ -295,12 +332,13 @@ void Texture::doDgradient()
 
 void Texture::doBevel()
 {
-    unsigned char *pr = m_red, *pg = m_green, *pb = m_blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
     register unsigned char r, g, b, rr ,gg ,bb;
-    register unsigned int w = m_width, h = m_height - 1, wh = w * h;
+    register unsigned int w = d->width, h = d->height - 1, wh = w * h;
 
-    while (--w) {
+    while (--w)
+    {
         r = *pr;
         rr = r + (r >> 1);
         if (rr < r) rr = ~0;
@@ -358,11 +396,12 @@ void Texture::doBevel()
     *(pg + wh) = gg;
     *(pb + wh) = bb;
 
-    pr = m_red   + m_width;
-    pg = m_green + m_width;
-    pb = m_blue  + m_width;
+    pr = d->red   + d->width;
+    pg = d->green + d->width;
+    pb = d->blue  + d->width;
 
-    while (--h) {
+    while (--h)
+    {
         r = *pr;
         rr = r + (r >> 1);
         if (rr < r) rr = ~0;
@@ -377,9 +416,9 @@ void Texture::doBevel()
         *pg = gg;
         *pb = bb;
 
-        pr += m_width - 1;
-        pg += m_width - 1;
-        pb += m_width - 1;
+        pr += d->width - 1;
+        pg += d->width - 1;
+        pb += d->width - 1;
 
         r = *pr;
         rr = (r >> 2) + (r >> 1);
@@ -410,9 +449,9 @@ void Texture::doBevel()
     *pg = gg;
     *pb = bb;
 
-    pr += m_width - 1;
-    pg += m_width - 1;
-    pb += m_width - 1;
+    pr += d->width - 1;
+    pg += d->width - 1;
+    pb += d->width - 1;
 
     r = *pr;
     rr = (r >> 2) + (r >> 1);
@@ -431,14 +470,14 @@ void Texture::doBevel()
 
 void Texture::buildImage()
 {
-    unsigned char *pr = m_red, *pg = m_green, *pb = m_blue;
+    unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
 
-    QImage image(m_width, m_height, 32);
+    QImage image(d->width, d->height, 32);
 
     unsigned int* bits = (unsigned int*) image.bits();
     
     register int p;
-    for (p =0; p < m_width*m_height; p++)
+    for (p =0; p < d->width*d->height; p++)
     {
         *bits = 0xff << 24 | *pr << 16 | *pg << 8 | *pb;
         bits++;
@@ -447,7 +486,7 @@ void Texture::buildImage()
         pb++;
     }
 
-    m_pixmap = QPixmap(image);
+    d->pixmap = QPixmap(image);
 }
 
 }  // NameSpace Digikam
