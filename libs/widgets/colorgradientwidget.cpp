@@ -133,16 +133,17 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
         }
     }
 
-    QColor ditherPalette[8];
+    const int psize = 256;
+    QColor ditherPalette[psize];
 
-    for ( int s = 0; s < 8; s++ )
+    for ( int s = 0; s < psize; s++ )
     {
-        ditherPalette[s].setRgb( color1.red()  + redDiff   * s / 8,
-                                 color1.green() + greenDiff * s / 8,
-                                 color1.blue()  + blueDiff  * s / 8 );
+        ditherPalette[s].setRgb( color1.red()   + redDiff   * s / psize,
+                                 color1.green() + greenDiff * s / psize,
+                                 color1.blue()  + blueDiff  * s / psize );
     }
 
-    KImageEffect::dither( image, ditherPalette, 8 );
+    KImageEffect::dither( image, ditherPalette, psize );
 
     QPixmap pm;
     pm.convertFromImage( image );
