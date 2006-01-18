@@ -153,11 +153,10 @@ private:
 
 private:
 
+    static DImgInterface *m_instance;
+    
     DImgInterfacePrivate *d;
 
-    static DImgInterface *m_instance;
-
-    bool                  m_rotatedOrFlipped;
 };
 
 }  // namespace Digikam

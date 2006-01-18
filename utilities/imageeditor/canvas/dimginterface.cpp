@@ -19,6 +19,8 @@
  *
  * ============================================================ */
 
+#define MaxRGB 255L
+
 // C++ includes.
 
 #include <cmath>
@@ -50,22 +52,45 @@
 #include "undoaction.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
-#include "dimginterface.h"
 #include "sharedloadsavethread.h"
+#include "dimginterface.h"
 
 namespace Digikam
 {
 
 class UndoManager;
 
-#define MaxRGB 255L
-
-class DImgInterfacePrivate 
+class DImgInterfacePrivate
 {
 
 public:
 
+    DImgInterfacePrivate()
+    {
+        parent     = 0;
+        undoMan    = 0;
+        cmSettings = 0;
+        thread     = 0;
+        width      = 0;
+        height     = 0;
+        origWidth  = 0;
+        origHeight = 0;
+        selX       = 0;
+        selY       = 0;
+        selW       = 0;
+        selH       = 0;
+        zoom       = 1.0;
+        
+        exifOrient           = false;
+        valid                = false;
+        needClearUndoManager = false;
+        rotatedOrFlipped     = false;
+    }
+
     bool          valid;
+    bool          rotatedOrFlipped;
+    bool          exifOrient;
+    bool          needClearUndoManager;
 
     int           width;
     int           height;
@@ -75,54 +100,49 @@ public:
     int           selY;
     int           selW;
     int           selH;
+    
     double        zoom;
 
     float         gamma;
     float         brightness;
     float         contrast;
 
-    bool          exifOrient;
-
-    DImg          image;
-    BCGModifier   cmod;
     QString       filename;
 
-    ICCSettingsContainer *cmSettings;
-    QWidget*      parent;
-    bool          needClearUndoManager;
+    QWidget      *parent;
+    
+    DImg          image;
 
-    UndoManager*  undoMan;
+    UndoManager  *undoMan;
+    
+    BCGModifier   cmod;
+
+    ICCSettingsContainer *cmSettings;
+
     SharedLoadSaveThread *thread;
 };
+
+DImgInterface* DImgInterface::instance()
+{
+    if (!m_instance)
+    {
+        new DImgInterface();
+    }
+
+    return m_instance;
+}
+
+DImgInterface* DImgInterface::m_instance = 0;
 
 DImgInterface::DImgInterface()
              : QObject()
 {
-    m_instance    = this;
-
-    d             = new DImgInterfacePrivate;
-
-    d->undoMan    = new UndoManager(this);
-
-    d->valid      = false;
-    d->width      = 0;
-    d->height     = 0;
-    d->origWidth  = 0;
-    d->origHeight = 0;
-    d->selX       = 0;
-    d->selY       = 0;
-    d->selW       = 0;
-    d->selH       = 0;
-    d->zoom       = 1.0;
-    d->exifOrient = false;
-
-    d->cmSettings = 0;
-    d->parent     = 0;
-    d->needClearUndoManager = false;
-
-    m_rotatedOrFlipped = false;
-
-    d->thread     = new SharedLoadSaveThread;
+    m_instance = this;
+    
+    d = new DImgInterfacePrivate;
+    
+    d->undoMan = new UndoManager(this);
+    d->thread  = new SharedLoadSaveThread;
 
     connect( d->thread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
              this, SLOT(slotImageLoaded(const QString&, const DImg&)) );
@@ -140,7 +160,6 @@ DImgInterface::~DImgInterface()
 {
     delete d->undoMan;
     delete d;
-
     m_instance = 0;
 }
 
@@ -174,7 +193,6 @@ void DImgInterface::load(const QString& filename,
     d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
                      SharedLoadSaveThread::AccessModeReadWrite,
                      SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-
 }
 
 void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
@@ -278,12 +296,11 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     emit signalImageLoaded(d->filename, valRet, isReadOnly);
     //TODO: undo manager was cleared. Is it correct to emit this here?
     emit signalModified(false, false);
-
 }
 
 bool DImgInterface::exifRotated()
 {
-    return m_rotatedOrFlipped;
+    return d->rotatedOrFlipped;
 }
 
 void DImgInterface::exifRotate(const QString& /*filename*/)
@@ -339,7 +356,7 @@ void DImgInterface::exifRotate(const QString& /*filename*/)
                 break;
         }
 
-        m_rotatedOrFlipped = true;
+        d->rotatedOrFlipped = true;
     }
 
     imlib_context_pop();
@@ -885,18 +902,6 @@ void DImgInterface::getRedoHistory(QStringList &titles)
     d->undoMan->getRedoHistory(titles);
 }
 
-DImgInterface* DImgInterface::instance()
-{
-    if (!m_instance) 
-    {
-        new DImgInterface();
-    }
-
-    return m_instance;
-}
-
-DImgInterface* DImgInterface::m_instance = 0;
-
 // -----------------------------------------------------------------------------------
 // FIXME Remove methods below when all image plugins will be ported to DImg
 
@@ -990,6 +995,6 @@ void DImgInterface::putSelectedData(uint* data, bool saveUndo)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
-}
+}  // namespace Digikam
 
 #include "dimginterface.moc"
