@@ -77,13 +77,14 @@ private:
     KTabWidget                      *m_tabsWidgets;
 
     QComboBox                       *m_channelCB;
-//     QComboBox                       *m_displayProfilesCB;
-    KURLRequester                   *m_displayProfilesCB;
-    QComboBox                       *m_inProfilesCB;
-    QComboBox                       *m_outProfilesCB;
-    QComboBox                       *m_renderingIntentCB;
+    QComboBox                       *m_renderingIntentsCB;
 
-    QCheckBox                       *m_softProofBox;
+    KURLRequester                   *m_displayProfileCB;
+    KURLRequester                   *m_inProfilesCB;
+    KURLRequester                   *m_proofProfileCB;
+    KURLRequester                   *m_spaceProfileCB;
+
+    QCheckBox                       *m_doSoftProofBox;
     QCheckBox                       *m_overExposureIndicatorBox;
     QCheckBox                       *m_doSofProfBox;
     QCheckBox                       *m_checkGamutBox;
@@ -93,10 +94,13 @@ private:
     QRadioButton                    *m_useEmbeddedProfile;
     QRadioButton                    *m_useInDefaultProfile;
     QRadioButton                    *m_useInSelectedProfile;
-    QRadioButton                    *m_useOutDefaultProfile;
-    QRadioButton                    *m_useOutSelectedProfile;
+    QRadioButton                    *m_useProofDefaultProfile;
+    QRadioButton                    *m_useProofSelectedProfile;
     QRadioButton                    *m_useDisplayDefaultProfile;
     QRadioButton                    *m_useDisplaySelectedProfile;
+    QRadioButton                    *m_useSpaceDefaultProfile;
+    QRadioButton                    *m_useSpaceSelectedProfile;
+    QRadioButton                    *m_useSRGBDefaultProfile;
 
     QHButtonGroup                   *m_scaleBG;
 
@@ -114,13 +118,16 @@ private:
 
     Digikam::HistogramWidget        *m_histogramWidget;
 
-    Digikam::ICCPreviewWidget       *m_iccPreviewWidget;
+    Digikam::ICCPreviewWidget       *m_iccDisplayPreviewWidget;
+    Digikam::ICCPreviewWidget       *m_iccInPreviewWidget;
+    Digikam::ICCPreviewWidget       *m_iccOutPreviewWidget;
+    Digikam::ICCPreviewWidget       *m_iccProofPreviewWidget;
+    Digikam::ICCPreviewWidget       *m_iccSpacePreviewWidget;
 
 private:
 
     void                            readSettings();
-    void                            fillCombos();
-
+    void                            getICCInfo(const QString&);
 
 private slots:
 
@@ -132,6 +139,10 @@ private slots:
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
     void slotTestIt();
     void slotToggledWidgets(bool t);
+    void slotInICCInfo();
+    void slotProofICCInfo();
+    void slotSpaceICCInfo();
+    void slotDisplayICCInfo();
 
 };
 
