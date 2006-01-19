@@ -41,9 +41,9 @@
 namespace DigikamShearToolImagesPlugin
 {
 
-ShearTool::ShearTool(QImage *orgImage, QObject *parent, float hAngle, float vAngle,
+ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
                      bool antialiasing, QColor backgroundColor, int orgW, int orgH)
-            : Digikam::ThreadedFilter(orgImage, parent, "ShearTool")
+         : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
 { 
     m_hAngle    = hAngle;
     m_vAngle    = vAngle;
@@ -67,7 +67,8 @@ void ShearTool::filterImage(void)
     int nWidth  = m_orgImage.width();
     int nHeight = m_orgImage.height();
     
-    uchar *pBits = m_orgImage.bits();        
+    uchar *pBits            = m_orgImage.bits();
+    unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
     
     // get beta ( complementary ) angle for horizontal and vertical angles
     horz_beta_angle = ( ( ( m_hAngle < 0.0 ) ? 180.0 : 90.0 ) - m_hAngle ) * DEG2RAD;
@@ -92,64 +93,78 @@ void ShearTool::filterImage(void)
     // if horizontal angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
     if( m_hAngle > 0.0 ) 
-        {
+    {
         // initial distance is zero and scale is negative ( to decrease )
         dx = 0;
         horz_factor *= -1.0;
-        }
+    }
     else 
-        {
+    {
         dx = -horz_add;
-        }
+    }
 
     // if vertical angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
     if( m_vAngle > 0.0 ) 
-        {
+    {
         // initial distance is zero and scale is negative ( to decrease )
         dy = 0;
         vert_factor *= -1.0;
-        }
+    }
     else 
-        {
+    {
         dy = -vert_add;
-        }
+    }
 
     // allocates a new image with the new size
-    m_destImage.create(new_width, new_height, 32);
-    m_destImage.fill( m_backgroundColor.rgb() );
-    uchar *pResBits = m_destImage.bits();
+
+    bool sixteenBit = m_orgImage.sixteenBit();
+    
+    m_destImage = Digikam::DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
+    m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+
+    uchar *pResBits            = m_destImage.bits();
+    unsigned short *pResBits16 = (unsigned short *)m_destImage.bits();
+
+    Digikam::DImgImageFilters filters;
     
     for( y = 0; y < new_height; y++) 
-        {
+    {
         for( x = 0; x < new_width; x++, p += 4 ) 
-            {
+        {
             // get new positions
             nx = x + dx + y * horz_factor;
             ny = y + dy + x * vert_factor;
 
             // if is inside the source image
             if (isInside (nWidth, nHeight, ROUND( nx ), ROUND( ny )))            
-                {
+            {
                 if( m_antiAlias ) 
-                    {
-                    // get anti aliased pixel
-                    Digikam::ImageFilters::pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny, 
-                             &pResBits[p+3], &pResBits[p+2], &pResBits[p+1], &pResBits[p]);
-                    }
+                {
+                    if (!sixteenBit)
+                        filters.pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny,
+                                                  &pResBits[p+3], &pResBits[p+2],
+                                                  &pResBits[p+1], &pResBits[p]);
+                    else
+                        filters.pixelAntiAliasing16(pBits16, nWidth, nHeight, nx, ny,
+                                                    &pResBits16[p+3], &pResBits16[p+2],
+                                                    &pResBits16[p+1], &pResBits16[p]);
+                }
                 else 
-                    {
-                    // else, get exact pixel
+                {
                     pt = setPosition (nWidth, ROUND( nx ), ROUND( ny ));
 
-                    pResBits[p+3] = pBits[pt+3];
-                    pResBits[p+2] = pBits[pt+2];
-                    pResBits[p+1] = pBits[pt+1];
-                    pResBits[ p ] = pBits[ pt ];
+                    for (int z = 0 ; z < 4 ; z++)
+                    {
+                        if (!sixteenBit)
+                            pResBits[p+z] = pBits[pt+z];
+                        else
+                            pResBits16[p+z] = pBits16[pt+z];
                     }
                 }
             }
         }
+    }
         
     // To compute the rotated destination image size using original image dimensions.           
     int W = (int)(fabs(m_orgH * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle ))))+

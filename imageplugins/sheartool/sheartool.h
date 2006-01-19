@@ -34,13 +34,13 @@
 namespace DigikamShearToolImagesPlugin
 {
 
-class ShearTool : public Digikam::ThreadedFilter
+class ShearTool : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    ShearTool(QImage *orgImage, QObject *parent=0, float hAngle=0.0, float vAngle=0.0,
-                 bool antialiasing=true, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
+    ShearTool(Digikam::DImg *orgImage, QObject *parent=0, float hAngle=0.0, float vAngle=0.0,
+              bool antialiasing=true, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
     
     ~ShearTool(){};
     
@@ -65,16 +65,16 @@ private:
     virtual void filterImage(void);
     
     inline int setPosition (int Width, int X, int Y)
-       {
+    {
        return (Y *Width*4 + 4*X); 
-       };
+    };
     
     inline bool isInside (int Width, int Height, int X, int Y)
-       {
+    {
        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
        return (bIsWOk && bIsHOk);
-       };    
+    };
 };    
 
 }  // NameSpace DigikamShearToolImagesPlugin

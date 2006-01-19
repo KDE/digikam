@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to process 
  *               shearing image.
 * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,24 +25,26 @@
 
 // Local includes.
 
-#include "imageguidedialog.h"
+#include <digikamheaders.h>
 
+class QFrame;
 class QPushButton;
 class QCheckBox;
 class QLabel;
 
+class KIntNumInput;
 class KDoubleNumInput;
 
 namespace DigikamShearToolImagesPlugin
 {
 
-class ImageEffect_ShearTool : public DigikamImagePlugins::ImageGuideDialog
+class ImageEffect_ShearTool : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_ShearTool(QWidget* parent);
+    ImageEffect_ShearTool(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_ShearTool();
 
 private:
@@ -52,8 +54,11 @@ private:
    
     QCheckBox       *m_antialiasInput;
     
-    KDoubleNumInput *m_magnitudeX;
-    KDoubleNumInput *m_magnitudeY;
+    KIntNumInput    *m_mainHAngleInput;
+    KIntNumInput    *m_mainVAngleInput;
+
+    KDoubleNumInput *m_fineHAngleInput;
+    KDoubleNumInput *m_fineVAngleInput;
     
 private slots:
     
