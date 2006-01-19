@@ -79,6 +79,7 @@ public:
     int  originalHeight();
     bool originalSixteenBit();
     bool originalHasAlpha();
+    bool originalHasICCEmbedded();
 
     /** Standard methods to get preview informations.*/
     int  previewWidth();
