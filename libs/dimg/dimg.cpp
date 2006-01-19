@@ -1203,7 +1203,7 @@ void DImg::fill(DColor color)
     {
         unsigned short *imgData16 = (unsigned short *)m_priv->data;
 
-        for (uint i = 0 ; i < width()*height() ; i+=4)
+        for (uint i = 0 ; i < width()*height()*4 ; i+=4)
         {
             imgData16[ i ] = (unsigned short)color.blue();
             imgData16[i+1] = (unsigned short)color.green();
@@ -1215,7 +1215,7 @@ void DImg::fill(DColor color)
     {
         uchar *imgData = m_priv->data;
         
-        for (uint i = 0 ; i < width()*height() ; i+=4)
+        for (uint i = 0 ; i < width()*height()*4 ; i+=4)
         {
             imgData[ i ] = (uchar)color.blue();
             imgData[i+1] = (uchar)color.green();
