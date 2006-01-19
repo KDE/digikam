@@ -58,6 +58,7 @@
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "iccpreviewwidget.h"
+#include "icctransform.h"
 
 // Local includes.
 
@@ -307,7 +308,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QButtonGroup *proofProfileBG = new QButtonGroup(4,Qt::Vertical, proofProfiles);
     proofProfileBG->setFrameStyle(QFrame::NoFrame);
 
-    QRadioButton *m_useProofDefaultProfile = new QRadioButton(proofProfileBG);
+    m_useProofDefaultProfile = new QRadioButton(proofProfileBG);
     m_useProofDefaultProfile->setText(i18n("Use default proof profile"));
 
     m_useProofSelectedProfile = new QRadioButton(proofProfileBG);
@@ -402,9 +403,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(displayProfilesInfo, SIGNAL(clicked()), this, SLOT(slotDisplayICCInfo()));
 
-    // -------------------------------------------------------------
+    connect(m_useInDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
 
-//     slotToggledWidgets(true);
+    connect(m_useSpaceDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
+
+    connect(m_useProofDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
+
+    connect(m_useDisplayDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
+
+    // -------------------------------------------------------------
 
     enableButtonOK( false );
 
@@ -483,7 +490,8 @@ void ImageEffect_ICCProof::slotEffect()
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-    Digikam::ImageIface* iface = m_previewWidget->imageIface();
+//     Digikam::ImageIface* iface = m_previewWidget->imageIface();
+    iface                      = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -491,6 +499,8 @@ void ImageEffect_ICCProof::slotEffect()
     bool sb                    = iface->previewSixteenBit();
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    if (!iface->originalHasICCEmbedded())
+        m_useEmbeddedProfile->setEnabled(false);
 //     Digikam::BCGModifier cmod;
 //     cmod.setOverIndicator(o);
 //     cmod.setGamma(g);
@@ -507,7 +517,13 @@ void ImageEffect_ICCProof::slotEffect()
     kdDebug() << "Doing updateData" << endl;
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
+//     if (original.getICCProfil().isNull())
+//     {
+//         m_useEmbeddedProfile->setEnabled(false);
+//     }
+
     kapp->restoreOverrideCursor();
+    
 }
 
 void ImageEffect_ICCProof::slotOk()
@@ -519,6 +535,23 @@ void ImageEffect_ICCProof::slotOk()
 void ImageEffect_ICCProof::slotTestIt()
 {
     /// @todo implement me
+    kapp->setOverrideCursor(KCursor::waitCursor());
+
+    enableButtonOK(true);
+
+    m_histogramWidget->stopHistogramComputation();
+
+    if (m_destinationPreviewData)
+        delete [] m_destinationPreviewData;
+
+//     Digikam::ImageIface* iface = m_previewWidget->imageIface();
+//     m_destinationPreviewData   = iface->getPreviewData();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
+
+    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
 }
 
 void ImageEffect_ICCProof::readSettings()
@@ -529,10 +562,6 @@ void ImageEffect_ICCProof::readSettings()
 
     if (!config->readBoolEntry("EnableCM", false))
     {
-        QString message = QString(i18n("<p>You don't have enabled Color Management in Digikam preferences, so you won't be able"));
-        message.append( i18n("to use the \"Use default profile...\" options</p>"));
-        KMessageBox::information(this, message);
-        slotToggledWidgets(false);
         cmEnabled = false;
     }
     else
@@ -546,11 +575,10 @@ void ImageEffect_ICCProof::readSettings()
 
 void ImageEffect_ICCProof::slotToggledWidgets( bool t)
 {
-    if (m_useInDefaultProfile->isVisible())
-        m_useInDefaultProfile->setEnabled(t);
-//     m_useProofDefaultProfile->setEnabled(t);
-//     m_useDisplayDefaultProfile->setEnabled(t);
-//     m_useSpaceDefaultProfile->setEnabled(t);
+    m_useInDefaultProfile->setEnabled(t);
+    m_useProofDefaultProfile->setEnabled(t);
+    m_useDisplayDefaultProfile->setEnabled(t);
+    m_useSpaceDefaultProfile->setEnabled(t);
 }
 
 /*!
@@ -627,6 +655,17 @@ void ImageEffect_ICCProof::getICCInfo(const QString& profile)
                                  i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
                                  profile + "</p>",
                                  i18n("Color Profile Info"));
+}
+
+void ImageEffect_ICCProof::slotCMDisabledWarning()
+{
+    if (!cmEnabled)
+    {
+        QString message = QString(i18n("<p>You don't have enabled Color Management in Digikam preferences.</p>"));
+        message.append( i18n("<p>\"Use default profile\" options will be disabled now.</p>"));
+        KMessageBox::information(this, message);
+        slotToggledWidgets(false);
+    }
 }
 
 }// NameSpace DigikamImagesPluginCore

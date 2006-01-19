@@ -41,6 +41,7 @@ class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
+class ImageIface;
 }
 
 namespace DigikamImagesPluginCore
@@ -123,6 +124,8 @@ private:
 
     Digikam::HistogramWidget        *m_histogramWidget;
 
+    Digikam::ImageIface             *iface;
+
     Digikam::ICCPreviewWidget       *m_iccDisplayPreviewWidget;
     Digikam::ICCPreviewWidget       *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget       *m_iccOutPreviewWidget;
@@ -148,6 +151,7 @@ private slots:
     void slotProofICCInfo();
     void slotSpaceICCInfo();
     void slotDisplayICCInfo();
+    void slotCMDisabledWarning();
 
 };
 
