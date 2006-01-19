@@ -74,15 +74,15 @@ DColor::DColor(const DColor& color)
     d->sixteenBit = color.d->sixteenBit;
 }
 
-DColor::DColor(const QColor& color)
+DColor::DColor(const QColor& color, bool sixteenBit)
 {
     d = new DColorPriv;
 
-    d->red        = color.red();
-    d->green      = color.green();
-    d->blue       = color.blue();
-    d->alpha      = 255;
-    d->sixteenBit = false;
+    d->red        = sixteenBit ? color.red()*255 : color.red();
+    d->green      = sixteenBit ? green.red()*255 : green.red();
+    d->blue       = sixteenBit ? blue.red()*255 : blue.red();
+    d->alpha      = sixteenBit ? 65535 : 255;
+    d->sixteenBit = sixteenBit;
 }
 
 DColor::DColor(int red, int green, int blue, int alpha, bool sixteenBit)

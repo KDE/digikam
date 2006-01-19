@@ -42,7 +42,7 @@ public:
     DColor(uchar *data, bool sixteenBit);
     DColor(int red, int green, int blue, int alpha, bool sixteenBit);
     DColor(const DColor& color);
-    DColor(const QColor& color);
+    DColor(const QColor& color, bool sixteenBit=false);
     DColor& operator=(const DColor& color);
     ~DColor();
 
