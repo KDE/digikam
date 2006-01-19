@@ -71,10 +71,6 @@ public slots:
     void slotOk();
     void slotTry();
 
-private:
-    
-    CtrlPanelDlgPriv* d;
-
 private slots:
     
     virtual void slotDefault();
@@ -100,6 +96,10 @@ protected:
     virtual void putPreviewData(void){};
     virtual void putFinalData(void){};
     virtual void renderingFinished(void){};
+
+private:
+    
+    CtrlPanelDlgPriv* d;
 };
 
 }  // NameSpace Digikam

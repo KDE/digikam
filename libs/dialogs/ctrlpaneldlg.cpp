@@ -169,7 +169,7 @@ void CtrlPanelDlg::slotInit()
 
 void CtrlPanelDlg::setAboutData(KAboutData *about)
 {
-    d->aboutData             = about;
+    d->aboutData            = about;
     QPushButton *helpButton = actionButton( Help );
     KHelpMenu* helpMenu     = new KHelpMenu(this, d->aboutData, false);
     helpMenu->menu()->removeItemAt(0);
@@ -254,7 +254,7 @@ void CtrlPanelDlg::slotFocusChanged(void)
 
 void CtrlPanelDlg::slotHelp()
 {
-    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
+    // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauched, 
     // else digiKam help. In this case, setHelp() method must be used to set anchor and handbook name.
 
     if (d->aboutData)

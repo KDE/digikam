@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT ImageDlgBase : public KDialogBase
 public:
 
     ImageDlgBase(QWidget *parent, QString title, QString name, 
-                    bool loadFileSettings=true, QFrame* bannerFrame=0);
+                 bool loadFileSettings=true, QFrame* bannerFrame=0);
     ~ImageDlgBase();
 
     void setAboutData(KAboutData *about);
