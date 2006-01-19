@@ -27,6 +27,7 @@
 
 #include <digikamheaders.h>
 
+class QFrame;
 class QLabel;
 class QCheckBox;
 class QComboBox;
