@@ -149,7 +149,7 @@ void FreeRotation::filterImage(void)
                         
                         i++;
                         j++;
-                   }
+                    }
                 }
             }
         }
