@@ -237,7 +237,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
-            d->desceditTab->setItem(d->currentView, d->currentItem, currentItemType);
+           d->desceditTab->setItem(d->currentItem, currentItemType);
            d->dirtyDesceditTab = true;
         }
     }

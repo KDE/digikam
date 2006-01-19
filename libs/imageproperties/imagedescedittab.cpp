@@ -61,7 +61,6 @@
 
 // Local includes.
 
-#include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
 #include "albumdb.h"
@@ -70,8 +69,9 @@
 #include "tagcreatedlg.h"
 #include "syncjob.h"
 #include "navigatebarwidget.h"
-#include "imagedescedittab.h"
+#include "imageinfo.h"
 #include "ratingwidget.h"
+#include "imagedescedittab.h"
 
 namespace Digikam
 {
@@ -118,7 +118,6 @@ public:
         commentsEdit       = 0;
         tagsSearchEdit     = 0;
         dateTimeEdit       = 0;
-        view               = 0;
         currItem           = 0;
         tagsView           = 0;
         ratingWidget       = 0;
@@ -136,8 +135,6 @@ public:
     KLineEdit         *tagsSearchEdit;
 
     KDateTimeEdit     *dateTimeEdit;
-
-    AlbumIconView     *view;
 
     AlbumIconItem     *currItem;
 
@@ -360,13 +357,13 @@ void ImageDescEditTab::slotModified()
 
 void ImageDescEditTab::applyChanges()
 {
+    if (!d->modified)
+        return;
+    
     if (!d->currItem)
         return;
 
     ImageInfo* info = d->currItem->imageInfo();
-
-    if (!d->modified)
-        return;
 
     info->setCaption(d->commentsEdit->text());
     info->setDateTime(d->dateTimeEdit->dateTime());
@@ -405,40 +402,23 @@ void ImageDescEditTab::applyChanges()
     d->modified = false;
 }
 
-void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int itemType)
+void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
 {
     applyChanges();
     
-    if (d->view)
-    {        
-       disconnect(d->view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-                  this, SLOT(slotItemDeleted(AlbumIconItem*)));
-        
-       disconnect(d->view, SIGNAL(signalCleared()),
-                  this, SLOT(slotCleared()));
-    }
-                
-    if (!currItem || !view)
+    if (!currItem)
     {
        d->navigateBar->setFileName();
        d->commentsEdit->clear();
-       d->view     = 0;
        d->currItem = 0;
        setEnabled(false);
        return;
     }
 
     setEnabled(true);
-    d->view     = view;
     d->currItem = currItem;
     d->modified = false;
     
-    connect(d->view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-            this, SLOT(slotItemDeleted(AlbumIconItem*)));
-    
-    connect(d->view, SIGNAL(signalCleared()),
-            this, SLOT(slotCleared()));
-
     ImageInfo* info = currItem->imageInfo();
     KURL fileURL;
     fileURL.setPath(info->filePath());
@@ -719,22 +699,6 @@ QPixmap ImageDescEditTab::tagThumbnail(TAlbum* album) const
                                    KIcon::DefaultState, 0, true);
 
     return pix;
-}
-
-void ImageDescEditTab::slotItemDeleted(AlbumIconItem* iconItem)
-{
-    if (d->currItem != iconItem)
-        return;
-
-    // uh oh. our current item got deleted. close
-    d->currItem = 0;
-    close();
-}
-
-void ImageDescEditTab::slotCleared()
-{
-    // if the iconview has been cleared, bail out and close
-    close();
 }
 
 void ImageDescEditTab::slotRecentTags()

@@ -37,7 +37,6 @@ class QListViewItem;
 
 namespace Digikam
 {
-class AlbumIconView;
 class AlbumIconItem;
 class Album;
 class TAlbum;
@@ -69,7 +68,7 @@ public:
     ImageDescEditTab(QWidget *parent, bool navBar=true);
     ~ImageDescEditTab();
 
-    void setItem(AlbumIconView *view=0, AlbumIconItem* currItem=0, int itemType=0);
+    void setItem(AlbumIconItem* currItem=0, int itemType=0);
     void populateTags();
         
 signals:
@@ -104,9 +103,6 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
-
-    void slotItemDeleted(AlbumIconItem* iconItem);
-    void slotCleared();
 
 private:
 
