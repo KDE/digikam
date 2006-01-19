@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-07-07
- * Description :
- * 
- * Copyright 2005 by Gilles Caulier
+ * Description : A button bar to navigate between album items
+ *
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,9 +43,9 @@ public:
 
     enum CurrentItemPosition
     {
-    ItemCurrent=0,
-    ItemFirst,
-    ItemLast
+        ItemCurrent=0,
+        ItemFirst,
+        ItemLast
     };
 
 public:
@@ -53,7 +53,7 @@ public:
     NavigateBarWidget(QWidget *parent=0, bool show=true);
     ~NavigateBarWidget();
     
-    void setFileName(QString filename);
+    void setFileName(QString filename=QString::null);
     void setButtonsState(int itemType);
 
 signals:

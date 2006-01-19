@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-11-17
- * Description :
+ * Description : A tab to display Colors image informations
  *
  * Copyright 2004-2006 by Gilles Caulier
  *

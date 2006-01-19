@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
  * Date  : 2004-11-17
- * Description :
+ * Description : A tab to display Exif image informations
  *
  * Copyright 2004-2006 by Gilles Caulier
  *
@@ -70,7 +70,7 @@ ImagePropertiesEXIFTab::ImagePropertiesEXIFTab(QWidget* parent, bool navBar)
     d->navigateBar  = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
         
-    QLabel* levelLabel = new QLabel(i18n("Select level of detail:"), this);
+    QLabel* levelLabel = new QLabel(i18n("Level of detail:"), this);
     d->levelCombo      = new QComboBox(this);
     topLayout->addMultiCellWidget(levelLabel, 1, 1, 0, 1);
     topLayout->addMultiCellWidget(d->levelCombo, 1, 1, 2, 2);
@@ -125,7 +125,7 @@ void ImagePropertiesEXIFTab::setCurrentURL(const KURL& url, int itemType)
     if (url.isEmpty())
     {
        d->exifWidget->loadFile(url.path());
-       d->navigateBar->setFileName("");
+       d->navigateBar->setFileName();
        setEnabled(false);
        return;
     }

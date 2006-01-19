@@ -311,6 +311,7 @@ bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
 
         return false;
     }
+    
     return false;
 }
 
@@ -409,23 +410,23 @@ void ImageDescEditTab::setItem(AlbumIconView *view, AlbumIconItem* currItem, int
     applyChanges();
     
     if (d->view)
-       {        
+    {        
        disconnect(d->view, SIGNAL(signalItemDeleted(AlbumIconItem*)),
                   this, SLOT(slotItemDeleted(AlbumIconItem*)));
         
        disconnect(d->view, SIGNAL(signalCleared()),
                   this, SLOT(slotCleared()));
-       }
+    }
                 
     if (!currItem || !view)
-       {
-       d->navigateBar->setFileName("");
+    {
+       d->navigateBar->setFileName();
        d->commentsEdit->clear();
        d->view     = 0;
        d->currItem = 0;
        setEnabled(false);
        return;
-       }
+    }
 
     setEnabled(true);
     d->view     = view;
@@ -589,10 +590,9 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
         return;
     }
 
-    int result =
-        KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?")
-                                           .arg(album->title()),i18n("Delete Tag"),
-                                           KGuiItem(i18n("Delete"), "editdelete"));
+    int result = KMessageBox::warningContinueCancel(this, i18n("Delete '%1' tag?")
+                                                    .arg(album->title()),i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"), "editdelete"));
 
     if (result == KMessageBox::Continue)
     {
@@ -883,7 +883,6 @@ void ImageDescEditTab::slotTagsSearchChanged()
 TAlbumListView::TAlbumListView(QWidget* parent)
     : QListView(parent)
 {
-    
 }
 
 void TAlbumListView::emitSignalItemStateChanged()
