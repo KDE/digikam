@@ -228,8 +228,10 @@ void ImageEffect_FreeRotation::prepareEffect()
     int orgW = iface->originalWidth();
     int orgH = iface->originalHeight();
 
+    uchar *data = iface->getPreviewImage();
     Digikam::DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-                        iface->previewHasAlpha(), iface->getPreviewImage());
+                        iface->previewHasAlpha(), data);
+    delete [] data;                        
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new FreeRotation(&image, this, angle, antialiasing, autocrop,
@@ -252,9 +254,11 @@ void ImageEffect_FreeRotation::prepareFinal()
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
     
+    uchar *data = iface.getOriginalImage();
     Digikam::DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
                            iface.originalHasAlpha(), iface.getOriginalImage());
-
+    delete [] data;
+    
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new FreeRotation(&orgImage, this, angle, antialiasing, autocrop,
                                         background, orgW, orgH));
