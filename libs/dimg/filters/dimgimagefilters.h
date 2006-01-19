@@ -21,6 +21,8 @@
 #ifndef DIMGIMAGE_FILTERS_H
 #define DIMGIMAGE_FILTERS_H
 
+#define CLAMP0255(a)    QMIN(QMAX(a,0), 255)
+#define CLAMP065535(a)  QMIN(QMAX(a,0), 65535)
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
@@ -117,9 +119,12 @@ public:   // Public methods.
                                int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-    void pixelAntiAliasing (uchar *data, int Width, int Height, bool sixteenBit,
-                            double X, double Y, unsigned short *A, unsigned short *R, 
-                            unsigned short *G, unsigned short *B);
+    
+    void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
+                           uchar *A, uchar *R, uchar *G, uchar *B);
+    
+    void pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
+                             unsigned short *A, unsigned short *R, unsigned short *G, unsigned short *B);
 };
 
 }  // NameSpace Digikam

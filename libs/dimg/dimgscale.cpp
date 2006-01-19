@@ -1,12 +1,14 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2005-06-14
+ * Description : This is the normal smoothscale method,
+ *               based on Imlib2's smoothscale. Added
+ *               smoothScaleSection - Scaling only of a
+ *               section of a image. Added 16bit image support
+ *
  * Copyright 2005 by Renchi Raju
- *
- * This is the normal smoothscale method, based on Imlib2's smoothscale.
- *
- * added smoothScaleSection - scaling only of a section of a image
- * added 16bit image support
+ * Copyright 2006 by Gilles Caulier
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley
@@ -26,14 +28,21 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 // C ansi includes.
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+extern "C"
+{
 #include <stdint.h>
+}
+
+// C++ includes.
+
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 
 // Local includes.
 
@@ -89,10 +98,15 @@ namespace DImgScale
 
 using namespace DImgScale;
 
-DImg DImg::smoothScale(uint dw, uint dh)
+DImg DImg::smoothScale(uint dw, uint dh, QSize::ScaleMode scaleMode)
 {
     uint w = width();
     uint h = height();
+
+    QSize newSize(w, h);
+    newSize.scale( QSize(dw, dh), scaleMode );
+    dw = newSize.width();
+    dh = newSize.height();
 
     // do we actually need to scale?
     if ((w == dw) && (h == dh))
@@ -147,8 +161,8 @@ if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
 if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 
 DImg DImg::smoothScaleSection(uint sx, uint sy,
-                                  uint sw, uint sh,
-                                  uint dw, uint dh)
+                              uint sw, uint sh,
+                              uint dw, uint dh)
 {
     uint w = width();
     uint h = height();
@@ -264,7 +278,7 @@ DImg DImg::smoothScaleSection(uint sx, uint sy,
 #define YAP                       (yapoints[dyy + y])
 
 unsigned int** DImgScale::dimgCalcYPoints(unsigned int *src,
-                                              int sw, int sh, int dh)
+                                          int sw, int sh, int dh)
 {
     unsigned int **p;
     int i, j = 0;
@@ -1529,9 +1543,9 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
 
 /* scale by area sampling */
 void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
-                                      int dxx, int dyy,
-                                      int dw,  int dh,
-                                      int dow, int sow)
+                                  int dxx, int dyy,
+                                  int dw,  int dh,
+                                  int dow, int sow)
 {
     ullong *sptr, *dptr;
     int x, y, end;

@@ -1,7 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-15
- * Copyright 2005 by Renchi Raju
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date    : 2005-06-15
+ * Description : DImg private data class
+ *
+ * Copyright 2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -13,6 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIMGPRIVATE_H

@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr> 
- * Date  : 2005-06-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr> 
+ * Date   : 2005-06-14
  * Description : main DImg framework implementation
  *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -16,6 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef DIMG_H
@@ -24,6 +26,7 @@
 // QT includes.
 
 #include <qcstring.h>
+#include <qsize.h>
 #include <qrect.h>
 #include <qimage.h>
 #include <qpixmap.h>
@@ -169,7 +172,7 @@ public:
 
     void       resize(int w, int h);
 
-    DImg       smoothScale(uint width, uint height);
+    DImg       smoothScale(uint width, uint height, QSize::ScaleMode scaleMode=QSize::ScaleFree);
     DImg       smoothScaleSection(uint sx, uint sy, uint sw, uint sh,
                                   uint dw, uint dh);
 

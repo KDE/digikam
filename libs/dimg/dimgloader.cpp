@@ -1,10 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-06-14
- * Description : 
- * 
- * Copyright 2005 by Renchi Raju
-
+ * Description : DImg image loader interface 
+ *
+ * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
