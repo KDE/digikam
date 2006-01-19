@@ -308,7 +308,7 @@ void ImageEffect_HSL::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_HSL::slotOk()
+void ImageEffect_HSL::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 

@@ -141,7 +141,6 @@ private slots:
 
     void slotDefault();
     void slotEffect();
-    void slotOk();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
@@ -153,6 +152,9 @@ private slots:
     void slotDisplayICCInfo();
     void slotCMDisabledWarning();
 
+protected:
+
+    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore

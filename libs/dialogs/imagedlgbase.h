@@ -77,7 +77,7 @@ private slots:
     
     void slotHelp();
     void slotCancel();
-//    void slotOk();        // TODO
+    void slotOk();        
     virtual void slotEffect(){};
     
 };

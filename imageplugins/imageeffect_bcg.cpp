@@ -321,7 +321,7 @@ void ImageEffect_BCG::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_BCG::slotOk()
+void ImageEffect_BCG::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();

@@ -58,24 +58,24 @@ private:
 
     enum AutoCorrectionType
     {
-    AutoLevelsCorrection=0,
-    NormalizeCorrection,
-    EqualizeCorrection,
-    StretchContrastCorrection
+        AutoLevelsCorrection=0,
+        NormalizeCorrection,
+        EqualizeCorrection,
+        StretchContrastCorrection
     };
 
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
 
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
     };
 
     uchar                        *m_destinationPreviewData;
@@ -100,10 +100,13 @@ private slots:
 
     void slotDefault();    
     void slotEffect();
-    void slotOk();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
+
+protected:
+
+    void finalRendering();
 };
 
 }  // NameSpace DigikamImagesPluginCore

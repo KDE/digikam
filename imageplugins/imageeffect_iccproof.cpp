@@ -526,8 +526,10 @@ void ImageEffect_ICCProof::slotEffect()
     
 }
 
-void ImageEffect_ICCProof::slotOk()
+void ImageEffect_ICCProof::finalRendering()
 {
+    // TODO : Gilles -> Paco : use this method instead slotOk() to do 
+    // final image transformations
 
     /// @todo implement me
 }

@@ -322,7 +322,7 @@ void ImageEffect_BWSepia::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_BWSepia::slotOk()
+void ImageEffect_BWSepia::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();

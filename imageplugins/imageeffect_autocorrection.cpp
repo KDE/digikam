@@ -291,7 +291,7 @@ void ImageEffect_AutoCorrection::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
-void ImageEffect_AutoCorrection::slotOk()
+void ImageEffect_AutoCorrection::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewWidget->imageIface();

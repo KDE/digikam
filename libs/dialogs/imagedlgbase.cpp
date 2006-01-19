@@ -138,14 +138,12 @@ void ImageDlgBase::slotCancel()
     done(Cancel);
 }
 
-// TODO
-/*
 void ImageDlgBase::slotOk()
 {
     saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     finalRendering();
 }
-*/
+
 void ImageDlgBase::slotHelp()
 {
     // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 
