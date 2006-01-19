@@ -995,6 +995,18 @@ void DImgInterface::putSelectedData(uint* data, bool saveUndo)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
+bool DImgInterface::hasICCEmbedded()
+{
+    if (d->image.getICCProfil().isNull())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 }  // namespace Digikam
 
 #include "dimginterface.moc"

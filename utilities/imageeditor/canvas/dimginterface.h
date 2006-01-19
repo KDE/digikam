@@ -88,6 +88,7 @@ public:
     bool   hasAlpha();
     bool   sixteenBit();
     bool   exifRotated();
+    bool   hasICCEmbedded();
 
     void   setSelectedArea(int x, int y, int w, int h);
     void   getSelectedArea(int& x, int& y, int& w, int& h);
