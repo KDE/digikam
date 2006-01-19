@@ -29,6 +29,7 @@ class QButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
 class QPushButton;
+class QCString;
 
 class KTabWidget;
 class KURLRequester;
@@ -117,6 +118,9 @@ private:
     QString                         proofPath;
 
     bool                            cmEnabled;
+    bool                            hasICC;
+
+    QByteArray                      m_embeddedICC;
 
     Digikam::ImageGuideWidget       *m_previewWidget;
 
@@ -136,6 +140,25 @@ private:
 
     void                            readSettings();
     void                            getICCInfo(const QString&);
+
+    bool                            useBPC();
+    bool                            doProof();
+    bool                            checkGamut();
+    bool                            embedProfile();
+
+    bool                            useEmbeddedProfile();
+    bool                            useBuiltinProfile();
+    bool                            useDefaultInProfile();
+    bool                            useSelectedInProfile();
+
+    bool                            useDefaultSpaceProfile();
+    bool                            useSelectedSpaceProfile();
+
+    bool                            useDefaultDisplayProfile();
+    bool                            useSelectedDisplayProfile();
+
+    bool                            useDefaultProofProfile();
+    bool                            useSelectedProofProfile();
 
 private slots:
 

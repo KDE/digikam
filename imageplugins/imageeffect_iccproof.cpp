@@ -79,6 +79,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     proofPath = QString::null;
     displayPath = QString::null;
 
+    hasICC = false;
+
     setHelp("colormanagement.anchor", "digikam");
 
     QFrame *frame = new QFrame(plainPage());
@@ -411,6 +413,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(m_useDisplayDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
 
+
     // -------------------------------------------------------------
 
     enableButtonOK( false );
@@ -499,14 +502,13 @@ void ImageEffect_ICCProof::slotEffect()
     bool sb                    = iface->previewSixteenBit();
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
-    if (!iface->originalHasICCEmbedded())
+    if (iface->getEmbeddedICCFromOriginalImage().isNull())
+    {
         m_useEmbeddedProfile->setEnabled(false);
-//     Digikam::BCGModifier cmod;
-//     cmod.setOverIndicator(o);
-//     cmod.setGamma(g);
-//     cmod.setBrightness(b);
-//     cmod.setContrast(c);
-//     cmod.applyBCG(preview);
+        hasICC = true;
+        m_embeddedICC = iface->getEmbeddedICCFromOriginalImage();
+    }
+
     iface->putPreviewImage(preview.bits());
 
     m_previewWidget->updatePreview();
@@ -516,11 +518,6 @@ void ImageEffect_ICCProof::slotEffect()
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     kdDebug() << "Doing updateData" << endl;
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
-//     if (original.getICCProfil().isNull())
-//     {
-//         m_useEmbeddedProfile->setEnabled(false);
-//     }
 
     kapp->restoreOverrideCursor();
     
@@ -543,17 +540,9 @@ void ImageEffect_ICCProof::slotTestIt()
 
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-        delete [] m_destinationPreviewData;
+    Digikam::IccTransform transform;
 
-//     Digikam::ImageIface* iface = m_previewWidget->imageIface();
-//     m_destinationPreviewData   = iface->getPreviewData();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool a                     = iface->previewHasAlpha();
-    bool sb                    = iface->previewSixteenBit();
-
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_ICCProof::readSettings()
@@ -668,6 +657,71 @@ void ImageEffect_ICCProof::slotCMDisabledWarning()
         KMessageBox::information(this, message);
         slotToggledWidgets(false);
     }
+}
+
+//-- General Tab ---------------------------
+
+bool ImageEffect_ICCProof::useBPC()
+{
+    return m_BPCBox->isChecked();
+}
+
+bool ImageEffect_ICCProof::doProof()
+{
+    return m_doSoftProofBox->isChecked();
+}
+
+bool ImageEffect_ICCProof::checkGamut()
+{
+    return m_checkGamutBox->isChecked();
+}
+
+bool ImageEffect_ICCProof::embedProfile()
+{
+    return m_embeddProfileBox->isChecked();
+}
+
+//-- Input Tab ---------------------------
+
+bool ImageEffect_ICCProof::useEmbeddedProfile()
+{
+    return m_useEmbeddedProfile->isChecked();
+}
+
+bool ImageEffect_ICCProof::useBuiltinProfile()
+{
+    return m_useSRGBDefaultProfile->isChecked();
+}
+
+bool ImageEffect_ICCProof::useDefaultInProfile()
+{
+    return m_useInDefaultProfile->isChecked();
+}
+
+bool ImageEffect_ICCProof::useSelectedInProfile()
+{
+    return m_useInSelectedProfile->isChecked();
+}
+
+//-- Workspace Tab ---------------------------
+
+bool ImageEffect_ICCProof::useDefaultSpaceProfile()
+{
+    return m_useSpaceDefaultProfile->isChecked();
+}
+
+//-- Proofing Tab ---------------------------
+
+bool ImageEffect_ICCProof::useDefaultProofProfile()
+{
+    return m_useProofDefaultProfile->isChecked();
+}
+
+//-- Display Tab ---------------------------
+
+bool ImageEffect_ICCProof::useDefaultDisplayProfile()
+{
+    return m_useDisplayDefaultProfile->isChecked();
 }
 
 }// NameSpace DigikamImagesPluginCore
