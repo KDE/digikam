@@ -1197,4 +1197,32 @@ void DImg::convertDepth(int depth)
     }
 }
 
+void DImg::fill(DColor color)
+{
+    if (sixteenBit())
+    {
+        unsigned short *imgData16 = (unsigned short *)m_priv->data;
+
+        for (uint i = 0 ; i < width()*height() ; i+=4)
+        {
+            imgData16[ i ] = (unsigned short)color.blue();
+            imgData16[i+1] = (unsigned short)color.green();
+            imgData16[i+2] = (unsigned short)color.red();
+            imgData16[i+3] = (unsigned short)color.alpha();
+        }
+    }
+    else
+    {
+        uchar *imgData = m_priv->data;
+        
+        for (uint i = 0 ; i < width()*height() ; i+=4)
+        {
+            imgData[ i ] = (uchar)color.blue();
+            imgData[i+1] = (uchar)color.green();
+            imgData[i+2] = (uchar)color.red();
+            imgData[i+3] = (uchar)color.alpha();
+        }
+    }
+}
+
 }  // NameSpace Digikam

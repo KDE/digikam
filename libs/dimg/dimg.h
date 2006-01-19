@@ -33,6 +33,7 @@
 #include "digikam_export.h"
 #include "rawdecodingsettings.h"
 #include "dimgloaderobserver.h"
+#include "dcolor.h"
 
 class QString;
 class QVariant;
@@ -180,6 +181,8 @@ public:
     void       detach();
 
     void       convertDepth(int depth);
+
+    void       fill(DColor color);
 
 private:
 
