@@ -444,9 +444,9 @@ uint* ImageIface::getSelectedData()
     return DImgInterface::instance()->getSelectedData();    
 }
 
-bool ImageIface::originalHasICCEmbedded()
+QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
 {
-    return DImgInterface::instance()->hasICCEmbedded();
+    return DImgInterface::instance()->getEmbeddedICC();
 }
 
 }   // namespace Digikam

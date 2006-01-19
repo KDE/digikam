@@ -79,7 +79,7 @@ public:
     int  originalHeight();
     bool originalSixteenBit();
     bool originalHasAlpha();
-    bool originalHasICCEmbedded();
+    QByteArray getEmbeddedICCFromOriginalImage();
 
     /** Standard methods to get preview informations.*/
     int  previewWidth();
