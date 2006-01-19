@@ -902,6 +902,11 @@ void DImgInterface::getRedoHistory(QStringList &titles)
     d->undoMan->getRedoHistory(titles);
 }
 
+QByteArray DImgInterface::getEmbeddedICC()
+{
+    return d->image.getICCProfil();
+}
+
 // -----------------------------------------------------------------------------------
 // FIXME Remove methods below when all image plugins will be ported to DImg
 
@@ -995,17 +1000,7 @@ void DImgInterface::putSelectedData(uint* data, bool saveUndo)
     emit signalModified(true, d->undoMan->anyMoreRedo());
 }
 
-bool DImgInterface::hasICCEmbedded()
-{
-    if (d->image.getICCProfil().isNull())
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
+
 
 }  // namespace Digikam
 

@@ -88,7 +88,6 @@ public:
     bool   hasAlpha();
     bool   sixteenBit();
     bool   exifRotated();
-    bool   hasICCEmbedded();
 
     void   setSelectedArea(int x, int y, int w, int h);
     void   getSelectedArea(int& x, int& y, int& w, int& h);
@@ -122,6 +121,8 @@ public:
     void   putImage(const QString &caller, uchar* data, int w, int h);
     uchar* getImageSelection();
     void   putImageSelection(uchar* data, bool saveUndo=true);
+
+    QByteArray getEmbeddedICC();
 
     // FIXME : remove these methods when all image plugins will be ported to DImg.
     uint*  getData();
