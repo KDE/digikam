@@ -68,10 +68,18 @@ protected slots:
 
     void slotTimer();       
     
+protected:
+    
+    void closeEvent(QCloseEvent *e);
+    virtual void finalRendering(){};
+
 private slots:
     
     void slotHelp();
+    void slotCancel();
+//    void slotOk();        // TODO
     virtual void slotEffect(){};
+    
 };
 
 }  // NameSpace Digikam

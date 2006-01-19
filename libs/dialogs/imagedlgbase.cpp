@@ -117,8 +117,6 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
 ImageDlgBase::~ImageDlgBase()
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
-
     if (d->timer)
        delete d->timer;
 
@@ -128,6 +126,26 @@ ImageDlgBase::~ImageDlgBase()
     delete d;
 }
 
+void ImageDlgBase::closeEvent(QCloseEvent *e)
+{
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    e->accept();
+}
+
+void ImageDlgBase::slotCancel()
+{
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    done(Cancel);
+}
+
+// TODO
+/*
+void ImageDlgBase::slotOk()
+{
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    finalRendering();
+}
+*/
 void ImageDlgBase::slotHelp()
 {
     // If setAboutData() is called by plugin, well DigikamImagePlugins help is lauch, 

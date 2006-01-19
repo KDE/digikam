@@ -201,8 +201,6 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
 ImageGuideDlg::~ImageGuideDlg()
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
-
     if (d->timer)
        delete d->timer;
 
@@ -320,6 +318,7 @@ void ImageGuideDlg::slotCancel()
        kapp->restoreOverrideCursor();
     }
     
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     done(Cancel);
 }
 
@@ -333,6 +332,7 @@ void ImageGuideDlg::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
     }
 
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     e->accept();
 }
 
@@ -383,6 +383,7 @@ void ImageGuideDlg::slotEffect()
 
 void ImageGuideDlg::slotOk()
 {
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     writeUserSettings();
     d->currentRenderingMode = ImageGuideDlgPriv::FinalRendering;
 

@@ -58,9 +58,9 @@ public:
 
     enum RunningMode
     {
-    NoneRendering=0,
-    PreviewRendering,
-    FinalRendering
+        NoneRendering=0,
+        PreviewRendering,
+        FinalRendering
     };
     
     CtrlPanelDlgPriv()
@@ -136,8 +136,6 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
 CtrlPanelDlg::~CtrlPanelDlg()
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
-
     if (d->aboutData)
        delete d->aboutData;
        
@@ -219,7 +217,8 @@ void CtrlPanelDlg::slotCancel()
 
        kapp->restoreOverrideCursor();
     }
-
+    
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     done(Cancel);
 }
 
@@ -233,6 +232,7 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
     }
 
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     e->accept();
 }
 
@@ -302,6 +302,7 @@ void CtrlPanelDlg::slotEffect()
 
 void CtrlPanelDlg::slotOk()
 {
+    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     writeUserSettings();
     d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
 
