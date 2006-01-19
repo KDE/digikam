@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,9 +55,9 @@
 namespace DigikamFreeRotationImagesPlugin
 {
 
-ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
-                        : ImageGuideDialog(parent, i18n("Free Rotation"),
-                                           "freerotation", false, false, true)
+ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString title, QFrame* banner)
+                        : Digikam::ImageGuideDlg(parent, title, "freerotation",
+                          false, false, true, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     // No need Abort button action.
     showButton(User1, false);
@@ -70,7 +70,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to process free image "
                                        "rotation."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier",
+                                       "(c) 2004-2006, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -227,14 +227,13 @@ void ImageEffect_FreeRotation::prepareEffect()
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgW = iface->originalWidth();
     int orgH = iface->originalHeight();
-    QImage image(iface->previewWidth(), iface->previewHeight(), 32);
-    uint *data = iface->getPreviewData();
-    memcpy( image.bits(), data, image.numBytes() );
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+    Digikam::DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
+                        iface->previewHasAlpha(), iface->getPreviewImage());
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new FreeRotation(&image, this, angle, antialiasing, autocrop,
                                         background, orgW, orgH));
-    delete [] data;
 }
 
 void ImageEffect_FreeRotation::prepareFinal()
@@ -252,14 +251,13 @@ void ImageEffect_FreeRotation::prepareFinal()
     Digikam::ImageIface iface(0, 0);
     int orgW = iface.originalWidth();
     int orgH = iface.originalHeight();
-    QImage orgImage(orgW, orgH, 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    
+    Digikam::DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
+                           iface.originalHasAlpha(), iface.getOriginalImage());
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new FreeRotation(&orgImage, this, angle, antialiasing, autocrop,
                                         background, orgW, orgH));
-    delete [] data;
 }
 
 void ImageEffect_FreeRotation::putPreviewData(void)
@@ -268,14 +266,16 @@ void ImageEffect_FreeRotation::putPreviewData(void)
     int w = iface->previewWidth();
     int h = iface->previewHeight();
 
-    QImage imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QImage::ScaleMin);
-    QImage imDest( w, h, 32 );
-    imDest.fill( paletteBackgroundColor().rgb() );
-    bitBlt( &imDest, (w-imTemp.width())/2, (h-imTemp.height())/2,
-            &imTemp, 0, 0, imTemp.width(), imTemp.height());
+    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QSize::ScaleMin);
+    Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
+                                m_threadedFilter->getTargetImage().hasAlpha() );
+    
+    imDest.fill( Digikam::DColor(paletteBackgroundColor().rgb(),
+                                 m_threadedFilter->getTargetImage().sixteenBit()) );
+    imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
-                                                     iface->previewHeight())).bits());
+    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
+                                               iface->previewHeight())).bits());
 
     m_imagePreviewWidget->updatePreview();
     QSize newSize = dynamic_cast<FreeRotation *>(m_threadedFilter)->getNewSize();
@@ -287,10 +287,10 @@ void ImageEffect_FreeRotation::putPreviewData(void)
 void ImageEffect_FreeRotation::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-    QImage targetImage = m_threadedFilter->getTargetImage();
-    iface.putOriginalData(i18n("Free Rotation"),
-                          (uint*)targetImage.bits(),
-                          targetImage.width(), targetImage.height());
+    Digikam::DImg targetImage = m_threadedFilter->getTargetImage();
+    iface.putOriginalImage(i18n("Free Rotation"),
+                           targetImage.bits(),
+                           targetImage.width(), targetImage.height());
 }
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

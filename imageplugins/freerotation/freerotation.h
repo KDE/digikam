@@ -4,7 +4,7 @@
  * Date  : 2005-07-18
  * Description : Free rotation threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,12 +34,12 @@
 namespace DigikamFreeRotationImagesPlugin
 {
 
-class FreeRotation : public Digikam::ThreadedFilter
+class FreeRotation : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    FreeRotation(QImage *orgImage, QObject *parent=0, double angle=0.0, 
+    FreeRotation(Digikam::DImg *orgImage, QObject *parent=0, double angle=0.0,
                  bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black, 
                  int orgW=0, int orgH=0);
     
@@ -51,9 +51,9 @@ public:
     
     enum AutoCropTypes 
     {
-    NoAutoCrop=0,
-    WidestArea,
-    LargestArea
+        NoAutoCrop=0,
+        WidestArea,
+        LargestArea
     };
         
 private:  
@@ -75,16 +75,16 @@ private:
     virtual void filterImage(void);
            
     inline int setPosition (int Width, int X, int Y)
-       {
+    {
        return (Y *Width*4 + 4*X); 
-       };
+    };
     
     inline bool isInside (int Width, int Height, int X, int Y)
-       {
+    {
        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
        return (bIsWOk && bIsHOk);
-       };
+    };
 };    
 
 }  // NameSpace DigikamFreeRotationImagesPlugin

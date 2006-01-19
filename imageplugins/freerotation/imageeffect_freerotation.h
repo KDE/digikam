@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to process image 
  *               free rotation.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@
 
 // Local includes.
 
-#include "imageguidedialog.h"
+#include <digikamheaders.h>
 
 class QLabel;
 class QCheckBox;
@@ -37,13 +37,13 @@ class KDoubleNumInput;
 namespace DigikamFreeRotationImagesPlugin
 {
 
-class ImageEffect_FreeRotation : public DigikamImagePlugins::ImageGuideDialog
+class ImageEffect_FreeRotation : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
     
 public:
 
-    ImageEffect_FreeRotation(QWidget *parent);
+    ImageEffect_FreeRotation(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_FreeRotation();
 
 private:

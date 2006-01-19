@@ -4,7 +4,7 @@
  * Date  : 2004-11-28
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_freerotation.h"
 #include "imageplugin_freerotation.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
-    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget());
+    QString title = i18n("Free Rotation");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamFreeRotationImagesPlugin::ImageEffect_FreeRotation dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

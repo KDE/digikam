@@ -4,7 +4,7 @@
  * Date  : 2005-07-18
  * Description : Free rotation threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * Original FreeRotation algorithms copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
@@ -41,9 +41,9 @@
 namespace DigikamFreeRotationImagesPlugin
 {
 
-FreeRotation::FreeRotation(QImage *orgImage, QObject *parent, double angle, bool antialiasing, 
+FreeRotation::FreeRotation(Digikam::DImg *orgImage, QObject *parent, double angle, bool antialiasing,
                            int autoCrop, QColor backgroundColor, int orgW, int orgH)
-            : Digikam::ThreadedFilter(orgImage, parent, "FreeRotation")
+            : Digikam::DImgThreadedFilter(orgImage, parent, "FreeRotation")
 { 
     m_angle           = angle;
     m_orgW            = orgW;
@@ -65,7 +65,8 @@ void FreeRotation::filterImage(void)
     int nWidth  = m_orgImage.width();
     int nHeight = m_orgImage.height();
     
-    uchar *pBits = m_orgImage.bits();
+    uchar *pBits            = m_orgImage.bits();
+    unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
     
     // first of all, we need to calcule the sin and cos of the given angle
     
@@ -75,15 +76,15 @@ void FreeRotation::filterImage(void)
     // now, we have to calc the new size for the destination image
     
     if ((lfSin * lfCos) < 0)
-        {
+    {
         nNewWidth  = ROUND (fabs (nWidth * lfCos - nHeight * lfSin));
         nNewHeight = ROUND (fabs (nWidth * lfSin - nHeight * lfCos));
-        }
+    }
     else
-        {
+    {
         nNewWidth  = ROUND (fabs (nWidth * lfCos + nHeight * lfSin));
         nNewHeight = ROUND (fabs (nWidth * lfSin + nHeight * lfCos));
-        }
+    }
 
     // getting the destination's center position
     
@@ -97,18 +98,24 @@ void FreeRotation::filterImage(void)
 
     // now, we have to alloc a new image
     
-    m_destImage.create(nNewWidth, nNewHeight, 32);
-    m_destImage.fill( m_backgroundColor.rgb() );
-    uchar *pResBits = m_destImage.bits();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    
+    m_destImage = Digikam::DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
+    m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+
+    uchar *pResBits            = m_destImage.bits();
+    unsigned short *pResBits16 = (unsigned short *)m_destImage.bits();
+
+    Digikam::DImgImageFilters filters;
     
     // main loop
     
     for (h = 0; !m_cancel && (h < nNewHeight); h++)
-        {
+    {
         nh = h - nhdy;
 
         for (w = 0; !m_cancel && (w < nNewWidth); w++)
-            {
+        {
             nw = w - nhdx;
 
             i = setPosition (nNewWidth, w, h);
@@ -117,22 +124,36 @@ void FreeRotation::filterImage(void)
             lfy = (double)nw * lfSin + (double)nh * lfCos + nhsy;
 
             if (isInside (nWidth, nHeight, (int)lfx, (int)lfy))
-                {
+            {
                 if (m_antiAlias)
-                    Digikam::ImageFilters::pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy, 
-                             &pResBits[i+3], &pResBits[i+2], &pResBits[i+1], &pResBits[i]);
+                {
+                    if (!sixteenBit)
+                        filters.pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy,
+                                                  &pResBits[i+3], &pResBits[i+2],
+                                                  &pResBits[i+1], &pResBits[i]);
+                    else
+                        filters.pixelAntiAliasing16(pBits16, nWidth, nHeight, lfx, lfy,
+                                                    &pResBits16[i+3], &pResBits16[i+2],
+                                                    &pResBits16[i+1], &pResBits16[i]);
+                }
                 else
-                    {
+                {
                     j = setPosition (nWidth, (int)lfx, (int)lfy);
 
-                    pResBits[i++] = pBits[j++];
-                    pResBits[i++] = pBits[j++];
-                    pResBits[i++] = pBits[j++];
-                    pResBits[i++] = pBits[j++];
-                    }   
+                    for (int p = 0 ; p < 4 ; p++)
+                    {
+                        if (!sixteenBit)
+                            pResBits[i] = pBits[j];
+                        else
+                            pResBits16[i] = pBits16[j];
+                        
+                        i++;
+                        j++;
+                   }
                 }
             }
         }
+    }
 
     // To compute the rotated destination image size using original image dimensions.        
     int W = (int)(m_orgW * cos(m_angle * DEG2RAD) + m_orgH * sin(fabs(m_angle) * DEG2RAD));
@@ -142,10 +163,11 @@ void FreeRotation::filterImage(void)
     QRect autoCrop;
        
     switch(m_autoCrop)
-       {
-       case WidestArea:
-           {
-           // 'Widest Area' method (by Renchi).
+    {
+        case WidestArea:
+        {
+           // 'Widest Area' method (by Renchi Raju).
+           
            autoCrop.setX( (int)(nHeight * sin(fabs(m_angle) * DEG2RAD)) );
            autoCrop.setY( (int)(nWidth  * sin(fabs(m_angle) * DEG2RAD)) );
            autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(fabs(m_angle) * DEG2RAD)) );
@@ -155,11 +177,12 @@ void FreeRotation::filterImage(void)
            m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
            m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
            break;
-           }
+        }
        
-       case LargestArea:
-           {
-           // 'Largest Area' method (by Gerhard).       
+        case LargestArea:
+        {
+           // 'Largest Area' method (by Gerhard Kulzer).
+           
            float gamma = atan((float)nHeight / (float)nWidth);
            autoCrop.setWidth( (int)((float)nHeight / cos(fabs(m_angle)*DEG2RAD) / 
                               ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
@@ -172,15 +195,14 @@ void FreeRotation::filterImage(void)
                                ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
            m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );        
            break;
-           }
-       default:   // No auto croping.
-           {
+        }
+        default:   // No auto croping.
+        {
            m_newSize.setWidth(  W );
            m_newSize.setHeight( H );
            break;
-           }
-       }
+        }
+    }
 }
-
 
 }  // NameSpace DigikamFreeRotationImagesPlugin
