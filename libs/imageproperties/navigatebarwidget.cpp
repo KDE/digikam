@@ -44,7 +44,14 @@ class NavigateBarWidgetPriv
 {
 public:
 
-    NavigateBarWidgetPriv(){}
+    NavigateBarWidgetPriv()
+    {
+        filename    = 0;
+        firstButton = 0;
+        prevButton  = 0;
+        nextButton  = 0;
+        lastButton  = 0;
+    }
 
     QPushButton        *firstButton;
     QPushButton        *prevButton;
