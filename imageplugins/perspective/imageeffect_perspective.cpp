@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to process image perspective adjustment."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -141,7 +141,7 @@ void ImageEffect_Perspective::slotDefault()
     m_previewWidget->reset();
 } 
 
-void ImageEffect_Perspective::slotOk()
+void ImageEffect_Perspective::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_previewWidget->applyPerspectiveAdjusment();

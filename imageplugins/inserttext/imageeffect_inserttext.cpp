@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for insert text  
  *               to an image.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin for inserting text on a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -324,7 +324,7 @@ void ImageEffect_InsertText::slotUpdatePreview()
                              m_textRotation->currentItem());
 }
 
-void ImageEffect_InsertText::slotOk()
+void ImageEffect_InsertText::finalRendering()
 {
     accept();
     kapp->setOverrideCursor( KCursor::waitCursor() );

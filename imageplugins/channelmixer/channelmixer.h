@@ -4,7 +4,7 @@
  * Date  : 2005-02-26
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -117,12 +117,16 @@ private slots:
     void slotUser3();
     void slotResetCurrentChannel();
     void slotEffect();
-    void slotOk();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);    
+
+protected:
+
+    void finalRendering();    
+
 };
 
 }  // NameSpace DigikamChannelMixerImagesPlugin

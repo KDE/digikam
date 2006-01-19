@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for insert text  
  *               to an image.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,11 +86,15 @@ private slots:
 
     void readSettings(void);
     
-    void slotOk();
     void slotDefault();
     void slotFontPropertiesChanged(const QFont &font);
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);
+
+protected:
+
+    void finalRendering();    
+
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin

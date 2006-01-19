@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -158,7 +158,6 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
-    void slotOk();
     void slotColorSelectedFromOriginal(const Digikam::DColor &color, bool release);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotScaleChanged(int scale);
@@ -166,6 +165,11 @@ private slots:
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);
+
+protected:
+
+    void finalRendering();    
+
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,7 +85,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -234,7 +234,7 @@ void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
        }
 }
 
-void ImageEffect_SuperImpose::slotOk()
+void ImageEffect_SuperImpose::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     

@@ -4,7 +4,7 @@
  * Date  : 2004-12-01
  * Description : image histogram adjust curves. 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,13 +129,16 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
-    void slotOk();
     void slotResetCurrentChannel();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotSpotColorChanged(const Digikam::DColor &color, bool release);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);    
+
+protected:
+
+    void finalRendering();    
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

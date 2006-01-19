@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * Some parts are inspired from RawPhoto implementation copyrighted 
  * 2004-2005 by Pawel T. Jochym <jochym at ifj edu pl>
@@ -104,7 +104,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to correct white color balance."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -663,7 +663,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     delete [] data;
 }
 
-void ImageEffect_WhiteBalance::slotOk()
+void ImageEffect_WhiteBalance::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();

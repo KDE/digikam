@@ -451,7 +451,7 @@ void ChannelMixerDialog::slotEffect()
     delete [] data;
 }
 
-void ChannelMixerDialog::slotOk()
+void ChannelMixerDialog::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();

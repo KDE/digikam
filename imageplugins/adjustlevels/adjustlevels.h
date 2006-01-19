@@ -4,7 +4,7 @@
  * Date  : 2004-07-20
  * Description : image histogram adjust levels. 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -133,7 +133,6 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
-    void slotOk();
     void slotResetCurrentChannel();
     void slotAutoLevels();
     void slotChannelChanged(int channel);
@@ -146,6 +145,11 @@ private slots:
     void slotAdjustMaxOutputSpinBox(int val);
     void slotSpotColorChanged(const Digikam::DColor &color, bool release);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
+
+protected:
+
+    void finalRendering();    
+
 };
 
 }  // NameSpace DigikamAdjustLevelsImagesPlugin

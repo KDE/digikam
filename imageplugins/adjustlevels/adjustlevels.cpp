@@ -573,7 +573,7 @@ void AdjustLevelDialog::slotEffect()
     delete [] orgData;
 }
 
-void AdjustLevelDialog::slotOk()
+void AdjustLevelDialog::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();

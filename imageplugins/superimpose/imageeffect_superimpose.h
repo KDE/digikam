@@ -5,7 +5,7 @@
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,10 +75,13 @@ private:
     
 private slots:
 
-    void slotOk();
     void slotDefault();
     void slotTemplateDirChanged(const KURL& url);
     void slotRootTemplateDirChanged(void);
+
+protected:
+
+    void finalRendering();    
 
 };
 

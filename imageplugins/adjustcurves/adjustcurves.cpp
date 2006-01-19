@@ -435,7 +435,7 @@ void AdjustCurveDialog::slotEffect()
     delete [] orgData;
 }
 
-void AdjustCurveDialog::slotOk()
+void AdjustCurveDialog::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
