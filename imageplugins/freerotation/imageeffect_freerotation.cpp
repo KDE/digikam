@@ -109,7 +109,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString titl
     KSeparator *line = new KSeparator (Horizontal, gboxSettings);
     gridSettings->addMultiCellWidget(line, 2, 2, 0, 2);
 
-    QLabel *label3 = new QLabel(i18n("Main Angle (in degrees):"), gboxSettings);
+    QLabel *label3 = new QLabel(i18n("Main angle:"), gboxSettings);
     m_angleInput = new KIntNumInput(gboxSettings);
     m_angleInput->setRange(-180, 180, 1, true);
     m_angleInput->setValue(0);
@@ -120,11 +120,11 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString titl
     gridSettings->addMultiCellWidget(label3, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_angleInput, 4, 4, 0, 2);
 
-    QLabel *label4 = new QLabel(i18n("Fine Angle (in degrees):"), gboxSettings);
+    QLabel *label4 = new QLabel(i18n("Fine angle:"), gboxSettings);
     m_fineAngleInput = new KDoubleNumInput(gboxSettings);
     m_fineAngleInput->setRange(-5.0, 5.0, 0.01, true);
     m_fineAngleInput->setValue(0);
-    QWhatsThis::add( m_fineAngleInput, i18n("<p>This value will be added to Main Angle value "
+    QWhatsThis::add( m_fineAngleInput, i18n("<p>This value in degrees will be added to main angle value "
                                             "to set fine target angle."));
 
     gridSettings->addMultiCellWidget(label4, 5, 5, 0, 2);
