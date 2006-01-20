@@ -264,7 +264,7 @@ void ImageEffect_ShearTool::prepareFinal()
 
     uchar *data = iface.getOriginalImage();
     Digikam::DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
-                           iface.originalHasAlpha(), iface.getOriginalImage());
+                           iface.originalHasAlpha(), data);
     delete [] data;
     
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
