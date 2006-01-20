@@ -155,7 +155,7 @@ private:
     // Comments/Tags dialogs from main window.
     AlbumIconView           *m_view;
     
-    Digikam::ImagePropertiesSideBarDB *m_rightSidebar;
+    ImagePropertiesSideBarDB *m_rightSidebar;
 
     ImageWindowSavingContext *m_savingContext;
     
