@@ -214,7 +214,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                           " the colors that are out of the printer gamut<p>"));
 
     QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
-    m_embeddProfileBox->setText(i18n("Embedd profile"));
+    m_embeddProfileBox->setText(i18n("Embed profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embedd"
                                              " into the image the selected color profile.</p>"));
 
@@ -505,6 +505,9 @@ void ImageEffect_ICCProof::slotEffect()
     if (iface->getEmbeddedICCFromOriginalImage().isNull())
     {
         m_useEmbeddedProfile->setEnabled(false);
+    }
+    else
+    {
         hasICC = true;
         m_embeddedICC = iface->getEmbeddedICCFromOriginalImage();
     }
@@ -534,6 +537,9 @@ void ImageEffect_ICCProof::finalRendering()
 void ImageEffect_ICCProof::slotTestIt()
 {
     /// @todo implement me
+    /// FIXME embed profile is not implemented -- Paco Cruz
+    /// FIXME use of Display profile is not implemented -- Paco Cruz
+    
     kapp->setOverrideCursor(KCursor::waitCursor());
 
     enableButtonOK(true);
@@ -542,6 +548,64 @@ void ImageEffect_ICCProof::slotTestIt()
 
     Digikam::IccTransform transform;
 
+    if (m_destinationPreviewData) 
+       delete [] m_destinationPreviewData;
+
+    m_destinationPreviewData   = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
+
+    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+
+    QString tmpInPath;
+    QString tmpProofPath;
+    QString tmpSpacePath;
+    
+    ///////////////////////////////////////
+    // Get parameters for transformation //
+    ///////////////////////////////////////
+    
+    //---------Input profile ------------------
+    
+    if (useDefaultInProfile())
+    {
+        tmpInPath = inPath;
+    }
+    else if (useSelectedInProfile())
+    {
+        tmpInPath = m_inProfilesCB->url();
+    }
+
+    //--------Proof profile ------------------
+
+    if (useDefaultProofProfile())
+    {
+        tmpProofPath = proofPath;
+    }
+    else
+    {
+        tmpProofPath = m_proofProfileCB->url();
+    }
+
+    //-------Workspace profile--------------
+
+    if (useDefaultSpaceProfile())
+    {
+        tmpSpacePath = spacePath;
+    }
+    else
+    {
+        tmpSpacePath = m_spaceProfileCB->url();
+    }
+
+    //------------------------------------------
+
+    transform.getTransformType(m_doSoftProofBox->isChecked());
+
+    
+    
     kapp->restoreOverrideCursor();
 }
 
@@ -577,7 +641,24 @@ void ImageEffect_ICCProof::slotToggledWidgets( bool t)
  */
 void ImageEffect_ICCProof::slotInICCInfo()
 {
-    getICCInfo(m_inProfilesCB->url());
+    if (useEmbeddedProfile())
+    {
+        getICCInfo(m_embeddedICC);
+    }
+    else if(useBuiltinProfile())
+    {
+        QString message = QString(i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>"));
+        message.append(QString(i18n("<p>This profile is built on the fly, so there is not relevant information about it.</p>")));
+        KMessageBox::information(this, message);
+    }
+    else if (useDefaultInProfile())
+    {
+        getICCInfo(inPath);
+    }
+    else if (useSelectedInProfile())
+    {
+        getICCInfo(m_inProfilesCB->url());
+    }
 }
 
 
@@ -586,7 +667,14 @@ void ImageEffect_ICCProof::slotInICCInfo()
  */
 void ImageEffect_ICCProof::slotProofICCInfo()
 {
-    getICCInfo(m_proofProfileCB->url());
+    if (useDefaultProofProfile())
+    {
+        getICCInfo(proofPath);
+    }
+    else
+    {
+        getICCInfo(m_proofProfileCB->url());
+    }
 }
 
 
@@ -595,7 +683,14 @@ void ImageEffect_ICCProof::slotProofICCInfo()
  */
 void ImageEffect_ICCProof::slotSpaceICCInfo()
 {
-    getICCInfo(m_spaceProfileCB->url());
+    if (useDefaultSpaceProfile())
+    {
+        getICCInfo(spacePath);
+    }
+    else
+    {
+        getICCInfo(m_spaceProfileCB->url());
+    }
 }
 
 
@@ -604,7 +699,14 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
  */
 void ImageEffect_ICCProof::slotDisplayICCInfo()
 {
-    getICCInfo(m_displayProfileCB->url());
+    if (useDefaultDisplayProfile())
+    {
+        getICCInfo(displayPath);
+    }
+    else
+    {
+        getICCInfo(m_displayProfileCB->url());
+    }
 }
 
 void ImageEffect_ICCProof::getICCInfo(const QString& profile)
@@ -646,6 +748,51 @@ void ImageEffect_ICCProof::getICCInfo(const QString& profile)
                                  i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
                                  profile + "</p>",
                                  i18n("Color Profile Info"));
+}
+
+void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
+{
+    if (profile.isNull())
+    {
+        KMessageBox::error(this, i18n("Sorry, it seems there is no embedded profile"), i18n("Profile Error"));
+        return;
+    }
+    QString intent;
+    cmsHPROFILE selectedProfile;
+    selectedProfile = cmsOpenProfileFromMem(profile.data(), (DWORD)profile.size());
+
+    QString  profileName = QString((cmsTakeProductName(selectedProfile)));
+    QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
+    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
+    int profileIntent = cmsTakeRenderingIntent(selectedProfile);
+    
+    //"Decode" profile rendering intent
+    switch (profileIntent)
+    {
+        case 0:
+            intent = i18n("Perceptual");
+            break;
+        case 1:
+            intent = i18n("Relative Colorimetric");
+            break;
+        case 2:
+            intent = i18n("Saturation");
+            break;
+        case 3:
+            intent = i18n("Absolute Colorimetric");
+            break;
+    }
+
+    QString message = QString(i18n("<p><b>Name:</b> "));
+    message.append(profileName);
+    message.append(QString(i18n("</p><p><b>Description:</b>  ")));
+    message.append(profileDescription);
+    message.append(QString(i18n("</p><p><b>Copyright:</b>  ")));
+    message.append(profileManufacturer);
+    message.append(QString(i18n("</p><p><b>Rendering Intent:</b>  ")));
+    message.append(intent);
+    message.append(QString(i18n("</p><p><b>Path:</b> Embedded profile</p>")));
+    KMessageBox::information(this, message);
 }
 
 void ImageEffect_ICCProof::slotCMDisabledWarning()

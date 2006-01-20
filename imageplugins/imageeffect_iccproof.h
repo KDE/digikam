@@ -140,6 +140,7 @@ private:
 
     void                            readSettings();
     void                            getICCInfo(const QString&);
+    void                            getICCInfo(QByteArray&);
 
     bool                            useBPC();
     bool                            doProof();
