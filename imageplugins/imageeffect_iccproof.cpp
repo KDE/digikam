@@ -537,7 +537,7 @@ void ImageEffect_ICCProof::finalRendering()
 void ImageEffect_ICCProof::slotTestIt()
 {
     /// @todo implement me
-    /// FIXME embed profile is not implemented -- Paco Cruz
+    /// FIXME "embed profile" option is not implemented -- Paco Cruz
     /// FIXME use of Display profile is not implemented -- Paco Cruz
     
     kapp->setOverrideCursor(KCursor::waitCursor());
@@ -604,7 +604,49 @@ void ImageEffect_ICCProof::slotTestIt()
 
     transform.getTransformType(m_doSoftProofBox->isChecked());
 
+    if (m_doSoftProofBox->isChecked())
+    {
+        if (m_useEmbeddedProfile->isChecked())
+        {
+            transform.setProfiles( spacePath, proofPath, true );
+        }
+        else
+        {
+            transform.setProfiles( inPath, spacePath, proofPath);
+        }
+    }
+    else
+    {
+        if (m_useEmbeddedProfile->isChecked())
+        {
+            transform.setProfiles( spacePath );
+        }
+        else
+        {
+            transform.setProfiles( inPath, spacePath );
+        }
+    }
+
     
+    if (m_useEmbeddedProfile->isChecked())
+    {
+        transform.apply(preview, m_embeddedICC, useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+    }
+    else
+    {
+        QByteArray fakeProfile = QByteArray();
+        transform.apply(preview, fakeProfile, useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+    }
+    
+    iface->putPreviewImage(preview.bits());
+
+    m_previewWidget->updatePreview();
+
+    // Update histogram.
+   
+    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
+    kdDebug() << "Doing updateData" << endl;
+    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
     
     kapp->restoreOverrideCursor();
 }
