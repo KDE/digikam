@@ -42,6 +42,8 @@ public:
     
     void getTransformType(bool do_proof_profile);
     void apply(DImg& image);
+    void apply(DImg& image, QByteArray& profile, bool useBPC = false, bool checkGamut = false,
+               bool useBuiltin=false);
     void getEmbeddedProfile(DImg image);
     
     //Input profile from file

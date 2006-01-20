@@ -270,6 +270,163 @@ void IccTransform::apply(DImg& image)
        cmsCloseProfile(proofprofile);
 }
 
+void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool checkGamut, bool useBuiltin )
+{
+    /// FIXME use of checkGamut is not implemented. -- Paco Cruz
+
+    cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
+    cmsHTRANSFORM transform;
+    int transformFlags = 0;
+
+    if (!profile.isNull())
+    {
+        inprofile = cmsOpenProfileFromMem(profile.data(),
+                                          (DWORD)profile.size());
+    }
+    else if (useBuiltin)
+    {
+        inprofile = cmsCreate_sRGBProfile();
+    }
+    else
+    {
+        inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
+    }
+
+    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
+
+    if (useBPC)
+    {
+        transformFlags = cmsFLAGS_WHITEBLACKCOMPENSATION;
+    }
+    
+    if (!d->do_proof_profile)
+    {
+        if (image.sixteenBit())
+        {
+            if (image.hasAlpha())
+            {
+                transform = cmsCreateTransform( inprofile,
+                                                TYPE_BGRA_16,
+                                                outprofile,
+                                                TYPE_BGRA_16,
+                                                INTENT_PERCEPTUAL,
+                                                transformFlags);
+            }
+            else
+            {
+                transform = cmsCreateTransform( inprofile,
+                                                TYPE_BGR_16,
+                                                outprofile,
+                                                TYPE_BGR_16,
+                                                INTENT_PERCEPTUAL,
+                                                transformFlags);
+            }
+
+        }
+        else
+        {
+            if (image.hasAlpha())
+            {
+                transform = cmsCreateTransform( inprofile,
+                                                TYPE_BGRA_8,
+                                                outprofile,
+                                                TYPE_BGRA_8,
+                                                INTENT_PERCEPTUAL,
+                                                transformFlags);
+            }
+            else
+            {
+                transform = cmsCreateTransform( inprofile,
+                                                TYPE_BGR_8,
+                                                outprofile,
+                                                TYPE_BGR_8,
+                                                INTENT_PERCEPTUAL,
+                                                transformFlags);
+            }
+
+        }
+    }
+    else
+    {
+        proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+
+        if (image.sixteenBit())
+        {
+            if (image.hasAlpha())
+            {
+                transform = cmsCreateProofingTransform( inprofile,
+                                                        TYPE_BGRA_16,
+                                                        outprofile,
+                                                        TYPE_BGRA_16,
+                                                        proofprofile,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        transformFlags);
+            }
+            else
+            {
+                transform = cmsCreateProofingTransform( inprofile,
+                                                        TYPE_BGR_16,
+                                                        outprofile,
+                                                        TYPE_BGR_16,
+                                                        proofprofile,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        transformFlags);
+            }
+        }
+        else
+        {
+            if (image.hasAlpha())
+            {
+                transform = cmsCreateProofingTransform( inprofile,
+                                                        TYPE_BGR_8,
+                                                        outprofile,
+                                                        TYPE_BGR_8,
+                                                        proofprofile,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        transformFlags);
+            }
+            else
+            {
+                transform = cmsCreateProofingTransform( inprofile,
+                                                        TYPE_BGR_8,
+                                                        outprofile,
+                                                        TYPE_BGR_8,
+                                                        proofprofile,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        transformFlags);
+            }
+        }
+    }
+
+     // We need to work using temp pixel buffer to apply ICC transformations.
+    uchar  transdata[image.bytesDepth()];
+    
+    // Always working with uchar* prevent endianess problem.
+    uchar *data = image.bits();
+
+    // We scan all image pixels one by one.
+    for (uint i=0; i < image.width()*image.height()*image.bytesDepth(); i+=image.bytesDepth())
+    {
+        // Apply ICC transformations.
+        cmsDoTransform( transform, &data[i], &transdata[0], 1);
+        
+        // Copy buufer to source to update original image with ICC corrections.
+        // Alpha channel is restored in all cases.
+        memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);        
+    }
+    
+    cmsDeleteTransform(transform);
+    cmsCloseProfile(inprofile);
+    cmsCloseProfile(outprofile);
+    
+    if (d->do_proof_profile)
+       cmsCloseProfile(proofprofile);
+}
+
 QString IccTransform::getProfileDescription(QString profile)
 {
 
