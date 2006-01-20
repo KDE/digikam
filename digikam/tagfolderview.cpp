@@ -488,12 +488,17 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     if(children)
     {
         int result =
-            KMessageBox::warningContinueCancel(this, i18n("Tag '%1' has %2 subtag(s). "
-                                                 "Deleting this will also delete "
-                                                 "the subtag(s). "
-                                                 "Are you sure you want to continue?")
-                                      .arg(tag->title())
-                                      .arg(children),i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
+            KMessageBox::warningContinueCancel(this,
+                    i18n("Tag '%1' has one subtag. "
+                         "Deleting this will also delete "
+                         "the subtag. "
+                         "Are you sure you want to continue?",
+                         "Tag '%1' has %n subtags. "
+                         "Deleting this will also delete "
+                         "the subtags. "
+                         "Are you sure you want to continue?",
+                         children).arg(tag->title()),
+                      i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
 
         if(result == KMessageBox::Continue)
         {
