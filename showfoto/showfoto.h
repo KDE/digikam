@@ -53,6 +53,7 @@ class ThumbBarItem;
 class ImagePropertiesSideBar;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
+class SavingContextContainer;
 class SplashScreen;
 }
 
@@ -60,7 +61,6 @@ namespace ShowFoto
 {
 
 class SlideShow;
-class ShowFotoSavingContext;
 
 class ShowFoto : public KMainWindow
 {
@@ -151,8 +151,7 @@ private:
     Digikam::ICCSettingsContainer    *m_ICCSettings;
     Digikam::IOFileSettingsContainer *m_IOFileSettings;
     Digikam::SplashScreen            *m_splash;
-
-    ShowFotoSavingContext            *m_savingContext;
+    Digikam::SavingContextContainer  *m_savingContext;
 
 private:
 

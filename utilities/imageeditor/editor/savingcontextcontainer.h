@@ -54,10 +54,13 @@ public:
     bool                     fileExists;
     
     QString                  format;
+    QString                  tmpFile;
 
     KProgressDialog         *progressDialog;
 
+    KURL                     currentURL;
     KURL                     saveURL;
+    KURL                     saveAsURL;
 
     KTempFile               *saveTempFile;
 };

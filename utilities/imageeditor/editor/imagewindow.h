@@ -52,7 +52,7 @@ class Canvas;
 class ImagePropertiesSideBarDB;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
-class ImageWindowSavingContext;
+class SavingContextContainer;
 
 class ImageWindow : public KMainWindow
 {
@@ -157,7 +157,7 @@ private:
     
     ImagePropertiesSideBarDB *m_rightSidebar;
 
-    ImageWindowSavingContext *m_savingContext;
+    SavingContextContainer   *m_savingContext;
     
 private:
 

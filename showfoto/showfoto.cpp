@@ -90,29 +90,11 @@
 #include "slideshow.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
+#include "savingcontextcontainer.h"
 #include "showfoto.h"
 
 namespace ShowFoto
 {
-
-class ShowFotoSavingContext
-{
-public:
-    ShowFotoSavingContext()
-    {
-        progressDialog          = 0;
-        fromSave                = false;
-        synchronousSavingResult = false;
-    }
-
-    KProgressDialog         *progressDialog;
-    bool                     fromSave;
-    bool                     synchronousSavingResult;
-    KURL                     saveAsURL;
-    KURL                     url;
-    QString                  format;
-    QString                  tmpFile;
-};
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : KMainWindow( 0, "Showfoto" )
@@ -128,8 +110,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_isReadOnly             = false;
     m_config                 = kapp->config();
 
-    m_savingContext          = new ShowFotoSavingContext;
-
     m_config->setGroup("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
     KGlobal::iconLoader()->addAppDir("digikam");
@@ -143,6 +123,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     m_ICCSettings    = new Digikam::ICCSettingsContainer();
     m_IOFileSettings = new Digikam::IOFileSettingsContainer();
+    m_savingContext  = new Digikam::SavingContextContainer();
 
     // -- construct the view ---------------------------------
 
@@ -754,7 +735,7 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    m_savingContext->url = m_currentItem->url();
+    m_savingContext->currentURL = m_currentItem->url();
 
     // FIXME : Add 16 bits file formats
 
@@ -762,14 +743,14 @@ bool ShowFoto::saveAs()
 
     kdDebug () << "mimetypes=" << mimetypes << endl;    
 
-    KFileDialog saveDialog(m_savingContext->url.isLocalFile() ? m_savingContext->url.directory() : QDir::homeDirPath(),
+    KFileDialog saveDialog(m_savingContext->currentURL.isLocalFile() ? m_savingContext->currentURL.directory() : QDir::homeDirPath(),
                            QString::null,
                            this,
                            "imageFileSaveDialog",
                            false);
     saveDialog.setOperationMode( KFileDialog::Saving );
     saveDialog.setMode( KFile::File );
-    saveDialog.setSelection(m_savingContext->url.fileName());
+    saveDialog.setSelection(m_savingContext->currentURL.fileName());
     saveDialog.setCaption( i18n("New Image File Name") );
     saveDialog.setFilter(mimetypes);
 
@@ -793,7 +774,7 @@ bool ShowFoto::saveAs()
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageIO::imageFormat(m_savingContext->url.path());
+            m_savingContext->format = QImageIO::imageFormat(m_savingContext->currentURL.path());
         }
         else
         {
@@ -825,10 +806,10 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    m_savingContext->url.cleanPath();
+    m_savingContext->currentURL.cleanPath();
     m_savingContext->saveAsURL.cleanPath();
 
-    if (m_savingContext->url.equals(m_savingContext->saveAsURL))
+    if (m_savingContext->currentURL.equals(m_savingContext->saveAsURL))
     {
         slotSave();
         return false;
@@ -912,15 +893,15 @@ bool ShowFoto::save()
         return true;
     }
 
-    m_savingContext->url = m_currentItem->url();
-    if (!m_savingContext->url.isLocalFile())
+    m_savingContext->currentURL = m_currentItem->url();
+    if (!m_savingContext->currentURL.isLocalFile())
     {
         KMessageBox::sorry(this, i18n("No support for saving non-local files"));
         return false;
     }
 
-    m_savingContext->tmpFile = m_savingContext->url.directory() + QString("/.showfoto-tmp-")
-                      + m_savingContext->url.filename();
+    m_savingContext->tmpFile = m_savingContext->currentURL.directory() + QString("/.showfoto-tmp-")
+                      + m_savingContext->currentURL.filename();
     
     m_savingContext->fromSave = true;
     m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings);
@@ -944,7 +925,7 @@ void ShowFoto::slotSavingFinished(const QString &filename, bool success)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->url.filename()));
+                    .arg(m_savingContext->currentURL.filename()));
                 ::unlink(QFile::encodeName(m_savingContext->tmpFile));
                 finishSaving(false);
                 return;
@@ -953,9 +934,9 @@ void ShowFoto::slotSavingFinished(const QString &filename, bool success)
         if ( m_canvas->exifRotated() )
             KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
 
-        kdDebug() << "renaming to " << m_savingContext->url.path() << endl;
+        kdDebug() << "renaming to " << m_savingContext->currentURL.path() << endl;
         if (::rename(QFile::encodeName(m_savingContext->tmpFile),
-              QFile::encodeName(m_savingContext->url.path())) != 0)
+              QFile::encodeName(m_savingContext->currentURL.path())) != 0)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to overwrite original file"));
@@ -983,7 +964,7 @@ void ShowFoto::slotSavingFinished(const QString &filename, bool success)
         }
 
         // only try to write exif if both src and destination are jpeg files
-        if (QString(QImageIO::imageFormat(m_savingContext->url.path())).upper() == "JPEG" &&
+        if (QString(QImageIO::imageFormat(m_savingContext->currentURL.path())).upper() == "JPEG" &&
             m_savingContext->format.upper() == "JPEG")
         {
             if ( m_canvas->exifRotated() )

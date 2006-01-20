@@ -85,31 +85,11 @@
 #include "tagspopupmenu.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
+#include "savingcontextcontainer.h"
 #include "imagewindow.h"
 
 namespace Digikam
 {
-
-class ImageWindowSavingContext
-{
-public:
-    ImageWindowSavingContext()
-    {
-        fromSave                = false;
-        saveTempFile            = 0;
-        fileExists              = false;
-        progressDialog          = 0;
-        synchronousSavingResult = false;
-    }
-
-    bool                     fromSave;
-    KURL                     saveURL;
-    KTempFile               *saveTempFile;
-    QString                  format;
-    bool                     fileExists;
-    KProgressDialog         *progressDialog;
-    bool                     synchronousSavingResult;
-};
 
 ImageWindow* ImageWindow::imagewindow()
 {
@@ -139,8 +119,7 @@ ImageWindow::ImageWindow()
 
     m_ICCSettings           = new ICCSettingsContainer();
     m_IOFileSettings        = new IOFileSettingsContainer();
-
-    m_savingContext         = new ImageWindowSavingContext;
+    m_savingContext         = new SavingContextContainer();
 
     // -- construct the view ---------------------------------
 
