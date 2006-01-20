@@ -28,6 +28,7 @@
 #include <dimg.h>
 #include <dimgimagefilters.h>
 #include <dimgthreadedfilter.h>
+#include <bcgmodifier.h>
 #include <dcolor.h>
 #include <imageiface.h>
 #include <imagehistogram.h>
@@ -57,6 +58,7 @@
 #include <digikam/dimg.h>
 #include <digikam/dimgimagefilters.h>
 #include <digikam/dimgthreadedfilter.h>
+#include <digikam/bcgmodifier.h>
 #include <digikam/dcolor.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagehistogram.h>
