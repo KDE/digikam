@@ -52,7 +52,7 @@ public:
     
     //Embedded input profile
     void setProfiles(QString output_profile);
-    //void setProfiles(QString * output_profile, QString * proof_profile);
+    void setProfiles(QString output_profile, QString proof_profile, bool forProof);
 
     //Profile info
     QString getProfileDescription(QString profile);

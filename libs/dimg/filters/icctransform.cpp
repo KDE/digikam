@@ -113,6 +113,15 @@ void IccTransform::setProfiles(QString output_profile)
     d->output_profile = output_profile;
 }
 
+void IccTransform::setProfiles( QString output_profile, QString proof_profile, bool forProof )
+{
+    if (forProof)
+    {
+        d->output_profile = output_profile;
+        d->proof_profile  = proof_profile;
+    }
+}
+
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
 kdDebug() << "First open embedded profile" << endl;
@@ -282,6 +291,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
     {
         inprofile = cmsOpenProfileFromMem(profile.data(),
                                           (DWORD)profile.size());
+        kdDebug() << "Embedded desc: " << cmsTakeProductDesc(inprofile) << endl;
     }
     else if (useBuiltin)
     {
