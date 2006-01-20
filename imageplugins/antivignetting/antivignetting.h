@@ -4,7 +4,7 @@
  * Date  : 2005-05-25
  * Description : Antivignetting threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,12 +29,12 @@
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-class AntiVignetting : public Digikam::ThreadedFilter
+class AntiVignetting : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    AntiVignetting(QImage *orgImage, QObject *parent=0, double density=2.0, 
+    AntiVignetting(Digikam::DImg *orgImage, QObject *parent=0, double density=2.0,
                    double power=1.0, double radius=1.0, int xshift=0, int yshift=0, bool normalize=true);
     
     ~AntiVignetting(){};

@@ -4,7 +4,7 @@
  * Date  : 2005-05-25
  * Description : Antivignetting threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * Original AntiVignetting algorithm copyrighted 2003 by 
  * John Walker from 'pnmctrfilt' implementation. See 
@@ -40,9 +40,9 @@
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-AntiVignetting::AntiVignetting(QImage *orgImage, QObject *parent, double density, 
+AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double density,
                                double power, double radius, int xshift, int yshift, bool normalize)
-              : Digikam::ThreadedFilter(orgImage, parent, "AntiVignetting")
+              : Digikam::DImgThreadedFilter(orgImage, parent, "AntiVignetting")
 { 
     m_density   = density;
     m_power     = power;
@@ -62,14 +62,14 @@ void AntiVignetting::filterImage(void)
     int     i, xsize, ysize, diagonal, erad, xctr, yctr;
     double *ldens;
     
-    // Big/Little endian compatibility.
-    int red, green, blue;
-    Digikam::ImageFilters::imageData imageData; 
-        
-    uint* NewBits = (uint*)m_destImage.bits();
-    uint* data    = (uint*)m_orgImage.bits();
-    int   Width   = m_orgImage.width();
-    int   Height  = m_orgImage.height();
+    uchar* NewBits = m_destImage.bits();
+    uchar* data    = m_orgImage.bits();
+
+    unsigned short* NewBits16 = (unsigned short*)m_destImage.bits();
+    unsigned short* data16    = (unsigned short*)m_orgImage.bits();
+
+    int Width  = m_orgImage.width();
+    int Height = m_orgImage.height();
 
     // Determine the radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the command line radius factor. 
@@ -92,50 +92,55 @@ void AntiVignetting::filterImage(void)
     ldens = new double[diagonal];
     
     for (i = 0 ; !m_cancel && (i < diagonal) ; i++)
-        {
+    {
         if ( i >= erad )
            ldens[i] = 1;
         else 
            ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
-        }
+    }
 
     xctr = ((Height + 1) / 2) + m_xshift;
     yctr = ((Width + 1) / 2) + m_yshift;
     
     for (row = 0 ; !m_cancel && (row < Width) ; row++) 
-        {
+    {
         yd = abs(yctr - row);
 
         for (col = 0 ; !m_cancel && (col < Height) ; col++) 
-            {
-            p = col * Width + row;         
+        {
+            p = (col * Width + row)*4;         
 
             xd = abs(xctr - col);
             td = (int) (sqrt((xd * xd) + (yd * yd)) + 0.5);
 
-            imageData.raw = data[p];               
-            red           = (int)imageData.channel.red;
-            green         = (int)imageData.channel.green;
-            blue          = (int)imageData.channel.blue;
-            
-            imageData.channel.red   = (uchar)(red   / ldens[td]);
-            imageData.channel.green = (uchar)(green / ldens[td]);
-            imageData.channel.blue  = (uchar)(blue  / ldens[td]);
-            
-            NewBits[p] = imageData.raw;
+            if (!m_orgImage.sixteenBit())       // 8 bits image
+            {
+                NewBits[ p ] = (uchar)(data[ p ] / ldens[td]);
+                NewBits[p+1] = (uchar)(data[p+1] / ldens[td]);
+                NewBits[p+2] = (uchar)(data[p+2] / ldens[td]);
+                NewBits[p+3] = data[p+3];
             }
+            else               // 16 bits image.
+            {
+                NewBits16[ p ] = (unsigned short)(data16[ p ] / ldens[td]);
+                NewBits16[p+1] = (unsigned short)(data16[p+1] / ldens[td]);
+                NewBits16[p+2] = (unsigned short)(data16[p+2] / ldens[td]);
+                NewBits16[p+3] = data16[p+3];
+            }
+        }
         
         // Update the progress bar in dialog.
         
         if (m_parent)
            postProgress( (int) (((double)row * 100.0) / Width) );      
-        }
-
-    // FIXME to support 16 bits images properly
+    }
 
     // Normalize colors for a best rendering.   
     if (m_normalize)
-       Digikam::ImageFilters::normalizeImage((uchar*)NewBits, Width, Height, false);
+    {
+       Digikam::DImgImageFilters filters;
+       filters.normalizeImage(m_destImage.bits(), Width, Height, m_destImage.sixteenBit());
+    }
         
     delete [] ldens;        
 }

@@ -4,7 +4,7 @@
  * Date  : 2004-12-25
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_antivignetting.h"
 #include "imageplugin_antivignetting.h"
 
@@ -59,9 +60,12 @@ void ImagePlugin_AntiVignetting::setEnabledActions(bool enable)
 
 void ImagePlugin_AntiVignetting::slotAntiVignetting()
 {
-    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(parentWidget());
+    QString title = i18n("Anti-Vignetting");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamAntiVignettingImagesPlugin::ImageEffect_AntiVignetting dlg(parentWidget(),
+                                title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
-
 
 #include "imageplugin_antivignetting.moc"
