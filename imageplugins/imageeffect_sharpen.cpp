@@ -95,7 +95,8 @@ void ImageEffect_Sharpen::prepareEffect()
     
     Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
         
-    m_threadedFilter = new Digikam::DImgSharpen(&img, this, m_radiusInput->value()*4);
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new Digikam::DImgSharpen(&img, this, m_radiusInput->value()*4));
 }
 
 void ImageEffect_Sharpen::prepareFinal()
@@ -110,7 +111,8 @@ void ImageEffect_Sharpen::prepareFinal()
     bool hasAlpha   = iface.originalHasAlpha();
     Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    m_threadedFilter = new Digikam::DImgSharpen(&orgImage, this, m_radiusInput->value()*4);
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new Digikam::DImgSharpen(&orgImage, this, m_radiusInput->value()*4));
 }
 
 void ImageEffect_Sharpen::putPreviewData(void)

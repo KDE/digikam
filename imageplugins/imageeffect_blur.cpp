@@ -95,7 +95,8 @@ void ImageEffect_Blur::prepareEffect()
     
     Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
         
-    m_threadedFilter = new Digikam::DImgGaussianBlur(&img, this, m_radiusInput->value());    
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new Digikam::DImgGaussianBlur(&img, this, m_radiusInput->value()));    
 }
 
 void ImageEffect_Blur::prepareFinal()
@@ -110,7 +111,8 @@ void ImageEffect_Blur::prepareFinal()
     bool hasAlpha   = iface.originalHasAlpha();
     Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    m_threadedFilter = new Digikam::DImgGaussianBlur(&orgImage, this, m_radiusInput->value());
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new Digikam::DImgGaussianBlur(&orgImage, this, m_radiusInput->value()));
 }
 
 void ImageEffect_Blur::putPreviewData(void)
