@@ -23,9 +23,9 @@
 * 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
 
    - BCG Adjust    (core plugin) : Done.
-   - HSL Adjust    (core plugin) : Incomplete. There is a problem in DImg::DColor with 16 bits images.
+   - HSL Adjust    (core plugin) : Uncomplete. There is a problem in DImg::DColor with 16 bits images.
    - RGB Adjust    (core plugin) : Done.
-   - Red Eyes      (core plugin) : Incomplete. Need to backport blending pixels method from imlib2.
+   - Red Eyes      (core plugin) : Uncomplete. Need to backport blending pixels method from imlib2.
    - B&W Tool      (core plugin) : Done.
    - Blur Tool     (core plugin) : Done.
    - Sharpen Tool  (core plugin) : TODO.
@@ -35,7 +35,7 @@
 
    - Adjust Curves   (digikamimageplugins) : Done.
    - Adjust Levels   (digikamimageplugins) : Done.
-   - Anti Vignetting (digikamimageplugins) : TODO.
+   - Anti Vignetting (digikamimageplugins) : Done.
    - Blowup          (digikamimageplugins) : Done.
    - Blur FX         (digikamimageplugins) : TODO.
    - Add Border      (digikamimageplugins) : TODO.
