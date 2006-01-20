@@ -159,7 +159,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
     QWhatsThis::add( m_gammaInput, i18n("<p>Set here the gamma re-adjustment of the target image."));
 
     gridSettings->addMultiCellWidget(label6, 11, 11, 0, 2);
-    gridSettings->addMultiCellWidget(m_gammaInput, 12, 12, 1, 2);
+    gridSettings->addMultiCellWidget(m_gammaInput, 12, 12, 0, 2);
 
     setUserAreaWidget(gboxSettings);
     
@@ -235,8 +235,15 @@ void ImageEffect_AntiVignetting::prepareEffect()
     double p = m_powerInput->value();
     double r = m_radiusInput->value();
 
+    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
+    uchar *data   = iface->getOriginalImage();
+    int orgWidth  = iface->originalWidth();
+    int orgHeight = iface->originalHeight();
+    QSize ps(orgWidth, orgHeight);
+    ps.scale( QSize(120, 120), QSize::ScaleMin );    
+
     // Calc mask preview.    
-    Digikam::DImg preview(120, 120, false);
+    Digikam::DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
     AntiVignetting maskPreview(&preview, 0L, d, p, r, 0, 0, false);
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
@@ -246,9 +253,7 @@ void ImageEffect_AntiVignetting::prepareEffect()
     pt.end();
     m_maskPreviewLabel->setPixmap( pix );
     
-    Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    uchar *data = iface->getOriginalImage();
-    Digikam::DImg orgImage(iface->originalWidth(), iface->originalHeight(), iface->originalSixteenBit(),
+    Digikam::DImg orgImage(orgWidth, orgHeight, iface->originalSixteenBit(),
                            iface->originalHasAlpha(), data);
     delete [] data;
 
