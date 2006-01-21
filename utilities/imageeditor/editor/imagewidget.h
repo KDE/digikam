@@ -1,6 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-02-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2004-02-14
  * Description : simple widget to display an image 
  * 
  * Copyright 2004 by Renchi Raju
