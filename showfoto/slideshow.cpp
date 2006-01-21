@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-04-21
- * Description : slideshow for showfoto
+ * Description : slide show tool
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,72 +35,121 @@
 namespace ShowFoto
 {
 
-SlideShow::SlideShow(KAction* first, KAction* next)
-         : m_first(first), m_next(next), m_delay(5), 
-           m_loop(false), m_startWithCurrent(false)
+class SlideShowPriv
 {
-    m_timer = new QTimer(this);
+public:
+
+    SlideShowPriv()
+    {
+        timer            = 0;
+        first            = 0;
+        next             = 0;
+        delay            = 5;
+        loop             = false;
+        startWithCurrent = false;
+    }
+
+    bool     loop;
+    bool     startWithCurrent;
+
+    int      delay;
+
+    QTimer  *timer;
     
-    connect(m_timer, SIGNAL(timeout()),
+    KAction *first;
+    KAction *next;
+};
+
+SlideShow::SlideShow(KAction* first, KAction* next)
+{
+    d = new SlideShowPriv;
+    d->first = first;
+    d->next  = next;
+    d->timer = new QTimer(this);
+        
+    connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()) );
+}
+
+SlideShow::~SlideShow()
+{
+    stop();
+    delete d;
 }
 
 void SlideShow::setLoop(bool value)
 {
-    m_loop = value;
+    d->loop = value;
 }
 
 void SlideShow::setStartWithCurrent(bool value)
 {
-    m_startWithCurrent = value;
+    d->startWithCurrent = value;
 }
 
 void SlideShow::setDelay(int delay)
 {
-    m_delay = delay;
+    d->delay = delay;
     
-    if (m_timer->isActive()) 
+    if (d->timer->isActive()) 
     {
-        m_timer->changeInterval(delay*1000);
+        d->timer->changeInterval(delay*1000);
     }
 }
 
 void SlideShow::start()
 {
-    if (!m_first->isEnabled()
-        && !m_next->isEnabled()) 
+    if (!d->first->isEnabled()
+        && !d->next->isEnabled()) 
     {
         emit finished();
         return;
     }
-    if (m_first->isEnabled() && !m_startWithCurrent) 
+
+    if (d->first->isEnabled() && !d->startWithCurrent) 
     {
-        m_first->activate();
+        d->first->activate();
     }
-    m_timer->start(m_delay*1000);
+
+    d->timer->start(d->delay*1000);
 }
 
 void SlideShow::stop()
 {
-    m_timer->stop();
+    d->timer->stop();
 }
 
 void SlideShow::slotTimeout()
 {
-    if (!m_next->isEnabled()) 
+    if (!d->next->isEnabled()) 
     {
-        if (m_loop) 
+        if (d->loop) 
         {
-            m_first->activate();
+            d->first->activate();
             return;
         }
         
-        m_timer->stop();
+        d->timer->stop();
         emit finished();
         return;
     }
 
-    m_next->activate();
+    d->next->activate();
+}
+
+bool SlideShow::startWithCurrent() const 
+{
+    return d->startWithCurrent; 
+}
+
+bool SlideShow::loop() const 
+{
+    return d->loop;
+}
+
+int SlideShow::delay() const 
+{
+    return d->delay;            
 }
 
 }   // namespace ShowFoto

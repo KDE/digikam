@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-04-21
- * Description : slideshow for showfoto
+ * Description : slide show tool
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,6 +21,8 @@
 #ifndef SLIDESHOW_H
 #define SLIDESHOW_H
 
+// Qt includes.
+
 #include <qobject.h>
 
 class QTimer;
@@ -31,21 +33,24 @@ class KConfig;
 namespace ShowFoto
 {
 
+class SlideShowPriv;
+
 class SlideShow : public QObject
 {
 Q_OBJECT
 
 public:
     
-    SlideShow(KAction* first,KAction* next);
-    
+    SlideShow(KAction* first, KAction* next);
+    ~SlideShow();
+
     void setStartWithCurrent(bool);
     void setLoop(bool);
     void setDelay(int);
 
-    bool startWithCurrent() const { return m_startWithCurrent; }
-    bool loop()             const { return m_loop;             }
-    int  delay()            const { return m_delay;            }
+    bool startWithCurrent() const;
+    bool loop() const;
+    int  delay() const;
     
     void start();
     void stop();
@@ -59,16 +64,9 @@ private slots:
     void slotTimeout();
 
 private:
-    
-    QTimer  *m_timer;
-    
-    KAction *m_first;
-    KAction *m_next;
-    
-    int      m_delay;
-    
-    bool     m_loop;
-    bool     m_startWithCurrent;
+
+    SlideShowPriv* d;
+
 };
 
 }   // namespace ShowFoto
