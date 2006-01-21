@@ -65,6 +65,8 @@ public:
         mainLayout = 0;
     }
 
+    bool            tryAction;
+
     QGridLayout    *mainLayout;
     
     QWidget        *parent;
@@ -77,8 +79,8 @@ public:
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
-                                 bool loadFileSettings, QFrame* bannerFrame)
-            : KDialogBase(Plain, title, Help|Default|User2|User3|Ok|Cancel, Ok,
+                                 bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
+            : KDialogBase(Plain, title, Help|Default|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
                           QString::null,
                           i18n("&Save As..."),
@@ -87,14 +89,16 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
     d = new ImageDlgBasePriv;
-    d->parent = parent;
-    d->name   = name;
-    
+    d->parent    = parent;
+    d->name      = name;
+    d->tryAction = tryAction;
+
     setButtonWhatsThis ( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis ( User3, i18n("<p>Load all filter parameters from settings text file.") );
     setButtonWhatsThis ( User2, i18n("<p>Save all filter parameters to settings text file.") );
     showButton(User2, loadFileSettings);
     showButton(User3, loadFileSettings);
+    showButton(Try, tryAction);
 
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));
 

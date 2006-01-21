@@ -110,8 +110,6 @@ private:
     QButtonGroup                    *m_optionsBG;
     QVButtonGroup                   *m_profilesBG;
 
-    QPushButton                     *m_testItBt;
-
     QString                         inPath;
     QString                         displayPath;
     QString                         spacePath;
@@ -164,11 +162,11 @@ private:
 private slots:
 
     void slotDefault();
+    void slotTry();
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
-    void slotTestIt();
     void slotToggledWidgets(bool t);
     void slotInICCInfo();
     void slotProofICCInfo();

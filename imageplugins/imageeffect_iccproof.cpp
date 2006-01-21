@@ -69,7 +69,7 @@ namespace DigikamImagesPluginCore
 
 ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
-                                            "colormanagement", false)
+                                            "colormanagement", false, true)
 {
     m_destinationPreviewData = 0L;
 
@@ -98,7 +98,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     // -------------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
+    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -144,7 +144,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     l1->addWidget(m_scaleBG);
     l1->addStretch(10);
     
-    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
+    gridSettings->addMultiCellLayout(l1, 0, 0, 0, 2);
 
     // -------------------------------------------------------------
 
@@ -156,8 +156,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
-    gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 4);
-    gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
+    gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 2);
+    gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 2);
 
     //-- Build rendering intents options group -----------------------
 
@@ -181,7 +181,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to achieve the desired effects.\n"
     "This intent is most suitable for business graphics such as charts, where it is more important that the colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
 
-    gridSettings->addMultiCellWidget(intentsBG, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(intentsBG, 3, 3, 0, 2);
 
     // -------------------------------------------------------------
 
@@ -276,7 +276,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *secondPageLayout = new QVBoxLayout(spaceProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *spaceProfileBG = new QButtonGroup(4,Qt::Vertical, spaceProfiles);
+    QButtonGroup *spaceProfileBG = new QButtonGroup(4, Qt::Vertical, spaceProfiles);
     spaceProfileBG->setFrameStyle(QFrame::NoFrame);
 
     m_useSpaceDefaultProfile = new QRadioButton(spaceProfileBG);
@@ -300,14 +300,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End Second Page -----------------------------------
 
-     m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
+    m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color Profiles.</p>"));
 
     //---------- Third Page Setup ---------------------------------
 
     QVBoxLayout *thirdPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *proofProfileBG = new QButtonGroup(4,Qt::Vertical, proofProfiles);
+    QButtonGroup *proofProfileBG = new QButtonGroup(4, Qt::Vertical, proofProfiles);
     proofProfileBG->setFrameStyle(QFrame::NoFrame);
 
     m_useProofDefaultProfile = new QRadioButton(proofProfileBG);
@@ -338,7 +338,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QVBoxLayout *fourthPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
 
-    QButtonGroup *displayProfileBG = new QButtonGroup(4,Qt::Vertical, displayProfiles);
+    QButtonGroup *displayProfileBG = new QButtonGroup(4, Qt::Vertical, displayProfiles);
     displayProfileBG->setFrameStyle(QFrame::NoFrame);
 
     m_useDisplayDefaultProfile = new QRadioButton(displayProfileBG);
@@ -361,21 +361,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     
     //---------- End Fourth Page ------------------------------------
 
-    gridSettings->addMultiCellWidget(m_tabsWidgets, 10, 10, 0, 0);
+    gridSettings->addMultiCellWidget(m_tabsWidgets, 4, 4, 0, 2);
 
-     //-- Build rendering intents options group -----------------------
-
-    QHButtonGroup *m_testItBG = new QHButtonGroup(gboxSettings);
-    m_testItBG->setFrameStyle(QFrame::NoFrame);
-
-    m_testItBt = new QPushButton(i18n("Test"),m_testItBG);
-    
-
-    gridSettings->addMultiCellWidget(m_testItBG, 11, 11, 0, 0);
-
-    // -------------------------------------------------------------
-
-    gridSettings->setRowStretch(10, 10);    
+    gridSettings->setRowStretch(6, 10);    
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
@@ -395,8 +383,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_testItBt, SIGNAL(clicked()), this, SLOT(slotTestIt()));
-
     connect(inProfilesInfo, SIGNAL(clicked()), this, SLOT(slotInICCInfo()));
 
     connect(spaceProfilesInfo, SIGNAL(clicked()), this, SLOT(slotSpaceICCInfo()));
@@ -412,7 +398,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_useProofDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
 
     connect(m_useDisplayDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
-
 
     // -------------------------------------------------------------
 
@@ -534,7 +519,7 @@ void ImageEffect_ICCProof::finalRendering()
     /// @todo implement me
 }
 
-void ImageEffect_ICCProof::slotTestIt()
+void ImageEffect_ICCProof::slotTry()
 {
     /// @todo implement me
     /// FIXME "embed profile" option is not implemented -- Paco Cruz
