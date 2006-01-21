@@ -1,6 +1,7 @@
 [Desktop Entry]
 # Base type of RAW images supported by dcraw program
 Name=RAW image
+Name[cs]=RAW obrázek
 Name[da]=RAW-billede
 Name[de]=RAW-Bild
 Name[el]=Εικόνα RAW
@@ -13,6 +14,7 @@ Name[sr]=RAW слика
 Name[sr@Latn]=RAW slika
 Name[sv]=Obehandlad bild
 Comment=RAW image file format
+Comment[cs]=Obrazový formát RAW
 Comment[da]=Ubehandlet billedfilformat
 Comment[de]=RAW-Bilddateiformat
 Comment[el]=Τύπος αρχείου εικόνας RAW
