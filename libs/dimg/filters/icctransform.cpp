@@ -279,13 +279,31 @@ void IccTransform::apply(DImg& image)
        cmsCloseProfile(proofprofile);
 }
 
-void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool checkGamut, bool useBuiltin )
+void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool useBPC, bool checkGamut, bool useBuiltin )
 {
-    /// FIXME use of checkGamut is not implemented. -- Paco Cruz
 
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
     cmsHTRANSFORM transform;
     int transformFlags = 0;
+    int renderingIntent;
+
+    switch (intent)
+    {
+        case 0:
+            intent = INTENT_PERCEPTUAL;
+            break;
+        case 1:
+            intent = INTENT_RELATIVE_COLORIMETRIC;
+            break;
+        case 2:
+            intent = INTENT_SATURATION;
+            break;
+        case 3:
+            intent = INTENT_ABSOLUTE_COLORIMETRIC;
+            break;
+    }
+
+    kdDebug() << "icctransform.cpp/308-Intent is: " << intent << endl;
 
     if (!profile.isNull())
     {
@@ -306,7 +324,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
 
     if (useBPC)
     {
-        transformFlags = cmsFLAGS_WHITEBLACKCOMPENSATION;
+        transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
     }
     
     if (!d->do_proof_profile)
@@ -319,7 +337,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                 TYPE_BGRA_16,
                                                 outprofile,
                                                 TYPE_BGRA_16,
-                                                INTENT_PERCEPTUAL,
+                                                intent,
                                                 transformFlags);
             }
             else
@@ -328,7 +346,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                 TYPE_BGR_16,
                                                 outprofile,
                                                 TYPE_BGR_16,
-                                                INTENT_PERCEPTUAL,
+                                                intent,
                                                 transformFlags);
             }
 
@@ -341,7 +359,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                 TYPE_BGRA_8,
                                                 outprofile,
                                                 TYPE_BGRA_8,
-                                                INTENT_PERCEPTUAL,
+                                                intent,
                                                 transformFlags);
             }
             else
@@ -350,7 +368,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                 TYPE_BGR_8,
                                                 outprofile,
                                                 TYPE_BGR_8,
-                                                INTENT_PERCEPTUAL,
+                                                intent,
                                                 transformFlags);
             }
 
@@ -359,6 +377,12 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
     else
     {
         proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+        transformFlags |= cmsFLAGS_SOFTPROOFING;
+        if (checkGamut)
+        {
+            cmsSetAlarmCodes(126, 255, 255);
+            transformFlags |= cmsFLAGS_GAMUTCHECK;
+        }
 
         if (image.sixteenBit())
         {
@@ -369,8 +393,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                         outprofile,
                                                         TYPE_BGRA_16,
                                                         proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        intent,
+                                                        intent,
                                                         transformFlags);
             }
             else
@@ -380,8 +404,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                         outprofile,
                                                         TYPE_BGR_16,
                                                         proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        intent,
+                                                        intent,
                                                         transformFlags);
             }
         }
@@ -394,8 +418,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                         outprofile,
                                                         TYPE_BGR_8,
                                                         proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        intent,
+                                                        intent,
                                                         transformFlags);
             }
             else
@@ -405,12 +429,14 @@ void IccTransform::apply( DImg& image, QByteArray& profile, bool useBPC, bool ch
                                                         outprofile,
                                                         TYPE_BGR_8,
                                                         proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
+                                                        intent,
+                                                        intent,
                                                         transformFlags);
             }
         }
     }
+
+    kdDebug() << "icctransform.cpp/439 Transform flags are: " << transformFlags << endl;
 
      // We need to work using temp pixel buffer to apply ICC transformations.
     uchar  transdata[image.bytesDepth()];
