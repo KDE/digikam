@@ -780,6 +780,8 @@ void DImg::detach()
         m_priv->data = new uchar[size];
         memcpy(m_priv->data, old->data, size);
     }
+
+    old->deref();
 }
 
 void DImg::crop(QRect rect)

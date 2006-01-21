@@ -40,7 +40,7 @@ int DImgLoader::granularity(DImgLoaderObserver *observer, int total, float progr
     // Progress slice is the part of 100% concerned with the current granularity
     // (E.g. in a loop only the values from 10% to 90% are used, then progressSlice is 0.8)
     // Current default is 1/20, that is progress info every 5%
-    int granularity = (total / (20 * progressSlice)) / observer->granularity();
+    int granularity = (int)(( total / (20 * progressSlice)) / observer->granularity());
     return granularity ? granularity : 1;
 }
 

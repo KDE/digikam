@@ -171,7 +171,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
 
     int w = cinfo.output_width;
     int h = cinfo.output_height;
-    uchar *dest;
+    uchar *dest = 0;
     
     if (loadImageData)
     {
@@ -205,9 +205,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
             return false;
         }
     
-        ptr2 = new uchar[w * h * 4];
+        dest = new uchar[w * h * 4];
     
-        if (!ptr2)
+        if (!dest)
         {
             delete [] data;
             jpeg_destroy_decompress(&cinfo);
@@ -216,7 +216,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
             return false;
         }
     
-        dest  = ptr2;
+        ptr2  = dest;
         count = 0;
         prevy = 0;
     
@@ -235,7 +235,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
-                        delete [] ptr2;
+                        delete [] dest;
                         jpeg_destroy_decompress(&cinfo);
                         fclose(file);
                         return false;
@@ -280,7 +280,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
-                        delete [] ptr2;
+                        delete [] dest;
                         jpeg_destroy_decompress(&cinfo);
                         fclose(file);
                         return false;
