@@ -615,12 +615,12 @@ void ImageEffect_ICCProof::slotTry()
     
     if (m_useEmbeddedProfile->isChecked())
     {
-        transform.apply(preview, m_embeddedICC, useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+        transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
     }
     else
     {
         QByteArray fakeProfile = QByteArray();
-        transform.apply(preview, fakeProfile, useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+        transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
     }
     
     iface->putPreviewImage(preview.bits());
