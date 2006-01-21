@@ -32,16 +32,9 @@ class QFrame;
 namespace Digikam
 {
 
-class SetupGeneral;
-class SetupExif;
-class SetupCollections;
-class SetupMime;
-class SetupEditor;
 class SetupImgPlugins;
 class SetupPlugins;
-class SetupICC;
-class SetupCamera;
-class SetupMisc;
+class SetupPrivate;
 
 class Setup : public KDialogBase 
 {
@@ -67,34 +60,17 @@ public:
           Page page=General);
     ~Setup();
 
-    SetupPlugins     *pluginsPage_;
-    SetupImgPlugins  *imgPluginsPage_;
-
-private:
-
-    QFrame           *page_general;
-    QFrame           *page_exif;
-    QFrame           *page_collections;
-    QFrame           *page_mime;
-    QFrame           *page_editor;
-    QFrame           *page_imgPlugins;
-    QFrame           *page_icc;
-    QFrame           *page_plugins;
-    QFrame           *page_camera;
-    QFrame           *page_misc;
-
-    SetupGeneral     *generalPage_;
-    SetupExif        *exifPage_;
-    SetupCollections *collectionsPage_;
-    SetupMime        *mimePage_;
-    SetupEditor      *editorPage_;
-    SetupICC         *iccPage_;
-    SetupCamera      *cameraPage_;
-    SetupMisc        *miscPage_;
+    SetupPlugins     *m_pluginsPage;
+    SetupImgPlugins  *m_imgPluginsPage;
 
 private slots:
 
     void slotOkClicked();
+
+private:
+
+    SetupPrivate* d;
+
 };
 
 }  // namespace Digikam

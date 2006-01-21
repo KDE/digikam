@@ -1051,13 +1051,13 @@ void DigikamApp::slotSetup()
     // To show the number of KIPI plugins in the setup dialog.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
-    setup.pluginsPage_->initPlugins((int)list.count());
+    setup.m_pluginsPage->initPlugins((int)list.count());
 
     if (setup.exec() != QDialog::Accepted)
         return;
 
-    setup.pluginsPage_->applyPlugins();
-    m_ImagePluginsLoader->loadPluginsFromList(setup.imgPluginsPage_->getImagePluginsListEnable());
+    setup.m_pluginsPage->applyPlugins();
+    m_ImagePluginsLoader->loadPluginsFromList(setup.m_imgPluginsPage->getImagePluginsListEnable());
 
     slotSetupChanged();
 }
@@ -1069,13 +1069,13 @@ void DigikamApp::slotSetupCamera()
     // For to show the number of KIPI plugins in the setup dialog.
 
     KIPI::PluginLoader::PluginList list = KipiPluginLoader_->pluginList();
-    setup.pluginsPage_->initPlugins((int)list.count());
+    setup.m_pluginsPage->initPlugins((int)list.count());
 
     if (setup.exec() != QDialog::Accepted)
         return;
 
-    setup.pluginsPage_->applyPlugins();
-    m_ImagePluginsLoader->loadPluginsFromList(setup.imgPluginsPage_->getImagePluginsListEnable());
+    setup.m_pluginsPage->applyPlugins();
+    m_ImagePluginsLoader->loadPluginsFromList(setup.m_imgPluginsPage->getImagePluginsListEnable());
 
     slotSetupChanged();
 }

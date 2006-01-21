@@ -48,51 +48,99 @@
 namespace Digikam
 {
 
+class SetupPrivate
+{
+public:
+
+    SetupPrivate()
+    {
+        page_general     = 0;
+        page_exif        = 0;
+        page_collections = 0;
+        page_mime        = 0;
+        page_editor      = 0;
+        page_imgPlugins  = 0;
+        page_icc         = 0;
+        page_plugins     = 0;
+        page_camera      = 0;
+        page_misc        = 0;
+        generalPage      = 0;
+        exifPage         = 0;
+        collectionsPage  = 0;
+        mimePage         = 0;
+        editorPage       = 0;
+        iccPage          = 0;
+        cameraPage       = 0;
+        miscPage         = 0;
+    }
+
+    QFrame           *page_general;
+    QFrame           *page_exif;
+    QFrame           *page_collections;
+    QFrame           *page_mime;
+    QFrame           *page_editor;
+    QFrame           *page_imgPlugins;
+    QFrame           *page_icc;
+    QFrame           *page_plugins;
+    QFrame           *page_camera;
+    QFrame           *page_misc;
+
+    SetupGeneral     *generalPage;
+    SetupExif        *exifPage;
+    SetupCollections *collectionsPage;
+    SetupMime        *mimePage;
+    SetupEditor      *editorPage;
+    SetupICC         *iccPage;
+    SetupCamera      *cameraPage;
+    SetupMisc        *miscPage;
+};
+
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                    name, true, true )
 {
+    d = new SetupPrivate;
     setHelp("setupdialog.anchor", "digikam");
 
-    page_general = addPage(i18n("Albums"), i18n("Albums"),
+    d->page_general = addPage(i18n("Albums"), i18n("Albums"),
                            BarIcon("folder_image", KIcon::SizeMedium));
-    generalPage_ = new SetupGeneral(page_general, this);
+    d->generalPage = new SetupGeneral(d->page_general, this);
 
-    page_exif = addPage(i18n("Embedded Info"), i18n("Embedded Image Information"),
+    d->page_exif = addPage(i18n("Embedded Info"), i18n("Embedded Image Information"),
                         BarIcon("exifinfo", KIcon::SizeMedium));
-    exifPage_ = new SetupExif(page_exif);
+    d->exifPage = new SetupExif(d->page_exif);
 
-    page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
+    d->page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
                                BarIcon("fileopen", KIcon::SizeMedium));
-    collectionsPage_ = new SetupCollections(page_collections);
+    d->collectionsPage = new SetupCollections(d->page_collections);
 
-    page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types"),
+    d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types"),
                         BarIcon("filetypes", KIcon::SizeMedium));
-    mimePage_ = new SetupMime(page_mime);
+    d->mimePage = new SetupMime(d->page_mime);
 
-    page_editor = addPage(i18n("Image Editor"), i18n("Image Editor Settings"),
+    d->page_editor = addPage(i18n("Image Editor"), i18n("Image Editor Settings"),
                           BarIcon("image", KIcon::SizeMedium));
-    editorPage_ = new SetupEditor(page_editor);
+    d->editorPage = new SetupEditor(d->page_editor);
 
-    page_imgPlugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
+    d->page_imgPlugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
                           BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    imgPluginsPage_ = new SetupImgPlugins(page_imgPlugins);
+    m_imgPluginsPage = new SetupImgPlugins(d->page_imgPlugins);
 
-    page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
-    iccPage_ = new SetupICC(page_icc);
+    d->iccPage = new SetupICC(d->page_icc);
 
-    page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
+    d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
                            BarIcon("kipi", KIcon::SizeMedium));
-    pluginsPage_ = new SetupPlugins(page_plugins);
+    m_pluginsPage = new SetupPlugins(d->page_plugins);
 
-    page_camera = addPage(i18n("Cameras"), i18n("Cameras"),
+    d->page_camera = addPage(i18n("Cameras"), i18n("Cameras"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
-    cameraPage_ = new SetupCamera(page_camera);
+    d->cameraPage = new SetupCamera(d->page_camera);
 
-    page_misc   = addPage(i18n("Miscellaneous"), i18n("Miscellaneous"),
+    d->page_misc   = addPage(i18n("Miscellaneous"), i18n("Miscellaneous"),
                           BarIcon("misc", KIcon::SizeMedium));
-    miscPage_ = new SetupMisc(page_misc);
+    d->miscPage = new SetupMisc(d->page_misc);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
@@ -103,19 +151,20 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
 Setup::~Setup()
 {
+    delete d;
 }
 
 void Setup::slotOkClicked()
 {
-    generalPage_->applySettings();
-    collectionsPage_->applySettings();
-    mimePage_->applySettings();
-    cameraPage_->applySettings();
-    exifPage_->applySettings();
-    editorPage_->applySettings();
-    imgPluginsPage_->applySettings();
-    iccPage_->applySettings();
-    miscPage_->applySettings();
+    d->generalPage->applySettings();
+    d->collectionsPage->applySettings();
+    d->mimePage->applySettings();
+    d->cameraPage->applySettings();
+    d->exifPage->applySettings();
+    d->editorPage->applySettings();
+    m_imgPluginsPage->applySettings();
+    d->iccPage->applySettings();
+    d->miscPage->applySettings();
     close();
 }
 
