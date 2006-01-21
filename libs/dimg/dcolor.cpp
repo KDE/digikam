@@ -78,9 +78,9 @@ DColor::DColor(const QColor& color, bool sixteenBit)
 {
     d = new DColorPriv;
 
-    d->red        = sixteenBit ? color.red()*255   : color.red();
-    d->green      = sixteenBit ? color.green()*255 : color.green();
-    d->blue       = sixteenBit ? color.red()*255   : color.red();
+    d->red        = sixteenBit ? ((color.red()+1)*256)-1  : color.red();
+    d->green      = sixteenBit ? ((color.red()+1)*256)-1  : color.green();
+    d->blue       = sixteenBit ? ((color.blue()+1)*256)-1 : color.blue();
     d->alpha      = sixteenBit ? 65535 : 255;
     d->sixteenBit = sixteenBit;
 }
@@ -187,7 +187,9 @@ void DColor::setSixteenBit(bool sixteenBit)
 QColor DColor::getQColor()
 {
     if (d->sixteenBit)
-        return (QColor::QColor(d->red/65535, d->green/65535, d->blue/65535));
+        return (QColor::QColor(((d->red+1)/256)-1, 
+                ((d->green+1)/256)-1, 
+                ((d->blue+1)/256)-1));
     
     return (QColor::QColor(d->red, d->green, d->blue));
 }
