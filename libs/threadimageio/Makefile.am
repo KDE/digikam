@@ -2,7 +2,11 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libthreadimageio.la
 
-libthreadimageio_la_SOURCES = loadsavethread.cpp loadingcache.cpp
+libthreadimageio_la_SOURCES = loadsavethread.cpp \
+                              managedloadsavethread.cpp \
+                              sharedloadsavethread.cpp \
+                              loadsavetask.cpp \
+                              loadingcache.cpp
 
 libthreadimageio_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

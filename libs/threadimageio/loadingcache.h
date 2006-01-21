@@ -61,6 +61,7 @@ class LoadingCache
 public:
 
     static LoadingCache *cache();
+    static void cleanUp();
     ~LoadingCache();
 
     // all functions shall only be called when a CacheLock is held
@@ -75,8 +76,16 @@ public:
         LoadingCache *m_cache;
     };
 
+    // Retrieves an image for the given string from the cache,
+    // or 0 if no image is found.
     DImg *retrieveImage(const QString &filePath);
-    void putImage(const QString &filePath, DImg *img);
+    // Returns whether the given DImg fits in the cache.
+    bool isCacheable(DImg *img);
+    // Put image into for given string into the cache.
+    // Returns true if image has been put in the cache, false otherwise.
+    // Ownership of the DImg instance is passed to the cache.
+    // When it cannot be put in the cache it is deleted.
+    bool putImage(const QString &filePath, DImg *img);
 
     LoadingProcess *retrieveLoadingProcess(const QString &filePath);
     void addLoadingProcess(LoadingProcess *process);

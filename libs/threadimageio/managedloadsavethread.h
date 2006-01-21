@@ -108,7 +108,7 @@ protected:
 
 private:
 
-    LoadingTask *checkLoadingTask(class Task *task, LoadingTaskFilter filter);
+    LoadingTask *checkLoadingTask(class LoadSaveTask *task, LoadingTaskFilter filter);
     LoadingTask *findExistingTask(const LoadingDescription &description);
     LoadingTask *createLoadingTask(const LoadingDescription &description, bool preloading, LoadingMode loadingMode, AccessMode accessMode);
     void removeLoadingTasks(const LoadingDescription &description, LoadingTaskFilter filter);

@@ -80,6 +80,7 @@ using KIO::UDSEntry;
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "scanlib.h"
+#include "loadingcache.h"
 
 namespace Digikam
 {
@@ -155,6 +156,8 @@ DigikamApp::~DigikamApp()
 
     delete mAlbumManager;
     delete AlbumLister::instance();
+
+    Digikam::LoadingCache::cleanUp();
 
     m_instance = 0;
 }

@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class LoadSaveThreadPriv;
+class LoadSaveTask;
 
 class DIGIKAM_EXPORT LoadSaveThread : public QObject, public QThread
 {
@@ -117,6 +118,7 @@ public:
             { emit signalImageSaved(filePath, success); };
 
     virtual bool querySendNotifyEvent();
+    virtual void taskHasFinished();
 
 protected:
 
@@ -127,9 +129,9 @@ protected:
 
     QWaitCondition       m_condVar;
 
-    QPtrList<class Task> m_todo;
+    QPtrList<LoadSaveTask> m_todo;
 
-    class Task          *m_currentTask;
+    LoadSaveTask        *m_currentTask;
 
     NotificationPolicy   m_notificationPolicy;
 

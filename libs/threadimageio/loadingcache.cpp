@@ -44,6 +44,12 @@ LoadingCache *LoadingCache::cache()
     return m_instance;
 }
 
+void LoadingCache::cleanUp()
+{
+    if (m_instance)
+        delete m_instance;
+}
+
 
 LoadingCache::LoadingCache()
 {
@@ -65,10 +71,25 @@ DImg *LoadingCache::retrieveImage(const QString &filePath)
     return d->imageCache.find(filePath);
 }
 
-void LoadingCache::putImage(const QString &filePath, DImg *img)
+bool LoadingCache::putImage(const QString &filePath, DImg *img)
 {
     // use size of image as cache cost
-    d->imageCache.insert(filePath, img, img->numBytes());
+    if ( d->imageCache.insert(filePath, img, img->numBytes()) )
+    {
+        return true;
+    }
+    else
+    {
+        // need to delete object if it was not successfully inserted (too large)
+        delete img;
+        return false;
+    }
+}
+
+bool LoadingCache::isCacheable(DImg *img)
+{
+    // return whether image fits in cache
+    return (uint)d->imageCache.maxCost() >= img->numBytes();
 }
 
 void LoadingCache::addLoadingProcess(LoadingProcess *process)

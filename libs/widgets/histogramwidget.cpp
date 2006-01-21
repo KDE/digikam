@@ -80,6 +80,7 @@ public:
         xmax         = 0.0;
         range        = 255;
         guideVisible = false;
+        inInitialRepaintWait = false;
     }
 
     // Current selection informations.
@@ -98,6 +99,7 @@ public:
     bool    blinkComputation;   // If true, a message will be displayed during histogram computation,
                                 // else nothing (limit flicker effect in widget especially for small
                                 // image/computation time).
+    bool    inInitialRepaintWait;
 
     QTimer *blinkTimer;
 
@@ -210,8 +212,22 @@ void HistogramWidget::customEvent(QCustomEvent *event)
     {
         setCursor( KCursor::waitCursor() );
         d->clearFlag = HistogramWidgetPriv::HistogramStarted;
-        d->blinkTimer->start( 200 );
-        //repaint(false);
+        if (!d->inInitialRepaintWait)
+        {
+            if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
+            {
+                // enter initial repaint wait, repaint only after waiting
+                // a short time so that very fast computation does not create flicker
+                d->inInitialRepaintWait = true;
+                d->blinkTimer->start( 100 );
+            }
+            else
+            {
+                // after the initial repaint, we can repaint immediately
+                repaint(false);
+                d->blinkTimer->start( 200 );
+            }
+        }
     }
     else 
     {
@@ -220,6 +236,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             // Repaint histogram 
             d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
+            d->inInitialRepaintWait = false;
             repaint(false);
             setCursor( KCursor::arrowCursor() );
 
@@ -232,6 +249,7 @@ void HistogramWidget::customEvent(QCustomEvent *event)
         {
             d->clearFlag = HistogramWidgetPriv::HistogramFailed;
             d->blinkTimer->stop();
+            d->inInitialRepaintWait = false;
             repaint(false);
             setCursor( KCursor::arrowCursor() );    
             // Remove old histogram data from memory.
@@ -257,7 +275,10 @@ void HistogramWidget::setDataLoading() {
     {
         setCursor( KCursor::waitCursor() );
         d->clearFlag = HistogramWidgetPriv::HistogramDataLoading;
-        d->blinkTimer->start( 200 );
+        // enter initial repaint wait, repaint only after waiting
+        // a short time so that very fast computation does not create flicker
+        d->inInitialRepaintWait = true;
+        d->blinkTimer->start( 100 );
         //repaint(false);
     }
 }
@@ -265,6 +286,7 @@ void HistogramWidget::setDataLoading() {
 void HistogramWidget::setLoadingFailed() {
     d->clearFlag = HistogramWidgetPriv::HistogramFailed;
     d->blinkTimer->stop();
+    d->inInitialRepaintWait = false;
     repaint(false);
     setCursor( KCursor::arrowCursor() );
 }
@@ -328,6 +350,7 @@ void HistogramWidget::updateSelectionData(uchar *s_data, uint s_w, uint s_h,
 void HistogramWidget::slotBlinkTimerDone( void )
 {
     d->blinkFlag = !d->blinkFlag;
+    d->inInitialRepaintWait = false;
     repaint(false);
     d->blinkTimer->start( 200 );
 }
