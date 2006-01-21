@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-10
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr> 
+ * Date   : 2003-02-10
+ * Description : a widget to display spash with progress bar
  *
  * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,11 +28,10 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-class QPixmap;
-class QTimer;
-
 namespace Digikam
 {
+
+class SplashScreenPriv;
 
 class SplashScreen : public QWidget
 {
@@ -53,20 +54,13 @@ protected:
     void drawContents(QPainter *painter);
     void animate();
         
-private:
-
-    QPixmap *pix_;
-    QTimer  *timer_;
-    bool     close_;
-    QString  currStatus_;
-    QColor   currColor_;
-    int      currAlign_;
-    int      currState_;
-    int      progressBarSize_;
-
 private slots:
 
     void slotClose();
+
+private:
+
+    SplashScreenPriv* d;
 
 };
 

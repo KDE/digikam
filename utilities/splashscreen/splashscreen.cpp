@@ -1,10 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at free.fr> 
  * Date  : 2003-02-10
- * Description :
+ * Description : a widget to display spash with progress bar
  *
  * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,35 +44,62 @@ void qt_wait_for_window_manager( QWidget *widget );
 namespace Digikam
 {
 
+class SplashScreenPriv
+{
+public:
+
+    SplashScreenPriv()
+    {
+        currState       = 0;
+        progressBarSize = 3;
+        pix             = 0;
+        timer           = 0;
+    }
+
+    bool     close;
+
+    int      currAlign;
+    int      currState;
+    int      progressBarSize;
+
+    QPixmap *pix;
+
+    QTimer  *timer;
+
+    QString  currStatus;
+
+    QColor   currColor;
+};
+
 SplashScreen::SplashScreen(const QString& splash)
             : QWidget(0, 0, WStyle_Customize|WStyle_Splash)
 {
-    currState_ = 0;
-    progressBarSize_ = 3;
+    d = new SplashScreenPriv;
     
     QString file = locate( "appdata", splash );
 
-    pix_ = new QPixmap(file);
+    d->pix = new QPixmap(file);
 
-    setErasePixmap( *pix_ );
-    resize( pix_->size() );
+    setErasePixmap( *d->pix );
+    resize( d->pix->size() );
     QRect scr = QApplication::desktop()->screenGeometry();
     move( scr.center() - rect().center() );
     show();
     animate();
 
-    close_ = false;
+    d->close = false;
     
-    timer_ = new QTimer;
-    connect(timer_, SIGNAL(timeout()),
+    d->timer = new QTimer;
+    connect(d->timer, SIGNAL(timeout()),
             this,   SLOT(slotClose()));
-    timer_->start(1000, true);
+    d->timer->start(1000, true);
 }
 
 SplashScreen::~SplashScreen()
 {
-    delete pix_;
-    delete timer_;
+    delete d->pix;
+    delete d->timer;
+    delete d;
 }
 
 void SplashScreen::finish( QWidget *mainWin )
@@ -79,7 +107,7 @@ void SplashScreen::finish( QWidget *mainWin )
 #if defined(Q_WS_X11)
     qt_wait_for_window_manager( mainWin );
 #endif
-    close_ = true;
+    d->close = true;
     slotClose();
 }
 
@@ -97,33 +125,34 @@ void SplashScreen::mousePressEvent( QMouseEvent * )
 
 void SplashScreen::slotClose()
 {
-    if (!close_) {
-        timer_->start(500, true);
+    if (!d->close) 
+    {
+        d->timer->start(500, true);
         return;
     }
     
-    if (timer_->isActive()) return;
+    if (d->timer->isActive()) return;
     delete this;
 }
 
 void SplashScreen::message(const QString &message, int alignment,
                            const QColor &color )
 {
-    currStatus_ = message;
-    currAlign_ = alignment;
-    currColor_ = color;
+    d->currStatus = message;
+    d->currAlign = alignment;
+    d->currColor = color;
     animate();
 }
 
 void SplashScreen::animate()
 {
-    currState_ = ((currState_ + 1) % (2*progressBarSize_-1));
+    d->currState = ((d->currState + 1) % (2*d->progressBarSize-1));
     repaint();
 }
 
 void SplashScreen::drawContents()
 {
-    QPixmap textPix = *pix_;
+    QPixmap textPix = *d->pix;
     QPainter painter(&textPix, this);
     drawContents(&painter);
     setErasePixmap(textPix);
@@ -144,9 +173,9 @@ void SplashScreen::drawContents( QPainter *painter )
     // Draw animated circles, increments are chosen
     // to get close to background's color
     // (didn't work well with QColor::light function)
-    for (int i=0; i < progressBarSize_; i++)
+    for (int i=0; i < d->progressBarSize; i++)
     {
-        position = (currState_+i)%(2*progressBarSize_-1);
+        position = (d->currState+i)%(2*d->progressBarSize-1);
         if (position < 3)
         {
             painter->setBrush(QColor(basecolor.red()-18*i,
@@ -157,7 +186,7 @@ void SplashScreen::drawContents( QPainter *painter )
     }
     
     
-    painter->setPen(currColor_);
+    painter->setPen(d->currColor);
     
     QFont fnt(KGlobalSettings::generalFont());
     int fntSize = fnt.pointSize();
@@ -174,7 +203,7 @@ void SplashScreen::drawContents( QPainter *painter )
    
     QRect r = rect();
     r.setRect( r.x() + 59, r.y() + 5, r.width() - 10, r.height() - 10 );
-    painter->drawText(r, currAlign_, currStatus_);
+    painter->drawText(r, d->currAlign, d->currStatus);
 }
 
 }   // namespace Digikam
