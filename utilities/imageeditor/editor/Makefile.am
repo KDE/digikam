@@ -9,7 +9,8 @@ libdimgeditor_la_SOURCES = imageiface.cpp imagewidget.cpp \
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 	 	           $(LIBKEXIF_LIBS)
 
-libshowfoto_la_SOURCES = imageiface.cpp imagewidget.cpp imageprint.cpp imageresizedlg.cpp 
+libshowfoto_la_SOURCES = imageiface.cpp imagewidget.cpp imageprint.cpp \
+	                 imageresizedlg.cpp slideshow.cpp 
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 

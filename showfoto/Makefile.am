@@ -16,7 +16,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 
-showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp slideshow.cpp \
+showfoto_SOURCES = main.cpp showfoto.cpp setup.cpp \
 		   setupeditor.cpp setupplugins.cpp setupslideshow.cpp \
 		   setupicc.cpp 
 

@@ -32,7 +32,7 @@
 
 #include "slideshow.h"
 
-namespace ShowFoto
+namespace Digikam
 {
 
 class SlideShowPriv
@@ -152,6 +152,6 @@ int SlideShow::delay() const
     return d->delay;            
 }
 
-}   // namespace ShowFoto
+}   // namespace Digikam
 
 #include "slideshow.moc"

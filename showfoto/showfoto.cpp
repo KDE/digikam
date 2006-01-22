@@ -20,10 +20,16 @@
  *
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+}
+
 // C++ includes.
 
 #include <cstdio>
-#include <unistd.h>
 
 // Qt includes.
 
@@ -221,7 +227,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
-    m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
+    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
 
     applySettings();
 
@@ -1067,7 +1073,8 @@ void ShowFoto::slotLoadingProgress(const QString& filePath, float progress)
 
 void ShowFoto::toggleNavigation(int index)
 {
-    if ( m_itemsNb == 0 || m_itemsNb == 1 ) {
+    if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
+    {
         m_backAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
@@ -1081,12 +1088,14 @@ void ShowFoto::toggleNavigation(int index)
         m_lastAction->setEnabled(true);
     }
     
-    if (index == 1) {
+    if (index == 1) 
+    {
         m_backAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 
-    if (index == m_itemsNb) {
+    if (index == m_itemsNb) 
+    {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
@@ -1302,8 +1311,10 @@ void ShowFoto::slotSelected(bool val)
     QPtrList<Digikam::ImagePlugin> pluginList
         = m_imagePluginLoader->pluginList();
     for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) {
-        if (plugin) {
+         plugin; plugin = pluginList.next()) 
+    {
+        if (plugin) 
+        {
             plugin->setEnabledSelectionActions(val);
         }
     }
@@ -1502,7 +1513,8 @@ void ShowFoto::unLoadPlugins()
     for (Digikam::ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
-        if (plugin) {
+        if (plugin) 
+        {
             guiFactory()->removeClient(plugin);
             plugin->setParentWidget(0);
             plugin->setEnabledSelectionActions(false);

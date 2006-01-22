@@ -30,7 +30,7 @@ class QTimer;
 class KAction;
 class KConfig;
 
-namespace ShowFoto
+namespace Digikam
 {
 
 class SlideShowPriv;
@@ -69,6 +69,6 @@ private:
 
 };
 
-}   // namespace ShowFoto
+}   // namespace Digikam
 
 #endif // SLIDESHOW_H

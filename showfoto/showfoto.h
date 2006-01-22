@@ -55,12 +55,11 @@ class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
 class SplashScreen;
+class SlideShow;
 }
 
 namespace ShowFoto
 {
-
-class SlideShow;
 
 class ShowFoto : public KMainWindow
 {
@@ -88,10 +87,6 @@ private:
 
     int                              m_itemsNb;
 
-    SlideShow                       *m_slideShow;
-
-    KURL                             m_lastOpenedDirectory;
-
     QLabel                          *m_nameLabel;
     QLabel                          *m_zoomLabel;
     QLabel                          *m_resLabel;
@@ -99,6 +94,8 @@ private:
     QPopupMenu                      *m_contextMenu;
 
     QSplitter                       *m_splitter;
+
+    KURL                             m_lastOpenedDirectory;
                           
     KConfig                         *m_config;
     
@@ -152,6 +149,7 @@ private:
     Digikam::IOFileSettingsContainer *m_IOFileSettings;
     Digikam::SplashScreen            *m_splash;
     Digikam::SavingContextContainer  *m_savingContext;
+    Digikam::SlideShow               *m_slideShow;
 
 private:
 
