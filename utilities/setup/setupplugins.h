@@ -25,15 +25,14 @@
 
 #include <qwidget.h>
 
-// Includes files for plugins support.
+// libkipi includes.
 
 #include <libkipi/pluginloader.h>
 
-class KListView;
-class QLabel;
-
 namespace Digikam
 {
+
+class SetupPluginsPriv;
 
 class SetupPlugins : public QWidget
 {
@@ -48,10 +47,8 @@ public:
     void applyPlugins();
 
 private:
-    
-    QLabel*             m_pluginsNumber;
-    KListView*          m_pluginList;
-    KIPI::ConfigWidget* m_Kipiconfig;
+
+    SetupPluginsPriv* d;    
 };
 
 }  // namespace Digikam
