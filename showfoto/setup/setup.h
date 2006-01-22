@@ -27,11 +27,15 @@
 
 class QFrame;
 
+namespace Digikam
+{
+class SetupImgPlugins;
+}
+
 namespace ShowFoto
 {
 
 class SetupEditor;
-class SetupImgPlugins;
 class SetupSlideShow;
 class SetupICC;
 
@@ -52,7 +56,7 @@ public:
     Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
     ~Setup();
     
-    SetupImgPlugins  *pluginsPage_;
+    Digikam::SetupImgPlugins  *pluginsPage_;
     
 private:
 

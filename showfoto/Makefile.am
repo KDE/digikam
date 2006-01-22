@@ -5,6 +5,7 @@ METASOURCES = AUTO
 bin_PROGRAMS = showfoto
 
 INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
+	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/libs/widgets \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
