@@ -32,7 +32,7 @@
 // Local includes.
 
 #include "setupeditor.h"
-#include "setupplugins.h"
+#include "setupimgplugins.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
 #include "setup.h"
@@ -52,7 +52,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    pluginsPage_ = new SetupPlugins(page_plugins);
+    pluginsPage_ = new SetupImgPlugins(page_plugins);
 
     page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                              BarIcon("slideshow", KIcon::SizeMedium));

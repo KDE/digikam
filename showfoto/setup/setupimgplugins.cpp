@@ -40,12 +40,12 @@
 
 // Local includes.
 
-#include "setupplugins.h"
+#include "setupimgplugins.h"
 
 namespace ShowFoto
 {
 
-SetupPlugins::SetupPlugins(QWidget* parent )
+SetupImgPlugins::SetupImgPlugins(QWidget* parent )
             : QWidget(parent)
 {
    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
@@ -75,11 +75,11 @@ SetupPlugins::SetupPlugins(QWidget* parent )
    updateImagePluginsList(m_availableImagePluginList, m_enableImagePluginList);
 }
 
-SetupPlugins::~SetupPlugins()
+SetupImgPlugins::~SetupImgPlugins()
 {
 }
 
-void SetupPlugins::initImagePluginsList()
+void SetupImgPlugins::initImagePluginsList()
 {
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
     KTrader::OfferList::ConstIterator iter;
@@ -93,7 +93,7 @@ void SetupPlugins::initImagePluginsList()
         }
 }
 
-void SetupPlugins::updateImagePluginsList(QStringList lista, QStringList listl)
+void SetupImgPlugins::updateImagePluginsList(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
     m_pluginsNumber->setText(i18n("Plugins found: %1").arg(lista.count()/3));
@@ -123,7 +123,7 @@ void SetupPlugins::updateImagePluginsList(QStringList lista, QStringList listl)
         }
 }
 
-QStringList SetupPlugins::getImagePluginsListEnable()
+QStringList SetupImgPlugins::getImagePluginsListEnable()
 {
     QStringList imagePluginList;
     QCheckListItem *item = (QCheckListItem*)m_pluginList->firstChild();
@@ -138,7 +138,7 @@ QStringList SetupPlugins::getImagePluginsListEnable()
     return imagePluginList;
 }
 
-void SetupPlugins::applySettings()
+void SetupImgPlugins::applySettings()
 {
     KConfig* config = kapp->config();
 
@@ -147,7 +147,7 @@ void SetupPlugins::applySettings()
     config->sync();
 }
 
-void SetupPlugins::readSettings()
+void SetupImgPlugins::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
@@ -156,4 +156,4 @@ void SetupPlugins::readSettings()
 
 }   // namespace ShowFoto
 
-#include "setupplugins.moc"
+#include "setupimgplugins.moc"

@@ -31,7 +31,7 @@ namespace ShowFoto
 {
 
 class SetupEditor;
-class SetupPlugins;
+class SetupImgPlugins;
 class SetupSlideShow;
 class SetupICC;
 
@@ -52,7 +52,7 @@ public:
     Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
     ~Setup();
     
-    SetupPlugins     *pluginsPage_;
+    SetupImgPlugins  *pluginsPage_;
     
 private:
 

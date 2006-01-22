@@ -18,8 +18,8 @@
  * 
  * ============================================================ */
 
-#ifndef SETUPPLUGINS_H
-#define SETUPPLUGINS_H
+#ifndef SETUPIMGPLUGINS_H
+#define SETUPIMGPLUGINS_H
 
 // Qt includes.
 
@@ -34,14 +34,14 @@ class KListView;
 namespace ShowFoto
 {
 
-class SetupPlugins : public QWidget
+class SetupImgPlugins : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupPlugins(QWidget* parent = 0);
-    ~SetupPlugins();
+    SetupImgPlugins(QWidget* parent = 0);
+    ~SetupImgPlugins();
 
     void applySettings();
     QStringList getImagePluginsListEnable();
@@ -62,4 +62,4 @@ private:
 
 }   // namespace ShowFoto
 
-#endif /* SETUPEDITOR_H */
+#endif /* SETUPIMGPLUGINS_H */
