@@ -24,17 +24,12 @@
 // Qt includes.
 
 #include <qwidget.h>
-
-class QLabel;
-class QStringList;
-class QCheckBox;
-
-class KColorButton;
-class KIntNumInput;
-class KListView;
+#include <qstring.h>
 
 namespace Digikam
 {
+
+class SetupImgPluginsPriv;
 
 class SetupImgPlugins : public QWidget
 {
@@ -47,22 +42,17 @@ public:
 
     void applySettings();
     QStringList getImagePluginsListEnable();
-
-private:
-
-    QStringList   m_availableImagePluginList;
-    QStringList   m_enableImagePluginList;
-    
-    QLabel       *m_pluginsNumber;
-    
-    KListView    *m_pluginList;
     
 private:
 
     void readSettings();
     void initImagePluginsList();
     void updateImagePluginsList(QStringList lista, QStringList listl);
-    
+
+private:
+
+    SetupImgPluginsPriv* d;
+
 };
 
 }  // namespace Digikam

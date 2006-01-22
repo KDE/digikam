@@ -46,38 +46,57 @@
 namespace Digikam
 {
 
+class SetupImgPluginsPriv
+{
+public:
+
+    SetupImgPluginsPriv()
+    {
+        pluginsNumber = 0;
+        pluginList    = 0;
+    }
+
+    QStringList  availableImagePluginList;
+    QStringList  enableImagePluginList;
+    
+    QLabel      *pluginsNumber;
+    
+    KListView   *pluginList;    
+};
+
 SetupImgPlugins::SetupImgPlugins(QWidget* parent )
                : QWidget(parent)
 {
-   QVBoxLayout *layout = new QVBoxLayout( parent );
+    d = new SetupImgPluginsPriv;
+    QVBoxLayout *layout = new QVBoxLayout( parent );
 
-   QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"),
-                                                      parent);
+    QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"), parent);
 
-   m_pluginsNumber = new QLabel(imagePluginsListGroup);
-
-   m_pluginList = new KListView( imagePluginsListGroup, "pluginList" );
-   m_pluginList->addColumn( i18n( "Name" ) );
-   m_pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
-   m_pluginList->addColumn( i18n( "Description" ) );
-   m_pluginList->setResizeMode( QListView::LastColumn );
-   m_pluginList->setAllColumnsShowFocus( true );
-   QWhatsThis::add( m_pluginList, i18n("<p>You can set here the list of plugins "
-                                       "which must be enabled/disabled for the future "
-                                       "digiKam image editor instances."
-                                       "<p>Note: the core image plugin cannot be disabled."));
-
-   layout->addWidget( imagePluginsListGroup );
-
-   // --------------------------------------------------------
-
-   readSettings();
-   initImagePluginsList();
-   updateImagePluginsList(m_availableImagePluginList, m_enableImagePluginList);
+    d->pluginsNumber = new QLabel(imagePluginsListGroup);
+    
+    d->pluginList = new KListView( imagePluginsListGroup, "pluginList" );
+    d->pluginList->addColumn( i18n( "Name" ) );
+    d->pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
+    d->pluginList->addColumn( i18n( "Description" ) );
+    d->pluginList->setResizeMode( QListView::LastColumn );
+    d->pluginList->setAllColumnsShowFocus( true );
+    QWhatsThis::add( d->pluginList, i18n("<p>You can set here the list of plugins "
+                                        "which must be enabled/disabled for the future "
+                                        "digiKam image editor instances."
+                                        "<p>Note: the core image plugin cannot be disabled."));
+    
+    layout->addWidget( imagePluginsListGroup );
+    
+    // --------------------------------------------------------
+    
+    readSettings();
+    initImagePluginsList();
+    updateImagePluginsList(d->availableImagePluginList, d->enableImagePluginList);
 }
 
 SetupImgPlugins::~SetupImgPlugins()
 {
+    delete d;
 }
 
 void SetupImgPlugins::initImagePluginsList()
@@ -88,16 +107,16 @@ void SetupImgPlugins::initImagePluginsList()
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
-        m_availableImagePluginList.append(service->name());      // Plugin name translated.
-        m_availableImagePluginList.append(service->library());   // Plugin system library name.
-        m_availableImagePluginList.append(service->comment());   // Plugin comments translated.
+        d->availableImagePluginList.append(service->name());      // Plugin name translated.
+        d->availableImagePluginList.append(service->library());   // Plugin system library name.
+        d->availableImagePluginList.append(service->comment());   // Plugin comments translated.
     }
 }
 
 void SetupImgPlugins::updateImagePluginsList(QStringList lista, QStringList listl)
 {
     QStringList::Iterator it = lista.begin();
-    m_pluginsNumber->setText(i18n("Plugins found: %1")
+    d->pluginsNumber->setText(i18n("Plugins found: %1")
                              .arg(lista.count()/3));
 
     while( it != lista.end() )
@@ -107,7 +126,7 @@ void SetupImgPlugins::updateImagePluginsList(QStringList lista, QStringList list
         QString libraryName = *it;
         it++;
         QString pluginComments = *it;
-        QCheckListItem *item = new QCheckListItem (m_pluginList, pluginName, QCheckListItem::CheckBox);
+        QCheckListItem *item = new QCheckListItem (d->pluginList, pluginName, QCheckListItem::CheckBox);
 
         if (listl.contains(libraryName))
            item->setOn(true);
@@ -128,7 +147,7 @@ void SetupImgPlugins::updateImagePluginsList(QStringList lista, QStringList list
 QStringList SetupImgPlugins::getImagePluginsListEnable()
 {
     QStringList imagePluginList;
-    QCheckListItem *item = (QCheckListItem*)m_pluginList->firstChild();
+    QCheckListItem *item = (QCheckListItem*)d->pluginList->firstChild();
 
     while( item )
     {
@@ -154,7 +173,7 @@ void SetupImgPlugins::readSettings()
     KConfig* config = kapp->config();
 
     config->setGroup("ImageViewer Settings");
-    m_enableImagePluginList = config->readListEntry("ImagePlugins List");
+    d->enableImagePluginList = config->readListEntry("ImagePlugins List");
 }
 
 }  // namespace Digikam
