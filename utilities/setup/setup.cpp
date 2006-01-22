@@ -72,6 +72,8 @@ public:
         iccPage          = 0;
         cameraPage       = 0;
         miscPage         = 0;
+        imgPluginsPage   = 0;
+        pluginsPage      = 0;
     }
 
     QFrame           *page_general;
@@ -93,6 +95,8 @@ public:
     SetupICC         *iccPage;
     SetupCamera      *cameraPage;
     SetupMisc        *miscPage;
+    SetupPlugins     *pluginsPage;
+    SetupImgPlugins  *imgPluginsPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -124,7 +128,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->page_imgPlugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
                           BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    m_imgPluginsPage = new SetupImgPlugins(d->page_imgPlugins);
+    d->imgPluginsPage = new SetupImgPlugins(d->page_imgPlugins);
 
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
@@ -132,7 +136,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
                            BarIcon("kipi", KIcon::SizeMedium));
-    m_pluginsPage = new SetupPlugins(d->page_plugins);
+    d->pluginsPage = new SetupPlugins(d->page_plugins);
 
     d->page_camera = addPage(i18n("Cameras"), i18n("Cameras"),
                           BarIcon("digitalcam", KIcon::SizeMedium));
@@ -162,10 +166,20 @@ void Setup::slotOkClicked()
     d->cameraPage->applySettings();
     d->exifPage->applySettings();
     d->editorPage->applySettings();
-    m_imgPluginsPage->applySettings();
+    d->imgPluginsPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     close();
+}
+
+SetupPlugins* Setup::kipiPluginsPage()
+{
+    return d->pluginsPage;
+}
+
+SetupImgPlugins* Setup::imagePluginsPage()
+{
+    return d->imgPluginsPage;
 }
 
 }  // namespace Digikam

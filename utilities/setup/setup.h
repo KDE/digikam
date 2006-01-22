@@ -27,8 +27,6 @@
 
 #include <kdialogbase.h>
 
-class QFrame;
-
 namespace Digikam
 {
 
@@ -56,12 +54,11 @@ public:
         Miscellaneous
     };
 
-    Setup(QWidget* parent=0, const char* name=0,
-          Page page=General);
+    Setup(QWidget* parent=0, const char* name=0, Page page=General);
     ~Setup();
 
-    SetupPlugins     *m_pluginsPage;
-    SetupImgPlugins  *m_imgPluginsPage;
+    SetupPlugins    *kipiPluginsPage();
+    SetupImgPlugins *imagePluginsPage();
 
 private slots:
 
