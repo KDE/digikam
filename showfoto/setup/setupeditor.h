@@ -25,13 +25,10 @@
 
 #include <qwidget.h>
 
-class QCheckBox;
-
-class KColorButton;
-class KIntNumInput;
-
 namespace ShowFoto
 {
+
+class SetupEditorPriv;
 
 class SetupEditor : public QWidget
 {
@@ -46,26 +43,12 @@ public:
 
 private:
 
-    KColorButton *m_backgroundColor;
+    void readSettings();
 
-    KIntNumInput *m_RAWquality;    
-    KIntNumInput *m_JPEGcompression;
-    KIntNumInput *m_PNGcompression;
-
-    QCheckBox    *m_cameraColorBalance;
-    QCheckBox    *m_automaticColorBalance;
-    QCheckBox    *m_enableRAWQuality;
-    QCheckBox    *m_RGBInterpolate4Colors;
-    QCheckBox    *m_TIFFcompression;
-    QCheckBox    *m_hideToolBar;
-    QCheckBox    *m_hideThumbBar;
-    QCheckBox    *m_horThumbBar;
-    QCheckBox    *m_showSplashCheck;
-    QCheckBox    *m_useTrashCheck;
-    
 private:
 
-    void readSettings();
+    SetupEditorPriv* d;
+
 };
 
 }   // namespace ShowFoto

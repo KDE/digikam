@@ -32,6 +32,7 @@
 // Local includes.
 
 #include "setupeditor.h"
+#include "setupiofiles.h"
 #include "setupimgplugins.h"
 #include "setupslideshow.h"
 #include "setupicc.h"
@@ -50,9 +51,13 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                         BarIcon("showfoto", KIcon::SizeMedium));
     editorPage_ = new SetupEditor(page_editor);
 
+    page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
+                          BarIcon("image", KIcon::SizeMedium));
+    iofilesPage_ = new Digikam::SetupIOFiles(page_iofiles);
+    
     page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    pluginsPage_ = new Digikam::SetupImgPlugins(page_plugins);
+    imgPluginsPage_ = new Digikam::SetupImgPlugins(page_plugins);
 
     page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                              BarIcon("slideshow", KIcon::SizeMedium));
@@ -76,10 +81,16 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     editorPage_->applySettings();
-    pluginsPage_->applySettings();
+    iofilesPage_->applySettings();
+    imgPluginsPage_->applySettings();
     slideshowPage_->applySettings();
     iccPage_->applySettings();
     close();
+}
+
+Digikam::SetupImgPlugins* Setup::imagePluginsPage()
+{
+    return imgPluginsPage_;
 }
 
 }   // namespace ShowFoto

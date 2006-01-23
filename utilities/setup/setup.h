@@ -47,6 +47,7 @@ public:
         Collections,
         Mime,
         Editor,
+        IOFiles,
         ImagePlugins,
         Icc,
         Plugins,

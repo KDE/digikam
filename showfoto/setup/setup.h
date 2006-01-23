@@ -30,6 +30,7 @@ class QFrame;
 namespace Digikam
 {
 class SetupImgPlugins;
+class SetupIOFiles;
 }
 
 namespace ShowFoto
@@ -48,6 +49,7 @@ public:
     enum Page 
     {
         EditorPage=0,
+        IOFilesPage,
         PluginsPage,
         SlideshowPage,
         ICCPage
@@ -55,19 +57,23 @@ public:
     
     Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
     ~Setup();
-    
-    Digikam::SetupImgPlugins  *pluginsPage_;
+
+    Digikam::SetupImgPlugins *imagePluginsPage();
     
 private:
 
-    QFrame           *page_editor;
-    QFrame           *page_plugins;
-    QFrame           *page_slideshow;
-    QFrame           *page_icc;
+    QFrame                   *page_editor;
+    QFrame                   *page_iofiles;
+    QFrame                   *page_plugins;
+    QFrame                   *page_slideshow;
+    QFrame                   *page_icc;
     
-    SetupEditor      *editorPage_;
-    SetupSlideShow   *slideshowPage_;
-    SetupICC         *iccPage_;
+    SetupEditor              *editorPage_;
+    SetupSlideShow           *slideshowPage_;
+    SetupICC                 *iccPage_;
+
+    Digikam::SetupIOFiles    *iofilesPage_;
+    Digikam::SetupImgPlugins *imgPluginsPage_;
 
 private slots:
 

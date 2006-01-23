@@ -53,7 +53,7 @@ private:  // Gaussian blur filter methods.
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
 
     // function to allocate a 2d array   
-    inline int** Alloc2DArray (int Columns, int Rows)
+    int** Alloc2DArray (int Columns, int Rows)
     {
        // First, we declare our future 2d array to be returned
        int** lpcArray = 0L;
@@ -68,7 +68,7 @@ private:  // Gaussian blur filter methods.
     };
     
     // Function to deallocates the 2d array previously created
-    inline void Free2DArray (int** lpcArray, int Columns)
+    void Free2DArray (int** lpcArray, int Columns)
     {
        // loop to dealocate the columns
        for (int i = 0; i < Columns; i++)

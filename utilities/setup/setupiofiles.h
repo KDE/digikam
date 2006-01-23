@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-08-03
- * Description : setup Image Editor tab.
+ * Date  : 2006-01-23
+ * Description : setup image editor Input Output files.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,30 +18,26 @@
  * 
  * ============================================================ */
 
-#ifndef SETUPEDITOR_H
-#define SETUPEDITOR_H
+#ifndef SETUPIOFILES_H
+#define SETUPIOFILES_H
 
 // Qt includes.
 
 #include <qwidget.h>
 
-class QCheckBox;
-
-class KColorButton;
-
 namespace Digikam
 {
 
-class SetupEditorPriv;
+class SetupIOFilesPriv;
 
-class SetupEditor : public QWidget
+class SetupIOFiles : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupEditor(QWidget* parent = 0);
-    ~SetupEditor();
+    SetupIOFiles(QWidget* parent = 0);
+    ~SetupIOFiles();
 
     void applySettings();
 
@@ -51,10 +47,10 @@ private:
 
 private:
 
-    SetupEditorPriv* d;
+    SetupIOFilesPriv* d;
     
 };
 
 }  // namespace Digikam
 
-#endif // SETUPEDITOR_H 
+#endif // SETUPIOFILES_H 

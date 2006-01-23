@@ -1476,7 +1476,7 @@ void ShowFoto::slotSetup()
         return;
 
     unLoadPlugins();
-    m_imagePluginLoader->loadPluginsFromList(setup.pluginsPage_->getImagePluginsListEnable());
+    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
     m_config->sync();
     loadPlugins();
     applySettings();
