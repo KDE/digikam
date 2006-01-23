@@ -122,7 +122,7 @@ void AlbumIconGroupItem::paintBanner()
     }
 
     QPainter p(&pix);
-    p.setPen(ThemeEngine::instance()->textSelColor());
+    p.setPen(Digikam::ThemeEngine::instance()->textSelColor());
     p.setFont(fn);
 
     QRect tr;

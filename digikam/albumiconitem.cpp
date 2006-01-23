@@ -193,7 +193,7 @@ void AlbumIconItem::paintItem()
     else
         pix = *(view_->itemBaseRegPixmap());
 
-    ThemeEngine* te = ThemeEngine::instance();
+    Digikam::ThemeEngine* te = Digikam::ThemeEngine::instance();
     
     QPainter p(&pix);
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());

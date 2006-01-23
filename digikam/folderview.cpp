@@ -64,7 +64,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
     d->dragItem = 0;
     d->oldHighlightItem = 0;
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(Digikam::ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             SLOT(slotThemeChanged()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
@@ -276,16 +276,16 @@ void FolderView::slotThemeChanged()
     int w = frameRect().width();
     int h = itemHeight();
 
-    d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
-    d->itemSelPix = ThemeEngine::instance()->listSelPixmap(w, h);
+    d->itemRegPix = Digikam::ThemeEngine::instance()->listRegPixmap(w, h);
+    d->itemSelPix = Digikam::ThemeEngine::instance()->listSelPixmap(w, h);
 
     QPalette plt(palette());
     QColorGroup cg(plt.active());
-    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
-    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
-    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
-    cg.setColor(QColorGroup::Link, ThemeEngine::instance()->textSpecialRegColor());
-    cg.setColor(QColorGroup::LinkVisited, ThemeEngine::instance()->textSpecialSelColor());
+    cg.setColor(QColorGroup::Base, Digikam::ThemeEngine::instance()->baseColor());
+    cg.setColor(QColorGroup::Text, Digikam::ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, Digikam::ThemeEngine::instance()->textSelColor());
+    cg.setColor(QColorGroup::Link, Digikam::ThemeEngine::instance()->textSpecialRegColor());
+    cg.setColor(QColorGroup::LinkVisited, Digikam::ThemeEngine::instance()->textSpecialSelColor());
     plt.setActive(cg);
     plt.setInactive(cg);
     setPalette(plt);

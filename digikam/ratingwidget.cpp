@@ -51,7 +51,7 @@ RatingWidget::RatingWidget(QWidget* parent)
     {
         QPainter painter(&m_selPixmap);
         painter.fillRect(0, 0, m_selPixmap.width(), m_selPixmap.height(),
-                         ThemeEngine::instance()->textSpecialRegColor());
+                         Digikam::ThemeEngine::instance()->textSpecialRegColor());
         painter.end();
     }
     

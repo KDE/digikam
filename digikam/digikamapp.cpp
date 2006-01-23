@@ -1338,21 +1338,21 @@ void DigikamApp::loadCameras()
 
 void DigikamApp::populateThemes()
 {
-    ThemeEngine::instance()->scanThemes();
-    QStringList themes(ThemeEngine::instance()->themeNames());
+    Digikam::ThemeEngine::instance()->scanThemes();
+    QStringList themes(Digikam::ThemeEngine::instance()->themeNames());
 
     mThemeMenuAction->setItems(themes);
     int index = themes.findIndex(mAlbumSettings->getCurrentTheme());
     if (index == -1)
         index = themes.findIndex(i18n("Default"));
     mThemeMenuAction->setCurrentItem(index);
-    ThemeEngine::instance()->slotChangeTheme(mThemeMenuAction->currentText());
+    Digikam::ThemeEngine::instance()->slotChangeTheme(mThemeMenuAction->currentText());
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
 {
     mAlbumSettings->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
+    Digikam::ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 void DigikamApp::updateDeleteTrashMenu()

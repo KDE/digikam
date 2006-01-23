@@ -33,7 +33,7 @@ libdigikam_la_SOURCES = albummanager.cpp album.cpp \
 			imagepropertiesgeneral.cpp imagepropertiesexif.cpp \
 			imagepropertieshistogram.cpp \
 		        cameralist.cpp cameratype.cpp cameradragobject.cpp \
-		        digikamfirstrun.cpp firstrunUI.ui \
+		        firstrunUI.ui digikamfirstrun.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
