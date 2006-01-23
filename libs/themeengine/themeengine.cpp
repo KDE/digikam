@@ -18,9 +18,7 @@
  * 
  * ============================================================ */
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+// Qt includes.
 
 #include <qdict.h>
 #include <qptrlist.h>
@@ -30,27 +28,47 @@
 #include <qpalette.h>
 #include <qtimer.h>
 
+// KDE includes.
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+
+// X11 includes.
+
 extern "C"
 {
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
 }    
 
+// Local includes.
+
 #include "theme.h"
 #include "texture.h"
 #include "themeengine.h"
+
+namespace Digikam
+{
 
 class ThemeEnginePriv
 {
 public:
 
+    ThemeEnginePriv()
+    {
+        currTheme = 0;
+        db        = 0;
+    }
+
     QPtrList<Theme> themeList;
     QDict<Theme>    themeDict;
+    
     Theme*          currTheme;
     Theme*          defaultTheme;
+
     XrmDatabase     db;
 };
-
 
 ThemeEngine* ThemeEngine::m_instance = 0;
 
@@ -72,11 +90,9 @@ ThemeEngine::ThemeEngine()
     XrmInitialize();
     
     d = new ThemeEnginePriv;
+
     d->themeList.setAutoDelete(false);
     d->themeDict.setAutoDelete(false);
-    d->currTheme = 0;
-    d->db        = 0;
-
     d->defaultTheme = new Theme(i18n("Default"), QString::null);
     d->themeList.append(d->defaultTheme);
     d->themeDict.insert(i18n("Default"), d->defaultTheme);
@@ -565,5 +581,7 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
                 d->currTheme->listSelBorder, d->currTheme->listSelBorderColor);
     return tex.renderPixmap();
 }
+
+}  // NameSpace Digikam
 
 #include "themeengine.moc"

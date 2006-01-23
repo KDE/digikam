@@ -21,15 +21,24 @@
 #ifndef THEMEENGINE_H
 #define THEMEENGINE_H
 
+// Qt includes.
+
 #include <qstringlist.h>
 #include <qobject.h>
 #include <qcolor.h>
 #include <qpixmap.h>
 
+// Digikam includes.
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
 class Theme;
 class ThemeEnginePriv;
 
-class ThemeEngine : public QObject
+class DIGIKAM_EXPORT ThemeEngine : public QObject
 {
     Q_OBJECT
     
@@ -64,8 +73,6 @@ private:
     void    loadTheme();
     QString resourceValue(const QString& name, const QString& altName);
     
-    ThemeEnginePriv* d;
-
 signals:
 
     void signalThemeChanged();
@@ -73,6 +80,12 @@ signals:
 public slots:
 
     void slotChangeTheme(const QString& name);
+
+private:
+    
+    ThemeEnginePriv* d;
 };
+
+}  // NameSpace Digikam
 
 #endif /* THEMEENGINE_H */

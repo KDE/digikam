@@ -1,6 +1,9 @@
 /* ============================================================
+ * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-07-26
  * Description : 
+ *
+ * Copyright 2004 by Renchi Raju
  * 
  * Adapted from fluxbox: Texture/TextureRender
  *
@@ -30,13 +33,22 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <qpixmap.h>
+// Qt includes.
+
 #include <qcolor.h>
 
-#include "theme.h"
+// Local includes.
 
-class Texture
+#include "digikam_export.h"
+
+namespace Digikam
 {
+
+class TexturePriv;
+
+class DIGIKAM_EXPORT Texture
+{
+
 public:
 
     Texture(int w, int h, const QColor& from, const QColor& to,
@@ -57,20 +69,12 @@ private:
 
     void buildImage();
 
-    QPixmap       m_pixmap;
-    QColor        m_color0;
-    QColor        m_color1;
-    int           m_width;
-    int           m_height;
-    bool          m_border;
-    QColor        m_borderColor;
+private:
 
-    unsigned char* m_red;
-    unsigned char* m_green;
-    unsigned char* m_blue;
-
-    Theme::Bevel    m_bevel;
-    Theme::Gradient m_gradient;
+    TexturePriv* d;
+    
 };
+
+}  // NameSpace Digikam
 
 #endif /* TEXTURE_H */
