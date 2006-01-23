@@ -31,14 +31,15 @@ namespace Digikam
 {
 class SetupImgPlugins;
 class SetupIOFiles;
+class SetupSlideShow;
 }
 
 namespace ShowFoto
 {
 
 class SetupEditor;
-class SetupSlideShow;
 class SetupICC;
+class SetupPrivate;
 
 class Setup : public KDialogBase 
 {
@@ -60,24 +61,14 @@ public:
 
     Digikam::SetupImgPlugins *imagePluginsPage();
     
-private:
-
-    QFrame                   *page_editor;
-    QFrame                   *page_iofiles;
-    QFrame                   *page_plugins;
-    QFrame                   *page_slideshow;
-    QFrame                   *page_icc;
-    
-    SetupEditor              *editorPage_;
-    SetupSlideShow           *slideshowPage_;
-    SetupICC                 *iccPage_;
-
-    Digikam::SetupIOFiles    *iofilesPage_;
-    Digikam::SetupImgPlugins *imgPluginsPage_;
-
 private slots:
 
     void slotOkClicked();
+        
+private:
+
+    SetupPrivate* d;
+        
 };
 
 }   // namespace ShowFoto

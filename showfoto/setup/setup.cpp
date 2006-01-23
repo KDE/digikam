@@ -41,31 +41,64 @@
 namespace ShowFoto
 {
 
+class SetupPrivate
+{
+public:
+
+    SetupPrivate()
+    {
+        slideshowPage   = 0;
+        imgPluginsPage  = 0;
+        iofilesPage     = 0;
+        iccPage         = 0;
+        editorPage      = 0;
+        page_icc        = 0;
+        page_slideshow  = 0;
+        page_imgplugins = 0;
+        page_iofiles    = 0;
+        page_editor     = 0;
+    }
+
+    QFrame                   *page_editor;
+    QFrame                   *page_iofiles;
+    QFrame                   *page_imgplugins;
+    QFrame                   *page_slideshow;
+    QFrame                   *page_icc;
+    
+    SetupEditor              *editorPage;
+    SetupICC                 *iccPage;
+
+    Digikam::SetupIOFiles    *iofilesPage;
+    Digikam::SetupImgPlugins *imgPluginsPage;
+    Digikam::SetupSlideShow  *slideshowPage;
+};
+
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
      : KDialogBase(IconList, i18n("Configure"), Help|Ok|Cancel, Ok, parent,
                    name, true, true )
 {
+    d = new SetupPrivate;
     setHelp("setupdialog.anchor", "showfoto");
 
-    page_editor = addPage(i18n("General"), i18n("General Settings"),
+    d->page_editor = addPage(i18n("General"), i18n("General Settings"),
                         BarIcon("showfoto", KIcon::SizeMedium));
-    editorPage_ = new SetupEditor(page_editor);
+    d->editorPage = new SetupEditor(d->page_editor);
 
-    page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
+    d->page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
                           BarIcon("image", KIcon::SizeMedium));
-    iofilesPage_ = new Digikam::SetupIOFiles(page_iofiles);
+    d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
-    page_plugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
+    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    imgPluginsPage_ = new Digikam::SetupImgPlugins(page_plugins);
+    d->imgPluginsPage = new Digikam::SetupImgPlugins(d->page_imgplugins);
 
-    page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
+    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                              BarIcon("slideshow", KIcon::SizeMedium));
-    slideshowPage_ = new SetupSlideShow(page_slideshow);
+    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
 
-    page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
-    iccPage_ = new SetupICC(page_icc);
+    d->iccPage = new SetupICC(d->page_icc);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
@@ -76,21 +109,22 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
 Setup::~Setup()
 {
+    delete d;
 }
 
 void Setup::slotOkClicked()
 {
-    editorPage_->applySettings();
-    iofilesPage_->applySettings();
-    imgPluginsPage_->applySettings();
-    slideshowPage_->applySettings();
-    iccPage_->applySettings();
+    d->editorPage->applySettings();
+    d->iofilesPage->applySettings();
+    d->imgPluginsPage->applySettings();
+    d->slideshowPage->applySettings();
+    d->iccPage->applySettings();
     close();
 }
 
 Digikam::SetupImgPlugins* Setup::imagePluginsPage()
 {
-    return imgPluginsPage_;
+    return d->imgPluginsPage;
 }
 
 }   // namespace ShowFoto

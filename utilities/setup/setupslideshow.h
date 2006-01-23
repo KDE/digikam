@@ -3,7 +3,7 @@
  * Date  : 2005-05-21
  * Description : setup tab for showfoto slideshow options.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,12 +25,10 @@
 
 #include <qwidget.h>
 
-class QCheckBox;
-
-class KIntNumInput;
-
-namespace ShowFoto
+namespace Digikam
 {
+
+class SetupSlideShowPriv;
 
 class SetupSlideShow : public QWidget
 {
@@ -45,15 +43,14 @@ public:
 
 private:
 
-    QCheckBox    *m_startWithCurrent;
-    QCheckBox    *m_loopMode;
-    QCheckBox    *m_fullScreenMode;
-    
-    KIntNumInput *m_delayInput;
-    
     void readSettings();
+
+private:
+
+    SetupSlideShowPriv* d;
+
 };
 
-}   // namespace ShowFoto
+}   // namespace Digikam
 
 #endif /* SETUPSLIDESHOW_H */
