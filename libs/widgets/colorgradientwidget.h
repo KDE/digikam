@@ -3,7 +3,7 @@
  * Date  : 2004-07-28
  * Description : a color gradient widget
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,8 @@
 namespace Digikam
 {
 
+class ColorGradientWidgetPriv;
+
 class DIGIKAM_EXPORT ColorGradientWidget : public QWidget
 {
 Q_OBJECT
@@ -59,11 +61,8 @@ protected:
     
 private:
 
-    int    m_orientation;
-    
-    QColor m_color1;
-    QColor m_color2;
-  
+    ColorGradientWidgetPriv* d;
+
 };
 
 }
