@@ -182,8 +182,11 @@ void DImgInterface::load(const QString& filename,
     d->brightness = 0.0;
     d->cmod.reset();
 
+    // FIXME : with File/Restore image action from GUI :
+    // cmSettings =0      ==> settings in d provate class instance will be lost !
+    // iofileSettings = 0 ==> crash !
+    
     d->cmSettings = cmSettings;
-
     d->undoMan->clear();
 
     d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
