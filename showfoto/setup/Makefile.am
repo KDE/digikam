@@ -1,0 +1,15 @@
+METASOURCES = AUTO
+
+INCLUDES= -I$(top_srcdir)/digikam/utilities/setup \
+	      $(all_includes)
+
+noinst_LTLIBRARIES = libsetup.la
+
+libsetup_la_SOURCES = setup.cpp setupeditor.cpp setupslideshow.cpp setupicc.cpp 
+
+libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
+
+libsetup_la_LIBADD = -I$(top_srcdir)/digikam/utilities/setup/libshowfotosetup.la \
+	                 $(all_libraries) $(KDE_RPATH)
+
+KDE_OPTIONS=nofinal
