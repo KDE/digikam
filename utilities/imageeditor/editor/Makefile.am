@@ -2,15 +2,14 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdimgeditor.la libshowfoto.la 
 
-libdimgeditor_la_SOURCES = imageiface.cpp imagewidget.cpp \
-	 		               imagewindow.cpp imageresizedlg.cpp \
-			               imageprint.cpp editorwindow.cpp 
+libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewidget.cpp \
+	 		               imagewindow.cpp imageresizedlg.cpp imageprint.cpp 
 
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 	 	           $(LIBKEXIF_LIBS)
 
-libshowfoto_la_SOURCES = imageiface.cpp imagewidget.cpp imageprint.cpp \
-	                     imageresizedlg.cpp slideshow.cpp editorwindow.cpp 
+libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp imagewidget.cpp \
+	                     imageresizedlg.cpp slideshow.cpp imageprint.cpp 
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 

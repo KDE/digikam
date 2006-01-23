@@ -768,38 +768,6 @@ void ImageWindow::slotLoadLast()
     slotLoadCurrent();
 }
 
-void ImageWindow::slotAboutToShowUndoMenu()
-{
-    m_undoAction->popupMenu()->clear();
-    QStringList titles;
-    m_canvas->getUndoHistory(titles);
-    if(!titles.isEmpty())
-    {
-        int id = 1;
-        QStringList::Iterator iter = titles.begin();        
-        for(; iter != titles.end(); ++iter,++id)
-        {
-            m_undoAction->popupMenu()->insertItem(*iter, id);
-        }        
-    }
-}
-
-void ImageWindow::slotAboutToShowRedoMenu()
-{
-    m_redoAction->popupMenu()->clear();
-    QStringList titles;
-    m_canvas->getRedoHistory(titles);
-    if(!titles.isEmpty())
-    {
-        int id = 1;
-        QStringList::Iterator iter = titles.begin();        
-        for(; iter != titles.end(); ++iter,++id)
-        {
-            m_redoAction->popupMenu()->insertItem(*iter, id);
-        }        
-    }
-}
-
 void ImageWindow::slotToggleAutoZoom()
 {
     bool checked = m_zoomFitAction->isChecked();

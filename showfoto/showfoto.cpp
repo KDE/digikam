@@ -1263,38 +1263,6 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
     }    
 }
 
-void ShowFoto::slotAboutToShowUndoMenu()
-{
-    m_undoAction->popupMenu()->clear();
-    QStringList titles;
-    m_canvas->getUndoHistory(titles);
-    if(!titles.isEmpty())
-    {
-        int id = 1;
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter,++id)
-        {
-            m_undoAction->popupMenu()->insertItem(*iter, id);
-        }
-    }
-}
-
-void ShowFoto::slotAboutToShowRedoMenu()
-{
-    m_redoAction->popupMenu()->clear();
-    QStringList titles;
-    m_canvas->getRedoHistory(titles);
-    if(!titles.isEmpty())
-    {
-        int id = 1;
-        QStringList::Iterator iter = titles.begin();
-        for(; iter != titles.end(); ++iter,++id)
-        {
-            m_redoAction->popupMenu()->insertItem(*iter, id);
-        }
-    }
-}
-
 void ShowFoto::slotSelected(bool val)
 {
     // Update menu actions.

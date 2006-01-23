@@ -194,9 +194,6 @@ private slots:
     void slotChanged(bool, bool);
     void slotSelected(bool);
     void slotUpdateItemInfo(void);
-    
-    void slotAboutToShowUndoMenu();
-    void slotAboutToShowRedoMenu();
 
     void slotConfToolbars();
     void slotNewToolbarConfig();

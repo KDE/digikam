@@ -30,6 +30,8 @@
 #include <kmainwindow.h>
 #include <kurl.h>
 
+class KToolBarPopupAction;
+
 namespace Digikam
 {
 
@@ -56,18 +58,25 @@ protected slots:
     void slotImagePluginsHelp();
     void slotEditKeys();
     void slotResize();
-        
+
+    void slotAboutToShowUndoMenu();
+    void slotAboutToShowRedoMenu();
+    
 protected:
 
     void printImage(KURL url);
 
 protected:
 
-    Canvas *m_canvas;
+    KToolBarPopupAction *m_undoAction;
+    KToolBarPopupAction *m_redoAction;
     
+    Canvas              *m_canvas;
+
 private slots:
 
 
+    
 private:
     
     EditorWindowPriv *d;

@@ -25,6 +25,8 @@
 #include <kkeydialog.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kaction.h>
+#include <kpopupmenu.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 
@@ -49,7 +51,9 @@ EditorWindow::EditorWindow(const char *name)
             : KMainWindow(0, name, WType_TopLevel|WDestructiveClose)
 {
     d = new EditorWindowPriv;
-    m_canvas = 0;
+    m_canvas     = 0;
+    m_undoAction = 0;
+    m_redoAction = 0;
 }
 
 EditorWindow::~EditorWindow()
@@ -126,6 +130,40 @@ void EditorWindow::slotResize()
         (width != m_canvas->imageWidth() ||
          height != m_canvas->imageHeight()))
         m_canvas->resizeImage(width, height);
+}
+
+void EditorWindow::slotAboutToShowUndoMenu()
+{
+    m_undoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getUndoHistory(titles);
+    
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_undoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
+}
+
+void EditorWindow::slotAboutToShowRedoMenu()
+{
+    m_redoAction->popupMenu()->clear();
+    QStringList titles;
+    m_canvas->getRedoHistory(titles);
+    
+    if(!titles.isEmpty())
+    {
+        int id = 1;
+        QStringList::Iterator iter = titles.begin();        
+        for(; iter != titles.end(); ++iter,++id)
+        {
+            m_redoAction->popupMenu()->insertItem(*iter, id);
+        }        
+    }
 }
 
 }  // namespace Digikam

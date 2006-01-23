@@ -140,9 +140,7 @@ private:
     KAction                *m_fileDelete;
     
     KAction                *m_copyAction;
-    KToolBarPopupAction    *m_undoAction;
-    KToolBarPopupAction    *m_redoAction;
-    
+
     KAction                *m_imagePluginsHelp;
     
     //Canvas                   *m_canvas;
@@ -198,9 +196,6 @@ private slots:
     void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
 
-    void slotAboutToShowUndoMenu();
-    void slotAboutToShowRedoMenu();
-    
     void slotDeleteCurrentItem();
 
     void slotFilePrint(){ printImage(m_urlCurrent); };
