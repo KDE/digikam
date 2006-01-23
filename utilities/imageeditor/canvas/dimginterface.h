@@ -57,8 +57,7 @@ public:
     ~DImgInterface();
 
     void   load(const QString& filename,
-                ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings,
-                QWidget *parent);
+                ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();

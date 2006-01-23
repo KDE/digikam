@@ -27,10 +27,13 @@
 
 #include <qstring.h>
 
-// Kde includes.
+// KDE includes.
 
-#include <kmainwindow.h>
 #include <kurl.h>
+
+// Local includes.
+
+#include "editorwindow.h"
 
 class QPopupMenu;
 class QLabel;
@@ -48,13 +51,12 @@ namespace Digikam
 {
 
 class AlbumIconView;
-class Canvas;
 class ImagePropertiesSideBarDB;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
 
-class ImageWindow : public KMainWindow
+class ImageWindow : public EditorWindow
 {
     Q_OBJECT
 
@@ -143,22 +145,22 @@ private:
     
     KAction                *m_imagePluginsHelp;
     
-    static ImageWindow     *m_instance;
+    //Canvas                   *m_canvas;
 
-    Canvas                 *m_canvas;
-
-    ICCSettingsContainer    *m_ICCSettings;
+    ICCSettingsContainer     *m_ICCSettings;
     
-    IOFileSettingsContainer *m_IOFileSettings;
+    IOFileSettingsContainer  *m_IOFileSettings;
     
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.
-    AlbumIconView           *m_view;
+    AlbumIconView            *m_view;
     
     ImagePropertiesSideBarDB *m_rightSidebar;
 
     SavingContextContainer   *m_savingContext;
     
+    static ImageWindow       *m_instance;
+
 private:
 
     ImageWindow();
@@ -186,8 +188,6 @@ private slots:
     void slotToggleFullScreen();
     void slotEscapePressed();
 
-    void slotResize();
-    
     void slotContextMenu();
     void slotZoomChanged(float zoom);
     void slotChanged(bool, bool);
@@ -201,13 +201,10 @@ private slots:
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
     
-    void slotFilePrint();
-    
     void slotDeleteCurrentItem();
 
-    void slotImagePluginsHelp();
+    void slotFilePrint(){ printImage(m_urlCurrent); };
 
-    void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
 

@@ -69,7 +69,6 @@ extern "C"
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kpopupmenu.h>
-#include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kprogress.h>
 
@@ -103,7 +102,7 @@ namespace ShowFoto
 {
 
 ShowFoto::ShowFoto(const KURL::List& urlList)
-        : KMainWindow( 0, "Showfoto" )
+        : Digikam::EditorWindow( "Showfoto" )
 {
     m_currentItem            = 0;
     m_itemsNb                = 0;
@@ -301,7 +300,6 @@ ShowFoto::~ShowFoto()
     unLoadPlugins();
 
     delete m_bar;
-    delete m_canvas;
     delete m_imagePluginLoader;
     delete m_slideShow;
     delete m_rightSidebar;
@@ -1044,12 +1042,12 @@ void ShowFoto::slotOpenURL(const KURL& url)
     if (m_ICCSettings->enableCMSetting)
     {
         kdDebug() << "enableCMSetting=true" << endl;
-        m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings, this);
+        m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
     }
     else
     {
         kdDebug() << "enableCMSetting=false" << endl;
-        m_canvas->load(localFile, 0, m_IOFileSettings, 0);
+        m_canvas->load(localFile, 0, m_IOFileSettings);
     }
 }
 
@@ -1240,11 +1238,6 @@ void ShowFoto::slotChangeBCG()
     }
 }
 
-void ShowFoto::slotImagePluginsHelp()
-{
-    KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
-}
-
 void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
 {
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
@@ -1367,25 +1360,6 @@ void ShowFoto::toggleActions(bool val, bool slideShow)
     }
 }
 
-void ShowFoto::slotEditKeys()
-{
-    KKeyDialog dialog(true, this);
-    dialog.insert( actionCollection(), i18n( "General" ) );
-
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
-    {
-        if (plugin)
-        {
-            dialog.insert( plugin->actionCollection(), plugin->name() );
-        }
-    }
-
-    dialog.configure();
-}
-
 void ShowFoto::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), "MainWindow");
@@ -1402,47 +1376,7 @@ void ShowFoto::slotNewToolbarConfig()
 
 void ShowFoto::slotFilePrint()
 {
-    uchar* ptr      = Digikam::DImgInterface::instance()->getImage();
-    int w           = Digikam::DImgInterface::instance()->origWidth();
-    int h           = Digikam::DImgInterface::instance()->origHeight();
-    bool hasAlpha   = Digikam::DImgInterface::instance()->hasAlpha();
-    bool sixteenBit = Digikam::DImgInterface::instance()->sixteenBit();
-
-    if (!ptr || !w || !h)
-        return;
-
-    Digikam::DImg image(w, h, sixteenBit, hasAlpha, ptr);
-    
-    KPrinter printer;
-    printer.setDocName( m_currentItem->url().filename() );
-    printer.setCreator( "ShowFoto");
-#if KDE_IS_VERSION(3,2,0)
-    printer.setUsePrinterResolution(true);
-#endif
-
-    KPrinter::addDialogPage( new Digikam::ImageEditorPrintDialogPage( this, "ShowFoto page"));
-
-    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
-    {
-        Digikam::ImagePrint printOperations(image, printer, m_currentItem->url().filename());
-        if (!printOperations.printImageWithQt())
-        {
-            KMessageBox::error(this, i18n("Failed to print file: '%1'")
-                               .arg(m_currentItem->url().filename()));
-        }
-    }
-}
-
-void ShowFoto::slotResize()
-{
-    int width  = m_canvas->imageWidth();
-    int height = m_canvas->imageHeight();
-
-    Digikam::ImageResizeDlg dlg(this, &width, &height);
-    if (dlg.exec() == QDialog::Accepted &&
-        (width != m_canvas->imageWidth() ||
-         height != m_canvas->imageHeight()))
-        m_canvas->resizeImage(width, height);
+    printImage(m_currentItem->url());
 }
 
 void ShowFoto::show()
@@ -1591,7 +1525,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         m_rightSidebar->noCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
-        m_canvas->load(QString::null, 0, m_IOFileSettings, 0);
+        m_canvas->load(QString::null, 0, m_IOFileSettings);
         m_currentItem = 0;
         m_isReadOnly = false;
     }
@@ -1679,7 +1613,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     if (!promptUserSave())
         return;
 
-    m_canvas->load(QString::null, 0, m_IOFileSettings, 0);
+    m_canvas->load(QString::null, 0, m_IOFileSettings);
     m_bar->clear(true);
     m_rightSidebar->noCurrentItem();
     m_currentItem = 0;

@@ -25,8 +25,11 @@
 
 // KDE includes.
 
-#include <kmainwindow.h>
 #include <kurl.h>
+
+// Local includes.
+
+#include "editorwindow.h"
 
 class QLabel;
 class QPopupMenu;
@@ -47,7 +50,6 @@ class Job;
 namespace Digikam
 {
 class ImagePluginLoader;
-class Canvas;
 class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
@@ -61,7 +63,7 @@ class SlideShow;
 namespace ShowFoto
 {
 
-class ShowFoto : public KMainWindow
+class ShowFoto : public Digikam::EditorWindow
 {
     Q_OBJECT
     
@@ -141,7 +143,6 @@ private:
     KSelectAction                   *m_viewHistogramAction;
 
     Digikam::ImagePluginLoader       *m_imagePluginLoader;
-    Digikam::Canvas                  *m_canvas;
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;
     Digikam::ImagePropertiesSideBar  *m_rightSidebar;
@@ -185,12 +186,10 @@ private slots:
     void slotToggleSlideShow();
     void slotAutoFit();
     void slotZoomChanged(float zoom);
-    void slotResize();
     void slotEscapePressed();
     void slotToggleShowBar();
     void slotViewHistogram();
     void slotChangeBCG();
-    void slotImagePluginsHelp();
     
     void slotChanged(bool, bool);
     void slotSelected(bool);
@@ -199,7 +198,6 @@ private slots:
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
 
-    void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();

@@ -217,7 +217,6 @@ Canvas::Canvas(QWidget *parent)
     viewport()->setMouseTracking(false);
 }
 
-
 void Canvas::customEvent(QCustomEvent *event)
 {
     if (!event) return;
@@ -366,7 +365,7 @@ Canvas::~Canvas()
 }
 
 void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
-                  IOFileSettingsContainer *IOFileSettings, QWidget *parent)
+                  IOFileSettingsContainer *IOFileSettings)
 {
     if (d->rubber)
     {
@@ -385,7 +384,7 @@ void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
 
     d->tileCache.clear();
 
-    d->im->load( filename, ICCSettings, IOFileSettings, parent );
+    d->im->load( filename, ICCSettings, IOFileSettings );
     emit signalLoadingStarted(filename);
 }
 

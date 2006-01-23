@@ -43,6 +43,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -67,7 +68,6 @@ public:
 
     DImgInterfacePrivate()
     {
-        parent     = 0;
         undoMan    = 0;
         cmSettings = 0;
         thread     = 0;
@@ -109,8 +109,6 @@ public:
 
     QString       filename;
 
-    QWidget      *parent;
-    
     DImg          image;
 
     UndoManager  *undoMan;
@@ -165,8 +163,7 @@ DImgInterface::~DImgInterface()
 
 void DImgInterface::load(const QString& filename,
                          ICCSettingsContainer *cmSettings,
-                         IOFileSettingsContainer* iofileSettings,
-                         QWidget *parent)
+                         IOFileSettingsContainer* iofileSettings)
 {
     d->valid      = false;
 
@@ -186,7 +183,6 @@ void DImgInterface::load(const QString& filename,
     d->cmod.reset();
 
     d->cmSettings = cmSettings;
-    d->parent     = parent;
 
     d->undoMan->clear();
 
@@ -244,7 +240,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 {
                     QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + "</p>";
                     
-                    if (KMessageBox::questionYesNo(d->parent, message) == KMessageBox::Yes)
+                    if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                     {
                         kdDebug() << "Pressed YES" << endl;
                         trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting), QFile::encodeName(d->cmSettings->workspaceSetting));
@@ -270,7 +266,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
                         QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
     
-                        if (KMessageBox::questionYesNo(d->parent, message) == KMessageBox::Yes)
+                        if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                         {
                             trans.setProfiles( QFile::encodeName(d->cmSettings->workspaceSetting));
                             trans.apply( d->image );
@@ -396,7 +392,7 @@ void DImgInterface::restore()
 {
     d->undoMan->clear();
 
-    load(d->filename, 0, 0, 0);
+    load(d->filename, 0, 0);
     //this is now emitted in slotImageLoaded. Correct?
     //emit signalModified(false, false);
 }

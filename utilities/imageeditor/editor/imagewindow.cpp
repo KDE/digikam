@@ -41,7 +41,6 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kprinter.h>
 #include <ktempfile.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
@@ -55,7 +54,6 @@
 #include <kstdaction.h>
 #include <kstdguiitem.h>
 #include <kstatusbar.h>
-#include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
@@ -107,7 +105,7 @@ bool ImageWindow::imagewindowCreated()
 ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow::ImageWindow()
-           : KMainWindow(0, 0, WType_TopLevel|WDestructiveClose)
+           : EditorWindow( "Image Editor" )
 {
     m_instance              = this;
     m_rotatedOrFlipped      = false;
@@ -248,7 +246,6 @@ ImageWindow::~ImageWindow()
         }
     }
     
-    delete m_canvas; 
     delete m_rightSidebar;
     delete m_ICCSettings;
     delete m_IOFileSettings;
@@ -627,12 +624,12 @@ void ImageWindow::slotLoadCurrent()
         if (m_ICCSettings->enableCMSetting)
         {
             kdDebug() << "enableCMSetting=true" << endl;
-            m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings, m_instance);
+            m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings);
         }
         else
         {
             kdDebug() << "enableCMSetting=false" << endl;
-            m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings, 0);
+            m_canvas->load(m_urlCurrent.path(), 0, m_IOFileSettings);
         }
         
         ++it;
@@ -726,7 +723,7 @@ void ImageWindow::slotLoadNext()
 
     if (it != m_urlList.end()) 
     {
-        if (m_urlCurrent != m_urlList.last()) 
+        if (m_urlCurrent != m_urlList.last())
         {
            KURL urlNext = *(++it);
            m_urlCurrent = urlNext;
@@ -817,18 +814,6 @@ void ImageWindow::slotViewHistogram()
 {
     int curItem = m_viewHistogramAction->currentItem();
     m_canvas->setHistogramType(curItem);
-}
-
-void ImageWindow::slotResize()
-{
-    int width  = m_canvas->imageWidth();
-    int height = m_canvas->imageHeight();
-
-    ImageResizeDlg dlg(this, &width, &height);
-    if (dlg.exec() == QDialog::Accepted &&
-        (width != m_canvas->imageWidth() ||
-        height != m_canvas->imageHeight()))
-        m_canvas->resizeImage(width, height);
 }
 
 void ImageWindow::slotContextMenu()
@@ -1022,39 +1007,6 @@ void ImageWindow::slotDeleteCurrentItem()
                              i18n("No Image in Current Album"));
 
     close();
-}
-
-void ImageWindow::slotFilePrint()
-{
-    uchar* ptr      = DImgInterface::instance()->getImage();
-    int w           = DImgInterface::instance()->origWidth();
-    int h           = DImgInterface::instance()->origHeight();
-    bool hasAlpha   = DImgInterface::instance()->hasAlpha();
-    bool sixteenBit = DImgInterface::instance()->sixteenBit();
-
-    if (!ptr || !w || !h)
-        return;
-
-    DImg image(w, h, sixteenBit, hasAlpha, ptr);
-
-    KPrinter printer;
-    printer.setDocName( m_urlCurrent.filename() );
-    printer.setCreator( "digiKam-ImageEditor");
-#if KDE_IS_VERSION(3,2,0)
-    printer.setUsePrinterResolution(true);
-#endif
-
-    KPrinter::addDialogPage( new ImageEditorPrintDialogPage( this, "ImageEditor page"));
-
-    if ( printer.setup( this, i18n("Print %1").arg(printer.docName().section('/', -1)) ) )
-    {
-        ImagePrint printOperations(image, printer, m_urlCurrent.filename());
-        if (!printOperations.printImageWithQt())
-        {
-            KMessageBox::error(this, i18n("Failed to print file: '%1'")
-                               .arg(m_urlCurrent.filename()));
-        }
-    }
 }
 
 bool ImageWindow::save()
@@ -1503,29 +1455,6 @@ void ImageWindow::plugActionAccel(KAction* action)
 void ImageWindow::unplugActionAccel(KAction* action)
 {
     m_accel->remove(action->text());
-}
-
-void ImageWindow::slotImagePluginsHelp()
-{
-    KApplication::kApplication()->invokeHelp( QString::null, "digikamimageplugins" );
-}
-
-void ImageWindow::slotEditKeys()
-{
-    KKeyDialog dialog(true, this);
-    dialog.insert( actionCollection(), i18n( "General" ) );
-
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next())
-    {
-        if (plugin)
-        {
-            dialog.insert( plugin->actionCollection(), plugin->name() );
-        }
-    }
-    
-    dialog.configure();
 }
 
 void ImageWindow::slotConfToolbars()
