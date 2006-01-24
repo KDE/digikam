@@ -15,6 +15,7 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 	   -I$(top_srcdir)/digikam/digikam \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
+	   -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   $(LIBKEXIF_CFLAGS) $(all_includes)
 

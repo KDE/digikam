@@ -58,6 +58,7 @@ class IOFileSettingsContainer;
 class SavingContextContainer;
 class SplashScreen;
 class SlideShow;
+class IOFileProgressBar;
 }
 
 namespace ShowFoto
@@ -89,7 +90,6 @@ private:
 
     int                              m_itemsNb;
 
-    QLabel                          *m_nameLabel;
     QLabel                          *m_zoomLabel;
     QLabel                          *m_resLabel;
         
@@ -142,6 +142,7 @@ private:
         
     KSelectAction                   *m_viewHistogramAction;
 
+    Digikam::IOFileProgressBar       *m_nameLabel;
     Digikam::ImagePluginLoader       *m_imagePluginLoader;
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;

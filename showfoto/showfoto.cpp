@@ -93,6 +93,7 @@ extern "C"
 #include "setupeditor.h"
 #include "setupimgplugins.h"
 #include "slideshow.h"
+#include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
@@ -166,7 +167,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);        
-    m_nameLabel = new QLabel(statusBar());
+
+    m_nameLabel = new Digikam::IOFileProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);
     m_zoomLabel = new QLabel(statusBar());
@@ -265,8 +267,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     connect(m_canvas, SIGNAL(signalSavingFinished(const QString &, bool)),
             this, SLOT(slotSavingFinished(const QString &, bool)));
 
-    connect(m_canvas, SIGNAL(signalSavingProgress(const QString& filePath, float progress)),
-            this, SLOT(slotSavingProgress(const QString& filePath, float progress)));
+    connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
+            this, SLOT(slotSavingProgress(const QString&, float)));
 
     connect(m_slideShow, SIGNAL(finished()),
             m_slideShowAction, SLOT(activate()) );
@@ -1053,12 +1055,16 @@ void ShowFoto::slotOpenURL(const KURL& url)
 
 void ShowFoto::slotLoadingStarted(const QString &filename)
 {
-    //TODO
+    //TODO: Disable actions as appropriate
+
+    m_nameLabel->progressBarVisible(true);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
 {
     //TODO: handle success == false
+    m_nameLabel->progressBarVisible(false);
     m_isReadOnly = isReadOnly;
     slotUpdateItemInfo();
     QApplication::restoreOverrideCursor();
@@ -1066,7 +1072,7 @@ void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool i
 
 void ShowFoto::slotLoadingProgress(const QString& filePath, float progress)
 {
-    //TODO
+    m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
 void ShowFoto::toggleNavigation(int index)

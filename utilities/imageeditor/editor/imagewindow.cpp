@@ -81,6 +81,7 @@
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
 #include "tagspopupmenu.h"
+#include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
@@ -135,7 +136,7 @@ ImageWindow::ImageWindow()
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
     
-    m_nameLabel = new QLabel(statusBar());
+    m_nameLabel = new IOFileProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel,1);
     m_zoomLabel = new QLabel(statusBar());
@@ -644,6 +645,8 @@ void ImageWindow::slotLoadCurrent()
 void ImageWindow::slotLoadingStarted(const QString &filename)
 {
     //TODO: Disable actions as appropriate
+
+    m_nameLabel->progressBarVisible(true);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
@@ -652,6 +655,7 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
     //TODO: enable actions as appropriate
     //TODO: handle success == false
 
+    m_nameLabel->progressBarVisible(false);
     QApplication::restoreOverrideCursor();
     m_isReadOnly = isReadOnly;
 
@@ -711,7 +715,7 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
 
 void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
 {
-    //TODO: progress display in status bar
+    m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
 void ImageWindow::slotLoadNext()

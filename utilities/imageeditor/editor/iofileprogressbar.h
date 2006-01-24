@@ -1,0 +1,61 @@
+/* ============================================================
+ * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Date  : 2006-01-24
+ * Description : a progress bar used to display io file acess 
+ *               progressor or the current file name.
+ * 
+ * Copyright 2006 by Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * ============================================================ */
+
+#ifndef IOFILEPROGRESSBAR_H
+#define IOFILEPROGRESSBAR_H
+
+// KDE includes.
+
+#include <qwidgetstack.h>
+#include <qstring.h>
+
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+class IOFileProgressBarPriv;
+
+class DIGIKAM_EXPORT IOFileProgressBar : public QWidgetStack
+{
+Q_OBJECT
+
+public:
+    
+    IOFileProgressBar( QWidget *parent=0 );
+  
+    ~IOFileProgressBar();
+  
+    void setText(QString text);
+    void progressBarVisible(bool v);
+    void setProgressValue( int v );
+    void setAlignment(int a);
+
+private:
+
+    IOFileProgressBarPriv* d;
+};
+
+}
+
+#endif /* IOFILEPROGRESSBAR_H */

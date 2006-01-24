@@ -55,6 +55,7 @@ class ImagePropertiesSideBarDB;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
+class IOFileProgressBar;
 
 class ImageWindow : public EditorWindow
 {
@@ -99,7 +100,6 @@ private:
 
     QSplitter              *m_splitter;
                               
-    QLabel*                 m_nameLabel;
     QLabel*                 m_zoomLabel;
     QLabel*                 m_resLabel;
     
@@ -156,6 +156,8 @@ private:
     ImagePropertiesSideBarDB *m_rightSidebar;
 
     SavingContextContainer   *m_savingContext;
+
+    IOFileProgressBar        *m_nameLabel;
     
     static ImageWindow       *m_instance;
 
