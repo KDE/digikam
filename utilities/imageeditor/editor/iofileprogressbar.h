@@ -50,7 +50,6 @@ public:
     void progressBarVisible(bool v);
     void setProgressValue( int v );
     void setAlignment(int a);
-    void resetProgressBar();
 
 private:
 
