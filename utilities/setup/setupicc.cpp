@@ -59,13 +59,61 @@
 
 #include LCMS_HEADER
 
+typedef QMap<QString, QString> ICCfilesPath;
+
 namespace Digikam
 {
+
+class SetupICCPriv
+{
+public:
+
+     SetupICCPriv()
+     {
+        enableColorManagement   = 0;
+        bpcAlgorithm            = 0;
+        defaultApplyICC         = 0;
+        defaultAskICC           = 0;
+        inICCFiles_file         = 0;
+        workICCFiles_file       = 0;
+        proofICCFiles_file      = 0;
+        monitorICCFiles_file    = 0;
+        defaultPathKU           = 0;
+        inProfilesKC            = 0;
+        workProfilesKC          = 0;
+        proofProfilesKC         = 0;
+        monitorProfilesKC       = 0;
+        renderingIntentKC       = 0;
+        ICCPath                 = QMap<QString, QString>();
+     }
+
+    QCheckBox       *enableColorManagement;
+    QCheckBox       *bpcAlgorithm;
+    
+    QRadioButton    *defaultApplyICC;
+    QRadioButton    *defaultAskICC;
+
+    QStringList     inICCFiles_file;
+    QStringList     workICCFiles_file;
+    QStringList     proofICCFiles_file;
+    QStringList     monitorICCFiles_file;
+
+    KURLRequester   *defaultPathKU;
+
+    KComboBox       *inProfilesKC;
+    KComboBox       *workProfilesKC;
+    KComboBox       *proofProfilesKC;
+    KComboBox       *monitorProfilesKC;
+    KComboBox       *renderingIntentKC;
+
+    ICCfilesPath    ICCPath;
+};
 
 SetupICC::SetupICC(QWidget* parent )
         : QWidget(parent)
 {
 //     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    d = new SetupICCPriv();
 
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint());
 
@@ -74,20 +122,20 @@ SetupICC::SetupICC(QWidget* parent )
    QVGroupBox *colorPolicy = new QVGroupBox(parent);
    colorPolicy->setTitle(i18n("Color Management Policy"));
 
-   m_enableColorManagement = new QCheckBox(colorPolicy);
-   m_enableColorManagement->setText(i18n("Enable Color Management"));
-   QWhatsThis::add( m_enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
+   d->enableColorManagement = new QCheckBox(colorPolicy);
+   d->enableColorManagement->setText(i18n("Enable Color Management"));
+   QWhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
                                                   "<li>Unchecked: Color Management is disabled</li></ul>"));
 
    QButtonGroup *behaviour = new QButtonGroup(2, Qt::Vertical, i18n("Behaviour"),colorPolicy);
 
-   m_defaultApplyICC = new QRadioButton(behaviour);
-   m_defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
-   QWhatsThis::add( m_defaultApplyICC, i18n("<p>If this option is selected, Digikam applies the Workspace default color profile to an image without asking when this has not embedded profile or the embedded profile is not the same that the workspace one.</p>"));
+   d->defaultApplyICC = new QRadioButton(behaviour);
+   d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
+   QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, Digikam applies the Workspace default color profile to an image without asking when this has not embedded profile or the embedded profile is not the same that the workspace one.</p>"));
 
-   m_defaultAskICC = new QRadioButton(behaviour);
-   m_defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
-   QWhatsThis::add( m_defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
+   d->defaultAskICC = new QRadioButton(behaviour);
+   d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
+   QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
 
    layout->addWidget(colorPolicy);
 
@@ -96,12 +144,12 @@ SetupICC::SetupICC(QWidget* parent )
    QHGroupBox * defaultPath = new QHGroupBox(parent);
    defaultPath->setTitle(i18n("Color Profiles Directory"));
 
-   m_defaultPath = new KURLRequester(defaultPath);
-   m_defaultPath->setMode(KFile::Directory);
-   QWhatsThis::add( m_defaultPath, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
+   d->defaultPathKU = new KURLRequester(defaultPath);
+   d->defaultPathKU->setMode(KFile::Directory);
+   QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
 
-   connect(m_defaultPath, SIGNAL(textChanged(const QString&)), this, SLOT(slotFillCombos(const QString&)));
-   connect(m_defaultPath, SIGNAL(urlSelected(const QString&)), this, SLOT(slotFillCombos(const QString&)));
+   connect(d->defaultPathKU, SIGNAL(textChanged(const QString&)), this, SLOT(slotFillCombos(const QString&)));
+   connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)), this, SLOT(slotFillCombos(const QString&)));
 
    layout->addWidget(defaultPath);
 
@@ -114,52 +162,52 @@ SetupICC::SetupICC(QWidget* parent )
     workProfilesSettings->setSpacing(KDialog::spacingHint());
 
     QLabel *workProfiles = new QLabel(i18n("Workspace profile: "), workProfilesSettings);
-    m_workProfiles = new KComboBox(false, workProfilesSettings);
-    workProfiles->setBuddy(m_workProfiles);
-    QWhatsThis::add( m_workProfiles, i18n("<p>All the images will be converted to the color space of this profile, so you must select an apropiate one for edition purpose.</p><p> These color profiles are device independents.</p>"));
+    d->workProfilesKC = new KComboBox(false, workProfilesSettings);
+    workProfiles->setBuddy(d->workProfilesKC);
+    QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color space of this profile, so you must select an apropiate one for edition purpose.</p><p> These color profiles are device independents.</p>"));
     QPushButton *infoWorkProfiles = new QPushButton("Info", workProfilesSettings);
     infoWorkProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoWorkProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(m_workProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeWorkProfile(int)));
+    connect(d->workProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeWorkProfile(int)));
     connect(infoWorkProfiles, SIGNAL(clicked()), this, SLOT(slotClickedWork()));
 
     QHBox *monitorProfilesSettings = new QHBox(profiles);
     monitorProfilesSettings->setSpacing(KDialog::spacingHint());
 
     QLabel *monitorProfiles = new QLabel(i18n("Monitor profile: "), monitorProfilesSettings);
-    m_monitorProfiles = new KComboBox(false, monitorProfilesSettings);
-    monitorProfiles->setBuddy(m_monitorProfiles);
-    QWhatsThis::add( m_monitorProfiles, i18n("<p>You must select the profile for your monitor.</p>"));
+    d->monitorProfilesKC = new KComboBox(false, monitorProfilesSettings);
+    monitorProfiles->setBuddy(d->monitorProfilesKC);
+    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor.</p>"));
     QPushButton *infoMonitorProfiles = new QPushButton("Info", monitorProfilesSettings);
     infoMonitorProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoMonitorProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(m_monitorProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeMonitorProfile(int)));
+    connect(d->monitorProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeMonitorProfile(int)));
     connect(infoMonitorProfiles, SIGNAL(clicked()), this, SLOT(slotClickedMonitor()) );
 
     QHBox *inProfilesSettings = new QHBox(profiles);
     inProfilesSettings->setSpacing(KDialog::spacingHint());
 
     QLabel *inProfiles = new QLabel(i18n("Input profile: "), inProfilesSettings);
-    m_inProfiles = new KComboBox(false, inProfilesSettings);
-    inProfiles->setBuddy(m_inProfiles);
-    QWhatsThis::add( m_inProfiles, i18n("<p>You must select the profile for your input device (scanner, camera, ...)</p>"));
+    d->inProfilesKC = new KComboBox(false, inProfilesSettings);
+    inProfiles->setBuddy(d->inProfilesKC);
+    QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device (scanner, camera, ...)</p>"));
     QPushButton *infoInProfiles = new QPushButton("Info", inProfilesSettings);
     infoInProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoInProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(m_inProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeInProfile(int)));
+    connect(d->inProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeInProfile(int)));
     connect(infoInProfiles, SIGNAL(clicked()), this, SLOT(slotClickedIn()) );
 
     QHBox *proofProfilesSettings = new QHBox(profiles);
     proofProfilesSettings->setSpacing(KDialog::spacingHint());
 
     QLabel *proofProfiles = new QLabel(i18n("Soft proof profile: "), proofProfilesSettings);
-    m_proofProfiles = new KComboBox(false, proofProfilesSettings);
-    proofProfiles->setBuddy(m_proofProfiles);
-    QWhatsThis::add( m_proofProfiles, i18n("<p>You must select the profile for your ouput device (usually, your printer). This profile will be used to do a soft proof, so you will be able to preview how an image will be rendered in an output device.</p>"));
+    d->proofProfilesKC = new KComboBox(false, proofProfilesSettings);
+    proofProfiles->setBuddy(d->proofProfilesKC);
+    QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device (usually, your printer). This profile will be used to do a soft proof, so you will be able to preview how an image will be rendered in an output device.</p>"));
     QPushButton *infoProofProfiles = new QPushButton("Info", proofProfilesSettings);
     infoProofProfiles->setMaximumWidth(60);
     QWhatsThis::add( infoProofProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(m_proofProfiles, SIGNAL(highlighted(int)), this, SLOT(slotChangeProofProfile(int)));
+    connect(d->proofProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeProofProfile(int)));
     connect(infoProofProfiles, SIGNAL(clicked()), this, SLOT(slotClickedProof()) );
 
     fillCombos();
@@ -170,9 +218,9 @@ SetupICC::SetupICC(QWidget* parent )
     
     QVGroupBox * bpc = new QVGroupBox(i18n("BPC Algorithm"), parent);
 
-    m_bpcAlgorithm = new QCheckBox(bpc);
-    m_bpcAlgorithm->setText(i18n("Use Black Point Compensation"));
-    QWhatsThis::add( m_bpcAlgorithm, i18n("<p>BPC is a way to make adjustments between the maximum black levels of digital files and the black capabilities of various digital devices.</p>"));
+    d->bpcAlgorithm = new QCheckBox(bpc);
+    d->bpcAlgorithm->setText(i18n("Use Black Point Compensation"));
+    QWhatsThis::add( d->bpcAlgorithm, i18n("<p>BPC is a way to make adjustments between the maximum black levels of digital files and the black capabilities of various digital devices.</p>"));
     
     layout->addWidget(bpc);
     
@@ -180,12 +228,12 @@ SetupICC::SetupICC(QWidget* parent )
     
     QHGroupBox *intents = new QHGroupBox(i18n("Rendering Intents"), parent);
 
-    m_renderingIntent = new KComboBox(false, intents);
-    m_renderingIntent->insertItem("Perceptual");
-    m_renderingIntent->insertItem("Absolute Colorimetric");
-    m_renderingIntent->insertItem("Relative Colorimetric");
-    m_renderingIntent->insertItem("Saturation");
-    QWhatsThis::add( m_renderingIntent, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be compressed or expanded to fill the gamut of the destination device, so that gray balance is preserved but colorimetric accuracy may not be preserved.\n"
+    d->renderingIntentKC = new KComboBox(false, intents);
+    d->renderingIntentKC->insertItem("Perceptual");
+    d->renderingIntentKC->insertItem("Absolute Colorimetric");
+    d->renderingIntentKC->insertItem("Relative Colorimetric");
+    d->renderingIntentKC->insertItem("Saturation");
+    QWhatsThis::add( d->renderingIntentKC, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be compressed or expanded to fill the gamut of the destination device, so that gray balance is preserved but colorimetric accuracy may not be preserved.\n"
     "In other words, if certain colors in an image fall outside of the range of colors that the output device can render, the picture intent will cause all the colors in the image to be adjusted so that the every color in the image falls within the range that can be rendered and so that the relationship between colors is preserved as much as possible.\n"
     "This intent is most suitable for display of photographs and images, and is the default intent.</li>"
     "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the output device can render are adjusted to the closest color that can be rendered, while all other colors are left unchanged.\n"
@@ -198,7 +246,7 @@ SetupICC::SetupICC(QWidget* parent )
     layout->addWidget(intents);
     
     // --------------------------------------------------------
-    connect(m_enableColorManagement, SIGNAL(toggled(bool)), this, SLOT(slotToggledWidgets(bool)));
+    connect(d->enableColorManagement, SIGNAL(toggled(bool)), this, SLOT(slotToggledWidgets(bool)));
 
     layout->addStretch();
 
@@ -212,6 +260,7 @@ SetupICC::SetupICC(QWidget* parent )
 
 SetupICC::~SetupICC()
 {
+    delete d;
 }
 
 void SetupICC::applySettings()
@@ -219,12 +268,12 @@ void SetupICC::applySettings()
     KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
-    config->writeEntry("EnableCM", m_enableColorManagement->isChecked());
+    config->writeEntry("EnableCM", d->enableColorManagement->isChecked());
     
-    if (!m_enableColorManagement->isChecked())
+    if (!d->enableColorManagement->isChecked())
         return;          // No need to write settings in this case.
 
-    if (m_defaultApplyICC->isChecked())
+    if (d->defaultApplyICC->isChecked())
     {
         config->writeEntry("BehaviourICC", true);
     }
@@ -232,9 +281,9 @@ void SetupICC::applySettings()
     {
         config->writeEntry("BehaviourICC", false);
     }
-//     config->writeEntry("ApplyICC", m_defaultApplyICC->isChecked());
-//     config->writeEntry("AskICC", m_defaultAskICC->isChecked());
-    if (m_defaultPath->url().isEmpty())
+//     config->writeEntry("ApplyICC", d->defaultApplyICC->isChecked());
+//     config->writeEntry("AskICC", d->defaultAskICC->isChecked());
+    if (d->defaultPathKU->url().isEmpty())
     {
         QString message = QString(i18n("<p>You must set a default path to color profiles files.</p>"));
         message.append(i18n("<p>This settings will not be written.</p>"));
@@ -243,17 +292,17 @@ void SetupICC::applySettings()
         config->sync();
         return;
     }
-    config->writeEntry("DefaultPath", m_defaultPath->url());
-    config->writeEntry("WorkSpaceProfile", m_workProfiles->currentItem());
-    config->writeEntry("MonitorProfile", m_monitorProfiles->currentItem());
-    config->writeEntry("InProfile", m_inProfiles->currentItem());
-    config->writeEntry("ProofProfile", m_proofProfiles->currentItem());
-    config->writeEntry("BPCAlgorithm", m_bpcAlgorithm->isChecked());
-    config->writeEntry("RenderingIntent", m_renderingIntent->currentItem());
-    config->writeEntry("InProfileFile", m_inICCFiles_file[m_inProfiles->currentItem()]);
-    config->writeEntry("WorkProfileFile", m_workICCFiles_file[m_workProfiles->currentItem()]);
-    config->writeEntry("MonitorProfileFile", m_monitorICCFiles_file[m_monitorProfiles->currentItem()]);
-    config->writeEntry("ProofProfileFile", m_proofICCFiles_file[m_proofProfiles->currentItem()]);
+    config->writeEntry("DefaultPath", d->defaultPathKU->url());
+    config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
+    config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
+    config->writeEntry("InProfile", d->inProfilesKC->currentItem());
+    config->writeEntry("ProofProfile", d->proofProfilesKC->currentItem());
+    config->writeEntry("BPCAlgorithm", d->bpcAlgorithm->isChecked());
+    config->writeEntry("RenderingIntent", d->renderingIntentKC->currentItem());
+    config->writeEntry("InProfileFile", d->inICCFiles_file[d->inProfilesKC->currentItem()]);
+    config->writeEntry("WorkProfileFile", d->workICCFiles_file[d->workProfilesKC->currentItem()]);
+    config->writeEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
+    config->writeEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
 
     config->sync();
 }
@@ -264,38 +313,38 @@ void SetupICC::readSettings()
 
     config->setGroup("Color Management");
 
-    m_enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
+    d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     
-    if (!m_enableColorManagement->isChecked())
+    if (!d->enableColorManagement->isChecked())
         return;          // No need to read settings in this case.
     
     slotToggledWidgets(true);
 
     if (config->readBoolEntry("BehaviourICC"))
     {
-        m_defaultApplyICC->setChecked(true);
+        d->defaultApplyICC->setChecked(true);
     }
     else
     {
-        m_defaultAskICC->setChecked(true);
+        d->defaultAskICC->setChecked(true);
     }
-//     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
-//     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
-    m_defaultPath->setURL(config->readPathEntry("DefaultPath"));
-    m_workProfiles->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
-    m_monitorProfiles->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
-    m_inProfiles->setCurrentItem(config->readNumEntry("InProfile", 0));
-    m_proofProfiles->setCurrentItem(config->readNumEntry("ProofProfile", 0));
-    m_bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-    m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
-    m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
-    m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-    m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
-    kdDebug() << "Profile Path: " << m_ICCfilesPath["InProfile"] << endl;
-    kdDebug() << "Profile Path: " << m_ICCfilesPath["WorkProfile"] << endl;
-    kdDebug() << "Profile Path: " << m_ICCfilesPath["MonitorProfile"] << endl;
-    kdDebug() << "Profile Path: " << m_ICCfilesPath["ProofProfile"] << endl;
+//     d->defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
+//     d->defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
+    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
+    d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
+    d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
+    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    d->ICCPath["InProfile"]=config->readPathEntry("InProfileFile");
+    d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
+    d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+    d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+    kdDebug() << "Profile Path: " << d->ICCPath["InProfile"] << endl;
+    kdDebug() << "Profile Path: " << d->ICCPath["WorkProfile"] << endl;
+    kdDebug() << "Profile Path: " << d->ICCPath["MonitorProfile"] << endl;
+    kdDebug() << "Profile Path: " << d->ICCPath["ProofProfile"] << endl;
 }
 
 void SetupICC::fillCombos()
@@ -335,23 +384,23 @@ void SetupICC::fillCombos()
             {
                 case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_inICCFiles_file.append(fileName);
+                    d->inICCFiles_file.append(fileName);
                     break;
                 case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_monitorICCFiles_file.append(fileName);
-                    m_workICCFiles_file.append(fileName);
+                    d->monitorICCFiles_file.append(fileName);
+                    d->workICCFiles_file.append(fileName);
                     break;
                 case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_proofICCFiles_file.append(fileName);
+                    d->proofICCFiles_file.append(fileName);
                     break;
                 case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_workICCFiles_file.append(fileName);
+                    d->workICCFiles_file.append(fileName);
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_inICCFiles_file.append(fileName);
+                    d->inICCFiles_file.append(fileName);
                     break;
             }
 
@@ -362,27 +411,27 @@ void SetupICC::fillCombos()
     {
       kdDebug() << "no list" << endl;
     }
-    m_inProfiles->insertStringList(m_inICCFiles_description);
-    m_monitorProfiles->insertStringList(m_monitorICCFiles_description);
-    m_workProfiles->insertStringList(m_workICCFiles_description);
-    m_proofProfiles->insertStringList(m_proofICCFiles_description);
+    d->inProfilesKC->insertStringList(m_inICCFiles_description);
+    d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
+    d->workProfilesKC->insertStringList(m_workICCFiles_description);
+    d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
 }
 
 void SetupICC::slotToggledWidgets(bool t)
 { 
-    m_bpcAlgorithm->setEnabled(t); 
+    d->bpcAlgorithm->setEnabled(t);
  
-    m_defaultApplyICC->setEnabled(t); 
-    m_defaultAskICC->setEnabled(t);
-    m_defaultApplyICC->setChecked(t);
+    d->defaultApplyICC->setEnabled(t); 
+    d->defaultAskICC->setEnabled(t);
+    d->defaultApplyICC->setChecked(t);
     
-    m_defaultPath->setEnabled(t); 
+    d->defaultPathKU->setEnabled(t);
     
-    m_inProfiles->setEnabled(t); 
-    m_workProfiles->setEnabled(t); 
-    m_proofProfiles->setEnabled(t); 
-    m_monitorProfiles->setEnabled(t); 
-    m_renderingIntent->setEnabled(t);
+    d->inProfilesKC->setEnabled(t);
+    d->workProfilesKC->setEnabled(t);
+    d->proofProfilesKC->setEnabled(t);
+    d->monitorProfilesKC->setEnabled(t);
+    d->renderingIntentKC->setEnabled(t);
 
     if (t)
     {
@@ -391,25 +440,25 @@ void SetupICC::slotToggledWidgets(bool t)
         config->setGroup("Color Management");
         if (config->readBoolEntry("BehaviourICC"))
         {
-            m_defaultApplyICC->setChecked(true);
+            d->defaultApplyICC->setChecked(true);
         }
         else
         {
-            m_defaultAskICC->setChecked(false);
+            d->defaultAskICC->setChecked(false);
         }
-    //     m_defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
-    //     m_defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
-        m_defaultPath->setURL(config->readPathEntry("DefaultPath"));
-        m_workProfiles->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
-        m_monitorProfiles->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
-        m_inProfiles->setCurrentItem(config->readNumEntry("InProfile", 0));
-        m_proofProfiles->setCurrentItem(config->readNumEntry("ProofProfile", 0));
-        m_bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-        m_renderingIntent->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-        m_ICCfilesPath["InProfile"]=config->readPathEntry("InProfileFile");
-        m_ICCfilesPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
-        m_ICCfilesPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-        m_ICCfilesPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+    //     d->defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
+    //     d->defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+        d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
+        d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+        d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
+        d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
+        d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
+        d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+        d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+        d->ICCPath["InProfile"]=config->readPathEntry("InProfileFile");
+        d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
+        d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+        d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
     }
 }
 
@@ -434,13 +483,13 @@ void SetupICC::slotFillCombos(const QString& url)
         QFileInfo *fileInfo;
 
         m_inICCFiles_description.clear();
-        m_inICCFiles_file.clear();
+        d->inICCFiles_file.clear();
         m_monitorICCFiles_description.clear();
-        m_monitorICCFiles_file.clear();
+        d->monitorICCFiles_file.clear();
         m_workICCFiles_description.clear();
-        m_workICCFiles_file.clear();
+        d->workICCFiles_file.clear();
         m_proofICCFiles_description.clear();
-        m_proofICCFiles_file.clear();
+        d->proofICCFiles_file.clear();
 
         while ((fileInfo = it.current()) != 0)
         {
@@ -454,21 +503,21 @@ void SetupICC::slotFillCombos(const QString& url)
             {
                 case icSigInputClass:
                     m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_inICCFiles_file.append(fileName);
+                    d->inICCFiles_file.append(fileName);
                     break;
                 case icSigDisplayClass:
                     m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_monitorICCFiles_file.append(fileName);
-                    m_workICCFiles_file.append(fileName);
+                    d->monitorICCFiles_file.append(fileName);
+                    d->workICCFiles_file.append(fileName);
                     break;
                 case icSigOutputClass:
                     m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_proofICCFiles_file.append(fileName);
+                    d->proofICCFiles_file.append(fileName);
                     break;
                 case icSigColorSpaceClass:
                     m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_workICCFiles_file.append(fileName);
+                    d->workICCFiles_file.append(fileName);
                     break;
             }
 
@@ -479,39 +528,39 @@ void SetupICC::slotFillCombos(const QString& url)
     {
       kdDebug() << "no list" << endl;
     }
-    m_inProfiles->clear();
-    m_inProfiles->insertStringList(m_inICCFiles_description);
-    m_monitorProfiles->clear();
-    m_monitorProfiles->insertStringList(m_monitorICCFiles_description);
-    m_workProfiles->clear();
-    m_workProfiles->insertStringList(m_workICCFiles_description);
-    m_proofProfiles->clear();
-    m_proofProfiles->insertStringList(m_proofICCFiles_description);
-    m_ICCfilesPath["WorkProfile"] = m_workICCFiles_file[m_workProfiles->currentItem()];
-    m_ICCfilesPath["InProfile"] = m_inICCFiles_file[m_inProfiles->currentItem()];
-    m_ICCfilesPath["MonitorProfile"] = m_monitorICCFiles_file[m_monitorProfiles->currentItem()];
-    m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[m_proofProfiles->currentItem()];
-//     kdDebug() << "Current Profle: " << m_ICCfilesPath["WorkProfile"] << endl;
+    d->inProfilesKC->clear();
+    d->inProfilesKC->insertStringList(m_inICCFiles_description);
+    d->monitorProfilesKC->clear();
+    d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
+    d->workProfilesKC->clear();
+    d->workProfilesKC->insertStringList(m_workICCFiles_description);
+    d->proofProfilesKC->clear();
+    d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
+    d->ICCPath["WorkProfile"] = d->workICCFiles_file[d->workProfilesKC->currentItem()];
+    d->ICCPath["InProfile"] = d->inICCFiles_file[d->inProfilesKC->currentItem()];
+    d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
+    d->ICCPath["ProofProfile"] = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
+//     kdDebug() << "Current Profle: " << d->ICCPath["WorkProfile"] << endl;
 }
 
 void SetupICC::slotClickedWork()
 {
-   profileInfo(m_ICCfilesPath["WorkProfile"]);
+   profileInfo(d->ICCPath["WorkProfile"]);
 }
 
 void SetupICC::slotClickedIn()
 {
-    profileInfo(m_ICCfilesPath["InProfile"]);
+    profileInfo(d->ICCPath["InProfile"]);
 }
 
 void SetupICC::slotClickedMonitor()
 {
-    profileInfo(m_ICCfilesPath["MonitorProfile"]);
+    profileInfo(d->ICCPath["MonitorProfile"]);
 }
 
 void SetupICC::slotClickedProof()
 {
-    profileInfo(m_ICCfilesPath["ProofProfile"]);
+    profileInfo(d->ICCPath["ProofProfile"]);
 }
 
 void SetupICC::profileInfo(const QString& profile)
@@ -557,22 +606,22 @@ void SetupICC::profileInfo(const QString& profile)
 
 void SetupICC::slotChangeWorkProfile(int index)
 {
-    m_ICCfilesPath["WorkProfile"] = m_workICCFiles_file[index];
+    d->ICCPath["WorkProfile"] = d->workICCFiles_file[index];
 }
 
 void SetupICC::slotChangeInProfile(int index)
 {
-    m_ICCfilesPath["InProfile"] = m_inICCFiles_file[index];
+    d->ICCPath["InProfile"] = d->inICCFiles_file[index];
 }
 
 void SetupICC::slotChangeMonitorProfile(int index)
 {
-    m_ICCfilesPath["MonitorProfile"] = m_monitorICCFiles_file[index];
+    d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[index];
 }
 
 void SetupICC::slotChangeProofProfile(int index)
 {
-    m_ICCfilesPath["ProofProfile"] = m_proofICCFiles_file[index];
+    d->ICCPath["ProofProfile"] = d->proofICCFiles_file[index];
 }
 
 }  // namespace Digikam
