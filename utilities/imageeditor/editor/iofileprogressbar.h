@@ -50,12 +50,13 @@ public:
     void progressBarVisible(bool v);
     void setProgressValue( int v );
     void setAlignment(int a);
+    void resetProgressBar();
 
 private:
 
     IOFileProgressBarPriv* d;
 };
 
-}
+}  // namespace Digikam
 
 #endif /* IOFILEPROGRESSBAR_H */

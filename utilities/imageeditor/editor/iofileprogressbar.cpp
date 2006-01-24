@@ -62,9 +62,11 @@ IOFileProgressBar::IOFileProgressBar(QWidget *parent)
     d = new IOFileProgressBarPriv;
     d->fileNameLabel        = new QLabel(this);
     d->fileAcessProgressBar = new KProgress(this);
-
+    d->fileAcessProgressBar->setTotalSteps(100);
+    
     addWidget(d->fileNameLabel, IOFileProgressBarPriv::FileNameLabel);
     addWidget(d->fileAcessProgressBar, IOFileProgressBarPriv::FileAcessProgressBar);
+    resetProgressBar();
     progressBarVisible(false);
 }      
 
@@ -88,10 +90,18 @@ void IOFileProgressBar::setProgressValue( int v )
     d->fileAcessProgressBar->setProgress(v);
 }
 
+void IOFileProgressBar::resetProgressBar()
+{
+    d->fileAcessProgressBar->reset();
+}
+
 void IOFileProgressBar::progressBarVisible(bool v)
 {
     if (v)
+    {
+        resetProgressBar();
         raiseWidget(IOFileProgressBarPriv::FileAcessProgressBar);
+    }
     else
         raiseWidget(IOFileProgressBarPriv::FileNameLabel);
 }
