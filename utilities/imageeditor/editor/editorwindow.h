@@ -38,6 +38,9 @@ namespace Digikam
 {
 
 class Canvas;
+class ICCSettingsContainer;
+class IOFileSettingsContainer;
+class SavingContextContainer;
 class EditorWindowPriv;
 
 class EditorWindow : public KMainWindow
@@ -72,18 +75,26 @@ protected slots:
 protected:
 
     void printImage(KURL url);
+    void closeEvent(QCloseEvent* e);
+
+    virtual bool promptUserSave()=0;
+    virtual void saveSettings()=0;
 
 protected:
 
-    KAction             *m_zoomPlusAction;
-    KAction             *m_zoomMinusAction;
+    KAction                 *m_zoomPlusAction;
+    KAction                 *m_zoomMinusAction;
 
-    KToggleAction       *m_zoomFitAction;
+    KToggleAction           *m_zoomFitAction;
 
-    KToolBarPopupAction *m_undoAction;
-    KToolBarPopupAction *m_redoAction;
+    KToolBarPopupAction     *m_undoAction;
+    KToolBarPopupAction     *m_redoAction;
     
-    Canvas              *m_canvas;
+    Canvas                  *m_canvas;
+
+    ICCSettingsContainer    *m_ICCSettings;
+    IOFileSettingsContainer *m_IOFileSettings;
+    SavingContextContainer  *m_savingContext;
 
 private slots:
 

@@ -140,19 +140,11 @@ private:
 
     KAction                *m_imagePluginsHelp;
     
-    //Canvas                   *m_canvas;
-
-    ICCSettingsContainer     *m_ICCSettings;
-    
-    IOFileSettingsContainer  *m_IOFileSettings;
-    
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.
     AlbumIconView            *m_view;
     
     ImagePropertiesSideBarDB *m_rightSidebar;
-
-    SavingContextContainer   *m_savingContext;
 
     IOFileProgressBar        *m_nameLabel;
     
@@ -207,10 +199,6 @@ private slots:
     void slotSavingStarted(const QString &filename);
     void slotSavingFinished(const QString &filename, bool success);
     void slotSavingProgress(const QString& filePath, float progress);
-
-protected:
-
-    void closeEvent(QCloseEvent *e);
 };
 
 }  // namespace Digikam

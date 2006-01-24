@@ -124,12 +124,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         m_splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
 
-    // Settings containers instance.
-    
-    m_ICCSettings    = new Digikam::ICCSettingsContainer();
-    m_IOFileSettings = new Digikam::IOFileSettingsContainer();
-    m_savingContext  = new Digikam::SavingContextContainer();
-
     // -- construct the view ---------------------------------
 
     QWidget* widget  = new QWidget(this);
@@ -304,20 +298,6 @@ ShowFoto::~ShowFoto()
     delete m_imagePluginLoader;
     delete m_slideShow;
     delete m_rightSidebar;
-    delete m_ICCSettings;
-    delete m_IOFileSettings;
-}
-
-void ShowFoto::closeEvent(QCloseEvent* e)
-{
-    if (!e)
-        return;
-
-    if (!promptUserSave())
-        return;
-
-    saveSettings();
-    e->accept();
 }
 
 void ShowFoto::setupActions()

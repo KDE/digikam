@@ -89,21 +89,6 @@
 namespace Digikam
 {
 
-ImageWindow* ImageWindow::imagewindow()
-{
-    if (!m_instance)
-        new ImageWindow();
-
-    return m_instance;
-}
-
-bool ImageWindow::imagewindowCreated()
-{
-    return m_instance;
-}
-
-ImageWindow* ImageWindow::m_instance = 0;
-
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
@@ -114,10 +99,6 @@ ImageWindow::ImageWindow()
     m_fullScreenHideToolBar = false;
     m_isReadOnly            = false;
     m_view                  = 0L;
-
-    m_ICCSettings           = new ICCSettingsContainer();
-    m_IOFileSettings        = new IOFileSettingsContainer();
-    m_savingContext         = new SavingContextContainer();
 
     // -- construct the view ---------------------------------
 
@@ -247,20 +228,6 @@ ImageWindow::~ImageWindow()
     }
     
     delete m_rightSidebar;
-    delete m_ICCSettings;
-    delete m_IOFileSettings;
-    delete m_savingContext;
-}
-
-void ImageWindow::closeEvent(QCloseEvent *e)
-{
-    if (!e) return;
-
-    if(!promptUserSave())
-        return;
-
-    saveSettings();
-    e->accept();
 }
 
 void ImageWindow::buildGUI()
@@ -1440,6 +1407,21 @@ void ImageWindow::slotRemoveTag(int tagID)
                 
     }
 }
+
+ImageWindow* ImageWindow::imagewindow()
+{
+    if (!m_instance)
+        new ImageWindow();
+
+    return m_instance;
+}
+
+bool ImageWindow::imagewindowCreated()
+{
+    return m_instance;
+}
+
+ImageWindow* ImageWindow::m_instance = 0;
 
 }  // namespace Digikam
 

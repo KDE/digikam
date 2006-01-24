@@ -144,10 +144,7 @@ private:
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;
     Digikam::ImagePropertiesSideBar  *m_rightSidebar;
-    Digikam::ICCSettingsContainer    *m_ICCSettings;
-    Digikam::IOFileSettingsContainer *m_IOFileSettings;
     Digikam::SplashScreen            *m_splash;
-    Digikam::SavingContextContainer  *m_savingContext;
     Digikam::SlideShow               *m_slideShow;
 
 private:
@@ -203,10 +200,6 @@ private slots:
     void slotSavingStarted(const QString &filename);
     void slotSavingFinished(const QString &filename, bool success);
     void slotSavingProgress(const QString& filePath, float progress);
-
-protected:
-
-    void closeEvent(QCloseEvent* e);
 };
 
 }   // namespace ShowFoto

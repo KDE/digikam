@@ -59,12 +59,33 @@ EditorWindow::EditorWindow(const char *name)
     m_zoomPlusAction  = 0;
     m_zoomMinusAction = 0;
     m_zoomFitAction   = 0;
+
+    // Settings containers instance.
+
+    m_ICCSettings     = new ICCSettingsContainer();
+    m_IOFileSettings  = new IOFileSettingsContainer();
+    m_savingContext   = new SavingContextContainer();
 }
 
 EditorWindow::~EditorWindow()
 {
     delete m_canvas;
+    delete m_ICCSettings;
+    delete m_IOFileSettings;
+    delete m_savingContext;
     delete d;
+}
+
+void EditorWindow::closeEvent(QCloseEvent* e)
+{
+    if (!e)
+        return;
+
+    if (!promptUserSave())
+        return;
+
+    saveSettings();
+    e->accept();
 }
 
 void EditorWindow::printImage(KURL url)
