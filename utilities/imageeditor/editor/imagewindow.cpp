@@ -100,35 +100,14 @@ ImageWindow::ImageWindow()
     m_isReadOnly            = false;
     m_view                  = 0L;
 
-    // -- construct the view ---------------------------------
+    // Construct the view
 
-    QWidget* widget  = new QWidget(this);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    
-    m_splitter       = new QSplitter(widget);
-    m_canvas         = new Canvas(m_splitter);
-    m_rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter,
-                                                    Sidebar::Right, true, false);
-    
-    lay->addWidget(m_splitter);
-    lay->addWidget(m_rightSidebar);
-    
-    m_splitter->setOpaqueResize(false);
-    setCentralWidget(widget);
-    
-    m_nameLabel = new IOFileProgressBar(statusBar());
-    m_nameLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_nameLabel,1);
-    m_zoomLabel = new QLabel(statusBar());
-    m_zoomLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_zoomLabel,1);
-    m_resLabel  = new QLabel(statusBar());
-    m_resLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(m_resLabel,1);
+    setupUserArea();
+    setupStatusBar();
 
-    // -- build the gui -------------------------------------
+    // Build the gui
 
-    buildGUI();
+    setupActions();
         
     QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
 
@@ -230,7 +209,24 @@ ImageWindow::~ImageWindow()
     delete m_rightSidebar;
 }
 
-void ImageWindow::buildGUI()
+void ImageWindow::setupUserArea()
+{
+    QWidget* widget  = new QWidget(this);
+    QHBoxLayout *lay = new QHBoxLayout(widget);
+    
+    m_splitter       = new QSplitter(widget);
+    m_canvas         = new Canvas(m_splitter);
+    m_rightSidebar   = new ImagePropertiesSideBarDB(widget, m_splitter,
+                                                    Sidebar::Right, true, false);
+    
+    lay->addWidget(m_splitter);
+    lay->addWidget(m_rightSidebar);
+    
+    m_splitter->setOpaqueResize(false);
+    setCentralWidget(widget);
+}
+
+void ImageWindow::setupActions()
 {
     // -- File actions -----------------------------------------------------------
     

@@ -31,9 +31,7 @@
 
 #include "editorwindow.h"
 
-class QLabel;
 class QPopupMenu;
-class QSplitter;
 
 class KAction;
 class KActionMenu;
@@ -53,12 +51,8 @@ class ImagePluginLoader;
 class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
-class ICCSettingsContainer;
-class IOFileSettingsContainer;
-class SavingContextContainer;
 class SplashScreen;
 class SlideShow;
-class IOFileProgressBar;
 }
 
 namespace ShowFoto
@@ -90,16 +84,9 @@ private:
 
     int                              m_itemsNb;
 
-    QLabel                          *m_zoomLabel;
-    QLabel                          *m_resLabel;
-        
     QPopupMenu                      *m_contextMenu;
 
-    QSplitter                       *m_splitter;
-
     KURL                             m_lastOpenedDirectory;
-                          
-    KConfig                         *m_config;
     
     KToggleAction                   *m_fullScreenAction;
     KToggleAction                   *m_showBarAction;
@@ -139,7 +126,6 @@ private:
         
     KSelectAction                   *m_viewHistogramAction;
 
-    Digikam::IOFileProgressBar       *m_nameLabel;
     Digikam::ImagePluginLoader       *m_imagePluginLoader;
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;
@@ -149,10 +135,12 @@ private:
 
 private:
 
-    void setupActions();
-    void applySettings();
+    void setupUserArea();
     void saveSettings();
     bool promptUserSave();
+
+    void setupActions();
+    void applySettings();
     bool save();
     bool saveAs();
     void toggleActions(bool val, bool slideShow=false);

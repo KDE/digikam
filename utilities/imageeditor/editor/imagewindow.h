@@ -36,9 +36,7 @@
 #include "editorwindow.h"
 
 class QPopupMenu;
-class QLabel;
 class QStringList;
-class QSplitter;
 
 class KAccel;
 class KAction;
@@ -52,10 +50,6 @@ namespace Digikam
 
 class AlbumIconView;
 class ImagePropertiesSideBarDB;
-class ICCSettingsContainer;
-class IOFileSettingsContainer;
-class SavingContextContainer;
-class IOFileProgressBar;
 
 class ImageWindow : public EditorWindow
 {
@@ -98,11 +92,6 @@ private:
 
     QPopupMenu             *m_contextMenu;
 
-    QSplitter              *m_splitter;
-                              
-    QLabel*                 m_zoomLabel;
-    QLabel*                 m_resLabel;
-    
     KURL::List              m_urlList;
     KURL                    m_urlCurrent;
     
@@ -146,17 +135,17 @@ private:
     
     ImagePropertiesSideBarDB *m_rightSidebar;
 
-    IOFileProgressBar        *m_nameLabel;
-    
     static ImageWindow       *m_instance;
 
 private:
 
     ImageWindow();
-    void buildGUI();
-    void readSettings();
+    void setupUserArea();
     void saveSettings();
     bool promptUserSave();
+
+    void setupActions();
+    void readSettings();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
     bool save();

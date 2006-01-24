@@ -30,6 +30,9 @@
 #include <kmainwindow.h>
 #include <kurl.h>
 
+class QSplitter;
+class QLabel;
+
 class KToolBarPopupAction;
 class KToggleAction;
 class KAction;
@@ -41,6 +44,7 @@ class Canvas;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
+class IOFileProgressBar;
 class EditorWindowPriv;
 
 class EditorWindow : public KMainWindow
@@ -73,14 +77,21 @@ protected slots:
     void slotToggleAutoZoom();
     
 protected:
-
+    
+    void setupStatusBar();
     void printImage(KURL url);
     void closeEvent(QCloseEvent* e);
 
     virtual bool promptUserSave()=0;
     virtual void saveSettings()=0;
+    virtual void setupUserArea()=0;
 
 protected:
+
+    QLabel                  *m_zoomLabel;
+    QLabel                  *m_resLabel;
+
+    QSplitter               *m_splitter;
 
     KAction                 *m_zoomPlusAction;
     KAction                 *m_zoomMinusAction;
@@ -91,7 +102,7 @@ protected:
     KToolBarPopupAction     *m_redoAction;
     
     Canvas                  *m_canvas;
-
+    IOFileProgressBar       *m_nameLabel;
     ICCSettingsContainer    *m_ICCSettings;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;

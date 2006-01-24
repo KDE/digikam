@@ -18,18 +18,49 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qsplitter.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qfile.h>
+#include <qpopupmenu.h>
+#include <qcursor.h>
+#include <qtimer.h>
+#include <qfileinfo.h>
+
 // KDE includes.
 
-#include <kapplication.h>
 #include <kprinter.h>
 #include <kkeydialog.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
-#include <kaboutdata.h>
-#include <kmessagebox.h>
 #include <kedittoolbar.h>
+#include <kaboutdata.h>
+#include <kcursor.h>
+#include <kstdaction.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kmenubar.h>
+#include <kimageio.h>
+#include <kaccel.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kiconloader.h>
+#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kprotocolinfo.h>
+#include <kglobalsettings.h>
+#include <ktoolbar.h>
+#include <kstatusbar.h>
+#include <kprogress.h>
 
 // Local includes.
 
@@ -39,6 +70,7 @@
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
 #include "imageprint.h"
+#include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
@@ -86,6 +118,19 @@ void EditorWindow::closeEvent(QCloseEvent* e)
 
     saveSettings();
     e->accept();
+}
+
+void EditorWindow::setupStatusBar()
+{
+    m_nameLabel = new IOFileProgressBar(statusBar());
+    m_nameLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_nameLabel,1);
+    m_zoomLabel = new QLabel(statusBar());
+    m_zoomLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_zoomLabel,1);
+    m_resLabel  = new QLabel(statusBar());
+    m_resLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(m_resLabel,1);
 }
 
 void EditorWindow::printImage(KURL url)
