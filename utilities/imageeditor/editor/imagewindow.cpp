@@ -54,7 +54,6 @@
 #include <kstdaction.h>
 #include <kstdguiitem.h>
 #include <kstatusbar.h>
-#include <kedittoolbar.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
 
@@ -772,16 +771,6 @@ void ImageWindow::slotLoadLast()
     slotLoadCurrent();
 }
 
-void ImageWindow::slotToggleAutoZoom()
-{
-    bool checked = m_zoomFitAction->isChecked();
-
-    m_zoomPlusAction->setEnabled(!checked);
-    m_zoomMinusAction->setEnabled(!checked);
-
-    m_canvas->slotToggleAutoZoom();
-}
-
 void ImageWindow::slotViewHistogram()
 {
     int curItem = m_viewHistogramAction->currentItem();
@@ -889,13 +878,16 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
 
 void ImageWindow::slotSelected(bool val)
 {
+    // Update menu actions.
     m_cropAction->setEnabled(val);
     m_copyAction->setEnabled(val);
 
     ImagePluginLoader* loader = ImagePluginLoader::instance();
     for (ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next()) {
-        if (plugin) {
+         plugin; plugin = loader->pluginList().next()) 
+    {
+        if (plugin) 
+        {
             plugin->setEnabledSelectionActions(val);
         }
     }
@@ -1427,20 +1419,6 @@ void ImageWindow::plugActionAccel(KAction* action)
 void ImageWindow::unplugActionAccel(KAction* action)
 {
     m_accel->remove(action->text());
-}
-
-void ImageWindow::slotConfToolbars()
-{
-    saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
-    KEditToolbar dlg(factory(), this);
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            SLOT(slotNewToolbarConfig()));
-    dlg.exec();
-}
-
-void ImageWindow::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
 }
 
 void ImageWindow::slotAssignTag(int tagID)

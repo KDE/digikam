@@ -31,6 +31,8 @@
 #include <kurl.h>
 
 class KToolBarPopupAction;
+class KToggleAction;
+class KAction;
 
 namespace Digikam
 {
@@ -61,12 +63,22 @@ protected slots:
 
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
+
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
+
+    void slotToggleAutoZoom();
     
 protected:
 
     void printImage(KURL url);
 
 protected:
+
+    KAction             *m_zoomPlusAction;
+    KAction             *m_zoomMinusAction;
+
+    KToggleAction       *m_zoomFitAction;
 
     KToolBarPopupAction *m_undoAction;
     KToolBarPopupAction *m_redoAction;

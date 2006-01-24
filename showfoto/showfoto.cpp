@@ -69,7 +69,6 @@ extern "C"
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kpopupmenu.h>
-#include <kedittoolbar.h>
 #include <kprogress.h>
 
 // Lib KExif includes.
@@ -407,7 +406,7 @@ void ShowFoto::setupActions()
     m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                             actionCollection(), "zoom_minus");
     m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                        Key_A, this, SLOT(slotAutoFit()),
+                                        Key_A, this, SLOT(slotToggleAutoZoom()),
                                         actionCollection(), "zoom_fit");
 
 #if KDE_IS_VERSION(3,2,0)
@@ -598,10 +597,6 @@ void ShowFoto::applySettings()
     bool showBar = false;
     bool autoFit = true;
 
-    // Get Main Window settings.
-
-    m_config->setGroup("MainWindow");
-
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(m_config->hasKey("Splitter Sizes"))
         m_splitter->setSizes(m_config->readIntListEntry("Splitter Sizes"));
@@ -644,7 +639,7 @@ void ShowFoto::applySettings()
 
 void ShowFoto::saveSettings()
 {
-    m_config->setGroup("MainWindow");
+    m_config->setGroup("ImageViewer Settings");
 
     m_config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
     m_config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
@@ -1105,16 +1100,6 @@ void ShowFoto::toggleNavigation(int index)
     }
 }
 
-void ShowFoto::slotAutoFit()
-{
-    bool checked = m_zoomFitAction->isChecked();
-
-    m_zoomPlusAction->setEnabled(!checked);
-    m_zoomMinusAction->setEnabled(!checked);
-
-    m_canvas->slotToggleAutoZoom();
-}
-
 void ShowFoto::slotToggleFullScreen()
 {
     if (m_fullScreen)
@@ -1293,7 +1278,6 @@ void ShowFoto::slotSelected(bool val)
         QRect sel = m_canvas->getSelectedArea();
         m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
     }
-
 }
 
 void ShowFoto::toggleActions(bool val, bool slideShow)
@@ -1332,20 +1316,6 @@ void ShowFoto::toggleActions(bool val, bool slideShow)
             plugin->setEnabledActions(val);
         }
     }
-}
-
-void ShowFoto::slotConfToolbars()
-{
-    saveMainWindowSettings(KGlobal::config(), "MainWindow");
-    KEditToolbar dlg(factory(), this);
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            SLOT(slotNewToolbarConfig()));
-    dlg.exec();
-}
-
-void ShowFoto::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
 void ShowFoto::slotFilePrint()
@@ -1398,8 +1368,8 @@ void ShowFoto::slotSetup()
 
 void ShowFoto::loadPlugins()
 {
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
+    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+
     for (Digikam::ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
@@ -1416,8 +1386,8 @@ void ShowFoto::loadPlugins()
 
 void ShowFoto::unLoadPlugins()
 {
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
+    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+
     for (Digikam::ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {

@@ -101,9 +101,6 @@ private:
                           
     KConfig                         *m_config;
     
-    KAction                         *m_zoomPlusAction;
-    KAction                         *m_zoomMinusAction;
-    KToggleAction                   *m_zoomFitAction;
     KToggleAction                   *m_fullScreenAction;
     KToggleAction                   *m_showBarAction;
     KToggleAction                   *m_slideShowAction;
@@ -185,7 +182,6 @@ private slots:
     
     void slotToggleFullScreen();
     void slotToggleSlideShow();
-    void slotAutoFit();
     void slotZoomChanged(float zoom);
     void slotEscapePressed();
     void slotToggleShowBar();
@@ -196,8 +192,6 @@ private slots:
     void slotSelected(bool);
     void slotUpdateItemInfo(void);
 
-    void slotConfToolbars();
-    void slotNewToolbarConfig();
     void slotSetup();
     void slotContextMenu();
         

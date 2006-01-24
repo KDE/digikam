@@ -29,6 +29,7 @@
 #include <kpopupmenu.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
+#include <kedittoolbar.h>
 
 // Local includes.
 
@@ -51,9 +52,13 @@ EditorWindow::EditorWindow(const char *name)
             : KMainWindow(0, name, WType_TopLevel|WDestructiveClose)
 {
     d = new EditorWindowPriv;
-    m_canvas     = 0;
-    m_undoAction = 0;
-    m_redoAction = 0;
+
+    m_canvas          = 0;
+    m_undoAction      = 0;
+    m_redoAction      = 0;
+    m_zoomPlusAction  = 0;
+    m_zoomMinusAction = 0;
+    m_zoomFitAction   = 0;
 }
 
 EditorWindow::~EditorWindow()
@@ -164,6 +169,30 @@ void EditorWindow::slotAboutToShowRedoMenu()
             m_redoAction->popupMenu()->insertItem(*iter, id);
         }        
     }
+}
+
+void EditorWindow::slotConfToolbars()
+{
+    saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+    KEditToolbar dlg(factory(), this);
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            SLOT(slotNewToolbarConfig()));
+    dlg.exec();
+}
+
+void EditorWindow::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
+}
+
+void EditorWindow::slotToggleAutoZoom()
+{
+    bool checked = m_zoomFitAction->isChecked();
+
+    m_zoomPlusAction->setEnabled(!checked);
+    m_zoomMinusAction->setEnabled(!checked);
+
+    m_canvas->slotToggleAutoZoom();
 }
 
 }  // namespace Digikam

@@ -119,9 +119,6 @@ private:
     KAction                *m_saveAsAction;
     KAction                *m_restoreAction;
      
-    KAction                *m_zoomPlusAction;
-    KAction                *m_zoomMinusAction;
-    KToggleAction          *m_zoomFitAction;
     KToggleAction          *m_fullScreenAction;
     KSelectAction          *m_viewHistogramAction;
 
@@ -183,7 +180,6 @@ private slots:
     void slotLoadFirst();
     void slotLoadLast();
 
-    void slotToggleAutoZoom();
     void slotViewHistogram();
     void slotToggleFullScreen();
     void slotEscapePressed();
@@ -202,9 +198,6 @@ private slots:
 
     void slotFilePrint(){ printImage(m_urlCurrent); };
 
-    void slotConfToolbars();
-    void slotNewToolbarConfig();
-
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     
@@ -214,6 +207,7 @@ private slots:
     void slotSavingStarted(const QString &filename);
     void slotSavingFinished(const QString &filename, bool success);
     void slotSavingProgress(const QString& filePath, float progress);
+
 protected:
 
     void closeEvent(QCloseEvent *e);
