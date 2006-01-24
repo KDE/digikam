@@ -59,10 +59,10 @@
 
 #include LCMS_HEADER
 
-typedef QMap<QString, QString> ICCfilesPath;
-
 namespace Digikam
 {
+
+typedef QMap<QString, QString> ICCfilesPath;
 
 class SetupICCPriv
 {
@@ -93,10 +93,10 @@ public:
     QRadioButton    *defaultApplyICC;
     QRadioButton    *defaultAskICC;
 
-    QStringList     inICCFiles_file;
-    QStringList     workICCFiles_file;
-    QStringList     proofICCFiles_file;
-    QStringList     monitorICCFiles_file;
+    QStringList      inICCFiles_file;
+    QStringList      workICCFiles_file;
+    QStringList      proofICCFiles_file;
+    QStringList      monitorICCFiles_file;
 
     KURLRequester   *defaultPathKU;
 
@@ -106,7 +106,7 @@ public:
     KComboBox       *monitorProfilesKC;
     KComboBox       *renderingIntentKC;
 
-    ICCfilesPath    ICCPath;
+    ICCfilesPath     ICCPath;
 };
 
 SetupICC::SetupICC(QWidget* parent )

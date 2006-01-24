@@ -28,13 +28,6 @@
 #include <qwidget.h>
 #include <qmap.h>
 
-class QCheckBox;
-class QRadioButton;
-class KURLRequester;
-class KComboBox;
-// class QStringList;
-// typedef QMap<QString, QString> ICCfilesPath;
-
 namespace Digikam
 {
 
@@ -58,29 +51,6 @@ private:
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
-
-// private:
-// 
-//     QCheckBox       *m_enableColorManagement;
-//     QCheckBox       *m_bpcAlgorithm;
-//     
-//     QRadioButton    *m_defaultApplyICC;
-//     QRadioButton    *m_defaultAskICC;
-// 
-//     QStringList     m_inICCFiles_file;
-//     QStringList     m_workICCFiles_file;
-//     QStringList     m_proofICCFiles_file;
-//     QStringList     m_monitorICCFiles_file;
-// 
-//     KURLRequester   *m_defaultPath;
-// 
-//     KComboBox       *m_inProfiles;
-//     KComboBox       *m_workProfiles;
-//     KComboBox       *m_proofProfiles;
-//     KComboBox       *m_monitorProfiles;
-//     KComboBox       *m_renderingIntent;
-// 
-//     ICCfilesPath    m_ICCfilesPath;
 
 private slots:
 
