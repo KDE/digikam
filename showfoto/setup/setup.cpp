@@ -66,8 +66,8 @@ public:
     QFrame                   *page_icc;
     
     SetupEditor              *editorPage;
-    SetupICC                 *iccPage;
 
+    Digikam::SetupICC                 *iccPage;
     Digikam::SetupIOFiles    *iofilesPage;
     Digikam::SetupImgPlugins *imgPluginsPage;
     Digikam::SetupSlideShow  *slideshowPage;
@@ -98,7 +98,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
                        BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new SetupICC(d->page_icc);
+    d->iccPage = new Digikam::SetupICC(d->page_icc);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
