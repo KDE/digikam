@@ -32,13 +32,14 @@ namespace Digikam
 class SetupImgPlugins;
 class SetupIOFiles;
 class SetupSlideShow;
+class SetupICC;
 }
 
 namespace ShowFoto
 {
 
 class SetupEditor;
-class SetupICC;
+// class SetupICC;
 class SetupPrivate;
 
 class Setup : public KDialogBase 

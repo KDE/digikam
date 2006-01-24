@@ -5,7 +5,7 @@ INCLUDES= -I$(top_srcdir)/digikam/utilities/setup \
 
 noinst_LTLIBRARIES = libsetup.la
 
-libsetup_la_SOURCES = setup.cpp setupeditor.cpp setupicc.cpp
+libsetup_la_SOURCES = setup.cpp setupeditor.cpp
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
