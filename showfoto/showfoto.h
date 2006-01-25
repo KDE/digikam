@@ -94,7 +94,6 @@ private:
     KAction                         *m_imagePluginsHelpAction;
     
     KAction                         *m_openFilesInFolderAction;    
-    KAction                         *m_copyAction;
     KAction                         *m_fileOpenAction;
     
     KAction                         *m_rotate90Action;
@@ -111,8 +110,6 @@ private:
     
     KToolBarPopupAction             *m_undoAction;
     KToolBarPopupAction             *m_redoAction;
-        
-    KSelectAction                   *m_viewHistogramAction;
 
     Digikam::ImagePluginLoader       *m_imagePluginLoader;
     Digikam::ThumbBarView            *m_bar;

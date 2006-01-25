@@ -302,6 +302,8 @@ void ShowFoto::setupActions()
 {
     setupStandardActions();
 
+    // Extra 'File' menu actions ---------------------------------------------
+
     m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
                        actionCollection(), "showfoto_open_file");
 
@@ -314,10 +316,6 @@ void ShowFoto::setupActions()
                                             "showfoto_open_folder");
 
     // -- Edit actions ----------------------------------------------------------------
-
-    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
-                                    actionCollection(), "copy");
-    m_copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
                                            KStdAccel::shortcut(KStdAccel::Undo),
@@ -339,44 +337,11 @@ void ShowFoto::setupActions()
             m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
 
-    // -- View Actions -----------------------------------------------
-
-    m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
-                                          actionCollection(), "zoom_plus");
-    m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
-                                            actionCollection(), "zoom_minus");
-    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                        Key_A, this, SLOT(slotToggleAutoZoom()),
-                                        actionCollection(), "zoom_fit");
-
-#if KDE_IS_VERSION(3,2,0)
-    m_fullScreenAction =
-        KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
-                               actionCollection(), this, "full_screen");
-#else
-    m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
-                                           CTRL+SHIFT+Key_F, this,
-                                           SLOT(slotToggleFullScreen()),
-                                           actionCollection(), "full_screen");
-#endif
+    // Extra 'View' menu actions ---------------------------------------------
 
     m_showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
                                         this, SLOT(slotToggleShowBar()),
                                         actionCollection(), "show_thumbs");
-
-    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
-                                              this, SLOT(slotViewHistogram()),
-                                              actionCollection(), "view_histogram");
-    m_viewHistogramAction->setEditable(false);
-
-    QStringList selectItems;
-    selectItems << i18n("Hide");
-    selectItems << i18n("Luminosity");
-    selectItems << i18n("Red");
-    selectItems << i18n("Green");
-    selectItems << i18n("Blue");
-    selectItems << i18n("Alpha");
-    m_viewHistogramAction->setItems(selectItems);
 
     m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
                                           this, SLOT(slotToggleSlideShow()),

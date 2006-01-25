@@ -36,6 +36,7 @@ class QLabel;
 class KToolBarPopupAction;
 class KToggleAction;
 class KAction;
+class KSelectAction;
 
 namespace Digikam
 {
@@ -84,6 +85,9 @@ protected:
     KAction                 *m_backwardAction;
     KAction                 *m_firstAction;
     KAction                 *m_lastAction;
+    KAction                 *m_copyAction;
+
+    KSelectAction           *m_viewHistogramAction;
 
     KToggleAction           *m_zoomFitAction;
     KToggleAction           *m_fullScreenAction;

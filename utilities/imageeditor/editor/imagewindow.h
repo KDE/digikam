@@ -94,8 +94,6 @@ private:
     
     // Actions
 
-    KSelectAction          *m_viewHistogramAction;
-
     KActionMenu            *m_rotateAction;
     KActionMenu            *m_flipAction;
     KAction                *m_rotate90Action;
@@ -107,8 +105,6 @@ private:
     KAction                *m_resizeAction;
     KAction                *m_cropAction;
     
-    KAction                *m_copyAction;
-
     KAction                *m_imagePluginsHelp;
     
     // Allow to use Image properties and 

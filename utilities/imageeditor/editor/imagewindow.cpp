@@ -230,10 +230,6 @@ void ImageWindow::setupActions()
 
     // -- Edit actions ----------------------------------------------------------------                     
 
-    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
-                                    actionCollection(), "imageview_copy");
-    m_copyAction->setEnabled(false);
-
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
                                            KStdAccel::shortcut(KStdAccel::Undo),
                                            m_canvas, SLOT(slotUndo()),
@@ -253,44 +249,6 @@ void ImageWindow::setupActions()
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
-           
-    // -- View actions ----------------------------------------------------------------
-    
-    m_zoomPlusAction = new KAction(i18n("Zoom &In"), "viewmag+",
-                                   CTRL+Key_Plus,
-                                   m_canvas, SLOT(slotIncreaseZoom()),
-                                   actionCollection(), "imageview_zoom_plus");
-
-    m_zoomMinusAction = new KAction(i18n("Zoom &Out"), "viewmag-",
-                                    CTRL+Key_Minus,
-                                    m_canvas, SLOT(slotDecreaseZoom()),
-                                    actionCollection(), "imageview_zoom_minus");
-
-    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                        Key_A,
-                                        this, SLOT(slotToggleAutoZoom()),
-                                        actionCollection(), "imageview_zoom_fit");
-
-    m_fullScreenAction = new KToggleAction(i18n("Toggle Full Screen"),
-                                           "window_fullscreen",
-                                           CTRL+SHIFT+Key_F,
-                                           this, SLOT(slotToggleFullScreen()),
-                                           actionCollection(), "toggle_fullScreen");
-
-    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram",
-                                              Key_H,
-                                              this, SLOT(slotViewHistogram()),
-                                              actionCollection(), "imageview_histogram");
-    m_viewHistogramAction->setEditable(false);
-
-    QStringList selectItems;
-    selectItems << i18n("Hide");
-    selectItems << i18n("Luminosity");
-    selectItems << i18n("Red");
-    selectItems << i18n("Green");
-    selectItems << i18n("Blue");
-    selectItems << i18n("Alpha");
-    m_viewHistogramAction->setItems(selectItems);
 
     // -- Transform actions ----------------------------------------------------------
     

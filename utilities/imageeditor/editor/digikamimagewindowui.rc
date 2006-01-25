@@ -24,7 +24,7 @@
     
   <Menu name="Edit" >
      <text>&amp;Edit</text>
-     <Action name="imageview_copy" />
+     <Action name="editorwindow_copy" />
      <Separator/>
      <Action name="imageview_undo" />
      <Action name="imageview_redo" />
@@ -48,9 +48,9 @@
 
   <Menu name="View" >
    <text>&amp;View</text>
-   <Action name="imageview_zoom_plus" /> 
-   <Action name="imageview_zoom_minus" /> 
-   <Action name="imageview_zoom_fit" />
+   <Action name="editorwindow_zoomplus" /> 
+   <Action name="editorwindow_zoomminus" /> 
+   <Action name="editorwindow_zoomfit" />
    <Action name="imageview_histogram" />
   </Menu>
 
@@ -85,9 +85,9 @@
      <Action name="imageview_redo" />     
      <Action name="editorwindow_revert" />
      <Separator/>     
-     <Action name="imageview_zoom_plus" /> 
-     <Action name="imageview_zoom_minus" /> 
-     <Action name="imageview_zoom_fit" /> 
+     <Action name="editorwindow_zoomplus" /> 
+     <Action name="editorwindow_zoomminus" /> 
+     <Action name="editorwindow_zoomfit" /> 
      <Separator/>     
      <Action name="imageview_rotate" /> 
      <Action name="imageview_crop" /> 

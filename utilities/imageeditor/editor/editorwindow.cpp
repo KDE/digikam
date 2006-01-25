@@ -85,30 +85,32 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
-    m_canvas           = 0;
-    m_undoAction       = 0;
-    m_redoAction       = 0;
-    m_zoomPlusAction   = 0;
-    m_zoomMinusAction  = 0;
-    m_zoomFitAction    = 0;
-    m_fullScreenAction = 0;
-    m_saveAction       = 0;
-    m_saveAsAction     = 0;
-    m_revertAction     = 0;
-    m_filePrintAction  = 0;    
-    m_fileDeleteAction = 0;
-    m_forwardAction    = 0;
-    m_backwardAction   = 0;
-    m_firstAction      = 0;
-    m_lastAction       = 0;
-    m_fullScreen       = false;
-    m_isReadOnly       = false;
+    m_canvas              = 0;
+    m_undoAction          = 0;
+    m_redoAction          = 0;
+    m_zoomPlusAction      = 0;
+    m_zoomMinusAction     = 0;
+    m_zoomFitAction       = 0;
+    m_fullScreenAction    = 0;
+    m_saveAction          = 0;
+    m_saveAsAction        = 0;
+    m_revertAction        = 0;
+    m_filePrintAction     = 0;    
+    m_fileDeleteAction    = 0;
+    m_forwardAction       = 0;
+    m_backwardAction      = 0;
+    m_firstAction         = 0;
+    m_lastAction          = 0;
+    m_copyAction          = 0;
+    m_viewHistogramAction = 0;
+    m_fullScreen          = false;
+    m_isReadOnly          = false;
 
     // Settings containers instance.
 
-    m_ICCSettings     = new ICCSettingsContainer();
-    m_IOFileSettings  = new IOFileSettingsContainer();
-    m_savingContext   = new SavingContextContainer();
+    m_ICCSettings    = new ICCSettingsContainer();
+    m_IOFileSettings = new IOFileSettingsContainer();
+    m_savingContext  = new SavingContextContainer();
 }
 
 EditorWindow::~EditorWindow()
@@ -134,7 +136,7 @@ void EditorWindow::closeEvent(QCloseEvent* e)
 
 void EditorWindow::setupStandardActions()
 {
-    // Standard 'File' menu actions.
+    // Standard 'File' menu actions ---------------------------------------------
 
     m_backwardAction = KStdAction::back(this, SLOT(slotBackward()),
                                     actionCollection(), "editorwindow_backward");
@@ -176,6 +178,46 @@ void EditorWindow::setupStandardActions()
                                      actionCollection(), "editorwindow_delete");
 
     KStdAction::quit(this, SLOT(close()), actionCollection(), "editorwindow_exit");
+
+    // Standard 'Edit' menu actions ---------------------------------------------
+
+    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
+                                    actionCollection(), "editorwindow_copy");
+    m_copyAction->setEnabled(false);
+
+    // Standard 'View' menu actions ---------------------------------------------
+
+    m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
+                                          actionCollection(), "editorwindow_zoomplus");
+    m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
+                                            actionCollection(), "editorwindow_zoomminus");
+    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
+                                        Key_A, this, SLOT(slotToggleAutoZoom()),
+                                        actionCollection(), "editorwindow_zoomfit");
+
+#if KDE_IS_VERSION(3,2,0)
+    m_fullScreenAction = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()),
+                                                actionCollection(), this, "editorwindow_fullscreen");
+#else
+    m_fullScreenAction = new KToggleAction(i18n("Fullscreen"), "window_fullscreen",
+                                           CTRL+SHIFT+Key_F, this,
+                                           SLOT(slotToggleFullScreen()),
+                                           actionCollection(), "editorwindow_fullscreen");
+#endif
+
+    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
+                                              this, SLOT(slotViewHistogram()),
+                                              actionCollection(), "view_histogram");
+    m_viewHistogramAction->setEditable(false);
+
+    QStringList selectItems;
+    selectItems << i18n("Hide");
+    selectItems << i18n("Luminosity");
+    selectItems << i18n("Red");
+    selectItems << i18n("Green");
+    selectItems << i18n("Blue");
+    selectItems << i18n("Alpha");
+    m_viewHistogramAction->setItems(selectItems);
 }
 
 void EditorWindow::setupStatusBar()
