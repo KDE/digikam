@@ -95,7 +95,6 @@ ImageWindow::ImageWindow()
     m_instance              = this;
     m_rotatedOrFlipped      = false;
     m_allowSaving           = true;
-    m_fullScreen            = false;
     m_fullScreenHideToolBar = false;
     m_isReadOnly            = false;
     m_view                  = 0L;
@@ -1292,14 +1291,6 @@ void ImageWindow::slotToggleFullScreen()
 
         showFullScreen();
         m_fullScreen = true;
-    }
-}
-
-void ImageWindow::slotEscapePressed()
-{
-    if (m_fullScreen)
-    {
-        m_fullScreenAction->activate();
     }
 }
 

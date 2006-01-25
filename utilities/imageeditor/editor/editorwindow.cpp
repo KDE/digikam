@@ -85,12 +85,14 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
-    m_canvas          = 0;
-    m_undoAction      = 0;
-    m_redoAction      = 0;
-    m_zoomPlusAction  = 0;
-    m_zoomMinusAction = 0;
-    m_zoomFitAction   = 0;
+    m_canvas           = 0;
+    m_undoAction       = 0;
+    m_redoAction       = 0;
+    m_zoomPlusAction   = 0;
+    m_zoomMinusAction  = 0;
+    m_zoomFitAction    = 0;
+    m_fullScreenAction = 0;
+    m_fullScreen       = false;
 
     // Settings containers instance.
 
@@ -272,6 +274,13 @@ void EditorWindow::slotZoomChanged(float zoom)
     m_zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
                                   !m_zoomFitAction->isChecked());
 }
+
+void EditorWindow::slotEscapePressed()
+{
+    if (m_fullScreen)
+        m_fullScreenAction->activate();
+}
+
 }  // namespace Digikam
 
 #include "editorwindow.moc"

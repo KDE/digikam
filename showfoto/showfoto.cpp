@@ -109,7 +109,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_splash                 = 0;
     m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
-    m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
     m_isReadOnly             = false;
@@ -1150,14 +1149,6 @@ void ShowFoto::slotToggleFullScreen()
         showFullScreen();
         m_fullScreen = true;
     }
-}
-
-void ShowFoto::slotEscapePressed()
-{
-    if (!m_fullScreen)
-        return;
-
-    m_fullScreenAction->activate();
 }
 
 void ShowFoto::slotToggleShowBar()

@@ -78,7 +78,6 @@ signals:
 private:
 
     bool                    m_rotatedOrFlipped;
-    bool                    m_fullScreen;
     bool                    m_fullScreenHideToolBar;
     bool                    m_removeFullScreenButton;
 
@@ -108,7 +107,6 @@ private:
     KAction                *m_saveAsAction;
     KAction                *m_restoreAction;
      
-    KToggleAction          *m_fullScreenAction;
     KSelectAction          *m_viewHistogramAction;
 
     KActionMenu            *m_rotateAction;
@@ -163,8 +161,7 @@ private slots:
 
     void slotViewHistogram();
     void slotToggleFullScreen();
-    void slotEscapePressed();
-
+    
     void slotContextMenu();
     void slotChanged(bool, bool);
     void slotSelected(bool);

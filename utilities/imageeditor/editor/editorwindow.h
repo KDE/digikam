@@ -77,6 +77,8 @@ protected slots:
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
     
+    void slotEscapePressed();
+    
 protected:
     
     void setupStatusBar();
@@ -89,6 +91,8 @@ protected:
 
 protected:
 
+    bool                     m_fullScreen;
+
     QLabel                  *m_zoomLabel;
     QLabel                  *m_resLabel;
 
@@ -98,6 +102,7 @@ protected:
     KAction                 *m_zoomMinusAction;
 
     KToggleAction           *m_zoomFitAction;
+    KToggleAction           *m_fullScreenAction;
 
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;

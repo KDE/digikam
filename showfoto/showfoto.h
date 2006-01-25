@@ -72,7 +72,6 @@ public:
 private:
     
     bool                             m_removeFullScreenButton;
-    bool                             m_fullScreen;
     bool                             m_fullScreenHideToolBar;
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
@@ -88,7 +87,6 @@ private:
 
     KURL                             m_lastOpenedDirectory;
     
-    KToggleAction                   *m_fullScreenAction;
     KToggleAction                   *m_showBarAction;
     KToggleAction                   *m_slideShowAction;
     
@@ -167,7 +165,6 @@ private slots:
     
     void slotToggleFullScreen();
     void slotToggleSlideShow();
-    void slotEscapePressed();
     void slotToggleShowBar();
     void slotViewHistogram();
     void slotChangeBCG();
