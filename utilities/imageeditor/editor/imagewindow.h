@@ -166,7 +166,6 @@ private slots:
     void slotEscapePressed();
 
     void slotContextMenu();
-    void slotZoomChanged(float zoom);
     void slotChanged(bool, bool);
     void slotSelected(bool);
 

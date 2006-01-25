@@ -167,7 +167,6 @@ private slots:
     
     void slotToggleFullScreen();
     void slotToggleSlideShow();
-    void slotZoomChanged(float zoom);
     void slotEscapePressed();
     void slotToggleShowBar();
     void slotViewHistogram();

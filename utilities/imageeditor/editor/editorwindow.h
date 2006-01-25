@@ -75,6 +75,7 @@ protected slots:
     void slotNewToolbarConfig();
 
     void slotToggleAutoZoom();
+    void slotZoomChanged(float zoom);
     
 protected:
     

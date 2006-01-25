@@ -261,6 +261,17 @@ void EditorWindow::slotToggleAutoZoom()
     m_canvas->slotToggleAutoZoom();
 }
 
+void EditorWindow::slotZoomChanged(float zoom)
+{
+    m_zoomLabel->setText(i18n("Zoom: ") +
+                         QString::number(zoom*100, 'f', 2) +
+                         QString("%"));
+
+    m_zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
+                                 !m_zoomFitAction->isChecked());
+    m_zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
+                                  !m_zoomFitAction->isChecked());
+}
 }  // namespace Digikam
 
 #include "editorwindow.moc"
