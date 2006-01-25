@@ -364,7 +364,9 @@ void ImageGuideDlg::slotTimer()
 void ImageGuideDlg::slotEffect()
 {
     // Computation already in process.
-    if (d->currentRenderingMode == ImageGuideDlgPriv::PreviewRendering) return;
+    if (d->currentRenderingMode == ImageGuideDlgPriv::PreviewRendering ||
+        d->currentRenderingMode == ImageGuideDlgPriv::FinalRendering)
+        return;
 
     d->currentRenderingMode = ImageGuideDlgPriv::PreviewRendering;
 

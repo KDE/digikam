@@ -313,7 +313,9 @@ void ImageGuideDialog::slotTimer()
 void ImageGuideDialog::slotEffect()
 {
     // Computation already in process.
-    if (m_currentRenderingMode == PreviewRendering) return;
+    if (m_currentRenderingMode == PreviewRendering ||
+        m_currentRenderingMode == FinalRendering)
+        return;
 
     m_currentRenderingMode = PreviewRendering;
 
