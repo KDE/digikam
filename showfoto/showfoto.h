@@ -90,23 +90,14 @@ private:
     KToggleAction                   *m_showBarAction;
     KToggleAction                   *m_slideShowAction;
     
-    KAction                         *m_cropAction;
-    KAction                         *m_imagePluginsHelpAction;
-    
     KAction                         *m_openFilesInFolderAction;    
     KAction                         *m_fileOpenAction;
     
-    KAction                         *m_rotate90Action;
-    KAction                         *m_rotate180Action;
-    KAction                         *m_rotate270Action;
-    
-    KAction                         *m_resizeAction;
     KAction                         *m_flipHorzAction;
     KAction                         *m_flipVertAction;
     
     KActionMenu                     *m_flipAction;
     KActionMenu                     *m_BCGAction;
-    KActionMenu                     *m_rotateAction;
     
     KToolBarPopupAction             *m_undoAction;
     KToolBarPopupAction             *m_redoAction;

@@ -86,6 +86,14 @@ protected:
     KAction                 *m_firstAction;
     KAction                 *m_lastAction;
     KAction                 *m_copyAction;
+    KAction                 *m_resizeAction;
+    KAction                 *m_cropAction;
+    KAction                 *m_imagePluginsHelpAction;
+    KAction                 *m_rotate90Action;
+    KAction                 *m_rotate180Action;
+    KAction                 *m_rotate270Action;    
+
+    KActionMenu             *m_rotateAction;
 
     KSelectAction           *m_viewHistogramAction;
 

@@ -85,26 +85,33 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
-    m_canvas              = 0;
-    m_undoAction          = 0;
-    m_redoAction          = 0;
-    m_zoomPlusAction      = 0;
-    m_zoomMinusAction     = 0;
-    m_zoomFitAction       = 0;
-    m_fullScreenAction    = 0;
-    m_saveAction          = 0;
-    m_saveAsAction        = 0;
-    m_revertAction        = 0;
-    m_filePrintAction     = 0;    
-    m_fileDeleteAction    = 0;
-    m_forwardAction       = 0;
-    m_backwardAction      = 0;
-    m_firstAction         = 0;
-    m_lastAction          = 0;
-    m_copyAction          = 0;
-    m_viewHistogramAction = 0;
-    m_fullScreen          = false;
-    m_isReadOnly          = false;
+    m_canvas                 = 0;
+    m_undoAction             = 0;
+    m_redoAction             = 0;
+    m_zoomPlusAction         = 0;
+    m_zoomMinusAction        = 0;
+    m_zoomFitAction          = 0;
+    m_fullScreenAction       = 0;
+    m_saveAction             = 0;
+    m_saveAsAction           = 0;
+    m_revertAction           = 0;
+    m_filePrintAction        = 0;    
+    m_fileDeleteAction       = 0;
+    m_forwardAction          = 0;
+    m_backwardAction         = 0;
+    m_firstAction            = 0;
+    m_lastAction             = 0;
+    m_copyAction             = 0;
+    m_viewHistogramAction    = 0;
+    m_resizeAction           = 0;
+    m_cropAction             = 0;
+    m_imagePluginsHelpAction = 0;
+    m_rotate90Action         = 0;
+    m_rotate180Action        = 0;
+    m_rotate270Action        = 0;    
+    m_rotateAction           = 0;
+    m_fullScreen             = false;
+    m_isReadOnly             = false;
 
     // Settings containers instance.
 
@@ -207,7 +214,7 @@ void EditorWindow::setupStandardActions()
 
     m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
                                               this, SLOT(slotViewHistogram()),
-                                              actionCollection(), "view_histogram");
+                                              actionCollection(), "editorwindow_histogram");
     m_viewHistogramAction->setEditable(false);
 
     QStringList selectItems;
@@ -218,6 +225,56 @@ void EditorWindow::setupStandardActions()
     selectItems << i18n("Blue");
     selectItems << i18n("Alpha");
     m_viewHistogramAction->setItems(selectItems);
+
+    // Standard 'Transform' menu actions ---------------------------------------------
+
+    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
+                                 this, SLOT(slotResize()),
+                                 actionCollection(), "editorwindow_resize");
+
+    m_cropAction = new KAction(i18n("Crop"), "crop",
+                               CTRL+Key_X,
+                               m_canvas, SLOT(slotCrop()),
+                               actionCollection(), "editorwindow_crop");
+    
+    m_cropAction->setEnabled(false);
+    m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
+                                     "Select the image region to enable this action.") );
+
+    // Standard 'Rotate' menu actions ----------------------------------------
+
+    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
+                                     actionCollection(),
+                                     "editorwindow_rotate");
+    m_rotateAction->setDelayed(false);
+
+    m_rotate90Action  = new KAction(i18n("90 Degrees"),
+                                    0, Key_9, m_canvas, SLOT(slotRotate90()),
+                                    actionCollection(),
+                                    "rotate_90");
+    m_rotate180Action = new KAction(i18n("180 Degrees"),
+                                    0, Key_8, m_canvas, SLOT(slotRotate180()),
+                                    actionCollection(),
+                                    "rotate_180");
+    m_rotate270Action = new KAction(i18n("270 Degrees"),
+                                    0, Key_7, m_canvas, SLOT(slotRotate270()),
+                                    actionCollection(),
+                                    "rotate_270");
+    m_rotateAction->insert(m_rotate90Action);
+    m_rotateAction->insert(m_rotate180Action);
+    m_rotateAction->insert(m_rotate270Action);
+
+    // Standard 'Configure' menu actions ----------------------------------------
+
+    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
+    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+
+    // Standard 'Help' menu actions ---------------------------------------------
+
+    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
+                                           "digikamimageplugins", 0,
+                                           this, SLOT(slotImagePluginsHelp()),
+                                           actionCollection(), "editorwindow_imagepluginshelp");
 }
 
 void EditorWindow::setupStatusBar()

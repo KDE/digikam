@@ -341,34 +341,11 @@ void ShowFoto::setupActions()
 
     m_showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
                                         this, SLOT(slotToggleShowBar()),
-                                        actionCollection(), "show_thumbs");
+                                        actionCollection(), "shofoto_showthumbs");
 
     m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
                                           this, SLOT(slotToggleSlideShow()),
-                                          actionCollection(),"slideshow");
-
-    // -- rotate actions ---------------------------------------------
-
-    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
-                                     actionCollection(),
-                                     "rotate");
-    m_rotateAction->setDelayed(false);
-
-    m_rotate90Action  = new KAction(i18n("90 Degrees"),
-                                    0, Key_9, m_canvas, SLOT(slotRotate90()),
-                                    actionCollection(),
-                                    "rotate_90");
-    m_rotate180Action = new KAction(i18n("180 Degrees"),
-                                    0, Key_8, m_canvas, SLOT(slotRotate180()),
-                                    actionCollection(),
-                                    "rotate_180");
-    m_rotate270Action = new KAction(i18n("270 Degrees"),
-                                    0, Key_7, m_canvas, SLOT(slotRotate270()),
-                                    actionCollection(),
-                                    "rotate_270");
-    m_rotateAction->insert(m_rotate90Action);
-    m_rotateAction->insert(m_rotate180Action);
-    m_rotateAction->insert(m_rotate270Action);
+                                          actionCollection(),"shofoto_slideshow");
 
     // -- flip actions ---------------------------------------------------------------
 
@@ -390,29 +367,8 @@ void ShowFoto::setupActions()
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
 
-    // -- Transform actions ----------------------------------------------------------
-
-    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
-                                 this, SLOT(slotResize()),
-                                 actionCollection(), "resize");
-
-    m_cropAction = new KAction(i18n("Crop"), "crop",
-                               CTRL+Key_C,
-                               m_canvas, SLOT(slotCrop()),
-                               actionCollection(), "crop");
-    m_cropAction->setEnabled(false);
-
-    // -- help actions -----------------------------------------------
-
-    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
-                                           "digikamimageplugins", 0,
-                                           this, SLOT(slotImagePluginsHelp()),
-                                           actionCollection(), "imagepluginshelp");
-
     // -- Configure toolbar and shortcuts ---------------------------------------------
 
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
     // ---------------------------------------------------------------

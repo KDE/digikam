@@ -40,10 +40,10 @@
 
   <Menu name="Transform" >
    <text>&amp;Transform</text>
-   <Action name="imageview_rotate" /> 
+   <Action name="editorwindow_rotate" /> 
    <Action name="imageview_flip" /> 
-   <Action name="imageview_crop" /> 
-   <Action name="imageview_resize" /> 
+   <Action name="editorwindow_crop" /> 
+   <Action name="editorwindow_resize" /> 
   </Menu>
 
   <Menu name="View" >
@@ -51,12 +51,12 @@
    <Action name="editorwindow_zoomplus" /> 
    <Action name="editorwindow_zoomminus" /> 
    <Action name="editorwindow_zoomfit" />
-   <Action name="imageview_histogram" />
+   <Action name="editorwindow_histogram" />
   </Menu>
 
   <Menu name="help" >
   <text>&amp;Help</text>
-   <Action name="imageview_imagepluginshelp" />
+   <Action name="editorwindow_imagepluginshelp" />
   </Menu>
   
   <Merge/>
@@ -65,7 +65,7 @@
      <Action name="options_show_toolbar"/>
      <Merge name="StandardToolBarMenuHandler" />
      <Separator/>
-     <Action name="toggle_fullScreen" />
+     <Action name="editorwindow_fullscreen" />
      <Separator/>
      <Action name="options_configure_keybinding"/>
      <Action name="options_configure_toolbars"/>
@@ -89,10 +89,10 @@
      <Action name="editorwindow_zoomminus" /> 
      <Action name="editorwindow_zoomfit" /> 
      <Separator/>     
-     <Action name="imageview_rotate" /> 
-     <Action name="imageview_crop" /> 
+     <Action name="editorwindow_rotate" /> 
+     <Action name="editorwindow_crop" /> 
      <Separator/>     
-     <Action name="toggle_fullScreen" />     
+     <Action name="editorwindow_fullscreen" />     
      <Merge />
  </ToolBar>
  
@@ -100,8 +100,8 @@
     <Action name="editorwindow_backward" />
     <Action name="editorwindow_forward" />
     <Separator/>
-    <Action name="imageview_rotate" /> 
-    <Action name="imageview_crop" /> 
+    <Action name="editorwindow_rotate" /> 
+    <Action name="editorwindow_crop" /> 
     <Separator/>
     <Action name="editorwindow_delete" />
 </Menu>

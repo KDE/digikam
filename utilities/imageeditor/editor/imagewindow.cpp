@@ -250,43 +250,6 @@ void ImageWindow::setupActions()
             m_canvas, SLOT(slotRedo(int)));
     m_redoAction->setEnabled(false);
 
-    // -- Transform actions ----------------------------------------------------------
-    
-    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
-                                 this, SLOT(slotResize()),
-                                 actionCollection(), "imageview_resize");
-
-    m_cropAction = new KAction(i18n("&Crop"), "crop",
-                               CTRL+Key_X,
-                               m_canvas, SLOT(slotCrop()),
-                               actionCollection(), "imageview_crop");
-    m_cropAction->setEnabled(false);
-    m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
-                                     "Select the image region to enable this action.") );
-
-    // -- rotate actions -------------------------------------------------------------
-    
-    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
-                                     actionCollection(),
-                                     "imageview_rotate");
-    m_rotateAction->setDelayed(false);
-
-    m_rotate90Action  = new KAction(i18n("90 Degrees"),
-                                    0, Key_1, m_canvas, SLOT(slotRotate90()),
-                                    actionCollection(),
-                                    "rotate_90");
-    m_rotate180Action = new KAction(i18n("180 Degrees"),
-                                    0, Key_2, m_canvas, SLOT(slotRotate180()),
-                                    actionCollection(),
-                                    "rotate_180");
-    m_rotate270Action = new KAction(i18n("270 Degrees"),
-                                    0, Key_3, m_canvas, SLOT(slotRotate270()),
-                                    actionCollection(),
-                                    "rotate_270");
-    m_rotateAction->insert(m_rotate90Action);
-    m_rotateAction->insert(m_rotate180Action);
-    m_rotateAction->insert(m_rotate270Action);
-
     // -- flip actions ---------------------------------------------------------------
     
     m_flipAction = new KActionMenu(i18n("Flip"),
@@ -306,20 +269,6 @@ void ImageWindow::setupActions()
                                    "flip_vertical");
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
-
-    // -- help actions ---------------------------------------------------------------
-    
-    m_imagePluginsHelp = new KAction(i18n("Image Plugins Handbooks"), 
-                                     "digikamimageplugins", 0, 
-                                     this, SLOT(slotImagePluginsHelp()),
-                                     actionCollection(), "imageview_imagepluginshelp");
-
-    // -- Configure toolbar and shortcuts ---------------------------------------------
-    
-    KStdAction::keyBindings(this, SLOT(slotEditKeys()),
-                            actionCollection());
-    KStdAction::configureToolbars(this, SLOT(slotConfToolbars()),
-                                  actionCollection());
 
     // --- Create the gui --------------------------------------------------------------
     

@@ -45,10 +45,10 @@
 
  <Menu name="Transform" >
    <text>&amp;Transform</text>
-     <Action name="rotate" /> 
+     <Action name="editorwindow_rotate" /> 
      <Action name="flip" />    
-     <Action name="crop" />
-     <Action name="resize" /> 
+     <Action name="editorwindow_crop" />
+     <Action name="editorwindow_resize" /> 
  </Menu>
 
  <Menu name="View" >
@@ -57,15 +57,15 @@
      <Action name="editorwindow_zoomminus" />
      <Action name="editorwindow_zoomfit" /> 
      <Separator/>
-     <Action name="show_thumbs" /> 
-     <Action name="view_histogram" /> 
+     <Action name="shofoto_showthumbs" /> 
+     <Action name="editorwindow_histogram" /> 
      <Separator/>
-     <Action name="slideshow" /> 
+     <Action name="shofoto_slideshow" /> 
  </Menu>
 
  <Menu name="help" >
     <text>&amp;Help</text>
-     <Action name="imagepluginshelp" />
+     <Action name="editorwindow_imagepluginshelp" />
  </Menu>
  
  <Merge/>
@@ -75,7 +75,7 @@
      <Action name="options_show_toolbar" />
      <Merge name="StandardToolBarMenuHandler" />
      <Separator/>
-     <Action name="full_screen" /> 
+     <Action name="editorwindow_fullscreen" /> 
      <Separator/>
      <Action name="options_configure_keybinding" />
      <Action name="options_configure_toolbars" />
@@ -102,10 +102,10 @@
   <Action name="editorwindow_zoomminus" />
   <Action name="editorwindow_zoomfit" />
   <Separator/>
-  <Action name="rotate" /> 
-  <Action name="crop" />
+  <Action name="editorwindow_rotate" /> 
+  <Action name="editorwindow_crop" />
   <Separator/>
-  <Action name="full_screen" /> 
+  <Action name="editorwindow_fullscreen" /> 
   <Action name="slideshow" /> 
   <Merge />
 </ToolBar>
@@ -114,8 +114,8 @@
     <Action name="editorwindow_backward" />
     <Action name="editorwindow_forward" />
     <Separator/>
-    <Action name="rotate" /> 
-    <Action name="crop" />    
+    <Action name="editorwindow_rotate" /> 
+    <Action name="editorwindow_crop" />    
     <Separator/>
     <Action name="editorwindow_delete" />
 </Menu>

@@ -94,19 +94,10 @@ private:
     
     // Actions
 
-    KActionMenu            *m_rotateAction;
     KActionMenu            *m_flipAction;
-    KAction                *m_rotate90Action;
-    KAction                *m_rotate180Action;
-    KAction                *m_rotate270Action;
     KAction                *m_flipHorzAction;
     KAction                *m_flipVertAction;
 
-    KAction                *m_resizeAction;
-    KAction                *m_cropAction;
-    
-    KAction                *m_imagePluginsHelp;
-    
     // Allow to use Image properties and 
     // Comments/Tags dialogs from main window.
     AlbumIconView            *m_view;
