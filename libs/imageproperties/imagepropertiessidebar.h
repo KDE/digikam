@@ -38,7 +38,8 @@ namespace Digikam
 {
 
 class DImg;
-class ImagePropertiesSideBarPriv;
+class ImagePropertiesEXIFTab;
+class ImagePropertiesColorsTab;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Digikam::Sidebar
 {
@@ -50,19 +51,29 @@ public:
                     
     ~ImagePropertiesSideBar();
     
-    void itemChanged(const KURL& url, QRect *rect, DImg *img=0);
+    virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
                     
-    void imageSelectionChanged(QRect *rect);                 
+    virtual void imageSelectionChanged(QRect *rect);                 
     
-    void noCurrentItem(void);                               
+    virtual void noCurrentItem(void);                               
 
-private slots:
+protected slots:
 
-    void slotChangedTab(QWidget* tab);
+    virtual void slotChangedTab(QWidget* tab);
 
-private:
+protected:
 
-    ImagePropertiesSideBarPriv* d;
+    bool                      m_dirtyExifTab;
+    bool                      m_dirtyHistogramTab;
+ 
+    QRect                    *m_currentRect;
+ 
+    KURL                      m_currentURL;
+ 
+    DImg                     *m_image;
+     
+    ImagePropertiesEXIFTab   *m_exifTab;
+    ImagePropertiesColorsTab *m_histogramTab;
         
 };
 

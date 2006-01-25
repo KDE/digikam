@@ -28,7 +28,7 @@
 
 // Local includes.
 
-#include "sidebar.h"
+#include "imagepropertiessidebar.h"
 #include "digikam_export.h"
 
 class QSplitter;
@@ -43,7 +43,7 @@ class AlbumIconView;
 class AlbumIconItem;
 class ImagePropertiesSideBarDBPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public Digikam::Sidebar
+class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public Digikam::ImagePropertiesSideBar
 {
     Q_OBJECT
 
@@ -54,12 +54,10 @@ public:
                     
     ~ImagePropertiesSideBarDB();
     
-    void itemChanged(const KURL& url, AlbumIconView* view, AlbumIconItem* item, 
-                     QRect *rect=0, DImg *img=0);
+    void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0,
+                     AlbumIconView* view=0, AlbumIconItem* item=0);
                     
-    void imageSelectionChanged(QRect *rect);                 
-    
-    void noCurrentItem(void);                               
+    void noCurrentItem(void);
 
     void populateTags(void);                               
     

@@ -54,75 +54,54 @@ public:
 
     ImagePropertiesSideBarDBPriv()
     {
-        image             = 0;
-        currentRect       = 0;
         currentView       = 0;
         currentItem       = 0;
-        dirtyExifTab      = false;
-        dirtyHistogramTab = false;
         dirtyDesceditTab  = false;
     }
 
-    bool                      dirtyExifTab;
-    bool                      dirtyHistogramTab;
     bool                      dirtyDesceditTab;
-
-    QRect                    *currentRect;
-
-    KURL                      currentURL;
 
     AlbumIconView            *currentView;
 
     AlbumIconItem            *currentItem;
 
-    DImg                     *image;
-
-    ImagePropertiesEXIFTab   *exifTab;
-    ImagePropertiesColorsTab *histogramTab;
     ImageDescEditTab         *desceditTab;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter, 
                                                    Side side, bool mimimizedDefault, bool navBar)
-                        : Digikam::Sidebar(parent, side, mimimizedDefault)
+                        : Digikam::ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarDBPriv;
-    
-    d->exifTab      = new ImagePropertiesEXIFTab(parent, navBar);
-    d->histogramTab = new ImagePropertiesColorsTab(parent, 0, navBar);
-    d->desceditTab  = new ImageDescEditTab(parent, navBar);
-    
-    setSplitter(splitter);
-         
-    appendTab(d->exifTab, SmallIcon("exifinfo"), i18n("EXIF"));
-    appendTab(d->histogramTab, SmallIcon("blend"), i18n("Colors"));
+    d->desceditTab = new ImageDescEditTab(parent, navBar);
+   
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments && Tags"));
     loadViewState();
 
     // ----------------------------------------------------------
     
-    connect(d->exifTab, SIGNAL(signalFirstItem()),
+    connect(m_exifTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(d->exifTab, SIGNAL(signalPrevItem()),
+    connect(m_exifTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(d->exifTab, SIGNAL(signalNextItem()),
+    connect(m_exifTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->exifTab, SIGNAL(signalLastItem()),
+    connect(m_exifTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 
-    connect(d->histogramTab, SIGNAL(signalFirstItem()),
+    connect(m_histogramTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(d->histogramTab, SIGNAL(signalPrevItem()),
+    connect(m_histogramTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(d->histogramTab, SIGNAL(signalNextItem()),
+    connect(m_histogramTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->histogramTab, SIGNAL(signalLastItem()),
+    connect(m_histogramTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
                             
     connect(d->desceditTab, SIGNAL(signalFirstItem()),
@@ -146,44 +125,36 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view, 
-                                           AlbumIconItem* item, QRect *rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *img,
+                                           AlbumIconView* view, AlbumIconItem* item)
 {
     if (!url.isValid())
         return;
     
-    d->currentURL        = url;
-    d->currentRect       = rect;
-    d->image             = img;
-    d->currentView       = view;
-    d->currentItem       = item;
-    d->dirtyExifTab      = false;
-    d->dirtyHistogramTab = false;
-    d->dirtyDesceditTab  = false;
+    m_currentURL        = url;
+    m_currentRect       = rect;
+    m_image             = img;
+    m_dirtyExifTab      = false;
+    m_dirtyHistogramTab = false;
+    d->currentView      = view;
+    d->currentItem      = item;
+    d->dirtyDesceditTab = false;
         
     slotChangedTab( getActiveTab() );    
 }
 
 void ImagePropertiesSideBarDB::noCurrentItem(void)
 {
-    d->currentURL        = KURL::KURL();
-    d->currentItem       = 0;
-    d->exifTab->setCurrentURL();
-    d->histogramTab->setData();
-    d->desceditTab->setItem();
-    d->dirtyExifTab      = false;
-    d->dirtyHistogramTab = false;
-    d->dirtyDesceditTab  = false;
-}
+    m_currentURL        = KURL::KURL();
+    d->currentItem      = 0;
 
-void ImagePropertiesSideBarDB::imageSelectionChanged(QRect *rect)
-{
-    d->currentRect = rect;
-    
-    if (d->dirtyHistogramTab)
-       d->histogramTab->setSelection(rect);
-    else
-       slotChangedTab(d->histogramTab);
+    m_exifTab->setCurrentURL();
+    m_histogramTab->setData();
+    d->desceditTab->setItem();
+
+    m_dirtyExifTab      = false;
+    m_dirtyHistogramTab = false;
+    d->dirtyDesceditTab = false;
 }
 
 void ImagePropertiesSideBarDB::populateTags(void)
@@ -199,15 +170,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     // launched from camera GUI.
     if (!d->currentView || !d->currentItem)
     {
-        if (tab == d->exifTab && !d->dirtyExifTab)
+        if (tab == m_exifTab && !m_dirtyExifTab)
         {
-            d->exifTab->setCurrentURL(d->currentURL, NavigateBarWidget::ItemCurrent);
-            d->dirtyExifTab = true;
+            m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_dirtyExifTab = true;
         }
-        else if (tab == d->histogramTab && !d->dirtyHistogramTab)
+        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
-            d->histogramTab->setData(d->currentURL, d->currentRect, d->image, NavigateBarWidget::ItemCurrent);
-            d->dirtyHistogramTab = true;
+            m_histogramTab->setData(m_currentURL, m_currentRect, m_image, NavigateBarWidget::ItemCurrent);
+            m_dirtyHistogramTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
@@ -225,15 +196,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (d->currentView->lastItem() == d->currentItem)
             currentItemType = NavigateBarWidget::ItemLast;
         
-        if (tab == d->exifTab && !d->dirtyExifTab)
+        if (tab == m_exifTab && !m_dirtyExifTab)
         {
-            d->exifTab->setCurrentURL(d->currentURL, currentItemType);
-            d->dirtyExifTab = true;
+            m_exifTab->setCurrentURL(m_currentURL, currentItemType);
+            m_dirtyExifTab = true;
         }
-        else if (tab == d->histogramTab && !d->dirtyHistogramTab)
+        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
         {
-            d->histogramTab->setData(d->currentURL, d->currentRect, d->image, currentItemType);
-            d->dirtyHistogramTab = true;
+            m_histogramTab->setData(m_currentURL, m_currentRect, m_image, currentItemType);
+            m_dirtyHistogramTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {

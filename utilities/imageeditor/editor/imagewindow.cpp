@@ -834,8 +834,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
         if (palbum)
            item = m_view->findItem(m_urlCurrent.url());
             
-        m_rightSidebar->itemChanged(m_urlCurrent.url(), m_view, item,
-                                   sel.isNull() ? 0 : &sel, img);
+        m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img, m_view, item);
     }
 }
 
