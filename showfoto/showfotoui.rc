@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="6" name="showfoto" >
+<gui version="7" name="showfoto" >
 
 <MenuBar>
 
  <Menu name="file" >
    <text>&amp;File</text>
-     <Action name="open_file" /> 
-     <Action name="open_folder" />     
+     <Action name="showfoto_open_file" /> 
+     <Action name="showfoto_open_folder" />     
      <Separator/>
      <Action name="file_bwd" /> 
      <Action name="file_fwd" /> 
@@ -14,13 +14,15 @@
      <Action name="file_first" /> 
      <Action name="file_last" /> 
      <Separator/>
-     <Action name="save" />
-     <Action name="saveas" />
-     <Action name="revert" /> 
+     <Action name="editorwindow_save" />
+     <Action name="editorwindow_saveas" />
+     <Action name="editorwindow_revert" /> 
      <Separator/>
-     <Action name="delete" />
+     <Action name="editorwindow_delete" />
      <Separator/>
-     <Action name="print" />
+     <Action name="editorwindow_print" />
+     <Separator/>
+     <Action name="editorwindow_exit" />     
  </Menu>
 
    <Menu name="Edit" >

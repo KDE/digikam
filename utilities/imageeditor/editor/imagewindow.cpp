@@ -96,7 +96,6 @@ ImageWindow::ImageWindow()
     m_rotatedOrFlipped      = false;
     m_allowSaving           = true;
     m_fullScreenHideToolBar = false;
-    m_isReadOnly            = false;
     m_view                  = 0L;
 
     // Construct the view
@@ -227,8 +226,8 @@ void ImageWindow::setupUserArea()
 
 void ImageWindow::setupActions()
 {
-    // -- File actions -----------------------------------------------------------
-    
+    setupStandardActions();
+
     m_navPrevAction = new KAction(i18n("&Previous"), "back",
                                   KStdAccel::shortcut( KStdAccel::Prior),
                                   this, SLOT(slotLoadPrev()),
@@ -249,27 +248,10 @@ void ImageWindow::setupActions()
                                   this, SLOT(slotLoadLast()),
                                   actionCollection(), "imageview_last");
 
-    m_saveAction = KStdAction::save(this, SLOT(slotSave()),
-                                    actionCollection(), "imageview_save");
-    m_saveAsAction = KStdAction::saveAs(this, SLOT(slotSaveAs()),
-                                        actionCollection(), "imageview_saveas");
-    m_restoreAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
-                                        actionCollection(), "imageview_restore");
-    m_saveAction->setEnabled(false);
-    m_restoreAction->setEnabled(false);
-    
-    m_fileprint = new KAction(i18n("Print Image..."), "fileprint",
-                              CTRL+Key_P,
-                              this, SLOT(slotFilePrint()),
-                              actionCollection(), "imageview_print");
-
-    m_fileDelete = new KAction(i18n("Delete File"), "editdelete",
+    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
                                    SHIFT+Key_Delete,
                                    this, SLOT(slotDeleteCurrentItem()),
                                    actionCollection(), "imageview_delete");
-
-    KStdAction::quit(this, SLOT(close()),
-                     actionCollection(), "imageview_exit");
 
     // -- Edit actions ----------------------------------------------------------------                     
 
@@ -445,7 +427,7 @@ void ImageWindow::loadURL(const KURL::List& urlList,
     m_allowSaving = allowSaving;
     
     m_saveAction->setEnabled(false);
-    m_restoreAction->setEnabled(false);
+    m_revertAction->setEnabled(false);
     m_undoAction->setEnabled(false);
     m_redoAction->setEnabled(false);
 
@@ -481,13 +463,13 @@ void ImageWindow::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
     {
-        m_fileDelete->setIcon("edittrash");
-        m_fileDelete->setText(i18n("Move to Trash"));
+        m_fileDeleteAction->setIcon("edittrash");
+        m_fileDeleteAction->setText(i18n("Move to Trash"));
     }
     else
     {
-        m_fileDelete->setIcon("editdelete");
-        m_fileDelete->setText(i18n("Delete File"));
+        m_fileDeleteAction->setIcon("editdelete");
+        m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
     m_canvas->setExifOrient(settings->getExifRotate());
@@ -666,11 +648,11 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
 
     if (!palbum)
     {
-        m_fileDelete->setEnabled(false);
+        m_fileDeleteAction->setEnabled(false);
     }
     else
     {
-        m_fileDelete->setEnabled(true);
+        m_fileDeleteAction->setEnabled(true);
     }
 }
 
@@ -797,7 +779,7 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
                         QString(" ") +
                         i18n("pixels"));
 
-    m_restoreAction->setEnabled(moreUndo);
+    m_revertAction->setEnabled(moreUndo);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
@@ -1240,8 +1222,8 @@ void ImageWindow::slotToggleFullScreen()
         unplugActionAccel(m_zoomMinusAction);
         unplugActionAccel(m_zoomFitAction);
         unplugActionAccel(m_cropAction);
-        unplugActionAccel(m_fileprint);
-        unplugActionAccel(m_fileDelete);
+        unplugActionAccel(m_filePrintAction);
+        unplugActionAccel(m_fileDeleteAction);
 
         m_fullScreen = false;
     }
@@ -1286,8 +1268,8 @@ void ImageWindow::slotToggleFullScreen()
         plugActionAccel(m_zoomMinusAction);
         plugActionAccel(m_zoomFitAction);
         plugActionAccel(m_cropAction);
-        plugActionAccel(m_fileprint);
-        plugActionAccel(m_fileDelete);
+        plugActionAccel(m_filePrintAction);
+        plugActionAccel(m_fileDeleteAction);
 
         showFullScreen();
         m_fullScreen = true;

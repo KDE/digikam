@@ -93,11 +93,6 @@ private:
     KAction                         *m_cropAction;
     KAction                         *m_imagePluginsHelpAction;
     
-    KAction                         *m_revertAction;
-    KAction                         *m_saveAction;
-    KAction                         *m_saveAsAction;
-    KAction                         *m_filePrintAction;    
-    KAction                         *m_fileDeleteAction;
     KAction                         *m_openFilesInFolderAction;    
     KAction                         *m_copyAction;
     KAction                         *m_fileOpenAction;
@@ -136,8 +131,8 @@ private:
     void setupUserArea();
     void saveSettings();
     bool promptUserSave();
-
     void setupActions();
+    
     void applySettings();
     bool save();
     bool saveAs();
@@ -160,9 +155,6 @@ private slots:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
-    void slotSaveAs() { saveAs(); };
-    
     void slotToggleFullScreen();
     void slotToggleSlideShow();
     void slotToggleShowBar();

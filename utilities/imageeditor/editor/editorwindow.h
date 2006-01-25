@@ -60,9 +60,46 @@ public:
 
 signals:
 
+protected:
+
+    // If current image file format is only available in read only,
+    // typicially all RAW image file formats.
+    bool                     m_isReadOnly;
+
+    bool                     m_fullScreen;
+
+    QLabel                  *m_zoomLabel;
+    QLabel                  *m_resLabel;
+
+    QSplitter               *m_splitter;
+
+    KAction                 *m_zoomPlusAction;
+    KAction                 *m_zoomMinusAction;
+    KAction                 *m_saveAction;
+    KAction                 *m_saveAsAction;
+    KAction                 *m_revertAction;
+    KAction                 *m_filePrintAction;    
+    KAction                 *m_fileDeleteAction;
+
+    KToggleAction           *m_zoomFitAction;
+    KToggleAction           *m_fullScreenAction;
+
+    KToolBarPopupAction     *m_undoAction;
+    KToolBarPopupAction     *m_redoAction;
+    
+    Canvas                  *m_canvas;
+    IOFileProgressBar       *m_nameLabel;
+    ICCSettingsContainer    *m_ICCSettings;
+    IOFileSettingsContainer *m_IOFileSettings;
+    SavingContextContainer  *m_savingContext;
+
 protected slots:
 
     virtual void slotFilePrint()=0;
+    virtual void slotDeleteCurrentItem()=0;
+    
+    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
+    void slotSaveAs() { saveAs(); };
     
     void slotImagePluginsHelp();
     void slotEditKeys();
@@ -80,38 +117,18 @@ protected slots:
     void slotEscapePressed();
     
 protected:
-    
+
+    void setupStandardActions();    
     void setupStatusBar();
     void printImage(KURL url);
     void closeEvent(QCloseEvent* e);
 
+    virtual void setupActions()=0;
     virtual bool promptUserSave()=0;
     virtual void saveSettings()=0;
     virtual void setupUserArea()=0;
-
-protected:
-
-    bool                     m_fullScreen;
-
-    QLabel                  *m_zoomLabel;
-    QLabel                  *m_resLabel;
-
-    QSplitter               *m_splitter;
-
-    KAction                 *m_zoomPlusAction;
-    KAction                 *m_zoomMinusAction;
-
-    KToggleAction           *m_zoomFitAction;
-    KToggleAction           *m_fullScreenAction;
-
-    KToolBarPopupAction     *m_undoAction;
-    KToolBarPopupAction     *m_redoAction;
-    
-    Canvas                  *m_canvas;
-    IOFileProgressBar       *m_nameLabel;
-    ICCSettingsContainer    *m_ICCSettings;
-    IOFileSettingsContainer *m_IOFileSettings;
-    SavingContextContainer  *m_savingContext;
+    virtual bool saveAs()=0; 
+    virtual bool save()=0;
 
 private slots:
 

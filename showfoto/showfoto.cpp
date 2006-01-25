@@ -109,9 +109,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_splash                 = 0;
     m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
+    m_fullScreen             = false;
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
-    m_isReadOnly             = false;
 
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
@@ -300,18 +300,19 @@ void ShowFoto::setupUserArea()
 
 void ShowFoto::setupActions()
 {
+    setupStandardActions();
+
     m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
-                       actionCollection(), "open_file");
-    
+                       actionCollection(), "showfoto_open_file");
+
     m_openFilesInFolderAction = new KAction(i18n("Open folder"),
                                             "folder_image",
                                             CTRL+SHIFT+Key_O,
                                             this,
                                             SLOT(slotOpenFilesInFolder()),
                                             actionCollection(),
-                                            "open_folder");
-    KStdAction::quit(this, SLOT(close()),
-                     actionCollection());
+                                            "showfoto_open_folder");
+
 
     m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
                                           actionCollection(), "file_fwd");
@@ -327,29 +328,6 @@ void ShowFoto::setupActions()
                                KStdAccel::shortcut( KStdAccel::End),
                                this, SLOT(slotLast()),
                                actionCollection(), "file_last");
-
-    m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
-                                      actionCollection(), "save");
-
-    m_saveAsAction  = KStdAction::saveAs(this, SLOT(slotSaveAs()),
-                                         actionCollection(), "saveas");
-
-    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
-                                        actionCollection(), "revert");
-
-    m_revertAction->setEnabled(false);
-    m_saveAction->setEnabled(false);
-    m_saveAsAction->setEnabled(false);
-
-    m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
-                                    CTRL+Key_P,
-                                    this, SLOT(slotFilePrint()),
-                                    actionCollection(), "print");
-
-    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
-                                     SHIFT+Key_Delete,
-                                     this, SLOT(slotDeleteCurrentItem()),
-                                     actionCollection(), "delete");
 
     // -- Edit actions ----------------------------------------------------------------
 

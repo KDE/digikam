@@ -85,10 +85,6 @@ private:
     // image cannot be saved.
     bool                    m_allowSaving;
     
-    // If current image file format is only available in read only,
-    // typicially all RAW image file formats.
-    bool                    m_isReadOnly;
-
     QPopupMenu             *m_contextMenu;
 
     KURL::List              m_urlList;
@@ -103,10 +99,6 @@ private:
     KAction                *m_navFirstAction;
     KAction                *m_navLastAction;
 
-    KAction                *m_saveAction;
-    KAction                *m_saveAsAction;
-    KAction                *m_restoreAction;
-     
     KSelectAction          *m_viewHistogramAction;
 
     KActionMenu            *m_rotateAction;
@@ -119,9 +111,6 @@ private:
 
     KAction                *m_resizeAction;
     KAction                *m_cropAction;
-    
-    KAction                *m_fileprint;
-    KAction                *m_fileDelete;
     
     KAction                *m_copyAction;
 
@@ -141,8 +130,8 @@ private:
     void setupUserArea();
     void saveSettings();
     bool promptUserSave();
-
     void setupActions();
+
     void readSettings();
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
@@ -168,9 +157,6 @@ private slots:
 
     void slotRotatedOrFlipped();
     
-    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
-    void slotSaveAs() { saveAs(); };
-
     void slotDeleteCurrentItem();
 
     void slotFilePrint(){ printImage(m_urlCurrent); };

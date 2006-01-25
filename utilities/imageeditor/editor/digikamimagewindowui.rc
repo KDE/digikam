@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="3" name="digikamimagewindow" >
+<gui version="4" name="digikamimagewindow" >
 
  <MenuBar>
 
@@ -11,15 +11,15 @@
      <Action name="imageview_first" />
      <Action name="imageview_last" />
      <Separator/>
-     <Action name="imageview_save" />
-     <Action name="imageview_saveas" />
-     <Action name="imageview_restore" />
+     <Action name="editorwindow_save" />
+     <Action name="editorwindow_saveas" />
+     <Action name="editorwindow_revert" />
      <Separator/>
-     <Action name="imageview_delete" />
+     <Action name="editorwindow_delete" />
      <Separator/>
-     <Action name="imageview_print" />
+     <Action name="editorwindow_print" />
      <Separator/>
-     <Action name="imageview_exit" />
+     <Action name="editorwindow_exit" />
   </Menu>
     
   <Menu name="Edit" >

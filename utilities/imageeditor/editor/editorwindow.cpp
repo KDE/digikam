@@ -92,7 +92,13 @@ EditorWindow::EditorWindow(const char *name)
     m_zoomMinusAction  = 0;
     m_zoomFitAction    = 0;
     m_fullScreenAction = 0;
+    m_saveAction       = 0;
+    m_saveAsAction     = 0;
+    m_revertAction     = 0;
+    m_filePrintAction  = 0;    
+    m_fileDeleteAction = 0;
     m_fullScreen       = false;
+    m_isReadOnly       = false;
 
     // Settings containers instance.
 
@@ -120,6 +126,36 @@ void EditorWindow::closeEvent(QCloseEvent* e)
 
     saveSettings();
     e->accept();
+}
+
+void EditorWindow::setupStandardActions()
+{
+    // Standard 'File' menu actions.
+
+    m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
+                                      actionCollection(), "editorwindow_save");
+
+    m_saveAsAction = KStdAction::saveAs(this, SLOT(slotSaveAs()),
+                                        actionCollection(), "editorwindow_saveas");
+
+    m_revertAction = KStdAction::revert(m_canvas, SLOT(slotRestore()),
+                                        actionCollection(), "editorwindow_revert");
+
+    m_saveAction->setEnabled(false);
+    m_saveAsAction->setEnabled(false);
+    m_revertAction->setEnabled(false);
+
+    m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
+                                    CTRL+Key_P,
+                                    this, SLOT(slotFilePrint()),
+                                    actionCollection(), "editorwindow_print");
+
+    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
+                                     SHIFT+Key_Delete,
+                                     this, SLOT(slotDeleteCurrentItem()),
+                                     actionCollection(), "editorwindow_delete");
+
+    KStdAction::quit(this, SLOT(close()), actionCollection(), "editorwindow_exit");
 }
 
 void EditorWindow::setupStatusBar()
