@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2004-07-09
- * Description : Sharpen image filter for ImageEditor
+ * Description : Blur image filter for ImageEditor
  * 
  * Copyright 2004-2005 by Gilles Caulier
  *
@@ -40,18 +40,18 @@
 #include <imageiface.h>
 #include <imagepannelwidget.h>
 #include <imagefilters.h>
-#include <sharpen.h>
+#include <gaussianblur.h>
 
 // Local includes.
 
-#include "imageeffect_sharpen.h"
+#include "imageeffect_blur.h"
 
-ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
-                   : KDialogBase(Plain, i18n("Sharpening Photograph"),
-                                 Help|Default|User1|Ok|Cancel, Ok,
-                                 parent, 0, true, true,
-                                 i18n("&Abort")),                                 
-                     m_parent(parent)
+ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
+                : KDialogBase(Plain, i18n("Apply Gaussian Blur on Photograph"),
+                              Help|Default|User1|Ok|Cancel, Ok,
+                              parent, 0, true, true,
+                              i18n("&Abort")),
+                  m_parent(parent)
 {
     m_currentRenderingMode = NoneRendering;
     m_timer                = 0L;
@@ -60,49 +60,50 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     setButtonWhatsThis( Default, i18n("<p>Reset all filter parameters to their default values.") );
     setButtonWhatsThis( User1, i18n("<p>Abort the current image rendering.") );
     setHelp("blursharpentool.anchor", "digikam");
-    resize(configDialogSize("Sharpen Tool Dialog"));       
+    resize(configDialogSize("Blur Tool Dialog"));         
     
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
 
     QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, "Sharpen Tool Dialog", plainPage(), true);
+    
+    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160, "Blur Tool Dialog", plainPage(), true);
     hlay1->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
-    QLabel *label = new QLabel(i18n("Sharpness:"), gboxSettings);
+    QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 20, 1, true);
     m_radiusInput->setValue(0);
-    QWhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
-                                         "1 and above determine the sharpen matrix radius "
-                                         "that determines how much to sharpen the image."));
-                                         
+    QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
+                                         "1 and above determine the Gaussian blur matrix radius "
+                                         "that determines how much to blur the image."));
+
     gridSettings->addWidget(label, 0, 0);
     gridSettings->addWidget(m_radiusInput, 0, 1);
-        
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
+    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+        
     // -------------------------------------------------------------
     
     QTimer::singleShot(0, this, SLOT(slotDefault()));
-
+                                             
     // -------------------------------------------------------------
-                                                             
+    
     connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
-    
+     
     connect(m_imagePreviewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotFocusChanged()));
 }
 
-ImageEffect_Sharpen::~ImageEffect_Sharpen()
+ImageEffect_Blur::~ImageEffect_Blur()
 {
-    saveDialogSize("Sharpen Tool Dialog");    
-    
+    saveDialogSize("Blur Tool Dialog");    
+
     if (m_timer)
        delete m_timer;
     
@@ -110,7 +111,7 @@ ImageEffect_Sharpen::~ImageEffect_Sharpen()
        delete m_threadedFilter;    
 }
 
-void ImageEffect_Sharpen::slotTimer()
+void ImageEffect_Blur::slotTimer()
 {
     if (m_timer)
        {
@@ -124,7 +125,7 @@ void ImageEffect_Sharpen::slotTimer()
     m_timer->start(500, true);
 }
 
-void ImageEffect_Sharpen::abortPreview()
+void ImageEffect_Blur::abortPreview()
 {
     m_currentRenderingMode = NoneRendering;
     m_imagePreviewWidget->setProgress(0);
@@ -136,14 +137,13 @@ void ImageEffect_Sharpen::abortPreview()
     m_radiusInput->setEnabled(true);
 }
 
-void ImageEffect_Sharpen::slotUser1()
+void ImageEffect_Blur::slotUser1()
 {
     if (m_currentRenderingMode != NoneRendering)
        m_threadedFilter->stopComputation();
+}
 
-} 
-
-void ImageEffect_Sharpen::slotDefault()
+void ImageEffect_Blur::slotDefault()
 {
     m_radiusInput->blockSignals(true);
     m_radiusInput->setValue(0);
@@ -151,7 +151,7 @@ void ImageEffect_Sharpen::slotDefault()
     slotEffect();    
 } 
 
-void ImageEffect_Sharpen::slotCancel()
+void ImageEffect_Blur::slotCancel()
 {
     if (m_currentRenderingMode != NoneRendering)
        {
@@ -162,7 +162,7 @@ void ImageEffect_Sharpen::slotCancel()
     done(Cancel);
 }
 
-void ImageEffect_Sharpen::closeEvent(QCloseEvent *e)
+void ImageEffect_Blur::closeEvent(QCloseEvent *e)
 {
     if (m_currentRenderingMode != NoneRendering)
        {
@@ -173,7 +173,7 @@ void ImageEffect_Sharpen::closeEvent(QCloseEvent *e)
     e->accept();    
 }
 
-void ImageEffect_Sharpen::slotFocusChanged(void)
+void ImageEffect_Blur::slotFocusChanged(void)
 {
     if (m_currentRenderingMode == FinalRendering)
        {
@@ -188,13 +188,13 @@ void ImageEffect_Sharpen::slotFocusChanged(void)
     QTimer::singleShot(0, this, SLOT(slotEffect()));        
 }
 
-void ImageEffect_Sharpen::slotEffect()
+void ImageEffect_Blur::slotEffect()
 {
     // Computation already in process.
     if (m_currentRenderingMode == PreviewRendering ||
         m_currentRenderingMode == FinalRendering)
         return;
-            
+    
     m_currentRenderingMode = PreviewRendering;
 
     m_imagePreviewWidget->setEnable(false);
@@ -211,12 +211,12 @@ void ImageEffect_Sharpen::slotEffect()
     
     QImage img = m_imagePreviewWidget->getOriginalClipImage();
     
-    int r = m_radiusInput->value()*4;
+    int r = m_radiusInput->value();
             
-    m_threadedFilter = new Digikam::Sharpen(&img, this, r);    
+    m_threadedFilter = new Digikam::GaussianBlur(&img, this, r);    
 }
 
-void ImageEffect_Sharpen::slotOk()
+void ImageEffect_Blur::slotOk()
 {
     m_currentRenderingMode = FinalRendering;
 
@@ -232,18 +232,18 @@ void ImageEffect_Sharpen::slotOk()
     
     m_radiusInput->setEnabled(false);
     
-    int r = m_radiusInput->value()*4;
+    int r = m_radiusInput->value();
     
     Digikam::ImageIface iface(0, 0);
     QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
     uint *data = iface.getOriginalData();
     memcpy( orgImage.bits(), data, orgImage.numBytes() );
             
-    m_threadedFilter = new Digikam::Sharpen(&orgImage, this, r);    
+    m_threadedFilter = new Digikam::GaussianBlur(&orgImage, this, r);    
     delete [] data;
 }
 
-void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
+void ImageEffect_Blur::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
@@ -263,7 +263,7 @@ void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
               {
               case PreviewRendering:
                  {
-                 kdDebug() << "Preview Sharpen completed..." << endl;
+                 kdDebug() << "Preview Gaussian Blur completed..." << endl;
                  QImage imDest = m_threadedFilter->getTargetImage();
                  m_imagePreviewWidget->setPreviewImageData(imDest);
                  abortPreview();
@@ -272,9 +272,9 @@ void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
               
               case FinalRendering:
                  {
-                 kdDebug() << "Final Sharpen completed..." << endl;
+                 kdDebug() << "Final Gaussian Blur completed..." << endl;
                  Digikam::ImageIface iface(0, 0);
-                 iface.putOriginalData(i18n("Sharpen"), 
+                 iface.putOriginalData(i18n("Gaussian Blur"), 
                                        (uint*)m_threadedFilter->getTargetImage().bits());
                  kapp->restoreOverrideCursor();
                  accept();
@@ -288,7 +288,7 @@ void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
                 {
                 case PreviewRendering:
                     {
-                    kdDebug() << "Preview Sharpen failed..." << endl;
+                    kdDebug() << "Preview Gaussian Blur failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;
@@ -306,7 +306,7 @@ void ImageEffect_Sharpen::customEvent(QCustomEvent *event)
 // Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
 // to prevent any conflicts between dialog keys events and SpinBox keys events.
 
-void ImageEffect_Sharpen::keyPressEvent(QKeyEvent *e)
+void ImageEffect_Blur::keyPressEvent(QKeyEvent *e)
 {
     if ( e->state() == 0 )
     {
@@ -341,4 +341,4 @@ void ImageEffect_Sharpen::keyPressEvent(QKeyEvent *e)
     }
 }
 
-#include "imageeffect_sharpen.moc"
+#include "imageeffect_blur.moc"
