@@ -36,6 +36,7 @@ class QLabel;
 class KToolBarPopupAction;
 class KToggleAction;
 class KAction;
+class KActionMenu;
 class KSelectAction;
 
 namespace Digikam
