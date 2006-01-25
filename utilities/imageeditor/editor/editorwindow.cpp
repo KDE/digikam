@@ -97,6 +97,10 @@ EditorWindow::EditorWindow(const char *name)
     m_revertAction     = 0;
     m_filePrintAction  = 0;    
     m_fileDeleteAction = 0;
+    m_forwardAction    = 0;
+    m_backwardAction   = 0;
+    m_firstAction      = 0;
+    m_lastAction       = 0;
     m_fullScreen       = false;
     m_isReadOnly       = false;
 
@@ -131,6 +135,22 @@ void EditorWindow::closeEvent(QCloseEvent* e)
 void EditorWindow::setupStandardActions()
 {
     // Standard 'File' menu actions.
+
+    m_backwardAction = KStdAction::back(this, SLOT(slotBackward()),
+                                    actionCollection(), "editorwindow_backward");
+
+    m_forwardAction = KStdAction::forward(this, SLOT(slotForward()),
+                                          actionCollection(), "editorwindow_forward");
+
+    m_firstAction = new KAction(i18n("&First"), "start",
+                                KStdAccel::shortcut( KStdAccel::Home),
+                                this, SLOT(slotFirst()),
+                                actionCollection(), "editorwindow_first");
+
+    m_lastAction = new KAction(i18n("&Last"), "finish",
+                               KStdAccel::shortcut( KStdAccel::End),
+                               this, SLOT(slotLast()),
+                               actionCollection(), "editorwindow_last");
 
     m_saveAction   = KStdAction::save(this, SLOT(slotSave()),
                                       actionCollection(), "editorwindow_save");

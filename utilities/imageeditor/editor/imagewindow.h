@@ -94,11 +94,6 @@ private:
     
     // Actions
 
-    KAction                *m_navNextAction;
-    KAction                *m_navPrevAction;
-    KAction                *m_navFirstAction;
-    KAction                *m_navLastAction;
-
     KSelectAction          *m_viewHistogramAction;
 
     KActionMenu            *m_rotateAction;
@@ -143,10 +138,10 @@ private slots:
 
     void slotLoadCurrent();
     
-    void slotLoadNext();
-    void slotLoadPrev();
-    void slotLoadFirst();
-    void slotLoadLast();
+    void slotForward();
+    void slotBackward();
+    void slotFirst();
+    void slotLast();
 
     void slotViewHistogram();
     void slotToggleFullScreen();

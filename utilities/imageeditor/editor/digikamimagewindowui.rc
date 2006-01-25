@@ -5,11 +5,11 @@
 
   <Menu name="File" >
    <text>&amp;File</text>
-     <Action name="imageview_prev" />  
-     <Action name="imageview_next" />    
+     <Action name="editorwindow_backward" />  
+     <Action name="editorwindow_forward" />    
      <Separator/>     
-     <Action name="imageview_first" />
-     <Action name="imageview_last" />
+     <Action name="editorwindow_first" />
+     <Action name="editorwindow_last" />
      <Separator/>
      <Action name="editorwindow_save" />
      <Action name="editorwindow_saveas" />
@@ -73,17 +73,17 @@
 
  </MenuBar>
 
- <ToolBar name="ToolBar" >
-  <text>Main Toolbar</text>
-     <Action name="imageview_first" />
-     <Action name="imageview_prev" />  
-     <Action name="imageview_next" />    
-     <Action name="imageview_last" />
+ <ToolBar name="ToolBar" ><text>Main Toolbar</text>
+     <Action name="editorwindow_first" />
+     <Action name="editorwindow_backward" />  
+     <Action name="editorwindow_forward" />    
+     <Action name="editorwindow_last" />
      <Separator/>     
-     <Action name="imageview_save" />
+     <Action name="editorwindow_save" />
+     <Action name="editorwindow_saveas" />
      <Action name="imageview_undo" />
      <Action name="imageview_redo" />     
-     <Action name="imageview_restore" />
+     <Action name="editorwindow_revert" />
      <Separator/>     
      <Action name="imageview_zoom_plus" /> 
      <Action name="imageview_zoom_minus" /> 
@@ -91,17 +91,19 @@
      <Separator/>     
      <Action name="imageview_rotate" /> 
      <Action name="imageview_crop" /> 
+     <Separator/>     
+     <Action name="toggle_fullScreen" />     
      <Merge />
  </ToolBar>
  
 <Menu name="RMBMenu">
-    <Action name="imageview_prev" />
-    <Action name="imageview_next" />
+    <Action name="editorwindow_backward" />
+    <Action name="editorwindow_forward" />
     <Separator/>
     <Action name="imageview_rotate" /> 
     <Action name="imageview_crop" /> 
     <Separator/>
-    <Action name="imageview_delete" />
+    <Action name="editorwindow_delete" />
 </Menu>
  
  <ActionProperties/>

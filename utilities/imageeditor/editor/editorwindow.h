@@ -80,6 +80,10 @@ protected:
     KAction                 *m_revertAction;
     KAction                 *m_filePrintAction;    
     KAction                 *m_fileDeleteAction;
+    KAction                 *m_forwardAction;
+    KAction                 *m_backwardAction;
+    KAction                 *m_firstAction;
+    KAction                 *m_lastAction;
 
     KToggleAction           *m_zoomFitAction;
     KToggleAction           *m_fullScreenAction;
@@ -97,6 +101,10 @@ protected slots:
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;
+    virtual void slotBackward()=0;
+    virtual void slotForward()=0;
+    virtual void slotFirst()=0;
+    virtual void slotLast()=0;
     
     void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };

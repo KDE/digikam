@@ -313,22 +313,6 @@ void ShowFoto::setupActions()
                                             actionCollection(),
                                             "showfoto_open_folder");
 
-
-    m_forwardAction = KStdAction::forward(this, SLOT(slotNext()),
-                                          actionCollection(), "file_fwd");
-    m_backAction = KStdAction::back(this, SLOT(slotPrev()),
-                                    actionCollection(), "file_bwd");
-
-    m_firstAction = new KAction(i18n("&First"), "start",
-                                KStdAccel::shortcut( KStdAccel::Home),
-                                this, SLOT(slotFirst()),
-                                actionCollection(), "file_first");
-
-    m_lastAction = new KAction(i18n("&Last"), "finish",
-                               KStdAccel::shortcut( KStdAccel::End),
-                               this, SLOT(slotLast()),
-                               actionCollection(), "file_last");
-
     // -- Edit actions ----------------------------------------------------------------
 
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
@@ -477,19 +461,19 @@ void ShowFoto::setupActions()
                   false, true);
     accel->insert("Next Image Key_Space", i18n("Next Image"),
                   i18n("Load Next Image"),
-                  Key_Space, this, SLOT(slotNext()),
+                  Key_Space, this, SLOT(slotForward()),
                   false, true);
     accel->insert("Previous Image Key_Backspace", i18n("Previous Image"),
                   i18n("Load Previous Image"),
-                  Key_Backspace, this, SLOT(slotPrev()),
+                  Key_Backspace, this, SLOT(slotBackward()),
                   false, true);
     accel->insert("Next Image Key_Next", i18n("Next Image"),
                   i18n("Load Next Image"),
-                  Key_Next, this, SLOT(slotNext()),
+                  Key_Next, this, SLOT(slotForward()),
                   false, true);
     accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
                   i18n("Load Previous Image"),
-                  Key_Prior, this, SLOT(slotPrev()),
+                  Key_Prior, this, SLOT(slotBackward()),
                   false, true);
     accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
                   i18n("Zoom into Image"),
@@ -660,7 +644,7 @@ void ShowFoto::slotLast()
     m_bar->setSelected( m_bar->lastItem() );
 }
 
-void ShowFoto::slotNext()
+void ShowFoto::slotForward()
 {
     if (!promptUserSave())
         return;
@@ -673,7 +657,7 @@ void ShowFoto::slotNext()
     }
 }
 
-void ShowFoto::slotPrev()
+void ShowFoto::slotBackward()
 {
     if (!promptUserSave())
         return;
@@ -1032,14 +1016,14 @@ void ShowFoto::toggleNavigation(int index)
 {
     if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
     {
-        m_backAction->setEnabled(false);
+        m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
     else 
     {
-        m_backAction->setEnabled(true);
+        m_backwardAction->setEnabled(true);
         m_forwardAction->setEnabled(true);
         m_firstAction->setEnabled(true);
         m_lastAction->setEnabled(true);
@@ -1047,7 +1031,7 @@ void ShowFoto::toggleNavigation(int index)
     
     if (index == 1) 
     {
-        m_backAction->setEnabled(false);
+        m_backwardAction->setEnabled(false);
         m_firstAction->setEnabled(false);
     }
 

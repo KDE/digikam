@@ -145,10 +145,10 @@ ImageWindow::ImageWindow()
             this, SLOT(slotChanged(bool, bool)));
             
     connect(m_canvas, SIGNAL(signalShowNextImage()),
-            this, SLOT(slotLoadNext()));
+            this, SLOT(slotForward()));
             
     connect(m_canvas, SIGNAL(signalShowPrevImage()),
-            this, SLOT(slotLoadPrev()));
+            this, SLOT(slotBackward()));
 
     connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
             this, SLOT(slotLoadingStarted(const QString &)));
@@ -169,10 +169,10 @@ ImageWindow::ImageWindow()
             this, SLOT(slotSavingProgress(const QString&, float)));
 
     connect(m_rightSidebar, SIGNAL(signalNextItem()),
-            this, SLOT(slotLoadNext()));
+            this, SLOT(slotForward()));
                 
     connect(m_rightSidebar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotLoadPrev()));
+            this, SLOT(slotBackward()));
     
     // -- read settings --------------------------------
     
@@ -227,31 +227,6 @@ void ImageWindow::setupUserArea()
 void ImageWindow::setupActions()
 {
     setupStandardActions();
-
-    m_navPrevAction = new KAction(i18n("&Previous"), "back",
-                                  KStdAccel::shortcut( KStdAccel::Prior),
-                                  this, SLOT(slotLoadPrev()),
-                                  actionCollection(), "imageview_prev");
-
-    m_navNextAction = new KAction(i18n("&Next"), "forward",
-                                  KStdAccel::shortcut( KStdAccel::Next),
-                                  this, SLOT(slotLoadNext()),
-                                  actionCollection(), "imageview_next");
-
-    m_navFirstAction = new KAction(i18n("&First"), "start",
-                                   KStdAccel::shortcut( KStdAccel::Home),
-                                   this, SLOT(slotLoadFirst()),
-                                   actionCollection(), "imageview_first");
-
-    m_navLastAction = new KAction(i18n("&Last"), "finish",
-                                  KStdAccel::shortcut( KStdAccel::End),
-                                  this, SLOT(slotLoadLast()),
-                                  actionCollection(), "imageview_last");
-
-    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
-                                   SHIFT+Key_Delete,
-                                   this, SLOT(slotDeleteCurrentItem()),
-                                   actionCollection(), "imageview_delete");
 
     // -- Edit actions ----------------------------------------------------------------                     
 
@@ -614,29 +589,29 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
 
     if (m_urlList.count() == 1) 
     {
-        m_navPrevAction->setEnabled(false);
-        m_navNextAction->setEnabled(false);
-        m_navFirstAction->setEnabled(false);
-        m_navLastAction->setEnabled(false);
+        m_backwardAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
     }
     else 
     {
-        m_navPrevAction->setEnabled(true);
-        m_navNextAction->setEnabled(true);
-        m_navFirstAction->setEnabled(true);
-        m_navLastAction->setEnabled(true);
+        m_backwardAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
     }
 
     if (index == 0) 
     {
-        m_navPrevAction->setEnabled(false);
-        m_navFirstAction->setEnabled(false);
+        m_backwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
     }
 
     if (index == m_urlList.count()-1) 
     {
-        m_navNextAction->setEnabled(false);
-        m_navLastAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
     }
 
     // Disable some menu actions if the current root image URL
@@ -661,7 +636,7 @@ void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
     m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
-void ImageWindow::slotLoadNext()
+void ImageWindow::slotForward()
 {
     if(!promptUserSave())
         return;
@@ -679,7 +654,7 @@ void ImageWindow::slotLoadNext()
     }
 }
 
-void ImageWindow::slotLoadPrev()
+void ImageWindow::slotBackward()
 {
     if(!promptUserSave())
         return;
@@ -697,7 +672,7 @@ void ImageWindow::slotLoadPrev()
     }
 }
 
-void ImageWindow::slotLoadFirst()
+void ImageWindow::slotFirst()
 {
     if(!promptUserSave())
         return;
@@ -706,7 +681,7 @@ void ImageWindow::slotLoadFirst()
     slotLoadCurrent();
 }
 
-void ImageWindow::slotLoadLast()
+void ImageWindow::slotLast()
 {
     if(!promptUserSave())
         return;
@@ -1212,10 +1187,10 @@ void ImageWindow::slotToggleFullScreen()
 
         // -- remove the imageguiclient action accels ----
 
-        unplugActionAccel(m_navNextAction);
-        unplugActionAccel(m_navPrevAction);
-        unplugActionAccel(m_navFirstAction);
-        unplugActionAccel(m_navLastAction);
+        unplugActionAccel(m_forwardAction);
+        unplugActionAccel(m_backwardAction);
+        unplugActionAccel(m_firstAction);
+        unplugActionAccel(m_lastAction);
         unplugActionAccel(m_saveAction);
         unplugActionAccel(m_saveAsAction);
         unplugActionAccel(m_zoomPlusAction);
@@ -1258,10 +1233,10 @@ void ImageWindow::slotToggleFullScreen()
 
         // -- Insert all the imageguiclient actions into the accel --
 
-        plugActionAccel(m_navNextAction);
-        plugActionAccel(m_navPrevAction);
-        plugActionAccel(m_navFirstAction);
-        plugActionAccel(m_navLastAction);
+        plugActionAccel(m_forwardAction);
+        plugActionAccel(m_backwardAction);
+        plugActionAccel(m_firstAction);
+        plugActionAccel(m_lastAction);
         plugActionAccel(m_saveAction);
         plugActionAccel(m_saveAsAction);
         plugActionAccel(m_zoomPlusAction);

@@ -97,11 +97,6 @@ private:
     KAction                         *m_copyAction;
     KAction                         *m_fileOpenAction;
     
-    KAction                         *m_forwardAction;
-    KAction                         *m_backAction;
-    KAction                         *m_firstAction;
-    KAction                         *m_lastAction;
-                          
     KAction                         *m_rotate90Action;
     KAction                         *m_rotate180Action;
     KAction                         *m_rotate270Action;
@@ -145,11 +140,12 @@ private:
 private slots:
 
     void slotOpenFile();
-    void slotNext();
-    void slotPrev();
+    void slotForward();
+    void slotBackward();
     void slotLast();
     void slotFirst();
     void slotFilePrint();
+
     void slotOpenURL(const KURL& url);
     void slotOpenFolder(const KURL& url);
     void slotOpenFilesInFolder();

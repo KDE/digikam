@@ -8,11 +8,11 @@
      <Action name="showfoto_open_file" /> 
      <Action name="showfoto_open_folder" />     
      <Separator/>
-     <Action name="file_bwd" /> 
-     <Action name="file_fwd" /> 
+     <Action name="editorwindow_backward" /> 
+     <Action name="editorwindow_forward" /> 
      <Separator/>
-     <Action name="file_first" /> 
-     <Action name="file_last" /> 
+     <Action name="editorwindow_first" /> 
+     <Action name="editorwindow_last" /> 
      <Separator/>
      <Action name="editorwindow_save" />
      <Action name="editorwindow_saveas" />
@@ -85,22 +85,24 @@
 </MenuBar>
 
 <ToolBar name="ToolBar"><text>Main Toolbar</text>
-  <Action name="file_first" />
-  <Action name="file_bwd" />
-  <Action name="file_fwd" />
-  <Action name="file_last" />
+  <Action name="editorwindow_first" />
+  <Action name="editorwindow_backward" />
+  <Action name="editorwindow_forward" />
+  <Action name="editorwindow_last" />
   <Separator/>
-  <Action name="open_file" />
-  <Action name="open_files_in_folder" />
-  <Action name="save" />
-  <Action name="saveas" />
+  <Action name="showfoto_open_file" />
+  <Action name="showfoto_open_folder" />
+  <Action name="editorwindow_save" />
+  <Action name="editorwindow_saveas" />
   <Action name="undo" /> 
   <Action name="redo" />   
+  <Action name="editorwindow_revert" />  
   <Separator/>
   <Action name="zoom_plus" />
   <Action name="zoom_minus" />
   <Action name="zoom_fit" />
   <Separator/>
+  <Action name="rotate" /> 
   <Action name="crop" />
   <Separator/>
   <Action name="full_screen" /> 
@@ -109,11 +111,13 @@
 </ToolBar>
 
 <Menu name="RMBMenu">
-    <Action name="file_bwd" />
-    <Action name="file_fwd" />
+    <Action name="editorwindow_backward" />
+    <Action name="editorwindow_forward" />
     <Separator/>
     <Action name="rotate" /> 
     <Action name="crop" />    
+    <Separator/>
+    <Action name="editorwindow_delete" />
 </Menu>
 
 <ActionProperties/>
