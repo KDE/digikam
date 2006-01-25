@@ -68,18 +68,19 @@ public:
 
     DImgInterfacePrivate()
     {
-        undoMan    = 0;
-        cmSettings = 0;
-        thread     = 0;
-        width      = 0;
-        height     = 0;
-        origWidth  = 0;
-        origHeight = 0;
-        selX       = 0;
-        selY       = 0;
-        selW       = 0;
-        selH       = 0;
-        zoom       = 1.0;
+        undoMan         = 0;
+        cmSettings      = 0;
+        iofileSettings  = 0;
+        thread          = 0;
+        width           = 0;
+        height          = 0;
+        origWidth       = 0;
+        origHeight      = 0;
+        selX            = 0;
+        selY            = 0;
+        selW            = 0;
+        selH            = 0;
+        zoom            = 1.0;
         
         exifOrient           = false;
         valid                = false;
@@ -116,6 +117,8 @@ public:
     BCGModifier   cmod;
 
     ICCSettingsContainer *cmSettings;
+
+    IOFileSettingsContainer *iofileSettings;
 
     SharedLoadSaveThread *thread;
 };
@@ -187,6 +190,7 @@ void DImgInterface::load(const QString& filename,
     // iofileSettings = 0 ==> crash !
     
     d->cmSettings = cmSettings;
+    d->iofileSettings = iofileSettings;
     d->undoMan->clear();
 
     d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
@@ -395,7 +399,8 @@ void DImgInterface::restore()
 {
     d->undoMan->clear();
 
-    load(d->filename, 0, 0);
+//     load(d->filename, 0, 0);
+    load(d->filename, d->cmSettings, d->iofileSettings);
     //this is now emitted in slotImageLoaded. Correct?
     //emit signalModified(false, false);
 }
