@@ -21,8 +21,10 @@
 
 // JPEG_COM
 #define M_COM    0xFE
+
 // JPEG_APP0+1  ==> EXIF marker
 #define M_EXIF   0xE1
+
 // JPEG_APP0+13 ==> IPTC marker
 #define M_IPTC   0xED
 
@@ -330,14 +332,23 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
 
         if (marker->marker == M_COM)
         {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+            kdDebug() << "Reading JPEG metadata: COM:" << " DATA==" << ba << endl;
+//#endif
             metaData.insert(DImg::JPG_COM, ba);
         }
         else if (marker->marker == M_EXIF)
         {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+            kdDebug() << "Reading JPEG metadata: APP1:" << " DATA=" << ba << endl;
+//#endif
             metaData.insert(DImg::JPG_EXIF, ba);
         }
         else if (marker->marker == M_IPTC)
         {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+            kdDebug() << "Reading JPEG metadata: APP13:" << " DATA=" << ba << endl;
+//#endif
             metaData.insert(DImg::JPG_IPTC, ba);
         }
 
@@ -452,16 +463,25 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         {
             case(DImg::JPG_COM):
             {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+                kdDebug() << "Writing JPEG metadata: COM:" << " DATA=" << ba << endl;
+//#endif
                 jpeg_write_marker(&cinfo, M_COM, (const JOCTET*)ba.data(), ba.size());
                 break;
             }
             case(DImg::JPG_EXIF):
             {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+                kdDebug() << "Writing JPEG metadata: APP1:" << " DATA=" << ba << endl;
+//#endif
                 jpeg_write_marker(&cinfo, M_EXIF, (const JOCTET*)ba.data(), ba.size());
                 break;
             }
             case(DImg::JPG_IPTC):
             {
+//#ifdef ENABLE_DEBUG_MESSAGES    
+                kdDebug() << "Writing JPEG metadata: APP13:" << " DATA=" << ba << endl;
+//#endif
                 jpeg_write_marker(&cinfo, M_IPTC, (const JOCTET*)ba.data(), ba.size());
                 break;
             }
