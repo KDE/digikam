@@ -333,35 +333,7 @@ void ShowFoto::setupActions()
 
     createGUI("showfotoui.rc", false);
 
-    KAccel *accel = new KAccel(this);
-    accel->insert("Exit fullscreen", i18n("Exit Fullscreen"),
-                  i18n("Exit out of the fullscreen mode"),
-                  Key_Escape, this, SLOT(slotEscapePressed()),
-                  false, true);
-    accel->insert("Next Image Key_Space", i18n("Next Image"),
-                  i18n("Load Next Image"),
-                  Key_Space, this, SLOT(slotForward()),
-                  false, true);
-    accel->insert("Previous Image Key_Backspace", i18n("Previous Image"),
-                  i18n("Load Previous Image"),
-                  Key_Backspace, this, SLOT(slotBackward()),
-                  false, true);
-    accel->insert("Next Image Key_Next", i18n("Next Image"),
-                  i18n("Load Next Image"),
-                  Key_Next, this, SLOT(slotForward()),
-                  false, true);
-    accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
-                  i18n("Load Previous Image"),
-                  Key_Prior, this, SLOT(slotBackward()),
-                  false, true);
-    accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
-                  i18n("Zoom into Image"),
-                  Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
-                  false, true);
-    accel->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
-                  i18n("Zoom out of Image"),
-                  Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
-                  false, true);
+    setupStandardAccelerators();
 }
 
 void ShowFoto::applySettings()

@@ -122,14 +122,6 @@ ImageWindow::ImageWindow()
 
     m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
     
-    // -- Some Accels not available from actions -------------
-
-    m_accel = new KAccel(this);
-    m_accel->insert("Exit fullscreen", i18n("Exit Fullscreen"),
-                    i18n("Exit out of the fullscreen mode"),
-                    Key_Escape, this, SLOT(slotEscapePressed()),
-                    false, true);
-
     // -- setup connections ---------------------------
            
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
@@ -232,6 +224,8 @@ void ImageWindow::setupActions()
     
     createGUI("digikamimagewindowui.rc", false);
 
+    setupStandardAccelerators();
+    
     // -- if rotating/flipping set the rotatedflipped flag to true ---------------------
 
     connect(m_rotate90Action, SIGNAL(activated()),
@@ -1164,24 +1158,6 @@ bool ImageWindow::promptUserSave()
             return false;
     }
     return true;
-}
-
-void ImageWindow::plugActionAccel(KAction* action)
-{
-    if (!action)
-        return;
-
-    m_accel->insert(action->text(),
-                    action->text(),
-                    action->whatsThis(),
-                    action->shortcut(),
-                    action,
-                    SLOT(activate()));
-}
-
-void ImageWindow::unplugActionAccel(KAction* action)
-{
-    m_accel->remove(action->text());
 }
 
 void ImageWindow::slotAssignTag(int tagID)

@@ -110,6 +110,11 @@ EditorWindow::EditorWindow(const char *name)
     m_rotate180Action        = 0;
     m_rotate270Action        = 0;    
     m_rotateAction           = 0;
+    m_flipHorzAction         = 0;
+    m_flipVertAction         = 0;
+    m_undoAction             = 0;
+    m_redoAction             = 0;
+    m_accel                  = 0;
     m_fullScreen             = false;
     m_isReadOnly             = false;
 
@@ -319,6 +324,46 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_imagepluginshelp");
 }
 
+void EditorWindow::setupStandardAccelerators()
+{
+    m_accel = new KAccel(this);
+    
+    m_accel->insert("Exit fullscreen", i18n("Exit Fullscreen"),
+                    i18n("Exit out of the fullscreen mode"),
+                    Key_Escape, this, SLOT(slotEscapePressed()),
+                    false, true);
+
+    m_accel->insert("Next Image Key_Space", i18n("Next Image"),
+                    i18n("Load Next Image"),
+                    Key_Space, this, SLOT(slotForward()),
+                    false, true);
+
+    m_accel->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    Key_Backspace, this, SLOT(slotBackward()),
+                    false, true);
+
+    m_accel->insert("Next Image Key_Next", i18n("Next Image"),
+                    i18n("Load Next Image"),
+                    Key_Next, this, SLOT(slotForward()),
+                    false, true);
+
+    m_accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
+                    i18n("Load Previous Image"),
+                    Key_Prior, this, SLOT(slotBackward()),
+                    false, true);
+
+    m_accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
+                    i18n("Zoom into Image"),
+                    Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
+                    false, true);
+    
+    m_accel->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
+                    i18n("Zoom out of Image"),
+                    Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
+                    false, true);
+}
+    
 void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new IOFileProgressBar(statusBar());
@@ -477,6 +522,25 @@ void EditorWindow::slotEscapePressed()
     if (m_fullScreen)
         m_fullScreenAction->activate();
 }
+
+void EditorWindow::plugActionAccel(KAction* action)
+{
+    if (!action)
+        return;
+
+    m_accel->insert(action->text(),
+                    action->text(),
+                    action->whatsThis(),
+                    action->shortcut(),
+                    action,
+                    SLOT(activate()));
+}
+
+void EditorWindow::unplugActionAccel(KAction* action)
+{
+    m_accel->remove(action->text());
+}
+
 
 }  // namespace Digikam
 

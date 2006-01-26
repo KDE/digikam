@@ -33,6 +33,7 @@
 class QSplitter;
 class QLabel;
 
+class KAccel;
 class KToolBarPopupAction;
 class KToggleAction;
 class KAction;
@@ -99,6 +100,8 @@ protected:
     KActionMenu             *m_flipAction;
     KActionMenu             *m_rotateAction;
 
+    KAccel                  *m_accel;
+    
     KSelectAction           *m_viewHistogramAction;
 
     KToggleAction           *m_zoomFitAction;
@@ -142,11 +145,17 @@ protected slots:
     
 protected:
 
-    void setupStandardActions();    
-    void setupStatusBar();
-    void printImage(KURL url);
     void closeEvent(QCloseEvent* e);
 
+    void setupStandardActions();    
+    void setupStandardAccelerators();
+    void setupStatusBar();
+
+    void printImage(KURL url);
+
+    void plugActionAccel(KAction* action);
+    void unplugActionAccel(KAction* action);
+    
     virtual void setupActions()=0;
     virtual bool promptUserSave()=0;
     virtual void saveSettings()=0;

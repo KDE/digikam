@@ -90,8 +90,6 @@ private:
     KURL::List              m_urlList;
     KURL                    m_urlCurrent;
     
-    KAccel                 *m_accel;
-    
     // Allow to use Image properties and
     // Comments/Tags dialogs from main window.
     AlbumIconView            *m_view;
@@ -109,8 +107,6 @@ private:
     void setupActions();
 
     void readSettings();
-    void plugActionAccel(KAction* action);
-    void unplugActionAccel(KAction* action);
     bool save();
     bool saveAs();
     void finishSaving(bool success);
