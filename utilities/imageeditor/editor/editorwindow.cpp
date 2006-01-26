@@ -538,8 +538,10 @@ void EditorWindow::slotConfToolbars()
 {
     saveMainWindowSettings(KGlobal::config(), "ImageViewer Settings");
     KEditToolbar dlg(factory(), this);
+
     connect(&dlg, SIGNAL(newToolbarConfig()),
-            SLOT(slotNewToolbarConfig()));
+            this, SLOT(slotNewToolbarConfig()));
+
     dlg.exec();
 }
 
@@ -700,6 +702,13 @@ void EditorWindow::applyStandardSettings()
     
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
+    // -- Slideshow Settings -------------------------------------------------
+    
+    m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
+    m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
+    m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
+    m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
+
     // -- Settings for Color Management stuff --------------------------------
 
     config->setGroup("Color Management");
@@ -712,13 +721,6 @@ void EditorWindow::applyStandardSettings()
     m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
     m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
     m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
-
-    // -- Slideshow Settings -------------------------------------------------
-    
-    m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
-    m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
-    m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
-    m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
 }
 
 void EditorWindow::saveStandardSettings()
