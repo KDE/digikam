@@ -25,12 +25,10 @@
 
 #include <qwidget.h>
 
-class QPushButton;
-class QListBox;
-class QListBoxItem;
-
 namespace Digikam
 {
+
+class SetupCollectionsPriv;
 
 class SetupCollections : public QWidget
 {
@@ -46,16 +44,17 @@ public:
 private:
 
     void readSettings();
-    
-    QListBox     *albumCollectionBox_;
-    QPushButton  *addCollectionButton_;
-    QPushButton  *delCollectionButton_;
-    
+
 private slots:
 
     void slotCollectionSelectionChanged();
     void slotAddCollection();
     void slotDelCollection();
+
+private:
+
+    SetupCollectionsPriv* d;
+
 };
 
 }  // namespace Digikam
