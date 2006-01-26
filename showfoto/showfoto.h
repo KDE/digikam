@@ -93,15 +93,8 @@ private:
     KAction                         *m_openFilesInFolderAction;    
     KAction                         *m_fileOpenAction;
     
-    KAction                         *m_flipHorzAction;
-    KAction                         *m_flipVertAction;
-    
-    KActionMenu                     *m_flipAction;
     KActionMenu                     *m_BCGAction;
     
-    KToolBarPopupAction             *m_undoAction;
-    KToolBarPopupAction             *m_redoAction;
-
     Digikam::ImagePluginLoader       *m_imagePluginLoader;
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;

@@ -191,8 +191,8 @@ ImageWindow::~ImageWindow()
 {
     m_instance = 0;
 
-    QPtrList<ImagePlugin> pluginList
-        = ImagePluginLoader::instance()->pluginList();
+    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+    
     for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
@@ -227,48 +227,6 @@ void ImageWindow::setupUserArea()
 void ImageWindow::setupActions()
 {
     setupStandardActions();
-
-    // -- Edit actions ----------------------------------------------------------------                     
-
-    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo", 
-                                           KStdAccel::shortcut(KStdAccel::Undo),
-                                           m_canvas, SLOT(slotUndo()),
-                                           actionCollection(), "imageview_undo");
-    connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
-            this, SLOT(slotAboutToShowUndoMenu()));
-    connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
-            m_canvas, SLOT(slotUndo(int)));
-    m_undoAction->setEnabled(false);
-
-    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo", 
-                                           KStdAccel::shortcut(KStdAccel::Redo),
-                                           m_canvas, SLOT(slotRedo()),
-                                           actionCollection(), "imageview_redo");
-    connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
-            this, SLOT(slotAboutToShowRedoMenu()));
-    connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
-            m_canvas, SLOT(slotRedo(int)));
-    m_redoAction->setEnabled(false);
-
-    // -- flip actions ---------------------------------------------------------------
-    
-    m_flipAction = new KActionMenu(i18n("Flip"),
-                                   "flip",
-                                   actionCollection(),
-                                   "imageview_flip");
-    m_flipAction->setDelayed(false);
-
-    m_flipHorzAction = new KAction(i18n("Horizontally"), 0,
-                                   m_canvas, SLOT(slotFlipHoriz()),
-                                   actionCollection(),
-                                   "flip_horizontal"); 
-
-    m_flipVertAction = new KAction(i18n("Vertically"), 0,
-                                   m_canvas, SLOT(slotFlipVert()),
-                                   actionCollection(),
-                                   "flip_vertical");
-    m_flipAction->insert(m_flipHorzAction);
-    m_flipAction->insert(m_flipVertAction);
 
     // --- Create the gui --------------------------------------------------------------
     

@@ -92,8 +92,11 @@ protected:
     KAction                 *m_imagePluginsHelpAction;
     KAction                 *m_rotate90Action;
     KAction                 *m_rotate180Action;
-    KAction                 *m_rotate270Action;    
+    KAction                 *m_rotate270Action;
+    KAction                 *m_flipHorzAction;
+    KAction                 *m_flipVertAction;
 
+    KActionMenu             *m_flipAction;
     KActionMenu             *m_rotateAction;
 
     KSelectAction           *m_viewHistogramAction;

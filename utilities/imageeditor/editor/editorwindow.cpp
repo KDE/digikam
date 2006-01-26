@@ -190,7 +190,32 @@ void EditorWindow::setupStandardActions()
 
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                     actionCollection(), "editorwindow_copy");
+    
     m_copyAction->setEnabled(false);
+
+    m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
+                                           KStdAccel::shortcut(KStdAccel::Undo),
+                                           m_canvas, SLOT(slotUndo()),
+                                           actionCollection(), "editorwindow_undo");
+
+    connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowUndoMenu()));
+    connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotUndo(int)));
+
+    m_undoAction->setEnabled(false);
+
+    m_redoAction = new KToolBarPopupAction(i18n("Redo"), "redo",
+                                           KStdAccel::shortcut(KStdAccel::Redo),
+                                           m_canvas, SLOT(slotRedo()),
+                                           actionCollection(), "editorwindow_redo");
+
+    connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowRedoMenu()));
+    connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
+            m_canvas, SLOT(slotRedo(int)));
+
+    m_redoAction->setEnabled(false);
 
     // Standard 'View' menu actions ---------------------------------------------
 
@@ -241,6 +266,22 @@ void EditorWindow::setupStandardActions()
     m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
                                      "Select the image region to enable this action.") );
 
+    // Standard 'Flip' menu actions ---------------------------------------------
+    
+    m_flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
+    m_flipAction->setDelayed(false);
+
+    m_flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
+                                   m_canvas, SLOT(slotFlipHoriz()),
+                                   actionCollection(), "editorwindow_fliphorizontal");
+
+    m_flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
+                                   m_canvas, SLOT(slotFlipVert()),
+                                   actionCollection(), "editorwindow_flipvertical");
+                                   
+    m_flipAction->insert(m_flipHorzAction);
+    m_flipAction->insert(m_flipVertAction);
+
     // Standard 'Rotate' menu actions ----------------------------------------
 
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
@@ -260,6 +301,7 @@ void EditorWindow::setupStandardActions()
                                     0, Key_7, m_canvas, SLOT(slotRotate270()),
                                     actionCollection(),
                                     "rotate_270");
+                                    
     m_rotateAction->insert(m_rotate90Action);
     m_rotateAction->insert(m_rotate180Action);
     m_rotateAction->insert(m_rotate270Action);

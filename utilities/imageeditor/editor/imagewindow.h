@@ -92,13 +92,7 @@ private:
     
     KAccel                 *m_accel;
     
-    // Actions
-
-    KActionMenu            *m_flipAction;
-    KAction                *m_flipHorzAction;
-    KAction                *m_flipVertAction;
-
-    // Allow to use Image properties and 
+    // Allow to use Image properties and
     // Comments/Tags dialogs from main window.
     AlbumIconView            *m_view;
     
