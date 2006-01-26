@@ -3,10 +3,10 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdimgeditor.la libshowfoto.la 
 
 libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewidget.cpp \
-	 		   imagewindow.cpp iofileprogressbar.cpp  
+	 		               imagewindow.cpp iofileprogressbar.cpp  
 
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
-	 	           $(LIBKEXIF_LIBS)
+	 	                   $(LIBKEXIF_LIBS)
 
 libdimgeditor_la_LIBADD = $(top_srcdir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
 
@@ -17,15 +17,15 @@ libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT)
 libshowfoto_la_LIBADD = $(top_srcdir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	  -I$(top_srcdir)/digikam/libs/widgets \
-	  -I$(top_srcdir)/digikam/libs/dimg \
-	  -I$(top_srcdir)/digikam/libs/dimg/filters \
-	  -I$(top_srcdir)/digikam/libs/imageproperties \
-	  -I$(top_srcdir)/digikam/libs/threadimageio \
-	  -I$(top_srcdir)/digikam/utilities/splashscreen \
-	  -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-	  -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
-	  $(LIBKEXIF_CFLAGS) $(all_includes) 
+	      -I$(top_srcdir)/digikam/libs/widgets \
+	      -I$(top_srcdir)/digikam/libs/dimg \
+	      -I$(top_srcdir)/digikam/libs/dimg/filters \
+	      -I$(top_srcdir)/digikam/libs/imageproperties \
+	      -I$(top_srcdir)/digikam/libs/threadimageio \
+	      -I$(top_srcdir)/digikam/utilities/setup \
+	      -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
+	      -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
+	      $(LIBKEXIF_CFLAGS) $(all_includes) 
 
 digikaminclude_HEADERS = imageiface.h imagewidget.h 
 

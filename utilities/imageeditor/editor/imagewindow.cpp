@@ -80,6 +80,8 @@
 #include "imageinfo.h"
 #include "imagepropertiessidebardb.h"
 #include "tagspopupmenu.h"
+#include "setup.h"
+#include "setupimgplugins.h"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
@@ -311,59 +313,8 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
     m_nameLabel->progressBarVisible(false);
     QApplication::restoreOverrideCursor();
     m_isReadOnly = isReadOnly;
-
-    uint index = m_urlList.findIndex(m_urlCurrent);
-
-    m_rotatedOrFlipped = false;
-
-    QString text = m_urlCurrent.filename() +
-            i18n(" (%2 of %3)")
-            .arg(QString::number(index+1))
-            .arg(QString::number(m_urlList.count()));
-    m_nameLabel->setText(text);
-
-    if (m_urlList.count() == 1) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_forwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
-    else 
-    {
-        m_backwardAction->setEnabled(true);
-        m_forwardAction->setEnabled(true);
-        m_firstAction->setEnabled(true);
-        m_lastAction->setEnabled(true);
-    }
-
-    if (index == 0) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-    }
-
-    if (index == m_urlList.count()-1) 
-    {
-        m_forwardAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
-
-    // Disable some menu actions if the current root image URL
-    // isn't include in the digiKam Albums library database.
-    // This is necessary when ImageEditor is opened from cameraclient.
-
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-
-    if (!palbum)
-    {
-        m_fileDeleteAction->setEnabled(false);
-    }
-    else
-    {
-        m_fileDeleteAction->setEnabled(true);
-    }
+    slotUpdateItemInfo();
+    QApplication::restoreOverrideCursor();
 }
 
 void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
@@ -1047,6 +998,82 @@ void ImageWindow::slotRemoveTag(int tagID)
         ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);
                 
     }
+}
+
+void ImageWindow::slotUpdateItemInfo()
+{
+    uint index = m_urlList.findIndex(m_urlCurrent);
+
+    m_rotatedOrFlipped = false;
+
+    QString text = m_urlCurrent.filename() +
+            i18n(" (%2 of %3)")
+            .arg(QString::number(index+1))
+            .arg(QString::number(m_urlList.count()));
+    m_nameLabel->setText(text);
+
+    if (m_urlList.count() == 1) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+    else 
+    {
+        m_backwardAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
+    }
+
+    if (index == 0) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+    }
+
+    if (index == m_urlList.count()-1) 
+    {
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+
+    // Disable some menu actions if the current root image URL
+    // isn't include in the digiKam Albums library database.
+    // This is necessary when ImageEditor is opened from cameraclient.
+
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+    {
+        m_fileDeleteAction->setEnabled(false);
+    }
+    else
+    {
+        m_fileDeleteAction->setEnabled(true);
+    }
+}
+
+void ImageWindow::toggleActions(bool val)
+{
+    toggleStandardActions(val);
+}
+
+void ImageWindow::slotSetup()
+{
+    Setup setup(this, 0, Setup::Editor);
+    
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    unLoadImagePlugins();
+    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
+    kapp->config()->sync();
+    loadImagePlugins();
+    
+    applySettings();
 }
 
 ImageWindow* ImageWindow::imagewindow()

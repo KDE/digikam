@@ -349,6 +349,7 @@ void EditorWindow::setupStandardActions()
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
+    KStdAction::preferences(this, SLOT(slotSetup()), actionCollection());
 
     // Standard 'Help' menu actions ---------------------------------------------
 
@@ -718,6 +719,29 @@ void EditorWindow::slotViewHistogram()
 {
     int curItem = m_viewHistogramAction->currentItem();
     m_canvas->setHistogramType(curItem);
+}
+
+void EditorWindow::toggleStandardActions(bool val)
+{
+    m_zoomFitAction->setEnabled(val);
+    m_saveAsAction->setEnabled(val);
+    m_viewHistogramAction->setEnabled(val);
+    m_rotateAction->setEnabled(val);
+    m_flipAction->setEnabled(val);
+    m_filePrintAction->setEnabled(val);
+    m_resizeAction->setEnabled(val);
+    m_fileDeleteAction->setEnabled(val);
+
+    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
+        if (plugin) 
+        {
+            plugin->setEnabledActions(val);
+        }
+    }
 }
 
 }  // namespace Digikam

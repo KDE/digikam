@@ -107,23 +107,24 @@ private:
     void readSettings();
     void saveSettings();
     void applySettings();
-    
+    void toggleActions(bool val);
+    void toggleActionsDuringSlideShow(bool val);
+        
+    void toggleNavigation(int index);
     bool promptUserSave();
     bool save();
     bool saveAs();
-    void toggleActions(bool val, bool slideShow=false);
-    void toggleNavigation(int index);
     void finishSaving(bool success);
 
 private slots:
 
-    void slotOpenFile();
     void slotForward();
     void slotBackward();
     void slotLast();
     void slotFirst();
     void slotFilePrint();
 
+    void slotOpenFile();
     void slotOpenURL(const KURL& url);
     void slotOpenFolder(const KURL& url);
     void slotOpenFilesInFolder();
@@ -136,7 +137,7 @@ private slots:
     
     void slotChanged(bool, bool);
     void slotSelected(bool);
-    void slotUpdateItemInfo(void);
+    void slotUpdateItemInfo();
 
     void slotSetup();
     void slotContextMenu();

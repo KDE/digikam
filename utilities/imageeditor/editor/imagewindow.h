@@ -100,37 +100,39 @@ private:
 private:
 
     ImageWindow();
-    void setupUserArea();
-    void saveSettings();
-    bool promptUserSave();
     void setupActions();
     void setupConnections();
-
+    void setupUserArea();
     void readSettings();
+    void saveSettings();
+    void toggleActions(bool val);
+
+    bool promptUserSave();
     bool save();
     bool saveAs();
     void finishSaving(bool success);
 
 private slots:
 
-    void slotLoadCurrent();
-    
     void slotForward();
     void slotBackward();
     void slotFirst();
     void slotLast();
-
+    void slotFilePrint(){ printImage(m_urlCurrent); };
+        
+    void slotLoadCurrent();
+    void slotDeleteCurrentItem();
+    
     void slotToggleFullScreen();
     
-    void slotContextMenu();
     void slotChanged(bool, bool);
     void slotSelected(bool);
+    void slotUpdateItemInfo();
 
-    void slotRotatedOrFlipped();
+    void slotSetup();
+    void slotContextMenu();
     
-    void slotDeleteCurrentItem();
-
-    void slotFilePrint(){ printImage(m_urlCurrent); };
+    void slotRotatedOrFlipped();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);

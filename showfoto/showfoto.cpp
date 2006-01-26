@@ -89,7 +89,6 @@ extern "C"
 #include "dimginterface.h"
 #include "splashscreen.h"
 #include "setup.h"
-#include "setupeditor.h"
 #include "setupimgplugins.h"
 #include "slideshow.h"
 #include "iofileprogressbar.h"
@@ -304,8 +303,6 @@ void ShowFoto::setupActions()
                                           actionCollection(),"shofoto_slideshow");
 
     // -- Configure toolbar and shortcuts ---------------------------------------------
-
-    KStdAction::preferences(this, SLOT(slotSetup()), actionCollection());
 
     // --- Create the gui --------------------------------------------------------------
 
@@ -981,41 +978,55 @@ void ShowFoto::slotSelected(bool val)
     }
 }
 
-void ShowFoto::toggleActions(bool val, bool slideShow)
+void ShowFoto::toggleActions(bool val)
 {
-    m_zoomFitAction->setEnabled(val);
-    m_saveAsAction->setEnabled(val);
-    m_viewHistogramAction->setEnabled(val);
-    m_rotateAction->setEnabled(val);
-    m_flipAction->setEnabled(val);
-    m_filePrintAction->setEnabled(val);
-    m_resizeAction->setEnabled(val);
-    m_fileDeleteAction->setEnabled(val);
-    
-    if (!slideShow)
-    {
-       // if no slideshow mode then toggle it.
-       m_slideShowAction->setEnabled(val);
-    }
-    else
-    {
-       // if slideshow mode then toogle file open actions.
-       m_fileOpenAction->setEnabled(val);
-       m_openFilesInFolderAction->setEnabled(val);
-    }
-
+    toggleStandardActions(val);
+        
+    // if BCG actions exists then toggle it.
     if (m_BCGAction)
         m_BCGAction->setEnabled(val);
 
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
+    // if no active slideshow then toggle it.
+    if (!m_slideShowAction->isChecked())
+        m_slideShowAction->setEnabled(val);
+}
+
+void ShowFoto::toggleActionsDuringSlideShow(bool val)
+{
+    toggleActions(val);
+    
+    // if slideshow mode then toogle file open actions.
+    m_fileOpenAction->setEnabled(val);
+    m_openFilesInFolderAction->setEnabled(val);
+}
+
+void ShowFoto::slotToggleSlideShow()
+{
+    if (m_slideShowAction->isChecked())
     {
-        if (plugin) 
+        m_rightSidebar->shrink();
+        m_rightSidebar->hide();
+        
+        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
         {
-            plugin->setEnabledActions(val);
+            m_fullScreenAction->activate();
         }
+
+        toggleActionsDuringSlideShow(false);
+        m_slideShow->start();
+    }
+    else
+    {
+        m_slideShow->stop();
+        toggleActionsDuringSlideShow(true);
+
+        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
+        {
+            m_fullScreenAction->activate();
+        }
+        
+        m_rightSidebar->show();
+        m_rightSidebar->expand();
     }
 }
 
@@ -1176,36 +1187,6 @@ void ShowFoto::slotUpdateItemInfo(void)
 void ShowFoto::slotContextMenu()
 {
     m_contextMenu->exec(QCursor::pos());
-}
-
-void ShowFoto::slotToggleSlideShow()
-{
-    if (m_slideShowAction->isChecked())
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-        
-        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-
-        toggleActions(false, true);
-        m_slideShow->start();
-    }
-    else
-    {
-        m_slideShow->stop();
-        toggleActions(true, true);
-
-        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-        
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-    }
 }
 
 void ShowFoto::slotOpenFolder(const KURL& url)

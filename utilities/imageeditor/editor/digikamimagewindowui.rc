@@ -62,6 +62,7 @@
         <Separator/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
+        <Action name="options_configure" />        
     </Menu>
 
 </MenuBar>

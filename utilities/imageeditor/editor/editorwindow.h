@@ -128,6 +128,8 @@ protected slots:
     virtual void slotForward()=0;
     virtual void slotFirst()=0;
     virtual void slotLast()=0;
+    virtual void slotUpdateItemInfo()=0;
+    virtual void slotSetup()=0;
     
     void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
@@ -161,6 +163,7 @@ protected:
     void setupStandardActions();    
     void setupStandardAccelerators();
     void setupStatusBar();
+    void toggleStandardActions(bool val);
 
     void printImage(KURL url);
 
@@ -169,7 +172,8 @@ protected:
 
     void unLoadImagePlugins();
     void loadImagePlugins();
-    
+
+    virtual void toggleActions(bool val)=0;
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual bool promptUserSave()=0;
