@@ -86,6 +86,7 @@ EditorWindow::EditorWindow(const char *name)
     d = new EditorWindowPriv;
 
     m_canvas                 = 0;
+    m_imagePluginLoader      = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
     m_zoomPlusAction         = 0;
@@ -574,6 +575,39 @@ void EditorWindow::unplugActionAccel(KAction* action)
     m_accel->remove(action->text());
 }
 
+void EditorWindow::loadImagePlugins()
+{
+    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
+        if (plugin)
+        {
+            guiFactory()->addClient(plugin);
+            plugin->setParentWidget(this);
+            plugin->setEnabledSelectionActions(false);
+        }
+        else
+            kdDebug() << "Invalid plugin to add!" << endl;
+    }
+}
+
+void EditorWindow::unLoadImagePlugins()
+{
+    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
+    {
+        if (plugin) 
+        {
+            guiFactory()->removeClient(plugin);
+            plugin->setParentWidget(0);
+            plugin->setEnabledSelectionActions(false);
+        }
+    }
+}
 
 }  // namespace Digikam
 

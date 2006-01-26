@@ -128,14 +128,14 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     setupUserArea();
     setupStatusBar();
 
-    // Build the gui
+    // Build the GUI
 
     setupActions();
 
-    // Load image plugins.
+    // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, m_splash);
-    loadPlugins();
+    loadImagePlugins();
 
     // If plugin core isn't available, plug BCG actions to collection instead.
     
@@ -210,10 +210,10 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
 ShowFoto::~ShowFoto()
 {
-    unLoadPlugins();
+    unLoadImagePlugins();
 
-    delete m_bar;
     delete m_imagePluginLoader;
+    delete m_bar;
     delete m_slideShow;
     delete m_rightSidebar;
 }
@@ -1101,50 +1101,17 @@ void ShowFoto::slotSetup()
     if (setup.exec() != QDialog::Accepted)
         return;
 
-    unLoadPlugins();
+    unLoadImagePlugins();
     m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
     kapp->config()->sync();
-    loadPlugins();
+    loadImagePlugins();
+    
     applySettings();
 
     if ( m_itemsNb == 0 )
     {
         slotUpdateItemInfo();
         toggleActions(false);
-    }
-}
-
-void ShowFoto::loadPlugins()
-{
-    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
-
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
-    {
-        if (plugin)
-        {
-            guiFactory()->addClient(plugin);
-            plugin->setParentWidget(this);
-            plugin->setEnabledSelectionActions(false);
-        }
-        else
-            kdDebug() << "Invalid plugin to add!" << endl;
-    }
-}
-
-void ShowFoto::unLoadPlugins()
-{
-    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
-
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
-    {
-        if (plugin) 
-        {
-            guiFactory()->removeClient(plugin);
-            plugin->setParentWidget(0);
-            plugin->setEnabledSelectionActions(false);
-        }
     }
 }
 

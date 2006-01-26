@@ -103,22 +103,14 @@ ImageWindow::ImageWindow()
     setupUserArea();
     setupStatusBar();
 
-    // Build the gui
+    // Build the GUI
 
     setupActions();
         
-    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
-
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
-    {
-        if (plugin) 
-        {
-            guiFactory()->addClient(plugin);
-            plugin->setParentWidget(this);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
+    // Load image plugins to GUI
+    
+    m_imagePluginLoader = ImagePluginLoader::instance();
+    loadImagePlugins();
 
     m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
     
@@ -143,18 +135,7 @@ ImageWindow::~ImageWindow()
 {
     m_instance = 0;
 
-    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
-    
-    for (ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next())
-    {
-        if (plugin) 
-        {
-            guiFactory()->removeClient(plugin);
-            plugin->setParentWidget(0);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
+    unLoadImagePlugins();
     
     delete m_rightSidebar;
 }
@@ -624,9 +605,8 @@ void ImageWindow::slotSelected(bool val)
     m_cropAction->setEnabled(val);
     m_copyAction->setEnabled(val);
 
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
-    for (ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next()) 
+    for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next())
     {
         if (plugin) 
         {

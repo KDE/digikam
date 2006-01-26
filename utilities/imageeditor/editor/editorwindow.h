@@ -44,6 +44,7 @@ namespace Digikam
 {
 
 class Canvas;
+class ImagePluginLoader;
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
@@ -109,8 +110,9 @@ protected:
 
     KToolBarPopupAction     *m_undoAction;
     KToolBarPopupAction     *m_redoAction;
-    
+
     Canvas                  *m_canvas;
+    ImagePluginLoader       *m_imagePluginLoader;
     IOFileProgressBar       *m_nameLabel;
     ICCSettingsContainer    *m_ICCSettings;
     IOFileSettingsContainer *m_IOFileSettings;
@@ -156,6 +158,9 @@ protected:
 
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
+
+    void unLoadImagePlugins();
+    void loadImagePlugins();
     
     virtual void setupConnections()=0;
     virtual void setupActions()=0;

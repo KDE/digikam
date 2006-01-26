@@ -47,7 +47,6 @@ class Job;
 
 namespace Digikam
 {
-class ImagePluginLoader;
 class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
@@ -95,7 +94,6 @@ private:
     
     KActionMenu                     *m_BCGAction;
     
-    Digikam::ImagePluginLoader       *m_imagePluginLoader;
     Digikam::ThumbBarView            *m_bar;
     Digikam::ThumbBarItem            *m_currentItem;
     Digikam::ImagePropertiesSideBar  *m_rightSidebar;
