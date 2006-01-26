@@ -138,7 +138,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->editorPage = new SetupEditor(d->page_editor);
 
     d->page_iofiles = addPage(i18n("IO files"), i18n("Image Editor IO Images Files Settings"),
-                          BarIcon("image", KIcon::SizeMedium));
+                          BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 
     d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),

@@ -67,7 +67,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     
     d->delayInput = new KIntNumInput(5, parent);
     d->delayInput->setRange(1, 3600, 1, true );
-    d->delayInput->setLabel( i18n("&Delay between images:"), AlignLeft|AlignVCenter );
+    d->delayInput->setLabel( i18n("&Delay between images:"), AlignLeft|AlignTop );
     QWhatsThis::add( d->delayInput, i18n("<p>The delay in seconds between images."));
     
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);

@@ -100,7 +100,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     
     d->RAWquality = new KIntNumInput(0, RAWfileOptionsGroup);
     d->RAWquality->setRange(0, 3, 1, true );
-    d->RAWquality->setLabel( i18n("&RAW file decoding quality:"), AlignLeft|AlignVCenter );
+    d->RAWquality->setLabel( i18n("&RAW file decoding quality:"), AlignLeft|AlignTop );
     
     QWhatsThis::add( d->RAWquality, i18n("<p>The decoding quality value for RAW images:<p>"
                                         "<b>0</b>: medium quality (default - for slow computer)<p>"
@@ -120,7 +120,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     
     d->JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
     d->JPEGcompression->setRange(1, 100, 1, true );
-    d->JPEGcompression->setLabel( i18n("&JPEG quality:"), AlignLeft|AlignVCenter );
+    d->JPEGcompression->setLabel( i18n("&JPEG quality:"), AlignLeft|AlignTop );
     
     QWhatsThis::add( d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
                                                 "<b>1</b>: low quality (high compression and small file size)<p>"
@@ -131,7 +131,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     
     d->PNGcompression = new KIntNumInput(1, savingOptionsGroup);
     d->PNGcompression->setRange(1, 9, 1, true );
-    d->PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignVCenter );
+    d->PNGcompression->setLabel( i18n("&PNG compression:"), AlignLeft|AlignTop );
     
     QWhatsThis::add( d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
                                             "<b>1</b>: low compression (large file size but "

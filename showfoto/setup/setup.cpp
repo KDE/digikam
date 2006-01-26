@@ -85,7 +85,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->editorPage = new SetupEditor(d->page_editor);
 
     d->page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
-                          BarIcon("image", KIcon::SizeMedium));
+                          BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
     d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),

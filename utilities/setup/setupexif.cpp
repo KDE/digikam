@@ -58,7 +58,7 @@ SetupExif::SetupExif(QWidget* parent )
                                             i18n("Exif Actions"), parent);*/
 
    QLabel* explanation = new QLabel(this);
-   explanation->setAlignment(explanation->alignment() |  WordBreak);
+   explanation->setAlignment(explanation->alignment() | WordBreak);
    explanation->setText(i18n("EXIF is a standard used by most digital cameras today to store information such as comments in image files. You can learn more about EXIF at www.exif.org."));
    layout->addWidget(explanation);
 
