@@ -69,14 +69,14 @@ signals:
 
 private:
 
-    bool                    m_rotatedOrFlipped;
+    bool                      m_rotatedOrFlipped;
 
     // If image editor is launched by camera interface, current 
     // image cannot be saved.
-    bool                    m_allowSaving;
+    bool                      m_allowSaving;
     
-    KURL::List              m_urlList;
-    KURL                    m_urlCurrent;
+    KURL::List                m_urlList;
+    KURL                      m_urlCurrent;
     
     // Allow to use Image properties and
     // Comments/Tags dialogs from main window.
