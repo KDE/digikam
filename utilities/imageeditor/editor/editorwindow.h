@@ -51,6 +51,7 @@ class IOFileSettingsContainer;
 class SavingContextContainer;
 class IOFileProgressBar;
 class EditorWindowPriv;
+class SlideShow;
 
 class EditorWindow : public KMainWindow
 {
@@ -74,7 +75,9 @@ protected:
     bool                     m_fullScreenHideToolBar;
     bool                     m_fullScreen;
     bool                     m_removeFullScreenButton;
-    
+
+    bool                     m_slideShowInFullScreen;
+
     QLabel                  *m_zoomLabel;
     QLabel                  *m_resLabel;
 
@@ -105,11 +108,11 @@ protected:
 
     KActionMenu             *m_flipAction;
     KActionMenu             *m_rotateAction;
-
     KAccel                  *m_accel;
     
     KSelectAction           *m_viewHistogramAction;
 
+    KToggleAction           *m_slideShowAction;
     KToggleAction           *m_zoomFitAction;
     KToggleAction           *m_fullScreenAction;
 
@@ -122,18 +125,9 @@ protected:
     ICCSettingsContainer    *m_ICCSettings;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
+    SlideShow               *m_slideShow;
 
 protected slots:
-
-    virtual void slotFilePrint()=0;
-    virtual void slotDeleteCurrentItem()=0;
-    virtual void slotBackward()=0;
-    virtual void slotForward()=0;
-    virtual void slotFirst()=0;
-    virtual void slotLast()=0;
-    virtual void slotUpdateItemInfo()=0;
-    virtual void slotSetup()=0;
-    virtual void slotContextMenu();
 
     void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
@@ -148,12 +142,24 @@ protected slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
 
+    void slotToggleSlideShow();
     void slotToggleFullScreen();
     void slotEscapePressed();
         
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
     void slotViewHistogram();
+    
+    virtual void slotContextMenu();
+
+    virtual void slotFilePrint()=0;
+    virtual void slotDeleteCurrentItem()=0;
+    virtual void slotBackward()=0;
+    virtual void slotForward()=0;
+    virtual void slotFirst()=0;
+    virtual void slotLast()=0;
+    virtual void slotUpdateItemInfo()=0;
+    virtual void slotSetup()=0;
     
 protected:
 
@@ -177,7 +183,10 @@ protected:
     void unLoadImagePlugins();
     void loadImagePlugins();
 
-    virtual void toggleGUI2FullScreenMode(){};
+    virtual void toggleGUI2SlideShow(){};
+    virtual void toggleGUI2FullScreen(){};
+    virtual void toggleActions2SlideShow(bool){};
+
     virtual void toggleActions(bool val)=0;
     virtual void setupConnections()=0;
     virtual void setupActions()=0;

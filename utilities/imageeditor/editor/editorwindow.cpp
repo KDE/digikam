@@ -70,6 +70,7 @@
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
 #include "imageprint.h"
+#include "slideshow.h"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
@@ -87,6 +88,7 @@ EditorWindow::EditorWindow(const char *name)
 
     m_contextMenu            = 0;
     m_canvas                 = 0;
+    m_slideShow              = 0;
     m_imagePluginLoader      = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
@@ -116,10 +118,12 @@ EditorWindow::EditorWindow(const char *name)
     m_flipVertAction         = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
+    m_slideShowAction        = 0;
     m_accel                  = 0;
     m_fullScreen             = false;
     m_isReadOnly             = false;
     m_fullScreenHideToolBar  = false;
+    m_slideShowInFullScreen  = true;
     
     // Settings containers instance.
 
@@ -134,6 +138,7 @@ EditorWindow::~EditorWindow()
     delete m_ICCSettings;
     delete m_IOFileSettings;
     delete m_savingContext;
+    delete m_slideShow;
     delete d;
 }
 
@@ -180,11 +185,14 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SLOT(slotSavingProgress(const QString&, float)));
+
+    connect(m_slideShow, SIGNAL(finished()),
+            m_slideShowAction, SLOT(activate()) );
 }
 
 void EditorWindow::setupStandardActions()
 {
-    // Standard 'File' menu actions ---------------------------------------------
+    // -- Standard 'File' menu actions ---------------------------------------------
 
     m_backwardAction = KStdAction::back(this, SLOT(slotBackward()),
                                     actionCollection(), "editorwindow_backward");
@@ -227,7 +235,7 @@ void EditorWindow::setupStandardActions()
 
     KStdAction::quit(this, SLOT(close()), actionCollection(), "editorwindow_exit");
 
-    // Standard 'Edit' menu actions ---------------------------------------------
+    // -- Standard 'Edit' menu actions ---------------------------------------------
 
     m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                     actionCollection(), "editorwindow_copy");
@@ -258,7 +266,7 @@ void EditorWindow::setupStandardActions()
 
     m_redoAction->setEnabled(false);
 
-    // Standard 'View' menu actions ---------------------------------------------
+    // -- Standard 'View' menu actions ---------------------------------------------
 
     m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
@@ -292,7 +300,11 @@ void EditorWindow::setupStandardActions()
     selectItems << i18n("Alpha");
     m_viewHistogramAction->setItems(selectItems);
 
-    // Standard 'Transform' menu actions ---------------------------------------------
+    m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
+                                          this, SLOT(slotToggleSlideShow()),
+                                          actionCollection(),"editorwindow_slideshow");
+
+    // -- Standard 'Transform' menu actions ---------------------------------------------
 
     m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
                                  this, SLOT(slotResize()),
@@ -307,7 +319,7 @@ void EditorWindow::setupStandardActions()
     m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
                                      "Select the image region to enable this action.") );
 
-    // Standard 'Flip' menu actions ---------------------------------------------
+    // -- Standard 'Flip' menu actions ---------------------------------------------
     
     m_flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
     m_flipAction->setDelayed(false);
@@ -323,7 +335,7 @@ void EditorWindow::setupStandardActions()
     m_flipAction->insert(m_flipHorzAction);
     m_flipAction->insert(m_flipVertAction);
 
-    // Standard 'Rotate' menu actions ----------------------------------------
+    // -- Standard 'Rotate' menu actions ----------------------------------------
 
     m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
                                      actionCollection(),
@@ -347,18 +359,22 @@ void EditorWindow::setupStandardActions()
     m_rotateAction->insert(m_rotate180Action);
     m_rotateAction->insert(m_rotate270Action);
 
-    // Standard 'Configure' menu actions ----------------------------------------
+    // -- Standard 'Configure' menu actions ----------------------------------------
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(slotSetup()), actionCollection());
 
-    // Standard 'Help' menu actions ---------------------------------------------
+    // -- Standard 'Help' menu actions ---------------------------------------------
 
     m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
                                            "digikamimageplugins", 0,
                                            this, SLOT(slotImagePluginsHelp()),
                                            actionCollection(), "editorwindow_imagepluginshelp");
+
+    // -- Init SlideShow instance -------------------------------------------------
+    
+    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
 }
 
 void EditorWindow::setupStandardAccelerators()
@@ -652,11 +668,14 @@ void EditorWindow::applyStandardSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
 
-    // Background color.
+    // -- Background color --------------------------------------------------------
+    
     QColor bgColor(Qt::black);
     m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
     m_canvas->update();
 
+    // -- IO files format settings ------------------------------------------------
+    
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
                                                + 25.0 - (75.0/99.0));
@@ -681,7 +700,8 @@ void EditorWindow::applyStandardSettings()
     
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
-    // Settings for Color Management stuff
+    // -- Settings for Color Management stuff --------------------------------
+
     config->setGroup("Color Management");
 
     m_ICCSettings->enableCMSetting = config->readBoolEntry("EnableCM");
@@ -692,6 +712,13 @@ void EditorWindow::applyStandardSettings()
     m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
     m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
     m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
+
+    // -- Slideshow Settings -------------------------------------------------
+    
+    m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
+    m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
+    m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
+    m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
 }
 
 void EditorWindow::saveStandardSettings()
@@ -787,7 +814,7 @@ void EditorWindow::slotToggleFullScreen()
         unplugActionAccel(m_filePrintAction);
         unplugActionAccel(m_fileDeleteAction);
 
-        toggleGUI2FullScreenMode();
+        toggleGUI2FullScreen();
         
         m_fullScreen = false;
     }
@@ -838,7 +865,7 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(m_filePrintAction);
         plugActionAccel(m_fileDeleteAction);
 
-        toggleGUI2FullScreenMode();
+        toggleGUI2FullScreen();
         
         showFullScreen();
         m_fullScreen = true;
@@ -848,6 +875,34 @@ void EditorWindow::slotToggleFullScreen()
 void EditorWindow::slotContextMenu()
 {
     m_contextMenu->exec(QCursor::pos());
+}
+
+void EditorWindow::slotToggleSlideShow()
+{
+    if (m_slideShowAction->isChecked())
+    {
+        toggleGUI2SlideShow();
+        
+        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
+        {
+            m_fullScreenAction->activate();
+        }
+
+        toggleActions2SlideShow(false);
+        m_slideShow->start();
+    }
+    else
+    {
+        m_slideShow->stop();
+        toggleActions2SlideShow(true);
+
+        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
+        {
+            m_fullScreenAction->activate();
+        }
+        
+        toggleGUI2SlideShow();
+    }
 }
 
 }  // namespace Digikam

@@ -49,6 +49,7 @@ public:
         Editor,
         IOFiles,
         ImagePlugins,
+        Slideshow,
         Icc,
         Plugins,
         Camera,

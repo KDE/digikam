@@ -7,16 +7,16 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 noinst_LTLIBRARIES = libsetup.la libshowfotosetup.la
 
 libsetup_la_SOURCES = setup.cpp setupcamera.cpp setupimgplugins.cpp \
-	              cameraselection.cpp setupgeneral.cpp \
-	              gpiface.cpp setupmime.cpp setupplugins.cpp \
-		      setupcollections.cpp setupexif.cpp \
-		      setupeditor.cpp setupmisc.cpp setupicc.cpp \
-		      setupiofiles.cpp 
+	                  cameraselection.cpp setupgeneral.cpp \
+	                  gpiface.cpp setupmime.cpp setupplugins.cpp \
+		              setupcollections.cpp setupexif.cpp \
+		              setupeditor.cpp setupmisc.cpp setupicc.cpp \
+		              setupiofiles.cpp setupslideshow.cpp 
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 
 libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp \
-		              setupicc.cpp setupslideshow.cpp
+		                      setupicc.cpp setupslideshow.cpp
 
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 

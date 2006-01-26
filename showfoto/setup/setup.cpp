@@ -48,7 +48,7 @@ public:
     SetupPrivate()
     {
         slideshowPage   = 0;
-        imgPluginsPage  = 0;
+        imgpluginsPage  = 0;
         iofilesPage     = 0;
         iccPage         = 0;
         editorPage      = 0;
@@ -69,7 +69,7 @@ public:
 
     Digikam::SetupICC                 *iccPage;
     Digikam::SetupIOFiles    *iofilesPage;
-    Digikam::SetupImgPlugins *imgPluginsPage;
+    Digikam::SetupImgPlugins *imgpluginsPage;
     Digikam::SetupSlideShow  *slideshowPage;
 };
 
@@ -90,7 +90,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     
     d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
                            BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    d->imgPluginsPage = new Digikam::SetupImgPlugins(d->page_imgplugins);
+    d->imgpluginsPage = new Digikam::SetupImgPlugins(d->page_imgplugins);
 
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
                              BarIcon("slideshow", KIcon::SizeMedium));
@@ -116,7 +116,7 @@ void Setup::slotOkClicked()
 {
     d->editorPage->applySettings();
     d->iofilesPage->applySettings();
-    d->imgPluginsPage->applySettings();
+    d->imgpluginsPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     close();
@@ -124,7 +124,7 @@ void Setup::slotOkClicked()
 
 Digikam::SetupImgPlugins* Setup::imagePluginsPage()
 {
-    return d->imgPluginsPage;
+    return d->imgpluginsPage;
 }
 
 }   // namespace ShowFoto

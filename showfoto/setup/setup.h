@@ -39,7 +39,6 @@ namespace ShowFoto
 {
 
 class SetupEditor;
-// class SetupICC;
 class SetupPrivate;
 
 class Setup : public KDialogBase 

@@ -51,7 +51,6 @@ class ThumbBarView;
 class ThumbBarItem;
 class ImagePropertiesSideBar;
 class SplashScreen;
-class SlideShow;
 }
 
 namespace ShowFoto
@@ -72,7 +71,6 @@ private:
     
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
-    bool                             m_slideShowInFullScreen;
     
     // If current image file format is only available in read only,
     // typicially all RAW image file formats.
@@ -83,18 +81,16 @@ private:
     KURL                             m_lastOpenedDirectory;
     
     KToggleAction                   *m_showBarAction;
-    KToggleAction                   *m_slideShowAction;
-    
-    KAction                         *m_openFilesInFolderAction;    
+
+    KAction                         *m_openFilesInFolderAction;
     KAction                         *m_fileOpenAction;
     
     KActionMenu                     *m_BCGAction;
     
-    Digikam::ThumbBarView            *m_bar;
-    Digikam::ThumbBarItem            *m_currentItem;
-    Digikam::ImagePropertiesSideBar  *m_rightSidebar;
-    Digikam::SplashScreen            *m_splash;
-    Digikam::SlideShow               *m_slideShow;
+    Digikam::ThumbBarView           *m_bar;
+    Digikam::ThumbBarItem           *m_currentItem;
+    Digikam::ImagePropertiesSideBar *m_rightSidebar;
+    Digikam::SplashScreen           *m_splash;
 
 private:
 
@@ -104,10 +100,13 @@ private:
     void readSettings();
     void saveSettings();
     void applySettings();
+
     void toggleActions(bool val);
-    void toggleActionsDuringSlideShow(bool val);
-        
-    void toggleGUI2FullScreenMode();
+    void toggleActions2SlideShow(bool val);
+    
+    void toggleGUI2SlideShow();
+    void toggleGUI2FullScreen();
+    
     void toggleNavigation(int index);
     bool promptUserSave();
     bool save();
@@ -128,7 +127,6 @@ private slots:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotToggleSlideShow();
     void slotToggleShowBar();
     void slotChangeBCG();
     

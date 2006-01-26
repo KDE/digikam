@@ -40,6 +40,7 @@
 #include "setupeditor.h"
 #include "setupiofiles.h"
 #include "setupimgplugins.h"
+#include "setupslideshow.h"
 #include "setupicc.h"
 #include "setupplugins.h"
 #include "setupcamera.h"
@@ -61,7 +62,8 @@ public:
         page_mime        = 0;
         page_editor      = 0;
         page_iofiles     = 0;
-        page_imgPlugins  = 0;
+        page_imgplugins  = 0;
+        page_slideshow   = 0;
         page_icc         = 0;
         page_plugins     = 0;
         page_camera      = 0;
@@ -73,10 +75,11 @@ public:
         mimePage         = 0;
         editorPage       = 0;
         iofilesPage      = 0;
+        slideshowPage    = 0;
         iccPage          = 0;
         cameraPage       = 0;
         miscPage         = 0;
-        imgPluginsPage   = 0;
+        imgpluginsPage   = 0;
         pluginsPage      = 0;
     }
 
@@ -86,7 +89,8 @@ public:
     QFrame           *page_mime;
     QFrame           *page_editor;
     QFrame           *page_iofiles;
-    QFrame           *page_imgPlugins;
+    QFrame           *page_imgplugins;
+    QFrame           *page_slideshow;
     QFrame           *page_icc;
     QFrame           *page_plugins;
     QFrame           *page_camera;
@@ -98,11 +102,12 @@ public:
     SetupMime        *mimePage;
     SetupEditor      *editorPage;
     SetupIOFiles     *iofilesPage;
+    SetupSlideShow   *slideshowPage;
     SetupICC         *iccPage;
     SetupCamera      *cameraPage;
     SetupMisc        *miscPage;
     SetupPlugins     *pluginsPage;
-    SetupImgPlugins  *imgPluginsPage;
+    SetupImgPlugins  *imgpluginsPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
@@ -136,10 +141,14 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                           BarIcon("image", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 
-    d->page_imgPlugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
+    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
                           BarIcon("digikamimageplugins", KIcon::SizeMedium));
-    d->imgPluginsPage = new SetupImgPlugins(d->page_imgPlugins);
+    d->imgpluginsPage = new SetupImgPlugins(d->page_imgplugins);
 
+    d->page_slideshow = addPage(i18n("Slide Show"), i18n("Image Editor Slide Show Settings"),
+                             BarIcon("slideshow", KIcon::SizeMedium));
+    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
+    
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor ICC Profiles Management"),
                        BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new SetupICC(d->page_icc);
@@ -177,7 +186,8 @@ void Setup::slotOkClicked()
     d->exifPage->applySettings();
     d->editorPage->applySettings();
     d->iofilesPage->applySettings();
-    d->imgPluginsPage->applySettings();
+    d->imgpluginsPage->applySettings();
+    d->slideshowPage->applySettings();    
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     close();
@@ -190,7 +200,7 @@ SetupPlugins* Setup::kipiPluginsPage()
 
 SetupImgPlugins* Setup::imagePluginsPage()
 {
-    return d->imgPluginsPage;
+    return d->imgpluginsPage;
 }
 
 }  // namespace Digikam

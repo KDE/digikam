@@ -84,13 +84,10 @@ extern "C"
 #include "imagepropertiessidebar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageresizedlg.h"
-#include "imageprint.h"
 #include "dimginterface.h"
 #include "splashscreen.h"
 #include "setup.h"
 #include "setupimgplugins.h"
-#include "slideshow.h"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
@@ -127,8 +124,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     setupUserArea();
     setupStatusBar();
     setupActions();
-    
-    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
     
     // Load image plugins to GUI
 
@@ -216,7 +211,6 @@ ShowFoto::~ShowFoto()
 
     delete m_imagePluginLoader;
     delete m_bar;
-    delete m_slideShow;
     delete m_rightSidebar;
 }
 
@@ -229,9 +223,6 @@ void ShowFoto::setupConnections()
 
     connect(m_bar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
-    
-    connect(m_slideShow, SIGNAL(finished()),
-            m_slideShowAction, SLOT(activate()) );
 }
 
 void ShowFoto::setupUserArea()
@@ -298,12 +289,6 @@ void ShowFoto::setupActions()
                                         this, SLOT(slotToggleShowBar()),
                                         actionCollection(), "shofoto_showthumbs");
 
-    m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
-                                          this, SLOT(slotToggleSlideShow()),
-                                          actionCollection(),"shofoto_slideshow");
-
-    // -- Configure toolbar and shortcuts ---------------------------------------------
-
     // --- Create the gui --------------------------------------------------------------
 
     createGUI("showfotoui.rc", false);
@@ -362,12 +347,6 @@ void ShowFoto::applySettings()
     }
 
     m_fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
-    
-    // Slideshow Settings.
-    m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
-    m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
-    m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
-    m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
 }
 
 void ShowFoto::slotOpenFile()
@@ -770,7 +749,7 @@ void ShowFoto::toggleNavigation(int index)
     }
 }
 
-void ShowFoto::toggleGUI2FullScreenMode()
+void ShowFoto::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
@@ -899,7 +878,7 @@ void ShowFoto::toggleActions(bool val)
         m_slideShowAction->setEnabled(val);
 }
 
-void ShowFoto::toggleActionsDuringSlideShow(bool val)
+void ShowFoto::toggleActions2SlideShow(bool val)
 {
     toggleActions(val);
     
@@ -908,31 +887,15 @@ void ShowFoto::toggleActionsDuringSlideShow(bool val)
     m_openFilesInFolderAction->setEnabled(val);
 }
 
-void ShowFoto::slotToggleSlideShow()
+void ShowFoto::toggleGUI2SlideShow()
 {
     if (m_slideShowAction->isChecked())
     {
         m_rightSidebar->shrink();
         m_rightSidebar->hide();
-        
-        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-
-        toggleActionsDuringSlideShow(false);
-        m_slideShow->start();
     }
     else
     {
-        m_slideShow->stop();
-        toggleActionsDuringSlideShow(true);
-
-        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
-        {
-            m_fullScreenAction->activate();
-        }
-        
         m_rightSidebar->show();
         m_rightSidebar->expand();
     }

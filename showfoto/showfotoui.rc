@@ -54,7 +54,7 @@
         <Action name="shofoto_showthumbs" /> 
         <Action name="editorwindow_histogram" /> 
         <Separator/>
-        <Action name="shofoto_slideshow" /> 
+        <Action name="editorwindow_slideshow" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
@@ -98,7 +98,7 @@
     <Action name="editorwindow_crop" />
     <Separator/>
     <Action name="editorwindow_fullscreen" /> 
-    <Action name="slideshow" /> 
+    <Action name="editorwindow_slideshow" /> 
     <Merge />
 </ToolBar>
 
