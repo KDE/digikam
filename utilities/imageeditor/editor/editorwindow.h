@@ -147,6 +147,7 @@ protected:
 
     void closeEvent(QCloseEvent* e);
 
+    void setupStandardConnections();
     void setupStandardActions();    
     void setupStandardAccelerators();
     void setupStatusBar();
@@ -156,6 +157,7 @@ protected:
     void plugActionAccel(KAction* action);
     void unplugActionAccel(KAction* action);
     
+    virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual bool promptUserSave()=0;
     virtual void saveSettings()=0;

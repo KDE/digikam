@@ -108,6 +108,7 @@ private:
     void saveSettings();
     bool promptUserSave();
     void setupActions();
+    void setupConnections();
     
     void applySettings();
     bool save();

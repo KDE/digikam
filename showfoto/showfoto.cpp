@@ -182,46 +182,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     applySettings();
 
-    // -- setup connections ---------------------------
-
-    connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
-            this, SLOT(slotOpenURL(const KURL&)));
-
-    connect(m_bar, SIGNAL(signalItemAdded()),
-            this, SLOT(slotUpdateItemInfo()));
-    
-    connect(m_canvas, SIGNAL(signalRightButtonClicked()),
-            this, SLOT(slotContextMenu()));
-
-    connect(m_canvas, SIGNAL(signalZoomChanged(float)),
-            this, SLOT(slotZoomChanged(float)));
-
-    connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
-            this, SLOT(slotChanged(bool, bool)));
-
-    connect(m_canvas, SIGNAL(signalSelected(bool)),
-            this, SLOT(slotSelected(bool)));
-
-    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
-            this, SLOT(slotLoadingStarted(const QString &)));
-
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool, bool)),
-            this, SLOT(slotLoadingFinished(const QString &, bool, bool)));
-
-    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
-            this, SLOT(slotLoadingProgress(const QString &, float)));
-
-    connect(m_canvas, SIGNAL(signalSavingStarted(const QString &)),
-            this, SLOT(slotSavingStarted(const QString &)));
-
-    connect(m_canvas, SIGNAL(signalSavingFinished(const QString &, bool)),
-            this, SLOT(slotSavingFinished(const QString &, bool)));
-
-    connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
-            this, SLOT(slotSavingProgress(const QString&, float)));
-
-    connect(m_slideShow, SIGNAL(finished()),
-            m_slideShowAction, SLOT(activate()) );
+    setupConnections();
 
     //-------------------------------------------------------------
 
@@ -255,6 +216,20 @@ ShowFoto::~ShowFoto()
     delete m_imagePluginLoader;
     delete m_slideShow;
     delete m_rightSidebar;
+}
+
+void ShowFoto::setupConnections()
+{
+    setupStandardConnections();
+    
+    connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
+            this, SLOT(slotOpenURL(const KURL&)));
+
+    connect(m_bar, SIGNAL(signalItemAdded()),
+            this, SLOT(slotUpdateItemInfo()));
+    
+    connect(m_slideShow, SIGNAL(finished()),
+            m_slideShowAction, SLOT(activate()) );
 }
 
 void ShowFoto::setupUserArea()
