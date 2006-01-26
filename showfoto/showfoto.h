@@ -113,8 +113,6 @@ private:
     bool saveAs();
     void toggleActions(bool val, bool slideShow=false);
     void toggleNavigation(int index);
-    void loadPlugins();
-    void unLoadPlugins();
     void finishSaving(bool success);
 
 private slots:

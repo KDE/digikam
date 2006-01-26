@@ -172,8 +172,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
         QPtrList<KAction> bcg_actions;
         bcg_actions.append( m_BCGAction );
-        unplugActionList( "bcg" );
-        plugActionList( "bcg", bcg_actions );
+        unplugActionList( "showfoto_bcg" );
+        plugActionList( "showfoto_bcg", bcg_actions );
     }
 
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));

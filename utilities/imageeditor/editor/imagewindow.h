@@ -64,11 +64,11 @@ public:
                  bool allowSaving=true,
                  AlbumIconView* view=0L);
                  
-    void applySettings();
-    
     static ImageWindow* imagewindow();
     static bool         imagewindowCreated();
-    
+
+    void applySettings();
+
 signals:
 
     void signalFileDeleted(const KURL& url);
