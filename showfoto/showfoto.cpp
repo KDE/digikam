@@ -331,6 +331,19 @@ void ShowFoto::readSettings()
                                    KGlobalSettings::documentPath()) );    
 }
 
+void ShowFoto::saveSettings()
+{
+    saveStandardSettings();
+    
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    
+    config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
+    config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
+
+    config->sync();    
+}
+
 void ShowFoto::applySettings()
 {
     applyStandardSettings();
@@ -358,19 +371,6 @@ void ShowFoto::applySettings()
     m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
-}
-
-void ShowFoto::saveSettings()
-{
-    saveStandardSettings();
-    
-    KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");
-    
-    config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
-    config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
-
-    config->sync();    
 }
 
 void ShowFoto::slotOpenFile()

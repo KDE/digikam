@@ -204,30 +204,6 @@ void ImageWindow::setupActions()
             this, SLOT(slotRotatedOrFlipped()));
 }
 
-void ImageWindow::loadURL(const KURL::List& urlList,
-                          const KURL& urlCurrent,
-                          const QString& caption,
-                          bool  allowSaving,
-                          AlbumIconView* view)
-{
-    if (!promptUserSave())
-        return;
-    
-    setCaption(i18n("digiKam Image Editor - Album \"%1\"").arg(caption));
-
-    m_view        = view;
-    m_urlList     = urlList;
-    m_urlCurrent  = urlCurrent;
-    m_allowSaving = allowSaving;
-    
-    m_saveAction->setEnabled(false);
-    m_revertAction->setEnabled(false);
-    m_undoAction->setEnabled(false);
-    m_redoAction->setEnabled(false);
-
-    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-}
-
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
@@ -258,6 +234,30 @@ void ImageWindow::readSettings()
 void ImageWindow::saveSettings()
 {
     saveStandardSettings();
+}
+
+void ImageWindow::loadURL(const KURL::List& urlList,
+                          const KURL& urlCurrent,
+                          const QString& caption,
+                          bool  allowSaving,
+                          AlbumIconView* view)
+{
+    if (!promptUserSave())
+        return;
+    
+    setCaption(i18n("digiKam Image Editor - Album \"%1\"").arg(caption));
+
+    m_view        = view;
+    m_urlList     = urlList;
+    m_urlCurrent  = urlCurrent;
+    m_allowSaving = allowSaving;
+    
+    m_saveAction->setEnabled(false);
+    m_revertAction->setEnabled(false);
+    m_undoAction->setEnabled(false);
+    m_redoAction->setEnabled(false);
+
+    QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
 void ImageWindow::slotLoadCurrent()
