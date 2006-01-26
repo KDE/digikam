@@ -609,6 +609,117 @@ void EditorWindow::unLoadImagePlugins()
     }
 }
 
+void EditorWindow::readStandardSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");    
+
+    // Blended Histogram settings.
+    QRect histogramRect = config->readRectEntry("Histogram Rectangle");
+    if (!histogramRect.isNull())
+        m_canvas->setHistogramPosition(histogramRect.topLeft());
+    
+    int histogramType = config->readNumEntry("HistogramType", 0);
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    m_viewHistogramAction->setCurrentItem(histogramType);
+    slotViewHistogram(); // update
+
+    // Restore full screen Mode ?
+    m_fullScreen = config->readBoolEntry("FullScreen", false);
+
+    if (m_fullScreen)
+    {
+        m_fullScreen = false;
+        m_fullScreenAction->activate();
+    }
+
+    // Restore Auto zoom action ?
+    bool autoZoom = config->readBoolEntry("AutoZoom", true);
+
+    if (autoZoom)
+    {
+        m_zoomFitAction->activate();
+        m_zoomPlusAction->setEnabled(false);
+        m_zoomMinusAction->setEnabled(false);
+    }    
+}
+
+void EditorWindow::applyStandardSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+
+    // Background color.
+    QColor bgColor(Qt::black);
+    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
+    m_canvas->update();
+
+    // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
+    m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
+                                               + 25.0 - (75.0/99.0));
+
+    // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
+    m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
+                                               + 100.0 - ((1.0-100.0)/8.0));
+
+    m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
+
+    m_IOFileSettings->rawDecodingSettings.automaticColorBalance = config->readBoolEntry("AutomaticColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.cameraColorBalance    = config->readBoolEntry("CameraColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality            = config->readNumEntry("RAWQuality", 0);
+
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    if(config->hasKey("Splitter Sizes"))
+        m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+    else 
+        m_canvas->setSizePolicy(rightSzPolicy);
+
+    m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+
+    // Settings for Color Management stuff
+    config->setGroup("Color Management");
+
+    m_ICCSettings->enableCMSetting = config->readBoolEntry("EnableCM");
+    m_ICCSettings->askOrApplySetting = config->readBoolEntry("BehaviourICC");
+    m_ICCSettings->BPCSetting = config->readBoolEntry("BPCAlgorithm");
+    m_ICCSettings->renderingSetting = config->readNumEntry("RenderingIntent");
+    m_ICCSettings->inputSetting = config->readPathEntry("InProfileFile");
+    m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
+    m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
+    m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
+}
+
+void EditorWindow::saveStandardSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    
+    config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
+    config->writeEntry("Splitter Sizes", m_splitter->sizes());
+
+    int histogramType = m_viewHistogramAction->currentItem();
+    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
+    config->writeEntry("HistogramType", histogramType);
+
+    QPoint pt;
+    QRect rc(0, 0, 0, 0);
+    if (m_canvas->getHistogramPosition(pt)) 
+        rc = QRect(pt.x(), pt.y(), 1, 1);
+    config->writeEntry("Histogram Rectangle", rc);
+
+    config->writeEntry("FullScreen", m_fullScreen);
+    
+    config->sync();
+}
+
+void EditorWindow::slotViewHistogram()
+{
+    int curItem = m_viewHistogramAction->currentItem();
+    m_canvas->setHistogramType(curItem);
+}
+
 }  // namespace Digikam
 
 #include "editorwindow.moc"

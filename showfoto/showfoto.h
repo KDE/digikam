@@ -71,7 +71,6 @@ public:
 private:
     
     bool                             m_removeFullScreenButton;
-    bool                             m_fullScreenHideToolBar;
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
     bool                             m_slideShowInFullScreen;
@@ -102,13 +101,14 @@ private:
 
 private:
 
-    void setupUserArea();
-    void saveSettings();
-    bool promptUserSave();
     void setupActions();
     void setupConnections();
-    
+    void setupUserArea();
+    void readSettings();
+    void saveSettings();
     void applySettings();
+    
+    bool promptUserSave();
     bool save();
     bool saveAs();
     void toggleActions(bool val, bool slideShow=false);
@@ -132,7 +132,6 @@ private slots:
     void slotToggleFullScreen();
     void slotToggleSlideShow();
     void slotToggleShowBar();
-    void slotViewHistogram();
     void slotChangeBCG();
     
     void slotChanged(bool, bool);

@@ -78,7 +78,6 @@ signals:
 private:
 
     bool                    m_rotatedOrFlipped;
-    bool                    m_fullScreenHideToolBar;
     bool                    m_removeFullScreenButton;
 
     // If image editor is launched by camera interface, current 
@@ -121,7 +120,6 @@ private slots:
     void slotFirst();
     void slotLast();
 
-    void slotViewHistogram();
     void slotToggleFullScreen();
     
     void slotContextMenu();

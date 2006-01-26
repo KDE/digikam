@@ -70,6 +70,8 @@ protected:
     // typicially all RAW image file formats.
     bool                     m_isReadOnly;
 
+    bool                     m_fullScreenHideToolBar;
+
     bool                     m_fullScreen;
 
     QLabel                  *m_zoomLabel;
@@ -144,10 +146,16 @@ protected slots:
     void slotZoomChanged(float zoom);
     
     void slotEscapePressed();
+
+    void slotViewHistogram();
     
 protected:
 
     void closeEvent(QCloseEvent* e);
+
+    void saveStandardSettings();
+    void readStandardSettings();
+    void applyStandardSettings();
 
     void setupStandardConnections();
     void setupStandardActions();    
@@ -165,6 +173,7 @@ protected:
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual bool promptUserSave()=0;
+    virtual void readSettings()=0;
     virtual void saveSettings()=0;
     virtual void setupUserArea()=0;
     virtual bool saveAs()=0; 

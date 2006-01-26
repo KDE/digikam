@@ -131,7 +131,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     // Build the GUI
 
     setupActions();
-
+    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
+    
     // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, m_splash);
@@ -178,11 +179,15 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
-    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
-
-    applySettings();
+    // -- setup connections ---------------------------
 
     setupConnections();
+    
+    // -- read settings --------------------------------
+        
+    readSettings();
+    applySettings();
+    setAutoSaveSettings("ImageViewer Settings");    
 
     //-------------------------------------------------------------
 
@@ -192,8 +197,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         new Digikam::ThumbBarItem(m_bar, *it);
         m_lastOpenedDirectory=(*it);
     }
-
-    setAutoSaveSettings();
 
     if ( urlList.isEmpty() )
     {
@@ -311,10 +314,27 @@ void ShowFoto::setupActions()
     setupStandardAccelerators();
 }
 
+void ShowFoto::readSettings()
+{
+    readStandardSettings();
+    
+    KConfig* config = kapp->config();
+    config->setGroup("ImageViewer Settings");
+    
+    bool showBar = false;
+    showBar = config->readBoolEntry("Show Thumbnails", true);
+    
+    if (!showBar && m_showBarAction->isChecked())
+        m_showBarAction->activate();
+
+    m_lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
+                                   KGlobalSettings::documentPath()) );    
+}
+
 void ShowFoto::applySettings()
 {
-    // Get Image Editor settings.
-
+    applyStandardSettings();
+    
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
@@ -331,98 +351,25 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    // Background color.
-    QColor bgColor(Qt::black);
-    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
-    m_canvas->update();
-
-    m_fullScreenHideToolBar = config->readBoolEntry("FullScreenHideToolBar", false);
     m_fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
-
-    // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
-                                               + 25.0 - (75.0/99.0));
-
-    // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
-                                               + 100.0 - ((1.0-100.0)/8.0));
-
-    m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
-
-    m_IOFileSettings->rawDecodingSettings.automaticColorBalance = config->readBoolEntry("AutomaticColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.cameraColorBalance    = config->readBoolEntry("CameraColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality            = config->readNumEntry("RAWQuality", 0);
     
     // Slideshow Settings.
     m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
     m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
-
-    bool showBar = false;
-    bool autoFit = true;
-
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    if(config->hasKey("Splitter Sizes"))
-        m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
-    else 
-        m_canvas->setSizePolicy(rightSzPolicy);
-
-    m_lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
-                                   KGlobalSettings::documentPath()) );
-
-    showBar = config->readBoolEntry("Show Thumbnails", true);
-    autoFit = config->readBoolEntry("Zoom Autofit", true);
-
-    if (!showBar && m_showBarAction->isChecked())
-        m_showBarAction->activate();
-
-    if (autoFit && !m_zoomFitAction->isChecked())
-        m_zoomFitAction->activate();
-
-    QRect histogramRect = config->readRectEntry("Histogram Rectangle");
-    if (!histogramRect.isNull())
-        m_canvas->setHistogramPosition(histogramRect.topLeft());
-
-    int histogramType = config->readNumEntry("HistogramType", 0);
-    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
-    m_viewHistogramAction->setCurrentItem(histogramType);
-    slotViewHistogram(); // update
-
-    // Settings for Color Management stuff
-    config->setGroup("Color Management");
-
-    m_ICCSettings->enableCMSetting = config->readBoolEntry("EnableCM");
-    m_ICCSettings->askOrApplySetting = config->readBoolEntry("BehaviourICC");
-    m_ICCSettings->BPCSetting = config->readBoolEntry("BPCAlgorithm");
-    m_ICCSettings->renderingSetting = config->readNumEntry("RenderingIntent");
-    m_ICCSettings->inputSetting = config->readPathEntry("InProfileFile");
-    m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
-    m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
-    m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
 }
 
 void ShowFoto::saveSettings()
 {
+    saveStandardSettings();
+    
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
     config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
     config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
-    config->writeEntry("Zoom Autofit", m_zoomFitAction->isChecked());
-    config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
-    int histogramType = m_viewHistogramAction->currentItem();
-    histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
-    config->writeEntry("HistogramType", histogramType);
-
-    QPoint pt;
-    QRect rc(0, 0, 0, 0);
-    if (m_canvas->getHistogramPosition(pt))
-        rc = QRect(pt.x(), pt.y(), 1, 1);
-    config->writeEntry("Histogram Rectangle", rc);
     config->sync();    
 }
 
@@ -949,12 +896,6 @@ void ShowFoto::slotToggleShowBar()
     {
         m_bar->show();
     }
-}
-
-void ShowFoto::slotViewHistogram()
-{
-    int curItem = m_viewHistogramAction->currentItem();
-    m_canvas->setHistogramType(curItem);
 }
 
 void ShowFoto::slotChangeBCG()
