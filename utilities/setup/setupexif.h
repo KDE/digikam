@@ -27,10 +27,9 @@
 
 #include <qwidget.h>
 
-class QCheckBox;
-
 namespace Digikam
 {
+class SetupExifPriv;
 
 class SetupExif : public QWidget
 {
@@ -47,10 +46,10 @@ private:
 
     void readSettings();
 
-    QCheckBox    *iconSaveExifBox_;
-    QCheckBox    *iconExifRotateBox_;
-    QCheckBox    *iconExifSetOrientationBox_;
-    
+private:
+
+    SetupExifPriv* d;
+   
 };
 
 }  // namespace Digikam

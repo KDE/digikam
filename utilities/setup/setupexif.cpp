@@ -44,9 +44,26 @@
 namespace Digikam
 {
 
+class SetupExifPriv
+{
+public:
+
+    SetupExifPriv()
+    {
+        iconSaveExifBox           = 0;
+        iconExifRotateBox         = 0;
+        iconExifSetOrientationBox = 0;
+    }
+
+    QCheckBox *iconSaveExifBox;
+    QCheckBox *iconExifRotateBox;
+    QCheckBox *iconExifSetOrientationBox;
+};
+
 SetupExif::SetupExif(QWidget* parent )
          : QWidget(parent)
 {
+    d = new SetupExifPriv;
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
     QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint());
@@ -54,25 +71,26 @@ SetupExif::SetupExif(QWidget* parent )
    // --------------------------------------------------------
 
    // NOTE: put this back in when/if there are other, non-EXIF settings here
-/*   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal,
-                                            i18n("Exif Actions"), parent);*/
+   /*   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);*/
 
    QLabel* explanation = new QLabel(this);
    explanation->setAlignment(explanation->alignment() | WordBreak);
-   explanation->setText(i18n("EXIF is a standard used by most digital cameras today to store information such as comments in image files. You can learn more about EXIF at www.exif.org."));
+   explanation->setText(i18n("EXIF is a standard used by most digital cameras today to store "
+                             "information such as comments in image files. You can learn more "
+                             "about EXIF at www.exif.org."));
    layout->addWidget(explanation);
 
-   iconSaveExifBox_ = new QCheckBox(this);
-   iconSaveExifBox_->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
-   layout->addWidget(iconSaveExifBox_);
+   d->iconSaveExifBox = new QCheckBox(this);
+   d->iconSaveExifBox->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
+   layout->addWidget(d->iconSaveExifBox);
 
-   iconExifRotateBox_ = new QCheckBox(this);
-   iconExifRotateBox_->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
-   layout->addWidget(iconExifRotateBox_);
+   d->iconExifRotateBox = new QCheckBox(this);
+   d->iconExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
+   layout->addWidget(d->iconExifRotateBox);
 
-   iconExifSetOrientationBox_ = new QCheckBox(this);
-   iconExifSetOrientationBox_->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
-   layout->addWidget(iconExifSetOrientationBox_);
+   d->iconExifSetOrientationBox = new QCheckBox(this);
+   d->iconExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
+   layout->addWidget(d->iconExifSetOrientationBox);
 
    // --------------------------------------------------------
 
@@ -86,6 +104,7 @@ SetupExif::SetupExif(QWidget* parent )
 
 SetupExif::~SetupExif()
 {
+    delete d;
 }
 
 void SetupExif::applySettings()
@@ -94,9 +113,9 @@ void SetupExif::applySettings()
 
     if (!settings) return;
 
-    settings->setSaveExifComments(iconSaveExifBox_->isChecked());
-    settings->setExifRotate(iconExifRotateBox_->isChecked());
-    settings->setExifSetOrientation(iconExifSetOrientationBox_->isChecked());
+    settings->setSaveExifComments(d->iconSaveExifBox->isChecked());
+    settings->setExifRotate(d->iconExifRotateBox->isChecked());
+    settings->setExifSetOrientation(d->iconExifSetOrientationBox->isChecked());
 
     settings->saveSettings();
 }
@@ -107,9 +126,9 @@ void SetupExif::readSettings()
 
     if (!settings) return;
 
-    iconSaveExifBox_->setChecked(settings->getSaveExifComments());
-    iconExifRotateBox_->setChecked(settings->getExifRotate());
-    iconExifSetOrientationBox_->setChecked(settings->getExifSetOrientation());
+    d->iconSaveExifBox->setChecked(settings->getSaveExifComments());
+    d->iconExifRotateBox->setChecked(settings->getExifRotate());
+    d->iconExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
 }
 
 }  // namespace Digikam
