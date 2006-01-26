@@ -987,6 +987,20 @@ void ImageWindow::slotSetup()
     applySettings();
 }
 
+void ImageWindow::toggleGUI2FullScreen()
+{
+    if (m_fullScreen)
+    {
+        m_rightSidebar->show();
+        m_rightSidebar->expand();
+    }
+    else
+    {
+        m_rightSidebar->shrink();
+        m_rightSidebar->hide();
+    }
+}
+
 ImageWindow* ImageWindow::imagewindow()
 {
     if (!m_instance)

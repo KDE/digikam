@@ -95,6 +95,7 @@ private:
     void readSettings();
     void saveSettings();
     void toggleActions(bool val);
+    void toggleGUI2FullScreen();
 
     bool promptUserSave();
     bool save();
