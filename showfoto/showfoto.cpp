@@ -108,8 +108,6 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_splash                 = 0;
     m_BCGAction              = 0;
     m_deleteItem2Trash       = true;
-    m_fullScreen             = false;
-    m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
 
     KConfig* config = kapp->config();
@@ -812,41 +810,16 @@ void ShowFoto::toggleNavigation(int index)
     }
 }
 
-void ShowFoto::slotToggleFullScreen()
+void ShowFoto::toggleGUI2FullScreenMode()
 {
     if (m_fullScreen)
     {
-
-#if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~WindowFullScreen );
-#else
-        showNormal();
-#endif
-        menuBar()->show();
-        statusBar()->show();
-
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
             m_bar->show();
-
-        QObject* obj = child("ToolBar","KToolBar");
-        if (obj)
-        {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
-                m_fullScreenAction->unplug(toolBar);
-            if (toolBar->isHidden())
-                toolBar->show();
-        }
-
-        m_fullScreen = false;
     }
     else
     {
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
         // If Hide Thumbbar option is checked.
         if (!m_showBarAction->isChecked())
         {
@@ -855,31 +828,6 @@ void ShowFoto::slotToggleFullScreen()
             else
                 m_fullScreenAction->plug(m_bar);
         }
-
-        QObject* obj = child("ToolBar","KToolBar");
-        if (obj)
-        {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenHideToolBar)
-                toolBar->hide();
-            else
-            {    
-                if ( !m_fullScreenAction->isPlugged(toolBar) )
-                {
-                    m_fullScreenAction->plug(toolBar);
-                    m_removeFullScreenButton=true;
-                }
-                else    
-                {
-                    // If FullScreen button is enable in toolbar settings
-                    // We don't remove it at full screen out.
-                    m_removeFullScreenButton=false;
-                }
-            }
-        }
-
-        showFullScreen();
-        m_fullScreen = true;
     }
 }
 

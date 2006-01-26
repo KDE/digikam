@@ -70,7 +70,6 @@ public:
 
 private:
     
-    bool                             m_removeFullScreenButton;
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
     bool                             m_slideShowInFullScreen;
@@ -110,6 +109,7 @@ private:
     void toggleActions(bool val);
     void toggleActionsDuringSlideShow(bool val);
         
+    void toggleGUI2FullScreenMode();
     void toggleNavigation(int index);
     bool promptUserSave();
     bool save();
@@ -130,7 +130,6 @@ private slots:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotToggleFullScreen();
     void slotToggleSlideShow();
     void slotToggleShowBar();
     void slotChangeBCG();

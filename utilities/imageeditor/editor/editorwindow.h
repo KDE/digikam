@@ -71,9 +71,9 @@ protected:
     bool                     m_isReadOnly;
 
     bool                     m_fullScreenHideToolBar;
-
     bool                     m_fullScreen;
-
+    bool                     m_removeFullScreenButton;
+    
     QLabel                  *m_zoomLabel;
     QLabel                  *m_resLabel;
 
@@ -144,11 +144,11 @@ protected slots:
     void slotConfToolbars();
     void slotNewToolbarConfig();
 
+    void slotToggleFullScreen();
+    void slotEscapePressed();
+        
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
-    
-    void slotEscapePressed();
-
     void slotViewHistogram();
     
 protected:
@@ -173,6 +173,7 @@ protected:
     void unLoadImagePlugins();
     void loadImagePlugins();
 
+    virtual void toggleGUI2FullScreenMode(){};
     virtual void toggleActions(bool val)=0;
     virtual void setupConnections()=0;
     virtual void setupActions()=0;

@@ -117,7 +117,7 @@ void SetupEditor::applySettings()
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("BackgroundColor", d->backgroundColor->color());
-    config->writeEntry("FullScreenHideToolBar", d->hideToolBar->isChecked());
+    config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->writeEntry("FullScreenHideThumbBar", d->hideThumbBar->isChecked());
     config->writeEntry("HorizontalThumbbar", d->horizontalThumbBar->isChecked());
     config->writeEntry("DeleteItem2Trash", d->useTrash->isChecked());
@@ -132,7 +132,7 @@ void SetupEditor::readSettings()
 
     config->setGroup("ImageViewer Settings");
     d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
-    d->hideToolBar->setChecked(config->readBoolEntry("FullScreenHideToolBar", false));
+    d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
     d->hideThumbBar->setChecked(config->readBoolEntry("FullScreenHideThumbBar", true));
     d->horizontalThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
     d->useTrash->setChecked(config->readBoolEntry("DeleteItem2Trash", false));

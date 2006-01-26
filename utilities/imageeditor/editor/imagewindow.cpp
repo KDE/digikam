@@ -97,7 +97,6 @@ ImageWindow::ImageWindow()
     m_instance              = this;
     m_rotatedOrFlipped      = false;
     m_allowSaving           = true;
-    m_fullScreenHideToolBar = false;
     m_view                  = 0L;
 
     // Construct the view
@@ -838,95 +837,6 @@ void ImageWindow::slotSavingProgress(const QString& filePath, float progress)
     {
         // in synchronous saving mode
         m_savingContext->progressDialog->progressBar()->setProgress((int)(100 * progress));
-    }
-}
-
-void ImageWindow::slotToggleFullScreen()
-{
-    if (m_fullScreen)
-    {
-
-#if QT_VERSION >= 0x030300
-        setWindowState( windowState() & ~WindowFullScreen );
-#else
-        showNormal();
-#endif
-        menuBar()->show();
-        statusBar()->show();
-
-        QObject* obj = child("ToolBar","KToolBar");
-        if (obj)
-        {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
-                m_fullScreenAction->unplug(toolBar);
-            if (toolBar->isHidden())
-                toolBar->show();
-        }
-
-        // -- remove the imageguiclient action accels ----
-
-        unplugActionAccel(m_forwardAction);
-        unplugActionAccel(m_backwardAction);
-        unplugActionAccel(m_firstAction);
-        unplugActionAccel(m_lastAction);
-        unplugActionAccel(m_saveAction);
-        unplugActionAccel(m_saveAsAction);
-        unplugActionAccel(m_zoomPlusAction);
-        unplugActionAccel(m_zoomMinusAction);
-        unplugActionAccel(m_zoomFitAction);
-        unplugActionAccel(m_cropAction);
-        unplugActionAccel(m_filePrintAction);
-        unplugActionAccel(m_fileDeleteAction);
-
-        m_fullScreen = false;
-    }
-    else
-    {
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        QObject* obj = child("ToolBar","KToolBar");
-        if (obj)
-        {
-            KToolBar* toolBar = static_cast<KToolBar*>(obj);
-            if (m_fullScreenHideToolBar)
-                toolBar->hide();
-            else
-            {    
-                if ( !m_fullScreenAction->isPlugged(toolBar) )
-                {
-                    m_fullScreenAction->plug(toolBar);
-                    m_removeFullScreenButton=true;
-                }
-                else    
-                {
-                    // If FullScreen button is enable in toolbar settings
-                    // We don't remove it at full screen out.
-                    m_removeFullScreenButton=false;
-                }
-            }
-
-        }
-
-        // -- Insert all the imageguiclient actions into the accel --
-
-        plugActionAccel(m_forwardAction);
-        plugActionAccel(m_backwardAction);
-        plugActionAccel(m_firstAction);
-        plugActionAccel(m_lastAction);
-        plugActionAccel(m_saveAction);
-        plugActionAccel(m_saveAsAction);
-        plugActionAccel(m_zoomPlusAction);
-        plugActionAccel(m_zoomMinusAction);
-        plugActionAccel(m_zoomFitAction);
-        plugActionAccel(m_cropAction);
-        plugActionAccel(m_filePrintAction);
-        plugActionAccel(m_fileDeleteAction);
-
-        showFullScreen();
-        m_fullScreen = true;
     }
 }
 

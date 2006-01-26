@@ -78,7 +78,6 @@ signals:
 private:
 
     bool                    m_rotatedOrFlipped;
-    bool                    m_removeFullScreenButton;
 
     // If image editor is launched by camera interface, current 
     // image cannot be saved.
@@ -122,8 +121,6 @@ private slots:
         
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
-    
-    void slotToggleFullScreen();
     
     void slotChanged(bool, bool);
     void slotSelected(bool);

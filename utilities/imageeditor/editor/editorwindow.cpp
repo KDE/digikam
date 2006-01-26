@@ -118,7 +118,8 @@ EditorWindow::EditorWindow(const char *name)
     m_accel                  = 0;
     m_fullScreen             = false;
     m_isReadOnly             = false;
-
+    m_fullScreenHideToolBar  = false;
+    
     // Settings containers instance.
 
     m_ICCSettings    = new ICCSettingsContainer();
@@ -676,7 +677,7 @@ void EditorWindow::applyStandardSettings()
         m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
     else 
         m_canvas->setSizePolicy(rightSzPolicy);
-
+    
     m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     // Settings for Color Management stuff
@@ -741,6 +742,105 @@ void EditorWindow::toggleStandardActions(bool val)
         {
             plugin->setEnabledActions(val);
         }
+    }
+}
+
+void EditorWindow::slotToggleFullScreen()
+{
+    if (m_fullScreen)
+    {
+
+#if QT_VERSION >= 0x030300
+        setWindowState( windowState() & ~WindowFullScreen );
+#else
+        showNormal();
+#endif
+        menuBar()->show();
+        statusBar()->show();
+
+        QObject* obj = child("ToolBar","KToolBar");
+        
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            
+            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
+                m_fullScreenAction->unplug(toolBar);
+                
+            if (toolBar->isHidden())
+                toolBar->show();
+        }
+
+        // -- remove the gui action accels ----
+
+        unplugActionAccel(m_forwardAction);
+        unplugActionAccel(m_backwardAction);
+        unplugActionAccel(m_firstAction);
+        unplugActionAccel(m_lastAction);
+        unplugActionAccel(m_saveAction);
+        unplugActionAccel(m_saveAsAction);
+        unplugActionAccel(m_zoomPlusAction);
+        unplugActionAccel(m_zoomMinusAction);
+        unplugActionAccel(m_zoomFitAction);
+        unplugActionAccel(m_cropAction);
+        unplugActionAccel(m_filePrintAction);
+        unplugActionAccel(m_fileDeleteAction);
+
+        toggleGUI2FullScreenMode();
+        
+        m_fullScreen = false;
+    }
+    else
+    {
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        QObject* obj = child("ToolBar","KToolBar");
+        
+        if (obj)
+        {
+            KToolBar* toolBar = static_cast<KToolBar*>(obj);
+            
+            if (m_fullScreenHideToolBar)
+            {
+                toolBar->hide();
+            }
+            else
+            {    
+                if ( !m_fullScreenAction->isPlugged(toolBar) )
+                {
+                    m_fullScreenAction->plug(toolBar);
+                    m_removeFullScreenButton=true;
+                }
+                else    
+                {
+                    // If FullScreen button is enable in toolbar settings
+                    // We don't remove it at full screen end.
+                    m_removeFullScreenButton=false;
+                }
+            }
+        }
+
+        // -- Insert all the gui actions into the accel --
+
+        plugActionAccel(m_forwardAction);
+        plugActionAccel(m_backwardAction);
+        plugActionAccel(m_firstAction);
+        plugActionAccel(m_lastAction);
+        plugActionAccel(m_saveAction);
+        plugActionAccel(m_saveAsAction);
+        plugActionAccel(m_zoomPlusAction);
+        plugActionAccel(m_zoomMinusAction);
+        plugActionAccel(m_zoomFitAction);
+        plugActionAccel(m_cropAction);
+        plugActionAccel(m_filePrintAction);
+        plugActionAccel(m_fileDeleteAction);
+
+        toggleGUI2FullScreenMode();
+        
+        showFullScreen();
+        m_fullScreen = true;
     }
 }
 
