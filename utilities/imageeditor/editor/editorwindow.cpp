@@ -85,6 +85,7 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
+    m_contextMenu            = 0;
     m_canvas                 = 0;
     m_imagePluginLoader      = 0;
     m_undoAction             = 0;
@@ -842,6 +843,11 @@ void EditorWindow::slotToggleFullScreen()
         showFullScreen();
         m_fullScreen = true;
     }
+}
+
+void EditorWindow::slotContextMenu()
+{
+    m_contextMenu->exec(QCursor::pos());
 }
 
 }  // namespace Digikam

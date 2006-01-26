@@ -80,8 +80,6 @@ private:
 
     int                              m_itemsNb;
 
-    QPopupMenu                      *m_contextMenu;
-
     KURL                             m_lastOpenedDirectory;
     
     KToggleAction                   *m_showBarAction;
@@ -139,7 +137,6 @@ private slots:
     void slotUpdateItemInfo();
 
     void slotSetup();
-    void slotContextMenu();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
 

@@ -31,6 +31,7 @@
 #include <kurl.h>
 
 class QSplitter;
+class QPopupMenu;
 class QLabel;
 
 class KAccel;
@@ -78,6 +79,8 @@ protected:
     QLabel                  *m_resLabel;
 
     QSplitter               *m_splitter;
+
+    QPopupMenu              *m_contextMenu;
 
     KAction                 *m_zoomPlusAction;
     KAction                 *m_zoomMinusAction;
@@ -130,7 +133,8 @@ protected slots:
     virtual void slotLast()=0;
     virtual void slotUpdateItemInfo()=0;
     virtual void slotSetup()=0;
-    
+    virtual void slotContextMenu();
+
     void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
     void slotSaveAs() { saveAs(); };
     

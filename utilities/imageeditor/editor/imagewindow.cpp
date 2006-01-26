@@ -99,13 +99,10 @@ ImageWindow::ImageWindow()
     m_allowSaving           = true;
     m_view                  = 0L;
 
-    // Construct the view
+    // -- Build the GUI -------------------------------
 
     setupUserArea();
     setupStatusBar();
-
-    // Build the GUI
-
     setupActions();
         
     // Load image plugins to GUI
@@ -113,13 +110,15 @@ ImageWindow::ImageWindow()
     m_imagePluginLoader = ImagePluginLoader::instance();
     loadImagePlugins();
 
-    m_contextMenu = dynamic_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+    // Create context menu.
     
-    // -- setup connections ---------------------------
-           
+    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+
+    // Make signals/slots connections
+    
     setupConnections();
     
-    // -- read settings --------------------------------
+    // -- Read settings --------------------------------
     
     readSettings();
     applySettings();
@@ -139,6 +138,8 @@ ImageWindow::~ImageWindow()
     m_instance = 0;
 
     unLoadImagePlugins();
+
+    // No need to delete m_imagePluginLoader instance here, it will be done by main interface.
     
     delete m_rightSidebar;
 }

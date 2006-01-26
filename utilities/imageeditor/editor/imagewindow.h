@@ -35,15 +35,7 @@
 
 #include "editorwindow.h"
 
-class QPopupMenu;
 class QStringList;
-
-class KAccel;
-class KAction;
-class KActionMenu;
-class KToolBarPopupAction;
-class KToggleAction;
-class KSelectAction;
 
 namespace Digikam
 {
@@ -83,8 +75,6 @@ private:
     // image cannot be saved.
     bool                    m_allowSaving;
     
-    QPopupMenu             *m_contextMenu;
-
     KURL::List              m_urlList;
     KURL                    m_urlCurrent;
     

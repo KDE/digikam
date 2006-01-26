@@ -110,6 +110,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_deleteItem2Trash       = true;
     m_fullScreenHideThumbBar = true;
 
+    // -- Show splash at start ----------------------------
+    
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     KGlobal::dirs()->addResourceType("data", KGlobal::dirs()->kde_default("data") + "digikam");
@@ -120,14 +122,12 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         m_splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
 
-    // Construct the view
+    // -- Build the GUI -----------------------------------
 
     setupUserArea();
     setupStatusBar();
-
-    // Build the GUI
-
     setupActions();
+    
     m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
     
     // Load image plugins to GUI
@@ -174,19 +174,21 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         plugActionList( "showfoto_bcg", bcg_actions );
     }
 
+    // Create context menu.
+    
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
-    // -- setup connections ---------------------------
-
+    // Make signals/slots connections
+    
     setupConnections();
     
-    // -- read settings --------------------------------
+    // -- Read settings --------------------------------
         
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");    
 
-    //-------------------------------------------------------------
+    // -- Load current items ---------------------------
 
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
@@ -393,48 +395,6 @@ void ShowFoto::slotOpenFile()
             m_lastOpenedDirectory=(*it);
         }
         toggleActions(true);
-    }
-}
-
-void ShowFoto::slotFirst()
-{
-    if (!promptUserSave())
-        return;
-
-    m_bar->setSelected( m_bar->firstItem() );
-}
-
-void ShowFoto::slotLast()
-{
-    if (!promptUserSave())
-        return;
-
-    m_bar->setSelected( m_bar->lastItem() );
-}
-
-void ShowFoto::slotForward()
-{
-    if (!promptUserSave())
-        return;
-
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (curr && curr->next())
-    {
-        m_bar->setSelected(curr->next());
-        m_currentItem = m_bar->currentItem();
-    }
-}
-
-void ShowFoto::slotBackward()
-{
-    if (!promptUserSave())
-        return;
-
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (curr && curr->prev())
-    {
-        m_bar->setSelected(curr->prev());
-        m_currentItem = m_bar->currentItem();
     }
 }
 
@@ -1132,11 +1092,6 @@ void ShowFoto::slotUpdateItemInfo(void)
     toggleNavigation( index );
 }
     
-void ShowFoto::slotContextMenu()
-{
-    m_contextMenu->exec(QCursor::pos());
-}
-
 void ShowFoto::slotOpenFolder(const KURL& url)
 {
     if (!promptUserSave())
@@ -1224,6 +1179,48 @@ void ShowFoto::slotOpenFilesInFolder()
     {
        m_lastOpenedDirectory = url;
        slotOpenFolder(url);
+    }
+}
+
+void ShowFoto::slotFirst()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->firstItem() );
+}
+
+void ShowFoto::slotLast()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->lastItem() );
+}
+
+void ShowFoto::slotForward()
+{
+    if (!promptUserSave())
+        return;
+
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->next())
+    {
+        m_bar->setSelected(curr->next());
+        m_currentItem = m_bar->currentItem();
+    }
+}
+
+void ShowFoto::slotBackward()
+{
+    if (!promptUserSave())
+        return;
+
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->prev())
+    {
+        m_bar->setSelected(curr->prev());
+        m_currentItem = m_bar->currentItem();
     }
 }
 
