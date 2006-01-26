@@ -25,10 +25,10 @@
 
 #include <qwidget.h>
 
-class QLineEdit;
-
 namespace Digikam
 {
+
+class SetupMimePriv;
 
 class SetupMime : public QWidget
 {
@@ -45,10 +45,10 @@ private:
 
     void readSettings();
 
-    QLineEdit *m_imageFileFilterEdit;
-    QLineEdit *m_movieFileFilterEdit;
-    QLineEdit *m_audioFileFilterEdit;
-    QLineEdit *m_rawFileFilterEdit;
+private:
+
+    SetupMimePriv* d;
+
 };
 
 }  // namespace Digikam
