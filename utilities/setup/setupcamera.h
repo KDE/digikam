@@ -4,7 +4,7 @@
  * Date  : 2003-02-10
  * Description : camera setup tab.
  * 
- * Copyright 2003-2005 by Renchi Raju Gilles Caulier
+ * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
  * Copyright 2006 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
@@ -27,12 +27,10 @@
 
 #include <qwidget.h>
 
-class QListView;
-class QListViewItem;
-class QPushButton;
-
 namespace Digikam
 {
+
+class SetupCameraPriv;
 
 class SetupCamera : public QWidget
 {
@@ -45,14 +43,6 @@ public:
 
     void applySettings();
     
-private:
-    
-    QListView*   listView_;
-    QPushButton* addButton_;
-    QPushButton* removeButton_;
-    QPushButton* editButton_;
-    QPushButton* autoDetectButton_;
-
 private slots:
 
     void slotSelectionChanged();
@@ -66,6 +56,11 @@ private slots:
                          const QString& port,  const QString& path);
     void slotEditedCamera(const QString& title, const QString& model,
                           const QString& port,  const QString& path);
+
+private:
+
+    SetupCameraPriv* d;
+    
 };
 
 }  // namespace Digikam
