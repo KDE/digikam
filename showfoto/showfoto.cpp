@@ -825,7 +825,6 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::slotSavingFinished(const QString &filename, bool success)
 {
-    //TODO
     if (m_savingContext->fromSave)
     {
         // from save()

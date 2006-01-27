@@ -592,7 +592,6 @@ void ImageWindow::finishSaving(bool success)
 
 void ImageWindow::slotSavingFinished(const QString &filename, bool success)
 {
-    //TODO: enable actions as appropriate
     if (m_savingContext->fromSave)
     {
         // from save()
