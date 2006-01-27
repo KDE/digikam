@@ -721,76 +721,6 @@ void ImageWindow::slotSavingFinished(const QString &filename, bool success)
     finishSaving(true);
 }
 
-void ImageWindow::slotDeleteCurrentItem()
-{
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-
-    if (!palbum)
-        return;
-
-    AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings->getUseTrash())
-    {
-        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                        .arg(m_urlCurrent.filename()));
-        if (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
-            !=  KMessageBox::Continue)
-        {
-            return;
-        }
-    }
-
-    if (!SyncJob::userDelete(m_urlCurrent))
-    {
-        QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, errMsg);
-        return;
-    }
-
-    emit signalFileDeleted(m_urlCurrent);
-
-    KURL CurrentToRemove = m_urlCurrent;
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-
-    if (it != m_urlList.end())
-    {
-        if (m_urlCurrent != m_urlList.last())
-        {
-            // Try to get the next image in the current Album...
-
-            KURL urlNext = *(++it);
-            m_urlCurrent = urlNext;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-        else if (m_urlCurrent != m_urlList.first())
-        {
-            // Try to get the previous image in the current Album...
-
-            KURL urlPrev = *(--it);
-            m_urlCurrent = urlPrev;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-    }
-
-    // No image in the current Album -> Quit ImageEditor...
-
-    KMessageBox::information(this,
-                             i18n("There is no image to show in the current album.\n"
-                                  "The image editor will be closed."),
-                             i18n("No Image in Current Album"));
-
-    close();
-}
-
 bool ImageWindow::save()
 {
     m_savingContext->saveTempFile = new KTempFile(m_urlCurrent.directory(false), QString::null);
@@ -973,6 +903,76 @@ bool ImageWindow::promptUserSave()
             return false;
     }
     return true;
+}
+
+void ImageWindow::slotDeleteCurrentItem()
+{
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+        return;
+
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings->getUseTrash())
+    {
+        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                        .arg(m_urlCurrent.filename()));
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+            !=  KMessageBox::Continue)
+        {
+            return;
+        }
+    }
+
+    if (!SyncJob::userDelete(m_urlCurrent))
+    {
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    emit signalFileDeleted(m_urlCurrent);
+
+    KURL CurrentToRemove = m_urlCurrent;
+    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+
+    if (it != m_urlList.end())
+    {
+        if (m_urlCurrent != m_urlList.last())
+        {
+            // Try to get the next image in the current Album...
+
+            KURL urlNext = *(++it);
+            m_urlCurrent = urlNext;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+        else if (m_urlCurrent != m_urlList.first())
+        {
+            // Try to get the previous image in the current Album...
+
+            KURL urlPrev = *(--it);
+            m_urlCurrent = urlPrev;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+    }
+
+    // No image in the current Album -> Quit ImageEditor...
+
+    KMessageBox::information(this,
+                             i18n("There is no image to show in the current album.\n"
+                                  "The image editor will be closed."),
+                             i18n("No Image in Current Album"));
+
+    close();
 }
 
 }  // namespace Digikam

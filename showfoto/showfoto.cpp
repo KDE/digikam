@@ -1031,56 +1031,6 @@ bool ShowFoto::saveAs()
     return true;
 }
 
-bool ShowFoto::promptUserSave()
-{
-    if (!m_currentItem)
-        return true;
-
-    if (m_saveAction->isEnabled())
-    {
-        int result = KMessageBox::warningYesNoCancel(this,
-                                  i18n("The image '%1\' has been modified.\n"
-                                       "Do you want to save it?")
-                                       .arg(m_currentItem->url().filename()),
-                                  QString::null,
-                                  KStdGuiItem::save(),
-                                  KStdGuiItem::discard());
-
-        if (result == KMessageBox::Yes)
-        {
-            m_savingContext->progressDialog = new KProgressDialog(this, 0, QString::null,
-                    i18n("Saving \"%1\"").arg(m_currentItem->url().filename()), true );
-            m_savingContext->progressDialog->setAllowCancel(false);
-
-            bool saving;
-            if (m_isReadOnly)
-                saving = saveAs();
-            else
-                saving = save();
-
-            if (saving)
-            {
-                // if saving has started, enter modal dialog to synchronize
-                // on the saving operation. When saving is finished, the dialog is closed.
-                m_savingContext->progressDialog->exec();
-                delete m_savingContext->progressDialog;
-                m_savingContext->progressDialog = 0;
-                return m_savingContext->synchronousSavingResult;
-            }
-            else
-                return false;
-        }
-        else if (result == KMessageBox::No)
-        {
-            m_saveAction->setEnabled(false);
-            return true;
-        }
-        else
-            return false;
-    }
-    return true;
-}
-
 bool ShowFoto::save()
 {
     if (!m_currentItem)
@@ -1133,6 +1083,56 @@ void ShowFoto::toggleNavigation(int index)
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
+}
+
+bool ShowFoto::promptUserSave()
+{
+    if (!m_currentItem)
+        return true;
+
+    if (m_saveAction->isEnabled())
+    {
+        int result = KMessageBox::warningYesNoCancel(this,
+                                  i18n("The image '%1\' has been modified.\n"
+                                       "Do you want to save it?")
+                                       .arg(m_currentItem->url().filename()),
+                                  QString::null,
+                                  KStdGuiItem::save(),
+                                  KStdGuiItem::discard());
+
+        if (result == KMessageBox::Yes)
+        {
+            m_savingContext->progressDialog = new KProgressDialog(this, 0, QString::null,
+                    i18n("Saving \"%1\"").arg(m_currentItem->url().filename()), true );
+            m_savingContext->progressDialog->setAllowCancel(false);
+
+            bool saving;
+            if (m_isReadOnly)
+                saving = saveAs();
+            else
+                saving = save();
+
+            if (saving)
+            {
+                // if saving has started, enter modal dialog to synchronize
+                // on the saving operation. When saving is finished, the dialog is closed.
+                m_savingContext->progressDialog->exec();
+                delete m_savingContext->progressDialog;
+                m_savingContext->progressDialog = 0;
+                return m_savingContext->synchronousSavingResult;
+            }
+            else
+                return false;
+        }
+        else if (result == KMessageBox::No)
+        {
+            m_saveAction->setEnabled(false);
+            return true;
+        }
+        else
+            return false;
+    }
+    return true;
 }
 
 void ShowFoto::slotDeleteCurrentItem()
