@@ -466,19 +466,12 @@ void ImageEffect_ICCProof::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
 
-//     double b = m_bInput->value();
-//     double c = m_cInput->value() + (double)(1.00);    
-//     double g = m_gInput->value() + (double)(1.00);
-//     bool   o = m_overExposureIndicatorBox->isChecked();
 
-//     enableButtonOK( b != 0.0 || c != 1.0 || g != 1.0 );
-    
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-//     Digikam::ImageIface* iface = m_previewWidget->imageIface();
     iface                      = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
@@ -517,6 +510,15 @@ void ImageEffect_ICCProof::finalRendering()
     // final image transformations
 
     /// @todo implement me
+    if (!m_doSoftProofBox->isChecked())
+    {
+        kapp->setOverrideCursor( KCursor::waitCursor() );
+        Digikam::ImageIface* iface = m_previewWidget->imageIface();
+        kdDebug() << "No Doing proof" << endl;
+        kapp->restoreOverrideCursor();
+    }
+    kdDebug() << "Doing proof" << endl;
+    accept();
 }
 
 void ImageEffect_ICCProof::slotTry()
@@ -593,34 +595,56 @@ void ImageEffect_ICCProof::slotTry()
     {
         if (m_useEmbeddedProfile->isChecked())
         {
-            transform.setProfiles( spacePath, proofPath, true );
+            transform.setProfiles( tmpSpacePath, tmpProofPath, true );
         }
         else
         {
-            transform.setProfiles( inPath, spacePath, proofPath);
+            transform.setProfiles( tmpInPath, tmpSpacePath, tmpProofPath);
         }
     }
     else
     {
         if (m_useEmbeddedProfile->isChecked())
         {
-            transform.setProfiles( spacePath );
+            transform.setProfiles( tmpSpacePath );
         }
         else
         {
-            transform.setProfiles( inPath, spacePath );
+            transform.setProfiles( tmpInPath, tmpSpacePath );
         }
     }
 
     
     if (m_useEmbeddedProfile->isChecked())
     {
-        transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+        if ( (m_doSoftProofBox->isChecked() && tmpProofPath.isEmpty()) || (tmpSpacePath.isEmpty()) )
+        {
+            KMessageBox::information(this, i18n("<p>You have to set a \"Proof\" and a \"Workspace\" profile.</p>"));
+        }
+        else if (tmpSpacePath.isEmpty())
+        {
+            KMessageBox::information(this, i18n("<p>You have to set an \"Input\" profile.</p>"));
+        }
+        else
+        {
+            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+        }
     }
     else
     {
-        QByteArray fakeProfile = QByteArray();
+        if ( (m_doSoftProofBox->isChecked() && tmpProofPath.isEmpty()) || ((tmpInPath.isEmpty() || tmpSpacePath.isEmpty()) || m_useSRGBDefaultProfile->isChecked()) )
+        {
+            KMessageBox::information(this, i18n("<p>You have to set a \"Proof\" (for a \"soft-proof\" transformation), an \"Input\"  and a \"Workspace\" profile.</p>"));
+        }
+        else if ((tmpInPath.isEmpty() || tmpSpacePath.isEmpty()) ||  m_useSRGBDefaultProfile->isChecked() )
+        {
+            KMessageBox::information(this, i18n("<p>You have to set an \"Input\" and a \"Workspace\" profile.</p>"));
+        }
+        else
+        {
+            QByteArray fakeProfile = QByteArray();
         transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+        }
     }
     
     iface->putPreviewImage(preview.bits());
@@ -645,6 +669,7 @@ void ImageEffect_ICCProof::readSettings()
     if (!config->readBoolEntry("EnableCM", false))
     {
         cmEnabled = false;
+        slotToggledWidgets(false);
     }
     else
     {
