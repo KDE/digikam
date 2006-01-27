@@ -374,9 +374,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-//     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-//             this, SLOT(slotEffect()));
-                        
+
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
@@ -390,14 +388,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(proofProfilesInfo, SIGNAL(clicked()), this, SLOT(slotProofICCInfo()));
 
     connect(displayProfilesInfo, SIGNAL(clicked()), this, SLOT(slotDisplayICCInfo()));
-
-    connect(m_useInDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
-
-    connect(m_useSpaceDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
-
-    connect(m_useProofDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
-
-    connect(m_useDisplayDefaultProfile, SIGNAL(clicked()), this, SLOT(slotCMDisabledWarning()));
 
     // -------------------------------------------------------------
 
@@ -506,9 +496,6 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::finalRendering()
 {
-    // TODO : Gilles -> Paco : use this method instead slotOk() to do 
-    // final image transformations
-
     /// @todo implement me
     if (!m_doSoftProofBox->isChecked())
     {
@@ -523,9 +510,8 @@ void ImageEffect_ICCProof::finalRendering()
 
 void ImageEffect_ICCProof::slotTry()
 {
-    /// @todo implement me
-    /// FIXME "embed profile" option is not implemented -- Paco Cruz
-    /// FIXME use of Display profile is not implemented -- Paco Cruz
+    /// @todo "embed profile" option is not implemented -- Paco Cruz
+    /// @todo use of Display profile is not implemented -- Paco Cruz
     
     kapp->setOverrideCursor(KCursor::waitCursor());
 
