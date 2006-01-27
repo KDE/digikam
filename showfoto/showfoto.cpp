@@ -794,6 +794,9 @@ void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool i
     m_nameLabel->progressBarVisible(false);
     m_isReadOnly = isReadOnly;
     slotUpdateItemInfo();
+
+    //TODO: Enable actions as appropriate
+
     QApplication::restoreOverrideCursor();
 }
 
@@ -814,7 +817,9 @@ void ShowFoto::finishSaving(bool success)
         m_savingContext->synchronousSavingResult = success;
         m_savingContext->progressDialog->close();
     }
-    
+
+    //TODO: Enable actions as appropriate
+
     m_nameLabel->progressBarVisible(false);
 }
 
