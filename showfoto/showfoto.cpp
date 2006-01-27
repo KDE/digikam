@@ -783,7 +783,11 @@ void ShowFoto::slotLoadingStarted(const QString &filename)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
-    //TODO: Disable actions as appropriate
+    // Disable actions as appropriate during loading
+    m_rightSidebar->noCurrentItem();
+    toggleActions(false);
+    m_openFilesInFolderAction->setEnabled(false);
+    m_fileOpenAction->setEnabled(false);
 
     m_nameLabel->progressBarVisible(true);
 }
@@ -791,11 +795,17 @@ void ShowFoto::slotLoadingStarted(const QString &filename)
 void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
 {
     //TODO: handle success == false
+    
     m_nameLabel->progressBarVisible(false);
     m_isReadOnly = isReadOnly;
     slotUpdateItemInfo();
 
-    //TODO: Enable actions as appropriate
+    // Enable actions as appropriate after loading
+    // No need to re-enable image properties sidebar here, it's will be done
+    // automaticly by a signal from canvas
+    toggleActions(true);
+    m_openFilesInFolderAction->setEnabled(true);
+    m_fileOpenAction->setEnabled(true);
 
     QApplication::restoreOverrideCursor();
 }
@@ -804,7 +814,11 @@ void ShowFoto::slotSavingStarted(const QString &filename)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
-    //TODO: disable actions as appropriate
+    // Disable actions as appropriate during saving
+    m_rightSidebar->noCurrentItem();
+    toggleActions(false);
+    m_openFilesInFolderAction->setEnabled(false);
+    m_fileOpenAction->setEnabled(false);
     
     m_nameLabel->progressBarVisible(true);
 }
@@ -818,7 +832,11 @@ void ShowFoto::finishSaving(bool success)
         m_savingContext->progressDialog->close();
     }
 
-    //TODO: Enable actions as appropriate
+    // Enable actions as appropriate after saving
+    // TODO updated image propertie side bar!
+    toggleActions(true);
+    m_openFilesInFolderAction->setEnabled(true);
+    m_fileOpenAction->setEnabled(true);
 
     m_nameLabel->progressBarVisible(false);
 }
