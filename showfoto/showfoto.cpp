@@ -789,14 +789,14 @@ void ShowFoto::slotLoadingStarted(const QString &filename)
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
 
-    m_nameLabel->progressBarVisible(true);
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::ProgressBarMode);
 }
 
 void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
 {
     //TODO: handle success == false
     
-    m_nameLabel->progressBarVisible(false);
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
     m_isReadOnly = isReadOnly;
     slotUpdateItemInfo();
 
@@ -820,7 +820,7 @@ void ShowFoto::slotSavingStarted(const QString &filename)
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
     
-    m_nameLabel->progressBarVisible(true);
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::CancelProgressBarMode);
 }
 
 void ShowFoto::finishSaving(bool success)
@@ -838,7 +838,7 @@ void ShowFoto::finishSaving(bool success)
     m_openFilesInFolderAction->setEnabled(true);
     m_fileOpenAction->setEnabled(true);
 
-    m_nameLabel->progressBarVisible(false);
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
 }
 
 void ShowFoto::slotSavingFinished(const QString &filename, bool success)

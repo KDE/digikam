@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2006-01-24
- * Description : a progress bar used to display io file acess 
- *               progressor or the current file name.
+ * Description : a progress bar used to display io file access
+ *               progress or the current file name.
  * 
  * Copyright 2006 by Gilles Caulier
  *
@@ -22,10 +22,15 @@
 // Qt includes.
   
 #include "qlabel.h"
+#include <qlayout.h>
+#include "qwidget.h"
+#include "qpushbutton.h"
  
 // KDE includes.
 
 #include "kprogress.h"
+#include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -39,7 +44,7 @@ class IOFileProgressBarPriv
     
 public:
 
-    enum WidgetVisible
+    enum WidgetStackEnum
     {
         FileNameLabel=0,      
         FileAcessProgressBar
@@ -49,24 +54,44 @@ public:
     {
         fileNameLabel        = 0; 
         fileAcessProgressBar = 0;
+        progressWidget       = 0;
+        cancelButton         = 0;
     }
 
-    QLabel    *fileNameLabel;
+    QLabel      *fileNameLabel;
+    
+    QWidget     *progressWidget;
 
-    KProgress *fileAcessProgressBar;
+    QPushButton *cancelButton;
+
+    KProgress   *fileAcessProgressBar;
 };
 
 IOFileProgressBar::IOFileProgressBar(QWidget *parent)
                  : QWidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new IOFileProgressBarPriv;
-    d->fileNameLabel        = new QLabel(this);
-    d->fileAcessProgressBar = new KProgress(this);
+
+    d->fileNameLabel  = new QLabel(this);
+    d->progressWidget = new QWidget(this);
+    QHBoxLayout *hBox = new QHBoxLayout(d->progressWidget);
+    d->fileAcessProgressBar = new KProgress(d->progressWidget);
     d->fileAcessProgressBar->setTotalSteps(100);
+    d->cancelButton = new QPushButton(d->progressWidget);
+    d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    d->cancelButton->setPixmap( SmallIcon( "cancel" ) );
+      
+    hBox->addWidget(d->fileAcessProgressBar);
+    hBox->addWidget(d->cancelButton);
 
     addWidget(d->fileNameLabel, IOFileProgressBarPriv::FileNameLabel);
-    addWidget(d->fileAcessProgressBar, IOFileProgressBarPriv::FileAcessProgressBar);
-    progressBarVisible(false);
+    addWidget(d->progressWidget, IOFileProgressBarPriv::FileAcessProgressBar);
+    setMaximumHeight( fontMetrics().height() );
+
+    connect( d->cancelButton, SIGNAL( clicked() ),
+             this, SIGNAL( signalCancelButtonPressed() ) );
+           
+    progressBarMode(FileNameMode);
 }      
 
 IOFileProgressBar::~IOFileProgressBar()
@@ -89,14 +114,22 @@ void IOFileProgressBar::setProgressValue( int v )
     d->fileAcessProgressBar->setProgress(v);
 }
 
-void IOFileProgressBar::progressBarVisible(bool v)
+void IOFileProgressBar::progressBarMode( int mode )
 {
-    if (v)
+    if ( mode == FileNameMode)
     {
+        raiseWidget(IOFileProgressBarPriv::FileNameLabel);
+    }
+    else if ( mode == ProgressBarMode )
+    {
+        d->cancelButton->hide();
         raiseWidget(IOFileProgressBarPriv::FileAcessProgressBar);
     }
-    else
-        raiseWidget(IOFileProgressBarPriv::FileNameLabel);
+    else  // CancelProgressBarMode
+    {
+        d->cancelButton->show();
+        raiseWidget(IOFileProgressBarPriv::FileAcessProgressBar);
+    }
 }
 
 }  // namespace Digikam

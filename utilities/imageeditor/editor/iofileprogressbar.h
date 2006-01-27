@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2006-01-24
- * Description : a progress bar used to display io file acess 
- *               progressor or the current file name.
- * 
+ * Description : a progress bar used to display io file access
+ *               progress or the current file name.
+ *
  * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -47,10 +47,23 @@ public:
     ~IOFileProgressBar();
   
     void setText(QString text);
-    void progressBarVisible(bool v);
+    void progressBarMode(int mode);
     void setProgressValue( int v );
     void setAlignment(int a);
 
+public:
+
+    enum IOFileProgressBarMode
+    {
+        FileNameMode=0,
+        ProgressBarMode,
+        CancelProgressBarMode
+    };
+
+signals:
+
+    void signalCancelButtonPressed();
+    
 private:
 
     IOFileProgressBarPriv* d;
