@@ -181,6 +181,9 @@ void ImageWindow::setupConnections()
                 
     connect(m_rightSidebar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
+
+    connect(this, SIGNAL(signalSelectionChanged( QRect* )),
+            m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
 }
 
 void ImageWindow::setupUserArea()
@@ -424,27 +427,6 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
             
         m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img, m_view, item);
     }
-}
-
-void ImageWindow::slotSelected(bool val)
-{
-    // Update menu actions.
-    m_cropAction->setEnabled(val);
-    m_copyAction->setEnabled(val);
-
-    for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
-         plugin; plugin = m_imagePluginLoader->pluginList().next())
-    {
-        if (plugin) 
-        {
-            plugin->setEnabledSelectionActions(val);
-        }
-    }
-    
-    // Update histogram.
-    
-    QRect sel = m_canvas->getSelectedArea();
-    m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
 }
 
 void ImageWindow::slotAssignTag(int tagID)

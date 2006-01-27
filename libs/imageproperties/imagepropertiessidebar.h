@@ -53,9 +53,11 @@ public:
     
     virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
                     
-    virtual void imageSelectionChanged(QRect *rect);                 
-    
     virtual void noCurrentItem(void);                               
+
+public slots:
+
+    void slotImageSelectionChanged(QRect *rect);                 
 
 protected slots:
 

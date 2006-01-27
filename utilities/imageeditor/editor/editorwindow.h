@@ -24,6 +24,7 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qrect.h>
 
 // KDE includes.
 
@@ -65,6 +66,8 @@ public:
     virtual void applySettings(){};
 
 signals:
+
+    void signalSelectionChanged( QRect* );
 
 protected:
 
@@ -152,9 +155,9 @@ protected:
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
+    virtual void toggleActions2SlideShow(bool){};
     virtual void toggleGUI2SlideShow()        {};
     virtual void toggleGUI2FullScreen()       {};
-    virtual void toggleActions2SlideShow(bool){};
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
@@ -184,6 +187,7 @@ protected slots:
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
     void slotViewHistogram();
+    void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);

@@ -235,6 +235,9 @@ void ShowFoto::setupConnections()
 
     connect(m_bar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
+
+    connect(this, SIGNAL(signalSelectionChanged( QRect* )),
+            m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
 }
 
 void ShowFoto::setupUserArea()
@@ -518,32 +521,6 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
                                         sel.isNull() ? 0 : &sel, img);
         }
     }    
-}
-
-void ShowFoto::slotSelected(bool val)
-{
-    // Update menu actions.
-    m_cropAction->setEnabled(val);
-    m_copyAction->setEnabled(val);
-
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) 
-    {
-        if (plugin) 
-        {
-            plugin->setEnabledSelectionActions(val);
-        }
-    }
-    
-    // Update histogram.
-    
-    if (m_currentItem)
-    {
-        QRect sel = m_canvas->getSelectedArea();
-        m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
-    }
 }
 
 void ShowFoto::toggleActions(bool val)

@@ -92,7 +92,7 @@ void ImagePropertiesSideBar::noCurrentItem(void)
     m_dirtyHistogramTab = false;
 }
 
-void ImagePropertiesSideBar::imageSelectionChanged(QRect *rect)
+void ImagePropertiesSideBar::slotImageSelectionChanged(QRect *rect)
 {
     m_currentRect = rect;
     

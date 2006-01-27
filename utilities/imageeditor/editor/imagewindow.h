@@ -111,7 +111,6 @@ private slots:
     void slotDeleteCurrentItem();
     
     void slotChanged(bool, bool);
-    void slotSelected(bool);
     void slotUpdateItemInfo();
 
     void slotSetup();

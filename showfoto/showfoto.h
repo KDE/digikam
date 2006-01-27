@@ -133,7 +133,6 @@ private slots:
     void slotChangeBCG();
     
     void slotChanged(bool, bool);
-    void slotSelected(bool);
     void slotUpdateItemInfo();
 
     void slotSetup();

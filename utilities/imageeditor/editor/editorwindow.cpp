@@ -999,6 +999,27 @@ void EditorWindow::enter_loop()
     qt_leave_modal(&dummy);
 }
 
+void EditorWindow::slotSelected(bool val)
+{
+    // Update menu actions.
+    m_cropAction->setEnabled(val);
+    m_copyAction->setEnabled(val);
+
+    for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
+         plugin; plugin = m_imagePluginLoader->pluginList().next())
+    {
+        if (plugin) 
+        {
+            plugin->setEnabledSelectionActions(val);
+        }
+    }
+    
+    // Update histogram into sidebar.
+    
+    QRect sel = m_canvas->getSelectedArea();
+    emit signalSelectionChanged( sel.isNull() ? 0 : &sel );
+}
+
 }  // namespace Digikam
 
 #include "editorwindow.moc"
