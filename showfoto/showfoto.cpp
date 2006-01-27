@@ -779,6 +779,128 @@ void ShowFoto::slotBackward()
 // -------------------------------------------------------------------------
 // TODO : Following method must be merged to common GUI implementation.
 
+void ShowFoto::slotLoadingStarted(const QString &filename)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    
+    //TODO: Disable actions as appropriate
+
+    m_nameLabel->progressBarVisible(true);
+}
+
+void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
+{
+    //TODO: handle success == false
+    m_nameLabel->progressBarVisible(false);
+    m_isReadOnly = isReadOnly;
+    slotUpdateItemInfo();
+    QApplication::restoreOverrideCursor();
+}
+
+void ShowFoto::slotSavingStarted(const QString &filename)
+{
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
+    //TODO: disable actions as appropriate
+    
+    m_nameLabel->progressBarVisible(true);
+}
+
+void ShowFoto::finishSaving(bool success)
+{
+    // FIXME : remove saving context progress dialog
+    if (m_savingContext->progressDialog)
+    {
+        m_savingContext->synchronousSavingResult = success;
+        m_savingContext->progressDialog->close();
+    }
+    
+    m_nameLabel->progressBarVisible(false);
+}
+
+void ShowFoto::slotSavingFinished(const QString &filename, bool success)
+{
+    //TODO
+    if (m_savingContext->fromSave)
+    {
+        // from save()
+        if (!success)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file '%1'")
+                    .arg(m_savingContext->currentURL.filename()));
+                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
+                finishSaving(false);
+                return;
+        }
+
+        if ( m_canvas->exifRotated() )
+            KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
+
+        kdDebug() << "renaming to " << m_savingContext->currentURL.path() << endl;
+        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
+              QFile::encodeName(m_savingContext->currentURL.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to overwrite original file"));
+                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
+                finishSaving(false);
+                return;
+        }
+
+        m_canvas->setModified( false );
+        m_bar->invalidateThumb(m_currentItem);
+        kapp->restoreOverrideCursor();
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+    }
+    else
+    {
+        // from saveAs()
+        if (!success)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file '%1'")
+                    .arg(m_savingContext->saveAsURL.filename()));
+                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
+                finishSaving(false);
+                return;
+        }
+
+        // only try to write exif if both src and destination are jpeg files
+        if (QString(QImageIO::imageFormat(m_savingContext->currentURL.path())).upper() == "JPEG" &&
+            m_savingContext->format.upper() == "JPEG")
+        {
+            if ( m_canvas->exifRotated() )
+                KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
+        }
+
+        kdDebug() << "renaming to " << m_savingContext->saveAsURL.path() << endl;
+        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
+              QFile::encodeName(m_savingContext->saveAsURL.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to overwrite original file"));
+                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
+                finishSaving(false);
+                return;
+        }
+
+        m_canvas->setModified( false );
+
+        // add the file to the list of images if it's not there already
+        Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->saveAsURL);
+        m_bar->invalidateThumb(foundItem);
+
+        if (!foundItem)
+            foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->saveAsURL);
+
+        m_bar->setSelected(foundItem);
+        kapp->restoreOverrideCursor();
+    }
+
+    finishSaving(true);
+}
+
 bool ShowFoto::saveAs()
 {
     if (!m_currentItem)
@@ -959,131 +1081,6 @@ bool ShowFoto::save()
     m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings);
 
     return true;
-}
-
-void ShowFoto::slotSavingStarted(const QString &filename)
-{
-    //TODO: disable actions as appropriate
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-}
-
-void ShowFoto::slotSavingFinished(const QString &filename, bool success)
-{
-    //TODO
-    if (m_savingContext->fromSave)
-    {
-        // from save()
-        if (!success)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->currentURL.filename()));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
-        }
-
-        if ( m_canvas->exifRotated() )
-            KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
-
-        kdDebug() << "renaming to " << m_savingContext->currentURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
-              QFile::encodeName(m_savingContext->currentURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to overwrite original file"));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
-        }
-
-        m_canvas->setModified( false );
-        m_bar->invalidateThumb(m_currentItem);
-        kapp->restoreOverrideCursor();
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
-    }
-    else
-    {
-        // from saveAs()
-        if (!success)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->saveAsURL.filename()));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
-        }
-
-        // only try to write exif if both src and destination are jpeg files
-        if (QString(QImageIO::imageFormat(m_savingContext->currentURL.path())).upper() == "JPEG" &&
-            m_savingContext->format.upper() == "JPEG")
-        {
-            if ( m_canvas->exifRotated() )
-                KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
-        }
-
-        kdDebug() << "renaming to " << m_savingContext->saveAsURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
-              QFile::encodeName(m_savingContext->saveAsURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to overwrite original file"));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
-        }
-
-        m_canvas->setModified( false );
-
-        // add the file to the list of images if it's not there already
-        Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->saveAsURL);
-        m_bar->invalidateThumb(foundItem);
-
-        if (!foundItem)
-            foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->saveAsURL);
-
-        m_bar->setSelected(foundItem);
-        kapp->restoreOverrideCursor();
-    }
-
-    finishSaving(true);
-}
-
-void ShowFoto::finishSaving(bool success)
-{
-    if (m_savingContext->progressDialog)
-    {
-        m_savingContext->synchronousSavingResult = success;
-        m_savingContext->progressDialog->close();
-    }
-}
-
-void ShowFoto::slotSavingProgress(const QString& filePath, float progress)
-{
-    //TODO
-}
-
-void ShowFoto::slotLoadingStarted(const QString &filename)
-{
-    //TODO: Disable actions as appropriate
-
-    m_nameLabel->progressBarVisible(true);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-}
-
-void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
-{
-    //TODO: handle success == false
-    m_nameLabel->progressBarVisible(false);
-    m_isReadOnly = isReadOnly;
-    slotUpdateItemInfo();
-    QApplication::restoreOverrideCursor();
-}
-
-void ShowFoto::slotLoadingProgress(const QString& filePath, float progress)
-{
-    m_nameLabel->setProgressValue((int)(progress*100.0));
 }
 
 void ShowFoto::toggleNavigation(int index)

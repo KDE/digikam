@@ -185,7 +185,10 @@ protected slots:
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
     void slotViewHistogram();
-    
+
+    void slotLoadingProgress(const QString& filePath, float progress);
+    void slotSavingProgress(const QString& filePath, float progress);
+
     virtual void slotContextMenu();
 
     virtual void slotFilePrint()=0;

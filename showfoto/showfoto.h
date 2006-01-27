@@ -140,10 +140,8 @@ private slots:
 
     void slotLoadingStarted(const QString &filename);
     void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
-    void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingStarted(const QString &filename);
     void slotSavingFinished(const QString &filename, bool success);
-    void slotSavingProgress(const QString& filePath, float progress);
 };
 
 }   // namespace ShowFoto

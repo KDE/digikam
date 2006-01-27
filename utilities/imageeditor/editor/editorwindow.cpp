@@ -942,6 +942,16 @@ void EditorWindow::slotRotatedOrFlipped()
     m_rotatedOrFlipped = true;
 }
 
+void EditorWindow::slotLoadingProgress(const QString&, float progress)
+{
+    m_nameLabel->setProgressValue((int)(progress*100.0));
+}
+
+void EditorWindow::slotSavingProgress(const QString&, float progress)
+{
+    m_nameLabel->setProgressValue((int)(progress*100.0));
+}
+
 }  // namespace Digikam
 
 #include "editorwindow.moc"
