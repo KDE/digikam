@@ -86,7 +86,6 @@ void IccTransform::getEmbeddedProfile(DImg image)
     {
         d->embedded_profile = image.getICCProfil();
         d->has_profile = true;
-        kdDebug() << "Has profile" << endl;
     }
     else
     {
@@ -124,7 +123,6 @@ void IccTransform::setProfiles( QString output_profile, QString proof_profile, b
 
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
-kdDebug() << "First open embedded profile" << endl;
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(), (DWORD)d->embedded_profile.size());
     QString embeddedProfileDescriptor =QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
@@ -138,11 +136,8 @@ void IccTransform::apply(DImg& image)
 
     if (d->has_profile)
     {
-        kdDebug() << "Second open embedded profile" << endl;
         inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
                                           (DWORD)d->embedded_profile.size());
-//         embeddedProfileDescriptor = QString(cmsTakeProductDesc(inprofile));
-        kdDebug() << "Embedded profile name: " << cmsTakeProductDesc(inprofile) << endl;
     }
     else
     {
@@ -303,13 +298,12 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             break;
     }
 
-    kdDebug() << "icctransform.cpp/308-Intent is: " << intent << endl;
+    kdDebug() << "icctransform.cpp/301-Intent is: " << intent << endl;
 
     if (!profile.isNull())
     {
         inprofile = cmsOpenProfileFromMem(profile.data(),
                                           (DWORD)profile.size());
-        kdDebug() << "Embedded desc: " << cmsTakeProductDesc(inprofile) << endl;
     }
     else if (useBuiltin)
     {
@@ -320,7 +314,11 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
     }
 
+    kdDebug() << "icctransform.cpp/317-In profile: " << cmsTakeProductName(inprofile) << endl;
+
     outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
+
+    kdDebug() << "icctransform.cpp/321-Out profile: " << cmsTakeProductName(outprofile) << endl;
 
     if (useBPC)
     {
@@ -377,6 +375,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     else
     {
         proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+        kdDebug() << "icctransform.cpp/378-proof profile: " << cmsTakeProductName(proofprofile) << endl;
         transformFlags |= cmsFLAGS_SOFTPROOFING;
         if (checkGamut)
         {
