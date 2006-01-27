@@ -69,9 +69,7 @@ signals:
 
 private:
 
-    bool                      m_rotatedOrFlipped;
-
-    // If image editor is launched by camera interface, current 
+    // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      m_allowSaving;
     
@@ -92,9 +90,6 @@ private:
     void setupActions();
     void setupConnections();
     void setupUserArea();
-    void readSettings();
-    void saveSettings();
-    void toggleActions(bool val);
     void toggleGUI2FullScreen();
 
     bool promptUserSave();
@@ -120,8 +115,6 @@ private slots:
     void slotSetup();
     void slotContextMenu();
     
-    void slotRotatedOrFlipped();
-
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     

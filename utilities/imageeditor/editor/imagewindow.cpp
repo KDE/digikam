@@ -91,44 +91,58 @@
 namespace Digikam
 {
 
+ImageWindow* ImageWindow::m_instance = 0;
+
+ImageWindow* ImageWindow::imagewindow()
+{
+    if (!m_instance)
+        new ImageWindow();
+
+    return m_instance;
+}
+
+bool ImageWindow::imagewindowCreated()
+{
+    return m_instance;
+}
+
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
-    m_instance              = this;
-    m_rotatedOrFlipped      = false;
-    m_allowSaving           = true;
-    m_view                  = 0L;
+    m_instance    = this;
+    m_allowSaving = true;
+    m_view        = 0;
 
     // -- Build the GUI -------------------------------
 
     setupUserArea();
     setupStatusBar();
     setupActions();
-        
+
     // Load image plugins to GUI
-    
+
     m_imagePluginLoader = ImagePluginLoader::instance();
     loadImagePlugins();
 
     // Create context menu.
-    
+
     m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
     // Make signals/slots connections
-    
+
     setupConnections();
-    
+
     // -- Read settings --------------------------------
-    
+
     readSettings();
     applySettings();
     setAutoSaveSettings("ImageViewer Settings");
 
-    //-------------------------------------------------------------    
+    //-------------------------------------------------------------
     
     // This is just a bloody workaround until we have found the problem
     // which leads the imagewindow to open in a wrong size
-    resize(640, 480);
+    //resize(640, 480);
 
     m_rightSidebar->populateTags();
 }
@@ -147,17 +161,13 @@ ImageWindow::~ImageWindow()
 void ImageWindow::setupConnections()
 {
     setupStandardConnections();
+
+    // To toogle properly keyboards shortcuts from comments & tags side bar tab.
     
     connect(m_rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotForward()));
                 
     connect(m_rightSidebar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotBackward()));
-                       
-    connect(m_canvas, SIGNAL(signalShowNextImage()),
-            this, SLOT(slotForward()));
-            
-    connect(m_canvas, SIGNAL(signalShowPrevImage()),
             this, SLOT(slotBackward()));
 }
 
@@ -182,28 +192,9 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
-    // --- Create the gui --------------------------------------------------------------
-    
     createGUI("digikamimagewindowui.rc", false);
 
     setupStandardAccelerators();
-    
-    // -- if rotating/flipping set the rotatedflipped flag to true ---------------------
-
-    connect(m_rotate90Action, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(m_rotate180Action, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(m_rotate270Action, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(m_flipHorzAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
-            
-    connect(m_flipVertAction, SIGNAL(activated()),
-            this, SLOT(slotRotatedOrFlipped()));
 }
 
 void ImageWindow::applySettings()
@@ -228,21 +219,8 @@ void ImageWindow::applySettings()
     m_canvas->setExifOrient(settings->getExifRotate());
 }
 
-void ImageWindow::readSettings()
-{
-    readStandardSettings();
-}
-
-void ImageWindow::saveSettings()
-{
-    saveStandardSettings();
-}
-
-void ImageWindow::loadURL(const KURL::List& urlList,
-                          const KURL& urlCurrent,
-                          const QString& caption,
-                          bool  allowSaving,
-                          AlbumIconView* view)
+void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
+                          const QString& caption, bool allowSaving, AlbumIconView* view)
 {
     if (!promptUserSave())
         return;
@@ -483,10 +461,113 @@ void ImageWindow::slotSelected(bool val)
     m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
 }
 
-void ImageWindow::slotRotatedOrFlipped()
+void ImageWindow::slotAssignTag(int tagID)
 {
-    m_rotatedOrFlipped = true;
+    IconItem* item = m_view->findItem(m_urlCurrent.url());
+    if (item)
+    {
+        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);
+                
+    }
 }
+
+void ImageWindow::slotRemoveTag(int tagID)
+{
+    IconItem* item = m_view->findItem(m_urlCurrent.url());
+    if (item)
+    {
+        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);
+                
+    }
+}
+
+void ImageWindow::slotUpdateItemInfo()
+{
+    uint index = m_urlList.findIndex(m_urlCurrent);
+
+    m_rotatedOrFlipped = false;
+
+    QString text = m_urlCurrent.filename() +
+            i18n(" (%2 of %3)")
+            .arg(QString::number(index+1))
+            .arg(QString::number(m_urlList.count()));
+    m_nameLabel->setText(text);
+
+    if (m_urlList.count() == 1) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+    else 
+    {
+        m_backwardAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
+    }
+
+    if (index == 0) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+    }
+
+    if (index == m_urlList.count()-1) 
+    {
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+
+    // Disable some menu actions if the current root image URL
+    // isn't include in the digiKam Albums library database.
+    // This is necessary when ImageEditor is opened from cameraclient.
+
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+    {
+        m_fileDeleteAction->setEnabled(false);
+    }
+    else
+    {
+        m_fileDeleteAction->setEnabled(true);
+    }
+}
+
+void ImageWindow::slotSetup()
+{
+    Setup setup(this, 0, Setup::Editor);
+    
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    unLoadImagePlugins();
+    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
+    kapp->config()->sync();
+    loadImagePlugins();
+    
+    applySettings();
+}
+
+void ImageWindow::toggleGUI2FullScreen()
+{
+    if (m_fullScreen)
+    {
+        m_rightSidebar->show();
+        m_rightSidebar->expand();
+    }
+    else
+    {
+        m_rightSidebar->shrink();
+        m_rightSidebar->hide();
+    }
+}
+
+// -------------------------------------------------------------------------
+// TODO : Following method must be merged to common GUI implementation.
 
 void ImageWindow::slotDeleteCurrentItem()
 {
@@ -890,131 +971,6 @@ bool ImageWindow::promptUserSave()
     }
     return true;
 }
-
-void ImageWindow::slotAssignTag(int tagID)
-{
-    IconItem* item = m_view->findItem(m_urlCurrent.url());
-    if (item)
-    {
-        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);
-                
-    }
-}
-
-void ImageWindow::slotRemoveTag(int tagID)
-{
-    IconItem* item = m_view->findItem(m_urlCurrent.url());
-    if (item)
-    {
-        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);
-                
-    }
-}
-
-void ImageWindow::slotUpdateItemInfo()
-{
-    uint index = m_urlList.findIndex(m_urlCurrent);
-
-    m_rotatedOrFlipped = false;
-
-    QString text = m_urlCurrent.filename() +
-            i18n(" (%2 of %3)")
-            .arg(QString::number(index+1))
-            .arg(QString::number(m_urlList.count()));
-    m_nameLabel->setText(text);
-
-    if (m_urlList.count() == 1) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_forwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
-    else 
-    {
-        m_backwardAction->setEnabled(true);
-        m_forwardAction->setEnabled(true);
-        m_firstAction->setEnabled(true);
-        m_lastAction->setEnabled(true);
-    }
-
-    if (index == 0) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-    }
-
-    if (index == m_urlList.count()-1) 
-    {
-        m_forwardAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
-
-    // Disable some menu actions if the current root image URL
-    // isn't include in the digiKam Albums library database.
-    // This is necessary when ImageEditor is opened from cameraclient.
-
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-
-    if (!palbum)
-    {
-        m_fileDeleteAction->setEnabled(false);
-    }
-    else
-    {
-        m_fileDeleteAction->setEnabled(true);
-    }
-}
-
-void ImageWindow::toggleActions(bool val)
-{
-    toggleStandardActions(val);
-}
-
-void ImageWindow::slotSetup()
-{
-    Setup setup(this, 0, Setup::Editor);
-    
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    unLoadImagePlugins();
-    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
-    kapp->config()->sync();
-    loadImagePlugins();
-    
-    applySettings();
-}
-
-void ImageWindow::toggleGUI2FullScreen()
-{
-    if (m_fullScreen)
-    {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-    }
-    else
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-    }
-}
-
-ImageWindow* ImageWindow::imagewindow()
-{
-    if (!m_instance)
-        new ImageWindow();
-
-    return m_instance;
-}
-
-bool ImageWindow::imagewindowCreated()
-{
-    return m_instance;
-}
-
-ImageWindow* ImageWindow::m_instance = 0;
 
 }  // namespace Digikam
 

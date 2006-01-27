@@ -124,6 +124,7 @@ EditorWindow::EditorWindow(const char *name)
     m_isReadOnly             = false;
     m_fullScreenHideToolBar  = false;
     m_slideShowInFullScreen  = true;
+    m_rotatedOrFlipped       = false;
     
     // Settings containers instance.
 
@@ -156,6 +157,14 @@ void EditorWindow::closeEvent(QCloseEvent* e)
 
 void EditorWindow::setupStandardConnections()
 {
+    // -- Canvas connections ------------------------------------------------
+
+    connect(m_canvas, SIGNAL(signalShowNextImage()),
+            this, SLOT(slotForward()));
+            
+    connect(m_canvas, SIGNAL(signalShowPrevImage()),
+            this, SLOT(slotBackward()));
+
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
             
@@ -186,8 +195,27 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SLOT(slotSavingProgress(const QString&, float)));
 
+    // -- Slideshow tool connections -----------------------------------------
+
     connect(m_slideShow, SIGNAL(finished()),
             m_slideShowAction, SLOT(activate()) );
+
+    // -- if rotating/flipping set the rotatedflipped flag to true -----------
+
+    connect(m_rotate90Action, SIGNAL(activated()),
+            this, SLOT(slotRotatedOrFlipped()));
+            
+    connect(m_rotate180Action, SIGNAL(activated()),
+            this, SLOT(slotRotatedOrFlipped()));
+            
+    connect(m_rotate270Action, SIGNAL(activated()),
+            this, SLOT(slotRotatedOrFlipped()));
+            
+    connect(m_flipHorzAction, SIGNAL(activated()),
+            this, SLOT(slotRotatedOrFlipped()));
+            
+    connect(m_flipVertAction, SIGNAL(activated()),
+            this, SLOT(slotRotatedOrFlipped()));
 }
 
 void EditorWindow::setupStandardActions()
@@ -249,6 +277,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_undoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
+            
     connect(m_undoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotUndo(int)));
 
@@ -261,6 +290,7 @@ void EditorWindow::setupStandardActions()
 
     connect(m_redoAction->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
+            
     connect(m_redoAction->popupMenu(), SIGNAL(activated(int)),
             m_canvas, SLOT(slotRedo(int)));
 
@@ -905,6 +935,11 @@ void EditorWindow::slotToggleSlideShow()
         
         toggleGUI2SlideShow();
     }
+}
+
+void EditorWindow::slotRotatedOrFlipped()
+{
+    m_rotatedOrFlipped = true;
 }
 
 }  // namespace Digikam

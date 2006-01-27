@@ -181,7 +181,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         
     readSettings();
     applySettings();
-    setAutoSaveSettings("ImageViewer Settings");    
+    setAutoSaveSettings("ImageViewer Settings");
 
     // -- Load current items ---------------------------
 
@@ -217,7 +217,7 @@ ShowFoto::~ShowFoto()
 void ShowFoto::setupConnections()
 {
     setupStandardConnections();
-    
+
     connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
 
@@ -376,6 +376,408 @@ void ShowFoto::slotOpenFile()
         toggleActions(true);
     }
 }
+
+void ShowFoto::slotOpenURL(const KURL& url)
+{
+    if(!promptUserSave())
+    {
+        m_bar->blockSignals(true);
+        m_bar->setSelected(m_currentItem);
+        m_bar->blockSignals(false);
+        return;
+    }
+
+    m_currentItem = m_bar->currentItem();
+    if(!m_currentItem)
+        return;
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    QString localFile;
+#if KDE_IS_VERSION(3,2,0)
+    KIO::NetAccess::download(url, localFile, this);
+#else
+    KIO::NetAccess::download(url, localFile);
+#endif
+    
+    if (m_ICCSettings->enableCMSetting)
+    {
+        kdDebug() << "enableCMSetting=true" << endl;
+        m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
+    }
+    else
+    {
+        kdDebug() << "enableCMSetting=false" << endl;
+        m_canvas->load(localFile, 0, m_IOFileSettings);
+    }
+}
+
+void ShowFoto::toggleGUI2FullScreen()
+{
+    if (m_fullScreen)
+    {
+        m_rightSidebar->show();
+        m_rightSidebar->expand();
+
+        // If Hide Thumbbar option is checked, restore it.
+        if (!m_showBarAction->isChecked())
+            m_bar->show();
+    }
+    else
+    {
+        m_rightSidebar->shrink();
+        m_rightSidebar->hide();
+
+        // If Hide Thumbbar option is checked, catch it if necessary.
+        if (!m_showBarAction->isChecked())
+        {
+            if (m_fullScreenHideThumbBar)
+                m_bar->hide();
+            else
+                m_fullScreenAction->plug(m_bar);
+        }
+    }
+}
+
+void ShowFoto::slotToggleShowBar()
+{
+    if (m_showBarAction->isChecked())
+    {
+        m_bar->hide();
+    }
+    else
+    {
+        m_bar->show();
+    }
+}
+
+void ShowFoto::slotChangeBCG()
+{
+    QString name;
+    if (sender())
+        name = sender()->name();
+
+    if (name == "gamma_plus")
+    {
+        m_canvas->increaseGamma();
+    }
+    else if  (name == "gamma_minus")
+    {
+        m_canvas->decreaseGamma();
+    }
+    else if  (name == "brightness_plus")
+    {
+        m_canvas->increaseBrightness();
+    }
+    else if  (name == "brightness_minus")
+    {
+        m_canvas->decreaseBrightness();
+    }
+    else if  (name == "contrast_plus")
+    {
+        m_canvas->increaseContrast();
+    }
+    else if  (name == "contrast_minus")
+    {
+        m_canvas->decreaseContrast();
+    }
+}
+
+void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
+{
+    m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
+                        QString("x") +
+                        QString::number(m_canvas->imageHeight()) +
+                        QString(" ") +
+                        i18n("pixels"));
+
+    m_revertAction->setEnabled(moreUndo);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+    m_saveAction->setEnabled(moreUndo);
+
+    if (m_currentItem)
+    {
+        if (m_currentItem->url().isValid())
+        {
+            QRect sel          = m_canvas->getSelectedArea();
+            Digikam::DImg* img = Digikam::DImgInterface::instance()->getImg();
+            m_rightSidebar->itemChanged(m_currentItem->url(),
+                                        sel.isNull() ? 0 : &sel, img);
+        }
+    }    
+}
+
+void ShowFoto::slotSelected(bool val)
+{
+    // Update menu actions.
+    m_cropAction->setEnabled(val);
+    m_copyAction->setEnabled(val);
+
+    QPtrList<Digikam::ImagePlugin> pluginList
+        = m_imagePluginLoader->pluginList();
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next()) 
+    {
+        if (plugin) 
+        {
+            plugin->setEnabledSelectionActions(val);
+        }
+    }
+    
+    // Update histogram.
+    
+    if (m_currentItem)
+    {
+        QRect sel = m_canvas->getSelectedArea();
+        m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
+    }
+}
+
+void ShowFoto::toggleActions(bool val)
+{
+    toggleStandardActions(val);
+        
+    // if BCG actions exists then toggle it.
+    if (m_BCGAction)
+        m_BCGAction->setEnabled(val);
+
+    // if no active slideshow then toggle it.
+    if (!m_slideShowAction->isChecked())
+        m_slideShowAction->setEnabled(val);
+}
+
+void ShowFoto::toggleActions2SlideShow(bool val)
+{
+    toggleActions(val);
+    
+    // if slideshow mode then toogle file open actions.
+    m_fileOpenAction->setEnabled(val);
+    m_openFilesInFolderAction->setEnabled(val);
+}
+
+void ShowFoto::toggleGUI2SlideShow()
+{
+    if (m_slideShowAction->isChecked())
+    {
+        m_rightSidebar->shrink();
+        m_rightSidebar->hide();
+    }
+    else
+    {
+        m_rightSidebar->show();
+        m_rightSidebar->expand();
+    }
+}
+
+void ShowFoto::slotFilePrint()
+{
+    printImage(m_currentItem->url());
+}
+
+void ShowFoto::show()
+{
+    if(m_splash)
+    {
+        m_splash->finish(this);
+        delete m_splash;
+        m_splash = 0;
+    }
+    KMainWindow::show();
+}
+
+void ShowFoto::slotSetup()
+{
+    Setup setup(this);
+    
+    if (setup.exec() != QDialog::Accepted)
+        return;
+
+    unLoadImagePlugins();
+    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
+    kapp->config()->sync();
+    loadImagePlugins();
+    
+    applySettings();
+
+    if ( m_itemsNb == 0 )
+    {
+        slotUpdateItemInfo();
+        toggleActions(false);
+    }
+}
+
+void ShowFoto::slotUpdateItemInfo(void)
+{
+    m_itemsNb = m_bar->countItems();
+    int index = 0;
+    QString text;
+    
+    if (m_itemsNb > 0)
+    {
+        index = 1;
+        
+        for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+        {
+            if (item->url().equals(m_currentItem->url()))
+            {
+                break;
+            }
+            index++;
+        }
+
+        text = m_currentItem->url().filename() +
+                   i18n(" (%2 of %3)")
+                   .arg(QString::number(index))
+                   .arg(QString::number(m_itemsNb));
+    
+        setCaption(m_currentItem->url().directory());
+    }
+    else 
+    {
+        text = "";
+        setCaption("");
+    }
+    
+    m_nameLabel->setText(text);
+    
+    toggleNavigation( index );
+}
+    
+void ShowFoto::slotOpenFolder(const KURL& url)
+{
+    if (!promptUserSave())
+        return;
+
+    m_canvas->load(QString::null, 0, m_IOFileSettings);
+    m_bar->clear(true);
+    m_rightSidebar->noCurrentItem();
+    m_currentItem = 0;
+    m_isReadOnly = false;
+    
+    if (!url.isValid() || !url.isLocalFile())
+       return;
+
+    // Parse KDE image IO mime types registration to get files filter pattern.
+
+    QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
+    QString filter;
+
+    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; it++)
+    {    
+        QString format = KImageIO::typeForMime(*it);
+        filter.append ("*.");
+        filter.append (format);
+        filter.append (" ");
+    }    
+
+    // Because KImageIO return only *.JPEG and *.TIFF mime types.
+    if ( filter.contains("*.TIFF") )
+        filter.append (" *.TIF");
+    if ( filter.contains("*.JPEG") )
+        filter.append (" *.JPG");
+
+    // Added RAW files estentions supported by dcraw program and 
+    // defines to digikam/libs/dcraw/rawfiles.h
+    filter.append (" ");
+    filter.append ( QString::QString(raw_file_extentions) );  
+    filter.append (" ");
+
+    QString patterns = filter.lower();
+    patterns.append (" ");
+    patterns.append (filter.upper());
+
+    kdDebug () << "patterns=" << patterns << endl;    
+
+    // Get all image files from directory.
+
+    QDir dir(url.path(), patterns);
+    
+    if (!dir.exists())
+       return;
+    
+    // Directory items sorting. Perhaps we need to add any settings in config dialog.
+    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
+    dir.setSorting ( QDir::Time );
+
+    const QFileInfoList* fileinfolist = dir.entryInfoList();
+    if (!fileinfolist)
+       return;
+    
+    QFileInfoListIterator it(*fileinfolist);
+    QFileInfo* fi;
+
+    // And open all items in image editor.
+
+    while( (fi = it.current() ) )
+    {
+        new Digikam::ThumbBarItem( m_bar, KURL::KURL(fi->filePath()) );
+        ++it;
+    }
+        
+    toggleActions(true);
+    toggleNavigation(1);
+}
+    
+void ShowFoto::slotOpenFilesInFolder()
+{
+    if (!promptUserSave())
+        return;
+
+    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
+                                               this, i18n("Open Images From Directory")));
+
+    if (!url.isEmpty())
+    {
+       m_lastOpenedDirectory = url;
+       slotOpenFolder(url);
+    }
+}
+
+void ShowFoto::slotFirst()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->firstItem() );
+}
+
+void ShowFoto::slotLast()
+{
+    if (!promptUserSave())
+        return;
+
+    m_bar->setSelected( m_bar->lastItem() );
+}
+
+void ShowFoto::slotForward()
+{
+    if (!promptUserSave())
+        return;
+
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->next())
+    {
+        m_bar->setSelected(curr->next());
+        m_currentItem = m_bar->currentItem();
+    }
+}
+
+void ShowFoto::slotBackward()
+{
+    if (!promptUserSave())
+        return;
+
+    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    if (curr && curr->prev())
+    {
+        m_bar->setSelected(curr->prev());
+        m_currentItem = m_bar->currentItem();
+    }
+}
+
+// -------------------------------------------------------------------------
+// TODO : Following method must be merged to common GUI implementation.
 
 bool ShowFoto::saveAs()
 {
@@ -662,41 +1064,6 @@ void ShowFoto::slotSavingProgress(const QString& filePath, float progress)
     //TODO
 }
 
-void ShowFoto::slotOpenURL(const KURL& url)
-{
-    if(!promptUserSave())
-    {
-        m_bar->blockSignals(true);
-        m_bar->setSelected(m_currentItem);
-        m_bar->blockSignals(false);
-        return;
-    }
-
-    m_currentItem = m_bar->currentItem();
-    if(!m_currentItem)
-        return;
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    QString localFile;
-#if KDE_IS_VERSION(3,2,0)
-    KIO::NetAccess::download(url, localFile, this);
-#else
-    KIO::NetAccess::download(url, localFile);
-#endif
-    
-    if (m_ICCSettings->enableCMSetting)
-    {
-        kdDebug() << "enableCMSetting=true" << endl;
-        m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
-    }
-    else
-    {
-        kdDebug() << "enableCMSetting=false" << endl;
-        m_canvas->load(localFile, 0, m_IOFileSettings);
-    }
-}
-
 void ShowFoto::slotLoadingStarted(const QString &filename)
 {
     //TODO: Disable actions as appropriate
@@ -746,201 +1113,6 @@ void ShowFoto::toggleNavigation(int index)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
-    }
-}
-
-void ShowFoto::toggleGUI2FullScreen()
-{
-    if (m_fullScreen)
-    {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-
-        // If Hide Thumbbar option is checked, restore it.
-        if (!m_showBarAction->isChecked())
-            m_bar->show();
-    }
-    else
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-
-        // If Hide Thumbbar option is checked, catch it if necessary.
-        if (!m_showBarAction->isChecked())
-        {
-            if (m_fullScreenHideThumbBar)
-                m_bar->hide();
-            else
-                m_fullScreenAction->plug(m_bar);
-        }
-    }
-}
-
-void ShowFoto::slotToggleShowBar()
-{
-    if (m_showBarAction->isChecked())
-    {
-        m_bar->hide();
-    }
-    else
-    {
-        m_bar->show();
-    }
-}
-
-void ShowFoto::slotChangeBCG()
-{
-    QString name;
-    if (sender())
-        name = sender()->name();
-
-    if (name == "gamma_plus")
-    {
-        m_canvas->increaseGamma();
-    }
-    else if  (name == "gamma_minus")
-    {
-        m_canvas->decreaseGamma();
-    }
-    else if  (name == "brightness_plus")
-    {
-        m_canvas->increaseBrightness();
-    }
-    else if  (name == "brightness_minus")
-    {
-        m_canvas->decreaseBrightness();
-    }
-    else if  (name == "contrast_plus")
-    {
-        m_canvas->increaseContrast();
-    }
-    else if  (name == "contrast_minus")
-    {
-        m_canvas->decreaseContrast();
-    }
-}
-
-void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
-{
-    m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
-                        QString("x") +
-                        QString::number(m_canvas->imageHeight()) +
-                        QString(" ") +
-                        i18n("pixels"));
-
-    m_revertAction->setEnabled(moreUndo);
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-    m_saveAction->setEnabled(moreUndo);
-
-    if (m_currentItem)
-    {
-        if (m_currentItem->url().isValid())
-        {
-            QRect sel          = m_canvas->getSelectedArea();
-            Digikam::DImg* img = Digikam::DImgInterface::instance()->getImg();
-            m_rightSidebar->itemChanged(m_currentItem->url(),
-                                        sel.isNull() ? 0 : &sel, img);
-        }
-    }    
-}
-
-void ShowFoto::slotSelected(bool val)
-{
-    // Update menu actions.
-    m_cropAction->setEnabled(val);
-    m_copyAction->setEnabled(val);
-
-    QPtrList<Digikam::ImagePlugin> pluginList
-        = m_imagePluginLoader->pluginList();
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
-         plugin; plugin = pluginList.next()) 
-    {
-        if (plugin) 
-        {
-            plugin->setEnabledSelectionActions(val);
-        }
-    }
-    
-    // Update histogram.
-    
-    if (m_currentItem)
-    {
-        QRect sel = m_canvas->getSelectedArea();
-        m_rightSidebar->imageSelectionChanged( sel.isNull() ? 0 : &sel);
-    }
-}
-
-void ShowFoto::toggleActions(bool val)
-{
-    toggleStandardActions(val);
-        
-    // if BCG actions exists then toggle it.
-    if (m_BCGAction)
-        m_BCGAction->setEnabled(val);
-
-    // if no active slideshow then toggle it.
-    if (!m_slideShowAction->isChecked())
-        m_slideShowAction->setEnabled(val);
-}
-
-void ShowFoto::toggleActions2SlideShow(bool val)
-{
-    toggleActions(val);
-    
-    // if slideshow mode then toogle file open actions.
-    m_fileOpenAction->setEnabled(val);
-    m_openFilesInFolderAction->setEnabled(val);
-}
-
-void ShowFoto::toggleGUI2SlideShow()
-{
-    if (m_slideShowAction->isChecked())
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-    }
-    else
-    {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-    }
-}
-
-void ShowFoto::slotFilePrint()
-{
-    printImage(m_currentItem->url());
-}
-
-void ShowFoto::show()
-{
-    if(m_splash)
-    {
-        m_splash->finish(this);
-        delete m_splash;
-        m_splash = 0;
-    }
-    KMainWindow::show();
-}
-
-void ShowFoto::slotSetup()
-{
-    Setup setup(this);
-    
-    if (setup.exec() != QDialog::Accepted)
-        return;
-
-    unLoadImagePlugins();
-    m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
-    kapp->config()->sync();
-    loadImagePlugins();
-    
-    applySettings();
-
-    if ( m_itemsNb == 0 )
-    {
-        slotUpdateItemInfo();
-        toggleActions(false);
     }
 }
 
@@ -1021,175 +1193,6 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     {
         m_currentItem = m_bar->currentItem();
         QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
-    }
-}
-
-void ShowFoto::slotUpdateItemInfo(void)
-{
-    m_itemsNb = m_bar->countItems();
-    int index = 0;
-    QString text;
-    
-    if (m_itemsNb > 0)
-    {
-        index = 1;
-        
-        for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
-        {
-            if (item->url().equals(m_currentItem->url()))
-            {
-                break;
-            }
-            index++;
-        }
-
-        text = m_currentItem->url().filename() +
-                   i18n(" (%2 of %3)")
-                   .arg(QString::number(index))
-                   .arg(QString::number(m_itemsNb));
-    
-        setCaption(m_currentItem->url().directory());
-    }
-    else 
-    {
-        text = "";
-        setCaption("");
-    }
-    
-    m_nameLabel->setText(text);
-    
-    toggleNavigation( index );
-}
-    
-void ShowFoto::slotOpenFolder(const KURL& url)
-{
-    if (!promptUserSave())
-        return;
-
-    m_canvas->load(QString::null, 0, m_IOFileSettings);
-    m_bar->clear(true);
-    m_rightSidebar->noCurrentItem();
-    m_currentItem = 0;
-    m_isReadOnly = false;
-    
-    if (!url.isValid() || !url.isLocalFile())
-       return;
-
-    // Parse KDE image IO mime types registration to get files filter pattern.
-
-    QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
-    QString filter;
-
-    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; it++)
-    {    
-        QString format = KImageIO::typeForMime(*it);
-        filter.append ("*.");
-        filter.append (format);
-        filter.append (" ");
-    }    
-
-    // Because KImageIO return only *.JPEG and *.TIFF mime types.
-    if ( filter.contains("*.TIFF") )
-        filter.append (" *.TIF");
-    if ( filter.contains("*.JPEG") )
-        filter.append (" *.JPG");
-
-    // Added RAW files estentions supported by dcraw program and 
-    // defines to digikam/libs/dcraw/rawfiles.h
-    filter.append (" ");
-    filter.append ( QString::QString(raw_file_extentions) );  
-    filter.append (" ");
-
-    QString patterns = filter.lower();
-    patterns.append (" ");
-    patterns.append (filter.upper());
-
-    kdDebug () << "patterns=" << patterns << endl;    
-
-    // Get all image files from directory.
-
-    QDir dir(url.path(), patterns);
-    
-    if (!dir.exists())
-       return;
-    
-    // Directory items sorting. Perhaps we need to add any settings in config dialog.
-    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
-    dir.setSorting ( QDir::Time );
-
-    const QFileInfoList* fileinfolist = dir.entryInfoList();
-    if (!fileinfolist)
-       return;
-    
-    QFileInfoListIterator it(*fileinfolist);
-    QFileInfo* fi;
-
-    // And open all items in image editor.
-
-    while( (fi = it.current() ) )
-    {
-        new Digikam::ThumbBarItem( m_bar, KURL::KURL(fi->filePath()) );
-        ++it;
-    }
-        
-    toggleActions(true);
-    toggleNavigation(1);
-}
-    
-void ShowFoto::slotOpenFilesInFolder()
-{
-    if (!promptUserSave())
-        return;
-
-    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
-                                               this, i18n("Open Images From Directory")));
-
-    if (!url.isEmpty())
-    {
-       m_lastOpenedDirectory = url;
-       slotOpenFolder(url);
-    }
-}
-
-void ShowFoto::slotFirst()
-{
-    if (!promptUserSave())
-        return;
-
-    m_bar->setSelected( m_bar->firstItem() );
-}
-
-void ShowFoto::slotLast()
-{
-    if (!promptUserSave())
-        return;
-
-    m_bar->setSelected( m_bar->lastItem() );
-}
-
-void ShowFoto::slotForward()
-{
-    if (!promptUserSave())
-        return;
-
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (curr && curr->next())
-    {
-        m_bar->setSelected(curr->next());
-        m_currentItem = m_bar->currentItem();
-    }
-}
-
-void ShowFoto::slotBackward()
-{
-    if (!promptUserSave())
-        return;
-
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
-    if (curr && curr->prev())
-    {
-        m_bar->setSelected(curr->prev());
-        m_currentItem = m_bar->currentItem();
     }
 }
 
