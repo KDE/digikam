@@ -2,9 +2,10 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2003-02-01
- * Description :
+ * Description : general configuration setup tab
  *
  * Copyright 2003-2004 by Renchi Raju
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,24 +27,29 @@
 
 #include <qwidget.h>
 
-class QComboBox;
-class QRadioButton;
-class QCheckBox;
-class QLineEdit;
-
 class KDialogBase;
 
 namespace Digikam
 {
+
+class SetupGeneralPriv;
 
 class SetupGeneral : public QWidget
 {
     Q_OBJECT
 
 public:
-    enum ThumbnailSizes { /*TinyThumb, */SmallThumb = 0, MediumThumb, LargeThumb, HugeThumb };
 
-    SetupGeneral(QWidget* parent = 0, KDialogBase* dialog = 0 );
+    enum ThumbnailSizes 
+    { 
+        /*TinyThumb, */
+        SmallThumb = 0, 
+        MediumThumb, 
+        LargeThumb, 
+        HugeThumb 
+    };
+
+    SetupGeneral(QWidget* parent = 0, KDialogBase* dialog = 0);
     ~SetupGeneral();
 
     void applySettings();
@@ -52,26 +58,14 @@ private:
 
     void readSettings();
 
-    QLineEdit    *albumPathEdit;
-
-    QComboBox    *thumbnailSize_;
-
-    QCheckBox    *showToolTipsBox_;
-
-    QCheckBox    *iconShowNameBox_;
-    QCheckBox    *iconShowSizeBox_;
-    QCheckBox    *iconShowDateBox_;
-    QCheckBox    *iconShowResolutionBox_;
-    QCheckBox    *iconShowCommentsBox_;
-    QCheckBox    *iconShowTagsBox_;
-    QCheckBox    *iconShowRatingBox_;
-
-    KDialogBase  *mainDialog_;
-
 private slots:
 
     void slotChangeAlbumPath();
     void slotPathEdited(const QString& newPath);
+
+private:
+
+    SetupGeneralPriv* d;
 
 };
 
