@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-08-23
- * Description :
- *
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2004-08-23
+ * Description : mics configuration setup tab
+ * 
  * Copyright 2004 by Renchi Raju
-
+ * Copyright 2005-2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -37,27 +39,44 @@
 namespace Digikam
 {
 
-SetupMisc::SetupMisc(QWidget* parent)
-    : QWidget( parent )
+class SetupMiscPriv
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+public:
 
+    SetupMiscPriv()
+    {
+        showSplashCheck = 0;
+        useTrashCheck   = 0;
+        scanAtStart     = 0;
+    }
+
+    QCheckBox* showSplashCheck;
+    QCheckBox* useTrashCheck;
+    QCheckBox* scanAtStart;
+};
+
+SetupMisc::SetupMisc(QWidget* parent)
+         : QWidget( parent )
+{
+    d = new SetupMiscPriv;
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
     QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint() );
 
    // --------------------------------------------------------
-   m_useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"),
-                                   this);
-   layout->addWidget(m_useTrashCheck);
+
+   d->useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"), this);
+   layout->addWidget(d->useTrashCheck);
 
    // --------------------------------------------------------
-   m_showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"),
-                                     this);
-   layout->addWidget(m_showSplashCheck);
+
+   d->showSplashCheck = new QCheckBox(i18n("&Show splash screen at startup"), this);
+   layout->addWidget(d->showSplashCheck);
 
    // --------------------------------------------------------
-   m_scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"),
-                                     this);
-   layout->addWidget(m_scanAtStart);
+
+   d->scanAtStart = new QCheckBox(i18n("&Scan for new items on startup (slows down startup)"), this);
+   layout->addWidget(d->scanAtStart);
 
    // --------------------------------------------------------
 
@@ -69,15 +88,16 @@ SetupMisc::SetupMisc(QWidget* parent)
 
 SetupMisc::~SetupMisc()
 {
+    delete d;
 }
 
 void SetupMisc::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
-    settings->setShowSplashScreen(m_showSplashCheck->isChecked());
-    settings->setUseTrash(m_useTrashCheck->isChecked());
-    settings->setScanAtStart(m_scanAtStart->isChecked());
+    settings->setShowSplashScreen(d->showSplashCheck->isChecked());
+    settings->setUseTrash(d->useTrashCheck->isChecked());
+    settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->saveSettings();
 }
 
@@ -85,9 +105,9 @@ void SetupMisc::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
-    m_showSplashCheck->setChecked(settings->getShowSplashScreen());
-    m_useTrashCheck->setChecked(settings->getUseTrash());
-    m_scanAtStart->setChecked(settings->getScanAtStart());
+    d->showSplashCheck->setChecked(settings->getShowSplashScreen());
+    d->useTrashCheck->setChecked(settings->getUseTrash());
+    d->scanAtStart->setChecked(settings->getScanAtStart());
 }
 
 }  // namespace Digikam

@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-08-23
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2004-08-23
+ * Description : mics configuration setup tab
  * 
  * Copyright 2004 by Renchi Raju
-
+ * Copyright 2005-2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -25,10 +27,10 @@
 
 #include <qwidget.h>
 
-class QCheckBox;
-
 namespace Digikam
 {
+
+class SetupMiscPriv;
 
 class SetupMisc : public QWidget
 {
@@ -43,9 +45,10 @@ private:
 
     void readSettings();
 
-    QCheckBox* m_showSplashCheck;
-    QCheckBox* m_useTrashCheck;
-    QCheckBox* m_scanAtStart;
+private:
+
+    SetupMiscPriv* d;
+
 };
 
 }  // namespace Digikam
