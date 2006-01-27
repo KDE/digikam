@@ -94,9 +94,12 @@ private:
 
 private:
 
+    void closeEvent(QCloseEvent* e);
+
     void setupActions();
     void setupConnections();
     void setupUserArea();
+
     void readSettings();
     void saveSettings();
     void applySettings();
@@ -108,7 +111,6 @@ private:
     void toggleGUI2FullScreen();
     
     void toggleNavigation(int index);
-    bool promptUserSave();
     bool save();
     bool saveAs();
     void finishSaving(bool success);

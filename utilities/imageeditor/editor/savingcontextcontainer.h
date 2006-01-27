@@ -29,7 +29,6 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kprogress.h>
 #include <ktempfile.h>
 
 namespace Digikam
@@ -45,7 +44,6 @@ public:
         fromSave                = false;
         saveTempFile            = 0;
         fileExists              = false;
-        progressDialog          = 0;
         synchronousSavingResult = false;
     }
 
@@ -55,8 +53,6 @@ public:
     
     QString                  format;
     QString                  tmpFile;
-
-    KProgressDialog         *progressDialog;
 
     KURL                     currentURL;
     KURL                     saveURL;

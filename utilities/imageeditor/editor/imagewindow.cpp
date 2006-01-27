@@ -158,6 +158,18 @@ ImageWindow::~ImageWindow()
     delete m_rightSidebar;
 }
 
+void ImageWindow::closeEvent(QCloseEvent* e)
+{
+    if (!e)
+        return;
+
+    if (!promptUserSave(m_urlCurrent))
+        return;
+
+    saveSettings();
+    e->accept();
+}
+
 void ImageWindow::setupConnections()
 {
     setupStandardConnections();
@@ -222,7 +234,7 @@ void ImageWindow::applySettings()
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                           const QString& caption, bool allowSaving, AlbumIconView* view)
 {
-    if (!promptUserSave())
+    if (!promptUserSave(m_urlCurrent))
         return;
     
     setCaption(i18n("digiKam Image Editor - Album \"%1\"").arg(caption));
@@ -272,12 +284,11 @@ void ImageWindow::slotLoadCurrent()
 
         //QApplication::restoreOverrideCursor();
     }
-
 }
 
 void ImageWindow::slotForward()
 {
-    if(!promptUserSave())
+    if(!promptUserSave(m_urlCurrent))
         return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
@@ -295,7 +306,7 @@ void ImageWindow::slotForward()
 
 void ImageWindow::slotBackward()
 {
-    if(!promptUserSave())
+    if(!promptUserSave(m_urlCurrent))
         return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
@@ -313,7 +324,7 @@ void ImageWindow::slotBackward()
 
 void ImageWindow::slotFirst()
 {
-    if(!promptUserSave())
+    if(!promptUserSave(m_urlCurrent))
         return;
     
     m_urlCurrent = m_urlList.first();
@@ -322,7 +333,7 @@ void ImageWindow::slotFirst()
 
 void ImageWindow::slotLast()
 {
-    if(!promptUserSave())
+    if(!promptUserSave(m_urlCurrent))
         return;
     
     m_urlCurrent = m_urlList.last();
@@ -441,8 +452,7 @@ void ImageWindow::slotAssignTag(int tagID)
     IconItem* item = m_view->findItem(m_urlCurrent.url());
     if (item)
     {
-        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);
-                
+        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);                
     }
 }
 
@@ -451,8 +461,7 @@ void ImageWindow::slotRemoveTag(int tagID)
     IconItem* item = m_view->findItem(m_urlCurrent.url());
     if (item)
     {
-        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);
-                
+        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);                
     }
 }
 
@@ -541,8 +550,8 @@ void ImageWindow::toggleGUI2FullScreen()
     }
 }
 
-// -------------------------------------------------------------------------
-// TODO : Following method must be merged to common GUI implementation.
+// ----------------------------------------------------------------------------
+// TODO : Checking if methods below can be merged to common GUI implementation.
 
 void ImageWindow::slotLoadingStarted(const QString &filename)
 {
@@ -584,12 +593,10 @@ void ImageWindow::slotSavingStarted(const QString &filename)
 
 void ImageWindow::finishSaving(bool success)
 {
-    // FIXME : remove saving context progress dialog
-    if (m_savingContext->progressDialog)
-    {
-        m_savingContext->synchronousSavingResult = success;
-        m_savingContext->progressDialog->close();
-    }
+    m_savingContext->synchronousSavingResult = success;
+
+    // Exit of internal Qt event loop to unlock promptUserSave() method.
+    qApp->exit_loop();
 
     // Enable actions as appropriate after saving
     // TODO updated image propertie side bar!
@@ -852,56 +859,6 @@ bool ImageWindow::saveAs()
 
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
-    return true;
-}
-
-bool ImageWindow::promptUserSave()
-{
-    if (m_saveAction->isEnabled())
-    {
-        int result = KMessageBox::warningYesNoCancel(this,
-                                  i18n("The image \"%1\" has been modified.\n"
-                                       "Do you want to save it?")
-                                       .arg(m_urlCurrent.filename()),
-                                  QString::null,
-                                  KStdGuiItem::save(),
-                                  KStdGuiItem::discard());
-
-        if (result == KMessageBox::Yes)
-        {
-            m_savingContext->progressDialog = new KProgressDialog(this, 0, QString::null,
-                        i18n("Saving \"%1\"").arg(m_urlCurrent.filename()), true );
-            m_savingContext->progressDialog->setAllowCancel(false);
-
-            bool saving;
-            if (m_isReadOnly)
-                saving = saveAs();
-            else
-                saving = save();
-
-            // we must return a value here, and we must wait on asynchronous saving
-            //TODO: test this, think about this
-            // What is enter_loop() good for?
-            if (saving)
-            {
-                // if saving has started, enter modal dialog to synchronize
-                // on the saving operation. When saving is finished, the dialog is closed.
-                m_savingContext->progressDialog->exec();
-                delete m_savingContext->progressDialog;
-                m_savingContext->progressDialog = 0;
-                return m_savingContext->synchronousSavingResult;
-            }
-            else
-                return false;
-        }
-        else if (result == KMessageBox::No)
-        {
-            m_saveAction->setEnabled(false);
-            return true;
-        }
-        else
-            return false;
-    }
     return true;
 }
 

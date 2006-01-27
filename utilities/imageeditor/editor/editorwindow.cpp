@@ -78,6 +78,9 @@
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 
+void qt_enter_modal( QWidget *widget );
+void qt_leave_modal( QWidget *widget );
+
 namespace Digikam
 {
 
@@ -141,18 +144,6 @@ EditorWindow::~EditorWindow()
     delete m_savingContext;
     delete m_slideShow;
     delete d;
-}
-
-void EditorWindow::closeEvent(QCloseEvent* e)
-{
-    if (!e)
-        return;
-
-    if (!promptUserSave())
-        return;
-
-    saveSettings();
-    e->accept();
 }
 
 void EditorWindow::setupStandardConnections()
@@ -950,6 +941,62 @@ void EditorWindow::slotLoadingProgress(const QString&, float progress)
 void EditorWindow::slotSavingProgress(const QString&, float progress)
 {
     m_nameLabel->setProgressValue((int)(progress*100.0));
+}
+
+bool EditorWindow::promptUserSave(const KURL& url)
+{
+    if (m_saveAction->isEnabled())
+    {
+        int result = KMessageBox::warningYesNoCancel(this,
+                                  i18n("The image '%1\' has been modified.\n"
+                                       "Do you want to save it?")
+                                       .arg(url.filename()),
+                                  QString::null,
+                                  KStdGuiItem::save(),
+                                  KStdGuiItem::discard());
+
+        if (result == KMessageBox::Yes)
+        {
+            bool saving;
+
+            if (m_isReadOnly)
+                saving = saveAs();
+            else
+                saving = save();
+            
+            // Waiting asynchronous image file saving operation runing in separate thread.
+            enter_loop();
+            
+            if (saving)
+            {
+                return m_savingContext->synchronousSavingResult;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (result == KMessageBox::No)
+        {
+            m_saveAction->setEnabled(false);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void EditorWindow::enter_loop()
+{
+    QWidget dummy(0, 0, WType_Dialog | WShowModal);
+    dummy.setFocusPolicy( QWidget::NoFocus );
+    qt_enter_modal(&dummy);
+    qApp->enter_loop();
+    qt_leave_modal(&dummy);
 }
 
 }  // namespace Digikam

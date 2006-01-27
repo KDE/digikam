@@ -214,6 +214,18 @@ ShowFoto::~ShowFoto()
     delete m_rightSidebar;
 }
 
+void ShowFoto::closeEvent(QCloseEvent* e)
+{
+    if (!e)
+        return;
+
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+        return;
+
+    saveSettings();
+    e->accept();
+}
+
 void ShowFoto::setupConnections()
 {
     setupStandardConnections();
@@ -351,7 +363,7 @@ void ShowFoto::applySettings()
 
 void ShowFoto::slotOpenFile()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
@@ -379,7 +391,7 @@ void ShowFoto::slotOpenFile()
 
 void ShowFoto::slotOpenURL(const KURL& url)
 {
-    if(!promptUserSave())
+    if(m_currentItem && !promptUserSave(m_currentItem->url()))
     {
         m_bar->blockSignals(true);
         m_bar->setSelected(m_currentItem);
@@ -646,7 +658,7 @@ void ShowFoto::slotUpdateItemInfo(void)
     
 void ShowFoto::slotOpenFolder(const KURL& url)
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     m_canvas->load(QString::null, 0, m_IOFileSettings);
@@ -721,7 +733,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     
 void ShowFoto::slotOpenFilesInFolder()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
@@ -736,7 +748,7 @@ void ShowFoto::slotOpenFilesInFolder()
 
 void ShowFoto::slotFirst()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     m_bar->setSelected( m_bar->firstItem() );
@@ -744,7 +756,7 @@ void ShowFoto::slotFirst()
 
 void ShowFoto::slotLast()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     m_bar->setSelected( m_bar->lastItem() );
@@ -752,7 +764,7 @@ void ShowFoto::slotLast()
 
 void ShowFoto::slotForward()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     Digikam::ThumbBarItem* curr = m_bar->currentItem();
@@ -765,7 +777,7 @@ void ShowFoto::slotForward()
 
 void ShowFoto::slotBackward()
 {
-    if (!promptUserSave())
+    if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
     Digikam::ThumbBarItem* curr = m_bar->currentItem();
@@ -776,8 +788,8 @@ void ShowFoto::slotBackward()
     }
 }
 
-// -------------------------------------------------------------------------
-// TODO : Following method must be merged to common GUI implementation.
+// ----------------------------------------------------------------------------
+// TODO : Checking if methods below can be merged to common GUI implementation.
 
 void ShowFoto::slotLoadingStarted(const QString &filename)
 {
@@ -825,12 +837,10 @@ void ShowFoto::slotSavingStarted(const QString &filename)
 
 void ShowFoto::finishSaving(bool success)
 {
-    // FIXME : remove saving context progress dialog
-    if (m_savingContext->progressDialog)
-    {
-        m_savingContext->synchronousSavingResult = success;
-        m_savingContext->progressDialog->close();
-    }
+    m_savingContext->synchronousSavingResult = success;
+
+    // Exit of internal Qt event loop to unlock promptUserSave() method.
+    qApp->exit_loop();
 
     // Enable actions as appropriate after saving
     // TODO updated image propertie side bar!
@@ -1083,56 +1093,6 @@ void ShowFoto::toggleNavigation(int index)
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
     }
-}
-
-bool ShowFoto::promptUserSave()
-{
-    if (!m_currentItem)
-        return true;
-
-    if (m_saveAction->isEnabled())
-    {
-        int result = KMessageBox::warningYesNoCancel(this,
-                                  i18n("The image '%1\' has been modified.\n"
-                                       "Do you want to save it?")
-                                       .arg(m_currentItem->url().filename()),
-                                  QString::null,
-                                  KStdGuiItem::save(),
-                                  KStdGuiItem::discard());
-
-        if (result == KMessageBox::Yes)
-        {
-            m_savingContext->progressDialog = new KProgressDialog(this, 0, QString::null,
-                    i18n("Saving \"%1\"").arg(m_currentItem->url().filename()), true );
-            m_savingContext->progressDialog->setAllowCancel(false);
-
-            bool saving;
-            if (m_isReadOnly)
-                saving = saveAs();
-            else
-                saving = save();
-
-            if (saving)
-            {
-                // if saving has started, enter modal dialog to synchronize
-                // on the saving operation. When saving is finished, the dialog is closed.
-                m_savingContext->progressDialog->exec();
-                delete m_savingContext->progressDialog;
-                m_savingContext->progressDialog = 0;
-                return m_savingContext->synchronousSavingResult;
-            }
-            else
-                return false;
-        }
-        else if (result == KMessageBox::No)
-        {
-            m_saveAction->setEnabled(false);
-            return true;
-        }
-        else
-            return false;
-    }
-    return true;
 }
 
 void ShowFoto::slotDeleteCurrentItem()

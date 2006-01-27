@@ -86,16 +86,18 @@ private:
 
 private:
 
-    ImageWindow();
+    void closeEvent(QCloseEvent* e);
+
     void setupActions();
     void setupConnections();
     void setupUserArea();
     void toggleGUI2FullScreen();
 
-    bool promptUserSave();
     bool save();
     bool saveAs();
     void finishSaving(bool success);
+
+    ImageWindow();
 
 private slots:
 

@@ -129,8 +129,6 @@ protected:
 
 protected:
 
-    void closeEvent(QCloseEvent* e);
-
     void saveStandardSettings();
     void readStandardSettings();
     void applyStandardSettings();
@@ -149,6 +147,8 @@ protected:
     void unLoadImagePlugins();
     void loadImagePlugins();
 
+    bool promptUserSave(const KURL& url);
+
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
@@ -158,7 +158,6 @@ protected:
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
-    virtual bool promptUserSave()=0;
     virtual void setupUserArea()=0;
     virtual bool saveAs()=0; 
     virtual bool save()=0;
@@ -203,6 +202,10 @@ protected slots:
 private slots:
 
     void slotRotatedOrFlipped();
+
+private:
+
+    void enter_loop();
 
 private:
     
