@@ -275,31 +275,6 @@ void ImageWindow::slotLoadCurrent()
 
 }
 
-void ImageWindow::slotLoadingStarted(const QString &filename)
-{
-    //TODO: Disable actions as appropriate
-
-    m_nameLabel->progressBarVisible(true);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-}
-
-void ImageWindow::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
-{
-    //TODO: enable actions as appropriate
-    //TODO: handle success == false
-
-    m_nameLabel->progressBarVisible(false);
-    QApplication::restoreOverrideCursor();
-    m_isReadOnly = isReadOnly;
-    slotUpdateItemInfo();
-    QApplication::restoreOverrideCursor();
-}
-
-void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
-{
-    m_nameLabel->setProgressValue((int)(progress*100.0));
-}
-
 void ImageWindow::slotForward()
 {
     if(!promptUserSave())
@@ -568,6 +543,31 @@ void ImageWindow::toggleGUI2FullScreen()
 
 // -------------------------------------------------------------------------
 // TODO : Following method must be merged to common GUI implementation.
+
+void ImageWindow::slotLoadingStarted(const QString &filename)
+{
+    //TODO: Disable actions as appropriate
+
+    m_nameLabel->progressBarVisible(true);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+void ImageWindow::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
+{
+    //TODO: enable actions as appropriate
+    //TODO: handle success == false
+
+    m_nameLabel->progressBarVisible(false);
+    QApplication::restoreOverrideCursor();
+    m_isReadOnly = isReadOnly;
+    slotUpdateItemInfo();
+    QApplication::restoreOverrideCursor();
+}
+
+void ImageWindow::slotLoadingProgress(const QString& filePath, float progress)
+{
+    m_nameLabel->setProgressValue((int)(progress*100.0));
+}
 
 void ImageWindow::slotDeleteCurrentItem()
 {
