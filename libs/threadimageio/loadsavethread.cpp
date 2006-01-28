@@ -97,7 +97,7 @@ void LoadSaveThread::load(LoadingDescription description)
     m_condVar.wakeAll();
 }
 
-void LoadSaveThread::save(DImg &image, const QString& filePath, const char* format)
+void LoadSaveThread::save(DImg &image, const QString& filePath, const QString &format)
 {
     QMutexLocker lock(&m_mutex);
     m_todo.append(new SavingTask(this, image, filePath, format));

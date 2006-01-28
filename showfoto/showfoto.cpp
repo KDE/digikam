@@ -830,7 +830,7 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::slotSavingFinished(const QString &filename, bool success)
 {
-    if (m_savingContext->fromSave)
+    if (/*m_savingContext->fromSave*/true)
     {
         // from save()
         if (!success)
@@ -1012,7 +1012,7 @@ bool ShowFoto::saveAs()
     
     m_savingContext->tmpFile = m_savingContext->saveAsURL.directory() + QString("/.showfoto-tmp-")
                       + m_savingContext->saveAsURL.filename();
-    m_savingContext->fromSave = false;
+    //m_savingContext->fromSave = false;
     m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
@@ -1036,7 +1036,7 @@ bool ShowFoto::save()
     m_savingContext->tmpFile = m_savingContext->currentURL.directory() + QString("/.showfoto-tmp-")
                       + m_savingContext->currentURL.filename();
     
-    m_savingContext->fromSave = true;
+    //m_savingContext->fromSave = true;
     m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings);
 
     return true;

@@ -97,7 +97,7 @@ public:
     void stopLoading(const QString& filePath = QString(), LoadingTaskFilter filter = LoadingTaskFilterAll);
 
     // Append a task to save the image to the task list
-    void save(DImg &image, const QString& filePath, const char* format);
+    void save(DImg &image, const QString& filePath, const QString &format);
 
     void setTerminationPolicy(TerminationPolicy terminationPolicy);
 

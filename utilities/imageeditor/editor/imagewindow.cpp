@@ -578,7 +578,8 @@ void ImageWindow::finishSaving(bool success)
     m_savingContext->synchronousSavingResult = success;
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
-    qApp->exit_loop();
+    if (m_savingContext->synchronizingState == SavingContextContainer::SynchronousSaving)
+        qApp->exit_loop();
 
     // Enable actions as appropriate after saving
     // TODO updated image propertie side bar!
@@ -589,9 +590,11 @@ void ImageWindow::finishSaving(bool success)
 
 void ImageWindow::slotSavingFinished(const QString &filename, bool success)
 {
-    if (m_savingContext->fromSave)
+    if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
     {
         // from save()
+        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
+
         if (!success)
         {
             kapp->restoreOverrideCursor();
@@ -624,8 +627,10 @@ void ImageWindow::slotSavingFinished(const QString &filename, bool success)
 
         kapp->restoreOverrideCursor();
     }
-    else
+    else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
     {
+        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
+
         // from saveAs()
         if (success == false)
         {
@@ -715,7 +720,7 @@ bool ImageWindow::save()
     m_savingContext->saveTempFile = new KTempFile(m_urlCurrent.directory(false), QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
     m_savingContext->saveURL = KURL();
-    m_savingContext->fromSave = true;
+    m_savingContext->savingState = SavingContextContainer::SavingStateSave;
 
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
     return true;
@@ -837,7 +842,7 @@ bool ImageWindow::saveAs()
     m_savingContext->saveTempFile = new KTempFile(newURL.directory(false), QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
     m_savingContext->saveURL = newURL;
-    m_savingContext->fromSave = false;
+    m_savingContext->savingState = SavingContextContainer::SavingStateSaveAs;
 
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 

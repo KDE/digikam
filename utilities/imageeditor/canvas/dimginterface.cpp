@@ -109,6 +109,7 @@ public:
     float         contrast;
 
     QString       filename;
+    QString       savingFilename;
 
     DImg          image;
 
@@ -150,11 +151,10 @@ DImgInterface::DImgInterface()
     connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
-    // progress for preloaded images will not be sent anyway, so these can directly be connected
     connect( d->thread, SIGNAL(signalLoadingProgress(const QString&, float)),
-             this, SIGNAL(signalLoadingProgress(const QString &, float)) );
+             this, SLOT(slotLoadingProgress(const QString &, float)) );
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SIGNAL(signalSavingProgress(const QString &, float)) );
+             this, SLOT(slotSavingProgress(const QString &, float)) );
 }
 
 DImgInterface::~DImgInterface()
@@ -301,6 +301,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     emit signalModified(false, false);
 }
 
+void DImgInterface::slotLoadingProgress(const QString& filePath, float progress)
+{
+    if (filePath == d->filename)
+        emit signalLoadingProgress(filePath, progress);
+}
+
+
 bool DImgInterface::exifRotated()
 {
     return d->rotatedOrFlipped;
@@ -428,8 +435,6 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
                            const QString& mimeType)
 {
-    bool result;
-
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
@@ -459,12 +464,13 @@ void DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer 
     if ( mimeType.upper() == QString("TIFF") || mimeType.upper() == QString("TIF") ) 
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
-    d->image.save(fileName, mimeType.ascii());
+    d->savingFilename = fileName;
+    d->thread->save(d->image, fileName, mimeType.ascii());
 }
 
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 {
-    if (filePath != d->filename)
+    if (filePath != d->savingFilename)
         return;
 
     if (success)
@@ -484,6 +490,11 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
     emit signalImageSaved(filePath, success);
 }
 
+void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
+{
+    if (filePath == d->savingFilename)
+        emit signalSavingProgress(filePath, progress);
+}
 
 void DImgInterface::setModified(bool val)
 {

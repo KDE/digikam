@@ -134,6 +134,8 @@ protected slots:
 
     void   slotImageLoaded(const QString&, const DImg& img);
     void   slotImageSaved(const QString& filePath, bool success);
+    void   slotLoadingProgress(const QString& filePath, float progress);
+    void   slotSavingProgress(const QString& filePath, float progress);
 
 signals:
 

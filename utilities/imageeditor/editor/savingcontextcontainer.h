@@ -41,13 +41,28 @@ public:
 
     SavingContextContainer()
     {
-        fromSave                = false;
+        savingState             = SavingStateNone;
+        synchronizingState      = NormalSaving;
         saveTempFile            = 0;
         fileExists              = false;
         synchronousSavingResult = false;
     }
 
-    bool                     fromSave;
+    enum SavingState
+    {
+        SavingStateNone,
+        SavingStateSave,
+        SavingStateSaveAs
+    };
+
+    enum SynchronizingState
+    {
+        NormalSaving,
+        SynchronousSaving
+    };
+
+    SavingState              savingState;
+    SynchronizingState       synchronizingState;
     bool                     synchronousSavingResult;
     bool                     fileExists;
     

@@ -963,12 +963,15 @@ bool EditorWindow::promptUserSave(const KURL& url)
                 saving = saveAs();
             else
                 saving = save();
-            
-            // Waiting asynchronous image file saving operation runing in separate thread.
-            enter_loop();
-            
+
+            // save and saveAs return false if they were cancelled and did not enter saving at all
+            // In this case, do not call enter_loop because exit_loop will not be called.
             if (saving)
             {
+                // Waiting asynchronous image file saving operation runing in separate thread.
+                m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
+                enter_loop();
+                m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
                 return m_savingContext->synchronousSavingResult;
             }
             else

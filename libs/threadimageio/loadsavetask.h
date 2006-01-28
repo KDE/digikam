@@ -284,7 +284,7 @@ class SavingTask : public LoadSaveTask, public DImgLoaderObserver
 {
 public:
 
-    SavingTask(LoadSaveThread* thread, DImg &img, const QString &filePath, const char* format)
+    SavingTask(LoadSaveThread* thread, DImg &img, const QString &filePath, const QString &format)
         : LoadSaveTask(thread), m_img(img), m_filePath(filePath), m_format(format)
         {};
 
@@ -296,7 +296,7 @@ private:
 
     DImg        m_img;
     QString     m_filePath;
-    const char* m_format;
+    QString     m_format;
 };
 
 }   // namespace Digikam

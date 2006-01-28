@@ -263,7 +263,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &descrip
     }
 }
 
-void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const char* format)
+void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QString &format)
 {
     QMutexLocker lock(&m_mutex);
     LoadingTask *loadingTask;
