@@ -889,8 +889,8 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(m_fileDeleteAction);
 
         toggleGUI2FullScreen();
-        
         showFullScreen();
+
         m_fullScreen = true;
     }
 }

@@ -194,9 +194,9 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     if ( urlList.isEmpty() )
     {
-       m_rightSidebar->noCurrentItem();
-       toggleActions(false);
-       toggleNavigation(0);
+        m_rightSidebar->noCurrentItem();
+        toggleActions(false);
+        toggleNavigation(0);
     }
     else
     {

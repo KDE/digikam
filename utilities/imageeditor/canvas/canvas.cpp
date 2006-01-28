@@ -138,7 +138,8 @@ Canvas::Canvas(QWidget *parent)
       : QScrollView(parent)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
-    
+    setFrameStyle( QFrame::NoFrame );
+
     d = new CanvasPrivate;
 
     d->im = DImgInterface::instance();
