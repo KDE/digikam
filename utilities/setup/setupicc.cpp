@@ -292,17 +292,17 @@ void SetupICC::applySettings()
         config->sync();
         return;
     }
-    config->writeEntry("DefaultPath", d->defaultPathKU->url());
+    config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
     config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
     config->writeEntry("InProfile", d->inProfilesKC->currentItem());
     config->writeEntry("ProofProfile", d->proofProfilesKC->currentItem());
     config->writeEntry("BPCAlgorithm", d->bpcAlgorithm->isChecked());
     config->writeEntry("RenderingIntent", d->renderingIntentKC->currentItem());
-    config->writeEntry("InProfileFile", d->inICCFiles_file[d->inProfilesKC->currentItem()]);
-    config->writeEntry("WorkProfileFile", d->workICCFiles_file[d->workProfilesKC->currentItem()]);
-    config->writeEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
-    config->writeEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
+    config->writePathEntry("InProfileFile", d->inICCFiles_file[d->inProfilesKC->currentItem()]);
+    config->writePathEntry("WorkProfileFile", d->workICCFiles_file[d->workProfilesKC->currentItem()]);
+    config->writePathEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
+    config->writePathEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
 
     config->sync();
 }
