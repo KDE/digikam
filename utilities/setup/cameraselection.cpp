@@ -97,7 +97,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout* portPathBoxLayout = new QVBoxLayout( portPathBox->layout() );
     portPathBoxLayout->setAlignment( Qt::AlignTop );
 
-    QLabel* portPathLabel_ = new QLabel( portPathBox);
+    portPathLabel_ = new QLabel( portPathBox);
     portPathLabel_->setText( i18n( "only for serial port\n"
 			    "cameras" ) );
     portPathBoxLayout->addWidget( portPathLabel_ );
