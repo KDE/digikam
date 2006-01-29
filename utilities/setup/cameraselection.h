@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-10
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2003-02-10
+ * Description : Camera type selection dialog
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -30,16 +32,10 @@
 
 #include <kdialogbase.h>
 
-class QComboBox;
-class QListView;
-class QListViewItem;
-class QRadioButton;
-class QVButtonGroup;
-class QLabel;
-class QLineEdit;
-
 namespace Digikam
 {
+
+class CameraSelectionPriv;
 
 class CameraSelection : public KDialogBase
 {
@@ -63,21 +59,6 @@ private:
     void getCameraList();
     void getSerialPortList();
     
-private:
-    
-    QListView* listView_;
-    QLineEdit* titleEdit_;
-    QVButtonGroup* portButtonGroup_;
-    QRadioButton* usbButton_;
-    QRadioButton* serialButton_;
-    QLabel* portPathLabel_;
-    QComboBox* portPathComboBox_;
-    QComboBox* umsMountComboBox_;
-
-    QString UMSCameraNameActual_;
-    QString UMSCameraNameShown_;
-    QStringList serialPortList_;
-
 private slots:
 
     void slotSelectionChanged(QListViewItem *item);
@@ -87,11 +68,12 @@ private slots:
     
 signals:
 
-    void signalOkClicked(const QString& title,
-                         const QString& model,
-                         const QString& port,
-                         const QString& path);
-        
+    void signalOkClicked(const QString& title, const QString& model,
+                         const QString& port,  const QString& path);
+
+private:
+
+    CameraSelectionPriv* d;        
 };
 
 }  // namespace Digikam

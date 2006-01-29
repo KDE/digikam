@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-10
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at free.fr>
+ * Date   : 2003-02-10
+ * Description : Camera type selection dialog
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -44,13 +46,50 @@
 namespace Digikam
 {
 
-CameraSelection::CameraSelection( QWidget* parent )
-    : KDialogBase(parent, 0, true, i18n("Camera Selection"),
-                  Help|Ok|Cancel, Ok, true)
+class CameraSelectionPriv
 {
+public:
+
+    CameraSelectionPriv()
+    {
+        listView  = 0;
+        titleEdit = 0;
+        portButtonGroup = 0;
+        usbButton = 0;
+        serialButton = 0;
+        portPathLabel = 0;
+        portPathComboBox = 0;
+        umsMountComboBox = 0;
+    }
+
+    QListView*     listView;
+
+    QLineEdit*     titleEdit;
+
+    QVButtonGroup* portButtonGroup;
+
+    QRadioButton*  usbButton;
+    QRadioButton*  serialButton;
+
+    QLabel*        portPathLabel;
+
+    QComboBox*     portPathComboBox;
+    QComboBox*     umsMountComboBox;
+
+    QString        UMSCameraNameActual;
+    QString        UMSCameraNameShown;
+
+    QStringList    serialPortList;
+};
+
+CameraSelection::CameraSelection( QWidget* parent )
+               : KDialogBase(parent, 0, true, i18n("Camera Selection"),
+                             Help|Ok|Cancel, Ok, true)
+{
+    d = new CameraSelectionPriv;
     setHelp("cameraselection.anchor", "digikam");
-    UMSCameraNameActual_ = QString("Directory Browse");   // Don't be i18n!
-    UMSCameraNameShown_  = i18n("Mounted Camera");
+    d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
+    d->UMSCameraNameShown  = i18n("Mounted Camera");
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
@@ -66,11 +105,11 @@ CameraSelection::CameraSelection( QWidget* parent )
     QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout() );
     mainBoxLayout->setAlignment( Qt::AlignTop );
 
-    listView_ = new QListView( mainBox );
-    listView_->addColumn( i18n("Cameras") );
-    listView_->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
+    d->listView = new QListView( mainBox );
+    d->listView->addColumn( i18n("Cameras") );
+    d->listView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
                                          QSizePolicy::Expanding));
-    mainBoxLayout->addMultiCellWidget( listView_, 0, 4, 0, 0 );
+    mainBoxLayout->addMultiCellWidget( d->listView, 0, 4, 0, 0 );
 
     QGroupBox* titleBox = new QGroupBox( mainBox );
     titleBox->setTitle( i18n("Camera Title") );
@@ -79,24 +118,24 @@ CameraSelection::CameraSelection( QWidget* parent )
     titleBox->layout()->setMargin( 5 );
     QVBoxLayout* titleBoxLayout = new QVBoxLayout( titleBox->layout() );
 
-    titleEdit_ = new QLineEdit( titleBox );
-    titleBoxLayout->addWidget( titleEdit_ );
+    d->titleEdit = new QLineEdit( titleBox );
+    titleBoxLayout->addWidget( d->titleEdit );
 
     mainBoxLayout->addWidget( titleBox, 0, 1 );
     
-    portButtonGroup_ = new QVButtonGroup( mainBox );
-    portButtonGroup_->setTitle( i18n( "Camera Port Type" ) );
-    portButtonGroup_->setRadioButtonExclusive( true );
-    portButtonGroup_->layout()->setSpacing( 5 );
-    portButtonGroup_->layout()->setMargin( 5 );
+    d->portButtonGroup = new QVButtonGroup( mainBox );
+    d->portButtonGroup->setTitle( i18n( "Camera Port Type" ) );
+    d->portButtonGroup->setRadioButtonExclusive( true );
+    d->portButtonGroup->layout()->setSpacing( 5 );
+    d->portButtonGroup->layout()->setMargin( 5 );
 
-    usbButton_ = new QRadioButton( portButtonGroup_ );
-    usbButton_->setText( i18n( "USB" ) );
+    d->usbButton = new QRadioButton( d->portButtonGroup );
+    d->usbButton->setText( i18n( "USB" ) );
 
-    serialButton_ = new QRadioButton( portButtonGroup_ );
-    serialButton_->setText( i18n( "Serial" ) );
+    d->serialButton = new QRadioButton( d->portButtonGroup );
+    d->serialButton->setText( i18n( "Serial" ) );
 
-    mainBoxLayout->addWidget( portButtonGroup_, 1, 1 );
+    mainBoxLayout->addWidget( d->portButtonGroup, 1, 1 );
 
     QGroupBox* portPathBox = new QGroupBox( mainBox );
     portPathBox->setTitle( i18n( "Camera Port Path" ) );
@@ -106,14 +145,14 @@ CameraSelection::CameraSelection( QWidget* parent )
     QVBoxLayout* portPathBoxLayout = new QVBoxLayout( portPathBox->layout() );
     portPathBoxLayout->setAlignment( Qt::AlignTop );
 
-    QLabel* portPathLabel_ = new QLabel( portPathBox);
-    portPathLabel_->setText( i18n( "only for serial port\n"
-			    "cameras" ) );
-    portPathBoxLayout->addWidget( portPathLabel_ );
+    d->portPathLabel = new QLabel( portPathBox);
+    d->portPathLabel->setText( i18n( "only for serial port\n"
+			             "cameras" ) );
+    portPathBoxLayout->addWidget( d->portPathLabel );
 
-    portPathComboBox_ = new QComboBox( false, portPathBox );
-    portPathComboBox_->setDuplicatesEnabled( false );
-    portPathBoxLayout->addWidget( portPathComboBox_ );
+    d->portPathComboBox = new QComboBox( false, portPathBox );
+    d->portPathComboBox->setDuplicatesEnabled( false );
+    portPathBoxLayout->addWidget( d->portPathComboBox );
 
     mainBoxLayout->addWidget( portPathBox, 2, 1 );
 
@@ -129,12 +168,12 @@ CameraSelection::CameraSelection( QWidget* parent )
                                   "cameras" ) );
     umsMountBoxLayout->addWidget( umsMountLabel );
 
-    umsMountComboBox_ = new QComboBox( false, umsMountBox );
+    d->umsMountComboBox = new QComboBox( false, umsMountBox );
     umsMountBox->setTitle( i18n( "Camera Mount Path" ) );
-    umsMountComboBox_->setEditable( true );
-    umsMountComboBox_->setInsertionPolicy( QComboBox::AtTop );
-    umsMountComboBox_->setDuplicatesEnabled( false );
-    umsMountBoxLayout->addWidget( umsMountComboBox_ );
+    d->umsMountComboBox->setEditable( true );
+    d->umsMountComboBox->setInsertionPolicy( QComboBox::AtTop );
+    d->umsMountComboBox->setDuplicatesEnabled( false );
+    umsMountBoxLayout->addWidget( d->umsMountComboBox );
 
     mainBoxLayout->addWidget( umsMountBox, 3, 1 );
 
@@ -143,16 +182,15 @@ CameraSelection::CameraSelection( QWidget* parent )
                                            QSizePolicy::Expanding );
     mainBoxLayout->addItem( spacer, 4, 1 );
 
-
     topLayout->addWidget( mainBox );
 
     
     // Connections --------------------------------------------------
 
-    connect(listView_, SIGNAL(selectionChanged(QListViewItem *)),
+    connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
             this, SLOT(slotSelectionChanged(QListViewItem *)));
 
-    connect(portButtonGroup_, SIGNAL(clicked(int)),
+    connect(d->portButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotPortChanged()));
 
     connect(this, SIGNAL(okClicked()),
@@ -162,40 +200,46 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     getCameraList();
     getSerialPortList();
-
 }
 
 CameraSelection::~CameraSelection()
 {
+    delete d;
 }
 
 void CameraSelection::setCamera(const QString& title, const QString& model,
                                 const QString& port, const QString& path)
 {
     QString camModel(model);
-    if (camModel == UMSCameraNameActual_)
-        camModel = UMSCameraNameShown_;
-    QListViewItem* item = listView_->findItem(camModel, 0);
+
+    if (camModel == d->UMSCameraNameActual)
+        camModel = d->UMSCameraNameShown;
+
+    QListViewItem* item = d->listView->findItem(camModel, 0);
     if (!item) return;
 
-    listView_->setSelected(item, true);
-    listView_->ensureItemVisible(item);
+    d->listView->setSelected(item, true);
+    d->listView->ensureItemVisible(item);
     
-    titleEdit_->setText(title);
+    d->titleEdit->setText(title);
 
     if (port.contains("usb"))
-        usbButton_->setChecked(true);
-    else if (port.contains("serial")) {
-        serialButton_->setChecked(true);
-        for (int i=0; i<portPathComboBox_->count(); i++) {
-            if (port == portPathComboBox_->text(i)) {
-                portPathComboBox_->setCurrentItem(i);
+        d->usbButton->setChecked(true);
+    else if (port.contains("serial")) 
+    {
+        d->serialButton->setChecked(true);
+
+        for (int i=0; i<d->portPathComboBox->count(); i++) 
+        {
+            if (port == d->portPathComboBox->text(i)) 
+            {
+                d->portPathComboBox->setCurrentItem(i);
                 break;
             }
         }
     }
 
-    umsMountComboBox_->setCurrentText(path);
+    d->umsMountComboBox->setCurrentText(path);
 }
 
 void CameraSelection::getCameraList()
@@ -206,12 +250,13 @@ void CameraSelection::getCameraList()
     GPIface::getSupportedCameras(count, clist);
 
     QString cname;
-    for (int i=0; i<count; i++) {
+    for (int i=0; i<count; i++) 
+    {
         cname = clist[i];
-        if (cname == UMSCameraNameActual_)
-            new QListViewItem(listView_, UMSCameraNameShown_);
+        if (cname == d->UMSCameraNameActual)
+            new QListViewItem(d->listView, d->UMSCameraNameShown);
         else
-            new QListViewItem(listView_, cname);
+            new QListViewItem(d->listView, cname);
     }
 }
 
@@ -221,10 +266,12 @@ void CameraSelection::getSerialPortList()
 
     GPIface::getSupportedPorts(plist);
 
-    serialPortList_.clear();
-    for (unsigned int i=0; i<plist.count(); i++) {
+    d->serialPortList.clear();
+    
+    for (unsigned int i=0; i<plist.count(); i++) 
+    {
         if ((plist[i]).startsWith("serial:"))
-            serialPortList_.append(plist[i]);
+            d->serialPortList.append(plist[i]);
     }
 }
 
@@ -233,113 +280,117 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
     if (!item) return;
 
     QString model(item->text(0));
-    if (model == UMSCameraNameShown_) {
+    if (model == d->UMSCameraNameShown) 
+    {
+        model = d->UMSCameraNameActual;
 
-        model = UMSCameraNameActual_;
-
-        titleEdit_->setText(model);
+        d->titleEdit->setText(model);
         
-        serialButton_->setEnabled(true);
-        serialButton_->setChecked(false);
-        serialButton_->setEnabled(false);
-        usbButton_->setEnabled(true);
-        usbButton_->setChecked(false);
-        usbButton_->setEnabled(false);
-        portPathComboBox_->setEnabled(true);
-        portPathComboBox_->insertItem(QString("NONE"), 0);
-        portPathComboBox_->setEnabled(false);
+        d->serialButton->setEnabled(true);
+        d->serialButton->setChecked(false);
+        d->serialButton->setEnabled(false);
+        d->usbButton->setEnabled(true);
+        d->usbButton->setChecked(false);
+        d->usbButton->setEnabled(false);
+        d->portPathComboBox->setEnabled(true);
+        d->portPathComboBox->insertItem(QString("NONE"), 0);
+        d->portPathComboBox->setEnabled(false);
 
-        umsMountComboBox_->setEnabled(true);
-        umsMountComboBox_->clear();
-        umsMountComboBox_->insertItem(QString("/mnt/camera"), 0);
+        d->umsMountComboBox->setEnabled(true);
+        d->umsMountComboBox->clear();
+        d->umsMountComboBox->insertItem(QString("/mnt/camera"), 0);
         return;
     }
-    else {
-
-        umsMountComboBox_->setEnabled(true);
-        umsMountComboBox_->clear();
-        umsMountComboBox_->insertItem(QString("/"), 0);
-        umsMountComboBox_->setEnabled(false);
+    else 
+    {
+        d->umsMountComboBox->setEnabled(true);
+        d->umsMountComboBox->clear();
+        d->umsMountComboBox->insertItem(QString("/"), 0);
+        d->umsMountComboBox->setEnabled(false);
     }
 
-    titleEdit_->setText(model);
+    d->titleEdit->setText(model);
     
     QStringList plist;
     GPIface::getCameraSupportedPorts(model, plist);
 
-    if (plist.contains("serial")) {
-        serialButton_->setEnabled(true);
-        serialButton_->setChecked(true);
+    if (plist.contains("serial")) 
+    {
+        d->serialButton->setEnabled(true);
+        d->serialButton->setChecked(true);
     }
-    else {
-        serialButton_->setEnabled(true);
-        serialButton_->setChecked(false);
-        serialButton_->setEnabled(false);
+    else 
+    {
+        d->serialButton->setEnabled(true);
+        d->serialButton->setChecked(false);
+        d->serialButton->setEnabled(false);
     }
 
-    if (plist.contains("usb")) {
-        usbButton_->setEnabled(true);
-        usbButton_->setChecked(true);
+    if (plist.contains("usb")) 
+    {
+        d->usbButton->setEnabled(true);
+        d->usbButton->setChecked(true);
     }
-    else {
-        usbButton_->setEnabled(true);
-        usbButton_->setChecked(false);
-        usbButton_->setEnabled(false);
+    else 
+    {
+        d->usbButton->setEnabled(true);
+        d->usbButton->setChecked(false);
+        d->usbButton->setEnabled(false);
     }
 
     slotPortChanged();
-
 }
 
 void CameraSelection::slotPortChanged()
 {
-    if (usbButton_->isChecked()) {
-        portPathComboBox_->setEnabled(true);
-        portPathComboBox_->clear();
-        portPathComboBox_->insertItem( QString("usb:"), 0 );
-        portPathComboBox_->setEnabled(false);
+    if (d->usbButton->isChecked()) 
+    {
+        d->portPathComboBox->setEnabled(true);
+        d->portPathComboBox->clear();
+        d->portPathComboBox->insertItem( QString("usb:"), 0 );
+        d->portPathComboBox->setEnabled(false);
         return;
     }
 
-    if (serialButton_->isChecked()) {
-        portPathComboBox_->setEnabled(true);
-        portPathComboBox_->clear();
-        portPathComboBox_->insertStringList(serialPortList_);
+    if (d->serialButton->isChecked()) 
+    {
+        d->portPathComboBox->setEnabled(true);
+        d->portPathComboBox->clear();
+        d->portPathComboBox->insertStringList(d->serialPortList);
     }
 }
 
 QString CameraSelection::currentTitle()
 {
-    return titleEdit_->text();    
+    return d->titleEdit->text();    
 }
 
 QString CameraSelection::currentModel()
 {
-    QListViewItem* item = listView_->currentItem();
+    QListViewItem* item = d->listView->currentItem();
     if (!item)
         return QString::null;
 
     QString model(item->text(0));
-    if (model == UMSCameraNameShown_)
-        model = UMSCameraNameActual_;
+    if (model == d->UMSCameraNameShown)
+        model = d->UMSCameraNameActual;
 
     return model;
-        
 }
 
 QString CameraSelection::currentPortPath()
 {
-    return portPathComboBox_->currentText();
+    return d->portPathComboBox->currentText();
 }
 
 QString CameraSelection::currentCameraPath()
 {
-    return umsMountComboBox_->currentText();
+    return d->umsMountComboBox->currentText();
 }
 
 void CameraSelection::slotOkClicked()
 {
-    emit signalOkClicked(currentTitle(), currentModel(),
+    emit signalOkClicked(currentTitle(),    currentModel(),
                          currentPortPath(), currentCameraPath());
 }
 
