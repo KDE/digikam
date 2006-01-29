@@ -280,7 +280,8 @@ void ShowFoto::setupUserArea()
     }        
 
     m_splitter->setOpaqueResize(false);
-    setCentralWidget(widget);        
+    setCentralWidget(widget);
+    m_rightSidebar->loadViewState();    
 }
 
 void ShowFoto::setupActions()
