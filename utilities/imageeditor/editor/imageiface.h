@@ -53,7 +53,7 @@ namespace Digikam
 
 class ImageIfacePriv;
 
-class DIGIKAMIMAGEEDITOR_EXPORT ImageIface
+class DIGIKAM_EXPORT ImageIface
 {
 public:
 

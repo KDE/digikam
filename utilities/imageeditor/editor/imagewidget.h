@@ -38,7 +38,7 @@ namespace Digikam
 class ImageIface;
 class ImageWidgetPriv;
 
-class DIGIKAMIMAGEEDITOR_EXPORT ImageWidget : public QWidget
+class DIGIKAM_EXPORT ImageWidget : public QWidget
 {
     Q_OBJECT
 
