@@ -535,7 +535,7 @@ void ImageWindow::toggleGUI2FullScreen()
 // ----------------------------------------------------------------------------
 // TODO : Checking if methods below can be merged to common GUI implementation.
 
-void ImageWindow::slotLoadingStarted(const QString &filename)
+void ImageWindow::slotLoadingStarted(const QString& /*filename*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
@@ -547,7 +547,7 @@ void ImageWindow::slotLoadingStarted(const QString &filename)
                                  i18n("Loading: "));
 }
 
-void ImageWindow::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
+void ImageWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
 {
     //TODO: handle success == false
 
@@ -563,7 +563,7 @@ void ImageWindow::slotLoadingFinished(const QString &filename, bool success, boo
     QApplication::restoreOverrideCursor();
 }
 
-void ImageWindow::slotSavingStarted(const QString &filename)
+void ImageWindow::slotSavingStarted(const QString& /*filename*/)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
@@ -590,7 +590,7 @@ void ImageWindow::finishSaving(bool success)
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
 }
 
-void ImageWindow::slotSavingFinished(const QString &filename, bool success)
+void ImageWindow::slotSavingFinished(const QString& /*filename*/, bool success)
 {
     if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
     {

@@ -768,7 +768,7 @@ void ShowFoto::slotBackward()
 // ----------------------------------------------------------------------------
 // TODO : Checking if methods below can be merged to common GUI implementation.
 
-void ShowFoto::slotLoadingStarted(const QString &filename)
+void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
@@ -782,7 +782,7 @@ void ShowFoto::slotLoadingStarted(const QString &filename)
                                  i18n("Loading: "));
 }
 
-void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
+void ShowFoto::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
 {
     //TODO: handle success == false
     
@@ -800,7 +800,7 @@ void ShowFoto::slotLoadingFinished(const QString &filename, bool success, bool i
     QApplication::restoreOverrideCursor();
 }
 
-void ShowFoto::slotSavingStarted(const QString &filename)
+void ShowFoto::slotSavingStarted(const QString& /*filename*/)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
@@ -830,7 +830,7 @@ void ShowFoto::finishSaving(bool success)
     m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
 }
 
-void ShowFoto::slotSavingFinished(const QString &filename, bool success)
+void ShowFoto::slotSavingFinished(const QString& /*filename*/, bool success)
 {
     if (/*m_savingContext->fromSave*/true)
     {
