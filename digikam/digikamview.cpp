@@ -195,7 +195,6 @@ void DigikamView::loadViewState()
     }    
     
     mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
-    
 }
 
 void DigikamView::saveViewState()

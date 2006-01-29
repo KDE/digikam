@@ -2,7 +2,7 @@
  * File  : tagfolderview.h
  * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-03-22
- * Copyright 2005 by Joern Ahrens
+ * Copyright 2005-2006 by Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
