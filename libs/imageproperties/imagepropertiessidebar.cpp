@@ -43,9 +43,9 @@
 namespace Digikam
 {
 
-ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, QSplitter *splitter, 
-                                               Side side, bool mimimizedDefault)
-                      : Digikam::Sidebar(parent, side, mimimizedDefault)
+ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name, 
+                                               QSplitter *splitter, Side side, bool mimimizedDefault)
+                      : Digikam::Sidebar(parent, name, side, mimimizedDefault)
 {
     m_image             = 0;
     m_currentRect       = 0;

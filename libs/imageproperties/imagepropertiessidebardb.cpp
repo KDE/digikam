@@ -68,9 +68,9 @@ public:
     ImageDescEditTab         *desceditTab;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, QSplitter *splitter, 
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
                                                    Side side, bool mimimizedDefault, bool navBar)
-                        : Digikam::ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault)
+                        : Digikam::ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, navBar);

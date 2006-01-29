@@ -67,8 +67,8 @@ public:
     Sidebar::Side side;
 };
 
-Sidebar::Sidebar(QWidget *parent, Side side, bool minimizedDefault)
-    : KMultiTabBar(KMultiTabBar::Vertical, parent, "Sidebar")
+Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDefault)
+    : KMultiTabBar(KMultiTabBar::Vertical, parent, name)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
@@ -103,7 +103,7 @@ void Sidebar::loadViewState()
     int minimized;
     
     KConfig *config = kapp->config();
-    config->setGroup(QString("%1-%2").arg(name()).arg(d->side));
+    config->setGroup(QString("%1").arg(name()));
    
     tab = config->readNumEntry("ActiveTab", 0);
     minimized = config->readNumEntry("Minimized", d->minimizedDefault);
@@ -125,7 +125,7 @@ void Sidebar::loadViewState()
 void Sidebar::saveViewState()
 {
     KConfig *config = kapp->config();
-    config->setGroup(QString("%1-%2").arg(name()).arg(d->side));
+    config->setGroup(QString("%1").arg(name()));
     
     config->writeEntry("ActiveTab", d->activeTab);
     config->writeEntry("Minimized", (int)d->minimized);

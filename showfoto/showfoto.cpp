@@ -252,7 +252,8 @@ void ShowFoto::setupUserArea()
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         m_canvas          = new Digikam::Canvas(m_splitter);
-        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
+        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+                                                                Digikam::Sidebar::Right);
         m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
         
         hlay->addWidget(m_bar);
@@ -271,7 +272,8 @@ void ShowFoto::setupUserArea()
         vlay->addWidget(m_bar);
                 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Digikam::Sidebar::Right);
+        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+                                                                Digikam::Sidebar::Right);
 
         hlay->addWidget(m_splitter);
         hlay->addWidget(m_rightSidebar);        

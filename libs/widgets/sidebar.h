@@ -61,10 +61,11 @@ public:
     /**
      * Creates a new sidebar
      * @param parent sidebar's parent
+     * @param name the name of the widget is used to store its state to config
      * @param side where the sidebar should be displayed. At the left or right border.
      * @param minimizedDefault hide the sidebar when the program is started the first time?
      */
-    Sidebar(QWidget *parent, Side side=Left, bool mimimizedDefault=false);
+    Sidebar(QWidget *parent, const char *name, Side side=Left, bool mimimizedDefault=false);
     virtual ~Sidebar();
 
     /**
