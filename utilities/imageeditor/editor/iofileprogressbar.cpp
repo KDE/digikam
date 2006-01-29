@@ -99,7 +99,7 @@ IOFileProgressBar::~IOFileProgressBar()
     delete d;
 }
     
-void IOFileProgressBar::setText( QString text )
+void IOFileProgressBar::setText( const QString& text )
 {
     d->fileNameLabel->setText(text);
 }
@@ -114,11 +114,17 @@ void IOFileProgressBar::setProgressValue( int v )
     d->fileAcessProgressBar->setProgress(v);
 }
 
-void IOFileProgressBar::progressBarMode( int mode )
+void IOFileProgressBar::setProgressText( const QString& text )
+{
+    d->fileAcessProgressBar->setFormat( text + QString ("%p%") );
+}
+
+void IOFileProgressBar::progressBarMode( int mode, const QString& text )
 {
     if ( mode == FileNameMode)
     {
         raiseWidget(IOFileProgressBarPriv::FileNameLabel);
+        setProgressValue(0);
     }
     else if ( mode == ProgressBarMode )
     {
@@ -130,6 +136,8 @@ void IOFileProgressBar::progressBarMode( int mode )
         d->cancelButton->show();
         raiseWidget(IOFileProgressBarPriv::FileAcessProgressBar);
     }
+
+    setProgressText( text );
 }
 
 }  // namespace Digikam

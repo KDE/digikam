@@ -543,7 +543,8 @@ void ImageWindow::slotLoadingStarted(const QString &filename)
     m_rightSidebar->noCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode);
+    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, 
+                                 i18n("Loading: "));
 }
 
 void ImageWindow::slotLoadingFinished(const QString &filename, bool success, bool isReadOnly)
@@ -570,7 +571,8 @@ void ImageWindow::slotSavingStarted(const QString &filename)
     m_rightSidebar->noCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode);
+    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, 
+                                 i18n("Saving: "));
 }
 
 void ImageWindow::finishSaving(bool success)

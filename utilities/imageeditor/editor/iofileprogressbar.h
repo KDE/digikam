@@ -46,10 +46,12 @@ public:
   
     ~IOFileProgressBar();
   
-    void setText(QString text);
-    void progressBarMode(int mode);
+    void setText( const QString& text );
+    void setAlignment( int a );
+
+    void progressBarMode( int mode, const QString& text=QString::null );
     void setProgressValue( int v );
-    void setAlignment(int a);
+    void setProgressText( const QString& text );
 
 public:
 
