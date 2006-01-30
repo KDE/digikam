@@ -44,7 +44,7 @@ public:
         savingState             = SavingStateNone;
         synchronizingState      = NormalSaving;
         saveTempFile            = 0;
-        fileExists              = false;
+        destinationExisted      = false;
         synchronousSavingResult = false;
     }
 
@@ -64,14 +64,12 @@ public:
     SavingState              savingState;
     SynchronizingState       synchronizingState;
     bool                     synchronousSavingResult;
-    bool                     fileExists;
+    bool                     destinationExisted;
     
     QString                  format;
-    QString                  tmpFile;
 
-    KURL                     currentURL;
-    KURL                     saveURL;
-    KURL                     saveAsURL;
+    KURL                     srcURL;
+    KURL                     destinationURL;
 
     KTempFile               *saveTempFile;
 };

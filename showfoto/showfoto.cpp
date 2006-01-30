@@ -409,8 +409,6 @@ void ShowFoto::slotOpenURL(const KURL& url)
     if(!m_currentItem)
         return;
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     QString localFile;
 #if KDE_IS_VERSION(3,2,0)
     KIO::NetAccess::download(url, localFile, this);
@@ -816,9 +814,15 @@ void ShowFoto::slotSavingStarted(const QString& /*filename*/)
 void ShowFoto::finishSaving(bool success)
 {
     m_savingContext->synchronousSavingResult = success;
+    if (m_savingContext->saveTempFile)
+    {
+        delete m_savingContext->saveTempFile;
+        m_savingContext->saveTempFile = 0;
+    }
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
-    qApp->exit_loop();
+    if (m_savingContext->synchronizingState == Digikam::SavingContextContainer::SynchronousSaving)
+        qApp->exit_loop();
 
     // Enable actions as appropriate after saving
     // TODO updated image propertie side bar!
@@ -831,78 +835,77 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::slotSavingFinished(const QString& /*filename*/, bool success)
 {
-    if (/*m_savingContext->fromSave*/true)
+    if (m_savingContext->savingState == Digikam::SavingContextContainer::SavingStateSave)
     {
         // from save()
+        m_savingContext->savingState = Digikam::SavingContextContainer::SavingStateNone;
+
         if (!success)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->currentURL.filename()));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
+                    .arg(m_savingContext->destinationURL.filename()));
+            finishSaving(false);
+            return;
         }
 
         if ( m_canvas->exifRotated() )
-            KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
+            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
 
-        kdDebug() << "renaming to " << m_savingContext->currentURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
-              QFile::encodeName(m_savingContext->currentURL.path())) != 0)
+        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to overwrite original file"));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
+            finishSaving(false);
+            return;
         }
 
         m_canvas->setModified( false );
         m_bar->invalidateThumb(m_currentItem);
-        kapp->restoreOverrideCursor();
         QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+
+        kapp->restoreOverrideCursor();
     }
-    else
+    else if (m_savingContext->savingState == Digikam::SavingContextContainer::SavingStateSaveAs)
     {
         // from saveAs()
         if (!success)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->saveAsURL.filename()));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
+                    .arg(m_savingContext->destinationURL.filename()));
+            finishSaving(false);
+            return;
         }
 
         // only try to write exif if both src and destination are jpeg files
-        if (QString(QImageIO::imageFormat(m_savingContext->currentURL.path())).upper() == "JPEG" &&
+        if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
             m_savingContext->format.upper() == "JPEG")
         {
             if ( m_canvas->exifRotated() )
-                KExifUtils::writeOrientation(m_savingContext->tmpFile, KExifData::NORMAL);
+                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
         }
 
-        kdDebug() << "renaming to " << m_savingContext->saveAsURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->tmpFile),
-              QFile::encodeName(m_savingContext->saveAsURL.path())) != 0)
+        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
         {
             kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to overwrite original file"));
-                ::unlink(QFile::encodeName(m_savingContext->tmpFile));
-                finishSaving(false);
-                return;
+            finishSaving(false);
+            return;
         }
 
         m_canvas->setModified( false );
 
         // add the file to the list of images if it's not there already
-        Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->saveAsURL);
+        Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
         m_bar->invalidateThumb(foundItem);
 
         if (!foundItem)
-            foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->saveAsURL);
+            foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
 
         m_bar->setSelected(foundItem);
         kapp->restoreOverrideCursor();
@@ -919,22 +922,22 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    m_savingContext->currentURL = m_currentItem->url();
-
     // FIXME : Add 16 bits file formats
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
 
     kdDebug () << "mimetypes=" << mimetypes << endl;    
 
-    KFileDialog saveDialog(m_savingContext->currentURL.isLocalFile() ? m_savingContext->currentURL.directory() : QDir::homeDirPath(),
+    m_savingContext->srcURL = m_currentItem->url();
+
+    KFileDialog saveDialog(m_savingContext->srcURL.isLocalFile() ? m_savingContext->srcURL.directory() : QDir::homeDirPath(),
                            QString::null,
                            this,
                            "imageFileSaveDialog",
                            false);
     saveDialog.setOperationMode( KFileDialog::Saving );
     saveDialog.setMode( KFile::File );
-    saveDialog.setSelection(m_savingContext->currentURL.fileName());
+    saveDialog.setSelection(m_savingContext->srcURL.fileName());
     saveDialog.setCaption( i18n("New Image File Name") );
     saveDialog.setFilter(mimetypes);
 
@@ -943,22 +946,22 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    m_savingContext->saveAsURL = saveDialog.selectedURL();
+    KURL newURL = saveDialog.selectedURL();
 
     // Check if target image format have been selected from Combo List of SaveAs dialog.
-    QString format = KImageIO::typeForMime(saveDialog.currentMimeFilter());
+    m_savingContext->format = KImageIO::typeForMime(saveDialog.currentMimeFilter());
 
     if ( m_savingContext->format.isEmpty() )
     {
         // Else, check if target image format have been add to target image file name using extension.
 
-        QFileInfo fi(m_savingContext->saveAsURL.path());
+        QFileInfo fi(newURL.path());
         m_savingContext->format = fi.extension(false);
         
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageIO::imageFormat(m_savingContext->currentURL.path());
+            m_savingContext->format = QImageIO::imageFormat(m_savingContext->srcURL.path());
         }
         else
         {
@@ -984,37 +987,47 @@ bool ShowFoto::saveAs()
         }
     }
 
-    if (!m_savingContext->saveAsURL.isValid())
+    if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Invalid target selected"));
         return false;
     }
 
-    m_savingContext->currentURL.cleanPath();
-    m_savingContext->saveAsURL.cleanPath();
+    // if new and original url are equal use slotSave() ------------------------------
+    
+    KURL currURL(m_savingContext->srcURL);
+    currURL.cleanPath();
+    newURL.cleanPath();
 
-    if (m_savingContext->currentURL.equals(m_savingContext->saveAsURL))
+    if (currURL.equals(newURL))
     {
         slotSave();
         return false;
     }
 
-    QFileInfo fi(m_savingContext->saveAsURL.path());
-    if ( fi.exists() )
+    // Check for overwrite ----------------------------------------------------------
+
+    QFileInfo fi(newURL.path());
+    m_savingContext->destinationExisted = fi.exists();
+    if ( m_savingContext->destinationExisted )
     {
         int result =
             KMessageBox::warningYesNo( this, i18n("About to overwrite file %1. "
                                                   "Are you sure you want to continue?")
-                                       .arg(m_savingContext->saveAsURL.filename()) );
+                                       .arg(newURL.filename()) );
 
         if (result != KMessageBox::Yes)
             return false;
     }
     
-    m_savingContext->tmpFile = m_savingContext->saveAsURL.directory() + QString("/.showfoto-tmp-")
-                      + m_savingContext->saveAsURL.filename();
-    //m_savingContext->fromSave = false;
-    m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings, m_savingContext->format.lower());
+    // Now do the actual saving -----------------------------------------------------
+
+    m_savingContext->saveTempFile = new KTempFile(newURL.directory(false), QString::null);
+    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->destinationURL = newURL;
+    m_savingContext->savingState = Digikam::SavingContextContainer::SavingStateSaveAs;
+
+    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
 }
@@ -1027,19 +1040,19 @@ bool ShowFoto::save()
         return true;
     }
 
-    m_savingContext->currentURL = m_currentItem->url();
-    if (!m_savingContext->currentURL.isLocalFile())
+    if (!m_currentItem->url().isLocalFile())
     {
         KMessageBox::sorry(this, i18n("No support for saving non-local files"));
         return false;
     }
 
-    m_savingContext->tmpFile = m_savingContext->currentURL.directory() + QString("/.showfoto-tmp-")
-                      + m_savingContext->currentURL.filename();
-    
-    //m_savingContext->fromSave = true;
-    m_canvas->saveAsTmpFile(m_savingContext->tmpFile, m_IOFileSettings);
+    m_savingContext->srcURL = m_currentItem->url();
+    m_savingContext->saveTempFile = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
+    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->destinationURL = m_savingContext->srcURL;
+    m_savingContext->savingState = Digikam::SavingContextContainer::SavingStateSave;
 
+    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
     return true;
 }
 
