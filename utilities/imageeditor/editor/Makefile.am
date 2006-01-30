@@ -2,7 +2,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdimgeditor.la libshowfoto.la 
 
-libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp imagewidget.cpp \
+libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp \
 	 		               imagewindow.cpp iofileprogressbar.cpp  
 
 libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
@@ -10,7 +10,7 @@ libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
 
 libdimgeditor_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
 
-libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp imagewidget.cpp iofileprogressbar.cpp 
+libshowfoto_la_SOURCES = editorwindow.cpp imageiface.cpp iofileprogressbar.cpp
 
 libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
@@ -27,7 +27,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/utilities/imageeditor/tools \
 	      $(LIBKEXIF_CFLAGS) $(all_includes) 
 
-digikaminclude_HEADERS = imageiface.h imagewidget.h 
+digikaminclude_HEADERS = imageiface.h 
 
 digikamincludedir = $(includedir)/digikam
 
