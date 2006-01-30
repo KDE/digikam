@@ -44,7 +44,7 @@ public:
               const QString& path);
     ~UMSCamera();
 
-    bool connect();
+    bool doConnect();
     void cancel();
 
     void getAllFolders(const QString& folder,

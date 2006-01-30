@@ -51,7 +51,7 @@ public:
     bool mkDirSupport();
     bool delDirSupport();
 
-    bool connect();
+    bool doConnect();
 
     void cancel();
 

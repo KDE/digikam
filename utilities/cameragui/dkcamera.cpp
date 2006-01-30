@@ -26,8 +26,8 @@ namespace Digikam
 {
 
 DKCamera::DKCamera(const QString& model,
-               const QString& port,
-               const QString& path)
+                   const QString& port,
+                   const QString& path)
 {
     m_model = model;
     m_port  = port;

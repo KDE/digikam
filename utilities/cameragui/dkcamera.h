@@ -41,7 +41,7 @@ public:
            const QString& path);
     virtual ~DKCamera();
 
-    virtual bool connect() = 0;
+    virtual bool doConnect() = 0;
     virtual void cancel()  = 0;
 
     virtual void getAllFolders(const QString& folder,

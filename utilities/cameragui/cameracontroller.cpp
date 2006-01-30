@@ -192,7 +192,7 @@ void CameraThread::run()
         {
             sendInfo(i18n("Connecting to camera..."));
         
-            bool result = d->camera->connect();
+            bool result = d->camera->doConnect();
 
             CameraEvent* event = new CameraEvent(CameraEvent::gp_connected);
             event->result = result;

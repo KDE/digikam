@@ -126,7 +126,7 @@ GPCamera::~GPCamera()
     delete d;
 }
 
-bool GPCamera::connect()
+bool GPCamera::doConnect()
 {
     // -- first step - setup the camera --------------------
     

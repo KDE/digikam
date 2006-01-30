@@ -99,7 +99,7 @@ UMSCamera::~UMSCamera()
     delete d;
 }
 
-bool UMSCamera::connect()
+bool UMSCamera::doConnect()
 {
     return true;    
 }
