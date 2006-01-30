@@ -332,24 +332,30 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
 
         if (marker->marker == M_COM)
         {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-            kdDebug() << "Reading JPEG metadata: COM:" << " DATA==" << ba << endl;
-//#endif
+            kdDebug() << "Reading JPEG metadata: COM (size=" << ba.size() << ")"
+#ifdef ENABLE_DEBUG_MESSAGES    
+                      << " DATA==" << ba 
+#endif
+                      << endl;
             metaData.insert(DImg::JPG_COM, ba);
         }
         else if (marker->marker == M_EXIF)
         {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-            kdDebug() << "Reading JPEG metadata: APP1:" << " DATA=" << ba << endl;
-//#endif
+            kdDebug() << "Reading JPEG metadata: APP1 (size=" << ba.size() << ")"
+#ifdef ENABLE_DEBUG_MESSAGES    
+                      << " DATA==" << ba 
+#endif
+                      << endl;
             metaData.insert(DImg::JPG_EXIF, ba);
         }
         else if (marker->marker == M_IPTC)
         {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-            kdDebug() << "Reading JPEG metadata: APP13:" << " DATA=" << ba << endl;
-//#endif
-            metaData.insert(DImg::JPG_IPTC, ba);
+            kdDebug() << "Reading JPEG metadata: APP13 (size=" << ba.size() << ")"
+#ifdef ENABLE_DEBUG_MESSAGES    
+                      << " DATA==" << ba 
+#endif
+                      << endl;
+           metaData.insert(DImg::JPG_IPTC, ba);
         }
 
         marker = marker->next;
