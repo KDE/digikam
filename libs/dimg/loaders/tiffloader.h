@@ -27,6 +27,7 @@
 extern "C" 
 {
 #include <tiffio.h>
+#include <tiff.h>
 }
 
 // Local includes.

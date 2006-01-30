@@ -24,6 +24,11 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES 
 
+/* tags 34665, 34853 and 40965 are documented in EXIF specification */
+#ifndef TIFFTAG_EXIFIFD
+    #define TIFFTAG_EXIFIFD     34665 /* Pointer to EXIF private directory */
+#endif
+
 // C ansi includes.
 
 extern "C" 
@@ -334,9 +339,53 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer, boo
         profile_rawdata.resize(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
     }
-    
+
     // -------------------------------------------------------------------
-    // Get meta-data Tags contents.
+    // Get meta-data markers contents.
+
+    QMap<int, QByteArray>& metaData = imageMetaData();
+    metaData.clear();
+
+    uchar *markerData = 0;
+    uint   size       = 0;    
+
+    if(TIFFGetField(tif, TIFFTAG_EXIFIFD, &size, &markerData)) 
+    {
+        if (markerData)
+        {
+            QByteArray ba(size);
+            memcpy(ba.data(), markerData, size);
+
+            kdDebug() << "Reading TIFF metadata: EXIF (size=" << ba.size() << ")"
+#ifdef ENABLE_DEBUG_MESSAGES    
+                      << " DATA==" << ba 
+#endif
+                      << endl;
+            metaData.insert(DImg::JPG_EXIF, ba);
+        }
+    }
+/*
+    markerData = 0;
+    size       = 0;    
+
+    if(TIFFGetField(tif, TIFFTAG_EXIFIFD, &size, &markerData)) 
+    {
+        if (markerData)
+        {
+            QByteArray ba(size);
+            memcpy(ba.data(), markerData, size);
+
+            kdDebug() << "Reading TIFF metadata: EXIF (size=" << ba.size() << ")"
+#ifdef ENABLE_DEBUG_MESSAGES    
+                      << " DATA==" << ba 
+#endif
+                      << endl;
+            metaData.insert(DImg::JPG_EXIF, ba);
+        }
+    }
+*/  
+    // -------------------------------------------------------------------
+    // Get text meta-data contents.
     
     imageMetaData().clear();
     
