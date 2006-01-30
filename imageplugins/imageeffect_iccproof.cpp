@@ -248,6 +248,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_useSRGBDefaultProfile = new QRadioButton(inProfileBG);
     m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
+    m_useSRGBDefaultProfile->setChecked(true);
 
     m_useInDefaultProfile = new QRadioButton(inProfileBG);
     m_useInDefaultProfile->setText(i18n("Use default profile"));
@@ -487,7 +488,6 @@ void ImageEffect_ICCProof::slotEffect()
     // Update histogram.
    
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
-    kdDebug() << "Doing updateData" << endl;
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
@@ -501,10 +501,118 @@ void ImageEffect_ICCProof::finalRendering()
     {
         kapp->setOverrideCursor( KCursor::waitCursor() );
         Digikam::ImageIface* iface = m_previewWidget->imageIface();
-        kdDebug() << "No Doing proof" << endl;
+        
+        uchar *data                = iface->getOriginalImage();
+        int w                      = iface->originalWidth();
+        int h                      = iface->originalHeight();
+        bool a                     = iface->originalHasAlpha();
+        bool sb                    = iface->originalSixteenBit();
+
+        if (data)
+        {
+            Digikam::IccTransform transform;
+            
+            Digikam::DImg img(w, h, sb, a, data);
+
+            QString tmpInPath;
+            QString tmpProofPath;
+            QString tmpSpacePath;
+
+            bool inCondition;
+            bool proofCondition;
+            bool spaceCondiiton;
+            
+            ///////////////////////////////////////
+            // Get parameters for transformation //
+            ///////////////////////////////////////
+            
+            //---------Input profile ------------------
+            
+            if (useDefaultInProfile())
+            {
+                tmpInPath = inPath;
+            }
+            else if (useSelectedInProfile())
+            {
+                tmpInPath = m_inProfilesCB->url();
+            }
+
+            if (tmpInPath.isNull() && !m_useEmbeddedProfile->isChecked() && !m_useSRGBDefaultProfile->isChecked())
+            {
+                KMessageBox::information(this, "Profile error");
+                kdDebug() << "here" << endl;
+                return;
+            }
+                
+            //--------Proof profile ------------------
+        
+            if (useDefaultProofProfile())
+            {
+                tmpProofPath = proofPath;
+            }
+            else
+            {
+                tmpProofPath = m_proofProfileCB->url();
+            }
+
+            if (tmpProofPath.isNull())
+                proofCondition = false;
+        
+            //-------Workspace profile--------------
+        
+            if (useDefaultSpaceProfile())
+            {
+                tmpSpacePath = spacePath;
+            }
+            else
+            {
+                tmpSpacePath = m_spaceProfileCB->url();
+            }
+        
+            //------------------------------------------
+        
+            transform.getTransformType(m_doSoftProofBox->isChecked());
+        
+            if (m_doSoftProofBox->isChecked())
+            {
+                if (m_useEmbeddedProfile->isChecked())
+                {
+                    transform.setProfiles( tmpSpacePath, tmpProofPath, true );
+                }
+                else
+                {
+                    transform.setProfiles( tmpInPath, tmpSpacePath, tmpProofPath);
+                }
+            }
+            else
+            {
+                if (m_useEmbeddedProfile->isChecked())
+                {
+                    transform.setProfiles( tmpSpacePath );
+                }
+                else
+                {
+                    transform.setProfiles( tmpInPath, tmpSpacePath );
+                }
+            }
+        
+
+            
+            if (m_useEmbeddedProfile->isChecked())
+            {
+                transform.apply(img, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+            }
+            else
+            {
+                QByteArray fakeProfile = QByteArray();
+                transform.apply(img, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+            }
+            
+            iface->putOriginalImage("Color Management", img.bits());
+            delete [] data;
+        }
         kapp->restoreOverrideCursor();
     }
-    kdDebug() << "Doing proof" << endl;
     accept();
 }
 
@@ -532,9 +640,12 @@ void ImageEffect_ICCProof::slotTry()
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
 
-    QString tmpInPath;
-    QString tmpProofPath;
-    QString tmpSpacePath;
+    QString tmpInPath = QString::null;
+    QString tmpProofPath = QString::null;
+    QString tmpSpacePath = QString::null;
+
+    bool proofCondition = false;
+    bool spaceCondition = false;
     
     ///////////////////////////////////////
     // Get parameters for transformation //
@@ -562,6 +673,9 @@ void ImageEffect_ICCProof::slotTry()
         tmpProofPath = m_proofProfileCB->url();
     }
 
+    if (m_doSoftProofBox->isChecked())
+        proofCondition = tmpProofPath.isEmpty();
+
     //-------Workspace profile--------------
 
     if (useDefaultSpaceProfile())
@@ -572,6 +686,8 @@ void ImageEffect_ICCProof::slotTry()
     {
         tmpSpacePath = m_spaceProfileCB->url();
     }
+
+    spaceCondition = tmpSpacePath.isEmpty();
 
     //------------------------------------------
 
@@ -599,51 +715,41 @@ void ImageEffect_ICCProof::slotTry()
             transform.setProfiles( tmpInPath, tmpSpacePath );
         }
     }
-
-    
-    if (m_useEmbeddedProfile->isChecked())
+    if ( proofCondition || spaceCondition )
     {
-        if ( (m_doSoftProofBox->isChecked() && tmpProofPath.isEmpty()) || (tmpSpacePath.isEmpty()) )
-        {
-            KMessageBox::information(this, i18n("<p>You have to set a \"Proof\" and a \"Workspace\" profile.</p>"));
-        }
-        else if (tmpSpacePath.isEmpty())
-        {
-            KMessageBox::information(this, i18n("<p>You have to set an \"Input\" profile.</p>"));
-        }
-        else
-        {
-            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
-        }
+        kapp->restoreOverrideCursor();
+        QString error = i18n("<p>Your settings are not correct</p>\
+                        <p>To apply a color transform, you need at least two ICC profiles:</p> \
+                        <ul><li>An \"Input\" profile.</li>\
+                        <li>A \"Workspace\" profile.</li></ul>\
+                        <p>If you want to do a \"soft-proof\" transform, in adition to these profiles\
+                        you need a \"Proof\" one.</p>");
+        KMessageBox::information(this, error);
     }
     else
     {
-        if ( (m_doSoftProofBox->isChecked() && tmpProofPath.isEmpty()) || ((tmpInPath.isEmpty() || tmpSpacePath.isEmpty()) || m_useSRGBDefaultProfile->isChecked()) )
+        if (m_useEmbeddedProfile->isChecked())
         {
-            KMessageBox::information(this, i18n("<p>You have to set a \"Proof\" (for a \"soft-proof\" transformation), an \"Input\"  and a \"Workspace\" profile.</p>"));
-        }
-        else if ((tmpInPath.isEmpty() || tmpSpacePath.isEmpty()) ||  m_useSRGBDefaultProfile->isChecked() )
-        {
-            KMessageBox::information(this, i18n("<p>You have to set an \"Input\" and a \"Workspace\" profile.</p>"));
+            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
         }
         else
         {
             QByteArray fakeProfile = QByteArray();
-        transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+            transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
         }
+        
+        iface->putPreviewImage(preview.bits());
+    
+        m_previewWidget->updatePreview();
+    
+        // Update histogram.
+    
+        memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
+        kdDebug() << "Doing updateData" << endl;
+        m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+        kapp->restoreOverrideCursor();
     }
     
-    iface->putPreviewImage(preview.bits());
-
-    m_previewWidget->updatePreview();
-
-    // Update histogram.
-   
-    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
-    kdDebug() << "Doing updateData" << endl;
-    m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
-    
-    kapp->restoreOverrideCursor();
 }
 
 void ImageEffect_ICCProof::readSettings()
