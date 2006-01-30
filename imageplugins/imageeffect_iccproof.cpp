@@ -725,6 +725,7 @@ void ImageEffect_ICCProof::slotTry()
                         <p>If you want to do a \"soft-proof\" transform, in adition to these profiles\
                         you need a \"Proof\" one.</p>");
         KMessageBox::information(this, error);
+        enableButtonOK(false);
     }
     else
     {
