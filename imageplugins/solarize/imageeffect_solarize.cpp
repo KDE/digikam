@@ -6,7 +6,8 @@
  * Description : a digiKam image plugin for to solarize
  *               an image.
  *
- * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,12 +69,15 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
                              digikamimageplugins_version,
                              I18N_NOOP("A solarize image plugin for digiKam."),
                              KAboutData::License_GPL,
-                             "(c) 2004, Renchi Raju",
+                             "(c) 2004-2005, Renchi Raju",
                              0,
                              "http://extragear.kde.org/apps/digikamimageplugins");
 
-    m_about->addAuthor("Renchi Raju", I18N_NOOP("Author and maintainer"),
+    m_about->addAuthor("Renchi Raju", I18N_NOOP("Original Author and maintainer"),
                        "renchi@pooh.tam.uiuc.edu");
+    
+    m_about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
+                       "caulier dot gilles at free.fr");
 
     m_helpButton = actionButton( Help );
     KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
@@ -93,7 +97,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageWidget(480, 320, frame);
+    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, false);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the solarize effect preview"));
     l->addWidget(m_previewWidget, 0);
     topLayout->addWidget(frame, 10);
@@ -145,7 +149,7 @@ void ImageEffect_Solarize::slotEffect()
 
     iface->putPreviewImage(data);
     delete [] data;
-    m_previewWidget->update();
+    m_previewWidget->updatePreview();
 }
 
 void ImageEffect_Solarize::slotOk()

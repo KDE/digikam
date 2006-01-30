@@ -6,7 +6,8 @@
  * Description : a digiKam image plugin for to solarize
  *               an image.
  *
- * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,10 +29,6 @@
 
 #include <kdialogbase.h>
 
-// Digikam includes.
-
-#include <dimg.h>
-
 class QPushButton;
 
 class KDoubleNumInput;
@@ -39,7 +36,7 @@ class KAboutData;
 
 namespace Digikam
 {
-class ImageWidget;
+class ImageGuideWidget;
 }
 
 namespace DigikamSolarizeImagesPlugin
@@ -60,16 +57,16 @@ protected:
 
 private:
 
-    QWidget              *m_parent;
+    QWidget                   *m_parent;
 
-    QPushButton          *m_helpButton;
+    QPushButton               *m_helpButton;
 
-    KDoubleNumInput      *m_numInput;
+    KDoubleNumInput           *m_numInput;
     
-    KAboutData           *m_about;
+    KAboutData                *m_about;
     
-    Digikam::ImageWidget *m_previewWidget;
-
+    Digikam::ImageGuideWidget *m_previewWidget;
+    
 private slots:
 
     void slotHelp();
