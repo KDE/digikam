@@ -160,6 +160,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
     d->progressBar = new KProgress(100, plainPage());
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
 

@@ -119,6 +119,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->progressBar = new KProgress(100, this);
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setProgress(0);
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
     setProgressVisible(progress);
     
     d->separateView = new QHButtonGroup(this);
