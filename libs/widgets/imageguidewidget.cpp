@@ -102,17 +102,17 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    d->iface         = new ImageIface(w, h);
+    d->iface        = new ImageIface(w, h);
     uchar *data     = d->iface->getPreviewImage();
-    d->width             = d->iface->previewWidth();
-    d->height             = d->iface->previewHeight();
+    d->width        = d->iface->previewWidth();
+    d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview       = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     delete [] data;
 
-    d->pixmap  = new QPixmap(w, h);
-    d->rect    = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->pixmap = new QPixmap(w, h);
+    d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
     resetSpotPosition();
     setSpotVisible(d->spotVisible, blink);
@@ -194,7 +194,7 @@ void ImageGuideWidget::updatePixmap( void )
 {
     d->pixmap->fill(colorGroup().background());
     d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                   d->rect.width(), d->rect.height());
+                    d->rect.width(), d->rect.height());
 
     if (d->spotVisible)
     {
@@ -272,15 +272,15 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     int old_h = d->height;
 
     uchar *data     = d->iface->setPreviewImageSize(w, h);
-    d->width             = d->iface->previewWidth();
-    d->height             = d->iface->previewHeight();
+    d->width        = d->iface->previewWidth();
+    d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview       = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     delete [] data;
 
-    d->pixmap  = new QPixmap(w, h);
-    d->rect    = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->pixmap = new QPixmap(w, h);
+    d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
     d->spot.setX((int)((float)d->spot.x() * ( (float)d->width / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
@@ -313,9 +313,12 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
        DColor color = getSpotColor(d->getColorFrom);
        QPoint point = getSpotPosition();
        emit spotPositionChanged( color, true, d->spot );
-       QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")
-                                 .arg(point.x()).arg(point.y())
-                                 .arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()) );
+
+       if (d->guideMode == PickColorMode)
+          QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")
+                                    .arg(point.x()).arg(point.y())
+                                    .arg(color.red()).arg(color.green())
+                                    .arg(color.blue()).arg(color.alpha()) );
     }
 }
 
