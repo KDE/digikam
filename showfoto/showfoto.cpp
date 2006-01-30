@@ -460,13 +460,9 @@ void ShowFoto::toggleGUI2FullScreen()
 void ShowFoto::slotToggleShowBar()
 {
     if (m_showBarAction->isChecked())
-    {
         m_bar->hide();
-    }
     else
-    {
         m_bar->show();
-    }
 }
 
 void ShowFoto::slotChangeBCG()

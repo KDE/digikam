@@ -35,12 +35,9 @@ class QSplitter;
 class QPopupMenu;
 class QLabel;
 
-class KAccel;
 class KToolBarPopupAction;
 class KToggleAction;
 class KAction;
-class KActionMenu;
-class KSelectAction;
 
 namespace Digikam
 {
@@ -75,10 +72,7 @@ protected:
     // typicially all RAW image file formats.
     bool                     m_isReadOnly;
 
-    bool                     m_fullScreenHideToolBar;
     bool                     m_fullScreen;
-    bool                     m_removeFullScreenButton;
-    bool                     m_slideShowInFullScreen;
     bool                     m_rotatedOrFlipped;
     
     QLabel                  *m_zoomLabel;
@@ -88,35 +82,16 @@ protected:
 
     QPopupMenu              *m_contextMenu;
 
-    KAction                 *m_zoomPlusAction;
-    KAction                 *m_zoomMinusAction;
     KAction                 *m_saveAction;
     KAction                 *m_saveAsAction;
     KAction                 *m_revertAction;
-    KAction                 *m_filePrintAction;    
     KAction                 *m_fileDeleteAction;
     KAction                 *m_forwardAction;
     KAction                 *m_backwardAction;
     KAction                 *m_firstAction;
     KAction                 *m_lastAction;
-    KAction                 *m_copyAction;
-    KAction                 *m_resizeAction;
-    KAction                 *m_cropAction;
-    KAction                 *m_imagePluginsHelpAction;
-    KAction                 *m_rotate90Action;
-    KAction                 *m_rotate180Action;
-    KAction                 *m_rotate270Action;
-    KAction                 *m_flipHorzAction;
-    KAction                 *m_flipVertAction;
-
-    KActionMenu             *m_flipAction;
-    KActionMenu             *m_rotateAction;
-    KAccel                  *m_accel;
-    
-    KSelectAction           *m_viewHistogramAction;
 
     KToggleAction           *m_slideShowAction;
-    KToggleAction           *m_zoomFitAction;
     KToggleAction           *m_fullScreenAction;
 
     KToolBarPopupAction     *m_undoAction;
@@ -210,6 +185,8 @@ private slots:
 private:
 
     void enter_loop();
+    void hideToolBars();
+    void showToolBars();
 
 private:
     

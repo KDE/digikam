@@ -70,9 +70,10 @@ public:
     int   imageHeight();
     QRect getSelectedArea();
 
-    void resizeImage(int w, int h);
+    void  resizeImage(int w, int h);
 
-    void setBackgroundColor(const QColor& color);
+    void  setBackgroundColor(const QColor& color);
+
     void setExifOrient(bool exifOrient);
 
     void increaseGamma();
@@ -88,8 +89,8 @@ public:
     void setHistogramPosition(const QPoint& pos);
     bool getHistogramPosition(QPoint& pos);
 
-    int setHistogramType(int t);
-    
+    int  setHistogramType(int t);
+
 protected:
     
     void resizeEvent(QResizeEvent* e);

@@ -22,10 +22,18 @@
 #ifndef EDITORWINDOWPRIVATE_H
 #define EDITORWINDOWPRIVATE_H
 
+// Qt includes.
+
+#include <qcolor.h>
+
+class KAction;
+class KToggleAction;
+class KSelectAction;
+class KActionMenu;
+class KAccel;
+
 namespace Digikam
 {
-
-class EditorWindow;
 
 class EditorWindowPriv
 {
@@ -34,14 +42,59 @@ public:
 
     EditorWindowPriv()
     {
+        removeFullScreenButton = false;
+        fullScreenHideToolBar  = false;
+        slideShowInFullScreen  = true;
+        imagePluginsHelpAction = 0;
+        accelerators           = 0;
+        viewHistogramAction    = 0;
+        filePrintAction        = 0;
+        copyAction             = 0;
+        resizeAction           = 0;
+        zoomFitAction          = 0;
+        zoomPlusAction         = 0;
+        zoomMinusAction        = 0;
+        cropAction             = 0;
+        rotate90Action         = 0;
+        rotate180Action        = 0;
+        rotate270Action        = 0;
+        flipHorzAction         = 0;
+        flipVertAction         = 0;
+        flipAction             = 0;
+        rotateAction           = 0;
     }
 
     ~EditorWindowPriv()
     {
     }
 
-// TODO : Marcel : moving saving context class here...
+    bool           removeFullScreenButton;
+    bool           fullScreenHideToolBar;
+    bool           slideShowInFullScreen;
 
+    KAction       *imagePluginsHelpAction;
+    KAction       *filePrintAction;
+    KAction       *copyAction;
+    KAction       *resizeAction;
+    KAction       *cropAction;
+    KAction       *zoomPlusAction;
+    KAction       *zoomMinusAction;
+    KAction       *rotate90Action;
+    KAction       *rotate180Action;
+    KAction       *rotate270Action;
+    KAction       *flipHorzAction;
+    KAction       *flipVertAction;
+        
+    KActionMenu   *flipAction;
+    KActionMenu   *rotateAction;
+        
+    KToggleAction *zoomFitAction;
+    
+    KSelectAction *viewHistogramAction;
+
+    KAccel        *accelerators;
+
+    QColor         bgColor;
 };
 
 }  // NameSpace Digikam

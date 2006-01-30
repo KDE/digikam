@@ -70,24 +70,15 @@ class CanvasPrivate
 public:
 
     CanvasPrivate() :
-        maxZoom(8.0),
-        tileSize(128)
+        tileSize(128), maxZoom(8.0)
     {
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
     }
 
-    
-    DImgInterface     *im;
-    QPixmap            qcheck;
-    QColor             bgColor;
-                     
-    double             zoom;
+    bool               needEmitSignalChanged;
     bool               autoZoom;
-    QRect              pixmapRect;
     bool               fullScreen;
-
-    QRect             *rubber;
     bool               pressedMoved;
     bool               pressedMoving;
     bool               ltActive;
@@ -95,43 +86,58 @@ public:
     bool               lbActive;
     bool               rbActive;
     bool               midButtonPressed;
+
+    const int          tileSize;
     int                midButtonX;
     int                midButtonY;
+    
+    double             zoom;
+    const double       maxZoom;
 
+    QRect             *rubber;
+    QRect              pixmapRect;
+    
     QTimer            *paintTimer;
 
-    const double       maxZoom;
-    const int          tileSize;
     QCache<QPixmap>    tileCache;
+
     QPixmap*           tileTmpPix;
+    QPixmap            qcheck;
 
+    QColor             bgColor;
+    
+    DImgInterface     *im;
+
+    // -- Blended Histogram data. Need to be moved in an extarenal class. --------------------
+    
     // state variables for histogram visibility
-    bool               showHistogram;       //!< visibility
-
-    QPixmap           *histogramPixmap;     //!< histogram pixmap buffer
-    ImageHistogram    *imageHistogram;      //!< image histogram data
-    bool               histogramReady;      //!< state for histogram data thread
+    bool               showHistogram;                       //!< visibility
+    bool               histoMovingRepainting;               //!< is about to repaint
+    bool               histogramReady;                      //!< state for histogram data thread
 
     // state variables for repainting when the contents of the
-    // image are "moved", i.e. the image is scrolled 
+    // image are "moved", i.e. the image is scrolled
     bool               contentsMovingRepaintingHistogram;   //!< repaint cycle state for
                                                             //   histogram while content 
                                                             //   is moving underneath it
-                                                            //
+    bool               histogramMoving;                     //!< positioning histogram with mouse
+        
+    int                histoChannelType;                    //!< histogram type; \sa setHistogramType
+    
     QRect              contentsMovingDirtyRect;             //!< rectangles for histogram
                                                             //   that should be updated
                                                             //   in the next repaint state
 
-    bool               histogramMoving;                     //!< positioning histogram with mouse
     QRect              histogramRect;                       //!< x y width rect (\sa getHistogramRect)
 
     QPoint             histoMovingOffset;                   //!< offset
+
     QRect              histoMovingDirtyRect;                //!< dirty rectangle while moving histogram
-    bool               histoMovingRepainting;               //!< is about to repaint
+    
+    QPixmap           *histogramPixmap;                     //!< histogram pixmap buffer
 
-    int                histoChannelType;                    //!< histogram type; \sa setHistogramType
+    ImageHistogram    *imageHistogram;                      //!< image histogram data
 
-    bool               needEmitSignalChanged;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -142,14 +148,14 @@ Canvas::Canvas(QWidget *parent)
 
     d = new CanvasPrivate;
 
-    d->im = DImgInterface::instance();
-    d->zoom = 1.0;
-    d->autoZoom = false;
+    d->im         = DImgInterface::instance();
+    d->zoom       = 1.0;
+    d->autoZoom   = false;
     d->fullScreen = false;
-    d->bgColor.setRgb( 0, 0, 0 );
     d->tileTmpPix = new QPixmap(d->tileSize, d->tileSize);
+    d->bgColor.setRgb( 0, 0, 0 );
 
-    d->rubber = 0;
+    d->rubber           = 0;
     d->pressedMoved     = false;
     d->pressedMoving    = false;
     d->ltActive         = false;

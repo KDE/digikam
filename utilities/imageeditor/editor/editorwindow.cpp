@@ -21,6 +21,7 @@
 // Qt includes.
 
 #include <qlabel.h>
+#include <qdockarea.h>
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qdir.h>
@@ -95,38 +96,20 @@ EditorWindow::EditorWindow(const char *name)
     m_imagePluginLoader      = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
-    m_zoomPlusAction         = 0;
-    m_zoomMinusAction        = 0;
-    m_zoomFitAction          = 0;
     m_fullScreenAction       = 0;
     m_saveAction             = 0;
     m_saveAsAction           = 0;
     m_revertAction           = 0;
-    m_filePrintAction        = 0;    
     m_fileDeleteAction       = 0;
     m_forwardAction          = 0;
     m_backwardAction         = 0;
     m_firstAction            = 0;
     m_lastAction             = 0;
-    m_copyAction             = 0;
-    m_viewHistogramAction    = 0;
-    m_resizeAction           = 0;
-    m_cropAction             = 0;
-    m_imagePluginsHelpAction = 0;
-    m_rotate90Action         = 0;
-    m_rotate180Action        = 0;
-    m_rotate270Action        = 0;    
-    m_rotateAction           = 0;
-    m_flipHorzAction         = 0;
-    m_flipVertAction         = 0;
     m_undoAction             = 0;
     m_redoAction             = 0;
     m_slideShowAction        = 0;
-    m_accel                  = 0;
     m_fullScreen             = false;
     m_isReadOnly             = false;
-    m_fullScreenHideToolBar  = false;
-    m_slideShowInFullScreen  = true;
     m_rotatedOrFlipped       = false;
     
     // Settings containers instance.
@@ -193,19 +176,19 @@ void EditorWindow::setupStandardConnections()
 
     // -- if rotating/flipping set the rotatedflipped flag to true -----------
 
-    connect(m_rotate90Action, SIGNAL(activated()),
+    connect(d->rotate90Action, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
-    connect(m_rotate180Action, SIGNAL(activated()),
+    connect(d->rotate180Action, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
-    connect(m_rotate270Action, SIGNAL(activated()),
+    connect(d->rotate270Action, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
-    connect(m_flipHorzAction, SIGNAL(activated()),
+    connect(d->flipHorzAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
             
-    connect(m_flipVertAction, SIGNAL(activated()),
+    connect(d->flipVertAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
 }
 
@@ -242,7 +225,7 @@ void EditorWindow::setupStandardActions()
     m_saveAsAction->setEnabled(false);
     m_revertAction->setEnabled(false);
 
-    m_filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
+    d->filePrintAction = new KAction(i18n("Print Image..."), "fileprint",
                                     CTRL+Key_P,
                                     this, SLOT(slotFilePrint()),
                                     actionCollection(), "editorwindow_print");
@@ -256,10 +239,10 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
-    m_copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
+    d->copyAction = KStdAction::copy(m_canvas, SLOT(slotCopy()),
                                     actionCollection(), "editorwindow_copy");
     
-    m_copyAction->setEnabled(false);
+    d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(i18n("Undo"), "undo",
                                            KStdAccel::shortcut(KStdAccel::Undo),
@@ -289,11 +272,11 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    m_zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
+    d->zoomPlusAction = KStdAction::zoomIn(m_canvas, SLOT(slotIncreaseZoom()),
                                           actionCollection(), "editorwindow_zoomplus");
-    m_zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
+    d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                             actionCollection(), "editorwindow_zoomminus");
-    m_zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
+    d->zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
                                         Key_A, this, SLOT(slotToggleAutoZoom()),
                                         actionCollection(), "editorwindow_zoomfit");
 
@@ -307,10 +290,10 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_fullscreen");
 #endif
 
-    m_viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
+    d->viewHistogramAction = new KSelectAction(i18n("&Histogram"), "histogram", Key_H,
                                               this, SLOT(slotViewHistogram()),
                                               actionCollection(), "editorwindow_histogram");
-    m_viewHistogramAction->setEditable(false);
+    d->viewHistogramAction->setEditable(false);
 
     QStringList selectItems;
     selectItems << i18n("Hide");
@@ -319,7 +302,7 @@ void EditorWindow::setupStandardActions()
     selectItems << i18n("Green");
     selectItems << i18n("Blue");
     selectItems << i18n("Alpha");
-    m_viewHistogramAction->setItems(selectItems);
+    d->viewHistogramAction->setItems(selectItems);
 
     m_slideShowAction = new KToggleAction(i18n("Slide Show"), "slideshow", 0,
                                           this, SLOT(slotToggleSlideShow()),
@@ -327,58 +310,58 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    m_resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
+    d->resizeAction = new KAction(i18n("&Resize..."), "resize_image", 0,
                                  this, SLOT(slotResize()),
                                  actionCollection(), "editorwindow_resize");
 
-    m_cropAction = new KAction(i18n("Crop"), "crop",
+    d->cropAction = new KAction(i18n("Crop"), "crop",
                                CTRL+Key_X,
                                m_canvas, SLOT(slotCrop()),
                                actionCollection(), "editorwindow_crop");
     
-    m_cropAction->setEnabled(false);
-    m_cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
+    d->cropAction->setEnabled(false);
+    d->cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
                                      "Select the image region to enable this action.") );
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
-    m_flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
-    m_flipAction->setDelayed(false);
+    d->flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
+    d->flipAction->setDelayed(false);
 
-    m_flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
+    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_fliphorizontal");
 
-    m_flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
+    d->flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flipvertical");
                                    
-    m_flipAction->insert(m_flipHorzAction);
-    m_flipAction->insert(m_flipVertAction);
+    d->flipAction->insert(d->flipHorzAction);
+    d->flipAction->insert(d->flipVertAction);
 
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
-    m_rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
+    d->rotateAction = new KActionMenu(i18n("&Rotate"), "rotate_cw",
                                      actionCollection(),
                                      "editorwindow_rotate");
-    m_rotateAction->setDelayed(false);
+    d->rotateAction->setDelayed(false);
 
-    m_rotate90Action  = new KAction(i18n("90 Degrees"),
+    d->rotate90Action  = new KAction(i18n("90 Degrees"),
                                     0, Key_9, m_canvas, SLOT(slotRotate90()),
                                     actionCollection(),
                                     "rotate_90");
-    m_rotate180Action = new KAction(i18n("180 Degrees"),
+    d->rotate180Action = new KAction(i18n("180 Degrees"),
                                     0, Key_8, m_canvas, SLOT(slotRotate180()),
                                     actionCollection(),
                                     "rotate_180");
-    m_rotate270Action = new KAction(i18n("270 Degrees"),
+    d->rotate270Action = new KAction(i18n("270 Degrees"),
                                     0, Key_7, m_canvas, SLOT(slotRotate270()),
                                     actionCollection(),
                                     "rotate_270");
                                     
-    m_rotateAction->insert(m_rotate90Action);
-    m_rotateAction->insert(m_rotate180Action);
-    m_rotateAction->insert(m_rotate270Action);
+    d->rotateAction->insert(d->rotate90Action);
+    d->rotateAction->insert(d->rotate180Action);
+    d->rotateAction->insert(d->rotate270Action);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -388,7 +371,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    m_imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
+    d->imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
                                            "digikamimageplugins", 0,
                                            this, SLOT(slotImagePluginsHelp()),
                                            actionCollection(), "editorwindow_imagepluginshelp");
@@ -400,39 +383,39 @@ void EditorWindow::setupStandardActions()
 
 void EditorWindow::setupStandardAccelerators()
 {
-    m_accel = new KAccel(this);
+    d->accelerators = new KAccel(this);
     
-    m_accel->insert("Exit fullscreen", i18n("Exit Fullscreen"),
+    d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen"),
                     i18n("Exit out of the fullscreen mode"),
                     Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
 
-    m_accel->insert("Next Image Key_Space", i18n("Next Image"),
+    d->accelerators->insert("Next Image Key_Space", i18n("Next Image"),
                     i18n("Load Next Image"),
                     Key_Space, this, SLOT(slotForward()),
                     false, true);
 
-    m_accel->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Key_Backspace, this, SLOT(slotBackward()),
                     false, true);
 
-    m_accel->insert("Next Image Key_Next", i18n("Next Image"),
+    d->accelerators->insert("Next Image Key_Next", i18n("Next Image"),
                     i18n("Load Next Image"),
                     Key_Next, this, SLOT(slotForward()),
                     false, true);
 
-    m_accel->insert("Previous Image Key_Prior", i18n("Previous Image"),
+    d->accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
                     i18n("Load Previous Image"),
                     Key_Prior, this, SLOT(slotBackward()),
                     false, true);
 
-    m_accel->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
+    d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
                     i18n("Zoom into Image"),
                     Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
                     false, true);
     
-    m_accel->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
+    d->accelerators->insert("Zoom Plus Key_Minus", i18n("Zoom Out"),
                     i18n("Zoom out of Image"),
                     Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
                     false, true);
@@ -573,10 +556,10 @@ void EditorWindow::slotNewToolbarConfig()
 
 void EditorWindow::slotToggleAutoZoom()
 {
-    bool checked = m_zoomFitAction->isChecked();
+    bool checked = d->zoomFitAction->isChecked();
 
-    m_zoomPlusAction->setEnabled(!checked);
-    m_zoomMinusAction->setEnabled(!checked);
+    d->zoomPlusAction->setEnabled(!checked);
+    d->zoomMinusAction->setEnabled(!checked);
 
     m_canvas->slotToggleAutoZoom();
 }
@@ -587,16 +570,19 @@ void EditorWindow::slotZoomChanged(float zoom)
                          QString::number(zoom*100, 'f', 2) +
                          QString("%"));
 
-    m_zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
-                                 !m_zoomFitAction->isChecked());
-    m_zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
-                                  !m_zoomFitAction->isChecked());
+    d->zoomPlusAction->setEnabled(!m_canvas->maxZoom() &&
+                                 !d->zoomFitAction->isChecked());
+    d->zoomMinusAction->setEnabled(!m_canvas->minZoom() &&
+                                  !d->zoomFitAction->isChecked());
 }
 
 void EditorWindow::slotEscapePressed()
 {
     if (m_fullScreen)
         m_fullScreenAction->activate();
+    
+    if (m_slideShowAction->isChecked())
+        m_slideShowAction->activate();
 }
 
 void EditorWindow::plugActionAccel(KAction* action)
@@ -604,7 +590,7 @@ void EditorWindow::plugActionAccel(KAction* action)
     if (!action)
         return;
 
-    m_accel->insert(action->text(),
+    d->accelerators->insert(action->text(),
                     action->text(),
                     action->whatsThis(),
                     action->shortcut(),
@@ -614,7 +600,7 @@ void EditorWindow::plugActionAccel(KAction* action)
 
 void EditorWindow::unplugActionAccel(KAction* action)
 {
-    m_accel->remove(action->text());
+    d->accelerators->remove(action->text());
 }
 
 void EditorWindow::loadImagePlugins()
@@ -663,16 +649,15 @@ void EditorWindow::readStandardSettings()
     
     int histogramType = config->readNumEntry("HistogramType", 0);
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
-    m_viewHistogramAction->setCurrentItem(histogramType);
+    d->viewHistogramAction->setCurrentItem(histogramType);
     slotViewHistogram(); // update
 
     // Restore full screen Mode ?
-    m_fullScreen = config->readBoolEntry("FullScreen", false);
 
-    if (m_fullScreen)
+    if (config->readBoolEntry("FullScreen", false))
     {
-        m_fullScreen = false;
         m_fullScreenAction->activate();
+        m_fullScreen = true;
     }
 
     // Restore Auto zoom action ?
@@ -680,9 +665,9 @@ void EditorWindow::readStandardSettings()
 
     if (autoZoom)
     {
-        m_zoomFitAction->activate();
-        m_zoomPlusAction->setEnabled(false);
-        m_zoomMinusAction->setEnabled(false);
+        d->zoomFitAction->activate();
+        d->zoomPlusAction->setEnabled(false);
+        d->zoomMinusAction->setEnabled(false);
     }    
 }
 
@@ -693,9 +678,9 @@ void EditorWindow::applyStandardSettings()
 
     // -- Background color --------------------------------------------------------
     
-    QColor bgColor(Qt::black);
-    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &bgColor));
-    m_canvas->update();
+    d->bgColor = QColor(Qt::black);
+    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &d->bgColor));
+//    m_canvas->update();
 
     // -- IO files format settings ------------------------------------------------
     
@@ -721,11 +706,11 @@ void EditorWindow::applyStandardSettings()
     else 
         m_canvas->setSizePolicy(rightSzPolicy);
     
-    m_fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
+    d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
     // -- Slideshow Settings -------------------------------------------------
     
-    m_slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
+    d->slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
     m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
@@ -749,10 +734,10 @@ void EditorWindow::saveStandardSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
-    config->writeEntry("AutoZoom", m_zoomFitAction->isChecked());
+    config->writeEntry("AutoZoom", d->zoomFitAction->isChecked());
     config->writeEntry("Splitter Sizes", m_splitter->sizes());
 
-    int histogramType = m_viewHistogramAction->currentItem();
+    int histogramType = d->viewHistogramAction->currentItem();
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
     config->writeEntry("HistogramType", histogramType);
 
@@ -762,26 +747,26 @@ void EditorWindow::saveStandardSettings()
         rc = QRect(pt.x(), pt.y(), 1, 1);
     config->writeEntry("Histogram Rectangle", rc);
 
-    config->writeEntry("FullScreen", m_fullScreen);
+    config->writeEntry("FullScreen", m_slideShowAction->isChecked());
     
     config->sync();
 }
 
 void EditorWindow::slotViewHistogram()
 {
-    int curItem = m_viewHistogramAction->currentItem();
+    int curItem = d->viewHistogramAction->currentItem();
     m_canvas->setHistogramType(curItem);
 }
 
 void EditorWindow::toggleStandardActions(bool val)
 {
-    m_zoomFitAction->setEnabled(val);
+    d->zoomFitAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
-    m_viewHistogramAction->setEnabled(val);
-    m_rotateAction->setEnabled(val);
-    m_flipAction->setEnabled(val);
-    m_filePrintAction->setEnabled(val);
-    m_resizeAction->setEnabled(val);
+    d->viewHistogramAction->setEnabled(val);
+    d->rotateAction->setEnabled(val);
+    d->flipAction->setEnabled(val);
+    d->filePrintAction->setEnabled(val);
+    d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
 
     QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
@@ -800,6 +785,7 @@ void EditorWindow::slotToggleFullScreen()
 {
     if (m_fullScreen)
     {
+        m_canvas->setBackgroundColor(d->bgColor);
 
 #if QT_VERSION >= 0x030300
         setWindowState( windowState() & ~WindowFullScreen );
@@ -808,18 +794,22 @@ void EditorWindow::slotToggleFullScreen()
 #endif
         menuBar()->show();
         statusBar()->show();
-
+        leftDock()->show();
+        rightDock()->show();
+        topDock()->show();
+        bottomDock()->show();
+        
         QObject* obj = child("ToolBar","KToolBar");
         
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
             
-            if (m_fullScreenAction->isPlugged(toolBar) && m_removeFullScreenButton)
+            if (m_fullScreenAction->isPlugged(toolBar) && d->removeFullScreenButton)
                 m_fullScreenAction->unplug(toolBar);
                 
             if (toolBar->isHidden())
-                toolBar->show();
+                showToolBars();
         }
 
         // -- remove the gui action accels ----
@@ -830,45 +820,50 @@ void EditorWindow::slotToggleFullScreen()
         unplugActionAccel(m_lastAction);
         unplugActionAccel(m_saveAction);
         unplugActionAccel(m_saveAsAction);
-        unplugActionAccel(m_zoomPlusAction);
-        unplugActionAccel(m_zoomMinusAction);
-        unplugActionAccel(m_zoomFitAction);
-        unplugActionAccel(m_cropAction);
-        unplugActionAccel(m_filePrintAction);
+        unplugActionAccel(d->zoomPlusAction);
+        unplugActionAccel(d->zoomMinusAction);
+        unplugActionAccel(d->zoomFitAction);
+        unplugActionAccel(d->cropAction);
+        unplugActionAccel(d->filePrintAction);
         unplugActionAccel(m_fileDeleteAction);
 
         toggleGUI2FullScreen();
-        
         m_fullScreen = false;
     }
     else
     {
+        m_canvas->setBackgroundColor(QColor(Qt::black));
+        
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
-
+        topDock()->hide();
+        leftDock()->hide();
+        rightDock()->hide();
+        bottomDock()->hide();
+        
         QObject* obj = child("ToolBar","KToolBar");
         
         if (obj)
         {
             KToolBar* toolBar = static_cast<KToolBar*>(obj);
             
-            if (m_fullScreenHideToolBar)
+            if (d->fullScreenHideToolBar)
             {
-                toolBar->hide();
+                hideToolBars();
             }
             else
             {    
                 if ( !m_fullScreenAction->isPlugged(toolBar) )
                 {
                     m_fullScreenAction->plug(toolBar);
-                    m_removeFullScreenButton=true;
+                    d->removeFullScreenButton=true;
                 }
                 else    
                 {
                     // If FullScreen button is enable in toolbar settings
-                    // We don't remove it at full screen end.
-                    m_removeFullScreenButton=false;
+                    // We don't remove it when we out of fullscreen mode.
+                    d->removeFullScreenButton=false;
                 }
             }
         }
@@ -881,16 +876,15 @@ void EditorWindow::slotToggleFullScreen()
         plugActionAccel(m_lastAction);
         plugActionAccel(m_saveAction);
         plugActionAccel(m_saveAsAction);
-        plugActionAccel(m_zoomPlusAction);
-        plugActionAccel(m_zoomMinusAction);
-        plugActionAccel(m_zoomFitAction);
-        plugActionAccel(m_cropAction);
-        plugActionAccel(m_filePrintAction);
+        plugActionAccel(d->zoomPlusAction);
+        plugActionAccel(d->zoomMinusAction);
+        plugActionAccel(d->zoomFitAction);
+        plugActionAccel(d->cropAction);
+        plugActionAccel(d->filePrintAction);
         plugActionAccel(m_fileDeleteAction);
 
         toggleGUI2FullScreen();
         showFullScreen();
-
         m_fullScreen = true;
     }
 }
@@ -906,7 +900,7 @@ void EditorWindow::slotToggleSlideShow()
     {
         toggleGUI2SlideShow();
         
-        if (!m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
+        if (!m_fullScreenAction->isChecked() && d->slideShowInFullScreen)
         {
             m_fullScreenAction->activate();
         }
@@ -919,7 +913,7 @@ void EditorWindow::slotToggleSlideShow()
         m_slideShow->stop();
         toggleActions2SlideShow(true);
 
-        if (m_fullScreenAction->isChecked() && m_slideShowInFullScreen)
+        if (m_fullScreenAction->isChecked() && d->slideShowInFullScreen)
         {
             m_fullScreenAction->activate();
         }
@@ -1005,8 +999,8 @@ void EditorWindow::enter_loop()
 void EditorWindow::slotSelected(bool val)
 {
     // Update menu actions.
-    m_cropAction->setEnabled(val);
-    m_copyAction->setEnabled(val);
+    d->cropAction->setEnabled(val);
+    d->copyAction->setEnabled(val);
 
     for (ImagePlugin* plugin = m_imagePluginLoader->pluginList().first();
          plugin; plugin = m_imagePluginLoader->pluginList().next())
@@ -1021,6 +1015,38 @@ void EditorWindow::slotSelected(bool val)
     
     QRect sel = m_canvas->getSelectedArea();
     emit signalSelectionChanged( sel.isNull() ? 0 : &sel );
+}
+
+void EditorWindow::hideToolBars()
+{
+    QPtrListIterator<KToolBar> it = toolBarIterator();
+    KToolBar* bar;
+
+    for(;it.current()!=0L; ++it)
+    {
+        bar=it.current();
+        
+        if (bar->area()) 
+            bar->area()->hide();
+        else 
+            bar->hide();
+    }
+}
+
+void EditorWindow::showToolBars()
+{
+    QPtrListIterator<KToolBar> it = toolBarIterator();
+    KToolBar* bar;
+
+    for( ; it.current()!=0L ; ++it)
+    {
+        bar=it.current();
+        
+        if (bar->area())
+            bar->area()->show();
+        else
+            bar->show();
+    }
 }
 
 }  // namespace Digikam
