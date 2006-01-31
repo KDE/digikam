@@ -64,11 +64,12 @@
    - White Balance   (digikamimageplugins) : Done.
 
 * Improving metadata support:
-   - Using Exiv2 lib instead libexif
+   - Using Exiv2 lib instead libexif ?
    - Add IPTC support ?
    - Add RAW metadata support ?
    - Add embbeded thumbnail support ?
-   - Improved PNG file format support ==> PNG vs DNG file format ==> PNG is the ultimate photographs data container ?
+   - Improved metada from TIFF file format. Add DNG file format if it's possible...
+   - Improved PNG file format support ==> PNG vs DNG file format ==> PNG is the ultimate photographs data container in OpenSource world ?
 
 * Add 'Zoom In/Out' capabilities with ImagePreviewWidget :
 
