@@ -14,7 +14,6 @@ libcameragui_la_LIBADD  = $(LIB_GPHOTO) $(LIBKEXIF_LIBS) $(LIBJPEG)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
-	      -I$(top_srcdir)/digikam/libs/thumbbar \
 	      -I$(top_srcdir)/digikam/libs/jpegutils \
 	      -I$(top_srcdir)/digikam/libs/dimg \
 	      -I$(top_srcdir)/digikam/libs/dcraw \

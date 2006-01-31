@@ -51,7 +51,6 @@ extern "C"
 // Local includes.
 
 #include "dimg.h"
-#include "thumbnailjob.h"
 #include "dcraw_parse.h"
 #include "albumsettings.h"
 #include "umscamera.h"
@@ -66,18 +65,14 @@ public:
     UMSCameraPriv()
     {
         cancel = false;
-        thumbnailIsReady = false;
     }
 
-    bool     cancel;
-    bool     thumbnailIsReady;
+    bool    cancel;
     
-    QPixmap  thumbFromKIOSlave;
-    
-    QString  imageFilter;
-    QString  movieFilter;
-    QString  audioFilter;
-    QString  rawFilter;
+    QString imageFilter;
+    QString movieFilter;
+    QString audioFilter;
+    QString rawFilter;
 };
 
 UMSCamera::UMSCamera(const QString& model,
@@ -213,50 +208,18 @@ bool UMSCamera::getThumbnail(const QString& folder,
         }
     }
 
-    // In 4th we trying to get thumbnail from digiKam KIO slave. This way work fine with
-    // all file formats supported by KDE thumbs API like mpeg, avi, mov, etc.
+    // Finaly, we trying to get thumbnail using DImg API. This way can take a while.
+    // TODO : in the future, we need to use a new DImg::getEmbeddedThumbnail() method instead !
 
-    d->thumbnailIsReady = false;
-    
-    ThumbnailJob *job = new ThumbnailJob(QFile::encodeName(folder + "/" + itemName),
-                                         256, false, false);
+    DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
 
-    connect(job,  SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
-    
-    connect(job,  SIGNAL(signalFailed(const KURL&)),
-            this, SLOT(slotGotThumbnailFailed()));
-
-    // We waiting the result from KIO slave. We can do a infinite loop here without frozen GUI 
-    // because we working in a separate thread.
-
-    while (!d->thumbnailIsReady);
-
-    if (job) job->kill();
-    if (!d->thumbFromKIOSlave.isNull())
+    if (!dimgThumb.isNull())
     {
-        thumbnail = d->thumbFromKIOSlave.convertToImage();
+        thumbnail = dimgThumb.copyQImage();
         return true;
     }
 
     return false;
-}
-
-
-void UMSCamera::slotGotThumbnailFailed()
-{
-    d->thumbFromKIOSlave = QPixmap();
-    d->thumbnailIsReady = true;
-}
-
-void UMSCamera::slotGotThumbnail(const KURL&, const QPixmap& pix)
-{
-    if(!pix.isNull())
-        d->thumbFromKIOSlave = pix;
-    else 
-        d->thumbFromKIOSlave = QPixmap();
-
-    d->thumbnailIsReady = true;
 }
 
 bool UMSCamera::getExif(const QString& ,
@@ -406,5 +369,3 @@ QString UMSCamera::mimeType(const QString& fileext) const
 }
 
 }  // namespace Digikam
-
-#include "umscamera.moc"
