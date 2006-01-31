@@ -152,9 +152,9 @@ DImgInterface::DImgInterface()
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
     connect( d->thread, SIGNAL(signalLoadingProgress(const QString&, float)),
-             this, SLOT(slotLoadingProgress(const QString &, float)) );
+             this, SLOT(slotLoadingProgress(const QString&, float)) );
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SLOT(slotSavingProgress(const QString &, float)) );
+             this, SLOT(slotSavingProgress(const QString&, float)) );
 }
 
 DImgInterface::~DImgInterface()
@@ -169,9 +169,7 @@ void DImgInterface::load(const QString& filename,
                          IOFileSettingsContainer* iofileSettings)
 {
     d->valid      = false;
-
     d->filename   = filename;
-
     d->width      = 0;
     d->height     = 0;
     d->origWidth  = 0;
@@ -185,11 +183,7 @@ void DImgInterface::load(const QString& filename,
     d->brightness = 0.0;
     d->cmod.reset();
 
-    // FIXME : with File/Restore image action from GUI :
-    // cmSettings =0      ==> settings in d provate class instance will be lost !
-    // iofileSettings = 0 ==> crash !
-    
-    d->cmSettings = cmSettings;
+    d->cmSettings     = cmSettings;
     d->iofileSettings = iofileSettings;
     d->undoMan->clear();
 
@@ -204,7 +198,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         return;
 
     bool apply;
-    bool valRet = false;
+    bool valRet     = false;
     bool isReadOnly = true;
 
     d->image = img;
@@ -218,7 +212,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         d->width      = d->origWidth;
         d->height     = d->origHeight;
 
-        isReadOnly   = d->image.isReadOnly();
+        isReadOnly    = d->image.isReadOnly();
         valRet        = true;
 
         if (d->cmSettings)
@@ -306,7 +300,6 @@ void DImgInterface::slotLoadingProgress(const QString& filePath, float progress)
     if (filePath == d->filename)
         emit signalLoadingProgress(filePath, progress);
 }
-
 
 bool DImgInterface::exifRotated()
 {

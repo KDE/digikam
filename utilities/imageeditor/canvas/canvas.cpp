@@ -206,11 +206,11 @@ Canvas::Canvas(QWidget *parent)
     connect(d->im, SIGNAL(signalImageSaved(const QString&, bool)),
             SLOT(slotImageSaved(const QString&, bool)));
 
-    connect( d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
-             this, SIGNAL(signalLoadingProgress(const QString &, float)) );
+    connect(d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
+            this, SIGNAL(signalLoadingProgress(const QString&, float)));
 
-    connect( d->im, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SIGNAL(signalSavingProgress(const QString &, float)) );
+    connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
+            this, SIGNAL(signalSavingProgress(const QString&, float)));
             
     connect(this, SIGNAL(signalSelected(bool)),
             SLOT(slotSelected()));
