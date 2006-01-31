@@ -762,6 +762,36 @@ void ShowFoto::slotBackward()
     }
 }
 
+void ShowFoto::toggleNavigation(int index)
+{
+    if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+    else 
+    {
+        m_backwardAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
+    }
+    
+    if (index == 1) 
+    {
+        m_backwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+    }
+
+    if (index == m_itemsNb) 
+    {
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+}
+
 void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1065,36 +1095,6 @@ bool ShowFoto::saveAs()
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
-}
-
-void ShowFoto::toggleNavigation(int index)
-{
-    if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_forwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
-    else 
-    {
-        m_backwardAction->setEnabled(true);
-        m_forwardAction->setEnabled(true);
-        m_firstAction->setEnabled(true);
-        m_lastAction->setEnabled(true);
-    }
-    
-    if (index == 1) 
-    {
-        m_backwardAction->setEnabled(false);
-        m_firstAction->setEnabled(false);
-    }
-
-    if (index == m_itemsNb) 
-    {
-        m_forwardAction->setEnabled(false);
-        m_lastAction->setEnabled(false);
-    }
 }
 
 }   // namespace ShowFoto
