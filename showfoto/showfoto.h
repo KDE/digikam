@@ -109,8 +109,9 @@ private:
     
     void toggleGUI2SlideShow();
     void toggleGUI2FullScreen();
-    
+   
     void toggleNavigation(int index);
+
     bool save();
     bool saveAs();
     void finishSaving(bool success);

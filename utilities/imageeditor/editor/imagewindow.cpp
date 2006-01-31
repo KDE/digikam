@@ -649,6 +649,11 @@ bool ImageWindow::save()
     return true;
 }
 
+bool ImageWindow::saveAs()
+{
+    return ( startingSaveAs(m_urlCurrent) );
+}
+
 void ImageWindow::slotDeleteCurrentItem()
 {
     KURL u(m_urlCurrent.directory());
@@ -717,132 +722,6 @@ void ImageWindow::slotDeleteCurrentItem()
                              i18n("No Image in Current Album"));
 
     close();
-}
-
-// ----------------------------------------------------------------------------
-// TODO : Checking if methods below can be merged to common GUI implementation.
-
-bool ImageWindow::saveAs()
-{
-    // FIXME : Add 16 bits file formats and others files format like TIFF not supported by kimgio.
-
-    QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
-    mimetypes.append(" image/tiff");
-    kdDebug () << "mimetypes=" << mimetypes << endl;    
-
-    m_savingContext->srcURL = m_urlCurrent;
-
-    KFileDialog imageFileSaveDialog(m_savingContext->srcURL.directory(),
-                                    QString::null,
-                                    this,
-                                    "imageFileSaveDialog",
-                                    false);
-
-    imageFileSaveDialog.setOperationMode( KFileDialog::Saving );
-    imageFileSaveDialog.setMode( KFile::File );
-    imageFileSaveDialog.setSelection(m_savingContext->srcURL.fileName());
-    imageFileSaveDialog.setCaption( i18n("New Image File Name") );
-    imageFileSaveDialog.setFilter(mimetypes);
-
-    // Check for cancel.
-    if ( imageFileSaveDialog.exec() != KFileDialog::Accepted )
-    {
-       return false;
-    }
-
-    KURL newURL = imageFileSaveDialog.selectedURL();
-
-    // Check if target image format have been selected from Combo List of SaveAs dialog.
-    m_savingContext->format = KImageIO::typeForMime(imageFileSaveDialog.currentMimeFilter());
-
-    if ( m_savingContext->format.isEmpty() )
-    {
-        // Else, check if target image format have been add to target image file name using extension.
-
-        QFileInfo fi(newURL.path());
-        m_savingContext->format = fi.extension(false);
-        
-        if ( m_savingContext->format.isEmpty() )
-        {
-            // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageIO::imageFormat(m_savingContext->srcURL.path());
-        }
-        else
-        {
-            // Else, check if format from file name extension is include on file mime type list.
-
-            QString imgExtPattern;
-            QStringList imgExtList = QStringList::split(" ", mimetypes);
-            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; it++)
-            {    
-                imgExtPattern.append (KImageIO::typeForMime(*it).upper());
-                imgExtPattern.append (" ");
-            }    
-            imgExtPattern.append (" TIF TIFF");
-            if ( imgExtPattern.contains("JPEG") ) imgExtPattern.append (" JPG");
-    
-            if ( !imgExtPattern.contains( m_savingContext->format.upper() ) )
-            {
-                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
-                        .arg(m_savingContext->format));
-                kdWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
-                return false;
-            }
-        }
-    }
-    
-    if (!newURL.isValid())
-    {
-        KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to Album\n\"%2\".")
-                           .arg(newURL.filename())
-                           .arg(newURL.path().section('/', -2, -2)));
-        kdWarning() << k_funcinfo << "target URL isn't valid !" << endl;
-        return false;
-    }
-
-    // if new and original url are equal use slotSave() ------------------------------
-    
-    KURL currURL(m_savingContext->srcURL);
-    currURL.cleanPath();
-    newURL.cleanPath();
-
-    if (currURL.equals(newURL))
-    {
-        slotSave();
-        return false;
-    }
-
-    // Check for overwrite ----------------------------------------------------------
-    
-    QFileInfo fi(newURL.path());
-    m_savingContext->destinationExisted = fi.exists();
-    if ( m_savingContext->destinationExisted )
-    {
-        int result =
-
-            KMessageBox::warningYesNo( this, 
-                                       i18n("A file named \"%1\" already "
-                                            "exists. Are you sure you want "
-                                            "to overwrite it?")
-                                       .arg(newURL.filename()),
-                                       i18n("Overwrite File?"),
-                                       i18n("Overwrite"),
-                                       KStdGuiItem::cancel() );
-
-        if (result != KMessageBox::Yes)
-            return false;
-    }
-
-    // Now do the actual saving -----------------------------------------------------
-
-    m_savingContext->saveTempFile = new KTempFile(newURL.directory(false), QString::null);
-    m_savingContext->saveTempFile->setAutoDelete(true);
-    m_savingContext->destinationURL = newURL;
-    m_savingContext->savingState = SavingContextContainer::SavingStateSaveAs;
-
-    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
-
-    return true;
 }
 
 }  // namespace Digikam
