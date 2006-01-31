@@ -126,6 +126,7 @@ protected:
     void loadImagePlugins();
 
     bool promptUserSave(const KURL& url);
+    void startingSave(const KURL& url);
 
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
@@ -139,6 +140,10 @@ protected:
     virtual void setupUserArea()=0;
     virtual bool saveAs()=0; 
     virtual bool save()=0;
+
+    virtual void finishSaving(bool success)=0;    
+    virtual void saveIsComplete()=0;
+    virtual void saveAsIsComplete()=0; 
 
 protected slots:
 
@@ -181,6 +186,7 @@ protected slots:
 private slots:
 
     void slotRotatedOrFlipped();
+    void slotSavingFinished(const QString &filename, bool success);
 
 private:
 

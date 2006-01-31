@@ -35,8 +35,10 @@ namespace Digikam
 
 class UMSCameraPriv;
 
-class UMSCamera : public DKCamera
+class UMSCamera : public QObject, public DKCamera
 {
+    Q_OBJECT
+
 public:
 
     UMSCamera(const QString& model,
@@ -66,7 +68,11 @@ public:
     bool uploadItem(const QString& folder,
                     const QString& itemName,
                     const QString& localFile);
+private slots:
 
+    void slotGotThumbnail(const KURL& url, const QPixmap& pix);
+    void slotGotThumbnailFailed();
+    
 private:
 
     void    listFolders(const QString& folder,

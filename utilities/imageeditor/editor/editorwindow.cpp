@@ -63,6 +63,11 @@
 #include <kstatusbar.h>
 #include <kprogress.h>
 
+// LibKexif includes.
+
+#include <libkexif/kexifdata.h>
+#include <libkexif/kexifutils.h>
+
 // Local includes.
 
 #include "canvas.h"
@@ -1047,6 +1052,101 @@ void EditorWindow::showToolBars()
         else
             bar->show();
     }
+}
+
+void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
+{
+    if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
+    {
+        // from save()
+        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
+
+        if (!success)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to \n\"%2\".")
+                            .arg(m_savingContext->destinationURL.filename())
+                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            finishSaving(false);
+            return;
+        }
+
+        if( m_rotatedOrFlipped || m_canvas->exifRotated() )
+            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+        
+        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to overwrite original file"),
+                               i18n("Error Saving File"));
+            finishSaving(false);
+            return;
+        }
+
+        m_canvas->setModified( false );
+        
+        saveIsComplete();
+
+        kapp->restoreOverrideCursor();
+    }
+    else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
+    {
+        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
+
+        // from saveAs()
+        if (!success)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
+                            .arg(m_savingContext->destinationURL.filename())
+                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            finishSaving(false);
+            return;
+        }
+
+        // Only try to write exif if both src and destination are jpeg files
+
+        if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
+            m_savingContext->format.upper() == "JPEG")
+        {
+            if( m_rotatedOrFlipped || m_canvas->exifRotated() )
+                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+        }
+        
+        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+
+        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
+              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
+        {
+            kapp->restoreOverrideCursor();
+            KMessageBox::error(this, i18n("Failed to save to new file"),
+                               i18n("Error Saving File"));
+            finishSaving(false);
+            return;
+        }
+
+        m_canvas->setModified( false );
+
+        saveAsIsComplete();
+
+        kapp->restoreOverrideCursor();
+    }
+
+    finishSaving(true);
+}
+
+void EditorWindow::startingSave(const KURL& url)
+{
+    m_savingContext->srcURL         = url;
+    m_savingContext->destinationURL = m_savingContext->srcURL;
+    m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
+    m_savingContext->saveTempFile   = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
+    m_savingContext->saveTempFile->setAutoDelete(true);
+
+    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
 }
 
 }  // namespace Digikam

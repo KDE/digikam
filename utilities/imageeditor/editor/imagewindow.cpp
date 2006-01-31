@@ -196,7 +196,10 @@ void ImageWindow::setupUserArea()
     m_canvas         = new Canvas(m_splitter);
     m_rightSidebar   = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
                                                     Sidebar::Right, true, false);
-    
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
+
     lay->addWidget(m_splitter);
     lay->addWidget(m_rightSidebar);
     
@@ -533,9 +536,6 @@ void ImageWindow::toggleGUI2FullScreen()
     }
 }
 
-// ----------------------------------------------------------------------------
-// TODO : Checking if methods below can be merged to common GUI implementation.
-
 void ImageWindow::slotLoadingStarted(const QString& /*filename*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -544,8 +544,7 @@ void ImageWindow::slotLoadingStarted(const QString& /*filename*/)
     m_rightSidebar->noCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, 
-                                 i18n("Loading: "));
+    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
 void ImageWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
@@ -572,8 +571,7 @@ void ImageWindow::slotSavingStarted(const QString& /*filename*/)
     m_rightSidebar->noCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, 
-                                 i18n("Saving: "));
+    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
 void ImageWindow::finishSaving(bool success)
@@ -591,76 +589,14 @@ void ImageWindow::finishSaving(bool success)
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
 }
 
-void ImageWindow::slotSavingFinished(const QString& /*filename*/, bool success)
+void ImageWindow::saveIsComplete()
 {
-    if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
-    {
-        // from save()
-        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
-
-        if (!success)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                            .arg(m_savingContext->destinationURL.filename())
-                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
-            finishSaving(false);
-            return;
-        }
-
-        if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
-
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                               i18n("Error Saving File"));
-            finishSaving(false);
-            return;
-        }
-
-        m_canvas->setModified( false );
         emit signalFileModified(m_savingContext->destinationURL);
-        slotLoadCurrent();
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+}
 
-        kapp->restoreOverrideCursor();
-    }
-    else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
-    {
-        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
-
-        // from saveAs()
-        if (success == false)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to album\n\"%2\".")
-                            .arg(m_savingContext->destinationURL.filename())
-                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
-
-            finishSaving(false);
-            return;
-        }
-
-        // only try to write exif if both src and destination are jpeg files
-        if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
-            m_savingContext->format.upper() == "JPEG")
-        {
-            if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
-        }
-
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save to new file"),
-                               i18n("Error Saving File"));
-            finishSaving(false);
-            return;
-        }
-
+void ImageWindow::saveAsIsComplete()
+{
         // Find the src and dest albums ------------------------------------------
 
         KURL srcDirURL(QDir::cleanDirPath(m_savingContext->srcURL.directory()));
@@ -704,25 +640,87 @@ void ImageWindow::slotSavingFinished(const QString& /*filename*/, bool success)
         else
             emit signalFileAdded(m_savingContext->destinationURL);
 
-        m_canvas->setModified( false );
-        kapp->restoreOverrideCursor();
-        slotLoadCurrent();
-    }
-
-    finishSaving(true);
+        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
 bool ImageWindow::save()
 {
-    m_savingContext->srcURL = m_urlCurrent;
-    m_savingContext->saveTempFile = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
-    m_savingContext->saveTempFile->setAutoDelete(true);
-    m_savingContext->destinationURL = m_savingContext->srcURL;
-    m_savingContext->savingState = SavingContextContainer::SavingStateSave;
-
-    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
+    startingSave(m_urlCurrent);
     return true;
 }
+
+void ImageWindow::slotDeleteCurrentItem()
+{
+    KURL u(m_urlCurrent.directory());
+    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
+
+    if (!palbum)
+        return;
+
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings->getUseTrash())
+    {
+        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                        .arg(m_urlCurrent.filename()));
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+            !=  KMessageBox::Continue)
+        {
+            return;
+        }
+    }
+
+    if (!SyncJob::userDelete(m_urlCurrent))
+    {
+        QString errMsg(SyncJob::lastErrorMsg());
+        KMessageBox::error(this, errMsg, errMsg);
+        return;
+    }
+
+    emit signalFileDeleted(m_urlCurrent);
+
+    KURL CurrentToRemove = m_urlCurrent;
+    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+
+    if (it != m_urlList.end())
+    {
+        if (m_urlCurrent != m_urlList.last())
+        {
+            // Try to get the next image in the current Album...
+
+            KURL urlNext = *(++it);
+            m_urlCurrent = urlNext;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+        else if (m_urlCurrent != m_urlList.first())
+        {
+            // Try to get the previous image in the current Album...
+
+            KURL urlPrev = *(--it);
+            m_urlCurrent = urlPrev;
+            m_urlList.remove(CurrentToRemove);
+            slotLoadCurrent();
+            return;
+        }
+    }
+
+    // No image in the current Album -> Quit ImageEditor...
+
+    KMessageBox::information(this,
+                             i18n("There is no image to show in the current album.\n"
+                                  "The image editor will be closed."),
+                             i18n("No Image in Current Album"));
+
+    close();
+}
+
+// ----------------------------------------------------------------------------
+// TODO : Checking if methods below can be merged to common GUI implementation.
 
 bool ImageWindow::saveAs()
 {
@@ -845,76 +843,6 @@ bool ImageWindow::saveAs()
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
-}
-
-void ImageWindow::slotDeleteCurrentItem()
-{
-    KURL u(m_urlCurrent.directory());
-    PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-
-    if (!palbum)
-        return;
-
-    AlbumSettings* settings = AlbumSettings::instance();
-
-    if (!settings->getUseTrash())
-    {
-        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                        .arg(m_urlCurrent.filename()));
-        if (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
-            !=  KMessageBox::Continue)
-        {
-            return;
-        }
-    }
-
-    if (!SyncJob::userDelete(m_urlCurrent))
-    {
-        QString errMsg(SyncJob::lastErrorMsg());
-        KMessageBox::error(this, errMsg, errMsg);
-        return;
-    }
-
-    emit signalFileDeleted(m_urlCurrent);
-
-    KURL CurrentToRemove = m_urlCurrent;
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-
-    if (it != m_urlList.end())
-    {
-        if (m_urlCurrent != m_urlList.last())
-        {
-            // Try to get the next image in the current Album...
-
-            KURL urlNext = *(++it);
-            m_urlCurrent = urlNext;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-        else if (m_urlCurrent != m_urlList.first())
-        {
-            // Try to get the previous image in the current Album...
-
-            KURL urlPrev = *(--it);
-            m_urlCurrent = urlPrev;
-            m_urlList.remove(CurrentToRemove);
-            slotLoadCurrent();
-            return;
-        }
-    }
-
-    // No image in the current Album -> Quit ImageEditor...
-
-    KMessageBox::information(this,
-                             i18n("There is no image to show in the current album.\n"
-                                  "The image editor will be closed."),
-                             i18n("No Image in Current Album"));
-
-    close();
 }
 
 }  // namespace Digikam

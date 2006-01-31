@@ -762,9 +762,6 @@ void ShowFoto::slotBackward()
     }
 }
 
-// ----------------------------------------------------------------------------
-// TODO : Checking if methods below can be merged to common GUI implementation.
-
 void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -775,8 +772,7 @@ void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
 
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::ProgressBarMode, 
-                                 i18n("Loading: "));
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
 void ShowFoto::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
@@ -807,8 +803,7 @@ void ShowFoto::slotSavingStarted(const QString& /*filename*/)
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
     
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::CancelProgressBarMode, 
-                                 i18n("Saving: "));
+    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
 void ShowFoto::finishSaving(bool success)
@@ -833,74 +828,16 @@ void ShowFoto::finishSaving(bool success)
     m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
 }
 
-void ShowFoto::slotSavingFinished(const QString& /*filename*/, bool success)
+void ShowFoto::saveIsComplete()
 {
-    if (m_savingContext->savingState == Digikam::SavingContextContainer::SavingStateSave)
-    {
-        // from save()
-        m_savingContext->savingState = Digikam::SavingContextContainer::SavingStateNone;
+    m_bar->invalidateThumb(m_currentItem);
+    QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+}
 
-        if (!success)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->destinationURL.filename()));
-            finishSaving(false);
-            return;
-        }
+void ShowFoto::saveAsIsComplete()
+{
+        // Add the file to the list of thumbbar images if it's not there already
 
-        if ( m_canvas->exifRotated() )
-            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
-
-        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to overwrite original file"));
-            finishSaving(false);
-            return;
-        }
-
-        m_canvas->setModified( false );
-        m_bar->invalidateThumb(m_currentItem);
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
-
-        kapp->restoreOverrideCursor();
-    }
-    else if (m_savingContext->savingState == Digikam::SavingContextContainer::SavingStateSaveAs)
-    {
-        // from saveAs()
-        if (!success)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to save file '%1'")
-                    .arg(m_savingContext->destinationURL.filename()));
-            finishSaving(false);
-            return;
-        }
-
-        // only try to write exif if both src and destination are jpeg files
-        if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
-            m_savingContext->format.upper() == "JPEG")
-        {
-            if ( m_canvas->exifRotated() )
-                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
-        }
-
-        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
-        {
-            kapp->restoreOverrideCursor();
-            KMessageBox::error(this, i18n("Failed to overwrite original file"));
-            finishSaving(false);
-            return;
-        }
-
-        m_canvas->setModified( false );
-
-        // add the file to the list of images if it's not there already
         Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
         m_bar->invalidateThumb(foundItem);
 
@@ -908,11 +845,109 @@ void ShowFoto::slotSavingFinished(const QString& /*filename*/, bool success)
             foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
 
         m_bar->setSelected(foundItem);
-        kapp->restoreOverrideCursor();
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+}
+
+bool ShowFoto::save()
+{
+    if (!m_currentItem)
+    {
+        kdWarning() << k_funcinfo << "This should not happen" << endl;
+        return true;
     }
 
-    finishSaving(true);
+    if (!m_currentItem->url().isLocalFile())
+    {
+        KMessageBox::sorry(this, i18n("No yet support for saving non-local files"));
+        return false;
+    }
+
+    startingSave(m_currentItem->url());
+    return true;
 }
+
+void ShowFoto::slotDeleteCurrentItem()
+{
+    KURL urlCurrent(m_currentItem->url());
+
+    if (!m_deleteItem2Trash)
+    {
+        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+                        .arg(urlCurrent.filename()));
+        if (KMessageBox::warningContinueCancel(this,
+                                               warnMsg,
+                                               i18n("Warning"),
+                                               i18n("Delete"))
+            !=  KMessageBox::Continue)
+        {
+            return;
+        }
+        else
+        {
+            KIO::Job* job = KIO::del( urlCurrent );
+            connect( job, SIGNAL(result( KIO::Job* )),
+                     this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+        }
+    }
+    else
+    {
+        KURL dest("trash:/");
+
+        if (!KProtocolInfo::isKnownProtocol(dest))
+        {
+            dest = KGlobalSettings::trashPath();
+        }
+
+        KIO::Job* job = KIO::move( urlCurrent, dest );
+        connect( job, SIGNAL(result( KIO::Job* )),
+                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
+    }
+}
+
+void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
+{
+    if (job->error() != 0)
+    {
+        QString errMsg(job->errorString());
+        KMessageBox::error(this, errMsg);
+        return;
+    }
+
+    // No error, remove item in thumbbar.
+
+    Digikam::ThumbBarItem *item2remove = m_currentItem;
+
+    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    {
+        if (item->url().equals(item2remove->url()))
+        {
+            m_bar->removeItem(item);
+            break;
+        }
+    }
+    
+    m_itemsNb = m_bar->countItems();
+
+    // Disable menu actions and SideBar if no current image.
+
+    if ( m_itemsNb == 0 )
+    {
+        m_rightSidebar->noCurrentItem();
+        slotUpdateItemInfo();
+        toggleActions(false);
+        m_canvas->load(QString::null, 0, m_IOFileSettings);
+        m_currentItem = 0;
+        m_isReadOnly = false;
+    }
+    else
+    {
+        m_currentItem = m_bar->currentItem();
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+    }
+}
+
+// ----------------------------------------------------------------------------
+// TODO : Checking if methods below can be merged to common GUI implementation.
 
 bool ShowFoto::saveAs()
 {
@@ -1032,30 +1067,6 @@ bool ShowFoto::saveAs()
     return true;
 }
 
-bool ShowFoto::save()
-{
-    if (!m_currentItem)
-    {
-        kdWarning() << k_funcinfo << "This should not happen" << endl;
-        return true;
-    }
-
-    if (!m_currentItem->url().isLocalFile())
-    {
-        KMessageBox::sorry(this, i18n("No support for saving non-local files"));
-        return false;
-    }
-
-    m_savingContext->srcURL = m_currentItem->url();
-    m_savingContext->saveTempFile = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
-    m_savingContext->saveTempFile->setAutoDelete(true);
-    m_savingContext->destinationURL = m_savingContext->srcURL;
-    m_savingContext->savingState = Digikam::SavingContextContainer::SavingStateSave;
-
-    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
-    return true;
-}
-
 void ShowFoto::toggleNavigation(int index)
 {
     if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
@@ -1083,86 +1094,6 @@ void ShowFoto::toggleNavigation(int index)
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
-    }
-}
-
-void ShowFoto::slotDeleteCurrentItem()
-{
-    KURL urlCurrent(m_currentItem->url());
-
-    if (!m_deleteItem2Trash)
-    {
-        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                        .arg(urlCurrent.filename()));
-        if (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
-            !=  KMessageBox::Continue)
-        {
-            return;
-        }
-        else
-        {
-            KIO::Job* job = KIO::del( urlCurrent );
-            connect( job, SIGNAL(result( KIO::Job* )),
-                     this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
-        }
-    }
-    else
-    {
-        KURL dest("trash:/");
-
-        if (!KProtocolInfo::isKnownProtocol(dest))
-        {
-            dest = KGlobalSettings::trashPath();
-        }
-
-        KIO::Job* job = KIO::move( urlCurrent, dest );
-        connect( job, SIGNAL(result( KIO::Job* )),
-                 this, SLOT(slotDeleteCurrentItemResult( KIO::Job*)) );
-    }
-}
-
-void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
-{
-    if (job->error() != 0)
-    {
-        QString errMsg(job->errorString());
-        KMessageBox::error(this, errMsg);
-        return;
-    }
-
-    // No error, remove item in thumbbar.
-
-    Digikam::ThumbBarItem *item2remove = m_currentItem;
-
-    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
-    {
-        if (item->url().equals(item2remove->url()))
-        {
-            m_bar->removeItem(item);
-            break;
-        }
-    }
-    
-    m_itemsNb = m_bar->countItems();
-
-    // Disable menu actions and SideBar if no current image.
-
-    if ( m_itemsNb == 0 )
-    {
-        m_rightSidebar->noCurrentItem();
-        slotUpdateItemInfo();
-        toggleActions(false);
-        m_canvas->load(QString::null, 0, m_IOFileSettings);
-        m_currentItem = 0;
-        m_isReadOnly = false;
-    }
-    else
-    {
-        m_currentItem = m_bar->currentItem();
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
     }
 }
 
