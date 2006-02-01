@@ -116,7 +116,6 @@ UndoActionFlip::UndoActionFlip(DImgInterface* iface,
 
 UndoActionFlip::~UndoActionFlip()
 {
-    
 }
 
 void UndoActionFlip::rollBack()
@@ -152,7 +151,6 @@ UndoActionBCG::UndoActionBCG(DImgInterface* iface,
 
 UndoActionBCG::~UndoActionBCG()
 {
-    
 }
 
 void UndoActionBCG::rollBack()
@@ -174,7 +172,6 @@ UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface,
 
 UndoActionIrreversible::~UndoActionIrreversible()
 {
-
 }
 
 void UndoActionIrreversible::rollBack()
