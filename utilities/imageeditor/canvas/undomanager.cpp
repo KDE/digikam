@@ -98,7 +98,7 @@ void UndoManager::undo()
         uchar *newData = m_cache->getData(m_undoActions.size(), newW, newH, newBytesDepth, false);
         if (newData)
         {
-            m_iface->putImage(newData, newW, newH, newBytesDepth == 16 ? true : false);
+            m_iface->putImage(newData, newW, newH, newBytesDepth == 8 ? true : false);
             delete [] newData;
         }
     }
@@ -124,7 +124,7 @@ void UndoManager::redo()
         uchar *data = m_cache->getData(m_undoActions.size() + 2, w, h, bytesDepth, false);
         if (data)
         {
-            m_iface->putImage(data, w, h, bytesDepth == 16 ? true : false);
+            m_iface->putImage(data, w, h, bytesDepth == 8 ? true : false);
             delete[] data;
         }
     }
