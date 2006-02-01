@@ -556,7 +556,7 @@ void DImgInterface::getSelectedArea(int& x, int& y, int& w, int& h)
 void DImgInterface::paintOnDevice(QPaintDevice* p,
                                   int sx, int sy, int sw, int sh,
                                   int dx, int dy, int dw, int dh,
-                                  int antialias)
+                                  int /*antialias*/)
 {
     if (d->image.isNull())
         return;
@@ -573,7 +573,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
                                   int sx, int sy, int sw, int sh,
                                   int dx, int dy, int dw, int dh,
                                   int mx, int my, int mw, int mh,
-                                  int antialias)
+                                  int /*antialias*/)
 {
     if (d->image.isNull())
         return;
@@ -587,9 +587,9 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     uchar r, g, b, a;
     uchar color = 0xAA;
 
-    for (int j=0; j<img.height(); j++)
+    for (int j=0; j < (int)img.height(); j++)
     {
-        for (int i=0; i<img.width(); i++)
+        for (int i=0; i < (int)img.width(); i++)
         {
             if (i < (mx-dx) || i > (mx-dx+mw-1) ||
                 j < (my-dy) || j > (my-dy+mh-1))
