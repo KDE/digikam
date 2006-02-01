@@ -1,11 +1,10 @@
 /* ============================================================
- * File  : undomanager.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Jörn Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-02-06
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Joern Ahrens <joern.ahrens@kdemail.net>
+ * Date   : 2005-02-06
  * Description : 
  * 
- * Copyright 2005 by Renchi Raju, Jörn Ahrens
+ * Copyright 2005-2006 by Renchi Raju, Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,11 +65,12 @@ void UndoManager::addAction(UndoAction* action)
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
-        int   w    = m_iface->origWidth();
-        int   h    = m_iface->origHeight();
-        uint* data = m_iface->getData();
+        int w          = m_iface->origWidth();
+        int h          = m_iface->origHeight();
+        int bytesDepth = m_iface->bytesDepth();
+        uchar* data    = m_iface->getImage();
         
-        m_cache->putData(m_undoActions.size(), w, h, data);
+        m_cache->putData(m_undoActions.size(), w, h, bytesDepth, data);
     }
 }
 
@@ -83,18 +83,24 @@ void UndoManager::undo()
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
-        int   w    = m_iface->origWidth();
-        int   h    = m_iface->origHeight();
-        uint* data = m_iface->getData();
+        // Save the current state for the redo operation
 
-        // save the current state for the redo operation        
-        m_cache->putData(m_undoActions.size() + 1, w, h, data);
+        int   w        = m_iface->origWidth();
+        int   h        = m_iface->origHeight();
+        int bytesDepth = m_iface->bytesDepth();
+        uchar* data    = m_iface->getImage();
 
-        // and now, undo the action
-        m_cache->getData(m_undoActions.size(), w, h, data, false);
-        m_iface->putData(data, w, h);
+        m_cache->putData(m_undoActions.size() + 1, w, h, bytesDepth, data);
+        
+        // And now, undo the action
 
-        delete [] data;
+        int    newW, newH, newBytesDepth;
+        uchar *newData = m_cache->getData(m_undoActions.size(), newW, newH, newBytesDepth, false);
+        if (newData)
+        {
+            m_iface->putImage(newData, newW, newH, newBytesDepth == 16 ? true : false);
+            delete [] newData;
+        }
     }
     else
     {
@@ -114,13 +120,13 @@ void UndoManager::redo()
     
     if(typeid(*action) == typeid(UndoActionIrreversible))
     {
-        int  w, h;
-        uint *data;
-        
-        m_cache->getData(m_undoActions.size() + 2, w, h, data, false);
-        m_iface->putData(data, w, h);
-        
-        delete[] data;
+        int  w, h, bytesDepth;
+        uchar *data = m_cache->getData(m_undoActions.size() + 2, w, h, bytesDepth, false);
+        if (data)
+        {
+            m_iface->putImage(data, w, h, bytesDepth == 16 ? true : false);
+            delete[] data;
+        }
     }
     else
     {

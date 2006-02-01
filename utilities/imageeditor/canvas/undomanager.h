@@ -1,8 +1,10 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Jörn Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-02-06
- * Copyright 2005 by Renchi Raju, Jörn Ahrens
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Joern Ahrens <joern.ahrens@kdemail.net>
+ * Date   : 2005-02-06
+ * Description :
+ *
+ * Copyright 2005-2006 by Renchi Raju, Joern Ahrens
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -14,6 +16,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef UNDOMANAGER_H

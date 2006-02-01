@@ -116,8 +116,13 @@ public:
 
     DImg*  getImg();
     uchar* getImage();
+    
     void   putImage(uchar* data, int w, int h);
     void   putImage(const QString &caller, uchar* data, int w, int h);
+    
+    void   putImage(uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit);
+    
     uchar* getImageSelection();
     void   putImageSelection(uchar* data, bool saveUndo=true);
 

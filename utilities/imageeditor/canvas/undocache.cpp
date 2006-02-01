@@ -1,12 +1,11 @@
 /* ============================================================
- * File  : undocache.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Jörn Ahrens <joern.ahrens@kdemail.net>
- * Date  : 2005-02-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Joern Ahrens <joern.ahrens@kdemail.net>
+ * Date   : 2005-02-05
  * Description : 
  * 
- * Copyright 2005 by Renchi Raju, Jörn Ahrens
-
+ * Copyright 2005 by Renchi Raju, Joern Ahrens
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -94,7 +93,7 @@ void UndoCache::clear()
 /**
  * write the data into a cache file
  */
-bool UndoCache::putData(int level, int w, int h, uint* data)
+bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
 {
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
@@ -108,11 +107,11 @@ bool UndoCache::putData(int level, int w, int h, uint* data)
     QDataStream ds(&file);
     ds << w;
     ds << h;
+    ds << bytesDepth;
 
-    QByteArray ba;
-    ba.setRawData((const char*)data, w*h*sizeof(uint));
+    QByteArray ba(w*h*bytesDepth);
+    memcpy (ba.data(), data, w*h*bytesDepth);
     ds << ba;
-    ba.resetRawData((const char*)data, w*h*sizeof(uint));
 
     file.close();
 
@@ -124,7 +123,7 @@ bool UndoCache::putData(int level, int w, int h, uint* data)
 /**
  * get the data from a cache file
  */
-bool UndoCache::getData(int level, int& w, int& h, uint*& data, bool del)
+uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
 {
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
@@ -132,19 +131,21 @@ bool UndoCache::getData(int level, int& w, int& h, uint*& data, bool del)
 
     QFile file(cacheFile);
     if (!file.open(IO_ReadOnly))
-        return false;
+        return 0;
 
     QDataStream ds(&file);
     ds >> w;
     ds >> h;
+    ds >> bytesDepth;
 
-    data = new uint[w*h];
+    uchar *data = new uchar[w*h*bytesDepth];
+    if (!data)
+        return 0;
 
-    QByteArray ba;
-    ba.setRawData((const char*)data, w*h*sizeof(uint));
+    QByteArray ba(w*h*bytesDepth);
     ds >> ba;
-    ba.resetRawData((const char*)data, w*h*sizeof(uint));
-
+    memcpy (data, ba.data(), w*h*bytesDepth);
+    
     file.close();
 
     if(del)
@@ -153,7 +154,7 @@ bool UndoCache::getData(int level, int& w, int& h, uint*& data, bool del)
         d->cacheFilenames.remove(cacheFile);
     }
 
-    return true;
+    return data;
 }
 
 /**

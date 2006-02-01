@@ -825,31 +825,49 @@ uchar* DImgInterface::getImage()
 
 void DImgInterface::putImage(const QString &caller, uchar* data, int w, int h)
 {
+    putImage(caller, data, w, h, d->image.sixteenBit());
+}
+
+void DImgInterface::putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit)
+{
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImage(data, w, h);
+    putImage(data, w, h, sixteenBit);
 }
 
 void DImgInterface::putImage(uchar* data, int w, int h)
 {
+    putImage(data, w, h, d->image.sixteenBit());
+}
+
+void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
+{
     if (d->image.isNull())
+    {
+       kdWarning() << k_funcinfo << "d->image is NULL" << endl;
        return;
+    }
+
+    if (!data)
+    {
+       kdWarning() << k_funcinfo << "New image is NULL" << endl;
+       return;
+    }
     
     if (w != -1 && h != -1) 
     {
         // New image size !
-            
-        DImg im( w, h, d->image.sixteenBit(), d->image.hasAlpha(), data );
-        d->image = im.copy();
         
-        d->origWidth  = im.width();
-        d->origHeight = im.height();
+        DImg im( w, h, sixteenBit, d->image.hasAlpha(), data );
+        d->image = im.copy();
+        d->origWidth  = w;
+        d->origHeight = h;
     }
     else 
     {
-        // New image data size = original data size !
-        
-        uchar* ptr = d->image.bits();
-        memcpy(ptr, data, d->origWidth * d->origHeight * d->image.bytesDepth());
+        // New image data size == original data size !
+
+        DImg im( d->origWidth, d->origHeight, sixteenBit, d->image.hasAlpha(), data );
+        d->image = im.copy();
     }
 
     emit signalModified(true, d->undoMan->anyMoreRedo());
