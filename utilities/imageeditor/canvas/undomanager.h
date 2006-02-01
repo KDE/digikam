@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Joern Ahrens <joern.ahrens@kdemail.net>
  * Date   : 2005-02-06
- * Description :
+ * Description : an image editor actions undo/redo manager
  *
  * Copyright 2005-2006 by Renchi Raju, Joern Ahrens
  *
@@ -31,17 +31,15 @@ class QStringList;
 namespace Digikam
 {
 
+class DImgInterface;
 class UndoManagerPriv;
 class UndoAction;
-class UndoCache;
-
-class DImgInterface;
 
 class UndoManager
 {
 public:
 
-    UndoManager(Digikam::DImgInterface* iface);
+    UndoManager(DImgInterface* iface);
     ~UndoManager();
 
     void undo();
@@ -61,13 +59,8 @@ private:
     void clearRedoActions();
 
 private:
-    
-    DImgInterface           *m_iface;
-    
-    QValueList<UndoAction*>  m_undoActions;
-    QValueList<UndoAction*>  m_redoActions;
-    
-    UndoCache*               m_cache;
+
+    UndoManagerPriv* d;
 };
 
 }  // namespace Digikam

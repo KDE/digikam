@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Joern Ahrens <joern.ahrens@kdemail.net>
  * Date   : 2005-02-06
- * Description : 
+ * Description : an image editor actions undo/redo manager
  * 
  * Copyright 2005-2006 by Renchi Raju, Joern Ahrens
  *
@@ -41,16 +41,37 @@
 namespace Digikam
 {
 
-UndoManager::UndoManager(Digikam::DImgInterface* iface)
-    : m_iface(iface)
+class UndoManagerPriv
 {
-    m_cache = new UndoCache;
+    
+public:
+
+    UndoManagerPriv()
+    {
+        dimgiface = 0;
+        undoCache = 0;
+    }
+
+    QValueList<UndoAction*>  undoActions;
+    QValueList<UndoAction*>  redoActions;
+    
+    UndoCache               *undoCache;
+    
+    DImgInterface           *dimgiface;
+};
+
+UndoManager::UndoManager(DImgInterface* iface)
+{
+    d = new UndoManagerPriv;
+    d->dimgiface = iface;
+    d->undoCache = new UndoCache;
 }
 
 UndoManager::~UndoManager()
 {
     clear(true);
-    delete m_cache;
+    delete d->undoCache;
+    delete d;
 }
 
 void UndoManager::addAction(UndoAction* action)
@@ -61,44 +82,44 @@ void UndoManager::addAction(UndoAction* action)
     // All redo actions are invalid now
     clearRedoActions();
    
-    m_undoActions.push_back(action);
+    d->undoActions.push_back(action);
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
-        int w          = m_iface->origWidth();
-        int h          = m_iface->origHeight();
-        int bytesDepth = m_iface->bytesDepth();
-        uchar* data    = m_iface->getImage();
+        int w          = d->dimgiface->origWidth();
+        int h          = d->dimgiface->origHeight();
+        int bytesDepth = d->dimgiface->bytesDepth();
+        uchar* data    = d->dimgiface->getImage();
         
-        m_cache->putData(m_undoActions.size(), w, h, bytesDepth, data);
+        d->undoCache->putData(d->undoActions.size(), w, h, bytesDepth, data);
     }
 }
 
 void UndoManager::undo()
 {
-    if (m_undoActions.isEmpty())
+    if (d->undoActions.isEmpty())
         return;
 
-    UndoAction* action = m_undoActions.back();
+    UndoAction* action = d->undoActions.back();
 
     if (typeid(*action) == typeid(UndoActionIrreversible))
     {
         // Save the current state for the redo operation
 
-        int   w        = m_iface->origWidth();
-        int   h        = m_iface->origHeight();
-        int bytesDepth = m_iface->bytesDepth();
-        uchar* data    = m_iface->getImage();
+        int w          = d->dimgiface->origWidth();
+        int h          = d->dimgiface->origHeight();
+        int bytesDepth = d->dimgiface->bytesDepth();
+        uchar* data    = d->dimgiface->getImage();
 
-        m_cache->putData(m_undoActions.size() + 1, w, h, bytesDepth, data);
+        d->undoCache->putData(d->undoActions.size() + 1, w, h, bytesDepth, data);
         
         // And now, undo the action
 
         int    newW, newH, newBytesDepth;
-        uchar *newData = m_cache->getData(m_undoActions.size(), newW, newH, newBytesDepth, false);
+        uchar *newData = d->undoCache->getData(d->undoActions.size(), newW, newH, newBytesDepth, false);
         if (newData)
         {
-            m_iface->putImage(newData, newW, newH, newBytesDepth == 8 ? true : false);
+            d->dimgiface->putImage(newData, newW, newH, newBytesDepth == 8 ? true : false);
             delete [] newData;
         }
     }
@@ -107,24 +128,24 @@ void UndoManager::undo()
         action->rollBack();
     }
     
-    m_undoActions.pop_back();
-    m_redoActions.push_back(action);
+    d->undoActions.pop_back();
+    d->redoActions.push_back(action);
 }
 
 void UndoManager::redo()
 {
-    if(m_redoActions.isEmpty())
+    if(d->redoActions.isEmpty())
         return;
     
-    UndoAction *action = m_redoActions.back();
+    UndoAction *action = d->redoActions.back();
     
     if(typeid(*action) == typeid(UndoActionIrreversible))
     {
-        int  w, h, bytesDepth;
-        uchar *data = m_cache->getData(m_undoActions.size() + 2, w, h, bytesDepth, false);
+        int    w, h, bytesDepth;
+        uchar *data = d->undoCache->getData(d->undoActions.size() + 2, w, h, bytesDepth, false);
         if (data)
         {
-            m_iface->putImage(data, w, h, bytesDepth == 8 ? true : false);
+            d->dimgiface->putImage(data, w, h, bytesDepth == 8 ? true : false);
             delete[] data;
         }
     }
@@ -133,8 +154,8 @@ void UndoManager::redo()
         action->execute();
     }
     
-    m_redoActions.pop_back();
-    m_undoActions.push_back(action);
+    d->redoActions.pop_back();
+    d->undoActions.push_back(action);
 }
 
 void UndoManager::clear(bool clearCache)
@@ -143,7 +164,7 @@ void UndoManager::clear(bool clearCache)
     clearRedoActions();
     
     if(clearCache)
-        m_cache->clear();
+        d->undoCache->clear();
 }
 
 void UndoManager::clearUndoActions()
@@ -151,12 +172,12 @@ void UndoManager::clearUndoActions()
     UndoAction *action;
     QValueList<UndoAction*>::iterator it;
     
-    for(it = m_undoActions.begin(); it != m_undoActions.end(); ++it)
+    for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         action = *it;
         delete action;
     }
-    m_undoActions.clear();
+    d->undoActions.clear();
 }
 
 void UndoManager::clearRedoActions()
@@ -168,33 +189,33 @@ void UndoManager::clearRedoActions()
     QValueList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
-    int level = m_undoActions.size() + 1;
-    for(it = m_redoActions.begin(); it != m_redoActions.end(); ++it)
+    int level = d->undoActions.size() + 1;
+    for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
         action = *it;
-        m_cache->erase(level);
+        d->undoCache->erase(level);
         delete action;
         level++;
     }
-    m_cache->erase(level);
-    m_redoActions.clear();
+    d->undoCache->erase(level);
+    d->redoActions.clear();
 }
 
 bool UndoManager::anyMoreUndo()
 {
-    return !m_undoActions.isEmpty();
+    return !d->undoActions.isEmpty();
 }
 
 bool UndoManager::anyMoreRedo()
 {
-    return !m_redoActions.isEmpty();
+    return !d->redoActions.isEmpty();
 }
 
 void UndoManager::getUndoHistory(QStringList &titles)
 {
     QValueList<UndoAction*>::iterator it;
 
-    for(it = m_undoActions.begin(); it != m_undoActions.end(); ++it)
+    for(it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
     {
         titles.push_front((*it)->getTitle());
     }
@@ -204,7 +225,7 @@ void UndoManager::getRedoHistory(QStringList &titles)
 {
     QValueList<UndoAction*>::iterator it;
 
-    for(it = m_redoActions.begin(); it != m_redoActions.end(); ++it)
+    for(it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
     {
         titles.push_front((*it)->getTitle());
     }
