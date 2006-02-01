@@ -136,7 +136,6 @@ private slots:
     void slotAllAlbumsLoaded();
     
     void slot_imageSelected();
-    void slot_imageDeleted();
 
     void slot_albumsCleared();
     void slot_albumHighlight();
@@ -155,6 +154,7 @@ signals:
     void signal_albumSelected(bool val);
     void signal_tagSelected(bool val);
     void signal_imageSelected(bool val);
+    void signal_noCurrentItem();
 };
 
 }  // namespace Digikam

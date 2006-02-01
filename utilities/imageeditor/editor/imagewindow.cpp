@@ -185,6 +185,9 @@ void ImageWindow::setupConnections()
 
     connect(this, SIGNAL(signalSelectionChanged( QRect* )),
             m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            m_rightSidebar, SLOT(slotNoCurrentItem()));
 }
 
 void ImageWindow::setupUserArea()
@@ -541,7 +544,7 @@ void ImageWindow::slotLoadingStarted(const QString& /*filename*/)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
     // Disable actions as appropriate during loading
-    m_rightSidebar->noCurrentItem();
+    emit signalNoCurrentItem();
     toggleActions(false);
 
     m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
@@ -568,7 +571,7 @@ void ImageWindow::slotSavingStarted(const QString& /*filename*/)
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
     // Disable actions as appropriate during saving
-    m_rightSidebar->noCurrentItem();
+    emit signalNoCurrentItem();
     toggleActions(false);
 
     m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));

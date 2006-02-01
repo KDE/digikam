@@ -65,6 +65,7 @@ public:
 signals:
 
     void signalSelectionChanged( QRect* );
+    void signalNoCurrentItem();
 
 protected:
 

@@ -57,8 +57,6 @@ public:
     void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0,
                      AlbumIconView* view=0, AlbumIconItem* item=0);
                     
-    void noCurrentItem(void);
-
     void populateTags(void);                               
     
 signals:
@@ -68,6 +66,10 @@ signals:
     void signalNextItem(void);    
     void signalLastItem(void);  
                                    
+public slots:
+
+    virtual void slotNoCurrentItem(void);                               
+
 private slots:
 
     void slotChangedTab(QWidget* tab);

@@ -91,16 +91,16 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     connect(m_exifTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 
-    connect(m_histogramTab, SIGNAL(signalFirstItem()),
+    connect(m_colorTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(m_histogramTab, SIGNAL(signalPrevItem()),
+    connect(m_colorTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(m_histogramTab, SIGNAL(signalNextItem()),
+    connect(m_colorTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(m_histogramTab, SIGNAL(signalLastItem()),
+    connect(m_colorTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
                             
     connect(d->desceditTab, SIGNAL(signalFirstItem()),
@@ -134,7 +134,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     m_currentRect       = rect;
     m_image             = img;
     m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    m_dirtyColorTab     = false;
     d->currentView      = view;
     d->currentItem      = item;
     d->dirtyDesceditTab = false;
@@ -142,17 +142,11 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     slotChangedTab( getActiveTab() );    
 }
 
-void ImagePropertiesSideBarDB::noCurrentItem(void)
+void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
-    m_currentURL        = KURL::KURL();
-    d->currentItem      = 0;
-
-    m_exifTab->setCurrentURL();
-    m_histogramTab->setData();
+    ImagePropertiesSideBar::slotNoCurrentItem();
+    d->currentItem = 0;
     d->desceditTab->setItem();
-
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
     d->dirtyDesceditTab = false;
 }
 
@@ -174,10 +168,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
             m_dirtyExifTab = true;
         }
-        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+        else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            m_histogramTab->setData(m_currentURL, m_currentRect, m_image, NavigateBarWidget::ItemCurrent);
-            m_dirtyHistogramTab = true;
+            m_colorTab->setData(m_currentURL, m_currentRect, m_image, NavigateBarWidget::ItemCurrent);
+            m_dirtyColorTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
@@ -200,10 +194,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             m_exifTab->setCurrentURL(m_currentURL, currentItemType);
             m_dirtyExifTab = true;
         }
-        else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+        else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            m_histogramTab->setData(m_currentURL, m_currentRect, m_image, currentItemType);
-            m_dirtyHistogramTab = true;
+            m_colorTab->setData(m_currentURL, m_currentRect, m_image, currentItemType);
+            m_dirtyColorTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {

@@ -54,11 +54,11 @@ public:
     
     virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
                     
-    virtual void noCurrentItem(void);                               
-
 public slots:
 
     void slotImageSelectionChanged(QRect *rect);                 
+    virtual void slotNoCurrentItem(void);                               
+
 
 protected slots:
 
@@ -67,7 +67,7 @@ protected slots:
 protected:
 
     bool                      m_dirtyExifTab;
-    bool                      m_dirtyHistogramTab;
+    bool                      m_dirtyColorTab;
  
     QRect                    *m_currentRect;
  
@@ -76,7 +76,7 @@ protected:
     DImg                     *m_image;
      
     ImagePropertiesEXIFTab   *m_exifTab;
-    ImagePropertiesColorsTab *m_histogramTab;
+    ImagePropertiesColorsTab *m_colorTab;
         
 };
 

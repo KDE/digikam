@@ -194,7 +194,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     if ( urlList.isEmpty() )
     {
-        m_rightSidebar->noCurrentItem();
+        emit signalNoCurrentItem();
         toggleActions(false);
         toggleNavigation(0);
     }
@@ -238,6 +238,9 @@ void ShowFoto::setupConnections()
 
     connect(this, SIGNAL(signalSelectionChanged( QRect* )),
             m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            m_rightSidebar, SLOT(slotNoCurrentItem()));
 }
 
 void ShowFoto::setupUserArea()
@@ -385,12 +388,14 @@ void ShowFoto::slotOpenFile()
     if (!urls.isEmpty())
     {
         m_bar->clear();
+
         for (KURL::List::const_iterator it = urls.begin();
              it != urls.end(); ++it)
         {
             new Digikam::ThumbBarItem(m_bar, *it);
             m_lastOpenedDirectory=(*it);
         }
+
         toggleActions(true);
     }
 }
@@ -637,7 +642,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
 
     m_canvas->load(QString::null, 0, m_IOFileSettings);
     m_bar->clear(true);
-    m_rightSidebar->noCurrentItem();
+    emit signalNoCurrentItem();
     m_currentItem = 0;
     m_isReadOnly = false;
     
@@ -797,7 +802,7 @@ void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
     // Disable actions as appropriate during loading
-    m_rightSidebar->noCurrentItem();
+    emit signalNoCurrentItem();
     toggleActions(false);
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
@@ -828,7 +833,7 @@ void ShowFoto::slotSavingStarted(const QString& /*filename*/)
     kapp->setOverrideCursor( KCursor::waitCursor() );
     
     // Disable actions as appropriate during saving
-    m_rightSidebar->noCurrentItem();
+    emit signalNoCurrentItem();
     toggleActions(false);
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
@@ -973,7 +978,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
     if ( m_itemsNb == 0 )
     {
-        m_rightSidebar->noCurrentItem();
+        emit signalNoCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
         m_canvas->load(QString::null, 0, m_IOFileSettings);

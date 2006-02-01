@@ -147,7 +147,7 @@ void DigikamView::setupConnections()
             this, SLOT(slot_albumHighlight()));
 
     connect(mIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-            this, SLOT(slot_imageDeleted()));
+            this, SIGNAL(signal_noCurrentItem()));
     
     connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
             mIconView->viewport(), SLOT(update()));
@@ -174,6 +174,9 @@ void DigikamView::setupConnections()
     
     connect(mRightSidebar, SIGNAL(signalLastItem()),
             this, SLOT(slotLastItem()));                
+
+    connect(this, SIGNAL(signal_noCurrentItem()),
+            mRightSidebar, SLOT(slotNoCurrentItem()));
 }
 
 void DigikamView::loadViewState()
@@ -452,7 +455,7 @@ void DigikamView::slotSelectAlbum(const KURL &)
 
 void DigikamView::slot_albumSelected(Album* album)
 {
-    mRightSidebar->noCurrentItem();
+    emit signal_noCurrentItem();
     
     if (!album)
     {
@@ -508,14 +511,9 @@ void DigikamView::slot_imageSelected()
     }
 
     if (!selected)
-       mRightSidebar->noCurrentItem();
-    
-    emit signal_imageSelected(selected);
-}
+       emit signal_noCurrentItem();
 
-void DigikamView::slot_imageDeleted()
-{
-    mRightSidebar->noCurrentItem();
+    emit signal_imageSelected(selected);
 }
 
 void DigikamView::slot_albumsCleared()
@@ -528,7 +526,7 @@ void DigikamView::slot_albumsCleared()
 
 void DigikamView::slot_thumbSizePlus()
 {
-    mRightSidebar->noCurrentItem();
+    emit signal_noCurrentItem();
 
     ThumbnailSize thumbSize;
 
@@ -574,7 +572,7 @@ void DigikamView::slot_thumbSizePlus()
 
 void DigikamView::slot_thumbSizeMinus()
 {
-    mRightSidebar->noCurrentItem();
+    emit signal_noCurrentItem();
     
     ThumbnailSize thumbSize;
 

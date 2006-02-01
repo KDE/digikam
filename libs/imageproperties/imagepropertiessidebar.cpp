@@ -47,18 +47,18 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
                                                QSplitter *splitter, Side side, bool mimimizedDefault)
                       : Digikam::Sidebar(parent, name, side, mimimizedDefault)
 {
-    m_image             = 0;
-    m_currentRect       = 0;
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    m_image         = 0;
+    m_currentRect   = 0;
+    m_dirtyExifTab  = false;
+    m_dirtyColorTab = false;
     
     m_exifTab      = new ImagePropertiesEXIFTab(parent, false);
-    m_histogramTab = new ImagePropertiesColorsTab(parent, 0, false);
+    m_colorTab = new ImagePropertiesColorsTab(parent, 0, false);
     
     setSplitter(splitter);
          
     appendTab(m_exifTab, SmallIcon("exifinfo"), i18n("EXIF"));
-    appendTab(m_histogramTab, SmallIcon("blend"), i18n("Colors"));
+    appendTab(m_colorTab, SmallIcon("blend"), i18n("Colors"));
     
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -73,32 +73,32 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     if (!url.isValid())
         return;
     
-    m_currentURL        = url;
-    m_currentRect       = rect;
-    m_image             = img;
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    m_currentURL    = url;
+    m_currentRect   = rect;
+    m_image         = img;
+    m_dirtyExifTab  = false;
+    m_dirtyColorTab = false;
     
     slotChangedTab( getActiveTab() );    
 }
 
-void ImagePropertiesSideBar::noCurrentItem(void)
+void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
     m_currentURL = KURL::KURL();
     m_exifTab->setCurrentURL();
-    m_histogramTab->setData();
-    m_dirtyExifTab      = false;
-    m_dirtyHistogramTab = false;
+    m_colorTab->setData();
+    m_dirtyExifTab  = false;
+    m_dirtyColorTab = false;
 }
 
 void ImagePropertiesSideBar::slotImageSelectionChanged(QRect *rect)
 {
     m_currentRect = rect;
     
-    if (m_dirtyHistogramTab)
-       m_histogramTab->setSelection(rect);
+    if (m_dirtyColorTab)
+       m_colorTab->setSelection(rect);
     else
-       slotChangedTab(m_histogramTab);
+       slotChangedTab(m_colorTab);
 }
 
 void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
@@ -113,10 +113,10 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
        m_exifTab->setCurrentURL(m_currentURL);
        m_dirtyExifTab = true;
     }
-    else if (tab == m_histogramTab && !m_dirtyHistogramTab)
+    else if (tab == m_colorTab && !m_dirtyColorTab)
     {
-       m_histogramTab->setData(m_currentURL, m_currentRect, m_image);
-       m_dirtyHistogramTab = true;
+       m_colorTab->setData(m_currentURL, m_currentRect, m_image);
+       m_dirtyColorTab = true;
     }
     
     setCursor( KCursor::arrowCursor() );
