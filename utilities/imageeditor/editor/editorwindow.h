@@ -129,6 +129,8 @@ protected:
     bool promptUserSave(const KURL& url);
     void startingSave(const KURL& url);
     bool startingSaveAs(const KURL& url);
+    
+    virtual void finishSaving(bool success);    
 
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
@@ -143,7 +145,6 @@ protected:
     virtual bool saveAs()=0; 
     virtual bool save()=0;
 
-    virtual void finishSaving(bool success)=0;    
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0; 
 
@@ -174,6 +175,10 @@ protected slots:
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);
 
+    virtual void slotLoadingStarted(const QString& filename);
+    virtual void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    virtual void slotSavingStarted(const QString &filename);
+        
     virtual void slotContextMenu();
 
     virtual void slotFilePrint()=0;

@@ -95,8 +95,7 @@ private:
 
     bool save();
     bool saveAs();
-    void finishSaving(bool success);
-    
+
     void saveIsComplete();
     void saveAsIsComplete(); 
 
@@ -121,10 +120,6 @@ private slots:
     
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
-    
-    void slotLoadingStarted(const QString &filename);
-    void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
-    void slotSavingStarted(const QString &filename);
 };
 
 }  // namespace Digikam

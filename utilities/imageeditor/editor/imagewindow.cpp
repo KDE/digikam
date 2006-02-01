@@ -539,59 +539,6 @@ void ImageWindow::toggleGUI2FullScreen()
     }
 }
 
-void ImageWindow::slotLoadingStarted(const QString& /*filename*/)
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    
-    // Disable actions as appropriate during loading
-    emit signalNoCurrentItem();
-    toggleActions(false);
-
-    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
-}
-
-void ImageWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
-{
-    //TODO: handle success == false
-
-    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
-    m_isReadOnly = isReadOnly;
-    slotUpdateItemInfo();
-
-    // Enable actions as appropriate after loading
-    // No need to re-enable image properties sidebar here, it's will be done
-    // automaticly by a signal from canvas
-    toggleActions(true);
-
-    QApplication::restoreOverrideCursor();
-}
-
-void ImageWindow::slotSavingStarted(const QString& /*filename*/)
-{
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    
-    // Disable actions as appropriate during saving
-    emit signalNoCurrentItem();
-    toggleActions(false);
-
-    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
-}
-
-void ImageWindow::finishSaving(bool success)
-{
-    m_savingContext->synchronousSavingResult = success;
-
-    // Exit of internal Qt event loop to unlock promptUserSave() method.
-    if (m_savingContext->synchronizingState == SavingContextContainer::SynchronousSaving)
-        qApp->exit_loop();
-
-    // Enable actions as appropriate after saving
-    // TODO updated image propertie side bar!
-    toggleActions(true);
-
-    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
-}
-
 void ImageWindow::saveIsComplete()
 {
         emit signalFileModified(m_savingContext->destinationURL);

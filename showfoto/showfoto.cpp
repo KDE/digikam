@@ -797,70 +797,40 @@ void ShowFoto::toggleNavigation(int index)
     }
 }
 
-void ShowFoto::slotLoadingStarted(const QString& /*filename*/)
+void ShowFoto::slotLoadingStarted(const QString& filename)
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    
-    // Disable actions as appropriate during loading
-    emit signalNoCurrentItem();
-    toggleActions(false);
+    Digikam::EditorWindow::slotLoadingStarted(filename);
+
+    // Here we disable specific actions on showfoto.
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
-
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
-void ShowFoto::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
+void ShowFoto::slotLoadingFinished(const QString& filename, bool success, bool isReadOnly)
 {
-    //TODO: handle success == false
+    Digikam::EditorWindow::slotLoadingFinished(filename, success, isReadOnly);
     
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
-    m_isReadOnly = isReadOnly;
-    slotUpdateItemInfo();
-
-    // Enable actions as appropriate after loading
-    // No need to re-enable image properties sidebar here, it's will be done
-    // automaticly by a signal from canvas
-    toggleActions(true);
+    // Here we re-enable specific actions on showfoto.
     m_openFilesInFolderAction->setEnabled(true);
     m_fileOpenAction->setEnabled(true);
-
-    QApplication::restoreOverrideCursor();
 }
 
-void ShowFoto::slotSavingStarted(const QString& /*filename*/)
+void ShowFoto::slotSavingStarted(const QString& filename)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    
-    // Disable actions as appropriate during saving
-    emit signalNoCurrentItem();
-    toggleActions(false);
+    Digikam::EditorWindow::slotSavingStarted(filename);
+
+    // Here we disable specific actions on showfoto.
     m_openFilesInFolderAction->setEnabled(false);
     m_fileOpenAction->setEnabled(false);
-    
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
 void ShowFoto::finishSaving(bool success)
 {
-    m_savingContext->synchronousSavingResult = success;
-    if (m_savingContext->saveTempFile)
-    {
-        delete m_savingContext->saveTempFile;
-        m_savingContext->saveTempFile = 0;
-    }
+    Digikam::EditorWindow::finishSaving(success);
 
-    // Exit of internal Qt event loop to unlock promptUserSave() method.
-    if (m_savingContext->synchronizingState == Digikam::SavingContextContainer::SynchronousSaving)
-        qApp->exit_loop();
-
-    // Enable actions as appropriate after saving
-    // TODO updated image propertie side bar!
-    toggleActions(true);
+    // Here we re-enable specific actions on showfoto.
     m_openFilesInFolderAction->setEnabled(true);
     m_fileOpenAction->setEnabled(true);
-
-    m_nameLabel->progressBarMode(Digikam::IOFileProgressBar::FileNameMode);
 }
 
 void ShowFoto::saveIsComplete()

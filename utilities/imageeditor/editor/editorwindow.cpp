@@ -1054,6 +1054,44 @@ void EditorWindow::showToolBars()
     }
 }
 
+void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    
+    // Disable actions as appropriate during loading
+    emit signalNoCurrentItem();
+    toggleActions(false);
+
+    m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
+}
+
+void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
+{
+    //TODO: handle success == false
+
+    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
+    m_isReadOnly = isReadOnly;
+    slotUpdateItemInfo();
+
+    // Enable actions as appropriate after loading
+    // No need to re-enable image properties sidebar here, it's will be done
+    // automaticly by a signal from canvas
+    toggleActions(true);
+
+    QApplication::restoreOverrideCursor();
+}
+
+void EditorWindow::slotSavingStarted(const QString& /*filename*/)
+{
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
+    // Disable actions as appropriate during saving
+    emit signalNoCurrentItem();
+    toggleActions(false);
+
+    m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
+}
+
 void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
 {
     if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
@@ -1136,6 +1174,26 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
     }
 
     finishSaving(true);
+}
+
+void EditorWindow::finishSaving(bool success)
+{
+    m_savingContext->synchronousSavingResult = success;
+    
+    if (m_savingContext->saveTempFile)
+    {
+        delete m_savingContext->saveTempFile;
+        m_savingContext->saveTempFile = 0;
+    }
+
+    // Exit of internal Qt event loop to unlock promptUserSave() method.
+    if (m_savingContext->synchronizingState == SavingContextContainer::SynchronousSaving)
+        qApp->exit_loop();
+
+    // Enable actions as appropriate after saving
+    toggleActions(true);
+
+    m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
 }
 
 void EditorWindow::startingSave(const KURL& url)
@@ -1260,10 +1318,10 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     // Now do the actual saving -----------------------------------------------------
 
-    m_savingContext->saveTempFile = new KTempFile(newURL.directory(false), QString::null);
-    m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->saveTempFile   = new KTempFile(newURL.directory(false), QString::null);
     m_savingContext->destinationURL = newURL;
-    m_savingContext->savingState = SavingContextContainer::SavingStateSaveAs;
+    m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
+    m_savingContext->saveTempFile->setAutoDelete(true);
 
     m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
