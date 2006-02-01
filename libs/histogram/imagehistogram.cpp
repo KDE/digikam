@@ -170,6 +170,7 @@ void ImageHistogram::calcHistogramValues()
        postProgress(true, false);
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
+    memset(d->histogram, 0, d->histoSegments*sizeof(ImageHistogramPriv::double_packet));
 
     if ( !d->histogram )
     {
@@ -185,7 +186,7 @@ void ImageHistogram::calcHistogramValues()
 
     if (d->histoSegments == 65536)         // 16 bits image.
     {
-        unsigned short blue, green, red, alpha;
+        unsigned short  blue, green, red, alpha;
         unsigned short *data = (unsigned short*)d->imageData;
 
         for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
