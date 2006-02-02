@@ -28,6 +28,9 @@
 #include <qtooltip.h>
 #include <qtimer.h>
 #include <qrect.h>
+#include <qbrush.h>
+#include <qfont.h> 
+#include <qfontmetrics.h> 
 
 // KDE include.
 
@@ -51,11 +54,12 @@ public:
 
     ImageGuideWidgetPriv()
     {
-        pixmap  = 0;
-        iface   = 0;
-        flicker = 0;
-        timerID = 0;
-        focus   = false;
+        pixmap           = 0;
+        iface            = 0;
+        flicker          = 0;
+        timerID          = 0;
+        focus            = false;
+        renderingPreview = ImageGuideWidget::PreviewBothImagesVert;
     }
 
     int                  width;
@@ -66,6 +70,7 @@ public:
     int                  guideSize;
     int                  flicker;
     int                  getColorFrom;
+    int                  renderingPreview;
 
     bool                 sixteenBit;
     bool                 focus;
@@ -103,9 +108,9 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMouseTracking(true);
 
     d->iface        = new ImageIface(w, h);
-    uchar *data     = d->iface->getPreviewImage();
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
+    uchar *data     = d->iface->getPreviewImage();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
@@ -140,6 +145,12 @@ void ImageGuideWidget::resetSpotPosition(void)
 {
     d->spot.setX( d->width / 2 );
     d->spot.setY( d->height / 2 );
+    updatePreview();
+}
+
+void ImageGuideWidget::slotChangeRenderingPreviewMode(int mode)
+{
+    d->renderingPreview = mode;
     updatePreview();
 }
 
@@ -192,9 +203,119 @@ void ImageGuideWidget::slotChangeGuideSize(int size)
 
 void ImageGuideWidget::updatePixmap( void )
 {
+    QPainter p(d->pixmap);
+    QString text;
+    QRect textRect, fontRect;
+    QFontMetrics fontMt = p.fontMetrics();
+    p.setPen(QPen::QPen(Qt::red, 1)) ;
+    
     d->pixmap->fill(colorGroup().background());
-    d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                    d->rect.width(), d->rect.height());
+    
+    if (d->renderingPreview == PreviewOriginalImage)
+    {
+        p.drawPixmap(d->rect, d->preview.convertToPixmap());
+
+        text = i18n("Original");
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text); 
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+    }
+    else if (d->renderingPreview == PreviewTargetImage)
+    {
+        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
+                        d->rect.width(), d->rect.height());
+
+        text = i18n("Target");
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+    }
+    else if (d->renderingPreview == PreviewBothImagesVert)
+    {
+        p.drawPixmap(d->rect, d->preview.convertToPixmap());
+
+        d->iface->paint(d->pixmap, 
+                        d->rect.x()+d->rect.width()/2, 
+                        d->rect.y(),
+                        d->rect.width()+d->rect.width()/2,
+                        d->rect.height());
+
+        p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+        p.drawLine(d->rect.x()+d->rect.width()/2, 
+                   d->rect.y(),
+                   d->rect.x()+d->rect.width()/2, 
+                   d->rect.y()+d->rect.height());
+        p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+        p.drawLine(d->rect.x()+d->rect.width()/2, 
+                   d->rect.y(),
+                   d->rect.x()+d->rect.width()/2, 
+                   d->rect.y()+d->rect.height());
+                    
+        p.setPen(QPen::QPen(Qt::red, 1)) ;                    
+        
+        text = i18n("Target");
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + d->rect.width()/2 + 20,
+                                           d->rect.y() + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+                    
+        text = i18n("Original");                    
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text); 
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+    }
+    else if (d->renderingPreview == PreviewBothImagesHorz)
+    {
+        p.drawPixmap(d->rect, d->preview.convertToPixmap());
+
+        d->iface->paint(d->pixmap, 
+                        d->rect.x(), 
+                        d->rect.y()+d->rect.height()/2,
+                        d->rect.width(),
+                        d->rect.height()+d->rect.height()/2);
+
+        p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
+        p.drawLine(d->rect.x(), 
+                   d->rect.y()+d->rect.height()/2,
+                   d->rect.width(),
+                   d->rect.y()+d->rect.height()/2);
+        p.setPen(QPen(Qt::red, 2, Qt::DotLine));
+        p.drawLine(d->rect.x(), 
+                   d->rect.y()+d->rect.height()/2,
+                   d->rect.width(),
+                   d->rect.y()+d->rect.height()/2);
+                    
+        p.setPen(QPen::QPen(Qt::red, 1)) ;                    
+        
+        text = i18n("Target");
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20,
+                                           d->rect.y() + d->rect.height()/2 + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+                    
+        text = i18n("Original");                    
+        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text); 
+        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+        p.drawRect(textRect);
+        p.drawText(textRect, Qt::AlignCenter, text);
+    }
 
     if (d->spotVisible)
     {
@@ -206,20 +327,17 @@ void ImageGuideWidget::updatePixmap( void )
        {
           case HVGuideMode:
           {
-             QPainter p(d->pixmap);
              p.setPen(QPen(Qt::white, d->guideSize, Qt::SolidLine));
              p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
              p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
              p.setPen(QPen(d->guideColor, d->guideSize, Qt::DotLine));
              p.drawLine(xspot, d->rect.top() + d->flicker, xspot, d->rect.bottom() - d->flicker);
              p.drawLine(d->rect.left() + d->flicker, yspot, d->rect.right() - d->flicker, yspot);
-             p.end();
              break;
           }
             
           case PickColorMode:
           {
-             QPainter p(d->pixmap);
              p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
              p.drawLine(xspot-10, yspot-10, xspot+10, yspot+10);
              p.drawLine(xspot+10, yspot-10, xspot-10, yspot+10);
@@ -232,12 +350,13 @@ void ImageGuideWidget::updatePixmap( void )
                 p.drawEllipse( xspot-5, yspot-5, 11, 11 );
              }
                 
-             p.end();
              break;
           }
        }
     }
-}    
+    
+    p.end();
+}
 
 void ImageGuideWidget::paintEvent( QPaintEvent * )
 {

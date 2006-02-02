@@ -54,6 +54,14 @@ public:
         PickColorMode
     };
 
+    enum RenderingPreviewMode 
+    {
+        PreviewOriginalImage=0,
+        PreviewBothImagesHorz,
+        PreviewBothImagesVert,
+        PreviewTargetImage,
+    };
+
     enum ColorPointSrc
     {
         OriginalImage=0,
@@ -81,7 +89,8 @@ public slots:
         
     void slotChangeGuideColor(const QColor &color);
     void slotChangeGuideSize(int size);    
-
+    void slotChangeRenderingPreviewMode(int mode);
+    
 signals:
 
     void spotPositionChanged( const Digikam::DColor &color, bool release, const QPoint &position );

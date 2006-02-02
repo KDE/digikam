@@ -49,7 +49,7 @@
 // Digikam includes.
 
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imagewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "bcgmodifier.h"
@@ -68,19 +68,12 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("bcgadjusttool.anchor", "digikam");
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true, 
-                                                    Digikam::ImageGuideWidget::PickColorMode,
-                                                    Qt::red, 1, false,
-                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
-    l->addWidget(m_previewWidget, 0);
-    QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the image "
-                                           "brightness-contrast-gamma adjustments preview. "
-                                           "You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(frame); 
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>Here you can see the image "
+                                               "brightness-contrast-gamma adjustments preview. "
+                                               "You can pick color on image "
+                                               "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
                 

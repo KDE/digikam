@@ -3,9 +3,10 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libwidgets.la
 
 libwidgets_la_SOURCES = imageregionwidget.cpp imagepaniconwidget.cpp \
-				histogramwidget.cpp colorgradientwidget.cpp imageselectionwidget.cpp \
-				imageguidewidget.cpp curveswidget.cpp imagepannelwidget.cpp 			sidebar.cpp \
-	cietonguewidget.cpp iccpreviewwidget.cpp
+	                histogramwidget.cpp colorgradientwidget.cpp \
+	                imageselectionwidget.cpp imageguidewidget.cpp \
+	                curveswidget.cpp imagepannelwidget.cpp imagewidget.cpp \
+	                sidebar.cpp cietonguewidget.cpp iccpreviewwidget.cpp 
 
 libwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
@@ -19,8 +20,9 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	       $(all_includes)
 
-digikaminclude_HEADERS = imageregionwidget.h imagepaniconwidget.h \
-	histogramwidget.h colorgradientwidget.h imageselectionwidget.h imageguidewidget.h \
-	curveswidget.h imagepannelwidget.h sidebar.h cietonguewidget.h iccpreviewwidget.h
+digikaminclude_HEADERS = imageregionwidget.h imagepaniconwidget.h imagewidget.h \
+	                 histogramwidget.h colorgradientwidget.h imageselectionwidget.h \
+	                 curveswidget.h imagepannelwidget.h sidebar.h cietonguewidget.h \
+	                 imageguidewidget.h iccpreviewwidget.h 
 
 digikamincludedir = $(includedir)/digikam
