@@ -26,10 +26,6 @@
 
 #include <digikamheaders.h>
 
-// Local includes.
-
-#include "imagetabdialog.h"
-
 class QComboBox;
 class QSpinBox;
 class QPushButton;
@@ -40,19 +36,10 @@ class KDoubleSpinBox;
 class KGradientSelector;
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ColorGradientWidget;
-class ImageGuideWidget;
-class ImageLevels;
-class HistogramWidget;
-class DImg;
-}
-
 namespace DigikamAdjustLevelsImagesPlugin
 {
 
-class AdjustLevelDialog : public DigikamImagePlugins::ImageTabDialog
+class AdjustLevelDialog : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -65,24 +52,24 @@ private:
     
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
     
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel,
-    AlphaChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel,
+        AlphaChannel
     };
     
     enum ColorPicker
     {
-    BlackTonal=0,
-    GrayTonal,
-    WhiteTonal
+        BlackTonal=0,
+        GrayTonal,
+        WhiteTonal
     };
 
     uchar                     *m_destinationPreviewData;
@@ -117,8 +104,7 @@ private:
     Digikam::HistogramWidget  *m_levelsHistogramWidget;
     Digikam::HistogramWidget  *m_histogramWidget;
     
-    Digikam::ImageGuideWidget *m_previewOriginalWidget;
-    Digikam::ImageGuideWidget *m_previewTargetWidget;
+    Digikam::ImageWidget      *m_previewWidget;
     
     Digikam::ImageLevels      *m_levels;
     Digikam::DImg              m_originalImage;
