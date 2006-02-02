@@ -44,6 +44,7 @@
 #include <imageregionwidget.h>
 #include <imageselectionwidget.h>
 #include <imageguidewidget.h>
+#include <imagewidget.h>
 #include <ctrlpaneldlg.h>
 #include <imagedlgbase.h>
 #include <imageguidedlg.h>
@@ -73,6 +74,7 @@
 #include <digikam/imageregionwidget.h>
 #include <digikam/imageselectionwidget.h>
 #include <digikam/imageguidewidget.h>
+#include <digikam/imagewidget.h>
 #include <digikam/ctrlpaneldlg.h>
 #include <digikam/imagedlgbase.h>
 #include <digikam/imageguidedlg.h>

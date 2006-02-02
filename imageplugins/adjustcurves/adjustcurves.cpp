@@ -71,8 +71,7 @@ namespace DigikamAdjustCurvesImagesPlugin
 {
 
 AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* banner)
-                 : ImageTabDialog(parent, title, "adjustcurves", 
-                                  true, true, true, banner)
+                 : Digikam::ImageDlgBase(parent, title, "adjustcurves", false, banner)
 {
     m_destinationPreviewData = 0L;
 
@@ -280,16 +279,11 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
 
     // -------------------------------------------------------------
 
-    m_previewOriginalWidget = previewOriginalWidget();
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
-                                                   "a color on the image using the color "
-                                                   "picker tools to select shadow, middle, and highlight "
-                                                   "tones to adjust the curves' points in the Red, "
-                                                   "Green, Blue, and Luminosity Channels."));
-    m_previewTargetWidget   = previewTargetWidget();
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's "
-                                                 "curve-adjustments preview.You can pick color on image "
-                                                 "to see the color level corresponding on histogram."));
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>You can see here the image's "
+                                                    "curve-adjustments preview.You can pick color on image "
+                                                    "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
     
@@ -301,16 +295,16 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
     
-    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
 
-    connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
             
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));              
 
-    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+    connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                                            
             
     // -------------------------------------------------------------
@@ -341,6 +335,7 @@ AdjustCurveDialog::~AdjustCurveDialog()
        
     delete m_histogramWidget;
     delete m_curvesWidget;
+    delete m_previewWidget;
     delete m_curves;
 }
 
@@ -407,7 +402,7 @@ void AdjustCurveDialog::slotResetCurrentChannel()
 
 void AdjustCurveDialog::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -428,7 +423,7 @@ void AdjustCurveDialog::slotEffect()
     m_curves->curvesLutProcess(orgData, m_destinationPreviewData, w, h);
 
     iface->putPreviewImage(m_destinationPreviewData);
-    m_previewTargetWidget->updatePreview();
+    m_previewWidget->updatePreview();
 
     // Update histogram.
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
@@ -438,7 +433,7 @@ void AdjustCurveDialog::slotEffect()
 void AdjustCurveDialog::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *orgData             = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();

@@ -32,27 +32,15 @@
 
 // Local includes.
 
-#include "imagetabdialog.h"
-
 class QComboBox;
 class QPushButton;
 class QHButtonGroup;
 class QCheckBox;
 
-namespace Digikam
-{
-class CurvesWidget;
-class ColorGradientWidget;
-class ImageGuideWidget;
-class ImageCurves;
-class HistogramWidget;
-class DImg;
-}
-
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
-class AdjustCurveDialog : public DigikamImagePlugins::ImageTabDialog
+class AdjustCurveDialog : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -65,30 +53,30 @@ private:
     
     enum ColorPicker
     {
-    BlackTonal=0,
-    GrayTonal,
-    WhiteTonal
+        BlackTonal=0,
+        GrayTonal,
+        WhiteTonal
     };
 
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel,
-    AlphaChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel,
+        AlphaChannel
     };
     
     enum CurvesDrawingType
     {
-    SmoothDrawing=0,
-    FreeDrawing
+        SmoothDrawing=0,
+        FreeDrawing
     };
     
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
     
     uchar                        *m_destinationPreviewData;
@@ -117,8 +105,7 @@ private:
     Digikam::ColorGradientWidget *m_hGradient;
     Digikam::ColorGradientWidget *m_vGradient;
         
-    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageGuideWidget    *m_previewTargetWidget;
+    Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ImageCurves         *m_curves;
     Digikam::DImg                 m_originalImage;
