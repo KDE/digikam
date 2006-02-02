@@ -132,9 +132,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     {
        QPushButton *duplicateHorButton = new QPushButton( d->separateView );
        d->separateView->insert(duplicateHorButton, Digikam::ImageRegionWidget::SeparateViewDuplicateHorz);
-       KGlobal::dirs()->addResourceType("duplicateheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       QString directory = KGlobal::dirs()->findResourceDir("duplicateheight", "duplicateheight.png");
-       duplicateHorButton->setPixmap( QPixmap( directory + "duplicateheight.png" ) );
+       KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
+       QString directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
+       duplicateHorButton->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
        duplicateHorButton->setToggleButton(true);
        QToolTip::add( duplicateHorButton, i18n("<p>If you enable this option, you will separate the preview area "
                                                "horizontally, displaying the original and target image "
@@ -143,9 +143,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
         
        QPushButton *duplicateVerButton = new QPushButton( d->separateView );
        d->separateView->insert(duplicateVerButton, Digikam::ImageRegionWidget::SeparateViewDuplicateVert);
-       KGlobal::dirs()->addResourceType("duplicatewidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       directory = KGlobal::dirs()->findResourceDir("duplicatewidth", "duplicatewidth.png");
-       duplicateVerButton->setPixmap( QPixmap( directory + "duplicatewidth.png" ) );
+       KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
+       directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
+       duplicateVerButton->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
        duplicateVerButton->setToggleButton(true);
        QToolTip::add( duplicateVerButton, i18n("<p>If you enable this option, you will separate the preview area "
                                                "vertically, displaying the original and target image "
@@ -158,9 +158,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        {
        QPushButton *separateHorButton = new QPushButton( d->separateView );
        d->separateView->insert(separateHorButton, Digikam::ImageRegionWidget::SeparateViewHorizontal);
-       KGlobal::dirs()->addResourceType("centerheight", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       QString directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
-       separateHorButton->setPixmap( QPixmap( directory + "centerheight.png" ) );
+       KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
+       QString directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
+       separateHorButton->setPixmap( QPixmap( directory + "bothhorz.png" ) );
        separateHorButton->setToggleButton(true);
        QToolTip::add( separateHorButton, i18n( "<p>If you enable this option, you will separate the preview area "
                                                "horizontally, displaying the original and target image "
@@ -169,9 +169,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
         
        QPushButton *separateVerButton = new QPushButton( d->separateView );
        d->separateView->insert(separateVerButton, Digikam::ImageRegionWidget::SeparateViewVertical);
-       KGlobal::dirs()->addResourceType("centerwidth", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
-       separateVerButton->setPixmap( QPixmap( directory + "centerwidth.png" ) );
+       KGlobal::dirs()->addResourceType("bothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
+       directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
+       separateVerButton->setPixmap( QPixmap( directory + "bothvert.png" ) );
        separateVerButton->setToggleButton(true);
        QToolTip::add( separateVerButton, i18n( "<p>If you enable this option, you will separate the preview area "
                                                "vertically, displaying the original and target image "
@@ -181,9 +181,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        
     QPushButton *noSeparateButton = new QPushButton( d->separateView );
     d->separateView->insert(noSeparateButton, Digikam::ImageRegionWidget::SeparateViewNone);
-    KGlobal::dirs()->addResourceType("nocenter", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("nocenter", "nocenter.png");
-    noSeparateButton->setPixmap( QPixmap( directory + "nocenter.png" ) );
+    KGlobal::dirs()->addResourceType("target", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("target", "target.png");
+    noSeparateButton->setPixmap( QPixmap( directory + "target.png" ) );
     noSeparateButton->setToggleButton(true);
     QToolTip::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                            "be separated." ) );
