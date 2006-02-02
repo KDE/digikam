@@ -91,6 +91,10 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_autoRotate->setChecked( false );
     layout->addWidget( m_autoRotate );
 
+    m_colorManaged = new QCheckBox(i18n("Color Management"), this);
+    m_colorManaged->setChecked( false );
+    layout->addWidget(m_colorManaged);
+
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );
     layout->addWidget( group );

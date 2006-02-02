@@ -96,6 +96,7 @@ private:
     QCheckBox       *m_addFileName;
     QCheckBox       *m_blackwhite;
     QCheckBox       *m_autoRotate;
+    QCheckBox       *m_colorManaged;
 };
 
 }  // namespace Digikam
