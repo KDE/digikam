@@ -243,8 +243,10 @@ void ImageGuideWidget::updatePixmap( void )
         d->iface->paint(d->pixmap, 
                         d->rect.x()+d->rect.width()/2, 
                         d->rect.y(),
-                        d->rect.width()+d->rect.width()/2,
+                        d->rect.width()/2,
                         d->rect.height());
+
+        p.fillRect(d->rect.right(), 0, width(), height(), colorGroup().background());
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x()+d->rect.width()/2, 
@@ -284,7 +286,9 @@ void ImageGuideWidget::updatePixmap( void )
                         d->rect.x(), 
                         d->rect.y()+d->rect.height()/2,
                         d->rect.width(),
-                        d->rect.height()+d->rect.height()/2);
+                        d->rect.height()/2);
+
+        p.fillRect(0, d->rect.bottom(), width(), height(), colorGroup().background());
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x(), 
