@@ -37,7 +37,7 @@ namespace Digikam
 {
 class HistogramWidget;
 class ColorGradientWidget;
-class ImageGuideWidget;
+class ImageWidget;
 class DColor;
 class DImg;
 }
@@ -85,7 +85,7 @@ private:
     
     QHButtonGroup                *m_scaleBG;
 
-    Digikam::ImageGuideWidget    *m_previewWidget;
+    Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     

@@ -25,7 +25,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
-#include <qhbuttongroup.h> 
+#include <qhbuttongroup.h>
 #include <qpushbutton.h>
 
 // KDE includes.
@@ -56,6 +56,8 @@ public:
 
     QHButtonGroup    *previewButtons;
 
+    QLabel           *spotInfoLabel;
+
     ImageGuideWidget *previewWidget;
 };
 
@@ -68,6 +70,9 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::marginHint(),
                                          KDialog::spacingHint());
 
+    d->spotInfoLabel = new QLabel(this);
+    d->spotInfoLabel->setAlignment(Qt::AlignRight);
+    
     d->previewButtons = new QHButtonGroup(this);
     d->previewButtons->setExclusive(true);
     d->previewButtons->setInsideMargin( 0 );
@@ -114,13 +119,13 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
     d->previewWidget = new ImageGuideWidget(480, 320, frame, true, 
                                            ImageGuideWidget::PickColorMode,
-                                           Qt::red, 1, false,
-                                           ImageGuideWidget::TargetPreviewImage);
+                                           Qt::red, 1, false);
     QWhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
     grid->addMultiCellWidget(title, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->previewButtons, 0, 0, 1, 1);
+    grid->addMultiCellWidget(d->spotInfoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(frame, 1, 1, 0, 2);
     grid->setRowStretch(1, 10);
     grid->setColStretch(2, 10);
@@ -128,8 +133,17 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
-            this, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
+            this, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )));
+
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotUpdateSPotInfo( const Digikam::DColor &, const QPoint & )));
+    
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )));
+
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotUpdateSPotInfo( const Digikam::DColor &, const QPoint & )));
 
     connect(d->previewButtons, SIGNAL(released(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
@@ -161,6 +175,15 @@ void ImageWidget::slotChangeGuideColor(const QColor &color)
 void ImageWidget::slotChangeGuideSize(int size)
 {
     d->previewWidget->slotChangeGuideSize(size);
+}
+
+void ImageWidget::slotUpdateSPotInfo(const Digikam::DColor &col, const QPoint &point)
+{
+    DColor color = col;
+    d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6")
+                             .arg(point.x()).arg(point.y())
+                             .arg(color.red()).arg(color.green())
+                             .arg(color.blue()).arg(color.alpha()) );
 }
 
 }  // namespace Digikam

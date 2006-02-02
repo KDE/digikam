@@ -60,6 +60,7 @@ public:
         PreviewBothImagesHorz,
         PreviewBothImagesVert,
         PreviewTargetImage,
+        NoPreviewMode
     };
 
     enum ColorPointSrc
@@ -73,8 +74,7 @@ public:
 
     ImageGuideWidget(int w, int h, QWidget *parent=0, 
                      bool spotVisible=true, int guideMode=HVGuideMode,
-                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false,
-                     int getColorFrom=OriginalImage);
+                     QColor guideColor=Qt::red, int guideSize=1, bool blink=false);
     ~ImageGuideWidget();
         
     ImageIface* imageIface();
@@ -93,7 +93,8 @@ public slots:
     
 signals:
 
-    void spotPositionChanged( const Digikam::DColor &color, bool release, const QPoint &position );
+    void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
+    void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );
     void signalResized(void);
 
 protected:

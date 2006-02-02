@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -53,7 +54,7 @@
 // Digikam includes.
 
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imagewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
@@ -73,27 +74,19 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 {
     m_destinationPreviewData = 0L;
 
-    cmEnabled = true;
-    inPath = QString::null;
-    spacePath = QString::null;
-    proofPath = QString::null;
+    cmEnabled   = true;
+    hasICC      = false;
+    inPath      = QString::null;
+    spacePath   = QString::null;
+    proofPath   = QString::null;
     displayPath = QString::null;
-
-    hasICC = false;
 
     setHelp("colormanagement.anchor", "digikam");
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout *l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(375, 250, frame, true,
-                                                    Digikam::ImageGuideWidget::PickColorMode,
-                                                    Qt::red, 1, false,
-                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
-    l->addWidget(m_previewWidget, 0);
-    QWhatsThis::add(m_previewWidget, i18n("<p>Here you can see the image preview after "
-                                          "convert it with a color profile</p>"));
-    setPreviewAreaWidget( frame );
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>Here you can see the image preview after "
+                                                    "convert it with a color profile</p>"));
+    setPreviewAreaWidget(m_previewWidget); 
     
     // -------------------------------------------------------------------
 
@@ -379,16 +372,20 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
             
-    connect(m_previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(inProfilesInfo, SIGNAL(clicked()), this, SLOT(slotInICCInfo()));
+    connect(inProfilesInfo, SIGNAL(clicked()),
+            this, SLOT(slotInICCInfo()));
 
-    connect(spaceProfilesInfo, SIGNAL(clicked()), this, SLOT(slotSpaceICCInfo()));
+    connect(spaceProfilesInfo, SIGNAL(clicked()),
+            this, SLOT(slotSpaceICCInfo()));
 
-    connect(proofProfilesInfo, SIGNAL(clicked()), this, SLOT(slotProofICCInfo()));
+    connect(proofProfilesInfo, SIGNAL(clicked()),
+            this, SLOT(slotProofICCInfo()));
 
-    connect(displayProfilesInfo, SIGNAL(clicked()), this, SLOT(slotDisplayICCInfo()));
+    connect(displayProfilesInfo, SIGNAL(clicked()),
+            this, SLOT(slotDisplayICCInfo()));
 
     // -------------------------------------------------------------
 

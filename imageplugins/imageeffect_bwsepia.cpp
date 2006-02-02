@@ -49,7 +49,7 @@
 
 #include "imageiface.h"
 #include "dimgimagefilters.h"
-#include "imageguidewidget.h"
+#include "imagewidget.h"
 #include "histogramwidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
@@ -70,18 +70,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, true, 
-                                                    Digikam::ImageGuideWidget::PickColorMode,
-                                                    Qt::red, 1, false,
-                                                    Digikam::ImageGuideWidget::TargetPreviewImage);
-    l->addWidget(m_previewWidget, 0);
-    QWhatsThis::add( m_previewWidget, i18n("<p>Here you can see the black and white conversion tool preview. "
-                                           "You can pick color on image "
-                                           "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(frame); 
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>Here you can see the black and white conversion tool preview. "
+                                                    "You can pick color on image "
+                                                    "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget);
 
     QWidget *gboxSettings     = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 4, marginHint(), spacingHint());
@@ -208,7 +201,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_typeCB, SIGNAL(activated(int)),

@@ -57,9 +57,14 @@ public slots:
 
 signals:
 
-    void spotPositionChanged( const Digikam::DColor &color, bool release, const QPoint &position );
+    void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
+    void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );    
     void signalResized(void);
     
+private slots:
+    
+    void slotUpdateSPotInfo(const Digikam::DColor &col, const QPoint &point);
+
 private:
 
     ImageWidgetPriv* d;

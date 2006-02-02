@@ -59,7 +59,7 @@ public:
         flicker          = 0;
         timerID          = 0;
         focus            = false;
-        renderingPreview = ImageGuideWidget::PreviewTargetImage;
+        renderingPreview = ImageGuideWidget::NoPreviewMode;
     }
 
     int                  width;
@@ -69,7 +69,6 @@ public:
     int                  guideMode;
     int                  guideSize;
     int                  flicker;
-    int                  getColorFrom;
     int                  renderingPreview;
 
     bool                 sixteenBit;
@@ -92,8 +91,7 @@ public:
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                                    bool spotVisible, int guideMode, 
-                                   QColor guideColor, int guideSize, bool blink,
-                                   int getColorFrom)
+                                   QColor guideColor, int guideSize, bool blink)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageGuideWidgetPriv;
@@ -101,7 +99,6 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->guideMode    = guideMode;
     d->guideColor   = guideColor;
     d->guideSize    = guideSize;
-    d->getColorFrom = getColorFrom;
     
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
@@ -162,12 +159,12 @@ QPoint ImageGuideWidget::getSpotPosition(void)
 
 DColor ImageGuideWidget::getSpotColor(int getColorFrom)
 {
-    if (getColorFrom == OriginalImage)                          // Get point color from original image
+    if (getColorFrom == OriginalImage)                          // Get point color from full original image
         return (d->iface->getColorInfoFromOriginalImage(getSpotPosition()));
-    else if (getColorFrom == PreviewImage)                      // Get point color from preview image
+    else if (getColorFrom == PreviewImage)                      // Get point color from full preview image
         return (d->iface->getColorInfoFromPreviewImage(d->spot));
 
-    // In other cases, get point color from target preview image
+    // In other cases, get point color from preview target image
     return (d->iface->getColorInfoFromTargetPreviewImage(d->spot));
 }
 
@@ -223,18 +220,21 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreview == PreviewTargetImage)
+    else if (d->renderingPreview == PreviewTargetImage || d->renderingPreview == NoPreviewMode)
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
                         d->rect.width(), d->rect.height());
 
-        text = i18n("Target");
-        fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        if (d->renderingPreview == PreviewTargetImage)
+        {
+            text = i18n("Target");
+            fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
+            textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
+            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );       
+            p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
+            p.drawRect(textRect);
+            p.drawText(textRect, Qt::AlignCenter, text);
+        }
     }
     else if (d->renderingPreview == PreviewBothImagesVert)
     {
@@ -433,15 +433,45 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
        d->spot.setX(e->x()-d->rect.x());
        d->spot.setY(e->y()-d->rect.y());
        
-       DColor color = getSpotColor(d->getColorFrom);
+       DColor color;
        QPoint point = getSpotPosition();
-       emit spotPositionChanged( color, true, d->spot );
 
-       if (d->guideMode == PickColorMode)
-          QToolTip::add( this, i18n("(%1,%2)<br>RGBA:%3,%4,%5,%6")
-                                    .arg(point.x()).arg(point.y())
-                                    .arg(color.red()).arg(color.green())
-                                    .arg(color.blue()).arg(color.alpha()) );
+       if (d->renderingPreview == PreviewOriginalImage)
+       {
+            color = getSpotColor(OriginalImage);
+            emit spotPositionChangedFromOriginal( color, d->spot );
+       }
+       else if (d->renderingPreview == PreviewTargetImage || d->renderingPreview == NoPreviewMode)
+       {
+            color = getSpotColor(TargetPreviewImage);
+            emit spotPositionChangedFromTarget( color, d->spot );
+       }
+       else if (d->renderingPreview == PreviewBothImagesVert)
+       {
+            if (d->spot.x() > d->rect.width()/2)
+            {
+                color = getSpotColor(TargetPreviewImage);
+                emit spotPositionChangedFromTarget( color, QPoint::QPoint(d->spot.x() - d->rect.width()/2, d->spot.y()));
+            }
+            else
+            {
+                color = getSpotColor(OriginalImage);
+                emit spotPositionChangedFromOriginal( color, d->spot );
+            }
+       }
+       else if (d->renderingPreview == PreviewBothImagesHorz)
+       {
+            if (d->spot.y() > d->rect.height()/2)
+            {
+                color = getSpotColor(TargetPreviewImage);
+                emit spotPositionChangedFromTarget( color, QPoint::QPoint(d->spot.x(), d->spot.y() - d->rect.height()/2 ));
+            }
+            else
+            {
+                color = getSpotColor(OriginalImage);
+                emit spotPositionChangedFromOriginal( color, d->spot );
+            }
+       }
     }
 }
 

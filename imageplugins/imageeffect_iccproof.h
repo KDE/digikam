@@ -13,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef IMAGEEFFECT_ICCPROOF_H
@@ -37,7 +38,7 @@ class KURLRequester;
 namespace Digikam
 {
 class ICCTransform;
-class ImageGuideWidget;
+class ImageWidget;
 class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
@@ -74,41 +75,41 @@ private:
         BlueChannel
     };
 
-    uchar                           *m_destinationPreviewData;
+    uchar                          *m_destinationPreviewData;
 
-    KTabWidget                      *m_tabsWidgets;
+    KTabWidget                     *m_tabsWidgets;
 
-    QComboBox                       *m_channelCB;
-    QComboBox                       *m_renderingIntentsCB;
+    QComboBox                      *m_channelCB;
+    QComboBox                      *m_renderingIntentsCB;
 
-    KURLRequester                   *m_displayProfileCB;
-    KURLRequester                   *m_inProfilesCB;
-    KURLRequester                   *m_proofProfileCB;
-    KURLRequester                   *m_spaceProfileCB;
+    KURLRequester                  *m_displayProfileCB;
+    KURLRequester                  *m_inProfilesCB;
+    KURLRequester                  *m_proofProfileCB;
+    KURLRequester                  *m_spaceProfileCB;
+    
+    QCheckBox                      *m_doSoftProofBox;
+    QCheckBox                      *m_overExposureIndicatorBox;
+    QCheckBox                      *m_doSofProfBox;
+    QCheckBox                      *m_checkGamutBox;
+    QCheckBox                      *m_BPCBox;
+    QCheckBox                      *m_embeddProfileBox;
 
-    QCheckBox                       *m_doSoftProofBox;
-    QCheckBox                       *m_overExposureIndicatorBox;
-    QCheckBox                       *m_doSofProfBox;
-    QCheckBox                       *m_checkGamutBox;
-    QCheckBox                       *m_BPCBox;
-    QCheckBox                       *m_embeddProfileBox;
+    QRadioButton                   *m_useEmbeddedProfile;
+    QRadioButton                   *m_useInDefaultProfile;
+    QRadioButton                   *m_useInSelectedProfile;
+    QRadioButton                   *m_useProofDefaultProfile;
+    QRadioButton                   *m_useProofSelectedProfile;
+    QRadioButton                   *m_useDisplayDefaultProfile;
+    QRadioButton                   *m_useDisplaySelectedProfile;
+    QRadioButton                   *m_useSpaceDefaultProfile;
+    QRadioButton                   *m_useSpaceSelectedProfile;
+    QRadioButton                   *m_useSRGBDefaultProfile;
 
-    QRadioButton                    *m_useEmbeddedProfile;
-    QRadioButton                    *m_useInDefaultProfile;
-    QRadioButton                    *m_useInSelectedProfile;
-    QRadioButton                    *m_useProofDefaultProfile;
-    QRadioButton                    *m_useProofSelectedProfile;
-    QRadioButton                    *m_useDisplayDefaultProfile;
-    QRadioButton                    *m_useDisplaySelectedProfile;
-    QRadioButton                    *m_useSpaceDefaultProfile;
-    QRadioButton                    *m_useSpaceSelectedProfile;
-    QRadioButton                    *m_useSRGBDefaultProfile;
+    QHButtonGroup                  *m_scaleBG;
 
-    QHButtonGroup                   *m_scaleBG;
-
-    QVButtonGroup                   *m_renderingIntentBG;
-    QButtonGroup                    *m_optionsBG;
-    QVButtonGroup                   *m_profilesBG;
+    QVButtonGroup                  *m_renderingIntentBG;
+    QButtonGroup                   *m_optionsBG;
+    QVButtonGroup                  *m_profilesBG;
 
     QString                         inPath;
     QString                         displayPath;
@@ -120,19 +121,19 @@ private:
 
     QByteArray                      m_embeddedICC;
 
-    Digikam::ImageGuideWidget       *m_previewWidget;
+    Digikam::ImageWidget           *m_previewWidget;
 
-    Digikam::ColorGradientWidget    *m_hGradient;
+    Digikam::ColorGradientWidget   *m_hGradient;
 
-    Digikam::HistogramWidget        *m_histogramWidget;
+    Digikam::HistogramWidget       *m_histogramWidget;
 
-    Digikam::ImageIface             *iface;
+    Digikam::ImageIface            *iface;
 
-    Digikam::ICCPreviewWidget       *m_iccDisplayPreviewWidget;
-    Digikam::ICCPreviewWidget       *m_iccInPreviewWidget;
-    Digikam::ICCPreviewWidget       *m_iccOutPreviewWidget;
-    Digikam::ICCPreviewWidget       *m_iccProofPreviewWidget;
-    Digikam::ICCPreviewWidget       *m_iccSpacePreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccDisplayPreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccOutPreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
 
 private:
 

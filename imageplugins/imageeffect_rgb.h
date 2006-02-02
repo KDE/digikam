@@ -35,7 +35,7 @@ namespace Digikam
 {
 class HistogramWidget;
 class ColorGradientWidget;
-class ImageGuideWidget;
+class ImageWidget;
 class DColor;
 }
 
@@ -79,7 +79,7 @@ public:
     QSlider                      *m_gSlider;
     QSlider                      *m_bSlider;
     
-    Digikam::ImageGuideWidget    *m_previewWidget;
+    Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     

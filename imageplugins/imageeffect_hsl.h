@@ -35,7 +35,7 @@ namespace Digikam
 {
 class HistogramWidget;
 class ColorGradientWidget;
-class ImageGuideWidget;
+class ImageWidget;
 class DColor;
 }
 
@@ -77,7 +77,7 @@ private:
     KDoubleNumInput              *m_sInput;
     KDoubleNumInput              *m_lInput;
     
-    Digikam::ImageGuideWidget    *m_previewWidget;
+    Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
