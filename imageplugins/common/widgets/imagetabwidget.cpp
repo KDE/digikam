@@ -63,8 +63,7 @@ ImageTabWidget::ImageTabWidget(QWidget *parent,
     QVBoxLayout* l2 = new QVBoxLayout(targetFrame, 5, 0);
     d->previewTargetWidget = new Digikam::ImageGuideWidget(480, 320, targetFrame,
                                           targGuideVisible, targGuideMode,
-                                          Qt::red, 1, false,
-                                          Digikam::ImageGuideWidget::TargetPreviewImage);
+                                          Qt::red, 1, false);
                                          
     QWhatsThis::add( d->previewTargetWidget, i18n("<p>You can see here the target image."));
     l2->addWidget(d->previewTargetWidget, 0);
@@ -77,8 +76,7 @@ ImageTabWidget::ImageTabWidget(QWidget *parent,
     QVBoxLayout* l = new QVBoxLayout(originalFrame, 5, 0);
     d->previewOriginalWidget = new Digikam::ImageGuideWidget(480, 320, originalFrame,
                                             orgGuideVisible, orgGuideMode,
-                                            Qt::red, 1, false,
-                                            Digikam::ImageGuideWidget::OriginalImage);
+                                            Qt::red, 1, false);
     QWhatsThis::add( d->previewOriginalWidget, i18n("<p>You can see here the original image."));
     l->addWidget(d->previewOriginalWidget, 0);
     addTab( originalFrame, i18n("Original") );
