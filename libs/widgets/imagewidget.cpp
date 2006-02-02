@@ -133,6 +133,9 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 
     connect(d->previewButtons, SIGNAL(released(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
+
+    d->previewButtons->setButton(ImageGuideWidget::PreviewBothImagesVert);
+    d->previewWidget->slotChangeRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVert);
 }
 
 ImageWidget::~ImageWidget()

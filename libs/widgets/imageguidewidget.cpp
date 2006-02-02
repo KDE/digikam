@@ -59,7 +59,7 @@ public:
         flicker          = 0;
         timerID          = 0;
         focus            = false;
-        renderingPreview = ImageGuideWidget::PreviewBothImagesVert;
+        renderingPreview = ImageGuideWidget::PreviewTargetImage;
     }
 
     int                  width;
