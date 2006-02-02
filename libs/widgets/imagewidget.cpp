@@ -177,6 +177,11 @@ void ImageWidget::slotChangeGuideSize(int size)
     d->previewWidget->slotChangeGuideSize(size);
 }
 
+void ImageWidget::resetSpotPosition(void)
+{
+    d->previewWidget->resetSpotPosition();
+}
+
 void ImageWidget::slotUpdateSPotInfo(const Digikam::DColor &col, const QPoint &point)
 {
     DColor color = col;

@@ -50,6 +50,7 @@ public:
 
     ImageIface* imageIface();
     void updatePreview();
+    void resetSpotPosition(void);
 
 public slots:
         
