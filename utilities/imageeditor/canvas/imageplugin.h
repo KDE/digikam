@@ -38,7 +38,7 @@ class QWidget;
 namespace Digikam
 {
 
-class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
+class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 {
 public:
     

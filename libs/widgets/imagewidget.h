@@ -31,6 +31,7 @@
 // Local includes
 
 #include "dcolor.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -38,7 +39,7 @@ namespace Digikam
 class ImageIface;
 class ImageWidgetPriv;
 
-class ImageWidget : public QWidget
+class DIGIKAM_EXPORT ImageWidget : public QWidget
 {
 Q_OBJECT
 
