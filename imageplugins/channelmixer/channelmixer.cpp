@@ -66,10 +66,6 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"

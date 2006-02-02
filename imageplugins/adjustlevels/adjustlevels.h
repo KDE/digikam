@@ -129,7 +129,7 @@ private slots:
     void slotAdjustMaxInputSpinBox(int val);
     void slotAdjustMinOutputSpinBox(int val);
     void slotAdjustMaxOutputSpinBox(int val);
-    void slotSpotColorChanged(const Digikam::DColor &color, bool release);
+    void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
 
 protected:

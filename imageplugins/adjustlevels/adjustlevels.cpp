@@ -333,7 +333,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
             this, SLOT(slotScaleChanged(int)));
             
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
@@ -396,25 +396,25 @@ AdjustLevelDialog::~AdjustLevelDialog()
     delete m_levels;
 }
 
-void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
+void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
 {
     if ( m_pickBlack->isOn() )
     {
        // Black tonal levels point.
        m_levels->levelsBlackToneAdjustByColors(m_channelCB->currentItem(), color);      
-       m_pickBlack->setOn(!release);
+       m_pickBlack->setOn(false);
     }
     else if ( m_pickGray->isOn() )
     {
        // Gray tonal levels point.
        m_levels->levelsGrayToneAdjustByColors(m_channelCB->currentItem(), color);      
-       m_pickGray->setOn(!release);
+       m_pickGray->setOn(false);
     }
     else if ( m_pickWhite->isOn() )
     {
        // White tonal levels point.
        m_levels->levelsWhiteToneAdjustByColors(m_channelCB->currentItem(), color);      
-       m_pickWhite->setOn(!release);
+       m_pickWhite->setOn(false);
     }
     else
        m_levelsHistogramWidget->setHistogramGuideByColor(color);

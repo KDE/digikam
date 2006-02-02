@@ -296,7 +296,7 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
             this, SLOT(slotTimer()));
     
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor &, bool )));
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
@@ -339,7 +339,7 @@ AdjustCurveDialog::~AdjustCurveDialog()
     delete m_curves;
 }
 
-void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool release)
+void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
 {
     Digikam::DColor sc = color;
 
@@ -351,7 +351,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool 
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 1, QPoint::QPoint(sc.red(), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 1, QPoint::QPoint(sc.green(), 42*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 1, QPoint::QPoint(sc.blue(), 42*m_histoSegments/256));
-       m_pickBlack->setOn(!release);
+       m_pickBlack->setOn(false);
     }
     else if ( m_pickGray->isOn() )
     {
@@ -361,7 +361,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool 
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 8, QPoint::QPoint(sc.red(), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 8, QPoint::QPoint(sc.green(), 128*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 8, QPoint::QPoint(sc.blue(), 128*m_histoSegments/256));
-       m_pickGray->setOn(!release);
+       m_pickGray->setOn(false);
     }
     else if ( m_pickWhite->isOn() )
     {
@@ -371,7 +371,7 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color, bool 
        m_curves->setCurvePoint(Digikam::ImageHistogram::RedChannel, 15, QPoint::QPoint(sc.red(), 213*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::GreenChannel, 15, QPoint::QPoint(sc.green(), 213*m_histoSegments/256));
        m_curves->setCurvePoint(Digikam::ImageHistogram::BlueChannel, 15, QPoint::QPoint(sc.blue(), 213*m_histoSegments/256));
-       m_pickWhite->setOn(!release);
+       m_pickWhite->setOn(false);
     }
     else
        m_curvesWidget->setCurveGuide(color);
