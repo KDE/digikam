@@ -12,7 +12,7 @@ digikamimageplugin_whitebalance_la_SOURCES = imageplugin_whitebalance.cpp \
 	                                     imageeffect_whitebalance.cpp 
 
 digikamimageplugin_whitebalance_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)\
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
 
 digikamimageplugin_whitebalance_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

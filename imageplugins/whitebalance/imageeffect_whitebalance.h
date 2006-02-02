@@ -27,9 +27,9 @@
 
 #include <qcolor.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "imagetabdialog.h"
+#include <digikamheaders.h>
 
 class QPushButton;
 class QLabel;
@@ -40,18 +40,10 @@ class QHButtonGroup;
 
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class ImageGuideWidget;
-class ColorGradientWidget;
-class HistogramWidget;
-class DColor;
-}
-
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
-class ImageEffect_WhiteBalance : public DigikamImagePlugins::ImageTabDialog
+class ImageEffect_WhiteBalance : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -64,30 +56,30 @@ private:
     
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
     
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel
     };
     
     enum TemperaturePreset
     {
-    Lamp40W=0,
-    Lamp200W,
-    Sunrise,
-    Tungsten,
-    Neutral,
-    Xenon,
-    Sun,
-    Flash,
-    Sky,
-    None
+        Lamp40W=0,
+        Lamp200W,
+        Sunrise,
+        Tungsten,
+        Neutral,
+        Xenon,
+        Sun,
+        Flash,
+        Sky,
+        None
     };
 
     bool                          m_clipSat;
@@ -142,8 +134,7 @@ private:
     
     Digikam::ColorGradientWidget *m_hGradient;
     
-    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageGuideWidget    *m_previewTargetWidget; 
+    Digikam::ImageWidget         *m_previewWidget;
 
 private:
         
@@ -158,7 +149,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotEffect();
-    void slotColorSelectedFromOriginal(const Digikam::DColor &color, bool release);
+    void slotColorSelectedFromOriginal(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
     void slotScaleChanged(int scale);
     void slotChannelChanged(int channel);

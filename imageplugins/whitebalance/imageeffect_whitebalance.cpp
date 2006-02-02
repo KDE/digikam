@@ -65,10 +65,6 @@
 #include <kfiledialog.h>
 #include <kseparator.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -79,8 +75,7 @@ namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString title, QFrame* banner)
-                        : ImageTabDialog(parent, title, "whitebalance",
-                                         true, true, true, banner)
+                        : Digikam::ImageDlgBase(parent, title, "whitebalance", false, banner)
 {
     QString whatsThis;
     
@@ -303,15 +298,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
             
     // -------------------------------------------------------------
     
-    m_previewOriginalWidget = previewOriginalWidget();
-    QWhatsThis::add( m_previewOriginalWidget, i18n("<p>You can see here the original image. You can pick "
-                                                   "color on image to select the tone to adjust image's "
-                                                   "white-balance with <b>Color Picker</b> method."));
-    m_previewTargetWidget   = previewTargetWidget();
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's white-balance "
-                                                 "adjustments preview. You can pick color on image to "
-                                                 "see the color level corresponding on histogram."));
-    
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>You can see here the image's white-balance "
+                                                    "adjustments preview. You can pick color on image to "
+                                                    "see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
+
     // -------------------------------------------------------------
     
     // Reset all parameters to the default values.
@@ -325,10 +317,10 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewOriginalWidget, SIGNAL(spotPositionChanged(  const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor &, bool )));
 
-    connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
                                     
     connect(m_autoAdjustExposure, SIGNAL(clicked()),
@@ -337,7 +329,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));         
 
-    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+    connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                                        
 
     // -------------------------------------------------------------                
@@ -384,7 +376,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
 
     // Create an histogram of original image.     
 
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int width                  = iface->originalWidth();
     int height                 = iface->originalHeight();
@@ -529,7 +521,7 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
     slotEffect();  
 }
 
-void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DColor &color, bool release )
+void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DColor &color )
 {
     if ( m_pickTemperature->isOn() )
     {
@@ -573,7 +565,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
     
        m_temperatureInput->setValue(m*10.0+2000.0);
        m_greenInput->setValue(t);
-       m_pickTemperature->setOn(!release);
+       m_pickTemperature->setOn(false);
     }
 
     slotEffect();  
@@ -620,7 +612,7 @@ void ImageEffect_WhiteBalance::slotChannelChanged(int channel)
 
 void ImageEffect_WhiteBalance::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -655,7 +647,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     whiteBalance(data, w, h, sb);
            
     iface->putPreviewImage(data);
-    m_previewTargetWidget->updatePreview();
+    m_previewWidget->updatePreview();
     
     // Update histogram.
     memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
@@ -666,7 +658,7 @@ void ImageEffect_WhiteBalance::slotEffect()
 void ImageEffect_WhiteBalance::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
@@ -848,7 +840,7 @@ void ImageEffect_WhiteBalance::slotDefault()
     m_temperaturePresetCB->setCurrentItem(Neutral);
     slotTemperaturePresetChanged(Neutral);
     
-    m_previewOriginalWidget->resetSpotPosition();    
+    m_previewWidget->resetSpotPosition();    
     m_channelCB->setCurrentItem(LuminosityChannel);
     slotChannelChanged(LuminosityChannel);
     
