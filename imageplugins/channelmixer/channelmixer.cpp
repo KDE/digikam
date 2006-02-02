@@ -4,7 +4,7 @@
  * Date  : 2005-02-26
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  * Load and save mixer gains methods inspired from 
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl 
  * <mguldahl at xmission dot com>.
@@ -79,8 +79,7 @@ namespace DigikamChannelMixerImagesPlugin
 {
 
 ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* banner)
-                  : ImageTabDialog(parent, title, "channelmixer", 
-                                   true, false, true, banner)
+                  : Digikam::ImageDlgBase(parent, title, "channelmixer", false, banner)
 {
     m_destinationPreviewData = 0L;
     
@@ -91,7 +90,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                                        digikamimageplugins_version,
                                        I18N_NOOP("An image color channel mixer plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier",
+                                       "(c) 2005-2006, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -215,12 +214,12 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     
     // -------------------------------------------------------------
 
-    m_previewOriginalWidget = previewOriginalWidget();
-    m_previewTargetWidget   = previewTargetWidget();
-    QWhatsThis::add( m_previewTargetWidget, i18n("<p>You can see here the image's color channels' "
-                                                 "gains adjustments preview. You can pick color on image "
-                                                 "to see the color level corresponding on histogram."));
-    
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>You can see here the image's color channels' "
+                                                    "gains adjustments preview. You can pick color on image "
+                                                    "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
+
     // -------------------------------------------------------------
 
     // Reset all parameters to the default values.
@@ -235,13 +234,13 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
-    connect(m_previewTargetWidget, SIGNAL(spotPositionChanged( const Digikam::DColor &, bool, const QPoint & )),
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
                         
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
     
-    connect(m_previewTargetWidget, SIGNAL(signalResized()),
+    connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));                             
     
     // -------------------------------------------------------------
@@ -406,7 +405,7 @@ void ChannelMixerDialog::slotMonochromeActived(bool mono)
 
 void ChannelMixerDialog::slotEffect()
 {
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -443,7 +442,7 @@ void ChannelMixerDialog::slotEffect()
     }
     
     iface->putPreviewImage(data);
-    m_previewTargetWidget->updatePreview();
+    m_previewWidget->updatePreview();
     
     // Update histogram.
     memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
@@ -454,7 +453,7 @@ void ChannelMixerDialog::slotEffect()
 void ChannelMixerDialog::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    Digikam::ImageIface* iface = m_previewTargetWidget->imageIface();
+    Digikam::ImageIface* iface = m_previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();

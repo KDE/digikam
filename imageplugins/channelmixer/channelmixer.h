@@ -22,9 +22,9 @@
 #ifndef CHANNELMIXER_H
 #define CHANNELMIXER_H
 
-// Local includes.
+// Digikam includes.
 
-#include "imagetabdialog.h"
+#include <digikamheaders.h>
 
 class QComboBox;
 class QPushButton;
@@ -33,18 +33,10 @@ class QHButtonGroup;
 
 class KDoubleNumInput;
 
-namespace Digikam
-{
-class HistogramWidget;
-class ColorGradientWidget;
-class ImageGuideWidget;
-class DColor;
-}
-
 namespace DigikamChannelMixerImagesPlugin
 {
 
-class ChannelMixerDialog : public DigikamImagePlugins::ImageTabDialog
+class ChannelMixerDialog : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -57,15 +49,15 @@ private:
 
     enum ColorChannelGains 
     {
-    RedChannelGains=0,
-    GreenChannelGains,
-    BlueChannelGains
+        RedChannelGains=0,
+        GreenChannelGains,
+        BlueChannelGains
     };
 
     enum HistogramScale
     {
-    Linear=0,
-    Logarithmic
+        Linear=0,
+        Logarithmic
     };
 
 private:
@@ -103,8 +95,7 @@ private:
     
     Digikam::HistogramWidget     *m_histogramWidget;
     
-    Digikam::ImageGuideWidget    *m_previewOriginalWidget;
-    Digikam::ImageGuideWidget    *m_previewTargetWidget;
+    Digikam::ImageWidget         *m_previewWidget;
     
 private:
 
