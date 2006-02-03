@@ -21,7 +21,6 @@
 // Qt includes.
  
 #include <qwhatsthis.h>
-#include <qtooltip.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -88,8 +87,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     QString directory = KGlobal::dirs()->findResourceDir("original", "original.png");
     previewOriginalButton->setPixmap( QPixmap( directory + "original.png" ) );
     previewOriginalButton->setToggleButton(true);
-    QToolTip::add( previewOriginalButton, i18n( "<p>If you enable this option, you will see "
-                                                "the original image." ) );
+    QWhatsThis::add( previewOriginalButton, i18n( "<p>If you enable this option, you will see "
+                                                  "the original image." ) );
 
     QPushButton *previewBothButtonVert = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
@@ -97,8 +96,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
     previewBothButtonVert->setPixmap( QPixmap( directory + "bothvert.png" ) );
     previewBothButtonVert->setToggleButton(true);
-    QToolTip::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
-                                                "be separated vertically. The original and target images are contiguous" ) );
+    QWhatsThis::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
+                                                  "be separated vertically. The original and target images are contiguous" ) );
 
     QPushButton *previewBothButtonHorz = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
@@ -106,8 +105,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
     previewBothButtonHorz->setPixmap( QPixmap( directory + "bothhorz.png" ) );
     previewBothButtonHorz->setToggleButton(true);
-    QToolTip::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
-                                                "be separated horizontally. The original and target images are contiguous" ) );
+    QWhatsThis::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
+                                                  "be separated horizontally. The original and target images are contiguous" ) );
 
     QPushButton *previewDuplicateBothButtonVert = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
@@ -115,8 +114,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
     previewDuplicateBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
     previewDuplicateBothButtonVert->setToggleButton(true);
-    QToolTip::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
-                                                         "be separated vertically. The original and target images are duplicated" ) );
+    QWhatsThis::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
+                                                           "be separated vertically. The original and target images are duplicated" ) );
 
     QPushButton *previewDupplicateBothButtonHorz = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
@@ -124,8 +123,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
     previewDupplicateBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
     previewDupplicateBothButtonHorz->setToggleButton(true);
-    QToolTip::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
-                                                          "be separated horizontally. The original and target images are duplicated" ) );
+    QWhatsThis::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
+                                                            "be separated horizontally. The original and target images are duplicated" ) );
 
     QPushButton *previewtargetButton = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
@@ -133,8 +132,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("target", "target.png");
     previewtargetButton->setPixmap( QPixmap( directory + "target.png" ) );
     previewtargetButton->setToggleButton(true);
-    QToolTip::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
-                                              "the target image." ) );
+    QWhatsThis::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
+                                                "the target image." ) );
 
     QPushButton *previewToogleMouseOverButton = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewToogleMouseOverButton, ImageGuideWidget::PreviewToogleOnMouseOver);
@@ -142,9 +141,9 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     directory = KGlobal::dirs()->findResourceDir("tooglemouseover", "tooglemouseover.png");
     previewToogleMouseOverButton->setPixmap( QPixmap( directory + "tooglemouseover.png" ) );
     previewToogleMouseOverButton->setToggleButton(true);
-    QToolTip::add( previewToogleMouseOverButton, i18n( "<p>If you enable this option, you will see "
-                                                       "the target image when the mouse is over image area, "
-                                                       "else the original image." ) );
+    QWhatsThis::add( previewToogleMouseOverButton, i18n( "<p>If you enable this option, you will see "
+                                                         "the target image when the mouse is over image area, "
+                                                         "else the original image." ) );
 
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
