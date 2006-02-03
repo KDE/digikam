@@ -106,9 +106,9 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     setMouseTracking(true);
 
     d->iface        = new ImageIface(w, h);
+    uchar *data     = d->iface->getPreviewImage();
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
-    uchar *data     = d->iface->getPreviewImage();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
@@ -275,14 +275,14 @@ void ImageGuideWidget::updatePixmap( void )
         p.fillRect(d->rect.right(), 0, width(), height(), colorGroup().background());
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-        p.drawLine(d->rect.x()+d->rect.width()/2, 
+        p.drawLine(d->rect.x()+d->rect.width()/2-1, 
                    d->rect.y(),
-                   d->rect.x()+d->rect.width()/2, 
+                   d->rect.x()+d->rect.width()/2-1, 
                    d->rect.y()+d->rect.height());
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-        p.drawLine(d->rect.x()+d->rect.width()/2, 
+        p.drawLine(d->rect.x()+d->rect.width()/2-1, 
                    d->rect.y(),
-                   d->rect.x()+d->rect.width()/2, 
+                   d->rect.x()+d->rect.width()/2-1, 
                    d->rect.y()+d->rect.height());
                     
         p.setPen(QPen::QPen(Qt::red, 1)) ;                    
@@ -335,14 +335,14 @@ void ImageGuideWidget::updatePixmap( void )
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x(), 
-                   d->rect.y()+d->rect.height()/2,
+                   d->rect.y()+d->rect.height()/2-1,
                    d->rect.width(),
-                   d->rect.y()+d->rect.height()/2);
+                   d->rect.y()+d->rect.height()/2-1);
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
         p.drawLine(d->rect.x(), 
-                   d->rect.y()+d->rect.height()/2,
+                   d->rect.y()+d->rect.height()/2-1,
                    d->rect.width(),
-                   d->rect.y()+d->rect.height()/2);
+                   d->rect.y()+d->rect.height()/2-1);
                     
         p.setPen(QPen::QPen(Qt::red, 1)) ;                    
         

@@ -185,7 +185,6 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 
     // -------------------------------------------------------------
     
-    //setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
     setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
 }
 
