@@ -136,7 +136,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query head
         sqlQuery = "SELECT Images.id, Images.name, Images.dirid, Images.datetime, Albums.url "
-                   "FROM Images, Albums, ImageProperties "
+                   "FROM Images, Albums LEFT JOIN ImageProperties ON Images.id = Imageproperties.imageid "
                    "WHERE ( ";
 
         // query body
@@ -144,7 +144,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query tail
         sqlQuery += " ) ";
-        sqlQuery += " AND (Albums.id=Images.dirid) AND (Images.id = ImageProperties.imageid); ";
+        sqlQuery += " AND (Albums.id=Images.dirid); ";
 
         QStringList values;
         QString     errMsg;
@@ -240,7 +240,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query head
         sqlQuery = "SELECT Albums.url||'/'||Images.name "
-                   "FROM Images, Albums, ImageProperties "
+                   "FROM Images, Albums LEFT JOIN ImageProperties on Images.id = ImageProperties.imageid "
                    "WHERE ( ";
 
         // query body
@@ -248,7 +248,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // query tail
         sqlQuery += " ) ";
-        sqlQuery += " AND (Albums.id=Images.dirid) AND (Images.id = ImageProperties.imageid) ";
+        sqlQuery += " AND (Albums.id=Images.dirid) ";
         sqlQuery += " LIMIT 500;";
 
         QStringList values;
