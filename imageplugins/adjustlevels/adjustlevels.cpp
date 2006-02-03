@@ -382,6 +382,10 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
 
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
+    
+    connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
+            this, SLOT(slotPickerColorButtonActived()));
+            
 }
 
 AdjustLevelDialog::~AdjustLevelDialog()
@@ -394,6 +398,13 @@ AdjustLevelDialog::~AdjustLevelDialog()
     delete m_histogramWidget;
     delete m_levelsHistogramWidget;
     delete m_levels;
+}
+
+void AdjustLevelDialog::slotPickerColorButtonActived()
+{
+    // Save previous rendering mode and toggle to original image.
+    m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
+    m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
 }
 
 void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
@@ -422,6 +433,9 @@ void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());
        
+    // restore previous rendering mode.
+    m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);
+              
     slotEffect();                
 }
 

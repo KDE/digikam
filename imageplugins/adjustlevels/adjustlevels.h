@@ -75,7 +75,8 @@ private:
     uchar                     *m_destinationPreviewData;
     
     int                        m_histoSegments;
-
+    int                        m_currentPreviewMode;
+    
     QComboBox                 *m_channelCB;    
     
     QSpinBox                  *m_minInput;
@@ -109,6 +110,10 @@ private:
     Digikam::ImageLevels      *m_levels;
     Digikam::DImg              m_originalImage;
 
+protected:
+
+    void finalRendering();    
+
 private:
 
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
@@ -131,10 +136,7 @@ private slots:
     void slotAdjustMaxOutputSpinBox(int val);
     void slotSpotColorChanged(const Digikam::DColor &color);
     void slotColorSelectedFromTarget(const Digikam::DColor &color);
-
-protected:
-
-    void finalRendering();    
+    void slotPickerColorButtonActived();    
 
 };
 

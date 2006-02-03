@@ -95,6 +95,7 @@ private:
     double                        m_green;
 
     int                           m_BP, m_WP;
+    int                           m_currentPreviewMode;
     
     uint                          m_rgbMax;
     
@@ -136,6 +137,10 @@ private:
     
     Digikam::ImageWidget         *m_previewWidget;
 
+protected:
+
+    void finalRendering();    
+
 private:
         
     void setRGBmult(void);
@@ -156,11 +161,7 @@ private slots:
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);
-
-protected:
-
-    void finalRendering();    
-
+    void slotPickerColorButtonActived();    
 };
 
 }  // NameSpace DigikamWhiteBalanceImagesPlugin

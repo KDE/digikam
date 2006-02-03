@@ -318,14 +318,11 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
             this, SLOT(slotScaleChanged(int)));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor &, bool )));
+            this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor & )));
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
                                     
-    connect(m_autoAdjustExposure, SIGNAL(clicked()),
-            this, SLOT(slotAutoAdjustExposure()));
-
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));         
 
@@ -358,6 +355,15 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
 
     connect(m_greenInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                 
+
+    // -------------------------------------------------------------
+    // Bouttons slots.
+    
+    connect(m_autoAdjustExposure, SIGNAL(clicked()),
+            this, SLOT(slotAutoAdjustExposure()));
+
+    connect(m_pickTemperature, SIGNAL(released()),
+            this, SLOT(slotPickerColorButtonActived()));            
 }
 
 ImageEffect_WhiteBalance::~ImageEffect_WhiteBalance()
@@ -521,6 +527,13 @@ void ImageEffect_WhiteBalance::slotTemperaturePresetChanged(int tempPreset)
     slotEffect();  
 }
 
+void ImageEffect_WhiteBalance::slotPickerColorButtonActived()
+{
+    // Save previous rendering mode and toggle to original image.
+    m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
+    m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
+}
+
 void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DColor &color )
 {
     if ( m_pickTemperature->isOn() )
@@ -567,7 +580,10 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
        m_greenInput->setValue(t);
        m_pickTemperature->setOn(false);
     }
-
+       
+    // restore previous rendering mode.
+    m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);
+    
     slotEffect();  
 }
 

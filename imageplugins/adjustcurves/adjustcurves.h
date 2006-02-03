@@ -82,6 +82,7 @@ private:
     uchar                        *m_destinationPreviewData;
 
     int                           m_histoSegments;
+    int                           m_currentPreviewMode;
         
     QComboBox                    *m_channelCB;    
     
@@ -110,6 +111,10 @@ private:
     Digikam::ImageCurves         *m_curves;
     Digikam::DImg                 m_originalImage;
 
+protected:
+
+    void finalRendering();
+    
 private slots:
 
     void slotDefault();
@@ -121,11 +126,9 @@ private slots:
     void slotScaleChanged(int scale);
     void slotCurveTypeChanged(int type);
     void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);    
+    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotPickerColorButtonActived();
 
-protected:
-
-    void finalRendering();    
 };
 
 }  // NameSpace DigikamAdjustCurvesImagesPlugin

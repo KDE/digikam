@@ -324,6 +324,9 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
 
     connect(m_resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
+
+    connect(m_pickerColorButtonGroup, SIGNAL(released(int)),
+            this, SLOT(slotPickerColorButtonActived()));
 }
 
 AdjustCurveDialog::~AdjustCurveDialog()
@@ -337,6 +340,13 @@ AdjustCurveDialog::~AdjustCurveDialog()
     delete m_curvesWidget;
     delete m_previewWidget;
     delete m_curves;
+}
+
+void AdjustCurveDialog::slotPickerColorButtonActived()
+{
+    // Save previous rendering mode and toggle to original image.
+    m_currentPreviewMode = m_previewWidget->getRenderingPreviewMode();
+    m_previewWidget->setRenderingPreviewMode(Digikam::ImageGuideWidget::PreviewOriginalImage);
 }
 
 void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
@@ -382,6 +392,9 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
        m_curves->curvesCalculateCurve(i);
     
     m_curvesWidget->repaint(false);
+    
+    // restore previous rendering mode.
+    m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);
        
     slotEffect();  
 }
