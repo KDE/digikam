@@ -62,6 +62,7 @@ public:
         PreviewBothImagesHorzCont,  // Horizontal with original and target in contiguous.
         PreviewBothImagesVertCont,  // Vertical with original and target in contiguous.
         PreviewTargetImage,         // Target image only.
+        PreviewToogleOnMouseOver,   // Target image if mouse is over image area, else original image.
         NoPreviewMode               // Target image only without information displayed.
     };
 
@@ -108,7 +109,9 @@ protected:
     void mousePressEvent( QMouseEvent * e );
     void mouseReleaseEvent( QMouseEvent * e );
     void mouseMoveEvent( QMouseEvent * e );
-
+    void enterEvent ( QEvent * e );
+    void leaveEvent ( QEvent * e );
+    
 private:
 
     void updatePixmap( void );

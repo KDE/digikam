@@ -54,27 +54,28 @@ public:
 
     ImageGuideWidgetPriv()
     {
-        pixmap               = 0;
-        iface                = 0;
-        flicker              = 0;
-        timerID              = 0;
-        focus                = false;
-        renderingPreviewMode = ImageGuideWidget::NoPreviewMode;
+        pixmap                    = 0;
+        iface                     = 0;
+        flicker                   = 0;
+        timerID                   = 0;
+        focus                     = false;
+        onMouseMovePreviewToogled = false;
+        renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
     }
 
+    bool                 sixteenBit;
+    bool                 focus;
+    bool                 spotVisible;
+    bool                 onMouseMovePreviewToogled;
+    
     int                  width;
     int                  height;
-    
     int                  timerID;
     int                  guideMode;
     int                  guideSize;
     int                  flicker;
     int                  renderingPreviewMode;
 
-    bool                 sixteenBit;
-    bool                 focus;
-    bool                 spotVisible;
-    
     // Current spot position in preview coordinates.
     QPoint               spot;
     
@@ -213,7 +214,8 @@ void ImageGuideWidget::updatePixmap( void )
     
     d->pixmap->fill(colorGroup().background());
     
-    if (d->renderingPreviewMode == PreviewOriginalImage)
+    if (d->renderingPreviewMode == PreviewOriginalImage ||
+       (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == false ))
     {
         p.drawPixmap(d->rect, d->preview.convertToPixmap());
 
@@ -225,12 +227,13 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
+    else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode ||
+            (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == true ))
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
                         d->rect.width(), d->rect.height());
 
-        if (d->renderingPreviewMode == PreviewTargetImage)
+        if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == PreviewToogleOnMouseOver)
         {
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -545,15 +548,37 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( d->rect.contains( e->x(), e->y() ) && !d->focus && d->spotVisible )
     {
-       setCursor( KCursor::crossCursor() );
+        setCursor( KCursor::crossCursor() );
     }
     else if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible )
     {
-       d->spot.setX(e->x()-d->rect.x());
-       d->spot.setY(e->y()-d->rect.y());
+        d->spot.setX(e->x()-d->rect.x());
+        d->spot.setY(e->y()-d->rect.y());
     }
     else
-       setCursor( KCursor::arrowCursor() );
+    {
+        setCursor( KCursor::arrowCursor() );
+    }
+}
+
+void ImageGuideWidget::enterEvent( QEvent * )
+{
+    if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
+    {
+        d->onMouseMovePreviewToogled = true;
+        updatePixmap();
+        repaint(false);
+    }
+}
+
+void ImageGuideWidget::leaveEvent( QEvent * )
+{
+    if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
+    {
+        d->onMouseMovePreviewToogled = false;
+        updatePixmap();
+        repaint(false);
+    }
 }
 
 }  // NameSpace Digikam

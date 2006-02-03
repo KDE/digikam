@@ -136,6 +136,16 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     QToolTip::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
                                               "the target image." ) );
 
+    QPushButton *previewToogleMouseOverButton = new QPushButton( d->previewButtons );
+    d->previewButtons->insert(previewToogleMouseOverButton, ImageGuideWidget::PreviewToogleOnMouseOver);
+    KGlobal::dirs()->addResourceType("tooglemouseover", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("tooglemouseover", "tooglemouseover.png");
+    previewToogleMouseOverButton->setPixmap( QPixmap( directory + "tooglemouseover.png" ) );
+    previewToogleMouseOverButton->setToggleButton(true);
+    QToolTip::add( previewToogleMouseOverButton, i18n( "<p>If you enable this option, you will see "
+                                                       "the target image when the mouse is over image area, "
+                                                       "else the original image." ) );
+
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
@@ -176,6 +186,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 
     // -------------------------------------------------------------
     
+    //setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
     setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
 }
 
