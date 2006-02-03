@@ -24,6 +24,7 @@
 // Digikam includes.
 
 #include "dimg.h"
+#include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -32,17 +33,23 @@ namespace Digikam
 class DIGIKAM_EXPORT LoadingDescription
 {
 public:
-    LoadingDescription(const QString &filePath, RawDecodingSettings rawDecodingSettings = RawDecodingSettings())
-        : filePath(filePath),rawDecodingSettings(rawDecodingSettings)
+
+    LoadingDescription(const QString &filePath)
+        : filePath(filePath)
+        {
+            rawDecodingSettings = RawDecodingSettings();
+        };
+        
+    LoadingDescription(const QString &filePath, RawDecodingSettings settings)
+        : filePath(filePath), rawDecodingSettings(settings)
         {};
-    QString filePath;
+        
+    QString             filePath;
     RawDecodingSettings rawDecodingSettings;
 
     bool operator==(const LoadingDescription &other);
 };
 
-
 }   // namespace Digikam
-
 
 #endif // LOADING_DESCRIPTION_H

@@ -33,7 +33,7 @@ public:
     
     RawDecodingSettings()
     {
-        enableRAWQuality      = false;
+        enableRAWQuality      = true;
         RAWQuality            = 0;
         RGBInterpolate4Colors = false;
         cameraColorBalance    = true;
