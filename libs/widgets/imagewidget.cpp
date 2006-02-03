@@ -176,8 +176,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 
     // -------------------------------------------------------------
     
-    d->previewButtons->setButton(ImageGuideWidget::PreviewBothImagesVertCont);
-    d->previewWidget->slotChangeRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
+    setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
 }
 
 ImageWidget::~ImageWidget()
@@ -215,6 +214,12 @@ int ImageWidget::getRenderingPreviewMode()
     return ( d->previewWidget->getRenderingPreviewMode() );
 }
     
+void ImageWidget::setRenderingPreviewMode(int mode)
+{
+    d->previewButtons->setButton(mode);
+    d->previewWidget->slotChangeRenderingPreviewMode(mode);
+}
+
 void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point)
 {
     DColor color = col;

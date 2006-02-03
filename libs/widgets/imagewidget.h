@@ -52,6 +52,7 @@ public:
     void updatePreview();
     void resetSpotPosition();
     int  getRenderingPreviewMode();
+    void setRenderingPreviewMode(int mode);
 
 public slots:
         
