@@ -75,7 +75,7 @@ namespace DigikamChannelMixerImagesPlugin
 {
 
 ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* banner)
-                  : Digikam::ImageDlgBase(parent, title, "channelmixer", false, banner)
+                  : Digikam::ImageDlgBase(parent, title, "channelmixer", true, false, banner)
 {
     m_destinationPreviewData = 0L;
     

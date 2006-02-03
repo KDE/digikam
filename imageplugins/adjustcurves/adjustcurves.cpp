@@ -71,7 +71,7 @@ namespace DigikamAdjustCurvesImagesPlugin
 {
 
 AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* banner)
-                 : Digikam::ImageDlgBase(parent, title, "adjustcurves", false, banner)
+                 : Digikam::ImageDlgBase(parent, title, "adjustcurves", true, false, banner)
 {
     m_destinationPreviewData = 0L;
 

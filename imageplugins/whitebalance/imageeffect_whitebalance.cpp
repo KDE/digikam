@@ -75,7 +75,7 @@ namespace DigikamWhiteBalanceImagesPlugin
 {
 
 ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString title, QFrame* banner)
-                        : Digikam::ImageDlgBase(parent, title, "whitebalance", false, banner)
+                        : Digikam::ImageDlgBase(parent, title, "whitebalance", true, false, banner)
 {
     QString whatsThis;
     

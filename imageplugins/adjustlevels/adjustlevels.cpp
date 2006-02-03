@@ -71,7 +71,7 @@ namespace DigikamAdjustLevelsImagesPlugin
 {
 
 AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* banner)
-                 : Digikam::ImageDlgBase(parent, title, "adjustlevels", false, banner)
+                 : Digikam::ImageDlgBase(parent, title, "adjustlevels", true, false, banner)
 {
     m_destinationPreviewData = 0L;
 
