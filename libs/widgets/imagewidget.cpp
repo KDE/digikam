@@ -88,22 +88,40 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
                                                 "the original image." ) );
 
     QPushButton *previewBothButtonVert = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
-    KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
-    previewBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
+    d->previewButtons->insert(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
+    KGlobal::dirs()->addResourceType("bothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
+    previewBothButtonVert->setPixmap( QPixmap( directory + "bothvert.png" ) );
     previewBothButtonVert->setToggleButton(true);
     QToolTip::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
-                                                "be separated vertically." ) );
+                                                "be separated vertically. The original and target images are contiguous" ) );
 
     QPushButton *previewBothButtonHorz = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
-    KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
-    previewBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
+    d->previewButtons->insert(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
+    KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
+    previewBothButtonHorz->setPixmap( QPixmap( directory + "bothhorz.png" ) );
     previewBothButtonHorz->setToggleButton(true);
     QToolTip::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
-                                                "be separated horizontally." ) );
+                                                "be separated horizontally. The original and target images are contiguous" ) );
+
+    QPushButton *previewDuplicateBothButtonVert = new QPushButton( d->previewButtons );
+    d->previewButtons->insert(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
+    KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
+    previewDuplicateBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
+    previewDuplicateBothButtonVert->setToggleButton(true);
+    QToolTip::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
+                                                         "be separated vertically. The original and target images are duplicated" ) );
+
+    QPushButton *previewDupplicateBothButtonHorz = new QPushButton( d->previewButtons );
+    d->previewButtons->insert(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
+    KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
+    previewDupplicateBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
+    previewDupplicateBothButtonHorz->setToggleButton(true);
+    QToolTip::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
+                                                          "be separated horizontally. The original and target images are duplicated" ) );
 
     QPushButton *previewtargetButton = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
@@ -148,8 +166,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     connect(d->previewButtons, SIGNAL(released(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
 
-    d->previewButtons->setButton(ImageGuideWidget::PreviewBothImagesVert);
-    d->previewWidget->slotChangeRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVert);
+    d->previewButtons->setButton(ImageGuideWidget::PreviewBothImagesVertCont);
+    d->previewWidget->slotChangeRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
 }
 
 ImageWidget::~ImageWidget()

@@ -236,16 +236,34 @@ void ImageGuideWidget::updatePixmap( void )
             p.drawText(textRect, Qt::AlignCenter, text);
         }
     }
-    else if (d->renderingPreview == PreviewBothImagesVert)
+    else if (d->renderingPreview == PreviewBothImagesVert || d->renderingPreview == PreviewBothImagesVertCont)
     {
-        p.drawPixmap(d->rect, d->preview.convertToPixmap());
-
-        d->iface->paint(d->pixmap, 
-                        d->rect.x()+d->rect.width()/2, 
-                        d->rect.y(),
-                        d->rect.width()/2,
-                        d->rect.height());
-
+        if (d->renderingPreview == PreviewBothImagesVert)
+        {
+            // Drawing the original image.
+            p.drawPixmap(d->rect, d->preview.convertToPixmap());
+    
+            // Drawing the target image under the original.
+            d->iface->paint(d->pixmap, 
+                            d->rect.x()+d->rect.width()/2, 
+                            d->rect.y(),
+                            d->rect.width()/2,
+                            d->rect.height());
+        }
+        else
+        {
+            // Drawing the target image.
+            d->iface->paint(d->pixmap, 
+                            d->rect.x(),
+                            d->rect.y(),
+                            d->rect.width(),
+                            d->rect.height());
+    
+            // Drawing the original image under the target.
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(), 0, 0, d->rect.width()/2, d->rect.height());
+        }
+        
+        // Drawing the information and others stuff.
         p.fillRect(d->rect.right(), 0, width(), height(), colorGroup().background());
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
@@ -278,15 +296,32 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreview == PreviewBothImagesHorz)
+    else if (d->renderingPreview == PreviewBothImagesHorz || d->renderingPreview == PreviewBothImagesHorzCont)
     {
-        p.drawPixmap(d->rect, d->preview.convertToPixmap());
+        if (d->renderingPreview == PreviewBothImagesHorz)
+        {
+            // Drawing the original image.
+            p.drawPixmap(d->rect, d->preview.convertToPixmap());
 
-        d->iface->paint(d->pixmap, 
-                        d->rect.x(), 
-                        d->rect.y()+d->rect.height()/2,
-                        d->rect.width(),
-                        d->rect.height()/2);
+            // Drawing the target image under the original.
+            d->iface->paint(d->pixmap, 
+                            d->rect.x(), 
+                            d->rect.y()+d->rect.height()/2,
+                            d->rect.width(),
+                            d->rect.height()/2);
+        }
+        else
+        {
+            // Drawing the target image.
+            d->iface->paint(d->pixmap, 
+                            d->rect.x(),
+                            d->rect.y(),
+                            d->rect.width(),
+                            d->rect.height());
+    
+            // Drawing the original image under the target.
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(), 0, 0, d->rect.width(), d->rect.height()/2);
+        }
 
         p.fillRect(0, d->rect.bottom(), width(), height(), colorGroup().background());
 
@@ -459,12 +494,38 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
        }
+       else if (d->renderingPreview == PreviewBothImagesVertCont)
+       {
+            if (d->spot.x() > d->rect.width()/2)
+            {
+                color = getSpotColor(TargetPreviewImage);
+                emit spotPositionChangedFromTarget( color, d->spot);
+            }
+            else
+            {
+                color = getSpotColor(OriginalImage);
+                emit spotPositionChangedFromOriginal( color, d->spot );
+            }
+       }
        else if (d->renderingPreview == PreviewBothImagesHorz)
        {
             if (d->spot.y() > d->rect.height()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
                 emit spotPositionChangedFromTarget( color, QPoint::QPoint(d->spot.x(), d->spot.y() - d->rect.height()/2 ));
+            }
+            else
+            {
+                color = getSpotColor(OriginalImage);
+                emit spotPositionChangedFromOriginal( color, d->spot );
+            }
+       }
+       else if (d->renderingPreview == PreviewBothImagesHorzCont)
+       {
+            if (d->spot.y() > d->rect.height()/2)
+            {
+                color = getSpotColor(TargetPreviewImage);
+                emit spotPositionChangedFromTarget( color, d->spot);
             }
             else
             {

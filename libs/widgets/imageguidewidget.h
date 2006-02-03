@@ -56,11 +56,13 @@ public:
 
     enum RenderingPreviewMode 
     {
-        PreviewOriginalImage=0,
-        PreviewBothImagesHorz,
-        PreviewBothImagesVert,
-        PreviewTargetImage,
-        NoPreviewMode
+        PreviewOriginalImage=0,     // Original image only.
+        PreviewBothImagesHorz,      // Horizontal with original and target duplicated.
+        PreviewBothImagesVert,      // Vertical with original and target duplicated.
+        PreviewBothImagesHorzCont,  // Horizontal with original and target in contiguous.
+        PreviewBothImagesVertCont,  // Vertical with original and target in contiguous.
+        PreviewTargetImage,         // Target image only.
+        NoPreviewMode               // Target image only without information displayed.
     };
 
     enum ColorPointSrc
