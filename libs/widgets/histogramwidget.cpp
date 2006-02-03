@@ -847,16 +847,23 @@ void HistogramWidget::paintEvent( QPaintEvent * )
           QString string = i18n("x:%1").arg(guidePos);
           QFontMetrics fontMt( string );       
           QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string); 
-          rect.setBottom(wHeight - 10);
-
+          p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+          rect.moveTop(1);
+             
           if (xGuide < wWidth/2)
           {
-             rect.moveLeft(xGuide + 3);
+             rect.moveLeft(xGuide);
+             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+             p1.drawRect(rect);
+             rect.moveLeft(xGuide+3);
              p1.drawText(rect, Qt::AlignLeft, string);
           }
           else
           {
-             rect.moveRight(xGuide - 3);
+             rect.moveRight(xGuide);
+             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+             p1.drawRect(rect);
+             rect.moveRight(xGuide-3);
              p1.drawText(rect, Qt::AlignRight, string);
           }
        }
