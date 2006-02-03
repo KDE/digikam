@@ -144,7 +144,7 @@ bool UMSCamera::getThumbnail(const QString& folder,
 {
     m_cancel = false;
 
-    // Trying to get thumbnail from Exif data.
+    // In 1st, we trying to get thumbnail from Exif data if we are JPEG file.
 
     KExifData exifData;
     
@@ -154,8 +154,21 @@ bool UMSCamera::getThumbnail(const QString& folder,
         if (!thumbnail.isNull())
            return true;
     }
+
+    // In 2th, we trying to get thumbnail from '.thm' files if we didn't manage to get
+    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
+    // Using this way is always more speed than using dcraw parse utility.
+    // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
+
+    QFileInfo fi(folder + "/" + itemName);
+
+    if (thumbnail.load(folder + "/" + fi.baseName() + ".thm"))
+    {
+        if (!thumbnail.isNull())
+           return true;
+    }
  
-   // Trying to get thumbnail from RAW file using dcraw parse utility.
+    // In 3rd we trying to get thumbnail from RAW files using dcraw parse utility.
 
     KTempFile thumbFile(QString::null, "camerarawthumb");
     thumbFile.setAutoDelete(true);
@@ -164,16 +177,21 @@ bool UMSCamera::getThumbnail(const QString& folder,
     if (thumbFile.status() == 0)
     {
         if (rawFileParser.getThumbnail(QFile::encodeName(folder + "/" + itemName),
-                                    QFile::encodeName(thumbFile.name())) == 0)
+                                       QFile::encodeName(thumbFile.name())) == 0)
         {
             thumbnail.load(thumbFile.name());
             if (!thumbnail.isNull())
                 return true;
         }
     }
-
-    // TODO: check for thm files if we didn't manage to get thumbnail from exif
     
+    // Finaly, we trying to get thumbnail using KDELib API. This way can take a while.
+    
+    thumbnail.load(folder + "/" + itemName);
+
+    if (!thumbnail.isNull())
+        return true;
+
     return false;
 }
 
