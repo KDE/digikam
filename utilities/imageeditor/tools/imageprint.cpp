@@ -44,6 +44,7 @@
 #include <qcolor.h>
 #include <qcombobox.h>
 #include <qstyle.h>
+#include <qpushbutton.h>
 
 // KDE lib includes
 
@@ -91,9 +92,25 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     m_autoRotate->setChecked( false );
     layout->addWidget( m_autoRotate );
 
-    m_colorManaged = new QCheckBox(i18n("Color Management"), this);
+    QVButtonGroup *cmgroup = new QVButtonGroup(i18n("Color Management Settings"), this);
+    layout->addWidget(cmgroup);
+
+    QHBox *cmbox = new QHBox(cmgroup);
+    layout->addWidget(cmbox);
+    cmbox->setSpacing(KDialog::spacingHint());
+//     QWidget *width = new QWidget(cmbox);
+//     width->setFixedWidth(m_cmPreferences->style().subRect( QStyle::SR_PushButtonContents, m_cmPreferences ).width());
+    
+
+    m_colorManaged = new QCheckBox(i18n("Color Management"), cmbox);
     m_colorManaged->setChecked( false );
-    layout->addWidget(m_colorManaged);
+//     layout->addWidget(m_colorManaged);
+
+    m_cmPreferences = new QPushButton(i18n("Settings"), cmbox);
+    
+//     width = new QWidget(cmbox);
+//     cmbox->setStretchFactor(width, 1);
+    
 
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
     group->setRadioButtonExclusive( true );

@@ -38,6 +38,7 @@
 
 class QCheckBox;
 class QRadioButton;
+class QPushButton;
 
 class KComboBox;
 class KDoubleNumInput;
@@ -97,6 +98,7 @@ private:
     QCheckBox       *m_blackwhite;
     QCheckBox       *m_autoRotate;
     QCheckBox       *m_colorManaged;
+    QPushButton     *m_cmPreferences;
 };
 
 }  // namespace Digikam
