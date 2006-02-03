@@ -551,6 +551,7 @@ void ChannelMixerDialog::slotDefault()
     
     m_histogramWidget->reset();
 
+    slotChannelChanged(RedChannelGains);
     slotEffect();
 }
 
