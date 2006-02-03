@@ -84,6 +84,7 @@ public:
     QPoint getSpotPosition(void);
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
+    int    getRenderingPreviewMode(void);
     void   resetSpotPosition(void);
     void   updatePreview(void);
 

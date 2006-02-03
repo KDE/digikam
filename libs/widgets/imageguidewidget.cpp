@@ -54,12 +54,12 @@ public:
 
     ImageGuideWidgetPriv()
     {
-        pixmap           = 0;
-        iface            = 0;
-        flicker          = 0;
-        timerID          = 0;
-        focus            = false;
-        renderingPreview = ImageGuideWidget::NoPreviewMode;
+        pixmap               = 0;
+        iface                = 0;
+        flicker              = 0;
+        timerID              = 0;
+        focus                = false;
+        renderingPreviewMode = ImageGuideWidget::NoPreviewMode;
     }
 
     int                  width;
@@ -69,7 +69,7 @@ public:
     int                  guideMode;
     int                  guideSize;
     int                  flicker;
-    int                  renderingPreview;
+    int                  renderingPreviewMode;
 
     bool                 sixteenBit;
     bool                 focus;
@@ -147,8 +147,13 @@ void ImageGuideWidget::resetSpotPosition(void)
 
 void ImageGuideWidget::slotChangeRenderingPreviewMode(int mode)
 {
-    d->renderingPreview = mode;
+    d->renderingPreviewMode = mode;
     updatePreview();
+}
+
+int ImageGuideWidget::getRenderingPreviewMode(void)
+{
+    return (d->renderingPreviewMode);
 }
 
 QPoint ImageGuideWidget::getSpotPosition(void)
@@ -208,7 +213,7 @@ void ImageGuideWidget::updatePixmap( void )
     
     d->pixmap->fill(colorGroup().background());
     
-    if (d->renderingPreview == PreviewOriginalImage)
+    if (d->renderingPreviewMode == PreviewOriginalImage)
     {
         p.drawPixmap(d->rect, d->preview.convertToPixmap());
 
@@ -220,12 +225,12 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreview == PreviewTargetImage || d->renderingPreview == NoPreviewMode)
+    else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
                         d->rect.width(), d->rect.height());
 
-        if (d->renderingPreview == PreviewTargetImage)
+        if (d->renderingPreviewMode == PreviewTargetImage)
         {
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -236,9 +241,9 @@ void ImageGuideWidget::updatePixmap( void )
             p.drawText(textRect, Qt::AlignCenter, text);
         }
     }
-    else if (d->renderingPreview == PreviewBothImagesVert || d->renderingPreview == PreviewBothImagesVertCont)
+    else if (d->renderingPreviewMode == PreviewBothImagesVert || d->renderingPreviewMode == PreviewBothImagesVertCont)
     {
-        if (d->renderingPreview == PreviewBothImagesVert)
+        if (d->renderingPreviewMode == PreviewBothImagesVert)
         {
             // Drawing the original image.
             p.drawPixmap(d->rect, d->preview.convertToPixmap());
@@ -296,9 +301,9 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreview == PreviewBothImagesHorz || d->renderingPreview == PreviewBothImagesHorzCont)
+    else if (d->renderingPreviewMode == PreviewBothImagesHorz || d->renderingPreviewMode == PreviewBothImagesHorzCont)
     {
-        if (d->renderingPreview == PreviewBothImagesHorz)
+        if (d->renderingPreviewMode == PreviewBothImagesHorz)
         {
             // Drawing the original image.
             p.drawPixmap(d->rect, d->preview.convertToPixmap());
@@ -471,17 +476,17 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
        DColor color;
        QPoint point = getSpotPosition();
 
-       if (d->renderingPreview == PreviewOriginalImage)
+       if (d->renderingPreviewMode == PreviewOriginalImage)
        {
             color = getSpotColor(OriginalImage);
             emit spotPositionChangedFromOriginal( color, d->spot );
        }
-       else if (d->renderingPreview == PreviewTargetImage || d->renderingPreview == NoPreviewMode)
+       else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
        {
             color = getSpotColor(TargetPreviewImage);
             emit spotPositionChangedFromTarget( color, d->spot );
        }
-       else if (d->renderingPreview == PreviewBothImagesVert)
+       else if (d->renderingPreviewMode == PreviewBothImagesVert)
        {
             if (d->spot.x() > d->rect.width()/2)
             {
@@ -494,7 +499,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
        }
-       else if (d->renderingPreview == PreviewBothImagesVertCont)
+       else if (d->renderingPreviewMode == PreviewBothImagesVertCont)
        {
             if (d->spot.x() > d->rect.width()/2)
             {
@@ -507,7 +512,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
        }
-       else if (d->renderingPreview == PreviewBothImagesHorz)
+       else if (d->renderingPreviewMode == PreviewBothImagesHorz)
        {
             if (d->spot.y() > d->rect.height()/2)
             {
@@ -520,7 +525,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
        }
-       else if (d->renderingPreview == PreviewBothImagesHorzCont)
+       else if (d->renderingPreviewMode == PreviewBothImagesHorzCont)
        {
             if (d->spot.y() > d->rect.height()/2)
             {

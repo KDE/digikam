@@ -50,7 +50,8 @@ public:
 
     ImageIface* imageIface();
     void updatePreview();
-    void resetSpotPosition(void);
+    void resetSpotPosition();
+    int  getRenderingPreviewMode();
 
 public slots:
         
@@ -65,7 +66,7 @@ signals:
     
 private slots:
     
-    void slotUpdateSPotInfo(const Digikam::DColor &col, const QPoint &point);
+    void slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point);
 
 private:
 

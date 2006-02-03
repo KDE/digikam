@@ -66,12 +66,16 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 {
     d = new ImageWidgetPriv;
 
+    // -------------------------------------------------------------
+    
     QLabel *title = new QLabel(i18n("Preview Mode:"), this);
     QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::marginHint(),
                                          KDialog::spacingHint());
 
     d->spotInfoLabel = new QLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
+
+    // -------------------------------------------------------------
     
     d->previewButtons = new QHButtonGroup(this);
     d->previewButtons->setExclusive(true);
@@ -141,6 +145,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     QWhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
+    // -------------------------------------------------------------
+    
     grid->addMultiCellWidget(title, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->previewButtons, 0, 0, 1, 1);
     grid->addMultiCellWidget(d->spotInfoLabel, 0, 0, 2, 2);
@@ -148,6 +154,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
     grid->setRowStretch(1, 10);
     grid->setColStretch(2, 10);
 
+    // -------------------------------------------------------------
+    
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
@@ -155,17 +163,19 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
             this, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )));
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotUpdateSPotInfo( const Digikam::DColor &, const QPoint & )));
+            this, SLOT(slotUpdateSpotInfo( const Digikam::DColor &, const QPoint & )));
     
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )));
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotUpdateSPotInfo( const Digikam::DColor &, const QPoint & )));
+            this, SLOT(slotUpdateSpotInfo( const Digikam::DColor &, const QPoint & )));
 
     connect(d->previewButtons, SIGNAL(released(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
 
+    // -------------------------------------------------------------
+    
     d->previewButtons->setButton(ImageGuideWidget::PreviewBothImagesVertCont);
     d->previewWidget->slotChangeRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
 }
@@ -195,12 +205,17 @@ void ImageWidget::slotChangeGuideSize(int size)
     d->previewWidget->slotChangeGuideSize(size);
 }
 
-void ImageWidget::resetSpotPosition(void)
+void ImageWidget::resetSpotPosition()
 {
     d->previewWidget->resetSpotPosition();
 }
 
-void ImageWidget::slotUpdateSPotInfo(const Digikam::DColor &col, const QPoint &point)
+int ImageWidget::getRenderingPreviewMode()
+{
+    return ( d->previewWidget->getRenderingPreviewMode() );
+}
+    
+void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point)
 {
     DColor color = col;
     d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6")
