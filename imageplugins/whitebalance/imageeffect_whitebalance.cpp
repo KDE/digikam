@@ -580,6 +580,8 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
        m_greenInput->setValue(t);
        m_pickTemperature->setOn(false);
     }
+    else
+       return;
        
     // restore previous rendering mode.
     m_previewWidget->setRenderingPreviewMode(m_currentPreviewMode);

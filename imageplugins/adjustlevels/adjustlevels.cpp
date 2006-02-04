@@ -428,7 +428,10 @@ void AdjustLevelDialog::slotSpotColorChanged(const Digikam::DColor &color)
        m_pickWhite->setOn(false);
     }
     else
+    {
        m_levelsHistogramWidget->setHistogramGuideByColor(color);
+       return;
+    }
 
     // Refresh the current levels config.
     slotChannelChanged(m_channelCB->currentItem());

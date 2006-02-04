@@ -384,7 +384,10 @@ void AdjustCurveDialog::slotSpotColorChanged(const Digikam::DColor &color)
        m_pickWhite->setOn(false);
     }
     else
+    {
        m_curvesWidget->setCurveGuide(color);
+       return;
+    }
 
     // Calculate Red, green, blue curves.
     
