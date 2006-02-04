@@ -58,6 +58,9 @@
 // Others
 
 #include LCMS_HEADER
+#if LCMS_VERSION < 114
+#define cmsTakeCopyright(profile) "Unknown"
+#endif // LCMS_VERSION < 114
 
 namespace Digikam
 {
