@@ -65,6 +65,9 @@
 // Local includes
 
 #include "imageprint.h"
+// #include "setup.h"
+// #include "setupicc.h"
+
 
 namespace Digikam
 {
@@ -75,6 +78,8 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
                           : KPrintDialogPage( parent, name )
 {
     setTitle( i18n("Image Settings") );
+
+    readSettings();
 
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( KDialog::marginHint() );
@@ -98,18 +103,22 @@ ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const c
     QHBox *cmbox = new QHBox(cmgroup);
     layout->addWidget(cmbox);
     cmbox->setSpacing(KDialog::spacingHint());
-//     QWidget *width = new QWidget(cmbox);
-//     width->setFixedWidth(m_cmPreferences->style().subRect( QStyle::SR_PushButtonContents, m_cmPreferences ).width());
-    
+    QWidget *wth = new QWidget(cmbox);
 
     m_colorManaged = new QCheckBox(i18n("Color Management"), cmbox);
     m_colorManaged->setChecked( false );
-//     layout->addWidget(m_colorManaged);
 
     m_cmPreferences = new QPushButton(i18n("Settings"), cmbox);
-    
-//     width = new QWidget(cmbox);
-//     cmbox->setStretchFactor(width, 1);
+
+    wth->setFixedWidth(m_colorManaged->style().subRect( QStyle::SR_CheckBoxIndicator, m_colorManaged ).width());
+    wth = new QWidget(cmbox);
+    cmbox->setStretchFactor(wth, 1);
+
+    connect( m_colorManaged, SIGNAL(toggled(bool)),
+            this, SLOT(slotAlertSettings( bool )) );
+
+    connect( m_cmPreferences, SIGNAL(clicked()),
+             this, SLOT(slotSetupDlg()) );
     
 
     QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
@@ -207,6 +216,38 @@ void ImageEditorPrintDialogPage::toggleScaling( bool enable )
     m_width->setEnabled( enable );
     m_height->setEnabled( enable );
     m_units->setEnabled( enable );
+}
+
+void ImageEditorPrintDialogPage::readSettings()
+{
+    ///TODO implement me
+    KConfig* config = kapp->config();
+
+    config->setGroup("Color Management");
+
+    m_cmEnabled = config->readBoolEntry("EnableCM", false);
+    m_inProfilePath = config->readPathEntry("InProfileFile");
+    m_outpuProfilePath = config->readPathEntry("ProofProfileFile");
+}
+
+void ImageEditorPrintDialogPage::slotSetupDlg()
+{
+   ///TODO implement me
+// //    Setup setup(this, 0, Setup::Icc);
+// //     
+// //     if (setup.exec() != QDialog::Accepted)
+// //         return;
+}
+
+void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
+{
+    if (t && !m_cmEnabled)
+    {
+        QString message = i18n("<p>Color Managemente is disabled</p> \
+                                <p>You can enabled now clicking on \"Settings\" button.</p>");
+        KMessageBox::information(this, message);
+        m_colorManaged->setChecked(!t);
+    }
 }
 
 // Image print class -----------------------------------------------------------------

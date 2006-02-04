@@ -86,6 +86,8 @@ public:
 private slots:
 
     void toggleScaling( bool enable );
+    void slotSetupDlg();
+    void slotAlertSettings(bool t);
 
 private:
 
@@ -99,6 +101,11 @@ private:
     QCheckBox       *m_autoRotate;
     QCheckBox       *m_colorManaged;
     QPushButton     *m_cmPreferences;
+    QString         m_inProfilePath;
+    QString         m_outpuProfilePath;
+    bool            m_cmEnabled;
+
+    void readSettings();
 };
 
 }  // namespace Digikam
