@@ -101,9 +101,11 @@ private:
     QCheckBox       *m_autoRotate;
     QCheckBox       *m_colorManaged;
     QPushButton     *m_cmPreferences;
-    QString         m_inProfilePath;
-    QString         m_outpuProfilePath;
-    bool            m_cmEnabled;
+    QString          m_inProfilePath;
+    QString          m_outpuProfilePath;
+    bool             m_cmEnabled;
+
+    QWidget         *m_parent;
 
     void readSettings();
 };

@@ -60,6 +60,7 @@ public:
     static bool         imagewindowCreated();
 
     void applySettings();
+    void setup(bool iccSetupPage=false);
 
 signals:
 
@@ -115,7 +116,6 @@ private slots:
     void slotChanged(bool, bool);
     void slotUpdateItemInfo();
 
-    void slotSetup();
     void slotContextMenu();
     
     void slotAssignTag(int tagID);

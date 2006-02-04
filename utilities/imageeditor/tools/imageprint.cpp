@@ -65,6 +65,7 @@
 // Local includes
 
 #include "imageprint.h"
+#include "editorwindow.h"
 // #include "setup.h"
 // #include "setupicc.h"
 
@@ -77,6 +78,7 @@ namespace Digikam
 ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
                           : KPrintDialogPage( parent, name )
 {
+    m_parent = parent;
     setTitle( i18n("Image Settings") );
 
     readSettings();
@@ -237,13 +239,16 @@ void ImageEditorPrintDialogPage::slotSetupDlg()
 // //     
 // //     if (setup.exec() != QDialog::Accepted)
 // //         return;
+
+    EditorWindow* editor = dynamic_cast<EditorWindow*>(m_parent);
+    editor->setup(true);
 }
 
 void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
 {
     if (t && !m_cmEnabled)
     {
-        QString message = i18n("<p>Color Managemente is disabled</p> \
+        QString message = i18n("<p>Color Management is disabled</p> \
                                 <p>You can enabled now clicking on \"Settings\" button.</p>");
         KMessageBox::information(this, message);
         m_colorManaged->setChecked(!t);

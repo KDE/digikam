@@ -66,6 +66,7 @@ public:
     ~ShowFoto();
     
     virtual void show();
+    void setup(bool iccSetupPage=false);
 
 private:
     
@@ -138,8 +139,6 @@ private slots:
     
     void slotChanged(bool, bool);
     void slotUpdateItemInfo();
-
-    void slotSetup();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
 

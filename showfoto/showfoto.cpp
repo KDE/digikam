@@ -577,9 +577,9 @@ void ShowFoto::show()
     KMainWindow::show();
 }
 
-void ShowFoto::slotSetup()
+void ShowFoto::setup(bool iccSetupPage)
 {
-    Setup setup(this);
+    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::EditorPage);
     
     if (setup.exec() != QDialog::Accepted)
         return;

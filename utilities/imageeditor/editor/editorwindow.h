@@ -61,7 +61,8 @@ public:
     ~EditorWindow();
 
     virtual void applySettings(){};
-
+    virtual void setup(bool iccSetupPage=false)=0;
+    
 signals:
 
     void signalSelectionChanged( QRect* );
@@ -132,6 +133,7 @@ protected:
     
     virtual void finishSaving(bool success);    
 
+    virtual void slotSetup()                  { setup(); };
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
@@ -188,7 +190,6 @@ protected slots:
     virtual void slotFirst()=0;
     virtual void slotLast()=0;
     virtual void slotUpdateItemInfo()=0;
-    virtual void slotSetup()=0;
 
 private slots:
 
