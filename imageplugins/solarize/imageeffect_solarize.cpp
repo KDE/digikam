@@ -56,68 +56,54 @@
 namespace DigikamSolarizeImagesPlugin
 {
 
-ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
-                    : KDialogBase(Plain, i18n("Solarize Photograph"),
-                                  Help|Ok|Cancel, Ok,
-                                  parent, 0, true, true),
-                      m_parent(parent)
+ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFrame* banner)
+                    : Digikam::ImageDlgBase(parent, title, "solarizeimage", false, false, banner)
 {
     // About data and help button.
 
-    m_about = new KAboutData("digikamimageplugins",
-                             I18N_NOOP("Solarize a Photograph"),
-                             digikamimageplugins_version,
-                             I18N_NOOP("A solarize image plugin for digiKam."),
-                             KAboutData::License_GPL,
-                             "(c) 2004-2005, Renchi Raju",
-                             0,
-                             "http://extragear.kde.org/apps/digikamimageplugins");
+    KAboutData *about = new KAboutData("digikamimageplugins",
+                            I18N_NOOP("Solarize a Photograph"),
+                            digikamimageplugins_version,
+                            I18N_NOOP("A solarize image plugin for digiKam."),
+                            KAboutData::License_GPL,
+                            "(c) 2004-2005, Renchi Raju\n(c) 2006, Gilles Caulier",
+                            0,
+                            "http://extragear.kde.org/apps/digikamimageplugins");
 
-    m_about->addAuthor("Renchi Raju", I18N_NOOP("Original Author and maintainer"),
-                       "renchi@pooh.tam.uiuc.edu");
+    about->addAuthor("Renchi Raju", I18N_NOOP("Original Author"),
+                     "renchi@pooh.tam.uiuc.edu");
     
-    m_about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
-                       "caulier dot gilles at free.fr");
+    about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
+                     "caulier dot gilles at free.fr");
 
-    m_helpButton = actionButton( Help );
-    KHelpMenu* helpMenu = new KHelpMenu(this, m_about, false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Plugin Handbook"), this, SLOT(slotHelp()), 0, -1, 0);
-    m_helpButton->setPopup( helpMenu->menu() );
+    setAboutData(about);
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                          i18n("<p>This is the solarize effect preview"));
 
-    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(plainPage(), i18n("Solarize Photograph"));    
-    topLayout->addWidget(headerFrame);
-
-    // -------------------------------------------------------------
-
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new Digikam::ImageGuideWidget(480, 320, frame, false);
-    QWhatsThis::add( m_previewWidget, i18n("<p>This is the solarize effect preview"));
-    l->addWidget(m_previewWidget, 0);
-    topLayout->addWidget(frame, 10);
+    setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay = new QHBoxLayout(topLayout);
-    QLabel *label = new QLabel(i18n("Intensity:"), plainPage());
-    m_numInput = new KDoubleNumInput(plainPage());
+    QWidget *gboxSettings = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
+
+    QLabel *label = new QLabel(i18n("Intensity:"), gboxSettings);
+    m_numInput = new KDoubleNumInput(gboxSettings);
     m_numInput->setPrecision(1);
     m_numInput->setRange(0.0, 100.0, 0.1, true);
-    hlay->addWidget(label, 1);
-    hlay->addWidget(m_numInput, 5);
+    grid->addMultiCellWidget(label, 0, 0, 0, 0);
+    grid->addMultiCellWidget(m_numInput, 1, 1, 0, 0);
 
-    resize(configDialogSize("Solarize Tool Dialog"));
+    grid->setRowStretch(2, 10);
+    setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
 
     connect(m_numInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -125,16 +111,8 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent)
 
 ImageEffect_Solarize::~ImageEffect_Solarize()
 {
-    saveDialogSize("Solarize Tool Dialog");
-
-    delete m_about;
     delete m_numInput;
     delete m_previewWidget;
-}
-
-void ImageEffect_Solarize::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("solarizeimage", "digikamimageplugins");
 }
 
 void ImageEffect_Solarize::slotEffect()

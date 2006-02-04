@@ -25,30 +25,29 @@
 #ifndef IMAGEEFFECT_SOLARIZE_H
 #define IMAGEEFFECT_SOLARIZE_H
 
-// KDE includes.
+// Digikam includes.
 
-#include <kdialogbase.h>
+#include <digikamheaders.h>
 
 class QPushButton;
 
 class KDoubleNumInput;
-class KAboutData;
 
 namespace Digikam
 {
-class ImageGuideWidget;
+class ImageWidget;
 }
 
 namespace DigikamSolarizeImagesPlugin
 {
 
-class ImageEffect_Solarize : public KDialogBase
+class ImageEffect_Solarize : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Solarize(QWidget *parent);
+    ImageEffect_Solarize(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_Solarize();
 
 protected:
@@ -57,19 +56,16 @@ protected:
 
 private:
 
-    QWidget                   *m_parent;
+    QWidget              *m_parent;
 
-    QPushButton               *m_helpButton;
+    QPushButton          *m_helpButton;
 
-    KDoubleNumInput           *m_numInput;
+    KDoubleNumInput      *m_numInput;
     
-    KAboutData                *m_about;
-    
-    Digikam::ImageGuideWidget *m_previewWidget;
+    Digikam::ImageWidget *m_previewWidget;
     
 private slots:
 
-    void slotHelp();
     void slotEffect();
     void slotOk();
 };

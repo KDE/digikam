@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_solarize.h"
 #include "imageplugin_solarize.h"
 
@@ -60,9 +61,12 @@ void ImagePlugin_Solarize::setEnabledActions(bool enable)
 
 void ImagePlugin_Solarize::slotSolarize()
 {
-    DigikamSolarizeImagesPlugin::ImageEffect_Solarize dlg(parentWidget());
+    QString title = i18n("Solarize Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamSolarizeImagesPlugin::ImageEffect_Solarize dlg(parentWidget(),
+                                 title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
-
 
 #include "imageplugin_solarize.moc"
