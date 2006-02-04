@@ -372,7 +372,7 @@ void EditorWindow::setupStandardActions()
 
     KStdAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
     KStdAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(slotSetup()), actionCollection());
+    KStdAction::preferences(this, SLOT(slotSetup()),              actionCollection());
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

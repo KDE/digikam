@@ -133,7 +133,6 @@ protected:
     
     virtual void finishSaving(bool success);    
 
-    virtual void slotSetup()                  { setup(); };
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };
     virtual void toggleActions(bool val)      { toggleStandardActions(val); };
@@ -182,6 +181,8 @@ protected slots:
     virtual void slotSavingStarted(const QString &filename);
         
     virtual void slotContextMenu();
+
+    virtual void slotSetup() { setup(); };
 
     virtual void slotFilePrint()=0;
     virtual void slotDeleteCurrentItem()=0;
