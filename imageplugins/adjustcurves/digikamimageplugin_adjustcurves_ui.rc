@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="1" name="digikamimageplugin_adjustcurves" >
+<kpartgui version="2" name="digikamimageplugin_adjustcurves" >
 
  <MenuBar>
 
@@ -16,7 +16,9 @@
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
-
- <ActionProperties/>
  
+ <ActionProperties>
+  <Action shortcut="Shift+C" name="imageplugin_adjustcurves" />
+ </ActionProperties>
+
 </kpartgui>
