@@ -482,10 +482,11 @@ void EditorWindow::slotEditKeys()
 {
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
-    ImagePluginLoader* loader = ImagePluginLoader::instance();
     
-    for (ImagePlugin* plugin = loader->pluginList().first();
-         plugin; plugin = loader->pluginList().next())
+    QPtrList<Digikam::ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+
+    for (Digikam::ImagePlugin* plugin = pluginList.first();
+         plugin; plugin = pluginList.next())
     {
         if (plugin)
         {
