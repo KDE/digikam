@@ -60,11 +60,15 @@ private:
 
     QString minimizeString( QString text, const QFontMetrics& metrics,
                             int maxWidth );
+    void readSettings();
+    
 private:
 
     DImg          m_image;
     KPrinter&     m_printer;
     QString       m_filename;
+    QString       m_inProfilePath;
+    QString       m_outputProfilePath;
 
 };
 
@@ -101,8 +105,7 @@ private:
     QCheckBox       *m_autoRotate;
     QCheckBox       *m_colorManaged;
     QPushButton     *m_cmPreferences;
-    QString          m_inProfilePath;
-    QString          m_outpuProfilePath;
+
     bool             m_cmEnabled;
 
     QWidget         *m_parent;

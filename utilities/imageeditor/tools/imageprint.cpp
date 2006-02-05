@@ -66,8 +66,7 @@
 
 #include "imageprint.h"
 #include "editorwindow.h"
-// #include "setup.h"
-// #include "setupicc.h"
+#include "icctransform.h"
 
 
 namespace Digikam
@@ -175,6 +174,7 @@ void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
     opts["app-imageeditor-scale-width"] = QString::number( m_width->value() );
     opts["app-imageeditor-scale-height"] = QString::number( m_height->value() );
     opts["app-imageeditor-auto-rotate"] = m_autoRotate->isChecked() ? t : f;
+    opts["app-imageeditor-color-managed"] = m_colorManaged->isChecked() ? t : f;
 }
 
 
@@ -191,6 +191,8 @@ void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
     m_scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
     m_scale->setChecked( opts["app-imageeditor-scale"] == t );
     m_autoRotate->setChecked( opts["app-imageeditor-auto-rotate"] == t );
+
+    m_colorManaged->setChecked( false );
 
     m_units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
 
@@ -228,18 +230,10 @@ void ImageEditorPrintDialogPage::readSettings()
     config->setGroup("Color Management");
 
     m_cmEnabled = config->readBoolEntry("EnableCM", false);
-    m_inProfilePath = config->readPathEntry("InProfileFile");
-    m_outpuProfilePath = config->readPathEntry("ProofProfileFile");
 }
 
 void ImageEditorPrintDialogPage::slotSetupDlg()
 {
-   ///TODO implement me
-// //    Setup setup(this, 0, Setup::Icc);
-// //     
-// //     if (setup.exec() != QDialog::Accepted)
-// //         return;
-
     EditorWindow* editor = dynamic_cast<EditorWindow*>(m_parent);
     editor->setup(true);
 }
@@ -279,7 +273,16 @@ bool ImagePrint::printImageWithQt()
 
     // TODO : perform all prepare to print transformations using DImg methods.
     // Paco, we will need to apply printer ICC profile here !
+    if (m_printer.option( "app-imageeditor-color-managed") != f)
+    {
+        IccTransform *transform = new IccTransform();
+        readSettings();
 
+        transform->setProfiles( m_inProfilePath, m_outputProfilePath );
+        transform->apply( m_image );
+    }
+    
+    
     QImage image2Print = m_image.copyQImage();
 
     // Black & white print ?
@@ -433,6 +436,16 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
     }
 
     return text;
+}
+
+void ImagePrint::readSettings()
+{
+     KConfig* config = kapp->config();
+
+    config->setGroup("Color Management");
+
+    m_inProfilePath = config->readPathEntry("InProfileFile");
+    m_outputProfilePath = config->readPathEntry("ProofProfileFile");
 }
 
 }  // namespace Digikam
