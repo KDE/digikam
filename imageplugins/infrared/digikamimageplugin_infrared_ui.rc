@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="1" name="digikamimageplugin_infrared" >
+<kpartgui version="2" name="digikamimageplugin_infrared" >
  <MenuBar>
 
   <Menu name="Filters" >
