@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ namespace DigikamAntiVignettingImagesPlugin
 
 ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString title, QFrame* banner)
                           : Digikam::ImageGuideDlg(parent, title, "antivignettings",
-                            false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
+                            false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner, true)
 {
     QString whatsThis;
     
