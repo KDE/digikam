@@ -13,7 +13,9 @@
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
-
- <ActionProperties/>
+ 
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_freerotation" />
+ </ActionProperties>
 
 </kpartgui>

@@ -14,6 +14,8 @@
   <text>Main Toolbar</text>
  </ToolBar>
 
- <ActionProperties/>
-
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_hotpixels" />
+ </ActionProperties>
+ 
 </kpartgui>

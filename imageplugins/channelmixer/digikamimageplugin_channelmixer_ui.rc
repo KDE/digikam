@@ -16,7 +16,9 @@
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
-
- <ActionProperties/>
+ 
+ <ActionProperties>
+  <Action shortcut="Shift+M" name="imageplugin_channelmixer" />
+ </ActionProperties>
 
 </kpartgui>

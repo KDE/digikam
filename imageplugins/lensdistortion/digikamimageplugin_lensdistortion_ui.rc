@@ -13,7 +13,9 @@
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
-
- <ActionProperties/>
+ 
+ <ActionProperties>
+  <Action shortcut="Shift+D" name="imageplugin_lensdistortion" />
+ </ActionProperties>
 
 </kpartgui>
