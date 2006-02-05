@@ -33,11 +33,13 @@ public:
     
     RawDecodingSettings()
     {
-        enableRAWQuality      = true;
-        RAWQuality            = 0;
-        RGBInterpolate4Colors = false;
-        cameraColorBalance    = true;
-        automaticColorBalance = true;
+        enableRAWQuality        = true;
+        RAWQuality              = 0;
+        RGBInterpolate4Colors   = false;
+        SuperCCDsecondarySensor = false;
+        unclipColors            = false;
+        cameraColorBalance      = true;
+        automaticColorBalance   = true;
     };
     
     ~RawDecodingSettings(){};
@@ -53,7 +55,15 @@ public:
     
     // RAW file decoding using RGB interpolation as four colors.
     bool RGBInterpolate4Colors;
+
+    // For Fuji Super CCD SR cameras, use the secondary sensors. In effect underexposing the image 
+    // by four stops to reveal detail in the highlights. 
+    bool SuperCCDsecondarySensor;
     
+    // By default, dcraw clips all colors to prevent pink highlights. Use -n -b 0.25 to leave 
+    // the image data completely unclipped.
+    bool unclipColors;
+
     // RAW file decoding using quality factor. 
     bool enableRAWQuality;
 

@@ -703,6 +703,8 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance    = config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.SuperCCDsecondarySensor = config->readBoolEntry("SuperCCDsecondarySensor", false);
+    m_IOFileSettings->rawDecodingSettings.unclipColors = config->readBoolEntry("UnclipColors", false);
     m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", false);
     m_IOFileSettings->rawDecodingSettings.RAWQuality            = config->readNumEntry("RAWQuality", 0);
 

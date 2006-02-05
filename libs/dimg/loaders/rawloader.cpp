@@ -4,7 +4,7 @@
  * Description : A digital camera RAW files loader for DImg 
  *               framework using dcraw program.
  *
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,6 +77,8 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -w : Use camera white balance, if possible  
     // -a : Use automatic white balance
+    // -n : Don't clip colors
+    // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
 
     command  = "dcraw -c -2 ";
@@ -89,7 +91,13 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
         command += "-f ";
-    
+
+    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
+        command += "-s ";
+
+    if (m_rawDecodingSettings.unclipColors)
+        command += "-n -b 0.25 ";    
+
     command += "-q ";
 
     if (m_rawDecodingSettings.enableRAWQuality)
@@ -210,6 +218,8 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
+    // -n : Don't clip colors
+    // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
 
     command  = "dcraw -c -4 ";
@@ -222,7 +232,13 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
         command += "-f ";
+
+    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
+        command += "-s ";
     
+    if (m_rawDecodingSettings.unclipColors)
+        command += "-n -b 0.25 ";    
+
     command += "-q ";
 
     if (m_rawDecodingSettings.enableRAWQuality)

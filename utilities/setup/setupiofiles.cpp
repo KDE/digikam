@@ -52,25 +52,29 @@ public:
 
     SetupIOFilesPriv()
     {
-        RAWquality            = 0;
-        JPEGcompression       = 0;
-        PNGcompression        = 0;
-        cameraColorBalance    = 0;
-        automaticColorBalance = 0;
-        enableRAWQuality      = 0;
-        RGBInterpolate4Colors = 0;
-        TIFFcompression       = 0;
+        RAWquality              = 0;
+        JPEGcompression         = 0;
+        PNGcompression          = 0;
+        cameraColorBalance      = 0;
+        automaticColorBalance   = 0;
+        enableRAWQuality        = 0;
+        SuperCCDsecondarySensor = 0;
+        unclipColors            = 0;
+        RGBInterpolate4Colors   = 0;
+        TIFFcompression         = 0;
     }
 
-    KIntNumInput *RAWquality;
-    KIntNumInput *JPEGcompression;
-    KIntNumInput *PNGcompression;
-    
+    QCheckBox    *SuperCCDsecondarySensor;    
+    QCheckBox    *unclipColors;
     QCheckBox    *cameraColorBalance;
     QCheckBox    *automaticColorBalance;
     QCheckBox    *enableRAWQuality;
     QCheckBox    *RGBInterpolate4Colors;
     QCheckBox    *TIFFcompression;
+
+    KIntNumInput *RAWquality;
+    KIntNumInput *JPEGcompression;
+    KIntNumInput *PNGcompression;
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
@@ -94,6 +98,12 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->cameraColorBalance = new QCheckBox(i18n("Camera color balance"), RAWfileOptionsGroup);
     QWhatsThis::add( d->cameraColorBalance, i18n("<p>Use the color balance specified by the camera. If this can't "
                                                 "be found, reverts to the default.<p>"));
+
+    d->unclipColors = new QCheckBox(i18n("Unclip colors"), RAWfileOptionsGroup);
+    QWhatsThis::add( d->unclipColors, i18n("<p>Enabled this option to leave the image color completely unclipped else all colors will be cliped to prevent pink highlights.<p>"));
+
+    d->SuperCCDsecondarySensor = new QCheckBox(i18n("Using Super CCD secondary sensors"), RAWfileOptionsGroup);
+    QWhatsThis::add( d->SuperCCDsecondarySensor, i18n("<p>For Fuji Super CCD SR cameras, use the secondary sensors, in effect underexposing the image by four stops to reveal detail in the highlights. For all other camera types this option is ignored.<p>"));
     
     d->enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
     QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images.<p>"));
@@ -168,6 +178,8 @@ void SetupIOFiles::applySettings()
     config->setGroup("ImageViewer Settings");
     config->writeEntry("RAWQuality", d->RAWquality->value());
     config->writeEntry("EnableRAWQuality", d->enableRAWQuality->isChecked());
+    config->writeEntry("SuperCCDsecondarySensor", d->SuperCCDsecondarySensor->isChecked());
+    config->writeEntry("UnclipColors", d->unclipColors->isChecked());
     config->writeEntry("AutomaticColorBalance", d->automaticColorBalance->isChecked());
     config->writeEntry("CameraColorBalance", d->cameraColorBalance->isChecked());
     config->writeEntry("RGBInterpolate4Colors", d->RGBInterpolate4Colors->isChecked());
@@ -184,6 +196,8 @@ void SetupIOFiles::readSettings()
     
     d->RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
     d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
+    d->SuperCCDsecondarySensor->setChecked(config->readBoolEntry("SuperCCDsecondarySensor", false));
+    d->unclipColors->setChecked(config->readBoolEntry("UnclipColors", false));
     d->cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
     d->automaticColorBalance->setChecked(config->readBoolEntry("CameraColorBalance", true));
     d->RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));
