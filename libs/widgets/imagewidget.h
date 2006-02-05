@@ -31,6 +31,7 @@
 // Local includes
 
 #include "dcolor.h"
+#include "imageguidewidget.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -45,14 +46,21 @@ Q_OBJECT
 
 public:
 
-    ImageWidget(QWidget *parent=0, const QString& previewWhatsThis=QString::null);
+    ImageWidget(QWidget *parent=0, const QString& previewWhatsThis=QString::null,
+                bool prevModeOptions=true, int guideMode=ImageGuideWidget::PickColorMode, 
+                bool guideVisible=true);
     ~ImageWidget();
 
     ImageIface* imageIface();
-    void updatePreview();
-    void resetSpotPosition();
-    int  getRenderingPreviewMode();
-    void setRenderingPreviewMode(int mode);
+
+    QPoint getSpotPosition(void);
+    DColor getSpotColor(int getColorFrom);
+    void   setSpotVisible(bool spotVisible, bool blink=false);    
+    int    getRenderingPreviewMode();
+    void   resetSpotPosition();
+    void   updatePreview();
+
+    void   setRenderingPreviewMode(int mode);
 
 public slots:
         

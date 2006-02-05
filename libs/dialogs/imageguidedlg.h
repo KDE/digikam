@@ -33,6 +33,7 @@
 
 // Local includes.
 
+#include "imagewidget.h"
 #include "imageguidewidget.h"
 #include "digikam_export.h"
 
@@ -61,7 +62,8 @@ public:
                   bool loadFileSettings=false, bool progress=true,
                   bool guideVisible=true,
                   int guideMode=Digikam::ImageGuideWidget::HVGuideMode,
-                  QFrame* bannerFrame=0);
+                  QFrame* bannerFrame=0,
+                  bool prevModeOptions=false);
     ~ImageGuideDlg();
 
     void setAboutData(KAboutData *about);
@@ -71,7 +73,7 @@ public:
         
     DImgThreadedFilter *m_threadedFilter;
     
-    ImageGuideWidget   *m_imagePreviewWidget;
+    ImageWidget        *m_imagePreviewWidget;
 
 public slots: 
 

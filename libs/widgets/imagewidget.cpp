@@ -37,7 +37,6 @@
 
 // Local includes
 
-#include "imageguidewidget.h"
 #include "imagewidget.h"
 
 namespace Digikam
@@ -49,6 +48,8 @@ public:
 
     ImageWidgetPriv()
     {
+        title          = 0;
+        spotInfoLabel  = 0;
         previewButtons = 0;
         previewWidget  = 0;
     }
@@ -56,18 +57,20 @@ public:
     QHButtonGroup    *previewButtons;
 
     QLabel           *spotInfoLabel;
+    QLabel           *title;
 
     ImageGuideWidget *previewWidget;
 };
 
-ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
+ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis, 
+                         bool prevModeOptions, int guideMode, bool guideVisible)
            : QWidget(parent)
 {
     d = new ImageWidgetPriv;
 
     // -------------------------------------------------------------
     
-    QLabel *title = new QLabel(i18n("Preview Mode:"), this);
+    d->title = new QLabel(i18n("Preview Mode:"), this);
     QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::marginHint(),
                                          KDialog::spacingHint());
 
@@ -145,18 +148,20 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
                                                          "the target image when the mouse is over image area, "
                                                          "else the original image." ) );
 
+    // -------------------------------------------------------------
+    
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
-    d->previewWidget = new ImageGuideWidget(480, 320, frame, true, 
-                                           ImageGuideWidget::PickColorMode,
+    d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
+                                           guideMode,
                                            Qt::red, 1, false);
     QWhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellWidget(title, 0, 0, 0, 0);
+    grid->addMultiCellWidget(d->title, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->previewButtons, 0, 0, 1, 1);
     grid->addMultiCellWidget(d->spotInfoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(frame, 1, 1, 0, 2);
@@ -185,7 +190,15 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis)
 
     // -------------------------------------------------------------
     
-    setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
+    if (prevModeOptions)
+        setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
+    else
+    {
+        setRenderingPreviewMode(ImageGuideWidget::PreviewTargetImage);
+        d->title->hide();
+        d->spotInfoLabel->hide();
+        d->previewButtons->hide();    
+    }     
 }
 
 ImageWidget::~ImageWidget()
@@ -216,6 +229,21 @@ void ImageWidget::slotChangeGuideSize(int size)
 void ImageWidget::resetSpotPosition()
 {
     d->previewWidget->resetSpotPosition();
+}
+
+QPoint ImageWidget::getSpotPosition(void)
+{
+    return ( d->previewWidget->getSpotPosition() );
+}
+
+DColor ImageWidget::getSpotColor(int getColorFrom)
+{
+    return ( d->previewWidget->getSpotColor(getColorFrom) );
+}
+
+void ImageWidget::setSpotVisible(bool spotVisible, bool blink)
+{
+    d->previewWidget->setSpotVisible(spotVisible, blink);
 }
 
 int ImageWidget::getRenderingPreviewMode()

@@ -101,7 +101,8 @@ public:
 
 ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                                    bool loadFileSettings, bool progress,
-                                   bool guideVisible, int guideMode, QFrame* bannerFrame)
+                                   bool guideVisible, int guideMode, QFrame* bannerFrame,
+                                   bool prevModeOptions)
              : KDialogBase(Plain, title,
                            Help|Default|User1|User2|User3|Ok|Cancel, Ok,
                            parent, 0, true, true,
@@ -136,23 +137,21 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    QFrame *frame = new QFrame(plainPage());
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
-    m_imagePreviewWidget = new Digikam::ImageGuideWidget(240, 160, frame, guideVisible, guideMode);
+    QString desc;
 
     if (guideVisible)
-        QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the the image filter effect preview. "
-                                                    "If you move the mouse cursor on this area, "
-                                                    "a vertical and horizontal dashed line will be draw "
-                                                    "to guide you in adjusting the filter settings. "
-                                                    "Press the left mouse button to freeze the dashed "
-                                                    "line's position."));
+        desc = i18n("<p>This is the the image filter effect preview. "
+                    "If you move the mouse cursor on this area, "
+                    "a vertical and horizontal dashed line will be draw "
+                    "to guide you in adjusting the filter settings. "
+                    "Press the left mouse button to freeze the dashed "
+                    "line's position.");
     else
-        QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the image filter effect preview."));
+        desc = i18n("<p>This is the image filter effect preview.");
 
-    l->addWidget(m_imagePreviewWidget, 0);
-    d->mainLayout->addMultiCellWidget(frame, 1, 2, 0, 0);
+    m_imagePreviewWidget = new Digikam::ImageWidget(plainPage(), desc, prevModeOptions, 
+                                                    guideMode, guideVisible);
+    d->mainLayout->addMultiCellWidget(m_imagePreviewWidget, 1, 2, 0, 0);
     d->mainLayout->setColStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
 
