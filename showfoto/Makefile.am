@@ -30,7 +30,8 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
-		   $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la 
+		   $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
+		   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 

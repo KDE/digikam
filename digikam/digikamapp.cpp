@@ -80,7 +80,7 @@ using KIO::UDSEntry;
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "scanlib.h"
-#include "loadingcache.h"
+#include "loadingcacheinterface.h"
 
 namespace Digikam
 {
@@ -157,7 +157,7 @@ DigikamApp::~DigikamApp()
     delete mAlbumManager;
     delete AlbumLister::instance();
 
-    Digikam::LoadingCache::cleanUp();
+    Digikam::LoadingCacheInterface::cleanUp();
 
     m_instance = 0;
 }
@@ -1085,6 +1085,9 @@ void DigikamApp::slotSetupCamera()
 
 void DigikamApp::slotSetupChanged()
 {
+    // raw loading options might have changed
+    Digikam::LoadingCacheInterface::cleanCache();
+
     if(mAlbumSettings->getAlbumLibraryPath() != mAlbumManager->getLibraryPath())
         mView->clearHistory();
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());

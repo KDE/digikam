@@ -81,6 +81,7 @@
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "savingcontextcontainer.h"
+#include "loadingcacheinterface.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
 
@@ -1127,6 +1128,7 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
             return;
         }
 
+        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
         m_canvas->setModified( false );
         
         saveIsComplete();
@@ -1169,6 +1171,7 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
             return;
         }
 
+        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
         m_canvas->setModified( false );
 
         saveAsIsComplete();

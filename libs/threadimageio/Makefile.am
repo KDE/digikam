@@ -6,7 +6,8 @@ libthreadimageio_la_SOURCES = loadsavethread.cpp \
                               managedloadsavethread.cpp \
                               sharedloadsavethread.cpp \
                               loadsavetask.cpp \
-                              loadingcache.cpp
+                              loadingcache.cpp \
+                              loadingcacheinterface.cpp
 
 libthreadimageio_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

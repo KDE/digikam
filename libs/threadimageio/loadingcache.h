@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2005-01-11
+ * Date  : 2006-01-11
  * Description : shared image loading and caching
  *
  * Copyright 2005 by Marcel Wiesweg
@@ -86,10 +86,14 @@ public:
     // Ownership of the DImg instance is passed to the cache.
     // When it cannot be put in the cache it is deleted.
     bool putImage(const QString &filePath, DImg *img);
+    void removeImage(const QString &filePath);
+    void removeImages();
 
     LoadingProcess *retrieveLoadingProcess(const QString &filePath);
     void addLoadingProcess(LoadingProcess *process);
     void removeLoadingProcess(LoadingProcess *process);
+
+    void setCacheSize(int megabytes);
 
 private:
 

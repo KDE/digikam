@@ -56,6 +56,7 @@
 #include "dimginterface.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
+#include "loadingcacheinterface.h"
 #include "canvas.h"
 
 namespace Digikam
@@ -447,6 +448,11 @@ void Canvas::slotImageSaved(const QString& filePath, bool success)
 {
     if (success && d->needEmitSignalChanged)
     {
+        // usually images are saved as temp images, so this needs to be done
+        // where the image is renamed.
+        // However, cannot principally hurt to do this here as well.
+        LoadingCacheInterface::cleanFromCache(filePath);
+
         d->needEmitSignalChanged = false;
         emit signalChanged(false, false);
     }

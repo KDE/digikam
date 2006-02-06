@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2005-01-11
+ * Date  : 2006-01-11
  * Description : shared image loading and caching
  *
  * Copyright 2005 by Marcel Wiesweg
@@ -56,8 +56,8 @@ LoadingCache::LoadingCache()
     d = new LoadingCachePriv;
 
     d->imageCache.setAutoDelete(true);
-    // 60 MB of cache
-    d->imageCache.setMaxCost(60 * 1024 * 1024);
+    // default value: 60 MB of cache
+    setCacheSize(60);
 }
 
 LoadingCache::~LoadingCache()
@@ -86,6 +86,16 @@ bool LoadingCache::putImage(const QString &filePath, DImg *img)
     }
 }
 
+void LoadingCache::removeImage(const QString &filePath)
+{
+    d->imageCache.remove(filePath);
+}
+
+void LoadingCache::removeImages()
+{
+    d->imageCache.clear();
+}
+
 bool LoadingCache::isCacheable(DImg *img)
 {
     // return whether image fits in cache
@@ -105,6 +115,11 @@ LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString &filePath)
 void LoadingCache::removeLoadingProcess(LoadingProcess *process)
 {
     d->loadingDict.remove(process->filePath());
+}
+
+void LoadingCache::setCacheSize(int megabytes)
+{
+    d->imageCache.setMaxCost(megabytes * 1024 * 1024);
 }
 
 //---------------------------------------------------------------------------------------------------

@@ -120,8 +120,10 @@ void SharedLoadingTask::execute()
         if ( (cachedImg = cache->retrieveImage(m_loadingDescription.filePath)) )
         {
             // image is found in image cache, loading is successfull
-            kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " found in image cache" << endl;
+            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " found in image cache" << endl;
             DImg img(*cachedImg);
+            if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+                img = img.copy();
             QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
             return;
         }
@@ -131,7 +133,7 @@ void SharedLoadingTask::execute()
             // Add this task to the list of listeners and
             // attach this thread to the other thread, wait until loading
             // has finished.
-            kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " currently loading, waiting..." << endl;
+            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " currently loading, waiting..." << endl;
             usedProcess->addListener(this);
             // break loop when either the loading has completed, or this task is being stopped
             while ( !usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
@@ -140,14 +142,14 @@ void SharedLoadingTask::execute()
             usedProcess->removeListener(this);
             // wake up the process which is waiting until all listeners have removed themselves
             lock.wakeAll();
-            kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
+            //kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
             return;
         }
         else
         {
             // Neither in cache, nor currently loading in different thread.
             // Load it here and now, add this LoadingProcess to cache list.
-            kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " neither in cache nor loading, loading it now." << endl;
+            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " neither in cache nor loading, loading it now." << endl;
             cache->addLoadingProcess(this);
             // Add this to the list of listeners
             addListener(this);
@@ -174,7 +176,7 @@ void SharedLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-        kdDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
+        //kdDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 
