@@ -131,12 +131,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
     QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
     layout->addWidget( pixmapLogo );
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_right", 
-                                     KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    QString directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_right",
-                                                 "digikamimageplugins_banner_right.png");
-    pixmapLogo->setPixmap( QPixmap( directory + "digikamimageplugins_banner_right.png" ) );
+    KGlobal::dirs()->addResourceType("digikamlogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("digikamlogo", "digikamlogo.png");
+    pixmapLogo->setPixmap( QPixmap( directory + "digikamlogo.png" ) );
     
     m_anim = new AnimWidget(frame);
     layout->addWidget( m_anim );

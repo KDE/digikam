@@ -37,7 +37,7 @@ class AnimWidget : public QWidget
     
 public:
 
-    AnimWidget(QWidget* parent, int size=20);
+    AnimWidget(QWidget* parent, int size=28);
     ~AnimWidget();
 
     void start();
