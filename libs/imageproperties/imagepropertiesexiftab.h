@@ -15,14 +15,23 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef IMAGEPROPERTIESEXIFTAB_H
 #define IMAGEPROPERTIESEXIFTAB_H
 
+// LibPNG includes.
+
+extern "C"
+{
+#include <png.h>
+}
+
 // Qt includes.
 
 #include <qwidget.h>
+#include <qcstring.h>
 
 // KDE includes.
 
@@ -47,6 +56,8 @@ public:
     ~ImagePropertiesEXIFTab();
 
     void setCurrentURL(const KURL& url=KURL::KURL(), int itemType=0);
+    void setCurrentData(const QByteArray& data=QByteArray(), 
+                        const QString& filename=QString::null, int itemType=0);
 
 signals:
     
@@ -58,6 +69,11 @@ signals:
 private slots:
 
     void slotLevelChanged(int);
+
+private:
+
+    QByteArray loadRawProfileFromPNG(const KURL& url);
+    uchar* readRawProfile(png_textp text, png_uint_32 *length, int ii);
 
 private:
 

@@ -135,6 +135,8 @@ public:
 
     QByteArray getICCProfil() const;
 
+    QByteArray getExif() const;
+
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key);
 

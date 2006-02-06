@@ -53,8 +53,9 @@ public:
     NavigateBarWidget(QWidget *parent=0, bool show=true);
     ~NavigateBarWidget();
     
-    void setFileName(QString filename=QString::null);
-    void setButtonsState(int itemType);
+    void    setFileName(QString filename=QString::null);
+    QString getFileName();
+    void    setButtonsState(int itemType);
 
 signals:
     

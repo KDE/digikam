@@ -3,7 +3,7 @@
  * Date  : 2005-11-01
  * Description : A PNG files loader for DImg framework.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,12 +25,14 @@
 
 #define PNG_BYTES_TO_CHECK 4
 
+// C Ansi includes.
+
 extern "C"
 {
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <png.h>
+#include <stdarg.h> 
 }
 
 // QT includes.
@@ -402,8 +404,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
     }
     
     // -------------------------------------------------------------------
-    // Get embbeded text data.
+    // Get embbeded text data and metadata.
     
+    QMap<int, QByteArray>& metaData = imageMetaData();
+    metaData.clear();
+
     png_text* text_ptr;
     int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
     
@@ -420,23 +425,59 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
     Warning          Warning of nature of content
     Source           Device used to create the image
     Comment          Miscellaneous comment; conversion from GIF comment
+
+    Extra Raw profiles tag are used by ImageMAgick and defines at this URL :
+    http://search.cpan.org/src/EXIFTOOL/Image-ExifTool-5.87/html/TagNames/PNG.html#TextualData
     */    
         
     for (int i = 0; i < num_comments; i++)
     {
-        imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
-        
+        // Check if we have a Raw profile embeded using ImageMagick technic.
+
+        if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) == 0 ||
+            memcmp(text_ptr[i].key, "Raw profile type APP1", 21) == 0)
+        {
+            png_uint_32 length;
+            uchar *data = readRawProfile(text_ptr, &length, i);
+            QByteArray ba(length);
+            memcpy(ba.data(), data, length);
+            metaData.insert(DImg::JPG_EXIF, ba);
+            delete [] data;
+        }
+        else if (memcmp(text_ptr[i].key, "Raw profile type iptc", 21) == 0)
+        {
+            png_uint_32 length;
+            uchar *data = readRawProfile(text_ptr, &length, i);
+            QByteArray ba(length);
+            memcpy(ba.data(), data, length);
+            metaData.insert(DImg::JPG_IPTC, ba);
+            delete [] data;
+        }
+        else if (memcmp(text_ptr[i].key, "Raw profile type jcom", 21) == 0)
+        {
+            png_uint_32 length;
+            uchar *data = readRawProfile(text_ptr, &length, i);
+            QByteArray ba(length);
+            memcpy(ba.data(), data, length);
+            metaData.insert(DImg::JPG_COM, ba);
+            delete [] data;
+        }
+        else
+        {
+            imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
+            
 #ifdef ENABLE_DEBUG_MESSAGES    
-        kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
+            kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
 #endif
-
-        QString key(text_ptr[i].key);
-
-        if (key == "Source")
-           imageSetCameraModel(key);
-
-        if (key == "Software")
-           imageSetCameraConstructor(key);
+    
+            QString key(text_ptr[i].key);
+    
+            if (key == "Model")
+                imageSetCameraModel(key);
+    
+            if (key == "Make")
+               imageSetCameraConstructor(key);
+        }
     }
     
     // -------------------------------------------------------------------
@@ -589,17 +630,59 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     for (EmbeddedTextMap::iterator it = map.begin(); it != map.end(); ++it)
     {
-        png_text text;
-
-        text.key  = (char*)it.key().ascii();
-        text.text = (char*)it.data().ascii();
+        if (it.key() != QString("Software"))
+        {
+            png_text text;
+            text.key  = (char*)it.key().ascii();
+            text.text = (char*)it.data().ascii();
 #ifdef ENABLE_DEBUG_MESSAGES    
-        kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
+            kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
-        text.compression = PNG_TEXT_COMPRESSION_zTXt;
-        png_set_text(png_ptr, info_ptr, &(text), 1);
+            text.compression = PNG_TEXT_COMPRESSION_zTXt;
+            png_set_text(png_ptr, info_ptr, &(text), 1);
+        }
     }
 
+    // Update 'Software' text tag to 'digiKam'.
+    png_text text;
+    text.key  = "Software";
+    text.text = "digiKam";
+#ifdef ENABLE_DEBUG_MESSAGES    
+    kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
+#endif
+    text.compression = PNG_TEXT_COMPRESSION_zTXt;
+    png_set_text(png_ptr, info_ptr, &(text), 1);
+    
+    // Write embeded Raw profiles metadata in text tag using ImageMagick technic.
+    
+    typedef QMap<int, QByteArray> MetaDataMap;
+    MetaDataMap metaDataMap = imageMetaData();
+    
+    for (MetaDataMap::iterator it = metaDataMap.begin(); it != metaDataMap.end(); ++it)
+    {
+        QByteArray ba = it.data();
+        
+        switch (it.key())
+        {
+            case(DImg::JPG_COM):
+            {
+                writeRawProfile(png_ptr, info_ptr, "jcom", ba.data(), (png_uint_32) ba.size());
+                break;
+            }
+            case(DImg::JPG_EXIF):
+            {
+                writeRawProfile(png_ptr, info_ptr, "exif", ba.data(), (png_uint_32) ba.size());
+                break;
+            }
+            case(DImg::JPG_IPTC):
+            {
+                writeRawProfile(png_ptr, info_ptr, "iptc", ba.data(), (png_uint_32) ba.size());
+                break;
+            }
+            default:
+                break;
+        }
+    }
 
     if (observer)
         observer->progressInfo(m_image, 0.2);
@@ -701,6 +784,247 @@ bool PNGLoader::hasAlpha() const
 bool PNGLoader::sixteenBit() const
 {
     return m_sixteenBit;    
+}
+
+uchar* PNGLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii)
+{
+    uchar          *info = 0;
+    
+    register long   i;
+    
+    register uchar *dp;
+    
+    register        png_charp sp;
+    
+    png_uint_32     nibbles;
+    
+    unsigned char unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,10,11,12,
+                              13,14,15};
+    
+    sp = text[ii].text+1;
+    
+    // Look for newline 
+
+    while (*sp != '\n')
+        sp++;
+    
+    // Look for length 
+
+    while (*sp == '\0' || *sp == ' ' || *sp == '\n')
+        sp++;
+    
+    *length = (png_uint_32) atol(sp);
+    
+    while (*sp != ' ' && *sp != '\n')
+        sp++;
+    
+    // Allocate space 
+    
+    if (*length == 0)
+    {
+        kdDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
+        return (false);
+    }
+    
+    info = new uchar[*length];
+    
+    if (!info)
+    {
+        kdDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
+        return (false);
+    }
+    
+    // Copy profile, skipping white space and column 1 "=" signs 
+
+    dp      = info;
+    nibbles = *length * 2;
+    
+    for (i = 0; i < (long) nibbles; i++)
+    {
+        while (*sp < '0' || (*sp > '9' && *sp < 'a') || *sp > 'f')
+        {
+            if (*sp == '\0')
+            {
+                kdDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
+                return (false);
+            }
+            
+            sp++;
+        }
+    
+        if (i%2 == 0)
+            *dp = (uchar) (16*unhex[(int) *sp++]);
+        else
+            (*dp++) += unhex[(int) *sp++];
+    }
+    
+    return info;
+}
+
+void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
+                                char *profile_data, png_uint_32 length)
+{
+    png_textp      text;
+    
+    register long  i;
+    
+    uchar         *sp;
+    
+    png_charp      dp;
+    
+    png_uint_32    allocated_length, description_length;
+    
+    uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    
+    kdDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length << endl;
+    
+    text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
+    description_length = strlen((const char *) profile_type);
+    allocated_length   = (png_uint_32) (length*2 + (length >> 5) + 20 + description_length);
+    
+    text[0].text   = (png_charp) png_malloc(ping,allocated_length);
+    text[0].key    = (png_charp) png_malloc(ping, (png_uint_32) 80);
+    text[0].key[0] = '\0';
+    
+    concatenateString(text[0].key, "Raw profile type ", 4096);
+    concatenateString(text[0].key, (const char *) profile_type, 62);
+    
+    sp = (uchar*)profile_data;
+    dp = text[0].text;
+    *dp++='\n';
+    
+    copyString(dp, (const char *) profile_type, allocated_length);
+    
+    dp += description_length;
+    *dp++='\n';
+    
+    formatString(dp, allocated_length-strlen(text[0].text), "%8lu ", length);
+    
+    dp += 8;
+    
+    for (i=0; i < (long) length; i++)
+    {
+        if (i%36 == 0)
+            *dp++='\n';
+
+        *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
+        *(dp++)=(char) hex[((*sp++ ) & 0x0f)]; 
+    }
+
+    *dp++='\n';
+    *dp='\0';
+    text[0].text_length = (png_size_t) (dp-text[0].text);
+    text[0].compression = -1;
+
+    if (text[0].text_length <= allocated_length)
+        png_set_text(ping, ping_info,text, 1);
+
+    png_free(ping, text[0].text);
+    png_free(ping, text[0].key);
+    png_free(ping, text);
+}
+
+size_t PNGLoader::concatenateString(char *destination, const char *source, const size_t length)
+{
+    register char       *q;
+    
+    register const char *p;
+    
+    register size_t      i;
+    
+    size_t               count;
+  
+    if ( !destination || !source || length == 0 )
+        return 0;
+
+    p = source;
+    q = destination;
+    i = length;
+
+    while ((i-- != 0) && (*q != '\0'))
+        q++;
+
+    count = (size_t) (q-destination);
+    i     = length-count;
+
+    if (i == 0)
+        return(count+strlen(p));
+
+    while (*p != '\0')
+    {
+        if (i != 1)
+        {
+            *q++=(*p);
+            i--;
+        }
+        p++;
+    }
+
+    *q='\0';
+    
+    return(count+(p-source));
+}
+
+size_t PNGLoader::copyString(char *destination, const char *source, const size_t length)
+{
+    register char       *q;
+    
+    register const char *p;
+    
+    register size_t      i;
+        
+    if ( !destination || !source || length == 0 )
+        return 0;
+
+    p = source;
+    q = destination;
+    i = length;
+
+    if ((i != 0) && (--i != 0))
+    {
+        do
+        {
+            if ((*q++=(*p++)) == '\0')
+                break;
+        } 
+        while (--i != 0);
+    }
+
+    if (i == 0)
+    {
+        if (length != 0)
+            *q='\0';
+  
+        while (*p++ != '\0');
+    }
+    
+    return((size_t) (p-source-1));
+}
+
+long PNGLoader::formatString(char *string, const size_t length, const char *format,...)
+{
+    long n;
+    
+    va_list operands;
+    
+    va_start(operands,format);
+    n = (long) formatStringList(string, length, format, operands);
+    va_end(operands);
+    return(n);
+}
+
+long PNGLoader::formatStringList(char *string, const size_t length, const char *format, va_list operands)
+{
+  int n = vsnprintf(string, length, format, operands);
+
+  if (n < 0)
+    string[length-1] = '\0';
+
+  return((long) n);
 }
 
 }  // NameSpace Digikam

@@ -18,9 +18,21 @@
  * 
  * ============================================================ */
 
+#define PNG_BYTES_TO_CHECK 4
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+}
+
 // Qt includes.
  
 #include <qlayout.h>
+#include <qfile.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qcombobox.h>
@@ -33,6 +45,7 @@
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kfileitem.h>
+#include <kdebug.h>
 
 // LibKExif includes.
 
@@ -100,7 +113,6 @@ ImagePropertiesEXIFTab::ImagePropertiesEXIFTab(QWidget* parent, bool navBar)
 
     connect(d->navigateBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-           
 
     // -- read config ---------------------------------------------------------
 
@@ -135,10 +147,37 @@ void ImagePropertiesEXIFTab::setCurrentURL(const KURL& url, int itemType)
     if (!d->exifWidget->getCurrentItemName().isNull())
         d->currentItem = d->exifWidget->getCurrentItemName();
     
-    d->exifWidget->loadFile(url.path());
+    QByteArray ba = loadRawProfileFromPNG(url.path());
+    if (ba.isNull())
+        d->exifWidget->loadFile(url.path());
+    else
+        setCurrentData(ba, url.filename(), itemType);
+
     d->exifWidget->setCurrentItem(d->currentItem);
     
     d->navigateBar->setFileName(url.filename());
+    d->navigateBar->setButtonsState(itemType);
+}
+
+void ImagePropertiesEXIFTab::setCurrentData(const QByteArray& data, const QString& filename, int itemType)
+{
+    if (data.isEmpty())
+    {
+       d->exifWidget->loadData(data.data(), data.size());
+       d->navigateBar->setFileName();
+       setEnabled(false);
+       return;
+    }
+
+    setEnabled(true);
+
+    if (!d->exifWidget->getCurrentItemName().isNull())
+        d->currentItem = d->exifWidget->getCurrentItemName();
+    
+    d->exifWidget->loadData(data.data(), data.size());
+    d->exifWidget->setCurrentItem(d->currentItem);
+    
+    d->navigateBar->setFileName(filename);
     d->navigateBar->setButtonsState(itemType);
 }
 
@@ -148,6 +187,180 @@ void ImagePropertiesEXIFTab::slotLevelChanged(int)
         d->exifWidget->setMode(KExifWidget::SIMPLE);
     else
         d->exifWidget->setMode(KExifWidget::FULL);
+}
+
+QByteArray ImagePropertiesEXIFTab::loadRawProfileFromPNG(const KURL& url)
+{
+    QByteArray ba;
+    png_uint_32  w32, h32;
+    FILE        *f;
+    int          bit_depth, color_type, interlace_type;
+    png_structp  png_ptr  = NULL;
+    png_infop    info_ptr = NULL;
+    
+    // -------------------------------------------------------------------
+    // Open the file
+    
+    f = fopen(QFile::encodeName(url.path()), "rb");
+    if ( !f )
+    {
+        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
+        return ba;
+    }
+
+    unsigned char buf[PNG_BYTES_TO_CHECK];
+
+    fread(buf, 1, PNG_BYTES_TO_CHECK, f);
+    if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
+    {
+        fclose(f);
+        return ba;
+    }
+    rewind(f);
+
+    // -------------------------------------------------------------------
+    // Initialize the internal structures
+    
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_ptr)
+    {
+        fclose(f);
+        return ba;
+    }
+
+    info_ptr = png_create_info_struct(png_ptr);
+    if (!info_ptr)
+    {
+        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        fclose(f);
+        return ba;
+    }
+
+    if (setjmp(png_ptr->jmpbuf))
+    {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        fclose(f);
+        return ba;
+    }
+
+    png_init_io(png_ptr, f);
+    
+    // -------------------------------------------------------------------
+    // Read all PNG info up to image data
+    
+    png_read_info(png_ptr, info_ptr);
+    
+    png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) (&w32),
+                 (png_uint_32 *) (&h32), &bit_depth, &color_type,
+                 &interlace_type, NULL, NULL);
+
+    if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        png_set_tRNS_to_alpha(png_ptr);
+
+    png_read_update_info(png_ptr, info_ptr);
+
+    // Check if we have a Raw profile embedded using ImageMagick technic.
+    
+    png_text* text_ptr;
+    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+
+    for (int i = 0; i < num_comments; i++)
+    {
+        if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) == 0)
+        {
+            png_uint_32 length;
+            uchar *data = readRawProfile(text_ptr, &length, i);
+            ba.resize(length);
+            memcpy(ba.data(), data, length);
+            delete [] data;
+        }
+    }
+    
+    // -------------------------------------------------------------------
+    
+    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+    fclose(f);
+    
+    return ba;
+}
+
+uchar* ImagePropertiesEXIFTab::readRawProfile(png_textp text, png_uint_32 *length, int ii)
+{
+    uchar          *info = 0;
+    
+    register long   i;
+    
+    register uchar *dp;
+    
+    register        png_charp sp;
+    
+    png_uint_32     nibbles;
+    
+    unsigned char unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,10,11,12,
+                              13,14,15};
+    
+    sp = text[ii].text+1;
+    
+    // Look for newline 
+
+    while (*sp != '\n')
+        sp++;
+    
+    // Look for length 
+
+    while (*sp == '\0' || *sp == ' ' || *sp == '\n')
+        sp++;
+    
+    *length = (png_uint_32) atol(sp);
+    
+    while (*sp != ' ' && *sp != '\n')
+        sp++;
+    
+    // Allocate space 
+    
+    if (*length == 0)
+    {
+        kdDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
+        return (false);
+    }
+    
+    info = new uchar[*length];
+    
+    if (!info)
+    {
+        kdDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
+        return (false);
+    }
+    
+    // Copy profile, skipping white space and column 1 "=" signs 
+
+    dp      = info;
+    nibbles = *length * 2;
+    
+    for (i = 0; i < (long) nibbles; i++)
+    {
+        while (*sp < '0' || (*sp > '9' && *sp < 'a') || *sp > 'f')
+        {
+            if (*sp == '\0')
+            {
+                kdDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
+                return (false);
+            }
+            
+            sp++;
+        }
+    
+        if (i%2 == 0)
+            *dp = (uchar) (16*unhex[(int) *sp++]);
+        else
+            (*dp++) += unhex[(int) *sp++];
+    }
+    
+    return info;
 }
 
 }  // NameSpace Digikam

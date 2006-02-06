@@ -165,7 +165,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     {
         if (tab == m_exifTab && !m_dirtyExifTab)
         {
-            m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            if (m_image)
+                m_exifTab->setCurrentData(m_image->getExif(), m_currentURL.fileName(),
+                                          NavigateBarWidget::ItemCurrent);
+            else
+                m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+
             m_dirtyExifTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
@@ -191,7 +196,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         
         if (tab == m_exifTab && !m_dirtyExifTab)
         {
-            m_exifTab->setCurrentURL(m_currentURL, currentItemType);
+            if (m_image)
+                m_exifTab->setCurrentData(m_image->getExif(), m_currentURL.fileName(),
+                                          currentItemType);
+            else
+                m_exifTab->setCurrentURL(m_currentURL, currentItemType);
+
             m_dirtyExifTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)

@@ -52,7 +52,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
     m_dirtyExifTab  = false;
     m_dirtyColorTab = false;
     
-    m_exifTab      = new ImagePropertiesEXIFTab(parent, false);
+    m_exifTab  = new ImagePropertiesEXIFTab(parent, false);
     m_colorTab = new ImagePropertiesColorsTab(parent, 0, false);
     
     setSplitter(splitter);

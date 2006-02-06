@@ -34,6 +34,7 @@ extern "C"
 // Qt includes.
 
 #include <qfile.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -42,9 +43,9 @@ extern "C"
 // Local includes.
 
 #include "dcraw_parse.h"
+#include "pngloader.h"
 #include "jpegloader.h"
 #include "tiffloader.h"
-#include "pngloader.h"
 #include "ppmloader.h"
 #include "rawloader.h"
 #include "qimageloader.h"
@@ -384,6 +385,19 @@ bool DImg::isReadOnly() const
 QByteArray DImg::getICCProfil() const
 {
     return m_priv->ICCProfil;
+}
+
+QByteArray DImg::getExif() const
+{
+    typedef QMap<int, QByteArray> MetaDataMap;
+    
+    for (MetaDataMap::iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
+    {
+        if (it.key() == JPG_EXIF)
+            return it.data();
+    }
+
+    return QByteArray();
 }
 
 uint DImg::numBytes() const

@@ -23,6 +23,7 @@
 // Qt includes.
 
 #include <qwidget.h>
+#include <qcstring.h>
 
 // KDE includes.
 

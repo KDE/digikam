@@ -119,6 +119,11 @@ void NavigateBarWidget::setFileName(QString filename)
     d->filename->setText( filename );
 }
 
+QString NavigateBarWidget::getFileName()
+{
+    return ( d->filename->text() );
+}
+
 void NavigateBarWidget::setButtonsState(int itemType)
 {
     if (itemType == ItemFirst)
