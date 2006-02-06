@@ -271,7 +271,7 @@ bool UMSCamera::downloadItem(const QString& folder,
 bool UMSCamera::deleteItem(const QString& folder,
                            const QString& itemName)
 {
-    d->cancel = false;
+    m_cancel = false;
 
     // Any camera provide THM (thumbnail) file with real image. We need to remove it also.
 
