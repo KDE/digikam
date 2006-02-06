@@ -39,11 +39,13 @@ extern "C"
 #include <qpopupmenu.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qframe.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qprogressbar.h>
+#include <qtooltip.h>
 #include <qtimer.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -58,9 +60,11 @@ extern "C"
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
+#include <kstandarddirs.h>
 #include <khelpmenu.h>
 #include <kdebug.h>
 #include <kcalendarsystem.h>
+#include <kurllabel.h>
 
 // Local includes.
 
@@ -92,8 +96,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     QGroupBox* viewBox = new QGroupBox(title, this);
     viewBox->setColumnLayout(0, Qt::Vertical);
 
-    QGridLayout* viewBoxLayout =
-        new QGridLayout(viewBox->layout(), 2, 4, 5);
+    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 2, 4, 5);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 3 );
     viewBoxLayout->setColStretch( 2, 1 );
@@ -103,9 +106,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     viewBoxLayout->addMultiCellWidget(m_view, 0, 0, 0, 3);
 
     m_cancelBtn = new QToolButton(viewBox);
-    QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop",
-                                                       KIcon::Toolbar,
-                                                       22);
+    QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop", KIcon::Toolbar, 22);
     m_cancelBtn->setText(i18n("Cancel"));
     m_cancelBtn->setIconSet(iconSet);
     m_cancelBtn->setEnabled(false);
@@ -116,8 +117,31 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_progress = new QProgressBar(viewBox);
     viewBoxLayout->addWidget(m_progress, 1, 2);
     m_progress->hide();
-    m_anim = new AnimWidget(viewBox);
-    viewBoxLayout->addWidget(m_anim, 1, 3);
+
+    QFrame *frame = new QFrame(viewBox);
+    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QHBoxLayout* layout = new QHBoxLayout( frame );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
+
+    KURLLabel *pixmapLogo = new KURLLabel( frame );
+    pixmapLogo->setText(QString::null);
+    pixmapLogo->setURL("http://www.digikam.org");
+    pixmapLogo->setScaledContents( false );
+    pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
+    layout->addWidget( pixmapLogo );
+    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_right", 
+                                     KGlobal::dirs()->kde_default("data") +
+                                     "digikamimageplugins/data");
+    QString directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_right",
+                                                 "digikamimageplugins_banner_right.png");
+    pixmapLogo->setPixmap( QPixmap( directory + "digikamimageplugins_banner_right.png" ) );
+    
+    m_anim = new AnimWidget(frame);
+    layout->addWidget( m_anim );
+
+    viewBoxLayout->addWidget(frame, 1, 3);
     
     mainLayout->addWidget(viewBox);
 
@@ -215,22 +239,33 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     // -------------------------------------------------------------------------
     
     connect(m_closeBtn, SIGNAL(clicked()),
-            SLOT(close()));
+            this, SLOT(close()));
+
     connect(m_advBtn, SIGNAL(clicked()),
-            SLOT(slotToggleAdvanced()));
+            this, SLOT(slotToggleAdvanced()));
+
+    connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processURL(const QString&)));     
+
+    // -------------------------------------------------------------------------
 
     connect(m_view, SIGNAL(signalSelected(bool)),
-            SLOT(slotItemsSelected(bool)));
+            this, SLOT(slotItemsSelected(bool)));
+
     connect(m_view, SIGNAL(signalFileView(CameraIconViewItem*)),
-            SLOT(slotFileView(CameraIconViewItem*)));
+            this, SLOT(slotFileView(CameraIconViewItem*)));
+
     connect(m_view, SIGNAL(signalFileProperties(CameraIconViewItem*)),
-            SLOT(slotFileProps(CameraIconViewItem*)));
+            this, SLOT(slotFileProps(CameraIconViewItem*)));
+
     connect(m_view, SIGNAL(signalFileExif(CameraIconViewItem*)),
-            SLOT(slotFileExif(CameraIconViewItem*)));
+            this, SLOT(slotFileExif(CameraIconViewItem*)));
+
     connect(m_view, SIGNAL(signalDownload()),
-            SLOT(slotDownloadSelected()));
+            this, SLOT(slotDownloadSelected()));
+
     connect(m_view, SIGNAL(signalDelete()),
-            SLOT(slotDeleteSelected()));
+            this, SLOT(slotDeleteSelected()));
 
     // -- Read settings --------------------------------------------------
 
@@ -241,28 +276,35 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_controller = new CameraController(this, model, port, path);
 
     connect(m_controller, SIGNAL(signalConnected(bool)),
-            SLOT(slotConnected(bool)));
+            this, SLOT(slotConnected(bool)));
+
     connect(m_controller, SIGNAL(signalInfoMsg(const QString&)),
             m_status, SLOT(setText(const QString&)));
+
     connect(m_controller, SIGNAL(signalErrorMsg(const QString&)),
-            SLOT(slotErrorMsg(const QString&)));
+            this, SLOT(slotErrorMsg(const QString&)));
+
     connect(m_controller, SIGNAL(signalBusy(bool)),
-            SLOT(slotBusy(bool)));
+            this, SLOT(slotBusy(bool)));
+
     connect(m_controller, SIGNAL(signalFolderList(const QStringList&)),
-            SLOT(slotFolderList(const QStringList&)));
+            this, SLOT(slotFolderList(const QStringList&)));
+
     connect(m_controller, SIGNAL(signalFileList(const GPItemInfoList&)),
-            SLOT(slotFileList(const GPItemInfoList&)));
-    connect(m_controller, SIGNAL(signalThumbnail(const QString&,
-                                                 const QString&,
-                                                 const QImage&)),
-            SLOT(slotThumbnail(const QString&, const QString&,
-                               const QImage&)));
+            this, SLOT(slotFileList(const GPItemInfoList&)));
+
+    connect(m_controller, SIGNAL(signalThumbnail(const QString&, const QString&, const QImage&)),
+            this, SLOT(slotThumbnail(const QString&, const QString&, const QImage&)));
+
     connect(m_controller, SIGNAL(signalDownloaded(const QString&, const QString&)),
-            SLOT(slotDownloaded(const QString&, const QString&)));
+            this, SLOT(slotDownloaded(const QString&, const QString&)));
+
     connect(m_controller, SIGNAL(signalSkipped(const QString&, const QString&)),
-            SLOT(slotSkipped(const QString&, const QString&)));
+            this, SLOT(slotSkipped(const QString&, const QString&)));
+
     connect(m_controller, SIGNAL(signalDeleted(const QString&, const QString&)),
-            SLOT(slotDeleted(const QString&, const QString&)));
+            this, SLOT(slotDeleted(const QString&, const QString&)));
+
     connect(m_cancelBtn, SIGNAL(clicked()),
             m_controller, SLOT(slotCancel()));
 
@@ -272,6 +314,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
 CameraUI::~CameraUI()
 {
+}
+
+void CameraUI::processURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 bool CameraUI::isBusy() const

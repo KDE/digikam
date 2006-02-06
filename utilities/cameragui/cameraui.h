@@ -78,33 +78,7 @@ private:
                          const QDate& date,
                          QString& errMsg);
     void addFileExtension(const QString& ext);
-    
-    CameraIconView*   m_view;
-
-    QPushButton*      m_helpBtn;
-    QPushButton*      m_closeBtn;
-    QPushButton*      m_downloadBtn;
-    QPushButton*      m_deleteBtn;
-    QPopupMenu*       m_downloadMenu;
-    QPopupMenu*       m_deleteMenu;
-    QPushButton*      m_advBtn;
-    QToolButton*      m_cancelBtn;
-
-    bool              m_showAdvanced;
-    QVBox*            m_advBox;
-    RenameCustomizer* m_renameCustomizer;
-    QCheckBox*        m_autoRotateCheck;
-    QCheckBox*        m_autoAlbumCheck;
-    
-    QLabel*           m_status;
-    AnimWidget*       m_anim;
-    bool              m_busy;
-    QProgressBar*     m_progress;
-
-    CameraController* m_controller;
-    
-    KURL              m_lastDestURL;
-    QStringList       m_foldersToScan;
+    void processURL(const QString& url);
 
 private slots:
 
@@ -140,6 +114,44 @@ signals:
     
     void signalLastDestination(const KURL&);
     void signalAlbumSettingsChanged();
+
+private:
+    
+    bool              m_showAdvanced;
+    bool              m_busy;
+
+    QStringList       m_foldersToScan;
+
+    QPushButton*      m_helpBtn;
+    QPushButton*      m_closeBtn;
+    QPushButton*      m_downloadBtn;
+    QPushButton*      m_deleteBtn;
+    QPushButton*      m_advBtn;
+
+    QPopupMenu*       m_downloadMenu;
+    QPopupMenu*       m_deleteMenu;
+
+    QToolButton*      m_cancelBtn;
+
+    QVBox*            m_advBox;
+
+    QCheckBox*        m_autoRotateCheck;
+    QCheckBox*        m_autoAlbumCheck;
+
+    QLabel*           m_status;
+
+    QProgressBar*     m_progress;
+
+    KURL              m_lastDestURL;
+
+    CameraController* m_controller;
+
+    CameraIconView*   m_view;
+
+    RenameCustomizer* m_renameCustomizer;
+
+    AnimWidget*       m_anim;
+    
 };
 
 }  // namespace Digikam

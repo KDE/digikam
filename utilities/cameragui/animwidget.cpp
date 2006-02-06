@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
+#include <qcolor.h>
 #include <qtimer.h>
 
 // Local includes.
@@ -43,8 +44,9 @@ AnimWidget::AnimWidget(QWidget* parent, int size )
     setFixedSize(m_size, m_size);
 
     m_timer = new QTimer();
+    
     connect(m_timer, SIGNAL(timeout()),
-            SLOT(slotTimeout()));
+            this, SLOT(slotTimeout()));
 }
 
 AnimWidget::~AnimWidget()
@@ -68,7 +70,7 @@ void AnimWidget::stop()
 
 void AnimWidget::paintEvent(QPaintEvent*)
 {
-    m_pix->fill(colorGroup().background());
+    m_pix->fill(QColor(201, 208, 255));
     QPainter p(m_pix);
 
     p.translate(m_size/2, m_size/2);
@@ -88,7 +90,6 @@ void AnimWidget::paintEvent(QPaintEvent*)
         p.drawLine(m_size/2-4,0,m_size/2-2,0);
         p.rotate(30);
     }
-
     
     p.end();
     bitBlt(this, 0, 0, m_pix);
