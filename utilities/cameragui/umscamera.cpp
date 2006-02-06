@@ -185,11 +185,16 @@ bool UMSCamera::getThumbnail(const QString& folder,
 
     QFileInfo fi(folder + "/" + itemName);
 
-    if (thumbnail.load(folder + "/" + fi.baseName() + ".thm"))
+    if (thumbnail.load(folder + "/" + fi.baseName() + ".thm"))        // Lowercase
     {
         if (!thumbnail.isNull())
            return true;
     }
+    else if (thumbnail.load(folder + "/" + fi.baseName() + ".THM"))   // Uppercase
+    {
+        if (!thumbnail.isNull())
+           return true;
+    }     
 
     // In 3rd we trying to get thumbnail from RAW files using dcraw parse utility.
 
@@ -295,6 +300,21 @@ bool UMSCamera::deleteItem(const QString& folder,
 {
     d->cancel = false;
 
+    // Any camera provide THM (thumbnail) file with real image. We need to remove it also.
+
+    QFileInfo fi(folder + "/" + itemName);
+
+    QFileInfo thmLo(folder + "/" + fi.baseName() + ".thm");          // Lowercase
+
+    if (thmLo.exists())           
+        ::unlink(QFile::encodeName(thmLo.filePath()));
+
+    QFileInfo thmUp(folder + "/" + fi.baseName() + ".thm");          // Uppercase
+
+    if (thmUp.exists())           
+        ::unlink(QFile::encodeName(thmUp.filePath()));
+
+    // Remove the real image.
     return (::unlink(QFile::encodeName(folder + "/" + itemName)) == 0);
 }
 
