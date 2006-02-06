@@ -77,13 +77,12 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
     pixmapLabelRight->setPaletteBackgroundColor( QColor(201, 208, 255) );
     QToolTip::add(pixmapLabelRight, i18n("Visit digiKam project website"));
     layout->addWidget( pixmapLabelRight );
-    KGlobal::dirs()->addResourceType("digikamimageplugins_banner_right", 
+    KGlobal::dirs()->addResourceType("digikamlogo", 
                                      KGlobal::dirs()->kde_default("data") +
-                                     "digikamimageplugins/data");
-    directory = KGlobal::dirs()->findResourceDir("digikamimageplugins_banner_right",
-                                                 "digikamimageplugins_banner_right.png");
+                                     "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("digikamlogo", "digikamlogo.png");
     
-    pixmapLabelRight->setPixmap( QPixmap( directory + "digikamimageplugins_banner_right.png" ) );
+    pixmapLabelRight->setPixmap( QPixmap( directory + "digikamlogo.png" ) );
     
     // -------------------------------------------------------------
     
