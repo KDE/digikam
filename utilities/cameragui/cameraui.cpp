@@ -242,7 +242,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
             this, SLOT(slotToggleAdvanced()));
 
     connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processURL(const QString&)));     
+            this, SLOT(slotProcessURL(const QString&)));     
 
     // -------------------------------------------------------------------------
 
@@ -313,7 +313,7 @@ CameraUI::~CameraUI()
 {
 }
 
-void CameraUI::processURL(const QString& url)
+void CameraUI::slotProcessURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
 }

@@ -78,11 +78,11 @@ private:
                          const QDate& date,
                          QString& errMsg);
     void addFileExtension(const QString& ext);
-    void processURL(const QString& url);
 
 private slots:
 
     void slotHelp();
+    void slotProcessURL(const QString& url);
 
     void slotConnected(bool val);
     void slotBusy(bool val);
