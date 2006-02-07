@@ -214,7 +214,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
 
         isReadOnly    = d->image.isReadOnly();
         valRet        = true;
-
+        
         if (d->cmSettings)
         {
             if (d->cmSettings->askOrApplySetting)
@@ -241,6 +241,9 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 {
                     QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + "</p>";
                     
+                    // To repaint image in canvas before to ask about to apply ICC profile.
+                    emit signalImageLoaded(d->filename, valRet, isReadOnly);
+                    
                     if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                     {
                         kdDebug() << "Pressed YES" << endl;
@@ -256,7 +259,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 
                 if (apply)
                 {
-                                    trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
+                    trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
                 }
                 else
@@ -266,6 +269,9 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
                         QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
+
+                        // To repaint image in canvas before to ask about to apply ICC profile.
+                        emit signalImageLoaded(d->filename, valRet, isReadOnly);
     
                         if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                         {
@@ -291,6 +297,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     }
 
     emit signalImageLoaded(d->filename, valRet, isReadOnly);
+    
     //TODO: undo manager was cleared. Is it correct to emit this here?
     emit signalModified(false, false);
 }
