@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
     aboutData.addAuthor ( "Caulier Gilles",
                           I18N_NOOP("Developer"),
-                          "caulier dot gilles at free.fr",
+                          "caulier dot gilles at kdemail dot net",
                           "http://caulier.gilles.free.fr");
 
     aboutData.addAuthor ( "Joern Ahrens",
