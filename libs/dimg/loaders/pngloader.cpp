@@ -29,11 +29,14 @@
 
 extern "C"
 {
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <stdarg.h> 
 }
+
+// C++  includes.
+
+#include <cstdlib>
+#include <cstdio>
 
 // QT includes.
 
@@ -46,6 +49,7 @@ extern "C"
 
 // Local includes.
 
+#include "version.h"
 #include "dimg.h"
 #include "pngloader.h"
 
@@ -644,10 +648,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     // Update 'Software' text tag to 'digiKam'.
+    QString software("digiKam ");
+    software.append(digikam_version);
     png_text text;
     text.key  = "Software";
-    text.text = "digiKam";
-#ifdef ENABLE_DEBUG_MESSAGES    
+    text.text = (char *)software.ascii();
+#ifdef ENABLE_DEBUG_MESSAGES
     kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
     text.compression = PNG_TEXT_COMPRESSION_zTXt;

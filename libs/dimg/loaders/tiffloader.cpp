@@ -29,12 +29,9 @@
     #define TIFFTAG_EXIFIFD     34665 /* Pointer to EXIF private directory */
 #endif
 
-// C ansi includes.
+// C++ includes.
 
-extern "C" 
-{
-#include <stdio.h>
-}
+#include <cstdio>
 
 // Qt includes.
 
@@ -46,6 +43,7 @@ extern "C"
 
 // Local includes.
 
+#include "version.h"
 #include "dimg.h"
 #include "tiffloader.h"
 
@@ -583,7 +581,6 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             TIFFClose(tif);
             return false;
         }
-
     }
 
     _TIFFfree(buf);
@@ -593,7 +590,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
     for (int t = DImg::TIF_TAG_ARTIST; t <= DImg::TIF_TAG_TARGETPRINTER; t++) 
         setTiffTextTag(tif, t);
-            
+
     // -------------------------------------------------------------------
     // Write ICC profil.
     
@@ -734,6 +731,15 @@ void TIFFLoader::setTiffTextTag(TIFF* tif, int tag)
     
     typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap map = imageMetaData();
+    
+    if (tiffTag == TIFFTAG_SOFTWARE)
+    {
+        QString software("digiKam ");
+        software.append(digikam_version);
+        TIFFSetField (tif, tiffTag, (uint32)software.length(), (uchar *)software.ascii());
+        return;
+    }
+
     
     if (map.contains(tag))
     {
