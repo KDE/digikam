@@ -63,7 +63,12 @@ class ImagePropertiesEXIFTabPriv
 {
 public:
 
-    ImagePropertiesEXIFTabPriv(){}
+    ImagePropertiesEXIFTabPriv()
+    {
+	levelCombo  = 0;
+	exifWidget  = 0;
+	navigateBar = 0;
+    }
 
     QComboBox         *levelCombo;
 
