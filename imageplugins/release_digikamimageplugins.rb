@@ -9,11 +9,12 @@
 
 name       = "digikamimageplugins"
 egmodule   = "graphics"
-version    = "0.8.0"
+version    = "0.8.1"
 docs       = "no"
 
-svnbase    = "https://toma@svn.kde.org/home/kde"
-svnroot    = "#{svnbase}/trunk"
+#svnbase    = "https://toma@svn.kde.org/home/kde"
+svnbase	   = "svn://anonsvn.kde.org/home/kde"
+svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = []
@@ -161,6 +162,7 @@ Dir.chdir( "#{name}" )
 `/bin/mv -f INSTALL ..`
 `/bin/mv -f README ..`
 `/bin/mv -f TODO ..`
+`/bin/rm PACKAGING`
 Dir.chdir( ".." )
 
 

@@ -1,3 +1,851 @@
+v0.8.1 - 11/02/06
+----------------------------------------------------------------------------
+
+2006-02-05 17:50  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp_ui.rc,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance_ui.rc:
+	   digiKam from stable : backport .rc files patch from Gerhard
+	  
+	  CCMAIL : gerhard@kulzer.net
+
+2006-02-03 10:29  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp:
+	   Channel Mixer : bugfix : set properly red channel to histogram 
+	  when Reset button is used
+
+2006-01-25 07:06  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp:
+	   digikam from stable : do not render preview effect if final 
+	  rendering is already in progress in image.
+	  CCBUG: 120736
+
+2006-01-15 14:34  ach
+
+	* branches/stable/extragear/graphics/digikamimageplugins/refocus/hisc-action-refocus.svgz:
+	   digikam stable: remove hisc-action-refocus.svgz
+	  	does no longer match the used .png files.
+
+2006-01-13 20:12  ach
+
+	* branches/stable/extragear/graphics/digikamimageplugins/refocus/hi128-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi16-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi22-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi32-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi48-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi64-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi128-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi16-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi22-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi32-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi48-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi64-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hisc-action-unsharpedmask.svgz:
+	   digikam stable: new refocus and unsharp icons.  Contributed by
+	  	Tung NGUYEN.  Thx!
+
+2006-01-11 23:06  ach
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi128-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi16-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi22-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi32-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi48-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hi64-action-adjustcurves.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/hisc-action-adjustcurves.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi128-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi16-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi22-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi32-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi48-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hi64-action-adjustlevels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/hisc-action-adjustlevels.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi128-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi16-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi22-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi32-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi48-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hi64-action-antivignetting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/hisc-action-antivignetting.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi128-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi16-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi22-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi32-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi48-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hi64-action-blowup.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/hisc-action-blowup.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi128-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi16-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi22-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi32-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi48-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hi64-action-blurfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/hisc-action-blurfx.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi128-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi16-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi22-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi32-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi48-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hi64-action-bordertool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/hisc-action-bordertool.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi128-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi16-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi22-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi32-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi48-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hi64-action-channelmixer.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/hisc-action-channelmixer.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi128-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi16-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi22-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi32-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi48-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/hi64-action-charcoaltool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi128-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi16-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi22-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi32-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi48-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hi64-action-distortionfx.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/hisc-action-distortionfx.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi128-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi16-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi22-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi32-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi48-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/hi64-action-embosstool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi128-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi16-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi22-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi32-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi48-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hi64-action-filmgrain.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/hisc-action-filmgrain.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi128-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi16-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi22-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi32-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi48-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hi64-action-freerotation.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/hisc-action-freerotation.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi128-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi16-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi22-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi32-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi48-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hi64-action-hotpixels.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/hisc-action-hotpixels.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi128-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi16-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi22-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi32-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi48-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/hi64-action-infrared.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi128-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi16-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi22-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi32-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi48-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hi64-action-inpainting.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/hisc-action-inpainting.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi128-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi16-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi22-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi32-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi48-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hi64-action-inserttext.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/hisc-action-inserttext.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi128-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi16-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi22-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi32-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi48-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/hi64-action-lensdistortion.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi128-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi16-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi22-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi32-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi48-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hi64-action-despeckle.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/hisc-action-despeckle.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi128-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi16-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi22-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi32-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi48-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/hi64-action-oilpaint.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi128-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi16-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi22-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi32-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi48-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hi64-action-perspective.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/hisc-action-perspective.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi128-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi16-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi22-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi32-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi48-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/hi64-action-raindrop.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi128-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi16-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi22-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi32-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi48-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hi64-action-refocus.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/hisc-action-refocus.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi128-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi16-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi22-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi32-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi48-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hi64-action-restoration.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/hisc-action-restoration.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi128-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi16-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi22-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi32-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi48-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hi64-action-shear.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/hisc-action-shear.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi128-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi16-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi22-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi32-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi48-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/hi64-action-solarizetool.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi128-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi16-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi22-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi32-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi48-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hi64-action-superimpose.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/hisc-action-superimpose.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi128-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi16-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi22-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi32-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi48-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hi64-action-texture.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/hisc-action-texture.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi128-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi16-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi22-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi32-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi48-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hi64-action-unsharpedmask.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/hisc-action-unsharpedmask.svgz,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi128-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi16-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi22-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi32-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi48-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hi64-action-whitebalance.png,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/hisc-action-whitebalance.svgz:
+	   digikamimageplugins stable branch:  Add new iconset contributed
+	          by  Tung NGUYEN <ntung@free.fr>. Thanks!
+
+2006-01-11 10:48  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/include/version.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm:
+	   fix release number
+
+2005-12-19 09:15  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	   Digikam from stable: fix color gradients color
+
+2005-12-15 19:46  toma
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp:
+	   backport of SVN commit 487278 by mhunter: Typographical 
+	  corrections and changes
+
+2005-12-14 11:19  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.h:
+	   Digikam from stable : fix memory leak : memory allocation are 
+	  cleaned to close event only. This must be done too when user 
+	  pressing ok or cancel !
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-14 11:05  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/blowup/imageeffect_blowup.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/imageeffect_blowup.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/imageeffect_inpainting.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/imageeffect_inpainting.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.h:
+	   Digikam from stable : fix memory leak : KAboutData isn't 
+	  cleaned automaticly by KDE lib.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-14 10:49  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/imagedialogbase.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/imagedialogbase.h,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/imageguidedialog.h:
+	   Digikam from stable : fix memory leak : KAboutData isn't 
+	  cleaned automaticly by KDE lib.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-14 10:26  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/Makefile.am,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/threadedfilterdialog.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/threadedfilterdialog.h:
+	   removed unused implementation
+
+2005-12-14 10:22  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/common/dialogs/ctrlpaneldialog.h:
+	   Digikam from stable : fix memory leak : KAboutData isn't 
+	  cleaned automaticly by KDE lib.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2005-12-06 22:49  toma
+
+	* branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/imageeffect_inserttext.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/imageeffect_refocus.cpp:
+	   backport: (SVN commit 485874 by mhunter: Typographical 
+	  corrections and changes)
+
+2005-12-06 05:52  scripty
+
+	* branches/stable/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop:
+	   SVN_SILENT made messages (.desktop file)
+
+2005-12-04 17:38  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	   Fix wrong memory acess (out of range of m_curves array)
+
+2005-12-01 06:17  scripty
+
+	* branches/stable/extragear/graphics/digikam/digikam/digikam.desktop,
+	   
+	  branches/stable/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+	   
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+	   
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+	   
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+	   
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+	   
+	  branches/stable/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+	   
+	  branches/stable/extragear/graphics/digikam/showfoto/showfoto.desktop,
+	   
+	  branches/stable/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+	   
+	  branches/stable/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	   
+	  branches/stable/extragear/graphics/gwenview/gvdirpart/gvdirpart.desktop:
+	   SVN_SILENT made messages (.desktop file)
+
+2005-11-26 16:09  toma
+
+	* branches/stable/extragear/graphics/digikamimageplugins/release_digikamimageplugins.rb:
+	   SVN_SILENT: backport failure
+
+2005-11-22 21:27  toma
+
+	* branches/stable/extragear/graphics/digikam, 
+	  branches/stable/extragear/graphics/digikamimageplugins: New 
+	  branch from trunk. Will be used for the 0.8.x serie
+
+2005-11-22 18:33  toma
+
+	* trunk/extragear/graphics/digikam/PACKAGING, 
+	  trunk/extragear/graphics/digikam/release_digikam_docs.rb, 
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_docs.rb:
+	   Tarballs seem ok, committing the scripts and adjust the 
+	  PACKAGING file.
+
+2005-11-21 19:48  toma
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog, 
+	  trunk/extragear/graphics/digikamimageplugins/common/include/version.h,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins.rb:
+	   Prepping final
+
+2005-11-20 04:31  scripty
+
+	* trunk/extragear/graphics/digikam/digikam/digikam.desktop, 
+	  trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+	   
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+	   
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol, 
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+	   trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol, 
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+	   trunk/extragear/graphics/digikam/showfoto/showfoto.desktop, 
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/digikamimageplugin.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+	   
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	   trunk/extragear/graphics/fraqtive/src/fraqtive.desktop: 
+	  SVN_SILENT made messages (.desktop file)
+
+
 v0.8.0 - 21/11/05
 ----------------------------------------------------------------------------
 
@@ -90,7 +938,7 @@ v0.8.0-rc - 03/11/05
 2005-10-14 12:19  cgilles
 
     * trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp:
-      freerotation plugin : no need to have angle < 45° to fix
+      freerotation plugin : no need to have angle < 45 to fix
       photographs
 
 2005-10-12 06:15  scripty
@@ -452,7 +1300,7 @@ v0.7.1-beta1 - 12/17/04
     * Moved 'Free Rotation' tool from Image editor core to new ImagePlugin.
     * All plugins: disable filter setup widgets when Ok button is pressed.
     * Fixed 'Reset Values' dialog buttons effect with ImagePreviewWidget instance.
-    * Update and fix handbooks by Göran Jartin.
+    * Update and fix handbooks by Gï¿½an Jartin.
 
 v0.7.0 - 11/08/04
 ----------------------------------------------------------------------------
