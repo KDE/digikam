@@ -325,7 +325,7 @@ LoadSaveThread::AccessMode SharedLoadingTask::accessMode()
 
 void SavingTask::execute()
 {
-    bool success = m_img.save(m_filePath, m_format.ascii());
+    bool success = m_img.save(m_filePath, m_format.ascii(), this);
     m_thread->taskHasFinished();
     QApplication::postEvent(m_thread, new SavedEvent(m_filePath, success));
 };
