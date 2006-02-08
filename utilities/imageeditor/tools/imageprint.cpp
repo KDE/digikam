@@ -278,7 +278,16 @@ bool ImagePrint::printImageWithQt()
         IccTransform *transform = new IccTransform();
         readSettings();
 
-        transform->setProfiles( m_inProfilePath, m_outputProfilePath );
+        if (m_image.getICCProfil().isNull())
+        {
+            transform->setProfiles( m_inProfilePath, m_outputProfilePath );
+        }
+        else
+        {
+            transform->setProfiles(m_outputProfilePath);
+        }
+
+        
         transform->apply( m_image );
     }
     
