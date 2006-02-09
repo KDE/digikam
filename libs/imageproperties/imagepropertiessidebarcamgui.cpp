@@ -162,7 +162,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 {
-    if (!d->currentURL.isValid())
+    if (!d->itemInfo)
         return;
     
     setCursor(KCursor::waitCursor());
@@ -173,15 +173,20 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         currentItemType = NavigateBarWidget::ItemFirst;
     else if (d->cameraView->lastItem() == d->cameraItem)
         currentItemType = NavigateBarWidget::ItemLast;
-            
+             
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
-       d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType);
-       d->dirtyCameraItemTab = true;
+        d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType);
+        d->dirtyCameraItemTab = true;
     }
     else if (tab == d->exifTab && !d->dirtyExifTab)
     {
-       d->exifTab->setCurrentURL(d->currentURL, currentItemType);
+        if (d->exifData)
+            d->exifTab->setCurrentData(d->exifData, d->itemInfo->name,
+                                       currentItemType);
+        else
+            d->exifTab->setCurrentURL(d->currentURL, currentItemType);
+
        d->dirtyExifTab = true;
     }
     
