@@ -433,7 +433,7 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 }
 
 void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
-                           const QString& mimeType)
+                           const QString& givenMimeType)
 {
     d->cmod.reset();
     d->cmod.setGamma(d->gamma);
@@ -443,17 +443,27 @@ void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileS
 
     d->needClearUndoManager = false;
 
+    // Try hard to find a mimetype.
+    QString mimeType = givenMimeType;
+    // This is possibly empty
     if (mimeType.isEmpty())
-        saveAction(file, iofileSettings, d->image.attribute("format").toString());
-    else
-        saveAction(file, iofileSettings, mimeType);
+    {
+        mimeType = d->image.attribute("format").toString();
+        // It is a bug if format attribute is not given
+        if (mimeType.isEmpty())
+        {
+            kdWarning() << "DImg object does not contain attribute \"format\"" << endl;
+            mimeType = QImageIO::imageFormat(d->filename);
+        }
+    }
+    saveAction(file, iofileSettings, mimeType);
 }
 
 void DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                                const QString& mimeType) 
 {
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
-              << mimeType.ascii() << ")" << endl;
+              << mimeType << ")" << endl;
 
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
        d->image.setAttribute("quality", iofileSettings->JPEGCompression);
@@ -465,7 +475,7 @@ void DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer 
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     d->savingFilename = fileName;
-    d->thread->save(d->image, fileName, mimeType.ascii());
+    d->thread->save(d->image, fileName, mimeType);
 }
 
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)

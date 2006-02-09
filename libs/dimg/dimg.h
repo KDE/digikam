@@ -109,7 +109,7 @@ public:
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
                      
-    bool        save(const QString& filePath, const char* format, DImgLoaderObserver *observer = 0);
+    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
     bool        isNull()     const;
     uint        width()      const;

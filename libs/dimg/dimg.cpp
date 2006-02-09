@@ -238,14 +238,16 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
     return false;
 }
 
-bool DImg::save(const QString& filePath, const char* format, DImgLoaderObserver *observer)
+bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver *observer)
 {
     if (isNull())
         return false;
-    
-    QString frm = QString::fromLatin1(format);
-    frm = frm.upper();
-    
+
+    if (format.isEmpty())
+        return false;
+
+    QString frm = format.upper();
+
     if (frm == "JPEG" || frm == "JPG")
     {
         JPEGLoader loader(this);
