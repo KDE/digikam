@@ -59,11 +59,13 @@ public:
     EventData() 
     {
        starting = false;
-       success = false; 
+       success = false;
+       histogram = 0;
     }
 
     bool starting;
     bool success;
+    ImageHistogram *histogram;
 };
 
 public:

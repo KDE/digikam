@@ -145,6 +145,7 @@ void ImageHistogram::postProgress(bool starting, bool success)
     EventData *eventData = new EventData();
     eventData->starting  = starting;
     eventData->success   = success;
+    eventData->histogram = this;
     QApplication::postEvent(d->parent, new QCustomEvent(QEvent::User, eventData));
 }
 

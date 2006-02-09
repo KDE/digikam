@@ -208,6 +208,9 @@ void HistogramWidget::customEvent(QCustomEvent *event)
 
     if (!ed) return;
 
+    if (ed->histogram != m_imageHistogram && ed->histogram != m_selectionHistogram)
+        return;
+
     if (ed->starting)
     {
         setCursor( KCursor::waitCursor() );
