@@ -6,6 +6,7 @@
  * Description : a bar widget to display image thumbnails
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
+ * Copyrigth 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright 2006 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
@@ -230,8 +231,13 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
-        ensureVisible(0, (int)(item->m_pos+d->margin+d->tileSize*.5),
-                      0, (int)(d->tileSize*1.5+3*d->margin));
+        if (d->orientation == Vertical)
+            ensureVisible(0, (int)(item->m_pos+d->margin+d->tileSize*.5),
+                          0, (int)(d->tileSize*1.5+3*d->margin));
+        else
+            ensureVisible((int)(item->m_pos+d->margin+d->tileSize*.5), 0,
+                          (int)(d->tileSize*1.5+3*d->margin), 0);
+          
         item->repaint();
         emit signalURLSelected(item->url());
     }
