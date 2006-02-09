@@ -3,8 +3,8 @@
  * Date  : 2004-09-29
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,30 +18,43 @@
  * 
  * ============================================================ */
 
+#define XMD_H
+
+// C++ Includes.
+
+#include <cstdio>
+#include <cstdlib>
+
+// C Ansi includes.
+
+extern "C"
+{
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <utime.h>
+#include <jpeglib.h>
+}
+
+// Qt includes.
+
 #include <qstring.h>
 #include <qcstring.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 
+// KDE includes.
+
 #include <kdebug.h>
+
+// LibKExif includes.
 
 #include <libkexif/kexifdata.h>
 #include <libkexif/kexifutils.h>
 
-#define XMD_H
-
-extern "C" {
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <jpeglib.h>
-#include <utime.h>
-}
+// Local includes.
 
 #include "transupp.h"
-
 
 namespace Digikam
 {
@@ -76,44 +89,44 @@ bool exifRotate(const QString& file)
 
     switch(exifData.getImageOrientation())
     {
-    case(KExifData::UNSPECIFIED):
-    case(KExifData::NORMAL):
-        break;
-    case(KExifData::HFLIP):
-    {
-        transformoption.transform = JXFORM_FLIP_H;
-        break;
-    }
-    case(KExifData::ROT_180):
-    {
-        transformoption.transform = JXFORM_ROT_180;
-        break;
-    }
-    case(KExifData::VFLIP):
-    {
-        transformoption.transform = JXFORM_FLIP_V;
-        break;
-    }
-    case(KExifData::ROT_90_HFLIP):
-    {
-        transformoption.transform = JXFORM_TRANSPOSE;
-        break;
-    }
-    case(KExifData::ROT_90):
-    {
-        transformoption.transform = JXFORM_ROT_90;
-        break;
-    }
-    case(KExifData::ROT_90_VFLIP):
-    {
-        transformoption.transform = JXFORM_TRANSVERSE;
-        break;
-    }
-    case(KExifData::ROT_270):
-    {
-        transformoption.transform = JXFORM_ROT_270;
-        break;
-    }
+        case(KExifData::UNSPECIFIED):
+        case(KExifData::NORMAL):
+            break;
+        case(KExifData::HFLIP):
+        {
+            transformoption.transform = JXFORM_FLIP_H;
+            break;
+        }
+        case(KExifData::ROT_180):
+        {
+            transformoption.transform = JXFORM_ROT_180;
+            break;
+        }
+        case(KExifData::VFLIP):
+        {
+            transformoption.transform = JXFORM_FLIP_V;
+            break;
+        }
+        case(KExifData::ROT_90_HFLIP):
+        {
+            transformoption.transform = JXFORM_TRANSPOSE;
+            break;
+        }
+        case(KExifData::ROT_90):
+        {
+            transformoption.transform = JXFORM_ROT_90;
+            break;
+        }
+        case(KExifData::ROT_90_VFLIP):
+        {
+            transformoption.transform = JXFORM_TRANSVERSE;
+            break;
+        }
+        case(KExifData::ROT_270):
+        {
+            transformoption.transform = JXFORM_ROT_270;
+            break;
+        }
     }            
 
     if (transformoption.transform == JXFORM_NONE)
@@ -220,4 +233,4 @@ bool exifRotate(const QString& file)
     }
 }
 
-}
+} // Namespace Digikam
