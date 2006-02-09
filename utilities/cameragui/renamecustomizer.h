@@ -1,10 +1,12 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-19
- * Description : 
+ * Description : a options group to set renaming files
+ *               operations during camera downloading
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -25,16 +27,10 @@
 
 #include <qbuttongroup.h>
 
-class QLineEdit;
-class QCheckBox;
-class QRadioButton;
-class QComboBox;
-class QLabel;
-class QTimer;
-class QHBox;
-
 namespace Digikam
 {
+
+class RenameCustomizerPriv;
 
 class RenameCustomizer : public QButtonGroup
 {
@@ -57,8 +53,6 @@ public:
     QString nameTemplate() const;
     Case    changeCase() const;
 
-
-
 signals:
 
     void signalChanged();
@@ -68,20 +62,6 @@ private:
     void readSettings();
     void saveSettings();
     
-    QRadioButton*  m_renameDefault;
-    QRadioButton*  m_renameCustom;
-
-    QGroupBox*     m_renameDefaultBox;
-    QLabel*        m_renameDefaultCase;
-    QComboBox*     m_renameDefaultCaseType;
-
-    QGroupBox*     m_renameCustomBox;
-    QLineEdit*     m_renameCustomPrefix;
-    QCheckBox*     m_renameCustomExif;
-    QCheckBox*     m_renameCustomSeq;
-
-    QTimer*        m_changedTimer;
-
 private slots:
 
     void slotRadioButtonClicked(int);
@@ -89,6 +69,10 @@ private slots:
     void slotExifChanged(bool);
     void slotSeqChanged(bool);
     void slotCaseTypeChanged(const QString&);
+
+private:
+    
+    RenameCustomizerPriv *d;
 };
 
 }  // namespace Digikam

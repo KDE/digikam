@@ -1,10 +1,12 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-19
- * Description : 
- * 
- * Copyright 2004 by Renchi Raju
-
+ * Description : a options group to set renaming files
+ *               operations during camera downloading
+ *
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -24,7 +26,6 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
@@ -34,6 +35,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <klineedit.h>
 
 // Local includes.
 
@@ -42,9 +44,47 @@
 namespace Digikam
 {
 
-RenameCustomizer::RenameCustomizer(QWidget* parent)
-    : QButtonGroup(parent)
+class RenameCustomizerPriv
 {
+public:
+
+    RenameCustomizerPriv()
+    {
+        renameDefault         = 0;
+        renameCustom          = 0;
+        renameDefaultBox      = 0;
+        renameCustomBox       = 0;
+        renameDefaultCase     = 0;
+        renameDefaultCaseType = 0;
+        renameCustomExif      = 0;
+        renameCustomSeq       = 0;
+        changedTimer          = 0;
+        renameCustomPrefix    = 0;
+    }
+
+    QRadioButton *renameDefault;
+    QRadioButton *renameCustom;
+
+    QGroupBox    *renameDefaultBox;
+    QGroupBox    *renameCustomBox;
+    
+    QLabel       *renameDefaultCase;
+
+    QComboBox    *renameDefaultCaseType;
+
+    QCheckBox    *renameCustomExif;
+    QCheckBox    *renameCustomSeq;
+
+    QTimer       *changedTimer;
+
+    KLineEdit    *renameCustomPrefix;
+};
+
+RenameCustomizer::RenameCustomizer(QWidget* parent)
+                : QButtonGroup(parent)
+{
+    d = new RenameCustomizerPriv;
+    
     // -- setup view --------------------------------------------------
     
     setTitle(i18n("Renaming Options"));
@@ -56,78 +96,83 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     QGridLayout* mainLayout = new QGridLayout(layout());
 
-    m_renameDefault = new QRadioButton(i18n("Use camera provided names"), this);
-    mainLayout->addMultiCellWidget(m_renameDefault, 0, 0, 0, 1);
+    d->renameDefault = new QRadioButton(i18n("Use camera provided names"), this);
+    mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
-    m_renameDefaultBox = new QGroupBox( this );
-    m_renameDefaultBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
-    m_renameDefaultBox->setColumnLayout(0, Qt::Vertical);
+    d->renameDefaultBox = new QGroupBox( this );
+    d->renameDefaultBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
+    d->renameDefaultBox->setColumnLayout(0, Qt::Vertical);
 
-    m_renameDefaultCase = new QLabel( i18n("Change case to"), m_renameDefaultBox );
-    m_renameDefaultCase->setIndent( 10 );
-    m_renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+    d->renameDefaultCase = new QLabel( i18n("Change case to"), d->renameDefaultBox );
+    d->renameDefaultCase->setIndent( 10 );
+    d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 
-    m_renameDefaultCaseType = new QComboBox( m_renameDefaultBox );
-    m_renameDefaultCaseType->insertItem(i18n("Leave as Is"), 0);
-    m_renameDefaultCaseType->insertItem(i18n("Upper"), 1);
-    m_renameDefaultCaseType->insertItem(i18n("Lower"), 2);
-    m_renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    d->renameDefaultCaseType = new QComboBox( d->renameDefaultBox );
+    d->renameDefaultCaseType->insertItem(i18n("Leave as Is"), 0);
+    d->renameDefaultCaseType->insertItem(i18n("Upper"), 1);
+    d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
+    d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    QHBoxLayout* boxLayout =  new QHBoxLayout( m_renameDefaultBox->layout() );
+    QHBoxLayout* boxLayout =  new QHBoxLayout( d->renameDefaultBox->layout() );
     boxLayout->setSpacing(5);
-    boxLayout->addWidget( m_renameDefaultCase );
-    boxLayout->addWidget( m_renameDefaultCaseType );
-    boxLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Expanding,
-                                       QSizePolicy::Minimum ));
+    boxLayout->addWidget( d->renameDefaultCase );
+    boxLayout->addWidget( d->renameDefaultCaseType );
+    boxLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Expanding, QSizePolicy::Minimum ));
 
-    mainLayout->addMultiCellWidget(m_renameDefaultBox, 1, 1, 0, 1);
+    mainLayout->addMultiCellWidget(d->renameDefaultBox, 1, 1, 0, 1);
 
-    
-    m_renameCustom = new QRadioButton(i18n("Customize names"), this);
-    mainLayout->addMultiCellWidget(m_renameCustom, 2, 2, 0, 1);
+    d->renameCustom = new QRadioButton(i18n("Customize names"), this);
+    mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
 
-    m_renameCustomBox = new QGroupBox(this);
-    m_renameCustomBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
-    m_renameCustomBox->setColumnLayout(0, Qt::Vertical);
-    QGridLayout* renameCustomBoxLayout = new QGridLayout(m_renameCustomBox->layout());
+    d->renameCustomBox = new QGroupBox(this);
+    d->renameCustomBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
+    d->renameCustomBox->setColumnLayout(0, Qt::Vertical);
+
+    // -------------------------------------------------------------
+
+    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout(), 3, 2);
     renameCustomBoxLayout->setMargin(0);
     renameCustomBoxLayout->setSpacing(5);
 
-    QLabel* prefixLabel  = new QLabel(i18n("Prefix:"), m_renameCustomBox);
-    renameCustomBoxLayout->addWidget(prefixLabel, 0, 0);
+    QLabel* prefixLabel  = new QLabel(i18n("Prefix:"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 0, 0);
 
-    m_renameCustomPrefix = new QLineEdit(m_renameCustomBox);
-    renameCustomBoxLayout->addWidget(m_renameCustomPrefix, 0, 1);
+    d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 1, 1);
 
-    m_renameCustomExif = new QCheckBox(i18n("Add camera provided date and time"),
-                                       m_renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(m_renameCustomExif, 1, 1, 0, 1);
+    d->renameCustomExif = new QCheckBox(i18n("Add camera provided date and time"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExif, 1, 1, 0, 1);
 
-    m_renameCustomSeq  = new QCheckBox(i18n("Add sequence number"),
-                                       m_renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(m_renameCustomSeq, 2, 2, 0, 1);
+    d->renameCustomSeq  = new QCheckBox(i18n("Add sequence number"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSeq, 2, 2, 0, 1);
 
-    mainLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Minimum,
-                                        QSizePolicy::Minimum ), 3, 0);
-    mainLayout->addWidget(m_renameCustomBox, 3, 1);
+    renameCustomBoxLayout->setColStretch(2, 10);
+
+    mainLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Minimum ), 3, 0);
+    mainLayout->addWidget(d->renameCustomBox, 3, 1);
 
     // -- setup connections -------------------------------------------------
 
     connect(this, SIGNAL(clicked(int)),
-            SLOT(slotRadioButtonClicked(int)));
-    connect(m_renameCustomPrefix, SIGNAL(textChanged(const QString&)),
-            SLOT(slotPrefixChanged(const QString&)));
-    connect(m_renameCustomExif, SIGNAL(toggled(bool)),
-            SLOT(slotExifChanged(bool)));
-    connect(m_renameCustomSeq, SIGNAL(toggled(bool)),
-            SLOT(slotSeqChanged(bool)));
-    connect(m_renameDefaultCaseType, SIGNAL(activated(const QString&)),
-            SLOT(slotCaseTypeChanged(const QString&)));
+            this, SLOT(slotRadioButtonClicked(int)));
+            
+    connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotPrefixChanged(const QString&)));
+            
+    connect(d->renameCustomExif, SIGNAL(toggled(bool)),
+            this, SLOT(slotExifChanged(bool)));
+            
+    connect(d->renameCustomSeq, SIGNAL(toggled(bool)),
+            this, SLOT(slotSeqChanged(bool)));
+            
+    connect(d->renameDefaultCaseType, SIGNAL(activated(const QString&)),
+            this, SLOT(slotCaseTypeChanged(const QString&)));
 
     // -- changed timer ----------------------------------------------------
 
-    m_changedTimer = new QTimer();
-    connect(m_changedTimer, SIGNAL(timeout()),
+    d->changedTimer = new QTimer();
+    
+    connect(d->changedTimer, SIGNAL(timeout()),
             this, SIGNAL(signalChanged()));
 
     // -- initial values ---------------------------------------------------
@@ -137,27 +182,28 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
 RenameCustomizer::~RenameCustomizer()
 {
-    delete m_changedTimer;
+    delete d->changedTimer;
     saveSettings();
+    delete d;
 }
 
 bool RenameCustomizer::useDefault() const
 {
-    return m_renameDefault->isChecked();    
+    return d->renameDefault->isChecked();
 }
 
 QString RenameCustomizer::nameTemplate() const
 {
-    if (m_renameDefault->isChecked())
+    if (d->renameDefault->isChecked())
         return QString();
     else
     {
-        QString templ(m_renameCustomPrefix->text());
+        QString templ(d->renameCustomPrefix->text());
 
-        if (m_renameCustomExif->isChecked())
+        if (d->renameCustomExif->isChecked())
             templ += "%Y%m%d-%H:%M:%S";
 
-        if (m_renameCustomSeq->isChecked())
+        if (d->renameCustomSeq->isChecked())
             templ += "-%%04d";
 
         return templ;
@@ -168,9 +214,9 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 {
     RenameCustomizer::Case type = NONE;
 
-    if (m_renameDefaultCaseType->currentItem() == 1)
+    if (d->renameDefaultCaseType->currentItem() == 1)
         type=UPPER;
-    if (m_renameDefaultCaseType->currentItem() == 2)
+    if (d->renameDefaultCaseType->currentItem() == 2)
         type=LOWER;
 
     return type;
@@ -183,29 +229,29 @@ void RenameCustomizer::slotRadioButtonClicked(int)
     if (!btn)
         return;
 
-    m_renameCustomBox->setEnabled( btn != m_renameDefault );
-    m_renameDefaultBox->setEnabled( btn == m_renameDefault );
-    m_changedTimer->start(500, true);
+    d->renameCustomBox->setEnabled( btn != d->renameDefault );
+    d->renameDefaultBox->setEnabled( btn == d->renameDefault );
+    d->changedTimer->start(500, true);
 }
 
 void RenameCustomizer::slotPrefixChanged(const QString&)
 {
-    m_changedTimer->start(500, true);
+    d->changedTimer->start(500, true);
 }
 
 void RenameCustomizer::slotExifChanged(bool)
 {
-    m_changedTimer->start(500, true);
+    d->changedTimer->start(500, true);
 }
 
 void RenameCustomizer::slotSeqChanged(bool)
 {
-    m_changedTimer->start(500, true);
+    d->changedTimer->start(500, true);
 }
 
 void RenameCustomizer::slotCaseTypeChanged(const QString&)
 {
-    m_changedTimer->start(500, true);
+    d->changedTimer->start(500, true);
 }
 
 void RenameCustomizer::readSettings()
@@ -227,23 +273,23 @@ void RenameCustomizer::readSettings()
 
     if (def)
     {
-        m_renameDefault->setChecked(true);
-        m_renameCustom->setChecked(false);
-        m_renameCustomBox->setEnabled(false);
-        m_renameDefaultBox->setEnabled(true);
+        d->renameDefault->setChecked(true);
+        d->renameCustom->setChecked(false);
+        d->renameCustomBox->setEnabled(false);
+        d->renameDefaultBox->setEnabled(true);
     }
     else
     {
-        m_renameDefault->setChecked(false);
-        m_renameCustom->setChecked(true);
-        m_renameCustomBox->setEnabled(true);
-        m_renameDefaultBox->setEnabled(false);
+        d->renameDefault->setChecked(false);
+        d->renameCustom->setChecked(true);
+        d->renameCustomBox->setEnabled(true);
+        d->renameDefaultBox->setEnabled(false);
     }
 
-    m_renameDefaultCaseType->setCurrentItem(chcaseT);
-    m_renameCustomPrefix->setText(prefix);
-    m_renameCustomExif->setChecked(exif);
-    m_renameCustomSeq->setChecked(seq);
+    d->renameDefaultCaseType->setCurrentItem(chcaseT);
+    d->renameCustomPrefix->setText(prefix);
+    d->renameCustomExif->setChecked(exif);
+    d->renameCustomSeq->setChecked(seq);
 }
 
 void RenameCustomizer::saveSettings()
@@ -252,15 +298,15 @@ void RenameCustomizer::saveSettings()
 
     config->setGroup("Camera Settings");
     config->writeEntry("Rename Use Default",
-                       m_renameDefault->isChecked());
+                       d->renameDefault->isChecked());
     config->writeEntry("Rename Add Exif",
-                       m_renameCustomExif->isChecked());
+                       d->renameCustomExif->isChecked());
     config->writeEntry("Rename Add Sequence",
-                       m_renameCustomSeq->isChecked());
+                       d->renameCustomSeq->isChecked());
     config->writeEntry("Case Type",
-                       m_renameDefaultCaseType->currentItem());
+                       d->renameDefaultCaseType->currentItem());
     config->writeEntry("Rename Prefix",
-                       m_renameCustomPrefix->text());
+                       d->renameCustomPrefix->text());
     config->sync();
 }
 
