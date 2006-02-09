@@ -38,6 +38,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -280,6 +281,19 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     if ( filePath == QString::null )
         return NONE;
 
+    KFileMetaInfo metaInfo(filePath, QString::null, KFileMetaInfo::Fastest);
+
+    if (metaInfo.isValid())
+    {
+        kdDebug() << k_funcinfo << " : Mime type: " << metaInfo.mimeType() << endl;
+        
+        if (metaInfo.mimeType() == "image/jpeg")
+            return JPEG;
+        
+        if (metaInfo.mimeType() == "image/png")
+            return PNG;
+    }
+
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     if (!f)
     {
@@ -300,21 +314,11 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     fclose(f);
 
     DcrawParse     rawFileParser;
-    unsigned short jpegID    = 0xD8FF;
     unsigned short tiffBigID = 0x4d4d;
     unsigned short tiffLilID = 0x4949;
-    unsigned char  pngID[8]  = {'\211', 'P', 'N', 'G', '\r', '\n', '\032', '\n'};
 
-    if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
-    {
-        return JPEG;
-    }
-    else if (memcmp(&header, &pngID, 8) == 0)        // PNG file ?
-    {
-        return PNG;
-    }
-    else if (memcmp(&header[0], "P", 1)  == 0 &&
-             memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
+    if (memcmp(&header[0], "P", 1)  == 0 &&
+        memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
     {
         int width, height, rgbmax;
         char nl;
