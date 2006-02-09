@@ -280,50 +280,48 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 {
     if ( filePath == QString::null )
         return NONE;
-
-    KFileMetaInfo metaInfo(filePath, QString::null, KFileMetaInfo::Fastest);
-
-    if (metaInfo.isValid())
-    {
-        kdDebug() << k_funcinfo << " : Mime type: " << metaInfo.mimeType() << endl;
-        
-        if (metaInfo.mimeType() == "image/jpeg")
-            return JPEG;
-        
-        if (metaInfo.mimeType() == "image/png")
-            return PNG;
-    }
-
+    
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
+    
     if (!f)
     {
         kdDebug() << k_funcinfo << "Failed to open file" << endl;
         return NONE;
     }
-
+    
     const int headerLen = 8;
     unsigned char header[headerLen];
-
+    
     if (fread(&header, 8, 1, f) != 1)
     {
         kdDebug() << k_funcinfo << "Failed to read header" << endl;
         fclose(f);
         return NONE;
     }
-
+    
     fclose(f);
-
-    DcrawParse     rawFileParser;
-    unsigned short tiffBigID = 0x4d4d;
-    unsigned short tiffLilID = 0x4949;
-
-    if (memcmp(&header[0], "P", 1)  == 0 &&
-        memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
+    
+    DcrawParse rawFileParser;
+    uchar jpegID[2]    = { 0xFF, 0xD8 };   
+    uchar tiffBigID[2] = { 0x4D, 0x4D };
+    uchar tiffLilID[2] = { 0x49, 0x49 };
+    uchar pngID[8]     = {'\211', 'P', 'N', 'G', '\r', '\n', '\032', '\n'};
+    
+    if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
+    {
+        return JPEG;
+    }
+    else if (memcmp(&header, &pngID, 8) == 0)        // PNG file ?
+    {
+        return PNG;
+    }
+    else if (memcmp(&header[0], "P", 1)  == 0 &&
+             memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
     {
         int width, height, rgbmax;
         char nl;
-
         FILE *file = fopen(QFile::encodeName(filePath), "rb");
+        
         if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4) 
         {
             if (rgbmax > 255)
@@ -332,6 +330,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
                 return PPM;
             }
         }
+        
         pclose (file);
     }
     else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
@@ -346,7 +345,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         return TIFF;
     }
-
+    
     // In others cases, QImage will be used to try to open file.
     return QIMAGE;
 }
