@@ -98,7 +98,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     QGroupBox* viewBox = new QGroupBox(title, this);
     viewBox->setColumnLayout(0, Qt::Vertical);
 
-    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 2, 4, 5);
+    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 2, 3, 5);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 3 );
     viewBoxLayout->setColStretch( 2, 1 );
@@ -124,12 +124,12 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_cancelBtn->setText(i18n("Cancel"));
     m_cancelBtn->setIconSet(iconSet);
     m_cancelBtn->setEnabled(false);
-    viewBoxLayout->addWidget(m_cancelBtn, 1, 0);
+    viewBoxLayout->addMultiCellWidget(m_cancelBtn, 1, 1, 0, 0);
     
     m_status = new QLabel(viewBox);
-    viewBoxLayout->addWidget(m_status, 1, 1);
+    viewBoxLayout->addMultiCellWidget(m_status, 1, 1, 1, 1);
     m_progress = new QProgressBar(viewBox);
-    viewBoxLayout->addWidget(m_progress, 1, 2);
+    viewBoxLayout->addMultiCellWidget(m_progress, 1, 1, 2, 2);
     m_progress->hide();
 
     QFrame *frame = new QFrame(viewBox);
@@ -152,10 +152,12 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_anim = new AnimWidget(frame);
     layout->addWidget( m_anim );
 
-    viewBoxLayout->addWidget(frame, 1, 3);
+    viewBoxLayout->addMultiCellWidget(frame, 1, 1, 3, 3);
     
     mainLayout->addWidget(viewBox);
 
+    // -------------------------------------------------------------------------
+    
     QHBoxLayout* btnLayout = new QHBoxLayout();
 
     QPushButton* helpBtn;
@@ -169,8 +171,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     m_closeBtn    = new QPushButton(i18n("&Close"), this);
     
     btnLayout->addWidget(m_advBtn);
-    btnLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Expanding,
-                                       QSizePolicy::Fixed));
+    btnLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Fixed));
     btnLayout->addWidget(helpBtn);
     btnLayout->addWidget(selectBtn);
     btnLayout->addWidget(m_downloadBtn);
