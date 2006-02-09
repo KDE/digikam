@@ -56,21 +56,22 @@ public:
     {
         currentView       = 0;
         currentItem       = 0;
+        desceditTab       = 0;
         dirtyDesceditTab  = false;
     }
 
-    bool                      dirtyDesceditTab;
+    bool              dirtyDesceditTab;
 
-    AlbumIconView            *currentView;
+    AlbumIconView    *currentView;
+    
+    AlbumIconItem    *currentItem;
 
-    AlbumIconItem            *currentItem;
-
-    ImageDescEditTab         *desceditTab;
+    ImageDescEditTab *desceditTab;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
                                                    Side side, bool mimimizedDefault, bool navBar)
-                        : Digikam::ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault)
+                        : Digikam::ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, navBar)
 {
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, navBar);
@@ -190,7 +191,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         int currentItemType = NavigateBarWidget::ItemCurrent;
         
         if (d->currentView->firstItem() == d->currentItem)
-           currentItemType = NavigateBarWidget::ItemFirst;
+            currentItemType = NavigateBarWidget::ItemFirst;
         else if (d->currentView->lastItem() == d->currentItem)
             currentItemType = NavigateBarWidget::ItemLast;
         

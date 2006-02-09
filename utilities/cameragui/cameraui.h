@@ -3,8 +3,9 @@
  * Date  : 2004-09-16
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -41,6 +42,8 @@ class QLineEdit;
 class QPopupMenu;
 class QProgressBar;
 class QDate;
+class QSplitter;
+
 class KURL;
 
 namespace Digikam
@@ -51,6 +54,7 @@ class CameraIconViewItem;
 class CameraController;
 class RenameCustomizer;
 class AnimWidget;
+class ImagePropertiesSideBarCamGui;
 
 class CameraUI : public QDialog
 {
@@ -99,17 +103,23 @@ private slots:
     void slotDeleteAll();
 
     void slotFileView(CameraIconViewItem* item);
-    void slotFileProps(CameraIconViewItem* item);
-    void slotFileExif(CameraIconViewItem* item);
     
     void slotDownloaded(const QString&, const QString&);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&);
     
-    void slotItemsSelected(bool selected);
+    void slotItemsSelected(CameraIconViewItem* item, bool selected);
     
     void slotToggleAdvanced();
-    
+
+    void slotExifFromFile(const QString& folder, const QString& file);
+    void slotExifFromData(const QByteArray& exifData);
+
+    void slotFirstItem(void);
+    void slotPrevItem(void);    
+    void slotNextItem(void);
+    void slotLastItem(void);
+
 signals:
     
     void signalLastDestination(const KURL&);
@@ -142,6 +152,8 @@ private:
 
     QProgressBar*     m_progress;
 
+    QSplitter        *m_splitter;
+
     KURL              m_lastDestURL;
 
     CameraController* m_controller;
@@ -151,7 +163,8 @@ private:
     RenameCustomizer* m_renameCustomizer;
 
     AnimWidget*       m_anim;
-    
+
+    ImagePropertiesSideBarCamGui *m_rightSidebar;
 };
 
 }  // namespace Digikam

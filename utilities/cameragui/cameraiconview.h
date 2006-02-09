@@ -3,8 +3,9 @@
  * Date  : 2004-09-18
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -78,10 +79,9 @@ private:
 
 signals:
 
-    void signalSelected(bool selected);
+    void signalSelected(CameraIconViewItem*, bool);
     void signalFileView(CameraIconViewItem*);
-    void signalFileProperties(CameraIconViewItem*);
-    void signalFileExif(CameraIconViewItem*);
+
     void signalDownload();
     void signalDelete();
     

@@ -29,6 +29,7 @@ class QLineEdit;
 class QCheckBox;
 class QRadioButton;
 class QComboBox;
+class QLabel;
 class QTimer;
 class QHBox;
 

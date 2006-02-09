@@ -309,7 +309,7 @@ bool UMSCamera::deleteItem(const QString& folder,
     if (thmLo.exists())           
         ::unlink(QFile::encodeName(thmLo.filePath()));
 
-    QFileInfo thmUp(folder + "/" + fi.baseName() + ".thm");          // Uppercase
+    QFileInfo thmUp(folder + "/" + fi.baseName() + ".THM");          // Uppercase
 
     if (thmUp.exists())           
         ::unlink(QFile::encodeName(thmUp.filePath()));

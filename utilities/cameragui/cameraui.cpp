@@ -3,8 +3,9 @@
  * Date  : 2004-09-16
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -37,6 +38,7 @@ extern "C"
 #include <qlabel.h>
 #include <qvbox.h>
 #include <qpopupmenu.h>
+#include <qsplitter.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qframe.h>
@@ -68,13 +70,13 @@ extern "C"
 
 // Local includes.
 
+#include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
-#include "gpiteminfodlg.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
@@ -87,10 +89,10 @@ namespace Digikam
 CameraUI::CameraUI(QWidget* parent, const QString& title,
                    const QString& model, const QString& port,
                    const QString& path)
-    : QDialog(parent, 0, false, WDestructiveClose)    
+        : QDialog(parent, 0, false, WDestructiveClose)    
 {
     // -- setup view -----------------------------------------
-
+    
     QVBoxLayout* mainLayout = new QVBoxLayout(this, 5, 5);
 
     QGroupBox* viewBox = new QGroupBox(title, this);
@@ -102,8 +104,20 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     viewBoxLayout->setColStretch( 2, 1 );
     viewBoxLayout->setColStretch( 3, 0 );
 
-    m_view = new CameraIconView(this, viewBox);
-    viewBoxLayout->addMultiCellWidget(m_view, 0, 0, 0, 3);
+    QWidget* widget   = new QWidget(this);
+    QHBoxLayout *hlay = new QHBoxLayout(widget);
+    m_splitter        = new QSplitter(widget);
+    m_view            = new CameraIconView(this, m_splitter);
+    m_rightSidebar    = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", m_splitter,
+                                                         Digikam::Sidebar::Right);
+    hlay->addWidget(m_splitter);
+    hlay->addWidget(m_rightSidebar);
+    
+    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 3);
+    m_splitter->setOpaqueResize(false);
+    m_rightSidebar->loadViewState();
+        
+    // -------------------------------------------------------------------------
 
     m_cancelBtn = new QToolButton(viewBox);
     QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop", KIcon::Toolbar, 22);
@@ -185,6 +199,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     
     mainLayout->addWidget(m_advBox);
 
+    // -------------------------------------------------------------------------
     // About popupmenu button using a slot for calling the camera interface
     // anchor in Digikam handbook.
     
@@ -246,23 +261,31 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     // -------------------------------------------------------------------------
 
-    connect(m_view, SIGNAL(signalSelected(bool)),
-            this, SLOT(slotItemsSelected(bool)));
+    connect(m_view, SIGNAL(signalSelected(CameraIconViewItem*, bool)),
+            this, SLOT(slotItemsSelected(CameraIconViewItem*, bool)));
 
     connect(m_view, SIGNAL(signalFileView(CameraIconViewItem*)),
             this, SLOT(slotFileView(CameraIconViewItem*)));
-
-    connect(m_view, SIGNAL(signalFileProperties(CameraIconViewItem*)),
-            this, SLOT(slotFileProps(CameraIconViewItem*)));
-
-    connect(m_view, SIGNAL(signalFileExif(CameraIconViewItem*)),
-            this, SLOT(slotFileExif(CameraIconViewItem*)));
 
     connect(m_view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
 
     connect(m_view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
+
+    // -------------------------------------------------------------------------
+    
+    connect(m_rightSidebar, SIGNAL(signalFirstItem()),
+            this, SLOT(slotFirstItem()));
+    
+    connect(m_rightSidebar, SIGNAL(signalNextItem()),
+            this, SLOT(slotNextItem()));
+                
+    connect(m_rightSidebar, SIGNAL(signalPrevItem()),
+            this, SLOT(slotPrevItem()));                
+    
+    connect(m_rightSidebar, SIGNAL(signalLastItem()),
+            this, SLOT(slotLastItem()));                
 
     // -- Read settings --------------------------------------------------
 
@@ -302,15 +325,23 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     connect(m_controller, SIGNAL(signalDeleted(const QString&, const QString&)),
             this, SLOT(slotDeleted(const QString&, const QString&)));
 
+    connect(m_controller, SIGNAL(signalExifFromFile(const QString&, const QString&)),
+            this, SLOT(slotExifFromFile(const QString&, const QString&)));
+    
+    connect(m_controller, SIGNAL(signalExifData(const QByteArray&)),
+            this, SLOT(slotExifFromData(const QByteArray&)));
+
     connect(m_cancelBtn, SIGNAL(clicked()),
             m_controller, SLOT(slotCancel()));
 
     m_busy = false;
+    m_view->setFocus();
     QTimer::singleShot(0, m_controller, SLOT(slotConnect()));
 }
 
 CameraUI::~CameraUI()
 {
+    delete m_rightSidebar;
 }
 
 void CameraUI::slotProcessURL(const QString& url)
@@ -654,22 +685,27 @@ void CameraUI::slotFileView(CameraIconViewItem* item)
                            item->itemInfo()->name);
 }
 
-void CameraUI::slotFileProps(CameraIconViewItem* item)
+void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 {
-    GPItemInfoDlg dlg(this, item->itemInfo());
-    dlg.exec();
+    CameraIconViewItem* item = m_view->findItem(folder, file);
+    m_rightSidebar->itemChanged(item->itemInfo(), KURL::KURL(folder + QString("/") + file), QByteArray(), m_view, item);
 }
 
-void CameraUI::slotFileExif(CameraIconViewItem* item)
+void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
-    m_controller->getExif(item->itemInfo()->folder,
-                          item->itemInfo()->name);
+    CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(m_view->currentItem());
+    m_rightSidebar->itemChanged(item->itemInfo(), KURL::KURL(), exifData, m_view, item);
 }
 
-void CameraUI::slotItemsSelected(bool selected)
+void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 {
     m_downloadMenu->setItemEnabled(0, selected);
     m_deleteMenu->setItemEnabled(0, selected);
+
+    if (selected)
+        m_controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
+    else
+        m_rightSidebar->slotNoCurrentItem();
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file)
@@ -706,6 +742,12 @@ void CameraUI::readSettings()
     h = config->readNumEntry("Height", 500);
     m_autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
     m_autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    if(config->hasKey("Splitter Sizes"))
+        m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+    else 
+        m_view->setSizePolicy(rightSzPolicy);
 
     resize(w, h);
 }
@@ -719,6 +761,7 @@ void CameraUI::saveSettings()
     config->writeEntry("Height", height());
     config->writeEntry("AutoRotate", m_autoRotateCheck->isChecked());
     config->writeEntry("AutoAlbum", m_autoAlbumCheck->isChecked());
+    config->writeEntry("Splitter Sizes", m_splitter->sizes());
     config->sync();
 }
 
@@ -776,6 +819,44 @@ void CameraUI::addFileExtension(const QString& ext)
     settings->setImageFileFilter(settings->getImageFileFilter() +
                                  QString(" *.") + ext);
     emit signalAlbumSettingsChanged();
+}
+
+void CameraUI::slotFirstItem(void)
+{
+    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(m_view->firstItem());
+    if (currItem) 
+       m_view->setCurrentItem(currItem);
+}
+
+void CameraUI::slotPrevItem(void)
+{
+    IconItem* prevItem = 0;
+    IconItem *currItem = m_view->currentItem();
+    if (currItem) 
+    {
+       prevItem = currItem->prevItem();
+       if (prevItem)
+           m_view->setCurrentItem(prevItem);
+    }
+}
+
+void CameraUI::slotNextItem(void)
+{
+    IconItem* nextItem = 0;
+    IconItem *currItem = m_view->currentItem();
+    if (currItem) 
+    {
+       nextItem = currItem->nextItem();
+       if (nextItem)
+           m_view->setCurrentItem(nextItem);
+    }
+}
+
+void CameraUI::slotLastItem(void)
+{
+    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(m_view->lastItem());
+    if (currItem) 
+       m_view->setCurrentItem(currItem);
 }
 
 }  // namespace Digikam

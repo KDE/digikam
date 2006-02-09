@@ -3,8 +3,9 @@
  * Date  : 2004-09-17
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -61,24 +62,6 @@ public:
 
     void openFile(const QString& folder, const QString& file);
     
-protected:
-
-    void customEvent(QCustomEvent* e);
-    
-private:
-
-    CameraControllerPriv *d;
-    friend class CameraThread;
-
-public slots:
-
-    void slotCancel();
-    void slotConnect();
-
-private slots:
-
-    void slotProcessNext();
-
 signals:
 
     void signalBusy(bool val);
@@ -91,9 +74,27 @@ signals:
     void signalDownloaded(const QString& folder, const QString& file);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file);
-    void signalThumbnail(const QString& folder, const QString& file,
-                         const QImage& thumb);
-    void signalExif(const QString& folder, const QString& file);
+    void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
+    void signalExifFromFile(const QString& folder, const QString& file);
+    void signalExifData(const QByteArray& exifData);
+        
+protected:
+
+    void customEvent(QCustomEvent* e);
+    
+public slots:
+
+    void slotCancel();
+    void slotConnect();
+
+private slots:
+
+    void slotProcessNext();
+
+private:
+
+    CameraControllerPriv *d;
+    friend class CameraThread;
 };
     
 }  // namespace Digikam

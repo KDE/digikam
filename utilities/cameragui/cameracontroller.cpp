@@ -3,8 +3,9 @@
  * Date  : 2004-09-17
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -25,12 +26,12 @@ extern "C"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdio.h>
 }
 
 // C++ includes.
 
 #include <typeinfo>
+#include <cstdio>
 
 // Qt includes.
 
@@ -54,10 +55,6 @@ extern "C"
 #include <kio/renamedlg.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-
-// Lib Kexif includes.
-
-#include <libkexif/kexifdialog.h>
 
 // Local includes.
 
@@ -686,18 +683,7 @@ void CameraController::customEvent(QCustomEvent* e)
         QString folder = QDeepCopy<QString>(event->map["folder"].asString());
         QString file   = QDeepCopy<QString>(event->map["file"].asString());
         QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
-
-        KExifDialog exif(d->parent);
-        if (exif.loadData(file, ba.data(), ba.size()))
-        {
-            exif.exec();
-        }
-        else 
-        {
-            KMessageBox::sorry(0, i18n("Failed to retrieve EXIF information for %1")
-                               .arg(file));
-        }
-        
+        emit signalExifData(ba);
         break;
     }
     case (CameraEvent::gp_downloaded) :
@@ -818,9 +804,7 @@ void CameraController::slotProcessNext()
         folder = QDeepCopy<QString>(cmd->map["folder"].asString());
         file   = QDeepCopy<QString>(cmd->map["file"].asString());
 
-        KExifDialog exif(d->parent);
-        exif.loadFile(folder + "/" + file);
-        exif.exec();
+        emit signalExifFromFile(folder, file);
 
         d->cmdQueue.dequeue();
         d->timer->start(50, false);

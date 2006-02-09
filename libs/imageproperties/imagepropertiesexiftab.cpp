@@ -24,10 +24,13 @@
 
 extern "C"
 {
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 }
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
 
 // Qt includes.
  
@@ -35,6 +38,7 @@ extern "C"
 #include <qfile.h>
 #include <qlabel.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 
@@ -65,9 +69,9 @@ public:
 
     ImagePropertiesEXIFTabPriv()
     {
-	levelCombo  = 0;
-	exifWidget  = 0;
-	navigateBar = 0;
+        levelCombo  = 0;
+        exifWidget  = 0;
+        navigateBar = 0;
     }
 
     QComboBox         *levelCombo;
@@ -152,14 +156,32 @@ void ImagePropertiesEXIFTab::setCurrentURL(const KURL& url, int itemType)
     if (!d->exifWidget->getCurrentItemName().isNull())
         d->currentItem = d->exifWidget->getCurrentItemName();
     
-    QByteArray ba = loadRawProfileFromPNG(url.path());
+    // In first, trying to load Raw exif data embedded in PNG file.
+    
+    QByteArray ba = loadRawExifProfileFromPNG(url.path());
     if (ba.isNull())
-        d->exifWidget->loadFile(url.path());
+    {
+        QFileInfo fi(url.path());
+        QFileInfo thmLo(fi.dirPath() + "/" + fi.baseName() + ".thm");          // Lowercase
+        QFileInfo thmUp(fi.dirPath() + "/" + fi.baseName() + ".THM");          // Uppercase
+    
+        // In second, trying to load exif data from THM file (thumbnail) if exist, especially
+        // with recent USM camera.
+        // At end, trying to get Exif data from real image file.
+        
+        if (thmLo.exists())
+            d->exifWidget->loadFile(thmLo.filePath());
+        else if (thmUp.exists())
+            d->exifWidget->loadFile(thmUp.filePath());
+        else
+            d->exifWidget->loadFile(url.path());
+    }
     else
+    {
         setCurrentData(ba, url.filename(), itemType);
+    }
 
     d->exifWidget->setCurrentItem(d->currentItem);
-    
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
 }
@@ -194,7 +216,7 @@ void ImagePropertiesEXIFTab::slotLevelChanged(int)
         d->exifWidget->setMode(KExifWidget::FULL);
 }
 
-QByteArray ImagePropertiesEXIFTab::loadRawProfileFromPNG(const KURL& url)
+QByteArray ImagePropertiesEXIFTab::loadRawExifProfileFromPNG(const KURL& url)
 {
     QByteArray ba;
     png_uint_32  w32, h32;

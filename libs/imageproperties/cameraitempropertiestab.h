@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at free.fr>
- * Date  : 2004-11-17
- * Description : A tab to display Exif image informations
+ * Date  : 2006-02-08
+ * Description : A tab to display camera item informations
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,15 +18,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESEXIFTAB_H
-#define IMAGEPROPERTIESEXIFTAB_H
-
-// LibPNG includes.
-
-extern "C"
-{
-#include <png.h>
-}
+#ifndef CAMERAITEMPROPERTIESTAB_H
+#define CAMERAITEMPROPERTIESTAB_H
 
 // Qt includes.
 
@@ -44,20 +37,19 @@ extern "C"
 namespace Digikam
 {
 
-class ImagePropertiesEXIFTabPriv;
+class GPItemInfo;
+class CameraItemPropertiesTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesEXIFTab : public QWidget
+class DIGIKAM_EXPORT CameraItemPropertiesTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesEXIFTab(QWidget* parent, bool navBar=true);
-    ~ImagePropertiesEXIFTab();
+    CameraItemPropertiesTab(QWidget* parent, bool navBar=true);
+    ~CameraItemPropertiesTab();
 
-    void setCurrentURL(const KURL& url=KURL::KURL(), int itemType=0);
-    void setCurrentData(const QByteArray& data=QByteArray(), 
-                        const QString& filename=QString::null, int itemType=0);
+    void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0);
 
 signals:
     
@@ -66,20 +58,11 @@ signals:
     void signalNextItem(void);    
     void signalLastItem(void); 
         
-private slots:
-
-    void slotLevelChanged(int);
-
 private:
 
-    QByteArray loadRawExifProfileFromPNG(const KURL& url);
-    uchar* readRawProfile(png_textp text, png_uint_32 *length, int ii);
-
-private:
-
-    ImagePropertiesEXIFTabPriv* d;
+    CameraItemPropertiesTabPriv* d;
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPROPERTIESEXIFTAB_H */
+#endif /* CAMERAITEMPROPERTIESTAB_H */

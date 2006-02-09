@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name, 
-                                               QSplitter *splitter, Side side, bool mimimizedDefault)
+                                               QSplitter *splitter, Side side, bool mimimizedDefault, bool navBar)
                       : Digikam::Sidebar(parent, name, side, mimimizedDefault)
 {
     m_image         = 0;
@@ -52,8 +52,8 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
     m_dirtyExifTab  = false;
     m_dirtyColorTab = false;
     
-    m_exifTab  = new ImagePropertiesEXIFTab(parent, false);
-    m_colorTab = new ImagePropertiesColorsTab(parent, 0, false);
+    m_exifTab  = new ImagePropertiesEXIFTab(parent, navBar);
+    m_colorTab = new ImagePropertiesColorsTab(parent, 0, navBar);
     
     setSplitter(splitter);
          

@@ -3,8 +3,9 @@
  * Date  : 2004-09-18
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -18,12 +19,9 @@
  * 
  * ============================================================ */
 
-// C Ansi includes.
+// C++ includes.
 
-extern "C"
-{
-#include <time.h>
-}
+#include <ctime>
 
 // Qt includes.
 
@@ -53,19 +51,21 @@ namespace Digikam
 {
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
-    : IconView(parent), m_renamer(0), m_ui(ui),
-      m_groupItem(new IconGroupItem(this))
+              : IconView(parent), m_renamer(0), m_ui(ui),
+                m_groupItem(new IconGroupItem(this))
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
 
     CameraIconViewItem::m_newEmblem = new QPixmap(CameraIconViewItem::new_xpm);
     
     connect(this, SIGNAL(signalSelectionChanged()),
-            SLOT(slotSelectionChanged()));
+            this, SLOT(slotSelectionChanged()));
+            
     connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
-            SLOT(slotContextMenu(IconItem*, const QPoint&)));
+            this, SLOT(slotContextMenu(IconItem*, const QPoint&)));
+            
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
-            SLOT(slotDoubleClicked(IconItem*)));
+            this, SLOT(slotDoubleClicked(IconItem*)));
 }
 
 CameraIconView::~CameraIconView()
@@ -78,8 +78,9 @@ CameraIconView::~CameraIconView()
 void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 {
     m_renamer = renamer;
+    
     connect(m_renamer, SIGNAL(signalChanged()),
-            SLOT(slotDownloadNameChanged()));
+            this, SLOT(slotDownloadNameChanged()));
 }
 
 void CameraIconView::addItem(const GPItemInfo& info)
@@ -136,7 +137,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
 
 void CameraIconView::slotDownloadNameChanged()
 {
-    bool    useDefault   = true;
+    bool useDefault = true;
     QString nameTemplate;
 
     if (m_renamer)
@@ -227,18 +228,20 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
 void CameraIconView::slotSelectionChanged()
 {
     bool selected = false;
+    CameraIconViewItem* camItem = 0;
     
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
         if (item->isSelected())
         {
+            camItem = static_cast<CameraIconViewItem*>(item);
             selected = true;
             break;
         }
     }
 
-    emit signalSelected(selected);
+    emit signalSelected(camItem, selected);
 }
 
 void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
@@ -255,11 +258,8 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     QPopupMenu menu;
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator();
-    menu.insertItem(i18n("Properties"), 1);
-    menu.insertItem(SmallIcon("text_block"), i18n("EXIF Information"), 2);
-    menu.insertSeparator();
-    menu.insertItem(SmallIcon("down"),i18n("Download"), 3);
-    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 4);
+    menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
+    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
 
     int result = menu.exec(QCursor::pos());
 
@@ -272,20 +272,10 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     }
     case(1):
     {
-        emit signalFileProperties(camItem);
-        break;
-    }
-    case(2):
-    {
-        emit signalFileExif(camItem);
-        break;
-    }
-    case(3):
-    {
         emit signalDownload();
         break;
     }
-    case(4):
+    case(2):
     {
         emit signalDelete();
         break;
