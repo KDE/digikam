@@ -48,6 +48,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kfilemetainfo.h>
 #include <kdebug.h>
 #include <kprocess.h>
 #include <libkexif/kexifdata.h>
@@ -170,6 +171,22 @@ ImlibInterface::~ImlibInterface()
 
 int ImlibInterface::fileFormat(const QString& filePath)
 {
+    if ( filePath == QString::null )
+        return NONE_IMAGE;
+        
+    KFileMetaInfo metaInfo(filePath, QString::null, KFileMetaInfo::Fastest);
+
+    if (metaInfo.isValid())
+    {
+        kdDebug() << k_funcinfo << " : Mime type: " << metaInfo.mimeType() << endl;
+        
+        if (metaInfo.mimeType() == "image/jpeg")
+            return JPEG_IMAGE;
+        
+        if (metaInfo.mimeType() == "image/png")
+            return PNG_IMAGE;
+    }
+
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     if (!f)
     {
@@ -190,20 +207,10 @@ int ImlibInterface::fileFormat(const QString& filePath)
     fclose(f);
     
     DcrawParse     rawFileParser;
-    unsigned short jpegID    = 0xD8FF;
     unsigned short tiffBigID = 0x4d4d;
     unsigned short tiffLilID = 0x4949;
-    unsigned char  pngID[8]  = {'\211', 'P', 'N', 'G', '\r', '\n', '\032', '\n'};
     
-    if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
-    {
-        return JPEG_IMAGE;
-    }
-    else if (memcmp(&header, &pngID, 8) == 0)        // PNG file ?
-    {
-        return PNG_IMAGE;
-    }
-    else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
+    if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
     {
         // RAW File test using dcraw.  
         // Need to test it before TIFF because any RAW file 
