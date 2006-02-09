@@ -39,10 +39,13 @@
 
 extern "C" 
 {
-#include <stdio.h>
-#include <stdlib.h>
 #include "iccjpeg.h"
 }
+
+// C+ includes.
+
+#include <cstdio>
+#include <cstdlib>
 
 // QT includes.
 
