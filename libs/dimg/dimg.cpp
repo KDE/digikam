@@ -282,6 +282,15 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 {
     if ( filePath == QString::null )
         return NONE;
+
+    // ----------------------------------------
+    // FIXME : It's just for testing : remove this code later...
+    KFileMetaInfo metaInfo(filePath, QString::null, KFileMetaInfo::Fastest);
+    if (metaInfo.isValid())
+        kdDebug() << k_funcinfo << " : Mime type: " << metaInfo.mimeType() << endl;
+    else
+        kdDebug() << k_funcinfo << " KFileMetaInfo is not valid for " << filePath << endl;
+    // ----------------------------------------
     
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     
