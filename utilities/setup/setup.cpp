@@ -151,7 +151,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor ICC Profiles Management"),
                        BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new SetupICC(d->page_icc);
+    d->iccPage = new SetupICC(d->page_icc, this);
 
     d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
                            BarIcon("kipi", KIcon::SizeMedium));

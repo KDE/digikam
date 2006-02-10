@@ -43,6 +43,7 @@
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kdialogbase.h>
 #include <kurlrequester.h>
 #include <kconfig.h>
 #include <kcombobox.h>
@@ -110,13 +111,17 @@ public:
     KComboBox       *renderingIntentKC;
 
     ICCfilesPath     ICCPath;
+
+    KDialogBase     *mainDialog;
 };
 
-SetupICC::SetupICC(QWidget* parent )
+SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
         : QWidget(parent)
 {
 //     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
     d = new SetupICCPriv();
+
+    d->mainDialog = dialog;
 
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint());
 
@@ -286,15 +291,15 @@ void SetupICC::applySettings()
     }
 //     config->writeEntry("ApplyICC", d->defaultApplyICC->isChecked());
 //     config->writeEntry("AskICC", d->defaultAskICC->isChecked());
-    if (d->defaultPathKU->url().isEmpty())
-    {
-        QString message = QString(i18n("<p>You must set a default path to color profiles files.</p>"));
-        message.append(i18n("<p>This settings will not be written.</p>"));
-        KMessageBox::error(this, message );
-        config->writeEntry("EnableCM", false);
-        config->sync();
-        return;
-    }
+//     if (d->defaultPathKU->url().isEmpty())
+//     {
+//         QString message = QString(i18n("<p>You must set a default path to color profiles files.</p>"));
+//         message.append(i18n("<p>This settings will not be written.</p>"));
+//         KMessageBox::error(this, message );
+//         config->writeEntry("EnableCM", false);
+//         config->sync();
+//         return;
+//     }
     config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
     config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
@@ -370,10 +375,19 @@ void SetupICC::fillCombos()
     const QFileInfoList* files = profilesDir.entryInfoList();
     QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
+
+//     if (files->isEmpty())
+//     {
+//         d->mainDialog->enableButtonOK(false);
+//         KMessageBox::sorry(this, i18n("<p>It seems there are no color profiles in this path</p>"));
+//         return;
+//     }
+//     else
     if (files)
     {
         QFileInfoListIterator it(*files);
         QFileInfo *fileInfo;
+//         d->mainDialog->enableButtonOK(true);
 
         while ((fileInfo = it.current()) != 0)
         {
@@ -412,7 +426,7 @@ void SetupICC::fillCombos()
     }
     else
     {
-      kdDebug() << "no list" << endl;
+        kdDebug() << "No List" << endl;
     }
     d->inProfilesKC->insertStringList(m_inICCFiles_description);
     d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
@@ -423,9 +437,11 @@ void SetupICC::fillCombos()
 void SetupICC::slotToggledWidgets(bool t)
 { 
     d->bpcAlgorithm->setEnabled(t);
+    d->bpcAlgorithm->setChecked(t);
  
     d->defaultApplyICC->setEnabled(t); 
     d->defaultAskICC->setEnabled(t);
+    d->defaultAskICC->setChecked(t);
     d->defaultApplyICC->setChecked(t);
     
     d->defaultPathKU->setEnabled(t);
@@ -468,6 +484,15 @@ void SetupICC::slotToggledWidgets(bool t)
 void SetupICC::slotFillCombos(const QString& url)
 {
     cmsHPROFILE tmpProfile=0;
+
+    if (url.isEmpty())
+    {
+        d->mainDialog->enableButtonOK(false);
+        KMessageBox::sorry(this, i18n("<p>You must set a default path to color profiles files.</p>"));
+        return;
+    }
+    d->mainDialog->enableButtonOK(true);
+    
     QDir profilesDir(QFile::encodeName(url), "*.icc;*.icm", QDir::Files);
 
 
@@ -480,10 +505,18 @@ void SetupICC::slotFillCombos(const QString& url)
     const QFileInfoList* files = profilesDir.entryInfoList();
     QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
+//     if (files->isEmpty())
+//     {
+//         d->mainDialog->enableButtonOK(false);
+//         KMessageBox::sorry(this, i18n("<p>It seems there are no color profiles in this path</p>"));
+//         return;
+//     }
+//     else
     if (files)
     {
         QFileInfoListIterator it(*files);
         QFileInfo *fileInfo;
+//         d->mainDialog->enableButtonOK(true);
 
         m_inICCFiles_description.clear();
         d->inICCFiles_file.clear();
@@ -529,7 +562,7 @@ void SetupICC::slotFillCombos(const QString& url)
     }
     else
     {
-      kdDebug() << "no list" << endl;
+        kdDebug() << "No list" << endl;
     }
     d->inProfilesKC->clear();
     d->inProfilesKC->insertStringList(m_inICCFiles_description);

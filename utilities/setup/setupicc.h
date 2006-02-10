@@ -28,6 +28,8 @@
 #include <qwidget.h>
 #include <qmap.h>
 
+class KDialogBase;
+
 namespace Digikam
 {
 
@@ -39,7 +41,7 @@ class SetupICC : public QWidget
 
 public:
 
-    SetupICC(QWidget* parent = 0);
+    SetupICC(QWidget* parent = 0, KDialogBase* dialog = 0);
     ~SetupICC();
 
     void applySettings();
