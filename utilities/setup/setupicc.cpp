@@ -400,23 +400,55 @@ void SetupICC::fillCombos()
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
                 case icSigInputClass:
-                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    
+                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    {
+                        m_inICCFiles_description.append(fileName);
+                    }
+                    else
+                    {
+                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    }
                     d->inICCFiles_file.append(fileName);
                     break;
                 case icSigDisplayClass:
-                    m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    
+                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    {
+                        m_monitorICCFiles_description.append(fileName);
+                        m_workICCFiles_description.append(fileName);
+                    }
+                    else
+                    {
+                        m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    }
                     d->monitorICCFiles_file.append(fileName);
                     d->workICCFiles_file.append(fileName);
                     break;
                 case icSigOutputClass:
-                    m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    {
+                        m_proofICCFiles_description.append(fileName);
+                    }
+                    else
+                    {
+                        m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    }
                     d->proofICCFiles_file.append(fileName);
                     break;
                 case icSigColorSpaceClass:
-                    m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    if(QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    {
+                        m_workICCFiles_description.append(fileName);
+                        m_inICCFiles_description.append(fileName);
+                    }
+                    else
+                    {
+                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                    }
                     d->workICCFiles_file.append(fileName);
-                    m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     d->inICCFiles_file.append(fileName);
                     break;
             }
