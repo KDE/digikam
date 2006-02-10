@@ -66,7 +66,7 @@ signals:
 
     /**
      * This signal is emitted when @ref downloadFrom() is called via DCOP
-     * @param the path to download from
+     * @param folder the path passed tp downloadFrom earlier
      */
     void signalDownloadImages( const QString& folder);
 
