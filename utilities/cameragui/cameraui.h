@@ -24,39 +24,25 @@
 
 // Qt includes.
 
-#include <qdialog.h>
 #include <qstring.h>
+#include <qimage.h>
+
+// KDE includes.
+
+#include <kdialog.h>
+#include <kurl.h>
 
 // Local includes.
 
 #include "gpiteminfo.h"
 
-class QPushButton;
-class QToolButton;
-class QCheckBox;
-class QLabel;
-class QImage;
-class QVButtonGroup;
-class QVBox;
-class QLineEdit;
-class QPopupMenu;
-class QProgressBar;
-class QDate;
-class QSplitter;
-
-class KURL;
-
 namespace Digikam
 {
 
-class CameraIconView;
 class CameraIconViewItem;
-class CameraController;
-class RenameCustomizer;
-class AnimWidget;
-class ImagePropertiesSideBarCamGui;
+class CameraUIPriv;
 
-class CameraUI : public QDialog
+class CameraUI : public KDialog
 {
     Q_OBJECT
 
@@ -69,6 +55,11 @@ public:
 
     bool isBusy() const;
     
+signals:
+    
+    void signalLastDestination(const KURL&);
+    void signalAlbumSettingsChanged();
+
 protected:
 
     void closeEvent(QCloseEvent* e);
@@ -120,51 +111,9 @@ private slots:
     void slotNextItem(void);
     void slotLastItem(void);
 
-signals:
-    
-    void signalLastDestination(const KURL&);
-    void signalAlbumSettingsChanged();
-
 private:
     
-    bool              m_showAdvanced;
-    bool              m_busy;
-
-    QStringList       m_foldersToScan;
-
-    QPushButton*      m_helpBtn;
-    QPushButton*      m_closeBtn;
-    QPushButton*      m_downloadBtn;
-    QPushButton*      m_deleteBtn;
-    QPushButton*      m_advBtn;
-
-    QPopupMenu*       m_downloadMenu;
-    QPopupMenu*       m_deleteMenu;
-
-    QToolButton*      m_cancelBtn;
-
-    QVBox*            m_advBox;
-
-    QCheckBox*        m_autoRotateCheck;
-    QCheckBox*        m_autoAlbumCheck;
-
-    QLabel*           m_status;
-
-    QProgressBar*     m_progress;
-
-    QSplitter        *m_splitter;
-
-    KURL              m_lastDestURL;
-
-    CameraController* m_controller;
-
-    CameraIconView*   m_view;
-
-    RenameCustomizer* m_renameCustomizer;
-
-    AnimWidget*       m_anim;
-
-    ImagePropertiesSideBarCamGui *m_rightSidebar;
+    CameraUIPriv* d;
 };
 
 }  // namespace Digikam
