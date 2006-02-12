@@ -157,7 +157,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     QGroupBox* viewBox = new QGroupBox(0, Qt::Horizontal, title, this);
 
-    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 1, 3, 5);
+    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 1, 3, 
+                                     KDialog::spacingHint());
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 3 );
     viewBoxLayout->setColStretch( 2, 1 );
@@ -165,9 +166,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     QWidget* widget   = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(widget);
-    d->splitter        = new QSplitter(widget);
-    d->view            = new CameraIconView(this, d->splitter);
-    d->rightSidebar    = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
+    d->splitter       = new QSplitter(widget);
+    d->view           = new CameraIconView(this, d->splitter);
+    d->rightSidebar   = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
                                                          Digikam::Sidebar::Right);
     hlay->addWidget(d->splitter);
     hlay->addWidget(d->rightSidebar);
@@ -217,14 +218,14 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     // -------------------------------------------------------------------------
     
-    QHBoxLayout* btnLayout = new QHBoxLayout();
+    QHBoxLayout* btnLayout = new QHBoxLayout(0, KDialog::marginHint(), KDialog::spacingHint());
 
     QPushButton* helpBtn;
     QPushButton* selectBtn;
     
     d->advBtn      = new QPushButton(i18n("&Advanced %1").arg(">>"), this);
-    helpBtn       = new QPushButton(i18n("&Help"), this);
-    selectBtn     = new QPushButton(i18n("&Select"), this);
+    helpBtn        = new QPushButton(i18n("&Help"), this);
+    selectBtn      = new QPushButton(i18n("&Select"), this);
     d->downloadBtn = new QPushButton(i18n("&Download"), this);
     d->deleteBtn   = new QPushButton(i18n("D&elete"), this);
     d->closeBtn    = new QPushButton(i18n("&Close"), this);
@@ -239,8 +240,10 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     mainLayout->addLayout(btnLayout);
     
+    // -------------------------------------------------------------------------
+
     d->advBox = new QVBox(this);
-    d->advBox->setSpacing(5);
+    d->advBox->setSpacing(KDialog::spacingHint());
     d->showAdvanced = false;
     d->advBox->hide();
 
