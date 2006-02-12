@@ -70,10 +70,6 @@ signals:
 
 protected:
 
-    // If current image file format is only available in read only,
-    // typicially all RAW image file formats.
-    bool                     m_isReadOnly;
-
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
     
@@ -151,7 +147,7 @@ protected:
 
 protected slots:
 
-    void slotSave()   { if (m_isReadOnly) saveAs(); else save(); };
+    void slotSave();
     void slotSaveAs() { saveAs(); };
     
     void slotImagePluginsHelp();
@@ -177,7 +173,7 @@ protected slots:
     void slotSavingProgress(const QString& filePath, float progress);
 
     virtual void slotLoadingStarted(const QString& filename);
-    virtual void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
         
     virtual void slotContextMenu();

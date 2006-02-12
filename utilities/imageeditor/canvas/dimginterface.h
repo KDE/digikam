@@ -62,10 +62,12 @@ public:
     void   undo();
     void   redo();
     void   restore();
-    void   save(const QString& file, IOFileSettingsContainer *iofileSettings);
+    //void   save(const QString& file, IOFileSettingsContainer *iofileSettings);
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   const QString& mimeType=0);
-    void   setModified (bool val);
+    void   setModified();
+    void   clearUndoManager();
+    void   setUndoManagerOrigin();
 
     void   zoom(double val);
 
@@ -87,6 +89,7 @@ public:
     bool   hasAlpha();
     bool   sixteenBit();
     bool   exifRotated();
+    bool   isReadOnly();
 
     void   setSelectedArea(int x, int y, int w, int h);
     void   getSelectedArea(int& x, int& y, int& w, int& h);
@@ -144,17 +147,18 @@ protected slots:
 
 signals:
 
-    void   signalModified(bool moreUndo, bool moreRedo);
+    void signalModified();
+    void signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 
     void signalLoadingProgress(const QString& filePath, float progress);
-    void signalImageLoaded(const QString& filePath, bool success, bool isReadOnly);
+    void signalImageLoaded(const QString& filePath, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalImageSaved(const QString& filePath, bool success);
 
 private:
 
-    void   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
-                      const QString& mimeType); 
+    //void   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
+      //                const QString& mimeType); 
     void   exifRotate(const QString& filename);
 
     DImgInterface();

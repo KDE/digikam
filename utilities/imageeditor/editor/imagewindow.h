@@ -99,6 +99,7 @@ private:
 
     void saveIsComplete();
     void saveAsIsComplete(); 
+    void setViewToURL(const KURL &url);
 
     ImageWindow();
 
@@ -113,7 +114,8 @@ private slots:
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
     
-    void slotChanged(bool, bool);
+    void slotChanged();
+    void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
     void slotContextMenu();

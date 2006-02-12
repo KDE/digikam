@@ -50,10 +50,12 @@ public:
     {
         dimgiface = 0;
         undoCache = 0;
+        origin = 0;
     }
 
     QValueList<UndoAction*>  undoActions;
     QValueList<UndoAction*>  redoActions;
+    int                      origin;
     
     UndoCache               *undoCache;
     
@@ -93,6 +95,7 @@ void UndoManager::addAction(UndoAction* action)
         
         d->undoCache->putData(d->undoActions.size(), w, h, bytesDepth, data);
     }
+    d->origin++;
 }
 
 void UndoManager::undo()
@@ -130,6 +133,7 @@ void UndoManager::undo()
     
     d->undoActions.pop_back();
     d->redoActions.push_back(action);
+    d->origin--;
 }
 
 void UndoManager::redo()
@@ -156,6 +160,7 @@ void UndoManager::redo()
     
     d->redoActions.pop_back();
     d->undoActions.push_back(action);
+    d->origin++;
 }
 
 void UndoManager::clear(bool clearCache)
@@ -229,6 +234,16 @@ void UndoManager::getRedoHistory(QStringList &titles)
     {
         titles.push_front((*it)->getTitle());
     }
+}
+
+bool UndoManager::isAtOrigin()
+{
+    return d->origin == 0;
+}
+
+void UndoManager::setOrigin()
+{
+    d->origin = 0;
 }
 
 }  // namespace Digikam

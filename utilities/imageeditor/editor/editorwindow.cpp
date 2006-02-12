@@ -115,7 +115,6 @@ EditorWindow::EditorWindow(const char *name)
     m_redoAction             = 0;
     m_slideShowAction        = 0;
     m_fullScreen             = false;
-    m_isReadOnly             = false;
     m_rotatedOrFlipped       = false;
     
     // Settings containers instance.
@@ -151,17 +150,20 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalZoomChanged(float)),
             this, SLOT(slotZoomChanged(float)));
             
-    connect(m_canvas, SIGNAL(signalChanged(bool, bool)),
-            this, SLOT(slotChanged(bool, bool)));
-            
+    connect(m_canvas, SIGNAL(signalChanged()),
+            this, SLOT(slotChanged()));
+
+    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
+            this, SLOT(slotUndoStateChanged(bool, bool, bool)));
+
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
     
     connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
             this, SLOT(slotLoadingStarted(const QString &)));
 
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool, bool)),
-            this, SLOT(slotLoadingFinished(const QString &, bool, bool)));
+    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool)),
+            this, SLOT(slotLoadingFinished(const QString &, bool)));
 
     connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
             this, SLOT(slotLoadingProgress(const QString &, float)));
@@ -962,7 +964,7 @@ bool EditorWindow::promptUserSave(const KURL& url)
         {
             bool saving;
 
-            if (m_isReadOnly)
+            if (m_canvas->isReadOnly())
                 saving = saveAs();
             else
                 saving = save();
@@ -1060,8 +1062,8 @@ void EditorWindow::showToolBars()
 
 void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    
+    setCursor( KCursor::waitCursor() );
+
     // Disable actions as appropriate during loading
     emit signalNoCurrentItem();
     toggleActions(false);
@@ -1069,12 +1071,11 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
-void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/, bool isReadOnly)
+void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/)
 {
     //TODO: handle success == false
 
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
-    m_isReadOnly = isReadOnly;
     slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
@@ -1082,12 +1083,20 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*succe
     // automaticly by a signal from canvas
     toggleActions(true);
 
-    QApplication::restoreOverrideCursor();
+    unsetCursor();
 }
 
+
+void EditorWindow::slotSave()
+{
+    if (m_canvas->isReadOnly())
+        saveAs();
+    else
+        save();
+}
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
+    setCursor( KCursor::waitCursor() );
     
     // Disable actions as appropriate during saving
     emit signalNoCurrentItem();
@@ -1096,7 +1105,7 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(IOFileProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
-void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
+void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 {
     if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
     {
@@ -1105,7 +1114,6 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
 
         if (!success)
         {
-            kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to \n\"%2\".")
                             .arg(m_savingContext->destinationURL.filename())
                             .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
@@ -1121,19 +1129,24 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
         if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
               QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
         {
-            kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to overwrite original file"),
                                i18n("Error Saving File"));
             finishSaving(false);
             return;
         }
 
-        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
-        m_canvas->setModified( false );
-        
-        saveIsComplete();
+        m_canvas->setUndoHistoryOrigin();
 
-        kapp->restoreOverrideCursor();
+        // remove image from cache since it has changed
+        LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
+        // this won't be in the cache, but does not hurt to do it anyway
+        LoadingCacheInterface::cleanFromCache(filename);
+
+        // restore state of disabled actions. saveIsComplete can start any other task
+        // (loading!) which might itself in turn change states
+        finishSaving(true);
+
+        saveIsComplete();
     }
     else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
     {
@@ -1142,7 +1155,6 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
         // from saveAs()
         if (!success)
         {
-            kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
                             .arg(m_savingContext->destinationURL.filename())
                             .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
@@ -1164,22 +1176,20 @@ void EditorWindow::slotSavingFinished(const QString& /*filename*/, bool success)
         if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
               QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
         {
-            kapp->restoreOverrideCursor();
             KMessageBox::error(this, i18n("Failed to save to new file"),
                                i18n("Error Saving File"));
             finishSaving(false);
             return;
         }
 
+        m_canvas->setUndoHistoryOrigin();
+
         LoadingCacheInterface::cleanFromCache(m_savingContext->destinationURL.path());
-        m_canvas->setModified( false );
+        LoadingCacheInterface::cleanFromCache(filename);
 
+        finishSaving(true);
         saveAsIsComplete();
-
-        kapp->restoreOverrideCursor();
     }
-
-    finishSaving(true);
 }
 
 void EditorWindow::finishSaving(bool success)
@@ -1198,23 +1208,31 @@ void EditorWindow::finishSaving(bool success)
 
     // Enable actions as appropriate after saving
     toggleActions(true);
+    unsetCursor();
 
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
 }
 
 void EditorWindow::startingSave(const KURL& url)
 {
+    // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+        return;
+
     m_savingContext->srcURL         = url;
     m_savingContext->destinationURL = m_savingContext->srcURL;
     m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
     m_savingContext->saveTempFile   = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
 
-    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings);
+    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings);
 }
 
 bool EditorWindow::startingSaveAs(const KURL& url)
 {
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+        return false;
+
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
     mimetypes.append(" image/tiff");
     kdDebug () << "mimetypes=" << mimetypes << endl;    
@@ -1329,7 +1347,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->saveTempFile->setAutoDelete(true);
 
-    m_canvas->saveAsTmpFile(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
+    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 
     return true;
 }

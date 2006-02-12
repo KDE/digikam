@@ -91,6 +91,7 @@ extern "C"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
+#include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "showfoto.h"
 
@@ -500,18 +501,13 @@ void ShowFoto::slotChangeBCG()
     }
 }
 
-void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
+void ShowFoto::slotChanged()
 {
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
                         QString::number(m_canvas->imageHeight()) +
                         QString(" ") +
                         i18n("pixels"));
-
-    m_revertAction->setEnabled(moreUndo);
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-    m_saveAction->setEnabled(moreUndo);
 
     if (m_currentItem)
     {
@@ -523,6 +519,14 @@ void ShowFoto::slotChanged(bool moreUndo, bool moreRedo)
                                         sel.isNull() ? 0 : &sel, img);
         }
     }    
+}
+
+void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+{
+    m_revertAction->setEnabled(moreUndo);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+    m_saveAction->setEnabled(canSave);
 }
 
 void ShowFoto::toggleActions(bool val)
@@ -644,7 +648,6 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     m_bar->clear(true);
     emit signalNoCurrentItem();
     m_currentItem = 0;
-    m_isReadOnly = false;
     
     if (!url.isValid() || !url.isLocalFile())
        return;
@@ -806,9 +809,9 @@ void ShowFoto::slotLoadingStarted(const QString& filename)
     m_fileOpenAction->setEnabled(false);
 }
 
-void ShowFoto::slotLoadingFinished(const QString& filename, bool success, bool isReadOnly)
+void ShowFoto::slotLoadingFinished(const QString& filename, bool success)
 {
-    Digikam::EditorWindow::slotLoadingFinished(filename, success, isReadOnly);
+    Digikam::EditorWindow::slotLoadingFinished(filename, success);
     
     // Here we re-enable specific actions on showfoto.
     m_openFilesInFolderAction->setEnabled(true);
@@ -835,22 +838,27 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::saveIsComplete()
 {
-    m_bar->invalidateThumb(m_currentItem);
-    QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    slotChanged();
+    //m_bar->invalidateThumb(m_currentItem);
+    //slotOpenURL(m_currentItem->url());
 }
 
 void ShowFoto::saveAsIsComplete()
 {
-        // Add the file to the list of thumbbar images if it's not there already
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    slotChanged();
 
-        Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
-        m_bar->invalidateThumb(foundItem);
+    // Add the file to the list of thumbbar images if it's not there already
+    Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
+    m_bar->invalidateThumb(foundItem);
 
-        if (!foundItem)
-            foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
+    if (!foundItem)
+        foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
 
-        m_bar->setSelected(foundItem);
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+    m_bar->setSelected(foundItem);
+    //QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+    //slotOpenURL(m_currentItem->url());
 }
 
 bool ShowFoto::save()
@@ -953,7 +961,6 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         toggleActions(false);
         m_canvas->load(QString::null, 0, m_IOFileSettings);
         m_currentItem = 0;
-        m_isReadOnly = false;
     }
     else
     {

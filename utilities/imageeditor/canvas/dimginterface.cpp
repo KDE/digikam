@@ -84,14 +84,12 @@ public:
         
         exifOrient           = false;
         valid                = false;
-        needClearUndoManager = false;
         rotatedOrFlipped     = false;
     }
 
     bool          valid;
     bool          rotatedOrFlipped;
     bool          exifOrient;
-    bool          needClearUndoManager;
 
     int           width;
     int           height;
@@ -199,7 +197,6 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
 
     bool apply;
     bool valRet     = false;
-    bool isReadOnly = true;
 
     d->image = img;
 
@@ -212,7 +209,6 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         d->width      = d->origWidth;
         d->height     = d->origHeight;
 
-        isReadOnly    = d->image.isReadOnly();
         valRet        = true;
         
         if (d->cmSettings)
@@ -242,7 +238,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + "</p>";
                     
                     // To repaint image in canvas before to ask about to apply ICC profile.
-                    emit signalImageLoaded(d->filename, valRet, isReadOnly);
+                    emit signalImageLoaded(d->filename, valRet);
                     
                     if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                     {
@@ -271,7 +267,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
 
                         // To repaint image in canvas before to ask about to apply ICC profile.
-                        emit signalImageLoaded(d->filename, valRet, isReadOnly);
+                        emit signalImageLoaded(d->filename, valRet);
     
                         if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                         {
@@ -296,10 +292,8 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         //exifRotate(filename);
     }
 
-    emit signalImageLoaded(d->filename, valRet, isReadOnly);
-    
-    //TODO: undo manager was cleared. Is it correct to emit this here?
-    emit signalModified(false, false);
+    emit signalImageLoaded(d->filename, valRet);
+    setModified();
 }
 
 void DImgInterface::slotLoadingProgress(const QString& filePath, float progress)
@@ -382,36 +376,35 @@ void DImgInterface::undo()
 {
     if (!d->undoMan->anyMoreUndo())
     {
-        emit signalModified(false, d->undoMan->anyMoreRedo());
+        emit signalUndoStateChanged(false, d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
         return;
     }
 
     d->undoMan->undo();
-    emit signalModified(d->undoMan->anyMoreUndo(), true);
+    setModified();
 }
 
 void DImgInterface::redo()
 {
     if (!d->undoMan->anyMoreRedo())
     {
-        emit signalModified(d->undoMan->anyMoreUndo(), false);
+        emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), false, !d->undoMan->isAtOrigin());
         return;
     }
 
     d->undoMan->redo();
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::restore()
 {
     d->undoMan->clear();
 
-//     load(d->filename, 0, 0);
     load(d->filename, d->cmSettings, d->iofileSettings);
-    //this is now emitted in slotImageLoaded. Correct?
-    //emit signalModified(false, false);
 }
 
+/*
+These code is unused and untested
 void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
 {
     d->cmod.reset();
@@ -431,8 +424,9 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 
     saveAction(file, iofileSettings, currentMimeType);
 }
+*/
 
-void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileSettings, 
+void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings, 
                            const QString& givenMimeType)
 {
     d->cmod.reset();
@@ -440,8 +434,6 @@ void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileS
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
     d->cmod.applyBCG(d->image);
-
-    d->needClearUndoManager = false;
 
     // Try hard to find a mimetype.
     QString mimeType = givenMimeType;
@@ -456,12 +448,7 @@ void DImgInterface::saveAs(const QString& file, IOFileSettingsContainer *iofileS
             mimeType = QImageIO::imageFormat(d->filename);
         }
     }
-    saveAction(file, iofileSettings, mimeType);
-}
 
-void DImgInterface::saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
-                               const QString& mimeType) 
-{
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType << ")" << endl;
 
@@ -483,16 +470,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
     if (filePath != d->savingFilename)
         return;
 
-    if (success)
-    {
-        if (d->needClearUndoManager)
-        {
-            d->needClearUndoManager = false;
-            d->undoMan->clear();
-            emit signalModified(false, false);
-        }
-    }
-    else
+    if (!success)
     {
         kdWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
     }
@@ -506,17 +484,23 @@ void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
         emit signalSavingProgress(filePath, progress);
 }
 
-void DImgInterface::setModified(bool val)
+void DImgInterface::setModified()
 {
-    if (val)
-    {
-        emit signalModified(true, true);
-    }
-    else 
-    {
-        d->undoMan->clear();
-        emit signalModified(false, false);
-    }
+    emit signalModified();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
+
+void DImgInterface::clearUndoManager()
+{
+    d->undoMan->clear();
+    d->undoMan->setOrigin();
+    emit signalUndoStateChanged(false, false, false);
+}
+
+void DImgInterface::setUndoManagerOrigin()
+{
+    d->undoMan->setOrigin();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 int DImgInterface::width()
@@ -552,6 +536,14 @@ bool DImgInterface::sixteenBit()
 bool DImgInterface::hasAlpha()
 {
     return d->image.hasAlpha();
+}
+
+bool DImgInterface::isReadOnly()
+{
+    if (d->image.isNull())
+        return true;
+    else
+        return d->image.isReadOnly();
 }
 
 void DImgInterface::setSelectedArea(int x, int y, int w, int h)
@@ -648,7 +640,7 @@ void DImgInterface::rotate90(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::rotate180(bool saveUndo)
@@ -662,7 +654,7 @@ void DImgInterface::rotate180(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::rotate270(bool saveUndo)
@@ -676,7 +668,7 @@ void DImgInterface::rotate270(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::flipHoriz(bool saveUndo)
@@ -688,7 +680,7 @@ void DImgInterface::flipHoriz(bool saveUndo)
 
     d->image.flip(DImg::HORIZONTAL);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::flipVert(bool saveUndo)
@@ -700,7 +692,7 @@ void DImgInterface::flipVert(bool saveUndo)
 
     d->image.flip(DImg::VERTICAL);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::crop(int x, int y, int w, int h)
@@ -712,7 +704,7 @@ void DImgInterface::crop(int x, int y, int w, int h)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::resize(int w, int h)
@@ -724,7 +716,7 @@ void DImgInterface::resize(int w, int h)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::changeGamma(double gamma)
@@ -740,7 +732,7 @@ void DImgInterface::changeGamma(double gamma)
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::changeBrightness(double brightness)
@@ -756,7 +748,7 @@ void DImgInterface::changeBrightness(double brightness)
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::changeContrast(double contrast)
@@ -772,7 +764,7 @@ void DImgInterface::changeContrast(double contrast)
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::changeBCG(double gamma, double brightness, double contrast)
@@ -785,7 +777,7 @@ void DImgInterface::changeBCG(double gamma, double brightness, double contrast)
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::setBCG(double brightness, double contrast, double gamma)
@@ -803,7 +795,7 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     d->contrast   = 1.0;
     d->brightness = 0.0;
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 void DImgInterface::convertDepth(int depth)
@@ -811,7 +803,7 @@ void DImgInterface::convertDepth(int depth)
     d->undoMan->addAction(new UndoActionIrreversible(this, "Convert Color Depth"));
     d->image.convertDepth(depth);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 DImg* DImgInterface::getImg()
@@ -869,25 +861,24 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
        kdWarning() << k_funcinfo << "New image is NULL" << endl;
        return;
     }
-    
-    if (w != -1 && h != -1) 
+
+    if (w == -1 && h == -1)
     {
-        // New image size !
-        
-        DImg im( w, h, sixteenBit, d->image.hasAlpha(), data );
-        d->image = im.copy();
+        // New image size
+        w = d->origWidth;
+        h = d->origHeight;
+    }
+    else
+    {
+        // New image size == original size
         d->origWidth  = w;
         d->origHeight = h;
     }
-    else 
-    {
-        // New image data size == original data size !
 
-        DImg im( d->origWidth, d->origHeight, sixteenBit, d->image.hasAlpha(), data );
-        d->image = im.copy();
-    }
+    //kdDebug() << k_funcinfo << data << " " << w << " " << h << endl;
+    d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 uchar* DImgInterface::getImageSelection()
@@ -898,11 +889,7 @@ uchar* DImgInterface::getImageSelection()
     if (!d->image.isNull())
     {
         DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-
-        uchar *data = new uchar[im.width() * im.height() * im.bytesDepth()];
-        memcpy (data, im.bits(), im.width() * im.height() * im.bytesDepth());
-
-        return data;
+        return im.stripImageData();
     }
 
     return 0;
@@ -915,24 +902,10 @@ void DImgInterface::putImageSelection(uchar* data, bool saveUndo)
 
     if (saveUndo)
         d->undoMan->addAction(new UndoActionIrreversible(this));
-    
-    uchar *ptr  = d->image.bits();
-    uchar *pptr;
-    uchar *dptr = data;
-        
-    
-    for (int j = d->selY; j < (d->selY + d->selH); j++) 
-    {
-        pptr  = &ptr[ j * d->origWidth * d->image.bytesDepth() ] + 
-                d->selX * d->image.bytesDepth();
-        
-        for (int i = 0; i < d->selW*d->image.bytesDepth() ; i++) 
-        {
-            *(pptr++) = *(dptr++);
-        }
-    }
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
+
+    setModified();
 }
 
 void DImgInterface::getUndoHistory(QStringList &titles)
@@ -995,7 +968,7 @@ void DImgInterface::putData(uint* data, int w, int h)
         memcpy(ptr, (uchar*)data, d->origWidth * d->origHeight * d->image.bytesDepth());
     }
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 uint* DImgInterface::getSelectedData()
@@ -1040,7 +1013,7 @@ void DImgInterface::putSelectedData(uint* data, bool saveUndo)
         }
     }
 
-    emit signalModified(true, d->undoMan->anyMoreRedo());
+    setModified();
 }
 
 

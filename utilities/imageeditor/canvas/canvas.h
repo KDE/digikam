@@ -28,6 +28,10 @@
 #include <qscrollview.h>
 #include <qrect.h>
 
+// Local includes
+
+#include "dimg.h"
+
 class QString;
 class QStringList;
 class QPixmap;
@@ -56,19 +60,25 @@ public:
     void load(const QString& filename, ICCSettingsContainer *ICCSettings,
               IOFileSettingsContainer *IOFileSettings);
     void preload(const QString& filename);
-    void save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    //void save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    //void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+      //          const QString& mimeType);
     void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                const QString& mimeType);
-    void saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                       const QString& mimeType=0);
-    void setModified(bool val);
-        
+                const QString& mimeType=0);
+    void setModified();
+    void clearUndoHistory();
+    void setUndoHistoryOrigin();
+    DImg currentImage();
+
     bool  maxZoom();
     bool  minZoom();
     bool  exifRotated();
     int   imageWidth();
     int   imageHeight();
     QRect getSelectedArea();
+    // If current image file format is only available in read only,
+    // typicially all RAW image file formats.
+    bool  isReadOnly();
 
     void  resizeImage(int w, int h);
 
@@ -146,11 +156,11 @@ private slots:
 
     void slotSelected();
     void slotPaintSmooth();
-    void slotModified(bool anyMoreUndo, bool anyMoreRedo);
+    void slotModified();
     void slotContentsMoving(int, int);
     void slotContentsMovingPaintHistogram();
     void slotHistoMovingPaintHistogram();
-    void slotImageLoaded(const QString& filePath, bool success, bool isReadOnly);
+    void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
     
 signals:
@@ -158,13 +168,14 @@ signals:
     void signalZoomChanged(float zoom);
     void signalMaxZoom();
     void signalMinZoom();
-    void signalChanged(bool, bool);
+    void signalChanged();
+    void signalUndoStateChanged(bool, bool, bool);
     void signalSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalLoadingStarted(const QString &filename);
-    void signalLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    void signalLoadingFinished(const QString &filename, bool success);
     void signalLoadingProgress(const QString& filePath, float progress);
     void signalSavingStarted(const QString &filename);
     void signalSavingFinished(const QString &filename, bool success);

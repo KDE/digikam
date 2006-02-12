@@ -137,13 +137,14 @@ private slots:
     void slotToggleShowBar();
     void slotChangeBCG();
     
-    void slotChanged(bool, bool);
+    void slotChanged();
+    void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
         
     void slotDeleteCurrentItemResult( KIO::Job * job );
 
     void slotLoadingStarted(const QString &filename);
-    void slotLoadingFinished(const QString &filename, bool success, bool isReadOnly);
+    void slotLoadingFinished(const QString &filename, bool success);
     void slotSavingStarted(const QString &filename);
 };
 

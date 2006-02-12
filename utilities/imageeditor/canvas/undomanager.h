@@ -50,6 +50,8 @@ public:
     bool anyMoreRedo();    
     void getUndoHistory(QStringList &titles);
     void getRedoHistory(QStringList &titles);
+    bool isAtOrigin();
+    void setOrigin();
 
     void addAction(UndoAction* action);
 

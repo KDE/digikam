@@ -66,6 +66,7 @@
 
 #include "canvas.h"
 #include "dimginterface.h"
+#include "dimg.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
@@ -85,6 +86,7 @@
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
+#include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "imagewindow.h"
 
@@ -265,17 +267,11 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
 void ImageWindow::slotLoadCurrent()
 {
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-    
-    if (m_view)
-    {
-        IconItem* item = m_view->findItem((*it).url());
-        if (item)
-           m_view->setCurrentItem(item);
-    }
 
-    if (it != m_urlList.end()) 
+    setViewToURL(*it);
+
+    if (it != m_urlList.end())
     {
-        //QApplication::setOverrideCursor(Qt::WaitCursor);
 
         if (m_ICCSettings->enableCMSetting)
         {
@@ -292,8 +288,18 @@ void ImageWindow::slotLoadCurrent()
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
 
-        //QApplication::restoreOverrideCursor();
     }
+}
+
+void ImageWindow::setViewToURL(const KURL &url)
+{
+    if (m_view)
+    {
+        IconItem* item = m_view->findItem(url.url());
+        if (item)
+            m_view->setCurrentItem(item);
+    }
+
 }
 
 void ImageWindow::slotForward()
@@ -400,7 +406,7 @@ void ImageWindow::slotContextMenu()
     }
 }
 
-void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
+void ImageWindow::slotChanged()
 {
     m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
                         QString("x") +
@@ -408,18 +414,6 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
                         QString(" ") +
                         i18n("pixels"));
 
-    m_revertAction->setEnabled(moreUndo);
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-
-    if (m_allowSaving)
-    {
-        m_saveAction->setEnabled(moreUndo);
-    }
-
-    if (!moreUndo)
-        m_rotatedOrFlipped = false;
-        
     if (m_urlCurrent.isValid())
     {
         KURL u(m_urlCurrent.directory());
@@ -434,6 +428,21 @@ void ImageWindow::slotChanged(bool moreUndo, bool moreRedo)
             
         m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img, m_view, item);
     }
+}
+
+void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+{
+    m_revertAction->setEnabled(moreUndo);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+
+    if (m_allowSaving)
+    {
+        m_saveAction->setEnabled(canSave);
+    }
+
+    if (!moreUndo)
+        m_rotatedOrFlipped = false;
 }
 
 void ImageWindow::slotAssignTag(int tagID)
@@ -541,8 +550,28 @@ void ImageWindow::toggleGUI2FullScreen()
 
 void ImageWindow::saveIsComplete()
 {
-        emit signalFileModified(m_savingContext->destinationURL);
-        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+    // With save(), we do not reload the image but just continue using the data.
+    // This means that a saving operation does not lead to quality loss for
+    // subsequent editing operations.
+
+    // put image in cache, the LoadingCacheInterface cares for the details
+    LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+
+    // take all action necessary to update information and reenable sidebar
+    slotChanged();
+
+    // notify main app that file changed
+    emit signalFileModified(m_savingContext->destinationURL);
+
+    // all that is done in slotLoadCurrent, except for loading
+    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    setViewToURL(*it);
+
+    if (++it != m_urlList.end()) 
+    {
+        m_canvas->preload((*it).path());
+    }
+    //slotLoadCurrent();
 }
 
 void ImageWindow::saveAsIsComplete()
@@ -553,7 +582,7 @@ void ImageWindow::saveAsIsComplete()
         PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
         if (!srcAlbum)
         {
-            kapp->restoreOverrideCursor();
+            unsetCursor();
             kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
             finishSaving(false);
             return;
@@ -563,7 +592,7 @@ void ImageWindow::saveAsIsComplete()
         PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
         if (!dstAlbum)
         {
-            kapp->restoreOverrideCursor();
+            unsetCursor();
             kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
             finishSaving(false);
             return;
@@ -583,14 +612,32 @@ void ImageWindow::saveAsIsComplete()
             KURL::List::iterator it = m_urlList.find(m_savingContext->srcURL);
             m_urlList.insert(it, m_savingContext->destinationURL);
             m_urlCurrent = m_savingContext->destinationURL;
+            LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+        }
+        else
+        {
+            //TODO: make the user aware that the new path has not been loaded
+            //      and that he is still working on the same image as before the saveAs()
         }
 
+        // take all action necessary to update information and reenable sidebar
+        slotChanged();
+
+        // notify main app that file changed or a file is added
         if(m_savingContext->destinationExisted)
             emit signalFileModified(m_savingContext->destinationURL);
         else
             emit signalFileAdded(m_savingContext->destinationURL);
 
-        QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
+        // all that is done in slotLoadCurrent, except for loading
+        KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+        setViewToURL(*it);
+
+        if (++it != m_urlList.end()) 
+        {
+            m_canvas->preload((*it).path());
+        }
+        //slotLoadCurrent();
 }
 
 bool ImageWindow::save()

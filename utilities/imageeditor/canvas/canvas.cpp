@@ -77,7 +77,6 @@ public:
         tileCache.setAutoDelete(true);
     }
 
-    bool               needEmitSignalChanged;
     bool               autoZoom;
     bool               fullScreen;
     bool               pressedMoved;
@@ -196,13 +195,14 @@ Canvas::Canvas(QWidget *parent)
 
     d->histoChannelType = Digikam::ImageHistogram::ValueChannel;
 
-    d->needEmitSignalChanged = false;
-    
-    connect(d->im, SIGNAL(signalModified(bool, bool)),
-            SLOT(slotModified(bool, bool)));
-    
-    connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool, bool)),
-            SLOT(slotImageLoaded(const QString&, bool, bool)));
+    connect(d->im, SIGNAL(signalModified()),
+            SLOT(slotModified()));
+
+    connect(d->im, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
+            SIGNAL(signalUndoStateChanged(bool, bool, bool)));
+
+    connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool)),
+            SLOT(slotImageLoaded(const QString&, bool)));
 
     connect(d->im, SIGNAL(signalImageSaved(const QString&, bool)),
             SLOT(slotImageSaved(const QString&, bool)));
@@ -396,7 +396,7 @@ void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
     emit signalLoadingStarted(filename);
 }
 
-void Canvas::slotImageLoaded(const QString& filePath, bool success, bool isReadOnly)
+void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d->zoom = 1.0;
     d->im->zoom(d->zoom);
@@ -410,11 +410,10 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success, bool isReadO
     viewport()->update();
     if (d->showHistogram)
         updateHistogram(true);
-   
-    emit signalChanged(false, false);
+
     emit signalZoomChanged(d->zoom);
-    
-    emit signalLoadingFinished(filePath, success, isReadOnly);
+
+    emit signalLoadingFinished(filePath, success);
 }
 
 void Canvas::preload(const QString& /*filename*/)
@@ -422,9 +421,10 @@ void Canvas::preload(const QString& /*filename*/)
 //    d->im->preload(filename);
 }
 
+/*
+These code paths are unused and untested
 void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
 {
-    d->needEmitSignalChanged = true;
     d->im->save(filename, IOFileSettings);
     emit signalSavingStarted(filename);
 }
@@ -432,13 +432,13 @@ void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettin
 void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings,
                    const QString& mimeType)
 {
-    d->needEmitSignalChanged = true;
     d->im->saveAs(filename, IOFileSettings, mimeType);
     emit signalSavingStarted(filename);
 }
+*/
 
-void Canvas::saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                          const QString& mimeType)
+void Canvas::saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+                    const QString& mimeType)
 {
     d->im->saveAs(filename, IOFileSettings, mimeType);
     emit signalSavingStarted(filename);
@@ -446,22 +446,27 @@ void Canvas::saveAsTmpFile(const QString& filename, IOFileSettingsContainer *IOF
 
 void Canvas::slotImageSaved(const QString& filePath, bool success)
 {
-    if (success && d->needEmitSignalChanged)
-    {
-        // usually images are saved as temp images, so this needs to be done
-        // where the image is renamed.
-        // However, cannot principally hurt to do this here as well.
-        LoadingCacheInterface::cleanFromCache(filePath);
-
-        d->needEmitSignalChanged = false;
-        emit signalChanged(false, false);
-    }
     emit signalSavingFinished(filePath, success);
 }
 
-void Canvas::setModified(bool val) 
+void Canvas::setModified()
 {
-    d->im->setModified(val); 
+    d->im->setModified();
+}
+
+void Canvas::clearUndoHistory()
+{
+    d->im->clearUndoManager();
+}
+
+void Canvas::setUndoHistoryOrigin()
+{
+    d->im->setUndoManagerOrigin();
+}
+
+DImg Canvas::currentImage()
+{
+    return DImg(*d->im->getImg());
 }
 
 int Canvas::imageWidth()
@@ -472,6 +477,11 @@ int Canvas::imageWidth()
 int Canvas::imageHeight()
 {
     return d->im->origHeight();
+}
+
+bool Canvas::isReadOnly()
+{
+    return d->im->isReadOnly();
 }
 
 QRect Canvas::getSelectedArea()
@@ -1491,7 +1501,7 @@ void Canvas::slotSelected()
     d->im->setSelectedArea(x, y, w, h);
 }
 
-void Canvas::slotModified(bool anyMoreUndo, bool anyMoreRedo)
+void Canvas::slotModified()
 {
     if (d->showHistogram)
         updateHistogram(true);
@@ -1502,7 +1512,7 @@ void Canvas::slotModified(bool anyMoreUndo, bool anyMoreRedo)
 
     updateContentsSize();
     viewport()->update();
-    emit signalChanged(anyMoreUndo, anyMoreRedo);
+    emit signalChanged();
 }
 
 /**
