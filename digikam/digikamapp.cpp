@@ -923,8 +923,10 @@ void DigikamApp::slotDownloadImages()
 
     // Fetch the contents of the device. This is needed to make sure that the 
     // media:/device gets mounted.
-    KIO::ListJob *job = KIO::listDir(KURL(mCameraGuiPath), false, false);
-    KIO::NetAccess::synchronousRun(job,0);
+    // KIO::ListJob *job = KIO::listDir(KURL(mCameraGuiPath), false, false);
+    //
+    // cant use this, as this is not in old kdelibs
+    // KIO::NetAccess::synchronousRun(job,0);
 
     QString cameraGuiPath = convertToLocalUrl(mCameraGuiPath);
     kdDebug() << "IN: " << mCameraGuiPath << " OUT: " << cameraGuiPath << endl;
@@ -974,7 +976,8 @@ void DigikamApp::slotCameraUmount()
             // Ok, item is now mounted and not before, umount it.
             kdDebug() << "Trying to umount device" << endl;
             KIO::SimpleJob *job = KIO::unmount(convertToLocalUrl(mCameraGuiPath));
-            KIO::NetAccess::synchronousRun(job,0);
+            // cant use this, as this is not in old kdelibs
+            // KIO::NetAccess::synchronousRun(job,0);
         }
     }
 }
