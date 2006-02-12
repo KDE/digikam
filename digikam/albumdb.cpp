@@ -1060,6 +1060,26 @@ QString AlbumDB::getAlbumURL(int albumID)
     return values[0];
 }
 
+QDate AlbumDB::getAlbumLowestDate(int albumID)
+{
+    QStringList values;
+    execSql( QString("SELECT MIN(datetime) FROM Images "
+                     "WHERE dirid=%1 GROUP BY dirid")
+            .arg( albumID ), &values);
+    QDate itemDate = QDate::fromString( values[0], Qt::ISODate );
+    return itemDate;
+}
+
+QDate AlbumDB::getAlbumHighestDate(int albumID)
+{
+    QStringList values;
+    execSql( QString("SELECT MAX(datetime) FROM Images "
+                     "WHERE dirid=%1 GROUP BY dirid")
+            .arg( albumID ), &values);
+    QDate itemDate = QDate::fromString( values[0], Qt::ISODate );
+    return itemDate;
+}
+
 QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QStringList values;

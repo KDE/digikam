@@ -84,7 +84,9 @@ private:
 
 private slots:
    void slotTitleChanged(const QString& newtitle);
-   void slotAverageButtonClicked();
+   void slotDateLowButtonClicked();
+   void slotDateAverageButtonClicked();
+   void slotDateHighButtonClicked();
 };
 
 #endif /* ALBUMPROPSEDIT_H */
