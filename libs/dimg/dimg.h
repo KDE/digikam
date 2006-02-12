@@ -93,22 +93,41 @@ public:
         VERTICAL
     };
 
+    /** Create null image */
     DImg();
-    
+
+    /** Load image */
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
          RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
-         
-    DImg(const DImg& image);
-    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0);
-   ~DImg();
-    
-    DImg& operator=(const DImg& image);
 
+    /** Copy image */
+    DImg(const DImg& image);
+
+    /** Create image from data.
+        If data is 0, a new buffer will be allocated, otherwise the given data will be used:
+        If copydata is true, the data will be copied to a newly allocated buffer.
+        If copyData is false, this DImg object will take ownership of the data pointer.
+    */
+    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0, bool copyData = true);
+
+   ~DImg();
+
+    DImg&       operator=(const DImg& image);
+
+    /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above. */
+    void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData = true);
+
+    /** Reset to null image */
     void        reset(void);
+
+    /** Returns the data of this image. 
+        Ownership of the buffer is passed to the caller, this image will be null afterwards.
+    */
+    uchar*      stripImageData();
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
-                     
+
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
     bool        isNull()     const;
@@ -136,6 +155,7 @@ public:
     QByteArray getICCProfil() const;
 
     QByteArray getExif() const;
+    QByteArray metadata(METADATA key) const;
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key);
@@ -157,8 +177,18 @@ public:
     DImg       copy(QRect rect);
     DImg       copy(uint x, uint y, uint w, uint h);
 
-    /** Copy a pixels region to an image */
-    void       bitBltImage(DImg* src, int dx, int dy);
+    /** Copy a region of pixels from a source image to this image.
+        Parameters:
+        sx|sy  Coordinates in the source image of the rectangle to be copied
+        w h    Width and height of the rectangle (Default: whole source image)
+        dx|dy  Coordinates in this image of the rectangle in which the region will be copied
+               (Default: 0|0)
+    */
+    void       bitBltImage(const DImg* src, int dx, int dy);
+    void       bitBltImage(const DImg* src, int sx, int sy, int dx, int dy);
+    void       bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, int dy);
+    void       bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
+                           uint swidth, uint sheight, int sdepth);
 
     /** Merge a pixels region to an image */
     void       bitBlend(DImg& region, int x, int y, int w, int h);
@@ -195,7 +225,15 @@ private:
 
 private:
 
-    FORMAT fileFormat(const QString& filePath);
+    FORMAT     fileFormat(const QString& filePath);
+    void       copyMetaData(const DImgPrivate *src);
+    void       copyImageData(const DImgPrivate *src);
+    void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
+    void       setImageDimension(uint width, uint height);
+    int        allocateData();
+    DImg(const DImg &image, int w, int h);
+    static void bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, int dx, int dy,
+                       uint swidth, uint sheight, uint dwidth, uint dheight, int sdepth, int ddepth);
 
     friend class DImgLoader;
 };

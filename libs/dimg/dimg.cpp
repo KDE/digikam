@@ -77,38 +77,35 @@ DImg::DImg(const DImg& image)
     m_priv->ref();
 }
 
-DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data)
+DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
     : m_priv(new DImgPrivate)
 {
-    m_priv->null       = (width == 0) || (height == 0);
-    m_priv->width      = width;
-    m_priv->height     = height;
-    m_priv->sixteenBit = sixteenBit;
-    m_priv->alpha      = alpha;
-
-    if (sixteenBit)
-    {
-        m_priv->data = new uchar[width*height*8];
-        if (!m_priv->data)
-            return;
-        if (data)
-            memcpy(m_priv->data, data, width*height*8);
-    }
-    else
-    {
-        m_priv->data = new uchar[width*height*4];
-        if (!m_priv->data)
-            return;
-        if (data)
-            memcpy(m_priv->data, data, width*height*4); 
-    }
+    putImageData(width, height, sixteenBit, alpha, data, copyData);
 }
+
+DImg::DImg(const DImg &image, int w, int h)
+    : m_priv(new DImgPrivate)
+{
+    // This private constructor creates a copy of everything except the data.
+    // The image size is set to the given values and a buffer corresponding to these values is allocated.
+    // This is used by copy and scale.
+    copyImageData(image.m_priv);
+    copyMetaData(image.m_priv);
+    setImageDimension(w, h);
+    allocateData();
+}
+
 
 DImg::~DImg()
 {
     if (m_priv->deref())
         delete m_priv;
 }
+
+
+//---------------------------------------------------------------------------------------------------
+// data management
+
 
 DImg& DImg::operator=(const DImg& image)
 {
@@ -134,6 +131,112 @@ void DImg::reset(void)
 
     m_priv = new DImgPrivate;
 }
+
+void DImg::detach()
+{
+    // are we being shared?
+    if (m_priv->count <= 1)
+    {
+        return;
+    }
+
+    DImgPrivate* old = m_priv;
+
+    m_priv = new DImgPrivate;
+    copyImageData(old);
+    copyMetaData(old);
+
+    if (old->data)
+    {
+        int size = allocateData();
+        memcpy(m_priv->data, old->data, size);
+    }
+
+    old->deref();
+}
+
+void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData)
+{
+    // set image data, metadata is untouched
+    bool null = (width == 0) || (height == 0) || !data;
+    setImageData(null, width, height, sixteenBit, alpha);
+
+    // replace data
+    delete [] m_priv->data;
+    if (copyData)
+    {
+        int size = allocateData();
+        if (data)
+            memcpy(m_priv->data, data, size);
+    }
+    else
+    {
+        if (data)
+            m_priv->data = data;
+        else
+            allocateData();
+    }
+}
+
+uchar *DImg::stripImageData()
+{
+    uchar *data = m_priv->data;
+    m_priv->data = 0;
+    m_priv->null = true;
+    return data;
+}
+
+void DImg::copyMetaData(const DImgPrivate *src)
+{
+    m_priv->isReadOnly        = src->isReadOnly;
+    m_priv->attributes        = src->attributes;
+    m_priv->embeddedText      = src->embeddedText;
+    m_priv->cameraModel       = src->cameraModel;
+    m_priv->cameraConstructor = src->cameraConstructor;
+
+    // since qbytearrays are explicity shared, we need to make sure that they are
+    // detached from any shared references
+    m_priv->ICCProfil         = src->ICCProfil.copy();
+
+    for (QMap<int, QByteArray>::const_iterator it = src->metaData.begin();
+         it != src->metaData.end(); ++it)
+    {
+        m_priv->metaData.insert(it.key(), it.data().copy());
+    }
+}
+
+void DImg::copyImageData(const DImgPrivate *src)
+{
+    setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
+}
+
+int DImg::allocateData()
+{
+    int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+    m_priv->data = new uchar[size];
+    m_priv->null = false;
+    return size;
+}
+
+void DImg::setImageDimension(uint width, uint height)
+{
+    m_priv->width             = width;
+    m_priv->height            = height;
+}
+
+void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha)
+{
+    m_priv->null              = null;
+    m_priv->width             = width;
+    m_priv->height            = height;
+    m_priv->alpha             = alpha;
+    m_priv->sixteenBit        = sixteenBit;
+}
+
+
+//---------------------------------------------------------------------------------------------------
+// load and save
+
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
                 RawDecodingSettings rawDecodingSettings)
@@ -361,6 +464,11 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     return QIMAGE;
 }
 
+
+//---------------------------------------------------------------------------------------------------
+// accessing properties
+
+
 bool DImg::isNull() const
 {
     return m_priv->null;
@@ -403,11 +511,16 @@ QByteArray DImg::getICCProfil() const
 
 QByteArray DImg::getExif() const
 {
+    return metadata(JPG_EXIF);
+}
+
+QByteArray DImg::metadata(DImg::METADATA key) const
+{
     typedef QMap<int, QByteArray> MetaDataMap;
     
     for (MetaDataMap::iterator it = m_priv->metaData.begin(); it != m_priv->metaData.end(); ++it)
     {
-        if (it.key() == JPG_EXIF)
+        if (it.key() == key)
             return it.data();
     }
 
@@ -481,6 +594,11 @@ QString DImg::cameraConstructor()
     return ( m_priv->cameraConstructor );
 }
 
+
+//---------------------------------------------------------------------------------------------------
+// copying operations
+
+
 DImg DImg::copy()
 {
     DImg img(*this);
@@ -501,77 +619,132 @@ DImg DImg::copy(uint x, uint y, uint w, uint h)
     if ( (y+h) > height() )
         h = height() - y;
 
-    if ( w <= 0 || h <= 0)
+    if ( isNull() || w <= 0 || h <= 0)
     {
         kdDebug() << k_funcinfo << " : return null image!" << endl;
         return DImg();
     }
 
-    DImg image(w, h, sixteenBit());
-
-    uchar* sptr      = 0;
-    uchar* dptr      = image.bits();
-    uchar* origData  = bits();
-
-    for (uint j = y ; j < (y + h) ; j++)
-    {
-        sptr = origData + (j * width() + x) * bytesDepth();
-
-        for (uint i=0 ; i < w*bytesDepth() ; i++, *dptr++, *sptr++)
-        {
-            *dptr = *sptr;
-        }
-    }
-
-    image.m_priv->alpha = hasAlpha();
+    DImg image(*this, w, h);
+    image.bitBltImage(this, x, y, w, h, 0, 0);
 
     return image;
 }
 
-void DImg::bitBltImage(DImg* src, int dx, int dy)
+
+//---------------------------------------------------------------------------------------------------
+// bitwise operations
+
+
+void DImg::bitBltImage(const DImg* src, int dx, int dy)
 {
-    int sw = src->width();
-    int sh = src->height();
-    
-    if (isNull() || src->sixteenBit() != sixteenBit() ||
-        sw <= 0 || sh <= 0)
+    bitBltImage(src, 0, 0, src->width(), src->height(), dx, dy);
+}
+
+void DImg::bitBltImage(const DImg* src, int sx, int sy, int dx, int dy)
+{
+    bitBltImage(src, sx, sy, src->width() - sx, src->height() - sy, dx, dy);
+}
+
+void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, int dy)
+{
+    if (isNull())
        return;
+
+    if (src->sixteenBit() != sixteenBit())
+    {
+        kdWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        return;
+    }
+
+    bitBlt(src->bits(), bits(), sx, sy, w, h, dx, dy,
+           src->width(), src->height(), width(), height(), src->bytesDepth(), bytesDepth());
+}
+
+void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
+                       uint swidth, uint sheight, int sdepth)
+{
+    if (isNull())
+        return;
+
+    if (bytesDepth() != sdepth)
+    {
+        kdWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        return;
+    }
+
+    bitBlt(src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sdepth, bytesDepth());
+}
+
+
+void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, int dx, int dy,
+                  uint swidth, uint sheight, uint dwidth, uint dheight, int sdepth, int ddepth)
+{
+    if (w <= 0 || h <= 0)
+        return;
 
     // Normalize
 
+    if (sx < 0)
+    {
+        // sx is negative, so + is -
+        w = w + sx;
+        sx = 0;
+    }
+
+    if (sy < 0)
+    {
+        h = h + sy;
+        sy = 0;
+    }
+
     if (dx < 0)
     {
-       sw = sw - dx;
-       dx = 0;
+        w = w + sx;
+        dx = 0;
     }
 
     if (dy < 0)
     {
-       sh = sh - dy;
-       dy = 0;
+        h = h + dy;
+        dy = 0;
     }
 
-    if (sw > (int)width())
+    if (sx + w > (int)swidth)
     {
-       sw = width();
+        w = swidth - sx;
     }
 
-    if (sh > (int)height())
+    if (sy + h > (int)sheight)
     {
-       sh = height();
+        h = sheight - sy;
     }
 
-    uchar *pptr;
-    uchar *ptr  = bits();
-    uchar *dptr = src->bits();
-
-    for (int j = dy ; j < (dy + sh) ; j++) 
+    if (dx + w > (int)dwidth)
     {
-        pptr  = &ptr[ j * width() * bytesDepth() ] + dx * bytesDepth();
+        w = dwidth - sx;
+    }
 
-        for (int i = 0; i < sw * bytesDepth() ; i++, *pptr++, *dptr++)
+    if (dy + h > (int)dheight)
+    {
+        h = dheight - sy;
+    }
+
+    const uchar *sptr;
+    uchar *dptr;
+    uint   slinelength = swidth * sdepth;
+    uint   dlinelength = dwidth * ddepth;
+
+    int scurY = sy;
+    int dcurY = dy;
+    for (int j = 0 ; j < h ; j++, scurY++, dcurY++) 
+    {
+        sptr  = &src [ scurY * slinelength ] + sx * sdepth;
+        dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
+
+        for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
         {
-            *pptr = *dptr;
+            *dptr = *sptr;
         }
     }
 }
@@ -677,6 +850,11 @@ BLEND_COLOR(a1, B_VAL(dest), b1, B_VAL(dest));
     }
 }
 
+
+//---------------------------------------------------------------------------------------------------
+// QImage / QPixmap access
+
+
 QImage DImg::copyQImage()
 {
     if (isNull())
@@ -771,46 +949,10 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-void DImg::detach()
-{
-    // are we being shared?
-    if (m_priv->count <= 1)
-    {
-        return;
-    }
 
-    DImgPrivate* old = m_priv;
+//---------------------------------------------------------------------------------------------------
+// basic imaging operations
 
-    m_priv = new DImgPrivate;
-    m_priv->null              = old->null;
-    m_priv->alpha             = old->alpha;
-    m_priv->sixteenBit        = old->sixteenBit;
-    m_priv->isReadOnly        = old->isReadOnly;
-    m_priv->width             = old->width;
-    m_priv->height            = old->height;
-    m_priv->attributes        = old->attributes;
-    m_priv->embeddedText      = old->embeddedText;
-    m_priv->ICCProfil         = old->ICCProfil;
-    m_priv->cameraModel       = old->cameraModel;
-    m_priv->cameraConstructor = old->cameraConstructor;
-
-    // since qbytearrays are explicity shared, we need to make sure that they are
-    // detached from any shared references
-    for (QMap<int, QByteArray>::const_iterator it = old->metaData.begin();
-         it != old->metaData.end(); ++it)
-    {
-        m_priv->metaData.insert(it.key(), it.data().copy());
-    }
-
-    if (old->data)
-    {
-        int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
-        m_priv->data = new uchar[size];
-        memcpy(m_priv->data, old->data, size);
-    }
-
-    old->deref();
-}
 
 void DImg::crop(QRect rect)
 {
@@ -819,32 +961,21 @@ void DImg::crop(QRect rect)
 
 void DImg::crop(int x, int y, int w, int h)
 {
-    if ( w <= 0 || h <= 0)
+    if ( isNull() || w <= 0 || h <= 0)
         return;
 
-    uchar *newData;
-    
-    DImg image = copy(x, y, w, h);
-    int width  = image.width();
-    int height = image.height();
-    
-    if (sixteenBit())
-    {
-        newData = new uchar[width*height*8];
-        memcpy (newData, image.bits(), width*height*8);
-    }
-    else
-    {
-        newData = new uchar[width*height*4];    
-        memcpy (newData, image.bits(), width*height*4);
-    }
-    
-    m_priv->width  = image.width();
-    m_priv->height = image.height();
-    
-    delete [] m_priv->data;
-    m_priv->data = newData;
-}    
+    uint  oldw = width();
+    uint  oldh = height();
+    uchar *old = stripImageData();
+
+    // set new image data, bits(), width(), height() change
+    setImageDimension(w, h);
+    allocateData();
+
+    // copy image region (x|y), wxh, from old data to point (0|0) of new data
+    bitBlt(old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), bytesDepth(), bytesDepth());
+    delete [] old;
+}
 
 void DImg::resize(int w, int h)
 {
@@ -853,25 +984,11 @@ void DImg::resize(int w, int h)
 
     DImg image = smoothScale(w, h);
 
-    int width  = image.width();
-    int height = image.height();
-    m_priv->width  = width;
-    m_priv->height = height;
-
     delete [] m_priv->data;
-    
-    if (sixteenBit())
-    {
-        m_priv->data = new uchar[width*height*8];
-        memcpy (m_priv->data, image.bits(), width*height*8);
-    }
-    else
-    {
-        m_priv->data = new uchar[width*height*4];    
-        memcpy (m_priv->data, image.bits(), width*height*4);
-    }
-}    
-            
+    m_priv->data = image.stripImageData();
+    setImageDimension(w, h);
+}
+
 void DImg::rotate(ANGLE angle)
 {
     if (isNull())
@@ -902,8 +1019,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            m_priv->width  = w;
-            m_priv->height = h;
+            setImageDimension(w, h);
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -926,8 +1042,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            m_priv->width  = w;
-            m_priv->height = h;
+            setImageDimension(w, h);
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1015,8 +1130,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            m_priv->width  = w;
-            m_priv->height = h;
+            setImageDimension(w, h);
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;
@@ -1039,8 +1153,7 @@ void DImg::rotate(ANGLE angle)
                 }
             }
 
-            m_priv->width  = w;
-            m_priv->height = h;
+            setImageDimension(w, h);
 
             delete [] m_priv->data;
             m_priv->data = (uchar*)newData;

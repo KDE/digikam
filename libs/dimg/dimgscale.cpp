@@ -111,7 +111,7 @@ DImg DImg::smoothScale(uint dw, uint dh, QSize::ScaleMode scaleMode)
     // do we actually need to scale?
     if ((w == dw) && (h == dh))
     {
-        return copy(0, 0, w, h);
+        return copy();
     }
 
     DImgScale::DImgScaleInfo *scaleinfo = dimgCalcScaleInfo(*this, w, h, dw, dh, 
@@ -119,8 +119,7 @@ DImg DImg::smoothScale(uint dw, uint dh, QSize::ScaleMode scaleMode)
     if (!scaleinfo)
         return *this;
 
-    DImg buffer(dw, dh, sixteenBit());
-    buffer.m_priv->alpha = hasAlpha();    
+    DImg buffer(*this, dw, dh);
 
     if (sixteenBit())
     {
@@ -209,8 +208,7 @@ DImg DImg::smoothScaleSection(uint sx, uint sy,
     if (!scaleinfo)
         return DImg();
 
-    DImg buffer(dw, dh, sixteenBit());
-    buffer.m_priv->alpha = hasAlpha();    
+    DImg buffer(*this, dw, dh);
 
     if (sixteenBit())
     {
