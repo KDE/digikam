@@ -105,10 +105,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        QString directory = KGlobal::dirs()->findResourceDir("duplicateheight", "duplicateheight.png");
        duplicateHorButton->setPixmap( QPixmap( directory + "duplicateheight.png" ) );
        duplicateHorButton->setToggleButton(true);
-       QToolTip::add( duplicateHorButton, i18n("<p>If you enable this option, you will separe horizontally the "
-                                               "preview area to display original and target image "
-                                               "at the same time. The target is duplicated from the original on "
-                                               "the bottom of the red dashed line." ) );
+       QToolTip::add( duplicateHorButton, i18n("<p>If you enable this option, you will separate the preview area "
+                                               "horizontally, displaying the original and target image "
+                                               "at the same time. The target is duplicated from the original "
+                                               "below the red dashed line." ) );
         
        QPushButton *duplicateVerButton = new QPushButton( m_separateView );
        m_separateView->insert(duplicateVerButton, Digikam::ImageRegionWidget::SeparateViewDuplicateVert);
@@ -116,9 +116,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        directory = KGlobal::dirs()->findResourceDir("duplicatewidth", "duplicatewidth.png");
        duplicateVerButton->setPixmap( QPixmap( directory + "duplicatewidth.png" ) );
        duplicateVerButton->setToggleButton(true);
-       QToolTip::add( duplicateVerButton, i18n("<p>If you enable this option, you will separe vertically the "
-                                               "preview area to display original and target image "
-                                               "at the same time. The target is duplicated from the original on "
+       QToolTip::add( duplicateVerButton, i18n("<p>If you enable this option, you will separate the preview area "
+                                               "vertically, displaying the original and target image "
+                                               "at the same time. The target is duplicated from the original to "
                                                "the right of the red dashed line." ) );
         }
         
@@ -131,10 +131,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        QString directory = KGlobal::dirs()->findResourceDir("centerheight", "centerheight.png");
        separateHorButton->setPixmap( QPixmap( directory + "centerheight.png" ) );
        separateHorButton->setToggleButton(true);
-       QToolTip::add( separateHorButton, i18n( "<p>If you enable this option, you will separe horizontally the "
-                                               "preview area to display original and target image "
-                                               "at the same time. The original is on the top of the "
-                                               "red dashed line, target on the bottom" ) );
+       QToolTip::add( separateHorButton, i18n( "<p>If you enable this option, you will separate the preview area "
+                                               "horizontally, displaying the original and target image "
+                                               "at the same time. The original is above the "
+                                               "red dashed line, the target below it." ) );
         
        QPushButton *separateVerButton = new QPushButton( m_separateView );
        m_separateView->insert(separateVerButton, Digikam::ImageRegionWidget::SeparateViewVertical);
@@ -142,10 +142,10 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        directory = KGlobal::dirs()->findResourceDir("centerwidth", "centerwidth.png");
        separateVerButton->setPixmap( QPixmap( directory + "centerwidth.png" ) );
        separateVerButton->setToggleButton(true);
-       QToolTip::add( separateVerButton, i18n( "<p>If you enable this option, you will separe vertically the "
-                                               "preview area to display original and target image "
-                                               "at the same time. The original is on the left of the "
-                                               "red dashed line, target on the right" ) );
+       QToolTip::add( separateVerButton, i18n( "<p>If you enable this option, you will separate the preview area "
+                                               "vertically, displaying the original and target image "
+                                               "at the same time. The original is to the left of the "
+                                               "red dashed line, the target to the right of it." ) );
        }
        
     QPushButton *noSeparateButton = new QPushButton( m_separateView );
@@ -155,7 +155,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     noSeparateButton->setPixmap( QPixmap( directory + "nocenter.png" ) );
     noSeparateButton->setToggleButton(true);
     QToolTip::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
-                                           "be separed" ) );
+                                           "be separated." ) );
     
     l2->addWidget(frame3, 0, Qt::AlignHCenter);
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
