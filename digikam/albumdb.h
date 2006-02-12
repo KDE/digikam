@@ -453,9 +453,23 @@ public:
     QString getAlbumURL(int albumID);
 
     /**
+     * Returns the lowest/oldest date of all images for that album.
+     * @param albumID the id of the album to calculate
+     * @return the date.
+     */
+    QDate getAlbumLowestDate(int albumID);
+    
+    /**
+     * Returns the highest/newest date of all images for that album.
+     * @param albumID the id of the album to calculate
+     * @return the date.
+     */
+    QDate getAlbumHighestDate(int albumID);
+
+    /**
      * Returns the average date of all images for that album.
-     * @param albumID the id of the album to calculate the average in
-     * @return the average date.
+     * @param albumID the id of the album to calculate
+     * @return the date.
      */
     QDate getAlbumAverageDate(int albumID);
 

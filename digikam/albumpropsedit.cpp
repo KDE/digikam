@@ -33,6 +33,7 @@
 #include <qlistview.h>
 #include <qframe.h>
 #include <qheader.h>
+#include <qhbox.h>
 #include <qpushbutton.h>
 
 // KDE includes.
@@ -134,11 +135,22 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     topLayout->addWidget( datePicker_, 5, 1 );
     dateLabel->setBuddy( datePicker_ );
 
-    QPushButton *avgButton = new QPushButton( 
-                                i18n("This is a button which calculates "
-                                     "the average date",
-                                     "&Average" ), plainPage( ) );
-    topLayout->addWidget( avgButton, 6, 1);
+    QHBox *buttonRow = new QHBox( plainPage( ) );
+    QPushButton *dateLowButton = new QPushButton( 
+            i18n("Button to select the date of the first image", 
+                 "&Lowest" ), 
+            buttonRow );
+    QPushButton *dateAvgButton = new QPushButton( 
+            i18n("This is a button which calculates the average date",
+                 "&Average" ), 
+            buttonRow );
+    QPushButton *dateHighButton = new QPushButton( 
+            i18n("Button to select the date of the last image", 
+                 "&Highest" ), 
+    buttonRow );
+    
+    
+    topLayout->addWidget( buttonRow, 6, 1);
 
     setTabOrder(titleEdit_, collectionCombo_);
     setTabOrder(collectionCombo_, commentsEdit_);
@@ -179,8 +191,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     connect(titleEdit_, SIGNAL(textChanged(const QString&)),
             SLOT(slotTitleChanged(const QString&)));
-    connect(avgButton, SIGNAL( clicked() ),
-            SLOT( slotAverageButtonClicked()));
+    connect(dateLowButton, SIGNAL( clicked() ),
+            SLOT( slotDateLowButtonClicked()));
+    connect(dateAvgButton, SIGNAL( clicked() ),
+            SLOT( slotDateAverageButtonClicked()));
+    connect(dateHighButton, SIGNAL( clicked() ),
+            SLOT( slotDateHighButtonClicked()));
     
     adjustSize();
 }
@@ -277,7 +293,31 @@ void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
     enableButtonOK(!newtitle.isEmpty());    
 }
 
-void AlbumPropsEdit::slotAverageButtonClicked()
+void AlbumPropsEdit::slotDateLowButtonClicked()
+{
+    setCursor( KCursor::waitCursor() );
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    QDate avDate = db->getAlbumLowestDate( album_->id() );
+    setCursor( KCursor::arrowCursor() );
+
+    if ( avDate.isValid() )
+        datePicker_->setDate( avDate );
+}
+
+void AlbumPropsEdit::slotDateHighButtonClicked()
+{
+    setCursor( KCursor::waitCursor() );
+
+    AlbumDB* db = AlbumManager::instance()->albumDB();
+    QDate avDate = db->getAlbumHighestDate( album_->id() );
+    setCursor( KCursor::arrowCursor() );
+
+    if ( avDate.isValid() )
+        datePicker_->setDate( avDate );
+}
+
+void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
     setCursor( KCursor::waitCursor() );
 
