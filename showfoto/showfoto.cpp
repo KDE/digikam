@@ -736,7 +736,7 @@ bool ShowFoto::saveAs()
     
             if ( !imgExtPattern.contains( format.upper() ) )
             {
-                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported!")
+                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
                         .arg(format));
                 kdWarning() << k_funcinfo << "target image file format " << format << " unsupported!" << endl;
                 return false;
