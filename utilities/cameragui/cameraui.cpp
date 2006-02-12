@@ -438,7 +438,6 @@ void CameraUI::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-
 void CameraUI::slotHelp()
 {
     KApplication::kApplication()->invokeHelp("camerainterface.anchor",
@@ -774,6 +773,9 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file)
     if (iconItem)
     {
         iconItem->setDownloaded();
+
+        if (iconItem->isSelected())
+            slotItemsSelected(iconItem, true);
     }
     
     int curr = d->progress->progress();
