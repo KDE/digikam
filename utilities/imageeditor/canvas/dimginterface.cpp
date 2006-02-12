@@ -105,6 +105,7 @@ public:
     float         gamma;
     float         brightness;
     float         contrast;
+    bool          changedBCG;
 
     QString       filename;
     QString       savingFilename;
@@ -179,6 +180,7 @@ void DImgInterface::load(const QString& filename,
     d->gamma      = 1.0;
     d->contrast   = 1.0;
     d->brightness = 0.0;
+    d->changedBCG = false;
     d->cmod.reset();
 
     d->cmSettings     = cmSettings;
@@ -381,7 +383,7 @@ void DImgInterface::undo()
     }
 
     d->undoMan->undo();
-    setModified();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 void DImgInterface::redo()
@@ -393,7 +395,7 @@ void DImgInterface::redo()
     }
 
     d->undoMan->redo();
-    setModified();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 void DImgInterface::restore()
@@ -404,7 +406,7 @@ void DImgInterface::restore()
 }
 
 /*
-These code is unused and untested
+This code is unused and untested
 void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
 {
     d->cmod.reset();
@@ -429,11 +431,14 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings, 
                            const QString& givenMimeType)
 {
-    d->cmod.reset();
-    d->cmod.setGamma(d->gamma);
-    d->cmod.setBrightness(d->brightness);
-    d->cmod.setContrast(d->contrast);
-    d->cmod.applyBCG(d->image);
+    if (d->changedBCG)
+    {
+        d->cmod.reset();
+        d->cmod.setGamma(d->gamma);
+        d->cmod.setBrightness(d->brightness);
+        d->cmod.setContrast(d->contrast);
+        d->cmod.applyBCG(d->image);
+    }
 
     // Try hard to find a mimetype.
     QString mimeType = givenMimeType;
@@ -731,6 +736,7 @@ void DImgInterface::changeGamma(double gamma)
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
+    d->changedBCG = true;
 
     setModified();
 }
@@ -747,6 +753,7 @@ void DImgInterface::changeBrightness(double brightness)
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
+    d->changedBCG = true;
 
     setModified();
 }
@@ -763,6 +770,7 @@ void DImgInterface::changeContrast(double contrast)
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
+    d->changedBCG = true;
 
     setModified();
 }
@@ -777,12 +785,14 @@ void DImgInterface::changeBCG(double gamma, double brightness, double contrast)
     d->cmod.setGamma(d->gamma);
     d->cmod.setBrightness(d->brightness);
     d->cmod.setContrast(d->contrast);
+    d->changedBCG = true;
+
     setModified();
 }
 
 void DImgInterface::setBCG(double brightness, double contrast, double gamma)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Brithness, Contrast, Gamma"));
+    d->undoMan->addAction(new UndoActionIrreversible(this, "Brightness, Contrast, Gamma"));
 
     d->cmod.reset();
     d->cmod.setGamma(gamma);
@@ -794,6 +804,7 @@ void DImgInterface::setBCG(double brightness, double contrast, double gamma)
     d->gamma      = 1.0;
     d->contrast   = 1.0;
     d->brightness = 0.0;
+    d->changedBCG = false;
 
     setModified();
 }
