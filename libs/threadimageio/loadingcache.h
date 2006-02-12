@@ -80,7 +80,7 @@ public:
     // or 0 if no image is found.
     DImg *retrieveImage(const QString &filePath);
     // Returns whether the given DImg fits in the cache.
-    bool isCacheable(DImg *img);
+    bool isCacheable(const DImg *img);
     // Put image into for given string into the cache.
     // Returns true if image has been put in the cache, false otherwise.
     // Ownership of the DImg instance is passed to the cache.

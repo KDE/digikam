@@ -96,7 +96,7 @@ void LoadingCache::removeImages()
     d->imageCache.clear();
 }
 
-bool LoadingCache::isCacheable(DImg *img)
+bool LoadingCache::isCacheable(const DImg *img)
 {
     // return whether image fits in cache
     return (uint)d->imageCache.maxCost() >= img->numBytes();

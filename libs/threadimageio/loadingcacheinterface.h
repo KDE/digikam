@@ -24,6 +24,7 @@
 #include <qstring.h>
 
 #include "digikam_export.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -39,6 +40,8 @@ public:
     // remove all images from the cache
     // (e.g. when loading settings changed)
     static void cleanCache();
+    // add a copy of the image to cache
+    static void putImage(const QString &filePath, const DImg &img);
     // Set cache size in Megabytes.
     // Set to 0 to disable caching.
     static void setCacheOptions(int cacheSize);
