@@ -489,6 +489,19 @@ void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
         emit signalSavingProgress(filePath, progress);
 }
 
+void DImgInterface::switchToLastSaved(const QString& newFilename)
+{
+    // Higher level wants to use the current DImg object to represent the file
+    // it has previously been saved to.
+    d->filename = newFilename;
+
+    // Currently the only place where a DImg is connected to the file it originates from
+    // is the format attribute.
+    QString savedformat = d->image.attribute("savedformat").toString();
+    if (!savedformat.isEmpty())
+        d->image.setAttribute("format", savedformat);
+}
+
 void DImgInterface::setModified()
 {
     emit signalModified();

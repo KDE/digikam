@@ -779,6 +779,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
     
     fclose(f);
+
+    imageSetAttribute("savedformat", "PNG");
+
     return true;
 }
 

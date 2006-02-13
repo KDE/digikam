@@ -601,6 +601,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_destroy_compress(&cinfo);
     fclose(file);
 
+    imageSetAttribute("savedformat", "JPEG");
+
     return true;
 }
 

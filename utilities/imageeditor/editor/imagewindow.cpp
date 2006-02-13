@@ -432,7 +432,7 @@ void ImageWindow::slotChanged()
 
 void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
 {
-    m_revertAction->setEnabled(moreUndo);
+    m_revertAction->setEnabled(canSave);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
@@ -557,9 +557,6 @@ void ImageWindow::saveIsComplete()
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
-    // take all action necessary to update information and reenable sidebar
-    slotChanged();
-
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
 
@@ -576,28 +573,16 @@ void ImageWindow::saveIsComplete()
 
 void ImageWindow::saveAsIsComplete()
 {
-        // Find the src and dest albums ------------------------------------------
+    // Find the src and dest albums ------------------------------------------
 
-        KURL srcDirURL(QDir::cleanDirPath(m_savingContext->srcURL.directory()));
-        PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
-        if (!srcAlbum)
-        {
-            unsetCursor();
-            kdWarning() << k_funcinfo << "Cannot find the source album" << endl;
-            finishSaving(false);
-            return;
-        }
+    KURL srcDirURL(QDir::cleanDirPath(m_savingContext->srcURL.directory()));
+    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
 
-        KURL dstDirURL(QDir::cleanDirPath(m_savingContext->destinationURL.directory()));
-        PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
-        if (!dstAlbum)
-        {
-            unsetCursor();
-            kdWarning() << k_funcinfo << "Cannot find the destination album" << endl;
-            finishSaving(false);
-            return;
-        }
+    KURL dstDirURL(QDir::cleanDirPath(m_savingContext->destinationURL.directory()));
+    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
 
+    if (dstAlbum && srcAlbum)
+    {
         // Now copy the metadata of the original file to the new file ------------
 
         AlbumDB* db = AlbumManager::instance()->albumDB();
@@ -612,6 +597,10 @@ void ImageWindow::saveAsIsComplete()
             KURL::List::iterator it = m_urlList.find(m_savingContext->srcURL);
             m_urlList.insert(it, m_savingContext->destinationURL);
             m_urlCurrent = m_savingContext->destinationURL;
+            m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
+            slotUpdateItemInfo();
+            // only cache here. Of course, when saving to a different album, this might be opened in main view,
+            // but the probability of wasting cache memory is high.
             LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
         }
         else
@@ -619,9 +608,6 @@ void ImageWindow::saveAsIsComplete()
             //TODO: make the user aware that the new path has not been loaded
             //      and that he is still working on the same image as before the saveAs()
         }
-
-        // take all action necessary to update information and reenable sidebar
-        slotChanged();
 
         // notify main app that file changed or a file is added
         if(m_savingContext->destinationExisted)
@@ -631,13 +617,18 @@ void ImageWindow::saveAsIsComplete()
 
         // all that is done in slotLoadCurrent, except for loading
         KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-        setViewToURL(*it);
 
-        if (++it != m_urlList.end()) 
+        if (it != m_urlList.end()) 
         {
-            m_canvas->preload((*it).path());
+            setViewToURL(*it);
+            m_canvas->preload((*++it).path());
         }
-        //slotLoadCurrent();
+    }
+    else
+    {
+        //TODO: make the user aware that the new path has not been because it is outside
+        //      the digikam album hierachy
+    }
 }
 
 bool ImageWindow::save()

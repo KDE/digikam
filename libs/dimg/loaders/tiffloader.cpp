@@ -608,6 +608,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (observer)
         observer->progressInfo(m_image, 1.0);
 
+    imageSetAttribute("savedformat", "TIFF");
     return true;
 }
 

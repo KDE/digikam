@@ -1210,7 +1210,16 @@ void EditorWindow::finishSaving(bool success)
     toggleActions(true);
     unsetCursor();
 
+    // take all action necessary to update information and reenable sidebar
+    slotChanged();
+
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
+
+    // On error, continue using current image
+    if (!success)
+    {
+        m_canvas->switchToLastSaved(m_savingContext->srcURL.path());
+    }
 }
 
 void EditorWindow::startingSave(const KURL& url)

@@ -108,6 +108,9 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     bool success = image.save(filePath, format.upper(), quality);
     if (observer && success)
         observer->progressInfo(m_image, 1.0);
+
+    imageSetAttribute("format", format.upper());
+
     return success;
 }
 

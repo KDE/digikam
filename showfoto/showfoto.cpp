@@ -525,7 +525,7 @@ void ShowFoto::slotChanged()
 
 void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
 {
-    m_revertAction->setEnabled(moreUndo);
+    m_revertAction->setEnabled(canSave);
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(canSave);
@@ -841,20 +841,20 @@ void ShowFoto::finishSaving(bool success)
 void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
-    slotChanged();
     //m_bar->invalidateThumb(m_currentItem);
     //slotOpenURL(m_currentItem->url());
 }
 
 void ShowFoto::saveAsIsComplete()
 {
+    m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
-    slotChanged();
 
     // Add the file to the list of thumbbar images if it's not there already
     Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
     m_bar->invalidateThumb(foundItem);
 
+    // a signal will call slotUpdateItemChanged
     if (!foundItem)
         foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
 

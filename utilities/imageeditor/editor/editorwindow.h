@@ -187,6 +187,7 @@ protected slots:
     virtual void slotFirst()=0;
     virtual void slotLast()=0;
     virtual void slotUpdateItemInfo()=0;
+    virtual void slotChanged()=0;
 
 private slots:
 
