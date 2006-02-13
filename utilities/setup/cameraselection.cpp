@@ -36,6 +36,8 @@
 
 // KDE includes.
 
+#include <kglobalsettings.h>
+#include <kurlrequester.h>
 #include <klocale.h>
 
 // Local includes.
@@ -52,34 +54,35 @@ public:
 
     CameraSelectionPriv()
     {
-        listView  = 0;
-        titleEdit = 0;
-        portButtonGroup = 0;
-        usbButton = 0;
-        serialButton = 0;
-        portPathLabel = 0;
+        listView         = 0;
+        titleEdit        = 0;
+        portButtonGroup  = 0;
+        usbButton        = 0;
+        serialButton     = 0;
+        portPathLabel    = 0;
         portPathComboBox = 0;
-        umsMountComboBox = 0;
+        umsMountURL      = 0;
     }
 
-    QListView*     listView;
+    QListView     *listView;
 
-    QLineEdit*     titleEdit;
+    QLineEdit     *titleEdit;
 
-    QVButtonGroup* portButtonGroup;
+    QVButtonGroup *portButtonGroup;
 
-    QRadioButton*  usbButton;
-    QRadioButton*  serialButton;
+    QRadioButton  *usbButton;
+    QRadioButton  *serialButton;
 
-    QLabel*        portPathLabel;
+    QLabel        *portPathLabel;
 
-    QComboBox*     portPathComboBox;
-    QComboBox*     umsMountComboBox;
+    QComboBox     *portPathComboBox;
 
     QString        UMSCameraNameActual;
     QString        UMSCameraNameShown;
 
     QStringList    serialPortList;
+
+    KURLRequester *umsMountURL;
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
@@ -157,6 +160,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     mainBoxLayout->addWidget( portPathBox, 2, 1 );
 
     QGroupBox* umsMountBox = new QGroupBox( mainBox );
+    umsMountBox->setTitle( i18n( "Camera Mount Path" ) );
     umsMountBox->setColumnLayout(0, Qt::Vertical );
     umsMountBox->layout()->setSpacing( 5 );
     umsMountBox->layout()->setMargin( 5 );
@@ -168,13 +172,10 @@ CameraSelection::CameraSelection( QWidget* parent )
                                   "cameras" ) );
     umsMountBoxLayout->addWidget( umsMountLabel );
 
-    d->umsMountComboBox = new QComboBox( false, umsMountBox );
-    umsMountBox->setTitle( i18n( "Camera Mount Path" ) );
-    d->umsMountComboBox->setEditable( true );
-    d->umsMountComboBox->setInsertionPolicy( QComboBox::AtTop );
-    d->umsMountComboBox->setDuplicatesEnabled( false );
-    umsMountBoxLayout->addWidget( d->umsMountComboBox );
+    d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
+    d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
+    umsMountBoxLayout->addWidget( d->umsMountURL );
     mainBoxLayout->addWidget( umsMountBox, 3, 1 );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20,
@@ -184,7 +185,6 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     topLayout->addWidget( mainBox );
 
-    
     // Connections --------------------------------------------------
 
     connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
@@ -239,7 +239,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
         }
     }
 
-    d->umsMountComboBox->setCurrentText(path);
+    d->umsMountURL->setURL(path);
 }
 
 void CameraSelection::getCameraList()
@@ -280,6 +280,7 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
     if (!item) return;
 
     QString model(item->text(0));
+    
     if (model == d->UMSCameraNameShown) 
     {
         model = d->UMSCameraNameActual;
@@ -296,17 +297,17 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
         d->portPathComboBox->insertItem(QString("NONE"), 0);
         d->portPathComboBox->setEnabled(false);
 
-        d->umsMountComboBox->setEnabled(true);
-        d->umsMountComboBox->clear();
-        d->umsMountComboBox->insertItem(QString("/mnt/camera"), 0);
+        d->umsMountURL->setEnabled(true);
+        d->umsMountURL->clear();
+        d->umsMountURL->setURL(QString("/mnt/camera"));
         return;
     }
     else 
     {
-        d->umsMountComboBox->setEnabled(true);
-        d->umsMountComboBox->clear();
-        d->umsMountComboBox->insertItem(QString("/"), 0);
-        d->umsMountComboBox->setEnabled(false);
+        d->umsMountURL->setEnabled(true);
+        d->umsMountURL->clear();
+        d->umsMountURL->setURL(QString("/"));
+        d->umsMountURL->setEnabled(false);
     }
 
     d->titleEdit->setText(model);
@@ -385,7 +386,7 @@ QString CameraSelection::currentPortPath()
 
 QString CameraSelection::currentCameraPath()
 {
-    return d->umsMountComboBox->currentText();
+    return d->umsMountURL->url();
 }
 
 void CameraSelection::slotOkClicked()
