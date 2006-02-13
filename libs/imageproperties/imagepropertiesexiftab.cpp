@@ -230,10 +230,7 @@ QByteArray ImagePropertiesEXIFTab::loadRawExifProfileFromPNG(const KURL& url)
     
     f = fopen(QFile::encodeName(url.path()), "rb");
     if ( !f )
-    {
-        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
         return ba;
-    }
 
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
@@ -306,8 +303,9 @@ QByteArray ImagePropertiesEXIFTab::loadRawExifProfileFromPNG(const KURL& url)
     // -------------------------------------------------------------------
     
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+    png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
+
     fclose(f);
-    
     return ba;
 }
 
