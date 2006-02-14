@@ -1,8 +1,9 @@
 METASOURCES = AUTO
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	    $(all_includes) \
-	    $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS)
+	      -I$(top_srcdir)/digikam/libs/dialogs \
+	      $(all_includes) \
+	      $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS)
 
 noinst_LTLIBRARIES = libsetup.la libshowfotosetup.la
 
