@@ -19,7 +19,7 @@
  * 
  * ============================================================ */
 
-// C Ansi
+// C Ansi includes.
 
 extern "C"
 {
@@ -163,7 +163,7 @@ private:
 };
 
 CameraThread::CameraThread(CameraController* controller)
-    : d(controller->d), parent(controller)
+            : d(controller->d), parent(controller)
 {
 }
 
@@ -177,7 +177,6 @@ void CameraThread::run()
         return;
 
     sendBusy(true);
-
 
     CameraCommand* cmd = d->cmdQueue.dequeue();
     if (cmd)
@@ -352,7 +351,6 @@ void CameraThread::run()
                 }
             }
 
-            
             if (result)
             {
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_downloaded);
@@ -457,7 +455,6 @@ void CameraThread::run()
         }    
 
         delete cmd;
-
     }
 
     sendBusy(false);
@@ -647,8 +644,7 @@ void CameraController::customEvent(QCustomEvent* e)
     {
         /* TODO: ugly hack since qt <= 3.1.2 does not define
            QStringList with QDeepCopy as a friend. */
-        QValueList<QVariant> flist =
-            QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
+        QValueList<QVariant> flist = QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
 
         QStringList folderList;
         QValueList<QVariant>::Iterator it;
@@ -753,19 +749,21 @@ void CameraController::customEvent(QCustomEvent* e)
     }
     case (CameraEvent::gp_opened) :
     {
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
-        QString dest   = QDeepCopy<QString>(event->map["dest"].asString());
+        QString file = QDeepCopy<QString>(event->map["file"].asString());
+        QString dest = QDeepCopy<QString>(event->map["dest"].asString());
 
         KURL url(dest);
         KURL::List urlList;
         urlList << url;
 
-        Digikam::ImageWindow *im = Digikam::ImageWindow::imagewindow();
-        im->loadURL(urlList, url, file, false);
+        ImageWindow *im = ImageWindow::imagewindow();
+        im->loadURL(urlList, url, i18n("Camera \"%1\"").arg(d->camera->model()), false);
+
         if (im->isHidden())
             im->show();
         else
             im->raise();
+            
         im->setFocus();
         break;
     }

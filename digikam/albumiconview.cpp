@@ -896,15 +896,17 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     imview->disconnect(this);
 
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
-            SLOT(slotFilesModified()));
+            this, SLOT(slotFilesModified()));
+            
     connect(imview, SIGNAL(signalFileModified(const KURL&)),
-            SLOT(slotFilesModified(const KURL&)));
+            this, SLOT(slotFilesModified(const KURL&)));
+            
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
-            SLOT(slotFilesModified()));
+            this, SLOT(slotFilesModified()));
 
     imview->loadURL(urlList,
                     item->imageInfo()->kurl(),
-                    d->currentAlbum ? d->currentAlbum->title():QString(),
+                    d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
                     true,
                     this);  // Allow to use image properties and comments/tags dialogs
 

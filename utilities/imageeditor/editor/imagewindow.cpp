@@ -249,7 +249,7 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
     if (!promptUserSave(m_urlCurrent))
         return;
     
-    setCaption(i18n("digiKam Image Editor - Album \"%1\"").arg(caption));
+    setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
     m_view        = view;
     m_urlList     = urlList;
