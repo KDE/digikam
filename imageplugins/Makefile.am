@@ -10,7 +10,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/libs/dimg \
 	   -I$(top_srcdir)/digikam/libs/dimg/filters \
 	   -I$(top_srcdir)/digikam/digikam \
-	   $(all_includes) $(IMLIB2_CFLAGS)
+	   $(all_includes) 
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = digikamimageplugin_core.la
@@ -20,7 +20,7 @@ digikamimageplugin_core_la_SOURCES = imageplugin_core.cpp \
 		imageeffect_redeye.cpp imageeffect_blur.cpp imageeffect_sharpen.cpp imageeffect_rgb.cpp \
 		imageeffect_hsl.cpp imageeffect_iccproof.cpp
 
-digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) $(LIB_IMLIB2) \
+digikamimageplugin_core_la_LIBADD = $(LIB_KPARTS) \
 	                                $(top_builddir)/digikam/digikam/libdigikam.la
 
 digikamimageplugin_core_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
