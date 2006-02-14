@@ -489,12 +489,12 @@ uchar* DImg::bits() const
     return m_priv->data;
 }
 
-uchar* DImg::scanLine(int line) const
+uchar* DImg::scanLine(uint i) const
 {
-    if ( line >= height() )
+    if ( i >= height() )
         return 0;
         
-    return m_priv->data[ width() * bytesDepth() * line];
+    return &m_priv->data[ width() * bytesDepth() * i];
 }
     
 bool DImg::hasAlpha() const

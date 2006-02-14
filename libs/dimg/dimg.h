@@ -130,14 +130,14 @@ public:
 
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
 
-    bool        isNull()           const;
-    uint        width()            const;
-    uint        height()           const;
-    uchar*      bits()             const;
-    uchar*      scanLine(int line) const;
-    bool        hasAlpha()         const;
-    bool        sixteenBit()       const;
-    uint        numBytes()         const;
+    bool        isNull()         const;
+    uint        width()          const;
+    uint        height()         const;
+    uchar*      bits()           const;
+    uchar*      scanLine(uint i) const;
+    bool        hasAlpha()       const;
+    bool        sixteenBit()     const;
+    uint        numBytes()       const;
 
     /** Return the number of bytes depth of one pixel : 4 (non sixteenBit) or 8 (sixteen) */
     int         bytesDepth() const;
