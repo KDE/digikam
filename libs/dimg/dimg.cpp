@@ -800,9 +800,9 @@ void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
     
         for (int j = y ; j < (y + h) ; j++) 
         {
-            pptr  = &src[ j * width() * 4 ] + x * 4;
+            pptr = &src[ j * width() * 4 ] + x * 4;
     
-            for (int i = 0 ; i < w * 4 ; i++)
+            for (int i = 0 ; i < w ; i++)
             {
                 alpha = pptr[3];
     
@@ -816,8 +816,8 @@ void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
                         break;
                 }
                 
-                pptr++;
-                dst++;
+                pptr+=4;
+                dst+=4;
             }
         }
     }
@@ -830,9 +830,9 @@ void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
     
         for (int j = y ; j < (y + h) ; j++) 
         {
-            pptr  = &src[ j * width() * 4 ] + x * 4;
+            pptr = &src[ j * width() * 4 ] + x * 4;
     
-            for (int i = 0 ; i < w * 4 ; i++)
+            for (int i = 0 ; i < w ; i++)
             {
                 alpha = pptr[3];
     
@@ -846,8 +846,8 @@ void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
                         break;
                 }
                 
-                pptr++;
-                dst++;
+                pptr+=4;
+                dst+=4;
             }
         }
     }
