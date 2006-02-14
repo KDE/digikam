@@ -25,11 +25,11 @@
    - BCG Adjust    (core plugin) : Done.
    - HSL Adjust    (core plugin) : Uncomplete. There is a problem in DImg::DColor with 16 bits images.
    - RGB Adjust    (core plugin) : Done.
-   - Red Eyes      (core plugin) : Uncomplete. Need to backport blending pixels method from imlib2.
+   - Red Eyes      (core plugin) : Done
    - B&W Tool      (core plugin) : Done.
    - Blur Tool     (core plugin) : Done.
    - Sharpen Tool  (core plugin) : TODO.
-   - ICC Tool      (core plugin) : under development.
+   - ICC Tool      (core plugin) : Done.
    - Ratio Crop    (core plugin) : Done.
    - Auto-Colors   (core plugin) : Done.
 
