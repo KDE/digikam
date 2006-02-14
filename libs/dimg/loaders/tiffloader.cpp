@@ -737,7 +737,7 @@ void TIFFLoader::setTiffTextTag(TIFF* tif, int tag)
     {
         QString software("digiKam ");
         software.append(digikam_version);
-        TIFFSetField (tif, tiffTag, (uint32)software.length(), (uchar *)software.ascii());
+        TIFFSetField (tif, tiffTag, (uchar *)software.ascii());
         return;
     }
 
