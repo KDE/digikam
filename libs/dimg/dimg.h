@@ -145,6 +145,8 @@ public:
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
 
+    DColor      getPixelColor(uint x, uint y);
+
     /**
     Return true if the original image file format cannot be saved. 
     This is depending of DImgLoader::save() implementation. For example

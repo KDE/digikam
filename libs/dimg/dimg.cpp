@@ -602,6 +602,15 @@ QString DImg::cameraConstructor()
     return ( m_priv->cameraConstructor );
 }
 
+DColor DImg::getPixelColor(uint x, uint y)
+{
+    if (x > width() || y>height())
+        return DColor();
+
+    return( DColor(m_priv->data[y*width()*bitsDepth() + x*bitsDepth()],
+                   sixteenBit()) );
+}
+
 
 //---------------------------------------------------------------------------------------------------
 // copying operations
