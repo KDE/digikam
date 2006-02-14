@@ -1,6 +1,6 @@
 #MIN_CONFIG(3)
 
-AM_INIT_AUTOMAKE(digikam,0.8.0)
+AM_INIT_AUTOMAKE(digikam,0.9.0)
 
 # -----------------------------------------------------------------
 # enable hidden visibility only if kde >= 3.3.2 and kdelibs has
@@ -128,68 +128,6 @@ AC_LANG_SAVE
 AC_LANG_C
 AC_C_BIGENDIAN
 AC_LANG_RESTORE
-
-#---------------------------------------------------------
-# imlib2-detection
-#---------------------------------------------------------
-
-AC_DEFUN([KDE_FIND_IMLIB2_CONFIG],
-   [AC_MSG_CHECKING([for imlib2-config])
-
-imlib2_config_given=NO
-ac_imlib2_config=""
-
-AC_ARG_WITH(imlib2-config,
-        [  --with-imlib2-config     directory where \"imlib2-config\" lies ],
-        [  ac_imlib2_config="$withval/imlib2-config"
-           imlib2_config_given=yes
-        ])
-
-if test "$imlib2_config_given" = "yes"; then
-  if test ! -r $ac_imlib2_config; then
-    AC_MSG_RESULT(wrong file specified)
-    ac_imlib2_config=""
-  else
-    IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
-    LIB_IMLIB2=`$ac_imlib2_config --libs`
-    AC_SUBST(LIB_IMLIB2)
-    AC_SUBST(IMLIB2_CFLAGS)
-    AC_MSG_RESULT($ac_imlib2_config)
-  fi
-else
-  ac_imlib2_config=`which imlib2-config 2>/dev/null`
-  if test -z "$ac_imlib2_config"; then
-    AC_MSG_RESULT(no)
-  else
-    dummy=`echo "$ac_imlib2_config" | grep '/imlib2-config'`
-    if test -z "$dummy"; then
-      AC_MSG_RESULT(no)
-      ac_imlib2_config=""
-    else
-      LIB_IMLIB2=`$ac_imlib2_config --libs`
-      IMLIB2_CFLAGS=`$ac_imlib2_config --cflags`
-      imlib2_config=`echo "$LIB_IMLIB2" | grep lImlib2`
-      if test -z "$imlib2_config"; then
-        AC_MSG_RESULT(no)
-        ac_imlib2_config=""
-      else
-        AC_SUBST(LIB_IMLIB2)
-        AC_SUBST(IMLIB2_CFLAGS)
-        AC_MSG_RESULT($ac_imlib2_config)
-      fi
-    fi
-  fi
-fi
-
-])
-
-dnl Check if Imlib2 is installed properly
-KDE_FIND_IMLIB2_CONFIG
-     
-if test -z "$ac_imlib2_config"; then
-  AC_MSG_WARN([Imlib 2.x not found.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi
 
 #------------------------------------------------------------------
 # gphoto2 detection
@@ -330,5 +268,4 @@ if test "x$enable_nfs_hack" == "xyes"; then
    AC_DEFINE(NFS_HACK, 1, [NFS hack enabled])
    AC_MSG_NOTICE([NFS hack enabled. Make sure you know what you are doing])
 fi
-
 

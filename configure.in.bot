@@ -15,17 +15,6 @@ else
   echo "-- sqlite3 found.................. YES"
 fi
 
-if test -z "$ac_imlib2_config"; then
-  echo "-- imlib2 found................... NO"
-  echo ""
-  echo "digiKam needs imlib2-config. You need to install Imlib 2.x, e.g. from"
-  echo "http://prdownloads.sourceforge.net/enlightenment/imlib2-1.0.6.tar.gz"
-  echo ""
-  all_tests=bad
-else
-  echo "-- imlib2 found................... YES"
-fi
-
 if test -z "$GPHOTO_CONFIG" ; then
   echo "-- gphoto2 found.................. NO"
   echo ""

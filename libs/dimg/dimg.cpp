@@ -749,13 +749,27 @@ void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, i
     }
 }
 
-// FIXME : This method come from imlib2 and do not yet work properly with red eyes correction tool.
+// This method is inspired from imlib2::__imlib_BlendRGBAToRGB() (blend.c)
 
-void DImg::bitBlend(DImg& region, int x, int y, int w, int h)
+void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
 {
+    int tmp;
+
+#define BLEND_COLOR(a, nc, c, cc) \
+    tmp = ((c) - (cc)) * (a); \
+    nc = (cc) + ((tmp + (tmp >> bitsDepth()) + (128*(sixteenBit() ? 256 : 1)) >> bitsDepth()));
+
+#define BLEND(r1, g1, b1, a1, dest) \
+    BLEND_COLOR(a1, dest[2], r1, dest[2]); \
+    BLEND_COLOR(a1, dest[1], g1, dest[1]); \
+    BLEND_COLOR(a1, dest[0], b1, dest[0]);
+
     if (isNull() || region.sixteenBit() != sixteenBit() ||
         w <= 0 || h <= 0)
-       return;
+       {
+           kdDebug() << k_funcinfo << " : invalid blending arguments!" << endl;
+           return;
+       }
 
     // Normalize
 
@@ -772,80 +786,69 @@ void DImg::bitBlend(DImg& region, int x, int y, int w, int h)
     }
 
     if (w > (int)width())
-    {
        w = width();
-    }
 
     if (h > (int)height())
-    {
        w = height();
-    }
 
-    uchar pow_lut[256][256];
-    int i, j;
-
-    for (i = 0; i < 256; i++)
+    if (!sixteenBit())         // 8 bits image.
     {
-        for (j = 0; j < 256; j++)
+        uchar  alpha;
+        uchar *pptr;
+        uchar *dst = bits();
+        uchar *src = region.bits();
+    
+        for (int j = y ; j < (y + h) ; j++) 
         {
-            int divisor;
-
-            divisor = (i + (j * (255 - i)) / 255);
-
-            if (divisor > 0)
-                pow_lut[i][j] = (i * 255) / divisor;
-            else
-                pow_lut[i][j] = 0;
+            pptr  = &src[ j * width() * 4 ] + x * 4;
+    
+            for (int i = 0 ; i < w * 4 ; i++)
+            {
+                alpha = pptr[3];
+    
+                switch (alpha)
+                {
+                    case 0:
+                        break;
+        
+                    default:
+                        BLEND(pptr[2], pptr[1], pptr[0], alpha, dst);
+                        break;
+                }
+                
+                pptr++;
+                dst++;
+            }
         }
     }
-
-    int tmp;
-
-#define B_VAL(p) ((uchar *)(p))[0]
-#define G_VAL(p) ((uchar *)(p))[1]
-#define R_VAL(p) ((uchar *)(p))[2]
-#define A_VAL(p) ((uchar *)(p))[3]
-
-#define BLEND_COLOR(a, nc, c, cc) \
-tmp = ((c) - (cc)) * (a); \
-nc = (cc) + ((tmp + (tmp >> 8) + 0x80) >> 8);
-
-#define BLEND(r1, g1, b1, a1, dest) \
-BLEND_COLOR(a1, R_VAL(dest), r1, R_VAL(dest)); \
-BLEND_COLOR(a1, G_VAL(dest), g1, G_VAL(dest)); \
-BLEND_COLOR(a1, B_VAL(dest), b1, B_VAL(dest));
-
-    uchar  a, aa;
-    uchar *pptr;
-    uchar *src = bits();
-    uchar *dst = region.bits();
-
-    for (int j = y; j < (y + h); j++) 
+    else                        // 16 bits image.
     {
-        pptr  = &src[ j * width() * bytesDepth() ] + x * bytesDepth();
-
-        for (int i = 0; i < w * bytesDepth() ; i++) 
+        unsigned short  alpha;
+        unsigned short *pptr;
+        unsigned short *dst = (unsigned short *)bits();
+        unsigned short *src = (unsigned short *)region.bits();
+    
+        for (int j = y ; j < (y + h) ; j++) 
         {
-            aa = A_VAL(pptr);
-
-            switch (aa)
+            pptr  = &src[ j * width() * 4 ] + x * 4;
+    
+            for (int i = 0 ; i < w * 4 ; i++)
             {
-                case 0:
-                    break;
-
-                case 255:
-                    *pptr = *dst;
-                    break;
-
-                default:
-                    a = pow_lut[aa][A_VAL(dst)];
-                    BLEND_COLOR(aa, A_VAL(dst), 255, A_VAL(dst));
-                    BLEND(R_VAL(pptr), G_VAL(pptr), B_VAL(pptr), a, dst);
-                    break;
+                alpha = pptr[3];
+    
+                switch (alpha)
+                {
+                    case 0:
+                        break;
+        
+                    default:
+                        BLEND(pptr[2], pptr[1], pptr[0], alpha, dst);
+                        break;
+                }
+                
+                pptr++;
+                dst++;
             }
-
-            pptr++;
-            dst++;
         }
     }
 }
