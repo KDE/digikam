@@ -1,7 +1,9 @@
 /* ============================================================
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-12-21
- * Copyright 2005 by F.J. Cruz
+ * Copyright 2005-2006 by F.J. Cruz
+ * Description : digiKam image editor ICC profile
+ *               correction tool
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +62,7 @@
 #include "dimg.h"
 #include "iccpreviewwidget.h"
 #include "icctransform.h"
+#include "iccprofileinfodlg.h"
 
 // Local includes.
 
@@ -367,7 +370,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
-
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));    
@@ -858,38 +860,9 @@ void ImageEffect_ICCProof::getICCInfo(const QString& profile)
         KMessageBox::error(this, i18n("Sorry, there is not any selected profile"), i18n("Profile Error"));
         return;
     }
-    QString intent;
-    cmsHPROFILE selectedProfile;
-    selectedProfile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
-
-    QString  profileName = QString((cmsTakeProductName(selectedProfile)));
-    QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
-    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
-    int profileIntent = cmsTakeRenderingIntent(selectedProfile);
     
-    //"Decode" profile rendering intent
-    switch (profileIntent)
-    {
-        case 0:
-            intent = i18n("Perceptual");
-            break;
-        case 1:
-            intent = i18n("Relative Colorimetric");
-            break;
-        case 2:
-            intent = i18n("Saturation");
-            break;
-        case 3:
-            intent = i18n("Absolute Colorimetric");
-            break;
-    }
-
-    KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
-                                 i18n("</p><p><b>Description:</b>  ") + profileDescription +
-                                 i18n("</p><p><b>Copyright:</b>  ") + profileManufacturer +
-                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
-                                 profile + "</p>",
-                                 i18n("Color Profile Info"));
+    Digikam::ICCProfileInfoDlg infoDlg(this, profile);
+    infoDlg.exec();
 }
 
 void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)

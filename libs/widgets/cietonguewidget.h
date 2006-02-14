@@ -32,13 +32,20 @@
 #include <qwidget.h>
 #include <qcolor.h>
 
+// KDE includes.
+
+#include <kurl.h>
+
+// lcms includes
+
+#include LCMS_HEADER
+#if LCMS_VERSION < 114
+#define cmsTakeCopyright(profile) "Unknown"
+#endif // LCMS_VERSION < 114
+
 // Local includes
 
 #include "digikam_export.h"
-
-// Others
-
-#include LCMS_HEADER
 
 namespace Digikam
 {
@@ -54,8 +61,10 @@ public:
     CIETongueWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongueWidget();
 
-    void setProfileData(QByteArray *profileData=0);
-
+    bool setProfileData(QByteArray *profileData=0);
+    bool setProfileFromFile(const KURL& file=KURL());
+    bool setProfileHandler(cmsHPROFILE hProfile=0);
+    
 protected:
 
     int Grids(double val) const;
@@ -82,6 +91,8 @@ private:
     void CIETongueWidget::BiasedText(int x, int y, QString Txt);
 
     void Sweep_sRGB(void);
+
+    void setProfile(cmsHPROFILE hProfile);
 
 private :
 

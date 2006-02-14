@@ -26,6 +26,7 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) \
 		   $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 		   $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+		   $(top_builddir)/digikam/libs/dialogs/libdialog.la \
 		   $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
 		   $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \

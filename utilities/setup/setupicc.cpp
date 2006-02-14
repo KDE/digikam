@@ -51,17 +51,18 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-// Local includes.
-
-#include "albumsettings.h"
-#include "setupicc.h"
-
-// Others
+// lcms includes.
 
 #include LCMS_HEADER
 #if LCMS_VERSION < 114
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
+
+// Local includes.
+
+#include "iccprofileinfodlg.h"
+#include "albumsettings.h"
+#include "setupicc.h"
 
 namespace Digikam
 {
@@ -88,6 +89,10 @@ public:
         proofProfilesKC         = 0;
         monitorProfilesKC       = 0;
         renderingIntentKC       = 0;
+        infoWorkProfiles        = 0;
+        infoMonitorProfiles     = 0;
+        infoInProfiles          = 0;
+        infoProofProfiles       = 0;
         ICCPath                 = QMap<QString, QString>();
      }
 
@@ -102,6 +107,11 @@ public:
     QStringList      proofICCFiles_file;
     QStringList      monitorICCFiles_file;
 
+    QPushButton     *infoWorkProfiles;
+    QPushButton     *infoMonitorProfiles;
+    QPushButton     *infoInProfiles;
+    QPushButton     *infoProofProfiles;
+    
     KURLRequester   *defaultPathKU;
 
     KComboBox       *inProfilesKC;
@@ -110,9 +120,9 @@ public:
     KComboBox       *monitorProfilesKC;
     KComboBox       *renderingIntentKC;
 
-    ICCfilesPath     ICCPath;
-
     KDialogBase     *mainDialog;
+
+    ICCfilesPath     ICCPath;
 };
 
 SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
@@ -156,9 +166,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
    d->defaultPathKU->setMode(KFile::Directory);
    QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
 
-   connect(d->defaultPathKU, SIGNAL(textChanged(const QString&)), this, SLOT(slotFillCombos(const QString&)));
-   connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)), this, SLOT(slotFillCombos(const QString&)));
-
    layout->addWidget(defaultPath);
 
     // --------------------------------------------------------
@@ -173,11 +180,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->workProfilesKC = new KComboBox(false, workProfilesSettings);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color space of this profile, so you must select an apropiate one for edition purpose.</p><p> These color profiles are device independents.</p>"));
-    QPushButton *infoWorkProfiles = new QPushButton("Info", workProfilesSettings);
-    infoWorkProfiles->setMaximumWidth(60);
-    QWhatsThis::add( infoWorkProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(d->workProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeWorkProfile(int)));
-    connect(infoWorkProfiles, SIGNAL(clicked()), this, SLOT(slotClickedWork()));
+    d->infoWorkProfiles = new QPushButton("Info", workProfilesSettings);
+    d->infoWorkProfiles->setMaximumWidth(60);
+    QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
 
     QHBox *monitorProfilesSettings = new QHBox(profiles);
     monitorProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -186,11 +191,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfilesKC = new KComboBox(false, monitorProfilesSettings);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor.</p>"));
-    QPushButton *infoMonitorProfiles = new QPushButton("Info", monitorProfilesSettings);
-    infoMonitorProfiles->setMaximumWidth(60);
-    QWhatsThis::add( infoMonitorProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(d->monitorProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeMonitorProfile(int)));
-    connect(infoMonitorProfiles, SIGNAL(clicked()), this, SLOT(slotClickedMonitor()) );
+    d->infoMonitorProfiles = new QPushButton("Info", monitorProfilesSettings);
+    d->infoMonitorProfiles->setMaximumWidth(60);
+    QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
 
     QHBox *inProfilesSettings = new QHBox(profiles);
     inProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -199,11 +202,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->inProfilesKC = new KComboBox(false, inProfilesSettings);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device (scanner, camera, ...)</p>"));
-    QPushButton *infoInProfiles = new QPushButton("Info", inProfilesSettings);
-    infoInProfiles->setMaximumWidth(60);
-    QWhatsThis::add( infoInProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(d->inProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeInProfile(int)));
-    connect(infoInProfiles, SIGNAL(clicked()), this, SLOT(slotClickedIn()) );
+    d->infoInProfiles = new QPushButton("Info", inProfilesSettings);
+    d->infoInProfiles->setMaximumWidth(60);
+    QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
 
     QHBox *proofProfilesSettings = new QHBox(profiles);
     proofProfilesSettings->setSpacing(KDialog::spacingHint());
@@ -212,11 +213,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->proofProfilesKC = new KComboBox(false, proofProfilesSettings);
     proofProfiles->setBuddy(d->proofProfilesKC);
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device (usually, your printer). This profile will be used to do a soft proof, so you will be able to preview how an image will be rendered in an output device.</p>"));
-    QPushButton *infoProofProfiles = new QPushButton("Info", proofProfilesSettings);
-    infoProofProfiles->setMaximumWidth(60);
-    QWhatsThis::add( infoProofProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
-    connect(d->proofProfilesKC, SIGNAL(highlighted(int)), this, SLOT(slotChangeProofProfile(int)));
-    connect(infoProofProfiles, SIGNAL(clicked()), this, SLOT(slotClickedProof()) );
+    d->infoProofProfiles = new QPushButton("Info", proofProfilesSettings);
+    d->infoProofProfiles->setMaximumWidth(60);
+    QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
 
     fillCombos();
 
@@ -254,7 +253,41 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     layout->addWidget(intents);
     
     // --------------------------------------------------------
-    connect(d->enableColorManagement, SIGNAL(toggled(bool)), this, SLOT(slotToggledWidgets(bool)));
+    
+    connect(d->enableColorManagement, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggledWidgets(bool)));
+
+    connect(d->proofProfilesKC, SIGNAL(highlighted(int)),
+            this, SLOT(slotChangeProofProfile(int)));
+    
+    connect(d->infoProofProfiles, SIGNAL(clicked()),
+            this, SLOT(slotClickedProof()) );
+
+    connect(d->inProfilesKC, SIGNAL(highlighted(int)),
+            this, SLOT(slotChangeInProfile(int)));
+    
+    connect(d->infoInProfiles, SIGNAL(clicked()),
+            this, SLOT(slotClickedIn()) );
+
+    connect(d->monitorProfilesKC, SIGNAL(highlighted(int)),
+            this, SLOT(slotChangeMonitorProfile(int)));
+    
+    connect(d->infoMonitorProfiles, SIGNAL(clicked()),
+            this, SLOT(slotClickedMonitor()) );
+
+    connect(d->workProfilesKC, SIGNAL(highlighted(int)),
+            this, SLOT(slotChangeWorkProfile(int)));
+            
+    connect(d->infoWorkProfiles, SIGNAL(clicked()),
+            this, SLOT(slotClickedWork()));
+
+    connect(d->defaultPathKU, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotFillCombos(const QString&)));
+            
+    connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)),
+            this, SLOT(slotFillCombos(const QString&)));
+
+    // --------------------------------------------------------
 
     layout->addStretch();
 
@@ -484,6 +517,11 @@ void SetupICC::slotToggledWidgets(bool t)
     d->monitorProfilesKC->setEnabled(t);
     d->renderingIntentKC->setEnabled(t);
 
+    d->infoWorkProfiles->setEnabled(t);
+    d->infoMonitorProfiles->setEnabled(t);
+    d->infoInProfiles->setEnabled(t);
+    d->infoProofProfiles->setEnabled(t);
+
     if (t)
     {
         KConfig* config = kapp->config();
@@ -526,7 +564,6 @@ void SetupICC::slotFillCombos(const QString& url)
     d->mainDialog->enableButtonOK(true);
     
     QDir profilesDir(QFile::encodeName(url), "*.icc;*.icm", QDir::Files);
-
 
     if (!profilesDir.isReadable())
     {
@@ -638,38 +675,9 @@ void SetupICC::profileInfo(const QString& profile)
         KMessageBox::error(this, i18n("Sorry, there is not any selected profile"), i18n("Profile Error"));
         return;
     }
-    QString intent;
-    cmsHPROFILE selectedProfile;
-    selectedProfile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
 
-    QString  profileName = QString((cmsTakeProductName(selectedProfile)));
-    QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
-    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
-    int profileIntent = cmsTakeRenderingIntent(selectedProfile);
-    
-    //"Decode" profile rendering intent
-    switch (profileIntent)
-    {
-        case 0:
-            intent = i18n("Perceptual");
-            break;
-        case 1:
-            intent = i18n("Relative Colorimetric");
-            break;
-        case 2:
-            intent = i18n("Saturation");
-            break;
-        case 3:
-            intent = i18n("Absolute Colorimetric");
-            break;
-    }
-
-    KMessageBox::information(this, i18n("<p><b>Name:</b> ") + profileName +
-                                 i18n("</p><p><b>Description:</b>  ") + profileDescription +
-                                 i18n("</p><p><b>Copyright:</b>  ") + profileManufacturer +
-                                 i18n("</p><p><b>Rendering Intent:</b>  ") + intent + i18n("</p><p><b>Path:</b> ") +
-                                 profile + "</p>",
-                                 i18n("Color Profile Info"));
+    ICCProfileInfoDlg infoDlg(this, profile);
+    infoDlg.exec();
 }
 
 void SetupICC::slotChangeWorkProfile(int index)

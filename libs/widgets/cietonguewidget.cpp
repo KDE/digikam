@@ -31,6 +31,7 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -215,74 +216,14 @@ int CIETongueWidget::Grids(double val) const
     return (int) floor(val * d->gridside + 0.5);
 }
 
-void CIETongueWidget::setProfileData(QByteArray *profileData)
+bool CIETongueWidget::setProfileData(QByteArray *profileData)
 {
     if (profileData)
     {
-        d->profileDataAvailable = true;
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
                                                     (DWORD)profileData->size());
     
-        // Get the white point.
-        ZeroMemory(&(d->MediaWhite), sizeof(cmsCIEXYZ)); 
-        cmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
-        cmsCIExyY White;
-        cmsXYZ2xyY(&White, &(d->MediaWhite));
-    
-        // Get the colorant matrix.
-        ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
-        
-        if (cmsIsTag(hProfile, icSigRedColorantTag) &&
-            cmsIsTag(hProfile, icSigGreenColorantTag) &&
-            cmsIsTag(hProfile, icSigBlueColorantTag))
-            {
-            MAT3 Mat;
-    
-            if (cmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
-            {
-                // Undo chromatic adaptation
-                if (cmsAdaptMatrixFromD50(&Mat, &White))
-                {
-                    cmsCIEXYZ tmp;
-    
-                    tmp.X = Mat.v[0].n[0];
-                    tmp.Y = Mat.v[1].n[0];
-                    tmp.Z = Mat.v[2].n[0];
-    
-                    // ScaleToWhite(&MediaWhite, &tmp);
-                    cmsXYZ2xyY(&(d->Primaries.Red), &tmp);
-    
-                    tmp.X = Mat.v[0].n[1];
-                    tmp.Y = Mat.v[1].n[1];
-                    tmp.Z = Mat.v[2].n[1];
-                    // ScaleToWhite(&MediaWhite, &tmp);
-                    cmsXYZ2xyY(&(d->Primaries.Green), &tmp);
-                    
-                    tmp.X = Mat.v[0].n[2];
-                    tmp.Y = Mat.v[1].n[2];
-                    tmp.Z = Mat.v[2].n[2];
-                    // ScaleToWhite(&MediaWhite, &tmp);
-                    cmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
-                }
-            }       
-        }
-    
-        // Get target data stored in profile
-        ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
-        char*  CharTarget;
-        size_t CharTargetSize;
-    
-        if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
-        {
-            LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
-            if (hSheet != NULL)
-            {
-                cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
-                cmsxIT8Free(hSheet);
-                cmsxPCollValidatePatches(&(d->Measurement), PATCH_HAS_XYZ|PATCH_HAS_RGB);
-            }
-        }
-    
+        setProfile(hProfile);
         cmsCloseProfile(hProfile);
     }
     else
@@ -291,6 +232,114 @@ void CIETongueWidget::setProfileData(QByteArray *profileData)
     }
     
     repaint(false);
+    return (d->profileDataAvailable);
+}
+
+bool CIETongueWidget::setProfileFromFile(const KURL& file)
+{
+    if (!file.isEmpty() && file.isValid())
+    {
+        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
+    
+        setProfile(hProfile);
+        cmsCloseProfile(hProfile);
+    }
+    else
+    {
+        d->profileDataAvailable = false;
+    }
+    
+    repaint(false);
+    return (d->profileDataAvailable);
+}
+
+bool CIETongueWidget::setProfileHandler(cmsHPROFILE hProfile)
+{
+    if (hProfile)
+    {
+        setProfile(hProfile);
+    }
+    else
+    {
+        d->profileDataAvailable = false;
+    }
+    
+    repaint(false);
+    return (d->profileDataAvailable);
+}
+
+void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
+{
+    if (!hProfile)
+    {
+        d->profileDataAvailable = false;
+        return;
+    }
+
+    d->profileDataAvailable = true;
+
+    // Get the white point.
+
+    ZeroMemory(&(d->MediaWhite), sizeof(cmsCIEXYZ));
+    cmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
+    cmsCIExyY White;
+    cmsXYZ2xyY(&White, &(d->MediaWhite));
+
+    // Get the colorant matrix.
+
+    ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
+
+    if (cmsIsTag(hProfile, icSigRedColorantTag) &&
+        cmsIsTag(hProfile, icSigGreenColorantTag) &&
+        cmsIsTag(hProfile, icSigBlueColorantTag))
+    {
+        MAT3 Mat;
+
+        if (cmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
+        {
+            // Undo chromatic adaptation
+            if (cmsAdaptMatrixFromD50(&Mat, &White))
+            {
+                cmsCIEXYZ tmp;
+
+                tmp.X = Mat.v[0].n[0];
+                tmp.Y = Mat.v[1].n[0];
+                tmp.Z = Mat.v[2].n[0];
+
+                // ScaleToWhite(&MediaWhite, &tmp);
+                cmsXYZ2xyY(&(d->Primaries.Red), &tmp);
+
+                tmp.X = Mat.v[0].n[1];
+                tmp.Y = Mat.v[1].n[1];
+                tmp.Z = Mat.v[2].n[1];
+                // ScaleToWhite(&MediaWhite, &tmp);
+                cmsXYZ2xyY(&(d->Primaries.Green), &tmp);
+
+                tmp.X = Mat.v[0].n[2];
+                tmp.Y = Mat.v[1].n[2];
+                tmp.Z = Mat.v[2].n[2];
+                // ScaleToWhite(&MediaWhite, &tmp);
+                cmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
+            }
+        }
+    }
+
+    // Get target data stored in profile
+    
+    ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
+    char*  CharTarget;
+    size_t CharTargetSize;
+
+    if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
+    {
+        LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
+        if (hSheet != NULL)
+        {
+            cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
+            cmsxIT8Free(hSheet);
+            cmsxPCollValidatePatches(&(d->Measurement), PATCH_HAS_XYZ|PATCH_HAS_RGB);
+        }
+    }
 }
 
 void CIETongueWidget::MapPoint(int& icx, int& icy, LPcmsCIExyY xyY)
