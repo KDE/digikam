@@ -379,11 +379,12 @@ void ImageGuideDlg::slotEffect()
         return;
 
     d->currentRenderingMode = ImageGuideDlgPriv::PreviewRendering;
+    kdDebug() << "Preview " << d->name << " started..." << endl;
 
-    enableButton(Ok,    false);
-    enableButton(User1, true);
-    enableButton(User2, false);
-    enableButton(User3, false);
+    enableButton(Ok,      false);
+    enableButton(User1,   true);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
     enableButton(Default, false);
     d->progressBar->setValue(0);
     setProgressVisible(d->progress);
@@ -396,14 +397,15 @@ void ImageGuideDlg::slotEffect()
 
 void ImageGuideDlg::slotOk()
 {
+    d->currentRenderingMode = ImageGuideDlgPriv::FinalRendering;
+    kdDebug() << "Final " << d->name << " started..." << endl;
     saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     writeUserSettings();
-    d->currentRenderingMode = ImageGuideDlgPriv::FinalRendering;
 
-    enableButton(Ok,    false);
-    enableButton(User1, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
+    enableButton(Ok,      false);
+    enableButton(User1,   false);
+    enableButton(User2,   false);
+    enableButton(User3,   false);
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     d->progressBar->setValue(0);

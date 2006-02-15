@@ -65,11 +65,12 @@ public:
     
     CtrlPanelDlgPriv()
     {
-        parent      = 0;
-        timer       = 0;
-        aboutData   = 0;
-        progressBar = true;
-        tryAction   = false;
+        parent               = 0;
+        timer                = 0;
+        aboutData            = 0;
+        progressBar          = true;
+        tryAction            = false;
+        currentRenderingMode = NoneRendering;
     }
 
     bool         tryAction;
@@ -101,7 +102,6 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     d->name                 = name;
     d->tryAction            = tryAction;
     d->progressBar          = progressBar;
-    d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
     m_threadedFilter        = 0;
     QString whatsThis;
 
@@ -290,6 +290,7 @@ void CtrlPanelDlg::slotEffect()
         return;
 
     d->currentRenderingMode = CtrlPanelDlgPriv::PreviewRendering;
+    kdDebug() << "Preview " << d->name << " started..." << endl;
 
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,      false);
@@ -310,9 +311,10 @@ void CtrlPanelDlg::slotEffect()
 
 void CtrlPanelDlg::slotOk()
 {
+    d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
+    kdDebug() << "Final " << d->name << " started..." << endl;
     saveDialogSize(d->name + QString::QString(" Tool Dialog"));
     writeUserSettings();
-    d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
 
     m_imagePreviewWidget->setEnable(false);
     enableButton(Ok,      false);
@@ -335,17 +337,17 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    DImgThreadedFilter::EventData *e = (DImgThreadedFilter::EventData*) event->data();
+    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event->data();
 
-    if (!e) return;
+    if (!ed) return;
 
-    if (e->starting)           // Computation in progress !
+    if (ed->starting)           // Computation in progress !
     {
-        m_imagePreviewWidget->setProgress(e->progress);
+        m_imagePreviewWidget->setProgress(ed->progress);
     }
     else
     {
-        if (e->success)        // Computation Completed !
+        if (ed->success)        // Computation Completed !
         {
             switch (d->currentRenderingMode)
             {
@@ -385,7 +387,7 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
         }
     }
 
-    delete e;
+    delete ed;
 }
 
 // Backport KDialog::keyPressEvent() implementation from KDELibs to ignore Enter/Return Key events 
