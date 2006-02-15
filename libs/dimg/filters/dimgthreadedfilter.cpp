@@ -4,7 +4,7 @@
  * Date  : 2005-05-25
  * Description : threaded image filter class.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-  
+
 // Qt includes.
 
 #include <qobject.h>
@@ -89,7 +89,9 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 
 void DImgThreadedFilter::startComputation()
 {
-    kdDebug() << m_name << "::Start of computation... " << endl;
+    kdDebug() << m_name
+              << "::Start of computation... " << endl;
+              
     QDateTime startDate = QDateTime::currentDateTime();
     
     if (m_parent)
@@ -104,14 +106,16 @@ void DImgThreadedFilter::startComputation()
        if (m_parent)
           postProgress(0, false, true);
           
-       kdDebug() << m_name << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
+       kdDebug() << m_name
+                 << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
     }
     else
     {
        if (m_parent)
           postProgress(0, false, false);
           
-       kdDebug() << m_name << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
+       kdDebug() << m_name
+                 << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
     }
 }
 
