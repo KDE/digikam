@@ -2,7 +2,7 @@
  * File  : dimgsharpen.h
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-17-07
- * Description : A DImgSharpen threaded image filter.
+ * Description : A Sharpen threaded image filter.
  * 
  * Copyright 2005-2006 by Gilles Caulier
  *
@@ -51,11 +51,9 @@ private:  // DImgSharpen filter methods.
 
     virtual void filterImage(void);
     
-    void sharpenImage(uchar *data, int width, int height, bool sixteenBit, double radius, double sigma);
+    void sharpenImage(double radius, double sigma);
 
-    bool convolveImage(uchar *data, int w, int h, bool sixteenBit,
-                       const unsigned int order,
-                       const double *kernel);
+    bool convolveImage(const unsigned int order, const double *kernel);
                        
     int  getOptimalKernelWidth(double radius, double sigma);
 };

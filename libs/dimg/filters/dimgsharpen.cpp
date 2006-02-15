@@ -2,9 +2,12 @@
  * File  : dimgsharpen.cpp
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-17-07
- * Description : A DImgSharpen threaded image filter.
+ * Description : A Sharpen threaded image filter.
  * 
  * Copyright 2005-2006 by Gilles Caulier
+ * 
+ * Original Sharpen algorithm copyright 2002
+ * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,15 +52,14 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double 
 
 void DImgSharpen::filterImage(void)
 {
-    sharpenImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                 m_orgImage.sixteenBit(), m_radius, m_sigma);
+    sharpenImage(m_radius, m_sigma);
 }
 
 /** Function to apply the sharpen filter on an image*/
 
-void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenBit, double radius, double sigma)
+void DImgSharpen::sharpenImage(double radius, double sigma)
 {
-    if (!data || !width || !height)
+    if (m_orgImage.isNull())
     {
        kdWarning() << k_funcinfo << "No image data available!"
                    << endl;
@@ -73,16 +75,16 @@ void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenB
     double        alpha, normalize=0.0;
     register long i=0, u, v;
 
-    int optimalWidth = getOptimalKernelWidth(radius, sigma);
+    int kernelWidth = getOptimalKernelWidth(radius, sigma);
     
-    if(width < optimalWidth)
+    if((int)m_orgImage.width() < kernelWidth)
     {
         kdWarning() << k_funcinfo << "Image is smaller than radius!"
                     << endl;
         return;
     }
     
-    double *kernel = new double[optimalWidth*optimalWidth];
+    double *kernel = new double[kernelWidth*kernelWidth];
     
     if(!kernel)
     {
@@ -91,9 +93,9 @@ void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenB
         return;
     }
 
-    for(v=(-optimalWidth/2) ; v <= (optimalWidth/2) ; v++)
+    for(v=(-kernelWidth/2) ; v <= (kernelWidth/2) ; v++)
     {
-        for(u=(-optimalWidth/2) ; u <= (optimalWidth/2) ; u++)
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; u++)
         {
             alpha      = exp(-((double) u*u+v*v)/(2.0*sigma*sigma));
             kernel[i]  = alpha/(2.0*M_PI*sigma*sigma);
@@ -103,32 +105,30 @@ void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenB
     }
     
     kernel[i/2] = (-2.0)*normalize;
-    convolveImage(data, width, height, sixteenBit, optimalWidth, kernel);
+    convolveImage(kernelWidth, kernel);
     
     delete [] kernel;
 }
 
-bool DImgSharpen::convolveImage(uchar *data, int w, int h, bool sixteenBit,
-                                const unsigned int order,
-                                const double *kernel)
+bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
 {
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
-    long    width, i;
+    long    kernelWidth, i;
     double  red, green, blue, alpha, normalize=0.0;
     double *k=0;
     DColor  color;
     
-    width = order;
+    kernelWidth = order;
     
-    if((width % 2) == 0)
+    if((kernelWidth % 2) == 0)
     {
         kdWarning() << k_funcinfo << "Kernel width must be an odd number!"
                     << endl;
         return(false);
     }
     
-    double *normal_kernel = new double[width*width];
+    double *normal_kernel = new double[kernelWidth*kernelWidth];
     
     if(!normal_kernel)
     {
@@ -137,7 +137,7 @@ bool DImgSharpen::convolveImage(uchar *data, int w, int h, bool sixteenBit,
         return(false);
     }
     
-    for(i=0 ; i < (width*width) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
         normalize += kernel[i];
         
     if(fabs(normalize) <= Epsilon)
@@ -145,50 +145,84 @@ bool DImgSharpen::convolveImage(uchar *data, int w, int h, bool sixteenBit,
         
     normalize = 1.0/normalize;
     
-    for(i=0 ; i < (width*width) ; i++)
+    for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
         normal_kernel[i] = normalize*kernel[i];
 
-    uchar *q = m_destImage.bits();
+    uchar          *q8  = m_destImage.bits();
+    unsigned short *q16 = (unsigned short *)m_destImage.bits();
     
     for(y=0 ; y < m_destImage.height() ; y++)
     {
-        sy = y-(width/2);
+        sy = y-(kernelWidth/2);
 
         for(x=0 ; x < m_destImage.width() ; x++)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
-            sy  = y-(width/2);
+            sy  = y-(kernelWidth/2);
             
-            for(mcy=0 ; mcy < width ; mcy++, sy++)
+            if (!m_destImage.sixteenBit())        // 8 bits image.
             {
-                my = sy < 0 ? 0 : sy > h-1 ? h-1 : sy;
-                sx = x+(-width/2);
-                
-                for(mcx=0 ; mcx < width ; mcx++, sx++)
+                for(mcy=0 ; mcy < kernelWidth ; mcy++, sy++)
                 {
-                    mx     = sx < 0 ? 0 : sx > w-1 ? w-1 : sx;
-                    color  = m_orgImage.getPixelColor(mx, my);
-                    red   += (*k)*(color.red()   * 257.0);
-                    green += (*k)*(color.green() * 257.0);
-                    blue  += (*k)*(color.blue()  * 257.0);
-                    alpha += (*k)*(color.alpha() * 257.0);
-                    k++;
+                    my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
+                    sx = x+(-kernelWidth/2);
+    
+                    for(mcx=0 ; mcx < kernelWidth ; mcx++, sx++)
+                    {
+                        mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
+                        color  = m_orgImage.getPixelColor(mx, my);
+                        red   += (*k)*(color.red()   * 257.0);
+                        green += (*k)*(color.green() * 257.0);
+                        blue  += (*k)*(color.blue()  * 257.0);
+                        alpha += (*k)*(color.alpha() * 257.0);
+                        k++;
+                    }
                 }
+    
+                red   =   red < 0.0 ? 0.0 :   red > 65535.0 ? 65535.0 :   red+0.5;
+                green = green < 0.0 ? 0.0 : green > 65535.0 ? 65535.0 : green+0.5;
+                blue  =  blue < 0.0 ? 0.0 :  blue > 65535.0 ? 65535.0 :  blue+0.5;
+                alpha = alpha < 0.0 ? 0.0 : alpha > 65535.0 ? 65535.0 : alpha+0.5;
+    
+                q8[0] = (uchar)(blue  / 257UL);
+                q8[1] = (uchar)(green / 257UL);
+                q8[2] = (uchar)(red   / 257UL);
+                q8[3] = (uchar)(alpha / 257UL);
+                q8+=4;
             }
-
-            red   =   red < 0.0 ? 0.0 :   red > 65535.0 ? 65535.0 :   red+0.5;
-            green = green < 0.0 ? 0.0 : green > 65535.0 ? 65535.0 : green+0.5;
-            blue  =  blue < 0.0 ? 0.0 :  blue > 65535.0 ? 65535.0 :  blue+0.5;
-            alpha = alpha < 0.0 ? 0.0 : alpha > 65535.0 ? 65535.0 : alpha+0.5;
-
-            q[0] = (uchar)(blue  / 257UL);
-            q[1] = (uchar)(green / 257UL);
-            q[2] = (uchar)(red   / 257UL);
-            q[3] = (uchar)(alpha / 257UL);
-            q+=4;
+            else               // 16 bits image.
+            {
+                for(mcy=0 ; mcy < kernelWidth ; mcy++, sy++)
+                {
+                    my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
+                    sx = x+(-kernelWidth/2);
+    
+                    for(mcx=0 ; mcx < kernelWidth ; mcx++, sx++)
+                    {
+                        mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
+                        color  = m_orgImage.getPixelColor(mx, my);
+                        red   += (*k)*(color.red()   * 257.0);
+                        green += (*k)*(color.green() * 257.0);
+                        blue  += (*k)*(color.blue()  * 257.0);
+                        alpha += (*k)*(color.alpha() * 257.0);
+                        k++;
+                    }
+                }
+    
+                red   =   red < 0.0 ? 0.0 :   red > 16777215.0 ? 16777215.0 :   red+0.5;
+                green = green < 0.0 ? 0.0 : green > 16777215.0 ? 16777215.0 : green+0.5;
+                blue  =  blue < 0.0 ? 0.0 :  blue > 16777215.0 ? 16777215.0 :  blue+0.5;
+                alpha = alpha < 0.0 ? 0.0 : alpha > 16777215.0 ? 16777215.0 : alpha+0.5;
+    
+                q16[0] = (unsigned short)(blue  / 257UL);
+                q16[1] = (unsigned short)(green / 257UL);
+                q16[2] = (unsigned short)(red   / 257UL);
+                q16[3] = (unsigned short)(alpha / 257UL);
+                q16+=4;
+            }
         }
-        
+
         progress = (int)(((double)y * 100.0) / m_destImage.height());
         if ( progress%5 == 0 )
            postProgress( progress );          
@@ -201,29 +235,29 @@ bool DImgSharpen::convolveImage(uchar *data, int w, int h, bool sixteenBit,
 int DImgSharpen::getOptimalKernelWidth(double radius, double sigma)
 {
     double        normalize, value;
-    long          width;
+    long          kernelWidth;
     register long u;
 
     if(radius > 0.0)
         return((int)(2.0*ceil(radius)+1.0));
         
-    for(width=5; ;)
+    for(kernelWidth=5; ;)
     {
         normalize=0.0;
         
-        for(u=(-width/2) ; u <= (width/2) ; u++)
+        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; u++)
             normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
 
-        u     = width/2;
+        u     = kernelWidth/2;
         value = exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma)/normalize;
         
         if((long)(65535*value) <= 0)
             break;
             
-        width+=2;
+        kernelWidth+=2;
     }
     
-    return((int)width-2);
+    return((int)kernelWidth-2);
 }
 
 }  // NameSpace Digikam
