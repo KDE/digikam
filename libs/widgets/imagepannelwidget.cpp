@@ -190,7 +190,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
     h1->addWidget(d->separateView);
-    h1->addStretch();
     h1->addWidget(d->progressBar);
     
     l2->addWidget(frame3, 0, Qt::AlignHCenter);

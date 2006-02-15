@@ -71,8 +71,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     // -------------------------------------------------------------
     
     d->title = new QLabel(i18n("Preview Mode:"), this);
-    QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::marginHint(),
-                                         KDialog::spacingHint());
+    QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::spacingHint());
 
     d->spotInfoLabel = new QLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);

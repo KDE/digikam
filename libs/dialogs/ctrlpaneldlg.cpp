@@ -183,7 +183,6 @@ void CtrlPanelDlg::abortPreview()
 {
     d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
     m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressVisible(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);
     enableButton(Ok,      true);
@@ -301,7 +300,6 @@ void CtrlPanelDlg::slotEffect()
     enableButton(Default, false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressVisible(d->progressBar);
 
     if (m_threadedFilter)
        delete m_threadedFilter;
@@ -325,7 +323,6 @@ void CtrlPanelDlg::slotOk()
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
-    m_imagePreviewWidget->setProgressVisible(d->progressBar);
 
     if (m_threadedFilter)
        delete m_threadedFilter;

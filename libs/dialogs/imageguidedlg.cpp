@@ -280,7 +280,6 @@ void ImageGuideDlg::abortPreview()
 {
     d->currentRenderingMode = ImageGuideDlgPriv::NoneRendering;
     d->progressBar->setValue(0);
-    setProgressVisible(false);
     enableButton(Ok, true);
     enableButton(User1, false);
     enableButton(User2, true);
@@ -387,7 +386,6 @@ void ImageGuideDlg::slotEffect()
     enableButton(User3,   false);
     enableButton(Default, false);
     d->progressBar->setValue(0);
-    setProgressVisible(d->progress);
 
     if (m_threadedFilter)
        delete m_threadedFilter;
@@ -409,7 +407,6 @@ void ImageGuideDlg::slotOk()
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     d->progressBar->setValue(0);
-    setProgressVisible(d->progress);
 
     if (m_threadedFilter)
        delete m_threadedFilter;
