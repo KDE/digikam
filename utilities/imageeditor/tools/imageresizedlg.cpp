@@ -3,7 +3,7 @@
  * Date  : 2004-06-05
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,152 +37,189 @@
 namespace Digikam
 {
 
+class ImageResizeDlgPriv
+{
+public:
+
+    ImageResizeDlgPriv()
+    {
+        width          = 0;
+        height         = 0;
+        constrainCheck = 0;
+        wInput         = 0;
+        hInput         = 0;
+        wpInput        = 0;
+        hpInput        = 0;
+    }
+
+    int             *width;
+    int             *height;
+    int              prevW;
+    int              prevH;
+    
+    double           prevWP;
+    double           prevHP;
+
+    QCheckBox       *constrainCheck;
+
+    KIntSpinBox     *wInput;
+    KIntSpinBox     *hInput;
+    KDoubleSpinBox  *wpInput;
+    KDoubleSpinBox  *hpInput;
+};
+
 ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
               : KDialogBase(Plain, i18n("Resize Image"), Help|Ok|Cancel, Ok,
                             parent, 0, true, true)
 {
+    d = new ImageResizeDlgPriv;
     setHelp("resizetool.anchor", "digikam");
     
-    m_width  = width;
-    m_height = height;
+    d->width  = width;
+    d->height = height;
 
-    m_prevW  = *m_width;
-    m_prevH  = *m_height;
-    m_prevWP = 100.0;
-    m_prevHP = 100.0;
+    d->prevW  = *d->width;
+    d->prevH  = *d->height;
+    d->prevWP = 100.0;
+    d->prevHP = 100.0;
     
-    QGridLayout *topLayout =
-        new QGridLayout( plainPage(), 0, 3, 4, spacingHint());
+    QGridLayout *topLayout = new QGridLayout( plainPage(), 0, 3, 4, spacingHint());
+    QLabel *label = 0;
 
-    QLabel      *label;
-
+    // -------------------------------------------------------------
+    
     label    = new QLabel(i18n("Width:"), plainPage(), "w");
-    m_wInput = new KIntSpinBox(1, 9999, 1, *m_width, 10, plainPage()); 
-    m_wInput->setName("w");
+    d->wInput = new KIntSpinBox(1, 9999, 1, *d->width, 10, plainPage());
+    d->wInput->setName("w");
     topLayout->addWidget(label, 0, 0);
-    topLayout->addWidget(m_wInput, 0, 1);
+    topLayout->addWidget(d->wInput, 0, 1);
     
     label    = new QLabel(i18n("Height:"), plainPage());
-    m_hInput = new KIntSpinBox(1, 9999, 1, *m_height, 10, plainPage());
-    m_hInput->setName("h");
+    d->hInput = new KIntSpinBox(1, 9999, 1, *d->height, 10, plainPage());
+    d->hInput->setName("h");
     topLayout->addWidget(label, 0, 2);
-    topLayout->addWidget(m_hInput, 0, 3);
+    topLayout->addWidget(d->hInput, 0, 3);
 
     label     = new QLabel(i18n("Width (%):"), plainPage());
-    m_wpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
-    m_wpInput->setName("wp");
+    d->wpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage());
+    d->wpInput->setName("wp");
     topLayout->addWidget(label, 1, 0);
-    topLayout->addWidget(m_wpInput, 1, 1);
+    topLayout->addWidget(d->wpInput, 1, 1);
 
     label    = new QLabel(i18n("Height (%):"), plainPage(), "hp");
-    m_hpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage()); 
-    m_hpInput->setName("hp");
+    d->hpInput = new KDoubleSpinBox(1, 999, 1, 100, 1, plainPage());
+    d->hpInput->setName("hp");
     topLayout->addWidget(label, 1, 2);
-    topLayout->addWidget(m_hpInput, 1, 3);
+    topLayout->addWidget(d->hpInput, 1, 3);
 
-    m_constrainCheck = new QCheckBox(i18n("Maintain aspect ratio"),
+    d->constrainCheck = new QCheckBox(i18n("Maintain aspect ratio"),
                                      plainPage());
-    topLayout->addMultiCellWidget(m_constrainCheck, 2, 2, 0, 3);
+    topLayout->addMultiCellWidget(d->constrainCheck, 2, 2, 0, 3);
 
-    m_constrainCheck->setChecked(true);
+    d->constrainCheck->setChecked(true);
 
-
-    connect(m_wInput, SIGNAL(valueChanged(int)),
-            SLOT(slotChanged()));
-    connect(m_hInput, SIGNAL(valueChanged(int)),
-            SLOT(slotChanged()));
-    connect(m_wpInput, SIGNAL(valueChanged(double)),
-            SLOT(slotChanged()));
-    connect(m_hpInput, SIGNAL(valueChanged(double)),
-            SLOT(slotChanged()));
+    // -------------------------------------------------------------
+    
+    connect(d->wInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotChanged()));
+            
+    connect(d->hInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotChanged()));
+            
+    connect(d->wpInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotChanged()));
+            
+    connect(d->hpInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotChanged()));
 }
 
 ImageResizeDlg::~ImageResizeDlg()
 {
+    delete d;
 }
 
 void ImageResizeDlg::slotOk()
 {
-    if (m_prevW != m_wInput->value() || m_prevH != m_hInput->value() ||
-        m_prevWP != m_wpInput->value() || m_prevHP != m_hpInput->value())
+    if (d->prevW != d->wInput->value() || d->prevH != d->hInput->value() ||
+        d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotChanged();
     
-    *m_width  = m_prevW;
-    *m_height = m_prevH;
+    *d->width  = d->prevW;
+    *d->height = d->prevH;
     accept();
 }
 
 void ImageResizeDlg::slotChanged()
 {
-    m_wInput->blockSignals(true);
-    m_hInput->blockSignals(true);
-    m_wpInput->blockSignals(true);
-    m_hpInput->blockSignals(true);
+    d->wInput->blockSignals(true);
+    d->hInput->blockSignals(true);
+    d->wpInput->blockSignals(true);
+    d->hpInput->blockSignals(true);
     
     QString s(sender()->name());
     
     if (s == "w")
     {
-        double val = m_wInput->value();
-        double wp  = val/(double)(*m_width) * 100.0;
-        m_wpInput->setValue(wp);
+        double val = d->wInput->value();
+        double wp  = val/(double)(*d->width) * 100.0;
+        d->wpInput->setValue(wp);
 
-        if (m_constrainCheck->isChecked())
+        if (d->constrainCheck->isChecked())
         {
-            m_hpInput->setValue(wp);
-            int h = (int)(wp*(*m_height)/100);
-            m_hInput->setValue(h);
+            d->hpInput->setValue(wp);
+            int h = (int)(wp*(*d->height)/100);
+            d->hInput->setValue(h);
         }
     }
     else if (s == "h")
     {
-        double val = m_hInput->value();
-        double hp  = val/(double)(*m_height) * 100.0;
-        m_hpInput->setValue(hp);
+        double val = d->hInput->value();
+        double hp  = val/(double)(*d->height) * 100.0;
+        d->hpInput->setValue(hp);
 
-        if (m_constrainCheck->isChecked())
+        if (d->constrainCheck->isChecked())
         {
-            m_wpInput->setValue(hp);
-            int w = (int)(hp*(*m_width)/100);
-            m_wInput->setValue(w);
+            d->wpInput->setValue(hp);
+            int w = (int)(hp*(*d->width)/100);
+            d->wInput->setValue(w);
         }
     }
     else if (s == "wp")
     {
-        double val = m_wpInput->value();
-        int w      = (int)(val*(*m_width)/100);
-        m_wInput->setValue(w);
+        double val = d->wpInput->value();
+        int w      = (int)(val*(*d->width)/100);
+        d->wInput->setValue(w);
 
-        if (m_constrainCheck->isChecked())
+        if (d->constrainCheck->isChecked())
         {
-            m_hpInput->setValue(val);
-            int h = (int)(val*(*m_height)/100);
-            m_hInput->setValue(h);
+            d->hpInput->setValue(val);
+            int h = (int)(val*(*d->height)/100);
+            d->hInput->setValue(h);
         }
     }
     else if (s == "hp")
     {
-        double val = m_hpInput->value();
-        int h      = (int)(val*(*m_height)/100);
-        m_hInput->setValue(h);
+        double val = d->hpInput->value();
+        int h      = (int)(val*(*d->height)/100);
+        d->hInput->setValue(h);
 
-        if (m_constrainCheck->isChecked())
+        if (d->constrainCheck->isChecked())
         {
-            m_wpInput->setValue(val);
-            int w = (int)(val*(*m_width)/100);
-            m_wInput->setValue(w);
+            d->wpInput->setValue(val);
+            int w = (int)(val*(*d->width)/100);
+            d->wInput->setValue(w);
         }
     }
 
-    m_prevW = m_wInput->value();
-    m_prevH = m_hInput->value();
-    m_prevWP = m_wpInput->value();
-    m_prevHP = m_hpInput->value();
+    d->prevW = d->wInput->value();
+    d->prevH = d->hInput->value();
+    d->prevWP = d->wpInput->value();
+    d->prevHP = d->hpInput->value();
     
-    m_wInput->blockSignals(false);
-    m_hInput->blockSignals(false);
-    m_wpInput->blockSignals(false);
-    m_hpInput->blockSignals(false);
+    d->wInput->blockSignals(false);
+    d->hInput->blockSignals(false);
+    d->wpInput->blockSignals(false);
+    d->hpInput->blockSignals(false);
 }
 
 }  // namespace Digikam

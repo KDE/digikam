@@ -3,7 +3,7 @@
  * Date  : 2004-06-05
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,13 +25,9 @@
 
 #include <kdialogbase.h>
 
-class QCheckBox;
-
-class KIntSpinBox;
-class KDoubleSpinBox;
-
 namespace Digikam
 {
+class ImageResizeDlgPriv;
 
 class ImageResizeDlg : public KDialogBase
 {
@@ -42,26 +38,14 @@ public:
     ImageResizeDlg(QWidget* parent, int* width, int* height);
     ~ImageResizeDlg();
 
-private:
-
-    KIntSpinBox     *m_wInput;
-    KIntSpinBox     *m_hInput;
-    KDoubleSpinBox  *m_wpInput;
-    KDoubleSpinBox  *m_hpInput;
-    QCheckBox       *m_constrainCheck;
-
-    int      *m_width;
-    int      *m_height;
-
-    int       m_prevW;
-    int       m_prevH;
-    double    m_prevWP;
-    double    m_prevHP;
-    
 private slots:
 
     void slotOk();
     void slotChanged();
+
+private:
+
+    ImageResizeDlgPriv *d;
 };
 
 }  // namespace Digikam
