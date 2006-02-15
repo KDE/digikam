@@ -39,7 +39,7 @@ namespace Digikam
 DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, QString name)
                   : QThread()
 { 
-    m_orgImage = DImg(*orgImage);
+    m_orgImage = orgImage->copy();
     m_parent   = parent;
     m_cancel   = false;
     m_name     = name;
