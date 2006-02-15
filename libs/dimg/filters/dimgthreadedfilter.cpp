@@ -89,6 +89,7 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 
 void DImgThreadedFilter::startComputation()
 {
+    kdDebug() << m_name << "::Start of computation... " << endl;
     QDateTime startDate = QDateTime::currentDateTime();
     
     if (m_parent)
