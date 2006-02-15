@@ -669,18 +669,42 @@ void TIFFLoader::getTiffTextTag(TIFF* tif, int tag)
         default:
             return;
     }
-    
-    if (TIFFGetField(tif, tiffTag, &text) == 1)        
+
+    if (tiffTag == TIFFTAG_INKNAMES)
     {
-        QByteArray ba(strlen(text));
-        memcpy(ba.data(), text, strlen(text));
-        imageMetaData().insert(tag, ba);
+        uint16 count;
+        if (TIFFGetField(tif, tiffTag, &text) == 1 && TIFFGetField(tif, TIFFTAG_NUMBEROFINKS, &count) == 1)
+        {
+            //INKNAMES is concatenated from NUMBEROFINKS null-terminated strings. Count total length, including nulls.
+            int length = 0;
+            char *str  = text;
+            for (int i=0; i<count; i++)
+            {
+                int len = strlen(text)+1;
+                length += len;
+                str += len;
+            }
+            QByteArray ba(length);
+            memcpy(ba.data(), text, length);
+            imageMetaData().insert(tag, ba);
+        }
+    }
+    else
+    {
+        if (TIFFGetField(tif, tiffTag, &text) == 1)
+        {
+            // include the terminating \0
+            int textlength = strlen(text)+1;
+            QByteArray ba(textlength);
+            memcpy(ba.data(), text, textlength);
+            imageMetaData().insert(tag, ba);
 
-        if (tiffTag == TIFFTAG_MODEL)
-           imageSetCameraModel(QString::QString(text));
+            if (tiffTag == TIFFTAG_MODEL)
+            imageSetCameraModel(QString::QString(text));
 
-        if (tiffTag == TIFFTAG_MAKE)
-           imageSetCameraConstructor(QString::QString(text));
+            if (tiffTag == TIFFTAG_MAKE)
+            imageSetCameraConstructor(QString::QString(text));
+        }
     }
 }
 
@@ -729,23 +753,29 @@ void TIFFLoader::setTiffTextTag(TIFF* tif, int tag)
         default:
             return;
     }
-    
+
     typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap map = imageMetaData();
-    
+
     if (tiffTag == TIFFTAG_SOFTWARE)
     {
         QString software("digiKam ");
         software.append(digikam_version);
-        TIFFSetField (tif, tiffTag, (uchar *)software.ascii());
+        TIFFSetField (tif, tiffTag, software.ascii());
         return;
     }
-
-    
-    if (map.contains(tag))
+    else if (map.contains(tag))
     {
-        QByteArray ba = map[tag];
-        TIFFSetField (tif, tiffTag, (uint32)ba.size(), (uchar *)ba.data());        
+        if (tiffTag == TIFFTAG_INKNAMES)
+        {
+            QByteArray ba = map[tag];
+            TIFFSetField (tif, tiffTag, (uint16)ba.size(), (char *)ba.data());
+        }
+        else
+        {
+            QByteArray ba = map[tag];
+            TIFFSetField (tif, tiffTag, (char *)ba.data());
+        }
     }
 }
 
