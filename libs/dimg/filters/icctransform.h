@@ -45,6 +45,8 @@ public:
     void apply(DImg& image, QByteArray& profile, int intent, bool useBPC = false, bool checkGamut = false,
                bool useBuiltin=false);
     void getEmbeddedProfile(DImg image);
+
+    int getRenderingIntent();
     
     //Input profile from file
     void setProfiles(QString input_profile, QString output_profile);
