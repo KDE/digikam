@@ -56,18 +56,18 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, marginHint(), spacingHint());
     QLabel *label             = new QLabel(i18n("Sharpness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
-    m_radiusInput->setRange(0, 20, 1, true);
+    m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A sharpness of 0 has no effect, "
                                          "1 and above determine the sharpen matrix radius "
                                          "that determines how much to sharpen the image."));
 
-    gridSettings->addWidget(label, 0, 0);
-    gridSettings->addWidget(m_radiusInput, 0, 1);
+    gridSettings->addMultiCellWidget(label, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
@@ -99,7 +99,7 @@ void ImageEffect_Sharpen::prepareEffect()
     
     Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
         
-    double radius = m_radiusInput->value()*4.0/10.0;
+    double radius = m_radiusInput->value()/10.0;
     double sigma;
 
     if (radius < 1.0) sigma = radius;
@@ -113,7 +113,7 @@ void ImageEffect_Sharpen::prepareFinal()
 {
     m_radiusInput->setEnabled(false);
 
-    double radius = m_radiusInput->value()*4.0/10.0;
+    double radius = m_radiusInput->value()/10.0;
     double sigma;
 
     if (radius < 1.0) sigma = radius;

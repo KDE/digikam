@@ -52,18 +52,18 @@ ImageEffect_Blur::ImageEffect_Blur(QWidget* parent)
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, marginHint(), spacingHint());
     QLabel *label = new QLabel(i18n("Smoothness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
-    m_radiusInput->setRange(0, 20, 1, true);
+    m_radiusInput->setRange(0, 100, 1, true);
     m_radiusInput->setValue(0);
     QWhatsThis::add( m_radiusInput, i18n("<p>A smoothness of 0 has no effect, "
                                          "1 and above determine the Gaussian blur matrix radius "
                                          "that determines how much to blur the image."));
 
-    gridSettings->addWidget(label, 0, 0);
-    gridSettings->addWidget(m_radiusInput, 0, 1);
+    gridSettings->addMultiCellWidget(label, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         
@@ -104,11 +104,11 @@ void ImageEffect_Blur::prepareFinal()
     m_radiusInput->setEnabled(false);
 
     Digikam::ImageIface iface(0, 0);
-    uchar *data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-    bool hasAlpha   = iface.originalHasAlpha();
+    uchar *data            = iface.getOriginalImage();
+    int w                  = iface.originalWidth();
+    int h                  = iface.originalHeight();
+    bool sixteenBit        = iface.originalSixteenBit();
+    bool hasAlpha          = iface.originalHasAlpha();
     Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
