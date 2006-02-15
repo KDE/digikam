@@ -70,6 +70,7 @@ public:
     
     ImageGuideDlgPriv()
     {
+        progress             = true;
         currentRenderingMode = NoneRendering;
         parent               = 0;
         timer                = 0;
@@ -80,6 +81,8 @@ public:
         mainLayout           = 0;
     }
 
+    bool          progress;
+    
     int           currentRenderingMode;
 
     QWidget      *parent;
@@ -113,6 +116,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d = new ImageGuideDlgPriv;
     d->parent        = parent;
     d->name          = name;
+    d->progress      = progress;
     m_threadedFilter = 0;
     QString whatsThis;
 
@@ -162,10 +166,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->progressBar->setMaximumHeight( fontMetrics().height() );
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
-
-    if (progress) d->progressBar->show();
-    else d->progressBar->hide();
-
+    setProgressVisible(d->progress);
     vLayout->addWidget(d->progressBar);
 
     // -------------------------------------------------------------
@@ -267,10 +268,19 @@ void ImageGuideDlg::setAboutData(KAboutData *about)
     helpButton->setPopup( helpMenu->menu() );
 }
 
+void ImageGuideDlg::setProgressVisible(bool v)
+{
+    if (v)
+        d->progressBar->show();
+    else
+        d->progressBar->hide();
+}
+
 void ImageGuideDlg::abortPreview()
 {
     d->currentRenderingMode = ImageGuideDlgPriv::NoneRendering;
     d->progressBar->setValue(0);
+    setProgressVisible(false);
     enableButton(Ok, true);
     enableButton(User1, false);
     enableButton(User2, true);
@@ -376,6 +386,7 @@ void ImageGuideDlg::slotEffect()
     enableButton(User3, false);
     enableButton(Default, false);
     d->progressBar->setValue(0);
+    setProgressVisible(d->progress);
 
     if (m_threadedFilter)
        delete m_threadedFilter;
@@ -396,6 +407,7 @@ void ImageGuideDlg::slotOk()
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     d->progressBar->setValue(0);
+    setProgressVisible(d->progress);
 
     if (m_threadedFilter)
        delete m_threadedFilter;

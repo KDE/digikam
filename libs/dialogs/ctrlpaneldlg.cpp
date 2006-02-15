@@ -65,12 +65,15 @@ public:
     
     CtrlPanelDlgPriv()
     {
-        parent    = 0;
-        timer     = 0;
-        aboutData = 0;
+        parent      = 0;
+        timer       = 0;
+        aboutData   = 0;
+        progressBar = true;
+        tryAction   = false;
     }
 
     bool         tryAction;
+    bool         progressBar;
 
     int          currentRenderingMode;
 
@@ -97,6 +100,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     d->parent               = parent;
     d->name                 = name;
     d->tryAction            = tryAction;
+    d->progressBar          = progressBar;
     d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
     m_threadedFilter        = 0;
     QString whatsThis;
@@ -126,7 +130,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
     m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160,
                                         name + QString::QString(" Tool Dialog"),
-                                        plainPage(),  progressBar, separateViewMode);
+                                        plainPage(), d->progressBar, separateViewMode);
     hlay1->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------
@@ -179,6 +183,7 @@ void CtrlPanelDlg::abortPreview()
 {
     d->currentRenderingMode = CtrlPanelDlgPriv::NoneRendering;
     m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressVisible(false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);
     enableButton(Ok,      true);
@@ -295,6 +300,7 @@ void CtrlPanelDlg::slotEffect()
     enableButton(Default, false);
     m_imagePreviewWidget->setPreviewImageWaitCursor(true);
     m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressVisible(d->progressBar);
 
     if (m_threadedFilter)
        delete m_threadedFilter;
@@ -317,6 +323,7 @@ void CtrlPanelDlg::slotOk()
     enableButton(Default, false);
     kapp->setOverrideCursor( KCursor::waitCursor() );
     m_imagePreviewWidget->setProgress(0);
+    m_imagePreviewWidget->setProgressVisible(d->progressBar);
 
     if (m_threadedFilter)
        delete m_threadedFilter;

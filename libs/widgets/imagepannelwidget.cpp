@@ -116,12 +116,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                 "red rectangle to change the clip focus."));
     l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
     
-    d->progressBar = new KProgress(100, this);
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
-    d->progressBar->setProgress(0);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
-    setProgressVisible(progress);
-    
     d->separateView = new QHButtonGroup(this);
     d->separateView->setExclusive(true);
     d->separateView->setInsideMargin( 0 );
@@ -188,10 +182,18 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                              "be separated." ) );
     
-    l2->addWidget(frame3, 0, Qt::AlignHCenter);
+    d->progressBar = new KProgress(100, this);
+    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setProgress(0);
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
+    setProgressVisible(progress);
+    
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
     h1->addWidget(d->separateView);
-    h1->addWidget(d->progressBar, 10);
+    h1->addStretch();
+    h1->addWidget(d->progressBar);
+    
+    l2->addWidget(frame3, 0, Qt::AlignHCenter);
     l2->addLayout(h1);
     l2->addStretch();
     

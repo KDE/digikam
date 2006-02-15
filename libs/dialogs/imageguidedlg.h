@@ -110,6 +110,10 @@ protected:
     virtual void renderingFinished(void){};
 
 private:
+
+    void setProgressVisible(bool v);
+
+private:
     
     ImageGuideDlgPriv* d;
 };
