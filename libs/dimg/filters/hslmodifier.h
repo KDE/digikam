@@ -5,7 +5,7 @@
  * Description : Hue/Saturation/Lightness modifier methods
  *               for DImg framework
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,10 +65,8 @@ private:
     int  hsl_value (double n1, double n2, double hue);
 
     void rgb_to_hsl (int& r, int& g, int& b);
-    void rgb_to_hsl16 (int& r, int& g, int& b);
     
     void hsl_to_rgb (int& hue, int& saturation, int& lightness);
-    void hsl_to_rgb16 (int& hue, int& saturation, int& lightness);
 
 };
 
