@@ -151,11 +151,11 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     uchar          *q8  = m_destImage.bits();
     unsigned short *q16 = (unsigned short *)m_destImage.bits();
     
-    for(y=0 ; y < m_destImage.height() ; y++)
+    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; y++)
     {
         sy = y-(kernelWidth/2);
 
-        for(x=0 ; x < m_destImage.width() ; x++)
+        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; x++)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
@@ -163,12 +163,12 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
             
             if (!m_destImage.sixteenBit())        // 8 bits image.
             {
-                for(mcy=0 ; mcy < kernelWidth ; mcy++, sy++)
+                for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
                 {
                     my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
                     sx = x+(-kernelWidth/2);
     
-                    for(mcx=0 ; mcx < kernelWidth ; mcx++, sx++)
+                    for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
                     {
                         mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
                         color  = m_orgImage.getPixelColor(mx, my);
@@ -193,12 +193,12 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
             }
             else               // 16 bits image.
             {
-                for(mcy=0 ; mcy < kernelWidth ; mcy++, sy++)
+                for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
                 {
                     my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
                     sx = x+(-kernelWidth/2);
     
-                    for(mcx=0 ; mcx < kernelWidth ; mcx++, sx++)
+                    for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
                     {
                         mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
                         color  = m_orgImage.getPixelColor(mx, my);
