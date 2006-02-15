@@ -50,6 +50,7 @@ public:
         data              = 0;
         alpha             = false;
         sixteenBit        = false;
+        isReadOnly        = false;
         cameraModel       = QString::null;
         cameraConstructor = QString::null;
     }
