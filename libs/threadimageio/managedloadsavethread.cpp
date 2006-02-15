@@ -119,7 +119,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
     LoadingTask *loadingTask = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
-    //kdDebug() << "ManagedLoadSaveThread::load " << filePath << ", policy " << policy << endl;
+    //kdDebug() << "ManagedLoadSaveThread::load " << description.filePath << ", policy " << policy << endl;
     switch(policy)
     {
         case LoadingPolicyFirstRemovePrevious:
@@ -148,7 +148,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             // append new, exclusive loading task
             if (existingTask)
                 break;
-            m_todo.append(createLoadingTask(description, true, loadingMode, accessMode));
+            m_todo.append(createLoadingTask(description, false, loadingMode, accessMode));
             break;
         case LoadingPolicyPrepend:
             if (existingTask)
@@ -168,7 +168,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             // prepend new loading task
             if (existingTask)
                 break;
-            m_todo.prepend(createLoadingTask(description, true, loadingMode, accessMode));
+            m_todo.prepend(createLoadingTask(description, false, loadingMode, accessMode));
             break;
         case LoadingPolicyAppend:
             if (existingTask)
