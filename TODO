@@ -1,4 +1,4 @@
-0.9.x TODO LIST
+0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
 * Media support
@@ -17,7 +17,7 @@
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
-   - Added a new option in IE/Showfoto to catch Image Properties side bar in fullscreen mode.
+   - Fix in IE/Showfoto Image Properties side bar restoration after fullscreen mode.
    
      
 * 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
@@ -28,7 +28,7 @@
    - Red Eyes      (core plugin) : Done
    - B&W Tool      (core plugin) : Done.
    - Blur Tool     (core plugin) : Done.
-   - Sharpen Tool  (core plugin) : TODO.
+   - Sharpen Tool  (core plugin) : Done.
    - ICC Tool      (core plugin) : Done.
    - Ratio Crop    (core plugin) : Done.
    - Auto-Colors   (core plugin) : Done.
@@ -67,20 +67,11 @@
    - Using Exiv2 lib instead libexif ?
    - Add IPTC support ?
    - Add RAW metadata support ?
-   - Add embbeded thumbnail support ?
-   - Improved metada from TIFF file format. Add DNG file format if it's possible...
+   - Better embbeded thumbnail support, especially for TIFF/EP ?
+   - Improved metadata from TIFF file format. Add DNG file format if it's possible...
    - Improved PNG file format support ==> PNG vs DNG file format ==> PNG is the ultimate photographs data container in OpenSource world ?
 
 * Add 'Zoom In/Out' capabilities with ImagePreviewWidget :
-
-* New CD/DVD album folders+database backup/restore tool :
-   - Take a look of music database backup in amarok.
-   - Take a look of image database backup in showimg.
-   
-* Image conversion tool included in camera interface
-   
-* New TimeLine tool :
-   - Take a look in kimdaba and f-spot.
 
 * post conversion to qlistview: allow selection of multiple
   albums/tags/dates :
@@ -92,13 +83,26 @@
 
 * Custom ordering of images
 
+* Image Plugins improvement :
+
+   - Hot Pixels Tool : Add manual hot pixel selection.
+   - SuperImpose Tool : Complete rewrite of superimpose widget.
+
+LATER 0.9.0 TODO LIST
+------------------------------------------------------------------------------------
+
+* New CD/DVD album folders+database backup/restore tool :
+   - Take a look of music database backup in amarok.
+   - Take a look of image database backup in showimg.
+   
+* Image conversion tool included in camera interface
+   
+* New TimeLine tool :
+   - Take a look in kimdaba and f-spot.
+
 * Showfoto improvements :
 
    - Add DCOP interface.
    - Add Support KURL for better konqueror interactions.
    - Add canvas Exif autorotate with JPEG file like image editor.
 
-* Image Plugins improvement :
-
-   - Hot Pixels Tool : Add manual hot pixel selection.
-   - SuperImpose Tool : Complete rewrite of superimpose widget.
