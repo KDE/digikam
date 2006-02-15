@@ -4,10 +4,7 @@
  * Date  : 2005-17-07
  * Description : A DImgSharpen threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
- *
- * Original Sharpen algorithm copyrighted 2004 by
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,6 +19,9 @@
  * 
  * ============================================================ */
  
+#define SQ2PI   2.50662827463100024161235523934010416269302368164062
+#define Epsilon 1.0e-12
+
 // C++ includes. 
  
 #include <cmath>
@@ -39,125 +39,191 @@
 namespace Digikam
 {
 
-DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, int radius)
+DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double sigma)
            : Digikam::DImgThreadedFilter(orgImage, parent, "Sharpen")
 { 
     m_radius = radius;
+    m_sigma  = sigma;
     initFilter();
 }
 
 void DImgSharpen::filterImage(void)
 {
     sharpenImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                 m_orgImage.sixteenBit(), m_radius);
+                 m_orgImage.sixteenBit(), m_radius, m_sigma);
 }
 
 /** Function to apply the sharpen filter on an image*/
 
-void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
+void DImgSharpen::sharpenImage(uchar *data, int width, int height, bool sixteenBit, double radius, double sigma)
 {
-    double Offset = 0.0;
-
     if (!data || !width || !height)
     {
-       kdWarning() << ("DImgSharpen::sharpenImage: no image data available!")
+       kdWarning() << k_funcinfo << "No image data available!"
                    << endl;
        return;
     }
 
-    if (radius <= 0)
+    if (radius <= 0.0)
     {
        m_destImage = m_orgImage;
        return;
     }
 
-    const int Kernel[] = {-1,     -1,    -1,
-                          -1,  /*radius+*/8, -1,
-                          -1,     -1,    -1};
-    
-    double DivCoeff = (double)radius;
+    double        alpha, normalize=0.0;
+    register long i=0, u, v;
 
-    int nSumR=0, nSumG=0, nSumB=0, progress;
-    int nKernelSize = 9;
-    int depth = /*sixteenBit ? 65536 : */256;
-
-    // We need to alloc a 2d array to help us to store the values
+    int optimalWidth = getOptimalKernelWidth(radius, sigma);
     
-    int** arrMult = alloc2DArray (nKernelSize, depth);
-    
-    for (int i = 0; !m_cancel && (i < nKernelSize); i++)
-        for (int j = 0; !m_cancel && (j < depth); j++)
-            arrMult[i][j] = j * Kernel[i];
-
-    // We need to initialize all the loop and iterator variables
-    
-    int i = 0, j = 0;
-    uchar*          pOutBits   = m_destImage.bits();
-    unsigned short* data16     = (unsigned short*)data;
-    unsigned short* pOutBits16 = (unsigned short*)pOutBits;
-    uchar *org, *dst;
-    
-    // now, we enter in the main loop
-
-    for (int h = 0; !m_cancel && (h < height); h++)
+    if(width < optimalWidth)
     {
-        for (int w = 0; !m_cancel && (w < width); w++, i+=4)
-        {
-            if (!sixteenBit)        // 8 bits image.
-            {
-               // first of all, we need to sharp the horizontal lines
-                
-                for (int a = -1, k = 0 ; a <= 1 ; a++)
-                {
-           /*         for (int b = -1 ; b <= 1 ; b++, k++)
-                    {
-
-                        // if is inside...
-                        if (IsInside (width, height, w + b, h + a))
-                        
-                        {
-                            // we points to the pixel
-
-                            j = SetPosition(width, w + b, h + a);
-
-                            // finally, we sum the pixels using a method
-                            // similar to assigntables
+        kdWarning() << k_funcinfo << "Image is smaller than radius!"
+                    << endl;
+        return;
+    }
     
-                            org = &data[j];
-                            nSumR += arrMult[k][org[2]];
-                            nSumG += arrMult[k][org[1]];
-                            nSumB += arrMult[k][org[0]];
-                        }
-                        else
-                        {
-                            org = &data[i];
-                            nSumR += arrMult[k][org[2]];
-                            nSumG += arrMult[k][org[1]];
-                            nSumB += arrMult[k][org[0]];
-                        }
-                    }*/
-                }
-                
-                // now, we return to sharp bits the horizontal sharpen values
-
-                /*dst    = &pOutBits[i];
-                dst[2] = (uchar)CLAMP (nSumR / DivCoeff + Offset, 0, 255);
-                dst[1] = (uchar)CLAMP (nSumG / DivCoeff + Offset, 0, 255);
-                dst[0] = (uchar)CLAMP (nSumB / DivCoeff + Offset, 0, 255);*/
-
-                // ok, now we reinitialize the variables
-                nSumR = nSumG = nSumB = 0;
-            }
-            
-        progress = (int) (((double)h * 100.0) / height);
-        if ( progress%5 == 0 )
-           postProgress( progress );           
-        }
+    double *kernel = new double[optimalWidth*optimalWidth];
+    
+    if(!kernel)
+    {
+        kdWarning() << k_funcinfo << "Unable to allocate memory!"
+                    << endl;
+        return;
     }
 
-    // now, we must free memory
+    for(v=(-optimalWidth/2) ; v <= (optimalWidth/2) ; v++)
+    {
+        for(u=(-optimalWidth/2) ; u <= (optimalWidth/2) ; u++)
+        {
+            alpha      = exp(-((double) u*u+v*v)/(2.0*sigma*sigma));
+            kernel[i]  = alpha/(2.0*M_PI*sigma*sigma);
+            normalize += kernel[i];
+            i++;
+        }
+    }
     
-    free2DArray (arrMult, nKernelSize);
+    kernel[i/2] = (-2.0)*normalize;
+    convolveImage(data, width, height, sixteenBit, optimalWidth, kernel);
+    
+    delete [] kernel;
+}
+
+bool DImgSharpen::convolveImage(uchar *data, int w, int h, bool sixteenBit,
+                                const unsigned int order,
+                                const double *kernel)
+{
+    uint    x, y;
+    int     mx, my, sx, sy, mcx, mcy, progress;
+    long    width, i;
+    double  red, green, blue, alpha, normalize=0.0;
+    double *k=0;
+    DColor  color;
+    
+    width = order;
+    
+    if((width % 2) == 0)
+    {
+        kdWarning() << k_funcinfo << "Kernel width must be an odd number!"
+                    << endl;
+        return(false);
+    }
+    
+    double *normal_kernel = new double[width*width];
+    
+    if(!normal_kernel)
+    {
+        kdWarning() << k_funcinfo << "Unable to allocate memory!"
+                    << endl;
+        return(false);
+    }
+    
+    for(i=0 ; i < (width*width) ; i++)
+        normalize += kernel[i];
+        
+    if(fabs(normalize) <= Epsilon)
+        normalize=1.0;
+        
+    normalize = 1.0/normalize;
+    
+    for(i=0 ; i < (width*width) ; i++)
+        normal_kernel[i] = normalize*kernel[i];
+
+    uchar *q = m_destImage.bits();
+    
+    for(y=0 ; y < m_destImage.height() ; y++)
+    {
+        sy = y-(width/2);
+
+        for(x=0 ; x < m_destImage.width() ; x++)
+        {
+            k   = normal_kernel;
+            red = green = blue = alpha = 0;
+            sy  = y-(width/2);
+            
+            for(mcy=0 ; mcy < width ; mcy++, sy++)
+            {
+                my = sy < 0 ? 0 : sy > h-1 ? h-1 : sy;
+                sx = x+(-width/2);
+                
+                for(mcx=0 ; mcx < width ; mcx++, sx++)
+                {
+                    mx     = sx < 0 ? 0 : sx > w-1 ? w-1 : sx;
+                    color  = m_orgImage.getPixelColor(mx, my);
+                    red   += (*k)*(color.red()   * 257.0);
+                    green += (*k)*(color.green() * 257.0);
+                    blue  += (*k)*(color.blue()  * 257.0);
+                    alpha += (*k)*(color.alpha() * 257.0);
+                    k++;
+                }
+            }
+
+            red   =   red < 0.0 ? 0.0 :   red > 65535.0 ? 65535.0 :   red+0.5;
+            green = green < 0.0 ? 0.0 : green > 65535.0 ? 65535.0 : green+0.5;
+            blue  =  blue < 0.0 ? 0.0 :  blue > 65535.0 ? 65535.0 :  blue+0.5;
+            alpha = alpha < 0.0 ? 0.0 : alpha > 65535.0 ? 65535.0 : alpha+0.5;
+
+            q[0] = (uchar)(blue  / 257UL);
+            q[1] = (uchar)(green / 257UL);
+            q[2] = (uchar)(red   / 257UL);
+            q[3] = (uchar)(alpha / 257UL);
+            q+=4;
+        }
+        
+        progress = (int)(((double)y * 100.0) / m_destImage.height());
+        if ( progress%5 == 0 )
+           postProgress( progress );          
+    }
+
+    delete [] normal_kernel;
+    return(true);
+}
+
+int DImgSharpen::getOptimalKernelWidth(double radius, double sigma)
+{
+    double        normalize, value;
+    long          width;
+    register long u;
+
+    if(radius > 0.0)
+        return((int)(2.0*ceil(radius)+1.0));
+        
+    for(width=5; ;)
+    {
+        normalize=0.0;
+        
+        for(u=(-width/2) ; u <= (width/2) ; u++)
+            normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
+
+        u     = width/2;
+        value = exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma)/normalize;
+        
+        if((long)(65535*value) <= 0)
+            break;
+            
+        width+=2;
+    }
+    
+    return((int)width-2);
 }
 
 }  // NameSpace Digikam

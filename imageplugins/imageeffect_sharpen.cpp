@@ -18,6 +18,10 @@
  * 
  * ============================================================ */
 
+// C++ includes. 
+ 
+#include <cmath>
+
 // Qt includes.
 
 #include <qlayout.h>
@@ -51,9 +55,9 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
  {
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
+    QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
-    QLabel *label = new QLabel(i18n("Sharpness:"), gboxSettings);
+    QLabel *label             = new QLabel(i18n("Sharpness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);
     m_radiusInput->setRange(0, 20, 1, true);
@@ -95,14 +99,26 @@ void ImageEffect_Sharpen::prepareEffect()
     
     Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
         
+    double radius = m_radiusInput->value()*4.0/10.0;
+    double sigma;
+
+    if (radius < 1.0) sigma = radius;
+    else sigma = sqrt(radius);
+    
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new Digikam::DImgSharpen(&img, this, m_radiusInput->value()*4));
+                       (new Digikam::DImgSharpen(&img, this, radius, sigma ));
 }
 
 void ImageEffect_Sharpen::prepareFinal()
 {
     m_radiusInput->setEnabled(false);
 
+    double radius = m_radiusInput->value()*4.0/10.0;
+    double sigma;
+
+    if (radius < 1.0) sigma = radius;
+    else sigma = sqrt(radius);
+    
     Digikam::ImageIface iface(0, 0);
     uchar *data     = iface.getOriginalImage();
     int w           = iface.originalWidth();
@@ -112,7 +128,7 @@ void ImageEffect_Sharpen::prepareFinal()
     Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
-                       (new Digikam::DImgSharpen(&orgImage, this, m_radiusInput->value()*4));
+                       (new Digikam::DImgSharpen(&orgImage, this, radius, sigma ));
 }
 
 void ImageEffect_Sharpen::putPreviewData(void)
