@@ -493,8 +493,9 @@ uchar* DImg::scanLine(uint i) const
 {
     if ( i >= height() )
         return 0;
-        
-    return &m_priv->data[ width() * bytesDepth() * i];
+
+    uchar *data = bits() + (width() * bytesDepth() * i);
+    return data;
 }
     
 bool DImg::hasAlpha() const
@@ -604,11 +605,12 @@ QString DImg::cameraConstructor()
 
 DColor DImg::getPixelColor(uint x, uint y)
 {
-    if (x > width() || y>height())
+    if (x > width() || y > height())
         return DColor();
 
-    return( DColor(m_priv->data[y*width()*bitsDepth() + x*bitsDepth()],
-                   sixteenBit()) );
+    uchar *data = bits() + x*bytesDepth() + (width()*y*bytesDepth());
+                              
+    return( DColor(data, sixteenBit()) );
 }
 
 
