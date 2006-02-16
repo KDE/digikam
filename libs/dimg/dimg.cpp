@@ -606,11 +606,46 @@ QString DImg::cameraConstructor()
 DColor DImg::getPixelColor(uint x, uint y)
 {
     if (x > width() || y > height())
+    {
+        kdDebug() << k_funcinfo << " : wrong pixel position!" << endl;
         return DColor();
+    }
 
     uchar *data = bits() + x*bytesDepth() + (width()*y*bytesDepth());
                               
     return( DColor(data, sixteenBit()) );
+}
+
+void DImg::setPixelColor(uint x, uint y, DColor color)
+{
+    if (x > width() || y > height())
+    {
+        kdDebug() << k_funcinfo << " : wrong pixel position!" << endl;
+        return;
+    }
+
+    if (color.sixteenBit() != sixteenBit())
+    {
+        kdDebug() << k_funcinfo << " : wrong color depth!" << endl;
+        return;
+    }
+
+    if (sixteenBit())       // 16 bits image.
+    {
+        unsigned short *data16 = (unsigned short *)bits() + x*bytesDepth() + (width()*y*bytesDepth());
+        data16[0] = (unsigned short)color.blue();
+        data16[1] = (unsigned short)color.green();
+        data16[2] = (unsigned short)color.red();
+        data16[3] = (unsigned short)color.alpha();
+    }                              
+    else                    // 8 bits image.
+    {
+        uchar *data8 = bits() + x*bytesDepth() + (width()*y*bytesDepth());
+        data8[0] = (uchar)color.blue();
+        data8[1] = (uchar)color.green();
+        data8[2] = (uchar)color.red();
+        data8[3] = (uchar)color.alpha();
+    }                              
 }
 
 

@@ -146,6 +146,7 @@ public:
     int         bitsDepth()  const;
 
     DColor      getPixelColor(uint x, uint y);
+    void        setPixelColor(uint x, uint y, DColor color);
 
     /**
     Return true if the original image file format cannot be saved. 
