@@ -630,9 +630,11 @@ void DImg::setPixelColor(uint x, uint y, DColor color)
         return;
     }
 
+    uchar *data8 = bits() + x*bytesDepth() + (width()*y*bytesDepth());
+    
     if (sixteenBit())       // 16 bits image.
     {
-        unsigned short *data16 = (unsigned short *)bits() + x*bytesDepth() + (width()*y*bytesDepth());
+        unsigned short *data16 = (unsigned short *)data8;
         data16[0] = (unsigned short)color.blue();
         data16[1] = (unsigned short)color.green();
         data16[2] = (unsigned short)color.red();
@@ -640,7 +642,6 @@ void DImg::setPixelColor(uint x, uint y, DColor color)
     }                              
     else                    // 8 bits image.
     {
-        uchar *data8 = bits() + x*bytesDepth() + (width()*y*bytesDepth());
         data8[0] = (uchar)color.blue();
         data8[1] = (uchar)color.green();
         data8[2] = (uchar)color.red();
