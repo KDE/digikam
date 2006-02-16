@@ -148,9 +148,8 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     for(i=0 ; i < (kernelWidth*kernelWidth) ; i++)
         normal_kernel[i] = normalize*kernel[i];
 
-    uchar          *q8  = m_destImage.bits();
-    unsigned short *q16 = (unsigned short *)m_destImage.bits();
-    
+    double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
+
     for(y=0 ; !m_cancel && (y < m_destImage.height()) ; y++)
     {
         sy = y-(kernelWidth/2);
@@ -161,66 +160,31 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
             red = green = blue = alpha = 0;
             sy  = y-(kernelWidth/2);
             
-            if (!m_destImage.sixteenBit())        // 8 bits image.
+            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
             {
-                for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
+                my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
+                sx = x+(-kernelWidth/2);
+
+                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
                 {
-                    my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
-                    sx = x+(-kernelWidth/2);
-    
-                    for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
-                    {
-                        mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
-                        color  = m_orgImage.getPixelColor(mx, my);
-                        red   += (*k)*(color.red()   * 257.0);
-                        green += (*k)*(color.green() * 257.0);
-                        blue  += (*k)*(color.blue()  * 257.0);
-                        alpha += (*k)*(color.alpha() * 257.0);
-                        k++;
-                    }
+                    mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
+                    color  = m_orgImage.getPixelColor(mx, my);
+                    red   += (*k)*(color.red()   * 257.0);
+                    green += (*k)*(color.green() * 257.0);
+                    blue  += (*k)*(color.blue()  * 257.0);
+                    alpha += (*k)*(color.alpha() * 257.0);
+                    k++;
                 }
-    
-                red   =   red < 0.0 ? 0.0 :   red > 65535.0 ? 65535.0 :   red+0.5;
-                green = green < 0.0 ? 0.0 : green > 65535.0 ? 65535.0 : green+0.5;
-                blue  =  blue < 0.0 ? 0.0 :  blue > 65535.0 ? 65535.0 :  blue+0.5;
-                alpha = alpha < 0.0 ? 0.0 : alpha > 65535.0 ? 65535.0 : alpha+0.5;
-    
-                q8[0] = (uchar)(blue  / 257UL);
-                q8[1] = (uchar)(green / 257UL);
-                q8[2] = (uchar)(red   / 257UL);
-                q8[3] = (uchar)(alpha / 257UL);
-                q8+=4;
             }
-            else               // 16 bits image.
-            {
-                for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
-                {
-                    my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
-                    sx = x+(-kernelWidth/2);
-    
-                    for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
-                    {
-                        mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
-                        color  = m_orgImage.getPixelColor(mx, my);
-                        red   += (*k)*(color.red()   * 257.0);
-                        green += (*k)*(color.green() * 257.0);
-                        blue  += (*k)*(color.blue()  * 257.0);
-                        alpha += (*k)*(color.alpha() * 257.0);
-                        k++;
-                    }
-                }
-    
-                red   =   red < 0.0 ? 0.0 :   red > 16777215.0 ? 16777215.0 :   red+0.5;
-                green = green < 0.0 ? 0.0 : green > 16777215.0 ? 16777215.0 : green+0.5;
-                blue  =  blue < 0.0 ? 0.0 :  blue > 16777215.0 ? 16777215.0 :  blue+0.5;
-                alpha = alpha < 0.0 ? 0.0 : alpha > 16777215.0 ? 16777215.0 : alpha+0.5;
-    
-                q16[0] = (unsigned short)(blue  / 257UL);
-                q16[1] = (unsigned short)(green / 257UL);
-                q16[2] = (unsigned short)(red   / 257UL);
-                q16[3] = (unsigned short)(alpha / 257UL);
-                q16+=4;
-            }
+
+            red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red+0.5;
+            green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green+0.5;
+            blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
+            alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
+
+            m_destImage.setPixelColor(x, y, DColor((int)(red / 257UL),  (int)(green / 257UL),
+                                                   (int)(blue / 257UL), (int)(alpha / 257UL),
+                                                   m_destImage.sixteenBit()));
         }
 
         progress = (int)(((double)y * 100.0) / m_destImage.height());
