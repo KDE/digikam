@@ -81,4 +81,15 @@ else
   echo "-- lcms found..................... YES"
 fi
 
+if test "x$have_exiv2" != "xyes"; then
+  echo "-- Exiv2 library found................. NO"
+  echo ""
+  echo "digiKam needs Exiv2 library. You need to install Exiv2 first"
+  echo "Exiv2 website is at http://home.arcor.de/ahuggel/exiv2"
+  echo ""
+  all_tests=bad
+else
+  echo "-- Exiv2 library found................. YES"
+fi
+
 echo "------------------------------------------------"

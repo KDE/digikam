@@ -31,6 +31,7 @@ extern "C"
 
 #include <cstdlib>
 #include <cstdio>
+#include <cassert>
 
 // Qt includes.
  
@@ -54,6 +55,11 @@ extern "C"
 // LibKExif includes.
 
 #include <libkexif/kexifwidget.h>
+
+// LibExiv2 includes.
+
+#include "exiv2/image.hpp"
+#include "exiv2/exif.hpp"
 
 // Local includes.
 
@@ -159,28 +165,41 @@ void ImagePropertiesEXIFTab::setCurrentURL(const KURL& url, int itemType)
     // In first, trying to load Raw exif data embedded in PNG file.
     
     QByteArray ba = loadRawExifProfileFromPNG(url.path());
-    if (ba.isNull())
-    {
-        QFileInfo fi(url.path());
-        QFileInfo thmLo(fi.dirPath() + "/" + fi.baseName() + ".thm");          // Lowercase
-        QFileInfo thmUp(fi.dirPath() + "/" + fi.baseName() + ".THM");          // Uppercase
-    
-        // In second, trying to load exif data from THM file (thumbnail) if exist, especially
-        // with recent USM camera.
-        // At end, trying to get Exif data from real image file.
-        
-        if (thmLo.exists())
-            d->exifWidget->loadFile(thmLo.filePath());
-        else if (thmUp.exists())
-            d->exifWidget->loadFile(thmUp.filePath());
-        else
-            d->exifWidget->loadFile(url.path());
-    }
-    else
+    if (!ba.isNull())
     {
         setCurrentData(ba, url.filename(), itemType);
+        d->exifWidget->setCurrentItem(d->currentItem);
+        d->navigateBar->setFileName(url.filename());
+        d->navigateBar->setButtonsState(itemType);
+        return;
     }
+    
+    // In second, trying to load exif data using Exiv2 library.
+    ba = loadExifWithExiv2(url.path());
+    if (!ba.isNull())
+    {
+        setCurrentData(ba, url.filename(), itemType);
+        d->exifWidget->setCurrentItem(d->currentItem);
+        d->navigateBar->setFileName(url.filename());
+        d->navigateBar->setButtonsState(itemType);
+        return;
+    }
+        
+    // In third, we trying to load exif data using likexif from THM file (thumbnail) if exist,
+    // especially provided by recent USM camera.
+    // At end, trying to get Exif data from real image.
 
+    QFileInfo fi(url.path());
+    QFileInfo thmLo(fi.dirPath() + "/" + fi.baseName() + ".thm");          // Lowercase
+    QFileInfo thmUp(fi.dirPath() + "/" + fi.baseName() + ".THM");          // Uppercase
+
+    if (thmLo.exists())
+        d->exifWidget->loadFile(thmLo.filePath());
+    else if (thmUp.exists())
+        d->exifWidget->loadFile(thmUp.filePath());
+    else
+        d->exifWidget->loadFile(url.path());
+   
     d->exifWidget->setCurrentItem(d->currentItem);
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
@@ -386,6 +405,33 @@ uchar* ImagePropertiesEXIFTab::readRawProfile(png_textp text, png_uint_32 *lengt
     }
     
     return info;
+}
+
+QByteArray ImagePropertiesEXIFTab::loadExifWithExiv2(const KURL& url)
+{
+    try
+    {    
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(url.path())));
+        image->readMetadata();
+        Exiv2::ExifData exifData = image->exifData();
+    
+        if (exifData.empty())
+            return QByteArray();
+    
+        exifData.sortByKey();
+        
+        Exiv2::DataBuf const c(exifData.copy());
+        const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+        QByteArray data(c.size_ + sizeof(ExifHeader));
+        memcpy(data.data(), ExifHeader, sizeof(ExifHeader));
+        memcpy(data.data() + sizeof(ExifHeader), c.pData_, c.size_);
+        return (data);
+    }
+    catch( Exiv2::Error& e )
+    {
+        kdDebug() << "Caught Exiv2 exception (" << e.code() << ")" << endl;
+        return QByteArray();
+    }
 }
 
 }  // NameSpace Digikam

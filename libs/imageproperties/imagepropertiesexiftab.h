@@ -73,7 +73,9 @@ private slots:
 private:
 
     QByteArray loadRawExifProfileFromPNG(const KURL& url);
-    uchar* readRawProfile(png_textp text, png_uint_32 *length, int ii);
+    uchar*     readRawProfile(png_textp text, png_uint_32 *length, int ii);
+    
+    QByteArray loadExifWithExiv2(const KURL& url);
 
 private:
 
