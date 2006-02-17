@@ -58,6 +58,7 @@ AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double 
 
 void AntiVignetting::filterImage(void)
 {
+    int     progress;
     int     col, row, xd, td, yd, p;
     int     i, xsize, ysize, diagonal, erad, xctr, yctr;
     double *ldens;
@@ -130,9 +131,9 @@ void AntiVignetting::filterImage(void)
         }
         
         // Update the progress bar in dialog.
-        
-        if (m_parent)
-           postProgress( (int) (((double)row * 100.0) / Width) );      
+        progress = (int)(((double)row * 100.0) / Width);
+        if (progress%5 == 0)
+            postProgress( progress );
     }
 
     // Normalize colors for a best rendering.   
