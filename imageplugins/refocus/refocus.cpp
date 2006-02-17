@@ -88,7 +88,6 @@ void Refocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
 void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int height,
                             bool sixteenBit, const double *const mat, int mat_size)
 {
-    Refocus::EventData d;
     int progress;
     unsigned short *orgData16  = (unsigned short *)orgData;
     unsigned short *destData16 = (unsigned short *)destData;
@@ -191,7 +190,7 @@ void Refocus::convolveImage(uchar *orgData, uchar *destData, int width, int heig
         // Update the progress bar in dialog.
         progress = (int)(((double)y1 * 100.0) / height);
         if (progress%5 == 0)
-        postProgress( progress );        
+            postProgress( progress );        
         }
 }
 
