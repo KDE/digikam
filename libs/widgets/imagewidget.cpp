@@ -193,7 +193,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
         setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
     else
     {
-        setRenderingPreviewMode(ImageGuideWidget::PreviewTargetImage);
+        setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
         d->title->hide();
         d->spotInfoLabel->hide();
         d->previewButtons->hide();    
