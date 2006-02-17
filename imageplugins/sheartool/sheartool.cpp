@@ -57,6 +57,7 @@ ShearTool::ShearTool(Digikam::DImg *orgImage, QObject *parent, float hAngle, flo
 
 void ShearTool::filterImage(void)
 {
+    int          progress;
     register int x, y, p = 0, pt;
     int          new_width, new_height;
     double       nx, ny, dx, dy;
@@ -164,6 +165,11 @@ void ShearTool::filterImage(void)
                 }
             }
         }
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)y * 100.0) / new_height);
+        if (progress%5 == 0)
+            postProgress( progress );            
     }
         
     // To compute the rotated destination image size using original image dimensions.           

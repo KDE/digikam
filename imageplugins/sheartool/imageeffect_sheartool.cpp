@@ -56,7 +56,7 @@ namespace DigikamShearToolImagesPlugin
 
 ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent, QString title, QFrame* banner)
                      : Digikam::ImageGuideDlg(parent, title, "sheartool",
-                       false, false, true, Digikam::ImageGuideWidget::HVGuideMode, banner)
+                       false, true, true, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     // No need Abort button action.
     showButton(User1, false); 
@@ -75,7 +75,7 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent, QString title, QFr
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     setAboutData(about);
     
