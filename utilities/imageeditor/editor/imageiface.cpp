@@ -227,12 +227,12 @@ void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int
     DImgInterface::instance()->putImage(caller, data, w, h);
 }
 
-void ImageIface::putImageSelection(uchar* data)
+void ImageIface::putImageSelection(const QString &caller, uchar* data)
 {
     if (!data)
         return;
     
-    DImgInterface::instance()->putImageSelection(data);
+    DImgInterface::instance()->putImageSelection(caller, data);
 }
 
 int ImageIface::previewWidth()

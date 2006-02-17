@@ -57,12 +57,12 @@ public:
     ~ImageIface();
 
     uchar* getPreviewImage();
-    uchar* getOriginalImage();
     uchar* getImageSelection();
+    uchar* getOriginalImage();
 
     void   putOriginalImage(const QString &caller, uchar* data, int w=-1, int h=-1);
+    void   putImageSelection(const QString &caller, uchar* data);
     void   putPreviewImage(uchar* data);
-    void   putImageSelection(uchar* data);
 
     /** Color point information method.*/
 

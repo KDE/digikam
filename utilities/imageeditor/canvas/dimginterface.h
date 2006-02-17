@@ -4,7 +4,8 @@
  * Date  : 2003-01-15
  * Description :
  *
- * Copyright 2003-2006 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,13 +59,15 @@ public:
 
     void   load(const QString& filename,
                 ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings);
+                
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();
     void   restore();
-    //void   save(const QString& file, IOFileSettingsContainer *iofileSettings);
+    
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
                   const QString& mimeType=0);
+                  
     void   switchToLastSaved(const QString& newFilename);
     void   setModified();
     void   clearUndoManager();
@@ -122,22 +125,14 @@ public:
     uchar* getImage();
     
     void   putImage(uchar* data, int w, int h);
-    void   putImage(const QString &caller, uchar* data, int w, int h);
-    
     void   putImage(uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString &caller, uchar* data, int w, int h);
     void   putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit);
     
     uchar* getImageSelection();
-    void   putImageSelection(uchar* data, bool saveUndo=true);
+    void   putImageSelection(const QString &caller, uchar* data);
 
     QByteArray getEmbeddedICC();
-
-    // FIXME : remove these methods when all image plugins will be ported to DImg.
-    uint*  getData();
-    void   putData(uint* data, int w, int h);
-    void   putData(const QString &caller, uint* data, int w, int h);
-    uint*  getSelectedData();
-    void   putSelectedData(uint* data, bool saveUndo=true);
 
 protected slots:
 
@@ -148,18 +143,16 @@ protected slots:
 
 signals:
 
-    void signalModified();
-    void signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
+    void   signalModified();
+    void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 
-    void signalLoadingProgress(const QString& filePath, float progress);
-    void signalImageLoaded(const QString& filePath, bool success);
-    void signalSavingProgress(const QString& filePath, float progress);
-    void signalImageSaved(const QString& filePath, bool success);
+    void   signalLoadingProgress(const QString& filePath, float progress);
+    void   signalImageLoaded(const QString& filePath, bool success);
+    void   signalSavingProgress(const QString& filePath, float progress);
+    void   signalImageSaved(const QString& filePath, bool success);
 
 private:
 
-    //void   saveAction(const QString& fileName, IOFileSettingsContainer *iofileSettings,
-      //                const QString& mimeType); 
     void   exifRotate(const QString& filename);
 
     DImgInterface();
@@ -169,6 +162,16 @@ private:
     static DImgInterface *m_instance;
     
     DImgInterfacePrivate *d;
+
+// -----------------------------------------------------------------------------
+// FIXME : remove these methods when all image plugins will be ported to DImg.
+
+public: 
+    uint*  getData();
+    void   putData(uint* data, int w, int h);
+    void   putData(const QString &caller, uint* data, int w, int h);
+    uint*  getSelectedData();
+    void   putSelectedData(uint* data, bool saveUndo=true);
 
 };
 

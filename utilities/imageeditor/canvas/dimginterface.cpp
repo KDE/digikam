@@ -4,7 +4,8 @@
  * Date  : 2003-01-15
  * Description :
  *
- * Copyright 2003-2006 by Renchi Raju, Gilles Caulier
+ * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,9 +83,9 @@ public:
         selH            = 0;
         zoom            = 1.0;
         
-        exifOrient           = false;
-        valid                = false;
-        rotatedOrFlipped     = false;
+        exifOrient       = false;
+        valid            = false;
+        rotatedOrFlipped = false;
     }
 
     bool          valid;
@@ -919,13 +920,12 @@ uchar* DImgInterface::getImageSelection()
     return 0;
 }
 
-void DImgInterface::putImageSelection(uchar* data, bool saveUndo)
+void DImgInterface::putImageSelection(const QString &caller, uchar* data)
 {
     if (!data || d->image.isNull())
         return;
 
-    if (saveUndo)
-        d->undoMan->addAction(new UndoActionIrreversible(this));
+    d->undoMan->addAction(new UndoActionIrreversible(this, caller));
 
     d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
 
