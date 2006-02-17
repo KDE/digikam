@@ -57,6 +57,7 @@ FreeRotation::FreeRotation(Digikam::DImg *orgImage, QObject *parent, double angl
 
 void FreeRotation::filterImage(void)
 {
+    int          progress;
     register int w, h, nw, nh, j, i = 0;
     int          nNewHeight, nNewWidth;
     int          nhdx, nhdy, nhsx, nhsy;
@@ -153,6 +154,11 @@ void FreeRotation::filterImage(void)
                 }
             }
         }
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / nNewHeight);
+        if (progress%5 == 0)
+            postProgress( progress );        
     }
 
     // To compute the rotated destination image size using original image dimensions.        
