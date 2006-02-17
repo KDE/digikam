@@ -983,13 +983,13 @@ void ImageFilters::hueSaturationLightnessImage(uint* data, int w, int h, double 
        green         = (int)imagedata.channel.green;
        blue          = (int)imagedata.channel.blue;
         
-       Digikam::rgb_to_hsl(red, green, blue);
+//       Digikam::rgb_to_hsl(red, green, blue);
          
        red   = hsl.htransfer[red];
        green = hsl.stransfer[green];
        blue  = hsl.ltransfer[blue];
 
-       Digikam::hsl_to_rgb(red, green, blue);
+//       Digikam::hsl_to_rgb(red, green, blue);
         
        imagedata.channel.red   = (uchar)red;
        imagedata.channel.green = (uchar)green;
