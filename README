@@ -59,6 +59,7 @@ AutoMake >= 1.7.x      http://www.gnu.org/software/automake
 KDE      >= 3.x        http://www.kde.org
 gphoto2  >= 2.x        http://www.gphoto.org
 sqlite   >= 3.x        http://www.sqlite.org
+dcraw    >= 8.0        http://www.cybercom.net/~dcoffin/dcraw
 exiv2    >= 0.9.x      http://home.arcor.de/ahuggel/exiv2
 libkipi  >= 0.1        http://extragear.kde.org/apps/kipi
 libkexif >= 0.2        http://www.digikam.org
