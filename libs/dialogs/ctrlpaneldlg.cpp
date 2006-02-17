@@ -97,6 +97,8 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                           i18n("&Save As..."),
                           i18n("&Load..."))
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
     d = new CtrlPanelDlgPriv;
     d->parent               = parent;
     d->name                 = name;
@@ -136,6 +138,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
 
     QTimer::singleShot(0, this, SLOT(slotInit()));
+    kapp->restoreOverrideCursor();
 }
 
 CtrlPanelDlg::~CtrlPanelDlg()
