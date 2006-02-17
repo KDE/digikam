@@ -164,12 +164,16 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
 
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
-    d->progressBar = new KProgress(100, plainPage());
+    
+    QWidget *gboxProgressBar = new QWidget(plainPage());
+    QGridLayout* grid2 = new QGridLayout( gboxProgressBar, 0, 0, marginHint());
+    d->progressBar = new KProgress(100, gboxProgressBar);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setValue(0);
     setProgressVisible(d->progress);
-    vLayout->addWidget(d->progressBar);
+    grid2->addMultiCellWidget(d->progressBar, 0, 0, 0, 0);
+    vLayout->addWidget(gboxProgressBar);
 
     // -------------------------------------------------------------
 
