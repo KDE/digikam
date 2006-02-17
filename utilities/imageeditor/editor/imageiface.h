@@ -7,10 +7,6 @@
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
  *
- * Includes code from gimp version 2.0
- * LIBGIMP - The GIMP Library
- * Copyright (C) 1995-1997 Peter Mattis and Spencer Kimball
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -119,7 +115,7 @@ private:
     ImageIfacePriv* d;
 };
 
-
+/*
 inline static int hsl_value (double n1,
                       double n2,
                       double hue)
@@ -207,7 +203,7 @@ inline static void hsl_to_rgb (int& hue, int& saturation, int& lightness)
 
     if (s == 0)
     {
-        /*  achromatic case  */
+        //  achromatic case  
         hue        = (int) l;
         lightness  = (int) l;
         saturation = (int) l;
@@ -223,7 +219,7 @@ inline static void hsl_to_rgb (int& hue, int& saturation, int& lightness)
 
         m1 = (l / 127.5) - m2;
 
-        /*  chromatic case  */
+        //  chromatic case  
         hue        = hsl_value (m1, m2, h + 85);
         saturation = hsl_value (m1, m2, h);
         lightness  = hsl_value (m1, m2, h - 85);
@@ -248,7 +244,7 @@ inline static int rgb_to_l (int red, int green, int blue)
 
     return ROUND ((max + min) / 2.0);
 }
-
+*/
 }
 
 #endif /* IMAGEIFACE_H */
