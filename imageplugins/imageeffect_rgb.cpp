@@ -139,13 +139,24 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QLabel *labelLeft = new QLabel(i18n("Cyan"), gboxSettings);
-    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+    QString beg("<table cellspacing=0 cellpadding=0 border=0>"
+                "<tr bgcolor=\"%1\">"
+                "<td align=center valign=bottom>"
+                "<font color=\"black\" size=-1><b>");
+    QString end("%1</b></font>"
+                "</td>"
+                "</tr>"
+                "</table>");
+
+    QLabel *labelLeft = new QLabel(QString(beg).arg("cyan") + QString(end).arg(i18n("Cyan")),
+                                   gboxSettings);
+    labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignBottom );
     m_rSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_rSlider");
     m_rSlider->setTickmarks(QSlider::Below);
     m_rSlider->setTickInterval(20);
     QWhatsThis::add( m_rSlider, i18n("<p>Set here the cyan/red color adjustment of the image."));
-    QLabel *labelRight = new QLabel(i18n("Red"), gboxSettings);
+    QLabel *labelRight = new QLabel(QString(beg).arg("red") + QString(end).arg(i18n("Red")),
+                                    gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_rInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_rInput");
     
@@ -156,13 +167,15 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    labelLeft = new QLabel(i18n("Magenta"), gboxSettings);
+    labelLeft = new QLabel(QString(beg).arg("magenta") + QString(end).arg(i18n("Magenta")),
+                           gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_gSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_gSlider");
     m_gSlider->setTickmarks(QSlider::Below);
     m_gSlider->setTickInterval(20);
     QWhatsThis::add( m_gSlider, i18n("<p>Set here the magenta/green color adjustment of the image."));
-    labelRight = new QLabel(i18n("Green"), gboxSettings);
+    labelRight = new QLabel(QString(beg).arg("green") + QString(end).arg(i18n("Green")),
+                            gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_gInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_gInput");
 
@@ -173,13 +186,15 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     
     // -------------------------------------------------------------
         
-    labelLeft = new QLabel(i18n("Yellow"), gboxSettings);
+    labelLeft = new QLabel(QString(beg).arg("yellow") + QString(end).arg(i18n("Yellow")),
+                           gboxSettings);
     labelLeft->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_bSlider = new QSlider(-100, 100, 1, 0, Qt::Horizontal, gboxSettings, "m_bSlider");
     m_bSlider->setTickmarks(QSlider::Below);
     m_bSlider->setTickInterval(20);
     QWhatsThis::add( m_bSlider, i18n("<p>Set here the yellow/blue color adjustment of the image."));
-    labelRight = new QLabel(i18n("Blue"), gboxSettings);
+    labelRight = new QLabel(QString(beg).arg("blue") + QString(end).arg(i18n("Blue")),
+                            gboxSettings);
     labelRight->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter );
     m_bInput = new QSpinBox(-100, 100, 1, gboxSettings, "m_bInput");
     
