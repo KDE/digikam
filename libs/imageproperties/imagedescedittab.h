@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Caulier Gilles <caulier dot gilles at free.fr>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *

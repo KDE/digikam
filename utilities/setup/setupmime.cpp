@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2003-05-03
  * Description : mime types setup tab
  *

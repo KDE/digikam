@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at free.fr>
+ * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-08
  * Description : A tab to display camera item informations
  *

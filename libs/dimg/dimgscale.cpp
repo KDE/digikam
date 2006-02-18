@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at free.fr>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-06-14
  * Description : This is the normal smoothscale method,
  *               based on Imlib2's smoothscale. Added

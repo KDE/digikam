@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Caulier Gilles <caulier dot gilles at free.fr>
+ *         Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-06-04
  * Description : load digiKam image editor plugins list 
  *               configured in setup dialog.

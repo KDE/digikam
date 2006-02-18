@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-12-02
  * Description : 16 bits color management class
  *

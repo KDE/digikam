@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : colormodifier.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-01-18
  * Description : color modifier methods
  *               for DImg framework

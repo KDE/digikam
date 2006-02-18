@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at free.fr>
+ * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-17
  * Description : image properties side bar using data from 
  *               digiKam database.

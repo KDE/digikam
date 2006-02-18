@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : iccprofileinfodlg.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-16
  * Description : a dialog to display icc profile informations.
  * 

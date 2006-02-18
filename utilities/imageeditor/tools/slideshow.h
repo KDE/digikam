@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-21
  * Description : slide show tool
  * 

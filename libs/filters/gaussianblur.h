@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : gaussianblur.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  * 

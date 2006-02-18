@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imagedlgbase.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-07-23
  * Description : simple plugins dialog without threadable 
  *               filter interface. The dialog layout is 

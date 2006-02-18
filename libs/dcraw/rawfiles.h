@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at free.fr>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-11-06
  * Description : RAW file extensions list supported by 
  *               dcraw propgram.

@@ -1,6 +1,6 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi at pooh.tam.uiuc.edu>
- *          Gilles Caulier <caulier dot gilles at free.fr>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2003-02-03
  * Description : digiKam setup dialog.
  * 

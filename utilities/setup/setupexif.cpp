@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  *         Ralf Holzer <ralf at well.com>
  * Date  : 2003-08-03
  * Description : setup Image Editor tab.

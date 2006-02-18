@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : curveswidget.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-01
  * Description : 
  * 

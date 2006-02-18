@@ -1,6 +1,6 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *

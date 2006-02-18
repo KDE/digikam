@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : bcgmodifier.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr> 
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date  : 2005-03-06
  * Description : Brighness/Contrast/Gamma modifier methods
  *               for DImg framework

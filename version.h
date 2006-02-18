@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at free.fr>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2004-09-09
  * Description : digiKam release ID header.
  * 

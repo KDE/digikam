@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : main.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-22
  * Description :
  *

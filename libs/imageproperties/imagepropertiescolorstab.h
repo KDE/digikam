@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Caulier Gilles <caulier dot gilles at free.fr>
+ * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-17
  * Description : A tab to display Colors image informations
  *

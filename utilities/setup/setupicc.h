@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr> 
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
  *         F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
