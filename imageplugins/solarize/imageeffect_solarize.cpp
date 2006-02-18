@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : imageeffect_solarize.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-02-14
  * Description : a digiKam image plugin for to solarize
  *               an image.
@@ -74,7 +74,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
                      "renchi@pooh.tam.uiuc.edu");
     
     about->addAuthor("Caulier Gilles", I18N_NOOP("Maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
 

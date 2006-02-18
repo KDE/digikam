@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_raindrop.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-09-30
  * Description : a digiKam image plugin to add
  *               raindrops on an image.

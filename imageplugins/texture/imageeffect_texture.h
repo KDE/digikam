@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_texture.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-10
  * Description : a digiKam image editor plugin to apply 
  *               texture on image.

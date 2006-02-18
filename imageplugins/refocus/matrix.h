@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : matrix.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-29
  * Description : refocus deconvolution matrix implementation.
  *

@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_emboss.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-26
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
@@ -64,7 +64,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Emboss algorithm"), 
                      "pieter_voloshyn at ame.com.br");         

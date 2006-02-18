@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_lensdistortion.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-27
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.

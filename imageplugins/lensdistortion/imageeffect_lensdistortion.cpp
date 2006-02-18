@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_lensdistortion.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-27
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
@@ -80,7 +80,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("David Hodson", I18N_NOOP("Lens distortion correction algorithm."),
                      "hodsond at acm dot org");

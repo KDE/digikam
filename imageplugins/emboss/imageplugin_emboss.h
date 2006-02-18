@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_emboss.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-26
  * Description : 
  * 

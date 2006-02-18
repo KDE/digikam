@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_blowup.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-07
  * Description : a digiKam image editor plugin to blowup
  *               a photograph
@@ -108,7 +108,7 @@ ImageEffect_BlowUp::ImageEffect_BlowUp(QWidget* parent)
                              "http://extragear.kde.org/apps/digikamimageplugins");
 
     m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                       "caulier dot gilles at free.fr");
+                       "caulier dot gilles at kdemail dot net");
 
     m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
                        "http://cimg.sourceforge.net");

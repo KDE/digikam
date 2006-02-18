@@ -1,7 +1,7 @@
 /* ============================================================
  * File  : imageeffect_solarize.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at free.fr>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-02-14
  * Description : a digiKam image plugin for to solarize
  *               an image.

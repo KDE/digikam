@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : adjustlevels.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-07-20
  * Description : image histogram adjust levels.
  *
@@ -99,7 +99,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
     

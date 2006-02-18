@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_antivignetting.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-25
  * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.
@@ -70,7 +70,7 @@ ImageEffect_AntiVignetting::ImageEffect_AntiVignetting(QWidget* parent, QString 
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("John Walker", I18N_NOOP("Anti Vignetting algorithm"), 0,
                      "http://www.fourmilab.ch/netpbm/pnmctrfilt"); 

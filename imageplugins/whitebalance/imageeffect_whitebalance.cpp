@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_whitebalance.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-11
  * Description : a digiKam image editor plugin to correct 
  *               image white balance 
@@ -104,7 +104,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
                      "jochym at ifj edu pl");

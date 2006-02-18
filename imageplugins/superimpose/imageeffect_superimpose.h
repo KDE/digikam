@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_freerotation.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-01-04
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.

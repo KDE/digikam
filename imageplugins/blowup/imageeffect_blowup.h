@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_blowup.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-07
  * Description : a digiKam image editor plugin to blowup 
  *               a photograph

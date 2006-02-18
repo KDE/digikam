@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_charcoal.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-26
  * Description : a digiKam image editor plugin for 
  *               simulate charcoal drawing.

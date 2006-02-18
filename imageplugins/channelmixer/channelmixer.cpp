@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : channelmixer.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-26
  * Description : 
  * 
@@ -91,7 +91,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
     

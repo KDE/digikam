@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_border.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-01-20
  * Description : a Digikam image plugin for add a border  
  *               around an image.
@@ -70,7 +70,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
     

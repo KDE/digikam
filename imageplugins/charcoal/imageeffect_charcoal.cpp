@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_charcoal.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-26
  * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
@@ -64,7 +64,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     setAboutData(about);
         

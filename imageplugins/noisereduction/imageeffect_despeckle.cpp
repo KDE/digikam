@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_despeckle.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
@@ -68,7 +68,7 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Michael Sweet", I18N_NOOP("Despeckle algorithm author from Gimp"),
                      "mike at easysw.com");

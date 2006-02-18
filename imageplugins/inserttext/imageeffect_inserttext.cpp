@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_inserttext.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-14
  * Description : a digiKam image plugin for insert text  
  *               to an image.
@@ -80,7 +80,7 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
     

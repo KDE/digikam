@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_oilpaint.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-25
  * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
@@ -66,7 +66,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Oil paint algorithm"), 
                      "pieter_voloshyn at ame.com.br");                     

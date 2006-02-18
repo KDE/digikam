@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_restoration.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-26
  * Description : a digiKam image editor plugin to restore 
  *               a photograph

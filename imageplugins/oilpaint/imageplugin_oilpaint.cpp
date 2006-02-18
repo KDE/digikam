@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_oilpaint.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-25
  * Description : 
  * 

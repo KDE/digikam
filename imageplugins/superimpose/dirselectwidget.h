@@ -1,6 +1,6 @@
 /* ============================================================
  * File   : dirselectwidget.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-01-11
  * Description : a directory selection widget.
  * 

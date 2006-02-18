@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_unsharp.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
@@ -66,7 +66,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Winston Chang", I18N_NOOP("Unsharp mask algorithm author from Gimp"),
                      "winstonc at cs.wisc.edu");

@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_infrared.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-22
  * Description : a digiKam image editor plugin for simulate 
  *               infrared film.
@@ -69,7 +69,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent)
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     setAboutData(about);
     

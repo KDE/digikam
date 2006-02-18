@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_inserttext.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-14
  * Description : 
  * 

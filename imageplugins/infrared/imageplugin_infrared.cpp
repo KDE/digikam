@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_infrared.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-22
  * Description : 
  * 

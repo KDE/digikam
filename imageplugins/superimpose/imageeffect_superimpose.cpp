@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_superimpose.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-01-04
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
@@ -90,7 +90,7 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
     
     setAboutData(about);    
     

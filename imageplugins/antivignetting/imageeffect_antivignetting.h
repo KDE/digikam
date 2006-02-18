@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_antivignetting.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-25
  * Description : a digiKam image plugin to reduce 
  *               vignetting on an image.

@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : despeckle.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-05-25
  * Description : Despeckle threaded image filter.
  * 

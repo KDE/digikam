@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_inpainting.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-30
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
@@ -149,7 +149,7 @@ ImageEffect_InPainting_Dialog::ImageEffect_InPainting_Dialog(QWidget* parent)
                              "http://extragear.kde.org/apps/digikamimageplugins");
 
     m_about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                       "caulier dot gilles at free.fr");
+                       "caulier dot gilles at kdemail dot net");
 
     m_about->addAuthor("David Tschumperle", I18N_NOOP("CImg library"), 0,
                        "http://cimg.sourceforge.net");

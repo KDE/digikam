@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_inpainting.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-30
  * Description : a digiKam image editor plugin to inpaint 
  *               a photograph

@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_freerotation.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-28
  * Description : 
  * 

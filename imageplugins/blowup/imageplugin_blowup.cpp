@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_blowup.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-07
  * Description : 
  * 

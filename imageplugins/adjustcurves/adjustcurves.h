@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : adjustcurves.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-01
  * Description : image histogram adjust curves. 
  * 

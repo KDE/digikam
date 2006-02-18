@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageplugin_inpainting.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-30
  * Description : 
  * 

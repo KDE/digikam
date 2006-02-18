@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_refocus.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-04-29
  * Description : a digiKam image editor plugin to refocus 
  *               an image.
@@ -71,7 +71,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
-                     "caulier dot gilles at free.fr");
+                     "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Ernst Lippe", I18N_NOOP("FIR Wiener deconvolution filter algorithm"), 
                      "ernstl@users.sourceforge.net");

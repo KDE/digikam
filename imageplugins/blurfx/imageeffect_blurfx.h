@@ -1,6 +1,6 @@
 /* ============================================================
  * File  : imageeffect_blurfx.h
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-02-09
  * Description : 
  * 
