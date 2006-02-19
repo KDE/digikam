@@ -201,6 +201,11 @@ uchar* ImageIface::getOriginalImage()
     return origData;
 }
 
+DImg* ImageIface::getOriginalImg()
+{
+    return DImgInterface::instance()->getImg();
+}
+
 uchar* ImageIface::getImageSelection()
 {
     return DImgInterface::instance()->getImageSelection();

@@ -59,6 +59,7 @@ public:
     uchar* getPreviewImage();
     uchar* getImageSelection();
     uchar* getOriginalImage();
+    DImg*  getOriginalImg();
 
     void   putOriginalImage(const QString &caller, uchar* data, int w=-1, int h=-1);
     void   putImageSelection(const QString &caller, uchar* data);
