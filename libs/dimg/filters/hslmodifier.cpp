@@ -25,14 +25,13 @@
 #define CLAMP_0_65535(x) QMAX(QMIN(x, 65535), 0)
 #define ROUND(x) ((int) ((x) + 0.5))
 
-// C ansi includes.
+// C++ includes.
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 // Local includes.
 
-#include "imageiface.h"
 #include "dcolor.h"
 #include "dimg.h"
 #include "hslmodifier.h"
