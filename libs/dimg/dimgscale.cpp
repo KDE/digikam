@@ -901,7 +901,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                         R_VAL(dptr) = r;
                         G_VAL(dptr) = g;
                         B_VAL(dptr) = b;
-                        
+                        A_VAL(dptr) = 0xFF;
+
                         dptr++;
                     }
                     else{
@@ -920,7 +921,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                         R_VAL(dptr) = r;
                         G_VAL(dptr) = g;
                         B_VAL(dptr) = b;
-                        
+                        A_VAL(dptr) = 0xFF;
+
                         dptr++;
                     }
                 }
@@ -946,7 +948,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                         R_VAL(dptr) = r;
                         G_VAL(dptr) = g;
                         B_VAL(dptr) = b;
-                        
+                        A_VAL(dptr) = 0xFF;
+
                         dptr++;
                     }
                     else
@@ -1019,7 +1022,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                 R_VAL(dptr) = r;
                 G_VAL(dptr) = g;
                 B_VAL(dptr) = b;
-                
+                A_VAL(dptr) = 0xFF;
+
                 dptr++;
             }
         }
@@ -1088,7 +1092,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                 R_VAL(dptr) = r;
                 G_VAL(dptr) = g;
                 B_VAL(dptr) = b;
-                
+                A_VAL(dptr) = 0xFF;
+
                 dptr++;
             }
         }
@@ -1184,6 +1189,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo *isi, unsigned int *dest,
                 R_VAL(dptr) = r >> 5;
                 G_VAL(dptr) = g >> 5;
                 B_VAL(dptr) = b >> 5;
+                A_VAL(dptr) = 0xFF;
                 dptr++;
             }
         }
@@ -1244,11 +1250,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                         g = ((gg * YAP) + (g * INV_YAP)) >> 16;
                         b = ((bb * YAP) + (b * INV_YAP)) >> 16;
 
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
+                        A_VAL16(dptr) = 0xFFFF;
 
-			dptr++;
+                        dptr++;
                     }
                     else{
                         pix = ypoints[dyy + y] + xpoints[x];
@@ -1263,11 +1270,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                         g >>= 8;
                         b >>= 8;
 
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
+                        A_VAL16(dptr) = 0xFFFF;
 
-			dptr++;
+                        dptr++;
                     }
                 }
             }
@@ -1289,11 +1297,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                         g >>= 8;
                         b >>= 8;
 
-			R_VAL16(dptr) = r;
-			G_VAL16(dptr) = g;
-			B_VAL16(dptr) = b;
+                        R_VAL16(dptr) = r;
+                        G_VAL16(dptr) = g;
+                        B_VAL16(dptr) = b;
+                        A_VAL16(dptr) = 0xFFFF;
 
-			dptr++;
+                        dptr++;
                     }
                     else
                         *dptr++ = sptr[xpoints[x] ];
@@ -1363,9 +1372,10 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                     b >>= 4;
                 }
 
-		R_VAL16(dptr) = r;
-		G_VAL16(dptr) = g;
-		B_VAL16(dptr) = b;
+                R_VAL16(dptr) = r;
+                G_VAL16(dptr) = g;
+                B_VAL16(dptr) = b;
+                A_VAL16(dptr) = 0xFFFF;
                 dptr++;
             }
         }
@@ -1431,9 +1441,10 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                     b >>= 4;
                 }
 
-		R_VAL16(dptr) = r;
-		G_VAL16(dptr) = g;
-		B_VAL16(dptr) = b;
+                R_VAL16(dptr) = r;
+                G_VAL16(dptr) = g;
+                B_VAL16(dptr) = b;
+                A_VAL16(dptr) = 0xFFFF;
                 dptr++;
             }
         }
@@ -1533,6 +1544,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
                 R_VAL16(dptr) = r >> 5;
                 G_VAL16(dptr) = g >> 5;
                 B_VAL16(dptr) = b >> 5;
+                A_VAL16(dptr) = 0xFFFF;
                 dptr++;
             }
         }
