@@ -48,25 +48,22 @@ libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			ratingwidget.cpp digikamfirstrun.cpp \
 			dcopiface.cpp dcopiface.skel
 
-
-
-
-libdigikam_la_LIBADD  = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
-			$(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) \
-		        $(top_builddir)/digikam/sqlite/libsqlite.la \
-		        $(top_builddir)/digikam/libs/filters/libfilters.la \
-		        $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
-		        $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
-		        $(top_builddir)/digikam/libs/widgets/libwidgets.la \
-		        $(top_builddir)/digikam/libs/dialogs/libdialog.la \
-		        $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-		        $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
-	            $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
-		        $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
-		        $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
-		        $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
-		        $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		        $(top_builddir)/digikam/utilities/setup/libsetup.la
+libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
+			           $(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
+		               $(top_builddir)/digikam/sqlite/libsqlite.la \
+		               $(top_builddir)/digikam/libs/filters/libfilters.la \
+		               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
+		               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
+		               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+		               $(top_builddir)/digikam/libs/dialogs/libdialog.la \
+		               $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
+		               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
+	                   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
+		               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
+		               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
+		               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
+		               $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
+		               $(top_builddir)/digikam/utilities/setup/libsetup.la
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
