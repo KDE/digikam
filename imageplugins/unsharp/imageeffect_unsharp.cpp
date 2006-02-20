@@ -4,7 +4,7 @@
  * Date  : 2004-08-27
  * Description : Unsharp mask image filter for digiKam Image Editor
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("An unsharp mask image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -76,7 +76,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 1, marginHint(), spacingHint());
+
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
     m_radiusInput = new KDoubleNumInput(gboxSettings, "m_radiusInput");
@@ -86,8 +87,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
                      "10 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
-    gridSettings->addWidget(label1, 0, 0);
-    gridSettings->addWidget(m_radiusInput, 0, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -99,8 +100,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
-    gridSettings->addWidget(label2, 1, 0);
-    gridSettings->addWidget(m_amountInput, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_amountInput, 3, 3, 0, 1);
         
     // -------------------------------------------------------------
     
@@ -111,8 +112,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
-    gridSettings->addWidget(label3, 3, 0);
-    gridSettings->addWidget(m_thresholdInput, 3, 1);
+    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(m_thresholdInput, 5, 5, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
