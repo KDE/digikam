@@ -5,7 +5,7 @@
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>
@@ -75,7 +75,7 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
                                        I18N_NOOP("A digiKam image plugin to reduce spherical aberration caused "
                                                  "by a lens to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -90,13 +90,13 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 8, 1, marginHint(), spacingHint());
     
     m_maskPreviewLabel = new QLabel( gboxSettings );
     m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
     QWhatsThis::add( m_maskPreviewLabel, i18n("<p>You can see here a thumbnail preview of the distortion correction "
                                               "applied to a cross pattern.") );
-    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 2);
+    gridSettings->addMultiCellWidget(m_maskPreviewLabel, 0, 0, 0, 1);
         
     // -------------------------------------------------------------
     
@@ -108,8 +108,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_mainInput, i18n("<p>This value controls the amount of distortion. Negative values correct lens barrel "
                                        "distortion, while positive values correct lens pincushion distortion."));
 
-    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_mainInput, 1, 1, 1, 2);
+    gridSettings->addMultiCellWidget(label1, 1, 1, 0, 1);
+    gridSettings->addMultiCellWidget(m_mainInput, 2, 2, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -121,8 +121,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     QWhatsThis::add( m_edgeInput, i18n("<p>This value controls in the same manner as the Main control, but has more effect "
                                        "at the edges of the image than at the center."));
 
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_edgeInput, 2, 2, 1, 2);
+    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 1);
+    gridSettings->addMultiCellWidget(m_edgeInput, 4, 4, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -133,8 +133,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_rescaleInput->setRange(-100.0, 100.0, 0.1, true);
     QWhatsThis::add( m_rescaleInput, i18n("<p>This value rescales the overall image size."));
     
-    gridSettings->addMultiCellWidget(label3, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_rescaleInput, 3, 3, 1, 2);
+    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 1);
+    gridSettings->addMultiCellWidget(m_rescaleInput, 6, 6, 0, 1);
 
     // -------------------------------------------------------------
     
@@ -145,8 +145,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
     m_brightenInput->setRange(-100.0, 100.0, 0.1, true);
     QWhatsThis::add( m_brightenInput, i18n("<p>This value adjust the brightness in image corners."));
 
-    gridSettings->addMultiCellWidget(label4, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_brightenInput, 4, 4, 1, 2);
+    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 1);
+    gridSettings->addMultiCellWidget(m_brightenInput, 8, 8, 0, 1);
     
     setUserAreaWidget(gboxSettings);
     
