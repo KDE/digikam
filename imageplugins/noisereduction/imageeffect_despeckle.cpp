@@ -5,7 +5,7 @@
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,14 +63,14 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A despeckle image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Michael Sweet", I18N_NOOP("Despeckle algorithm author from Gimp"),
+    about->addAuthor("Michael Sweet", I18N_NOOP("Original Despeckle algorithm author"),
                      "mike at easysw.com");
                          
     setAboutData(about);
@@ -78,7 +78,7 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 2, marginHint(), spacingHint());    
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 1, marginHint(), spacingHint());    
     
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
@@ -89,8 +89,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
                      "1 and above determine the blur matrix radius "
                      "that determines how much to blur the image.") );
     
-    gridSettings->addWidget(label1, 0, 0);
-    gridSettings->addWidget(m_radiusInput, 0, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
 
@@ -103,8 +103,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
 
-    gridSettings->addWidget(label2, 1, 0);
-    gridSettings->addWidget(m_blackLevelInput, 1, 1);                         
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_blackLevelInput, 3, 3, 0, 1);                         
     
     // -------------------------------------------------------------
 
@@ -117,8 +117,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
 
-    gridSettings->addWidget(label3, 3, 0);
-    gridSettings->addWidget(m_whiteLevelInput, 3, 1);
+    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(m_whiteLevelInput, 5, 5, 0, 1);
                                               
     // -------------------------------------------------------------
     
@@ -128,8 +128,8 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), gboxSettings);
     QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type.")); 
     
-    gridSettings->addMultiCellWidget(m_useAdaptativeMethod, 4, 4, 0, 1);
-    gridSettings->addMultiCellWidget(m_useRecursiveMethod, 4, 4, 1, 1);    
+    gridSettings->addMultiCellWidget(m_useAdaptativeMethod, 6, 6, 0, 0);
+    gridSettings->addMultiCellWidget(m_useRecursiveMethod, 6, 6, 1, 1);    
         
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
