@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
@@ -38,6 +38,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -52,10 +53,11 @@ public:
 
     ImageRegionWidgetPriv()
     {
+        iface            = 0;
         movingInProgress = false;
-        image            = 0;
         pixmap           = 0;
         pixmapRegion     = 0;
+        zoomFactor       = 1.0;
         separateView     = ImageRegionWidget::SeparateViewVertical;
     }
 
@@ -65,18 +67,23 @@ public:
     int          xpos;
     int          ypos;
 
+    double       zoomFactor;
+
     QPixmap     *pixmap;                // Entire content widget pixmap.
     QPixmap     *pixmapRegion;          // Pixmap of current region to render.
     
     QPointArray  hightlightPoints;
     
-    DImg        *image;                // Entire content image.
+    QImage       image;                // Entire content image to render pixmap.
+    
+    ImageIface  *iface;
 };
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
                  : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageRegionWidgetPriv;
+    d->iface = new ImageIface(0, 0);
 
     if( !scrollBar ) 
     {
@@ -86,30 +93,44 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     
     setMinimumSize(wp, hp);
     viewport()->setMouseTracking(true);
-
-    ImageIface iface(0, 0);
-    uchar *data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-    bool hasAlpha   = iface.originalHasAlpha();
-    d->image = new DImg(w, h, sixteenBit, hasAlpha, data);
-    delete [] data;
-    
-    updateOriginalImage();
+    slotZoomFactorChanged(1.0);
 }
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    if (d->pixmap) delete d->pixmap;
+    if (d->iface)        delete d->iface;
+    if (d->pixmap)       delete d->pixmap;
     if (d->pixmapRegion) delete d->pixmapRegion;
-    if (d->image) delete d->image;
     delete d;
+}
+
+void ImageRegionWidget::slotZoomFactorChanged(double factor)
+{
+    QPoint currentPos((int)(contentsX() / d->zoomFactor), (int)(contentsY() / d->zoomFactor));
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    
+    d->image = d->iface->getOriginalImg()->copyQImage(); 
+
+    d->zoomFactor = factor;
+
+    if(d->zoomFactor != 1.0)
+    {
+        QImage img = d->image.scale((uint)(d->image.width()  * d->zoomFactor), 
+                                    (uint)(d->image.height() * d->zoomFactor));
+        d->image = img;
+    }
+    
+    updateOriginalImage();
+    setContentsPos((int)(currentPos.x() * d->zoomFactor), (int)(currentPos.y() * d->zoomFactor));
+    kapp->restoreOverrideCursor();
+    QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
 }
 
 void ImageRegionWidget::viewportResizeEvent(QResizeEvent *)
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     updateOriginalImage();
+    kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
 }
 
@@ -127,7 +148,9 @@ void ImageRegionWidget::setHighLightPoints(QPointArray pointsList)
 void ImageRegionWidget::slotSeparateViewToggled(int mode)
 {
     d->separateView = mode;
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     updateOriginalImage();
+    kapp->restoreOverrideCursor();
     QTimer::singleShot(0, this, SLOT(slotTimerResizeEvent())); 
 }
 
@@ -136,22 +159,15 @@ void ImageRegionWidget::updateOriginalImage()
     updatePixmap(d->image);
 }
 
-void ImageRegionWidget::updatePreviewImage(DImg *img)
-{
-    QPixmap pix = img->convertToPixmap();
-    QRect area  = getTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
-}
-
-void ImageRegionWidget::updatePixmap(DImg *img)
+void ImageRegionWidget::updatePixmap(const QImage& img)
 {
     horizontalScrollBar()->setLineStep( 1 );
     horizontalScrollBar()->setPageStep( 1 );
     verticalScrollBar()->setLineStep( 1 );
     verticalScrollBar()->setPageStep( 1 );
     
-    int w = img->width();
-    int h = img->height();
+    int w = img.width();
+    int h = img.height();
     
     if (d->pixmap)
     {
@@ -166,13 +182,13 @@ void ImageRegionWidget::updatePixmap(DImg *img)
         case SeparateViewNone:
         {
             d->pixmap = new QPixmap(w, h);
-            d->pixmap->convertFromImage(img->copyQImage());
+            d->pixmap->convertFromImage(img);
             resizeContents(w, h);
-        }
             break;
+        }
         case SeparateViewDuplicateVert:
         {
-            QPixmap pix = img->convertToPixmap();
+            QPixmap pix(img);
             d->pixmap = new QPixmap(w+visibleWidth()/2, h);
             d->pixmap->fill(paletteBackgroundColor().rgb());
             copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
@@ -181,7 +197,7 @@ void ImageRegionWidget::updatePixmap(DImg *img)
         }
         case SeparateViewDuplicateHorz:
         {
-            QPixmap pix = img->convertToPixmap();
+            QPixmap pix(img);
             d->pixmap = new QPixmap(w, h+visibleHeight()/2);
             d->pixmap->fill(paletteBackgroundColor().rgb());
             copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
@@ -194,26 +210,6 @@ void ImageRegionWidget::updatePixmap(DImg *img)
     }
 
     repaintContents(false);    
-}
-
-DImg ImageRegionWidget::getImageRegionImage(void)
-{
-    return ( d->image->copy(getImageRegionToRender()) );
-}
-
-void ImageRegionWidget::backupPixmapRegion(void)
-{
-    if (d->pixmapRegion) delete d->pixmapRegion;
-    QRect area = getTargetImageRegion();
-    d->pixmapRegion = new QPixmap(area.size());
-    copyBlt( d->pixmapRegion, 0, 0, d->pixmap, area.x(), area.y(), area.width(), area.height() );
-}
-
-void ImageRegionWidget::restorePixmapRegion(void)
-{
-    if (!d->pixmapRegion) return;
-    QRect area = getTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, d->pixmap->width(), d->pixmap->height() );
 }
 
 void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
@@ -231,15 +227,15 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewDuplicateVert:
             {
                 p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                p->drawLine(getTargetImageRegion().topLeft().x(),    
-                            getTargetImageRegion().topLeft().y(),
-                            getTargetImageRegion().bottomLeft().x(),
-                            getTargetImageRegion().bottomLeft().y());
+                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
+                            getLocalTargetImageRegion().topLeft().y(),
+                            getLocalTargetImageRegion().bottomLeft().x(),
+                            getLocalTargetImageRegion().bottomLeft().y());
                 p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                p->drawLine(getTargetImageRegion().topLeft().x(),    
-                            getTargetImageRegion().topLeft().y()+1,
-                            getTargetImageRegion().bottomLeft().x(),
-                            getTargetImageRegion().bottomLeft().y()-1);
+                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
+                            getLocalTargetImageRegion().topLeft().y()+1,
+                            getLocalTargetImageRegion().bottomLeft().x(),
+                            getLocalTargetImageRegion().bottomLeft().y()-1);
                             
                 p->setPen(QPen::QPen(Qt::red, 1)) ;                    
                 QFontMetrics fontMt = p->fontMetrics();
@@ -247,8 +243,8 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                 QString text(i18n("Target"));
                 QRect textRect;
                 QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint::QPoint(getTargetImageRegion().topLeft().x()+20, 
-                                                   getTargetImageRegion().topLeft().y()+20));
+                textRect.setTopLeft(QPoint::QPoint(getLocalTargetImageRegion().topLeft().x()+20,
+                                                   getLocalTargetImageRegion().topLeft().y()+20));
                 textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
                 p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
                 p->drawRect(textRect);
@@ -267,15 +263,15 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
             case SeparateViewDuplicateHorz:
             {
                 p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                p->drawLine(getTargetImageRegion().topLeft().x()+1,
-                            getTargetImageRegion().topLeft().y(),
-                            getTargetImageRegion().topRight().x()-1,
-                            getTargetImageRegion().topRight().y());
+                p->drawLine(getLocalTargetImageRegion().topLeft().x()+1,
+                            getLocalTargetImageRegion().topLeft().y(),
+                            getLocalTargetImageRegion().topRight().x()-1,
+                            getLocalTargetImageRegion().topRight().y());
                 p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                p->drawLine(getTargetImageRegion().topLeft().x(),
-                            getTargetImageRegion().topLeft().y(),
-                            getTargetImageRegion().topRight().x(),
-                            getTargetImageRegion().topRight().y());
+                p->drawLine(getLocalTargetImageRegion().topLeft().x(),
+                            getLocalTargetImageRegion().topLeft().y(),
+                            getLocalTargetImageRegion().topRight().x(),
+                            getLocalTargetImageRegion().topRight().y());
                             
                 p->setPen(QPen::QPen(Qt::red, 1)) ;                    
                 QFontMetrics fontMt = p->fontMetrics();
@@ -283,8 +279,8 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                 QString text(i18n("Target"));
                 QRect textRect;
                 QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text); 
-                textRect.setTopLeft(QPoint::QPoint(getTargetImageRegion().topLeft().x()+20, 
-                                                   getTargetImageRegion().topLeft().y()+20));
+                textRect.setTopLeft(QPoint::QPoint(getLocalTargetImageRegion().topLeft().x()+20,
+                                                   getLocalTargetImageRegion().topLeft().y()+20));
                 textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
                 p->fillRect(textRect, QBrush(QColor(250, 250, 255)) );
                 p->drawRect(textRect);
@@ -316,17 +312,17 @@ void ImageRegionWidget::drawContents(QPainter *p, int x, int y, int w, int h)
                 {
                     p->setPen(QPen(Qt::white, 1, Qt::SolidLine));
                     ptArea.setSize(QSize::QSize(12, 12));
-                    ptArea.moveCenter(pt);
+                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
                     p->drawEllipse(ptArea);
                     ptArea.setSize(QSize::QSize(8, 8));
-                    ptArea.moveCenter(pt);
+                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
                     p->drawEllipse(ptArea);
                     p->setPen(QPen(Qt::black, 1, Qt::SolidLine));
                     ptArea.setSize(QSize::QSize(10, 10));
-                    ptArea.moveCenter(pt);
+                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
                     p->drawEllipse(ptArea);
                     ptArea.setSize(QSize::QSize(6, 6));
-                    ptArea.moveCenter(pt);
+                    ptArea.moveCenter(QPoint((int)(pt.x() * d->zoomFactor), (int)(pt.y() * d->zoomFactor)));
                     p->drawEllipse(ptArea);
                 }
             }
@@ -355,6 +351,35 @@ void ImageRegionWidget::setContentsPosition(int x, int y, bool targetDone)
        emit contentsMovedEvent(true);
 }
 
+void ImageRegionWidget::backupPixmapRegion(void)
+{
+    if (d->pixmapRegion) delete d->pixmapRegion;
+    QRect area = getLocalTargetImageRegion();
+    d->pixmapRegion = new QPixmap(area.size());
+    copyBlt( d->pixmapRegion, 0, 0, d->pixmap, area.x(), area.y(), area.width(), area.height() );
+}
+
+void ImageRegionWidget::restorePixmapRegion(void)
+{
+    if (!d->pixmapRegion) return;
+    QRect area = getLocalTargetImageRegion();
+    copyBlt( d->pixmap, area.x(), area.y(), d->pixmapRegion, 0, 0, area.width(), area.height() );
+}
+
+void ImageRegionWidget::updatePreviewImage(DImg *img)
+{
+    QImage image = img->copyQImage();
+    QPixmap pix( image.scale((uint)(image.width()  * d->zoomFactor), 
+                             (uint)(image.height() * d->zoomFactor)));
+    QRect area  = getLocalTargetImageRegion();
+    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
+}
+
+DImg ImageRegionWidget::getImageRegionImage(void)
+{
+    return ( d->iface->getOriginalImg()->copy(getImageRegionToRender()) );
+}
+
 QRect ImageRegionWidget::getImageRegion(void)
 {
     QRect region;    
@@ -365,18 +390,18 @@ QRect ImageRegionWidget::getImageRegion(void)
         case SeparateViewHorizontal:
         case SeparateViewNone:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < d->image->width()) ? visibleWidth()  : d->image->width(),
-                (visibleHeight() < d->image->height()) ? visibleHeight() : d->image->height());
+                (visibleWidth()  < d->image.width()) ? visibleWidth()  : d->image.width(),
+                (visibleHeight() < d->image.height()) ? visibleHeight() : d->image.height());
             break;
         case SeparateViewDuplicateVert:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()/2  < d->image->width()) ? visibleWidth()/2  : d->image->width(),
-                (visibleHeight() < d->image->height()) ? visibleHeight() : d->image->height());
+                (visibleWidth()/2  < d->image.width()) ? visibleWidth()/2  : d->image.width(),
+                (visibleHeight() < d->image.height()) ? visibleHeight() : d->image.height());
             break;
         case SeparateViewDuplicateHorz:
             region = QRect::QRect(contentsX(), contentsY(), 
-                (visibleWidth()  < d->image->width()) ? visibleWidth()  : d->image->width(),
-                (visibleHeight()/2 < d->image->height()) ? visibleHeight()/2 : d->image->height());
+                (visibleWidth()  < d->image.width()) ? visibleWidth()  : d->image.width(),
+                (visibleHeight()/2 < d->image.height()) ? visibleHeight()/2 : d->image.height());
             break;
     }
         
@@ -385,33 +410,43 @@ QRect ImageRegionWidget::getImageRegion(void)
 
 QRect ImageRegionWidget::getImageRegionToRender(void)
 {
+    QRect region = getLocalImageRegionToRender();
+    region.setX((int)(region.x()/d->zoomFactor));
+    region.setY((int)(region.y()/d->zoomFactor));
+    region.setWidth((int)(region.width()/d->zoomFactor));
+    region.setHeight((int)(region.height()/d->zoomFactor));
+    return (region);
+}
+
+QRect ImageRegionWidget::getLocalImageRegionToRender(void)
+{
     int normalizedW, normalizedH;
     
     // For large screen.
-    if (visibleWidth()  > d->image->width())  normalizedW = d->image->width();
+    if (visibleWidth()  > d->image.width())  normalizedW = d->image.width();
     else normalizedW = visibleWidth();
-    if (visibleHeight() > d->image->height()) normalizedH = d->image->height();
+    if (visibleHeight() > d->image.height()) normalizedH = d->image.height();
     else normalizedH = visibleHeight();
 
     QRect region;
     
     if (d->separateView == SeparateViewVertical)
-        region = QRect::QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
+        region = QRect(contentsX()+normalizedW/2, contentsY(), normalizedW/2, normalizedH);
     else if (d->separateView == SeparateViewHorizontal)
-        region = QRect::QRect(contentsX(), contentsY()+normalizedH/2, normalizedW, normalizedH/2);
+        region = QRect(contentsX(), contentsY()+normalizedH/2, normalizedW, normalizedH/2);
     else if (d->separateView == SeparateViewDuplicateVert)
-        region = QRect::QRect(contentsX(), contentsY(), normalizedW/2, normalizedH);
+        region = QRect(contentsX(), contentsY(), normalizedW/2, normalizedH);
     else if (d->separateView == SeparateViewDuplicateHorz)
-        region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH/2);
+        region = QRect(contentsX(), contentsY(), normalizedW, normalizedH/2);
     else 
-        region = QRect::QRect(contentsX(), contentsY(), normalizedW, normalizedH);
+        region = QRect(contentsX(), contentsY(), normalizedW, normalizedH);
             
     return (region);
 }
 
-QRect ImageRegionWidget::getTargetImageRegion(void)
+QRect ImageRegionWidget::getLocalTargetImageRegion(void)
 {
-    QRect region = getImageRegionToRender();
+    QRect region = getLocalImageRegionToRender();
     
     if (d->separateView == SeparateViewDuplicateVert)
         region.moveBy(region.width(), 0);
@@ -465,68 +500,15 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
 
 void ImageRegionWidget::updatePreviewImage(QImage *img)
 {
-    QPixmap pix(img->width(), img->height());
-    pix.convertFromImage(*img);
-    QRect area = getTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, pix.width(), pix.height() );
-}
-
-void ImageRegionWidget::updatePixmap(QImage *img)
-{
-    horizontalScrollBar()->setLineStep( 1 );
-    horizontalScrollBar()->setPageStep( 1 );
-    verticalScrollBar()->setLineStep( 1 );
-    verticalScrollBar()->setPageStep( 1 );
-    
-    int w = img->width();
-    int h = img->height();
-    
-    if (d->pixmap)
-    {
-        delete d->pixmap;
-        d->pixmap = 0;
-    }
-    
-    switch (d->separateView)
-        {
-        case SeparateViewVertical:
-        case SeparateViewHorizontal:
-        case SeparateViewNone:
-            {
-            d->pixmap = new QPixmap(w, h);
-            d->pixmap->convertFromImage(*img);
-            resizeContents(w, h);
-            }
-            break;
-        case SeparateViewDuplicateVert:
-            {
-            QPixmap pix(*img); 
-            d->pixmap = new QPixmap(w+visibleWidth()/2, h);
-            d->pixmap->fill(paletteBackgroundColor().rgb());
-            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
-            resizeContents(w+visibleWidth()/2, h);
-            break;
-            }
-        case SeparateViewDuplicateHorz:
-            {
-            QPixmap pix(*img); 
-            d->pixmap = new QPixmap(w, h+visibleHeight()/2);
-            d->pixmap->fill(paletteBackgroundColor().rgb());
-            copyBlt( d->pixmap, 0, 0, &pix, 0, 0, w, h );
-            resizeContents(w, h+visibleHeight()/2);
-            break;
-            }
-        default:
-            kdWarning() << "Unknown separation view specified"
-                        << endl;
-        }
-
-    repaintContents(false);    
+    QPixmap pix( img->scale((uint)(img->width()  * d->zoomFactor),
+                            (uint)(img->height() * d->zoomFactor)));
+    QRect area = getLocalTargetImageRegion();
+    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
 }
 
 QImage ImageRegionWidget::getImageRegionData(void)
 {
-    return ( d->image->copyQImage(getImageRegionToRender()) );
+    return ( d->iface->getOriginalImg()->copyQImage(getImageRegionToRender()) );
 }
 
 }  // NameSpace Digikam

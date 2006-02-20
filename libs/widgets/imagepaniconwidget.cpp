@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-22
  * Description : a widget to display a panel to choose
  *               a rectangular image area.
@@ -55,17 +55,20 @@ public:
         moveSelection = false;
     }
 
+    bool         moveSelection;
+
+    uchar *      data;
+
     int          separateView;
     
     int          width;
     int          height;
     
+    int          zoomedOrgWidth;
+    int          zoomedOrgHeight;
+    
     int          xpos;
     int          ypos;
-
-    bool         moveSelection;
-
-    uchar *      data;
     
     QRect        rect;
     QRect        regionSelection;         // Original size image selection.
@@ -83,12 +86,14 @@ ImagePanIconWidget::ImagePanIconWidget(int w, int h, QWidget *parent)
 {
     d = new ImagePanIconWidgetPriv;
     
-    d->separateView  = Digikam::ImageRegionWidget::SeparateViewVertical;
-    d->iface         = new ImageIface(w, h);
-    d->data          = d->iface->getPreviewImage();
-    d->width         = d->iface->previewWidth();
-    d->height        = d->iface->previewHeight();
-    d->pixmap        = new QPixmap(w, h);
+    d->separateView    = ImageRegionWidget::SeparateViewVertical;
+    d->iface           = new ImageIface(w, h);
+    d->data            = d->iface->getPreviewImage();
+    d->width           = d->iface->previewWidth();
+    d->height          = d->iface->previewHeight();
+    d->zoomedOrgWidth  = d->iface->originalWidth();
+    d->zoomedOrgHeight = d->iface->originalHeight();
+    d->pixmap          = new QPixmap(w, h);
     
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(d->width, d->height);
@@ -106,21 +111,29 @@ ImagePanIconWidget::~ImagePanIconWidget()
     delete d;
 }
 
+void ImagePanIconWidget::slotZoomFactorChanged(double factor)
+{
+    d->zoomedOrgWidth  = (int)(d->iface->originalWidth()  * factor);
+    d->zoomedOrgHeight = (int)(d->iface->originalHeight() * factor);
+    updatePixmap();
+    repaint(false);
+}
+
 void ImagePanIconWidget::setRegionSelection(QRect regionSelection)
 {
     d->regionSelection = regionSelection;
     d->localRegionSelection.setX( 1 + d->rect.x() + (int)((float)d->regionSelection.x() *
-                                              ( (float)d->width / (float)d->iface->originalWidth() )) );
+                                  ( (float)d->width / (float)d->zoomedOrgWidth )) );
                                             
     d->localRegionSelection.setY( 1 + d->rect.y() + (int)((float)d->regionSelection.y() *
-                                              ( (float)d->height / (float)d->iface->originalHeight() )) );
+                                  ( (float)d->height / (float)d->zoomedOrgHeight )) );
                                             
     d->localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
-                                          ( (float)d->width / (float)d->iface->originalWidth() )) );
+                                      ( (float)d->width / (float)d->zoomedOrgWidth )) );
                                      
     d->localRegionSelection.setHeight( (int)((float)d->regionSelection.height() *
-                                           ( (float)d->height / (float)d->iface->originalHeight() )) );
-    
+                                       ( (float)d->height / (float)d->zoomedOrgHeight )) );
+
     updatePixmap();
     repaint(false);
 }
@@ -133,8 +146,8 @@ QRect ImagePanIconWidget::getRegionSelection(void)
 void ImagePanIconWidget::setCenterSelection(void)
 {
     setRegionSelection(QRect::QRect( 
-             (int)(((float)d->iface->originalWidth() / 2.0)  - ((float)d->regionSelection.width() / 2.0)),
-             (int)(((float)d->iface->originalHeight() / 2.0) - ((float)d->regionSelection.height() / 2.0)),
+             (int)(((float)d->zoomedOrgWidth / 2.0)  - ((float)d->regionSelection.width() / 2.0)),
+             (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
              d->regionSelection.width(),
              d->regionSelection.height()));
 }
@@ -155,16 +168,16 @@ void ImagePanIconWidget::regionSelectionMoved( bool targetDone )
     }
     
     int x = ROUND( ((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
-                   ( (float)d->iface->originalWidth() / (float)d->width ));
+                   ( (float)d->zoomedOrgWidth / (float)d->width ));
                                             
     int y = ROUND( ((float)d->localRegionSelection.y() - (float)d->rect.y() ) *
-                   ( (float)d->iface->originalHeight() / (float)d->height ));
+                   ( (float)d->zoomedOrgHeight / (float)d->height ));
                                             
     int w = ROUND((float)d->localRegionSelection.width() *
-                 ( (float)d->iface->originalWidth() / (float)d->width ));
+                 ( (float)d->zoomedOrgWidth / (float)d->width ));
                                      
     int h = ROUND((float)d->localRegionSelection.height() *
-                 ( (float)d->iface->originalHeight() / (float)d->height ));
+                 ( (float)d->zoomedOrgHeight / (float)d->height ));
                      
     d->regionSelection.setX(x);
     d->regionSelection.setY(y);
@@ -191,7 +204,7 @@ void ImagePanIconWidget::updatePixmap( void )
        for (uint i = 0 ; i < d->hightlightPoints.count() ; i++)
        {
           pt = d->hightlightPoints.point(i);
-          pt.setX((int)(pt.x() * (float)(d->width)/(float)d->iface->originalWidth()));
+          pt.setX((int)(pt.x() * (float)(d->width)/(float)d->iface->originalWidth())); 
           pt.setY((int)(pt.y() * (float)(d->height)/(float)d->iface->originalHeight()));
           p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
           p.drawLine(pt.x(), pt.y()-1, pt.x(), pt.y()+1);
@@ -206,12 +219,17 @@ void ImagePanIconWidget::updatePixmap( void )
     
     // Drawing selection border
     p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-    p.drawRect(d->localRegionSelection);
+    p.drawRect(d->localRegionSelection.x(), 
+               d->localRegionSelection.y(),
+               d->localRegionSelection.width(), 
+               d->localRegionSelection.height());
     p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-    p.drawRect(d->localRegionSelection.x()+1, d->localRegionSelection.y()+1,
-               d->localRegionSelection.width()-2, d->localRegionSelection.height()-2);
+    p.drawRect(d->localRegionSelection.x() + 1, 
+               d->localRegionSelection.y() + 1,
+               d->localRegionSelection.width() - 2, 
+               d->localRegionSelection.height() - 2);
     
-    if (d->separateView == Digikam::ImageRegionWidget::SeparateViewVertical)
+    if (d->separateView == ImageRegionWidget::SeparateViewVertical)
     {
         p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(d->localRegionSelection.topLeft().x() + d->localRegionSelection.width()/2,
@@ -220,11 +238,11 @@ void ImagePanIconWidget::updatePixmap( void )
                    d->localRegionSelection.bottomLeft().y());
         p.setPen(QPen(Qt::red, 1, Qt::DotLine));
         p.drawLine(d->localRegionSelection.topLeft().x() + d->localRegionSelection.width()/2,
-                   d->localRegionSelection.topLeft().y()+1,
+                   d->localRegionSelection.topLeft().y() + 1,
                    d->localRegionSelection.bottomLeft().x() + d->localRegionSelection.width()/2,
-                   d->localRegionSelection.bottomLeft().y()-1);
+                   d->localRegionSelection.bottomLeft().y() - 1);
     }
-    else if (d->separateView == Digikam::ImageRegionWidget::SeparateViewHorizontal)
+    else if (d->separateView == ImageRegionWidget::SeparateViewHorizontal)
     {
         p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
         p.drawLine(d->localRegionSelection.topLeft().x(),
@@ -232,9 +250,9 @@ void ImagePanIconWidget::updatePixmap( void )
                    d->localRegionSelection.topRight().x(),
                    d->localRegionSelection.topRight().y() + d->localRegionSelection.height()/2);
         p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-        p.drawLine(d->localRegionSelection.topLeft().x()+1,
+        p.drawLine(d->localRegionSelection.topLeft().x() + 1,
                    d->localRegionSelection.topLeft().y() + d->localRegionSelection.height()/2,
-                   d->localRegionSelection.topRight().x()-1,
+                   d->localRegionSelection.topRight().x() - 1,
                    d->localRegionSelection.topRight().y() + d->localRegionSelection.height()/2);
     }
 

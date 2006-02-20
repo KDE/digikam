@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
@@ -95,11 +95,13 @@ protected slots:
 
     void slotPanIconTakeFocus(void);    
     void slotInitGui(void);
+    void slotZoomButtonReleased(int);
                 
 signals:
 
     void signalOriginalClipFocusChanged( void );
     void signalResized( void );
+    void signalZoomFactorChanged( double );
     
 protected:
     

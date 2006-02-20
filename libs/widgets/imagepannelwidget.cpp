@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-07-01
  * Description : a widget to draw a control pannel image tool.
  * 
@@ -58,6 +58,15 @@ class ImagePannelWidgetPriv
 {
 public:
 
+    enum ZoomOptions 
+    {
+        ZoomX10=10,   //  1.0 zoom factor
+        ZoomX15=15,   //  1.5 zoom factor
+        ZoomX20=20,   //  2.0 zoom factor
+        ZoomX25=25,   //  2.5 zoom factor
+        ZoomX30=30    //  3.0 zoom factor
+    };
+
     ImagePannelWidgetPriv()
     {
         imageRegionWidget  = 0;
@@ -65,11 +74,13 @@ public:
         mainLayout         = 0;
         separateView       = 0;
         progressBar        = 0;
+        zoomButtons        = 0;
     }
 
     QGridLayout        *mainLayout;
     
     QHButtonGroup      *separateView;
+    QHButtonGroup      *zoomButtons;
     
     QString             settingsSection;
     
@@ -85,22 +96,61 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
 {
     d = new ImagePannelWidgetPriv;
     d->settingsSection = settingsSection;
+    d->mainLayout      = new QGridLayout( this, 2, 3 , KDialog::marginHint(), KDialog::spacingHint());
+
+    // -------------------------------------------------------------
     
-    d->mainLayout = new QGridLayout( this, 2, 2 , KDialog::marginHint(), KDialog::spacingHint());
-    
-    QFrame *frame1 = new QFrame(this);
-    frame1->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l1 = new QVBoxLayout(frame1, 5, 0);
-    d->imageRegionWidget = new Digikam::ImageRegionWidget(w, h, frame1, false);
+    QLabel *zoomLabel = new QLabel(i18n("Zoom Factor:"), this);
+
+    d->zoomButtons = new QHButtonGroup(this);
+    d->zoomButtons->setExclusive(true);
+    d->zoomButtons->setInsideMargin( 0 );
+    d->zoomButtons->setFrameShape(QFrame::NoFrame);
+
+    QPushButton *zoomX10Button = new QPushButton( "x1", d->zoomButtons );
+    zoomX10Button->setMaximumHeight( fontMetrics().height() );
+    d->zoomButtons->insert(zoomX10Button, ImagePannelWidgetPriv::ZoomX10);
+    zoomX10Button->setToggleButton(true);
+    QWhatsThis::add( zoomX10Button, i18n( "<p>Press this buttom to not magnify image" ) );
+
+    QPushButton *zoomX15Button = new QPushButton( "x1.5", d->zoomButtons );
+    zoomX15Button->setMaximumHeight( fontMetrics().height() );
+    d->zoomButtons->insert(zoomX15Button, ImagePannelWidgetPriv::ZoomX15);
+    zoomX15Button->setToggleButton(true);
+    QWhatsThis::add( zoomX15Button, i18n( "<p>Press this buttom to magnify image using 1.5:1 zoom factor." ) );
+
+    QPushButton *zoomX20Button = new QPushButton( "x2", d->zoomButtons );
+    zoomX20Button->setMaximumHeight( fontMetrics().height() );
+    d->zoomButtons->insert(zoomX20Button, ImagePannelWidgetPriv::ZoomX20);
+    zoomX20Button->setToggleButton(true);
+    QWhatsThis::add( zoomX20Button, i18n( "<p>Press this buttom to magnify image using 2:1 zoom factor." ) );
+
+    QPushButton *zoomX25Button = new QPushButton( "x2.5", d->zoomButtons );
+    zoomX25Button->setMaximumHeight( fontMetrics().height() );
+    d->zoomButtons->insert(zoomX25Button, ImagePannelWidgetPriv::ZoomX25);
+    zoomX25Button->setToggleButton(true);
+    QWhatsThis::add( zoomX25Button, i18n( "<p>Press this buttom to magnify image using 2.5:1 zoom factor." ) );
+
+    QPushButton *zoomX30Button = new QPushButton( "x3", d->zoomButtons );
+    zoomX30Button->setMaximumHeight( fontMetrics().height() );
+    d->zoomButtons->insert(zoomX30Button, ImagePannelWidgetPriv::ZoomX30);
+    zoomX30Button->setToggleButton(true);
+    QWhatsThis::add( zoomX30Button, i18n( "<p>Press this buttom to magnify image using 3:1 zoom factor." ) );
+
+    d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
+
+    // -------------------------------------------------------------
+
+    QFrame *preview = new QFrame(this);
+    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l1 = new QVBoxLayout(preview, 5, 0);
+    d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     QWhatsThis::add( d->imageRegionWidget, i18n("<p>Here you can see the original clip image "
-                                               "which will be used for the preview computation."
-                                               "<p>Click and drag the mouse cursor in the "
-                                               "image to change the clip focus."));
+                                                "which will be used for the preview computation."
+                                                "<p>Click and drag the mouse cursor in the "
+                                                "image to change the clip focus."));
     l1->addWidget(d->imageRegionWidget, 0);
-    d->mainLayout->addMultiCellWidget(frame1, 0, 1, 0, 0);
-    d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setColStretch(0, 10);
 
     // -------------------------------------------------------------
         
@@ -109,11 +159,11 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QFrame *frame3 = new QFrame(this);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
-    d->imagePanIconWidget = new Digikam::ImagePanIconWidget(360, 240, frame3);
+    d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
     QWhatsThis::add( d->imagePanIconWidget, i18n("<p>Here you can see the original image panel "
-                                                "which can help you to select the clip preview."
-                                                "<p>Click and drag the mouse cursor in the "
-                                                "red rectangle to change the clip focus."));
+                                                 "which can help you to select the clip preview."
+                                                 "<p>Click and drag the mouse cursor in the "
+                                                 "red rectangle to change the clip focus."));
     l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
     
     d->separateView = new QHButtonGroup(this);
@@ -125,7 +175,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
         separateViewMode == SeparateViewAll)
     {
        QPushButton *duplicateHorButton = new QPushButton( d->separateView );
-       d->separateView->insert(duplicateHorButton, Digikam::ImageRegionWidget::SeparateViewDuplicateHorz);
+       d->separateView->insert(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
        KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
        QString directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
        duplicateHorButton->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
@@ -136,7 +186,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                  "below the red dashed line." ) );
         
        QPushButton *duplicateVerButton = new QPushButton( d->separateView );
-       d->separateView->insert(duplicateVerButton, Digikam::ImageRegionWidget::SeparateViewDuplicateVert);
+       d->separateView->insert(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
        KGlobal::dirs()->addResourceType("duplicatebothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("duplicatebothvert", "duplicatebothvert.png");
        duplicateVerButton->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
@@ -151,7 +201,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
         separateViewMode == SeparateViewAll)
        {
        QPushButton *separateHorButton = new QPushButton( d->separateView );
-       d->separateView->insert(separateHorButton, Digikam::ImageRegionWidget::SeparateViewHorizontal);
+       d->separateView->insert(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
        KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
        QString directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
        separateHorButton->setPixmap( QPixmap( directory + "bothhorz.png" ) );
@@ -162,7 +212,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                  "red dashed line, the target below it." ) );
         
        QPushButton *separateVerButton = new QPushButton( d->separateView );
-       d->separateView->insert(separateVerButton, Digikam::ImageRegionWidget::SeparateViewVertical);
+       d->separateView->insert(separateVerButton, ImageRegionWidget::SeparateViewVertical);
        KGlobal::dirs()->addResourceType("bothvert", KGlobal::dirs()->kde_default("data") + "digikam/data");
        directory = KGlobal::dirs()->findResourceDir("bothvert", "bothvert.png");
        separateVerButton->setPixmap( QPixmap( directory + "bothvert.png" ) );
@@ -174,7 +224,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        }
        
     QPushButton *noSeparateButton = new QPushButton( d->separateView );
-    d->separateView->insert(noSeparateButton, Digikam::ImageRegionWidget::SeparateViewNone);
+    d->separateView->insert(noSeparateButton, ImageRegionWidget::SeparateViewNone);
     KGlobal::dirs()->addResourceType("target", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("target", "target.png");
     noSeparateButton->setPixmap( QPixmap( directory + "target.png" ) );
@@ -195,9 +245,14 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     l2->addWidget(frame3, 0, Qt::AlignHCenter);
     l2->addLayout(h1);
     l2->addStretch();
-    
-    d->mainLayout->addMultiCellLayout(l2, 0, 0, 1, 1);
-    
+
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 2);
+    d->mainLayout->addMultiCellWidget(zoomLabel, 2, 2, 0, 0);
+    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 1, 1);
+    d->mainLayout->addMultiCellLayout(l2, 0, 0, 3, 3);
+    d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setColStretch(2, 10);
+
     // -------------------------------------------------------------
     
     QTimer::singleShot(0, this, SLOT(slotInitGui())); 
@@ -218,12 +273,26 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     
     connect(d->separateView, SIGNAL(released(int)),
             d->imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
+
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            d->imageRegionWidget, SLOT(slotZoomFactorChanged(double)));
+
+    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+            d->imagePanIconWidget, SLOT(slotZoomFactorChanged(double)));
+
+    connect(d->zoomButtons, SIGNAL(released(int)),
+            this, SLOT(slotZoomButtonReleased(int)));
 }
 
 ImagePannelWidget::~ImagePannelWidget()
 {
     writeSettings();
     delete d;
+}
+
+void ImagePannelWidget::slotZoomButtonReleased(int buttonId)
+{
+    emit signalZoomFactorChanged((double)(buttonId/10.0));
 }
 
 KProgress *ImagePannelWidget::progressBar(void)
@@ -266,7 +335,7 @@ void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
        
     vLayout->addWidget(w);
     vLayout->addStretch();
-    d->mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
+    d->mainLayout->addMultiCellLayout(vLayout, 1, 2, 3, 3);
 }
 
 void ImagePannelWidget::setEnable(bool b)
@@ -355,9 +424,9 @@ void ImagePannelWidget::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup(d->settingsSection);
-    int mode = config->readNumEntry("Separate View", Digikam::ImageRegionWidget::SeparateViewVertical);
-    mode = QMAX(Digikam::ImageRegionWidget::SeparateViewVertical, mode);
-    mode = QMIN(Digikam::ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
+    mode = QMAX(ImageRegionWidget::SeparateViewVertical, mode);
+    mode = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
     
     d->imageRegionWidget->blockSignals(true);
     d->imagePanIconWidget->blockSignals(true);

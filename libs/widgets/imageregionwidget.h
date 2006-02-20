@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-17
  * Description : a widget to draw an image clip region.
  * 
@@ -25,6 +25,7 @@
 
 #include <qscrollview.h>
 #include <qrect.h>
+#include <qimage.h>
 
 // Local includes
 
@@ -58,9 +59,16 @@ public:
     
     void   setContentsPosition(int x, int y, bool targetDone);    
     void   setCenterContentsPosition(void);
+
+    /** To get image region including original or/and target area depending of separate view mode */
     QRect  getImageRegion(void);
+    
+    /** To get target image region area to render */
     QRect  getImageRegionToRender(void);
+    
+    /** To get target image region image to use for render operations */
     DImg   getImageRegionImage(void);
+
     void   updatePreviewImage(DImg *img);
     void   updateOriginalImage(void);   
 
@@ -88,15 +96,14 @@ protected:
 private:
     
     void  drawContents(QPainter *p, int x, int y, int w, int h);
-    void  updatePixmap(DImg *img);
-    QRect getTargetImageRegion(void);
+    void  updatePixmap(const QImage& img);
+    QRect getLocalTargetImageRegion(void);
+    QRect getLocalImageRegionToRender(void);
 
-    // FIXME remove this method when all image plugins will be ported to DIMG.
-    void  updatePixmap(QImage *img);
-    
 public slots:
 
     void slotSeparateViewToggled(int mode);
+    void slotZoomFactorChanged(double);
 
 private slots:
     

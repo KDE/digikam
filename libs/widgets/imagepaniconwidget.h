@@ -1,5 +1,5 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
+ * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-22
  * Description : a widget to display a panel to choose
  *               a rectangular image area.
@@ -59,6 +59,7 @@ signals:
 
 public slots:
 
+    void slotZoomFactorChanged( double );
     void slotSeparateViewToggled(int t);
             
 protected:
