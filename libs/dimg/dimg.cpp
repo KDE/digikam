@@ -38,7 +38,6 @@ extern "C"
 
 // KDE includes.
 
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 
 // Local includes.
@@ -386,15 +385,6 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     if ( filePath == QString::null )
         return NONE;
 
-    // ----------------------------------------
-    // FIXME : It's just for testing : remove this code later...
-    KFileMetaInfo metaInfo(filePath, QString::null, KFileMetaInfo::Fastest);
-    if (metaInfo.isValid())
-        kdDebug() << k_funcinfo << " : Mime type: " << metaInfo.mimeType() << endl;
-    else
-        kdDebug() << k_funcinfo << " KFileMetaInfo is not valid for " << filePath << endl;
-    // ----------------------------------------
-    
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     
     if (!f)
@@ -521,6 +511,11 @@ QByteArray DImg::getICCProfil() const
 QByteArray DImg::getExif() const
 {
     return metadata(JPG_EXIF);
+}
+
+QByteArray DImg::getIPTC() const
+{
+    return metadata(JPG_IPTC);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const

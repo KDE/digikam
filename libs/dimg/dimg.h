@@ -156,10 +156,11 @@ public:
     */
     bool       isReadOnly() const;
 
-    QByteArray getICCProfil() const;
-
+    /** Metadata manipulation methods */
     QByteArray getExif() const;
+    QByteArray getIPTC() const;
     QByteArray metadata(METADATA key) const;
+    QByteArray getICCProfil() const;
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key);
