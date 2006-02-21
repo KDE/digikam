@@ -69,6 +69,7 @@ public:
                   const QString& mimeType=0);
                   
     void   switchToLastSaved(const QString& newFilename);
+    void   abortSaving();
     void   setModified();
     void   clearUndoManager();
     void   setUndoManagerOrigin();

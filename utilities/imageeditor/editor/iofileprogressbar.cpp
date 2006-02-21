@@ -31,6 +31,7 @@
 #include "kprogress.h"
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kcursor.h>
 
 // Local includes.
 
@@ -80,6 +81,9 @@ IOFileProgressBar::IOFileProgressBar(QWidget *parent)
     d->cancelButton = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     d->cancelButton->setPixmap( SmallIcon( "cancel" ) );
+    // Parent widget will probably have the wait cursor set.
+    // Set arrow cursor to indicate the button can be clicked
+    d->cancelButton->setCursor( KCursor::arrowCursor() );
       
     hBox->addWidget(d->fileAcessProgressBar);
     hBox->addWidget(d->cancelButton);

@@ -176,6 +176,7 @@ protected slots:
     virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
         
+    void slotNameLabelCancelButtonPressed();
     virtual void slotContextMenu();
 
     virtual void slotSetup() { setup(); };

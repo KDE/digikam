@@ -454,6 +454,11 @@ void Canvas::switchToLastSaved(const QString& newFilename)
     d->im->switchToLastSaved(newFilename);
 }
 
+void Canvas::abortSaving()
+{
+    d->im->abortSaving();
+}
+
 void Canvas::setModified()
 {
     d->im->setModified();

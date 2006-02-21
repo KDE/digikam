@@ -198,6 +198,11 @@ void EditorWindow::setupStandardConnections()
             
     connect(d->flipVertAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
+
+    // -- status bar connections --
+
+    connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotNameLabelCancelButtonPressed()));
 }
 
 void EditorWindow::setupStandardActions()
@@ -1086,6 +1091,14 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*succe
     unsetCursor();
 }
 
+void EditorWindow::slotNameLabelCancelButtonPressed()
+{
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+    {
+        m_savingContext->abortingSaving = true;
+        m_canvas->abortSaving();
+    }
+}
 
 void EditorWindow::slotSave()
 {
@@ -1114,9 +1127,12 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         if (!success)
         {
-            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to \n\"%2\".")
-                            .arg(m_savingContext->destinationURL.filename())
-                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            if (!m_savingContext->abortingSaving)
+            {
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to \n\"%2\".")
+                                .arg(m_savingContext->destinationURL.filename())
+                                .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            }
             finishSaving(false);
             return;
         }
@@ -1155,9 +1171,12 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         // from saveAs()
         if (!success)
         {
-            KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
-                            .arg(m_savingContext->destinationURL.filename())
-                            .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            if (!m_savingContext->abortingSaving)
+            {
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
+                                .arg(m_savingContext->destinationURL.filename())
+                                .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+            }
             finishSaving(false);
             return;
         }
@@ -1233,6 +1252,7 @@ void EditorWindow::startingSave(const KURL& url)
     m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
     m_savingContext->saveTempFile   = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->abortingSaving = false;
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings);
 }
@@ -1355,6 +1375,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     m_savingContext->destinationURL = newURL;
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->saveTempFile->setAutoDelete(true);
+    m_savingContext->abortingSaving = false;
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
 

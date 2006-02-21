@@ -341,5 +341,14 @@ void SavingTask::progressInfo(const DImg *, float progress)
         QApplication::postEvent(m_thread, new SavingProgressEvent(m_filePath, progress));
 }
 
+bool SavingTask::continueQuery(const DImg *)
+{
+    return m_savingTaskStatus != SavingTaskStatusStopping;
+}
+
+void SavingTask::setStatus(SavingTaskStatus status)
+{
+    m_savingTaskStatus = status;
+}
 
 }   //namespace Digikam

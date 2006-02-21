@@ -234,6 +234,36 @@ void ManagedLoadSaveThread::stopLoading(const QString& filePath, LoadingTaskFilt
     removeLoadingTasks(LoadingDescription(filePath), filter);
 }
 
+void ManagedLoadSaveThread::stopSaving(const QString& filePath)
+{
+    QMutexLocker lock(&m_mutex);
+
+    // stop current task if it is matching the criteria
+    if (m_currentTask && m_currentTask->type() == LoadSaveTask::TaskTypeSaving)
+    {
+        SavingTask *savingTask = (SavingTask *)m_currentTask;
+        if (filePath.isNull() || savingTask->filePath() == filePath)
+        {
+            savingTask->setStatus(SavingTask::SavingTaskStatusStopping);
+        }
+    }
+
+    // remove relevant tasks from list
+    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    {
+        if (task->type() ==  LoadSaveTask::TaskTypeSaving)
+        {
+            SavingTask *savingTask = (SavingTask *)m_currentTask;
+            if (filePath.isNull() || savingTask->filePath() == filePath)
+            {
+                m_todo.remove();
+                m_todo.prev();
+            }
+        }
+    }
+}
+
+
 void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &description, LoadingTaskFilter filter)
 {
     LoadingTask *loadingTask;
@@ -244,11 +274,10 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &descrip
         if (description.filePath.isNull() || loadingTask->loadingDescription() == description)
         {
             loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
-            return;
         }
     }
 
-    // remove relevant preloading tasks from list
+    // remove relevant tasks from list
     for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
     {
         if ( (loadingTask = checkLoadingTask(task, filter)) )
@@ -257,7 +286,6 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &descrip
             {
                 m_todo.remove();
                 m_todo.prev();
-                return;
             }
         }
     }

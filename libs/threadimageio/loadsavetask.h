@@ -198,6 +198,7 @@ public:
 
     virtual void progressInfo(const DImg *, float progress);
     virtual bool continueQuery(const DImg *);
+
     virtual void setStatus(LoadingTaskStatus status);
 
     LoadingTaskStatus status() const
@@ -284,19 +285,40 @@ class SavingTask : public LoadSaveTask, public DImgLoaderObserver
 {
 public:
 
+    enum SavingTaskStatus
+    {
+        SavingTaskStatusSaving,
+        SavingTaskStatusStopping
+    };
+
     SavingTask(LoadSaveThread* thread, DImg &img, const QString &filePath, const QString &format)
         : LoadSaveTask(thread), m_img(img), m_filePath(filePath), m_format(format)
         {};
 
     virtual void execute();
     virtual TaskType type();
+
     virtual void progressInfo(const DImg *, float progress);
+    virtual bool continueQuery(const DImg *);
+
+    virtual void setStatus(SavingTaskStatus status);
+
+    SavingTaskStatus status() const
+    {
+        return m_savingTaskStatus;
+    }
+
+    QString filePath() const
+    {
+        return m_filePath;
+    }
 
 private:
 
     DImg        m_img;
     QString     m_filePath;
     QString     m_format;
+    SavingTaskStatus m_savingTaskStatus;
 };
 
 }   // namespace Digikam

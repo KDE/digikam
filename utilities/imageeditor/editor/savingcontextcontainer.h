@@ -46,6 +46,7 @@ public:
         saveTempFile            = 0;
         destinationExisted      = false;
         synchronousSavingResult = false;
+        abortingSaving          = false;
     }
 
     enum SavingState
@@ -65,6 +66,7 @@ public:
     SynchronizingState       synchronizingState;
     bool                     synchronousSavingResult;
     bool                     destinationExisted;
+    bool                     abortingSaving;
     
     QString                  format;
 

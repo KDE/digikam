@@ -66,6 +66,7 @@ public:
     void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                 const QString& mimeType=0);
     void switchToLastSaved(const QString& newFilename);
+    void abortSaving();
     void setModified();
     void clearUndoHistory();
     void setUndoHistoryOrigin();

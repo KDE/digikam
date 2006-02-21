@@ -95,6 +95,9 @@ public:
     // Stop and remove tasks filtered by filePath and policy.
     // If filePath isNull, applies to all file paths.
     void stopLoading(const QString& filePath = QString(), LoadingTaskFilter filter = LoadingTaskFilterAll);
+    // Stop and remove saving tasks filtered by filePath.
+    // If filePath isNull, applies to all file paths.
+    void stopSaving(const QString& filePath = QString());
 
     // Append a task to save the image to the task list
     void save(DImg &image, const QString& filePath, const QString &format);

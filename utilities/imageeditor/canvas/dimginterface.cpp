@@ -490,6 +490,12 @@ void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
         emit signalSavingProgress(filePath, progress);
 }
 
+void DImgInterface::abortSaving()
+{
+    // failure will be reported by a signal
+    d->thread->stopSaving(d->savingFilename);
+}
+
 void DImgInterface::switchToLastSaved(const QString& newFilename)
 {
     // Higher level wants to use the current DImg object to represent the file
