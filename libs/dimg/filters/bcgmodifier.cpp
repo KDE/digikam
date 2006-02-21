@@ -152,7 +152,7 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<65536; i++)
     {
-        val2 = (int)(pow(((double)d->map16[i] / 65535), (1 / val)) * 65535);
+        val2 = (int)round(pow(((double)d->map16[i] / 65535), (1 / val)) * 65535);
         if (d->overIndicator && val2 > 65535)
             d->map16[i] = -1;
         else
@@ -161,7 +161,7 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<256; i++)
     {
-        val2 = (int)(pow(((double)d->map[i] / 255), (1 / val)) * 255);
+        val2 = (int)round(pow(((double)d->map[i] / 255), (1 / val)) * 255);
         if (d->overIndicator && val2 > 255)
             d->map[i] = -1;
         else
