@@ -81,7 +81,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 1);
     
     QLabel *label2 = new QLabel(i18n("Circular sharpness:"), gboxSettings);
     m_radius = new KDoubleNumInput(gboxSettings);
