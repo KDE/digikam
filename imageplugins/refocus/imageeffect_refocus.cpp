@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to refocus 
  *               an image.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to refocus a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2006, Gilles Caulier",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -81,7 +81,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 1, marginHint(), spacingHint());
     
     QLabel *label2 = new QLabel(i18n("Circular sharpness:"), gboxSettings);
     m_radius = new KDoubleNumInput(gboxSettings);
@@ -91,8 +91,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                     "parameter for using the plugin. For most images the default value of 1.0 "
                                     "should give good results. Select a higher value when your image is very blurred."));
     
-    gridSettings->addWidget(label2, 0, 0);
-    gridSettings->addWidget(m_radius, 0, 1);
+    gridSettings->addMultiCellWidget(label2, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_radius, 1, 1, 0, 1);
         
     // -------------------------------------------------------------
     
@@ -105,8 +105,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                          "Using a high value for the Correlation will reduce the sharpening effect of the "
                                          "plugin."));
 
-    gridSettings->addWidget(label4, 1, 0);
-    gridSettings->addWidget(m_correlation, 1, 1);
+    gridSettings->addMultiCellWidget(label4, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_correlation, 3, 3, 0, 1);
     
     // -------------------------------------------------------------
             
@@ -120,8 +120,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                    "Using a high value for the Noise Filter will reduce the sharpening "
                                    "effect of the plugin."));
 
-    gridSettings->addWidget(label5, 2, 0);
-    gridSettings->addWidget(m_noise, 2, 1);
+    gridSettings->addMultiCellWidget(label5, 4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(m_noise, 5, 5, 0, 1);
             
     // -------------------------------------------------------------
     
@@ -134,8 +134,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                    "it causes nasty artifacts. When you use non-zero values you will probably have to "
                                    "increase the Correlation and/or Noise Filter parameters too."));
 
-    gridSettings->addWidget(label3, 3, 0);
-    gridSettings->addWidget(m_gauss, 3, 1);
+    gridSettings->addMultiCellWidget(label3, 6, 6, 0, 1);
+    gridSettings->addMultiCellWidget(m_gauss, 7, 7, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -146,8 +146,8 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
                                         "Increasing the Matrix Width may give better results, especially when you have "
                                         "chosen large values for Circular or Gaussian Sharpness."));
 
-    gridSettings->addWidget(label1, 4, 0);
-    gridSettings->addWidget(m_matrixSize, 4, 1);
+    gridSettings->addMultiCellWidget(label1, 8, 8, 0, 1);
+    gridSettings->addMultiCellWidget(m_matrixSize, 9, 9, 0, 1);
         
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
