@@ -99,11 +99,13 @@ void BCGModifier::applyBCG(DImg& image)
     if (!d->modified || image.isNull())
         return;
 
+    uint size = image.width()*image.height();
+
     if (!image.sixteenBit())                    // 8 bits image.
     {
         uchar* data = (uchar*) image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<size; i++)
         {
             if (d->map[data[0]] == -1 || d->map[data[1]] == -1 || d->map[data[2]] == -1)
             {
@@ -125,7 +127,7 @@ void BCGModifier::applyBCG(DImg& image)
     {
         ushort* data = (ushort*) image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<size; i++)
         {
             if (d->map16[data[0]] == -1 || d->map16[data[1]] == -1 || d->map16[data[2]] == -1)
             {
@@ -152,7 +154,7 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<65536; i++)
     {
-        val2 = (int)round(pow(((double)d->map16[i] / 65535), (1 / val)) * 65535);
+        val2 = lround(pow(((double)d->map16[i] / 65535.0), (1.0 / val)) * 65535.0);
         if (d->overIndicator && val2 > 65535)
             d->map16[i] = -1;
         else
@@ -161,7 +163,7 @@ void BCGModifier::setGamma(double val)
 
     for (int i=0; i<256; i++)
     {
-        val2 = (int)round(pow(((double)d->map[i] / 255), (1 / val)) * 255);
+        val2 = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
         if (d->overIndicator && val2 > 255)
             d->map[i] = -1;
         else
@@ -173,7 +175,7 @@ void BCGModifier::setGamma(double val)
 
 void BCGModifier::setBrightness(double val)
 {
-    int val1 = (int)(val * 65535);
+    int val1 = lround(val * 65535);
     int val2;
 
     for (int i = 0; i < 65536; i++)
@@ -185,7 +187,7 @@ void BCGModifier::setBrightness(double val)
             d->map16[i] = CLAMP_0_65535(val2);
     }
 
-    val1 = (int)(val * 255);
+    val1 = lround(val * 255);
     
     for (int i = 0; i < 256; i++)
     {
@@ -205,16 +207,16 @@ void BCGModifier::setContrast(double val)
 
     for (int i = 0; i < 65536; i++)
     {
-        val2 = (int)(((double)d->map16[i] - 32767) * val) + 32767;
+        val2 = lround((d->map16[i] - 32767) * val) + 32767;
         if (d->overIndicator && val2 > 65535)
             d->map16[i] = -1;
         else
             d->map16[i] = CLAMP_0_65535(val2);
-    }                                 
+    }
 
     for (int i = 0; i < 256; i++)
     {
-        val2 = (int)(((double)d->map[i] - 127) * val) + 127;
+        val2 = lround((d->map[i] - 127) * val) + 127;
         if (d->overIndicator && val2 > 255)
             d->map[i] = -1;
         else

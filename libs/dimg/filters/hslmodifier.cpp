@@ -32,6 +32,7 @@
 
 // Local includes.
 
+#include <kdebug.h>
 #include "dcolor.h"
 #include "dimg.h"
 #include "hslmodifier.h"
@@ -86,19 +87,19 @@ void HSLModifier::applyHSL(DImg& image)
         for (uint i=0; i<image.width()*image.height(); i++)
         {
             // Code using DImg::DColor
-            
+
             int hue, sat, lig;
-            
+
             DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
             color.getHSL(&hue, &sat, &lig);
             color.setRGB(htransfer16[hue], stransfer16[sat], ltransfer16[lig], image.sixteenBit());
-        
+
             data[2] = color.red();
             data[1] = color.green();
             data[0] = color.blue();
 
             /* Code to test in 8 bits only with old implementation from Gimp.
-            
+
             int red, green, blue;
 
             red   = data[2]/256;
@@ -106,18 +107,18 @@ void HSLModifier::applyHSL(DImg& image)
             blue  = data[0]/256;
 
             rgb_to_hsl(red, green, blue);
-        
+
             red   = htransfer[red];
             green = stransfer[green];
             blue  = ltransfer[blue];
-        
+
             hsl_to_rgb(red, green, blue);
 
             data[2] = red*256;
             data[1] = green*256;
             data[0] = blue*256;
             */
-            
+
             data += 4;
         }
     }
@@ -128,19 +129,19 @@ void HSLModifier::applyHSL(DImg& image)
         for (uint i=0; i<image.width()*image.height(); i++)
         {
             // Code using DImg::DColor
-            
+
             int hue, sat, lig;
 
             DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
             color.getHSL(&hue, &sat, &lig);
             color.setRGB(htransfer[hue], stransfer[sat], ltransfer[lig], image.sixteenBit());
-        
+
             data[2] = color.red();
             data[1] = color.green();
             data[0] = color.blue();
 
             /* Code to test in 8 bits only with old implementation from Gimp.
-            
+
             int red, green, blue;
 
             red   = data[2];
@@ -148,11 +149,11 @@ void HSLModifier::applyHSL(DImg& image)
             blue  = data[0];
 
             rgb_to_hsl(red, green, blue);
-        
+
             red   = htransfer[red];
             green = stransfer[green];
             blue  = ltransfer[blue];
-        
+
             hsl_to_rgb(red, green, blue);
 
             data[2] = red;
@@ -171,7 +172,7 @@ void HSLModifier::setHue(double val)
 
     for (int i = 0; i < 65536; i++)
     {
-       value = (int)(val * 65535.0 / 360.0);
+       value = lround(val * 65535.0 / 360.0);
       
        if ((i + value) < 0)
           htransfer16[i] = 65535 + (i + value);
@@ -183,7 +184,7 @@ void HSLModifier::setHue(double val)
 
     for (int i = 0; i < 256; i++)
     {
-       value = (int)(val * 255.0 / 360.0);
+       value = lround(val * 255.0 / 360.0);
       
        if ((i + value) < 0)
           htransfer[i] = 255 + (i + value);
@@ -198,11 +199,29 @@ void HSLModifier::setHue(double val)
 
 void HSLModifier::setSaturation(double val)
 {
+    val = CLAMP(val, -100.0, 100.0);
     int value;
-    
+
     for (int i = 0; i < 65536; i++)
     {
-       value = (int)(val * 65535.0 / 100.0);
+        value = lround( (i * (100.0 + val)) / 100.0 );
+        stransfer16[i] = CLAMP_0_65535(value);
+    }
+
+    for (int i = 0; i < 256; i++)
+    {
+        value = lround( (i * (100.0 + val)) / 100.0 );
+        stransfer[i]  = CLAMP_0_255(value);
+    }
+
+    /*
+    This is the old code.
+    There is an integer overflow with 16 bits and slight rounding errors.
+    The code above is mathematically equivalent,
+    but this here gives some more insight on the algorithm.
+    for (int i = 0; i < 65536; i++)
+    {
+       value = lround(val * 65535.0 / 100.0);
        value = CLAMP (value, -65535, 65535);
 
        stransfer16[i] = CLAMP_0_65535 ((i * (65535 + value)) / 65535);
@@ -210,22 +229,54 @@ void HSLModifier::setSaturation(double val)
 
     for (int i = 0; i < 256; i++)
     {
-       value = (int)(val * 255.0 / 100.0);
+       value = lround(val * 255.0 / 100.0);
        value = CLAMP (value, -255, 255);
 
        stransfer[i] = CLAMP_0_255 ((i * (255 + value)) / 255);
     }
-    
+    */
+
     m_modified = true;
 }
 
 void HSLModifier::setLightness(double val)
 {
-    int value;
+    // val needs to be in that range so that the result is in the range 0..65535
+    val = CLAMP(val, -100.0, 100.0);
 
+    if (val < 0)
+    {
+        for (int i = 0; i < 65536; i++)
+        {
+            ltransfer16[i] = lround( (i * ( val + 100.0 )) / 100.0);
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            ltransfer[i]   = lround( (i * ( val + 100.0 )) / 100.0);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 65536; i++)
+        {
+            ltransfer16[i] = lround( i * ( 1.0 - val / 100.0 )  + 65535.0 / 100.0 * val );
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            ltransfer[i]   = lround( i * ( 1.0 - val / 100.0 )  + 255.0 / 100.0 * val );
+        }
+    }
+    /*
+    This is the old code.
+    There is an integer overflow with 16 bits and slight rounding errors.
+    The range for val is -200..200, while it is -100..100 in setSaturation.
+    The code above is mathematically equivalent, but adjusted with for val/2,
+    Replace 100.0 with 200.0 to have the completely equivalent code for -200..200.
     for (int i = 0; i < 65536; i++)
     {
-       value = (int)(val * 32767.0 / 100.0);
+       value = lround(val * 32767.0 / 100.0);
        value = CLAMP (value, -65535, 65535);
 
        if (value < 0)
@@ -236,7 +287,7 @@ void HSLModifier::setLightness(double val)
 
     for (int i = 0; i < 256; i++)
     {
-       value = (int)(val * 127.0 / 100.0);
+       value = lround(val * 127.0 / 100.0);
        value = CLAMP (value, -255, 255);
 
        if (value < 0)
@@ -244,7 +295,8 @@ void HSLModifier::setLightness(double val)
        else
           ltransfer[i] = (i + ((255 - i) * value) / 255);
     }
-    
+    */
+
     m_modified = true;
 }
 

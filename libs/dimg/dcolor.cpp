@@ -202,19 +202,22 @@ void DColor::getHSL(int* h, int* s, int* l)
     double green;
     double blue;
     double delta;
+    double sum;
     double hue, sat, lig;
-    
-    red   = d->red   / (d->sixteenBit ? 65535.0 : 255.0);
-    green = d->green / (d->sixteenBit ? 65535.0 : 255.0);
-    blue  = d->blue  / (d->sixteenBit ? 65535.0 : 255.0);
-    
+
+    double range = d->sixteenBit ? 65535.0 : 255.0;
+
+    red   = d->red   / range;
+    green = d->green / range;
+    blue  = d->blue  / range;
+
     if (red > green)
     {
         if (red > blue)
             max = red;
         else
             max = blue;
-    
+
         if (green < blue)
             min = green;
         else
@@ -226,122 +229,132 @@ void DColor::getHSL(int* h, int* s, int* l)
             max = green;
         else
             max = blue;
-    
+
         if (red < blue)
             min = red;
         else
             min = blue;
     }
-    
-    lig = (max + min) / 2;
+
+    sum = max + min;
+
+    lig = sum / 2;
     sat = 0;
     hue = 0;
-    
+
     if (max != min)
     {
+        delta = max - min;
+
         if (lig <= 0.5)
-            sat = (max - min) / (max + min);
+            sat = delta / sum;
         else
-            sat = (max - min) / (2 - max - min);
-    
-        delta = max -min;
+            sat = delta / (2 - sum);
+
         if (red == max)
             hue = (green - blue) / delta;
         else if (green == max)
             hue = 2 + (blue - red) / delta;
         else if (blue == max)
             hue = 4 + (red - green) / delta;
-    
+
+        if (hue < 0)
+            hue += 6;
+        if (hue > 6)
+            hue -= 6;
+
         hue *= 60;
-        if (hue < 0.0)
-            hue += 360;
     }
 
-    *h = (int)(hue / 360.0 * 255.0);
-    *s = (int)(sat * 255.0);
-    *l = (int)(lig * 255.0);
+    *h = lround(hue * range / 360.0);
+    *s = lround(sat * range);
+    *l = lround(lig * range);
 }
 
 void DColor::setRGB(int h, int s, int l, bool sixteenBit)
 {
     double hue;
     double lightness;
-    double saturation;  
+    double saturation;
     double m1, m2;
     double r, g, b;
-    
-    hue        = (double)(h * 360.0 / 255.0);
-    lightness  = (double)(l / 255.0);
-    saturation = (double)(s / 255.0);
-    
-    if (lightness <= 0.5)
-        m2 = lightness * (1 + saturation);
-    else
-        m2 = lightness + saturation - lightness * saturation;
 
-    m1 = 2 * lightness - m2;
-    
-    if (saturation == 0)
+    double range = d->sixteenBit ? 65535.0 : 255.0;
+
+    if (s == 0)
     {
-        d->red   = (int)(lightness * (sixteenBit ? 65535.0 : 255.0));
-        d->green = (int)(lightness * (sixteenBit ? 65535.0 : 255.0));
-        d->blue  = (int)(lightness * (sixteenBit ? 65535.0 : 255.0));
+        d->red   = l;
+        d->green = l;
+        d->blue  = l;
     }
     else
     {
-        hue = h + 120;
-        while (hue > 360)
-            hue -= 360;
-        while (hue < 0)
-            hue += 360;
-    
-        if (hue < 60)
-            r = m1 + (m2 - m1) * hue / 60;
-        else if (hue < 180)
+        hue        = (double)(h * 360.0 / range);
+        lightness  = (double)(l / range);
+        saturation = (double)(s / range);
+
+        if (lightness <= 0.5)
+            m2 = lightness * (1 + saturation);
+        else
+            m2 = lightness + saturation - lightness * saturation;
+
+        m1 = 2 * lightness - m2;
+
+        double mh;
+
+        mh = hue + 120;
+        while (mh > 360)
+            mh -= 360;
+        while (mh < 0)
+            mh += 360;
+
+        if (mh < 60)
+            r = m1 + (m2 - m1) * mh / 60;
+        else if (mh < 180)
             r = m2;
-        else if (hue < 240)
-            r = m1 + (m2 - m1) * (240 - hue) / 60;
+        else if (mh < 240)
+            r = m1 + (m2 - m1) * (240 - mh) / 60;
         else
             r = m1;
-    
-        hue = h;
-        while (hue > 360)
-            hue -= 360;
-        while (hue < 0)
-            hue += 360;
-    
-        if (hue < 60)
-            g = m1 + (m2 - m1) * hue / 60;
-        else if (hue < 180)
+
+        mh = hue;
+        while (mh > 360)
+            mh -= 360;
+        while (mh < 0)
+            mh += 360;
+
+        if (mh < 60)
+            g = m1 + (m2 - m1) * mh / 60;
+        else if (mh < 180)
             g = m2;
-        else if (hue < 240)
-            g = m1 + (m2 - m1) * (240 - hue) / 60;
+        else if (mh < 240)
+            g = m1 + (m2 - m1) * (240 - mh) / 60;
         else
             g = m1;
-    
-        hue = h - 120;
-        while (hue > 360)
-            hue -= 360;
-        while (hue < 0)
-            hue += 360;
-    
-        if (hue < 60)
-            b = m1 + (m2 - m1) * hue / 60;
-        else if (hue < 180)
+
+        mh = hue - 120;
+        while (mh > 360)
+            mh -= 360;
+        while (mh < 0)
+            mh += 360;
+
+        if (mh < 60)
+            b = m1 + (m2 - m1) * mh / 60;
+        else if (mh < 180)
             b = m2;
-        else if (hue < 240)
-            b = m1 + (m2 - m1) * (240 - hue) / 60;
+        else if (mh < 240)
+            b = m1 + (m2 - m1) * (240 - mh) / 60;
         else
             b = m1;
-    
-        d->red   = (int)(r * (sixteenBit ? 65535.0 : 255.0));
-        d->green = (int)(g * (sixteenBit ? 65535.0 : 255.0));
-        d->blue  = (int)(b * (sixteenBit ? 65535.0 : 255.0));
+
+        d->red   = lround(r * range);
+        d->green = lround(g * range);
+        d->blue  = lround(b * range);
     }
- 
+
     d->sixteenBit = sixteenBit;
 
-    // Full transparent color.
+    // Fully opaque color.
     if (d->sixteenBit)
         d->alpha = 65535;
     else
