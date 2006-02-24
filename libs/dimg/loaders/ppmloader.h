@@ -38,7 +38,7 @@ public:
 
     PPMLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const { return false; };

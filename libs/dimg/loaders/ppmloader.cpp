@@ -56,7 +56,7 @@ PPMLoader::PPMLoader(DImg* image)
 {
 }
 
-bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
+bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     //TODO: progress information
     int	 width, height, rgbmax;
@@ -115,50 +115,47 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
 
     unsigned short *data;
     
-    if (loadImageData)
+    data = new unsigned short[width*height*4];
+    unsigned short *dst  = data;
+    uchar src[6];
+    float fac = 65535.0 / rgbmax;
+    int checkpoint = 0;
+
+#ifdef ENABLE_DEBUG_MESSAGES
+    kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+#endif
+
+    for (int h = 0; h < height; h++)
     {
-        data = new unsigned short[width*height*4];
-        unsigned short *dst  = data;
-        uchar src[6];
-        float fac = 65535.0 / rgbmax;
-        int checkpoint = 0;
-        
-    #ifdef ENABLE_DEBUG_MESSAGES    
-        kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
-    #endif
-    
-        for (int h = 0; h < height; h++)
+
+        if (observer && h == checkpoint)
         {
-    
-            if (observer && h == checkpoint)
+            checkpoint += granularity(observer, height, 0.9);
+            if (!observer->continueQuery(m_image))
             {
-                checkpoint += granularity(observer, height, 0.9);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    pclose( file );
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
+                delete [] data;
+                pclose( file );
+                return false;
             }
-    
-            for (int w = 0; w < width; w++)
-            {
-    
-                fread (src, 6 *sizeof(unsigned char), 1, file);
-    
-                // Swap byte order to preserve compatibility with PPC.
-    
-                if (QImage::systemByteOrder() == QImage::BigEndian)
-                    swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-    
-                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-                dst[3] = 0xFFFF;
-    
-                dst += 4;
-            }
+            observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
+        }
+
+        for (int w = 0; w < width; w++)
+        {
+
+            fread (src, 6 *sizeof(unsigned char), 1, file);
+
+            // Swap byte order to preserve compatibility with PPC.
+
+            if (QImage::systemByteOrder() == QImage::BigEndian)
+                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
+
+            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+            dst[3] = 0xFFFF;
+
+            dst += 4;
         }
     }
 
@@ -169,9 +166,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("format", "PPM");
-    
-    if (loadImageData)
-        imageData() = (uchar*)data;
+    imageData() = (uchar*)data;
 
     return true;
 }

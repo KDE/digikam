@@ -46,7 +46,7 @@ public:
 
     virtual ~DImgLoader() {};
 
-    virtual bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true) = 0;
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer) = 0;
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer) = 0;
     
     virtual bool hasAlpha()   const = 0;

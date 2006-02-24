@@ -63,7 +63,7 @@ PNGLoader::PNGLoader(DImg* image)
     m_sixteenBit = false;
 }
 
-bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
+bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     png_uint_32  w32, h32;
     int          width, height;
@@ -304,92 +304,89 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
 
     uchar *data  = 0;
     
-    if (loadImageData)
+    if (m_sixteenBit)
+        data = new uchar[width*height*8];  // 16 bits/color/pixel
+    else
+        data = new uchar[width*height*4];  // 8 bits/color/pixel
+
+    uchar **lines = 0;
+    lines = (uchar **)malloc(height * sizeof(uchar *));
+    if (!lines)
+    {
+        kdDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
+        png_read_end(png_ptr, info_ptr);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+        fclose(f);
+        delete [] data;
+        return false;
+    }
+
+    for (int i = 0; i < height; i++)
     {
         if (m_sixteenBit)
-            data = new uchar[width*height*8];  // 16 bits/color/pixel
-        else 
-            data = new uchar[width*height*4];  // 8 bits/color/pixel
-    
-        uchar **lines = 0;
-        lines = (uchar **)malloc(height * sizeof(uchar *));
-        if (!lines)
-        {
-            kdDebug() << k_funcinfo << "Cannot allocate memory to load PNG image data." << endl;
-            png_read_end(png_ptr, info_ptr);
-            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-            fclose(f);
-            delete [] data;
-            return false;
-        }
-    
-        for (int i = 0; i < height; i++)
-        {
-            if (m_sixteenBit)
-                lines[i] = data + (i * width * 8);
-            else
-                lines[i] = data + (i * width * 4);
-        }
-    
-        // The easy way to read the whole image
-        // png_read_image(png_ptr, lines);
-        // The other way to read images is row by row. Necessary for observer.
-        // Now we need to deal with interlacing.
-    
-        // for non-interlaced images number_passes will be 1
-        int number_passes = png_set_interlace_handling(png_ptr);
-        for (int pass = 0; pass < number_passes; pass++)
-        {
-            int y;
-            int checkPoint = 0;
-            for (y = 0; y < height; y++)
-            {
-                if (observer && y == checkPoint)
-                {
-                    checkPoint += granularity(observer, height, 0.7);
-                    if (!observer->continueQuery(m_image))
-                    {
-                        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-                        fclose(f);
-                        delete [] data;
-                        free(lines);
-                        return false;
-                    }
-                    // use 10% - 80% for progress while reading rows
-                    observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
-                }
-    
-                png_read_rows(png_ptr, lines+y, NULL, 1);
-    
-            }
-        }
-    
-        free(lines);
-
-        // Swap bytes in 16 bits/color/pixel for DImg
-        
-        if (m_sixteenBit)   
-        {
-            uchar ptr[8];   // One pixel to swap
-            
-            for (int p = 0; p < width*height*8; p+=8)
-            {
-                memcpy (&ptr[0], &data[p], 8);  // Current pixel 
-                    
-                data[ p ] = ptr[1];  // Blue
-                data[p+1] = ptr[0];
-                data[p+2] = ptr[3];  // Green
-                data[p+3] = ptr[2];  
-                data[p+4] = ptr[5];  // Red
-                data[p+5] = ptr[4];
-                data[p+6] = ptr[7];  // Alpha
-                data[p+7] = ptr[6];            
-            }
-        }
-    
-        if (observer)
-            observer->progressInfo(m_image, 0.9);
+            lines[i] = data + (i * width * 8);
+        else
+            lines[i] = data + (i * width * 4);
     }
+
+    // The easy way to read the whole image
+    // png_read_image(png_ptr, lines);
+    // The other way to read images is row by row. Necessary for observer.
+    // Now we need to deal with interlacing.
+
+    // for non-interlaced images number_passes will be 1
+    int number_passes = png_set_interlace_handling(png_ptr);
+    for (int pass = 0; pass < number_passes; pass++)
+    {
+        int y;
+        int checkPoint = 0;
+        for (y = 0; y < height; y++)
+        {
+            if (observer && y == checkPoint)
+            {
+                checkPoint += granularity(observer, height, 0.7);
+                if (!observer->continueQuery(m_image))
+                {
+                    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+                    fclose(f);
+                    delete [] data;
+                    free(lines);
+                    return false;
+                }
+                // use 10% - 80% for progress while reading rows
+                observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
+            }
+
+            png_read_rows(png_ptr, lines+y, NULL, 1);
+
+        }
+    }
+
+    free(lines);
+
+    // Swap bytes in 16 bits/color/pixel for DImg
+
+    if (m_sixteenBit)
+    {
+        uchar ptr[8];   // One pixel to swap
+
+        for (int p = 0; p < width*height*8; p+=8)
+        {
+            memcpy (&ptr[0], &data[p], 8);  // Current pixel
+
+            data[ p ] = ptr[1];  // Blue
+            data[p+1] = ptr[0];
+            data[p+2] = ptr[3];  // Green
+            data[p+3] = ptr[2];
+            data[p+4] = ptr[5];  // Red
+            data[p+5] = ptr[4];
+            data[p+6] = ptr[7];  // Alpha
+            data[p+7] = ptr[6];
+        }
+    }
+
+    if (observer)
+        observer->progressInfo(m_image, 0.9);
 
     // -------------------------------------------------------------------
     // Read image ICC profile
@@ -496,9 +493,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("format", "PNG");
-    
-    if (loadImageData)
-        imageData() = data;
+    imageData() = data;
     
     return true;
 }

@@ -34,7 +34,7 @@ public:
 
     QImageLoader(DImg* image);
     
-    virtual bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    virtual bool load(const QString& filePath, DImgLoaderObserver *observer);
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer);
     
     virtual bool hasAlpha()   const;

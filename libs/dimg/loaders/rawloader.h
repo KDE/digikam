@@ -38,7 +38,7 @@ public:
 
     RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;
@@ -56,8 +56,8 @@ private:
 
     // Methods to load RAW image using external dcraw instance.
 
-    bool load8bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
-    bool load16bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    bool load8bits(const QString& filePath, DImgLoaderObserver *observer);
+    bool load16bits(const QString& filePath, DImgLoaderObserver *observer);
 };
     
 }  // NameSpace Digikam

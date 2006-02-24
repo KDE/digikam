@@ -5,6 +5,7 @@
  * Description : A TIFF IO file for DImg framework
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +46,7 @@ public:
 
     TIFFLoader(DImg* image);
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData=true);
+    bool load(const QString& filePath, DImgLoaderObserver *observer);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
     virtual bool hasAlpha()   const;

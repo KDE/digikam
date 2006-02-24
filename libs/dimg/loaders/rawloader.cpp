@@ -59,12 +59,12 @@ RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
     m_rawDecodingSettings = rawDecodingSettings;
 }
 
-bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
+bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
-    return ( load16bits(filePath, observer, loadImageData) );
+    return ( load16bits(filePath, observer) );
 }
 
-bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
+bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
 {
     int  width, height, rgbmax;
     char nl;
@@ -133,48 +133,45 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     
     uchar *data = 0;
 
-    if (loadImageData)
+    data = new uchar[width*height*4];
+    uchar *dst = data;
+    uchar src[3];
+    int   checkpoint = 0;
+
+    for (int h = 0; h < height; h++)
     {
-        data = new uchar[width*height*4];
-        uchar *dst = data;
-        uchar src[3];
-        int   checkpoint = 0;
-    
-        for (int h = 0; h < height; h++)
+
+        if (observer && h == checkpoint)
         {
-    
-            if (observer && h == checkpoint)
+            checkpoint += granularity(observer, height);
+            if (!observer->continueQuery(m_image))
             {
-                checkpoint += granularity(observer, height);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    //TODO: real shutdown! pclose() waits!
-                    pclose( f );
-                    return false;
-                }
-                observer->progressInfo(m_image, ((float)h)/((float)height) );
+                delete [] data;
+                //TODO: real shutdown! pclose() waits!
+                pclose( f );
+                return false;
             }
-    
-            for (int w = 0; w < width; w++)
-            {
-                fread (src, 3 *sizeof(uchar), 1, f);
-    
-                // Swap byte order to preserve compatibility with PPC.
-    
-                if (QImage::systemByteOrder() == QImage::BigEndian)
-                    swab((const char *) src, (char *) src, 3 *sizeof(uchar));
-    
-                // No need to adapt RGB components accordinly with rgbmax value because dcraw
-                // always return rgbmax to 255 in 8 bits/color/pixels.
-    
-                dst[0] = src[2];    // Blue
-                dst[1] = src[1];    // Green
-                dst[2] = src[0];    // Red
-                dst[3] = 0xFF;      // Alpha
-    
-                dst += 4;
-            }
+            observer->progressInfo(m_image, ((float)h)/((float)height) );
+        }
+
+        for (int w = 0; w < width; w++)
+        {
+            fread (src, 3 *sizeof(uchar), 1, f);
+
+            // Swap byte order to preserve compatibility with PPC.
+
+            if (QImage::systemByteOrder() == QImage::BigEndian)
+                swab((const char *) src, (char *) src, 3 *sizeof(uchar));
+
+            // No need to adapt RGB components accordinly with rgbmax value because dcraw
+            // always return rgbmax to 255 in 8 bits/color/pixels.
+
+            dst[0] = src[2];    // Blue
+            dst[1] = src[1];    // Green
+            dst[2] = src[0];    // Red
+            dst[3] = 0xFF;      // Alpha
+
+            dst += 4;
         }
     }
     
@@ -198,14 +195,12 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer,
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("format", "RAW");
-
-    if (loadImageData)
-        imageData()   = data;
+    imageData()   = data;
     
     return true;
 }
 
-bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer, bool loadImageData)
+bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer)
 {
     int	 width, height, rgbmax;
     char nl;
@@ -279,46 +274,43 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     
     unsigned short  *data = 0;
 
-    if (loadImageData)
+    data = new unsigned short[width*height*4];
+    unsigned short *dst  = data;
+    uchar src[6];
+    float fac = 65535.0 / rgbmax;
+    int   checkpoint = 0;
+
+    for (int h = 0; h < height; h++)
     {
-        data = new unsigned short[width*height*4];
-        unsigned short *dst  = data;
-        uchar src[6];
-        float fac = 65535.0 / rgbmax;
-        int   checkpoint = 0;
-    
-        for (int h = 0; h < height; h++)
+
+        if (observer && h == checkpoint)
         {
-    
-            if (observer && h == checkpoint)
+            checkpoint += granularity(observer, height, 0.9);
+            if (!observer->continueQuery(m_image))
             {
-                checkpoint += granularity(observer, height, 0.9);
-                if (!observer->continueQuery(m_image))
-                {
-                    delete [] data;
-                    //TODO: real shutdown! pclose() waits!
-                    pclose( f );
-                    return false;
-                }
-                observer->progressInfo(m_image, 0.1 + 0.9*(((float)h)/((float)height)) );
+                delete [] data;
+                //TODO: real shutdown! pclose() waits!
+                pclose( f );
+                return false;
             }
-    
-            for (int w = 0; w < width; w++)
-            {
-                fread (src, 6 *sizeof(unsigned char), 1, f);
-    
-                // Swap byte order to preserve compatibility with PPC.
-    
-                if (QImage::systemByteOrder() == QImage::BigEndian)
-                    swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-    
-                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-                dst[3] = 0xFFFF;
-    
-                dst += 4;
-            }
+            observer->progressInfo(m_image, 0.1 + 0.9*(((float)h)/((float)height)) );
+        }
+
+        for (int w = 0; w < width; w++)
+        {
+            fread (src, 6 *sizeof(unsigned char), 1, f);
+
+            // Swap byte order to preserve compatibility with PPC.
+
+            if (QImage::systemByteOrder() == QImage::BigEndian)
+                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
+
+            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+            dst[3] = 0xFFFF;
+
+            dst += 4;
         }
     }
 
@@ -342,9 +334,7 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     imageWidth()  = width;
     imageHeight() = height;
     imageSetAttribute("format", "RAW");
-
-    if (loadImageData)
-        imageData() = (uchar *)data;
+    imageData() = (uchar *)data;
         
     return true;
 }
