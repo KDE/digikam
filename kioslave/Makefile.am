@@ -17,7 +17,7 @@ kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) \
 	                          $(top_builddir)/digikam/libs/dimg/libdimg.la
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(all_libraries) \
-	                          $(KDE_PLUGIN) $(LIBKEXIF_LIBS)
+	                          $(KDE_PLUGIN) $(LIBKEXIF_LIBS) $(LIB_EXIV2) 
 
 kio_digikamtags_la_SOURCES = digikamtags.cpp sqlitedb.cpp
 kio_digikamtags_la_LIBADD  = $(LIB_KIO)  $(LIB_SQLITE3)
