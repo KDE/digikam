@@ -813,9 +813,9 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
             
             mask.setRGB(hue, sat, lig, sixteenBit);
 
-            ptr[0] = mask.blue();
-            ptr[1] = mask.green();
-            ptr[2] = mask.red();
+            ptr[0] = (uchar)mask.blue();
+            ptr[1] = (uchar)mask.green();
+            ptr[2] = (uchar)mask.red();
             ptr += 4;
         }
     }
@@ -827,13 +827,13 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
         {
             // Convert to grayscale using tonal mask
                 
-            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0])/256;
+            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
             
             mask.setRGB(hue, sat, lig, sixteenBit);
                                 
-            ptr[0] = mask.blue();
-            ptr[1] = mask.green();
-            ptr[2] = mask.red();
+            ptr[0] = (unsigned short)mask.blue();
+            ptr[1] = (unsigned short)mask.green();
+            ptr[2] = (unsigned short)mask.red();
             ptr += 4;
         }
     }
