@@ -755,6 +755,7 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 
 void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
+    kdDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
     CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     d->rightSidebar->itemChanged(item->itemInfo(), KURL::KURL(), exifData, d->view, item);
 }
