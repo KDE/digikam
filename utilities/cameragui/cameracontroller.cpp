@@ -292,12 +292,7 @@ void CameraThread::run()
             int   esize;
             d->camera->getExif(folder, file, &edata, esize);
 
-            if (!edata || !esize)
-            {
-                sendError(i18n("Failed to retrieve EXIF information for %1")
-                          .arg(file));
-            }
-            else
+            if (edata || esize)
             {
                 QByteArray  ba;
                 QDataStream ds(ba, IO_WriteOnly);
