@@ -18,12 +18,12 @@
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
    - Fix in IE/Showfoto Image Properties side bar restoration after fullscreen mode.
-   
+   - New metadata tab (Exif/MakerNote/Iptc) instead Exif tab ==> Done on my computer (Gilles).
      
 * 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
 
    - BCG Adjust    (core plugin) : Done.
-   - HSL Adjust    (core plugin) : Uncomplete. There is a problem in DImg::DColor with 16 bits images.
+   - HSL Adjust    (core plugin) : Done.
    - RGB Adjust    (core plugin) : Done.
    - Red Eyes      (core plugin) : Done
    - B&W Tool      (core plugin) : Done.
@@ -45,7 +45,7 @@
    - Emboss          (digikamimageplugins) : TODO.
    - Film Grain      (digikamimageplugins) : TODO.
    - Free Rotation   (digikamimageplugins) : Done.
-   - Hot Pixels      (digikamimageplugins) : TODO.
+   - Hot Pixels      (digikamimageplugins) : TODO (will be done by Unai Garro).
    - Infrared        (digikamimageplugins) : TODO.
    - Inpainting      (digikamimageplugins) : Done.
    - Insert Text     (digikamimageplugins) : TODO.
@@ -64,12 +64,15 @@
    - White Balance   (digikamimageplugins) : Done.
 
 * Improving metadata support:
-   - Using Exiv2 lib instead libexif ?
-   - Add IPTC support ?
-   - Add RAW metadata support ?
+   - removed libkexif depency        ==> under progress ! (Gilles)
+   - Using Exiv2 lib instead libexif ==> under progress ! (Gilles)
+   - Add IPTC support                ==> done in my computer (Gilles)
+   - Add Exif MakerNote support      ==> done in my computer (Gilles)
+   - Add RAW metadata support ?      ==> CRW only actually (Gilles)
+   
    - Better embbeded thumbnail support, especially for TIFF/EP ?
    - Improved metadata from TIFF file format. Add DNG file format if it's possible...
-   - Improved PNG file format support ==> PNG vs DNG file format ==> PNG is the ultimate photographs data container in OpenSource world ?
+   - Improved PNG file format support : PNG vs DNG file format : PNG is the ultimate photographs data container in OpenSource world ?
 
 * post conversion to qlistview: allow selection of multiple
   albums/tags/dates :
@@ -93,10 +96,9 @@ LATER 0.9.0 TODO LIST
    - Take a look of music database backup in amarok.
    - Take a look of image database backup in showimg.
    
-* Image conversion tool included in camera interface
+* Image conversion on the fly tool included in camera interface
    
-* New TimeLine tool :
-   - Take a look in kimdaba and f-spot.
+* New TimeLine tool (take a look in kimdaba and f-spot) ?
 
 * Showfoto improvements :
 
