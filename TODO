@@ -20,55 +20,12 @@
    - Fix in IE/Showfoto Image Properties side bar restoration after fullscreen mode.
    - New metadata tab (Exif/MakerNote/Iptc) instead Exif tab ==> Done on my computer (Gilles).
      
-* 16 bits/color/pixels support : Any Image plugins must be adapted. Current port status is listed below :
-
-   - BCG Adjust    (core plugin) : Done.
-   - HSL Adjust    (core plugin) : Done.
-   - RGB Adjust    (core plugin) : Done.
-   - Red Eyes      (core plugin) : Done
-   - B&W Tool      (core plugin) : Done.
-   - Blur Tool     (core plugin) : Done.
-   - Sharpen Tool  (core plugin) : Done.
-   - ICC Tool      (core plugin) : Done.
-   - Ratio Crop    (core plugin) : Done.
-   - Auto-Colors   (core plugin) : Done.
-
-   - Adjust Curves   (digikamimageplugins) : Done.
-   - Adjust Levels   (digikamimageplugins) : Done.
-   - Anti Vignetting (digikamimageplugins) : Done.
-   - Blowup          (digikamimageplugins) : Done.
-   - Blur FX         (digikamimageplugins) : TODO.
-   - Add Border      (digikamimageplugins) : TODO.
-   - Channel Mixer   (digikamimageplugins) : Done.
-   - Charcoal        (digikamimageplugins) : TODO.
-   - Distortion FX   (digikamimageplugins) : TODO.
-   - Emboss          (digikamimageplugins) : TODO.
-   - Film Grain      (digikamimageplugins) : TODO.
-   - Free Rotation   (digikamimageplugins) : Done.
-   - Hot Pixels      (digikamimageplugins) : TODO (will be done by Unai Garro).
-   - Infrared        (digikamimageplugins) : TODO.
-   - Inpainting      (digikamimageplugins) : Done.
-   - Insert Text     (digikamimageplugins) : TODO.
-   - Lens Distortion (digikamimageplugins) : TODO.
-   - Noise Reduction (digikamimageplugins) : TODO.
-   - Oil Paint       (digikamimageplugins) : TODO.
-   - Perspective     (digikamimageplugins) : TODO.
-   - Rain Drops      (digikamimageplugins) : TODO.
-   - Refocus         (digikamimageplugins) : Done.
-   - Restoration     (digikamimageplugins) : Done.
-   - Shear Tool      (digikamimageplugins) : Done.
-   - Solarize        (digikamimageplugins) : Done.
-   - Superimpose     (digikamimageplugins) : TODO.
-   - Texture         (digikamimageplugins) : TODO.
-   - Unsharp         (digikamimageplugins) : TODO.
-   - White Balance   (digikamimageplugins) : Done.
-
 * Improving metadata support:
    - removed libkexif depency        ==> under progress ! (Gilles)
    - Using Exiv2 lib instead libexif ==> under progress ! (Gilles)
    - Add IPTC support                ==> done in my computer (Gilles)
    - Add Exif MakerNote support      ==> done in my computer (Gilles)
-   - Add RAW metadata support ?      ==> CRW only actually (Gilles)
+   - Add RAW metadata support        ==> CRW only actually (Gilles)
    
    - Better embbeded thumbnail support, especially for TIFF/EP ?
    - Improved metadata from TIFF file format. Add DNG file format if it's possible...
@@ -83,11 +40,6 @@
      and the kioslaves
 
 * Custom ordering of images
-
-* Image Plugins improvement :
-
-   - Hot Pixels Tool : Add manual hot pixel selection.
-   - SuperImpose Tool : Complete rewrite of superimpose widget.
 
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
