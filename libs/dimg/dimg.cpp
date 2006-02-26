@@ -733,6 +733,12 @@ void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, i
     if (w <= 0 || h <= 0)
         return;
 
+    if (   sx > (int)swidth
+        || sy > (int)sheight
+        || dx > (int)dwidth
+        || dy > (int)dheight )
+        return;
+
     // Normalize
 
     if (sx < 0)
@@ -772,12 +778,12 @@ void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, i
 
     if (dx + w > (int)dwidth)
     {
-        w = dwidth - sx;
+        w = dwidth - dx;
     }
 
     if (dy + h > (int)dheight)
     {
-        h = dheight - sy;
+        h = dheight - dy;
     }
 
     const uchar *sptr;
@@ -825,13 +831,14 @@ void DImg::bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h)
 
     if (x < 0)
     {
-       w = w - x;
+       // x is negative, so + is -
+       w = w + x;
        x = 0;
     }
 
     if (y < 0)
     {
-       h = h - y;
+       h = h + y;
        y = 0;
     }
 
