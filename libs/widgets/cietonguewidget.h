@@ -88,7 +88,7 @@ private:
     
     void MapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void BiasedLine(int x1, int y1, int x2, int y2);
-    void CIETongueWidget::BiasedText(int x, int y, QString Txt);
+    void BiasedText(int x, int y, QString Txt);
 
     void Sweep_sRGB(void);
 
