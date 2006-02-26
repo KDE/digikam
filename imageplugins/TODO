@@ -19,28 +19,37 @@
    - White Balance    : Done.
 
 
-   > Pending plugins:
+   > Pending plugins (by difficulty order):
 
-   - Blur FX          : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Add Border       : TODO. ==> simple port algorithms to 16 bits. Easy.
-   - Charcoal         : TODO. ==> backport algorithm from kimageeffect and add 16 bits support. 
-                                  Get any inspiration from sharpen algorithm already backported from kimageeffect
+   - Oil Paint        : TODO. ==> simple port algorithms to 16 bits. Easy.
+   - Texture          : TODO. ==> simple port algorithms to 16 bits. Easy.
+   - Blur FX          : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Distortion FX    : TODO. ==> simple port algorithms to 16 bits. Can be long.
-   - Emboss           : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Film Grain       : TODO. ==> simple port algorithms to 16 bits. Can be long.
+   - Lens Distortion  : TODO. ==> simple port algorithms to 16 bits. Can be long.
+   - Rain Drops       : TODO. ==> simple port algorithms to 16 bits. Can be long.
+   - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FilmGrain. Can be long.
+   - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
+                                  Can be long.
    - Hot Pixels       : TODO  ==> simple port algorithms to 16 bits. This part will be done by Unai Garro. 
                                   Add manual hot pixel selection. Need to implement pixel selection on
                                   imageregionwidget from digikam core. Can be long
-   - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FimlGrain. Can be long.
-   - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Easy.
-   - Lens Distortion  : TODO. ==> simple port algorithms to 16 bits. Can be long.
-   - Noise Reduction  : TODO. ==> backport new algorithm from Krita (it's better). Can be long.
-   - Oil Paint        : TODO. ==> simple port algorithms to 16 bits. Easy.
+   - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Fix plugin to support multiText edition 
+                                  in a same session (see B.K.O). Can be long.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix. 
                                   Check why antialiasing filter don't give any effects. Can be long.
-   - Rain Drops       : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Superimpose      : TODO. ==> complete rewrite of plugin widget (See B.K.O file). Can be long.
-   - Texture          : TODO. ==> simple port algorithms to 16 bits. Easy.
+   - Noise Reduction  : TODO. ==> backport new algorithm from Krita based on wavelets (it's better). Can be long.
+   - Charcoal         : TODO. ==> backport algorithm from kimageeffect and add 16 bits support. 
+                                  Get any inspiration from sharpen algorithm already backported from kimageeffect
    - Unsharp          : TODO. ==> backport new algorithm from ImageMagick (it's better). Can be long.
 
-Nota : For all pending plugins, we need to use new standard dialogs from digikam core instead common dialog from DigikamImagePlugins.  
+Nota : 
+
+- For all pending plugins, we need to use new standard dialogs from digikam core instead common dialog from DigikamImagePlugins.  
+
+- All common dialog from DigikamImagePlugins must be removed.
+
+
+
