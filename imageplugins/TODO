@@ -21,7 +21,8 @@
 
    > Pending plugins (by difficulty order):
 
-   - Add Border       : TODO. ==> simple port algorithms to 16 bits. Easy.
+   - Add Border       : TODO. ==> simple port algorithms to 16 bits. Add capability to preserve 
+                                  original image aspect ratio. Easy.
    - Oil Paint        : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Texture          : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Blur FX          : TODO. ==> simple port algorithms to 16 bits. Can be long.
