@@ -30,6 +30,7 @@ namespace Digikam
 {
 
 class DImg;
+class HSLModifierPriv;
 
 class DIGIKAM_EXPORT HSLModifier
 {
@@ -38,36 +39,18 @@ public:
     HSLModifier();
     ~HSLModifier();
 
-    void   reset();
-    bool   modified() const;
-    
-    void   setHue(double val);
-    void   setSaturation(double val);
-    void   setLightness(double val);
-    void   applyHSL(DImg& image);
+    void reset();
+    bool modified() const;
+
+    void setOverIndicator(bool overIndicator);
+    void setHue(double val);
+    void setSaturation(double val);
+    void setLightness(double val);
+    void applyHSL(DImg& image);
     
 private:
 
-    bool           m_modified;
-    
-    // Used with HSL correction methods.
-    
-    int htransfer[256];
-    int ltransfer[256];
-    int stransfer[256];
-    
-    int htransfer16[65536];
-    int ltransfer16[65536];
-    int stransfer16[65536];
-    
-private:
-
-    int  hsl_value (double n1, double n2, double hue);
-
-    void rgb_to_hsl (int& r, int& g, int& b);
-    
-    void hsl_to_rgb (int& hue, int& saturation, int& lightness);
-
+    HSLModifierPriv* d;    
 };
 
 }  // NameSpace Digikam

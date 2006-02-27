@@ -23,16 +23,18 @@
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define CLAMP_0_255(x)   QMAX(QMIN(x, 255), 0)
 #define CLAMP_0_65535(x) QMAX(QMIN(x, 65535), 0)
-#define ROUND(x) ((int) ((x) + 0.5))
 
 // C++ includes.
 
 #include <cstdio>
 #include <cmath>
 
-// Local includes.
+// KDE includes.
 
 #include <kdebug.h>
+
+// Local includes.
+
 #include "dcolor.h"
 #include "dimg.h"
 #include "hslmodifier.h"
@@ -40,18 +42,40 @@
 namespace Digikam
 {
 
+class HSLModifierPriv
+{
+public:
+
+    HSLModifierPriv()
+    {
+        modified = false;
+    }
+
+    bool modified;
+    
+    int  htransfer[256];
+    int  ltransfer[256];
+    int  stransfer[256];
+    
+    int  htransfer16[65536];
+    int  ltransfer16[65536];
+    int  stransfer16[65536];
+};
+
 HSLModifier::HSLModifier()
 {
+    d = new HSLModifierPriv;  
     reset();
 }
 
 HSLModifier::~HSLModifier()
 {
+    delete d;
 }
 
 bool HSLModifier::modified() const
 {
-    return m_modified;    
+    return d->modified;    
 }
 
 void HSLModifier::reset()
@@ -60,64 +84,41 @@ void HSLModifier::reset()
 
     for (int i=0; i<65536; i++)
     {
-        htransfer16[i] = i;
-        ltransfer16[i] = i;
-        stransfer16[i] = i;
+        d->htransfer16[i] = i;
+        d->ltransfer16[i] = i;
+        d->stransfer16[i] = i;
     }
 
     for (int i=0; i<256; i++)
     {
-        htransfer[i] = i;
-        ltransfer[i] = i;
-        stransfer[i] = i;
+        d->htransfer[i] = i;
+        d->ltransfer[i] = i;
+        d->stransfer[i] = i;
     }
     
-    m_modified = false;
+    d->modified      = false;
 }
 
 void HSLModifier::applyHSL(DImg& image)
 {
-    if (!m_modified || image.isNull())
+    if (!d->modified || image.isNull())
         return;
 
     if (image.sixteenBit())                   // 16 bits image.
     {
-        ushort* data = (ushort*) image.bits();
+        unsigned short* data = (unsigned short*) image.bits();
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            // Code using DImg::DColor
-
             int hue, sat, lig;
 
             DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
             color.getHSL(&hue, &sat, &lig);
-            color.setRGB(htransfer16[hue], stransfer16[sat], ltransfer16[lig], image.sixteenBit());
+            color.setRGB(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], image.sixteenBit());
 
             data[2] = color.red();
             data[1] = color.green();
             data[0] = color.blue();
-
-            /* Code to test in 8 bits only with old implementation from Gimp.
-
-            int red, green, blue;
-
-            red   = data[2]/256;
-            green = data[1]/256;
-            blue  = data[0]/256;
-
-            rgb_to_hsl(red, green, blue);
-
-            red   = htransfer[red];
-            green = stransfer[green];
-            blue  = ltransfer[blue];
-
-            hsl_to_rgb(red, green, blue);
-
-            data[2] = red*256;
-            data[1] = green*256;
-            data[0] = blue*256;
-            */
 
             data += 4;
         }
@@ -128,38 +129,15 @@ void HSLModifier::applyHSL(DImg& image)
 
         for (uint i=0; i<image.width()*image.height(); i++)
         {
-            // Code using DImg::DColor
-
             int hue, sat, lig;
 
             DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
             color.getHSL(&hue, &sat, &lig);
-            color.setRGB(htransfer[hue], stransfer[sat], ltransfer[lig], image.sixteenBit());
+            color.setRGB(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], image.sixteenBit());
 
             data[2] = color.red();
             data[1] = color.green();
             data[0] = color.blue();
-
-            /* Code to test in 8 bits only with old implementation from Gimp.
-
-            int red, green, blue;
-
-            red   = data[2];
-            green = data[1];
-            blue  = data[0];
-
-            rgb_to_hsl(red, green, blue);
-
-            red   = htransfer[red];
-            green = stransfer[green];
-            blue  = ltransfer[blue];
-
-            hsl_to_rgb(red, green, blue);
-
-            data[2] = red;
-            data[1] = green;
-            data[0] = blue;
-            */
 
             data += 4;
         }
@@ -175,11 +153,11 @@ void HSLModifier::setHue(double val)
        value = lround(val * 65535.0 / 360.0);
       
        if ((i + value) < 0)
-          htransfer16[i] = 65535 + (i + value);
+          d->htransfer16[i] = 65535 + (i + value);
        else if ((i + value) > 65535)
-          htransfer16[i] = i + value - 65535;
+          d->htransfer16[i] = i + value - 65535;
        else
-          htransfer16[i] = i + value;
+          d->htransfer16[i] = i + value;
     }
 
     for (int i = 0; i < 256; i++)
@@ -187,14 +165,14 @@ void HSLModifier::setHue(double val)
        value = lround(val * 255.0 / 360.0);
       
        if ((i + value) < 0)
-          htransfer[i] = 255 + (i + value);
+          d->htransfer[i] = 255 + (i + value);
        else if ((i + value) > 255)
-          htransfer[i] = i + value - 255;
+          d->htransfer[i] = i + value - 255;
        else
-          htransfer[i] = i + value;
+          d->htransfer[i] = i + value;
     }
     
-    m_modified = true;
+    d->modified = true;
 }
 
 void HSLModifier::setSaturation(double val)
@@ -205,38 +183,16 @@ void HSLModifier::setSaturation(double val)
     for (int i = 0; i < 65536; i++)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        stransfer16[i] = CLAMP_0_65535(value);
+        d->stransfer16[i] = CLAMP_0_65535(value);
     }
 
     for (int i = 0; i < 256; i++)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        stransfer[i]  = CLAMP_0_255(value);
+        d->stransfer[i]  = CLAMP_0_255(value);
     }
 
-    /*
-    This is the old code.
-    There is an integer overflow with 16 bits and slight rounding errors.
-    The code above is mathematically equivalent,
-    but this here gives some more insight on the algorithm.
-    for (int i = 0; i < 65536; i++)
-    {
-       value = lround(val * 65535.0 / 100.0);
-       value = CLAMP (value, -65535, 65535);
-
-       stransfer16[i] = CLAMP_0_65535 ((i * (65535 + value)) / 65535);
-    }
-
-    for (int i = 0; i < 256; i++)
-    {
-       value = lround(val * 255.0 / 100.0);
-       value = CLAMP (value, -255, 255);
-
-       stransfer[i] = CLAMP_0_255 ((i * (255 + value)) / 255);
-    }
-    */
-
-    m_modified = true;
+    d->modified = true;
 }
 
 void HSLModifier::setLightness(double val)
@@ -248,167 +204,28 @@ void HSLModifier::setLightness(double val)
     {
         for (int i = 0; i < 65536; i++)
         {
-            ltransfer16[i] = lround( (i * ( val + 100.0 )) / 100.0);
+            d->ltransfer16[i] = lround( (i * ( val + 100.0 )) / 100.0);
         }
 
         for (int i = 0; i < 256; i++)
         {
-            ltransfer[i]   = lround( (i * ( val + 100.0 )) / 100.0);
+            d->ltransfer[i] = lround( (i * ( val + 100.0 )) / 100.0);
         }
     }
     else
     {
         for (int i = 0; i < 65536; i++)
         {
-            ltransfer16[i] = lround( i * ( 1.0 - val / 100.0 )  + 65535.0 / 100.0 * val );
+            d->ltransfer16[i] = lround( i * ( 1.0 - val / 100.0 )  + 65535.0 / 100.0 * val );
         }
 
         for (int i = 0; i < 256; i++)
         {
-            ltransfer[i]   = lround( i * ( 1.0 - val / 100.0 )  + 255.0 / 100.0 * val );
+            d->ltransfer[i] = lround( i * ( 1.0 - val / 100.0 )  + 255.0 / 100.0 * val );
         }
     }
-    /*
-    This is the old code.
-    There is an integer overflow with 16 bits and slight rounding errors.
-    The range for val is -200..200, while it is -100..100 in setSaturation.
-    The code above is mathematically equivalent, but adjusted with for val/2,
-    Replace 100.0 with 200.0 to have the completely equivalent code for -200..200.
-    for (int i = 0; i < 65536; i++)
-    {
-       value = lround(val * 32767.0 / 100.0);
-       value = CLAMP (value, -65535, 65535);
 
-       if (value < 0)
-          ltransfer16[i] = ((i * (65535 + value)) / 65535);
-       else
-          ltransfer16[i] = (i + ((65535 - i) * value) / 65535);
-    }
-
-    for (int i = 0; i < 256; i++)
-    {
-       value = lround(val * 127.0 / 100.0);
-       value = CLAMP (value, -255, 255);
-
-       if (value < 0)
-          ltransfer[i] = ((i * (255 + value)) / 255);
-       else
-          ltransfer[i] = (i + ((255 - i) * value) / 255);
-    }
-    */
-
-    m_modified = true;
-}
-
-
-// -----------------------------------------------------------------------
-// Old methods from Gimp to set 8 bits images. Not used with DImg::DColor
-
-int HSLModifier::hsl_value (double n1, double n2, double hue)
-{
-    double value;
-
-    if (hue > 255)
-	hue -= 255;
-    else if (hue < 0)
-	hue += 255;
-    
-    if (hue < 42.5)
-	value = n1 + (n2 - n1) * (hue / 42.5);
-    else if (hue < 127.5)
-	value = n2;
-    else if (hue < 170)
-	value = n1 + (n2 - n1) * ((170 - hue) / 42.5);
-    else
-	value = n1;
-
-    return ROUND(value * 255.0);
-}
-
-void HSLModifier::rgb_to_hsl (int& r, int& g, int& b)
-{
-    double h, s, l;
-    int    min, max;
-    int    delta;
-
-    if (r > g)
-    {
-        max = QMAX (r, b);
-        min = QMIN (g, b);
-    }
-    else
-    {
-        max = QMAX (g, b);
-        min = QMIN (r, b);
-    }
-
-    l = (max + min) / 2.0;
-
-    if (max == min)
-    {
-        s = 0.0;
-        h = 0.0;
-    }
-    else
-    {
-        delta = (max - min);
-
-        if (l < 128)
-            s = 255 * (double) delta / (double) (max + min);
-        else
-            s = 255 * (double) delta / (double) (511 - max - min);
-
-        if (r == max)
-            h = (g - b) / (double) delta;
-        else if (g == max)
-            h = 2 + (b - r) / (double) delta;
-        else
-            h = 4 + (r - g) / (double) delta;
-
-        h = h * 42.5;
-
-        if (h < 0)
-            h += 255;
-        else if (h > 255)
-            h -= 255;
-    }
-
-    r = ROUND (h);
-    g = ROUND (s);
-    b = ROUND (l);
-}
-
-void HSLModifier::hsl_to_rgb (int& hue, int& saturation, int& lightness)
-{
-    double h, s, l;
-
-    h = hue;
-    s = saturation;
-    l = lightness;
-
-    if (s == 0)
-    {
-        //  achromatic case  
-        hue        = (int) l;
-        lightness  = (int) l;
-        saturation = (int) l;
-    }
-    else
-    {
-        double m1, m2;
-
-        if (l < 128)
-            m2 = (l * (255 + s)) / 65025.0;
-        else
-            m2 = (l + s - (l * s) / 255.0) / 255.0;
-
-        m1 = (l / 127.5) - m2;
-
-        //  chromatic case  
-        hue        = hsl_value (m1, m2, h + 85);
-        saturation = hsl_value (m1, m2, h);
-        lightness  = hsl_value (m1, m2, h - 85);
-    }
+    d->modified = true;
 }
 
 }  // NameSpace Digikam
