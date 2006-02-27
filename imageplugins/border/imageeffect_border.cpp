@@ -52,7 +52,7 @@ namespace DigikamBorderImagesPlugin
 {
 
 ImageEffect_Border::ImageEffect_Border(QWidget* parent)
-                  : ImageGuideDialog(parent, i18n("Add Border Around Photograph"), "border", 
+                  : Digikam::ImageGuideDlg(parent, i18n("Add Border Around Photograph"), "border", 
                                      false, false, false)
 {
     // No need Abort button action.
@@ -387,28 +387,32 @@ void ImageEffect_Border::prepareEffect()
     m_secondColorButton->setEnabled(false);
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    int orgWidth = iface->originalWidth();
+    int orgWidth  = iface->originalWidth();
     int orgHeight = iface->originalHeight();
     int w = iface->previewWidth();
     int h = iface->previewHeight();
-    QImage orgImage(w, h, 32);
-    uint *data = iface->getPreviewData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
+    bool sixteenBit = iface->previewSixteenBit();
+    uchar *data = iface->getPreviewImage();
+    Digikam::DImg orgImage(w, h, sixteenBit,
+                        iface->previewHasAlpha(), data);
+    delete [] data;
 
     int borderType  = m_borderType->currentItem();
-    float ratio     = (float)w/(float)iface->originalWidth();
-    int borderWidth = (int)((float)m_borderWidth->value()*ratio);        
+    float ratio     = (float)w/(float)orgWidth;
+    int borderWidth = (int)((float)m_borderWidth->value()*ratio);
     QString border = getBorderPath( m_borderType->currentItem() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new Border(&orgImage, this, orgWidth, orgHeight,
                                   border, borderType, borderWidth, 
-                                  (int)(20.0*ratio), (int)(20.0*ratio), 3, 
-                                  m_solidColor, m_niepceBorderColor,
-                                  m_niepceLineColor, m_bevelUpperLeftColor,
-                                  m_bevelLowerRightColor, m_decorativeFirstColor,
-                                  m_decorativeSecondColor));
-    delete [] data;
+                                  (int)(20.0*ratio), (int)(20.0*ratio), 3,
+                                  Digikam::DColor(m_solidColor, sixteenBit),
+                                  Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                  Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                  Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                  Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                  Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                  Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
 }
 
 void ImageEffect_Border::prepareFinal()
@@ -417,51 +421,60 @@ void ImageEffect_Border::prepareFinal()
     m_borderWidth->setEnabled(false);
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
-    
+
     int borderType = m_borderType->currentItem();
     int borderWidth = m_borderWidth->value();  
     QString border = getBorderPath( m_borderType->currentItem() );
-    
+
     Digikam::ImageIface iface(0, 0);
-    int orgWidth = iface.originalWidth();
+    int orgWidth  = iface.originalWidth();
     int orgHeight = iface.originalHeight();
-    QImage orgImage(orgWidth, orgHeight, 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
+    bool sixteenBit = iface.previewSixteenBit();
+
+    uchar *data = iface.getOriginalImage();
+    Digikam::DImg orgImage(orgWidth, orgHeight, sixteenBit,
+                           iface.originalHasAlpha(), data);
+    delete [] data;
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new Border(&orgImage, this, orgWidth, orgHeight,
                                   border, borderType, borderWidth, 15, 15, 10,
-                                  m_solidColor, m_niepceBorderColor,
-                                  m_niepceLineColor, m_bevelUpperLeftColor,
-                                  m_bevelLowerRightColor, m_decorativeFirstColor,
-                                  m_decorativeSecondColor));
-    delete [] data;       
+                                  Digikam::DColor(m_solidColor, sixteenBit),
+                                  Digikam::DColor(m_niepceBorderColor, sixteenBit),
+                                  Digikam::DColor(m_niepceLineColor, sixteenBit),
+                                  Digikam::DColor(m_bevelUpperLeftColor, sixteenBit),
+                                  Digikam::DColor(m_bevelLowerRightColor, sixteenBit),
+                                  Digikam::DColor(m_decorativeFirstColor, sixteenBit),
+                                  Digikam::DColor(m_decorativeSecondColor, sixteenBit)) );
 }
 
 void ImageEffect_Border::putPreviewData(void)
 {
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-
     int w = iface->previewWidth();
     int h = iface->previewHeight();
-    QImage tmp = m_threadedFilter->getTargetImage();
-    tmp = tmp.smoothScale(w, h, QImage::ScaleMin);
-    QImage imDest( w, h, 32 );
-    imDest.fill(m_imagePreviewWidget->colorGroup().background().rgb());
-    bitBlt( &imDest, (w-tmp.width())/2, (h-tmp.height())/2, &tmp, 0, 0, tmp.width(), tmp.height());
-    iface->putPreviewData((uint*)(imDest.smoothScale(w, h)).bits());
-    
-    m_imagePreviewWidget->updatePreview();    
+
+    Digikam::DImg imTemp = m_threadedFilter->getTargetImage().smoothScale(w, h, QSize::ScaleMin);
+    Digikam::DImg imDest( w, h, m_threadedFilter->getTargetImage().sixteenBit(),
+                          m_threadedFilter->getTargetImage().hasAlpha() );
+
+    imDest.fill( Digikam::DColor(paletteBackgroundColor().rgb(),
+                                 m_threadedFilter->getTargetImage().sixteenBit()) );
+
+    imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
+
+    iface->putPreviewImage(imDest.bits());
+    m_imagePreviewWidget->updatePreview();
 }
 
 void ImageEffect_Border::putFinalData(void)
 {
-    Digikam::ImageIface iface(0, 0);    
+    Digikam::ImageIface iface(0, 0);
 
-    QImage img = m_threadedFilter->getTargetImage();
-    iface.putOriginalData(i18n("Add Border"), 
-                         (uint*)img.bits(), img.width(), img.height());
+    Digikam::DImg targetImage = m_threadedFilter->getTargetImage();
+    iface.putOriginalImage(i18n("Add Border"),
+                           targetImage.bits(),
+                           targetImage.width(), targetImage.height());
 }
 
 QString ImageEffect_Border::getBorderPath(int border)

@@ -35,7 +35,7 @@
 namespace DigikamBorderImagesPlugin
 {
 
-class Border : public Digikam::ThreadedFilter
+class Border : public Digikam::DImgThreadedFilter
 {
 
 public:
@@ -64,20 +64,20 @@ public:
     };
 
 public:
-    
-    Border(QImage *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0, 
-           QString borderPath=QString::null, int borderType=SolidBorder, 
-           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10, 
-           QColor solidColor=QColor::QColor( 0, 0, 0 ), 
-           QColor niepceBorderColor=QColor::QColor( 0, 0, 0 ),
-           QColor niepceLineColor=QColor::QColor( 0, 0, 0 ), 
-           QColor bevelUpperLeftColor=QColor::QColor( 0, 0, 0 ),
-           QColor bevelLowerRightColor=QColor::QColor( 0, 0, 0 ), 
-           QColor decorativeFirstColor=QColor::QColor( 0, 0, 0 ),
-           QColor decorativeSecondColor=QColor::QColor( 0, 0, 0 ));
-    
+
+    Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+           QString borderPath=QString::null, int borderType=SolidBorder,
+           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
+           Digikam::DColor solidColor = Digikam::DColor(),
+           Digikam::DColor niepceBorderColor = Digikam::DColor(),
+           Digikam::DColor niepceLineColor = Digikam::DColor(),
+           Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
+           Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
+           Digikam::DColor decorativeFirstColor = Digikam::DColor(),
+           Digikam::DColor decorativeSecondColor = Digikam::DColor());
+
     ~Border(){};
-        
+
 private:  // Border filter data.
 
     int    m_orgWidth;
@@ -89,13 +89,13 @@ private:  // Border filter data.
     int    m_borderWidth3;
     int    m_borderWidth4;
     
-    QColor m_solidColor;
-    QColor m_niepceBorderColor;
-    QColor m_niepceLineColor;
-    QColor m_bevelUpperLeftColor; 
-    QColor m_bevelLowerRightColor;
-    QColor m_decorativeFirstColor; 
-    QColor m_decorativeSecondColor;
+    Digikam::DColor m_solidColor;
+    Digikam::DColor m_niepceBorderColor;
+    Digikam::DColor m_niepceLineColor;
+    Digikam::DColor m_bevelUpperLeftColor; 
+    Digikam::DColor m_bevelLowerRightColor;
+    Digikam::DColor m_decorativeFirstColor; 
+    Digikam::DColor m_decorativeSecondColor;
     
     QString m_borderPath;
         
@@ -103,11 +103,11 @@ private:  // Border filter methods.
 
     virtual void filterImage(void);
     
-    void solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth);
-    void niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, const QColor &bg, int lineWidth);
-    void bevel(QImage &src, QImage &dest, const QColor &topColor, const QColor &btmColor, int borderWidth);
-    void pattern(QImage &src, QImage &dest, int borderWidth, const QColor &firstColor, 
-                 const QColor &secondColor, int firstWidth, int secondWidth);
+    void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
+    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, const Digikam::DColor &bg, int lineWidth);
+    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, const Digikam::DColor &btmColor, int borderWidth);
+    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
+                 const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 };    
 
 }  // NameSpace DigikamBorderImagesPlugin

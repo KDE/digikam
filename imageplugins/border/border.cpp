@@ -42,17 +42,17 @@
 namespace DigikamBorderImagesPlugin
 {
 
-Border::Border(QImage *orgImage, QObject *parent, int orgWidth, int orgHeight,
+Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHeight,
                QString borderPath, int borderType, 
                int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
-               QColor solidColor, 
-               QColor niepceBorderColor,
-               QColor niepceLineColor, 
-               QColor bevelUpperLeftColor,
-               QColor bevelLowerRightColor, 
-               QColor decorativeFirstColor,
-               QColor decorativeSecondColor)
-      : Digikam::ThreadedFilter(orgImage, parent, "Border")
+               Digikam::DColor solidColor, 
+               Digikam::DColor niepceBorderColor,
+               Digikam::DColor niepceLineColor, 
+               Digikam::DColor bevelUpperLeftColor,
+               Digikam::DColor bevelLowerRightColor, 
+               Digikam::DColor decorativeFirstColor,
+               Digikam::DColor decorativeSecondColor)
+      : Digikam::DImgThreadedFilter(orgImage, parent, "Border")
 { 
     m_orgWidth     = orgWidth;
     m_orgHeight    = orgHeight;
@@ -202,77 +202,67 @@ void Border::filterImage(void)
 */
 }
 
-void Border::solid(QImage &src, QImage &dest, const QColor &fg, int borderWidth)
+void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
 {
-    dest.reset();
-    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    dest.fill(fg.rgb());
-       
-    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
+    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2, src.sixteenBit(), src.hasAlpha());
+    dest.fill(fg);
+    dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
-void Border::niepce(QImage &src, QImage &dest, const QColor &fg, int borderWidth, 
-                                const QColor &bg, int lineWidth)
+void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+                                const Digikam::DColor &bg, int lineWidth)
 {
-    QImage tmp;
+    Digikam::DImg tmp;
     solid(src, tmp, bg, lineWidth);
     solid(tmp, dest, fg, borderWidth);
 }
 
-void Border::bevel(QImage &src, QImage &dest, const QColor &topColor, 
-                               const QColor &btmColor, int borderWidth)
+void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+                               const Digikam::DColor &btmColor, int borderWidth)
 {
-    unsigned int *output;
     int x, y;
     int wc;
-    
-    dest.reset();
-    dest.create(src.width() + borderWidth*2, src.height() + borderWidth*2, 32);
-    
+
+    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2, src.sixteenBit(), src.hasAlpha());
+
     // top
-    
-    for(y=0, wc = dest.width()-1; y < borderWidth; ++y, --wc)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
-       for(x=0; x < wc; ++x)
-          output[x] = topColor.rgb();
-        
-       for(;x < dest.width(); ++x)
-          output[x] = btmColor.rgb();
-       }
-       
+
+    for(y=0, wc = (int)dest.width()-1; y < borderWidth; ++y, --wc)
+    {
+        for(x=0; x < wc; ++x)
+            dest.setPixelColor(x, y, topColor);
+
+        for(;x < (int)dest.width(); ++x)
+            dest.setPixelColor(x, y, btmColor);
+    }
+
     // left and right
-    
-    for(; y < dest.height()-borderWidth; ++y)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
+
+    for(; y < (int)dest.height()-borderWidth; ++y)
+    {
        for(x=0; x < borderWidth; ++x)
-          output[x] = topColor.rgb();
-       
-       for(x = dest.width()-1; x > dest.width()-borderWidth-1; --x)
-          output[x] = btmColor.rgb();
-       }
-       
+           dest.setPixelColor(x, y, topColor);
+
+       for(x = (int)dest.width()-1; x > (int)dest.width()-borderWidth-1; --x)
+           dest.setPixelColor(x, y, btmColor);
+    }
+
     // bottom
-    
-    for(wc = borderWidth; y < dest.height(); ++y, --wc)
-       {
-       output = (unsigned int *)dest.scanLine(y);
-       
+
+    for(wc = borderWidth; y < (int)dest.height(); ++y, --wc)
+    {
        for(x=0; x < wc; ++x)
-          output[x] = topColor.rgb();
-          
-       for(; x < dest.width(); ++x)
-          output[x] = btmColor.rgb();
-       }
-       
-    bitBlt( &dest, borderWidth, borderWidth, &src, 0, 0, src.width(), src.height());
+           dest.setPixelColor(x, y, topColor);
+
+       for(; x < (int)dest.width(); ++x)
+           dest.setPixelColor(x, y, btmColor);
+    }
+
+    dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
-void Border::pattern(QImage &src, QImage &dest, int borderWidth,
-                     const QColor &firstColor, const QColor &secondColor, 
+void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
+                     const Digikam::DColor &firstColor, const Digikam::DColor &secondColor, 
                      int firstWidth, int secondWidth)
 {
     // Border tile.
@@ -280,28 +270,29 @@ void Border::pattern(QImage &src, QImage &dest, int borderWidth,
     int w = m_orgWidth + borderWidth*2;
     int h = m_orgHeight + borderWidth*2;
     kdDebug() << "Border File:" << m_borderPath << endl;
-    QImage border(m_borderPath);
-    if ( border.isNull() ) return;
-    
-    QImage borderImg(w, h, 32);
-    
+    Digikam::DImg border(m_borderPath);
+    if ( border.isNull() )
+        return;
+
+    Digikam::DImg borderImg(w, h, src.sixteenBit(), src.hasAlpha());
+    border.convertToDepthOfImage(&borderImg);
+
     for (int x = 0 ; x < w ; x+=border.width())
-       for (int y = 0 ; y < h ; y+=border.height())
-          bitBlt(&borderImg, x, y, &border, 0, 0, border.width(), border.height(), 0);
-    
+        for (int y = 0 ; y < h ; y+=border.height())
+            borderImg.bitBltImage(&border, x, y);
+
     // First line around the pattern tile.
-    QImage tmp2 = borderImg.smoothScale( src.width() + borderWidth*2, 
-                                         src.height() + borderWidth*2 );
-    
-    solid(tmp2, dest, firstColor, firstWidth);                                                 
-    
+    Digikam::DImg tmp = borderImg.smoothScale( src.width() + borderWidth*2,
+                                                src.height() + borderWidth*2 );
+
+    solid(tmp, dest, firstColor, firstWidth);
+
     // Second line around original image.
-    QImage tmp;
-    solid(src, tmp, secondColor, secondWidth);                                                 
-    
-    // Copy original image.                                                 
-    bitBlt( &dest, borderWidth, borderWidth, 
-            &tmp, 0, 0, tmp.width(), tmp.height());
+    tmp.reset();
+    solid(src, tmp, secondColor, secondWidth);
+
+    // Copy original image.
+    dest.bitBltImage(&tmp, borderWidth, borderWidth);
 }
 
 }  // NameSpace DigikamBorderImagesPlugin

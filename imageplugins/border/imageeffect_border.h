@@ -40,7 +40,7 @@ class KColorButton;
 namespace DigikamBorderImagesPlugin
 {
 
-class ImageEffect_Border : public DigikamImagePlugins::ImageGuideDialog
+class ImageEffect_Border : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
     
