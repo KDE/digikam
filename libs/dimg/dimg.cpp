@@ -1356,6 +1356,24 @@ void DImg::flip(FLIP direction)
     }
 }
 
+void DImg::convertToSixteenBit()
+{
+    convertDepth(64);
+}
+
+void DImg::convertToEightBit()
+{
+    convertDepth(32);
+}
+
+void DImg::convertToDepthOfImage(const DImg *otherImage)
+{
+    if (otherImage->sixteenBit())
+        convertToSixteenBit();
+    else
+        convertToEightBit();
+}
+
 void DImg::convertDepth(int depth)
 {
     if (isNull())

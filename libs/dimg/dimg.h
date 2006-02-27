@@ -64,7 +64,7 @@ public:
     enum METADATA
     {
         JPG_EXIF,
-        JPG_IPTC, 
+        JPG_IPTC,
         JPG_COM,
         TIF_TAG_ARTIST,
         TIF_TAG_COPYRIGHT,
@@ -77,7 +77,7 @@ public:
         TIF_TAG_MODEL,
         TIF_TAG_PAGENAME,
         TIF_TAG_SOFTWARE,
-        TIF_TAG_TARGETPRINTER        
+        TIF_TAG_TARGETPRINTER
     };
 
     enum ANGLE
@@ -145,6 +145,7 @@ public:
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
 
+    /** Access a single pixel of the image */
     DColor      getPixelColor(uint x, uint y);
     void        setPixelColor(uint x, uint y, DColor color);
 
@@ -188,6 +189,7 @@ public:
         w h    Width and height of the rectangle (Default: whole source image)
         dx|dy  Coordinates in this image of the rectangle in which the region will be copied
                (Default: 0|0)
+        The bit depth of source and destination must be identical.
     */
     void       bitBltImage(const DImg* src, int dx, int dy);
     void       bitBltImage(const DImg* src, int sx, int sy, int dx, int dy);
@@ -203,13 +205,21 @@ public:
     QImage     copyQImage(QRect rect);
     QImage     copyQImage(uint x, uint y, uint w, uint h);
 
-    /** Cropping image methods */
+    /** Crop image to the specified region */
     void       crop(QRect rect);
     void       crop(int x, int y, int w, int h);
 
+    /** Set width and height of this image, smoothScale it to the given size */
     void       resize(int w, int h);
 
+    /** Return a version of this image scaled to the specified size with the specified mode.
+        See QSize documentation for information on available modes
+    */
     DImg       smoothScale(uint width, uint height, QSize::ScaleMode scaleMode=QSize::ScaleFree);
+
+    /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
+        and scale it to an image with size dw * dh
+    */
     DImg       smoothScaleSection(uint sx, uint sy, uint sw, uint sh,
                                   uint dw, uint dh);
 
@@ -218,10 +228,28 @@ public:
 
     QPixmap    convertToPixmap();
 
+    /** Detaches from shared image data and makes sure that this image
+        is the only one referring to the data. 
+        If multiple images share common data, this image makes a copy
+        of the data and detaches itself from the sharing mechanism.
+        Nothing is done if there is just a single reference.
+    */
     void       detach();
 
+    /** Convert depth of image. Depth is bytesDepth * bitsDepth.
+        If depth is 32, converts to 8 bits,
+        if depth is 64, converts to 16 bits.
+    */
     void       convertDepth(int depth);
 
+    /** Wrapper methods for convertDepth */
+    void       convertToSixteenBit();
+    void       convertToEightBit();
+    void       convertToDepthOfImage(const DImg *otherImage);
+
+    /** Fill whole image with specified color.
+        The bit depth of the color must be identical to the depth of this image.
+    */
     void       fill(DColor color);
 
 private:
