@@ -221,37 +221,35 @@ void DigikamView::saveViewState()
 void DigikamView::slotFirstItem(void)
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->firstItem());
+    mIconView->clearSelection();
+    mIconView->updateContents();
     if (currItem) 
        mIconView->setCurrentItem(currItem);
 }
 
 void DigikamView::slotPrevItem(void)
 {
-    IconItem* prevItem = 0;
-    AlbumIconItem *currItem = mIconView->firstSelectedItem();
-    if (currItem) 
-    {
-       prevItem = currItem->prevItem();
-       if (prevItem)
-           mIconView->setCurrentItem(prevItem);
-    }
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->currentItem());
+    mIconView->clearSelection();
+    mIconView->updateContents();
+    if (currItem)
+       mIconView->setCurrentItem(currItem->prevItem());
 }
 
 void DigikamView::slotNextItem(void)
 {
-    IconItem* nextItem = 0;
-    AlbumIconItem *currItem = mIconView->firstSelectedItem();
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->currentItem());
+    mIconView->clearSelection();
+    mIconView->updateContents();
     if (currItem) 
-    {
-       nextItem = currItem->nextItem();
-       if (nextItem)
-           mIconView->setCurrentItem(nextItem);
-    }
+       mIconView->setCurrentItem(currItem->nextItem());
 }
 
 void DigikamView::slotLastItem(void)
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->lastItem());
+    mIconView->clearSelection();
+    mIconView->updateContents();
     if (currItem) 
        mIconView->setCurrentItem(currItem);
 }
