@@ -135,10 +135,10 @@ void DigikamView::setupConnections()
     connect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));    
     
-    // -- IconView Connections -------------------------------------
-
-    connect(mIconView, SIGNAL(signalSelectionChanged()),
+    connect(mAlbumMan, SIGNAL(signalAlbumItemsSelected(bool) ),
             this, SLOT(slot_imageSelected()));
+
+    // -- IconView Connections -------------------------------------
 
     connect(mIconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slot_imageSelected()));
