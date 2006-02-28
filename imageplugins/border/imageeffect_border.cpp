@@ -1,11 +1,13 @@
 /* ============================================================
- * File  : imageeffect_border.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-20
- * Description : a Digikam image plugin for add a border  
+ * File   : imageeffect_border.cpp
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-01-20
+ * Description : a digiKam image plugin to add a border
  *               around an image.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,9 +53,9 @@
 namespace DigikamBorderImagesPlugin
 {
 
-ImageEffect_Border::ImageEffect_Border(QWidget* parent)
-                  : Digikam::ImageGuideDlg(parent, i18n("Add Border Around Photograph"), "border", 
-                                     false, false, false)
+ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* banner)
+                  : Digikam::ImageGuideDlg(parent, title, "border", 
+                                     false, false, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     // No need Abort button action.
     showButton(User1, false); 
@@ -65,12 +67,16 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to add a border around an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developper"),
+                     "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);
     

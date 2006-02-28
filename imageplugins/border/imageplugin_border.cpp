@@ -4,7 +4,7 @@
  * Date  : 2005-01-20
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_border.h"
 #include "imageplugin_border.h"
 
@@ -59,9 +60,12 @@ void ImagePlugin_Border::setEnabledActions(bool enable)
 
 void ImagePlugin_Border::slotBorder()
 {
-    DigikamBorderImagesPlugin::ImageEffect_Border dlg(parentWidget());
+    QString title = i18n("Add Border Around Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamBorderImagesPlugin::ImageEffect_Border dlg(parentWidget(),
+                               title, headerFrame);
     dlg.exec();
+    delete headerFrame;    
 }
-
 
 #include "imageplugin_border.moc"

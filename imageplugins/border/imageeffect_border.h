@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_border.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-20
- * Description : a digiKam image plugin for add a border  
+ * Description : a digiKam image plugin to add a border
  *               around an image.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,9 +29,9 @@
 
 #include <qstring.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "imageguidedialog.h"
+#include <digikamheaders.h>
 
 class QComboBox;
 class QLabel;
@@ -46,7 +48,7 @@ class ImageEffect_Border : public Digikam::ImageGuideDlg
     
 public:
 
-    ImageEffect_Border(QWidget *parent);
+    ImageEffect_Border(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_Border();
 
 private:

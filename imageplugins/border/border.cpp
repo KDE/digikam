@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : border.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : border threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,7 +81,7 @@ Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHe
 void Border::filterImage(void)
 {
     switch (m_borderType)
-       {
+    {
        case SolidBorder:
           solid(m_orgImage, m_destImage, m_solidColor, m_borderWidth1);
           break;
@@ -114,92 +116,7 @@ void Border::filterImage(void)
                    m_decorativeFirstColor, m_decorativeSecondColor,
                    m_borderWidth2, m_borderWidth2 );
           break;
-       }
-
-
-/*    // Border tile.
-
-    int w = m_orgImage.width();
-    int h = m_orgImage.height();
-    kdDebug() << "Border File:" << m_texturePath << endl;
-    QImage texture(m_texturePath);
-    if ( texture.isNull() ) return;
-    
-    m_textureImg.create(w, h, 32);
-    
-    for (int x = 0 ; x < w ; x+=texture.width())
-       for (int y = 0 ; y < h ; y+=texture.height())
-          bitBlt(&m_textureImg, x, y, &texture, 0, 0, texture.width(), texture.height(), 0);
-
-    // Apply texture.
-                        
-    uint* data         = (uint*)m_orgImage.bits();
-    uint* pTeData      = (uint*)m_textureImg.bits();
-    uint* pOutBits     = (uint*)m_destImage.bits(); 
-    uint* pTransparent = new uint[w*h];    
-    memset(pTransparent, 128, w*h*sizeof(uint));
-
-    Digikam::ImageFilters::imageData teData;    
-    Digikam::ImageFilters::imageData transData;    
-    Digikam::ImageFilters::imageData inData;  
-    Digikam::ImageFilters::imageData outData;  
-    
-    register int i;
-    int progress;
-
-    // Make textured transparent layout.
-    
-    for (i = 0; !m_cancel && (i < w*h); i++)
-        {
-        // Get Alpha channel (unchanged).
-        teData.raw           = pTeData[i];   
-        
-        // Overwrite RGB.
-        teData.channel.red   = (teData.channel.red * (255 - m_blendGain) + 
-                                transData.channel.red * m_blendGain) >> 8;
-        teData.channel.green = (teData.channel.green * (255 - m_blendGain) + 
-                                transData.channel.green * m_blendGain) >> 8;
-        teData.channel.blue  = (teData.channel.blue * (255 - m_blendGain) + 
-                                transData.channel.blue * m_blendGain) >> 8;
-        pTeData[i]           = teData.raw; 
-
-        // Update de progress bar in dialog.
-        progress = (int) (((double)i * 50.0) / (w*h));
-        
-        if (progress%5 == 0)
-           postProgress(progress);
-        }
-            
-    uint tmp, tmpM;
-
-    // Merge layout and image using overlay method.
-    
-    for (i = 0; !m_cancel && (i < w*h); i++)
-        {     
-        inData.raw            = data[i];
-        outData.raw           = pOutBits[i];
-        teData.raw            = pTeData[i];
-        outData.channel.red   = INT_MULT(inData.channel.red, inData.channel.red + 
-                                            INT_MULT(2 * teData.channel.red, 
-                                                    255 - inData.channel.red, tmpM), tmp);
-        outData.channel.green = INT_MULT(inData.channel.green, inData.channel.green + 
-                                            INT_MULT(2 * teData.channel.green, 
-                                                    255 - inData.channel.green, tmpM), tmp);
-        outData.channel.blue  = INT_MULT(inData.channel.blue, inData.channel.blue + 
-                                            INT_MULT(2 * teData.channel.blue, 
-                                                    255 - inData.channel.blue, tmpM), tmp);
-        outData.channel.alpha = inData.channel.alpha;
-        pOutBits[i]           = outData.raw;
-        
-        // Update progress bar in dialog.
-        progress = (int) (50.0 + ((double)i * 50.0) / (w*h));
-        
-        if (progress%5 == 0)
-           postProgress(progress);
-        }
-        
-    delete [] pTransparent;
-*/
+    }
 }
 
 void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
