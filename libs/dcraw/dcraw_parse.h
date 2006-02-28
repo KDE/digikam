@@ -28,14 +28,17 @@
 namespace Digikam
 {
 
+static const int flip_map[] = { 0,1,3,2,4,7,5,6 };
+
 class DIGIKAM_EXPORT DcrawParse
 {
+
 public:
 
     DcrawParse();
     ~DcrawParse();
 
-    int getThumbnail(const char* infile, const char* outfile);
+    int getThumbnail(const char* infile, const char* outfile, int* orientation);
     int getCameraModel(const char* infile, char* cameraConstructor, char* cameraModel);
 
 private:
@@ -56,6 +59,8 @@ private:
     char   make[128], model[128], model2[128], thumb_head[128];
     int    width, height, offset, length, bps, is_dng;
     int    thumb_offset, thumb_length, thumb_layers;
+
+    int    flip;   // From KFile-Plugins:parse.c to get thumb orientation.
 
 private:
 

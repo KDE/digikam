@@ -38,6 +38,7 @@ extern "C"
 #include <qfile.h>
 #include <qstringlist.h>
 #include <qdeepcopy.h>
+#include <qwmatrix.h>
 
 // KDE includes.
 
@@ -201,15 +202,39 @@ bool UMSCamera::getThumbnail(const QString& folder,
     KTempFile thumbFile(QString::null, "camerarawthumb");
     thumbFile.setAutoDelete(true);
     DcrawParse rawFileParser;
-    
+    int orientation = 0;
+  
     if (thumbFile.status() == 0)
     {
         if (rawFileParser.getThumbnail(QFile::encodeName(folder + "/" + itemName),
-                                    QFile::encodeName(thumbFile.name())) == 0)
+                                       QFile::encodeName(thumbFile.name()),
+                                       &orientation) == 0)
         {
             thumbnail.load(thumbFile.name());
             if (!thumbnail.isNull())
+            {
+                if(orientation)
+                {
+                    QWMatrix M;
+                    QWMatrix flip = QWMatrix(-1, 0, 0, 1, 0, 0);
+
+                    switch(orientation+1)
+                    {  // notice intentional fallthroughs
+                        case 2: M = flip; break;
+                        case 4: M = flip;
+                        case 3: M.rotate(180); break;
+                        case 5: M = flip;
+                        case 6: M.rotate(90); break;
+                        case 7: M = flip;
+                        case 8: M.rotate(270); break;
+                        default: break; // should never happen
+                    }
+
+                    thumbnail = thumbnail.xForm(M);
+                }
+                
                 return true;
+            }
         }
     }
 

@@ -583,15 +583,39 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     KTempFile thumbFile(QString::null, "rawthumb");
     thumbFile.setAutoDelete(true);
     Digikam::DcrawParse rawFileParser;
-    
+    int orientation = 0;
+
     if (thumbFile.status() == 0)
     {
         if (rawFileParser.getThumbnail(QFile::encodeName(path),
-                                       QFile::encodeName(thumbFile.name())) == 0)
+                                       QFile::encodeName(thumbFile.name()),
+                                       &orientation) == 0)
         {
             image.load(thumbFile.name());
             if (!image.isNull())
+            {
+                if(orientation)
+                {
+                    QWMatrix M;
+                    QWMatrix flip = QWMatrix(-1, 0, 0, 1, 0, 0);
+
+                    switch(orientation+1)
+                    {  // notice intentional fallthroughs
+                        case 2: M = flip; break;
+                        case 4: M = flip;
+                        case 3: M.rotate(180); break;
+                        case 5: M = flip;
+                        case 6: M.rotate(90); break;
+                        case 7: M = flip;
+                        case 8: M.rotate(270); break;
+                        default: break; // should never happen
+                    }
+
+                    image = image.xForm(M);
+                }
+                
                 return true;
+            }
         }
     }
 

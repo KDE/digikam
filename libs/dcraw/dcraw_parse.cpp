@@ -56,6 +56,7 @@ namespace Digikam
 DcrawParse::DcrawParse()
 {
     order = 0;
+    flip  = 0;
 }
     
 DcrawParse::~DcrawParse()
@@ -401,6 +402,9 @@ int DcrawParse::parse_tiff_ifd (int base, int level)
       case 0x111:           /* StripOffset */
     if (!offset || is_dng) offset = val;
     break;
+      case 0x112:           /* Orientation */
+    flip = flip_map[(val-1) & 7];                // From KFile-Plugins:parse.c to get thumb orientation.
+    break;    
       case 0x117:           /* StripByteCounts */
     if (!length || is_dng) length = val;
     if (offset > val && !strncmp(make,"KODAK",5) && !is_dng)
@@ -1206,7 +1210,7 @@ int DcrawParse::getCameraModel(const char* infile, char* cameraConstructor, char
    Get embedded thumbnail in RAW file.  Return nonzero if the file cannot be decoded.
 */
 
-int DcrawParse::getThumbnail(const char* infile, const char* outfile)
+int DcrawParse::getThumbnail(const char* infile, const char* outfile, int* orientation)
 {
   char head[32], *thumb, *rgb, *cp;
   unsigned hlen, fsize, toff, tlen, lsize, i;
@@ -1314,6 +1318,18 @@ dng_skip:
   free (thumb);
 done:
   fclose (tfp);
+  
+  // From KFile-Plugins:parse.c to get thumb orientation.
+  
+  /* Coffin's code has different meaning for orientation
+     values than TIFF, so we map them to TIFF values */
+  switch ((flip+3600) % 360) {
+  case 270:  flip = 5;  break;
+  case 180:  flip = 3;  break;
+  case  90:  flip = 6;
+  }
+  if( orientation ) *orientation = flip_map[flip%7];
+
   return 0;
 }
 
