@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_oilpaint.h"
 #include "imageplugin_oilpaint.h"
 
@@ -60,8 +61,12 @@ void ImagePlugin_OilPaint::setEnabledActions(bool enable)
 
 void ImagePlugin_OilPaint::slotOilPaint()
 {
-    DigikamOilPaintImagesPlugin::ImageEffect_OilPaint dlg(parentWidget());
+    QString title = i18n("Apply Oil Paint Effect");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamOilPaintImagesPlugin::ImageEffect_OilPaint dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

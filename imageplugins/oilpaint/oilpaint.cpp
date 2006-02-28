@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : oilpaint.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : OilPainting threaded image filter.
- * 
+ *
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original OilPaint algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
@@ -34,9 +36,9 @@
 namespace DigikamOilPaintImagesPlugin
 {
 
-OilPaint::OilPaint(QImage *orgImage, QObject *parent, int brushSize, int smoothness)
-        : Digikam::ThreadedFilter(orgImage, parent, "OilPaint")
-{ 
+OilPaint::OilPaint(Digikam::DImg *orgImage, QObject *parent, int brushSize, int smoothness)
+        : Digikam::DImgThreadedFilter(orgImage, parent, "OilPaint")
+{
     m_brushSize  = brushSize;
     m_smoothness = smoothness;
     initFilter();
@@ -44,8 +46,7 @@ OilPaint::OilPaint(QImage *orgImage, QObject *parent, int brushSize, int smoothn
 
 void OilPaint::filterImage(void)
 {
-    oilpaintImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                   m_brushSize, m_smoothness);
+    oilpaintImage(m_orgImage, m_destImage, m_brushSize, m_smoothness);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -62,23 +63,28 @@ void OilPaint::filterImage(void)
  *                     a matrix and simply write at the original position.            
  */                                                                                 
     
-void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smoothness)
+void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, int BrushSize, int Smoothness)
 {
-    uint* newBits = (uint*)m_destImage.bits();    
-    int          i = 0, progress;
-    
+    int    progress;
+    Digikam::DColor mostFrequentColor;
+    int    w,h;
+
+    mostFrequentColor.setSixteenBit(orgImage.sixteenBit());
+    w = (int)orgImage.width();
+    h = (int)orgImage.height();
+
     for (int h2 = 0; !m_cancel && (h2 < h); h2++)
-       {
-       for (int w2 = 0; !m_cancel && (w2 < w); w2++)
-          {
-          i = h2 * w + w2;
-          newBits[i] = MostFrequentColor (data, w, h, w2, h2, BrushSize, Smoothness);
-          }
-       
-       progress = (int) (((double)h2 * 100.0) / h);
-       if ( progress%5 == 0 )
-          postProgress( progress );   
-       }
+    {
+        for (int w2 = 0; !m_cancel && (w2 < w); w2++)
+        {
+            mostFrequentColor = MostFrequentColor(orgImage, w2, h2, BrushSize, Smoothness);
+            destImage.setPixelColor(w2, h2, mostFrequentColor);
+        }
+
+        progress = (int) (((double)h2 * 100.0) / h);
+        if ( progress%5 == 0 )
+            postProgress( progress );
+    }
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -97,15 +103,16 @@ void OilPaint::oilpaintImage(uint* data, int w, int h, int BrushSize, int Smooth
  *                     the center of this matrix and find the most frequenty color   
  */
 
-uint OilPaint::MostFrequentColor (uint* Bits, int Width, int Height, int X, 
-                                  int Y, int Radius, int Intensity)
+Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, int Radius, int Intensity)
 {
-    int  i, w, h, I;
+    int  i, w, h, I, Width, Height;
     uint red, green, blue;
-    Digikam::ImageFilters::imageData imagedata;
-    
-    double Scale = Intensity / 255.0;
-        
+    Digikam::DColor mostFrequentColor;
+
+    double Scale = Intensity / (src.sixteenBit() ? 65535.0 : 255.0);
+    Width = (int)src.width();
+    Height = (int)src.height();
+
     // Alloc some arrays to be used
     uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
     uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
@@ -116,68 +123,64 @@ uint OilPaint::MostFrequentColor (uint* Bits, int Width, int Height, int X,
     memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
     for (w = X - Radius; w <= X + Radius; w++)
-        {
+    {
         for (h = Y - Radius; h <= Y + Radius; h++)
-            {
+        {
             // This condition helps to identify when a point doesn't exist
-            
+
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
-                {
-                // You'll see a lot of times this formula
-                i = h * Width + w;
-                
-                imagedata.raw = Bits[i];
-                red           = (uint)imagedata.channel.red;
-                green         = (uint)imagedata.channel.green;
-                blue          = (uint)imagedata.channel.blue;
-                       
+            {
+                Digikam::DColor color = src.getPixelColor(w, h);
+                red           = (uint)color.red();
+                green         = (uint)color.green();
+                blue          = (uint)color.blue();
+
                 I = (uint)(GetIntensity (red, green, blue) * Scale);
                 IntensityCount[I]++;
 
                 if (IntensityCount[I] == 1)
-                    {
+                {
                     AverageColorR[I] = red;
                     AverageColorG[I] = green;
                     AverageColorB[I] = blue;
-                    }
+                }
                 else
-                    {
+                {
                     AverageColorR[I] += red;
                     AverageColorG[I] += green;
                     AverageColorB[I] += blue;
-                    }
                 }
             }
         }
+    }
 
     I = 0;
     int MaxInstance = 0;
 
     for (i = 0 ; i <= Intensity ; i++)
-       {
-       if (IntensityCount[i] > MaxInstance)
-          {
-          I = i;
-          MaxInstance = IntensityCount[i];
-          }
-       }
+    {
+        if (IntensityCount[i] > MaxInstance)
+        {
+            I = i;
+            MaxInstance = IntensityCount[i];
+        }
+    }
 
-    // To get Alpha channel value from original (unchanged)
-    imagedata.raw = Bits[Y * Width + X];
-                
+    // get Alpha channel value from original (unchanged)
+    mostFrequentColor = src.getPixelColor(X, Y);
+
     // Overwrite RGB values to destination.
-    imagedata.channel.red   = AverageColorR[I] / MaxInstance;
-    imagedata.channel.green = AverageColorG[I] / MaxInstance;
-    imagedata.channel.blue  = AverageColorB[I] / MaxInstance;
-    
+    mostFrequentColor.setRed(AverageColorR[I] / MaxInstance);
+    mostFrequentColor.setGreen(AverageColorG[I] / MaxInstance);
+    mostFrequentColor.setBlue(AverageColorB[I] / MaxInstance);
+
     // free all the arrays
-    delete [] IntensityCount;        
+    delete [] IntensityCount;
     delete [] AverageColorR;
     delete [] AverageColorG;
     delete [] AverageColorB;
 
-    // return the most frequenty color
-    return (imagedata.raw);   
+    return mostFrequentColor;
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin

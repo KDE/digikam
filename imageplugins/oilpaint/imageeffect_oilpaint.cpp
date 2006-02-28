@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_oilpaint.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-08-25
  * Description : a digiKam image editor plugin to simulate 
  *               an oil painting.
  * 
  * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,10 +40,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
@@ -51,11 +49,12 @@
 namespace DigikamOilPaintImagesPlugin
 {
 
-ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
-                    : CtrlPanelDialog(parent, i18n("Oil Paint"), "oilpaint")
+ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFrame* banner)
+                    : Digikam::CtrlPanelDlg(parent, title, "oilpaint", true, false, true,
+                                            Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Oil Paint"), 
                                        digikamimageplugins_version,
@@ -64,33 +63,36 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
                                        "(c) 2004-2005, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-                                       
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Oil paint algorithm"), 
-                     "pieter_voloshyn at ame.com.br");                     
-    
+                     "pieter_voloshyn at ame.com.br");
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Brush size:"), gboxSettings);
-    
+
     m_brushSizeInput = new KIntNumInput(gboxSettings);
     m_brushSizeInput->setRange(1, 5, 1, true);
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
-    
+
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_brushSizeInput, 0, 0, 1, 1);
-        
+
     // -------------------------------------------------------------
 
     QLabel *label2 = new QLabel(i18n("Smooth:"), gboxSettings);
-    
+
     m_smoothInput = new KIntNumInput(gboxSettings);
     m_smoothInput->setRange(10, 255, 1, true);
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
@@ -98,16 +100,16 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent)
 
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_smoothInput, 1, 1, 1, 1);
-    
+
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
-            
+
     // -------------------------------------------------------------
 
     connect(m_brushSizeInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));            
-            
+            this, SLOT(slotTimer()));
+
     connect(m_smoothInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));         
+            this, SLOT(slotTimer()));
 }
 
 ImageEffect_OilPaint::~ImageEffect_OilPaint()
@@ -134,44 +136,39 @@ void ImageEffect_OilPaint::prepareEffect()
 {
     m_brushSizeInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    
-    QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    
+
+    //QImage image = m_imagePreviewWidget->getOriginalClipImage();
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+
     int b        = m_brushSizeInput->value();
     int s        = m_smoothInput->value();
-        
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new OilPaint(&image, this, b, s));
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new OilPaint(&image, this, b, s));
 }
 
 void ImageEffect_OilPaint::prepareFinal()
 {
     m_brushSizeInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
-    
+
     int b = m_brushSizeInput->value();
     int s = m_smoothInput->value();
-        
+
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-            
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new OilPaint(&orgImage, this, b, s));
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new OilPaint(iface.getOriginalImg(), this, b, s));
 }
 
 void ImageEffect_OilPaint::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
 void ImageEffect_OilPaint::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalData(i18n("Oil Paint"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Oil Paint"), 
+                        m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamOilPaintImagesPlugin
