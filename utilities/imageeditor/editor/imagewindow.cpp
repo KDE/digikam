@@ -296,10 +296,11 @@ void ImageWindow::setViewToURL(const KURL &url)
     if (m_view)
     {
         IconItem* item = m_view->findItem(url.url());
+        m_view->clearSelection();
+        m_view->updateContents();
         if (item)
             m_view->setCurrentItem(item);
     }
-
 }
 
 void ImageWindow::slotForward()
