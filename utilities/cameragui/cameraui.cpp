@@ -890,37 +890,35 @@ void CameraUI::addFileExtension(const QString& ext)
 void CameraUI::slotFirstItem(void)
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->firstItem());
+    d->view->clearSelection();
+    d->view->updateContents();
     if (currItem) 
        d->view->setCurrentItem(currItem);
 }
 
 void CameraUI::slotPrevItem(void)
 {
-    IconItem* prevItem = 0;
-    IconItem *currItem = d->view->currentItem();
-    if (currItem) 
-    {
-       prevItem = currItem->prevItem();
-       if (prevItem)
-           d->view->setCurrentItem(prevItem);
-    }
+    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+    d->view->clearSelection();
+    d->view->updateContents();
+    if (currItem)
+       d->view->setCurrentItem(currItem->prevItem());
 }
 
 void CameraUI::slotNextItem(void)
 {
-    IconItem* nextItem = 0;
-    IconItem *currItem = d->view->currentItem();
+    CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+    d->view->clearSelection();
+    d->view->updateContents();
     if (currItem) 
-    {
-       nextItem = currItem->nextItem();
-       if (nextItem)
-           d->view->setCurrentItem(nextItem);
-    }
+       d->view->setCurrentItem(currItem->nextItem());
 }
 
 void CameraUI::slotLastItem(void)
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->lastItem());
+    d->view->clearSelection();
+    d->view->updateContents();
     if (currItem) 
        d->view->setCurrentItem(currItem);
 }
