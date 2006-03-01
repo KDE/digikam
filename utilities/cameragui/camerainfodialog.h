@@ -25,6 +25,9 @@
 
 class QString;
 
+namespace Digikam
+{
+
 class CameraInfoDialog : public KDialogBase
 {
 public:
@@ -34,5 +37,7 @@ public:
                      const QString& about);
     ~CameraInfoDialog();
 };
+
+} // namespace Digikam
 
 #endif /* CAMERAINFODIALOG_H */
