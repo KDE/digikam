@@ -51,8 +51,10 @@
 namespace DigikamUnsharpMaskImagesPlugin
 {
 
-ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Unsharp Mask"), "unsharp")
+ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame* banner)
+                   : Digikam::CtrlPanelDlg(parent, title, "unsharp", false,
+                                           false, true, Digikam::ImagePannelWidget::SeparateViewAll, 
+                                           banner)
 {
     QString whatsThis;
     
@@ -68,25 +70,20 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Winston Chang", I18N_NOOP("Unsharp mask algorithm author from Gimp"),
-                     "winstonc at cs.wisc.edu");
-                        
     setAboutData(about);
     
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
-    m_radiusInput = new KDoubleNumInput(gboxSettings, "m_radiusInput");
-    m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(0.1, 120.0, 0.1, true);
+    m_radiusInput = new KIntNumInput(gboxSettings, "m_radiusInput");
+    m_radiusInput->setRange(1, 10, 1, true);
             
-    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
-                     "10 and above determine the blur matrix radius "
-                     "that determines how much to blur the image.") );
+    QWhatsThis::add( m_radiusInput, i18n("<p>Radius value is the gaussian blur matrix radius value "
+                                         "used to determines how much to blur the image.") );
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
@@ -95,8 +92,8 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     QLabel *label2 = new QLabel(i18n("Amount:"), gboxSettings);
     
     m_amountInput = new KDoubleNumInput(gboxSettings, "m_amountInput");
-    m_amountInput->setPrecision(2);
-    m_amountInput->setRange(0.0, 5.0, 0.01, true);
+    m_amountInput->setPrecision(1);
+    m_amountInput->setRange(0.0, 3.0, 0.1, true);
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
@@ -107,8 +104,9 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     QLabel *label3 = new QLabel(i18n("Threshold:"), gboxSettings);
     
-    m_thresholdInput = new KIntNumInput(gboxSettings, "m_thresholdInput");
-    m_thresholdInput->setRange(0, 255, 1, true);
+    m_thresholdInput = new KDoubleNumInput(gboxSettings, "m_thresholdInput");
+    m_thresholdInput->setPrecision(2);
+    m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
         
     QWhatsThis::add( m_thresholdInput, i18n("<p>The threshold, as a fraction of the maximum "
                      "luminosity value, needed to apply the difference amount.") );
@@ -119,13 +117,13 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    connect(m_radiusInput, SIGNAL(valueChanged (double)),
+    connect(m_radiusInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));                                                
 
     connect(m_amountInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                                                            
             
-    connect(m_thresholdInput, SIGNAL(valueChanged (int)),
+    connect(m_thresholdInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));                                                
 }
 
@@ -145,9 +143,9 @@ void ImageEffect_Unsharp::resetValues()
     m_radiusInput->blockSignals(true);
     m_amountInput->blockSignals(true);
     m_thresholdInput->blockSignals(true);
-    m_radiusInput->setValue(5.0);
-    m_amountInput->setValue(0.5);
-    m_thresholdInput->setValue(0);
+    m_radiusInput->setValue(1);
+    m_amountInput->setValue(1.0);
+    m_thresholdInput->setValue(0.05);
     m_radiusInput->blockSignals(false);
     m_amountInput->blockSignals(false);
     m_thresholdInput->blockSignals(false);
@@ -159,13 +157,14 @@ void ImageEffect_Unsharp::prepareEffect()
     m_amountInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
     
-    QImage img = m_imagePreviewWidget->getOriginalClipImage();
-   
-    double r  = m_radiusInput->value();
+    Digikam::DImg img = m_imagePreviewWidget->getOriginalRegionImage();
+
+    int    r  = m_radiusInput->value();
     double a  = m_amountInput->value();
-    int    th = m_thresholdInput->value();
+    double th = m_thresholdInput->value();
     
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new UnsharpMask(&img, this, r, a, th));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new UnsharpMask(&img, this, r, a, th));
 }
 
 void ImageEffect_Unsharp::prepareFinal()
@@ -174,31 +173,33 @@ void ImageEffect_Unsharp::prepareFinal()
     m_amountInput->setEnabled(false);
     m_thresholdInput->setEnabled(false);
         
-    double r  = m_radiusInput->value();
+    int    r  = m_radiusInput->value();
     double a  = m_amountInput->value();
-    int    th = m_thresholdInput->value();
+    double th = m_thresholdInput->value();
     
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-            
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new UnsharpMask(&orgImage, this, r, a, th));
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    Digikam::DImg orgImage = Digikam::DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>
+                       (new UnsharpMask(&orgImage, this, r, a, th));
 }
 
 void ImageEffect_Unsharp::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    m_imagePreviewWidget->setPreviewImage(imDest);
 }
 
 void ImageEffect_Unsharp::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Unsharp Mask"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage();
+    iface.putOriginalImage(i18n("Unsharp Mask"), imDest.bits());
 }
 
 }  // NameSpace DigikamUnsharpMaskImagesPlugin

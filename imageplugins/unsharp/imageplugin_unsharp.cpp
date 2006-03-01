@@ -4,7 +4,7 @@
  * Date  : 2004-08-27
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,12 +28,9 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_unsharp.h"
 #include "imageplugin_unsharp.h"
 
@@ -64,8 +61,12 @@ void ImagePlugin_Unsharp::setEnabledActions(bool enable)
 
 void ImagePlugin_Unsharp::slotUnsharp()
 {
-    DigikamUnsharpMaskImagesPlugin::ImageEffect_Unsharp dlg(parentWidget());
+    QString title = i18n("Unsharp Mask");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamUnsharpMaskImagesPlugin::ImageEffect_Unsharp dlg(parentWidget(),    
+                                    title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_unsharp.moc"

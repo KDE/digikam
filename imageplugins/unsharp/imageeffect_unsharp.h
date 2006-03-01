@@ -24,29 +24,29 @@
 
 // Local includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
-class KIntNumInput;
 class KDoubleNumInput;
+class KIntNumInput;
 
 namespace DigikamUnsharpMaskImagesPlugin
 {
 
-class ImageEffect_Unsharp : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Unsharp : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Unsharp(QWidget* parent);
+    ImageEffect_Unsharp(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Unsharp();
 
 private:
     
-    KDoubleNumInput *m_radiusInput;
+    KIntNumInput    *m_radiusInput;
+
     KDoubleNumInput *m_amountInput;
-    
-    KIntNumInput    *m_thresholdInput;
+    KDoubleNumInput *m_thresholdInput;
     
 protected:
     
