@@ -19,7 +19,7 @@
    - White Balance    : Done.
    - Add Border       : Done.
    - Oil Paint        : Done.
-   
+   - Unsharp          : Done.
 
    > Pending plugins (by difficulty order):
 
@@ -43,7 +43,6 @@
    - Noise Reduction  : TODO. ==> backport new algorithm from Krita based on wavelets (it's better). Can be long.
    - Charcoal         : TODO. ==> backport algorithm from kimageeffect and add 16 bits support. 
                                   Get any inspiration from sharpen algorithm already backported from kimageeffect
-   - Unsharp          : TODO. ==> backport new algorithm from ImageMagick (it's better). Can be long.
 
 Nota: 
 
