@@ -37,164 +37,77 @@
 namespace Digikam
 {
 
-class DColorPriv
-{
-public:
-
-    DColorPriv()
-    {
-        sixteenBit = false;
-        red        = 0;
-        green      = 0;
-        blue       = 0;
-        alpha      = 0;
-    }
-
-    bool sixteenBit;
- 
-    int  red;
-    int  green;
-    int  blue;
-    int  alpha;
-};
-
-DColor::DColor()
-{
-    d = new DColorPriv;
-}
-
 DColor::DColor(const DColor& color)
 {
-    d = new DColorPriv;
-
-    d->red        = color.d->red;
-    d->green      = color.d->green;
-    d->blue       = color.d->blue;
-    d->alpha      = color.d->alpha;
-    d->sixteenBit = color.d->sixteenBit;
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
 }
 
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
-    d = new DColorPriv;
+    // initialize as eight bit
+    m_red        = color.red();
+    m_green      = color.green();
+    m_blue       = color.blue();
+    m_alpha      = 255;
+    m_sixteenBit = false;
 
-    d->red        = sixteenBit ? ((color.red()+1)*256)-1  : color.red();
-    d->green      = sixteenBit ? ((color.red()+1)*256)-1  : color.green();
-    d->blue       = sixteenBit ? ((color.blue()+1)*256)-1 : color.blue();
-    d->alpha      = sixteenBit ? 65535 : 255;
-    d->sixteenBit = sixteenBit;
-}
-
-DColor::DColor(int red, int green, int blue, int alpha, bool sixteenBit)
-{
-    d = new DColorPriv;
-
-    d->sixteenBit = sixteenBit;
-    d->red        = red;
-    d->green      = green;
-    d->blue       = blue;
-    d->alpha      = alpha;
-}
-
-DColor::DColor(uchar *data, bool sixteenBit)
-{
-    d = new DColorPriv;
-
-    d->sixteenBit = sixteenBit;
-
-    if (!sixteenBit)          // 8 bits image
-    {
-        setBlue (data[0]);
-        setGreen(data[1]);
-        setRed  (data[2]);
-        setAlpha(data[3]);
-    }
-    else                      // 16 bits image
-    {
-        unsigned short* data16 = (unsigned short*)data;
-        setBlue (data16[0]);
-        setGreen(data16[1]);
-        setRed  (data16[2]);
-        setAlpha(data16[3]);
-    }
-}
-
-DColor::~DColor()
-{
-    delete d;
-}
-
-int DColor::red()
-{
-    return d->red;
-}
-
-int DColor::green()
-{
-    return d->green;
-}
-
-int DColor::blue()
-{
-    return d->blue;
-}
-
-int DColor::alpha()
-{
-    return d->alpha;
-}
-
-bool DColor::sixteenBit()
-{
-    return d->sixteenBit;
+    // convert to sixteen bit if requested
+    if (sixteenBit)
+        convertToSixteenBit();
 }
 
 DColor& DColor::operator=(const DColor& color)
 {
-    d->red        = color.d->red;
-    d->green      = color.d->green;
-    d->blue       = color.d->blue;
-    d->alpha      = color.d->alpha;
-    d->sixteenBit = color.d->sixteenBit;
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
     return *this;
 }
 
-void DColor::setRed(int red)
+QColor DColor::getQColor() const
 {
-    d->red = red;
+    if (m_sixteenBit)
+    {
+        DColor eightBit(*this);
+        eightBit.convertToEightBit();
+        return eightBit.getQColor();
+    }
+
+    return (QColor::QColor(m_red, m_green, m_blue));
 }
 
-void DColor::setGreen(int green)
+void DColor::convertToSixteenBit()
 {
-    d->green = green;
+    if (m_sixteenBit)
+        return;
+
+    m_red        = (m_red + 1) * 256 - 1;
+    m_green      = (m_green + 1) * 256 - 1;
+    m_blue       = (m_blue  + 1) * 256 - 1;
+    m_alpha      = (m_alpha + 1) * 256 - 1;
+    m_sixteenBit = true;
 }
 
-void DColor::setBlue (int blue)
+void DColor::convertToEightBit()
 {
-    d->blue = blue;
+    if (!m_sixteenBit)
+        return;
+
+    m_red        = (m_red + 1) / 256 - 1;
+    m_green      = (m_green + 1) / 256 - 1;
+    m_blue       = (m_blue  + 1) / 256 - 1;
+    m_alpha      = (m_alpha + 1) / 256 - 1;
+    m_sixteenBit = false;
 }
 
-void DColor::setAlpha(int alpha)
-{
-    d->alpha = alpha;
-}
 
-void DColor::setSixteenBit(bool sixteenBit)
-{
-    d->sixteenBit = sixteenBit;
-}
-
-QColor DColor::getQColor()
-{
-    if (d->sixteenBit)
-        return (QColor::QColor(((d->red+1)/256)-1, 
-                ((d->green+1)/256)-1, 
-                ((d->blue+1)/256)-1));
-    
-    return (QColor::QColor(d->red, d->green, d->blue));
-}
-
-void DColor::getHSL(int* h, int* s, int* l)
+void DColor::getHSL(int* h, int* s, int* l) const
 {
     double min;
     double max;
@@ -205,11 +118,11 @@ void DColor::getHSL(int* h, int* s, int* l)
     double sum;
     double hue, sat, lig;
 
-    double range = d->sixteenBit ? 65535.0 : 255.0;
+    double range = m_sixteenBit ? 65535.0 : 255.0;
 
-    red   = d->red   / range;
-    green = d->green / range;
-    blue  = d->blue  / range;
+    red   = m_red   / range;
+    green = m_green / range;
+    blue  = m_blue  / range;
 
     if (red > green)
     {
@@ -279,13 +192,13 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
     double m1, m2;
     double r, g, b;
 
-    double range = d->sixteenBit ? 65535.0 : 255.0;
+    double range = m_sixteenBit ? 65535.0 : 255.0;
 
     if (s == 0)
     {
-        d->red   = l;
-        d->green = l;
-        d->blue  = l;
+        m_red   = l;
+        m_green = l;
+        m_blue  = l;
     }
     else
     {
@@ -347,18 +260,18 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
         else
             b = m1;
 
-        d->red   = lround(r * range);
-        d->green = lround(g * range);
-        d->blue  = lround(b * range);
+        m_red   = lround(r * range);
+        m_green = lround(g * range);
+        m_blue  = lround(b * range);
     }
 
-    d->sixteenBit = sixteenBit;
+    m_sixteenBit = sixteenBit;
 
     // Fully opaque color.
-    if (d->sixteenBit)
-        d->alpha = 65535;
+    if (m_sixteenBit)
+        m_alpha = 65535;
     else
-        d->alpha = 255;
+        m_alpha = 255;
 }
 
 }  // NameSpace Digikam

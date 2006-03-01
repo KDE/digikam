@@ -145,7 +145,11 @@ public:
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen) */
     int         bitsDepth()  const;
 
-    /** Access a single pixel of the image */
+    /** Access a single pixel of the image.
+        These functions add some safety checks and then use the methods from DColor.
+        In optimized code working directly on the data,
+        better use the inline methods from DColor.
+    */
     DColor      getPixelColor(uint x, uint y);
     void        setPixelColor(uint x, uint y, DColor color);
 
