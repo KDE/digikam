@@ -50,7 +50,7 @@ namespace DigikamOilPaintImagesPlugin
 {
 
 ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFrame* banner)
-                    : Digikam::CtrlPanelDlg(parent, title, "oilpaint", true, false, true,
+                    : Digikam::CtrlPanelDlg(parent, title, "oilpaint", false, false, true,
                                             Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
@@ -60,7 +60,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
                                        digikamimageplugins_version,
                                        I18N_NOOP("An oil painting image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
+                                       "(c) 2004-2005, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 
@@ -78,7 +79,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Brush size:"), gboxSettings);
 
     m_brushSizeInput = new KIntNumInput(gboxSettings);
@@ -86,8 +87,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
     QWhatsThis::add( m_brushSizeInput, i18n("<p>Set here the brush size to use for "
                                             "simulating the oil painting.") );
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_brushSizeInput, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_brushSizeInput, 1, 1, 0, 1);
 
     // -------------------------------------------------------------
 
@@ -98,8 +99,8 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect "
                                          "of the brush under the canvas.") );
 
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_smoothInput, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
