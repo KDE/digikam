@@ -56,8 +56,13 @@ private:  // OilPaint filter methods.
 
     // Function to calculate the color intensity and return the luminance (Y)
     // component of YIQ color model.
-    inline uint GetIntensity(uint Red, uint Green, uint Blue)
-           { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); };
+    inline double GetIntensity(uint Red, uint Green, uint Blue)
+           { return Red * 0.3 + Green * 0.59 + Blue * 0.11; };
+
+    uchar *IntensityCount;
+    uint  *AverageColorR;
+    uint  *AverageColorG;
+    uint  *AverageColorB;
 };
 
 }  // NameSpace DigikamOilPaintImagesPlugin

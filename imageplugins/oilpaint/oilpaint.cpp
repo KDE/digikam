@@ -72,19 +72,36 @@ void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, 
     mostFrequentColor.setSixteenBit(orgImage.sixteenBit());
     w = (int)orgImage.width();
     h = (int)orgImage.height();
+    uchar *dest = destImage.bits();
+    int bytesDepth = orgImage.bytesDepth();
+    uchar *dptr;
+
+    // Allocate some arrays to be used.
+    // Do this here once for all to save a few million new / delete operations
+    IntensityCount = new uchar[Smoothness + 1];
+    AverageColorR  = new uint[Smoothness + 1];
+    AverageColorG  = new uint[Smoothness + 1];
+    AverageColorB  = new uint[Smoothness + 1];
 
     for (int h2 = 0; !m_cancel && (h2 < h); h2++)
     {
         for (int w2 = 0; !m_cancel && (w2 < w); w2++)
         {
             mostFrequentColor = MostFrequentColor(orgImage, w2, h2, BrushSize, Smoothness);
-            destImage.setPixelColor(w2, h2, mostFrequentColor);
+            dptr = dest + w2*bytesDepth + (w*h2*bytesDepth);
+            mostFrequentColor.setPixel(dptr);
         }
 
         progress = (int) (((double)h2 * 100.0) / h);
         if ( progress%5 == 0 )
             postProgress( progress );
     }
+
+    // free all the arrays
+    delete [] IntensityCount;
+    delete [] AverageColorR;
+    delete [] AverageColorG;
+    delete [] AverageColorB;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -107,17 +124,17 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
 {
     int  i, w, h, I, Width, Height;
     uint red, green, blue;
+
+    uchar *dest = src.bits();
+    int bytesDepth = src.bytesDepth();
+    uchar *sptr;
+    bool sixteenBit = src.sixteenBit();
+
     Digikam::DColor mostFrequentColor;
 
-    double Scale = Intensity / (src.sixteenBit() ? 65535.0 : 255.0);
-    Width = (int)src.width();
+    double Scale = Intensity / (sixteenBit ? 65535.0 : 255.0);
+    Width  = (int)src.width();
     Height = (int)src.height();
-
-    // Alloc some arrays to be used
-    uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
-    uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorG  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorB  = new uint[(Intensity + 1)  * sizeof (uint)];
 
     // Erase the array
     memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
@@ -130,12 +147,13 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
 
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
             {
-                Digikam::DColor color = src.getPixelColor(w, h);
+                sptr = dest + w*bytesDepth + (Width*h*bytesDepth);
+                Digikam::DColor color(sptr, sixteenBit);
                 red           = (uint)color.red();
                 green         = (uint)color.green();
                 blue          = (uint)color.blue();
 
-                I = (uint)(GetIntensity (red, green, blue) * Scale);
+                I = lround(GetIntensity (red, green, blue) * Scale);
                 IntensityCount[I]++;
 
                 if (IntensityCount[I] == 1)
@@ -173,12 +191,6 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, in
     mostFrequentColor.setRed(AverageColorR[I] / MaxInstance);
     mostFrequentColor.setGreen(AverageColorG[I] / MaxInstance);
     mostFrequentColor.setBlue(AverageColorB[I] / MaxInstance);
-
-    // free all the arrays
-    delete [] IntensityCount;
-    delete [] AverageColorR;
-    delete [] AverageColorG;
-    delete [] AverageColorB;
 
     return mostFrequentColor;
 }

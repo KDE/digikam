@@ -138,7 +138,6 @@ void ImageEffect_OilPaint::prepareEffect()
     m_brushSizeInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
 
-    //QImage image = m_imagePreviewWidget->getOriginalClipImage();
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
     int b        = m_brushSizeInput->value();

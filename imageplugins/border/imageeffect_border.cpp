@@ -75,7 +75,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developper"),
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);
