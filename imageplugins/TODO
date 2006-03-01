@@ -18,11 +18,11 @@
    - Solarize         : Done.
    - White Balance    : Done.
    - Add Border       : Done.
+   - Oil Paint        : Done.
    
 
    > Pending plugins (by difficulty order):
 
-   - Oil Paint        : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Texture          : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Film Grain       : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FilmGrain). Medium.
