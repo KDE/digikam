@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-17
- * Description : A tab to display Exif image informations
+ * Description : A tab to display metadata image informations
  *
  * Copyright 2004-2006 by Gilles Caulier
  *
@@ -18,15 +18,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESEXIFTAB_H
-#define IMAGEPROPERTIESEXIFTAB_H
-
-// LibPNG includes.
-
-extern "C"
-{
-#include <png.h>
-}
+#ifndef IMAGEPROPERTIESMETADATATAB_H
+#define IMAGEPROPERTIESMETADATATAB_H
 
 // Qt includes.
 
@@ -44,19 +37,20 @@ extern "C"
 namespace Digikam
 {
 
-class ImagePropertiesEXIFTabPriv;
+class ImagePropertiesMetadataTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesEXIFTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesEXIFTab(QWidget* parent, bool navBar=true);
-    ~ImagePropertiesEXIFTab();
+    ImagePropertiesMetaDataTab(QWidget* parent, bool navBar=true);
+    ~ImagePropertiesMetaDataTab();
 
     void setCurrentURL(const KURL& url=KURL::KURL(), int itemType=0);
-    void setCurrentData(const QByteArray& data=QByteArray(), 
+    void setCurrentData(const QByteArray& exifData=QByteArray(), 
+                        const QByteArray& iptcData=QByteArray(), 
                         const QString& filename=QString::null, int itemType=0);
 
 signals:
@@ -66,22 +60,15 @@ signals:
     void signalNextItem(void);    
     void signalLastItem(void); 
         
-private slots:
+private:
 
-    void slotLevelChanged(int);
+//    QByteArray loadExifWithExiv2(const KURL& url);
 
 private:
 
-    QByteArray loadRawExifProfileFromPNG(const KURL& url);
-    uchar*     readRawProfile(png_textp text, png_uint_32 *length, int ii);
-    
-    QByteArray loadExifWithExiv2(const KURL& url);
-
-private:
-
-    ImagePropertiesEXIFTabPriv* d;
+    ImagePropertiesMetadataTabPriv* d;
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPROPERTIESEXIFTAB_H */
+#endif /* IMAGEPROPERTIESMETADATATAB_H */

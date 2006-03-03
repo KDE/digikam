@@ -435,35 +435,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // Check if we have a Raw profile embeded using ImageMagick technic.
 
-        if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) == 0 ||
-            memcmp(text_ptr[i].key, "Raw profile type APP1", 21) == 0)
-        {
-            png_uint_32 length;
-            uchar *data = readRawProfile(text_ptr, &length, i);
-            QByteArray ba(length);
-            memcpy(ba.data(), data, length);
-            metaData.insert(DImg::JPG_EXIF, ba);
-            delete [] data;
-        }
-        else if (memcmp(text_ptr[i].key, "Raw profile type iptc", 21) == 0)
-        {
-            png_uint_32 length;
-            uchar *data = readRawProfile(text_ptr, &length, i);
-            QByteArray ba(length);
-            memcpy(ba.data(), data, length);
-            metaData.insert(DImg::JPG_IPTC, ba);
-            delete [] data;
-        }
-        else if (memcmp(text_ptr[i].key, "Raw profile type jcom", 21) == 0)
-        {
-            png_uint_32 length;
-            uchar *data = readRawProfile(text_ptr, &length, i);
-            QByteArray ba(length);
-            memcpy(ba.data(), data, length);
-            metaData.insert(DImg::JPG_COM, ba);
-            delete [] data;
-        }
-        else
+        if (memcmp(text_ptr[i].key, "Raw profile type exif", 21) != 0 ||
+            memcmp(text_ptr[i].key, "Raw profile type APP1", 21) != 0 ||
+            memcmp(text_ptr[i].key, "Raw profile type iptc", 21) != 0)
         {
             imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
             
@@ -494,6 +468,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = height;
     imageSetAttribute("format", "PNG");
     imageData() = data;
+        
+    readMetadata(filePath, DImg::PNG);
     
     return true;
 }

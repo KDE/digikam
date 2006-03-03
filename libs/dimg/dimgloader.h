@@ -32,12 +32,12 @@
 
 // Local includes.
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DImg;
 class DImgLoaderObserver;
 
 class DIGIKAM_EXPORT DImgLoader
@@ -79,7 +79,9 @@ protected:
 
     void                    imageSetCameraModel(const QString& model);
     void                    imageSetCameraConstructor(const QString& constructor);
-    
+
+    virtual void            readMetadata(const QString& filePath, DImg::FORMAT ff);
+    virtual void            saveMetadata(const QString& filePath);
     virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);
     
 protected:

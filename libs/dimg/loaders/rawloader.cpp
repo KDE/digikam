@@ -61,6 +61,7 @@ RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
+    readMetadata(filePath, DImg::RAW);
     return ( load16bits(filePath, observer) );
 }
 
@@ -339,7 +340,7 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     return true;
 }
 
-bool RAWLoader::save(const QString& /*filePath*/, DImgLoaderObserver *)
+bool RAWLoader::save(const QString&, DImgLoaderObserver *)
 {
     return false;    
 }

@@ -1,7 +1,5 @@
 METASOURCES = AUTO
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
 noinst_LTLIBRARIES = libimagepropertiesshowfoto.la libimagepropertiesdigikam.la \
 	                 libimagepropertiescamgui.la
 
@@ -19,6 +17,7 @@ libimagepropertiesshowfoto_la_SOURCES = imagepropertiessidebar.cpp navigatebarwi
 	                                    imagepropertiesexiftab.cpp imagepropertiescolorstab.cpp 
 
 libimagepropertiesshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la \
+	                                   $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
 	                                   $(top_builddir)/digikam/libs/dimg/libdimg.la \
 	                                   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	                                   $(top_builddir)/digikam/libs/histogram/libhistogram.la 
@@ -34,7 +33,9 @@ libimagepropertiesdigikam_la_SOURCES = imagepropertiessidebar.cpp imagepropertie
 libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
+	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/widgets \
+	       -I$(top_srcdir)/digikam/libs/widgets/metadata \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \
 	       -I$(top_srcdir)/digikam/utilities/cameragui \

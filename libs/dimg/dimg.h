@@ -163,7 +163,7 @@ public:
 
     /** Metadata manipulation methods */
     QByteArray getExif() const;
-    QByteArray getIPTC() const;
+    QByteArray getIptc() const;
     QByteArray metadata(METADATA key) const;
     QByteArray getICCProfil() const;
 

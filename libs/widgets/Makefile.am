@@ -1,3 +1,4 @@
+SUBDIRS = metadata
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libwidgets.la
@@ -10,7 +11,8 @@ libwidgets_la_SOURCES = imageregionwidget.cpp imagepaniconwidget.cpp \
 
 libwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-libwidgets_la_LIBADD = $(top_builddir)/digikam/libs/lprof/liblprof.la 
+libwidgets_la_LIBADD = $(top_builddir)/digikam/libs/lprof/liblprof.la \
+		       $(top_builddir)/digikam/libs/widgets/metadata/libmetadatawidgets.la 
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/curves \

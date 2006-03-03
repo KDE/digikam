@@ -513,7 +513,7 @@ QByteArray DImg::getExif() const
     return metadata(JPG_EXIF);
 }
 
-QByteArray DImg::getIPTC() const
+QByteArray DImg::getIptc() const
 {
     return metadata(JPG_IPTC);
 }

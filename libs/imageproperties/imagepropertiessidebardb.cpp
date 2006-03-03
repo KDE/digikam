@@ -80,16 +80,16 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     // ----------------------------------------------------------
     
-    connect(m_exifTab, SIGNAL(signalFirstItem()),
+    connect(m_metadataTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(m_exifTab, SIGNAL(signalPrevItem()),
+    connect(m_metadataTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(m_exifTab, SIGNAL(signalNextItem()),
+    connect(m_metadataTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(m_exifTab, SIGNAL(signalLastItem()),
+    connect(m_metadataTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 
     connect(m_colorTab, SIGNAL(signalFirstItem()),
@@ -134,7 +134,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     m_currentURL        = url;
     m_currentRect       = rect;
     m_image             = img;
-    m_dirtyExifTab      = false;
+    m_dirtyMetadataTab  = false;
     m_dirtyColorTab     = false;
     d->currentView      = view;
     d->currentItem      = item;
@@ -164,15 +164,16 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     // launched from camera GUI.
     if (!d->currentView || !d->currentItem)
     {
-        if (tab == m_exifTab && !m_dirtyExifTab)
+        if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
-                m_exifTab->setCurrentData(m_image->getExif(), m_currentURL.fileName(),
-                                          NavigateBarWidget::ItemCurrent);
+                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
+                                              m_currentURL.fileName(),
+                                              NavigateBarWidget::ItemCurrent);
             else
-                m_exifTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+                m_metadataTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
 
-            m_dirtyExifTab = true;
+            m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {
@@ -195,15 +196,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (d->currentView->lastItem() == d->currentItem)
             currentItemType = NavigateBarWidget::ItemLast;
         
-        if (tab == m_exifTab && !m_dirtyExifTab)
+        if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
-                m_exifTab->setCurrentData(m_image->getExif(), m_currentURL.fileName(),
-                                          currentItemType);
+                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
+                                              m_currentURL.fileName(), currentItemType);
             else
-                m_exifTab->setCurrentURL(m_currentURL, currentItemType);
+                m_metadataTab->setCurrentURL(m_currentURL, currentItemType);
 
-            m_dirtyExifTab = true;
+            m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {

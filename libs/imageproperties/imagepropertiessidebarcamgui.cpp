@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-08
- * Description :
+ * Description : simple image properties side bar used by 
+ *               camera gui.
  *
  * Copyright 2006 by Gilles Caulier
  *
@@ -51,9 +52,9 @@ public:
 
     ImagePropertiesSideBarCamGuiPriv()
     {
-        dirtyExifTab       = false;
+        dirtyMetadataTab   = false;
         dirtyCameraItemTab = false;
-        exifTab            = 0;
+        metadataTab            = 0;
         cameraItemTab      = 0;
         itemInfo           = 0;
         cameraView         = 0;
@@ -62,22 +63,22 @@ public:
         currentURL         = KURL();
     }
 
-    bool                     dirtyExifTab;
-    bool                     dirtyCameraItemTab;
+    bool                        dirtyMetadataTab;
+    bool                        dirtyCameraItemTab;
 
-    QByteArray               exifData;
+    QByteArray                  exifData;
 
-    KURL                     currentURL;
+    KURL                        currentURL;
 
-    GPItemInfo              *itemInfo;
+    GPItemInfo                 *itemInfo;
     
-    ImagePropertiesEXIFTab  *exifTab;
+    ImagePropertiesMetaDataTab *metadataTab;
     
-    CameraIconView          *cameraView;
+    CameraIconView             *cameraView;
 
-    CameraIconViewItem      *cameraItem;
+    CameraIconViewItem         *cameraItem;
     
-    CameraItemPropertiesTab *cameraItemTab;
+    CameraItemPropertiesTab    *cameraItemTab;
 };
 
 ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, const char *name,
@@ -87,12 +88,12 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, true);
-    d->exifTab       = new ImagePropertiesEXIFTab(parent, true);
+    d->metadataTab   = new ImagePropertiesMetaDataTab(parent, true);
     
     setSplitter(splitter);
          
     appendTab(d->cameraItemTab, SmallIcon("info"), i18n("Properties"));
-    appendTab(d->exifTab, SmallIcon("exifinfo"), i18n("EXIF"));
+    appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
 
     // ----------------------------------------------------------
     
@@ -108,16 +109,16 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
     connect(d->cameraItemTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
 
-    connect(d->exifTab, SIGNAL(signalFirstItem()),
+    connect(d->metadataTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
                     
-    connect(d->exifTab, SIGNAL(signalPrevItem()),
+    connect(d->metadataTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
     
-    connect(d->exifTab, SIGNAL(signalNextItem()),
+    connect(d->metadataTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->exifTab, SIGNAL(signalLastItem()),
+    connect(d->metadataTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
                             
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -139,7 +140,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KURL&
     d->exifData           = exifData;
     d->itemInfo           = itemInfo;
     d->currentURL         = url;
-    d->dirtyExifTab       = false;
+    d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
     d->cameraView         = view;
     d->cameraItem         = item;
@@ -153,11 +154,11 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
     d->cameraItem         = 0;
     d->exifData           = QByteArray();
     d->currentURL         = KURL();
-    d->dirtyExifTab       = false;
+    d->dirtyMetadataTab       = false;
     d->dirtyCameraItemTab = false;
 
     d->cameraItemTab->setCurrentItem();
-    d->exifTab->setCurrentURL();
+    d->metadataTab->setCurrentURL();
 }
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
@@ -179,15 +180,15 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType);
         d->dirtyCameraItemTab = true;
     }
-    else if (tab == d->exifTab && !d->dirtyExifTab)
+    else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
         if (d->exifData)
-            d->exifTab->setCurrentData(d->exifData, d->itemInfo->name,
-                                       currentItemType);
+            d->metadataTab->setCurrentData(d->exifData, QByteArray(), 
+                                           d->itemInfo->name, currentItemType);
         else
-            d->exifTab->setCurrentURL(d->currentURL, currentItemType);
+            d->metadataTab->setCurrentURL(d->currentURL, currentItemType);
 
-       d->dirtyExifTab = true;
+       d->dirtyMetadataTab = true;
     }
     
     setCursor( KCursor::arrowCursor() );

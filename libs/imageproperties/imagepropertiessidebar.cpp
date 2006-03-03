@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-17
- * Description :
+ * Description : simple image properties side bar (without support 
+ *               of digiKam database).
  *
  * Copyright 2004-2006 by Gilles Caulier
  *
@@ -47,17 +48,17 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
                                                QSplitter *splitter, Side side, bool mimimizedDefault, bool navBar)
                       : Digikam::Sidebar(parent, name, side, mimimizedDefault)
 {
-    m_image         = 0;
-    m_currentRect   = 0;
-    m_dirtyExifTab  = false;
-    m_dirtyColorTab = false;
+    m_image            = 0;
+    m_currentRect      = 0;
+    m_dirtyMetadataTab = false;
+    m_dirtyColorTab    = false;
     
-    m_exifTab  = new ImagePropertiesEXIFTab(parent, navBar);
-    m_colorTab = new ImagePropertiesColorsTab(parent, 0, navBar);
+    m_metadataTab  = new ImagePropertiesMetaDataTab(parent, navBar);
+    m_colorTab     = new ImagePropertiesColorsTab(parent, 0, navBar);
     
     setSplitter(splitter);
          
-    appendTab(m_exifTab, SmallIcon("exifinfo"), i18n("EXIF"));
+    appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("blend"), i18n("Colors"));
     
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -73,11 +74,11 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     if (!url.isValid())
         return;
     
-    m_currentURL    = url;
-    m_currentRect   = rect;
-    m_image         = img;
-    m_dirtyExifTab  = false;
-    m_dirtyColorTab = false;
+    m_currentURL       = url;
+    m_currentRect      = rect;
+    m_image            = img;
+    m_dirtyMetadataTab = false;
+    m_dirtyColorTab    = false;
     
     slotChangedTab( getActiveTab() );    
 }
@@ -85,9 +86,9 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
 void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
     m_currentURL = KURL::KURL();
-    m_exifTab->setCurrentURL();
+    m_metadataTab->setCurrentURL();
     m_colorTab->setData();
-    m_dirtyExifTab  = false;
+    m_dirtyMetadataTab  = false;
     m_dirtyColorTab = false;
 }
 
@@ -108,10 +109,10 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     
     setCursor(KCursor::waitCursor());
     
-    if (tab == m_exifTab && !m_dirtyExifTab)
+    if (tab == m_metadataTab && !m_dirtyMetadataTab)
     {
-       m_exifTab->setCurrentURL(m_currentURL);
-       m_dirtyExifTab = true;
+       m_metadataTab->setCurrentURL(m_currentURL);
+       m_dirtyMetadataTab = true;
     }
     else if (tab == m_colorTab && !m_dirtyColorTab)
     {

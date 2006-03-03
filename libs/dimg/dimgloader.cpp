@@ -21,8 +21,8 @@
 
 // Local includes.
 
-#include "dimg.h"
 #include "dimgprivate.h"
+#include "dmetadata.h"
 #include "dimgloader.h"
 
 namespace Digikam
@@ -122,6 +122,24 @@ void DImgLoader::imageSetCameraModel(const QString& model)
 void DImgLoader::imageSetCameraConstructor(const QString& constructor)
 {
     m_image->setCameraConstructor(constructor);
+}
+
+void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT ff)
+{
+    QMap<int, QByteArray>& imageMetadata = imageMetaData();
+    imageMetadata.clear();
+
+    DMetadata metaDataFromFile(filePath, ff);
+    imageMetadata.insert(DImg::JPG_EXIF, metaDataFromFile.getExif());
+    imageMetadata.insert(DImg::JPG_IPTC, metaDataFromFile.getIptc());
+}
+
+void DImgLoader::saveMetadata(const QString& filePath)
+{
+    DMetadata metaDataToFile;
+    metaDataToFile.setExif(m_image->getExif());
+    metaDataToFile.setIptc(m_image->getIptc());
+    metaDataToFile.save(filePath, imageGetAttribute("savedformat").toString());
 }
 
 }  // NameSpace Digikam

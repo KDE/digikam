@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-17
- * Description :
+ * Description : simple image properties side bar (without support 
+ *               of digiKam database).
  *
  * Copyright 2004-2006 by Gilles Caulier
  *
@@ -38,7 +39,7 @@ namespace Digikam
 {
 
 class DImg;
-class ImagePropertiesEXIFTab;
+class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Digikam::Sidebar
@@ -66,17 +67,17 @@ protected slots:
 
 protected:
 
-    bool                      m_dirtyExifTab;
-    bool                      m_dirtyColorTab;
+    bool                        m_dirtyMetadataTab;
+    bool                        m_dirtyColorTab;
  
-    QRect                    *m_currentRect;
+    QRect                      *m_currentRect;
  
-    KURL                      m_currentURL;
+    KURL                        m_currentURL;
  
-    DImg                     *m_image;
+    DImg                       *m_image;
      
-    ImagePropertiesEXIFTab   *m_exifTab;
-    ImagePropertiesColorsTab *m_colorTab;
+    ImagePropertiesMetaDataTab *m_metadataTab;
+    ImagePropertiesColorsTab   *m_colorTab;
         
 };
 

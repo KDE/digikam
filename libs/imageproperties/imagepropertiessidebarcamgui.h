@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-08
- * Description :
+ * Description : simple image properties side bar used by 
+ *               camera gui.
  *
  * Copyright 2006 by Gilles Caulier
  *

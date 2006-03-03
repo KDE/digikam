@@ -339,24 +339,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                       << endl;
             metaData.insert(DImg::JPG_COM, ba);
         }
-        else if (marker->marker == M_EXIF)
-        {
-            kdDebug() << "Reading JPEG metadata: APP1 (size=" << ba.size() << ")"
-#ifdef ENABLE_DEBUG_MESSAGES    
-                      << " DATA==" << ba 
-#endif
-                      << endl;
-            metaData.insert(DImg::JPG_EXIF, ba);
-        }
-        else if (marker->marker == M_IPTC)
-        {
-            kdDebug() << "Reading JPEG metadata: APP13 (size=" << ba.size() << ")"
-#ifdef ENABLE_DEBUG_MESSAGES    
-                      << " DATA==" << ba 
-#endif
-                      << endl;
-           metaData.insert(DImg::JPG_IPTC, ba);
-        }
 
         marker = marker->next;
     }
@@ -393,6 +375,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = h;
     imageSetAttribute("format", "JPEG");
     imageData() = dest;
+    
+    readMetadata(filePath, DImg::JPEG);
     
     return true;
 }
@@ -452,47 +436,6 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
-
-    // -------------------------------------------------------------------
-    // Write the markers that we have.
-    
-    typedef QMap<int, QByteArray> MetaDataMap;
-    MetaDataMap map = imageMetaData();
-    
-    for (MetaDataMap::iterator it = map.begin(); it != map.end(); ++it)
-    {
-        QByteArray ba = it.data();
-        
-        switch (it.key())
-        {
-            case(DImg::JPG_COM):
-            {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-                kdDebug() << "Writing JPEG metadata: COM:" << " DATA=" << ba << endl;
-//#endif
-                jpeg_write_marker(&cinfo, M_COM, (const JOCTET*)ba.data(), ba.size());
-                break;
-            }
-            case(DImg::JPG_EXIF):
-            {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-                kdDebug() << "Writing JPEG metadata: APP1:" << " DATA=" << ba << endl;
-//#endif
-                jpeg_write_marker(&cinfo, M_EXIF, (const JOCTET*)ba.data(), ba.size());
-                break;
-            }
-            case(DImg::JPG_IPTC):
-            {
-//#ifdef ENABLE_DEBUG_MESSAGES    
-                kdDebug() << "Writing JPEG metadata: APP13:" << " DATA=" << ba << endl;
-//#endif
-                jpeg_write_marker(&cinfo, M_IPTC, (const JOCTET*)ba.data(), ba.size());
-                break;
-            }
-            default:
-                break;
-        }
-    }
 
     // -------------------------------------------------------------------
     // Write ICC profil.
@@ -595,9 +538,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
     fclose(file);
-
     imageSetAttribute("savedformat", "JPEG");
-
+    saveMetadata(filePath);
+    
     return true;
 }
 
