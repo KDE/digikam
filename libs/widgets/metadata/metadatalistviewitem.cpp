@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-MetadataListViewItem::MetadataListViewItem(QListViewItem *parent, const QString& key,
+MetadataListViewItem::MetadataListViewItem(KListViewItem *parent, const QString& key,
                                            const QString& title, const QString& value)
                     : KListViewItem(parent)
 {

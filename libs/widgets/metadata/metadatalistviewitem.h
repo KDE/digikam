@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT MetadataListViewItem : public KListViewItem
 {
 public:
 
-    MetadataListViewItem(QListViewItem *parent, const QString& key,
+    MetadataListViewItem(KListViewItem *parent, const QString& key,
                          const QString& title, const QString& value);
     ~MetadataListViewItem();
 

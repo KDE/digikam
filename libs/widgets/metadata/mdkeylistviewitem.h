@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MdKeyListViewItem : public QListViewItem
+class DIGIKAM_EXPORT MdKeyListViewItem : public KListViewItem
 {
 
 public:

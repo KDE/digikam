@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 MdKeyListViewItem::MdKeyListViewItem(KListView *parent, const QString& key)
-                 : QListViewItem(parent)
+                 : KListViewItem(parent)
 {
     m_decryptedKey = key;
     
