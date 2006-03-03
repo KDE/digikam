@@ -95,7 +95,13 @@ void UndoManager::addAction(UndoAction* action)
         
         d->undoCache->putData(d->undoActions.size(), w, h, bytesDepth, data);
     }
-    d->origin++;
+
+    // if origin is at one of the redo action that are now invalid,
+    // it is no longer reachable
+    if (d->origin < 0)
+        d->origin = INT_MAX;
+    else
+        d->origin++;
 }
 
 void UndoManager::undo()
