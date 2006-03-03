@@ -18,14 +18,10 @@
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
    - Fix in IE/Showfoto Image Properties side bar restoration after fullscreen mode.
-   - New metadata tab (Exif/MakerNote/Iptc) instead Exif tab ==> Done on my computer (Gilles).
      
 * Improving metadata support:
    - removed libkexif depency        ==> under progress ! (Gilles)
    - Using Exiv2 lib instead libexif ==> under progress ! (Gilles)
-   - Add IPTC support                ==> done in my computer (Gilles)
-   - Add Exif MakerNote support      ==> done in my computer (Gilles)
-   - Add RAW metadata support        ==> CRW only actually (Gilles)
    
    - Better embbeded thumbnail support, especially for TIFF/EP ?
    - Improved metadata from TIFF file format. Add DNG file format if it's possible...
