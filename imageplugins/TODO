@@ -20,10 +20,10 @@
    - Add Border       : Done.
    - Oil Paint        : Done.
    - Unsharp          : Done.
+   - Texture          : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Texture          : TODO. ==> simple port algorithms to 16 bits. Easy.
    - Film Grain       : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FilmGrain). Medium.
    - Rain Drops       : TODO. ==> simple port algorithms to 16 bits. Medium.

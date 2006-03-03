@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_texture.h"
 #include "imageplugin_texture.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_Texture::setEnabledActions(bool enable)
 
 void ImagePlugin_Texture::slotTexture()
 {
-    DigikamTextureImagesPlugin::ImageEffect_Texture dlg(parentWidget());
+    QString title = i18n("Apply Texture");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamTextureImagesPlugin::ImageEffect_Texture dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_texture.moc"

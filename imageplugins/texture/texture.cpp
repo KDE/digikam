@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : texture.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : Texture threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,10 +21,8 @@
  * 
  * ============================================================ */
 
-#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ((((t) >> 8) + (t)) >> 8)) 
- 
-// C++ includes. 
- 
+// C++ includes.
+
 #include <cmath>
 #include <cstdlib>
 
@@ -37,17 +37,31 @@
 namespace DigikamTextureImagesPlugin
 {
 
-Texture::Texture(QImage *orgImage, QObject *parent, int blendGain, QString texturePath)
-       : Digikam::ThreadedFilter(orgImage, parent, "Texture")
-{ 
+Texture::Texture(Digikam::DImg *orgImage, QObject *parent, int blendGain, QString texturePath)
+       : Digikam::DImgThreadedFilter(orgImage, parent, "Texture")
+{
     m_blendGain   = blendGain;
     m_texturePath = texturePath;
-    
+
     initFilter();
 }
 
 // This method is based on the Simulate Texture Film tutorial from GimpGuru.org web site 
 // available at this url : http://www.gimpguru.org/Tutorials/SimulatedTexture/
+
+//#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ( ( (t >> 8) + t ) >> 8))
+
+inline static int intMult8(uint a, uint b)
+{
+    uint t = a * b + 0x80;
+    return ((t >> 8) + t) >> 8;
+}
+
+inline static int intMult16(uint a, uint b)
+{
+    uint t = a * b + 0x8000;
+    return ((t >> 16) + t) >> 16;
+}
 
 void Texture::filterImage(void)
 {
@@ -55,84 +69,115 @@ void Texture::filterImage(void)
 
     int w = m_orgImage.width();
     int h = m_orgImage.height();
-    kdDebug() << "Texture File:" << m_texturePath << endl;
-    QImage texture(m_texturePath);
+    int bytesDepth  = m_orgImage.bytesDepth();
+    bool sixteenBit = m_orgImage.sixteenBit();
+
+    kdDebug() << "Texture File: " << m_texturePath << endl;
+    Digikam::DImg texture(m_texturePath);
     if ( texture.isNull() ) return;
-    
-    m_textureImg.create(w, h, 32);
-    
+
+    Digikam::DImg textureImg(w, h, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+
+    texture.convertToDepthOfImage(&textureImg);
+
     for (int x = 0 ; x < w ; x+=texture.width())
-       for (int y = 0 ; y < h ; y+=texture.height())
-          bitBlt(&m_textureImg, x, y, &texture, 0, 0, texture.width(), texture.height(), 0);
+        for (int y = 0 ; y < h ; y+=texture.height())
+            textureImg.bitBltImage(&texture, x, y);
 
     // Apply texture.
-                        
-    uint* data         = (uint*)m_orgImage.bits();
-    uint* pTeData      = (uint*)m_textureImg.bits();
-    uint* pOutBits     = (uint*)m_destImage.bits(); 
-    uint* pTransparent = new uint[w*h];    
-    memset(pTransparent, 128, w*h*sizeof(uint));
 
-    Digikam::ImageFilters::imageData teData;    
-    Digikam::ImageFilters::imageData transData;    
-    Digikam::ImageFilters::imageData inData;  
-    Digikam::ImageFilters::imageData outData;  
-    
-    register int i;
+    uchar* data         = m_orgImage.bits();
+    uchar* pTeData      = textureImg.bits();
+    uchar* pOutBits     = m_destImage.bits();
+    uint offset;
+
+    Digikam::DColor teData, transData, inData, outData;
+    uchar *ptr, *dptr, *tptr;
     int progress;
 
-    // Make textured transparent layout.
-    
-    for (i = 0; !m_cancel && (i < w*h); i++)
-        {
-        // Get Alpha channel (unchanged).
-        teData.raw           = pTeData[i];   
-        
-        // Overwrite RGB.
-        teData.channel.red   = (teData.channel.red * (255 - m_blendGain) + 
-                                transData.channel.red * m_blendGain) >> 8;
-        teData.channel.green = (teData.channel.green * (255 - m_blendGain) + 
-                                transData.channel.green * m_blendGain) >> 8;
-        teData.channel.blue  = (teData.channel.blue * (255 - m_blendGain) + 
-                                transData.channel.blue * m_blendGain) >> 8;
-        pTeData[i]           = teData.raw; 
+    int blendGain;
+    if (sixteenBit)
+        blendGain = (m_blendGain + 1) * 256 - 1;
+    else
+        blendGain = m_blendGain;
 
-        // Update de progress bar in dialog.
-        progress = (int) (((double)i * 50.0) / (w*h));
-        
-        if (progress%5 == 0)
-           postProgress(progress);
+    // Make textured transparent layout.
+
+    for (int x = 0; !m_cancel && x < w; x++)
+    {
+        for (int y = 0; !m_cancel && y < h; y++)
+        {
+            offset = x*bytesDepth + (y*w*bytesDepth);
+            ptr = data + offset;
+            tptr = pTeData + offset;
+
+            // Read color
+            teData.setColor(tptr, sixteenBit);
+
+            // in the old algorithm, this was
+            //teData.channel.red   = (teData.channel.red * (255 - m_blendGain) +
+            //      transData.channel.red * m_blendGain) >> 8;
+            // but transdata was uninitialized, its components were apparently 0,
+            // so I removed the part after the "+".
+
+            if (sixteenBit)
+            {
+                teData.blendInvAlpha16(blendGain);
+            }
+            else
+            {
+                teData.blendInvAlpha8(blendGain);
+            }
+
+            // Overwrite RGB.
+            teData.setPixel(tptr);
         }
-            
-    uint tmp, tmpM;
+
+        // Update progress bar in dialog.
+        progress = (int) (((double)x * 50.0) / w);
+
+        if (progress%5 == 0)
+            postProgress(progress);
+    }
 
     // Merge layout and image using overlay method.
-    
-    for (i = 0; !m_cancel && (i < w*h); i++)
-        {     
-        inData.raw            = data[i];
-        outData.raw           = pOutBits[i];
-        teData.raw            = pTeData[i];
-        outData.channel.red   = INT_MULT(inData.channel.red, inData.channel.red + 
-                                            INT_MULT(2 * teData.channel.red, 
-                                                    255 - inData.channel.red, tmpM), tmp);
-        outData.channel.green = INT_MULT(inData.channel.green, inData.channel.green + 
-                                            INT_MULT(2 * teData.channel.green, 
-                                                    255 - inData.channel.green, tmpM), tmp);
-        outData.channel.blue  = INT_MULT(inData.channel.blue, inData.channel.blue + 
-                                            INT_MULT(2 * teData.channel.blue, 
-                                                    255 - inData.channel.blue, tmpM), tmp);
-        outData.channel.alpha = inData.channel.alpha;
-        pOutBits[i]           = outData.raw;
-        
-        // Update progress bar in dialog.
-        progress = (int) (50.0 + ((double)i * 50.0) / (w*h));
-        
-        if (progress%5 == 0)
-           postProgress(progress);
+
+    for (int x = 0; !m_cancel && x < w; x++)
+    {
+        for (int y = 0; !m_cancel && y < h; y++)
+        {
+            offset = x*bytesDepth + (y*w*bytesDepth);
+            ptr = data + offset;
+            dptr = pOutBits + offset;
+            tptr = pTeData + offset;
+
+            inData.setColor (ptr, sixteenBit);
+            outData.setColor(dptr, sixteenBit);
+            teData.setColor (tptr, sixteenBit);
+
+            if (sixteenBit)
+            {
+                outData.setRed  ( intMult16 (inData.red(),   inData.red()   + intMult16(2 * teData.red(),   65535 - inData.red())   ) );
+                outData.setGreen( intMult16 (inData.green(), inData.green() + intMult16(2 * teData.green(), 65535 - inData.green()) ) );
+                outData.setBlue ( intMult16 (inData.blue(),  inData.blue()  + intMult16(2 * teData.blue(),  65535 - inData.blue())  ) );
+            }
+            else
+            {
+                outData.setRed  ( intMult8  (inData.red(),   inData.red()   + intMult8(2 * teData.red(),    255 - inData.red())   ) );
+                outData.setGreen( intMult8  (inData.green(), inData.green() + intMult8(2 * teData.green(),  255 - inData.green()) ) );
+                outData.setBlue ( intMult8  (inData.blue(),  inData.blue()  + intMult8(2 * teData.blue(),   255 - inData.blue())  ) );
+            }
+            outData.setAlpha( inData.alpha() );
+            outData.setPixel( dptr );
         }
-        
-    delete [] pTransparent;
+
+        // Update progress bar in dialog.
+        progress = (int) (50.0 + ((double)x * 50.0) / w);
+
+        if (progress%5 == 0)
+            postProgress(progress);
+    }
+
 }
 
 }  // NameSpace DigikamTextureImagesPlugin

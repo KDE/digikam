@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_texture.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-03-10
  * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,11 +53,12 @@
 namespace DigikamTextureImagesPlugin
 {
 
-ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
-                   : CtrlPanelDialog(parent, i18n("Apply Texture on Photograph"), "texture")
+ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame* banner)
+                   : Digikam::CtrlPanelDlg(parent, title, "texture", false, false, true, 
+                                           Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
-        
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Apply Texture"), 
                                        digikamimageplugins_version,
@@ -63,20 +66,24 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent)
                                        "texture to an image."),
                                        KAboutData::License_GPL,
                                        "(c) 2005, Gilles Caulier", 
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
-    
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
-    
+
     m_textureType = new QComboBox( false, gboxSettings );
     m_textureType->insertItem( i18n("Paper") );
     m_textureType->insertItem( i18n("Paper 2") );
@@ -144,36 +151,31 @@ void ImageEffect_Texture::prepareEffect()
 {
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-            
-    QImage image   = m_imagePreviewWidget->getOriginalClipImage();
+
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( m_textureType->currentItem() );
-    
+
     int b = 255 - m_blendGain->value();
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Texture(&image, this, b, texture));
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Texture(&image, this, b, texture));
 }
 
 void ImageEffect_Texture::prepareFinal()
 {
     m_textureType->setEnabled(false);
     m_blendGain->setEnabled(false);
-    
+
     int b = 255 - m_blendGain->value();
-    
+
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     QString texture = getTexturePath( m_textureType->currentItem() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Texture(&orgImage, this, b, texture));
-    delete [] data;
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Texture(iface.getOriginalImg(), this, b, texture));
 }
 
 void ImageEffect_Texture::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
 void ImageEffect_Texture::putFinalData(void)

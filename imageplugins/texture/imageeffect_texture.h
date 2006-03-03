@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_texture.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-03-10
  * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,9 +29,9 @@
 
 #include <qstring.h>
 
-// Local includes.
+// Digikam includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class QComboBox;
 
@@ -38,13 +40,13 @@ class KIntNumInput;
 namespace DigikamTextureImagesPlugin
 {
 
-class ImageEffect_Texture : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Texture : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Texture(QWidget* parent);
+    ImageEffect_Texture(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Texture();
 
 private:
@@ -71,14 +73,14 @@ private:
 
     QComboBox    *m_textureType;
 
-    KIntNumInput *m_blendGain;    
-    
+    KIntNumInput *m_blendGain;
+
 private:
-    
+
     QString getTexturePath(int texture);
-        
+
 protected:
-    
+
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
