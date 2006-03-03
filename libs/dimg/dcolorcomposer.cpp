@@ -124,17 +124,20 @@ class DColorComposerPremultiplyAlpha : public DColorComposer
 // Dst blending function Inv Src Alpha
 void DColorComposerPorterDuffNone::compose(DColor &dest, DColor src)
 {
+    // preserve src alpha value for dest blending,
+    // src.alpha() will be changed after blending src
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
-        src.blendAlpha16(src.alpha());
-        dest.blendInvAlpha16(src.alpha());
+        src.blendAlpha16(sa);
+        dest.blendInvAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
-        src.blendAlpha8(src.alpha());
-        dest.blendInvAlpha8(src.alpha());
+        src.blendAlpha8(sa);
+        dest.blendInvAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
@@ -235,17 +238,18 @@ void DColorComposerPorterDuffSrcIn::compose(DColor &dest, DColor src)
 // Dst blending function Src Alpha
 void DColorComposerPorterDuffDstIn::compose(DColor &dest, DColor src)
 {
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
         src.blendZero();
-        dest.blendAlpha16(src.alpha());
+        dest.blendAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
         src.blendZero();
-        dest.blendAlpha8(src.alpha());
+        dest.blendAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
@@ -279,17 +283,18 @@ void DColorComposerPorterDuffSrcOut::compose(DColor &dest, DColor src)
 // Dst blending function Inv Src Alpha
 void DColorComposerPorterDuffDstOut::compose(DColor &dest, DColor src)
 {
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
         src.blendZero();
-        dest.blendInvAlpha16(src.alpha());
+        dest.blendInvAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
         src.blendZero();
-        dest.blendInvAlpha8(src.alpha());
+        dest.blendInvAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
@@ -301,17 +306,18 @@ void DColorComposerPorterDuffDstOut::compose(DColor &dest, DColor src)
 // Dst blending function Inv Src Alpha
 void DColorComposerPorterDuffSrcAtop::compose(DColor &dest, DColor src)
 {
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
         src.blendAlpha16(dest.alpha());
-        dest.blendInvAlpha16(src.alpha());
+        dest.blendInvAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
         src.blendAlpha8(dest.alpha());
-        dest.blendInvAlpha8(src.alpha());
+        dest.blendInvAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
@@ -323,17 +329,18 @@ void DColorComposerPorterDuffSrcAtop::compose(DColor &dest, DColor src)
 // Dst blending function Src Alpha
 void DColorComposerPorterDuffDstAtop::compose(DColor &dest, DColor src)
 {
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
         src.blendInvAlpha16(dest.alpha());
-        dest.blendAlpha16(src.alpha());
+        dest.blendAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
         src.blendInvAlpha8(dest.alpha());
-        dest.blendInvAlpha8(src.alpha());
+        dest.blendInvAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
@@ -345,17 +352,18 @@ void DColorComposerPorterDuffDstAtop::compose(DColor &dest, DColor src)
 // Dst blending function Inv Src Alpha
 void DColorComposerPorterDuffXor::compose(DColor &dest, DColor src)
 {
+    int sa = src.alpha();
     if (dest.sixteenBit())
     {
         src.blendInvAlpha16(dest.alpha());
-        dest.blendInvAlpha16(src.alpha());
+        dest.blendInvAlpha16(sa);
         dest.blendAdd(src);
         dest.blendClamp16();
     }
     else
     {
         src.blendInvAlpha8(dest.alpha());
-        dest.blendInvAlpha8(src.alpha());
+        dest.blendInvAlpha8(sa);
         dest.blendAdd(src);
         dest.blendClamp8();
     }
