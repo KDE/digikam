@@ -51,6 +51,7 @@ extern "C"
 #include "qimageloader.h"
 #include "dimgprivate.h"
 #include "dimg.h"
+#include "dcolorcomposer.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -692,8 +693,8 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
         return;
     }
 
-    bitBlt(src->bits(), bits(), sx, sy, w, h, dx, dy,
-           src->width(), src->height(), width(), height(), src->bytesDepth(), bytesDepth());
+    bitBlt(0, src->bits(), bits(), sx, sy, w, h, dx, dy,
+           src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
 }
 
 void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
@@ -708,12 +709,16 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
         return;
     }
 
-    bitBlt(src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sdepth, bytesDepth());
+    bitBlt(0, src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sixteenBit(), sdepth, bytesDepth());
 }
 
+// If composer is 0, this a plain bitBlt.
+// If composer is not 0, it will be used to blend source and destination
 
-void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, int dx, int dy,
-                  uint swidth, uint sheight, uint dwidth, uint dheight, int sdepth, int ddepth)
+void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
+                         int sx, int sy, int w, int h, int dx, int dy,
+                         uint swidth, uint sheight, uint dwidth, uint dheight,
+                         bool sixteenBit, int sdepth, int ddepth)
 {
     if (w <= 0 || h <= 0)
         return;
@@ -783,12 +788,44 @@ void DImg::bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, i
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
-        for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
+        if (composer)
         {
-            *dptr = *sptr;
+            // blend src and destination
+            for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
+            {
+                DColor src(sptr, sixteenBit);
+                DColor dst(dptr, sixteenBit);
+                composer->compose(dst, src);
+                dst.setPixel(dptr);
+            }
+        }
+        else
+        {
+            // plain and simple bitBlt
+            for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
+            {
+                *dptr = *sptr;
+            }
         }
     }
 }
+
+void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
+                   int sx, int sy, int w, int h, int dx, int dy)
+{
+    if (isNull())
+        return;
+
+    if (src->sixteenBit() != sixteenBit())
+    {
+        kdWarning() << "Blending from 8-bit to 16-bit or vice versa is not supported" << endl;
+        return;
+    }
+
+    bitBlt(composer, src->bits(), bits(), sx, sy, w, h, dx, dy,
+             src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
+}
+
 
 // This method is inspired from imlib2::__imlib_BlendRGBAToRGB() (blend.c)
 
@@ -1018,7 +1055,7 @@ void DImg::crop(int x, int y, int w, int h)
     allocateData();
 
     // copy image region (x|y), wxh, from old data to point (0|0) of new data
-    bitBlt(old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), bytesDepth(), bytesDepth());
+    bitBlt(0, old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), sixteenBit(), bytesDepth(), bytesDepth());
     delete [] old;
 }
 

@@ -3,7 +3,7 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdimg.la
 
-libdimg_la_SOURCES = dimg.cpp dimgloader.cpp dimgscale.cpp dcolor.cpp
+libdimg_la_SOURCES = dimg.cpp dimgloader.cpp dimgscale.cpp dcolor.cpp dcolorcomposer.cpp
 
 libdimg_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LCMS_LIBS) 
 

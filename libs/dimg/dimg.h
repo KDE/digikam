@@ -45,6 +45,7 @@ namespace Digikam
 {
 
 class DImgPrivate;
+class DColorComposer;
 
 class DIGIKAM_EXPORT DImg
 {
@@ -203,6 +204,8 @@ public:
 
     /** Merge a pixels region to an image using alpha channel */
     void       bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h);
+    void       bitBlendImage(DColorComposer *composer, const DImg* src,
+                             int sx, int sy, int w, int h, int dx, int dy);
 
     /** QImage wrapper methods */
     QImage     copyQImage();
@@ -269,8 +272,10 @@ private:
     void       setImageDimension(uint width, uint height);
     int        allocateData();
     DImg(const DImg &image, int w, int h);
-    static void bitBlt(const uchar *src, uchar *dest, int sx, int sy, int w, int h, int dx, int dy,
-                       uint swidth, uint sheight, uint dwidth, uint dheight, int sdepth, int ddepth);
+    static void bitBlt(DColorComposer *composer, const uchar *src, uchar *dest,
+                         int sx, int sy, int w, int h, int dx, int dy,
+                         uint swidth, uint sheight, uint dwidth, uint dheight,
+                         bool sixteenBit, int sdepth, int ddepth);
 
     friend class DImgLoader;
 };
