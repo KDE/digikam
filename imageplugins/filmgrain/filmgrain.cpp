@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : filmgrain.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : FilmGrain threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +30,10 @@
 
 #include <qdatetime.h> 
 
+// Digikam include
+
+#include "dcolorcomposer.h"
+
 // Local includes.
 
 #include "filmgrain.h"
@@ -35,111 +41,161 @@
 namespace DigikamFilmGrainImagesPlugin
 {
 
-FilmGrain::FilmGrain(QImage *orgImage, QObject *parent, int sensibility)
-         : Digikam::ThreadedFilter(orgImage, parent, "FilmGrain")
-{ 
+FilmGrain::FilmGrain(Digikam::DImg *orgImage, QObject *parent, int sensibility)
+         : Digikam::DImgThreadedFilter(orgImage, parent, "FilmGrain")
+{
     m_sensibility = sensibility;
     initFilter();
 }
 
 void FilmGrain::filterImage(void)
 {
-    filmgrainImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_sensibility);
+    filmgrainImage(&m_orgImage, m_sensibility);
 }
 
 // This method is based on the Simulate Film grain tutorial from GimpGuru.org web site 
 // available at this url : http://www.gimpguru.org/Tutorials/FilmGrain
 
-void FilmGrain::filmgrainImage(uint* data, int Width, int Height, int Sensibility)
+void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
 {
+    // Sensibility: 800..6400
+
     if (Sensibility <= 0) return;
-    
-    int Noise = (int)(Sensibility / 10.0);
-    register int i;       
-    int nRand, progress;
-    
-    uint* pGrainBits = new uint[Width*Height];    // Grain blured without curves adjustment.
-    uint*  pMaskBits = new uint[Width*Height];    // Grain mask with curves adjustment.
-    uint*   pOutBits = (uint*)m_destImage.bits(); // Destination image with merged grain mask and original.
-    
-    Digikam::ImageFilters::imageData inData;    
-    Digikam::ImageFilters::imageData grainData;    
-    Digikam::ImageFilters::imageData maskData;    
-    Digikam::ImageFilters::imageData outData;    
-    
+
+    int Width = orgImage->width();
+    int Height = orgImage->height();
+    int bytesDepth = orgImage->bytesDepth();
+    bool sixteenBit = orgImage->sixteenBit();
+    uchar* data = orgImage->bits();
+
+    uchar* pGrainBits = new uchar[Width*Height*bytesDepth];    // Grain blured without curves adjustment.
+    uchar* pMaskBits  = new uchar[Width*Height*bytesDepth];    // Grain mask with curves adjustment.
+    uchar* pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
+
+    int Noise, Shade, nRand, component, progress;
+    uchar *ptr;
+    Digikam::DColor blendData, grainData, maskData, outData;
+
+    if (sixteenBit)
+        Noise = (Sensibility / 10 + 1) * 256 - 1;
+    else
+        Noise = Sensibility / 10;
+
+    // This value controls the shading pixel effect between original image and grain mask.
+    if (sixteenBit)
+        Shade = (52 + 1) * 256 - 1;
+    else
+        Shade = 52;
+
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    srand ((uint) dt.secsTo(Y2000));
-    
+    uint seed = (uint) dt.secsTo(Y2000);
+
     // Make gray grain mask.
-    
-    for (i = 0; !m_cancel && (i < Width*Height); i++)
+
+    grainData.setSixteenBit(sixteenBit);
+
+    for (int x = 0; !m_cancel && x < Width; x++)
+    {
+        for (int y = 0; !m_cancel && y < Height; y++)
         {
-        nRand = (rand() % Noise) - (Noise / 2);
-        grainData.channel.red   = CLAMP(128 + nRand, 0, 255); // Red.
-        grainData.channel.green = CLAMP(128 + nRand, 0, 255); // Green.
-        grainData.channel.blue  = CLAMP(128 + nRand, 0, 255); // Blue.
-        grainData.channel.alpha = 0;                          // Reset Alpha (not used here).
-        pGrainBits[i] = grainData.raw;
-        
-        // Update de progress bar in dialog.
-        progress = (int) (((double)i * 25.0) / (Width*Height));
-        
-        if (progress%5 == 0)
-           postProgress( progress );   
+            ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
+
+            nRand = (rand_r(&seed) % Noise) - (Noise / 2);
+            if (sixteenBit)
+                component = CLAMP(32768 + nRand, 0, 65535);
+            else
+                component = CLAMP(128 + nRand, 0, 255);
+
+            grainData.setRed  (component);
+            grainData.setGreen(component);
+            grainData.setBlue (component);
+            grainData.setAlpha(0);
+
+            grainData.setPixel(ptr);
         }
 
-    // Smooth grain mask using gaussian blur.    
-    
-    Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 1);
-    
-    // Update de progress bar in dialog.
-    postProgress( 30 );   
-            
-    // Normally, film grain tends to be most noticable in the midtones, and much less 
-    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this. 
+        // Update progress bar in dialog.
+        progress = (int) (((double)x * 25.0) / Width);
 
-    // FIXME : support 16 bits image properly.
-    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(false);
-    
+        if (progress%5 == 0)
+            postProgress( progress );
+    }
+
+    // Smooth grain mask using gaussian blur.
+    Digikam::DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
+
+    // Update de progress bar in dialog.
+    postProgress( 30 );
+
+    // Normally, film grain tends to be most noticable in the midtones, and much less 
+    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
+
+    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(sixteenBit);
+
     // We modify only global luminosity of the grain.
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));   
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
-    grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
-    
+    if (sixteenBit)
+    {
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(32768, 32768));
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(65535, 0));
+    }
+    else
+    {
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
+        grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
+    }
+
     // Calculate curves and lut to apply on grain.
     grainCurves->curvesCalculateCurve(Digikam::ImageHistogram::ValueChannel);
     grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-    // FIXME : support 16 bits image properly.
-    grainCurves->curvesLutProcess((uchar*)pGrainBits, (uchar*)pMaskBits, Width, Height);
+    grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
+
+    delete [] pGrainBits;
     delete grainCurves;
-    
-    // Update de progress bar in dialog.
-    postProgress( 40 );   
-    
+
+    // Update progress bar in dialog.
+    postProgress( 40 );
+
     // Merge src image with grain using shade coefficient.
 
-    int Shade = 52; // This value control the shading pixel effect between original image and grain mask.
-        
-    for (i = 0; !m_cancel && (i < Width*Height); i++)
-        {        
-        inData.raw            = data[i];
-        maskData.raw          = pMaskBits[i];
-        outData.channel.red   = (inData.channel.red*(255-Shade)   + maskData.channel.red*Shade) >> 8;
-        outData.channel.green = (inData.channel.green*(255-Shade) + maskData.channel.green*Shade) >> 8;
-        outData.channel.blue  = (inData.channel.blue*(255-Shade)  + maskData.channel.blue*Shade) >> 8;
-        outData.channel.alpha = inData.channel.alpha;
-        pOutBits[i]           = outData.raw;
-    
-        // Update de progress bar in dialog.
-        progress = (int) (50.0 + ((double)i * 50.0) / (Width*Height));
-        
-        if (progress%5 == 0)
-           postProgress( progress );   
+    int alpha;
+    // get composer for default blending
+    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+
+    for (int x = 0; !m_cancel && x < Width; x++)
+    {
+        for (int y = 0; !m_cancel && y < Height; y++)
+        {
+            int offset = x*bytesDepth + (y*Width*bytesDepth);
+
+            // read color from orig image
+            blendData.setColor(data + offset, sixteenBit);
+            // read color from mask
+            maskData.setColor(pMaskBits + offset, sixteenBit);
+            // set shade as alpha value - it will be used as source alpha when blending
+            maskData.setAlpha(Shade);
+
+            // compose, write result to blendData.
+            // Preserve alpha, do not blend it (taken from old algorithm - correct?)
+            alpha = blendData.alpha();
+            composer->compose(blendData, maskData);
+            blendData.setAlpha(alpha);
+
+            // write to destination
+            blendData.setPixel(pOutBits + offset);
         }
-    
-    delete [] pGrainBits;    
+
+        // Update progress bar in dialog.
+        progress = (int) (50.0 + ((double)x * 50.0) / Width);
+
+        if (progress%5 == 0)
+           postProgress( progress );
+    }
+
     delete [] pMaskBits;
+    delete composer;
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

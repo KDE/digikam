@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_filmgrain.h"
 #include "imageplugin_filmgrain.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_FilmGrain::setEnabledActions(bool enable)
 
 void ImagePlugin_FilmGrain::slotFilmGrain()
 {
-    DigikamFilmGrainImagesPlugin::ImageEffect_FilmGrain dlg(parentWidget());
+    QString title = i18n("Add Film Grain to Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamFilmGrainImagesPlugin::ImageEffect_FilmGrain dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

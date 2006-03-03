@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : filmgrain.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : Filmgrain threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,26 +31,26 @@
 namespace DigikamFilmGrainImagesPlugin
 {
 
-class FilmGrain : public Digikam::ThreadedFilter
+class FilmGrain : public Digikam::DImgThreadedFilter
 {
 
 public:
-    
-    FilmGrain(QImage *orgImage, QObject *parent=0, int sensibility=12);
-    
+
+    FilmGrain(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=12);
+
     ~FilmGrain(){};
-    
+
 private:  // FilmGrain filter data.
 
     int  m_sensibility;
-    
+
 private:  // FilmGrain filter methods.
 
     virtual void filterImage(void);
 
-    void filmgrainImage(uint* data, int Width, int Height, int Sensibility);
+    void filmgrainImage(Digikam::DImg *orgImage, int Sensibility);
 
-};    
+};
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
 

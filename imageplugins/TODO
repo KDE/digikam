@@ -21,10 +21,10 @@
    - Oil Paint        : Done.
    - Unsharp          : Done.
    - Texture          : Done.
+   - Film Grain       : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Film Grain       : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FilmGrain). Medium.
    - Rain Drops       : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Lens Distortion  : TODO. ==> simple port algorithms to 16 bits. Medium.

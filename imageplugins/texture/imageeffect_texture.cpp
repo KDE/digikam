@@ -65,8 +65,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame*
                                        I18N_NOOP("A digiKam image plugin to apply a decorative "
                                        "texture to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
-                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
+                                       "(c) 2005, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
 

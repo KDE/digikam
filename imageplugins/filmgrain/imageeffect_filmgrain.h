@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_filmgrain.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-08-26
  * Description : a digiKam image editor plugin for add film 
  *               grain on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +25,9 @@
 #ifndef IMAGEEFFECT_FILMGRAIN_H
 #define IMAGEEFFECT_FILMGRAIN_H
 
-// Local includes.
+// Digikam includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class QSlider;
 class QLCDNumber;
@@ -33,34 +35,35 @@ class QLCDNumber;
 namespace DigikamFilmGrainImagesPlugin
 {
 
-class ImageEffect_FilmGrain : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_FilmGrain : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_FilmGrain(QWidget* parent);
+    ImageEffect_FilmGrain(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_FilmGrain();
 
-        
+
 private:
 
     QSlider     *m_sensibilitySlider;
-    
+
     QLCDNumber  *m_sensibilityLCDValue;
 
 private slots:
 
     void slotSensibilityChanged(int);
+    void slotSliderMoved(int);
 
 protected:
-    
+
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
     void putFinalData(void);
-    void resetValues(void);   
-    void renderingFinished(void);    
+    void resetValues(void);
+    void renderingFinished(void);
 };
 
 }  // NameSpace DigikamFilmGrainImagesPlugin
