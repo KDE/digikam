@@ -37,6 +37,7 @@
 namespace Digikam
 {
 
+/*
 DColor::DColor(const DColor& color)
 {
     m_red        = color.m_red;
@@ -45,6 +46,7 @@ DColor::DColor(const DColor& color)
     m_alpha      = color.m_alpha;
     m_sixteenBit = color.m_sixteenBit;
 }
+*/
 
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
@@ -60,6 +62,7 @@ DColor::DColor(const QColor& color, bool sixteenBit)
         convertToSixteenBit();
 }
 
+/*
 DColor& DColor::operator=(const DColor& color)
 {
     m_red        = color.m_red;
@@ -69,6 +72,7 @@ DColor& DColor::operator=(const DColor& color)
     m_sixteenBit = color.m_sixteenBit;
     return *this;
 }
+*/
 
 QColor DColor::getQColor() const
 {

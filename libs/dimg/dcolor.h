@@ -32,8 +32,6 @@
 namespace Digikam
 {
 
-class DColorPriv;
-
 class DIGIKAM_EXPORT DColor
 {
 public:
@@ -44,7 +42,7 @@ public:
         {};
 
     /** Read value from data. Equivalent to setColor() */
-    DColor(uchar *data, bool sixteenBit)
+    DColor(const uchar *data, bool sixteenBit = false)
         { setColor(data, sixteenBit); }
 
     /** Initialize with given RGBA values */
@@ -52,26 +50,24 @@ public:
         : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
         {};
 
-    /** Copy constructor */
-    DColor(const DColor& color);
-
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
     DColor(const QColor& color, bool sixteenBit=false);
 
-    DColor& operator=(const DColor& color);
-    ~DColor() {};
+    // Use default copy constructor, assignment operator and destructor
 
     /** Read color values as RGBA from the given memory location.
         If sixteenBit is false, 4 bytes are read.
         If sixteenBit is true, 8 bytes are read.
-    */
-    void DColor::setColor(uchar *data, bool sixteenBit = false);
+        Inline method.
+     */
+    void DColor::setColor(const uchar *data, bool sixteenBit = false);
 
     /** Write the values of this color to the given memory location.
         If sixteenBit is false, 4 bytes are written.
         If sixteenBit is true, 8 bytes are written.
+        Inline method.
     */
-    void DColor::setPixel(uchar *data);
+    void DColor::setPixel(uchar *data) const;
 
     int  red  () const { return m_red; }
     int  green() const { return m_green; }
@@ -115,53 +111,32 @@ private:
     int  m_alpha;
 
     bool m_sixteenBit;
+
+public:
+
+    // Inline alpha blending helper functions.
+    // These functions are used by DColorComposer.
+    // Look at that code to learn how to use them for
+    // composition if you want to use them in optimized code.
+    void blendZero();
+    void blendAlpha8(int alpha);
+    void blendInvAlpha8(int alpha);
+    void blendAlpha16(int alpha);
+    void blendInvAlpha16(int alpha);
+    void blendAdd(const DColor &src);
+    void blendClamp8();
+    void blendClamp16();
 };
 
 
-// These methods are used in quite a few image effects,
-// typically in loops iterating the data.
-// Providing them as inline methods allows the compiler to optimize better.
-
-inline void DColor::setColor(uchar *data, bool sixteenBit)
-{
-    m_sixteenBit = sixteenBit;
-
-    if (!sixteenBit)          // 8 bits image
-    {
-        setBlue (data[0]);
-        setGreen(data[1]);
-        setRed  (data[2]);
-        setAlpha(data[3]);
-    }
-    else                      // 16 bits image
-    {
-        unsigned short* data16 = (unsigned short*)data;
-        setBlue (data16[0]);
-        setGreen(data16[1]);
-        setRed  (data16[2]);
-        setAlpha(data16[3]);
-    }
-}
-
-inline void DColor::setPixel(uchar *data)
-{
-    if (sixteenBit())       // 16 bits image.
-    {
-        unsigned short *data16 = (unsigned short *)data;
-        data16[0] = (unsigned short)blue();
-        data16[1] = (unsigned short)green();
-        data16[2] = (unsigned short)red();
-        data16[3] = (unsigned short)alpha();
-    }
-    else                    // 8 bits image.
-    {
-        data[0] = (uchar)blue();
-        data[1] = (uchar)green();
-        data[2] = (uchar)red();
-        data[3] = (uchar)alpha();
-    }
-}
-
 }  // NameSpace Digikam
+
+
+
+// Inline methods
+#include "dcolorpixelaccess.h"
+#include "dcolorblend.h"
+
+
 
 #endif /* DCOLOR_H */
