@@ -39,7 +39,7 @@
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameraitempropertiestab.h"
-#include "imagepropertiesexiftab.h"
+#include "imagepropertiesmetadatatab.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiessidebarcamgui.h"
 

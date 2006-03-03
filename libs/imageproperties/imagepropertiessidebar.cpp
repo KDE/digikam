@@ -37,7 +37,7 @@
 // Local includes.
 
 #include "dimg.h"
-#include "imagepropertiesexiftab.h"
+#include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiessidebar.h"
 

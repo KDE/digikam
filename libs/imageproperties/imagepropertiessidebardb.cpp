@@ -39,7 +39,7 @@
 #include "dimg.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
-#include "imagepropertiesexiftab.h"
+#include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagedescedittab.h"
 #include "navigatebarwidget.h"

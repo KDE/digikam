@@ -44,7 +44,7 @@
 #include "iptcwidget.h"
 #include "makernotewidget.h"
 #include "navigatebarwidget.h"
-#include "imagepropertiesexiftab.h"
+#include "imagepropertiesmetadatatab.h"
 
 namespace Digikam
 {
@@ -195,4 +195,4 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
 
 }  // NameSpace Digikam
 
-#include "imagepropertiesexiftab.moc"
+#include "imagepropertiesmetadatatab.moc"

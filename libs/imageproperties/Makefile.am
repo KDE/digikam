@@ -14,7 +14,7 @@ libimagepropertiescamgui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # Image Properties SideBar for Showfoto (without digiKam database support).
 
 libimagepropertiesshowfoto_la_SOURCES = imagepropertiessidebar.cpp navigatebarwidget.cpp \
-	                                    imagepropertiesexiftab.cpp imagepropertiescolorstab.cpp 
+	                                    imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp
 
 libimagepropertiesshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	                                   $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
@@ -27,7 +27,7 @@ libimagepropertiesshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # Image Properties SideBar for digiKam Main interface and Image Editor (digiKam database support).
 
 libimagepropertiesdigikam_la_SOURCES = imagepropertiessidebar.cpp imagepropertiessidebardb.cpp \
-	                                   imagepropertiesexiftab.cpp imagepropertiescolorstab.cpp \
+	                                   imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp \
 	                                   imagedescedittab.cpp navigatebarwidget.cpp
 
 libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
