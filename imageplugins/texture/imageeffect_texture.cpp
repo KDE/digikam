@@ -81,7 +81,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
     m_textureType = new QComboBox( false, gboxSettings );
@@ -115,8 +115,8 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame*
     m_blendGain->setValue(200);
     QWhatsThis::add( m_blendGain, i18n("<p>Set here the relief gain used to merge texture and image."));
 
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_blendGain, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 1);
+    gridSettings->addMultiCellWidget(m_blendGain, 2, 2, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
