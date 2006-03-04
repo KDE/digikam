@@ -108,6 +108,11 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotTimer()) ); 
 
+    // this connection is necessary to change the LCD display when
+    // the value is changed by single clicking on the slider
+    connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
+             this, SLOT(slotSliderMoved(int)) );
+
     connect( m_sensibilitySlider, SIGNAL(sliderMoved(int)),
              this, SLOT(slotSliderMoved(int)) ); 
 }

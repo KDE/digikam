@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_infrared.h"
 #include "imageplugin_infrared.h"
 
@@ -42,9 +43,9 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const char*, const Q
     m_infraredAction = new KAction(i18n("Infrared Film..."), "infrared", 0, 
                            this, SLOT(slotInfrared()),
                            actionCollection(), "imageplugin_infrared");
-                
-    setXMLFile( "digikamimageplugin_infrared_ui.rc" );                                
-    
+
+    setXMLFile( "digikamimageplugin_infrared_ui.rc" );
+
     kdDebug() << "ImagePlugin_Infrared plugin loaded" << endl;
 }
 
@@ -59,8 +60,12 @@ void ImagePlugin_Infrared::setEnabledActions(bool enable)
 
 void ImagePlugin_Infrared::slotInfrared()
 {
-    DigikamInfraredImagesPlugin::ImageEffect_Infrared dlg(parentWidget());
+    QString title = i18n("Simulate Infrared Film to Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamInfraredImagesPlugin::ImageEffect_Infrared dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 #include "imageplugin_infrared.moc"

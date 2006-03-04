@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : infrared.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : Infrared threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,38 +31,28 @@
 namespace DigikamInfraredImagesPlugin
 {
 
-class Infrared : public Digikam::ThreadedFilter
+class Infrared : public Digikam::DImgThreadedFilter
 {
 
 public:
-    
-    Infrared(QImage *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
-    
+
+    Infrared(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
+
     ~Infrared(){};
-    
+
 private:  // Infrared filter data.
 
     bool m_grain;
-    
+
     int  m_sensibility;
-    
+
 private:  // Infrared filter methods.
 
     virtual void filterImage(void);
 
-    void infraredImage(uint* data, int Width, int Height, int Sensibility, bool Grain);
+    void infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grain);
 
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analize 
-    // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-    
-};    
+};
 
 }  // NameSpace DigikamInfraredImagesPlugin
 

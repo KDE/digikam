@@ -22,10 +22,10 @@
    - Unsharp          : Done.
    - Texture          : Done.
    - Film Grain       : Done.
+   - Infrared         : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Infrared         : TODO. ==> simple port algorithms to 16 bits (similar to FilmGrain). Medium.
    - Rain Drops       : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Lens Distortion  : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
