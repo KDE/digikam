@@ -114,5 +114,5 @@ inline void DColor::blendClamp8()
 
 } // namespace Digikam
 
-#endif
+#endif  // DCOLORBLEND_H
 

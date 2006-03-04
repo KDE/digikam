@@ -23,7 +23,8 @@
 #ifndef DCOLORPIXELACCESS_H
 #define DCOLORPIXELACCESS_H
 
-namespace Digikam {
+namespace Digikam 
+{
 
 // These methods are used in quite a few image effects,
 // typically in loops iterating the data.
@@ -70,6 +71,6 @@ inline void DColor::setPixel(uchar *data) const
 }
 
 
-}
+}  // namespace Digikam 
 
-#endif
+#endif  // DCOLORPIXELACCESS_H

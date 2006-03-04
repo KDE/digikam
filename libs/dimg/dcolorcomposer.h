@@ -24,11 +24,12 @@
 // Local includes
 
 #include "dcolor.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DColorComposer
+class DIGIKAM_EXPORT DColorComposer
 {
 public:
     /** The available rules to combine src and destination color.
@@ -106,6 +107,6 @@ public:
     */
 };
 
-}
+}  // namespace Digikam
 
-#endif
+#endif  // DCOLORCOMPOSER_H
