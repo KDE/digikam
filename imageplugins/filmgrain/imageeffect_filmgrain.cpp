@@ -81,7 +81,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
 
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
@@ -97,16 +97,17 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 0, 0, 2, 2);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
 
     connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(slotSensibilityChanged(int)) ); 
+             this, SLOT(slotTimer()) ); 
+
     connect( m_sensibilitySlider, SIGNAL(sliderMoved(int)),
              this, SLOT(slotSliderMoved(int)) ); 
 }
@@ -124,14 +125,8 @@ void ImageEffect_FilmGrain::resetValues()
 {
     m_sensibilitySlider->blockSignals(true);
     m_sensibilitySlider->setValue(12);
-    slotSensibilityChanged(12);
     m_sensibilitySlider->blockSignals(false);
 } 
-
-void ImageEffect_FilmGrain::slotSensibilityChanged(int)
-{
-    slotEffect();
-}
 
 void ImageEffect_FilmGrain::slotSliderMoved(int v)
 {

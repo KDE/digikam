@@ -53,7 +53,6 @@ private:
 
 private slots:
 
-    void slotSensibilityChanged(int);
     void slotSliderMoved(int);
 
 protected:
