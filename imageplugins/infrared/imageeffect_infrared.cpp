@@ -82,7 +82,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
 
     m_sensibilitySlider = new QSlider(1, 7, 1, 1, Qt::Horizontal, gboxSettings);
@@ -101,9 +101,9 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_sensibilitySlider, 0, 0, 1, 1);
-    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 0, 0, 2, 2);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_sensibilitySlider, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -111,7 +111,7 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
     m_addFilmGrain->setChecked( true );
     QWhatsThis::add( m_addFilmGrain, i18n("<p>This option is adding infrared film grain to "
                                           "the image depending on ISO-sensitivity."));
-    gridSettings->addMultiCellWidget(m_addFilmGrain, 1, 1, 0, 2);
+    gridSettings->addMultiCellWidget(m_addFilmGrain, 2, 2, 0, 1);
 
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
 
