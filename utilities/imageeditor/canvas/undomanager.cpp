@@ -173,7 +173,8 @@ void UndoManager::clear(bool clearCache)
 {
     clearUndoActions();
     clearRedoActions();
-    
+    setOrigin();
+
     if(clearCache)
         d->undoCache->clear();
 }

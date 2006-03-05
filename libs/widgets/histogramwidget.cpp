@@ -240,13 +240,18 @@ void HistogramWidget::customEvent(QCustomEvent *event)
             d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
             d->blinkTimer->stop();
             d->inInitialRepaintWait = false;
-            repaint(false);
             setCursor( KCursor::arrowCursor() );
 
-            // Send signal to refresh information if necessary.
-            notifyValuesChanged();
+            // Send signals to refresh information if necessary.
+            // The signals may trigger multiple repaints, avoid this,
+            // we repaint once afterwards.
+            setUpdatesEnabled(false);
 
+            notifyValuesChanged();
             emit signalHistogramComputationDone(d->sixteenBits);
+
+            setUpdatesEnabled(true);
+            repaint(false);
         }
         else
         {
@@ -315,6 +320,9 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
     d->blinkComputation = blinkComputation;
     d->sixteenBits      = i_sixteenBits;
 
+    // We are deleting the histogram data, so we must not use it to draw any more.
+    d->clearFlag = HistogramWidgetPriv::HistogramNone;
+
     // Do not using ImageHistogram::getHistogramSegment()
     // method here because histogram hasn't yet been computed.
     d->range = d->sixteenBits ? 65535 : 255;
@@ -362,8 +370,14 @@ void HistogramWidget::slotBlinkTimerDone( void )
 
 void HistogramWidget::paintEvent( QPaintEvent * )
 {
-    // Widget is disable : drawing grayed frame.
-    if ( !isEnabled() )
+    // Widget is disabled, not initialized, 
+    // or loading, but no message shall be drawn:
+    // Drawing grayed frame.
+    if (  !isEnabled() ||
+           d->clearFlag == HistogramWidgetPriv::HistogramNone ||
+         (!d->blinkComputation && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
+                                   d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
+       )
     {
        QPixmap pm(size());
        QPainter p1;
@@ -375,9 +389,12 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        bitBlt(this, 0, 0, &pm);
        return;
     }
-
-    if ( (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
-          d->clearFlag == HistogramWidgetPriv::HistogramDataLoading) && d->blinkComputation)
+    // Image data is loading or histogram is being computed:
+    // Draw message.
+    else if (  d->blinkComputation &&
+              (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
+               d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
+            )
     {
        QPixmap pm(size());
        QPainter p1;
@@ -399,8 +416,9 @@ void HistogramWidget::paintEvent( QPaintEvent * )
        bitBlt(this, 0, 0, &pm);
        return;
     }
-
-    if (d->clearFlag == HistogramWidgetPriv::HistogramFailed)
+    // Histogram computation failed:
+    // Draw message.
+    else if (d->clearFlag == HistogramWidgetPriv::HistogramFailed)
     {
        QPixmap pm(size());
        QPainter p1;
