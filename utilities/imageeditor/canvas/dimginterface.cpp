@@ -278,12 +278,12 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                                                "<p>This image has assigned a color profile that does not "
                                                "match with your default workspace color profile.</p>"
                                                "<p>Do you want to convert it to your workspace color profile?</p>"
-                                               "<p>Current workspace color profile:</p>
+                                               "<p>Current workspace color profile:</p>"
                                                "<p><b>%2<b></p>"
                                                "<p>Image Color Profile:</p>"
                                                "<p><b>%3</b></p>")
                                                .arg(fileName)
-                                               .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting)) 
+                                               .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting))
                                                .arg(trans.getEmbeddedProfileDescriptor());
 
                         // To repaint image in canvas before to ask about to apply ICC profile.
