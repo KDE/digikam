@@ -238,7 +238,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 }
                 else
                 {
-                    QString message = i18n("<p>This image has not assigned any color profile<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile: ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + "</p>";
+                    QString message = i18n("<p><b>%1</b></p>"
+                                           "<p>This image has not assigned any color profile</p>"
+                                           "<p>Do you want to convert it to your workspace color profile?</p>"
+                                           "<p>Current workspace color profile:</p>"
+                                           "<p><b>%2</b></p>")
+                                           .arg(fileName)
+                                           .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting));
                     
                     // To repaint image in canvas before to ask about to apply ICC profile.
                     emit signalImageLoaded(d->filename, valRet);
@@ -267,7 +273,18 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-                        QString message = i18n("<p>This image has assigned a color profile that does not match with your default workspace color profile.<p><p>Do you want to convert it to your workspace color profile?</p><p>Current workspace color profile:<b> ") + trans.getProfileDescription( d->cmSettings->workspaceSetting ) + i18n("</b></p><p>Image Color Profile:<b> ") + trans.getEmbeddedProfileDescriptor() + "</b></p>";
+
+                        QString message = i18n("<p><b>%1</b></p>"
+                                               "<p>This image has assigned a color profile that does not "
+                                               "match with your default workspace color profile.</p>"
+                                               "<p>Do you want to convert it to your workspace color profile?</p>"
+                                               "<p>Current workspace color profile:</p>
+                                               "<p><b>%2<b></p>"
+                                               "<p>Image Color Profile:</p>"
+                                               "<p><b>%3</b></p>")
+                                               .arg(fileName)
+                                               .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting)) 
+                                               .arg(trans.getEmbeddedProfileDescriptor());
 
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
