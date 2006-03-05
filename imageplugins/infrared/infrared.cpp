@@ -205,10 +205,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         }
     }
 
-    // Smooth blur bits  again (correct??) using gaussian blur.
-
-    Digikam::DImgImageFilters().gaussianBlurImage(pBWBlurBits, Width, Height, sixteenBit, blurRadius);
-
     postProgress( 50 );
     if (m_cancel)
     {
@@ -250,9 +246,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         delete [] pGrainBits;
         pGrainBits = 0;
     }
-
-    // Smooth blur bits again (correct??) using gaussian blur.
-    Digikam::DImgImageFilters().gaussianBlurImage(pBWBlurBits, Width, Height, sixteenBit, blurRadius);
 
     postProgress( 60 );
     if (m_cancel)
