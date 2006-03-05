@@ -147,7 +147,6 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
     if (Grain)
        Digikam::ImageFilters::gaussianBlurImage(pGrainBits, Width, Height, 1);
     
-    Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
     postProgress( 50 );   
     if (m_cancel) return;
         
@@ -170,7 +169,6 @@ void Infrared::infraredImage(uint* data, int Width, int Height, int Sensibility,
        delete grainCurves;
        }
     
-    Digikam::ImageFilters::gaussianBlurImage(pBWBlurBits, Width, Height, blurRadius);
     postProgress( 60 );   
     if (m_cancel) return;
        
