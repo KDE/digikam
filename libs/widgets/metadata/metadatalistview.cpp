@@ -192,7 +192,9 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList 
         subItems = 0;
         parentifDItem = new MdKeyListViewItem(this, *itKeysFilter);
         
-        for (MetadataWidget::MetaDataMap::iterator it = ifds.end(); it != ifds.begin(); --it)
+        MetadataWidget::MetaDataMap::iterator it = ifds.end(); 
+
+        while(1)   
         {
             if ( *itKeysFilter == it.key().section('.', 1, 1) )
             {
@@ -220,6 +222,9 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList 
                     }
                 }
             }
+            
+            if (it == ifds.begin()) break;
+            --it;
         }
 
         // We checking if the last IfD have any items. If no, we remove it.
