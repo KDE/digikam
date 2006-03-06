@@ -84,6 +84,9 @@ using namespace KIO;
 static void exifRotate(const QString& filePath, QImage& thumb)
 {
     // Rotate thumbnail based on EXIF rotate tag
+
+    // TODO : using Exiv2 library instead libKexif.
+    
     QWMatrix matrix;
 
     KExifData ke;
