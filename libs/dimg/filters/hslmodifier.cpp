@@ -49,9 +49,11 @@ public:
     HSLModifierPriv()
     {
         modified = false;
+        overIndicator = false;
     }
 
     bool modified;
+    bool overIndicator;
     
     int  htransfer[256];
     int  ltransfer[256];
@@ -76,6 +78,11 @@ HSLModifier::~HSLModifier()
 bool HSLModifier::modified() const
 {
     return d->modified;    
+}
+
+void HSLModifier::setOverIndicator(bool overIndicator)
+{
+    d->overIndicator = overIndicator;
 }
 
 void HSLModifier::reset()
@@ -104,17 +111,34 @@ void HSLModifier::applyHSL(DImg& image)
     if (!d->modified || image.isNull())
         return;
 
-    if (image.sixteenBit())                   // 16 bits image.
+    bool sixteenBit = image.sixteenBit();
+    uint numberOfPixels = image.width()*image.height();
+
+    if (sixteenBit)                   // 16 bits image.
     {
         unsigned short* data = (unsigned short*) image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<numberOfPixels; i++)
         {
             int hue, sat, lig;
 
-            DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
+            DColor color(data[2], data[1], data[0], 0, sixteenBit);
+
+            // convert RGB to HSL
             color.getHSL(&hue, &sat, &lig);
-            color.setRGB(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], image.sixteenBit());
+
+            if (d->stransfer16[sat] == -1)
+            {
+                // set to black when over-exposed
+                color.setRed(0);
+                color.setGreen(0);
+                color.setBlue(0);
+            }
+            else
+            {
+                // convert HSL to RGB
+                color.setRGB(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], sixteenBit);
+            }
 
             data[2] = color.red();
             data[1] = color.green();
@@ -127,13 +151,24 @@ void HSLModifier::applyHSL(DImg& image)
     {
         uchar* data = image.bits();
 
-        for (uint i=0; i<image.width()*image.height(); i++)
+        for (uint i=0; i<numberOfPixels; i++)
         {
             int hue, sat, lig;
 
-            DColor color(data[2], data[1], data[0], 0, image.sixteenBit());
+            DColor color(data[2], data[1], data[0], 0, sixteenBit);
+
             color.getHSL(&hue, &sat, &lig);
-            color.setRGB(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], image.sixteenBit());
+
+            if (d->stransfer[sat] == -1)
+            {
+                color.setRed(0);
+                color.setGreen(0);
+                color.setBlue(0);
+            }
+            else
+            {
+                color.setRGB(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], sixteenBit);
+            }
 
             data[2] = color.red();
             data[1] = color.green();
@@ -183,13 +218,19 @@ void HSLModifier::setSaturation(double val)
     for (int i = 0; i < 65536; i++)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        d->stransfer16[i] = CLAMP_0_65535(value);
+        if (d->overIndicator && value > 65535)
+            d->stransfer16[i] = -1;
+        else
+            d->stransfer16[i] = CLAMP_0_65535(value);
     }
 
     for (int i = 0; i < 256; i++)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        d->stransfer[i]  = CLAMP_0_255(value);
+        if (d->overIndicator && value > 255)
+            d->stransfer[i] = -1;
+        else
+            d->stransfer[i]  = CLAMP_0_255(value);
     }
 
     d->modified = true;

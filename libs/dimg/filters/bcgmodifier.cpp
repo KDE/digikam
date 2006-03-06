@@ -107,7 +107,7 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->map[data[0]] == -1 || d->map[data[1]] == -1 || d->map[data[2]] == -1)
+            if (d->map[data[0]] < 0 || d->map[data[1]] < 0 || d->map[data[2]] < 0)
             {
                 data[0] = 0;
                 data[1] = 0;
@@ -129,7 +129,7 @@ void BCGModifier::applyBCG(DImg& image)
 
         for (uint i=0; i<size; i++)
         {
-            if (d->map16[data[0]] == -1 || d->map16[data[1]] == -1 || d->map16[data[2]] == -1)
+            if (d->map16[data[0]] < 0 || d->map16[data[1]] < 0 || d->map16[data[2]] < 0)
             {
                 data[0] = 0;
                 data[1] = 0;
@@ -152,20 +152,39 @@ void BCGModifier::setGamma(double val)
     val = (val < 0.01) ? 0.01 : val;
     int val2;
 
+    /*
+       What is the idea with setting the values when overIndicator is true?
+       When the correct value is beyond the upper limit,
+       we set the value to be negative.
+       When the next function is called (setGamma, setBrightness, setContrast),
+       it has the opportunity to correct the excess, or the value
+       will again be set to its negative.
+       When the correction arrays are applied, all colors with 
+       negative values in the arrays will be to black.
+     */
+
     for (int i=0; i<65536; i++)
     {
+        if (d->map16[i] < 0)
+            d->map16[i] =  - d->map16[i];
+
         val2 = lround(pow(((double)d->map16[i] / 65535.0), (1.0 / val)) * 65535.0);
+
         if (d->overIndicator && val2 > 65535)
-            d->map16[i] = -1;
+            d->map16[i] =  - val2;
         else
             d->map16[i] = CLAMP_0_65535(val2);
     }
 
     for (int i=0; i<256; i++)
     {
+        if (d->map[i] < 0)
+            d->map[i] =  - d->map[i];
+
         val2 = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
+
         if (d->overIndicator && val2 > 255)
-            d->map[i] = -1;
+            d->map[i] =  - val2;
         else
             d->map[i] = CLAMP_0_255(val2);
     }
@@ -180,9 +199,13 @@ void BCGModifier::setBrightness(double val)
 
     for (int i = 0; i < 65536; i++)
     {
+        if (d->map16[i] < 0)
+            d->map16[i] =  - d->map16[i];
+
         val2 = d->map16[i] + val1;
+
         if (d->overIndicator && val2 > 65535)
-            d->map16[i] = -1;
+            d->map16[i] =  - val2;
         else
             d->map16[i] = CLAMP_0_65535(val2);
     }
@@ -191,9 +214,13 @@ void BCGModifier::setBrightness(double val)
     
     for (int i = 0; i < 256; i++)
     {
+        if (d->map[i] < 0)
+            d->map[i] =  - d->map[i];
+
         val2 = d->map[i] + val1;
+
         if (d->overIndicator && val2 > 255)
-            d->map[i] = -1;
+            d->map[i] =  - val2;
         else
             d->map[i] = CLAMP_0_255(val2);
     }
@@ -207,18 +234,26 @@ void BCGModifier::setContrast(double val)
 
     for (int i = 0; i < 65536; i++)
     {
+        if (d->map16[i] < 0)
+            d->map16[i] =  - d->map16[i];
+
         val2 = lround((d->map16[i] - 32767) * val) + 32767;
+
         if (d->overIndicator && val2 > 65535)
-            d->map16[i] = -1;
+            d->map16[i] =  - val2;
         else
             d->map16[i] = CLAMP_0_65535(val2);
     }
 
     for (int i = 0; i < 256; i++)
     {
+        if (d->map[i] < 0)
+            d->map[i] =  - d->map[i];
+
         val2 = lround((d->map[i] - 127) * val) + 127;
+
         if (d->overIndicator && val2 > 255)
-            d->map[i] = -1;
+            d->map[i] =  - val2;
         else
             d->map[i] = CLAMP_0_255(val2);
     }
