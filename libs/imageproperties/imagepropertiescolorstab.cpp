@@ -73,9 +73,43 @@ class ImagePropertiesColorsTabPriv
 {
 public:
 
+    enum MetadataTab
+    {
+        HISTOGRAM,
+        ICCPROFILE
+    };
+
     ImagePropertiesColorsTabPriv()
     {
-        imageLoaderThread = 0;
+        imageLoaderThread    = 0;
+        tab                  = 0;
+        channelCB            = 0;
+        colorsCB             = 0;
+        renderingCB          = 0;
+        scaleBG              = 0;
+        regionBG             = 0;
+        minInterv            = 0;
+        maxInterv            = 0;
+        labelMeanValue       = 0;
+        labelPixelsValue     = 0;
+        labelStdDevValue     = 0;
+        labelCountValue      = 0;
+        labelMedianValue     = 0;
+        labelPercentileValue = 0;
+        labelColorDepth      = 0;
+        labelAlphaChannel    = 0;
+        infoHeader           = 0;
+        selectionArea        = 0;
+        labelICCName         = 0;
+        labelICCDescription  = 0;
+        labelICCCopyright    = 0;
+        labelICCIntent       = 0;
+        labelICCColorSpace   = 0;
+        hGradient            = 0;
+        histogramWidget      = 0;
+        navigateBar          = 0;
+        imageLoaderThread    = 0;
+        cieTongue            = 0;
     }
 
     QComboBox             *channelCB;
@@ -101,7 +135,11 @@ public:
     QString                currentFilePath;
 
     QRect                 *selectionArea;
-        
+
+    QByteArray             embedded_profile;
+    
+    KTabWidget            *tab;        
+
     KSqueezedTextLabel    *labelICCName;
     KSqueezedTextLabel    *labelICCDescription;
     KSqueezedTextLabel    *labelICCCopyright;
@@ -116,12 +154,10 @@ public:
     NavigateBarWidget     *navigateBar;
     SharedLoadSaveThread  *imageLoaderThread;
     CIETongueWidget       *cieTongue;
-    
-    QByteArray             embedded_profile;
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar)
-                           : QWidget(parent)
+                        : QWidget(parent)
 {
     d = new ImagePropertiesColorsTabPriv;
     
@@ -129,13 +165,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
    
     QVBoxLayout *vLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     d->navigateBar       = new NavigateBarWidget(this, navBar);
-    KTabWidget *tab      = new KTabWidget(this);
+    d->tab      = new KTabWidget(this);
     vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(tab);
+    vLayout->addWidget(d->tab);
        
     // Histogram tab area -----------------------------------------------------
        
-    QWidget* histogramPage = new QWidget( tab );
+    QWidget* histogramPage = new QWidget( d->tab );
     QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), histogramPage);
@@ -314,11 +350,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
 
     topLayout->setRowStretch(8, 10);
-    tab->addTab(histogramPage, i18n("Histogram") );
+    d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
 
     // ICC Profiles tab area ---------------------------------------
     
-    QWidget* iccprofilePage = new QWidget( tab );
+    QWidget* iccprofilePage = new QWidget( d->tab );
     QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 9, 3, KDialog::marginHint(), KDialog::spacingHint());
     
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
@@ -344,7 +380,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     iccLayout->addMultiCellWidget(d->cieTongue, 8, 8, 0, 2);
     iccLayout->setRowStretch(9, 10);
 
-    tab->addTab(iccprofilePage, i18n("ICC profile") );
+    d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
     // -------------------------------------------------------------
 
@@ -396,10 +432,12 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
+    d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesColors Tab",
+                           ImagePropertiesColorsTabPriv::HISTOGRAM));
     d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
-    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+    d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
-    d->regionBG->setButton(config->readNumEntry("Histogram Rendering", Digikam::HistogramWidget::FullImageHistogram));
+    d->regionBG->setButton(config->readNumEntry("Histogram Rendering", HistogramWidget::FullImageHistogram));
 }
 
 ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
@@ -410,6 +448,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
+    config->writeEntry("ImagePropertiesColors Tab", d->tab->currentPageIndex());
     config->writeEntry("Histogram Channel", d->channelCB->currentItem());
     config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
     config->writeEntry("Histogram Color", d->colorsCB->currentItem());

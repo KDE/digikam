@@ -54,6 +54,14 @@ class ImagePropertiesMetadataTabPriv
 {
 public:
 
+    enum MetadataTab
+    {
+        EXIF,
+        MAKERNOTE,
+        IPTC,
+        GPS
+    };
+
     ImagePropertiesMetadataTabPriv()
     {
         exifWidget      = 0;
@@ -61,11 +69,17 @@ public:
         iptcWidget      = 0;
         navigateBar     = 0;
         gpsWidget       = 0;
+        tab             = 0;
     }
 
+    KTabWidget        *tab;
+
     ExifWidget        *exifWidget;
+
     MakerNoteWidget   *makernoteWidget;
+
     IptcWidget        *iptcWidget;
+
     GPSWidget         *gpsWidget;
         
     NavigateBarWidget *navigateBar;
@@ -78,29 +92,29 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 
     QVBoxLayout *vLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     d->navigateBar       = new NavigateBarWidget(this, navBar);
-    KTabWidget *tab      = new KTabWidget(this);
+    d->tab               = new KTabWidget(this);
     vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(tab);
+    vLayout->addWidget(d->tab);
     
     // Exif tab area -----------------------------------------------------
 
-    d->exifWidget = new ExifWidget(tab);
-    tab->addTab(d->exifWidget, i18n("Exif") );
+    d->exifWidget = new ExifWidget(d->tab);
+    d->tab->insertTab(d->exifWidget, i18n("Exif"), ImagePropertiesMetadataTabPriv::EXIF);
 
     // Makernote tab area -----------------------------------------------------
 
-    d->makernoteWidget = new MakerNoteWidget(tab);
-    tab->addTab(d->makernoteWidget, i18n("Makernote") );
+    d->makernoteWidget = new MakerNoteWidget(d->tab);
+    d->tab->insertTab(d->makernoteWidget, i18n("Makernote"), ImagePropertiesMetadataTabPriv::MAKERNOTE);
 
     // IPTC tab area ---------------------------------------
     
-    d->iptcWidget = new IptcWidget(tab);
-    tab->addTab(d->iptcWidget, i18n("Iptc") );
+    d->iptcWidget = new IptcWidget(d->tab);
+    d->tab->insertTab(d->iptcWidget, i18n("Iptc"), ImagePropertiesMetadataTabPriv::IPTC);
 
     // GPS tab area ---------------------------------------
     
-    d->gpsWidget = new GPSWidget(tab);
-    tab->addTab(d->gpsWidget, i18n("GPS") );
+    d->gpsWidget = new GPSWidget(d->tab);
+    d->tab->insertTab(d->gpsWidget, i18n("GPS"), ImagePropertiesMetadataTabPriv::GPS);
 
     // -------------------------------------------------------------
             
@@ -120,6 +134,8 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
+    d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesMetaData Tab",
+                           ImagePropertiesMetadataTabPriv::EXIF));
     d->exifWidget->setMode(config->readNumEntry("EXIF Level", ExifWidget::SIMPLE));
     d->makernoteWidget->setMode(config->readNumEntry("MAKERNOTE Level", MakerNoteWidget::SIMPLE));
     d->iptcWidget->setMode(config->readNumEntry("IPTC Level", IptcWidget::SIMPLE));
@@ -132,6 +148,7 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
+    config->writeEntry("ImagePropertiesMetaData Tab", d->tab->currentPageIndex());
     config->writeEntry("EXIF Level", d->exifWidget->getMode());
     config->writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
     config->writeEntry("IPTC Level", d->iptcWidget->getMode());
