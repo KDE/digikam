@@ -177,7 +177,6 @@ bool GPSWidget::loadFromURL(const KURL& url)
     return true;
 }
 
-
 bool GPSWidget::decodeMetadata()
 {
     try
@@ -185,6 +184,12 @@ bool GPSWidget::decodeMetadata()
         Exiv2::ExifData exifData;
         if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
         {
+            d->latTitle->setEnabled(false);
+            d->longTitle->setEnabled(false);
+            d->longLabel->setEnabled(false);
+            d->latLabel->setEnabled(false);
+            d->map->setEnabled(false);
+            d->detailsButton->setEnabled(false);
             kdDebug() << "Cannot parse EXIF metadata using Exiv2" << endl;
             return false;
         }
@@ -233,6 +238,13 @@ bool GPSWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
+        d->latTitle->setEnabled(false);
+        d->longTitle->setEnabled(false);
+        d->longLabel->setEnabled(false);
+        d->latLabel->setEnabled(false);
+        d->map->setEnabled(false);
+        d->detailsButton->setEnabled(false);
+        setGPSPosition(0.0, 0.0);
         kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
