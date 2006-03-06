@@ -55,6 +55,10 @@
 #include <kprocess.h>
 #include <kio/thumbcreator.h>
 
+// Lib KExif includes.
+
+#include <libkexif/kexifdata.h>
+
 // C Ansi includes.
 
 extern "C"
@@ -75,7 +79,6 @@ extern "C"
 // Local includes
 
 #include "dcraw_parse.h"
-#include "exiforientation_p.h"
 #include "digikamthumbnail.h"
 
 #define X_DISPLAY_MISSING 1
@@ -88,8 +91,10 @@ static void exifRotate(const QString& filePath, QImage& thumb)
     // Rotate thumbnail based on EXIF rotate tag
     QWMatrix matrix;
 
-    KExifData::ImageOrientation orientation
-        = getExifOrientation(filePath);
+    KExifData ke;
+    ke.readFromFile(filePath);
+    KExifData::ImageOrientation orientation = ke.getImageOrientation();
+    kdDebug() << "Image Orientation: " << (KExifData::ImageOrientation)orientation << endl;
 
     bool doXform = (orientation != KExifData::NORMAL &&
                     orientation != KExifData::UNSPECIFIED);
