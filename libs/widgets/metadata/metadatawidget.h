@@ -65,6 +65,8 @@ public:
     QString getCurrentItemKey() const;
     void    setCurrentItemByKey(const QString& itemKey);
 
+    void    setUserAreaWidget(QWidget *w);
+
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
     
@@ -95,10 +97,6 @@ protected:
     virtual bool decodeMetadata(void)=0;
     virtual void buildView(void)=0;
     virtual QString getMetadataTitle(void)=0;
-
-
-protected:
-
 
 private:
 

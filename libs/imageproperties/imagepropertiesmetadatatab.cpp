@@ -41,8 +41,9 @@
 
 #include "dmetadata.h"
 #include "exifwidget.h"
-#include "iptcwidget.h"
 #include "makernotewidget.h"
+#include "iptcwidget.h"
+#include "gpswidget.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiesmetadatatab.h"
 
@@ -59,11 +60,13 @@ public:
         makernoteWidget = 0;
         iptcWidget      = 0;
         navigateBar     = 0;
+        gpsWidget       = 0;
     }
 
     ExifWidget        *exifWidget;
     MakerNoteWidget   *makernoteWidget;
     IptcWidget        *iptcWidget;
+    GPSWidget         *gpsWidget;
         
     NavigateBarWidget *navigateBar;
 };
@@ -94,6 +97,11 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d->iptcWidget = new IptcWidget(tab);
     tab->addTab(d->iptcWidget, i18n("Iptc") );
 
+    // GPS tab area ---------------------------------------
+    
+    d->gpsWidget = new GPSWidget(tab);
+    tab->addTab(d->gpsWidget, i18n("GPS") );
+
     // -------------------------------------------------------------
             
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
@@ -115,9 +123,9 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d->exifWidget->setMode(config->readNumEntry("EXIF Level", ExifWidget::SIMPLE));
     d->makernoteWidget->setMode(config->readNumEntry("MAKERNOTE Level", MakerNoteWidget::SIMPLE));
     d->iptcWidget->setMode(config->readNumEntry("IPTC Level", IptcWidget::SIMPLE));
-    d->exifWidget->setCurrentItemByKey(config->readEntry("Current EXIF Item", QString()));
+    d->gpsWidget->setMode(config->readNumEntry("GPS Level", GPSWidget::SIMPLE));    d->exifWidget->setCurrentItemByKey(config->readEntry("Current EXIF Item", QString()));
     d->makernoteWidget->setCurrentItemByKey(config->readEntry("Current MAKERNOTE Item", QString()));
-    d->iptcWidget->setCurrentItemByKey(config->readEntry("Current IPTC Item", QString()));
+    d->iptcWidget->setCurrentItemByKey(config->readEntry("Current IPTC Item", QString()));    d->gpsWidget->setCurrentItemByKey(config->readEntry("Current GPS Item", QString()));
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
@@ -127,9 +135,11 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     config->writeEntry("EXIF Level", d->exifWidget->getMode());
     config->writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
     config->writeEntry("IPTC Level", d->iptcWidget->getMode());
+    config->writeEntry("GPS Level", d->gpsWidget->getMode());
     config->writeEntry("Current EXIF Item", d->exifWidget->getCurrentItemKey());
     config->writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
     config->writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
+    config->writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
     delete d;
 }
 
@@ -137,12 +147,13 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url, int itemType)
 {
     if (url.isEmpty())
     {
-       d->exifWidget->loadFromURL(url);
-       d->makernoteWidget->loadFromURL(url);
-       d->iptcWidget->loadFromURL(url);
-       d->navigateBar->setFileName();
-       setEnabled(false);
-       return;
+        d->exifWidget->loadFromURL(url);
+        d->makernoteWidget->loadFromURL(url);
+        d->iptcWidget->loadFromURL(url);
+        d->gpsWidget->loadFromURL(url);
+        d->navigateBar->setFileName();
+        setEnabled(false);
+        return;
     }
 
     setEnabled(true);
@@ -151,19 +162,10 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url, int itemType)
     QByteArray exifData = metadata.getExif(); 
     QByteArray iptcData = metadata.getIptc();
 
-    if (exifData.isEmpty() && iptcData.isEmpty())
-    {
-       d->exifWidget->loadFromData(url.filename(), exifData);
-       d->makernoteWidget->loadFromData(url.filename(), exifData);
-       d->iptcWidget->loadFromData(url.filename(), iptcData);
-       d->navigateBar->setFileName();
-       setEnabled(false);
-       return;
-    }
-
     d->exifWidget->loadFromData(url.filename(), exifData);
     d->makernoteWidget->loadFromData(url.filename(), exifData);
     d->iptcWidget->loadFromData(url.filename(), iptcData);
+    d->gpsWidget->loadFromData(url.filename(), exifData);
 
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
@@ -175,12 +177,13 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
 {
     if (exifData.isEmpty() && iptcData.isEmpty())
     {
-       d->exifWidget->loadFromData(filename, exifData);
-       d->makernoteWidget->loadFromData(filename, exifData);
-       d->iptcWidget->loadFromData(filename, iptcData);
-       d->navigateBar->setFileName();
-       setEnabled(false);
-       return;
+        d->exifWidget->loadFromData(filename, exifData);
+        d->makernoteWidget->loadFromData(filename, exifData);
+        d->iptcWidget->loadFromData(filename, iptcData);
+        d->gpsWidget->loadFromData(filename, exifData);
+        d->navigateBar->setFileName();
+        setEnabled(false);
+        return;
     }
 
     setEnabled(true);
@@ -188,6 +191,7 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
     d->exifWidget->loadFromData(filename, exifData);
     d->makernoteWidget->loadFromData(filename, exifData);
     d->iptcWidget->loadFromData(filename, iptcData);
+    d->gpsWidget->loadFromData(filename, exifData);
         
     d->navigateBar->setFileName(filename);
     d->navigateBar->setButtonsState(itemType);

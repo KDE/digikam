@@ -76,11 +76,11 @@ static char* ExifHumanList[] =
 };
 
 // Standard Exif Entry list from to less important to the most important for photograph.
+// This will not including GPS informations because they are displayed on another tab.
 static char* StandardExifEntryList[] =
 {
      "Iop",
      "Thumbnail",
-     "GPSInfo",
      "Image",
      "Photo",
      "-1"

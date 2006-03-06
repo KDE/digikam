@@ -64,9 +64,12 @@ public:
 
     MetadataWidgetPriv()
     {
-        modeCombo = 0;
-        view = 0;
+        modeCombo  = 0;
+        view       = 0;
+        mainLayout = 0;
     }
+
+    QGridLayout                 *mainLayout;
 
     QByteArray                   metadata;
 
@@ -84,20 +87,20 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 {
     d = new MetadataWidgetPriv;
 
-    QGridLayout *layout = new QGridLayout(this, 1, 4, KDialog::marginHint(), KDialog::spacingHint());
+    d->mainLayout = new QGridLayout(this, 2, 4, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel* modeLabel = new QLabel(i18n("Level of detail:"), this);
     d->modeCombo = new QComboBox(this);
     d->modeCombo->insertItem(i18n("Simple"));
     d->modeCombo->insertItem(i18n("Full"));
-    layout->addMultiCellWidget(modeLabel, 0, 0, 0, 1);
-    layout->addMultiCellWidget(d->modeCombo, 0, 0, 2, 2);
+    d->mainLayout->addMultiCellWidget(modeLabel, 0, 0, 0, 1);
+    d->mainLayout->addMultiCellWidget(d->modeCombo, 0, 0, 2, 2);
 
     QWhatsThis::add( d->modeCombo, i18n("<p>Select here the information level to display<p>"
                                         "<b>Simple</b>: display general information about the photograph "
                                         " (default).<p>"
                                         "<b>Full</b>: display all sections.") );
-    layout->setColStretch(3, 10);
+    d->mainLayout->setColStretch(3, 10);
 
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     QHButtonGroup *toolButtons = new QHButtonGroup(this);
@@ -114,10 +117,10 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QWhatsThis::add( copy2ClipBoard, i18n( "Copy metadata to clipboard" ) );
     toolButtons->insert(copy2ClipBoard);
 
-    layout->addMultiCellWidget(toolButtons, 0, 0, 4, 4);
+    d->mainLayout->addMultiCellWidget(toolButtons, 0, 0, 4, 4);
 
     d->view = new MetadataListView(this);
-    layout->addMultiCellWidget(d->view, 1, 1, 0, 4);
+    d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
 
     connect(d->modeCombo, SIGNAL(activated(int)),
             this, SLOT(slotModeChanged(int)));
@@ -314,7 +317,7 @@ void MetadataWidget::setCurrentItemByKey(const QString& itemKey)
 bool MetadataWidget::loadFromData(QString fileName, const QByteArray& data)
 {
     setFileName(fileName);
-    return (setMetadata(data));
+    return(setMetadata(data));
 }
 
 QString MetadataWidget::getTagTitle(const QString&)
@@ -332,6 +335,13 @@ void MetadataWidget::setFileName(QString fileName)
     d->fileName = fileName;
 }
 
+void MetadataWidget::setUserAreaWidget(QWidget *w)
+{
+    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
+    vLayout->addWidget(w);
+    vLayout->addStretch();
+    d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
+}
 }  // namespace Digikam
 
 #include "metadatawidget.moc"
