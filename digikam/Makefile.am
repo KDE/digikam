@@ -9,7 +9,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
-	   -I$(top_srcdir)/digikam/libs/widgets \
+	   -I$(top_srcdir)/digikam/libs/widgets/common \
 	   -I$(top_srcdir)/digikam/libs/thumbbar \
 	   -I$(top_srcdir)/digikam/libs/jpegutils \
 	   -I$(top_srcdir)/digikam/libs/dcraw \

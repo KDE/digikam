@@ -34,7 +34,7 @@ libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
-	       -I$(top_srcdir)/digikam/libs/widgets \
+	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/libs/widgets/metadata \
 	       -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/threadimageio \

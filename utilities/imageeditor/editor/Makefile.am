@@ -17,7 +17,7 @@ libshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT)
 libshowfoto_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	      -I$(top_srcdir)/digikam/libs/widgets \
+	      -I$(top_srcdir)/digikam/libs/widgets/common \
 	      -I$(top_srcdir)/digikam/libs/dimg \
 	      -I$(top_srcdir)/digikam/libs/dimg/filters \
 	      -I$(top_srcdir)/digikam/libs/imageproperties \

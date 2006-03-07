@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
 	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	   -I$(top_srcdir)/digikam/libs/histogram \
 	   -I$(top_srcdir)/digikam/libs/levels \
-	   -I$(top_srcdir)/digikam/libs/widgets \
+	   -I$(top_srcdir)/digikam/libs/widgets/common \
 	   -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
 	   -I$(top_srcdir)/digikam/libs/dialogs \
 	   -I$(top_srcdir)/digikam/libs/dimg \
