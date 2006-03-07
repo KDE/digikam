@@ -22,10 +22,6 @@
 * Improving metadata support:
    - removed libkexif depency        ==> under progress ! (Gilles)
 
-   - Better embbeded thumbnail support, especially for TIFF/EP ?
-   - Improved metadata from TIFF file format. Add DNG file format if it's possible...
-   - Improved PNG file format support : PNG vs DNG file format : PNG is the ultimate photographs data container in OpenSource world ?
-
 * post conversion to qlistview: allow selection of multiple
   albums/tags/dates :
 
@@ -38,6 +34,11 @@
 
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
+
+* Improving metadata support:
+   - Better embbeded thumbnail support, especially for TIFF/EP ?
+   - Improved metadata from TIFF file format. Add DNG file format if it's possible...
+   - Improved PNG file format support : PNG vs DNG file format : PNG is the ultimate photographs data container in OpenSource world ?
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
