@@ -1,8 +1,10 @@
 /* ============================================================
+ * File  : digikamsearch.h
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-21
- * Copyright 2005 by Renchi Raju
+ * Description :
  *
+ * Copyright 2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
