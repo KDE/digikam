@@ -21,8 +21,7 @@
      
 * Improving metadata support:
    - removed libkexif depency        ==> under progress ! (Gilles)
-   - Using Exiv2 lib instead libexif ==> under progress ! (Gilles)
-   
+
    - Better embbeded thumbnail support, especially for TIFF/EP ?
    - Improved metadata from TIFF file format. Add DNG file format if it's possible...
    - Improved PNG file format support : PNG vs DNG file format : PNG is the ultimate photographs data container in OpenSource world ?
