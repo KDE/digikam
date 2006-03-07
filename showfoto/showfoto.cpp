@@ -659,7 +659,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
     QString filter;
 
-    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; it++)
+    for (QStringList::ConstIterator it = mimeTypes.begin() ; it != mimeTypes.end() ; ++it)
     {    
         QString format = KImageIO::typeForMime(*it);
         filter.append ("*.");

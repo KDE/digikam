@@ -1310,7 +1310,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
             QString imgExtPattern;
             QStringList imgExtList = QStringList::split(" ", mimetypes);
-            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; it++)
+            for (QStringList::ConstIterator it = imgExtList.begin() ; it != imgExtList.end() ; ++it)
             {    
                 imgExtPattern.append (KImageIO::typeForMime(*it).upper());
                 imgExtPattern.append (" ");
