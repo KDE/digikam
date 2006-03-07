@@ -149,7 +149,7 @@ void SqueezedComboBox::slotUpdateToolTip( int index )
 
 QString SqueezedComboBox::itemHighlighted()
 {
-    int curItem = this->listBox()->currentItem();
+    int curItem = listBox()->currentItem();
     return m_originalItems[curItem];
 }
 
