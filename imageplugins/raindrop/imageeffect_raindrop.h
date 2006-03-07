@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_raindrop.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-09-30
  * Description : a digiKam image plugin to add
  *               raindrops on an image.
  * 
  * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,37 +25,37 @@
 #ifndef IMAGEEFFECT_RAINDROP_H
 #define IMAGEEFFECT_RAINDROP_H
 
-// Local includes.
+// Digikam includes.
 
-#include "imageguidedialog.h"
+#include <digikamheaders.h>
 
 class KIntNumInput;
 
 namespace DigikamRainDropImagesPlugin
 {
 
-class ImageEffect_RainDrop : public DigikamImagePlugins::ImageGuideDialog
+class ImageEffect_RainDrop : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
-    
+
 public:
 
-    ImageEffect_RainDrop(QWidget *parent);
+    ImageEffect_RainDrop(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_RainDrop();
 
 private:
-            
+
     KIntNumInput *m_dropInput;
     KIntNumInput *m_amountInput;
-    KIntNumInput *m_coeffInput;    
-    
+    KIntNumInput *m_coeffInput;
+
 protected:
-    
+
     void prepareEffect(void);
     void prepareFinal(void);
     void putPreviewData(void);
     void putFinalData(void);
-    void resetValues(void);   
+    void resetValues(void);
     void renderingFinished(void);
 };
 

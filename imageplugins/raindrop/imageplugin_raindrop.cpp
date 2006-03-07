@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_raindrop.h"
 #include "imageplugin_raindrop.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_RainDrop::setEnabledActions(bool enable)
 
 void ImagePlugin_RainDrop::slotRainDrop()
 {
-    DigikamRainDropImagesPlugin::ImageEffect_RainDrop dlg(parentWidget());
+    QString title = i18n("Add Raindrops to Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamRainDropImagesPlugin::ImageEffect_RainDrop dlg(parentWidget(), 
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

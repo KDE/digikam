@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : raindrop.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : Raindrop threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,12 +33,12 @@ class QRect;
 namespace DigikamRainDropImagesPlugin
 {
 
-class RainDrop : public Digikam::ThreadedFilter
+class RainDrop : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    RainDrop(QImage *orgImage, QObject *parent=0, int drop=80, 
+    RainDrop(Digikam::DImg *orgImage, QObject *parent=0, int drop=80, 
              int amount=150, int coeff=30, QRect *selection=0L);
     
     ~RainDrop(){};
@@ -56,39 +58,47 @@ private:  // RainDrop filter methods.
 
     virtual void filterImage(void);
 
-    void rainDropsImage(uint *data, int Width, int Height, int MinDropSize, int MaxDropSize, int Amount, 
-                        int Coeff, bool bLimitRange, int progressMin, int progressMax);
-                   
-    bool CreateRainDrop(uint *pBits, int Width, int Height, uint *pResBits, uchar* pStatusBits, int X, int Y, 
-                        int DropSize, double Coeff, bool bLimitRange);
-    
+    void rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int MinDropSize, int MaxDropSize,
+                        int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
+
+    bool CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                        uchar *pResBits, uchar* pStatusBits,
+                        int X, int Y, int DropSize, double Coeff, bool bLimitRange);
+
     bool CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
-    
+
     bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
-                        
+
     // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
     // But R, G and B values has 256 values to be used so, this function analize 
     // the value and limits to this range.
-    inline uchar LimitValues (int ColorValue)
-       {
-       if (ColorValue > 255) ColorValue = 255;        
-       if (ColorValue < 0) ColorValue = 0;
-       return ((uchar) ColorValue);
-       };
-    
+    inline int LimitValues8(int ColorValue)
+    {
+        if (ColorValue > 255) ColorValue = 255;
+        if (ColorValue < 0) ColorValue = 0;
+        return ColorValue;
+    };
+
+    inline int LimitValues16(int ColorValue)
+    {
+        if (ColorValue > 65535) ColorValue = 65535;
+        if (ColorValue < 0) ColorValue = 0;
+        return ColorValue;
+    };
+
     inline bool IsInside (int Width, int Height, int X, int Y)
-       {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-       };
-          
-    inline int SetPosition (int Width, int X, int Y)
-       {
-       return (Y * Width + X); 
-       };
-    
-};    
+    {
+        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+        return (bIsWOk && bIsHOk);
+    };
+
+    inline int Offset(int Width, int X, int Y, int bytesDepth)
+    {
+        return (Y * Width * bytesDepth + X * bytesDepth);
+    };
+
+};
 
 }  // NameSpace DigikamRainDropImagesPlugin
 
