@@ -45,7 +45,7 @@ BannerWidget::BannerWidget(QWidget *parent, QString title)
             : QFrame(parent)
 {
     QString directory;
-    this->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->setMargin( 2 ); // to make sure the frame gets displayed
     layout->setSpacing( 0 );
