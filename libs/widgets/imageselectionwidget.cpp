@@ -18,20 +18,17 @@
  *
  * ============================================================ */
 
-#define OPACITY   0.7
-#define RCOL8     0xAA
-#define GCOL8     0xAA
-#define BCOL8     0xAA
-#define RCOL16    0xAAAA
-#define GCOL16    0xAAAA
-#define BCOL16    0xAAAA
+#define OPACITY  0.7
+#define RCOL     0xAA
+#define GCOL     0xAA
+#define BCOL     0xAA
 
-#define MINRANGE  50
+#define MINRANGE 50
 
 // Fibanocci irrationel Golden Number.
-#define PHI       1.618033988 
+#define PHI      1.618033988
 // 1/PHI
-#define INVPHI    0.61803398903633
+#define INVPHI   0.61803398903633
 
 // C++ includes.
 
@@ -128,7 +125,7 @@ public:
 
     QColor      guideColor;
 
-    DImg        preview;
+    QImage      preview;
     
     ImageIface *iface;
 };
@@ -153,13 +150,13 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    d->iface         = new ImageIface(w, h);
+    d->iface        = new ImageIface(w, h);
     uchar *data     = d->iface->getPreviewImage();
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview       = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data).copyQImage();
     delete [] data;
     
     d->pixmap  = new QPixmap(w, h);
@@ -200,7 +197,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview       = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data).copyQImage();
     delete [] data;
     
     d->pixmap = new QPixmap(w, h);
@@ -681,10 +678,10 @@ void ImageSelectionWidget::updatePixmap(void)
     int ty = d->localRegionSelection.top()    - d->rect.top();
     int by = d->localRegionSelection.bottom() - d->rect.top();
 
-    QImage image = d->preview.copyQImage();
+    QImage image = d->preview.copy();
 
     uchar* ptr = image.bits();
-    uchar  r, g, b, a;
+    uchar  r, g, b;
 
     for (uint j=0 ; j < d->preview.height() ; j++)
     {
@@ -692,16 +689,17 @@ void ImageSelectionWidget::updatePixmap(void)
         {
             if (i < lx || i >= rx || j < ty || j >= by)
             {
-                a = (*ptr >> 24) & 0xFF;
-                r = (*ptr >> 16) & 0xFF;
-                g = (*ptr >> 8)  & 0xFF;
-                b = (*ptr)       & 0xFF;
+                b = ptr[0];
+                g = ptr[1];
+                r = ptr[2];
 
-                r += (uchar)((RCOL8 - r) * OPACITY);
-                g += (uchar)((GCOL8 - g) * OPACITY);
-                b += (uchar)((BCOL8 - b) * OPACITY);
+                r += (uchar)((RCOL - r) * OPACITY);
+                g += (uchar)((GCOL - g) * OPACITY);
+                b += (uchar)((BCOL - b) * OPACITY);
 
-                *ptr = a << 24 | r << 16 | g << 8 | b;
+                ptr[0] = b;
+                ptr[1] = g;
+                ptr[2] = r;
             }
 
             ptr+=4;
