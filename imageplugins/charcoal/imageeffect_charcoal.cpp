@@ -5,7 +5,7 @@
  * Description : a digikam image editor plugin for 
  *               simulate charcoal drawing.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,17 +49,19 @@
 namespace DigikamCharcoalImagesPlugin
 {
 
-ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
-                    : CtrlPanelDialog(parent, i18n("Charcoal Drawing"), "charcoal")
+ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent, QString title, QFrame* banner)
+                    : Digikam::CtrlPanelDlg(parent, title, "charcoal", false,
+                                           false, true, Digikam::ImagePannelWidget::SeparateViewAll,
+                                           banner)
 {
     QString whatsThis;
         
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Charcoal Drawing"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A charcoal drawing image effect plugin for digiKam."),
+                                       I18N_NOOP("A digiKam charcoal drawing image effect plugin."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2005, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
@@ -71,7 +73,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
     
     m_pencilInput = new KIntNumInput(gboxSettings);
@@ -79,8 +81,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     m_pencilInput->setValue(5);
     QWhatsThis::add( m_pencilInput, i18n("<p>Set here the charcoal pencil size used to simulate the drawing."));
 
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_pencilInput, 0, 0, 1, 1);
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_pencilInput, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
     
@@ -92,8 +94,8 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent)
     QWhatsThis::add( m_smoothInput, i18n("<p>This value controls the smoothing effect of the pencil "
                                          "under the canvas."));
 
-    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_smoothInput, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_smoothInput, 3, 3, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
     
@@ -131,12 +133,12 @@ void ImageEffect_Charcoal::prepareEffect()
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
             
-    double pencil = (double)m_pencilInput->value();
+    double pencil = (double)m_pencilInput->value()/10.0;
     double smooth = (double)m_smoothInput->value();
     
-    QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Charcoal(&image, this, pencil, smooth));
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(&image, this, pencil, smooth));
 }
 
 void ImageEffect_Charcoal::prepareFinal()
@@ -144,30 +146,23 @@ void ImageEffect_Charcoal::prepareFinal()
     m_pencilInput->setEnabled(false);
     m_smoothInput->setEnabled(false);
     
-    double pencil = (double)m_pencilInput->value();
+    double pencil = (double)m_pencilInput->value()/10.0;
     double smooth = (double)m_smoothInput->value();
 
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Charcoal(&orgImage, this, pencil, smooth));
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Charcoal(iface.getOriginalImg(), 
+                                                                   this, pencil, smooth));
 }
 
 void ImageEffect_Charcoal::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
 void ImageEffect_Charcoal::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Charcoal"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Charcoal"), m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamCharcoalImagesPlugin

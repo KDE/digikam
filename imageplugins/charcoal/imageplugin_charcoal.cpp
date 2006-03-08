@@ -4,7 +4,7 @@
  * Date  : 2004-08-26
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_charcoal.h"
 #include "imageplugin_charcoal.h"
 
@@ -60,8 +61,12 @@ void ImagePlugin_Charcoal::setEnabledActions(bool enable)
 
 void ImagePlugin_Charcoal::slotCharcoal()
 {
-    DigikamCharcoalImagesPlugin::ImageEffect_Charcoal dlg(parentWidget());
+    QString title = i18n("Charcoal Drawing");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamCharcoalImagesPlugin::ImageEffect_Charcoal dlg(parentWidget(),
+                                 title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

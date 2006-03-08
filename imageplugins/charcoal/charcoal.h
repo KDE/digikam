@@ -4,7 +4,7 @@
  * Date  : 2005-05-25
  * Description : Charcoal threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,23 +29,25 @@
 namespace DigikamCharcoalImagesPlugin
 {
 
-class Charcoal : public Digikam::ThreadedFilter
+class Charcoal : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    Charcoal(QImage *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
+    Charcoal(Digikam::DImg *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
     
     ~Charcoal(){};
             
-private:  // Texture filter data.
+private:
 
     double m_pencil;
     double m_smooth;
     
-private:  // Texture filter methods.
+private:
 
-    virtual void filterImage(void);
+    void filterImage(void);
+    bool convolveImage(const unsigned int order, const double *kernel);
+    int  getOptimalKernelWidth(double radius, double sigma);
 
 };    
 

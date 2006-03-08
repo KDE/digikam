@@ -24,6 +24,7 @@
    - Film Grain       : Done.
    - Infrared         : Done.
    - Rain Drops       : Done.
+   - Charcoal         : Done.
 
    > Pending plugins (by difficulty order):
 
@@ -41,8 +42,6 @@
                                   in a same session (see B.K.O). Can be long.
    - Superimpose      : TODO. ==> complete rewrite of plugin widget (See B.K.O file). Can be long.
    - Noise Reduction  : TODO. ==> backport new algorithm from Krita based on wavelets (it's better). Can be long.
-   - Charcoal         : TODO. ==> backport algorithm from kimageeffect and add 16 bits support. 
-                                  Get any inspiration from sharpen algorithm already backported from kimageeffect
 
 Nota: 
 

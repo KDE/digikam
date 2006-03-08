@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin for 
  *               simulate charcoal drawing.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,20 +25,20 @@
 
 // Local includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class KIntNumInput;
 
 namespace DigikamCharcoalImagesPlugin
 {
 
-class ImageEffect_Charcoal : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Charcoal : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Charcoal(QWidget* parent);
+    ImageEffect_Charcoal(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Charcoal();
 
 private:

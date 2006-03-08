@@ -1,8 +1,8 @@
 METASOURCES = AUTO
 
 INCLUDES    = -I$(top_srcdir)/digikamimageplugins/common/include \
-		  -I$(top_srcdir)/digikam/digikam \
-	      -I$(top_srcdir)/digikamimageplugins/common/dialogs \
+	      -I$(top_srcdir)/digikamimageplugins/common/widgets \
+	      -I$(top_srcdir)/digikam/digikam \
 	      $(all_includes) $(LIBDIGIKAM_CFLAGS)
 
 # Install this plugin in the KDE modules directory
@@ -12,7 +12,7 @@ digikamimageplugin_charcoal_la_SOURCES = imageplugin_charcoal.cpp \
 	                                 imageeffect_charcoal.cpp charcoal.cpp 
 
 digikamimageplugin_charcoal_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	           $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_charcoal_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
