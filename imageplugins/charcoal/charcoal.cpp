@@ -95,7 +95,7 @@ void Charcoal::filterImage(void)
     // -- Applying Gaussian blur effect ---------------------------------------
 
     Digikam::DImgImageFilters().gaussianBlurImage(m_destImage.bits(), m_destImage.width(), 
-                                m_destImage.height(), m_destImage.sixteenBit(), (int)(m_pencil));
+                                m_destImage.height(), m_destImage.sixteenBit(), (int)(m_smooth/10.0));
     postProgress( 60 );
     if (m_cancel)
         return;
