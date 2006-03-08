@@ -85,18 +85,19 @@ ImageEffect_Infrared::ImageEffect_Infrared(QWidget* parent, QString title, QFram
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
     QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
 
-    m_sensibilitySlider = new QSlider(1, 7, 1, 1, Qt::Horizontal, gboxSettings);
+    m_sensibilitySlider = new QSlider(1, 25, 1, 1, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
     m_sensibilitySlider->setTickInterval(1);
     m_sensibilitySlider->setTickmarks(QSlider::Below);
 
-    m_sensibilityLCDValue = new QLCDNumber (3, gboxSettings);
+    m_sensibilityLCDValue = new QLCDNumber (4, gboxSettings);
     m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
     m_sensibilityLCDValue->display( QString::number(200) );
     whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                      "Increasing this value will increase the portion of green color in the mix. " 
                      "It will also increase the halo effect on the hightlights, and the film "
-                     "graininess (if the box is checked).");
+                     "graininess (if the box is checked).</p>"
+                     "<p>Note: to simulate an <b>Ilford SFX200</b> infrared film, use a sensibility excursion of 200 to 800. A sensibility over 800 simulate <b>Kodak HIE</b> hight speed infrared film. This last one give more dramastic photograph style.</p>");
 
     QWhatsThis::add( m_sensibilityLCDValue, whatsThis);
     QWhatsThis::add( m_sensibilitySlider, whatsThis);
@@ -160,8 +161,8 @@ void ImageEffect_Infrared::prepareEffect()
     m_sensibilitySlider->setEnabled(false);
 
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
-    int   s      = 100 + 100 * m_sensibilitySlider->value();
-    bool  g      = m_addFilmGrain->isChecked();
+    int   s = 100 + 100 * m_sensibilitySlider->value();
+    bool  g = m_addFilmGrain->isChecked();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Infrared(&image, this, s, g));
 }
@@ -171,8 +172,8 @@ void ImageEffect_Infrared::prepareFinal()
     m_addFilmGrain->setEnabled(false);
     m_sensibilitySlider->setEnabled(false);
 
-    int  s    = 100 + 100 * m_sensibilitySlider->value();
-    bool g    = m_addFilmGrain->isChecked();
+    int  s = 100 + 100 * m_sensibilitySlider->value();
+    bool g = m_addFilmGrain->isChecked();
 
     Digikam::ImageIface iface(0, 0);
 

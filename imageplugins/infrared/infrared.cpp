@@ -21,8 +21,6 @@
  * 
  * ============================================================ */
 
-#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ((((t) >> 8) + (t)) >> 8)) 
-  
 // C++ includes. 
  
 #include <cmath>
@@ -56,8 +54,6 @@ void Infrared::filterImage(void)
 // This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site 
 // available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
 
-//#define INT_MULT(a,b,t)  ((t) = (a) * (b) + 0x80, ( ( (t >> 8) + t ) >> 8))
-
 inline static int intMult8(uint a, uint b)
 {
     uint t = a * b + 0x80;
@@ -70,28 +66,35 @@ inline static int intMult16(uint a, uint b)
     return ((t >> 16) + t) >> 16;
 }
 
+/* More info about IR film can be seen at this url : 
+
+http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
+*/
+
 void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grain)
 {
-    // Sensibility: 200..800
+    // Sensibility: 200..2600
 
     if (Sensibility <= 0) return;
 
-    int Width = orgImage->width();
-    int Height = orgImage->height();
-    int bytesDepth = orgImage->bytesDepth();
-    uint numBytes = orgImage->numBytes();
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    int bytesDepth  = orgImage->bytesDepth();
+    uint numBytes   = orgImage->numBytes();
     bool sixteenBit = orgImage->sixteenBit();
-    uchar* data = orgImage->bits();
+    uchar* data     = orgImage->bits();
 
     // Infrared film variables depending on Sensibility.
-    // This way try to reproduce famous Ilford SFX200 infrared film
+    // We can reproduce famous Ilford SFX200 infrared film
     // http://www.ilford.com/html/us_english/prod_html/sfx200/sfx200.html
-    // Note : this film have a sensibility escursion from 200 to 800 ISO.
+    // This film have a sensibility escursion from 200 to 800 ISO.
+    // Over 800 ISO, we reproduce The Kodak HIE hight speed infrared film.
 
     // Infrared film grain.
     int Noise = (Sensibility + 3000) / 10;
     if (sixteenBit)
         Noise = (Noise + 1) * 256 - 1;
+
     int   blurRadius = (int)((Sensibility / 200.0) + 1.0);   // Gaussian blur infrared hightlight effect 
                                                              // [2 to 5].
     float greenBoost = 2.1 - (Sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
