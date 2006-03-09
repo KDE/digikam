@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_lensdistortion.h"
 #include "imageplugin_lensdistortion.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_LensDistortion::setEnabledActions(bool enable)
 
 void ImagePlugin_LensDistortion::slotLensDistortion()
 {
-    DigikamLensDistortionImagesPlugin::ImageEffect_LensDistortion dlg(parentWidget());
+    QString title = i18n("Lens Distortion Correction");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamLensDistortionImagesPlugin::ImageEffect_LensDistortion dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

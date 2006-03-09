@@ -25,10 +25,10 @@
    - Infrared         : Done.
    - Rain Drops       : Done.
    - Charcoal         : Done.
+   - Lens Distortion  : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Lens Distortion  : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
                                   Medium.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix. 

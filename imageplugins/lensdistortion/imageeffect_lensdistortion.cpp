@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_lensdistortion.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-12-27
  * Description : a digiKam image plugin for to reduce spherical
  *               aberration provide by lens on an image.
  * 
  * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Distortion Correction algorithm copyrighted 
  * 2001-2003 David Hodson <hodsond@acm.org>
@@ -63,30 +65,34 @@
 namespace DigikamLensDistortionImagesPlugin
 {
 
-ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
-                          : ImageGuideDialog(parent, i18n("Lens Distortion Correction"), 
-                                             "lensdistortion")
+ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString title, QFrame* banner)
+                          : Digikam::ImageGuideDlg(parent, title, "lensdistortion",
+                             false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     QString whatsThis;
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Lens Distortion Correction"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to reduce spherical aberration caused "
                                                  "by a lens to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-                                       
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("David Hodson", I18N_NOOP("Lens distortion correction algorithm."),
                      "hodsond at acm dot org");
-            
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
         
     QWidget *gboxSettings = new QWidget(plainPage());
@@ -163,6 +169,27 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent)
 
     connect(m_brightenInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));           
+
+    /* Calc transform preview.
+       We would like a checkered area to demonstrate the effect.
+       We do not have any drawing support in DImg, so we let Qt draw.
+       First we create a white QImage. We convert this to a QPixmap,
+       on which we can draw. Then we convert back to QImage,
+       convert the QImage to a DImg which we only need to create once, here.
+       Later, we apply the effect on a copy and convert the DImg to QPixmap.
+       Longing for Qt4 where we can paint directly on the QImage...
+    */
+
+    QImage preview(120, 120, 32);
+    memset(preview.bits(), 255, preview.numBytes());
+    QPixmap pix (preview);
+    QPainter pt(&pix);
+    pt.setPen( QPen::QPen(Qt::black, 1) ); 
+    pt.fillRect( 0, 0, pix.width(), pix.height(), QBrush::QBrush(Qt::black, Qt::CrossPattern) );
+    pt.drawRect( 0, 0, pix.width(), pix.height() );
+    pt.end();
+    QImage preview2(pix.convertToImage());
+    m_previewRasterImage = Digikam::DImg(preview2.width(), preview2.height(), false, false, preview2.bits());
 }
 
 ImageEffect_LensDistortion::~ImageEffect_LensDistortion()
@@ -239,27 +266,13 @@ void ImageEffect_LensDistortion::prepareEffect()
     double r = m_rescaleInput->value();
     double b = m_brightenInput->value();
 
-    // Calc transform preview.    
-    QImage preview(120, 120, 32);
-    memset(preview.bits(), 255, preview.numBytes());
-    QPixmap pix (preview);
-    QPainter pt(&pix);
-    pt.setPen( QPen::QPen(Qt::black, 1) ); 
-    pt.fillRect( 0, 0, pix.width(), pix.height(), QBrush::QBrush(Qt::black, Qt::CrossPattern) );
-    pt.drawRect( 0, 0, pix.width(), pix.height() );
-    pt.end();
-    QImage preview2(pix.convertToImage());
-    LensDistortion transformPreview(&preview2, 0L, m, e, r, b, 0, 0);
-    m_maskPreviewLabel->setPixmap(QPixmap::QPixmap(transformPreview.getTargetImage()));
+    LensDistortion transformPreview(&m_previewRasterImage, 0L, m, e, r, b, 0, 0);
+    m_maskPreviewLabel->setPixmap(QPixmap::QPixmap(transformPreview.getTargetImage().convertToPixmap()));
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    QImage orgImage(iface->originalWidth(), iface->originalHeight(), 32);
-    uint *data = iface->getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new LensDistortion(&orgImage, this, m, e, r, b, 0, 0));    
-    delete [] data;
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new LensDistortion(iface->getOriginalImg(), this, m, e, r, b, 0, 0));
 }
 
 void ImageEffect_LensDistortion::prepareFinal()
@@ -268,39 +281,35 @@ void ImageEffect_LensDistortion::prepareFinal()
     m_edgeInput->setEnabled(false);
     m_rescaleInput->setEnabled(false);
     m_brightenInput->setEnabled(false);
-        
+
     double m = m_mainInput->value();
     double e = m_edgeInput->value();
     double r = m_rescaleInput->value();
     double b = m_brightenInput->value();
 
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new LensDistortion(&orgImage, this, m, e, r, b, 0, 0));
-    delete [] data;       
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new LensDistortion(iface.getOriginalImg(), this, m, e, r, b, 0, 0));
 }
 
 void ImageEffect_LensDistortion::putPreviewData(void)
 {
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    
-    QImage imDest = m_threadedFilter->getTargetImage();
-    iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
-                                                     iface->previewHeight())).bits());
-                 
-    m_imagePreviewWidget->updatePreview();    
+
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage()
+            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    iface->putPreviewImage(imDest.bits());
+
+    m_imagePreviewWidget->updatePreview();
 }
 
 void ImageEffect_LensDistortion::putFinalData(void)
 {
-    Digikam::ImageIface iface(0, 0);    
+    Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalData(i18n("Lens Distortion"), 
-                          (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Distortion"),
+                           m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamLensDistortionImagesPlugin

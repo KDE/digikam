@@ -32,12 +32,12 @@
 namespace DigikamLensDistortionImagesPlugin
 {
 
-class LensDistortion : public Digikam::ThreadedFilter
+class LensDistortion : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    LensDistortion(QImage *orgImage, QObject *parent=0, double main=0.0, 
+    LensDistortion(Digikam::DImg *orgImage, QObject *parent=0, double main=0.0, 
                    double edge=0.0, double rescale=0.0, double brighten=0.0,
                    int centre_x=0, int centre_y=0);
     

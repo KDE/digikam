@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : pixelaccess.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-12-27
  * Description : 
  * 
  * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,11 +30,9 @@
 #define PixelAccessXOffset 3
 #define PixelAccessYOffset 3
 
-#define MAX_PIXEL_DEPTH    4
+// Digikam includes.
 
-// Qt includes.
-
-#include <qimage.h>
+#include <digikamheaders.h>
 
 namespace DigikamLensDistortionImagesPlugin
 {
@@ -53,38 +53,38 @@ namespace DigikamLensDistortionImagesPlugin
 class PixelAccess
 {
 public:
-    
-    PixelAccess(uint *data, int Width, int Height);
+
+    PixelAccess(Digikam::DImg *srcImage);
     ~PixelAccess();
 
-    void pixelAccessGetCubic(double srcX, double srcY, double brighten, uchar* dst, int dstDepth);
-    
-private:   
-    
-    QImage m_image;
-    QImage m_region;                 
-    
-    uint*  m_srcPR;
-    uchar* m_buffer[PixelAccessRegions];
-    
+    void pixelAccessGetCubic(double srcX, double srcY, double brighten, uchar* dst);
+
+private:
+
+    Digikam::DImg *m_image;
+
+    //uchar* m_buffer[PixelAccessRegions];
+    Digikam::DImg *m_buffer[PixelAccessRegions];
+
     int    m_width;
     int    m_height;
     int    m_depth;
     int    m_imageWidth;
     int    m_imageHeight;
+    bool   m_sixteenBit;
     int    m_tileMinX[PixelAccessRegions];
     int    m_tileMaxX[PixelAccessRegions];
     int    m_tileMinY[PixelAccessRegions];
     int    m_tileMaxY[PixelAccessRegions];
-    
+
 protected:
 
     inline uchar* pixelAccessAddress(int i, int j);
     void pixelAccessSelectRegion(int n);
     void pixelAccessDoEdge(int i, int j);
     void pixelAccessReposition(int xInt, int yInt);
-    void cubicInterpolate(uchar* src, int rowStride, int srcDepth, uchar* dst, 
-                          int dstDepth, double dx, double dy, double brighten);
+    void cubicInterpolate(uchar* src, int rowStride, uchar* dst,
+                          bool sixteenBit, double dx, double dy, double brighten);
 };
 
 }  // NameSpace DigikamLensDistortionImagesPlugin
