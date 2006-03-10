@@ -22,8 +22,9 @@
  
 #include <qcolor.h>
 #include <qgroupbox.h>
-#include <qvbuttongroup.h>
 #include <qhgroupbox.h>
+#include <qvgroupbox.h>
+#include <qhbuttongroup.h> 
 #include <qradiobutton.h>
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h> 

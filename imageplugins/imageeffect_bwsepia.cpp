@@ -27,11 +27,13 @@
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h> 
+#include <qradiobutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
@@ -77,7 +79,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget);
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 4, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -140,44 +142,72 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    QLabel *labelType = new QLabel(i18n("Black and white conversion tool:"), gboxSettings);
-    m_typeCB = new QComboBox( false, gboxSettings );
-    m_typeCB->insertItem( previewEffectPic("neutralbw"), i18n("Neutral Black & White") );
-    m_typeCB->insertItem( previewEffectPic("bwgreen"),   i18n("Black & White with Green Filter") );
-    m_typeCB->insertItem( previewEffectPic("bworange"),  i18n("Black & White with Orange Filter") );
-    m_typeCB->insertItem( previewEffectPic("bwred"),     i18n("Black & White with Red Filter") );
-    m_typeCB->insertItem( previewEffectPic("bwyellow"),  i18n("Black & White with Yellow Filter") );
-    m_typeCB->insertItem( previewEffectPic("sepia"),     i18n("Black & White with Sepia Tone") );
-    m_typeCB->insertItem( previewEffectPic("browntone"), i18n("Black & White with Brown Tone") );
-    m_typeCB->insertItem( previewEffectPic("coldtone"),  i18n("Black & White with Cold Tone") );
-    m_typeCB->insertItem( previewEffectPic("selenium"),  i18n("Black & White with Selenium Tone") );
-    m_typeCB->insertItem( previewEffectPic("platinum"),  i18n("Black & White with Platinum Tone") );
-    m_typeCB->setCurrentText( i18n("Neutral Black & White") );
-    QWhatsThis::add( m_typeCB, i18n("<p>Select here the black and white conversion type:<p>"
-                                    "<b>Neutral</b>: simulate black and white neutral film exposure.<p>"
-                                    "<b>Green Filter</b>: simulate black and white film exposure using green filter. "
-                                    "This provides an universal asset for all scenics, especially suited for portraits "
-                                    "photographed against sky.<p>"
-                                    "<b>Orange Filter</b>: simulate black and white film exposure using orange filter. "
-                                    "This will enhances landscapes, marine scenes and aerial photography.<p>"
-                                    "<b>Red Filter</b>: simulate black and white film exposure using red filter. "
-                                    "Using this one creates dramatic sky effects and simulates moonlight scenes in daytime.<p>"
-                                    "<b>Yellow Filter</b>: simulate black and white film exposure using yellow filter. "
-                                    "Most natural tonal correction and improves contrast. Ideal for landscapes.<p>"
-                                    "<b>Sepia Tone</b>: gives a warm highlight and mid-tone while adding a bit of coolness to "
-                                    "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
-                                    "toner.<p>"
-                                    "<b>Brown Tone</b>: more neutral than Sepia Tone filter.<p>"
-                                    "<b>Cold Tone</b>: start subtle and replicate printing on a cold tone black and white "
-                                    "paper such as a bromide enlarging paper.<p>"
-                                    "<b>Selenium Tone</b>: effect that replicate traditional selenium chemical toning done "
-                                    "in the darkroom.<p>"
-                                    "<b>Platinum Tone</b>: effect that replicate traditional platinum chemical toning done "
-                                    "in the darkroom."
-                                    ));
+    m_bwTools = new QButtonGroup(1, Qt::Horizontal, i18n("Black and white tool:"), gboxSettings);
 
-    gridSettings->addMultiCellWidget(labelType, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_typeCB, 4, 4, 0, 4);
+    QRadioButton *neutral = new QRadioButton(i18n("Neutral"), m_bwTools);
+    QWhatsThis::add( neutral, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
+                                     "<p>Simulate black and white neutral film exposure.</p>").arg(previewEffectPic("neutralbw")));
+    m_bwTools->insert(neutral, BWNeutral);
+    
+    QRadioButton *green = new QRadioButton(i18n("Green Filter"), m_bwTools);
+    QWhatsThis::add( green, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
+                                     "<p>Simulate black and white film exposure using green filter. "
+                                     "This provides an universal asset for all scenics, especially suited for portraits "
+                                     "photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
+    m_bwTools->insert(green, BWGreenFilter);
+
+    QRadioButton *orange = new QRadioButton(i18n("Orange Filter"), m_bwTools);
+    QWhatsThis::add( orange, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
+                                     "<p>Simulate black and white film exposure using orange filter. "
+                                     "This will enhances landscapes, marine scenes and aerial "
+                                     "photography.</p>").arg(previewEffectPic("bworange")));
+    m_bwTools->insert(orange, BWOrangeFilter);
+
+    QRadioButton *red = new QRadioButton(i18n("Red Filter"), m_bwTools);
+    QWhatsThis::add( red, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
+                                     "<p>Simulate black and white film exposure using red filter. "
+                                     "Using this one creates dramatic sky effects and simulates moonlight scenes "
+                                     "in daytime.</p>").arg(previewEffectPic("bwred")));
+    m_bwTools->insert(red, BWRedFilter);
+
+    QRadioButton *yellow = new QRadioButton(i18n("Yellow Filter"), m_bwTools);
+    QWhatsThis::add( yellow, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
+                                      "<p>Simulate black and white film exposure using yellow filter. "
+                                      "Most natural tonal correction and improves contrast. Ideal for "
+                                      "landscapes.</p>").arg(previewEffectPic("bwyellow")));
+    m_bwTools->insert(yellow, BWYellowFilter);
+
+    QRadioButton *sepia = new QRadioButton(i18n("Sepia Tone"), m_bwTools);
+    QWhatsThis::add( sepia, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
+                                     "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
+                                     "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
+                                     "toner.</p>").arg(previewEffectPic("sepia")));
+    m_bwTools->insert(sepia, BWSepia);
+
+    QRadioButton *brown = new QRadioButton(i18n("Brown Tone"), m_bwTools);
+    QWhatsThis::add( brown, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
+                                      "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
+    m_bwTools->insert(brown, BWBrown);
+
+    QRadioButton *cold = new QRadioButton(i18n("Cold Tone"), m_bwTools);
+    QWhatsThis::add( cold, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
+                                      "<p>Start subtle and replicate printing on a cold tone black and white "
+                                      "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
+    m_bwTools->insert(cold, BWCold);    
+
+    QRadioButton *selenium = new QRadioButton(i18n("Selenium Tone"), m_bwTools);
+    QWhatsThis::add( selenium, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
+                                      "<p>This effect replicate traditional selenium chemical toning done "
+                                      "in the darkroom.</p>").arg(previewEffectPic("selenium")));
+    m_bwTools->insert(selenium, BWSelenium);
+
+    QRadioButton *platinium = new QRadioButton(i18n("Platinum Tone"), m_bwTools);
+    QWhatsThis::add( platinium, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
+                                      "<p>This effect replicate traditional platinum chemical toning done "
+                                    "in the darkroom.</p>").arg(previewEffectPic("platinum")));
+    m_bwTools->insert(platinium, BWPlatinum);
+    
+    gridSettings->addMultiCellWidget(m_bwTools, 3, 3, 0, 4);
 
     // -------------------------------------------------------------
     
@@ -187,12 +217,17 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_cInput->setRange(-1.0, 1.0, 0.01, true);
     m_cInput->setValue(0.0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_cInput, 5, 5, 0, 4);
 
-    gridSettings->setRowStretch(7, 10);
+    gridSettings->setRowStretch(6, 10);
     setUserAreaWidget(gboxSettings);
 
+    // -------------------------------------------------------------
+    
+    // Reset all parameters to the default values.
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
+    
     // -------------------------------------------------------------
 
     connect(m_channelCB, SIGNAL(activated(int)),
@@ -204,7 +239,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_typeCB, SIGNAL(activated(int)),
+    connect(m_bwTools, SIGNAL(released(int)),
             this, SLOT(slotEffect()));
 
     connect(m_cInput, SIGNAL(valueChanged (double)),
@@ -264,20 +299,20 @@ void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &co
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
-QPixmap ImageEffect_BWSepia::previewEffectPic(QString name)
+QString ImageEffect_BWSepia::previewEffectPic(QString name)
 {
     KGlobal::dirs()->addResourceType(name.ascii(), KGlobal::dirs()->kde_default("data") + "digikam/data");
-    return ( QPixmap::QPixmap(KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png") );
+    return ( KGlobal::dirs()->findResourceDir(name.ascii(), name + ".png") + name + ".png" );
 }
 
 void ImageEffect_BWSepia::slotDefault()
 {
-    m_typeCB->blockSignals(true);
+    m_bwTools->blockSignals(true);
     m_cInput->blockSignals(true);
-    m_typeCB->setCurrentItem( BWNeutral );
+    m_bwTools->setButton( BWNeutral );
     m_cInput->setValue(0.0);
     m_cInput->blockSignals(false);
-    m_typeCB->blockSignals(false);
+    m_bwTools->blockSignals(false);
     slotEffect();
 }
 
@@ -297,7 +332,7 @@ void ImageEffect_BWSepia::slotEffect()
     bool a                          = iface->previewHasAlpha();
     bool sb                         = iface->previewSixteenBit();
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_typeCB->currentItem());
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTools->selectedId());
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
     Digikam::BCGModifier cmod;
@@ -327,7 +362,7 @@ void ImageEffect_BWSepia::finalRendering()
     
     if (data) 
     {
-       int type = m_typeCB->currentItem();
+       int type = m_bwTools->selectedId();
        blackAndWhiteConversion(data, w, h, sb, type);
        Digikam::DImg img(w, h, sb, a, data);
        Digikam::BCGModifier cmod;

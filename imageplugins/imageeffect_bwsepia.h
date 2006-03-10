@@ -26,7 +26,6 @@
 // Qt Includes.
 
 #include <qstring.h>
-#include <qpixmap.h>
 
 // Digikam include.
 
@@ -34,6 +33,7 @@
 
 class QHButtonGroup;
 class QComboBox;
+class QButtonGroup;
 
 class KDoubleNumInput;
 
@@ -91,9 +91,10 @@ private:
     uchar                        *m_destinationPreviewData;
     
     QComboBox                    *m_channelCB;
-    QComboBox                    *m_typeCB;
     
     QHButtonGroup                *m_scaleBG;
+    
+    QButtonGroup                 *m_bwTools;
 
     KDoubleNumInput              *m_cInput;
     
@@ -106,7 +107,7 @@ private:
 private:
 
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    QPixmap previewEffectPic(QString name);
+    QString previewEffectPic(QString name);
 
 private slots:
 
