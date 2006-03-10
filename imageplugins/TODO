@@ -26,7 +26,8 @@
    - Rain Drops       : Done.
    - Charcoal         : Done.
    - Lens Distortion  : Done.
-
+   - Noise Reduction  : Done.
+   
    > Pending plugins (by difficulty order):
 
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
@@ -38,7 +39,6 @@
    - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Fix plugin to support multiText edition
                                   in a same session (see B.K.O). Can be long.
    - Superimpose      : TODO. ==> complete rewrite of plugin widget (See B.K.O file). Can be long.
-   - Noise Reduction  : TODO. ==> backport new algorithm from Krita based on wavelets (it's better). Can be long.
 
    - Hot Pixels       : TODO  ==> simple port algorithms to 16 bits. This part will be done by Unai Garro.
                                   Add manual hot pixel selection. Need to implement pixel selection on

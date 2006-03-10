@@ -1,5 +1,5 @@
 /* ============================================================
- * File  : imageeffect_despeckle.cpp
+ * File  : imageeffect_noisereduction.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-24
  * Description : noise reduction image filter for digiKam 
@@ -47,21 +47,22 @@
 // Local includes.
 
 #include "version.h"
-#include "despeckle.h"
-#include "imageeffect_despeckle.h"
+#include "noisereduction.h"
+#include "imageeffect_noisereduction.h"
 
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
-                     : CtrlPanelDialog(parent, i18n("Noise Reduction"), "despeckle")
+ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString title, QFrame* banner)
+                          : Digikam::CtrlPanelDlg(parent, title, "noisereduction", false,
+                                     false, true, Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
     
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Noise Reduction"), 
                                        digikamimageplugins_version,
-                                       I18N_NOOP("A despeckle image filter plugin for digiKam."),
+                                       I18N_NOOP("A noise reduction image filter plugin for digiKam."),
                                        KAboutData::License_GPL,
                                        "(c) 2004-2006, Gilles Caulier", 
                                        0,
@@ -72,7 +73,7 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
 
     about->addAuthor("Michael Sweet", I18N_NOOP("Original Despeckle algorithm author"),
                      "mike at easysw.com");
-                         
+                     
     setAboutData(about);
     
     // -------------------------------------------------------------
@@ -85,21 +86,24 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     m_radiusInput = new KIntNumInput(gboxSettings, "m_radiusInput");
     m_radiusInput->setRange(1, 20, 1, true);
     
-    QWhatsThis::add( m_radiusInput, i18n("<p>A radius of 0 has no effect, "
-                     "1 and above determine the blur matrix radius "
-                     "that determines how much to blur the image.") );
+    QWhatsThis::add( m_radiusInput, i18n("<p>This slider sets the size of action window witch be moved over the image to remove artefacts. "
+                                         "The color in it is smoothed, so imperfections are removed. This setting is only avaialble when "
+                                         "<b>Adaptive</b> method is disabled.") );
     
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
     gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
     
     // -------------------------------------------------------------
 
+    Digikam::ImageIface iface(0, 0);
+    m_maxLevel = iface.originalSixteenBit() ? 65535 : 255;
+
     QLabel *label2 = new QLabel(i18n("Black level:"), gboxSettings);
     
     m_blackLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
-    m_blackLevelInput->setRange(0, 255, 1, true);
+    m_blackLevelInput->setRange(0, m_maxLevel, 1, true);
     
-    QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls the black "
+    QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls the black luminosity "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
 
@@ -111,9 +115,9 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("White level:"), gboxSettings);
     
     m_whiteLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
-    m_whiteLevelInput->setRange(0, 255, 1, true);
+    m_whiteLevelInput->setRange(0, m_maxLevel, 1, true);
     
-    QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls the white "
+    QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls the white luminosity "
                      "levels used by the adaptive filter to "
                      "adjust the filter radius.") );
 
@@ -123,10 +127,14 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
     // -------------------------------------------------------------
     
     m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), gboxSettings);
-    QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type."));
+    QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type to "
+                                                 "adapts radius value to image content using Histogram. "
+                                                 "If this option is checked, radius slider is not efficient. "
+                                                 "It renders a result smoother than with radius alone."));
     
     m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), gboxSettings);
-    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type.")); 
+    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type. "
+                                                "Repeats filter action which gets stronger."));
     
     gridSettings->addMultiCellWidget(m_useAdaptativeMethod, 6, 6, 0, 0);
     gridSettings->addMultiCellWidget(m_useRecursiveMethod, 6, 6, 1, 1);    
@@ -145,26 +153,26 @@ ImageEffect_Despeckle::ImageEffect_Despeckle(QWidget* parent)
             this, SLOT(slotTimer()));                                                
             
     connect(m_useAdaptativeMethod, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));             
+            this, SLOT(slotEffect()));
     
     connect(m_useRecursiveMethod, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));             
 }
 
-ImageEffect_Despeckle::~ImageEffect_Despeckle()
+ImageEffect_NoiseReduction::~ImageEffect_NoiseReduction()
 {
 }
 
-void ImageEffect_Despeckle::renderingFinished()
+void ImageEffect_NoiseReduction::renderingFinished()
 {
-    m_radiusInput->setEnabled(true);
+    m_radiusInput->setEnabled(!m_useAdaptativeMethod->isChecked());
     m_blackLevelInput->setEnabled(true);
     m_whiteLevelInput->setEnabled(true);
     m_useAdaptativeMethod->setEnabled(true);
     m_useRecursiveMethod->setEnabled(true);
 }
 
-void ImageEffect_Despeckle::resetValues()
+void ImageEffect_NoiseReduction::resetValues()
 {
     m_radiusInput->blockSignals(true);
     m_blackLevelInput->blockSignals(true);
@@ -173,19 +181,20 @@ void ImageEffect_Despeckle::resetValues()
     m_useRecursiveMethod->blockSignals(true);
                     
     m_radiusInput->setValue(3);
-    m_blackLevelInput->setValue(7);
-    m_whiteLevelInput->setValue(248);
+    m_blackLevelInput->setValue(0);
+    m_whiteLevelInput->setValue(m_maxLevel);
     m_useAdaptativeMethod->setChecked(true);
     m_useRecursiveMethod->setChecked(false);
+    m_radiusInput->setEnabled(!m_useAdaptativeMethod->isChecked());
     
     m_radiusInput->blockSignals(false);
     m_blackLevelInput->blockSignals(false);
     m_whiteLevelInput->blockSignals(false);
     m_useAdaptativeMethod->blockSignals(false);
     m_useRecursiveMethod->blockSignals(false);
-} 
+}
 
-void ImageEffect_Despeckle::prepareEffect()
+void ImageEffect_NoiseReduction::prepareEffect()
 {
     m_radiusInput->setEnabled(false);
     m_blackLevelInput->setEnabled(false);
@@ -193,18 +202,19 @@ void ImageEffect_Despeckle::prepareEffect()
     m_useAdaptativeMethod->setEnabled(false);
     m_useRecursiveMethod->setEnabled(false);
     
-    QImage img = m_imagePreviewWidget->getOriginalClipImage();
-   
     int  r  = m_radiusInput->value();
     int  bl = m_blackLevelInput->value();
     int  wl = m_whiteLevelInput->value();
     bool af = m_useAdaptativeMethod->isChecked();
     bool rf = m_useRecursiveMethod->isChecked();
     
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Despeckle(&img, this, r, bl, wl, af, rf));
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new NoiseReduction(&image,
+                       this, r, bl, wl, af, rf));
 }
 
-void ImageEffect_Despeckle::prepareFinal()
+void ImageEffect_NoiseReduction::prepareFinal()
 {
     m_radiusInput->setEnabled(false);
     m_blackLevelInput->setEnabled(false);
@@ -219,29 +229,21 @@ void ImageEffect_Despeckle::prepareFinal()
     bool rf = m_useRecursiveMethod->isChecked();
 
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-            
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Despeckle(&orgImage, 
-                                                               this, r, bl, wl, af, rf));
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new NoiseReduction(iface.getOriginalImg(),
+                       this, r, bl, wl, af, rf));
 }
 
-void ImageEffect_Despeckle::putPreviewData(void)
+void ImageEffect_NoiseReduction::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
-void ImageEffect_Despeckle::putFinalData(void)
+void ImageEffect_NoiseReduction::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Noise Reduction"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Noise Reduction"), m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
 
-#include "imageeffect_despeckle.moc"
+#include "imageeffect_noisereduction.moc"

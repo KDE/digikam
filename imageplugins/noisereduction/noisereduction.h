@@ -1,10 +1,10 @@
 /* ============================================================
- * File  : despeckle.h
+ * File  : noisereduction.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-05-25
- * Description : Despeckle threaded image filter.
+ * Description : Noise Reduction threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,8 +19,8 @@
  * 
  * ============================================================ */
   
-#ifndef DESPECKLE_H
-#define DESPECKLE_H
+#ifndef NOISE_REDUCTION_H
+#define NOISE_REDUCTION_H
 
 // Digikam includes.
 
@@ -29,34 +29,38 @@
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-class Despeckle : public Digikam::ThreadedFilter
+class NoiseReduction : public Digikam::DImgThreadedFilter
 {
 
 public:
     
-    Despeckle(QImage *orgImage, QObject *parent=0, int radius=3, int black_level=7, int white_level=248, 
-              bool adaptativeFilter=true, bool recursiveFilter=false);
+    NoiseReduction(Digikam::DImg *orgImage, QObject *parent, int radius, int black_level,
+                   int white_level, bool adaptativeFilter=true, bool recursiveFilter=false);
+    ~NoiseReduction(){};
     
-    ~Despeckle(){};
-    
-private:  // Despeckle filter data.
+private:  
 
     int  m_radius;
     int  m_black_level;
     int  m_white_level;
     bool m_adaptativeFilter;
     bool m_recursiveFilter; 
-    
-private:  // Despeckle filter methods.
 
-    virtual void filterImage(void);
+private:  
 
-    void despeckleImage(uint* data, int w, int h, int despeckle_radius, 
-                        int black_level, int white_level, 
-                        bool adaptativeFilter, bool recursiveFilter);
+    void filterImage(void);
 
-};    
+    void despeckle();
+    void despeckle16();
+
+    int  quick_median_select(uchar **p, uchar *i, int n);
+    int  quick_median_select16(unsigned short **p, unsigned short *i, int n);
+
+    uchar pixel_intensity(const uchar *p);
+    unsigned short pixel_intensity16(const unsigned short *p);
+
+};
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
 
-#endif /* DESPECKLE_H */
+#endif /* NOISE_REDUCTION_H */

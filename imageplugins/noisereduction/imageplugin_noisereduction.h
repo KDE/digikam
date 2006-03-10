@@ -1,10 +1,10 @@
 /* ============================================================
- * File  : imageplugin_despeckle.h
+ * File  : imageplugin_noisereduction.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-24
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +20,8 @@
  * ============================================================ */
 
 
-#ifndef IMAGEPLUGIN_DESPECKLE_H
-#define IMAGEPLUGIN_DESPECKLE_H
+#ifndef IMAGEPLUGIN_NOISEREDUCTION_H
+#define IMAGEPLUGIN_NOISEREDUCTION_H
 
 // Digikam includes.
 
@@ -29,26 +29,26 @@
 
 class KAction;
 
-class ImagePlugin_Despeckle : public Digikam::ImagePlugin
+class ImagePlugin_NoiseReduction : public Digikam::ImagePlugin
 {
     Q_OBJECT
     
 public:
 
-    ImagePlugin_Despeckle(QObject *parent, const char* name,
-                             const QStringList &args);
-    ~ImagePlugin_Despeckle();
+    ImagePlugin_NoiseReduction(QObject *parent, const char* name,
+                               const QStringList &args);
+    ~ImagePlugin_NoiseReduction();
 
     void setEnabledActions(bool enable);
 
 private:
 
-    KAction *m_despeckleAction;
+    KAction *m_noiseReductionAction;
     
 private slots:
 
-    void slotDespeckle();
+    void slotNoiseReduction();
 
 };
     
-#endif /* IMAGEPLUGIN_DESPECKLE_H */
+#endif /* IMAGEPLUGIN_NOISEREDUCTION_H */

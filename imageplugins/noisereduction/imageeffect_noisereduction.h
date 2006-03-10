@@ -1,5 +1,5 @@
 /* ============================================================
- * File  : imageeffect_despeckle.h
+ * File  : imageeffect_noisereduction.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-08-24
  * Description : noise reduction image filter for digiKam 
@@ -20,12 +20,12 @@
  * 
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_DESPECKLE_H
-#define IMAGEEFFECT_DESPECKLE_H
+#ifndef IMAGEEFFECT_NOISEREDUCTION_H
+#define IMAGEEFFECT_NOISEREDUCTION_H
 
 // Local includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class QCheckBox;
 
@@ -34,24 +34,26 @@ class KIntNumInput;
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-class ImageEffect_Despeckle : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_NoiseReduction : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Despeckle(QWidget* parent);
-    ~ImageEffect_Despeckle();
+    ImageEffect_NoiseReduction(QWidget* parent, QString title, QFrame* banner);
+    ~ImageEffect_NoiseReduction();
        
 private:
 
+    int           m_maxLevel;
+    
+    QCheckBox    *m_useAdaptativeMethod;
+    QCheckBox    *m_useRecursiveMethod;
+        
     KIntNumInput *m_radiusInput;
     KIntNumInput *m_blackLevelInput;
     KIntNumInput *m_whiteLevelInput;
-        
-    QCheckBox    *m_useAdaptativeMethod;
-    QCheckBox    *m_useRecursiveMethod;
-    
+
 protected:
     
     void prepareEffect(void);
@@ -64,4 +66,4 @@ protected:
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin
 
-#endif /* IMAGEEFFECT_DESPECKLE_H */
+#endif /* IMAGEEFFECT_NOISEREDUCTION_H */
