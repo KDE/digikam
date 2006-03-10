@@ -1,7 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date  : 2005-06-14
+ * Description : A QImage loader for DImg framework.
+ * 
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006 by Caulier Gilles
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
