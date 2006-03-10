@@ -52,7 +52,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (image.isNull())
     {
-        kdDebug() << "Cannot loading \"filePath\" using DImg::QImageLoader!" << endl;
+        kdDebug() << "Cannot loading \"" << filePath << "\" using DImg::QImageLoader!" << endl;
         return false;
     }
 
