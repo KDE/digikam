@@ -161,6 +161,8 @@ void FreeRotation::filterImage(void)
             postProgress( progress );        
     }
 
+    // FIXME : if m_angle > 90 || m_angle < -90 W and H are wrong !!!
+    
     // To compute the rotated destination image size using original image dimensions.        
     int W = (int)(m_orgW * cos(m_angle * DEG2RAD) + m_orgH * sin(fabs(m_angle) * DEG2RAD));
     int H = (int)(m_orgH * cos(m_angle * DEG2RAD) + m_orgW * sin(fabs(m_angle) * DEG2RAD));
@@ -178,10 +180,18 @@ void FreeRotation::filterImage(void)
            autoCrop.setY( (int)(nWidth  * sin(fabs(m_angle) * DEG2RAD)) );
            autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(fabs(m_angle) * DEG2RAD)) );
            autoCrop.setHeight( (int)(nNewHeight - 2*nWidth  * sin(fabs(m_angle) * DEG2RAD)) );        
-           m_destImage = m_destImage.copy(autoCrop);
-        
-           m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
-           m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
+           if (!autoCrop.isValid())
+           {
+               m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), 
+                              m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+               m_newSize = QSize();
+           }
+           else
+           {
+               m_destImage = m_destImage.copy(autoCrop);
+               m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(fabs(m_angle) * DEG2RAD)) );
+               m_newSize.setHeight( (int)(H - 2*m_orgW * sin(fabs(m_angle) * DEG2RAD)) );        
+           }
            break;
         }
        
@@ -194,17 +204,25 @@ void FreeRotation::filterImage(void)
                               ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
            autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) ); 
            autoCrop.moveCenter( QPoint::QPoint(nNewWidth/2, nNewHeight/2));
-           m_destImage = m_destImage.copy(autoCrop);
-           
-           gamma = atan((float)m_orgH / (float)m_orgW);
-           m_newSize.setWidth( (int)((float)m_orgH / cos(fabs(m_angle)*DEG2RAD) / 
-                               ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
-           m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );        
+           if (!autoCrop.isValid() || m_angle > 90.0 || m_angle < -90.0)
+           {
+               m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), 
+                             m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+               m_newSize = QSize();
+           }
+           else
+           {           
+               m_destImage = m_destImage.copy(autoCrop);
+               gamma = atan((float)m_orgH / (float)m_orgW);
+               m_newSize.setWidth( (int)((float)m_orgH / cos(fabs(m_angle)*DEG2RAD) / 
+                                   ( tan(gamma) + tan(fabs(m_angle)*DEG2RAD) )) );
+               m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );        
+           }
            break;
         }
         default:   // No auto croping.
         {
-           m_newSize.setWidth(  W );
+           m_newSize.setWidth( W );
            m_newSize.setHeight( H );
            break;
         }
