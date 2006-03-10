@@ -24,7 +24,6 @@
 // Qt Includes.
 
 #include <qstring.h>
-#include <qpixmap.h>
 
 // Digikam include.
 
@@ -32,6 +31,7 @@
 
 class QHButtonGroup;
 class QComboBox;
+class QButtonGroup;
 
 namespace Digikam
 {
@@ -81,9 +81,10 @@ private:
     uchar                        *m_destinationPreviewData;
     
     QComboBox                    *m_channelCB;
-    QComboBox                    *m_typeCB;
     
     QHButtonGroup                *m_scaleBG;
+
+    QButtonGroup                 *m_correctionTools;
 
     Digikam::ImageWidget         *m_previewWidget;
 
@@ -94,7 +95,7 @@ private:
 private:
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
-    QPixmap previewEffectPic(QString name);
+    QString previewEffectPic(QString name);
 
 private slots:
 
