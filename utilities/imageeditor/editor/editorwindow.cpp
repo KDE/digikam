@@ -763,7 +763,7 @@ void EditorWindow::saveStandardSettings()
         rc = QRect(pt.x(), pt.y(), 1, 1);
     config->writeEntry("Histogram Rectangle", rc);
 
-    config->writeEntry("FullScreen", m_slideShowAction->isChecked());
+    config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
     
     config->sync();
 }

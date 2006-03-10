@@ -171,12 +171,13 @@ protected slots:
 
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);
+    
+    void slotNameLabelCancelButtonPressed();
 
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
-        
-    void slotNameLabelCancelButtonPressed();
+
     virtual void slotContextMenu();
 
     virtual void slotSetup() { setup(); };
