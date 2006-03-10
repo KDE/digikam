@@ -100,9 +100,9 @@ void NoiseReduction::despeckle(void)
     uchar **buf  = new uchar*[box];
     uchar *ibuf  = new uchar[box];
 
-    for (int x = 0 ; x < width ; x++)
+    for (int x = 0 ; !m_cancel && (x < width) ; x++)
     {
-        for (int y = 0 ; y < height ; y++)
+        for (int y = 0 ; !m_cancel && (y < height) ; y++)
         {
             hist0   = 0;
             hist255 = 0;
@@ -113,9 +113,9 @@ void NoiseReduction::despeckle(void)
                 // Make sure Svm is ininialized to a sufficient large value 
                 med = -1;
     
-                for (jh = x-m_radius ; jh <= x+m_radius ; jh++)
+                for (jh = x-m_radius ; !m_cancel && (jh <= x+m_radius) ; jh++)
                 {
-                    for (jv = y-m_radius, pos1 = 0 ; jv <= y+m_radius ; jv++)
+                    for (jv = y-m_radius, pos1 = 0 ; !m_cancel && (jv <= y+m_radius) ; jv++)
                     {
                         pos2 = (jh + (jv * width)) * bpp;
 
@@ -211,9 +211,9 @@ void NoiseReduction::despeckle16(void)
     unsigned short **buf = new unsigned short*[box];
     unsigned short *ibuf = new unsigned short[box];
     
-    for (int x = 0 ; x < width ; x++)
+    for (int x = 0 ; !m_cancel && (x < width) ; x++)
     {
-        for (int y = 0 ; y < height ; y++)
+        for (int y = 0 ; !m_cancel && (y < height) ; y++)
         {
             hist0     = 0;
             hist65535 = 0;
@@ -224,9 +224,9 @@ void NoiseReduction::despeckle16(void)
                 // Make sure Svm is ininialized to a sufficient large value 
                 med = -1;
     
-                for (jh = x-m_radius ; jh <= x+m_radius ; jh++)
+                for (jh = x-m_radius ; !m_cancel && (jh <= x+m_radius) ; jh++)
                 {
-                    for (jv = y-m_radius, pos1 = 0 ; jv <= y+m_radius ; jv++)
+                    for (jv = y-m_radius, pos1 = 0 ; !m_cancel && (jv <= y+m_radius) ; jv++)
                     {
                         pos2 = (jh + (jv * width)) * bpp;
                         // We compute the luminosity to check with White and Black level.
@@ -323,7 +323,7 @@ int NoiseReduction::quick_median_select (uchar **p, uchar *i, int n)
     high = n-1 ;
     median = (low + high) / 2;
     
-    for (;;)
+    for (;!m_cancel;)
     {
         if (high <= low) // One element only
             return median;
@@ -369,7 +369,7 @@ int NoiseReduction::quick_median_select (uchar **p, uchar *i, int n)
         ll = low + 1;
         hh = high;
     
-        for (;;)
+        for (;!m_cancel;)
         {
             do ll++;
             while (i[low] > i[ll]);
@@ -394,6 +394,8 @@ int NoiseReduction::quick_median_select (uchar **p, uchar *i, int n)
         if (hh >= median)
             high = hh - 1;
     }
+    
+    return median; // To please compiler.    
 }
 
 int NoiseReduction::quick_median_select16 (unsigned short **p, unsigned short *i, int n)
@@ -406,7 +408,7 @@ int NoiseReduction::quick_median_select16 (unsigned short **p, unsigned short *i
     high = n-1 ;
     median = (low + high) / 2;
     
-    for (;;)
+    for (;!m_cancel;)
     {
         if (high <= low) // One element only
             return median;
@@ -452,7 +454,7 @@ int NoiseReduction::quick_median_select16 (unsigned short **p, unsigned short *i
         ll = low + 1;
         hh = high;
     
-        for (;;)
+        for (;!m_cancel;)
         {
             do ll++;
             while (i[low] > i[ll]);
@@ -477,6 +479,8 @@ int NoiseReduction::quick_median_select16 (unsigned short **p, unsigned short *i
         if (hh >= median)
             high = hh - 1;
     }
+    
+    return median; // To please compiler.
 }
 
 uchar NoiseReduction::pixel_intensity(const uchar *p)
