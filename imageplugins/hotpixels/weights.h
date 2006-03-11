@@ -45,16 +45,16 @@ public:
     ~Weights()
     {    
         if (!mWeightMatrices) return;
-        for (uint i=0; i<mPositions.count(); i++)
+        for (unsigned int i=0; i<mPositions.count(); i++)
             {
-                for (int j=0; j<mHeight; j++) delete[] mWeightMatrices[i][j];
+                for (unsigned int j=0; j<mHeight; j++) delete[] mWeightMatrices[i][j];
             }
         }
     
-    int      height(void)        const   { return mHeight; }
-    int      polynomeOrder(void) const   { return mPolynomeOrder; }
+    unsigned int      height(void)        const   { return mHeight; }
+    unsigned int      polynomeOrder(void) const   { return mPolynomeOrder; }
     bool     twoDim(void)        const   { return mTwoDim; }
-    int      width(void)         const   { return mWidth; }
+    unsigned int      width(void)         const   { return mWidth; }
     
     void     setHeight(int h)            { mHeight=h; };
     void     setPolynomeOrder(int order) { mPolynomeOrder=order; }
@@ -74,11 +74,11 @@ protected:
     
 private:
 
-    int                 mHeight,mWidth;
+    unsigned int                 mHeight,mWidth;
     QValueList <QPoint> mPositions;
-    int                 mCoefficientNumber;
+    unsigned int                 mCoefficientNumber;
     bool                mTwoDim;
-    int                 mPolynomeOrder;
+    unsigned int                 mPolynomeOrder;
     double ***          mWeightMatrices; //Stores a list of weight matrices
     
 private:

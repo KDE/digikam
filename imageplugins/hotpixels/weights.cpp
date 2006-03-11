@@ -55,10 +55,10 @@ void Weights::operator=(const Weights &w)
         for (uint i=0; i<mPositions.count(); i++)
         {
             mWeightMatrices[i]=new double*[mHeight]; //allocate mHeight rows on each position
-            for (int j=0; j<mHeight; j++)
+            for (unsigned int j=0; j<mHeight; j++)
             {
                 mWeightMatrices[i][j]=new double[mWidth]; //Allocate mWidth columns on each row
-                for (int k=0; k<mWidth; k++) 
+                for (unsigned int k=0; k<mWidth; k++) 
                 {
                     mWeightMatrices[i][j][k]=origMatrices[i][j][k];
                 }
@@ -75,27 +75,29 @@ void Weights::calculateWeights()
     double *matrix;  /* num_coeff * num_coeff */
     double *vector0; /* mPositions.count()   * num_coeff */
     double *vector1; /* mPositions.count()   * num_coeff */
-    size_t ix, iy, j;
+    size_t ix,iy,i,j;
     int x, y;
     
     // Determine coordinates of pixels to be sampled
     
     if (mTwoDim)
     {
-        size_t len_pos = 8;
 
-        for (y = -mPolynomeOrder; y < height() + mPolynomeOrder; ++y)
-            for (x = -mPolynomeOrder; x < width() + mPolynomeOrder; ++x)
-                if ((x < 0 && y < 0 && -x - y < mPolynomeOrder + 2)
-                    || (x < 0 && y >= height() && -x + y - height() < mPolynomeOrder + 1)
-                    || (x >= width() && y < 0 && x - y - width() < mPolynomeOrder + 1)
-                    || (x >= width() && y >= height() && x + y - width() - height() < mPolynomeOrder)
-                    || (x < 0 && y >= 0 && y < height()) || (x >= width() && y >= 0 && y < height())
-                    || (y < 0 && x >= 0 && x < width()) || (y >= height() && x >= 0 && x < width()))
+	int iPolynomeOrder=(int) mPolynomeOrder; //lets avoid signed/unsigned comparison warnings
+	int iHeight = (int) height();            //"
+	int iWidth = (int) width();              //"
+	
+        for (y = -iPolynomeOrder; y < iHeight + iPolynomeOrder; ++y)
+            for (x = -iPolynomeOrder; x < iWidth + iPolynomeOrder; ++x)
+                if ((x < 0 && y < 0 && -x - y < iPolynomeOrder + 2)
+                    || (x < 0 && y >= iHeight && -x + y - iHeight < iPolynomeOrder + 1)
+                    || (x >= iWidth && y < 0 && x - y - iWidth < iPolynomeOrder + 1)
+                    || (x >= iWidth && y >= iHeight && x + y - iWidth - iHeight < iPolynomeOrder)
+                    || (x < 0 && y >= 0 && y < iHeight) || (x >= iWidth  && y >= 0 && y < iHeight)
+                    || (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
                 {
-            QPoint position(x,y);
-            mPositions.append(position);
-
+                    QPoint position(x,y);
+		    mPositions.append(position);
                 }
     }
     else
@@ -108,7 +110,7 @@ void Weights::calculateWeights()
         mPositions.append(position);
         }
 
-        for (y = height(); y < height() + mPolynomeOrder; ++y)
+        for (y = (int) height(); y < (int) height() + (int) mPolynomeOrder; ++y)
         {
             QPoint position(0,y);
         mPositions.append(position);
@@ -123,16 +125,16 @@ void Weights::calculateWeights()
     
     // Calculate coefficient matrix and vectors
     
-    for (int iy = 0; iy < mCoefficientNumber; ++iy)
+    for (iy = 0; iy < mCoefficientNumber; ++iy)
     {
-        for (int ix = 0; ix < mCoefficientNumber; ++ix)
+        for (ix = 0; ix < mCoefficientNumber; ++ix)
             matrix [iy*mCoefficientNumber+ix] = 0.0;
 
         for (j = 0; j < mPositions.count(); ++j)
         {
             vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(), mPositions [j].y(), mPolynomeOrder);
 
-            for (int ix = 0; ix < mCoefficientNumber; ++ix)
+            for (ix = 0; ix < mCoefficientNumber; ++ix)
                 matrix [iy * mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
                                                  * polyTerm (ix, mPositions [j].x(), mPositions[j].y(), mPolynomeOrder));
         }
@@ -157,14 +159,14 @@ void Weights::calculateWeights()
     
     mWeightMatrices = new double**[mPositions.count()]; //allocate mPositions.count() matrices
     
-    for (int i=0; i<mPositions.count(); i++)
+    for (i=0; i<mPositions.count(); i++)
     {
         mWeightMatrices[i]=new double*[mHeight]; //allocate mHeight rows on each position
-        for (int j=0; j<mHeight; j++) mWeightMatrices[i][j]=new double[mWidth]; //Allocate mWidth columns on each row
+        for (j=0; j<mHeight; j++) mWeightMatrices[i][j]=new double[mWidth]; //Allocate mWidth columns on each row
     }
 
-    for (y = 0; y < mHeight; ++y)
-        for (x = 0; x < mWidth; ++x)
+    for (y = 0; y < (int) mHeight; ++y)
+        for (x = 0; x < (int) mWidth; ++x)
         {
 
             for (j = 0; j < mPositions.count(); ++j)

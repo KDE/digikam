@@ -84,11 +84,11 @@ private: // Hot Pixels Removal filter methods.
     virtual void filterImage(void);
     
     void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
-    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir);
+    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir, int maxComponent);
     
     inline bool validPoint(Digikam::DImg &img, QPoint p)
         {
-        return (p.x()>=0 && p.y()>=0 && p.x()<img.width() && p.y()<img.height());
+        return (p.x()>=0 && p.y()>=0 && p.x()<(long) img.width() && p.y()<(long) img.height());
         };
     
     QValueList <Weights> mWeightList;

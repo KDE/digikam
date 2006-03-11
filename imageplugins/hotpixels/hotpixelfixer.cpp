@@ -39,9 +39,12 @@
 
 #include "hotpixelfixer.h"
 
+#ifdef HAVE_FLOAT_H
 #if HAVE_FLOAT_H
 # include <float.h>
 #endif
+#endif
+
 #ifndef DBL_MIN
 # define DBL_MIN 1e-37
 #endif
@@ -83,11 +86,9 @@ void HotPixelFixer::filterImage(void)
 // Interpolates a pixel block
 void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
 {
-    int icomp;
-    int component;
-        
     const int xPos = hp.x();
     const int yPos = hp.y();
+    bool sixtBits=img.sixteenBit();
     
         // Interpolate pixel.
         switch (method)
@@ -102,7 +103,6 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
             int sum_weight = 0;
             double vr=0.0,vg=0.0,vb=0.0;
             int x, y;
-	    bool sixtBits=img.sixteenBit();
 	    Digikam::DColor col;
         
             for (x = xPos; x < xPos+hp.width(); ++x)
@@ -158,7 +158,8 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
                 if (validPoint(img,QPoint(xPos+x,yPos+y)))
 		{
 		    int alpha=sixtBits ? 65535 : 255;
-	            img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(vr,vg,vb,alpha,sixtBits));
+		    int ir=(int )round(vr),ig=(int) round(vg),ib=(int) round(vb);
+	            img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(ir,ig,ib,alpha,sixtBits));
 		}
     
             }
@@ -167,22 +168,22 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
 
           case LINEAR_INTERPOLATION:
              //(Bi)linear interpolation.
-            weightPixels (img,hp,LINEAR_INTERPOLATION,TWODIM_DIRECTION);
+            weightPixels (img,hp,LINEAR_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535: 255);
             break;
 
           case QUADRATIC_INTERPOLATION:
             // (Bi)quadratic interpolation.
-             weightPixels (img,hp,QUADRATIC_INTERPOLATION,TWODIM_DIRECTION);
+             weightPixels (img,hp,QUADRATIC_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535 : 255);
             break;
 
           case CUBIC_INTERPOLATION:
             // (Bi)cubic interpolation. 
-             weightPixels (img,hp,CUBIC_INTERPOLATION,TWODIM_DIRECTION);
+             weightPixels (img,hp,CUBIC_INTERPOLATION,TWODIM_DIRECTION,sixtBits ? 65535 : 255);
         } //switch
     
 }
 
-void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir)
+void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir,int maxComponent)
 {
     //TODO: implement direction here too
         
@@ -275,20 +276,19 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
 		    Digikam::DColor color=img.getPixelColor(px.x()+x,px.y()+y);
                     int component;
                     if (fabs (v) <= DBL_MIN)
-                    
-                    component=0;
+                        component=0;
                     else if (sum_weight >= DBL_MIN)
-                    component=v/sum_weight;
+                        component=(int) (v/sum_weight);
                     else if (v >= 0.0)
-                    component=DBL_MAX;
+                        component=maxComponent;
                     else
-                    component=-DBL_MAX;
-                    
-                    int r=color.red(),g=color.green(),b=color.blue();
-                    if (iComp==0) r=component;
-                    else if (iComp==1) g=component;
-                    else b=component;
-		    color.setRed(r); color.setGreen(g); color.setBlue(b);
+                        component=0;
+		    
+                    if (iComp==0) color.setRed(component);
+                    else if (iComp==1) color.setGreen(component);
+                    else color.setBlue(component);
+
+		    
                     img.setPixelColor(px.x()+x,px.y()+y,color);
                     
                 } //if validPoint()
