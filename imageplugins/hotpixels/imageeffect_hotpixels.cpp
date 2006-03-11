@@ -55,7 +55,7 @@ namespace DigikamHotPixelsImagesPlugin
 {
 
 ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
-                     : CtrlPanelDialog(parent, i18n("Hot Pixels Correction"), "hotpixels", 
+                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"), "hotpixels", 
                                        false, false, false, 
                                        Digikam::ImagePannelWidget::SeparateViewDuplicate)
 {
@@ -188,7 +188,7 @@ void ImageEffect_HotPixels::prepareEffect()
     m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
 
-    QImage image = m_imagePreviewWidget->getOriginalClipImage();
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
     
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
@@ -206,7 +206,7 @@ void ImageEffect_HotPixels::prepareEffect()
            }
         }
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new HotPixelFixer(
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new HotPixelFixer(
                        &image, this, hotPixelsRegion, interpolationMethod));
 }
 
@@ -216,22 +216,19 @@ void ImageEffect_HotPixels::prepareFinal()
     m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
     
-    Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
     
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new HotPixelFixer(
-                       &orgImage, this, m_hotPixelsList, interpolationMethod));
-    delete [] data;
+
+    Digikam::ImageIface iface(0, 0);
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod));
+			
+    
 }
 
 void ImageEffect_HotPixels::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
 void ImageEffect_HotPixels::putFinalData(void)

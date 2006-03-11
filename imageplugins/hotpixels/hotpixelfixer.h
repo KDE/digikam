@@ -47,7 +47,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-class HotPixelFixer : public Digikam::ThreadedFilter
+class HotPixelFixer : public Digikam::DImgThreadedFilter
 {
 
 public:
@@ -69,7 +69,7 @@ public:
 
 public:
         
-    HotPixelFixer(QImage *orgImage, QObject *parent, 
+    HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, 
                   const QValueList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
@@ -83,10 +83,10 @@ private: // Hot Pixels Removal filter methods.
 
     virtual void filterImage(void);
     
-    void interpolate (QImage &img,HotPixel &hp, int method);
-    void weightPixels (QImage &img, HotPixel &px, int method, Direction dir);
+    void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
+    void weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir);
     
-    inline bool validPoint(QImage &img, QPoint p)
+    inline bool validPoint(Digikam::DImg &img, QPoint p)
         {
         return (p.x()>=0 && p.y()>=0 && p.x()<img.width() && p.y()<img.height());
         };

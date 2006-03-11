@@ -39,6 +39,7 @@
 #include "ctrlpaneldialog.h"
 #include "hotpixelfixer.h"
 
+
 class QComboBox;
 class QPushButton;
 
@@ -47,7 +48,7 @@ namespace DigikamHotPixelsImagesPlugin
 
 class BlackFrameListView;
 
-class ImageEffect_HotPixels : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_HotPixels : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 

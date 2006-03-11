@@ -52,9 +52,9 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-HotPixelFixer::HotPixelFixer(QImage *orgImage, QObject *parent, const QValueList<HotPixel>& hpList, 
+HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QValueList<HotPixel>& hpList, 
                              int interpolationMethod)
-             : Digikam::ThreadedFilter(orgImage, parent, "HotPixels")
+             : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
     m_hpList              = hpList;
     m_interpolationMethod = interpolationMethod;
@@ -81,7 +81,7 @@ void HotPixelFixer::filterImage(void)
 }
 
 // Interpolates a pixel block
-void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
+void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
 {
     int icomp;
     int component;
@@ -102,13 +102,14 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
             int sum_weight = 0;
             double vr=0.0,vg=0.0,vb=0.0;
             int x, y;
-            QColor col;
+	    bool sixtBits=img.sixteenBit();
+	    Digikam::DColor col;
         
             for (x = xPos; x < xPos+hp.width(); ++x)
             {
                 if (validPoint(img,QPoint(x,yPos-1)))
                 {
-                    col=QColor(img.pixel(x,yPos-1));
+                    col=img.getPixelColor(x,yPos-1);
                     vr += col.red();
                     vg += col.green();
                     vb += col.blue();
@@ -116,7 +117,7 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
                 }
                 if (validPoint(img,QPoint(x,yPos+hp.height())))
                 {
-                    col=QColor(img.pixel(x,yPos+hp.height()));
+                    col=img.getPixelColor(x,yPos+hp.height());
                     vr += col.red();
                     vg += col.green();
                     vb += col.blue();
@@ -129,7 +130,7 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
             
                 if (validPoint(img,QPoint(xPos-1,y)))
                 {
-                    col=QColor(img.pixel(xPos,y));
+                    col=img.getPixelColor(xPos,y);
                     vr += col.red();
                     vg += col.green();
                     vb += col.blue();
@@ -137,7 +138,7 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
                 }
                 if (validPoint(img,QPoint(xPos+hp.width(),y)))
                 {
-                    col=QColor(img.pixel(xPos+hp.width(),y));
+                    col=img.getPixelColor(xPos+hp.width(),y);
                     vr += col.red();
                     vg += col.green();
                     vb += col.blue();
@@ -155,7 +156,10 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
                 for (x = 0; x < hp.width(); ++x)
                 for (y = 0; y < hp.height(); ++y)
                 if (validPoint(img,QPoint(xPos+x,yPos+y)))
-                    img.setPixel(xPos+x,yPos+y,qRgb(vr,vg,vb));
+		{
+		    int alpha=sixtBits ? 65535 : 255;
+	            img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(vr,vg,vb,alpha,sixtBits));
+		}
     
             }
             break;
@@ -178,7 +182,7 @@ void HotPixelFixer::interpolate (QImage &img, HotPixel &hp, int method)
     
 }
 
-void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, int method, Direction dir)
+void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir)
 {
     //TODO: implement direction here too
         
@@ -260,15 +264,15 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, int method, Directi
                             weight=w[i][y][x];
                         }
                                 
-                        if (iComp==0) v += weight * qRed(img.pixel(xx, yy));
-                        else if (iComp==1) v += weight * qGreen(img.pixel(xx, yy));
-                        else v += weight * qBlue(img.pixel(xx, yy));
+                        if (iComp==0) v += weight * img.getPixelColor(xx, yy).red();
+                        else if (iComp==1) v += weight * img.getPixelColor(xx, yy).green();
+                        else v += weight * img.getPixelColor(xx, yy).blue();
                         
                         sum_weight += weight;
                     }
                     } //for (i
                     
-                    QColor color=img.pixel(px.x()+x,px.y()+y);
+		    Digikam::DColor color=img.getPixelColor(px.x()+x,px.y()+y);
                     int component;
                     if (fabs (v) <= DBL_MIN)
                     
@@ -280,12 +284,12 @@ void HotPixelFixer::weightPixels (QImage &img, HotPixel &px, int method, Directi
                     else
                     component=-DBL_MAX;
                     
-                    int r,g,b; color.getRgb(&r,&g,&b);
+                    int r=color.red(),g=color.green(),b=color.blue();
                     if (iComp==0) r=component;
                     else if (iComp==1) g=component;
                     else b=component;
-                    color.setRgb(r,g,b);
-                    img.setPixel(px.x()+x,px.y()+y,color.rgb());
+		    color.setRed(r); color.setGreen(g); color.setBlue(b);
+                    img.setPixelColor(px.x()+x,px.y()+y,color);
                     
                 } //if validPoint()
             
