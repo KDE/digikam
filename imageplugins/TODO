@@ -27,6 +27,7 @@
    - Charcoal         : Done.
    - Lens Distortion  : Done.
    - Noise Reduction  : Done.
+   - Hot Pixels       : Done.
    
    > Pending plugins (by difficulty order):
 
@@ -40,10 +41,6 @@
                                   in a same session (see B.K.O). Can be long.
    - Superimpose      : TODO. ==> complete rewrite of plugin widget (See B.K.O file). Can be long.
 
-   - Hot Pixels       : TODO  ==> simple port algorithms to 16 bits. This part will be done by Unai Garro.
-                                  Add manual hot pixel selection. Need to implement pixel selection on
-                                  imageregionwidget from digikam core. Can be long
-
 Nota: 
 
 - For all pending plugins, we need to use new standard dialogs from digikam core instead common dialog from DigikamImagePlugins.  
@@ -51,8 +48,10 @@ Nota:
 - All common dialog from DigikamImagePlugins must be removed.
 
 
-* New features :
+* New features (Later than 0.9.0 release) :
 
    - Add Border       : Add capability to preserve original image aspect ratio.
+   - Hot Pixels       : Add manual hot pixel selection. Need to implement pixel selection on
+                        imageregionwidget from digikam core. Can be long
 
 
