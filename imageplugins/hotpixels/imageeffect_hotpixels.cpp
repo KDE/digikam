@@ -54,10 +54,10 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent)
-                     : CtrlPanelDlg(parent, i18n("Hot Pixels Correction"), "hotpixels", 
-                                       false, false, false, 
-                                       Digikam::ImagePannelWidget::SeparateViewDuplicate)
+ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFrame* banner)
+                     : CtrlPanelDlg(parent, title, "hotpixels",false, false, false, 
+                                       Digikam::ImagePannelWidget::SeparateViewDuplicate,banner)
+
 {
     // No need Abort button action.
     showButton(User1, false); 

@@ -36,7 +36,6 @@
 
 // Local includes.
 
-#include "ctrlpaneldialog.h"
 #include "hotpixelfixer.h"
 
 
@@ -54,7 +53,7 @@ class ImageEffect_HotPixels : public Digikam::CtrlPanelDlg
 
 public:
 
-    ImageEffect_HotPixels(QWidget *parent);
+    ImageEffect_HotPixels(QWidget *parent,QString title, QFrame* banner);
     ~ImageEffect_HotPixels();
 
 private:

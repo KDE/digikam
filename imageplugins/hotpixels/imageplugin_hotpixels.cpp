@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_hotpixels.h"
 #include "imageplugin_hotpixels.h"
 
@@ -59,7 +60,10 @@ void ImagePlugin_HotPixels::setEnabledActions(bool enable)
 
 void ImagePlugin_HotPixels::slotHotPixels()
 {
-    DigikamHotPixelsImagesPlugin::ImageEffect_HotPixels dlg(parentWidget());
+    QString title = i18n("Hot Pixels Correction");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamHotPixelsImagesPlugin::ImageEffect_HotPixels dlg(parentWidget(),title, headerFrame);
+
     dlg.exec();
 }
 
