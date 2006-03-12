@@ -78,7 +78,7 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString titl
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Free Rotation algorithm"),
-                     "pieter_voloshyn at ame.com.br");
+                     "pieter dot voloshyn at gmail dot com");
 
     setAboutData(about);
 
