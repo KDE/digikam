@@ -75,7 +75,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* b
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Blurring algorithms"), 
-                     "pieter_voloshyn at ame.com.br"); 
+                     "pieter dot voloshyn at gmail dot com"); 
 
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
@@ -85,7 +85,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, marginHint(), spacingHint());
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     
@@ -123,24 +123,24 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* b
                                         "a frosted glass.<p>"
                                         "<b>Mosaic</b>: divides the photograph into rectangular cells and then "
                                         "recreates it by filling those cells with average pixel value."));
-    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_effectType, 0, 0, 1, 2);
+    gridSettings->addMultiCellWidget(m_effectTypeLabel, 0, 0, 0, 1);
+    gridSettings->addMultiCellWidget(m_effectType, 1, 1, 0, 1);
                                                   
     m_distanceLabel = new QLabel(i18n("Distance:"), gboxSettings);
     m_distanceInput = new KIntNumInput(gboxSettings);
     m_distanceInput->setRange(0, 100, 1, true);    
     QWhatsThis::add( m_distanceInput, i18n("<p>Set here the blur distance in pixels."));
     
-    gridSettings->addMultiCellWidget(m_distanceLabel, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_distanceInput, 1, 1, 1, 2);
+    gridSettings->addMultiCellWidget(m_distanceLabel, 2, 2, 0, 1);
+    gridSettings->addMultiCellWidget(m_distanceInput, 3, 3, 0, 1);
         
     m_levelLabel = new QLabel(i18n("Level:"), gboxSettings);
     m_levelInput = new KIntNumInput(gboxSettings);
     m_levelInput->setRange(0, 360, 1, true);
     QWhatsThis::add( m_levelInput, i18n("<p>This value controls the level to use with the current effect."));  
     
-    gridSettings->addMultiCellWidget(m_levelLabel, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_levelInput, 2, 2, 1, 2);
+    gridSettings->addMultiCellWidget(m_levelLabel, 4, 4, 0, 1);
+    gridSettings->addMultiCellWidget(m_levelInput, 5, 5, 0, 1);
     
     m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
         

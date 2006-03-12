@@ -1,5 +1,5 @@
 /* ============================================================
- * File  : texture.h
+ * File  : blurfx.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
@@ -9,7 +9,7 @@
  * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Blur algorithms copyrighted 2004 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
