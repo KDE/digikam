@@ -77,26 +77,36 @@ int main(int argc, char *argv[])
                           0,
                           "http://www.digikam.org");
 
-    aboutData.addAuthor ( "Renchi Raju",
-                          I18N_NOOP("Main coordinator and developer"),
-                          "renchi at pooh.tam.uiuc.edu",
-                          "http://www.digikam.org");
-
     aboutData.addAuthor ( "Caulier Gilles",
-                          I18N_NOOP("Developer, co-coordinator, French translations"),
+                          I18N_NOOP("Main developer and coordinator"),
                           "caulier dot gilles at kdemail dot net",
-                          "http://caulier.gilles.free.fr");
+                          "http://www.digikam.org/?q=blog/3");
 
     aboutData.addAuthor ( "Joern Ahrens",
                           I18N_NOOP("Developer"),
                           "kde at jokele.de",
-                          0);
+                          "http://www.digikam.org/?q=blog/1");
 
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
                           "tomalbers at kde.nl",
                           0);
     
+    aboutData.addAuthor ( "Marcel Wiesweg",
+                          I18N_NOOP("Developer"),
+                          "marcel dot wiesweg at gmx dot de",
+                          0);
+
+    aboutData.addAuthor ( "Francisco J. Cruz",
+                          I18N_NOOP("Developer"),
+                          "fj dot cruz at supercable dot es",
+                          "http://www.digikam.org/?q=blog/5");
+
+    aboutData.addAuthor ( "Renchi Raju",
+                          I18N_NOOP("Developer"),
+                          "renchi at pooh.tam.uiuc.edu",
+                          0);
+
     aboutData.addAuthor ( "Ralf Holzer",
                           I18N_NOOP("Developer"),
                           "kde at ralfhoelzer.com",
