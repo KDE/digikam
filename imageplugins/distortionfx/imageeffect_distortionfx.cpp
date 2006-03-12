@@ -6,9 +6,6 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
- * Original Distortion algorithms copyrighted 2004-2005 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -77,7 +74,7 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Distortion algorithms"), 
-                     "pieter_voloshyn at ame.com.br"); 
+                     "pieter dot voloshyn at gmail dot com"); 
     
     setAboutData(about);
         

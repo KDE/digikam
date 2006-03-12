@@ -6,6 +6,9 @@
  * 
  * Copyright 2005 by Gilles Caulier
  *
+ * Original Distortion algorithms copyrighted 2004-2005 by 
+ * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
