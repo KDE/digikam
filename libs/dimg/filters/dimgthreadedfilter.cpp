@@ -43,8 +43,39 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, QString 
     m_parent   = parent;
     m_cancel   = false;
     m_name     = name;
+
+    m_master   = 0;
+    m_slave    = 0;
+    m_progressBegin = 0;
+    m_progressSpan  = 100;
 }
-    
+
+DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, const DImg &destImage,
+                                       int progressBegin, int progressEnd, QString name)
+{
+    m_orgImage  = orgImage;
+    m_destImage = destImage;
+    m_parent    = 0;
+    m_cancel    = false;
+    m_name      = name;
+
+    m_master    = master;
+    m_slave     = 0;
+    m_progressBegin = progressBegin;
+    m_progressSpan = progressEnd - progressBegin;
+
+    m_master->setSlave(this);
+}
+
+DImgThreadedFilter::~DImgThreadedFilter()
+{
+    stopComputation();
+    if (m_master)
+        m_master->setSlave(0);
+}
+
+
+
 void DImgThreadedFilter::initFilter(void)
 {
     m_destImage.reset();         
@@ -71,14 +102,25 @@ void DImgThreadedFilter::initFilter(void)
 void DImgThreadedFilter::stopComputation(void)
 {
     m_cancel = true;
+    if (m_slave)
+    {
+        m_slave->m_cancel = true;
+        // do not wait on slave, it is not running in its own separate thread!
+        m_slave->cleanupFilter();
+    }
     wait();
     cleanupFilter();
 }
 
 void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 {
-    if (m_parent)
-    {    
+    if (m_master)
+    {
+        progress = modulateProgress(progress);
+        m_master->postProgress(progress, starting, success);
+    }
+    else if (m_parent)
+    {
        EventData *eventData = new EventData();
        eventData->progress = progress;
        eventData->starting = starting;
@@ -117,6 +159,16 @@ void DImgThreadedFilter::startComputation()
        kdDebug() << m_name
                  << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
     }
+}
+
+void DImgThreadedFilter::setSlave(DImgThreadedFilter *slave)
+{
+    m_slave = slave;
+}
+
+int DImgThreadedFilter::modulateProgress(int progress)
+{
+    return m_progressBegin + (int)((double)progress * (double)m_progressSpan / 100.0);
 }
 
 }  // NameSpace Digikam

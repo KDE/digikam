@@ -50,6 +50,17 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double 
     initFilter();
 }
 
+DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
+                         const DImg &orgImage, const DImg &destImage,
+                         int progressBegin, int progressEnd, double radius, double sigma)
+           : Digikam::DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                         parentFilter->filterName() + ": Sharpen")
+{
+    m_radius = radius;
+    m_sigma  = sigma;
+    filterImage();
+}
+
 void DImgSharpen::filterImage(void)
 {
     sharpenImage(m_radius, m_sigma);

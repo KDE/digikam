@@ -39,6 +39,10 @@ class DIGIKAM_EXPORT DImgGaussianBlur : public Digikam::DImgThreadedFilter
 public:
     
     DImgGaussianBlur(DImg *orgImage, QObject *parent=0, int radius=3);
+
+    // Constructor for slave mode: execute immediately in current thread with specified master filter
+    DImgGaussianBlur(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
+                     int progressBegin=0, int progressEnd=100, int radius=3);
     
     ~DImgGaussianBlur(){};
     

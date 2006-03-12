@@ -67,12 +67,14 @@ public:
     
     DImgThreadedFilter(DImg *orgImage, QObject *parent=0, QString name=QString::null);
     
-    ~DImgThreadedFilter(){ stopComputation(); };
+    ~DImgThreadedFilter();
     
     DImg getTargetImage(void) { return m_destImage; };
     
     void startComputation(void);
     void stopComputation(void);
+    
+    const QString &filterName() { return m_name; };
     
 protected:
 
@@ -86,11 +88,11 @@ protected:
     QString   m_name;
     
     // Used to stop compution loop.
-    bool      m_cancel;   
+    bool      m_cancel;
 
     // To post event from thread to parent.    
     QObject  *m_parent;
-    
+
 protected:
 
     // Start filter operation before threaded method. Must be calls by your constructor.
@@ -109,7 +111,39 @@ protected:
     // 'EventData' instance to 'customEvent' parent implementation.
     void postProgress(int progress=0, bool starting=true, bool success=false);
     
-};    
+protected:
+
+    // Support for chaining two filters as master and thread
+
+    // The current slave. Any filter might want to use another filter while processing.
+    DImgThreadedFilter *m_slave;
+    // The master of this slave filter. Progress info will be routed to this one.
+    DImgThreadedFilter *m_master;
+
+    /*
+      Constructor for slave mode:
+      Constructs a new slave filter with the specified master.
+      The filter will be executed in the current thread.
+      orgImage and destImage will not be copied.
+      progressBegin and progressEnd can indicate the progress span
+      that the slave filter uses in the parent filter's progress.
+      Any derived filter class that is publicly available to other filters
+      should implement an additional constructor using this constructor.
+    */
+    DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, const DImg &destImage,
+                       int progressBegin=0, int progressEnd=100, QString name=QString::null);
+
+    // inform the master that there is currently a slave. At destruction of the slave, call with slave=0.
+    void setSlave(DImgThreadedFilter *slave);
+
+    // The progress span that a slave filter uses in the parent filter's progress
+    int m_progressBegin;
+    int m_progressSpan;
+    // This method modulates the progress value from the 0..100 span to the span of this slave.
+    // Called by postProgress if master is not null.
+    virtual int modulateProgress(int progress);
+
+};
 
 }  // NameSpace Digikam
 

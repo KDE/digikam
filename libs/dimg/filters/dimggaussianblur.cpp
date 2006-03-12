@@ -46,6 +46,17 @@ DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, int radius)
     initFilter();
 }
 
+DImgGaussianBlur::DImgGaussianBlur(DImgThreadedFilter *parentFilter,
+                                   const DImg &orgImage, const DImg &destImage,
+                                   int progressBegin, int progressEnd, int radius)
+                : Digikam::DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                              parentFilter->filterName() + ": GaussianBlur")
+{
+    m_radius = radius;
+    filterImage();
+}
+
+
 void DImgGaussianBlur::filterImage(void)
 {
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
