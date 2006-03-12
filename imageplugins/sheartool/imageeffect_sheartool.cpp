@@ -77,6 +77,9 @@ ImageEffect_ShearTool::ImageEffect_ShearTool(QWidget* parent, QString title, QFr
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
     
+    about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"), 
+                     "pieter dot voloshyn at gmail dot com"); 
+
     setAboutData(about);
     
     QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the shearing image operation preview. "

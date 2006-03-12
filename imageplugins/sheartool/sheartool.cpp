@@ -4,10 +4,10 @@
  * Date  : 2005-07-18
  * Description : Shear tool threaded image filter.
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * Original Shear algorithms copyrighted 2005 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
