@@ -9,7 +9,7 @@
  * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original OilPaint algorithm copyrighted 2004 by 
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
