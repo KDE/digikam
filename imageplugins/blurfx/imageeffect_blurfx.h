@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : imageeffect_blurfx.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-09
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,9 +24,9 @@
 #ifndef IMAGEEFFECT_BLURFX_H
 #define IMAGEEFFECT_BLURFX_H
 
-// Local includes.
+// Digikam includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class QComboBox;
 class QLabel;
@@ -34,13 +36,13 @@ class KIntNumInput;
 namespace DigikamBlurFXImagesPlugin
 {
 
-class ImageEffect_BlurFX : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_BlurFX : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
     
 public:
 
-    ImageEffect_BlurFX(QWidget *parent);
+    ImageEffect_BlurFX(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_BlurFX();
 
 private:

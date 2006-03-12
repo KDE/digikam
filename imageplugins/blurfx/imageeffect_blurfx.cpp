@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : imageeffect_blurfx.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-09
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,32 +53,37 @@
 namespace DigikamBlurFXImagesPlugin
 {
 
-ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent)
-                  : CtrlPanelDialog(parent, i18n("Apply Blurring Special Effect to Photograph"), 
-                                    "blurfx")
+ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* banner)
+                  : Digikam::CtrlPanelDlg(parent, title,
+                                          "blurfx", false, false, true,
+                                          Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Blur Effects"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to apply blurring special effect "
                                        "to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-                                       
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Blurring algorithms"), 
                      "pieter_voloshyn at ame.com.br"); 
-                     
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
     
@@ -270,9 +277,9 @@ void ImageEffect_BlurFX::prepareEffect()
     m_distanceLabel->setEnabled(false);
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
-    
-    QImage *pImg;
-    
+
+    Digikam::DImg image;
+
     switch (m_effectType->currentItem())
        {
        case BlurFX::ZoomBlur:
@@ -280,13 +287,10 @@ void ImageEffect_BlurFX::prepareEffect()
        case BlurFX::FocusBlur:
             {
             Digikam::ImageIface iface(0, 0);
-            pImg = new QImage(iface.originalWidth(), iface.originalHeight(), 32);
-            uint *data = iface.getOriginalData();
-            memcpy( pImg->bits(), data, pImg->numBytes() );
-            delete [] data;
+            image = *iface.getOriginalImg();
             break;
             }
-                    
+
        case BlurFX::FarBlur:
        case BlurFX::MotionBlur:
        case BlurFX::SoftenerBlur:
@@ -294,16 +298,15 @@ void ImageEffect_BlurFX::prepareEffect()
        case BlurFX::SmartBlur:
        case BlurFX::FrostGlass: 
        case BlurFX::Mosaic: 
-            pImg = new QImage(m_imagePreviewWidget->getOriginalClipImage());
-            break;
+           image = m_imagePreviewWidget->getOriginalRegionImage();
+           break;
        }
-    
-    int t = m_effectType->currentItem();        
+
+    int t = m_effectType->currentItem();
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new BlurFX(pImg, this, t, d, l));
-    delete pImg;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new BlurFX(&image, this, t, d, l));
 }
 
 void ImageEffect_BlurFX::prepareFinal()
@@ -314,24 +317,17 @@ void ImageEffect_BlurFX::prepareFinal()
     m_distanceLabel->setEnabled(false);
     m_levelInput->setEnabled(false);
     m_levelLabel->setEnabled(false);
-    
-    int t = m_effectType->currentItem();         
+
+    int t = m_effectType->currentItem();
     int d = m_distanceInput->value();
     int l = m_levelInput->value();
 
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new BlurFX(&orgImage, this, t, d, l));           
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new BlurFX(iface.getOriginalImg(), this, t, d, l));
 }
 
 void ImageEffect_BlurFX::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    
     switch (m_effectType->currentItem())
         {
         case BlurFX::ZoomBlur:
@@ -339,11 +335,10 @@ void ImageEffect_BlurFX::putPreviewData(void)
         case BlurFX::FocusBlur:
             {
             QRect pRect    = m_imagePreviewWidget->getOriginalImageRegionToRender();
-            QImage destImg = imDest.copy(pRect);
-            m_imagePreviewWidget->setPreviewImageData(destImg);
+            Digikam::DImg destImg = m_threadedFilter->getTargetImage().copy(pRect);
+            m_imagePreviewWidget->setPreviewImage(destImg);
             break;
             }
-                    
         case BlurFX::FarBlur:
         case BlurFX::MotionBlur:
         case BlurFX::SoftenerBlur:
@@ -351,7 +346,7 @@ void ImageEffect_BlurFX::putPreviewData(void)
         case BlurFX::SmartBlur:
         case BlurFX::FrostGlass: 
         case BlurFX::Mosaic: 
-            m_imagePreviewWidget->setPreviewImageData(imDest);
+            m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
             break;
         }
 }
@@ -359,10 +354,9 @@ void ImageEffect_BlurFX::putPreviewData(void)
 void ImageEffect_BlurFX::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-  
-    iface.putOriginalData(i18n("Blur Effects"), 
-         (uint*)m_threadedFilter->getTargetImage().bits());
-                    
+
+    iface.putOriginalImage(i18n("Blur Effects"),
+                           m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamBlurFXImagesPlugin

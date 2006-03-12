@@ -28,12 +28,12 @@
    - Lens Distortion  : Done.
    - Noise Reduction  : Done.
    - Hot Pixels       : Done.
-   
+   - Blur FX          : Done.
+
    > Pending plugins (by difficulty order):
 
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
                                   Medium.
-   - Blur FX          : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Distortion FX    : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix. 
                                   Check why antialiasing filter don't give any effects. Medium.

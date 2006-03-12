@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_blurfx.h"
 #include "imageplugin_blurfx.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_BlurFX::setEnabledActions(bool enable)
 
 void ImagePlugin_BlurFX::slotBlurFX()
 {
-    DigikamBlurFXImagesPlugin::ImageEffect_BlurFX dlg(parentWidget());
+    QString title = i18n("Apply Blurring Special Effect to Photograph");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamBlurFXImagesPlugin::ImageEffect_BlurFX dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 
