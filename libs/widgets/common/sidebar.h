@@ -108,12 +108,22 @@ public:
      * redisplays the whole sidebar
      */
     void expand();
-                
+
     /**
      * load the last view state from disk
      */
     void loadViewState();
-    
+
+    /**
+     * hide sidebar and backup minimized state.
+     */ 
+    void backup();
+
+    /**
+     * show sidebar and restore minimized state.
+     */ 
+    void restore();
+
 private:
     
     

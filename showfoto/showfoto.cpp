@@ -440,8 +440,7 @@ void ShowFoto::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
+        m_rightSidebar->restore();
 
         // If Hide Thumbbar option is checked, restore it.
         if (!m_showBarAction->isChecked())
@@ -449,8 +448,7 @@ void ShowFoto::toggleGUI2FullScreen()
     }
     else
     {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
+        m_rightSidebar->backup();
 
         // If Hide Thumbbar option is checked, catch it if necessary.
         if (!m_showBarAction->isChecked())
@@ -551,20 +549,6 @@ void ShowFoto::toggleActions2SlideShow(bool val)
     // if slideshow mode then toogle file open actions.
     m_fileOpenAction->setEnabled(val);
     m_openFilesInFolderAction->setEnabled(val);
-}
-
-void ShowFoto::toggleGUI2SlideShow()
-{
-    if (m_slideShowAction->isChecked())
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-    }
-    else
-    {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-    }
 }
 
 void ShowFoto::slotFilePrint()

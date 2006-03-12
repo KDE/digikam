@@ -93,6 +93,7 @@ private:
     void setupConnections();
     void setupUserArea();
     void toggleGUI2FullScreen();
+    void toggleActions2SlideShow(bool val);
 
     bool save();
     bool saveAs();

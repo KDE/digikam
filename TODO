@@ -17,7 +17,6 @@
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
-   - Fix in IE/Showfoto Image Properties side bar restoration after fullscreen mode.
      
 * Improving metadata support:
    - removed libkexif depency        ==> under progress ! (Gilles)

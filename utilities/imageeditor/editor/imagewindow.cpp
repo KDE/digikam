@@ -538,15 +538,14 @@ void ImageWindow::setup(bool iccSetupPage)
 void ImageWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
-    {
-        m_rightSidebar->show();
-        m_rightSidebar->expand();
-    }
+        m_rightSidebar->restore();
     else
-    {
-        m_rightSidebar->shrink();
-        m_rightSidebar->hide();
-    }
+        m_rightSidebar->backup();
+}
+
+void ImageWindow::toggleActions2SlideShow(bool val)
+{
+    toggleActions(val);
 }
 
 void ImageWindow::saveIsComplete()

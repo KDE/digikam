@@ -54,6 +54,7 @@ public:
 
     bool          minimizedDefault;
     bool          minimized;
+    bool          isMinimized;         
 
     int           tabs;
     int           activeTab;
@@ -68,7 +69,7 @@ public:
 };
 
 Sidebar::Sidebar(QWidget *parent, const char *name, Side side, bool minimizedDefault)
-    : KMultiTabBar(KMultiTabBar::Vertical, parent, name)
+       : KMultiTabBar(KMultiTabBar::Vertical, parent, name)
 {
     d = new SidebarPriv;
     d->minimizedDefault = minimizedDefault;
@@ -106,7 +107,7 @@ void Sidebar::loadViewState()
     config->setGroup(QString("%1").arg(name()));
    
     tab = config->readNumEntry("ActiveTab", 0);
-    minimized = config->readNumEntry("Minimized", d->minimizedDefault);
+    minimized = config->readBoolEntry("Minimized", d->minimizedDefault);
         
     if(minimized)
     {
@@ -128,12 +129,30 @@ void Sidebar::saveViewState()
     config->setGroup(QString("%1").arg(name()));
     
     config->writeEntry("ActiveTab", d->activeTab);
-    config->writeEntry("Minimized", (int)d->minimized);
+    config->writeEntry("Minimized", d->minimized);
+}
+
+void Sidebar::backup()
+{
+    d->isMinimized = d->minimized;
+
+    if (!d->isMinimized) 
+        shrink();
+
+    KMultiTabBar::hide();
+}
+
+void Sidebar::restore()
+{
+    if (!d->isMinimized) 
+        expand();
+
+    KMultiTabBar::show();
 }
 
 void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
 {
-    w->reparent(d->stack, QPoint(0,0));
+    w->reparent(d->stack, QPoint(0, 0));
     KMultiTabBar::appendTab(pic, d->tabs, title);
     d->stack->addWidget(w, d->tabs);
 

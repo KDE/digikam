@@ -108,7 +108,6 @@ private:
     void toggleActions(bool val);
     void toggleActions2SlideShow(bool val);
     
-    void toggleGUI2SlideShow();
     void toggleGUI2FullScreen();
    
     void toggleNavigation(int index);
