@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_InsertText
-Name[da]=Plugin for at indsætte tekst
+Name[da]=Plugin til at indsætte tekst
 Name[el]=ΠρόσθετοΕικόνας_ΕισαγωγήΚειμένου
 Name[it]=PluginImmagini_InserisciTesto
 Name[ms]=ImagePlugin_SisipanTeks
@@ -14,7 +14,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Insert text to image plugin for digiKam
-Comment[da]=Digikam plugin for at indsætte tekst i billeder
+Comment[da]=Digikam plugin til at indsætte tekst i billeder
 Comment[de]=Ein digiKam-Modul zum Hinzufügen von Text zu einem Bild.
 Comment[el]=Πρόσθετο εισαγωγής κειμένου σε εικόνα για το digiKam
 Comment[es]=Plugin para insertar texto en una imagen para digiKam

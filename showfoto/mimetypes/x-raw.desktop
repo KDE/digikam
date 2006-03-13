@@ -2,7 +2,7 @@
 # Base type of RAW images supported by dcraw program
 Name=RAW image
 Name[cs]=RAW obrázek
-Name[da]=RAW-billede
+Name[da]=Ubehandlet billede
 Name[de]=RAW-Bild
 Name[el]=Εικόνα RAW
 Name[et]=Toorpilt
