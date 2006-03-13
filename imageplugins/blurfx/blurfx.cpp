@@ -43,7 +43,6 @@
 
 // Local includes.
 
-#include "dimggaussianblur.h"
 #include "blurfx.h"
 
 namespace DigikamBlurFXImagesPlugin

@@ -68,8 +68,10 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     bool sixteenBit = orgImage->sixteenBit();
     uchar* data = orgImage->bits();
 
-    uchar* pGrainBits = new uchar[Width*Height*bytesDepth];    // Grain blured without curves adjustment.
-    uchar* pMaskBits  = new uchar[Width*Height*bytesDepth];    // Grain mask with curves adjustment.
+    Digikam::DImg grain(Width, Height, sixteenBit);      // Grain blured without curves adjustment.
+    Digikam::DImg mask(Width, Height, sixteenBit);       // Grain mask with curves adjustment.
+    uchar* pGrainBits = grain.bits();
+    uchar* pMaskBits  = mask.bits();
     uchar* pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
     int Noise, Shade, nRand, component, progress;
@@ -122,11 +124,8 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
             postProgress( progress );
     }
 
-    // Smooth grain mask using gaussian blur.
-    Digikam::DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
-
-    // Update de progress bar in dialog.
-    postProgress( 30 );
+    // Smooth grain mask using gaussian blur with radius 1.
+    Digikam::DImgGaussianBlur(this, grain, grain, 25, 30, 1);
 
     // Normally, film grain tends to be most noticable in the midtones, and much less 
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
@@ -152,7 +151,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     grainCurves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
     grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
 
-    delete [] pGrainBits;
+    grain.reset();
     delete grainCurves;
 
     // Update progress bar in dialog.
@@ -194,7 +193,6 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
            postProgress( progress );
     }
 
-    delete [] pMaskBits;
     delete composer;
 }
 

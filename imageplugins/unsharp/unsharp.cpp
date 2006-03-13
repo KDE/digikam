@@ -59,11 +59,8 @@ void UnsharpMask::filterImage(void)
        kdWarning() << k_funcinfo << "No image data available!" << endl;
        return;
     }
-    
-    Digikam::DImgImageFilters filter;
-    m_destImage = m_orgImage.copy();
-    filter.gaussianBlurImage(m_destImage.bits(), m_destImage.width(), m_destImage.height(), 
-                             m_destImage.sixteenBit(), (int)(m_radius));
+
+    Digikam::DImgGaussianBlur(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
     quantum = m_destImage.sixteenBit() ? 65535 : 255;
     quantumThreshold = quantum*m_threshold;
@@ -118,7 +115,7 @@ void UnsharpMask::filterImage(void)
             m_destImage.setPixelColor(x, y, q);        
         }
 
-        progress = (int)(((double)y * 100.0) / m_destImage.height());
+        progress = (int)(10.0 + ((double)y * 90.0) / m_destImage.height());
         if ( progress%5 == 0 )
            postProgress( progress );   
     }

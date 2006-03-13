@@ -31,6 +31,8 @@
 #include <bcgmodifier.h>
 #include <dcolor.h>
 #include <dcolorcomposer.h>
+#include <dimggaussianblur.h>
+#include <dimgsharpen.h>
 #include <imageiface.h>
 #include <imagehistogram.h>
 #include <imagelevels.h>
@@ -62,6 +64,8 @@
 #include <digikam/bcgmodifier.h>
 #include <digikam/dcolor.h>
 #include <digikam/dcolorcomposer.h>
+#include <digikam/dimggaussianblur.h>
+#include <digikam/dimgsharpen.h>
 #include <digikam/imageiface.h>
 #include <digikam/imagehistogram.h>
 #include <digikam/imagelevels.h>

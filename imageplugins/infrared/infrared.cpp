@@ -117,7 +117,8 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     // Convert to gray scale with boosting Green channel. 
     // Infrared film increase green color.
 
-    pBWBits = new uchar[numBytes];    // Black and White conversion.
+    Digikam::DImg BWImage(Width, Height, sixteenBit);   // Black and White conversion.
+    pBWBits = BWImage.bits();
     memcpy (pBWBits, data, numBytes);
 
     Digikam::DImgImageFilters().channelMixerImage(pBWBits, Width, Height, sixteenBit, // Image data.
@@ -129,22 +130,19 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     postProgress( 10 );
     if (m_cancel)
     {
-        delete [] pBWBits;
         return;
     }
 
     // Apply a Gaussian blur to the black and white image.
     // This way simulate Infrared film dispersion for the highlights.
 
-    pBWBlurBits = new uchar[numBytes];
-    memcpy (pBWBlurBits, pBWBits, numBytes);
+    Digikam::DImg BWBlurImage(Width, Height, sixteenBit);
+    pBWBlurBits = BWBlurImage.bits();
 
-    Digikam::DImgImageFilters().gaussianBlurImage(pBWBlurBits, Width, Height, sixteenBit, blurRadius);
-    postProgress( 20 );
+    Digikam::DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
+
     if (m_cancel)
     {
-        delete [] pBWBits;
-        delete [] pBWBlurBits;
         return;
     }
 
@@ -201,8 +199,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         postProgress( 40 );
         if (m_cancel)
         {
-            delete [] pBWBits;
-            delete [] pBWBlurBits;
             delete [] pGrainBits;
             return;
         }
@@ -211,8 +207,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     postProgress( 50 );
     if (m_cancel)
     {
-        delete [] pBWBits;
-        delete [] pBWBlurBits;
         delete [] pGrainBits;
         return;
     }
@@ -253,8 +247,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     postProgress( 60 );
     if (m_cancel)
     {
-        delete [] pBWBits;
-        delete [] pBWBlurBits;
         delete [] pGrainBits;
         delete [] pMaskBits;
         return;
@@ -307,9 +299,8 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         delete composer;
 
         // delete it here, not used any more
-        delete [] pBWBlurBits;
+        BWBlurImage.reset();
         delete [] pMaskBits;
-        pBWBlurBits = 0;
         pMaskBits   = 0;
     }
     else
@@ -360,8 +351,6 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
             postProgress(progress);
     }
 
-    delete [] pBWBits;
-    delete [] pBWBlurBits;
     delete [] pGrainBits;
     delete [] pMaskBits;
     delete [] pOverlayBits;
