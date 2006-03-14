@@ -30,6 +30,8 @@
 #include <qtabwidget.h>
 #include <qimage.h>
 #include <qlayout.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 // KDE includes.
 
@@ -40,6 +42,9 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
 
 // Digikam includes.
 
@@ -55,7 +60,7 @@ namespace DigikamNoiseReductionImagesPlugin
 {
 
 ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString title, QFrame* banner)
-                          : Digikam::CtrlPanelDlg(parent, title, "noisereduction", false,
+                          : Digikam::CtrlPanelDlg(parent, title, "noisereduction", true,
                                      false, true, Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
@@ -416,6 +421,82 @@ void ImageEffect_NoiseReduction::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Noise Reduction"), m_threadedFilter->getTargetImage().bits());
+}
+
+void ImageEffect_NoiseReduction::slotUser3()
+{
+    KURL loadRestorationFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Noise Reduction Settings File to Load")) );
+    if( loadRestorationFile.isEmpty() )
+       return;
+
+    QFile file(loadRestorationFile.path());
+    
+    if ( file.open(IO_ReadOnly) )   
+    {
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Noise Reduction Configuration File" )
+        {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" is not a Photograph Noise Reduction settings text file.")
+                        .arg(loadRestorationFile.fileName()));
+           file.close();            
+           return;
+        }
+        
+        blockSignals(true);
+        m_radiusInput->setValue( stream.readLine().toDouble() );
+        m_lumToleranceInput->setValue( stream.readLine().toDouble() );
+        m_thresholdInput->setValue( stream.readLine().toDouble() );
+        m_textureInput->setValue( stream.readLine().toDouble() );
+        m_sharpnessInput->setValue( stream.readLine().toDouble() );
+
+        m_csmoothInput->setValue( stream.readLine().toDouble() );
+        m_lookaheadInput->setValue( stream.readLine().toDouble() );
+        m_gammaInput->setValue( stream.readLine().toDouble() );
+        m_dampingInput->setValue( stream.readLine().toDouble() );
+        m_phaseInput->setValue( stream.readLine().toDouble() );
+        blockSignals(false);
+        slotEffect();  
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Noise Reduction text file."));
+
+    file.close();             
+}
+
+void ImageEffect_NoiseReduction::slotUser2()
+{
+    KURL saveRestorationFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                            QString( "*" ), this,
+                                            QString( i18n("Photograph Noise Reduction Settings File to Save")) );
+    if( saveRestorationFile.isEmpty() )
+       return;
+
+    QFile file(saveRestorationFile.path());
+    
+    if ( file.open(IO_WriteOnly) )   
+    {
+        QTextStream stream( &file );        
+        stream << "# Photograph Noise Reduction Configuration File\n";    
+        stream << m_radiusInput->value() << "\n";    
+        stream << m_lumToleranceInput->value() << "\n";    
+        stream << m_thresholdInput->value() << "\n";    
+        stream << m_textureInput->value() << "\n";    
+        stream << m_sharpnessInput->value() << "\n";    
+
+        stream << m_csmoothInput->value() << "\n";    
+        stream << m_lookaheadInput->value() << "\n";    
+        stream << m_gammaInput->value() << "\n";    
+        stream << m_dampingInput->value() << "\n";    
+        stream << m_phaseInput->value() << "\n";    
+
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Noise Reduction text file."));
+    
+    file.close();        
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

@@ -55,6 +55,11 @@ private:
     KDoubleNumInput *m_dampingInput;
     KDoubleNumInput *m_phaseInput;
 
+private slots:
+
+    void slotUser2();
+    void slotUser3();
+
 protected:
     
     void prepareEffect(void);
