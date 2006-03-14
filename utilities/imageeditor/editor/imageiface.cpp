@@ -127,7 +127,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
 
 DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
 {
-    if ( d->image.isNull() || point.x() > d->image.width() || point.y() > d->image.height() )
+    if ( d->image.isNull() || point.x() > (int)d->image.width() || point.y() > (int)d->image.height() )
     {
         kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
         return DColor::DColor();
