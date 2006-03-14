@@ -245,7 +245,10 @@ KDE_CHECK_LIB(png, png_set_add_alpha,
 if test "x$have_png" != "xyes"; then
   AC_WARN([digiKam requires libpng >= 1.2.7; digiKam will not be compiled.])
   DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi  
+else
+  LIB_PNG="-lpng"
+  AC_SUBST(LIB_PNG)
+fi
 
 #------------------------------------------------------------------
 # Check for Exiv2 library

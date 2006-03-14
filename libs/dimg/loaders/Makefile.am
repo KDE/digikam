@@ -6,7 +6,7 @@ libdimgloaders_la_SOURCES = pngloader.cpp jpegloader.cpp tiffloader.cpp rawloade
 	                        ppmloader.cpp qimageloader.cpp iccjpeg.c 
 
 libdimgloaders_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
-	   	                    $(LIBJPEG) $(LIB_TIFF) 
+	   	                    $(LIBJPEG) $(LIB_TIFF) $(LIB_PNG) 
 
 INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg \
 	                       -I$(top_srcdir)/digikam/libs/dcraw \
