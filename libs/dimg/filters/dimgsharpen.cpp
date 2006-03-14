@@ -58,7 +58,13 @@ DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
 {
     m_radius = radius;
     m_sigma  = sigma;
+    // We need to provide support for orgImage == destImage.
+    // The algorithm does not support this out of the box, so use a temporary.
+    if (orgImage.bits() == destImage.bits())
+        m_destImage = Digikam::DImg(destImage.width(), destImage.height(), destImage.sixteenBit());
     filterImage();
+    if (orgImage.bits() == destImage.bits())
+        memcpy(destImage.bits(), m_destImage.bits(), m_destImage.numBytes());
 }
 
 void DImgSharpen::filterImage(void)
