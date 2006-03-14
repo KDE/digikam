@@ -139,6 +139,8 @@ bool PNGMetaLoader::load(const QString& filePath)
         {
             png_uint_32 length;
             uchar *data = readRawProfile(text_ptr, &length, i);
+            if (!data)
+                continue;
             // We removing standard Exif header
             exifMetadata() = QByteArray(length-6);
             memcpy(exifMetadata().data(), data+6, length-6);
@@ -152,6 +154,8 @@ bool PNGMetaLoader::load(const QString& filePath)
         {
             png_uint_32 length;
             uchar *data = readRawProfile(text_ptr, &length, i);
+            if (!data)
+                continue;
             iptcMetadata() = QByteArray(length);
             memcpy(iptcMetadata().data(), data, length);
             delete [] data;
@@ -297,7 +301,7 @@ uchar* PNGMetaLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii
     if (*length == 0)
     {
         kdDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
-        return (false);
+        return 0;
     }
 
     info = new uchar[*length];
@@ -305,7 +309,7 @@ uchar* PNGMetaLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii
     if (!info)
     {
         kdDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
-        return (false);
+        return 0;
     }
 
     // Copy profile, skipping white space and column 1 "=" signs
@@ -320,7 +324,7 @@ uchar* PNGMetaLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii
             if (*sp == '\0')
             {
                 kdDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
-                return (false);
+                return 0;
             }
 
             sp++;
