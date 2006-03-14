@@ -22,6 +22,10 @@
 #ifndef NOISE_REDUCTION_H
 #define NOISE_REDUCTION_H
 
+// C++ includes.
+ 
+#include <cmath>
+
 // Digikam includes.
 
 #include <digikamheaders.h>
@@ -34,30 +38,59 @@ class NoiseReduction : public Digikam::DImgThreadedFilter
 
 public:
     
-    NoiseReduction(Digikam::DImg *orgImage, QObject *parent, int radius, int black_level,
-                   int white_level, bool adaptativeFilter=true, bool recursiveFilter=false);
+    NoiseReduction(Digikam::DImg *orgImage, QObject *parent, 
+                   double radius, double lsmooth, double effect, double texture, double sharp,
+                   double csmooth, double lookahead, double gamma, double damping, double phase);
     ~NoiseReduction(){};
     
-private:  
+private:
 
-    int  m_radius;
-    int  m_black_level;
-    int  m_white_level;
-    bool m_adaptativeFilter;
-    bool m_recursiveFilter; 
+    struct iir_param
+    {
+        double  B, b1, b2, b3, b0, r, q;
+        double *p;
+    } m_iir;
+
+    int    m_clamp;
+    
+    double m_radius;
+    double m_lsmooth;
+    double m_csmooth;
+    double m_effect;
+    double m_lookahead;
+    double m_gamma;
+    double m_damping;
+    double m_phase;
+    double m_texture;
+    double m_sharp;
 
 private:  
 
     void filterImage(void);
 
-    void despeckle();
-    void despeckle16();
+    void iir_init(double r);
+    void box_filter(double *src, double *end, double *dest, double radius);
+    void iir_filter(float* const start, float* const end, float* dstart, double radius, const int type);
+    void filter(float *buffer, float *data, float *data2, float *rbuf, float *tbuf, int width, int color);
+    void blur_line(float* const data, float* const data2, float* const buffer,
+                   float* rbuf, float* tbuf, const uchar *src, uchar *dest, int len);
 
-    int  quick_median_select(uchar **p, uchar *i, int n);
-    int  quick_median_select16(unsigned short **p, unsigned short *i, int n);
+    inline double bsqrt(double val)
+    {
+        if (val >= 0.0) return sqrt(val);
+        else return -sqrt(-val);
+    };
 
-    uchar pixel_intensity(const uchar *p);
-    unsigned short pixel_intensity16(const unsigned short *p);
+    inline double sq(double val){ return val*val; };
+
+    inline double bsq(double val){ return fabs(val) * val; };
+
+    inline double mypow(double val, double ex)
+    {
+        if (fabs(val) < 1e-16) return 0.0;
+        if (val > 0.0) return exp(log(val)*ex);
+        return -exp(log(-val)*ex);
+    }; 
 
 };
 

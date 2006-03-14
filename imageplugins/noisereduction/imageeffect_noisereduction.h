@@ -27,9 +27,7 @@
 
 #include <digikamheaders.h>
 
-class QCheckBox;
-
-class KIntNumInput;
+class KDoubleNumInput;
 
 namespace DigikamNoiseReductionImagesPlugin
 {
@@ -45,14 +43,17 @@ public:
        
 private:
 
-    int           m_maxLevel;
-    
-    QCheckBox    *m_useAdaptativeMethod;
-    QCheckBox    *m_useRecursiveMethod;
-        
-    KIntNumInput *m_radiusInput;
-    KIntNumInput *m_blackLevelInput;
-    KIntNumInput *m_whiteLevelInput;
+    KDoubleNumInput *m_radiusInput;
+    KDoubleNumInput *m_lumToleranceInput;
+    KDoubleNumInput *m_thresholdInput;
+    KDoubleNumInput *m_textureInput;
+    KDoubleNumInput *m_sharpnessInput;
+
+    KDoubleNumInput *m_csmoothInput;
+    KDoubleNumInput *m_lookaheadInput;
+    KDoubleNumInput *m_gammaInput;
+    KDoubleNumInput *m_dampingInput;
+    KDoubleNumInput *m_phaseInput;
 
 protected:
     

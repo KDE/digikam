@@ -5,9 +5,9 @@
  * Description : Noise reduction threaded image filter.
  * 
  * Copyright 2005-2006 by Gilles Caulier
- *
- * Original Despeckle algorithm copyrighted 1997-1998
- * Michael Sweet (mike at easysw dot com).
+ * 
+ * Original Noise Filter algorithm copyright (C) 2005 
+ * Peter Heckert <peter dot heckert at arcor dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,21 +22,21 @@
  * 
  * ============================================================ */
 
-#define VALUE_SWAP(a,b)     { register uchar t = (a); (a) = (b); (b) = t; }
-#define VALUE_SWAP16(a,b)   { register unsigned short t = (a); (a) = (b); (b) = t; }
-#define POINTER_SWAP(a,b)   { register uchar* t = (a); (a) = (b); (b) = t; }
-#define POINTER_SWAP16(a,b) { register unsigned short* t = (a); (a) = (b); (b) = t; }
+#define IIR1(dest,src)  (dest) = (d3 = ((((src) * b + d3) * b3 + d2) * b2 + d1) * b1)
+#define IIR2(dest,src)  (dest) = (d2 = ((((src) * b + d2) * b3 + d1) * b2 + d3) * b1)
+#define IIR3(dest,src)  (dest) = (d1 = ((((src) * b + d1) * b3 + d3) * b2 + d2) * b1)
 
-#define RGB_INTENSITY_RED    0.30
-#define RGB_INTENSITY_GREEN  0.59
-#define RGB_INTENSITY_BLUE   0.11
-#define RGB_INTENSITY(r,g,b) ((r) * RGB_INTENSITY_RED   + \
-                              (g) * RGB_INTENSITY_GREEN + \
-                              (b) * RGB_INTENSITY_BLUE)
+#define IIR1A(dest,src)  (dest) = fabs(d3 = ((((src) * b + d3) * b3 + d2) * b2 + d1) * b1)
+#define IIR2A(dest,src)  (dest) = fabs(d2 = ((((src) * b + d2) * b3 + d1) * b2 + d3) * b1)
+#define IIR3A(dest,src)  (dest) = fabs(d1 = ((((src) * b + d1) * b3 + d3) * b2 + d2) * b1)
 
-// C++ includes.
- 
-#include <cmath>
+//#define FR 0.3
+//#define FG 0.59
+//#define FB 0.11
+          
+#define FR 0.212671
+#define FG 0.715160
+#define FB 0.072169
 
 // KDE includes.
 
@@ -49,448 +49,752 @@
 namespace DigikamNoiseReductionImagesPlugin
 {
 
-NoiseReduction::NoiseReduction(Digikam::DImg *orgImage, QObject *parent, int radius,
-                               int black_level, int white_level, bool adaptativeFilter,
-                               bool recursiveFilter)
+NoiseReduction::NoiseReduction(Digikam::DImg *orgImage, QObject *parent, 
+                double radius, double lsmooth, double effect, double texture, double sharp,
+                double csmooth, double lookahead, double gamma, double damping, double phase)
               : Digikam::DImgThreadedFilter(orgImage, parent, "NoiseReduction")
 { 
-    m_radius           = radius;
-    m_black_level      = black_level;
-    m_white_level      = white_level;
-    m_adaptativeFilter = adaptativeFilter;
-    m_recursiveFilter  = recursiveFilter;
+    m_radius    = radius;    /* default radius                   default = 1.0 */
+    m_sharp     = sharp;     /* Sharpness factor                 default = 0.25 */
+    m_lsmooth   = lsmooth;   /* Luminance Tolerance              default = 1.0 */
+    m_effect    = effect;    /* Adaptive filter-effect threshold default = 0.08 */
+    m_texture   = texture;   /* Texture Detail                   default = 0.0 */
+
+    m_csmooth   = csmooth;   /* RGB Tolerance                    default = 1.0  */
+    m_lookahead = lookahead; /* Lookahead                        default = 2.0 */
+    m_gamma     = gamma;     /* Filter gamma                     default = 1.0 */
+    m_damping   = damping;   /* Phase jitter Damping             default = 5.0 */
+    m_phase     = phase;     /* Area Noise Clip                  default = 1.0 */
+
+    m_iir.B  = 0.0;
+    m_iir.b1 = 0.0;
+    m_iir.b2 = 0.0;
+    m_iir.b3 = 0.0;
+    m_iir.b0 = 0.0;
+    m_iir.r  = 0.0;
+    m_iir.q  = 0.0;
+    m_iir.p  = 0;
+
+    m_clamp = m_orgImage.sixteenBit() ? 65535 : 255;
+    
     initFilter();
 }
 
-/*
- * Despeckle an image using a median filter.
- *
- * A median filter basically collects pixel values in a region around the
- * target pixel, sorts them, and uses the median value. This code uses a
- * circular row buffer to improve performance.
- *
- * The adaptive filter is based on the median filter but analizes the histogram
- * of the region around the target pixel and adjusts the despeckle diameter
- * accordingly.
- */
+// Remove noise on the region, given a source region, dest.
+// region, width and height of the regions, and corner coordinates of
+// a subregion to act upon. Everything outside the subregion is unaffected.
 
 void NoiseReduction::filterImage(void)
 {
-    if (m_orgImage.sixteenBit())
-        despeckle16();
+    int    bytes  = m_orgImage.bytesDepth(); // Bytes per pixel sample
+    uchar *srcPR  = m_orgImage.bits();
+    uchar *destPR = m_destImage.bits();
+    int    width  = m_orgImage.width();
+    int    height = m_orgImage.height();
+
+    int    row, col, i, progress;
+    float  prob = 0.0;
+    
+    int w = (int)((m_radius + m_lookahead + m_damping + m_phase) * 4.0 + 40.0);
+    
+    // if (radius < m_lookahead) w = m_lookahead * 4.0 + 40.0;
+    
+    float csmooth = m_csmooth;
+    
+    // Raw Filter preview
+
+    if (csmooth >= 0.99) csmooth = 1.0; 
+        
+    // Allocate and init buffers
+
+    uchar *src    = new uchar[ QMAX (width, height) * bytes ];
+    uchar *dest   = new uchar[ QMAX (width, height) * bytes ];
+    float *data   = new float[ QMAX (width, height) + 2*w ];
+    float *data2  = new float[ QMAX (width, height) + 2*w ];
+    float *buffer = new float[ QMAX (width, height) + 2*w ];
+    float *rbuf   = new float[ QMAX (width, height) + 2*w ];
+    float *tbuf   = new float[ QMAX (width, height) + 2*w ];
+
+    memset (src,  0, QMAX (width, height) * bytes);
+    memset (dest, 0, QMAX (width, height) * bytes);
+    
+    for (i=0 ; i < QMAX(width,height)+2*w-1 ; i++)
+        data[i] = data2[i] = buffer[i] = rbuf[i] = tbuf[i] = 0.0;
+    
+    // Initialize the damping filter coefficients
+    
+    iir_init(m_radius);
+    
+    // blur the rows
+    
+    for (row = 0 ; !m_cancel && (row < height) ; row++)
+    {
+        memcpy(src, srcPR + row*width*bytes, width*bytes);
+        memcpy(dest, src, width*bytes);
+        
+        blur_line (data+w, data2+w, buffer+w, rbuf+w, tbuf+w, src, dest, width);
+        
+        memcpy(destPR + row*width*bytes, dest, width*bytes);
+      
+        progress = (int)(((double)row * 20.0) / height);
+        if ( progress%2 == 0 )
+           postProgress( progress );   
+    }
+  
+    // blur the cols
+
+    for (col = 0 ; !m_cancel && (col < width) ; col++)
+    {
+        for (int n = 0 ; n < height ; n++)
+            memcpy(src + n*bytes, destPR + (col + width*n)*bytes, bytes);
+                
+        for (int n = 0 ; n < height ; n++)
+            memcpy(dest + n*bytes, destPR + (col + width*n)*bytes, bytes);
+        
+        blur_line (data+w, data2+w, buffer+w, rbuf+w, tbuf+w, src, dest, height);
+        
+        for (int n = 0 ; n < height ; n++)
+            memcpy(destPR + (col + width*n)*bytes, dest + n*bytes, bytes);
+
+        progress = (int)(20.0 + ((double)col * 20.0) / width);
+        if ( progress%2 == 0 )
+           postProgress( progress );   
+    }
+    
+    // merge the source and destination (which currently contains
+    // the blurred version) images
+    
+    for (row = 0 ; !m_cancel && (row < height) ; row++)
+    {
+        uchar *s            = src;
+        uchar *d            = dest;
+        unsigned short *s16 = (unsigned short *)src;
+        unsigned short *d16 = (unsigned short *)dest;
+        float  value;
+        int    u, v;
+    
+        // get source row
+        
+        memcpy(src,  srcPR  + row*width*bytes, width*bytes);
+        memcpy(dest, destPR + row*width*bytes, width*bytes);
+
+        // get dest row and combine the two
+        
+        float t  = m_csmooth;
+        float t2 = m_lsmooth;
+        
+        // Easier adjustment for small values
+        // TODO (gilles) : check it.
+        //t*  = t;
+        //t2* = t2;
+                
+        for (u = 0 ; !m_cancel && (u < width) ; u++)
+        {
+            float dpix[3], spix[3];
+            float lum,  red,  green,  blue;
+            float lum2, red2, green2, blue2;
+
+            if (m_orgImage.sixteenBit())       // 16 bits image
+            {
+                red   = (float) s16[2]/(float)m_clamp;
+                green = (float) s16[1]/(float)m_clamp;
+                blue  = (float) s16[0]/(float)m_clamp;
+            }
+            else                                // 8 bits image
+            {
+                red   = (float) s[2]/(float)m_clamp;
+                green = (float) s[1]/(float)m_clamp;
+                blue  = (float) s[0]/(float)m_clamp;
+            }
+            
+            spix[2] = red;
+            spix[1] = green;
+            spix[0] = blue;
+                    
+            lum = (FR*red + FG*green + FB*blue);
+            
+            if (m_orgImage.sixteenBit())       // 16 bits image
+            {
+                red2   = (float) d16[2]/(float)m_clamp;
+                green2 = (float) d16[1]/(float)m_clamp;
+                blue2  = (float) d16[0]/(float)m_clamp;
+            }
+            else                                // 8 bits image
+            {
+                red2   = (float) d[2]/(float)m_clamp;
+                green2 = (float) d[1]/(float)m_clamp;
+                blue2  = (float) d[0]/(float)m_clamp;
+            }
+            
+            lum2 = (FR*red2 + FG*green2 + FB*blue2);
+    
+            // Calculate luminance error (contrast error) for filtered template.
+            // This error is biggest, where edges are. Edges anyway cannot be filtered.
+            // Therefore we can correct luminance error in edges without increasing noise.
+            // Should be adjusted carefully, or not so carefully if you intentionally want to add noise.
+            // Noise, if not colorized, /can/ look good, so this makes sense.
+    
+            float dl = lum - lum2;
+                
+            // Multiply dl with first derivative of gamma curve divided by derivative value for midtone 0.5
+            // So bright tones will be corrected more (get more luminance noise and -information) than
+            // darker values because bright parts of image generally are less noisy, this is what we want.
+            
+            dl *= pow(lum2/0.5, m_gamma-1.0);
+    
+            if (t2 >= 0.0)
+                dl *= (1.0 - exp(-dl*dl/(2.0*t2*t2)));        
+            
+            // if (dl > p) dl = p;
+            // if (dl < -p) dl = -p;
+            
+            dpix[2] =   red2 + dl;
+            dpix[1] = green2 + dl;
+            dpix[0] =  blue2 + dl;
+            
+            for (v = 0 ; !m_cancel && (v < bytes) ; v++)
+            {
+                float value  = spix[v];
+                float fvalue = dpix[v];
+                float mvalue = (value + fvalue)/2.0;
+                float diff   = (value) - (fvalue);
+                
+                // Multiply diff with first derivative of gamma curve divided by derivative value for midtone 0.5
+                // So midtones will stay unchanged, darker values get more blur and brighter values get less blur
+                // when we increase gamma.
+                
+                diff *= pow(mvalue/0.5, m_gamma-1.0);
+    
+                // Calculate noise probability for pixel
+                // TODO : probably it's not probability but an arbitrary curve.
+                // Probably we should provide a GUI-interface for this
+                
+                if (t > 0.0)
+                    prob = exp(-diff*diff/(2.0*t*t));
+                else
+                    prob = 0.0;
+                
+                // Allow viewing of raw filter output
+                if (t >= 0.99)
+                    prob = 1.0; 
+
+                dpix[v] = value = fvalue * prob + value * (1.0 - prob);    
+            }
+    
+            if (m_orgImage.sixteenBit())       // 16 bits image
+            {
+                value = dpix[0]*(float)m_clamp+0.5;
+                d16[0]  = (unsigned short)CLAMP(value, 0, m_clamp);
+                value = dpix[1]*(float)m_clamp+0.5;
+                d16[1]  = (unsigned short)CLAMP(value, 0, m_clamp);
+                value = dpix[2]*(float)m_clamp+0.5;
+                d16[2]  = (unsigned short)CLAMP(value, 0, m_clamp);
+                
+                d16 += 4;
+                s16 += 4;
+            }
+            else                                // 8 bits image
+            {
+                value = dpix[0]*(float)m_clamp+0.5;
+                d[0]  = (uchar)CLAMP(value, 0, m_clamp);
+                value = dpix[1]*(float)m_clamp+0.5;
+                d[1]  = (uchar)CLAMP(value, 0, m_clamp);
+                value = dpix[2]*(float)m_clamp+0.5;
+                d[2]  = (uchar)CLAMP(value, 0, m_clamp);
+                
+                d += 4;
+                s += 4;
+            }
+        }
+
+        memcpy(destPR + row*width*bytes, dest, width*bytes);
+        
+        progress = (int)(60.0 + ((double)row * 40.0) / height);
+        if ( progress%2 == 0 )
+           postProgress( progress );   
+    }
+    
+    delete [] data;
+    delete [] data2;
+    delete [] buffer;
+    delete [] rbuf;
+    delete [] tbuf;
+    delete [] dest;
+    delete [] src;
+}
+
+// This function is written as if it is blurring a column at a time,
+// even though it can operate on rows, too.  There is no difference
+// in the processing of the lines, at least to the blur_line function.
+
+void NoiseReduction::blur_line(float* const data, float* const data2, float* const buffer,
+                               float* rbuf, float* tbuf, const uchar *src, uchar *dest,
+                               int len)    // length of src and dest
+{
+    float scale;
+    float sum;
+    int   b, i = 0;
+    int   j = 0;
+    int   row;
+    int   colors = 3;
+    int   idx;
+
+    unsigned short *src16  = (unsigned short *)src;
+    unsigned short *dest16 = (unsigned short *)dest;
+    
+    // Calculate radius factors
+    
+    for (row = 0, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+    {
+        // Color weigths are choosen proportional to Bayer Sensor pixel count
+
+        if (m_orgImage.sixteenBit())       // 16 bits image
+        {
+            data[idx] =  (float) dest16[row+2] / (float)m_clamp * 0.25; // Red color
+            data[idx] += (float) dest16[row+1] / (float)m_clamp * 0.5;  // Green color
+            data[idx] += (float) dest16[row]   / (float)m_clamp * 0.25; // Blue color
+            data[idx] = mypow(data[idx], m_gamma);
+        }
+        else                                // 8 bits image
+        {
+            data[idx] =  (float) dest[row+2] / (float)m_clamp * 0.25; // Red color
+            data[idx] += (float) dest[row+1] / (float)m_clamp * 0.5;  // Green color
+            data[idx] += (float) dest[row]   / (float)m_clamp * 0.25; // Blue color
+            data[idx] = mypow(data[idx], m_gamma);
+        }
+    }
+
+    filter(data, data2, buffer, rbuf, tbuf, len, -1);
+        
+    // Do actual filtering
+    
+    for (b = 0 ; !m_cancel && (b < colors) ; b++)
+    {
+        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+        {
+            if (m_orgImage.sixteenBit())       // 16 bits image
+                data[idx] = (float)src16[row] / (float)m_clamp;
+            else                                // 8 bits image
+                data[idx] = (float)src[row] / (float)m_clamp;
+        }
+
+        filter(data, data2, buffer, rbuf, tbuf, len, b);
+
+        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+        {
+            int value = (int)(data[idx] * (float)m_clamp + 0.5);
+            
+            if (m_orgImage.sixteenBit())       // 16 bits image
+                dest16[row] = (unsigned short)CLAMP( value, 0, m_clamp);
+            else                                // 8 bits image
+                dest[row] = (uchar)CLAMP( value, 0, m_clamp);
+        }
+    }
+}
+
+void NoiseReduction::iir_init(double r)
+{
+    if (m_iir.r == r)
+        return;
+    
+    // damping settings;
+    m_iir.r = r;  
+
+    double q;
+    
+    if ( r >= 2.5)
+        q = 0.98711 * r - 0.96330;
     else
-        despeckle();
+        q = 3.97156 - 4.14554 * sqrt(1.0-0.26891 * r);
+    
+    m_iir.q  = q;
+    m_iir.b0 = 1.57825 + ((0.422205 * q  + 1.4281) * q + 2.44413) *  q;
+    m_iir.b1 = ((1.26661 * q +2.85619) * q + 2.44413) * q / m_iir.b0;
+    m_iir.b2 = - ((1.26661*q +1.4281) * q * q ) / m_iir.b0;
+    m_iir.b3 = 0.422205 * q * q * q / m_iir.b0;
+    m_iir.B  = 1.0 - (m_iir.b1 + m_iir.b2 + m_iir.b3);
 }
 
-void NoiseReduction::despeckle(void)
+void NoiseReduction::box_filter(double *src, double *end, double *dest, double radius)
 {
-    int    pos1, pos2, med, jh, jv, hist0, hist255, progress;
-    uchar *pixel, max, lum, red, green, blue;
+    int   boxwidth = 1;
+    float box      = (*src);
+    float fbw      = 2.0 * radius;
     
-    uchar *src   = m_orgImage.bits();
-    uchar *dst   = m_destImage.bits();
-    int width    = m_destImage.width();
-    int height   = m_destImage.height();
-    int bpp      = 4;   // This is want mean 4 uchar values by pixel
-
-    double prog  = 0.0;
-    int diameter = (2 * m_radius) + 1;
-    int box      = diameter*diameter;
-
-    uchar **buf  = new uchar*[box];
-    uchar *ibuf  = new uchar[box];
-
-    for (int x = 0 ; !m_cancel && (x < width) ; x++)
+    if (fbw < 1.0)
+        fbw = 1.0;
+    
+    while(boxwidth+2 <= (int) fbw) boxwidth+=2, box += (src[boxwidth/2]) + (src[-boxwidth/2]);
+    
+    double frac = (fbw - (double) boxwidth)/2.0;
+    int    bh   = boxwidth/2;
+    int    bh1  = boxwidth/2+1;
+     
+    for ( ; src <= end ; src++, dest++)
     {
-        for (int y = 0 ; !m_cancel && (y < height) ; y++)
-        {
-            hist0   = 0;
-            hist255 = 0;
-    
-            if (x >= m_radius && y >= m_radius &&
-                x + m_radius < width && y + m_radius < height)
-            {
-                // Make sure Svm is ininialized to a sufficient large value 
-                med = -1;
-    
-                for (jh = x-m_radius ; !m_cancel && (jh <= x+m_radius) ; jh++)
-                {
-                    for (jv = y-m_radius, pos1 = 0 ; !m_cancel && (jv <= y+m_radius) ; jv++)
-                    {
-                        pos2 = (jh + (jv * width)) * bpp;
+        *dest = (box + frac * ((src[bh1])+(src[-bh1])))/fbw;
+        box   = box - (src[-bh]) + (src[bh1]);
+    }
+}
 
-                        // We compute the luminosity to check with White and Black level.
-                        blue  = src[ pos2 ];
-                        green = src[pos2+1];
-                        red   = src[pos2+2];
-                        max = (blue > green) ? blue : green;
-                        lum = (red > max) ? red : max;
+// Bidirectional IIR-filter, speed optimized 
 
-                        if (lum > m_black_level && lum < m_white_level)
-                        {
-                            med++;
-                            buf[med]  = src + pos2;
-                            ibuf[med] = pixel_intensity (src + pos2);
-                        }
-                        else
-                        {
-                            if (lum > m_black_level)
-                                hist0++;
+void NoiseReduction::iir_filter(float* const start, float* const end, float* dstart, 
+                                double radius, const int type)
+{
+    if (!dstart)
+        dstart = start;
+        
+    int    width;
+    float *src  = start;
+    float *dest = dstart;
+    float *dend = dstart + (end - start);
+
+    radius = floor((radius + 0.1) / 0.5) * 0.5;
+    //  gfloat boxwidth = radius * 2.0;
+    //  gint bw = (gint) boxwidth;
     
-                            if (lum >= m_white_level)
-                                hist255++;
-                        }
-                    }
-                }
+    int ofs = (int)radius;
+    if (ofs < 1) ofs = 1;
     
-                if (med < 1)
-                {
-                    pos1 = (x + ( y * width)) * bpp;
-                    memcpy(dst + pos1, src + pos1, bpp);
-                }
-                else
-                {
-                    pos1 = (x + (y * width)) * bpp;
-                    med  = quick_median_select (buf, ibuf, med + 1);
-                    pixel = buf[med];
+    double d1, d2, d3;
     
-                    if (m_recursiveFilter)
-                        memcpy(src + pos1, pixel, bpp);
+    width = end - start + 1;
+
+    if (radius < 0.25)
+    { 
+        if ( start != dest )
+        { 
+            memcpy(dest, start, width*sizeof(*dest));
+            return;       
+        }
+    }
     
-                    memcpy(dst + pos1, pixel, bpp);
-                }
-            }
-            else
+    iir_init(radius);
+    const double b1 = m_iir.b1;
+    const double b2 = m_iir.b2 / m_iir.b1;
+    const double b3 = m_iir.b3 / m_iir.b2;
+    const double b  = m_iir.B  / m_iir.b3;
+    
+    switch(type)
+    {
+        case 0: // Gauss
+        
+            d1 = d2 = d3 = *dest; 
+            dend -= 6;
+            src--;
+            dest--;
+
+            while (dest < dend)
             {
-                pos1 = (x + (y * width)) * bpp;
-                memcpy(dst + pos1, src + pos1, bpp);
+                IIR1(*(++dest), *(++src));
+                IIR2(*(++dest), *(++src));
+                IIR3(*(++dest), *(++src));
+                IIR1(*(++dest), *(++src));
+                IIR2(*(++dest), *(++src));
+                IIR3(*(++dest), *(++src));
             }
-    
-            // Check the histogram and adjust the diameter accordingly...
+
+            dend += 6;
+
+            while (1)
+            {
+                if (++dest > dend) break; 
+                    IIR1(*dest,*(++src));
+                if (++dest > dend) break; 
+                    IIR2(*dest,*(++src));
+                if (++dest > dend) break; 
+                    IIR3(*dest,*(++src));
+            }
+        
+            d1 = d2 = d3 = dest[-1];
+            dstart += 6;
             
-            if (m_adaptativeFilter)
+            while (dest > dstart)
             {
-                if (hist0 >= m_radius || hist255 >= m_radius)
-                {
-                    if (m_radius < diameter / 2)
-                        m_radius++;
-                }
-                else if (m_radius > 1)
-                {
-                    m_radius--;
-                }
+                --dest, IIR1(*dest, *dest);
+                --dest, IIR2(*dest, *dest);
+                --dest, IIR3(*dest, *dest);
+                --dest, IIR1(*dest, *dest);
+                --dest, IIR2(*dest, *dest);
+                --dest, IIR3(*dest, *dest);
             }
-        }
-    
-        prog += height;
-
-        progress = (int)(((double)x * 100.0) / m_destImage.width());
-        if ( progress%5 == 0 )
-            postProgress( progress );
-    }
-
-    delete [] buf;
-    delete [] ibuf;
-}
-
-void NoiseReduction::despeckle16(void)
-{
-    int             pos1, pos2, med, jh, jv, hist0, hist65535, progress;
-    unsigned short *pixel, max, lum, red, green, blue;
-    
-    unsigned short *src = (unsigned short*)m_orgImage.bits();
-    unsigned short *dst = (unsigned short*)m_destImage.bits();
-    int width           = m_destImage.width();
-    int height          = m_destImage.height();
-    int bpp             = 4;  // This is want mean 4 ushort values by pixel
-
-    double prog  = 0.0;
-    int diameter = (2 * m_radius) + 1;
-    int box      = diameter*diameter;
-
-    unsigned short **buf = new unsigned short*[box];
-    unsigned short *ibuf = new unsigned short[box];
-    
-    for (int x = 0 ; !m_cancel && (x < width) ; x++)
-    {
-        for (int y = 0 ; !m_cancel && (y < height) ; y++)
-        {
-            hist0     = 0;
-            hist65535 = 0;
-    
-            if (x >= m_radius && y >= m_radius &&
-                x + m_radius < width && y + m_radius < height)
-            {
-                // Make sure Svm is ininialized to a sufficient large value 
-                med = -1;
-    
-                for (jh = x-m_radius ; !m_cancel && (jh <= x+m_radius) ; jh++)
-                {
-                    for (jv = y-m_radius, pos1 = 0 ; !m_cancel && (jv <= y+m_radius) ; jv++)
-                    {
-                        pos2 = (jh + (jv * width)) * bpp;
-                        // We compute the luminosity to check with White and Black level.
-                        blue  = src[ pos2 ];
-                        green = src[pos2+1];
-                        red   = src[pos2+2];
-                        max = (blue > green) ? blue : green;
-                        lum = (red > max) ? red : max;
-
-                        if (lum > m_black_level && lum < m_white_level)
-                        {
-                            med++;
-                            buf[med]  = src + pos2;
-                            ibuf[med] = pixel_intensity16 (src + pos2);
-                        }
-                        else
-                        {
-                            if (lum > m_black_level)
-                                hist0++;
-    
-                            if (lum >= m_white_level)
-                                hist65535++;
-                        }
-                    }
-                }
-    
-                if (med < 1)
-                {
-                    pos1 = (x + ( y * width)) * bpp;
-                    memcpy(dst + pos1, src + pos1, 8);
-                }
-                else
-                {
-                    pos1 = (x + (y * width)) * bpp;
-                    med  = quick_median_select16(buf, ibuf, med + 1);
-                    pixel = buf[med];
-    
-                    if (m_recursiveFilter)
-                        memcpy(src + pos1, pixel, 8);
-    
-                    memcpy(dst + pos1, pixel, 8);
-                }
-            }
-            else
-            {
-                pos1 = (x + (y * width)) * bpp;
-                memcpy(dst + pos1, src + pos1, 8);
-            }
-    
-            // Check the histogram and adjust the diameter accordingly...
             
-            if (m_adaptativeFilter)
+            dstart -= 6;
+            
+            while (1)
             {
-                if (hist0 >= m_radius || hist65535 >= m_radius)
-                {
-                    if (m_radius < diameter / 2)
-                        m_radius++;
-                }
-                else if (m_radius > 1)
-                {
-                    m_radius--;
-                }
+                if (--dest < dstart) break; 
+                    IIR1(*dest, *dest);
+                if (--dest < dstart) break; 
+                    IIR2(*dest, *dest);
+                if (--dest < dstart) break; 
+                    IIR3(*dest, *dest);
             }
-        }
-    
-        prog += height;
+        
+        break;
+            
+        case 2: // rectified and filtered second derivative, source and dest may be equal 
+            
+            d1 = d2 = d3 = 0.0;
+            dest[0] = dest[ofs] = 0.0;
+            dend -= 6; 
+            dest--;
+            src--;
+            
+            while (dest < dend)
+            {
+                ++src, IIR1(*(++dest), src[ofs]-src[0]);
+                ++src, IIR2(*(++dest), src[ofs]-src[0]);
+                ++src, IIR3(*(++dest), src[ofs]-src[0]);
+                ++src, IIR1(*(++dest), src[ofs]-src[0]);
+                ++src, IIR2(*(++dest), src[ofs]-src[0]);
+                ++src, IIR3(*(++dest), src[ofs]-src[0]);
+            }
+            
+            dend += 6; 
 
-        progress = (int)(((double)x * 100.0) / m_destImage.width());
-        if ( progress%5 == 0 )
-            postProgress( progress );
+            while (1)
+            {
+                if (++dest > dend) break; 
+                    ++src, IIR1(*dest, src[ofs]-src[0]);
+                if (++dest > dend) break; 
+                    ++src, IIR2(*dest, src[ofs]-src[0]);
+                if (++dest > dend) break; 
+                    ++src, IIR3(*dest, src[ofs]-src[0]);
+            }
+            
+            d1 = d2 = d3 = 0.0;
+            dest[-1] = dest[-ofs-1] = 0.0;
+            dstart += 6;
+                
+            while (dest > dstart)
+            {
+                --dest, IIR1A(*dest, dest[0]-dest[-ofs]);
+                --dest, IIR2A(*dest, dest[0]-dest[-ofs]);
+                --dest, IIR3A(*dest, dest[0]-dest[-ofs]);
+                --dest, IIR1A(*dest, dest[0]-dest[-ofs]);
+                --dest, IIR2A(*dest, dest[0]-dest[-ofs]);
+                --dest, IIR3A(*dest, dest[0]-dest[-ofs]);
+            }
+
+            dstart -= 6;
+
+            while (1)
+            {
+                if (--dest < dstart) break;
+                    IIR1A(*dest, dest[0]-dest[-ofs]);
+                if (--dest < dstart) break;
+                    IIR2A(*dest, dest[0]-dest[-ofs]);
+                if (--dest < dstart) break;
+                    IIR3A(*dest, dest[0]-dest[-ofs]);
+            }
+            
+        break;
     }
-
-    delete [] buf;
-    delete [] ibuf;
 }
 
-/*
-* This Quickselect routine is based on the algorithm described in
-* "Numerical recipes in C", Second Edition,
-* Cambridge University Press, 1992, Section 8.5, ISBN 0-521-43108-5
-* This code by Nicolas Devillard - 1998. Public domain.
-*
-* modified to swap pointers: swap is done by comparing intensity value
-* for the pointer to RGB
-*/
+// A forward-backward box filter is used here and the radius is adapted to luminance jump.
+// Radius is calculated fron 1st and 2nd derivative of intensity values.
+// (Its not exactly 2nd derivative, but something similar, optimized by experiment)
+// The radius variations are filtered. This reduces spatial phase jitter.
 
-int NoiseReduction::quick_median_select (uchar **p, uchar *i, int n)
+void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbuf, 
+                            float *tbuf, int width, int color)
 {
-    int low, high ;
-    int median;
-    int middle, ll, hh;
+    float *lp       = data;
+    float *rp       = data + width-1;
+    float *lp2      = data2; 
+    float *rp2      = data2 +width-1;
+    float *blp      = buffer;
+    float *brp      = buffer + width-1;
+    float *rbuflp   = rbuf;
+    float *rbufrp   = rbuf + width-1;
+    float fboxwidth = m_radius*2.0;
+    float fradius   = m_radius;
+    float *p1, *p2;
     
-    low = 0 ;
-    high = n-1 ;
-    median = (low + high) / 2;
+    if (fboxwidth < 1.0) fboxwidth = 1.0 ;
+    if (fradius < 0.5) fradius = 0.5;
     
-    for (;!m_cancel;)
+    int    i, pass;
+    double box, lbox, rbox, frac;
+    int    boxwidth, ofs, ofs2;
+    float  maxrad;
+    float  fbw;
+    float  val, val2, lval, rval;
+    double rfact = sq(m_effect);
+    double sharp = m_sharp;
+    
+    ofs2  = (int)floor(m_damping * 2.0 + 0.1);
+    ofs   = (int)floor(m_lookahead * 2.0 + 0.1);
+    int w = (int)(fboxwidth + m_damping + m_lookahead + m_phase + 2.0);
+    
+    // Mirror image edges    
+
+    for (i=1 ; i <= w ; i++) 
+        blp[-i] = blp[i]; 
+
+    for (i=1 ; i <= w ; i++) 
+        brp[i] = brp[-i];
+    
+    if (color < 0) // Calc 2nd derivative
     {
-        if (high <= low) // One element only
-            return median;
-    
-        if (high == low + 1)
+        // boost high frequency in rbuf
+        
+        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; p1++, p2++)
         {
-            // Two elements only 
-            if (i[low] > i[high])
-            {
-                VALUE_SWAP (i[low], i[high]) ;
-                POINTER_SWAP (p[low], p[high]) ;
-            }
-    
-            return median;
+            *p2 = (sharp+1.0) * p1[0] - sharp * 0.5 * (p1[-ofs]+p1[ofs]);
         }
     
-        // Find median of low, middle and high items; swap into position low 
-        middle = (low + high) / 2;
+        iir_filter(rbuflp-w, rbufrp+w, blp-w, m_lookahead, 2);
     
-        if (i[middle] > i[high])
-        {
-            VALUE_SWAP (i[middle], i[high]) ;
-            POINTER_SWAP (p[middle], p[high]) ;
-        }
-    
-        if (i[low] > i[high])
-        {
-            VALUE_SWAP (i[low], i[high]) ;
-            POINTER_SWAP (p[low], p[high]) ;
-        }
-    
-        if (i[middle] > i[low])
-        {
-            VALUE_SWAP (i[middle], i[low]) ;
-            POINTER_SWAP (p[middle], p[low]) ;
-        }
-    
-        // Swap low item (now in position middle) into position (low+1) 
-        VALUE_SWAP (i[middle], i[low+1]) ;
-        POINTER_SWAP (p[middle], p[low+1])
-    
-        // Nibble from each end towards middle, swapping items when stuck 
-        ll = low + 1;
-        hh = high;
-    
-        for (;!m_cancel;)
-        {
-            do ll++;
-            while (i[low] > i[ll]);
-    
-            do hh--;
-            while (i[hh]  > i[low]);
-    
-            if (hh < ll)
-                break;
-    
-            VALUE_SWAP (i[ll], i[hh]);
-            POINTER_SWAP (p[ll], p[hh]);
-        }
-    
-        // Swap middle item (in position low) back into correct position 
-        VALUE_SWAP (i[low], i[hh]);
-        POINTER_SWAP (p[low], p[hh]);
-    
-        // Re-set active partition 
-        if (hh <= median)
-            low = ll;
-        if (hh >= median)
-            high = hh - 1;
-    }
-    
-    return median; // To please compiler.    
-}
+        // Mirror image edges
 
-int NoiseReduction::quick_median_select16 (unsigned short **p, unsigned short *i, int n)
-{
-    int low, high ;
-    int median;
-    int middle, ll, hh;
+        for (i = 1 ; i <= w ; i++) 
+            blp[-i] = blp[i];
+
+        for (i = 1 ; i <= w ; i++) 
+            brp[i] = brp[-i];
     
-    low = 0 ;
-    high = n-1 ;
-    median = (low + high) / 2;
+        // boost high frequency in rbuf
+        
+        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; p1++, p2++)
+        {
+            *p2 = ((sharp+1.0) * (p1[0]) - sharp * 0.5 * ((p1[-ofs2])+(p1[ofs2])));
+        }
     
-    for (;!m_cancel;)
+        // Mirror rbuf edges
+
+        for (i = 1 ; i <= w ; i++) 
+            rbuflp[-i] = rbuflp[i];
+
+        for (i = 1 ; i <= w ; i++) 
+            rbufrp[i] = rbufrp[-i];
+    
+        // Lowpass (gauss) filter rbuf, remove phase jitter
+        
+        iir_filter(rbuflp-w+5, rbufrp+w-5, rbuflp-w+5, m_damping, 0);
+    
+        for (i = -w+5; i < width-1+w-5 ; i++)
+        {
+            // val = rbuflp[i];
+            val = rbuflp[i]-rfact;
+    
+            // Avoid division by zero, clip negative filter overshoot
+            
+            if (val < rfact/fradius) val=rfact/fradius;
+    
+            val = rfact/val;
+            // val = pow(val/fradius,m_phase)*fradius;
+            if (val < 0.5) val = 0.5;
+    
+            rbuflp[i] = val*2.0;
+        }
+    
+        // Mirror rbuf edges
+
+        for (i=1 ; i <= w ; i++) 
+            rbuflp[-i] = rbuflp[i];
+
+        for (i=1 ; i <= w ; i++) 
+            rbufrp[i] = rbufrp[-i];
+
+        return;
+    } 
+    
+    // Calc lowpass filtered input signal
+    
+    iir_filter(blp-w+1, brp+w-1, lp2-w+1, m_radius, 0);
+    
+    // Subtract low frequency from input signal (aka original image data)
+    // and predistort this signal
+    
+    val = m_texture + 1.0;
+
+    for (i = -w+1 ; i <= width-1+w-1 ; i++)
     {
-        if (high <= low) // One element only
-            return median;
-    
-        if (high == low + 1)
-        {
-            // Two elements only 
-            if (i[low] > i[high])
-            {
-                VALUE_SWAP16 (i[low], i[high]) ;
-                POINTER_SWAP16 (p[low], p[high]) ;
-            }
-    
-            return median;
-        }
-    
-        // Find median of low, middle and high items; swap into position low 
-        middle = (low + high) / 2;
-    
-        if (i[middle] > i[high])
-        {
-            VALUE_SWAP16 (i[middle], i[high]) ;
-            POINTER_SWAP16 (p[middle], p[high]) ;
-        }
-    
-        if (i[low] > i[high])
-        {
-            VALUE_SWAP16 (i[low], i[high]) ;
-            POINTER_SWAP16 (p[low], p[high]) ;
-        }
-    
-        if (i[middle] > i[low])
-        {
-            VALUE_SWAP16 (i[middle], i[low]) ;
-            POINTER_SWAP16 (p[middle], p[low]) ;
-        }
-    
-        // Swap low item (now in position middle) into position (low+1) 
-        VALUE_SWAP16 (i[middle], i[low+1]) ;
-        POINTER_SWAP16 (p[middle], p[low+1])
-    
-        // Nibble from each end towards middle, swapping items when stuck 
-        ll = low + 1;
-        hh = high;
-    
-        for (;!m_cancel;)
-        {
-            do ll++;
-            while (i[low] > i[ll]);
-    
-            do hh--;
-            while (i[hh]  > i[low]);
-    
-            if (hh < ll)
-                break;
-    
-            VALUE_SWAP16 (i[ll], i[hh]);
-            POINTER_SWAP16 (p[ll], p[hh]);
-        }
-    
-        // Swap middle item (in position low) back into correct position 
-        VALUE_SWAP (i[low], i[hh]);
-        POINTER_SWAP16 (p[low], p[hh]);
-    
-        // Re-set active partition 
-        if (hh <= median)
-            low = ll;
-        if (hh >= median)
-            high = hh - 1;
+        blp[i] = mypow(blp[i] - lp2[i], val);
     }
     
-    return median; // To please compiler.
-}
+    float *src, *dest;
+    val = m_texture + 1.0;
+    
+    pass = 2;
+    
+    while (pass--)
+    {
+        float sum;
+        int   ibw;
+        src    = blp;
+        dest   = lp;
+        maxrad = 0.0;
+    
+        // Mirror left edge
+        
+        for (i=1 ; i <= w ; i++)
+            src[-i] = src[i]; 
+    
+        sum = (src[-1] += src[-2]);
+    
+        // forward pass
+        
+        for (rbuf = rbuflp-(int) m_phase ; rbuf <= rbufrp; src++, dest++, rbuf++)
+        {
+            //fbw = fabs( rbuf[-ofs2]*ll2+rbuf[-ofs2-1]*rl2);
+            fbw = *rbuf;
+        
+            if (fbw > (maxrad += 1.0)) fbw = maxrad;
+            else if (fbw < maxrad) maxrad = fbw;
+            
+            ibw   = (int)fbw;        
+            *src  = sum += *src;
+            *dest = (sum-src[-ibw]+(src[-ibw]-src[-ibw-1])*(fbw-ibw))/fbw;
+        }
+    
+        src    = rp;
+        dest   = brp;
+        maxrad = 0.0;
+    
+        // Mirror right edge
+        
+        for (i=1 ; i <= w ; i++)
+            src[i] = src[-i]; 
+    
+        sum = (src[1] += src[2]);
 
-uchar NoiseReduction::pixel_intensity(const uchar *p)
-{
-    return (uchar)RGB_INTENSITY (p[0], p[1], p[2]);
-}
+        // backward pass
 
-unsigned short NoiseReduction::pixel_intensity16(const unsigned short *p)
-{
-    return (unsigned short)RGB_INTENSITY (p[0], p[1], p[2]);
+        for ( rbuf = rbufrp +(int) m_phase ; rbuf >= rbuflp; src--, dest--, rbuf--)
+        {
+            //fbw = fabs( rbuf[ofs2]*ll2+rbuf[ofs2+1]*rl2);
+            fbw = *rbuf;
+        
+            if (fbw > (maxrad +=1.0)) fbw = maxrad;
+            else if (fbw < maxrad) maxrad = fbw;
+        
+            ibw = (int)fbw;
+        
+            *src  = sum += *src;
+            *dest = (sum-src[ibw]+(src[ibw]-src[ibw+1])*(fbw-ibw))/fbw;
+        }
+    }
+    
+    val = 1.0 / (m_texture + 1.0);
+
+    for (i = -w+1 ; i <= width-1+w-1 ; i++)
+    {
+        // Undo  predistortion
+        
+        blp[i]= mypow(blp[i],val);
+    
+        // Add in low frequency
+        
+        blp[i] += lp2[i]; 
+    
+        // if (blp[i] >= 0.0) blp[i] = pow(blp[i],val);
+        // else blp[i] = 0.0;
+    }
 }
 
 }  // NameSpace DigikamNoiseReductionImagesPlugin

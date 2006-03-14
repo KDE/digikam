@@ -27,6 +27,7 @@
 #include <qtooltip.h>
 #include <qcheckbox.h>
 #include <qstring.h>
+#include <qtabwidget.h>
 #include <qimage.h>
 #include <qlayout.h>
 
@@ -71,92 +72,177 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Michael Sweet", I18N_NOOP("Original Despeckle algorithm author"),
-                     "mike at easysw.com");
+    about->addAuthor("Peter Heckert", I18N_NOOP("Original Noise Reduction algorithm author"),
+                     "peter dot heckert at arcor dot de");
                      
     setAboutData(about);
+   
+    // -------------------------------------------------------------
+
+    QTabWidget *mainTab = new QTabWidget(m_imagePreviewWidget);
+    
+    QWidget* firstPage = new QWidget( mainTab );
+    QGridLayout* gridSettings = new QGridLayout( firstPage, 4, 1, marginHint());    
+    mainTab->addTab( firstPage, i18n("General") );
+    
+    QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
+    
+    m_radiusInput = new KDoubleNumInput(firstPage);
+    m_radiusInput->setPrecision(1);
+    m_radiusInput->setRange(0.0, 3.0, 0.1, true);
+    QWhatsThis::add( m_radiusInput, i18n("<p>Set here the <b>Radius of gaussian blur</b> in pixels used to "
+                     "filter noise. In any case it must be about the same size as noise granularity ore "
+                     "somewhat more. If it is set higher than necessary, then it can cause unwanted blur."));
+
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 1, marginHint(), spacingHint());    
+    QLabel *label2 = new QLabel(i18n("Luminance:"), firstPage);
     
-    QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
-    
-    m_radiusInput = new KIntNumInput(gboxSettings, "m_radiusInput");
-    m_radiusInput->setRange(1, 20, 1, true);
-    
-    QWhatsThis::add( m_radiusInput, i18n("<p>This slider sets the size of action window witch be moved over the image to remove artefacts. "
-                                         "The color in it is smoothed, so imperfections are removed. This setting is only avaialble when "
-                                         "<b>Adaptive</b> method is disabled.") );
-    
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 1);
-    gridSettings->addMultiCellWidget(m_radiusInput, 1, 1, 0, 1);
+    m_lumToleranceInput = new KDoubleNumInput(firstPage);
+    m_lumToleranceInput->setPrecision(1);
+    m_lumToleranceInput->setRange(0.1, 5.0, 0.1, true);
+    QWhatsThis::add( m_lumToleranceInput, i18n("<p>Set here the <b>Luminance Tolerance</b> adjustement."));
+
+    gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_lumToleranceInput, 1, 1, 1, 1);                         
     
     // -------------------------------------------------------------
 
-    Digikam::ImageIface iface(0, 0);
-    m_maxLevel = iface.originalSixteenBit() ? 65535 : 255;
+    QLabel *label3 = new QLabel(i18n("Threshold:"), firstPage);
+    
+    m_thresholdInput = new KDoubleNumInput(firstPage);
+    m_thresholdInput->setPrecision(1);
+    m_thresholdInput->setRange(0.0, 5.0, 0.1, true);
+    QWhatsThis::add( m_thresholdInput, i18n("<p>Set here the <b>Threshold</b> for 2nd derivative of "
+                                            "luminance adjustment."));
 
-    QLabel *label2 = new QLabel(i18n("Black level:"), gboxSettings);
-    
-    m_blackLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
-    m_blackLevelInput->setRange(0, m_maxLevel, 1, true);
-    
-    QWhatsThis::add( m_blackLevelInput, i18n("<p>This value controls the black luminosity "
-                     "levels used by the adaptive filter to "
-                     "adjust the filter radius.") );
-
-    gridSettings->addMultiCellWidget(label2, 2, 2, 0, 1);
-    gridSettings->addMultiCellWidget(m_blackLevelInput, 3, 3, 0, 1);                         
-    
-    // -------------------------------------------------------------
-
-    QLabel *label3 = new QLabel(i18n("White level:"), gboxSettings);
-    
-    m_whiteLevelInput = new KIntNumInput(gboxSettings, "m_blackLevelInput");
-    m_whiteLevelInput->setRange(0, m_maxLevel, 1, true);
-    
-    QWhatsThis::add( m_whiteLevelInput, i18n("<p>This value controls the white luminosity "
-                     "levels used by the adaptive filter to "
-                     "adjust the filter radius.") );
-
-    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 1);
-    gridSettings->addMultiCellWidget(m_whiteLevelInput, 5, 5, 0, 1);
+    gridSettings->addMultiCellWidget(label3, 2, 2, 0, 0);
+    gridSettings->addMultiCellWidget(m_thresholdInput, 2, 2, 1, 1);
                                               
     // -------------------------------------------------------------
+  
+    QLabel *label4 = new QLabel(i18n("Texture:"), firstPage);
     
-    m_useAdaptativeMethod = new QCheckBox( i18n("Adaptive"), gboxSettings);
-    QWhatsThis::add( m_useAdaptativeMethod, i18n("<p>This option use an adaptive median filter type to "
-                                                 "adapts radius value to image content using Histogram. "
-                                                 "If this option is checked, radius slider is not efficient. "
-                                                 "It renders a result smoother than with radius alone."));
+    m_textureInput = new KDoubleNumInput(firstPage);
+    m_textureInput->setPrecision(2);
+    m_textureInput->setRange(-0.99, 0.99, 0.01, true);
+    QWhatsThis::add( m_textureInput, i18n("<p>Set here the <b>Texture Accuracy</b> adjustment."));
+
+    gridSettings->addMultiCellWidget(label4, 3, 3, 0, 0);
+    gridSettings->addMultiCellWidget(m_textureInput, 3, 3, 1, 1);
+  
+    // -------------------------------------------------------------
+  
+    QLabel *label5 = new QLabel(i18n("Edge:"), firstPage);
     
-    m_useRecursiveMethod = new QCheckBox( i18n("Recursive"), gboxSettings);
-    QWhatsThis::add( m_useRecursiveMethod, i18n("<p>This option use a recursive median filter type. "
-                                                "Repeats filter action which gets stronger."));
+    m_sharpnessInput = new KDoubleNumInput(firstPage);
+    m_sharpnessInput->setPrecision(2);
+    m_sharpnessInput->setRange(0.0, 2.0, 0.01, true);
+    QWhatsThis::add( m_sharpnessInput, i18n("<p>Set here the <b>Edge Accuracy</b> adjustment of sharpness."));
+
+    gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_sharpnessInput, 4, 4, 1, 1);
+
+    // -------------------------------------------------------------
+
+    QWidget* secondPage = new QWidget( mainTab );
+    QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, marginHint());    
+    mainTab->addTab( secondPage, i18n("Advanced") );
+
+    QLabel *label6 = new QLabel(i18n("Color:"), secondPage);
     
-    gridSettings->addMultiCellWidget(m_useAdaptativeMethod, 6, 6, 0, 0);
-    gridSettings->addMultiCellWidget(m_useRecursiveMethod, 6, 6, 1, 1);    
-        
-    m_imagePreviewWidget->setUserAreaWidget(gboxSettings);
+    m_csmoothInput = new KDoubleNumInput(secondPage);
+    m_csmoothInput->setPrecision(1);
+    m_csmoothInput->setRange(1.0, 5.0, 0.1, true);
+    QWhatsThis::add( m_csmoothInput, i18n("<p>Set here the <b>Color Tolerance</b> adjustement."));
+
+    gridSettings2->addMultiCellWidget(label6, 0, 0, 0, 0);
+    gridSettings2->addMultiCellWidget(m_csmoothInput, 0, 0, 1, 1);
+    
+    // -------------------------------------------------------------
+
+    QLabel *label7 = new QLabel(i18n("Sharpness:"), secondPage);
+    
+    m_lookaheadInput = new KDoubleNumInput(secondPage);
+    m_lookaheadInput->setPrecision(1);
+    m_lookaheadInput->setRange(0.5, 10.0, 0.5, true);
+    QWhatsThis::add( m_lookaheadInput, i18n("<p>Set here the <b>Sharpness Level</b> adjustement."));
+    
+    gridSettings2->addMultiCellWidget(label7, 1, 1, 0, 0);
+    gridSettings2->addMultiCellWidget(m_lookaheadInput, 1, 1, 1, 1);
+
+    // -------------------------------------------------------------
+
+    QLabel *label8 = new QLabel(i18n("Gamma:"), secondPage);
+    
+    m_gammaInput = new KDoubleNumInput(secondPage);
+    m_gammaInput->setPrecision(1);
+    m_gammaInput->setRange(1.0, 5.0, 0.1, true);
+    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the <b>Gamma</b> adjustement."));
+    
+    gridSettings2->addMultiCellWidget(label8, 2, 2, 0, 0);
+    gridSettings2->addMultiCellWidget(m_gammaInput, 2, 2, 1, 1);
+
+    // -------------------------------------------------------------
+
+    QLabel *label9 = new QLabel(i18n("Damping:"), secondPage);
+    
+    m_dampingInput = new KDoubleNumInput(secondPage);
+    m_dampingInput->setPrecision(1);
+    m_dampingInput->setRange(0.5, 20.0, 0.5, true);
+    QWhatsThis::add( m_dampingInput, i18n("<p>Set here the <b>Phase Jitter Damping</b> adjustement."));
+    
+    gridSettings2->addMultiCellWidget(label9, 3, 3, 0, 0);
+    gridSettings2->addMultiCellWidget(m_dampingInput, 3, 3, 1, 1);
+
+    // -------------------------------------------------------------
+
+    QLabel *label10 = new QLabel(i18n("Erosion:"), secondPage);
+    
+    m_phaseInput = new KDoubleNumInput(secondPage);
+    m_phaseInput->setPrecision(1);
+    m_phaseInput->setRange(0.5, 20.0, 0.5, true);
+    QWhatsThis::add( m_phaseInput, i18n("<p>Set here the <b>Phase Shift for Edges</b> adjustement."));
+    
+    gridSettings2->addMultiCellWidget(label10, 4, 4, 0, 0);
+    gridSettings2->addMultiCellWidget(m_phaseInput, 4, 4, 1, 1);
+
+    m_imagePreviewWidget->setUserAreaWidget(mainTab);
     
     // -------------------------------------------------------------
     
-    connect(m_radiusInput, SIGNAL(valueChanged (int)),
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));            
-            
-    connect(m_blackLevelInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
 
-    connect(m_whiteLevelInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));                                                
-            
-    connect(m_useAdaptativeMethod, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));
-    
-    connect(m_useRecursiveMethod, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));             
+    connect(m_lumToleranceInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_thresholdInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+           
+    connect(m_textureInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_sharpnessInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));           
+
+    connect(m_csmoothInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_lookaheadInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_gammaInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+           
+    connect(m_dampingInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));            
+
+    connect(m_phaseInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));   
 }
 
 ImageEffect_NoiseReduction::~ImageEffect_NoiseReduction()
@@ -165,72 +251,119 @@ ImageEffect_NoiseReduction::~ImageEffect_NoiseReduction()
 
 void ImageEffect_NoiseReduction::renderingFinished()
 {
-    m_radiusInput->setEnabled(!m_useAdaptativeMethod->isChecked());
-    m_blackLevelInput->setEnabled(true);
-    m_whiteLevelInput->setEnabled(true);
-    m_useAdaptativeMethod->setEnabled(true);
-    m_useRecursiveMethod->setEnabled(true);
+    m_radiusInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+
+    m_csmoothInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_dampingInput->setEnabled(true);
+    m_phaseInput->setEnabled(true);
 }
 
 void ImageEffect_NoiseReduction::resetValues()
 {
-    m_radiusInput->blockSignals(true);
-    m_blackLevelInput->blockSignals(true);
-    m_whiteLevelInput->blockSignals(true);
-    m_useAdaptativeMethod->blockSignals(true);
-    m_useRecursiveMethod->blockSignals(true);
+    m_radiusInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+
+    m_csmoothInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_dampingInput->setEnabled(true);
+    m_phaseInput->setEnabled(true);
                     
-    m_radiusInput->setValue(3);
-    m_blackLevelInput->setValue(0);
-    m_whiteLevelInput->setValue(m_maxLevel);
-    m_useAdaptativeMethod->setChecked(true);
-    m_useRecursiveMethod->setChecked(false);
-    m_radiusInput->setEnabled(!m_useAdaptativeMethod->isChecked());
+    m_radiusInput->setValue(1.0);
+    m_lumToleranceInput->setValue(1.0);
+    m_thresholdInput->setValue(0.08);
+    m_textureInput->setValue(0.0);
+    m_sharpnessInput->setValue(0.25);
+
+    m_csmoothInput->setValue(1.0);
+    m_lookaheadInput->setValue(2.0);
+    m_gammaInput->setValue(1.0);
+    m_dampingInput->setValue(5.0);
+    m_phaseInput->setValue(1.0);
     
-    m_radiusInput->blockSignals(false);
-    m_blackLevelInput->blockSignals(false);
-    m_whiteLevelInput->blockSignals(false);
-    m_useAdaptativeMethod->blockSignals(false);
-    m_useRecursiveMethod->blockSignals(false);
+    m_radiusInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+
+    m_csmoothInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
 }
 
 void ImageEffect_NoiseReduction::prepareEffect()
 {
     m_radiusInput->setEnabled(false);
-    m_blackLevelInput->setEnabled(false);
-    m_whiteLevelInput->setEnabled(false);
-    m_useAdaptativeMethod->setEnabled(false);
-    m_useRecursiveMethod->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+
+    m_csmoothInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
     
-    int  r  = m_radiusInput->value();
-    int  bl = m_blackLevelInput->value();
-    int  wl = m_whiteLevelInput->value();
-    bool af = m_useAdaptativeMethod->isChecked();
-    bool rf = m_useRecursiveMethod->isChecked();
+    double r  = m_radiusInput->value();
+    double l  = m_lumToleranceInput->value();
+    double th = m_thresholdInput->value();
+    double tx = m_textureInput->value();
+    double s  = m_sharpnessInput->value();
+
+    double c  = m_csmoothInput->value();
+    double a  = m_lookaheadInput->value();
+    double g  = m_gammaInput->value();
+    double d  = m_dampingInput->value();
+    double p  = m_phaseInput->value();
     
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new NoiseReduction(&image,
-                       this, r, bl, wl, af, rf));
+                       this, r, l, th, tx, s, c, a, g, d, p));
 }
 
 void ImageEffect_NoiseReduction::prepareFinal()
 {
     m_radiusInput->setEnabled(false);
-    m_blackLevelInput->setEnabled(false);
-    m_whiteLevelInput->setEnabled(false);
-    m_useAdaptativeMethod->setEnabled(false);
-    m_useRecursiveMethod->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+
+    m_csmoothInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
     
-    int  r  = m_radiusInput->value();
-    int  bl = m_blackLevelInput->value();
-    int  wl = m_whiteLevelInput->value();
-    bool af = m_useAdaptativeMethod->isChecked();
-    bool rf = m_useRecursiveMethod->isChecked();
+    double r  = m_radiusInput->value();
+    double l  = m_lumToleranceInput->value();
+    double th = m_thresholdInput->value();
+    double tx = m_textureInput->value();
+    double s  = m_sharpnessInput->value();
+
+    double c  = m_csmoothInput->value();
+    double a  = m_lookaheadInput->value();
+    double g  = m_gammaInput->value();
+    double d  = m_dampingInput->value();
+    double p  = m_phaseInput->value();
 
     Digikam::ImageIface iface(0, 0);
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new NoiseReduction(iface.getOriginalImg(),
-                       this, r, bl, wl, af, rf));
+                       this, r, l, th, tx, s, c, a, g, d, p));
 }
 
 void ImageEffect_NoiseReduction::putPreviewData(void)
