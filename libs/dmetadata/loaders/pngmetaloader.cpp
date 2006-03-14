@@ -251,7 +251,7 @@ bool PNGMetaLoader::load(const QString& filePath)
     return true;
 }
 
-bool PNGMetaLoader::save(const QString& filePath)
+bool PNGMetaLoader::save(const QString& /*filePath*/)
 {
     return false;
 }
