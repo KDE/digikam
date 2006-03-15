@@ -449,6 +449,9 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings, 
                            const QString& givenMimeType)
 {
+    // cannot undo, redo or save while saving
+    emit signalUndoStateChanged(false, false, false);
+
     if (d->changedBCG)
     {
         d->cmod.reset();
@@ -499,6 +502,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
     }
 
     emit signalImageSaved(filePath, success);
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
