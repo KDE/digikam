@@ -8,6 +8,8 @@
  * 
  * Original Noise Filter algorithm copyright (C) 2005 
  * Peter Heckert <peter dot heckert at arcor dot de>
+ * from dcamnoise2 gimp plugin available at this url :
+ * http://home.arcor.de/peter.heckert/dcamnoise2-0.63.c
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,10 +32,6 @@
 #define IIR2A(dest,src)  (dest) = fabs(d2 = ((((src) * b + d2) * b3 + d1) * b2 + d3) * b1)
 #define IIR3A(dest,src)  (dest) = fabs(d1 = ((((src) * b + d1) * b3 + d3) * b2 + d2) * b1)
 
-//#define FR 0.3
-//#define FG 0.59
-//#define FB 0.11
-          
 #define FR 0.212671
 #define FG 0.715160
 #define FB 0.072169
@@ -75,7 +73,7 @@ NoiseReduction::NoiseReduction(Digikam::DImg *orgImage, QObject *parent,
     m_iir.q  = 0.0;
     m_iir.p  = 0;
 
-    m_clamp = m_orgImage.sixteenBit() ? 65535 : 255;
+    m_clampMax = m_orgImage.sixteenBit() ? 65535 : 255;
     
     initFilter();
 }
@@ -97,6 +95,7 @@ void NoiseReduction::filterImage(void)
     
     int w = (int)((m_radius + m_lookahead + m_damping + m_phase) * 4.0 + 40.0);
     
+    // NOTE: commented from original implementation
     // if (radius < m_lookahead) w = m_lookahead * 4.0 + 40.0;
     
     float csmooth = m_csmooth;
@@ -183,11 +182,6 @@ void NoiseReduction::filterImage(void)
         float t  = m_csmooth;
         float t2 = m_lsmooth;
         
-        // Easier adjustment for small values
-        // TODO (gilles) : check it.
-        //t*  = t;
-        //t2* = t2;
-                
         for (u = 0 ; !m_cancel && (u < width) ; u++)
         {
             float dpix[3], spix[3];
@@ -196,15 +190,15 @@ void NoiseReduction::filterImage(void)
 
             if (m_orgImage.sixteenBit())       // 16 bits image
             {
-                red   = (float) s16[2]/(float)m_clamp;
-                green = (float) s16[1]/(float)m_clamp;
-                blue  = (float) s16[0]/(float)m_clamp;
+                red   = (float) s16[2]/(float)m_clampMax;
+                green = (float) s16[1]/(float)m_clampMax;
+                blue  = (float) s16[0]/(float)m_clampMax;
             }
             else                                // 8 bits image
             {
-                red   = (float) s[2]/(float)m_clamp;
-                green = (float) s[1]/(float)m_clamp;
-                blue  = (float) s[0]/(float)m_clamp;
+                red   = (float) s[2]/(float)m_clampMax;
+                green = (float) s[1]/(float)m_clampMax;
+                blue  = (float) s[0]/(float)m_clampMax;
             }
             
             spix[2] = red;
@@ -215,15 +209,15 @@ void NoiseReduction::filterImage(void)
             
             if (m_orgImage.sixteenBit())       // 16 bits image
             {
-                red2   = (float) d16[2]/(float)m_clamp;
-                green2 = (float) d16[1]/(float)m_clamp;
-                blue2  = (float) d16[0]/(float)m_clamp;
+                red2   = (float) d16[2]/(float)m_clampMax;
+                green2 = (float) d16[1]/(float)m_clampMax;
+                blue2  = (float) d16[0]/(float)m_clampMax;
             }
             else                                // 8 bits image
             {
-                red2   = (float) d[2]/(float)m_clamp;
-                green2 = (float) d[1]/(float)m_clamp;
-                blue2  = (float) d[0]/(float)m_clamp;
+                red2   = (float) d[2]/(float)m_clampMax;
+                green2 = (float) d[1]/(float)m_clampMax;
+                blue2  = (float) d[0]/(float)m_clampMax;
             }
             
             lum2 = (FR*red2 + FG*green2 + FB*blue2);
@@ -244,7 +238,8 @@ void NoiseReduction::filterImage(void)
     
             if (t2 >= 0.0)
                 dl *= (1.0 - exp(-dl*dl/(2.0*t2*t2)));        
-            
+
+            // NOTE: commented from original implementation
             // if (dl > p) dl = p;
             // if (dl < -p) dl = -p;
             
@@ -267,7 +262,7 @@ void NoiseReduction::filterImage(void)
     
                 // Calculate noise probability for pixel
                 // TODO : probably it's not probability but an arbitrary curve.
-                // Probably we should provide a GUI-interface for this
+                // Probably we should provide a GUI-interface for this!!!
                 
                 if (t > 0.0)
                     prob = exp(-diff*diff/(2.0*t*t));
@@ -275,6 +270,7 @@ void NoiseReduction::filterImage(void)
                     prob = 0.0;
                 
                 // Allow viewing of raw filter output
+
                 if (t >= 0.99)
                     prob = 1.0; 
 
@@ -283,24 +279,24 @@ void NoiseReduction::filterImage(void)
     
             if (m_orgImage.sixteenBit())       // 16 bits image
             {
-                value = dpix[0]*(float)m_clamp+0.5;
-                d16[0]  = (unsigned short)CLAMP(value, 0, m_clamp);
-                value = dpix[1]*(float)m_clamp+0.5;
-                d16[1]  = (unsigned short)CLAMP(value, 0, m_clamp);
-                value = dpix[2]*(float)m_clamp+0.5;
-                d16[2]  = (unsigned short)CLAMP(value, 0, m_clamp);
+                value  = dpix[0]*(float)m_clampMax+0.5;
+                d16[0] = (unsigned short)CLAMP(value, 0, m_clampMax);
+                value  = dpix[1]*(float)m_clampMax+0.5;
+                d16[1] = (unsigned short)CLAMP(value, 0, m_clampMax);
+                value  = dpix[2]*(float)m_clampMax+0.5;
+                d16[2] = (unsigned short)CLAMP(value, 0, m_clampMax);
                 
                 d16 += 4;
                 s16 += 4;
             }
             else                                // 8 bits image
             {
-                value = dpix[0]*(float)m_clamp+0.5;
-                d[0]  = (uchar)CLAMP(value, 0, m_clamp);
-                value = dpix[1]*(float)m_clamp+0.5;
-                d[1]  = (uchar)CLAMP(value, 0, m_clamp);
-                value = dpix[2]*(float)m_clamp+0.5;
-                d[2]  = (uchar)CLAMP(value, 0, m_clamp);
+                value = dpix[0]*(float)m_clampMax+0.5;
+                d[0]  = (uchar)CLAMP(value, 0, m_clampMax);
+                value = dpix[1]*(float)m_clampMax+0.5;
+                d[1]  = (uchar)CLAMP(value, 0, m_clampMax);
+                value = dpix[2]*(float)m_clampMax+0.5;
+                d[2]  = (uchar)CLAMP(value, 0, m_clampMax);
                 
                 d += 4;
                 s += 4;
@@ -326,10 +322,10 @@ void NoiseReduction::filterImage(void)
 // This function is written as if it is blurring a column at a time,
 // even though it can operate on rows, too.  There is no difference
 // in the processing of the lines, at least to the blur_line function.
+// 'len' is the length of src and dest
 
 void NoiseReduction::blur_line(float* const data, float* const data2, float* const buffer,
-                               float* rbuf, float* tbuf, const uchar *src, uchar *dest,
-                               int len)    // length of src and dest
+                               float* rbuf, float* tbuf, const uchar *src, uchar *dest, int len)    
 {
     float scale;
     float sum;
@@ -350,16 +346,16 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
         if (m_orgImage.sixteenBit())       // 16 bits image
         {
-            data[idx] =  (float) dest16[row+2] / (float)m_clamp * 0.25; // Red color
-            data[idx] += (float) dest16[row+1] / (float)m_clamp * 0.5;  // Green color
-            data[idx] += (float) dest16[row]   / (float)m_clamp * 0.25; // Blue color
+            data[idx] =  (float) dest16[row+2] / (float)m_clampMax * 0.25; // Red color
+            data[idx] += (float) dest16[row+1] / (float)m_clampMax * 0.5;  // Green color
+            data[idx] += (float) dest16[row]   / (float)m_clampMax * 0.25; // Blue color
             data[idx] = mypow(data[idx], m_gamma);
         }
         else                                // 8 bits image
         {
-            data[idx] =  (float) dest[row+2] / (float)m_clamp * 0.25; // Red color
-            data[idx] += (float) dest[row+1] / (float)m_clamp * 0.5;  // Green color
-            data[idx] += (float) dest[row]   / (float)m_clamp * 0.25; // Blue color
+            data[idx] =  (float) dest[row+2] / (float)m_clampMax * 0.25; // Red color
+            data[idx] += (float) dest[row+1] / (float)m_clampMax * 0.5;  // Green color
+            data[idx] += (float) dest[row]   / (float)m_clampMax * 0.25; // Blue color
             data[idx] = mypow(data[idx], m_gamma);
         }
     }
@@ -373,21 +369,21 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
         for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
         {
             if (m_orgImage.sixteenBit())       // 16 bits image
-                data[idx] = (float)src16[row] / (float)m_clamp;
+                data[idx] = (float)src16[row] / (float)m_clampMax;
             else                                // 8 bits image
-                data[idx] = (float)src[row] / (float)m_clamp;
+                data[idx] = (float)src[row] / (float)m_clampMax;
         }
 
         filter(data, data2, buffer, rbuf, tbuf, len, b);
 
         for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
         {
-            int value = (int)(data[idx] * (float)m_clamp + 0.5);
+            int value = (int)(data[idx] * (float)m_clampMax + 0.5);
             
             if (m_orgImage.sixteenBit())       // 16 bits image
-                dest16[row] = (unsigned short)CLAMP( value, 0, m_clamp);
+                dest16[row] = (unsigned short)CLAMP( value, 0, m_clampMax);
             else                                // 8 bits image
-                dest[row] = (uchar)CLAMP( value, 0, m_clamp);
+                dest[row] = (uchar)CLAMP( value, 0, m_clampMax);
         }
     }
 }
@@ -451,8 +447,10 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
     float *dend = dstart + (end - start);
 
     radius = floor((radius + 0.1) / 0.5) * 0.5;
-    //  gfloat boxwidth = radius * 2.0;
-    //  gint bw = (gint) boxwidth;
+
+    // NOTE: commented from original implementation
+    // gfloat boxwidth = radius * 2.0;
+    // gint bw = (gint) boxwidth;
     
     int ofs = (int)radius;
     if (ofs < 1) ofs = 1;
@@ -471,6 +469,7 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
     }
     
     iir_init(radius);
+
     const double b1 = m_iir.b1;
     const double b2 = m_iir.b2 / m_iir.b1;
     const double b3 = m_iir.b3 / m_iir.b2;
@@ -623,7 +622,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     float  maxrad;
     float  fbw;
     float  val, val2, lval, rval;
-    double rfact = sq(m_effect);
+    double rfact = m_effect*m_effect;
     double sharp = m_sharp;
     
     ofs2  = (int)floor(m_damping * 2.0 + 0.1);
@@ -678,7 +677,9 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     
         for (i = -w+5; i < width-1+w-5 ; i++)
         {
+            // NOTE: commented from original implementation
             // val = rbuflp[i];
+
             val = rbuflp[i]-rfact;
     
             // Avoid division by zero, clip negative filter overshoot
@@ -686,7 +687,10 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
             if (val < rfact/fradius) val=rfact/fradius;
     
             val = rfact/val;
+
+            // NOTE: commented from original implementation
             // val = pow(val/fradius,m_phase)*fradius;
+
             if (val < 0.5) val = 0.5;
     
             rbuflp[i] = val*2.0;
@@ -741,7 +745,9 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
         
         for (rbuf = rbuflp-(int) m_phase ; rbuf <= rbufrp; src++, dest++, rbuf++)
         {
+            // NOTE: commented from original implementation
             //fbw = fabs( rbuf[-ofs2]*ll2+rbuf[-ofs2-1]*rl2);
+        
             fbw = *rbuf;
         
             if (fbw > (maxrad += 1.0)) fbw = maxrad;
@@ -767,7 +773,9 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         for ( rbuf = rbufrp +(int) m_phase ; rbuf >= rbuflp; src--, dest--, rbuf--)
         {
+            // NOTE: commented from original implementation
             //fbw = fabs( rbuf[ofs2]*ll2+rbuf[ofs2+1]*rl2);
+
             fbw = *rbuf;
         
             if (fbw > (maxrad +=1.0)) fbw = maxrad;
@@ -792,6 +800,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
         
         blp[i] += lp2[i]; 
     
+        // NOTE: commented from original implementation
         // if (blp[i] >= 0.0) blp[i] = pow(blp[i],val);
         // else blp[i] = 0.0;
     }
