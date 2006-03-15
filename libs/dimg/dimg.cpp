@@ -720,39 +720,34 @@ void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth)
 {
-    if (w <= 0 || h <= 0)
-        return;
-
-    if (   sx > (int)swidth
-        || sy > (int)sheight
-        || dx > (int)dwidth
-        || dy > (int)dheight )
-        return;
-
     // Normalize
 
     if (sx < 0)
     {
-        // sx is negative, so + is -
-        w = w + sx;
+        // sx is negative, so + is - and - is +
+        dx -= sx;
+        w  += sx;
         sx = 0;
     }
 
     if (sy < 0)
     {
-        h = h + sy;
+        dy -= sy;
+        h  += sy;
         sy = 0;
     }
 
     if (dx < 0)
     {
-        w = w + sx;
+        sx -= dx;
+        w  += dx;
         dx = 0;
     }
 
     if (dy < 0)
     {
-        h = h + dy;
+        sy -= dy;
+        h  += dy;
         dy = 0;
     }
 
@@ -775,6 +770,14 @@ void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
     {
         h = dheight - dy;
     }
+
+    // Nothing left to copy
+    if (w <= 0 || h <= 0)
+        return;
+
+    // Same pixels
+    if (src == dest && dx==sx && dy==sy)
+        return;
 
     const uchar *sptr;
     uchar *dptr;
