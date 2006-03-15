@@ -327,13 +327,9 @@ void NoiseReduction::filterImage(void)
 void NoiseReduction::blur_line(float* const data, float* const data2, float* const buffer,
                                float* rbuf, float* tbuf, const uchar *src, uchar *dest, int len)    
 {
-    float scale;
-    float sum;
-    int   b, i = 0;
-    int   j = 0;
-    int   row;
-    int   colors = 3;
-    int   idx;
+    int b;
+    int row;
+    int idx;
 
     unsigned short *src16  = (unsigned short *)src;
     unsigned short *dest16 = (unsigned short *)dest;
@@ -364,7 +360,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
         
     // Do actual filtering
     
-    for (b = 0 ; !m_cancel && (b < colors) ; b++)
+    for (b = 0 ; !m_cancel && (b < 3) ; b++)
     {
         for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
         {
@@ -599,29 +595,27 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
 // The radius variations are filtered. This reduces spatial phase jitter.
 
 void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbuf, 
-                            float *tbuf, int width, int color)
+                            float */*tbuf*/, int width, int color)
 {
-    float *lp       = data;
-    float *rp       = data + width-1;
-    float *lp2      = data2; 
-    float *rp2      = data2 +width-1;
-    float *blp      = buffer;
-    float *brp      = buffer + width-1;
-    float *rbuflp   = rbuf;
-    float *rbufrp   = rbuf + width-1;
-    float fboxwidth = m_radius*2.0;
-    float fradius   = m_radius;
+    float *lp        = data;
+    float *rp        = data + width-1;
+    float *lp2       = data2; 
+    float *blp       = buffer;
+    float *brp       = buffer + width-1;
+    float *rbuflp    = rbuf;
+    float *rbufrp    = rbuf + width-1;
+    float  fboxwidth = m_radius*2.0;
+    float  fradius   = m_radius;
     float *p1, *p2;
     
     if (fboxwidth < 1.0) fboxwidth = 1.0 ;
     if (fradius < 0.5) fradius = 0.5;
     
     int    i, pass;
-    double box, lbox, rbox, frac;
-    int    boxwidth, ofs, ofs2;
+    int    ofs, ofs2;
     float  maxrad;
     float  fbw;
-    float  val, val2, lval, rval;
+    float  val;
     double rfact = m_effect*m_effect;
     double sharp = m_sharp;
     
