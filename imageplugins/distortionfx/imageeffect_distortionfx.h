@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : imageeffect_distortionfx.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-11
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,9 +24,9 @@
 #ifndef IMAGEEFFECT_DISTORTIONFX_H
 #define IMAGEEFFECT_DISTORTIONFX_H
 
-// Local includes.
+// Digikam includes.
 
-#include "imageguidedialog.h"
+#include <digikamheaders.h>
 
 class QPushButton;
 class QComboBox;
@@ -35,13 +37,13 @@ class KIntNumInput;
 namespace DigikamDistortionFXImagesPlugin
 {
 
-class ImageEffect_DistortionFX : public DigikamImagePlugins::ImageGuideDialog
+class ImageEffect_DistortionFX : public Digikam::ImageGuideDlg
 {
     Q_OBJECT
     
 public:
 
-    ImageEffect_DistortionFX(QWidget *parent);
+    ImageEffect_DistortionFX(QWidget *parent, QString title, QFrame* banner);
     ~ImageEffect_DistortionFX();
 
 private:

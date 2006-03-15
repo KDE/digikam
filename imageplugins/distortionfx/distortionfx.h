@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : distortion.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-07-18
  * Description : Distortion FX threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Distortion algorithms copyrighted 2004-2005 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -36,114 +38,117 @@
 namespace DigikamDistortionFXImagesPlugin
 {
 
-class DistortionFX : public Digikam::ThreadedFilter
+class DistortionFX : public Digikam::DImgThreadedFilter
 {
 
 public:
-    
-    DistortionFX(QImage *orgImage, QObject *parent=0, int effectType=0, 
+
+    DistortionFX(Digikam::DImg *orgImage, QObject *parent=0, int effectType=0,
                  int level=0, int iteration=0, bool antialiasing=true);
-    
+
     ~DistortionFX(){};
 
 public:
-    
-    enum DistortionFXTypes 
+
+    enum DistortionFXTypes
     {
-    FishEye=0,
-    Twirl,
-    CilindricalHor,
-    CilindricalVert,
-    CilindricalHV,
-    Caricature,
-    MultipleCorners,
-    WavesHorizontal,
-    WavesVertical,
-    BlockWaves1,
-    BlockWaves2,
-    CircularWaves1,
-    CircularWaves2,
-    PolarCoordinates,
-    UnpolarCoordinates,
-    Tile,
-    Neon,
-    FindEdges
+        FishEye=0,
+        Twirl,
+        CilindricalHor,
+        CilindricalVert,
+        CilindricalHV,
+        Caricature,
+        MultipleCorners,
+        WavesHorizontal,
+        WavesVertical,
+        BlockWaves1,
+        BlockWaves2,
+        CircularWaves1,
+        CircularWaves2,
+        PolarCoordinates,
+        UnpolarCoordinates,
+        Tile,
+        Neon,
+        FindEdges
     };
-        
-private:  
+
+private:
 
     bool   m_antiAlias;
 
     int    m_level;
     int    m_iteration;
     int    m_effectType;
-    
-private:  
+
+private:
 
     virtual void filterImage(void);
-        
+
     // Backported from ImageProcessing version 2
-    void fisheye(uchar *data, int Width, int Height, double Coeff, bool AntiAlias=true);
-    void twirl(uchar *data, int Width, int Height, int Twirl, bool AntiAlias=true);
-    void cilindrical(uchar *data, int Width, int Height, double Coeff, 
+    void fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, bool AntiAlias=true);
+    void twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Twirl, bool AntiAlias=true);
+    void cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, 
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
-    void multipleCorners(uchar *data, int Width, int Height, int Factor, bool AntiAlias=true);
-    void polarCoordinates(uchar *data, int Width, int Height, bool Type, bool AntiAlias=true);
-    void circularWaves(uchar *data, int Width, int Height, int X, int Y, double Amplitude, 
+    void multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Factor, bool AntiAlias=true);
+    void polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool Type, bool AntiAlias=true);
+    void circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, double Amplitude, 
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
-    
+
     // Backported from ImageProcessing version 1
-    void waves(uchar *data, int Width, int Height, int Amplitude, int Frequency, 
+    void waves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Amplitude, int Frequency, 
                bool FillSides, bool Direction);
-    void blockWaves(uchar *data, int Width, int Height, int Amplitude, int Frequency, bool Mode);
-    void tile(uchar *data, int Width, int Height, int WSize, int HSize, int Random);
-    void neon(uchar *data, int Width, int Height, int Intensity, int BW);
-    void findEdges(uchar *data, int Width, int Height, int Intensity, int BW);
-               
+    void blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Amplitude, int Frequency, bool Mode);
+    void tile(Digikam::DImg *orgImage, Digikam::DImg *destImage, int WSize, int HSize, int Random);
+    void neon(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW);
+    void findEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Intensity, int BW);
+    void neonFindEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool neon, int Intensity, int BW);
+
+
+    void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
+                                         uchar *data, uchar *pResBits,
+                                         int w, int h, double nw, double nh, bool AntiAlias);
+    /*
+    //UNUSED
+
     inline double maximumRadius(int Height, int Width, double Angle);
-    
+
     // This function does the same thing that ShadeColors function but using double variables.
     inline double proportionalValue (double DestValue, double SrcValue, double Shade)
-       {
-       if (Shade == 0.0) return DestValue;
-       if (Shade == 255.0) return SrcValue;
-       return ((DestValue * (255.0 - Shade) + SrcValue * Shade) / 256.0);       
-       };
-    
+    {
+        if (Shade == 0.0) return DestValue;
+        if (Shade == 255.0) return SrcValue;
+        return ((DestValue * (255.0 - Shade) + SrcValue * Shade) / 256.0);
+    };
+    */
+
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max) 
-       {
-       --Max; 
-       while (Now > Max - Up) --Up; 
-       return (Up); 
-       };
-    
-    inline int GetStride (int Width)
-       { 
-       int LineWidth = Width * 4;
-       if (LineWidth % 4) return (4 - (LineWidth % 4)); 
-       return (0); 
-       };
+    {
+        --Max;
+        while (Now > Max - Up) --Up;
+        return (Up);
+    };
 
-    inline int setPosition (int Width, int X, int Y)
-       {
-       return (Y *Width*4 + 4*X); 
-       };
-    
     inline bool isInside (int Width, int Height, int X, int Y)
-       {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-       };
-       
-    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
-       {
-       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
-       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
-       return (Y*Width*4 + 4*X);
-       };
-};    
+    {
+        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+        return (bIsWOk && bIsHOk);
+    };
+
+    inline int getOffset(int Width, int X, int Y, int bytesDepth)
+    {
+        return (Y * Width * bytesDepth) + (X * bytesDepth);
+    };
+
+    inline int getOffsetAdjusted(int Width, int Height, int X, int Y, int bytesDepth)
+    {
+        X = (X < 0) ?  0  :  ((X >= Width ) ? (Width  - 1) : X);
+        Y = (Y < 0) ?  0  :  ((Y >= Height) ? (Height - 1) : Y);
+        return getOffset(Width, X, Y, bytesDepth);
+    };
+
+};
 
 }  // NameSpace DigikamDistortionFXImagesPlugin
 

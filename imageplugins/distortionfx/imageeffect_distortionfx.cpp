@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : imageeffect_distortionfx.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-11
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,9 +55,9 @@
 namespace DigikamDistortionFXImagesPlugin
 {
 
-ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
-                        : ImageGuideDialog(parent, i18n("Distortion Effects"), 
-                                           "distortionfx", false, true, false)                          
+ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent, QString title, QFrame* banner)
+                        : Digikam::ImageGuideDlg(parent, title, "distortionfx", 
+                                                 false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     QString whatsThis;
     
@@ -66,7 +68,8 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to apply distortion effect to an image."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Gilles Caulier", 
+                                       "(c) 2005, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
@@ -75,7 +78,10 @@ ImageEffect_DistortionFX::ImageEffect_DistortionFX(QWidget* parent)
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Distortion algorithms"), 
                      "pieter dot voloshyn at gmail dot com"); 
-    
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
         
     QWhatsThis::add( m_imagePreviewWidget, i18n("<p>This is the preview of the distortion effect "
@@ -303,13 +309,14 @@ void ImageEffect_DistortionFX::prepareEffect()
     int e = m_effectType->currentItem();
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    QImage image(iface->previewWidth(), iface->previewHeight(), 32);
-    uint *data = iface->getPreviewData();
-    memcpy( image.bits(), data, image.numBytes() );
-    
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new DistortionFX(&image, this, e, l, f));    
+
+    uchar *data = iface->getPreviewImage();
+    Digikam::DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
+                        iface->previewHasAlpha(), data);
     delete [] data;
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new DistortionFX(&image, this, e, l, f));
 }
 
 void ImageEffect_DistortionFX::prepareFinal()
@@ -326,33 +333,28 @@ void ImageEffect_DistortionFX::prepareFinal()
     int e = m_effectType->currentItem();
 
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
 
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(
-                       new DistortionFX(&orgImage, this, e, l, f));            
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new DistortionFX(iface.getOriginalImg(), this, e, l, f));
 }
 
 void ImageEffect_DistortionFX::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
-    
-    iface->putPreviewData((uint*)(imDest.smoothScale(iface->previewWidth(),
-                                                     iface->previewHeight())).bits());
-                 
-    m_imagePreviewWidget->updatePreview();  
+
+    Digikam::DImg imDest = m_threadedFilter->getTargetImage()
+            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    iface->putPreviewImage(imDest.bits());
+
+    m_imagePreviewWidget->updatePreview();
 }
 
 void ImageEffect_DistortionFX::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-  
-    iface.putOriginalData(i18n("Distortion Effects"), 
-         (uint*)m_threadedFilter->getTargetImage().bits());
+
+    iface.putOriginalImage(i18n("Distortion Effects"), 
+                           m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamDistortionFXImagesPlugin

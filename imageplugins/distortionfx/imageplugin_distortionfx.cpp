@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_distortionfx.h"
 #include "imageplugin_distortionfx.h"
 
@@ -59,8 +60,12 @@ void ImagePlugin_DistortionFX::setEnabledActions(bool enable)
 
 void ImagePlugin_DistortionFX::slotDistortionFX()
 {
-    DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(parentWidget());
+    QString title = i18n("Distortion Effects");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamDistortionFXImagesPlugin::ImageEffect_DistortionFX dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 

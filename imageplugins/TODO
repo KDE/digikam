@@ -29,12 +29,12 @@
    - Noise Reduction  : Done.
    - Hot Pixels       : Done.
    - Blur FX          : Done.
+   - Distortion FX    : Done.
 
    > Pending plugins (by difficulty order):
 
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
                                   Medium.
-   - Distortion FX    : TODO. ==> simple port algorithms to 16 bits. Can be long.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix. 
                                   Check why antialiasing filter don't give any effects. Medium.
    - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Fix plugin to support multiText edition
