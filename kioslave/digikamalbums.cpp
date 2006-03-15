@@ -206,7 +206,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         os << albumid;
         os << name;
         os << date;
-        os << stbuf.st_size;
+        os << static_cast<size_t>(stbuf.st_size);
         os << dims;
     }
 
