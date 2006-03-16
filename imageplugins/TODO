@@ -33,12 +33,11 @@
 
    > Pending plugins (by difficulty order):
 
+   - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Emboss           : TODO. ==> The algorithms must render embossed image in color, not in B&W (like krita).
                                   Medium.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix. 
                                   Check why antialiasing filter don't give any effects. Medium.
-   - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Fix plugin to support multiText edition
-                                  in a same session (see B.K.O). Can be long.
    - Superimpose      : TODO. ==> complete rewrite of plugin widget (See B.K.O file). Can be long.
 
 Nota: 
@@ -53,5 +52,5 @@ Nota:
    - Add Border       : Add capability to preserve original image aspect ratio.
    - Hot Pixels       : Add manual hot pixel selection. Need to implement pixel selection on
                         imageregionwidget from digikam core. Can be long
-
+   - Insert Text      : Fix plugin to support multiText edition in a same session (see B.K.O). 
 
