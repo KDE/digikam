@@ -181,7 +181,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
 
     QWidget* secondPage = new QWidget( mainTab );
     QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, marginHint());    
-    mainTab->addTab( secondPage, i18n("Lightness") );
+    mainTab->addTab( secondPage, i18n("Advanced") );
     
     QLabel *label2 = new QLabel(i18n("Luminance:"), secondPage);
     
