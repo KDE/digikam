@@ -52,17 +52,17 @@ NoiseReduction::NoiseReduction(Digikam::DImg *orgImage, QObject *parent,
                 double csmooth, double lookahead, double gamma, double damping, double phase)
               : Digikam::DImgThreadedFilter(orgImage, parent, "NoiseReduction")
 { 
-    m_radius    = radius;    /* default radius                   default = 1.0 */
+    m_radius    = radius;    /* default radius                   default = 1.0  */
     m_sharp     = sharp;     /* Sharpness factor                 default = 0.25 */
-    m_lsmooth   = lsmooth;   /* Luminance Tolerance              default = 1.0 */
+    m_lsmooth   = lsmooth;   /* Luminance Tolerance              default = 1.0  */
     m_effect    = effect;    /* Adaptive filter-effect threshold default = 0.08 */
-    m_texture   = texture;   /* Texture Detail                   default = 0.0 */
+    m_texture   = texture;   /* Texture Detail                   default = 0.0  */
 
     m_csmooth   = csmooth;   /* RGB Tolerance                    default = 1.0  */
-    m_lookahead = lookahead; /* Lookahead                        default = 2.0 */
-    m_gamma     = gamma;     /* Filter gamma                     default = 1.0 */
-    m_damping   = damping;   /* Phase jitter Damping             default = 5.0 */
-    m_phase     = phase;     /* Area Noise Clip                  default = 1.0 */
+    m_lookahead = lookahead; /* Lookahead                        default = 2.0  */
+    m_gamma     = gamma;     /* Filter gamma                     default = 1.0  */
+    m_damping   = damping;   /* Phase jitter Damping             default = 5.0  */
+    m_phase     = phase;     /* Area Noise Clip                  default = 1.0  */
 
     m_iir.B  = 0.0;
     m_iir.b1 = 0.0;
@@ -397,7 +397,7 @@ void NoiseReduction::iir_init(double r)
     if ( r >= 2.5)
         q = 0.98711 * r - 0.96330;
     else
-        q = 3.97156 - 4.14554 * sqrt(1.0-0.26891 * r);
+        q = 3.97156 - 4.14554 * sqrt(1.0 - 0.26891 * r);
     
     m_iir.q  = q;
     m_iir.b0 = 1.57825 + ((0.422205 * q  + 1.4281) * q + 2.44413) *  q;
@@ -418,13 +418,13 @@ void NoiseReduction::box_filter(double *src, double *end, double *dest, double r
     
     while(boxwidth+2 <= (int) fbw) boxwidth+=2, box += (src[boxwidth/2]) + (src[-boxwidth/2]);
     
-    double frac = (fbw - (double) boxwidth)/2.0;
-    int    bh   = boxwidth/2;
-    int    bh1  = boxwidth/2+1;
+    double frac = (fbw - (double) boxwidth) / 2.0;
+    int    bh   = boxwidth / 2;
+    int    bh1  = boxwidth / 2+1;
      
     for ( ; src <= end ; src++, dest++)
     {
-        *dest = (box + frac * ((src[bh1])+(src[-bh1])))/fbw;
+        *dest = (box + frac * ((src[bh1])+(src[-bh1]))) / fbw;
         box   = box - (src[-bh]) + (src[bh1]);
     }
 }
@@ -473,7 +473,7 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
     
     switch(type)
     {
-        case 0: // Gauss
+        case Gaussian:
         
             d1 = d2 = d3 = *dest; 
             dend -= 6;
@@ -529,7 +529,7 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
         
         break;
             
-        case 2: // rectified and filtered second derivative, source and dest may be equal 
+        case SecondDerivative: // rectified and filtered second derivative, source and dest may be equal 
             
             d1 = d2 = d3 = 0.0;
             dest[0] = dest[ofs] = 0.0;
@@ -640,7 +640,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
             *p2 = (sharp+1.0) * p1[0] - sharp * 0.5 * (p1[-ofs]+p1[ofs]);
         }
     
-        iir_filter(rbuflp-w, rbufrp+w, blp-w, m_lookahead, 2);
+        iir_filter(rbuflp-w, rbufrp+w, blp-w, m_lookahead, SecondDerivative);
     
         // Mirror image edges
 
@@ -667,7 +667,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     
         // Lowpass (gauss) filter rbuf, remove phase jitter
         
-        iir_filter(rbuflp-w+5, rbufrp+w-5, rbuflp-w+5, m_damping, 0);
+        iir_filter(rbuflp-w+5, rbufrp+w-5, rbuflp-w+5, m_damping, Gaussian);
     
         for (i = -w+5; i < width-1+w-5 ; i++)
         {
@@ -703,7 +703,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     
     // Calc lowpass filtered input signal
     
-    iir_filter(blp-w+1, brp+w-1, lp2-w+1, m_radius, 0);
+    iir_filter(blp-w+1, brp+w-1, lp2-w+1, m_radius, Gaussian);
     
     // Subtract low frequency from input signal (aka original image data)
     // and predistort this signal

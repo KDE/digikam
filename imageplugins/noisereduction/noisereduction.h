@@ -213,6 +213,12 @@ private:
         double *p;
     } m_iir;
 
+    enum IIRFilteringMode
+    {
+        Gaussian=0,
+        SecondDerivative
+    };
+    
     int    m_clampMax;
     
     double m_radius;
