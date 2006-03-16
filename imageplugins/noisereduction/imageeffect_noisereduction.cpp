@@ -95,9 +95,14 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_radiusInput = new KDoubleNumInput(firstPage);
     m_radiusInput->setPrecision(1);
     m_radiusInput->setRange(0.0, 3.0, 0.1, true);
-    QWhatsThis::add( m_radiusInput, i18n("<p>Set here the <b>Radius of gaussian blur</b> in pixels used to "
-                     "filter noise. In any case it must be about the same size as noise granularity ore "
-                     "somewhat more. If it is set higher than necessary, then it can cause unwanted blur."));
+    QWhatsThis::add( m_radiusInput, i18n("<p><b>Radius</b>: this control selects the "
+                                         "gliding window size used for the filter. Larger values increase "
+                                         "the amount of time needed to filter each pixel in the image and "
+                                         "can cause blurring. This window moves across the image, and the "
+                                         "color in it is smoothed to remove imperfections. "
+                                         "In any case it must be about the same size as noise granularity "
+                                         "or somewhat more. If it is set higher than necessary, then it "
+                                         "can cause unwanted blur."));
 
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridSettings->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
@@ -109,15 +114,15 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_textureInput = new KDoubleNumInput(firstPage);
     m_textureInput->setPrecision(2);
     m_textureInput->setRange(-0.99, 0.99, 0.01, true);
-    QWhatsThis::add( m_textureInput, i18n("<p>Set here the <b>Texture Accuracy</b> adjustment. "
-                "This value can be used, to get more or less texture accuracy.When decreased, "
+    QWhatsThis::add( m_textureInput, i18n("<p><b>Texture</b>: this control set the texture accuracy. "
+                "This value can be used, to get more or less texture accuracy. When decreased, "
                 "then noise and texture are blurred out, when increased then texture is "
                 "amplified, but also noise will increase. It has almost no effect to image edges, "
-                "opposed to filter <b>Threshold</b>, which would blur edges, when increased. "
-                "If <b>Threshold</b> is adjusted in away so that edges are sharp, and there "
+                "opposed to filter <b>Edge</b>, which would blur edges, when increased. "
+                "If <b>Edge</b> is adjusted in away so that edges are sharp, and there "
                 "is still too much area noise, then texture detail could be used to reduce noise "
-                "without blurring edges. Another way would be to decrease radius and to increase "
-                "threshold)"));
+                "without blurring edges. Another way would be to decrease <b>Radius</b> and to increase "
+                "<b>Edge</b>."));
 
     gridSettings->addMultiCellWidget(label4, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_textureInput, 1, 1, 1, 1);
@@ -129,10 +134,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_lookaheadInput = new KDoubleNumInput(firstPage);
     m_lookaheadInput->setPrecision(1);
     m_lookaheadInput->setRange(0.5, 10.0, 0.5, true);
-    QWhatsThis::add( m_lookaheadInput, i18n("<p>Set here the <b>Sharpness Level</b> adjustement. "
+    QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Sharpness</b>: this control set the sharpness level. "
                 "This value defines the pixel distance in which the filter looks ahead for luminance "
                 "variations. When this value is increased, then spikenoise is erased. "
-                "You can eventually readjust filter <b>Threshold</b>, when you changed this setting. "
+                "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
                 "When this value is to high, then the adaptive filter cannot longer accurately track "
                 "image details, and noise can reappear or blur can occur."));
     
@@ -146,7 +151,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_sharpnessInput = new KDoubleNumInput(firstPage);
     m_sharpnessInput->setPrecision(2);
     m_sharpnessInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( m_sharpnessInput, i18n("<p>Set here the <b>Edge Accuracy</b> adjustment of sharpness. "
+    QWhatsThis::add( m_sharpnessInput, i18n("<p><b>Edge</b>: this control set the edge accuracy for sharpness. "
                 "This value improves the frequency response for the filter. "
                 "When it is too strong then not all noise can be removed, or spike noise may appear. "
                 "Set it near to maximum, if you want to remove weak noise or JPEG-artifacts, "
@@ -163,7 +168,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_phaseInput = new KDoubleNumInput(firstPage);
     m_phaseInput->setPrecision(1);
     m_phaseInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_phaseInput, i18n("<p>Set here the <b>Phase Shift for Edges</b> adjustement. "
+    QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: this control set the phase shift for edges. "
                 "This value can be used to erodes singular spikes and it has a smooth effect to edges, "
                 "and sharpens edges by erosion, so noise at edges is eroded. The effect is dependant "
                 "from <b>Sharpness</b>, <b>Damping</b>, and <b>Edges</b>. Set it to minimum, "
@@ -188,10 +193,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_lumToleranceInput = new KDoubleNumInput(secondPage);
     m_lumToleranceInput->setPrecision(1);
     m_lumToleranceInput->setRange(0.1, 5.0, 0.1, true);
-    QWhatsThis::add( m_lumToleranceInput, i18n("<p>Set here the <b>Luminance Tolerance</b> adjustement "
+    QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control set the luminance tolerance "
                 "of image. It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance "
                 "settings to make an image correction, not the both at the same time. This settings "
-                "don't influence the main smoothing process."));
+                "don't influence the main smoothing process controled by <b>Details</b> settings."));
 
     gridSettings2->addMultiCellWidget(label2, 0, 0, 0, 0);
     gridSettings2->addMultiCellWidget(m_lumToleranceInput, 0, 0, 1, 1);                         
@@ -203,7 +208,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_thresholdInput = new KDoubleNumInput(secondPage);
     m_thresholdInput->setPrecision(1);
     m_thresholdInput->setRange(0.0, 5.0, 0.1, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p>Set here the <b>Threshold</b> for 2nd derivative of "
+    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: this control set the 2nd derivative of "
                      "luminance adjustment. This value should be set so that edges are clearly visible "
                      "and noise is smoothed out. This value is not bound to any intensity value, it is "
                      "bound to the second derivative of intensity values. Simply adjust it and watch the " 
@@ -221,10 +226,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_csmoothInput = new KDoubleNumInput(secondPage);
     m_csmoothInput->setPrecision(1);
     m_csmoothInput->setRange(1.0, 5.0, 0.1, true);
-    QWhatsThis::add( m_csmoothInput, i18n("<p>Set here the <b>Color Tolerance</b> adjustement of image. "
+    QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control set the color tolerance of image. "
                 "It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance settings to "
                 "make an image correction, not the both at the same time. This settings don't influence "
-                "the main smoothing process."));
+                "the main smoothing process controled by <b>Details</b> settings."));
 
     gridSettings2->addMultiCellWidget(label6, 2, 2, 0, 0);
     gridSettings2->addMultiCellWidget(m_csmoothInput, 2, 2, 1, 1);
@@ -236,7 +241,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_gammaInput = new KDoubleNumInput(secondPage);
     m_gammaInput->setPrecision(1);
     m_gammaInput->setRange(1.0, 5.0, 0.1, true);
-    QWhatsThis::add( m_gammaInput, i18n("<p>Set here the <b>Gamma</b> adjustement. This value "
+    QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control set the gamma tolerance of image. This value "
                 "can be used to increase the tolerance values for darker areas (which commonly "
                 "are more noisy). This results in more blur for shadow areas."));
     
@@ -250,10 +255,11 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_dampingInput = new KDoubleNumInput(secondPage);
     m_dampingInput->setPrecision(1);
     m_dampingInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_dampingInput, i18n("<p>Set here the <b>Phase Jitter Damping</b> adjustement. "
+    QWhatsThis::add( m_dampingInput, i18n("<p><b>Damping</b>: this control set the phase jitter damping adjustement. "
                 "This value defines how fast the adaptive filter-radius reacts to luminance variations. "
                 "If increased, then edges appear smoother, if too high, then blur may occur. If at "
-                "minimum then noise and phase jitter at edges can occur. It can supress spike noise when " "increased and this is the preferred method to remove it."));
+                "minimum then noise and phase jitter at edges can occur. It can supress spike noise when " 
+                "increased and this is the preferred method to remove it."));
     
     gridSettings2->addMultiCellWidget(label9, 4, 4, 0, 0);
     gridSettings2->addMultiCellWidget(m_dampingInput, 4, 4, 1, 1);
