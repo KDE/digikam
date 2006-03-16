@@ -305,7 +305,7 @@ void NoiseReduction::filterImage(void)
 
         memcpy(destPR + row*width*bytes, dest, width*bytes);
         
-        progress = (int)(60.0 + ((double)row * 40.0) / height);
+        progress = (int)(40.0 + ((double)row * 60.0) / height);
         if ( progress%2 == 0 )
            postProgress( progress );   
     }
