@@ -5,7 +5,7 @@
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
