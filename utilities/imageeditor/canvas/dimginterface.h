@@ -135,6 +135,8 @@ public:
 
     QByteArray getEmbeddedICC();
 
+    QString getImageFileName();
+
 protected slots:
 
     void   slotImageLoaded(const QString&, const DImg& img);

@@ -48,6 +48,7 @@
 
 // Local includes.
 
+#include "dimginterface.h"
 #include "imagedlgbase.h"
 
 namespace Digikam
@@ -79,15 +80,16 @@ public:
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
-                                 bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
-            : KDialogBase(Plain, title, Help|Default|User2|User3|Try|Ok|Cancel, Ok,
+                           bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
+            : KDialogBase(Plain, 0, Help|Default|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
                           QString::null,
                           i18n("&Save As..."),
                           i18n("&Load..."))
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-
+    setCaption(DImgInterface::instance()->getImageFileName() + QString(" - ") + title);
+    
     d = new ImageDlgBasePriv;
     d->parent    = parent;
     d->name      = name;

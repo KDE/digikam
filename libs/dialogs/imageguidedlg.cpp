@@ -52,6 +52,7 @@
 // Local includes.
 
 #include "dimgthreadedfilter.h"
+#include "dimginterface.h"
 #include "imageguidedlg.h"
 
 namespace Digikam
@@ -106,7 +107,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                                    bool loadFileSettings, bool progress,
                                    bool guideVisible, int guideMode, QFrame* bannerFrame,
                                    bool prevModeOptions)
-             : KDialogBase(Plain, title,
+             : KDialogBase(Plain, 0,
                            Help|Default|User1|User2|User3|Ok|Cancel, Ok,
                            parent, 0, true, true,
                            i18n("&Abort"),
@@ -114,6 +115,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
                            i18n("&Load..."))
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
+    setCaption(DImgInterface::instance()->getImageFileName() + QString(" - ") + title);
     
     d = new ImageGuideDlgPriv;
     d->parent        = parent;

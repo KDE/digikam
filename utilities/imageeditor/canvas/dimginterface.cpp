@@ -974,6 +974,11 @@ QByteArray DImgInterface::getEmbeddedICC()
     return d->image.getICCProfil();
 }
 
+QString DImgInterface::getImageFileName()
+{
+    return d->filename.section( '/', -1 );
+}
+
 // -----------------------------------------------------------------------------------
 // FIXME Remove methods below when all image plugins will be ported to DImg
 

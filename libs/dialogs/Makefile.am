@@ -12,6 +12,7 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/libs/dimg/filters \
 	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/libs/widgets/imageplugins \
+	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	       $(all_includes)
 
 digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h iccprofileinfodlg.h 

@@ -47,6 +47,7 @@
 // Local includes.
 
 #include "dimgthreadedfilter.h"
+#include "dimginterface.h"
 #include "ctrlpaneldlg.h"
 
 namespace Digikam
@@ -90,7 +91,7 @@ public:
 CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                            bool loadFileSettings, bool tryAction, bool progressBar,
                            int separateViewMode, QFrame* bannerFrame)
-            : KDialogBase(Plain, title,
+            : KDialogBase(Plain, 0,
                           Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
                           i18n("&Abort"),
@@ -98,6 +99,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
                           i18n("&Load..."))
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
+    setCaption(DImgInterface::instance()->getImageFileName() + QString(" - ") + title);
     
     d = new CtrlPanelDlgPriv;
     d->parent               = parent;
