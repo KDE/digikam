@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=ImagePlugin_Despeckle
+Name=ImagePlugin_NoiseReduction
 Name[bg]=Приставка за снимки - Почистване на шум
 Name[da]=Billedplugin_Pletfjerning
 Name[el]=ΠρόσθετοΕικόνας_ΑφαίρεσηΚουκίδων
@@ -11,7 +11,7 @@ Name[sr@Latn]=Otklanjanje fleka
 Name[sv]=Insticksprogram för ytutjämning
 Name[ta]=பிம்பசொருகுப்பொருள்_ 
 Name[tr]=ResimEklentisi_NoktacıkGider
-Name[xx]=xxImagePlugin_Despecklexx
+Name[xx]=xxImagePlugin_NoiseReductionxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8

@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_despeckle,
                             KGenericFactory<ImagePlugin_NoiseReduction>("digikamimageplugin_despeckle"));
 
 ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const char*, const QStringList &)
-                     : Digikam::ImagePlugin(parent, "ImagePlugin_NoiseReduction")
+                          : Digikam::ImagePlugin(parent, "ImagePlugin_NoiseReduction")
 {
     m_noiseReductionAction = new KAction(i18n("Noise Reduction..."), "despeckle", 0,
                              this, SLOT(slotNoiseReduction()),
