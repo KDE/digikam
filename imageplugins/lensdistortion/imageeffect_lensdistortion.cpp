@@ -67,7 +67,7 @@ namespace DigikamLensDistortionImagesPlugin
 
 ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString title, QFrame* banner)
                           : Digikam::ImageGuideDlg(parent, title, "lensdistortion",
-                             false, true, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
+                            false, true, true, Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     QString whatsThis;
 
