@@ -113,6 +113,14 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     
     // -------------------------------------------------------------
     
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>You can see here the image's white-balance "
+                                                    "adjustments preview. You can pick color on image to "
+                                                    "see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
+
+    // -------------------------------------------------------------
+    
     QWidget *gboxSettings = new QWidget(plainPage());
     QVBoxLayout* layout2 = new QVBoxLayout( gboxSettings, marginHint(), spacingHint() );
 
@@ -298,14 +306,6 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
             
     // -------------------------------------------------------------
     
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
-                                               i18n("<p>You can see here the image's white-balance "
-                                                    "adjustments preview. You can pick color on image to "
-                                                    "see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
-
-    // -------------------------------------------------------------
-    
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotDefault()));
 
@@ -414,7 +414,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     
     stop = ((uint)(width / scale)*(uint)(height / scale)) / 200;
     
-    for (i = 1, sum = 0; (i < m_rgbMax) && (sum < stop); i++)
+    for (i = 1, sum = 0; (i < (int)m_rgbMax) && (sum < stop); i++)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
     
     black = (double)i / m_rgbMax;
@@ -751,7 +751,7 @@ void ImageEffect_WhiteBalance::setLUTv(void)
     
     m_curve[0] = 0;
     
-    for (int i = 1; i < m_rgbMax; i++)
+    for (int i = 1; i < (int)m_rgbMax; i++)
     {
         float x = (float)(i - m_BP)/(m_WP - m_BP);
         m_curve[i]  = (i < m_BP) ? 0 : (m_rgbMax-1) * pow(x, g);
@@ -769,7 +769,7 @@ void ImageEffect_WhiteBalance::whiteBalance(uchar *data, int width, int height, 
         uchar red, green, blue;
         uchar *ptr = data;
         
-        for (j = 0 ; j < width*height ; j++)
+        for (j = 0 ; j < (uint)(width*height) ; j++)
         {
             int v, rv[3];
 
@@ -797,7 +797,7 @@ void ImageEffect_WhiteBalance::whiteBalance(uchar *data, int width, int height, 
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
         
-        for (j = 0 ; j < width*height ; j++)
+        for (j = 0 ; j < (uint)(width*height) ; j++)
         {
             int v, rv[3];
 
@@ -834,7 +834,8 @@ unsigned short ImageEffect_WhiteBalance::pixelColor(int colorMult, int index, in
            r = 0;
     }
     
-    return( (unsigned short)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 0, m_rgbMax-1) );
+    return( (unsigned short)CLAMP((int)((index - m_saturation*(index - r)) * m_curve[index]), 
+                                  0, (int)(m_rgbMax-1)) );
 }               
 
 // Reset all settings.

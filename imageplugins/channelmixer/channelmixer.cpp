@@ -97,6 +97,14 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     
     // -------------------------------------------------------------
 
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>You can see here the image's color channels' "
+                                                    "gains adjustments preview. You can pick color on image "
+                                                    "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
+
+    // -------------------------------------------------------------
+
     QWidget *gboxSettings = new QWidget(plainPage());
     QGridLayout* grid = new QGridLayout( gboxSettings, 10, 4, marginHint(), spacingHint());
 
@@ -208,14 +216,6 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     
     setUserAreaWidget(gboxSettings);
     
-    // -------------------------------------------------------------
-
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
-                                               i18n("<p>You can see here the image's color channels' "
-                                                    "gains adjustments preview. You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
-
     // -------------------------------------------------------------
 
     // Reset all parameters to the default values.

@@ -105,6 +105,14 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     
     // -------------------------------------------------------------
 
+    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+                                               i18n("<p>Here you can see the image's "
+                                                    "level-adjustments preview. You can pick color on image "
+                                                    "to see the color level corresponding on histogram."));
+    setPreviewAreaWidget(m_previewWidget); 
+
+    // -------------------------------------------------------------
+
     QWidget *gboxSettings = new QWidget(plainPage());
     QGridLayout* grid = new QGridLayout( gboxSettings, 10, 5, marginHint(), spacingHint());
 
@@ -309,14 +317,6 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     grid->setRowStretch(10, 10);
     
     setUserAreaWidget(gboxSettings);    
-    
-    // -------------------------------------------------------------
-
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
-                                               i18n("<p>Here you can see the image's "
-                                                    "level-adjustments preview. You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
-    setPreviewAreaWidget(m_previewWidget); 
     
     // -------------------------------------------------------------
     
