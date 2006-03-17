@@ -3,7 +3,7 @@
  * Date  : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,36 +56,34 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
-                     : KDialogBase(Plain, i18n("Aspect Ratio Crop & Composition Guide"),
-                                   Help|User1|User2|Ok|Cancel, Ok,
-                                   parent, 0, true, true,
-                                   i18n("&Reset Values"), i18n("&Max. Aspect")),
+                     : Digikam::ImageDlgBase(parent, i18n("Aspect Ratio Crop & Composition Guide"),
+                                             "aspectratiocrop", false),
                        m_parent(parent)
 {
     setHelp("ratiocroptool.anchor", "digikam");
-    setButtonWhatsThis ( User1, i18n("<p>Reset selection area to the default values.") );
-    setButtonWhatsThis ( User2, i18n("<p>Set selection area to the maximum size according "
+    setButtonWhatsThis ( User1, i18n("<p>Set selection area to the maximum size according "
                                      "to the current ratio.") );
+    setButtonText(User1, i18n("&Max. Aspect"));
+    showButton(User1, true);
 
     // -------------------------------------------------------------
-
-    QGridLayout *mainLayout = new QGridLayout( plainPage(), 2, 2 , marginHint(), spacingHint());
 
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
     m_imageSelectionWidget = new Digikam::ImageSelectionWidget(480, 320, frame);
+    l->addWidget(m_imageSelectionWidget);
     QWhatsThis::add( m_imageSelectionWidget, i18n("<p>Here you can see the aspect ratio selection preview "
                                                   "used for cropping. You can use the mouse for moving and "
                                                   "resizing the crop area."));
-    l->addWidget(m_imageSelectionWidget, 0);
-    mainLayout->addMultiCellWidget(frame, 0, 1, 0, 0);
-    mainLayout->setColStretch(0, 10);
-    mainLayout->setRowStretch(1, 10);
+    setPreviewAreaWidget(frame);  
 
     // -------------------------------------------------------------
 
-    QFrame *cropSelection = new QFrame( plainPage() );
+    QWidget *gbox2 = new QWidget(plainPage());
+    QGridLayout *gridBox2 = new QGridLayout( gbox2, 2, 0);
+
+    QFrame *cropSelection = new QFrame( gbox2 );
     cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QGridLayout* grid = new QGridLayout( cropSelection, 6, 4, marginHint(), spacingHint());
 
@@ -172,14 +170,13 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid->addMultiCellWidget(m_heightInput, 6, 6, 0, 3);
     grid->addMultiCellWidget(m_centerHeight, 6, 6, 4, 4);
 
-    mainLayout->addMultiCellWidget(cropSelection, 0, 0, 1, 1);
+    gridBox2->addMultiCellWidget(cropSelection, 0, 0, 0, 0);
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
-    QFrame* compositionGuide = new QFrame( plainPage() );
-    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QFrame* compositionGuide = new QFrame( gbox2 );
     QGridLayout* grid2 = new QGridLayout( compositionGuide, 7, 2, marginHint(), spacingHint());
+    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
     m_guideLinesCB = new QComboBox( false, compositionGuide );
@@ -227,9 +224,10 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     grid2->addMultiCellWidget(m_guideColorBt, 7, 7, 1, 1);
     grid2->addMultiCellWidget(m_guideSize, 7, 7, 2, 2);
 
-    vLayout->addWidget(compositionGuide);
-    vLayout->addStretch(10);
-    mainLayout->addMultiCellLayout(vLayout, 1, 1, 1, 1);
+    gridBox2->addMultiCellWidget(compositionGuide, 1, 1, 0, 0);
+    gridBox2->setRowStretch(2, 10);    
+
+    setUserAreaWidget(gbox2);
 
     // -------------------------------------------------------------
 
@@ -304,14 +302,12 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    resize(configDialogSize("Aspect Ratio Crop Tool Dialog"));
     readSettings();
 }
 
 ImageEffect_RatioCrop::~ImageEffect_RatioCrop()
 {
     writeSettings();
-    saveDialogSize("Aspect Ratio Crop Tool Dialog");
 }
 
 void ImageEffect_RatioCrop::readSettings(void)
@@ -339,7 +335,7 @@ void ImageEffect_RatioCrop::readSettings(void)
     m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
 
     if (w > h)
-        {
+    {
         m_xInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Ypos", 50) );
 
@@ -354,20 +350,20 @@ void ImageEffect_RatioCrop::readSettings(void)
                                                          Digikam::ImageSelectionWidget::Landscape) );
 
         if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
-            {
+        {
             m_widthInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Width", 800) );
             m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
-            }
+        }
         else
-            {
+        {
             m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
             m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
-            }
+        }
 
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
-        }
+    }
     else
-        {
+    {
         m_xInput->setValue( config->readNumEntry("Ver.Oriented  Custom Aspect Ratio Xpos", 50) );
         m_yInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Ypos", 50) );
 
@@ -382,18 +378,18 @@ void ImageEffect_RatioCrop::readSettings(void)
                                                          Digikam::ImageSelectionWidget::Portrait) );
 
         if ( m_ratioCB->currentItem() == Digikam::ImageSelectionWidget::RATIONONE )
-            {
+        {
             m_widthInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Width", 800) );
             m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
-            }
+        }
         else
-            {
+        {
             m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
             m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
-            }
+        }
 
         m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentItem());
-        }
+    }
 
     delete defaultGuideColor;
 }
@@ -408,7 +404,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->setGroup("Aspect Ratio Crop Tool Settings");
 
     if (w > h)
-       {
+    {
        config->writeEntry( "Hor.Oriented Aspect Ratio", m_ratioCB->currentItem() );
        config->writeEntry( "Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
        config->writeEntry( "Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
@@ -418,9 +414,9 @@ void ImageEffect_RatioCrop::writeSettings(void)
        config->writeEntry( "Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
        config->writeEntry( "Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
        config->writeEntry( "Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
-       }
+    }
     else
-       {
+    {
        config->writeEntry( "Ver.Oriented Aspect Ratio", m_ratioCB->currentItem() );
        config->writeEntry( "Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentItem() );
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value() );
@@ -430,7 +426,7 @@ void ImageEffect_RatioCrop::writeSettings(void)
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value() );
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value() );
        config->writeEntry( "Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value() );
-       }
+    }
 
     config->writeEntry( "Guide Lines Type", m_guideLinesCB->currentItem() );
     config->writeEntry( "Golden Section", m_goldenSectionBox->isChecked() );
@@ -444,12 +440,12 @@ void ImageEffect_RatioCrop::writeSettings(void)
     config->sync();
 }
 
-void ImageEffect_RatioCrop::slotUser1()
+void ImageEffect_RatioCrop::slotDefault()
 {
     m_imageSelectionWidget->resetSelection();
 }
 
-void ImageEffect_RatioCrop::slotUser2()
+void ImageEffect_RatioCrop::slotUser1()
 {
     m_imageSelectionWidget->maxAspectSelection();
 }
@@ -534,7 +530,7 @@ void ImageEffect_RatioCrop::slotOrientChanged(int o)
     m_imageSelectionWidget->setSelectionOrientation(o);
 
     // Reset selection area.
-    slotUser1();
+    slotDefault();
 }
 
 void ImageEffect_RatioCrop::slotRatioChanged(int a)
@@ -542,7 +538,7 @@ void ImageEffect_RatioCrop::slotRatioChanged(int a)
     applyRatioChanges(a);
 
     // Reset selection area.
-    slotUser1();
+    slotDefault();
 }
 
 void ImageEffect_RatioCrop::applyRatioChanges(int a)
@@ -550,7 +546,7 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
     m_imageSelectionWidget->setSelectionAspectRatioType(a);
 
     if ( a == Digikam::ImageSelectionWidget::RATIOCUSTOM )
-       {
+    {
        m_customLabel1->setEnabled(true);
        m_customLabel2->setEnabled(true);
        m_customRatioNInput->setEnabled(true);
@@ -558,31 +554,31 @@ void ImageEffect_RatioCrop::applyRatioChanges(int a)
        m_orientLabel->setEnabled(true);
        m_orientCB->setEnabled(true);
        slotCustomRatioChanged();
-       }
+    }
     else if ( a == Digikam::ImageSelectionWidget::RATIONONE )
-       {
+    {
        m_orientLabel->setEnabled(false);
        m_orientCB->setEnabled(false);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
        m_customRatioNInput->setEnabled(false);
        m_customRatioDInput->setEnabled(false);
-       }
+    }
     else        // Pre-config ratio selected.
-       {
+    {
        m_orientLabel->setEnabled(true);
        m_orientCB->setEnabled(true);
        m_customLabel1->setEnabled(false);
        m_customLabel2->setEnabled(false);
        m_customRatioNInput->setEnabled(false);
        m_customRatioDInput->setEnabled(false);
-       }
+    }
 }
 
 void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
 {
     if ( t == Digikam::ImageSelectionWidget::GuideNone )
-       {
+    {
        m_goldenSectionBox->setEnabled(false);
        m_goldenSpiralSectionBox->setEnabled(false);
        m_goldenSpiralBox->setEnabled(false);
@@ -592,9 +588,9 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_colorGuideLabel->setEnabled(false);
        m_guideColorBt->setEnabled(false);
        m_guideSize->setEnabled(false);
-       }
+    }
     else if ( t == Digikam::ImageSelectionWidget::RulesOfThirds )
-       {
+    {
        m_goldenSectionBox->setEnabled(false);
        m_goldenSpiralSectionBox->setEnabled(false);
        m_goldenSpiralBox->setEnabled(false);
@@ -604,9 +600,9 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_colorGuideLabel->setEnabled(true);
        m_guideColorBt->setEnabled(true);
        m_guideSize->setEnabled(true);
-       }
+    }
     else if ( t == Digikam::ImageSelectionWidget::HarmoniousTriangles )
-       {
+    {
        m_goldenSectionBox->setEnabled(false);
        m_goldenSpiralSectionBox->setEnabled(false);
        m_goldenSpiralBox->setEnabled(false);
@@ -616,9 +612,9 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_colorGuideLabel->setEnabled(true);
        m_guideColorBt->setEnabled(true);
        m_guideSize->setEnabled(true);
-       }
+    }
     else
-       {
+    {
        m_goldenSectionBox->setEnabled(true);
        m_goldenSpiralSectionBox->setEnabled(true);
        m_goldenSpiralBox->setEnabled(true);
@@ -628,7 +624,7 @@ void ImageEffect_RatioCrop::slotGuideTypeChanged(int t)
        m_colorGuideLabel->setEnabled(true);
        m_guideColorBt->setEnabled(true);
        m_guideSize->setEnabled(true);
-       }
+    }
 
     m_imageSelectionWidget->setGoldenGuideTypes(m_goldenSectionBox->isChecked(),
                                                 m_goldenSpiralSectionBox->isChecked(),
@@ -650,7 +646,7 @@ void ImageEffect_RatioCrop::slotCustomRatioChanged(void)
             (float)(m_customRatioNInput->value()) / (float)(m_customRatioDInput->value()) );
 
     // Reset selection area.
-    slotUser1();
+    slotDefault();
 }
 
 void ImageEffect_RatioCrop::slotOk()

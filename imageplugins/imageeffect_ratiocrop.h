@@ -3,7 +3,7 @@
  * Date  : 2004-12-06
  * Description : digiKam image editor Ratio Crop tool
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,9 +21,9 @@
 #ifndef IMAGEEFFECT_RATIOCROP_H
 #define IMAGEEFFECT_RATIOCROP_H
 
-// KDE include.
+// Digikam include.
 
-#include <kdialogbase.h>
+#include "imagedlgbase.h"
 
 class QLabel;
 class QComboBox;
@@ -43,7 +43,7 @@ class ImageSelectionWidget;
 namespace DigikamImagesPluginCore
 {
 
-class ImageEffect_RatioCrop : public KDialogBase
+class ImageEffect_RatioCrop : public Digikam::ImageDlgBase
 {
     Q_OBJECT
 
@@ -99,7 +99,7 @@ private:
 private slots:
 
     void slotUser1();
-    void slotUser2();
+    void slotDefault();
     void slotOk();
 
     void slotCenterWidth(void);
