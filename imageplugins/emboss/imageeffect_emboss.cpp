@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_emboss.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-08-26
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,26 +51,31 @@
 namespace DigikamEmbossImagesPlugin
 {
 
-ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent)
-                    : CtrlPanelDialog(parent, i18n("Emboss Image"), "emboss")
+ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent, QString title, QFrame* banner)
+                  : Digikam::CtrlPanelDlg(parent, title, "emboss", false, false, true,
+                                          Digikam::ImagePannelWidget::SeparateViewAll, banner)
 {
     QString whatsThis;
-        
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("Emboss Image"), 
                                        digikamimageplugins_version,
                                        I18N_NOOP("An embossed image effect plugin for digiKam."),
                                        KAboutData::License_GPL,
-                                       "(c) 2004-2006, Gilles Caulier", 
+                                       "(c) 2004-2006, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
-    
+
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Emboss algorithm"), 
                      "pieter dot voloshyn at gmail dot com");         
-                                          
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);
     
     // -------------------------------------------------------------
@@ -111,43 +118,37 @@ void ImageEffect_Emboss::resetValues()
 void ImageEffect_Emboss::prepareEffect()
 {
     m_depthInput->setEnabled(false);
-    
-    QImage image = m_imagePreviewWidget->getOriginalClipImage();
-    
+
+    Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
+
     int depth = m_depthInput->value();
-            
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Emboss(&image, this, depth));
+
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Emboss(&image, this, depth));
 }
 
 void ImageEffect_Emboss::prepareFinal()
 {
     m_depthInput->setEnabled(false);
-    
+
     int depth = m_depthInput->value();
-    
+
     Digikam::ImageIface iface(0, 0);
-    QImage orgImage(iface.originalWidth(), iface.originalHeight(), 32);
-    uint *data = iface.getOriginalData();
-    memcpy( orgImage.bits(), data, orgImage.numBytes() );
-            
-    m_threadedFilter = dynamic_cast<Digikam::ThreadedFilter *>(new Emboss(&orgImage, this, depth));
-    delete [] data;
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Emboss(iface.getOriginalImg(), this, depth));
 }
 
 void ImageEffect_Emboss::putPreviewData(void)
 {
-    QImage imDest = m_threadedFilter->getTargetImage();
-    m_imagePreviewWidget->setPreviewImageData(imDest);
+    m_imagePreviewWidget->setPreviewImage(m_threadedFilter->getTargetImage());
 }
 
 void ImageEffect_Emboss::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
 
-    iface.putOriginalData(i18n("Emboss"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Emboss"),
+                           m_threadedFilter->getTargetImage().bits());
 }
-    
+
 }  // NameSpace DigikamEmbossImagesPlugin
 
 #include "imageeffect_emboss.moc"

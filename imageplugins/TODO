@@ -30,10 +30,10 @@
    - Hot Pixels       : Done.
    - Blur FX          : Done.
    - Distortion FX    : Done.
+   - Emboss           : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Emboss           : TODO. ==> simple port algorithms to 16 bits. Easy
    - Insert Text      : TODO. ==> simple port algorithms to 16 bits. Medium.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix.
                                   Check why antialiasing filter don't give any effects. Medium.

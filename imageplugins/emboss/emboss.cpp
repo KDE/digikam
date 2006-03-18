@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : emboss.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
  * Description : Emboss threaded image filter.
  * 
  * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Original Emboss algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -34,16 +36,16 @@
 namespace DigikamEmbossImagesPlugin
 {
 
-Emboss::Emboss(QImage *orgImage, QObject *parent, int depth)
-      : Digikam::ThreadedFilter(orgImage, parent, "Emboss")
-{ 
+Emboss::Emboss(Digikam::DImg *orgImage, QObject *parent, int depth)
+      : Digikam::DImgThreadedFilter(orgImage, parent, "Emboss")
+{
     m_depth = depth;
     initFilter();
 }
 
 void Emboss::filterImage(void)
 {
-    embossImage((uint*)m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_depth);
+    embossImage(&m_orgImage, &m_destImage, m_depth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -60,55 +62,63 @@ void Emboss::filterImage(void)
  *                     increase it. After this, get the gray tone            
  */
 
-void Emboss::embossImage(uint* data, int Width, int Height, int d)
+void Emboss::embossImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int d)
 {
-    memcpy (m_destImage.bits(), data, m_destImage.numBytes());
-    
-    uint *Bits = (uint*) m_destImage.bits();
-    float Depth = d / 10.0;
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    uchar* data     = orgImage->bits();
+    bool sixteenBit = orgImage->sixteenBit();
+    int bytesDepth  = orgImage->bytesDepth();
+    uchar* Bits     = destImage->bits();
 
-    int    i = 0, j = 0, progress;
-    int    red = 0, green = 0, blue = 0;
-    uchar  gray = 0, r1, r2, g1, g2, b1, b2;
-    Digikam::ImageFilters::imageData imagedata;
-    
+    // Initial copy
+    memcpy (Bits, data, destImage->numBytes());
+
+    double Depth = d / 10.0;
+
+    int    progress;
+    int    red, green, blue, gray;
+    Digikam::DColor color, colorOther;
+    int    offset, offsetOther;
+
     for (int h = 0 ; !m_cancel && (h < Height) ; h++)
-       {
-       for (int w = 0 ; !m_cancel && (w < Width) ; w++)
-           {
-           i = h*Width + w;
-           j = (h + Lim_Max (h, 1, Height))*Width + w + Lim_Max (w, 1, Width);
+    {
+        for (int w = 0 ; !m_cancel && (w < Width) ; w++)
+        {
+            offset = getOffset(Width, w, h, bytesDepth);
+            offsetOther = getOffset(Width, w + Lim_Max (w, 1, Width), h + Lim_Max (h, 1, Height), bytesDepth);
 
-           imagedata.raw = Bits[i];
-           r1            = imagedata.channel.red;
-           g1            = imagedata.channel.green;
-           b1            = imagedata.channel.blue;
-           imagedata.raw = Bits[j];
-           r2            = imagedata.channel.red;
-           g2            = imagedata.channel.green;
-           b2            = imagedata.channel.blue;
-                               
-           red   = abs ((int)((r1 - r2) * Depth + 128));
-           green = abs ((int)((g1 - g2) * Depth + 128));
-           blue  = abs ((int)((b1 - b2) * Depth + 128));
+            color.setColor(Bits + offset, sixteenBit);
+            colorOther.setColor(Bits + offsetOther, sixteenBit);
 
-           gray = CLAMP0255 ((red + green + blue) / 3);
-           
-           // To get Alpha channel value from original (unchanged)
-           imagedata.raw = Bits[i];
-                
-           // Overwrite RGB values to destination.
-           imagedata.channel.red   = gray;
-           imagedata.channel.green = gray;
-           imagedata.channel.blue  = gray;
-           
-           Bits[i] = imagedata.raw;
-           }
-       
-       progress = (int) (((double)h * 100.0) / Height);
-       if ( progress%5 == 0 )
-          postProgress( progress );   
-       }
+            if (sixteenBit)
+            {
+                red   = abs ((int)((color.red()   - colorOther.red())   * Depth + 32768));
+                green = abs ((int)((color.green() - colorOther.green()) * Depth + 32768));
+                blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
+
+                gray = CLAMP065535 ((red + green + blue) / 3);
+            }
+            else
+            {
+                red   = abs ((int)((color.red()   - colorOther.red())   * Depth + 128));
+                green = abs ((int)((color.green() - colorOther.green()) * Depth + 128));
+                blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 128));
+
+                gray = CLAMP0255 ((red + green + blue) / 3);
+            }
+
+            // Overwrite RGB values to destination. Alpha remains unchanged.
+            color.setRed(gray);
+            color.setGreen(gray);
+            color.setBlue(gray);
+            color.setPixel(Bits + offset);
+        }
+
+        progress = (int) (((double)h * 100.0) / Height);
+        if ( progress%5 == 0 )
+            postProgress( progress );
+    }
 }
 
 }  // NameSpace DigikamEmbossImagesPlugin

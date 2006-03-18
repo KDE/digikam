@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_emboss.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2004-08-26
  * Description : a digiKam image editor plugin to emboss 
  *               an image.
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,28 +25,28 @@
 #ifndef IMAGEEFFECT_EMBOSS_H
 #define IMAGEEFFECT_EMBOSS_H
 
-// Local includes.
+// Digikam includes.
 
-#include "ctrlpaneldialog.h"
+#include <digikamheaders.h>
 
 class KIntNumInput;
 
 namespace DigikamEmbossImagesPlugin
 {
 
-class ImageEffect_Emboss : public DigikamImagePlugins::CtrlPanelDialog
+class ImageEffect_Emboss : public Digikam::CtrlPanelDlg
 {
     Q_OBJECT
 
 public:
 
-    ImageEffect_Emboss(QWidget* parent);
+    ImageEffect_Emboss(QWidget* parent, QString title, QFrame* banner);
     ~ImageEffect_Emboss();
 
 private:
 
     KIntNumInput *m_depthInput;
-    
+
 protected:
 
     void prepareEffect(void);

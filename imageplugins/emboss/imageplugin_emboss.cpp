@@ -30,6 +30,7 @@
 
 // Local includes.
 
+#include "bannerwidget.h"
 #include "imageeffect_emboss.h"
 #include "imageplugin_emboss.h"
 
@@ -60,8 +61,12 @@ void ImagePlugin_Emboss::setEnabledActions(bool enable)
 
 void ImagePlugin_Emboss::slotEmboss()
 {
-    DigikamEmbossImagesPlugin::ImageEffect_Emboss dlg(parentWidget());
+    QString title = i18n("Emboss Image");
+    QFrame *headerFrame = new DigikamImagePlugins::BannerWidget(0, title);
+    DigikamEmbossImagesPlugin::ImageEffect_Emboss dlg(parentWidget(),
+            title, headerFrame);
     dlg.exec();
+    delete headerFrame;
 }
 
 
