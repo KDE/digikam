@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_NoiseReduction
+Name[pt]=ImagePlugin_Restoration
+Name[pt_BR]=ImagePlugin_Restoration
 Name[sv]=Insticksprogram för brusreducering
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
