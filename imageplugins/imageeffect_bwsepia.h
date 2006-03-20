@@ -34,8 +34,10 @@
 class QHButtonGroup;
 class QComboBox;
 class QButtonGroup;
+class QCheckBox;
 
 class KDoubleNumInput;
+class KTabWidget;
 
 namespace Digikam
 {
@@ -44,6 +46,8 @@ class ColorGradientWidget;
 class ImageWidget;
 class DColor;
 class DImg;
+class ImageCurves;
+class CurvesWidget;
 }
 
 namespace DigikamImagesPluginCore
@@ -88,6 +92,12 @@ private:
         BlueChannel
     };
 
+    enum SettingsTab
+    {
+        ToneTab=0,
+        LuminosityTab
+    };
+
     uchar                        *m_destinationPreviewData;
     
     QComboBox                    *m_channelCB;
@@ -96,13 +106,23 @@ private:
     
     QButtonGroup                 *m_bwTools;
 
+    QCheckBox                    *m_overExposureIndicatorBox;
+    
     KDoubleNumInput              *m_cInput;
+    
+    KTabWidget                   *m_tab;
     
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
-    Digikam::HistogramWidget     *m_histogramWidget;    
+    Digikam::HistogramWidget     *m_histogramWidget;
+
+    Digikam::CurvesWidget        *m_curvesWidget;
+
+    Digikam::ImageCurves         *m_curves;
+    
+    Digikam::DImg                *m_originalImage;
 
 private:
 
@@ -115,6 +135,7 @@ private slots:
     void slotEffect();
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
+    void slotSpotColorChanged(const Digikam::DColor &color);    
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
 protected:

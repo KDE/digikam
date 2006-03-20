@@ -46,13 +46,18 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <knuminput.h>
+#include <ktabwidget.h>
+#include <kconfig.h>
 
 // Digikam includes.
 
 #include "imageiface.h"
+#include "imagehistogram.h"
+#include "imagecurves.h"
 #include "dimgimagefilters.h"
 #include "imagewidget.h"
 #include "histogramwidget.h"
+#include "curveswidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "bcgmodifier.h"
@@ -70,6 +75,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("blackandwhitetool.anchor", "digikam");
 
+    Digikam::ImageIface iface(0, 0);
+    m_originalImage = iface.getOriginalImg();
+    m_curves        = new Digikam::ImageCurves(m_originalImage->sixteenBit());
+
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget(plainPage(),
@@ -79,7 +88,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget);
 
     QWidget *gboxSettings     = new QWidget(plainPage());
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 6, 4, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, marginHint());
 
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
@@ -141,9 +150,12 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 4);
 
     // -------------------------------------------------------------
-    
-    m_bwTools = new QButtonGroup(1, Qt::Horizontal, i18n("Black and white tool:"), gboxSettings);
 
+    m_tab = new KTabWidget(gboxSettings);
+
+    m_bwTools = new QButtonGroup(1, Qt::Horizontal, m_tab);
+    m_bwTools->setFrameStyle(QFrame::NoFrame);
+ 
     QRadioButton *neutral = new QRadioButton(i18n("Neutral"), m_bwTools);
     QWhatsThis::add( neutral, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
                                      "<p>Simulate black and white neutral film exposure.</p>").arg(previewEffectPic("neutralbw")));
@@ -207,24 +219,62 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                                     "in the darkroom.</p>").arg(previewEffectPic("platinum")));
     m_bwTools->insert(platinium, BWPlatinum);
     
-    gridSettings->addMultiCellWidget(m_bwTools, 3, 3, 0, 4);
+    m_tab->insertTab(m_bwTools, i18n("Tone"), ToneTab);
 
     // -------------------------------------------------------------
     
-    QLabel *label3 = new QLabel(i18n("Contrast:"), gboxSettings);
-    m_cInput       = new KDoubleNumInput(gboxSettings);
+    QWidget* tab2 = new QWidget( m_tab );
+    QGridLayout* gridTab2 = new QGridLayout( tab2, 4, 1, marginHint());
+
+    Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(Digikam::ColorGradientWidget::Vertical,
+                                                                               10, tab2 );
+    vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+    gridTab2->addMultiCellWidget(vGradient, 0, 0, 0, 0);
+    
+    m_curvesWidget = new Digikam::CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
+                                               m_originalImage->height(), m_originalImage->sixteenBit(),
+                                               m_curves, tab2);
+    QWhatsThis::add( m_curvesWidget, i18n("<p>This is the curve adjustment of the image luminosity"));
+    gridTab2->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
+
+    Digikam::ColorGradientWidget *hGradient = new Digikam::ColorGradientWidget(Digikam::ColorGradientWidget::Horizontal,
+                                                                               10, tab2 );
+    hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    gridTab2->addMultiCellWidget(hGradient, 1, 1, 1, 1);
+    
+    m_cInput       = new KDoubleNumInput(tab2);
+    m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setPrecision(2);
     m_cInput->setRange(-1.0, 1.0, 0.01, true);
     m_cInput->setValue(0.0);
     QWhatsThis::add( m_cInput, i18n("<p>Set here the contrast adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 4, 4, 0, 4);
-    gridSettings->addMultiCellWidget(m_cInput, 5, 5, 0, 4);
+    gridTab2->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
 
-    gridSettings->setRowStretch(6, 10);
+    m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), tab2);
+    QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
+                                                      "from the target image preview will be over-colored. "
+                                                      "This will not have an effect on the final rendering."));
+    gridTab2->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
+
+    gridTab2->setRowStretch(4, 10);
+    
+    m_tab->insertTab(tab2, i18n("Lightness"), LuminosityTab);
+
+    // -------------------------------------------------------------
+
+    gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
+    gridSettings->setRowStretch(4, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
-    
+
+    KConfig* config = kapp->config();
+    config->setGroup("Black and White Convertion Tool");
+    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", ToneTab));
+    m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
+    m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
+
+
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotDefault()));
     
@@ -236,14 +286,23 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
+    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
+            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
+    
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
     connect(m_bwTools, SIGNAL(released(int)),
             this, SLOT(slotEffect()));
 
+    connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
+            this, SLOT(slotTimer()));
+    
     connect(m_cInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));                        
+            this, SLOT(slotTimer()));
+                     
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));                       
     
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -253,11 +312,20 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
 {
     m_histogramWidget->stopHistogramComputation();
 
+    KConfig* config = kapp->config();
+    config->setGroup("Black and White Convertion Tool");
+    config->writeEntry("Settings Tab", m_tab->currentPageIndex());
+    config->writeEntry("Histogram Channel", m_channelCB->currentItem());
+    config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
+    config->sync();
+
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
     delete m_previewWidget;
+    delete m_curvesWidget;
+    delete m_curves;
 }
 
 void ImageEffect_BWSepia::slotChannelChanged(int channel)
@@ -292,6 +360,13 @@ void ImageEffect_BWSepia::slotScaleChanged(int scale)
 {
     m_histogramWidget->m_scaleType = scale;
     m_histogramWidget->repaint(false);
+    m_curvesWidget->m_scaleType = scale;
+    m_curvesWidget->repaint(false);
+}
+
+void ImageEffect_BWSepia::slotSpotColorChanged(const Digikam::DColor &color)
+{
+    m_curvesWidget->setCurveGuide(color);
 }
 
 void ImageEffect_BWSepia::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -309,10 +384,18 @@ void ImageEffect_BWSepia::slotDefault()
 {
     m_bwTools->blockSignals(true);
     m_cInput->blockSignals(true);
+
     m_bwTools->setButton( BWNeutral );
     m_cInput->setValue(0.0);
+    
+    for (int channel = 0 ; channel < 5 ; channel++)
+       m_curves->curvesChannelReset(channel);
+
+    m_curvesWidget->reset();
+    
     m_cInput->blockSignals(false);
     m_bwTools->blockSignals(false);
+
     slotEffect();
 }
 
@@ -332,9 +415,19 @@ void ImageEffect_BWSepia::slotEffect()
     bool a                          = iface->previewHasAlpha();
     bool sb                         = iface->previewSixteenBit();
 
+    // Convert to black and white.
+
     blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTools->selectedId());
 
-    Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
+    // Calculate and apply the curve on image.
+    
+    uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+    m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+    m_curves->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
+
+    // Adjust contrast.
+    
+    Digikam::DImg preview(w, h, sb, a, targetData);
     Digikam::BCGModifier cmod;
     cmod.setContrast(m_cInput->value() + (double)(1.00));
     cmod.applyBCG(preview);
@@ -346,7 +439,8 @@ void ImageEffect_BWSepia::slotEffect()
     
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
+    delete [] targetData;
+    
     kapp->restoreOverrideCursor();
 }
 
@@ -363,8 +457,20 @@ void ImageEffect_BWSepia::finalRendering()
     if (data) 
     {
        int type = m_bwTools->selectedId();
+
+       // Convert to black and white.
+    
        blackAndWhiteConversion(data, w, h, sb, type);
-       Digikam::DImg img(w, h, sb, a, data);
+       
+       // Calculate and apply the curve on image.
+
+       uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+       m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+       m_curves->curvesLutProcess(data, targetData, w, h);
+       
+       // Adjust contrast.
+          
+       Digikam::DImg img(w, h, sb, a, targetData);
        Digikam::BCGModifier cmod;
        cmod.setContrast(m_cInput->value() + (double)(1.00));
        cmod.applyBCG(img);
@@ -416,6 +522,7 @@ void ImageEffect_BWSepia::finalRendering()
           
        iface->putOriginalImage(name, img.bits());
        delete [] data;
+       delete [] targetData;
     }
 
     kapp->restoreOverrideCursor();
