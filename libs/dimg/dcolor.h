@@ -89,6 +89,13 @@ public:
     void convertToSixteenBit();
     void convertToEightBit();
 
+    /** Premultiply and demultiply this color.
+        DImg stores the color non-premultiplied.
+        Inline methods.
+    */
+    void premultiply();
+    void demultiply();
+
     /** Return the current RGB color values of this color
         in the HSL color space.
         Alpha is ignored for the conversion.
@@ -123,6 +130,10 @@ public:
     void blendInvAlpha8(int alpha);
     void blendAlpha16(int alpha);
     void blendInvAlpha16(int alpha);
+    void premultiply16(int alpha);
+    void premultiply8(int alpha);
+    void demultiply16(int alpha);
+    void demultiply8(int alpha);
     void blendAdd(const DColor &src);
     void blendClamp8();
     void blendClamp16();

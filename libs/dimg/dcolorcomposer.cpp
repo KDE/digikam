@@ -18,7 +18,7 @@
  *
  * ============================================================ */
 
-// Inspired by DirectFB,
+// Integer arithmetic inspired by DirectFB,
 // src/gfx/generic/generic.c and src/display/idirectfbsurface.c:
 
 /*
@@ -35,6 +35,12 @@
 
 */
 
+// C includes
+
+#include <math.h>
+
+// Local includes
+
 #include "dcolorcomposer.h"
 
 namespace Digikam
@@ -50,12 +56,14 @@ class DColorComposerPorterDuffClear : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffSrc : public DColorComposer
 {
 public:
     virtual void compose(DColor &dest, DColor src);
+    virtual void compose(DColor &dest, DColor src, MultiplicationFlags multiplicationFlags);
 };
 
 class DColorComposerPorterDuffSrcOver : public DColorComposer
@@ -112,12 +120,6 @@ class DColorComposerPorterDuffXor : public DColorComposer
         virtual void compose(DColor &dest, DColor src);
 };
 
-class DColorComposerPremultiplyAlpha : public DColorComposer
-{
-    public:
-        virtual void compose(DColor &dest, DColor src);
-};
-
 // Porter-Duff None
 // component = (source * sa + destination * (1-sa))
 // Src blending function Src Alpha
@@ -154,6 +156,12 @@ void DColorComposerPorterDuffClear::compose(DColor &dest, DColor src)
     dest.blendAdd(src);
 }
 
+void DColorComposerPorterDuffClear::compose(DColor &dest, DColor src, MultiplicationFlags)
+{
+    // skip pre- and demultiplication
+    compose(dest, src);
+}
+
 // Porter-Duff Src
 // Normal Painter's algorithm
 // component = (source * 1 + destination * 0)
@@ -164,6 +172,12 @@ void DColorComposerPorterDuffSrc::compose(DColor &dest, DColor src)
     // src: no-op
     dest.blendZero();
     dest.blendAdd(src);
+}
+
+void DColorComposerPorterDuffSrc::compose(DColor &dest, DColor src, MultiplicationFlags)
+{
+    // skip pre- and demultiplication
+    compose(dest, src);
 }
 
 // Porter-Duff Src Over
@@ -369,16 +383,19 @@ void DColorComposerPorterDuffXor::compose(DColor &dest, DColor src)
     }
 }
 
-void DColorComposerPremultiplyAlpha::compose(DColor &dest, DColor src)
+
+
+void DColorComposer::compose(DColor &dest, DColor src, DColorComposer::MultiplicationFlags multiplicationFlags)
 {
-    if (dest.sixteenBit())
-    {
-        dest.blendAlpha16(src.alpha());
-    }
-    else
-    {
-        dest.blendAlpha8(src.alpha());
-    }
+    if (multiplicationFlags & PremultiplySrc)
+        src.premultiply();
+    if (multiplicationFlags & PremultiplyDst)
+        dest.premultiply();
+
+    compose(dest, src);
+
+    if (multiplicationFlags & DemultiplyDst)
+        dest.demultiply();
 }
 
 DColorComposer *DColorComposer::getComposer(DColorComposer::CompositingOperation rule)
@@ -409,11 +426,8 @@ DColorComposer *DColorComposer::getComposer(DColorComposer::CompositingOperation
             return new DColorComposerPorterDuffDstOut;
         case PorterDuffXor:
             return new DColorComposerPorterDuffDstOut;
-        case PremultiplyAlpha:
-            return new DColorComposerPremultiplyAlpha;
-        default:
-            return 0;
     }
+    return 0;
 }
 
 

@@ -37,6 +37,7 @@
 #include "rawdecodingsettings.h"
 #include "dimgloaderobserver.h"
 #include "dcolor.h"
+#include "dcolorcomposer.h"
 
 class QString;
 class QVariant;
@@ -108,6 +109,8 @@ public:
         If data is 0, a new buffer will be allocated, otherwise the given data will be used:
         If copydata is true, the data will be copied to a newly allocated buffer.
         If copyData is false, this DImg object will take ownership of the data pointer.
+
+        If there is an alpha channel, the data shall be in non-premultiplied form (unassociated alpha).
     */
     DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data = 0, bool copyData = true);
 
@@ -186,7 +189,7 @@ public:
 
     /** Return a region of image */
     DImg       copy(QRect rect);
-    DImg       copy(uint x, uint y, uint w, uint h);
+    DImg       copy(int x, int y, int w, int h);
 
     /** Copy a region of pixels from a source image to this image.
         Parameters:
@@ -205,12 +208,14 @@ public:
     /** Merge a pixels region to an image using alpha channel */
     void       bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h);
     void       bitBlendImage(DColorComposer *composer, const DImg* src,
-                             int sx, int sy, int w, int h, int dx, int dy);
+                             int sx, int sy, int w, int h, int dx, int dy,
+                             DColorComposer::MultiplicationFlags multiplicationFlags =
+                             DColorComposer::NoMultiplication);
 
     /** QImage wrapper methods */
     QImage     copyQImage();
     QImage     copyQImage(QRect rect);
-    QImage     copyQImage(uint x, uint y, uint w, uint h);
+    QImage     copyQImage(int x, int y, int w, int h);
 
     /** Crop image to the specified region */
     void       crop(QRect rect);
@@ -222,13 +227,13 @@ public:
     /** Return a version of this image scaled to the specified size with the specified mode.
         See QSize documentation for information on available modes
     */
-    DImg       smoothScale(uint width, uint height, QSize::ScaleMode scaleMode=QSize::ScaleFree);
+    DImg       smoothScale(int width, int height, QSize::ScaleMode scaleMode=QSize::ScaleFree);
 
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
     */
-    DImg       smoothScaleSection(uint sx, uint sy, uint sw, uint sh,
-                                  uint dw, uint dh);
+    DImg       smoothScaleSection(int sx, int sy, int sw, int sh,
+                                  int dw, int dh);
 
     void       rotate(ANGLE angle);
     void       flip(FLIP direction);
@@ -272,10 +277,17 @@ private:
     void       setImageDimension(uint width, uint height);
     int        allocateData();
     DImg(const DImg &image, int w, int h);
-    static void bitBlt(DColorComposer *composer, const uchar *src, uchar *dest,
+    static void bitBlt(const uchar *src, uchar *dest,
                          int sx, int sy, int w, int h, int dx, int dy,
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth);
+    static void bitBlend(DColorComposer *composer, const uchar *src, uchar *dest,
+                         int sx, int sy, int w, int h, int dx, int dy,
+                         uint swidth, uint sheight, uint dwidth, uint dheight,
+                         bool sixteenBit, int sdepth, int ddepth,
+                         DColorComposer::MultiplicationFlags multiplicationFlags);
+    static bool normalizeRegionArguments(int &sx, int &sy, int &w, int &h, int &dx, int &dy,
+                                         uint swidth, uint sheight, uint dwidth, uint dheight);
 
     friend class DImgLoader;
 };

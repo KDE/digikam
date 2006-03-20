@@ -98,18 +98,24 @@ namespace DImgScale
 
 using namespace DImgScale;
 
-DImg DImg::smoothScale(uint dw, uint dh, QSize::ScaleMode scaleMode)
+DImg DImg::smoothScale(int dw, int dh, QSize::ScaleMode scaleMode)
 {
+    if (dw < 0 || dh < 0)
+        return DImg();
+
     uint w = width();
     uint h = height();
 
     QSize newSize(w, h);
     newSize.scale( QSize(dw, dh), scaleMode );
+    if (!newSize.isValid())
+        return DImg();
+
     dw = newSize.width();
     dh = newSize.height();
 
     // do we actually need to scale?
-    if ((w == dw) && (h == dh))
+    if ((w == (uint)dw) && (h == (uint)dh))
     {
         return copy();
     }
@@ -159,9 +165,9 @@ if (y < (yy)) {h += (y - (yy)); y = (yy);} \
 if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
 if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 
-DImg DImg::smoothScaleSection(uint sx, uint sy,
-                              uint sw, uint sh,
-                              uint dw, uint dh)
+DImg DImg::smoothScaleSection(int sx, int sy,
+                              int sw, int sh,
+                              int dw, int dh)
 {
     uint w = width();
     uint h = height();
@@ -179,7 +185,7 @@ DImg DImg::smoothScaleSection(uint sx, uint sy,
     psy = sy;
     psw = sw;
     psh = sh;
-    CLIP(sx, sy, sw, sh, 0, 0, w, h);
+    CLIP(sx, sy, sw, sh, 0, 0, (int)w, (int)h);
     
     // clip output coords to clipped input coords 
     if (psw != sw)
@@ -385,7 +391,7 @@ DImgScaleInfo* DImgScale::dimgFreeScaleInfo(DImgScaleInfo *isi)
 DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg &img, 
 						  int sw, int sh,
                                                   int dw, int dh, 
-						  bool sixteenBit,
+                                                  bool /*sixteenBit*/,
 						  bool aa)
 {
     DImgScaleInfo *isi;

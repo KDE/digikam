@@ -601,7 +601,7 @@ QString DImg::cameraConstructor()
 
 DColor DImg::getPixelColor(uint x, uint y)
 {
-    if (x > width() || y > height())
+    if (isNull() || x > width() || y > height())
     {
         kdDebug() << k_funcinfo << " : wrong pixel position!" << endl;
         return DColor();
@@ -614,7 +614,7 @@ DColor DImg::getPixelColor(uint x, uint y)
 
 void DImg::setPixelColor(uint x, uint y, DColor color)
 {
-    if (x > width() || y > height())
+    if (isNull() || x > width() || y > height())
     {
         kdDebug() << k_funcinfo << " : wrong pixel position!" << endl;
         return;
@@ -647,14 +647,8 @@ DImg DImg::copy(QRect rect)
     return copy(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-DImg DImg::copy(uint x, uint y, uint w, uint h)
+DImg DImg::copy(int x, int y, int w, int h)
 {
-    if ( (x+w) > width() )
-        w = width() - x;
-
-    if ( (y+h) > height() )
-        h = height() - y;
-
     if ( isNull() || w <= 0 || h <= 0)
     {
         kdDebug() << k_funcinfo << " : return null image!" << endl;
@@ -693,7 +687,7 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
         return;
     }
 
-    bitBlt(0, src->bits(), bits(), sx, sy, w, h, dx, dy,
+    bitBlt(src->bits(), bits(), sx, sy, w, h, dx, dy,
            src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
 }
 
@@ -709,19 +703,12 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
         return;
     }
 
-    bitBlt(0, src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sixteenBit(), sdepth, bytesDepth());
+    bitBlt(src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sixteenBit(), sdepth, bytesDepth());
 }
 
-// If composer is 0, this a plain bitBlt.
-// If composer is not 0, it will be used to blend source and destination
-
-void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
-                         int sx, int sy, int w, int h, int dx, int dy,
-                         uint swidth, uint sheight, uint dwidth, uint dheight,
-                         bool sixteenBit, int sdepth, int ddepth)
+bool DImg::normalizeRegionArguments(int &sx, int &sy, int &w, int &h, int &dx, int &dy,
+                                    uint swidth, uint sheight, uint dwidth, uint dheight)
 {
-    // Normalize
-
     if (sx < 0)
     {
         // sx is negative, so + is - and - is +
@@ -773,6 +760,18 @@ void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
 
     // Nothing left to copy
     if (w <= 0 || h <= 0)
+        return false;
+
+    return true;
+}
+
+void DImg::bitBlt (const uchar *src, uchar *dest,
+                         int sx, int sy, int w, int h, int dx, int dy,
+                         uint swidth, uint sheight, uint dwidth, uint dheight,
+                         bool /*sixteenBit*/, int sdepth, int ddepth)
+{
+    // Normalize
+    if (!normalizeRegionArguments(sx, sy, w, h, dx, dy, swidth, sheight, dwidth, dheight))
         return;
 
     // Same pixels
@@ -791,30 +790,17 @@ void DImg::bitBlt (DColorComposer *composer, const uchar *src, uchar *dest,
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
-        if (composer)
-        {
-            // blend src and destination
-            for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
-            {
-                DColor src(sptr, sixteenBit);
-                DColor dst(dptr, sixteenBit);
-                composer->compose(dst, src);
-                dst.setPixel(dptr);
-            }
-        }
-        else
-        {
             // plain and simple bitBlt
-            for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
-            {
-                *dptr = *sptr;
-            }
+        for (int i = 0; i < w * sdepth ; i++, sptr++, dptr++)
+        {
+            *dptr = *sptr;
         }
     }
 }
 
 void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
-                   int sx, int sy, int w, int h, int dx, int dy)
+                         int sx, int sy, int w, int h, int dx, int dy,
+                         DColorComposer::MultiplicationFlags multiplicationFlags)
 {
     if (isNull())
         return;
@@ -825,8 +811,45 @@ void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
         return;
     }
 
-    bitBlt(composer, src->bits(), bits(), sx, sy, w, h, dx, dy,
-             src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
+    bitBlend(composer, src->bits(), bits(), sx, sy, w, h, dx, dy,
+             src->width(), src->height(), width(), height(), sixteenBit(),
+             src->bytesDepth(), bytesDepth(), multiplicationFlags);
+}
+
+void DImg::bitBlend (DColorComposer *composer, const uchar *src, uchar *dest,
+                     int sx, int sy, int w, int h, int dx, int dy,
+                     uint swidth, uint sheight, uint dwidth, uint dheight,
+                     bool sixteenBit, int sdepth, int ddepth,
+                     DColorComposer::MultiplicationFlags multiplicationFlags)
+{
+    // Normalize
+    if (!normalizeRegionArguments(sx, sy, w, h, dx, dy, swidth, sheight, dwidth, dheight))
+        return;
+
+    const uchar *sptr;
+    uchar *dptr;
+    uint   slinelength = swidth * sdepth;
+    uint   dlinelength = dwidth * ddepth;
+
+    int scurY = sy;
+    int dcurY = dy;
+    for (int j = 0 ; j < h ; j++, scurY++, dcurY++) 
+    {
+        sptr  = &src [ scurY * slinelength ] + sx * sdepth;
+        dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
+
+        // blend src and destination
+        for (int i = 0 ; i < w ; i++, sptr+=sdepth, dptr+=ddepth)
+        {
+            DColor src(sptr, sixteenBit);
+            DColor dst(dptr, sixteenBit);
+
+            // blend colors
+            composer->compose(dst, src, multiplicationFlags);
+
+            dst.setPixel(dptr);
+        }
+    }
 }
 
 
@@ -977,7 +1000,7 @@ QImage DImg::copyQImage(QRect rect)
     return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
 }
 
-QImage DImg::copyQImage(uint x, uint y, uint w, uint h)
+QImage DImg::copyQImage(int x, int y, int w, int h)
 {
     if (isNull())
         return QImage();
@@ -1058,7 +1081,7 @@ void DImg::crop(int x, int y, int w, int h)
     allocateData();
 
     // copy image region (x|y), wxh, from old data to point (0|0) of new data
-    bitBlt(0, old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), sixteenBit(), bytesDepth(), bytesDepth());
+    bitBlt(old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), sixteenBit(), bytesDepth(), bytesDepth());
     delete [] old;
 }
 

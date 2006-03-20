@@ -40,6 +40,28 @@
 namespace Digikam
 {
 
+inline void DColor::premultiply()
+{
+    if (sixteenBit())
+        premultiply16(alpha());
+    else
+        premultiply8(alpha());
+}
+
+inline void DColor::demultiply()
+{
+    if (sixteenBit())
+    {
+        demultiply16(alpha());
+        blendClamp16();
+    }
+    else
+    {
+        demultiply8(alpha());
+        blendClamp8();
+    }
+}
+
 inline void DColor::blendZero()
 {
     setAlpha(0);
@@ -86,6 +108,42 @@ inline void DColor::blendInvAlpha8(int alphaValue)
     setGreen((Sa * green()) >> 8);
     setBlue ((Sa * blue()) >> 8);
     setAlpha((Sa * alpha()) >> 8);
+}
+
+inline void DColor::premultiply16(int alphaValue)
+{
+    uint Da = alphaValue + 1;
+
+    setRed  ((Da * (uint)red()) >> 16);
+    setGreen((Da * (uint)green()) >> 16);
+    setBlue ((Da * (uint)blue()) >> 16);
+}
+
+inline void DColor::premultiply8(int alphaValue)
+{
+    uint Da = alphaValue + 1;
+
+    setRed  ((Da * red()) >> 8);
+    setGreen((Da * green()) >> 8);
+    setBlue ((Da * blue()) >> 8);
+}
+
+inline void DColor::demultiply16(int alphaValue)
+{
+    uint Da = alphaValue + 1;
+
+    setRed  (((uint)red()   << 16) / Da);
+    setGreen(((uint)green() << 16) / Da);
+    setBlue (((uint)blue()  << 16) / Da);
+}
+
+inline void DColor::demultiply8(int alphaValue)
+{
+    uint Da = alphaValue + 1;
+
+    setRed  ((red()   << 8) / Da);
+    setGreen((green() << 8) / Da);
+    setBlue ((blue()  << 8) / Da);
 }
 
 inline void DColor::blendAdd(const DColor &src)
