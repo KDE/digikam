@@ -195,7 +195,7 @@ void SetupIOFiles::readSettings()
     config->setGroup("ImageViewer Settings");
     
     d->RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
-    d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", false));
+    d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", true));
     d->SuperCCDsecondarySensor->setChecked(config->readBoolEntry("SuperCCDsecondarySensor", false));
     d->unclipColors->setChecked(config->readBoolEntry("UnclipColors", false));
     d->cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
@@ -204,6 +204,7 @@ void SetupIOFiles::readSettings()
     d->JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     d->PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     d->TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
+    
     d->RAWquality->setEnabled(d->enableRAWQuality->isChecked());
 }
 
