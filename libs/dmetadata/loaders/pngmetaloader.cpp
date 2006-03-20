@@ -347,12 +347,13 @@ uchar* PNGMetaLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii
    
 void PNGMetaLoader::png_skip_till_end(png_structp png_ptr, png_infop info_ptr)
 {
+/*
     png_byte chunk_length[4];
     png_uint_32 length;
     
     length=png_ptr->idat_size;
     
-    /* Skip IDAT chunks */
+    // Skip IDAT chunks 
     do
     {
         png_crc_finish(png_ptr, length);
@@ -373,9 +374,9 @@ void PNGMetaLoader::png_skip_till_end(png_structp png_ptr, png_infop info_ptr)
             png_handle_IHDR(png_ptr, info_ptr, length);
         else if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
         {
-        /* Zero length IDATs are legal after the last IDAT has been
-         * read, but not after other chunks have been read.
-         */
+        // Zero length IDATs are legal after the last IDAT has been
+        // read, but not after other chunks have been read.
+
         if (length > 0 || png_ptr->mode & PNG_AFTER_IDAT)
             png_error(png_ptr, "Too many IDAT's found");
         else
@@ -412,6 +413,8 @@ void PNGMetaLoader::png_skip_till_end(png_structp png_ptr, png_infop info_ptr)
         }
     }
     while (!(png_ptr->mode & PNG_HAVE_IEND));
+
+*/
 }
 
 
