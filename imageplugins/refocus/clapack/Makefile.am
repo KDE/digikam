@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = liblapack.la
 
-KDE_CFLAGS = -w
+liblapack_la_CFLAGS = -w
 
 noinst_HEADERS = blaswrap.h clapack.h f2c.h fio.h fmt.h fp.h
 
