@@ -133,7 +133,16 @@ public slots:
     void slotSortImages(int order);
 
     void slot_albumSelected(Album* album);
-    
+
+    // Image Rating slots
+    void slotAssignRating(int rating);
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
+        
 private slots:
 
     void slotAllAlbumsLoaded();

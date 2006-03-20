@@ -110,6 +110,7 @@ void ImageHistogram::calcHistogramValues()
        postProgress(true, false);
         
     m_histogram = new double_packet[256];
+    memset(m_histogram, 0, 256*sizeof(double_packet));
     
     if ( !m_histogram )
        {

@@ -190,6 +190,13 @@ private:
     KAction       *mThumbSizeMinusAction;
     KAction       *mFullScreenAction;
 
+    KAction               *m_0Star;
+    KAction               *m_1Star;
+    KAction               *m_2Star;
+    KAction               *m_3Star;
+    KAction               *m_4Star;
+    KAction               *m_5Star;
+
     // Application Actions
     KAction       *mQuitAction;
     KAction       *mTipAction;

@@ -588,6 +588,27 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "gamma_adjustment");
 
+    // -- Rating actions ---------------------------------------------------------------
+
+    m_0Star = new KAction(i18n("No Star"), CTRL+Key_0,
+                          mView, SLOT(slotAssignRatingNoStar()),
+                          actionCollection(), "imageview_ratenostar");
+    m_1Star = new KAction(i18n("One Star"), CTRL+Key_1,
+                          mView, SLOT(slotAssignRatingOneStar()),
+                          actionCollection(), "imageview_rateonestar");
+    m_2Star = new KAction(i18n("Two Star"), CTRL+Key_2, 
+                          mView, SLOT(slotAssignRatingTwoStar()),
+                          actionCollection(), "imageview_ratetwostar");
+    m_3Star = new KAction(i18n("Three Star"), CTRL+Key_3, 
+                          mView, SLOT(slotAssignRatingThreeStar()),
+                          actionCollection(), "imageview_ratethreestar");
+    m_4Star = new KAction(i18n("Four Star"), CTRL+Key_4, 
+                          mView, SLOT(slotAssignRatingFourStar()),
+                          actionCollection(), "imageview_ratefourstar");
+    m_5Star = new KAction(i18n("Five Star"), CTRL+Key_5, 
+                          mView, SLOT(slotAssignRatingFiveStar()),
+                          actionCollection(), "imageview_ratefivestar");
+                          
     // -----------------------------------------------------------
 
     KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
