@@ -11,7 +11,7 @@ digikamimageplugin_emboss_la_SOURCES = imageplugin_emboss.cpp \
 	                               imageeffect_emboss.cpp emboss.cpp 
 
 digikamimageplugin_emboss_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_emboss_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

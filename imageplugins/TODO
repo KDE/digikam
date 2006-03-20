@@ -43,8 +43,6 @@ Nota:
 
 - For all pending plugins, we need to use new standard dialogs from digikam core instead common dialog from DigikamImagePlugins.  
 
-- All common dialog from DigikamImagePlugins must be removed.
-
 
 * New features (Later than 0.9.0 release) :
 

@@ -11,7 +11,7 @@ digikamimageplugin_oilpaint_la_SOURCES = imageplugin_oilpaint.cpp \
 	                                 imageeffect_oilpaint.cpp oilpaint.cpp 
 
 digikamimageplugin_oilpaint_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)\
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_oilpaint_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

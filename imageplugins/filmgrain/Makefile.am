@@ -12,8 +12,7 @@ digikamimageplugin_filmgrain_la_SOURCES = imageplugin_filmgrain.cpp \
 	                                  imageeffect_filmgrain.cpp filmgrain.cpp 
 
 digikamimageplugin_filmgrain_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)\
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
-
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
 
 digikamimageplugin_filmgrain_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

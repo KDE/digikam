@@ -11,7 +11,7 @@ digikamimageplugin_hotpixels_la_SOURCES = blackframeparser.cpp weights.cpp hotpi
 					  blackframelistview.h blackframelistview.cpp imageeffect_hotpixels.cpp 
 
 digikamimageplugin_hotpixels_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la 
 
 digikamimageplugin_hotpixels_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

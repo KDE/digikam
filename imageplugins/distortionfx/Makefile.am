@@ -11,7 +11,7 @@ digikamimageplugin_distortionfx_la_SOURCES = imageplugin_distortionfx.cpp \
 	                                     imageeffect_distortionfx.cpp distortionfx.cpp
 
 digikamimageplugin_distortionfx_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_distortionfx_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 

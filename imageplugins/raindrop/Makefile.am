@@ -11,7 +11,7 @@ digikamimageplugin_raindrop_la_SOURCES = imageplugin_raindrop.cpp \
 	                                 imageeffect_raindrop.cpp raindrop.cpp 
 
 digikamimageplugin_raindrop_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS)\
-	              $(top_builddir)/digikamimageplugins/common/dialogs/libdigikamimagepluginsdialog.la 
+	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la
 
 digikamimageplugin_raindrop_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) 
 
