@@ -32,6 +32,8 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtimer.h>
+#include <qsplitter.h>
+#include <qhbox.h>
 
 // KDE includes.
 
@@ -45,9 +47,11 @@
 #include <kapplication.h>
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
 
 // Local includes.
 
+#include "sidebar.h"
 #include "dimginterface.h"
 #include "imagedlgbase.h"
 
@@ -60,10 +64,13 @@ public:
 
     ImageDlgBasePriv()
     {
-        aboutData  = 0;
-        timer      = 0;
-        parent     = 0;
-        mainLayout = 0;
+        aboutData       = 0;
+        timer           = 0;
+        parent          = 0;
+        mainLayout      = 0;
+        hbox            = 0;
+        settingsSideBar = 0;
+        splitter        = 0;
     }
 
     bool            tryAction;
@@ -76,12 +83,18 @@ public:
 
     QTimer         *timer;
 
+    QHBox          *hbox;
+
+    QSplitter      *splitter;
+
     KAboutData     *aboutData;
+
+    Sidebar        *settingsSideBar;
 };
 
 ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name, 
                            bool loadFileSettings, bool tryAction, QFrame* bannerFrame)
-            : KDialogBase(Plain, 0, Help|Default|User2|User3|Try|Ok|Cancel, Ok,
+            : KDialogBase(Plain, 0, Help|Default|User1|User2|User3|Try|Ok|Cancel, Ok,
                           parent, 0, true, true,
                           QString::null,
                           i18n("&Save As..."),
@@ -89,7 +102,8 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     setCaption(DImgInterface::instance()->getImageFileName() + QString(" - ") + title);
-    
+    showButton(User1, false);
+
     d = new ImageDlgBasePriv;
     d->parent    = parent;
     d->name      = name;
@@ -106,15 +120,20 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->mainLayout = new QGridLayout( plainPage(), 2, 1 , marginHint(), spacingHint());
+    d->mainLayout = new QGridLayout( plainPage(), 2, 1);
     if (bannerFrame)
     {
-        bannerFrame->reparent( plainPage(), QPoint::QPoint(0,0) );
+        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
         d->mainLayout->addMultiCellWidget(bannerFrame, 0, 0, 0, 1);
     }
 
     // -------------------------------------------------------------
 
+    d->hbox     = new QHBox(plainPage());
+    d->splitter = new QSplitter(d->hbox);
+    
+    d->splitter->setOpaqueResize(false);
+    d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);
 
@@ -129,24 +148,34 @@ ImageDlgBase::~ImageDlgBase()
     if (d->aboutData)
        delete d->aboutData;
 
+    delete d->settingsSideBar;
     delete d;
+}
+
+void ImageDlgBase::writeConfig()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->name + QString(" Tool Dialog"));
+    config->writeEntry("SplitterSizes", d->splitter->sizes());
+    config->sync();
+    saveDialogSize(d->name + QString(" Tool Dialog"));
 }
 
 void ImageDlgBase::closeEvent(QCloseEvent *e)
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    writeConfig();
     e->accept();
 }
 
 void ImageDlgBase::slotCancel()
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    writeConfig();
     done(Cancel);
 }
 
 void ImageDlgBase::slotOk()
 {
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    writeConfig();
     finalRendering();
 }
 
@@ -173,12 +202,25 @@ void ImageDlgBase::setAboutData(KAboutData *about)
 
 void ImageDlgBase::setPreviewAreaWidget(QWidget *w)
 {
-    d->mainLayout->addMultiCellWidget(w, 1, 2, 0, 0);
+    w->reparent( d->splitter, QPoint(0, 0) );
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Expanding,
+                              2, 1);
+    w->setSizePolicy(rightSzPolicy);
 }
 
 void ImageDlgBase::setUserAreaWidget(QWidget *w)
 {
-    d->mainLayout->addMultiCellWidget(w, 1, 2, 1, 1);
+    QString sbName(d->name + QString(" Image Plugin Sidebar"));
+    d->settingsSideBar = new Sidebar(d->hbox, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar->setSplitter(d->splitter);
+    d->settingsSideBar->appendTab(w, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->loadViewState();
+    
+    KConfig *config = kapp->config();
+    config->setGroup(d->name + QString(" Tool Dialog"));
+    if(config->hasKey("SplitterSizes"))
+        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
 }
 
 void ImageDlgBase::slotTimer()

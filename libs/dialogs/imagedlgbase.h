@@ -60,10 +60,6 @@ public:
     void setPreviewAreaWidget(QWidget *w);
     void setUserAreaWidget(QWidget *w);
 
-private:
-
-    ImageDlgBasePriv* d;
-        
 protected slots:
 
     void slotTimer();       
@@ -79,6 +75,14 @@ private slots:
     void slotCancel();
     void slotOk();        
     virtual void slotEffect(){};
+
+private:
+
+    void writeConfig();
+ 
+private:
+
+    ImageDlgBasePriv* d;
     
 };
 
