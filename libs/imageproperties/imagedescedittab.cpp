@@ -275,7 +275,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    applyChanges();
+    applyAllChanges();
     
     /*
     AlbumList tList = AlbumManager::instance()->allTAlbums();
@@ -355,7 +355,12 @@ void ImageDescEditTab::slotModified()
     d->modified = true;
 }
 
-void ImageDescEditTab::applyChanges()
+void ImageDescEditTab::assignRating(int rating)
+{
+    d->ratingWidget->setRating(rating);
+}
+
+void ImageDescEditTab::applyAllChanges()
 {
     if (!d->modified)
         return;
@@ -404,7 +409,7 @@ void ImageDescEditTab::applyChanges()
 
 void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
 {
-    applyChanges();
+    applyAllChanges();
     
     if (!currItem)
     {

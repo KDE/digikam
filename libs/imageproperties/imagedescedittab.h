@@ -68,6 +68,7 @@ public:
     ImageDescEditTab(QWidget *parent, bool navBar=true);
     ~ImageDescEditTab();
 
+    void assignRating(int rating);
     void setItem(AlbumIconItem* currItem=0, int itemType=0);
     void populateTags();
         
@@ -84,7 +85,7 @@ protected:
 
 private:    
 
-    void applyChanges();
+    void applyAllChanges();
 
     void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);

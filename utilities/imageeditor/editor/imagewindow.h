@@ -76,6 +76,14 @@ private:
     
     KURL::List                m_urlList;
     KURL                      m_urlCurrent;
+
+    // Rating actions.
+    KAction                  *m_0Star;
+    KAction                  *m_1Star;
+    KAction                  *m_2Star;
+    KAction                  *m_3Star;
+    KAction                  *m_4Star;
+    KAction                  *m_5Star;
     
     // Allow to use Image properties and
     // Comments/Tags dialogs from main window.

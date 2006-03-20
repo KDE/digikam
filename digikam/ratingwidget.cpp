@@ -37,7 +37,7 @@ namespace Digikam
 {
 
 RatingWidget::RatingWidget(QWidget* parent)
-    : QWidget(parent)
+            : QWidget(parent)
 {
     m_rating = 0;    
 
@@ -69,12 +69,12 @@ RatingWidget::RatingWidget(QWidget* parent)
 
 RatingWidget::~RatingWidget()
 {
-    
 }
 
 void RatingWidget::setRating(int val)
 {
     m_rating = val;
+    emit signalRatingChanged(m_rating);
     update();
 }
 

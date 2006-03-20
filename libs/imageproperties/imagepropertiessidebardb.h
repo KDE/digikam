@@ -68,7 +68,15 @@ signals:
                                    
 public slots:
 
-    virtual void slotNoCurrentItem(void);                               
+    void slotAssignRating(int rating);
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
+    
+    virtual void slotNoCurrentItem(void);
 
 private slots:
 

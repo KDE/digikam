@@ -221,6 +221,41 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     setCursor( KCursor::arrowCursor() );
 }
 
+void ImagePropertiesSideBarDB::slotAssignRating(int rating)
+{
+    d->desceditTab->assignRating(rating);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingNoStar()
+{
+    d->desceditTab->assignRating(0);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingOneStar()
+{
+    d->desceditTab->assignRating(1);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingTwoStar()
+{
+    d->desceditTab->assignRating(2);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingThreeStar()
+{
+    d->desceditTab->assignRating(3);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingFourStar()
+{
+    d->desceditTab->assignRating(4);
+}
+
+void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
+{
+    d->desceditTab->assignRating(5);
+}
+
 }  // NameSpace Digikam
 
 #include "imagepropertiessidebardb.moc"
