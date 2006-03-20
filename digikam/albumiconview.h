@@ -104,7 +104,7 @@ public:
     QFont    itemFontCom() const;
     QFont    itemFontXtra() const;
 
-     void    clear(bool update=true);
+    void     clear(bool update=true);
 
     AlbumIconItem* findItem(const QPoint& pos);
     AlbumIconItem* findItem(const QString& url) const;
@@ -152,8 +152,6 @@ private slots:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
-    void slotAssignRating(int rating);
-    
     void slotDIOResult(KIO::Job* job);
     
 public slots:
@@ -166,6 +164,14 @@ public slots:
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     void slotCopy();
     void slotPaste();
+    
+    void slotAssignRating(int rating);
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
     
 signals:
 

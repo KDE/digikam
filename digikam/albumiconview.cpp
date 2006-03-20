@@ -1660,6 +1660,36 @@ void AlbumIconView::slotAssignRating(int rating)
     triggerUpdate();
 }
 
+void AlbumIconView::slotAssignRatingNoStar()
+{
+    slotAssignRating(0);
+}
+
+void AlbumIconView::slotAssignRatingOneStar()
+{
+    slotAssignRating(1);
+}
+
+void AlbumIconView::slotAssignRatingTwoStar()
+{
+    slotAssignRating(2);
+}
+
+void AlbumIconView::slotAssignRatingThreeStar()
+{
+    slotAssignRating(3);
+}
+
+void AlbumIconView::slotAssignRatingFourStar()
+{
+    slotAssignRating(4);
+}
+
+void AlbumIconView::slotAssignRatingFiveStar()
+{
+    slotAssignRating(5);
+}
+
 void AlbumIconView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())

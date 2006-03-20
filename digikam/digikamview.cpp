@@ -744,6 +744,41 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     mSearchFolderView->setActive(w == mSearchFolderView);
 }
 
+void DigikamView::slotAssignRating(int rating)
+{
+    mIconView->slotAssignRating(rating);
+}
+
+void DigikamView::slotAssignRatingNoStar()
+{
+    mIconView->slotAssignRatingNoStar();
+}
+
+void DigikamView::slotAssignRatingOneStar()
+{
+    mIconView->slotAssignRatingOneStar();
+}
+
+void DigikamView::slotAssignRatingTwoStar()
+{
+    mIconView->slotAssignRatingTwoStar();
+}
+
+void DigikamView::slotAssignRatingThreeStar()
+{
+    mIconView->slotAssignRatingThreeStar();
+}
+
+void DigikamView::slotAssignRatingFourStar()
+{
+    mIconView->slotAssignRatingFourStar();
+}
+
+void DigikamView::slotAssignRatingFiveStar()
+{
+    mIconView->slotAssignRatingFiveStar();
+}
+
 }  // namespace Digikam
 
 #include "digikamview.moc"

@@ -78,20 +78,22 @@ private:
 
 private:
 
-    DigikamApp                        *mParent;
-    AlbumFolderView                   *mFolderView;    
-    AlbumIconView                     *mIconView;
-    AlbumManager                      *mAlbumMan;
-    AlbumHistory                      *mAlbumHistory;
-    Digikam::Sidebar                  *mMainSidebar;
-    DateFolderView                    *mDateFolderView;
-    TagFolderView                     *mTagFolderView;
-    SearchFolderView                  *mSearchFolderView;
-    Digikam::ImagePropertiesSideBarDB *mRightSidebar;
-    TagFilterView                     *mTagFilterView;
-    int                                mInitialAlbumID;
-    QSplitter                         *mSplitter;
-    
+    int                       mInitialAlbumID;
+
+    QSplitter                *mSplitter;
+        
+    DigikamApp               *mParent;
+    AlbumIconView            *mIconView;
+    AlbumFolderView          *mFolderView;
+    AlbumManager             *mAlbumMan;
+    AlbumHistory             *mAlbumHistory;
+    Sidebar                  *mMainSidebar;
+    DateFolderView           *mDateFolderView;
+    TagFolderView            *mTagFolderView;
+    SearchFolderView         *mSearchFolderView;
+    ImagePropertiesSideBarDB *mRightSidebar;
+    TagFilterView            *mTagFilterView;
+
 public slots:
 
     void slot_newAlbum();
@@ -130,7 +132,16 @@ public slots:
     void slotSortImages(int order);
 
     void slot_albumSelected(Album* album);
-    
+
+    // Image Rating slots
+    void slotAssignRating(int rating);
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
+
 private slots:
 
     void slotAllAlbumsLoaded();

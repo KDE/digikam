@@ -111,12 +111,12 @@ protected slots:
 
 private:
 
-    static DigikamApp          *m_instance;
-    AlbumManager               *mAlbumManager;
+    static DigikamApp     *m_instance;
+    AlbumManager          *mAlbumManager;
     
-    Digikam::ImagePluginLoader *m_ImagePluginsLoader;
+    ImagePluginLoader     *m_ImagePluginsLoader;
     
-    // For KIPI plugins support 
+    // KIPI plugins support
     KIPI::PluginLoader    *KipiPluginLoader_;
     DigikamKipiInterface  *KipiInterface_;
     QPtrList<KAction>      m_kipiFileActionsExport;
@@ -131,71 +131,78 @@ private:
     DigikamView           *mView;
     CameraList            *mCameraList;
     QPopupMenu            *mCameraMediaList;
-    QMap<int, QString>    mMediaItems;
+    QMap<int, QString>     mMediaItems;
 
     bool                   mFullScreen;
 
     Digikam::SplashScreen *mSplash;
     
-    QString               mCameraGuiPath;
+    QString                mCameraGuiPath;
     
     // Album Settings
-    AlbumSettings *mAlbumSettings;
+    AlbumSettings         *mAlbumSettings;
 
     // Camera Actions
-    KActionMenu   *mCameraMenuAction;
+    KActionMenu           *mCameraMenuAction;
 
     // Theme Actions
-    KSelectAction *mThemeMenuAction;
+    KSelectAction         *mThemeMenuAction;
 
     // Album Actions
-    KAction       *mNewAction;
-    KAction       *mDeleteAction;
-    KSelectAction *mAlbumSortAction;
+    KAction               *mNewAction;
+    KAction               *mDeleteAction;
+    KSelectAction         *mAlbumSortAction;
     KToolBarPopupAction   *mBackwardActionMenu;
     KToolBarPopupAction   *mForwardActionMenu;
 
-    KAction       *mAddImagesAction;
-    KAction       *mPropsEditAction;
-    KAction       *mAlbumImportAction;
-    KAction       *mOpenInKonquiAction;
+    KAction               *mAddImagesAction;
+    KAction               *mPropsEditAction;
+    KAction               *mAlbumImportAction;
+    KAction               *mOpenInKonquiAction;
     
     // Tag Actions
-    KAction       *mNewTagAction;
-    KAction       *mDeleteTagAction;
-    KAction       *mEditTagAction;
+    KAction               *mNewTagAction;
+    KAction               *mDeleteTagAction;
+    KAction               *mEditTagAction;
     
     // Image Actions
-    KAction       *mImageViewAction;
-    KAction       *mImageSetExifOrientation1Action;
-    KAction       *mImageSetExifOrientation2Action;
-    KAction       *mImageSetExifOrientation3Action;
-    KAction       *mImageSetExifOrientation4Action;
-    KAction       *mImageSetExifOrientation5Action;
-    KAction       *mImageSetExifOrientation6Action;
-    KAction       *mImageSetExifOrientation7Action;
-    KAction       *mImageSetExifOrientation8Action;
-    KAction       *mImageRenameAction;
-    KAction       *mImageDeleteAction;
-    KSelectAction *mImageSortAction;
-    KActionMenu   *mImageExifOrientationActionMenu;
+    KAction               *mImageViewAction;
+    KAction               *mImageSetExifOrientation1Action;
+    KAction               *mImageSetExifOrientation2Action;
+    KAction               *mImageSetExifOrientation3Action;
+    KAction               *mImageSetExifOrientation4Action;
+    KAction               *mImageSetExifOrientation5Action;
+    KAction               *mImageSetExifOrientation6Action;
+    KAction               *mImageSetExifOrientation7Action;
+    KAction               *mImageSetExifOrientation8Action;
+    KAction               *mImageRenameAction;
+    KAction               *mImageDeleteAction;
+    KSelectAction         *mImageSortAction;
+    KActionMenu           *mImageExifOrientationActionMenu;
 
     // Selection Actions
-    KAction       *mSelectAllAction;
-    KAction       *mSelectNoneAction;
-    KAction       *mSelectInvertAction;
+    KAction               *mSelectAllAction;
+    KAction               *mSelectNoneAction;
+    KAction               *mSelectInvertAction;
 
     // View Actions
-    KAction       *mThumbSizePlusAction;
-    KAction       *mThumbSizeMinusAction;
-    KAction       *mFullScreenAction;
+    KAction               *mThumbSizePlusAction;
+    KAction               *mThumbSizeMinusAction;
+    KAction               *mFullScreenAction;
+
+    KAction               *m_0Star;
+    KAction               *m_1Star;
+    KAction               *m_2Star;
+    KAction               *m_3Star;
+    KAction               *m_4Star;
+    KAction               *m_5Star;
 
     // Application Actions
-    KAction       *mQuitAction;
-    KAction       *mTipAction;
-    KAction       *mKipiHelpAction;
-    KAction       *mGammaAdjustmentAction;
-    DCOPIface     *mDcopIface;
+    KAction               *mQuitAction;
+    KAction               *mTipAction;
+    KAction               *mKipiHelpAction;
+    KAction               *mGammaAdjustmentAction;
+    DCOPIface             *mDcopIface;
 
 private slots:
 
