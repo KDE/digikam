@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_superimpose.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-04
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -200,10 +202,10 @@ void ImageEffect_SuperImpose::populateTemplates(void)
     QFileInfo* fi;
 
     while( (fi = it.current() ) )
-        {
+    {
         new Digikam::ThumbBarItem( m_thumbnailsBar, KURL::KURL(fi->filePath()) );
         ++it;
-        }
+    }
 }
 
 void ImageEffect_SuperImpose::slotDefault()
@@ -215,36 +217,42 @@ void ImageEffect_SuperImpose::slotRootTemplateDirChanged(void)
 {
     KURL url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
-    
+
     if( url.isValid() )
-       {
-       m_dirSelect->setRootPath(url);
-       m_templatesRootUrl = url;
-       m_templatesUrl = url;
-       populateTemplates();
-       }
+    {
+        m_dirSelect->setRootPath(url);
+        m_templatesRootUrl = url;
+        m_templatesUrl = url;
+        populateTemplates();
+    }
 }
 
 void ImageEffect_SuperImpose::slotTemplateDirChanged(const KURL& url)
 {
     if( url.isValid() )
-       {
-       m_templatesUrl = url;
-       populateTemplates();
-       }
+    {
+        m_templatesUrl = url;
+        populateTemplates();
+    }
 }
 
 void ImageEffect_SuperImpose::finalRendering()
 {
-    kapp->setOverrideCursor( KCursor::waitCursor() );
-    
+    setCursor(KCursor::waitCursor());
+    m_previewWidget->setEnabled(false);
+    m_dirSelect->setEnabled(false);
+    m_thumbnailsBar->setEnabled(false);
+
     Digikam::ImageIface iface(0, 0);
-    QImage img = m_previewWidget->makeSuperImpose().copy();
-    iface.putOriginalData(i18n("Super Impose"), (uint*)img.bits(),
-                          img.width(), img.height() );   
-    
-    kapp->restoreOverrideCursor();       
-    accept();       
+    Digikam::DImg img = m_previewWidget->makeSuperImpose();
+    iface.putOriginalImage(i18n("Super Impose"), img.bits(),
+                           img.width(), img.height() );
+
+    m_previewWidget->setEnabled(true);
+    m_dirSelect->setEnabled(true);
+    m_thumbnailsBar->setEnabled(true);
+    unsetCursor();
+    accept();
 }
 
 }  // NameSpace DigikamSuperImposeImagesPlugin

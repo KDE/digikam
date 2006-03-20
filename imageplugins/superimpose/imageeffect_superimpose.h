@@ -23,10 +23,6 @@
 #ifndef IMAGEEFFECT_SUPERIMPOSE_H
 #define IMAGEEFFECT_SUPERIMPOSE_H
 
-// Qt include.
-
-#include <qimage.h>
-
 // KDE include.
 
 #include <kurl.h>

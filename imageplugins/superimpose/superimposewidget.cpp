@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : superimposewidget.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-04
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +43,7 @@
 // Local includes.
 
 #include "superimposewidget.h"
+#include "superimpose.h"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -50,51 +53,29 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
 {
     m_pixmap   = new QPixmap(w, h);
     m_editMode = MOVE;
-    
+
     Digikam::ImageIface iface(0, 0);
-    uint *data   = iface.getOriginalData();
     m_w          = iface.originalWidth();
     m_h          = iface.originalHeight();
-    
-    m_img.create( m_w, m_h, 32 );
-    memcpy(m_img.bits(), data, m_img.numBytes());
-    delete [] data;    
-    
+
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
-    
+
     resetEdit();
 }
 
 SuperImposeWidget::~SuperImposeWidget()
 {
     if(m_pixmap) 
-       delete m_pixmap;    
+       delete m_pixmap;
 }
 
-QSize SuperImposeWidget::getTemplateSize(void)
+Digikam::DImg SuperImposeWidget::makeSuperImpose(void)
 {
-    return m_template.size();
-}
-
-QImage SuperImposeWidget::makeSuperImpose(void)
-{
-    QSize size = getTemplateSize();
-    QPixmap target(size);
-    
-    target.fill(colorGroup().background());
-    
-    QPainter p(&target);
-    QPixmap pix(m_img.copy(m_currentSelection.x(), m_currentSelection.y(),
-                           m_currentSelection.width(), m_currentSelection.height())
-                .scale(size));
-    p.drawPixmap(0, 0, pix, 0, 0, size.width(), size.height());
-    QPixmap pixTemplate(m_template);
-    p.drawPixmap(0, 0, pixTemplate, 0, 0, size.width(), size.height());
-    p.end();    
-    
-    return ( target.convertToImage().convertDepth(32) );
+    Digikam::ImageIface iface(0, 0);
+    SuperImpose superimpose(iface.getOriginalImg(), &m_template, m_currentSelection, false);
+    return superimpose.getTargetImage();
 }
 
 void SuperImposeWidget::resetEdit(void)
@@ -108,14 +89,14 @@ void SuperImposeWidget::resetEdit(void)
 
 void SuperImposeWidget::makePixmap(void)
 {
+    Digikam::ImageIface iface(0, 0);
+    SuperImpose superimpose(iface.getOriginalImg(), &m_templateScaled, m_currentSelection, true);
+    Digikam::DImg image = superimpose.getTargetImage();
+
     m_pixmap->fill(colorGroup().background());
-    
     QPainter p(m_pixmap);
-    QPixmap pix(m_img.copy(m_currentSelection.x(), m_currentSelection.y(),
-                           m_currentSelection.width(), m_currentSelection.height())
-                .scale(m_rect.width(), m_rect.height()));
-    p.drawPixmap(m_rect.x(), m_rect.y(), pix, 0, 0, m_rect.width(), m_rect.height());
-    p.drawPixmap(m_rect.x(), m_rect.y(), m_templatePix, 0, 0, m_rect.width(), m_rect.height());
+    QPixmap imagePix = image.convertToPixmap();
+    p.drawPixmap(m_rect.x(), m_rect.y(), imagePix, 0, 0, m_rect.width(), m_rect.height());
     p.end();
 }
 
@@ -126,22 +107,32 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
     int w = e->size().width();
     int h = e->size().height();
     m_pixmap = new QPixmap(w, h);
-    QSize size = m_template.size();
-    
-    if (size.width() < size.height())
-       {
-       int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
-       m_rect = QRect(width()/2-neww/2, 0, neww, height());
-       }
-    else
-       {
-       int newh = (int) ((float)width() / (float)size.width() * (float)size.height());
-       m_rect = QRect(0, height()/2-newh/2, width(), newh);
-       }
-    
-    m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
 
-    makePixmap();
+    if (!m_template.isNull())
+    {
+        int templateWidth  = m_template.width();
+        int templateHeight = m_template.height();
+
+        if (templateWidth < templateHeight)
+        {
+            int neww = (int) ((float)height() / (float)templateHeight * (float)templateWidth);
+            m_rect = QRect(width()/2-neww/2, 0, neww, height());
+        }
+        else
+        {
+            int newh = (int) ((float)width() / (float)templateWidth * (float)templateHeight);
+            m_rect = QRect(0, height()/2-newh/2, width(), newh);
+        }
+
+        m_templateScaled = m_template.smoothScale(m_rect.width(), m_rect.height());
+        makePixmap();
+    }
+    else
+    {
+        m_rect = QRect();
+        m_pixmap->fill(colorGroup().background());
+    }
+
     blockSignals(false);
 }
 
@@ -158,21 +149,29 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
 void SuperImposeWidget::slotSetCurrentTemplate(const KURL& url)
 {
     m_template.load(url.path());
-    QSize size = m_template.size();
-    
-    if (size.width() < size.height())
-       {
-       int neww = (int) ((float)height() / (float)size.height() * (float)size.width());
-       m_rect = QRect(width()/2-neww/2, 0, neww, height());
-       }
+
+    if (m_template.isNull())
+    {
+        m_rect = QRect();
+        return;
+    }
+
+    int templateWidth  = m_template.width();
+    int templateHeight = m_template.height();
+
+    if (templateWidth < templateHeight)
+    {
+        int neww = (int) ((float)height() / (float)templateHeight * (float)templateWidth);
+        m_rect = QRect(width()/2-neww/2, 0, neww, height());
+    }
     else
-       {
-       int newh = (int) ((float)width() / (float)size.width() * (float)size.height());
-       m_rect = QRect(0, height()/2-newh/2, width(), newh);
-       }
-    
-    m_templatePix.convertFromImage(m_template.scale(m_rect.width(), m_rect.height()));
-    
+    {
+        int newh = (int) ((float)width() / (float)templateWidth * (float)templateHeight);
+        m_rect = QRect(0, height()/2-newh/2, width(), newh);
+    }
+
+    m_templateScaled = m_template.smoothScale(m_rect.width(), m_rect.height());
+
     m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, m_rect.width(), m_rect.height());
     int z = m_zoomFactor;
     m_zoomFactor = 100;
@@ -183,7 +182,7 @@ void SuperImposeWidget::moveSelection(int dx, int dy)
 {
     float wf = (float)m_currentSelection.width() / (float)m_rect.width();
     float hf = (float)m_currentSelection.height() / (float)m_rect.height();
-    
+
     m_currentSelection.moveBy( -(int)(wf*(float)dx), -(int)(hf*(float)dy) );
 }
 
@@ -192,102 +191,102 @@ void SuperImposeWidget::zoomSelection(int deltaZoomFactor)
     m_zoomFactor = m_zoomFactor + deltaZoomFactor;
     int wf = (int)((float)m_rect.width()  * (100-(float)m_zoomFactor) / 100);
     int hf = (int)((float)m_rect.height() * (100-(float)m_zoomFactor) / 100);
-    
+
     if (deltaZoomFactor > 0)  // Zoom in.
-       {
-       m_currentSelection.setLeft(m_currentSelection.left() + (wf /2));
-       m_currentSelection.setTop(m_currentSelection.top() + (hf /2));
-       m_currentSelection.setWidth(m_currentSelection.width() - wf);
-       m_currentSelection.setHeight(m_currentSelection.height() - hf);
-       }
+    {
+        m_currentSelection.setLeft(m_currentSelection.left() + (wf /2));
+        m_currentSelection.setTop(m_currentSelection.top() + (hf /2));
+        m_currentSelection.setWidth(m_currentSelection.width() - wf);
+        m_currentSelection.setHeight(m_currentSelection.height() - hf);
+    }
     else                      // Zoom out.
-       {
-       m_currentSelection.setLeft(m_currentSelection.left() - (wf /2));
-       m_currentSelection.setTop(m_currentSelection.top() - (hf /2));
-       m_currentSelection.setWidth(m_currentSelection.width() + wf);
-       m_currentSelection.setHeight(m_currentSelection.height() + hf);
-       }
-        
+    {
+        m_currentSelection.setLeft(m_currentSelection.left() - (wf /2));
+        m_currentSelection.setTop(m_currentSelection.top() - (hf /2));
+        m_currentSelection.setWidth(m_currentSelection.width() + wf);
+        m_currentSelection.setHeight(m_currentSelection.height() + hf);
+    }
+
     makePixmap();
     repaint(false);
 }
 
 void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton &&
+    if ( isEnabled() && e->button() == Qt::LeftButton &&
          rect().contains( e->x(), e->y() ) )
-       {
-       switch (m_editMode)
-           {
-           case ZOOMIN:
-              if (m_zoomFactor < 100)
-                 {
-                 moveSelection(width()/2 - e->x(), height()/2 - e->y());
-                 zoomSelection(+5);
-                 }
-              break;
-              
-           case ZOOMOUT:
-              if (m_zoomFactor > 1)
-                 {
-                 moveSelection(width()/2 - e->x(), height()/2 - e->y());
-                 zoomSelection(-5);
-                 }
-              break;
-           
-           case MOVE:
-              m_xpos = e->x();
-              m_ypos = e->y();
-              setCursor ( KCursor::sizeAllCursor() );
-           }
-       }
+    {
+        switch (m_editMode)
+        {
+            case ZOOMIN:
+                if (m_zoomFactor < 100)
+                {
+                    moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                    zoomSelection(+5);
+                }
+                break;
+
+            case ZOOMOUT:
+                if (m_zoomFactor > 1)
+                {
+                    moveSelection(width()/2 - e->x(), height()/2 - e->y());
+                    zoomSelection(-5);
+                }
+                break;
+
+            case MOVE:
+                m_xpos = e->x();
+                m_ypos = e->y();
+                setCursor ( KCursor::sizeAllCursor() );
+        }
+    }
 }
 
 void SuperImposeWidget::mouseReleaseEvent ( QMouseEvent * )
 {
-    setCursor ( KCursor::arrowCursor() );
+    unsetCursor();
 }
 
 void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( rect().contains( e->x(), e->y() ) )
-       {
-       if ( e->state() == Qt::LeftButton )
-          {
-          switch (m_editMode)
-           {
-           case ZOOMIN:
-           case ZOOMOUT:
-              break;
-           
-           case MOVE:
-              uint newxpos = e->x();
-              uint newypos = e->y();
-              
-              moveSelection(newxpos - m_xpos, newypos - m_ypos);
-              makePixmap();
-              repaint(false);
-               
-              m_xpos = newxpos;
-              m_ypos = newypos;
-              setCursor( KCursor::handCursor() );
-              break;
-           }
-          }
-       else
-          {
-          switch (m_editMode)
-           {
-           case ZOOMIN:
-           case ZOOMOUT:
-              setCursor( KCursor::crossCursor() );
-              break;
-           
-           case MOVE:
-              setCursor ( KCursor::sizeAllCursor() );
-           }
-          }
-       }
+    if ( isEnabled() && rect().contains( e->x(), e->y() ) )
+    {
+        if ( e->state() == Qt::LeftButton )
+        {
+            switch (m_editMode)
+            {
+                case ZOOMIN:
+                case ZOOMOUT:
+                    break;
+
+                case MOVE:
+                    uint newxpos = e->x();
+                    uint newypos = e->y();
+
+                    moveSelection(newxpos - m_xpos, newypos - m_ypos);
+                    makePixmap();
+                    repaint(false);
+
+                    m_xpos = newxpos;
+                    m_ypos = newypos;
+                    setCursor( KCursor::handCursor() );
+                    break;
+            }
+        }
+        else
+        {
+            switch (m_editMode)
+            {
+                case ZOOMIN:
+                case ZOOMOUT:
+                    setCursor( KCursor::crossCursor() );
+                    break;
+
+                case MOVE:
+                    setCursor ( KCursor::sizeAllCursor() );
+            }
+        }
+    }
 }
 
 }  // NameSpace DigikamSuperImposeImagesPlugin

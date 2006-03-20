@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : superimposewidget.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-04
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +36,9 @@
 
 #include <kurl.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
 
 class QPixmap;
 
@@ -65,15 +70,15 @@ public:
     void   resetEdit(void);
     QRect  getCurrentSelection(void);
     QSize  getTemplateSize(void);
-    QImage makeSuperImpose(void);
-    
+    Digikam::DImg makeSuperImpose(void);
+
 public slots:
 
     void slotEditModeChanged(int mode);
     void slotSetCurrentTemplate(const KURL& url);
-    
+
 private:
-    
+
     int         m_w;
     int         m_h;
 
@@ -81,27 +86,26 @@ private:
     int         m_ypos;
     int         m_editMode;
     int         m_zoomFactor;
-    
-    QPixmap    *m_pixmap;              // For image region selection manipulations.
-    QPixmap     m_templatePix;         // Template scaled to widget size.
-    
-    QImage      m_img;                 // Full image data.
-    QImage      m_template;            // Full template data.
 
-        
+    QPixmap    *m_pixmap;              // For image region selection manipulations.
+
+    Digikam::DImg m_template;          // Full template data.
+    Digikam::DImg m_templateScaled;    // Template scaled to preview widget
+
+
     QRect       m_rect;                // For mouse drag position.
     QRect       m_currentSelection;    // Region selection in image displayed in the widget.
 
 protected:
-        
+
     void paintEvent( QPaintEvent *e );
     void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );    
-    
-    void zoomSelection(int deltaZoomFactor);    
-    void moveSelection(int x, int y);  
+    void mouseMoveEvent ( QMouseEvent * e );
+
+    void zoomSelection(int deltaZoomFactor);
+    void moveSelection(int x, int y);
     void makePixmap(void);
 };
 
