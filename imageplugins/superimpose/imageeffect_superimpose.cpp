@@ -104,9 +104,11 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
     
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
-    m_previewWidget = new SuperImposeWidget(400, 300, frame);
-    l->addWidget(m_previewWidget, 10);
+
+    QGridLayout* gridFrame = new QGridLayout( frame, 1, 2, marginHint(), spacingHint());
+    m_previewWidget        = new SuperImposeWidget(400, 300, frame);
+    gridFrame->addMultiCellWidget(m_previewWidget, 0, 0, 0, 2);
+    gridFrame->setRowStretch(0, 10);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
                                            "superimposed onto the image.") );
     
@@ -120,23 +122,25 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
     zoomInButton->setPixmap( icon.loadIcon( "viewmag+", (KIcon::Group)KIcon::Toolbar ) );
     zoomInButton->setToggleButton(true);
     QToolTip::add( zoomInButton, i18n( "Zoom in" ) );
-    bGroup->addSpace(0);
+    bGroup->addSpace(20);
     QPushButton *zoomOutButton = new QPushButton( bGroup );
     bGroup->insert(zoomOutButton, ZOOMOUT);
     zoomOutButton->setPixmap( icon.loadIcon( "viewmag-", (KIcon::Group)KIcon::Toolbar ) );
     zoomOutButton->setToggleButton(true);
     QToolTip::add( zoomOutButton, i18n( "Zoom out" ) );
-    bGroup->addSpace(0);
+    bGroup->addSpace(20);
     QPushButton *moveButton = new QPushButton( bGroup );
     bGroup->insert(moveButton, MOVE);
     moveButton->setPixmap( icon.loadIcon( "move", (KIcon::Group)KIcon::Toolbar ) );
     moveButton->setToggleButton(true);
     moveButton->setOn(true);
     QToolTip::add( moveButton, i18n( "Move" ) );
-    bGroup->addSpace(0);
+    bGroup->addSpace(20);
     bGroup->setExclusive(true);
     bGroup->setFrameShape(QFrame::NoFrame);
-    l->addWidget(bGroup);
+    gridFrame->addMultiCellWidget(bGroup, 1, 1, 1, 1);
+    gridFrame->setColStretch(0, 10);
+    gridFrame->setColStretch(2, 10);
     
     setPreviewAreaWidget(frame);     
     
