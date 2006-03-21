@@ -68,24 +68,28 @@ SetupImgPlugins::SetupImgPlugins(QWidget* parent )
                : QWidget(parent)
 {
     d = new SetupImgPluginsPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
 
-    QVGroupBox *imagePluginsListGroup = new QVGroupBox(i18n("Image Plugins List"), parent);
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
-    d->pluginsNumber = new QLabel(imagePluginsListGroup);
+    QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint());
+
+    d->pluginsNumber = new QLabel(this);
     
-    d->pluginList = new KListView( imagePluginsListGroup, "pluginList" );
+    d->pluginList = new KListView( this, "pluginList" );
     d->pluginList->addColumn( i18n( "Name" ) );
-    d->pluginList->addColumn( "Library Name", 0 );   // Hidden column with the internal plugin library name.
+    d->pluginList->addColumn( "Library Name", 0 );   // No i18n here. Hidden column with the internal plugin library name.
     d->pluginList->addColumn( i18n( "Description" ) );
     d->pluginList->setResizeMode( QListView::LastColumn );
     d->pluginList->setAllColumnsShowFocus( true );
     QWhatsThis::add( d->pluginList, i18n("<p>You can set here the list of plugins "
-                                        "which must be enabled/disabled for the future "
-                                        "digiKam image editor instances."
-                                        "<p>Note: the core image plugin cannot be disabled."));
+                                         "which must be enabled/disabled for the future "
+                                         "digiKam image editor instances."
+                                         "<p>Note: the core image plugin cannot be disabled."));
     
-    layout->addWidget( imagePluginsListGroup );
+    layout->addWidget( d->pluginsNumber );
+    layout->addWidget( d->pluginList );
+
+    mainLayout->addWidget(this);
     
     // --------------------------------------------------------
     
