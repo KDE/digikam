@@ -21,13 +21,6 @@
 #ifndef PNGMETALOADER_H
 #define PNGMETALOADER_H
 
-// LibPNG includes.
-
-extern "C"
-{
-#include <png.h>
-}
-
 // Local includes.
 
 #include "dmetaloader.h"
@@ -50,8 +43,7 @@ public:
 
 private :
     
-    uchar* readRawProfile(png_textp text, png_uint_32 *length, int ii);
-    void   png_skip_till_end(png_structp png_ptr, png_infop info_ptr);
+    uchar* readRawProfile(const char* text, uint *length);
 };
 
 }  // NameSpace Digikam
