@@ -138,7 +138,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStrin
 
             // Check if the current IfD have any items. If no remove it before to toogle to the next IfD.
             if ( subItems == 0 && parentifDItem)
-                takeItem(parentifDItem);
+                delete parentifDItem;
 
             parentifDItem = new MdKeyListViewItem(this, currentIfDName);
             subItems = 0;
@@ -171,7 +171,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStrin
 
     // To check if the last IfD have any items...
     if ( subItems == 0 && parentifDItem)
-        takeItem(parentifDItem);
+        delete parentifDItem;
 
     setCurrentItemByKey(m_selectedItemKey);
     QTimer::singleShot( 0, this, SLOT( triggerUpdate() ) );
@@ -229,7 +229,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, QStringList 
 
         // We checking if the last IfD have any items. If no, we remove it.
         if ( subItems == 0 && parentifDItem)
-            takeItem(parentifDItem);
+            delete parentifDItem;
     }
 
     setCurrentItemByKey(m_selectedItemKey);
