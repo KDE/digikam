@@ -52,10 +52,6 @@
 #include <imagedlgbase.h>
 #include <imageguidedlg.h>
 
-// FIXME : Revove these lines when all plugins will be ported to DImg
-#include <threadedfilter.h>
-#include <imagefilters.h>
-
 #else
 
 #include <digikam/dimg.h>
@@ -84,10 +80,6 @@
 #include <digikam/ctrlpaneldlg.h>
 #include <digikam/imagedlgbase.h>
 #include <digikam/imageguidedlg.h>
-
-// FIXME : Revove these lines when all plugins will be ported to DImg
-#include <digikam/threadedfilter.h>
-#include <digikam/imagefilters.h>
 
 #endif /* HAVE_DIGIKAM_TOPLEVEL */
 

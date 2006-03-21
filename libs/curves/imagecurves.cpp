@@ -23,6 +23,8 @@
  * 
  * ============================================================ */
 
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
 // C++ includes.
  
 #include <cstdio>
@@ -41,7 +43,6 @@
 
 // Local includes.
 
-#include "imagefilters.h"
 #include "imagecurves.h"
 
 namespace Digikam

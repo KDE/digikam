@@ -644,12 +644,12 @@ void PerspectiveWidget::transformAffine(uint *data, uint *newData, const Matrix3
              int u = iu - u1;
              int v = iv - v1;
              
-             if (m_antiAlias)
+/*             if (m_antiAlias)
                 {
                 Digikam::ImageFilters::pixelAntiAliasing((uchar*)data, w, h, u, v, 
                                        &color[3], &color[2], &color[1], &color[0]);
                 }
-             else   
+             else   */
                 memcpy(color, (uchar*)(data + (u + v*w)), 4);
 
              for (b = 0; b < bytes; b++)

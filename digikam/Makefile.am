@@ -1,11 +1,10 @@
-SUBDIRS = pics
+SUBDIRS = pics icons 
 
 lib_LTLIBRARIES = libdigikam.la
 bin_PROGRAMS = digikam
 
 INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/histogram \
-	   -I$(top_srcdir)/digikam/libs/filters \
 	   -I$(top_srcdir)/digikam/libs/levels \
 	   -I$(top_srcdir)/digikam/libs/curves \
 	   -I$(top_srcdir)/digikam/libs/themeengine \
@@ -51,7 +50,6 @@ libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 			           $(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
 		               $(top_builddir)/digikam/sqlite/libsqlite.la \
-		               $(top_builddir)/digikam/libs/filters/libfilters.la \
 		               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
 		               $(top_builddir)/digikam/libs/widgets/libwidgets.la \
