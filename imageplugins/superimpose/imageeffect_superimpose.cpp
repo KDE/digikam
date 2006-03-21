@@ -67,7 +67,7 @@ namespace DigikamSuperImposeImagesPlugin
 
 ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent, 
                                                  QString title, QFrame* banner)
-                       : Digikam::ImageDlgBase(parent, title, "superimpose", false, banner)
+                       : Digikam::ImageDlgBase(parent, title, "superimpose", false, false, banner)
 {
     QString whatsThis;
            
@@ -87,20 +87,24 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to superimpose a template onto a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
     
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
     
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
     setAboutData(about);    
     
     // -------------------------------------------------------------
     
     QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l = new QVBoxLayout(frame, 5, 0);
+    QVBoxLayout* l  = new QVBoxLayout(frame, 5, 0);
     m_previewWidget = new SuperImposeWidget(400, 300, frame);
     l->addWidget(m_previewWidget, 10);
     QWhatsThis::add( m_previewWidget, i18n("<p>This is the preview of the template "
@@ -138,18 +142,19 @@ ImageEffect_SuperImpose::ImageEffect_SuperImpose(QWidget* parent,
     
     // -------------------------------------------------------------
     
-    QWidget *gbox2 = new QWidget(plainPage());
-    QGridLayout* grid = new QGridLayout( gbox2, 2, 3, marginHint(), spacingHint());
+    QWidget *gbox2    = new QWidget(plainPage());
+    QGridLayout* grid = new QGridLayout( gbox2, 1, 1, marginHint(), spacingHint());
     
     m_thumbnailsBar = new Digikam::ThumbBarView(gbox2);
-    m_dirSelect = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
+    m_dirSelect     = new DirSelectWidget(m_templatesRootUrl, m_templatesUrl, gbox2);
     QPushButton *templateDirButton = new QPushButton( i18n("Root Directory..."), gbox2 );
     QWhatsThis::add( templateDirButton, i18n("<p>Set here the current templates' root directory.") );
 
     grid->addMultiCellWidget(m_thumbnailsBar, 0, 1, 0, 0);
-    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 2);    
+    grid->addMultiCellWidget(m_dirSelect, 0, 0, 1, 1);    
     grid->addMultiCellWidget(templateDirButton, 1, 1, 1, 1);    
-    
+    grid->setColStretch(1, 10);
+
     setUserAreaWidget(gbox2);
     
     // -------------------------------------------------------------
@@ -203,7 +208,7 @@ void ImageEffect_SuperImpose::populateTemplates(void)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( m_thumbnailsBar, KURL::KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( m_thumbnailsBar, KURL(fi->filePath()) );
         ++it;
     }
 }
