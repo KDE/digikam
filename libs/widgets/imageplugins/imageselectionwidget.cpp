@@ -683,11 +683,11 @@ void ImageSelectionWidget::updatePixmap(void)
     uchar* ptr = image.bits();
     uchar  r, g, b;
 
-    for (uint j=0 ; j < d->preview.height() ; j++)
+    for (uint j=0 ; j < (uint)d->preview.height() ; j++)
     {
-        for (uint i=0 ; i < d->preview.width() ; i++)
+        for (uint i=0 ; i < (uint)d->preview.width() ; i++)
         {
-            if (i < lx || i >= rx || j < ty || j >= by)
+            if (i < (uint)lx || i >= (uint)rx || j < (uint)ty || j >= (uint)by)
             {
                 b = ptr[0];
                 g = ptr[1];
