@@ -89,16 +89,16 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
 
     QLabel *title      = new QLabel(i18n("Camera File Properties:"), this);
-    QLabel *fileName   = new QLabel(i18n("Name:"), this);
-    QLabel *folder     = new QLabel(i18n("Folder:"), this);
-    QLabel *isReadable = new QLabel(i18n("Is readable:"), this);
-    QLabel *isWritable = new QLabel(i18n("Is writable:"), this);
-    QLabel *date       = new QLabel(i18n("Date:"), this);
-    QLabel *size       = new QLabel(i18n("Size:"), this);
-    QLabel *mime       = new QLabel(i18n("Mime type:"), this);
-    QLabel *width      = new QLabel(i18n("Width:"), this);
-    QLabel *height     = new QLabel(i18n("Height:"), this);
-    QLabel *downloaded = new QLabel(i18n("Already downloaded:"), this);
+    QLabel *fileName   = new QLabel(i18n("<b>Name</b>:"), this);
+    QLabel *folder     = new QLabel(i18n("<b>Folder</b>:"), this);
+    QLabel *isReadable = new QLabel(i18n("<b>Readable</b>:"), this);
+    QLabel *isWritable = new QLabel(i18n("<b>Writable</b>:"), this);
+    QLabel *date       = new QLabel(i18n("<b>Date</b>:"), this);
+    QLabel *size       = new QLabel(i18n("<b>Size</b>:"), this);
+    QLabel *mime       = new QLabel(i18n("<b>Mime</b>:"), this);
+    QLabel *width      = new QLabel(i18n("<b>Width</b>:"), this);
+    QLabel *height     = new QLabel(i18n("<b>Height</b>:"), this);
+    QLabel *downloaded = new QLabel(i18n("<b>Downloaded</b>:"), this);
                             
     d->labelFileName          = new KSqueezedTextLabel(0, this);
     d->labelFolder            = new KSqueezedTextLabel(0, this);
