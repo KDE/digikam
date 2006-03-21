@@ -96,12 +96,16 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageGuideWidgetPriv;
-    d->spotVisible  = spotVisible;
-    d->guideMode    = guideMode;
-    d->guideColor   = guideColor;
-    d->guideSize    = guideSize;
+    d->spotVisible = spotVisible;
+    d->guideMode   = guideMode;
+    d->guideColor  = guideColor;
+    d->guideSize   = guideSize;
     
     setBackgroundMode(Qt::NoBackground);
+
+    // FIXME : remove it (just for testing CF B.K.O #120309)
+    //setPaletteBackgroundColor ( Qt::red );
+    
     setMinimumSize(w, h);
     setMouseTracking(true);
 
@@ -159,8 +163,8 @@ int ImageGuideWidget::getRenderingPreviewMode(void)
 
 QPoint ImageGuideWidget::getSpotPosition(void)
 {
-    return (QPoint::QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth() / (float)d->width),
-                            (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
+    return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
+                    (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
 }
 
 DColor ImageGuideWidget::getSpotColor(int getColorFrom)
@@ -210,7 +214,7 @@ void ImageGuideWidget::updatePixmap( void )
     QString text;
     QRect textRect, fontRect;
     QFontMetrics fontMt = p.fontMetrics();
-    p.setPen(QPen::QPen(Qt::red, 1)) ;
+    p.setPen(QPen(Qt::red, 1)) ;
     
     d->pixmap->fill(colorGroup().background());
 
@@ -221,8 +225,8 @@ void ImageGuideWidget::updatePixmap( void )
 
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -238,8 +242,8 @@ void ImageGuideWidget::updatePixmap( void )
         {
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-            textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
-            textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
+            textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
+            textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
             p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
             p.drawRect(textRect);
             p.drawText(textRect, Qt::AlignCenter, text);
@@ -269,7 +273,8 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.height());
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(), 0, 0, d->rect.width()/2, d->rect.height());
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(),
+                         0, 0, d->rect.width()/2, d->rect.height());
         }
 
         // Drawing the information and others stuff.
@@ -286,21 +291,21 @@ void ImageGuideWidget::updatePixmap( void )
                 d->rect.x()+d->rect.width()/2-1,
                 d->rect.y()+d->rect.height());
 
-        p.setPen(QPen::QPen(Qt::red, 1)) ;
+        p.setPen(QPen(Qt::red, 1)) ;
 
         text = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + d->rect.width()/2 + 20,
-                                        d->rect.y() + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+        textRect.setTopLeft(QPoint(d->rect.x() + d->rect.width()/2 + 20,
+                                   d->rect.y() + 20));
+        textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
 
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -330,7 +335,8 @@ void ImageGuideWidget::updatePixmap( void )
                             d->rect.height());
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(), 0, 0, d->rect.width(), d->rect.height()/2);
+            p.drawPixmap(d->rect.x(), d->rect.y(), d->preview.convertToPixmap(),
+                         0, 0, d->rect.width(), d->rect.height()/2);
         }
 
         p.fillRect(0, d->rect.bottom(), width(), height(), colorGroup().background());
@@ -346,21 +352,21 @@ void ImageGuideWidget::updatePixmap( void )
                 d->rect.width(),
                 d->rect.y()+d->rect.height()/2-1);
 
-        p.setPen(QPen::QPen(Qt::red, 1)) ;
+        p.setPen(QPen(Qt::red, 1)) ;
 
         text = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20,
-                                        d->rect.y() + d->rect.height()/2 + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height()) );
+        textRect.setTopLeft(QPoint(d->rect.x() + 20,
+                                   d->rect.y() + d->rect.height()/2 + 20));
+        textRect.setSize( QSize(fontRect.width(), fontRect.height()) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
 
         text = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint::QPoint(d->rect.x() + 20, d->rect.y() + 20));
-        textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
+        textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
+        textRect.setSize( QSize(fontRect.width(), fontRect.height() ) );
         p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
@@ -450,7 +456,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent * e)
     d->pixmap = new QPixmap(w, h);
     d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
-    d->spot.setX((int)((float)d->spot.x() * ( (float)d->width / (float)old_w)));
+    d->spot.setX((int)((float)d->spot.x() * ( (float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
     updatePixmap();
     blockSignals(false);
@@ -496,7 +502,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
             if (d->spot.x() > d->rect.width()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, QPoint::QPoint(d->spot.x() - d->rect.width()/2, d->spot.y()));
+                emit spotPositionChangedFromTarget( color, QPoint(d->spot.x() - d->rect.width()/2, d->spot.y()));
             }
             else
             {
@@ -522,7 +528,7 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
             if (d->spot.y() > d->rect.height()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, QPoint::QPoint(d->spot.x(), d->spot.y() - d->rect.height()/2 ));
+                emit spotPositionChangedFromTarget( color, QPoint(d->spot.x(), d->spot.y() - d->rect.height()/2 ));
             }
             else
             {
