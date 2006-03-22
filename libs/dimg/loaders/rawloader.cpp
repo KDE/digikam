@@ -26,11 +26,14 @@
 
 extern "C"
 {
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <unistd.h>
 }
+
+// C++ includes.
+
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 
 // QT includes.
 
@@ -81,6 +84,7 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     // -n : Don't clip colors
     // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
+    // -B : Use bilateral filter to smooth noise while preserving edges.
 
     command  = "dcraw -c -2 ";
     
@@ -105,6 +109,16 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     {
         QCString rawQuality;
         command += rawQuality.setNum(m_rawDecodingSettings.RAWQuality);
+        command += " ";
+    }
+
+    if (m_rawDecodingSettings.enableNoiseReduction)
+    {
+        QCString NRSigmaDomain, NRSigmaRange;
+        command += "-B ";
+        command += NRSigmaDomain.setNum(m_rawDecodingSettings.NRSigmaDomain);
+        command += " ";
+        command += NRSigmaRange.setNum(m_rawDecodingSettings.NRSigmaRange);
         command += " ";
     }
     
@@ -217,6 +231,7 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -n : Don't clip colors
     // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
+    // -B : Use bilateral filter to smooth noise while preserving edges.
 
     command  = "dcraw -c -4 ";
     
@@ -244,6 +259,16 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
         command += " ";
     }
     
+    if (m_rawDecodingSettings.enableNoiseReduction)
+    {
+        QCString NRSigmaDomain, NRSigmaRange;
+        command += "-B ";
+        command += NRSigmaDomain.setNum(m_rawDecodingSettings.NRSigmaDomain);
+        command += " ";
+        command += NRSigmaRange.setNum(m_rawDecodingSettings.NRSigmaRange);
+        command += " ";
+    }
+
     command += QFile::encodeName( KProcess::quote( filePath ) );
 
 #ifdef ENABLE_DEBUG_MESSAGES
