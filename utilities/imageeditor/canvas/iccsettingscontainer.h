@@ -46,6 +46,7 @@ public:
     // TRUE  -> ask
     bool    askOrApplySetting;
     bool    BPCSetting;
+    bool    managedViewSetting;
 
     int     renderingSetting;
 
