@@ -743,6 +743,7 @@ void EditorWindow::applyStandardSettings()
     m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
     m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
     m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
+    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView");
 }
 
 void EditorWindow::saveStandardSettings()
