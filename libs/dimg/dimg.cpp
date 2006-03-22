@@ -1057,6 +1057,14 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
+QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
+{
+    if (isNull())
+        return QPixmap();
+
+    
+}
+
 
 //---------------------------------------------------------------------------------------------------
 // basic imaging operations

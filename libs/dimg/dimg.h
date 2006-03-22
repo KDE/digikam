@@ -239,6 +239,7 @@ public:
     void       flip(FLIP direction);
 
     QPixmap    convertToPixmap();
+    QPixmap    convertToPixmap(QString inProfile, QString monitorProfile);
 
     /** Detaches from shared image data and makes sure that this image
         is the only one referring to the data. 
