@@ -98,6 +98,7 @@ public:
 
     QCheckBox       *enableColorManagement;
     QCheckBox       *bpcAlgorithm;
+    QCheckBox       *managedView;
     
     QRadioButton    *defaultApplyICC;
     QRadioButton    *defaultAskICC;
@@ -221,6 +222,20 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     layout->addWidget(profiles);
 
+     // --------------------------------------------------------
+    
+    QVGroupBox * mv = new QVGroupBox(i18n("Colormanaged View"), parent);
+
+    d->managedView = new QCheckBox(mv);
+    d->managedView->setText(i18n("Use Colormanaged view."));
+    QWhatsThis::add( d->managedView, i18n("<p>You have to use this option if " 
+    "you want to use your Monitor Color Profile to show your pictures in "
+    "Image Editor window.</p>"));
+    
+    layout->addWidget(mv);
+    
+    // --------------------------------------------------------
+
     // --------------------------------------------------------
     
     QVGroupBox * bpc = new QVGroupBox(i18n("BPC Algorithm"), parent);
@@ -322,17 +337,7 @@ void SetupICC::applySettings()
     {
         config->writeEntry("BehaviourICC", false);
     }
-//     config->writeEntry("ApplyICC", d->defaultApplyICC->isChecked());
-//     config->writeEntry("AskICC", d->defaultAskICC->isChecked());
-//     if (d->defaultPathKU->url().isEmpty())
-//     {
-//         QString message = QString(i18n("<p>You must set a default path to color profiles files.</p>"));
-//         message.append(i18n("<p>This settings will not be written.</p>"));
-//         KMessageBox::error(this, message );
-//         config->writeEntry("EnableCM", false);
-//         config->sync();
-//         return;
-//     }
+
     config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
     config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
@@ -344,7 +349,8 @@ void SetupICC::applySettings()
     config->writePathEntry("WorkProfileFile", d->workICCFiles_file[d->workProfilesKC->currentItem()]);
     config->writePathEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
     config->writePathEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
-
+    config->writeEntry("ManagedView", d->managedView->isChecked());
+    
     config->sync();
 }
 
@@ -382,10 +388,8 @@ void SetupICC::readSettings()
     d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
     d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
     d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
-    kdDebug() << "Profile Path: " << d->ICCPath["InProfile"] << endl;
-    kdDebug() << "Profile Path: " << d->ICCPath["WorkProfile"] << endl;
-    kdDebug() << "Profile Path: " << d->ICCPath["MonitorProfile"] << endl;
-    kdDebug() << "Profile Path: " << d->ICCPath["ProofProfile"] << endl;
+    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+
 }
 
 void SetupICC::fillCombos()
@@ -503,6 +507,8 @@ void SetupICC::slotToggledWidgets(bool t)
 { 
     d->bpcAlgorithm->setEnabled(t);
     d->bpcAlgorithm->setChecked(t);
+
+    d->managedView->setChecked(t);
  
     d->defaultApplyICC->setEnabled(t); 
     d->defaultAskICC->setEnabled(t);
@@ -548,6 +554,7 @@ void SetupICC::slotToggledWidgets(bool t)
         d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
         d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
         d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
+        d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
     }
 }
 
