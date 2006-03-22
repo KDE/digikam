@@ -52,6 +52,7 @@ extern "C"
 #include "dimgprivate.h"
 #include "dimg.h"
 #include "dcolorcomposer.h"
+#include "icctransform.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -1062,7 +1063,26 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
     if (isNull())
         return QPixmap();
 
-    
+    DImg img(*this);
+    img.detach();
+
+    IccTransform trans;
+
+    // Without embedded profile
+    if (img.getICCProfil().isNull())
+    {
+        trans.setProfiles( QFile::encodeName(inProfile),
+                           QFile::encodeName(monitorProfile) );
+        trans.apply( img );
+    }
+    else
+    {
+        trans.getEmbeddedProfile( img );
+        trans.setProfiles( QFile::encodeName(monitorProfile) );
+        trans.apply( img );
+    }
+
+
 }
 
 
