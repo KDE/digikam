@@ -3,7 +3,7 @@
  * Date  : 2005-12-08
  * Description : ICC Settings Container..
  * 
- * Copyright 2005 by  F.J. Cruz
+ * Copyright 2005-2006 by  F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,14 @@ class ICCSettingsContainer
 
 public:
     
-    ICCSettingsContainer(){};
+    ICCSettingsContainer()
+    {
+        workspaceSetting = QString::null;
+        monitorSetting   = QString::null;
+        inputSetting     = QString::null;
+        proofSetting     = QString::null;
+    };
+    
     ~ICCSettingsContainer(){};
 
 public:
