@@ -34,8 +34,8 @@ public:
     RawDecodingSettings()
     {
         enableNoiseReduction    = false;
-        NRSigmaDomain           = 1.0;
-        NRSigmaRange            = 2.0;
+        NRSigmaDomain           = 2.0;
+        NRSigmaRange            = 4.0;
 
         enableRAWQuality        = true;
         RAWQuality              = 0;
@@ -84,8 +84,7 @@ public:
     float NRSigmaDomain;
     
     // Noise reduction sigma range value.
-    float NRSigmaRange;
-    
+    float NRSigmaRange;    
 };
 
 }  // namespace Digikam

@@ -163,22 +163,22 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     grid1->addMultiCellWidget(d->enableNoiseReduction, 7, 7, 0, 1);
 
     d->NRSigmaDomain = new KDoubleNumInput(RAWfileOptionsGroup);
-    d->NRSigmaDomain->setValue(1.0);
+    d->NRSigmaDomain->setValue(2.0);
     d->NRSigmaDomain->setPrecision(1);
     d->NRSigmaDomain->setRange(0.1, 5.0, 0.1);
     d->labelNRSigmaDomain = new QLabel(i18n("Sigma domain:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaDomain, i18n("<p>The noise reduction Sigma Domain in units of pixels. "
-                                            "The default value is 1.0.<p>"));
+                                            "The default value is 2.0.<p>"));
     grid1->addMultiCellWidget(d->labelNRSigmaDomain, 8, 8, 0, 0);
     grid1->addMultiCellWidget(d->NRSigmaDomain, 8, 8, 1, 1);
 
     d->NRSigmaRange = new KDoubleNumInput(RAWfileOptionsGroup);
-    d->NRSigmaRange->setValue(2.0);
+    d->NRSigmaRange->setValue(4.0);
     d->NRSigmaRange->setPrecision(1);
     d->NRSigmaRange->setRange(0.1, 5.0, 0.1);
     d->labelNRSigmaRange = new QLabel(i18n("Sigma range:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaRange, i18n("<p>The noise reduction Sigma Range in units of "
-                                           "CIELab colorspace. The default value is 2.0.<p>"));
+                                           "CIELab colorspace. The default value is 4.0.<p>"));
     grid1->addMultiCellWidget(d->labelNRSigmaRange, 9, 9, 0, 0);
     grid1->addMultiCellWidget(d->NRSigmaRange, 9, 9, 1, 1);
     
@@ -293,8 +293,8 @@ void SetupIOFiles::readSettings()
     d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", true));
     d->RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
     d->enableNoiseReduction->setChecked(config->readBoolEntry("EnableNoiseReduction", false));
-    d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 1.0) );
-    d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 2.0) );
+    d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 2.0) );
+    d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
     d->SuperCCDsecondarySensor->setChecked(config->readBoolEntry("SuperCCDsecondarySensor", false));
     d->unclipColors->setChecked(config->readBoolEntry("UnclipColors", false));
     d->cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));

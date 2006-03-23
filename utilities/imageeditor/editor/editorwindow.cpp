@@ -694,7 +694,7 @@ void EditorWindow::applyStandardSettings()
     
     d->bgColor = QColor(Qt::black);
     m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &d->bgColor));
-//    m_canvas->update();
+    //m_canvas->update();
 
     // -- IO files format settings ------------------------------------------------
     
@@ -708,16 +708,16 @@ void EditorWindow::applyStandardSettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
-    m_IOFileSettings->rawDecodingSettings.automaticColorBalance = config->readBoolEntry("AutomaticColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.cameraColorBalance    = config->readBoolEntry("CameraColorBalance", true);
-    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors = config->readBoolEntry("RGBInterpolate4Colors", false);
+    m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
     m_IOFileSettings->rawDecodingSettings.SuperCCDsecondarySensor = config->readBoolEntry("SuperCCDsecondarySensor", false);
-    m_IOFileSettings->rawDecodingSettings.unclipColors          = config->readBoolEntry("UnclipColors", false);
-    m_IOFileSettings->rawDecodingSettings.enableRAWQuality      = config->readBoolEntry("EnableRAWQuality", true);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality            = config->readNumEntry("RAWQuality", 0);
-    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction  = config->readBoolEntry("EnableNoiseReduction", false);
-    m_IOFileSettings->rawDecodingSettings.NRSigmaDomain         = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
-    m_IOFileSettings->rawDecodingSettings.NRSigmaRange          = config->readDoubleNumEntry("NRSigmaRange", 4.0);
+    m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readBoolEntry("UnclipColors", false);
+    m_IOFileSettings->rawDecodingSettings.enableRAWQuality        = config->readBoolEntry("EnableRAWQuality", true);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = config->readNumEntry("RAWQuality", 0);
+    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
+    m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
+    m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
 
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
