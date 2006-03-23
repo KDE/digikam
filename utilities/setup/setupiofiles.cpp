@@ -129,7 +129,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "completely unclipped else all colors will be cliped to prevent pink highlights.<p>"));
     grid1->addMultiCellWidget(d->unclipColors, 3, 3, 0, 1);
 
-    d->SuperCCDsecondarySensor = new QCheckBox(i18n("Using Super CCD secondary sensors"), RAWfileOptionsGroup);
+    d->SuperCCDsecondarySensor = new QCheckBox(i18n("Using Super CCD secondary sensors (Fuji cameras only)"), RAWfileOptionsGroup);
     QWhatsThis::add( d->SuperCCDsecondarySensor, i18n("<p>For Fuji Super CCD SR cameras, use the "
                      "secondary sensors, in effect underexposing the image by four stops to reveal "
                      "detail in the highlights. For all other camera types this option is ignored.<p>"));
