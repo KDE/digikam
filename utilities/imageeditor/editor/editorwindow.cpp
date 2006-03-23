@@ -688,16 +688,25 @@ void EditorWindow::readStandardSettings()
 void EditorWindow::applyStandardSettings()
 {
     KConfig* config = kapp->config();
+
+    // -- Settings for Color Management stuff --------------------------------
+
+    config->setGroup("Color Management");
+
+    m_ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
+    m_ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM");
+    m_ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC");
+    m_ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm");
+    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView");
+    m_ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString::null);
+    m_ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
+    m_ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
+    m_ICCSettings->proofSetting       = config->readPathEntry("ProofProfileFile", QString::null);
+        
+   // -- IO files format settings ------------------------------------------------
+ 
     config->setGroup("ImageViewer Settings");
-
-    // -- Background color --------------------------------------------------------
-    
-    d->bgColor = QColor(Qt::black);
-    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &d->bgColor));
-    //m_canvas->update();
-
-    // -- IO files format settings ------------------------------------------------
-    
+        
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
                                                + 25.0 - (75.0/99.0));
@@ -718,7 +727,17 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
+    m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode  = config->readNumEntry("RAWICCCorrectionMode",
+                                                                                         RawDecodingSettings::NOICC);
+    m_IOFileSettings->rawDecodingSettings.cameraICCProfilePath    = m_ICCSettings->inputSetting;
+    m_IOFileSettings->rawDecodingSettings.outputICCProfilePath    = m_ICCSettings->workspaceSetting;
+    
+    // If ICC color management is disabled, always disable ICC color correction during RAW files decoding.
+    if (!m_ICCSettings->enableCMSetting) 
+        m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode = RawDecodingSettings::NOICC;
 
+    // -- GUI Settings -------------------------------------------------------
+    
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
         m_splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
@@ -727,26 +746,15 @@ void EditorWindow::applyStandardSettings()
     
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
+    d->bgColor = QColor(Qt::black);
+    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &d->bgColor));
+      
     // -- Slideshow Settings -------------------------------------------------
     
     d->slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
     m_slideShow->setStartWithCurrent(config->readBoolEntry("SlideShowStartCurrent", false));
     m_slideShow->setLoop(config->readBoolEntry("SlideShowLoop", false));
     m_slideShow->setDelay(config->readNumEntry("SlideShowDelay", 5));
-
-    // -- Settings for Color Management stuff --------------------------------
-
-    config->setGroup("Color Management");
-
-    m_ICCSettings->enableCMSetting = config->readBoolEntry("EnableCM");
-    m_ICCSettings->askOrApplySetting = config->readBoolEntry("BehaviourICC");
-    m_ICCSettings->BPCSetting = config->readBoolEntry("BPCAlgorithm");
-    m_ICCSettings->renderingSetting = config->readNumEntry("RenderingIntent");
-    m_ICCSettings->inputSetting = config->readPathEntry("InProfileFile");
-    m_ICCSettings->workspaceSetting = config->readPathEntry("WorkProfileFile");
-    m_ICCSettings->monitorSetting = config->readPathEntry("MonitorProfileFile");
-    m_ICCSettings->proofSetting = config->readPathEntry("ProofProfileFile");
-    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView");
 }
 
 void EditorWindow::saveStandardSettings()
@@ -768,7 +776,6 @@ void EditorWindow::saveStandardSettings()
     config->writeEntry("Histogram Rectangle", rc);
 
     config->writeEntry("FullScreen", m_fullScreenAction->isChecked());
-    
     config->sync();
 }
 

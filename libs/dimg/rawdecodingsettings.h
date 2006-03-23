@@ -37,7 +37,7 @@ public:
     
     enum INPUTICCMODE
     {
-        NOICC = 0,    // No color correction.
+        NOICC = 0,    // No color correction during Raw file decoding.
         EMBED,        // Using embedded ICC color profile in RAW file.
         USERPROFILE   // Using user input ICC profile file.
     };
