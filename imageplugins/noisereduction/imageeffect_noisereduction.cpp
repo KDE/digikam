@@ -178,11 +178,9 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     gridSettings->addMultiCellWidget(label10, 4, 4, 0, 0);
     gridSettings->addMultiCellWidget(m_phaseInput, 4, 4, 1, 1);
-
-    m_imagePreviewWidget->setUserAreaWidget(mainTab);
+    gridSettings->setColStretch(1, 10);
 
     // -------------------------------------------------------------
-    
 
     QWidget* secondPage = new QWidget( mainTab );
     QGridLayout* gridSettings2 = new QGridLayout( secondPage, 4, 1, marginHint());    
@@ -263,6 +261,9 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     gridSettings2->addMultiCellWidget(label9, 4, 4, 0, 0);
     gridSettings2->addMultiCellWidget(m_dampingInput, 4, 4, 1, 1);
+    gridSettings2->setColStretch(1, 10);
+
+    m_imagePreviewWidget->setUserAreaWidget(mainTab);
     
     // -------------------------------------------------------------
     
