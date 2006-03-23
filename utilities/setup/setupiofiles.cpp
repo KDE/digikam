@@ -153,7 +153,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction during decoding (slow)"),
                                             RAWfileOptionsGroup);
     QWhatsThis::add( d->enableNoiseReduction, i18n("<p>Toggle bilateral filter to smooth noise while "
-                     "preserving edges. This option can be use to reduce low noise.<p>"
+                     "preserving edges. This option can be use to reduce low noise. The pictures edges "
+                     "are preserved because it is applied in CIELab color space instead of RGB.<p>"
                      "<b>Warnings</b>:<p>"
                      "This filter isn't adapted if your RAW picture have been taken using hight "
                      "sensitivity (over 1600 ISO). Its recommended to use the noise reduction filter "
