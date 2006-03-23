@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-01-06
- * Description : Raw file decoding options used with dcraw.
+ * Description : Raw file decoding options to use with dcraw.
  * 
  * Copyright 2006 by Gilles Caulier
  *
@@ -23,6 +23,10 @@
 
 #include "digikam_export.h"
 
+// Qt includes.
+
+#include <qstring.h>
+
 namespace Digikam
 {
 
@@ -31,8 +35,19 @@ class DIGIKAM_EXPORT RawDecodingSettings
 
 public:
     
+    enum INPUTICCMODE
+    {
+        NOICC = 0,    // No color correction.
+        EMBED,        // Using embedded ICC color profile in RAW file.
+        USERPROFILE   // Using user input ICC profile file.
+    };
+
     RawDecodingSettings()
     {
+        ICCColorCorrectionMode  = NOICC;
+        cameraICCProfilePath    = QString::null;
+        outputICCProfilePath    = QString::null;
+    
         enableNoiseReduction    = false;
         NRSigmaDomain           = 2.0;
         NRSigmaRange            = 4.0;
@@ -85,6 +100,16 @@ public:
     
     // Noise reduction sigma range value.
     float NRSigmaRange;    
+    
+    // Input ICC profile color correction mode to use (dcraw -p option).
+    int ICCColorCorrectionMode;
+    
+    // The file path to ICC camera color profile (input profile). Set to 'embed' to use the ICC profile embedded in the raw photo.
+    QString cameraICCProfilePath;
+    
+    // The file path to ICC output color profile (output profile). Set empty to use default sRGB color space.
+    QString outputICCProfilePath;
+    
 };
 
 }  // namespace Digikam

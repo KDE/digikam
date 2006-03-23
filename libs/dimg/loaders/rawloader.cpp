@@ -85,8 +85,10 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
     // -B : Use bilateral filter to smooth noise while preserving edges.
+    // -p : Use the input ICC profiles to define the camera's raw colorspace.
+    // -o : Use ICC profiles to define the output colorspace.
 
-    command  = "dcraw -c -2 ";
+    command = "dcraw -c -2 ";
     
     if (m_rawDecodingSettings.cameraColorBalance)
         command += "-w ";
@@ -119,6 +121,30 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
         command += NRSigmaDomain.setNum(m_rawDecodingSettings.NRSigmaDomain);
         command += " ";
         command += NRSigmaRange.setNum(m_rawDecodingSettings.NRSigmaRange);
+        command += " ";
+    }
+
+    switch (m_rawDecodingSettings.ICCColorCorrectionMode)
+    {
+        case RawDecodingSettings::EMBED:
+            command += "-p embed ";
+            break;
+            
+        case RawDecodingSettings::USERPROFILE:
+            command += "-p ";
+            command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.cameraICCProfilePath ) );
+            command += " ";
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
+        !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
+    {
+        command += "-o ";
+        command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.outputICCProfilePath ) );
         command += " ";
     }
     
@@ -232,8 +258,10 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -s : Use secondary pixels (Fuji Super CCD SR only)
     // -q : Use simple bilinear interpolation for quick results
     // -B : Use bilateral filter to smooth noise while preserving edges.
-
-    command  = "dcraw -c -4 ";
+    // -p : Use the input ICC profiles to define the camera's raw colorspace.
+    // -o : Use ICC profiles to define the output colorspace.
+    
+    command = "dcraw -c -4 ";
     
     if (m_rawDecodingSettings.cameraColorBalance)
         command += "-w ";
@@ -269,6 +297,30 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
         command += " ";
     }
 
+    switch (m_rawDecodingSettings.ICCColorCorrectionMode)
+    {
+        case RawDecodingSettings::EMBED:
+            command += "-p embed ";
+            break;
+            
+        case RawDecodingSettings::USERPROFILE:
+            command += "-p ";
+            command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.cameraICCProfilePath ) );
+            command += " ";
+            break;
+            
+        default:
+            break;
+    }
+
+    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
+        !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
+    {
+        command += "-o ";
+        command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.outputICCProfilePath ) );
+        command += " ";
+    }
+        
     command += QFile::encodeName( KProcess::quote( filePath ) );
 
 #ifdef ENABLE_DEBUG_MESSAGES
