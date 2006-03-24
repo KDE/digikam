@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-static char* ExifHumanList[] =
+static char* MakerNoteHumanList[] =
 {
      "Make",
      "Model",
@@ -73,27 +73,28 @@ static char* ExifHumanList[] =
      "Sharpness",
      "LightSource",
      "Flash",
+     "FNumber",
      "-1"
 };
 
-static char* StandardExifEntryList[] =
+static char* ExifEntryListToIgnore[] =
 {
-     "Image",
-     "Photo",
      "GPSInfo",
      "Iop",
      "Thumbnail",
+     "Image",
+     "Photo",
      "-1"
 };
 
 MakerNoteWidget::MakerNoteWidget(QWidget* parent, const char* name)
                : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; i++)
-        m_keysFilter << StandardExifEntryList[i];
+    for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; i++)
+        m_keysFilter << ExifEntryListToIgnore[i];
 
-    for (int i=0 ; QString(ExifHumanList[i]) != QString("-1") ; i++)
-        m_tagsfilter << ExifHumanList[i];
+    for (int i=0 ; QString(MakerNoteHumanList[i]) != QString("-1") ; i++)
+        m_tagsfilter << MakerNoteHumanList[i];
 }
 
 MakerNoteWidget::~MakerNoteWidget()

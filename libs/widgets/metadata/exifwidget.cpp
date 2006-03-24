@@ -72,6 +72,7 @@ static char* ExifHumanList[] =
      "Sharpness",
      "LightSource",
      "Flash",
+     "FNumber",
      "-1"
 };
 
