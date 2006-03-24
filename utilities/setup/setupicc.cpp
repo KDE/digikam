@@ -350,8 +350,8 @@ void SetupICC::applySettings()
     config->writePathEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
     config->writePathEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
     config->writeEntry("ManagedView", d->managedView->isChecked());
-    
-    config->sync();
+    kdDebug() << "proof: " << d->proofProfilesKC->currentItem() << endl;
+kdDebug() << d->proofICCFiles_file[d->proofProfilesKC->currentItem()] << endl;
 }
 
 void SetupICC::readSettings()
@@ -653,9 +653,14 @@ void SetupICC::slotFillCombos(const QString& url)
     d->proofProfilesKC->clear();
     m_proofICCFiles_description.remove(m_proofICCFiles_description.begin());
     d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
+    d->workICCFiles_file.remove(d->workICCFiles_file.begin());
+    d->inICCFiles_file.remove(d->inICCFiles_file.begin());
+    d->monitorICCFiles_file.remove(d->monitorICCFiles_file.begin());
+    d->proofICCFiles_file.remove(d->proofICCFiles_file.begin());
     d->ICCPath["WorkProfile"] =
     d->workICCFiles_file[d->workProfilesKC->currentItem()];
-    d->ICCPath["InProfile"] = d->inICCFiles_file[d->inProfilesKC->currentItem()];
+    d->ICCPath["InProfile"] =
+d->inICCFiles_file[d->inProfilesKC->currentItem()];
     d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
     d->ICCPath["ProofProfile"] = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
 }
