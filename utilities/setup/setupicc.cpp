@@ -560,7 +560,7 @@ void SetupICC::slotFillCombos(const QString& url)
     QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
     m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
-    if (!files->isEmpty())
+    if (files)
     {
         QFileInfoListIterator it(*files);
         QFileInfo *fileInfo;
@@ -632,7 +632,7 @@ void SetupICC::slotFillCombos(const QString& url)
             cmsCloseProfile(tmpProfile);
         }
     }
-    else if (files->isEmpty())
+    else 
     {
         d->mainDialog->enableButtonOK(false);
         QString message = i18n("<p>Sorry, there is no profiles files in ");
