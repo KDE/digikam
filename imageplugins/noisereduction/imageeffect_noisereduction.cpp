@@ -205,7 +205,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_thresholdInput = new KDoubleNumInput(secondPage);
     m_thresholdInput->setPrecision(1);
-    m_thresholdInput->setRange(0.0, 5.0, 0.1, true);
+    m_thresholdInput->setRange(0.1, 5.0, 0.1, true);
     QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: this control set the 2nd derivative of "
                      "luminance adjustment. This value should be set so that edges are clearly visible "
                      "and noise is smoothed out. This value is not bound to any intensity value, it is "
