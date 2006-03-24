@@ -375,8 +375,7 @@ void SetupICC::readSettings()
     {
         d->defaultAskICC->setChecked(true);
     }
-//     d->defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
-//     d->defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+
     d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
     d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
     d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
@@ -402,29 +401,15 @@ void SetupICC::fillCombos()
     cmsHPROFILE tmpProfile=0;
     QDir profilesDir(QFile::encodeName(config->readPathEntry("DefaultPath")), "*.icc;*.icm", QDir::Files);
 
-
-    if (!profilesDir.isReadable())
-    {
-//         KMessageBox::error(this, i18n("You don't have read permission for this directory"), i18n("Permission error"));
-        return;
-    }
-
     const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
+    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
+    m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
 
-//     if (files->isEmpty())
-//     {
-//         d->mainDialog->enableButtonOK(false);
-//         KMessageBox::sorry(this, i18n("<p>It seems there are no color profiles in this path</p>"));
-//         return;
-//     }
-//     else
     if (files)
     {
         QFileInfoListIterator it(*files);
         QFileInfo *fileInfo;
-//         d->mainDialog->enableButtonOK(true);
 
         while ((fileInfo = it.current()) != 0)
         {
@@ -541,8 +526,7 @@ void SetupICC::slotToggledWidgets(bool t)
         {
             d->defaultAskICC->setChecked(false);
         }
-    //     d->defaultApplyICC->setChecked(config->readBoolEntry("ApplyICC", false));
-    //     d->defaultAskICC->setChecked(config->readBoolEntry("AskICC", false));
+
         d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
         d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
         d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
@@ -572,27 +556,14 @@ void SetupICC::slotFillCombos(const QString& url)
     
     QDir profilesDir(QFile::encodeName(url), "*.icc;*.icm", QDir::Files);
 
-    if (!profilesDir.isReadable())
-    {
-//         KMessageBox::error(this, i18n("You don't have read permission for this directory"), i18n("Permission error"));
-        return;
-    }
-
     const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0, m_proofICCFiles_description=0, m_workICCFiles_description=0;
+    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
+    m_proofICCFiles_description=0, m_workICCFiles_description=0;
 
-//     if (files->isEmpty())
-//     {
-//         d->mainDialog->enableButtonOK(false);
-//         KMessageBox::sorry(this, i18n("<p>It seems there are no color profiles in this path</p>"));
-//         return;
-//     }
-//     else
-    if (files)
+    if (!files->isEmpty())
     {
         QFileInfoListIterator it(*files);
         QFileInfo *fileInfo;
-//         d->mainDialog->enableButtonOK(true);
 
         while ((fileInfo = it.current()) != 0)
         {
@@ -600,7 +571,6 @@ void SetupICC::slotFillCombos(const QString& url)
             QString fileName = fileInfo->filePath();
             tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
             QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-            kdDebug() << "Device class: " << cmsGetDeviceClass(tmpProfile) << endl;
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
@@ -640,6 +610,7 @@ void SetupICC::slotFillCombos(const QString& url)
                     {
                         m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->proofICCFiles_file.append(fileName);
                     break;
                 case icSigColorSpaceClass:
@@ -661,23 +632,32 @@ void SetupICC::slotFillCombos(const QString& url)
             cmsCloseProfile(tmpProfile);
         }
     }
-    else
+    else if (files->isEmpty())
     {
-        kdDebug() << "No list" << endl;
+        d->mainDialog->enableButtonOK(false);
+        QString message = i18n("<p>Sorry, there is no profiles files in ");
+        message.append(url);
+        message.append(i18n("</p>"));
+        KMessageBox::sorry(this,message);
+        return;
     }
     d->inProfilesKC->clear();
+    m_inICCFiles_description.remove(m_inICCFiles_description.begin());
     d->inProfilesKC->insertStringList(m_inICCFiles_description);
     d->monitorProfilesKC->clear();
+    m_monitorICCFiles_description.remove(m_monitorICCFiles_description.begin());
     d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
     d->workProfilesKC->clear();
+    m_workICCFiles_description.remove(m_workICCFiles_description.begin());
     d->workProfilesKC->insertStringList(m_workICCFiles_description);
     d->proofProfilesKC->clear();
+    m_proofICCFiles_description.remove(m_proofICCFiles_description.begin());
     d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
-    d->ICCPath["WorkProfile"] = d->workICCFiles_file[d->workProfilesKC->currentItem()];
+    d->ICCPath["WorkProfile"] =
+    d->workICCFiles_file[d->workProfilesKC->currentItem()];
     d->ICCPath["InProfile"] = d->inICCFiles_file[d->inProfilesKC->currentItem()];
     d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
     d->ICCPath["ProofProfile"] = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
-//     kdDebug() << "Current Profle: " << d->ICCPath["WorkProfile"] << endl;
 }
 
 void SetupICC::slotClickedWork()
