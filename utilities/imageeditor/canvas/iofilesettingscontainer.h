@@ -33,7 +33,12 @@ class IOFileSettingsContainer
 
 public:
     
-    IOFileSettingsContainer(){};
+    IOFileSettingsContainer()
+    {
+        JPEGCompression = 75;
+        PNGCompression  = 9;
+        TIFFCompression = false;
+    };
     ~IOFileSettingsContainer(){};
 
 public:
