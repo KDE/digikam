@@ -694,10 +694,10 @@ void EditorWindow::applyStandardSettings()
     config->setGroup("Color Management");
 
     m_ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
-    m_ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM");
-    m_ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC");
-    m_ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm");
-    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView");
+    m_ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM", false);
+    m_ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC", false);
+    m_ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm",false);
+    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView", false);
     m_ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString::null);
     m_ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
     m_ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
