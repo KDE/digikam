@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : inserttextwidget.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-14
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,11 +20,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
-#define OPACITY  0.7
-#define RCOL     0xAA
-#define GCOL     0xAA
-#define BCOL     0xAA
 
 // C++ includes.
 
@@ -56,20 +53,23 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     m_currentMoving = false;
-    
+
     m_iface  = new Digikam::ImageIface(w, h);
     m_data   = m_iface->getPreviewData();
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
-    
+    m_pixmap->fill(colorGroup().background());
+
     setBackgroundMode(Qt::NoBackground);
     setMinimumSize(w, h);
     setMouseTracking(true);
 
     m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
-    
-    resetEdit();
+    m_textRect = QRect();
+
+    m_backgroundColor = QColor(0xCC, 0xCC, 0xCC);
+    m_transparency    = 210;
 }
 
 InsertTextWidget::~InsertTextWidget()
@@ -86,7 +86,8 @@ Digikam::ImageIface* InsertTextWidget::imageIface()
 
 void InsertTextWidget::resetEdit()
 {
-    m_textRect.moveCenter( QPoint::QPoint(width()/2, height()/2) );
+    // signal this needs to be filled by makePixmap
+    m_textRect = QRect();
     makePixmap();
     repaint(false);
 }
@@ -99,157 +100,74 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
     m_textBorder      = border;
     m_textTransparent = transparent;
     m_textRotation    = rotation;
-    
+
     switch (alignMode)
-        {
+    {
         case ALIGN_LEFT:
-           m_alignMode = Qt::AlignLeft;
-           break;
-        
+            m_alignMode = Qt::AlignLeft;
+            break;
+
         case ALIGN_RIGHT:
-           m_alignMode = Qt::AlignRight;
-           break;
-        
+            m_alignMode = Qt::AlignRight;
+            break;
+
         case ALIGN_CENTER:
-           m_alignMode = Qt::AlignHCenter;
-           break;
-        
+            m_alignMode = Qt::AlignHCenter;
+            break;
+
         case ALIGN_BLOCK:
-           m_alignMode = Qt::AlignJustify;
-           break;
-        }
+            m_alignMode = Qt::AlignJustify;
+            break;
+    }
 
     // Center text if top left corner text area isn't visible.
-        
+
+    /*
     if ( m_textFont.pointSize() != font.pointSize() && 
          !rect().contains( m_textRect.x(), m_textRect.y() ) )
-       {
-       m_textFont = font;
-       resetEdit();
-       return;
-       }
-    
+    {
+        m_textFont = font;
+        resetEdit();
+        return;
+    }
+    */
+
     m_textFont = font;
 
     makePixmap();
     repaint(false);
 }
 
-QImage InsertTextWidget::makeInsertText(void)
+Digikam::DImg InsertTextWidget::makeInsertText(void)
 {
     int orgW = m_iface->originalWidth();
     int orgH = m_iface->originalHeight();
     float ratioW = (float)orgW/(float)m_w;
     float ratioH = (float)orgH/(float)m_h;
-    
-    QImage src( orgW, orgH, 32 );
-    memcpy(src.bits(), m_iface->getOriginalData(), src.numBytes());
-    QPixmap target( src );
-    
-    QRect targetRect;
-    QFontMetrics fontMt( m_textFont );       
-    QRect fontRect = fontMt.boundingRect(0, 0, targetRect.width(), 
-                                         targetRect.height(), 0, m_textString); 
-    
-    targetRect.setX( (int)(m_textRect.x()*ratioW) );
-    targetRect.setY( (int)(m_textRect.y()*ratioH) );
-    
-    // Calculate text area accordinly with rotation.
-       
-    switch(m_textRotation)
-       {
-       case ROTATION_NONE:
-       case ROTATION_180:
-          targetRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
-          break;
-        
-       case ROTATION_90:
-       case ROTATION_270:
-          targetRect.setSize( QSize::QSize(fontRect.height(), fontRect.width() ) );
-          break;
-       }
 
-    // Drawing semi-transparent text background.
-    
-    if (m_textTransparent)
-       {
-       src = src.copy( targetRect );
-       uint* ptr = (uint*)src.bits();
-       uchar red, green, blue, alpha;
-    
-       for (int j = 0 ; j < src.numBytes()/4 ; ++j)
-           {
-           alpha = (*ptr >> 24) & 0xff;
-           red   = (*ptr >> 16) & 0xff;
-           green = (*ptr >> 8)  & 0xff;
-           blue  = (*ptr)       & 0xff;
-                
-           red   += (uchar)((RCOL - red)   * OPACITY);
-           green += (uchar)((GCOL - green) * OPACITY);
-           blue  += (uchar)((BCOL - blue)  * OPACITY);
-             
-           *ptr = alpha << 24 | red << 16 | green << 8 | blue;
-           ptr++;
-           }
-    
-       QPixmap pix(src);
-       
-       bitBlt(&target, targetRect.x(), targetRect.y(), &pix);
-       }
-    
-    // Drawing the text.
+    int x, y;
+    if (m_textRect.isValid())
+    {
+        x = lroundf( (m_textRect.x() - m_rect.x()) * ratioW);
+        y = lroundf( (m_textRect.y() - m_rect.y()) * ratioH);
+    }
+    else
+    {
+        x = -1;
+        y = -1;
+    }
 
-    QPainter p(&target);
-    p.setFont( m_textFont );
-    p.setPen( QPen::QPen(m_textColor, 1) ) ;
-    p.save();
-    
-    switch(m_textRotation)
-        {
-        case ROTATION_NONE:
-              p.drawText( targetRect, m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_90:
-              p.translate(targetRect.x()+targetRect.width(), targetRect.y());
-              p.rotate(90.0);
-              p.drawText( 0, 0, targetRect.height(), targetRect.width(),
-                          m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_180:
-              p.translate(targetRect.x() + targetRect.width(), 
-                          targetRect.y() + targetRect.height());
-              p.rotate(180.0);
-              p.drawText( 0, 0, targetRect.width(), targetRect.height(), 
-                          m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_270:
-              p.translate(targetRect.x(), targetRect.y()+targetRect.height());
-              p.rotate(270.0);
-              p.drawText( 0, 0, targetRect.height(), targetRect.width(), 
-                          m_alignMode, m_textString );
-           break;
-        }
-    
-    p.restore();
-                
-    // Drawing border.
-    
-    if (m_textBorder)   
-       {
-       p.setPen( QPen::QPen(m_textColor, (int)(2*ratioW), 
-                 Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin) ) ;
-       p.drawRect(targetRect.x() - (int)(ratioW), 
-                  targetRect.y() - (int)(ratioW), 
-                  targetRect.width() + (int)(2*ratioW), 
-                  targetRect.height() + (int)(2*ratioW));
-       }                
-       
-    p.end();    
-    
-    return ( target.convertToImage().convertDepth(32) );
+    // Get original image
+    Digikam::DImg image = m_iface->getOriginalImg()->copy();
+
+    // compose and draw result on image
+    composeImage(&image, 0, x, y,
+                  m_textFont, m_textFont.pointSizeFloat(),
+                  m_textRotation, m_textColor, m_alignMode, m_textString,
+                  m_textTransparent, m_backgroundColor,
+                  m_textBorder ? BORDER_NORMAL : BORDER_NONE, 1);
+
+    return image;
 }
 
 void InsertTextWidget::makePixmap(void)
@@ -258,142 +176,274 @@ void InsertTextWidget::makePixmap(void)
     int orgH = m_iface->originalHeight();
     float ratioW = (float)m_w / (float)orgW;
     float ratioH = (float)m_h / (float)orgH;
-    
-    // Drawing image.
-    
-    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());
 
-    // Adapt text rectangle from image coordinate to widget coordinate for rendering.
-    QRect textRect = m_textRect;
-    textRect.setX( m_textRect.x() + m_rect.x() );
-    textRect.setY( m_textRect.y() + m_rect.y() );
-       
-    // Get Regions informations.
-    
-    QRect r(0, 0, width(), height());
-    QRegion reg(r);
-    reg -= m_rect;
+    // convert from widget to image coordinates
+    int x, y;
+    if (m_textRect.isValid())
+    {
+        x = m_textRect.x() - m_rect.x();
+        y = m_textRect.y() - m_rect.y();
+    }
+    else
+    {
+        x = -1;
+        y = -1;
+    }
 
-    QFont previewFont = m_textFont;
-    previewFont.setPointSizeFloat( m_textFont.pointSizeFloat() * ((ratioW > ratioH) ? ratioW : ratioH) );
+    // get preview image data
+    uchar *data = m_iface->getPreviewImage();
+    Digikam::DImg image(m_iface->previewWidth(), m_iface->previewHeight(), m_iface->previewSixteenBit(),
+                        m_iface->previewHasAlpha(), data);
+    delete [] data;
 
-    QFontMetrics fontMt( previewFont );
-    QRect fontRect = fontMt.boundingRect(0, 0, m_rect.width(), m_rect.height(), 
-                                         0, m_textString); 
-    
-    // Calculate text area accordinly with rotation.
-    
-    switch(m_textRotation)
-        {
-        case ROTATION_NONE:
-        case ROTATION_180:
-           textRect.setSize( QSize::QSize(fontRect.width(), fontRect.height() ) );
-           break;
-        
-        case ROTATION_90:
-        case ROTATION_270:
-           textRect.setSize( QSize::QSize(fontRect.height(), fontRect.width() ) );
-           break;
-        }
-    
-    // Drawing semi-transparent text background.
-    
-    if (m_textTransparent)
-       {
-       QImage image((uchar*)m_data, m_w, m_h, 32, 0, 0, QImage::IgnoreEndian);
-       
-       image = image.copy( textRect.x()-m_rect.x(), textRect.y()-m_rect.y(),
-                           textRect.width(), textRect.height() );
-          
-       uint* ptr = (uint*)image.bits();
-       uchar red, green, blue, alpha;
-    
-       for (int j = 0 ; j < image.numBytes()/4 ; ++j)
-           {
-           alpha = (*ptr >> 24) & 0xff;
-           red   = (*ptr >> 16) & 0xff;
-           green = (*ptr >> 8)  & 0xff;
-           blue  = (*ptr)       & 0xff;
-                
-           red   += (uchar)((RCOL - red)   * OPACITY);
-           green += (uchar)((GCOL - green) * OPACITY);
-           blue  += (uchar)((BCOL - blue)  * OPACITY);
-             
-           *ptr = alpha << 24 | red << 16 | green << 8 | blue;
-           ptr++;
-           }
-    
-       QPixmap pix(image);
-       
-       bitBlt(m_pixmap, textRect.x(), textRect.y(), &pix);
-       }
-            
-    // Drawing text with rotation.
-    
+    // paint pixmap for drawing this widget
+    // First, fill with background color
+    m_pixmap->fill(colorGroup().background());
     QPainter p(m_pixmap);
-    p.setPen( QPen::QPen(m_textColor, 1) ) ;
-    p.setFont( previewFont );
-    p.save();
-    
-    switch(m_textRotation)
-        {
-        case ROTATION_NONE:
-           p.drawText( textRect.x(), textRect.y(), textRect.width(), 
-                       textRect.height(), m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_90:
-           p.translate(textRect.x()+textRect.width(), textRect.y());
-           p.rotate(90.0);
-           p.drawText( 0, 0, textRect.height(), textRect.width(), 
-                       m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_180:
-           p.translate(textRect.x() + textRect.width(), 
-                       textRect.y() + textRect.height());
-           p.rotate(180.0);
-           p.drawText( 0, 0, textRect.width(), textRect.height(), 
-                       m_alignMode, m_textString );
-           break;
-        
-        case ROTATION_270:
-           p.translate(textRect.x(), textRect.y() + textRect.height());
-           p.rotate(270.0);
-           p.drawText( 0, 0, textRect.height(), textRect.width(), 
-                       m_alignMode, m_textString );
-           break;
-        }
-    
-    p.restore();
-    
-    // Drawing rectangle around text.
-    
-    if (m_textBorder)      // Decorative border using text color.
-       {
-       p.setPen( QPen::QPen(m_textColor, 2, Qt::SolidLine, 
-                 Qt::SquareCap, Qt::RoundJoin) ) ;
-       p.drawRect(textRect.x() - 1, textRect.y() - 1, 
-                  textRect.width() + 2, textRect.height() + 2);
-       }
-    else   // Make simple dot line border to help user.
-       {
-       p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-       p.drawRect(textRect);
-       p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-       p.drawRect(textRect);
-       }
-    
-    // Drawing widget background.
-    
-    p.setClipRegion(reg);
-    p.fillRect(r, colorGroup().background());
+    // Convert image to pixmap and draw it
+    QPixmap imagePixmap = image.convertToPixmap();
+    p.drawPixmap(m_rect.x(), m_rect.y(),
+                 imagePixmap, 0, 0, imagePixmap.width(), imagePixmap.height());
+
+    // prepare painter for use by compose image
+    p.setClipRect(m_rect);
+    p.translate(m_rect.x(), m_rect.y());
+
+    // compose image and draw result directly on pixmap, with correct offset
+    QRect textRect = composeImage(&image, &p, x, y,
+                                   m_textFont, m_textFont.pointSizeFloat() * ((ratioW > ratioH) ? ratioW : ratioH),
+                                   m_textRotation, m_textColor, m_alignMode, m_textString,
+                                   m_textTransparent, m_backgroundColor,
+                                   m_textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1);
+
     p.end();
-    
-    // Save all text rectangle transformations from widget coordinate to image coordinate.
-    m_textRect = textRect;
-    m_textRect.setX( textRect.x() - m_rect.x() );
-    m_textRect.setY( textRect.y() - m_rect.y() );    
+
+    // store new text rectangle
+    // convert from image to widget coordinates
+    m_textRect.setX(textRect.x() + m_rect.x());
+    m_textRect.setY(textRect.y() + m_rect.y());
+    m_textRect.setSize(textRect.size());
+}
+
+/*
+   Take data from image, draw text at x|y with specified parameters.
+   If destPainter is null, draw to image,
+   if destPainter is not null, draw directly using the painter.
+   Returns modified area of image.
+*/
+QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter,
+                                     int x, int y,
+                                     QFont font, float pointSize, int textRotation, QColor textColor,
+                                     int alignMode, const QString &textString,
+                                     bool transparentBackground, QColor backgroundColor,
+                                     BorderMode borderMode, int borderWidth)
+{
+    /*
+        The problem we have to solve is that we have no pixel access to font rendering,
+        we have to let Qt do the drawing. On the other hand we need to support 16 bit, which
+        cannot be done with QPixmap.
+        The current solution cuts out the text area, lets Qt do its drawing, converts back and blits to original.
+    */
+    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+
+    int maxWidth, maxHeight;
+    if (x == -1 && y == -1)
+    {
+        maxWidth = image->width();
+        maxHeight = image->height();
+    }
+    else
+    {
+        maxWidth = image->width() - x;
+        maxHeight = image->height() - y;
+    }
+
+    // find out size of the area that we are drawing to
+    font.setPointSizeFloat(pointSize);
+    QFontMetrics fontMt( font );
+    QRect fontRect = fontMt.boundingRect(0, 0, maxWidth, maxHeight, 0, textString);
+
+    if (x == -1 && y == -1)
+    {
+        x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+        y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+    }
+
+    // create a rectangle relative to image
+    QRect drawRect;
+    drawRect.setX(x);
+    drawRect.setY(y);
+
+    // create a rectangle relative to textArea, excluding the border
+    QRect textAreaTextRect;
+    textAreaTextRect.setX(borderWidth);
+    textAreaTextRect.setY(borderWidth);
+
+    // create a rectangle relative to textArea, including the border
+    QRect textAreaDrawRect;
+    textAreaDrawRect.setX(0);
+    textAreaDrawRect.setY(0);
+
+    switch(textRotation)
+    {
+        case ROTATION_NONE:
+        case ROTATION_180:
+            drawRect.setWidth(fontRect.width() + 2 * borderWidth);
+            drawRect.setHeight(fontRect.height() + 2 * borderWidth);
+
+            textAreaTextRect.setWidth(fontRect.width());
+            textAreaTextRect.setHeight(fontRect.height());
+
+            textAreaDrawRect.setWidth(fontRect.width() + 2 * borderWidth);
+            textAreaDrawRect.setHeight(fontRect.height() + 2 * borderWidth);
+            break;
+
+        case ROTATION_90:
+        case ROTATION_270:
+            drawRect.setWidth(fontRect.height() + 2 * borderWidth);
+            drawRect.setHeight(fontRect.width() + 2 * borderWidth);
+
+            textAreaTextRect.setWidth(fontRect.height());
+            textAreaTextRect.setHeight(fontRect.width());
+
+            textAreaDrawRect.setWidth(fontRect.height() + 2 * borderWidth);
+            textAreaDrawRect.setHeight(fontRect.width() + 2 * borderWidth);
+            break;
+    }
+
+    // cut out the text area
+    Digikam::DImg textArea = image->copy(drawRect);
+
+    if (textArea.isNull())
+        return QRect();
+
+    // compose semi-transparent bachground over textArea
+    if (transparentBackground)
+    {
+        Digikam::DImg transparentLayer(textAreaTextRect.width(), textAreaTextRect.height(), textArea.sixteenBit(), true);
+        Digikam::DColor transparent(backgroundColor);
+        transparent.setAlpha(m_transparency);
+        if (image->sixteenBit())
+            transparent.convertToSixteenBit();
+        transparentLayer.fill(transparent);
+        textArea.bitBlendImage(composer, &transparentLayer, 0, 0, transparentLayer.width(), transparentLayer.height(),
+                               textAreaTextRect.x(), textAreaTextRect.y());
+    }
+
+    Digikam::DImg textNotDrawn;
+    if (textArea.sixteenBit())
+    {
+        textNotDrawn = textArea.copy();
+        textNotDrawn.convertToEightBit();
+    }
+    else
+        textNotDrawn = textArea;
+
+    // We have no direct pixel access to font rendering, so now we need to use Qt/X11 for the drawing
+
+    // convert text area to pixmap
+    QPixmap pixmap = textNotDrawn.convertToPixmap();
+    // paint on pixmap
+    QPainter p(&pixmap);
+    p.setPen( QPen::QPen(textColor, 1) ) ;
+    p.setFont( font );
+    p.save();
+
+    // translate to origin of text, leaving space for the border
+    p.translate(textAreaTextRect.x(), textAreaTextRect.y());
+
+    switch(textRotation)
+    {
+        case ROTATION_NONE:
+            p.drawText( 0, 0, textAreaTextRect.width(),
+                        textAreaTextRect.height(), alignMode, textString );
+            break;
+        case ROTATION_90:
+            p.translate(textAreaTextRect.width(), 0);
+            p.rotate(90.0);
+            p.drawText( 0, 0, textAreaTextRect.height(), textAreaTextRect.width(),
+                        alignMode, textString );
+            break;
+        case ROTATION_180:
+            p.translate(textAreaTextRect.width(), textAreaTextRect.height());
+            p.rotate(180.0);
+            p.drawText( 0, 0, textAreaTextRect.width(), textAreaTextRect.height(),
+                        alignMode, textString );
+            break;
+        case ROTATION_270:
+            p.translate(0, textAreaTextRect.height());
+            p.rotate(270.0);
+            p.drawText( 0, 0, textAreaTextRect.height(), textAreaTextRect.width(),
+                        alignMode, textString );
+            break;
+    }
+
+    p.restore();
+
+    // Drawing rectangle around text.
+
+    if (borderMode == BORDER_NORMAL)      // Decorative border using text color.
+    {
+        p.setPen( QPen::QPen(textColor, 2, Qt::SolidLine,
+                  Qt::SquareCap, Qt::RoundJoin) ) ;
+        p.drawRect(textAreaDrawRect);
+    }
+    else if (borderMode == BORDER_SUPPORT)  // Make simple dot line border to help user.
+    {
+        p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
+        p.drawRect(textAreaDrawRect);
+        p.setPen(QPen(Qt::red, 1, Qt::DotLine));
+        p.drawRect(textAreaDrawRect);
+    }
+    p.end();
+
+    if (!destPainter)
+    {
+        // convert to QImage, then to DImg
+        QImage pixmapImage = pixmap.convertToImage();
+        Digikam::DImg textDrawn(pixmapImage.width(), pixmapImage.height(), false, true, pixmapImage.bits());
+
+        // This does not work: during the conversion, colors are altered significantly (diffs of 1 to 10 in each component),
+        // so we cannot find out which pixels have actually been touched.
+        /*
+        // Compare the result of drawing with the previous version.
+        // Set all unchanged pixels to transparent
+        Digikam::DColor color, ncolor;
+        uchar *ptr, *nptr;
+        ptr = textDrawn.bits();
+        nptr = textNotDrawn.bits();
+        int bytesDepth = textDrawn.bytesDepth();
+        int numPixels = textDrawn.width() * textDrawn.height();
+        for (int i = 0; i < numPixels; i++, ptr+= bytesDepth, nptr += bytesDepth)
+        {
+            color.setColor(ptr, false);
+            ncolor.setColor(nptr, false);
+            if ( color.red()   == ncolor.red() &&
+                color.green() == ncolor.green() &&
+                color.blue()  == ncolor.blue())
+            {
+                color.setAlpha(0);
+                color.setPixel(ptr);
+            }
+        }
+        // convert to 16 bit if needed
+        */
+        textDrawn.convertToDepthOfImage(&textArea);
+
+        // now compose to original: only pixels affected by drawing text and border are changed, not whole area
+        textArea.bitBlendImage(composer, &textDrawn, 0, 0, textDrawn.width(), textDrawn.height(), 0, 0);
+
+        // copy result to original image
+        image->bitBltImage(&textArea, drawRect.x(), drawRect.y());
+    }
+    else
+    {
+        destPainter->drawPixmap(drawRect.x(), drawRect.y(), pixmap, 0, 0, pixmap.width(), pixmap.height());
+    }
+
+    delete composer;
+
+    return drawRect;
 }
 
 void InsertTextWidget::paintEvent( QPaintEvent * )
@@ -405,18 +455,29 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
 {
     blockSignals(true);
     delete m_pixmap;
+
     int w = e->size().width();
     int h = e->size().height();
+
+    int textX = m_textRect.x() - m_rect.x();
+    int textY = m_textRect.y() - m_rect.y();
     int old_w = m_w;
     int old_h = m_h;
     m_data = m_iface->setPreviewSize(w, h);
     m_w    = m_iface->previewWidth();
     m_h    = m_iface->previewHeight();
+
     m_pixmap = new QPixmap(w, h);
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);  
-    m_textRect.setX((int)((float)m_textRect.x() * ( (float)m_w / (float)old_w)));
-    m_textRect.setY((int)((float)m_textRect.y() * ( (float)m_h / (float)old_h)));
-    makePixmap();
+    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+
+    if (m_textRect.isValid())
+    {
+        textX = lroundf( textX * (float)m_w / (float)old_w );
+        textY = lroundf( textY * (float)m_h / (float)old_h );
+        m_textRect.setX(textX + m_rect.x());
+        m_textRect.setY(textY + m_rect.y());
+        makePixmap();
+    }
     blockSignals(false);
 }
 
@@ -424,12 +485,12 @@ void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton &&
          m_textRect.contains( e->x(), e->y() ) )
-       {
-       m_xpos = e->x();
-       m_ypos = e->y();
-       setCursor ( KCursor::sizeAllCursor() );
-       m_currentMoving = true;
-       }
+    {
+        m_xpos = e->x();
+        m_ypos = e->y();
+        setCursor ( KCursor::sizeAllCursor() );
+        m_currentMoving = true;
+    }
 }
 
 void InsertTextWidget::mouseReleaseEvent ( QMouseEvent * )
@@ -441,29 +502,30 @@ void InsertTextWidget::mouseReleaseEvent ( QMouseEvent * )
 void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( rect().contains( e->x(), e->y() ) )
-       {
-       if ( e->state() == Qt::LeftButton && m_currentMoving )
-          {
-          uint newxpos = e->x();
-          uint newypos = e->y();
-              
-          m_textRect.moveBy(newxpos - m_xpos, newypos - m_ypos);
-          makePixmap();
-          repaint(false);
-               
-          m_xpos = newxpos;
-          m_ypos = newypos;
-          setCursor( KCursor::handCursor() );
-          }
-       else if ( m_textRect.contains( e->x(), e->y() ) )
-          {
-          setCursor ( KCursor::sizeAllCursor() );
-          }
-       else
-          {
-          setCursor ( KCursor::arrowCursor() );
-          }
-       }
+    {
+        if ( e->state() == Qt::LeftButton && m_currentMoving )
+        {
+            uint newxpos = e->x();
+            uint newypos = e->y();
+
+            m_textRect.moveBy(newxpos - m_xpos, newypos - m_ypos);
+
+            makePixmap();
+            repaint(false);
+
+            m_xpos = newxpos;
+            m_ypos = newypos;
+            setCursor( KCursor::handCursor() );
+        }
+        else if ( m_textRect.contains( e->x(), e->y() ) )
+        {
+            setCursor ( KCursor::sizeAllCursor() );
+        }
+        else
+        {
+            setCursor ( KCursor::arrowCursor() );
+        }
+    }
 }
 
 }  // NameSpace DigikamInsertTextImagesPlugin

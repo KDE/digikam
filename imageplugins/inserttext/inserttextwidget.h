@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : inserttextwidget.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-14
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,16 +39,16 @@
 
 #include <kurl.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
 
 class QPixmap;
 
-namespace Digikam
-{
-class ImageIface;
-}
-
 namespace DigikamInsertTextImagesPlugin
 {
+
 enum Action
 {
     ALIGN_LEFT=0,
@@ -65,6 +67,13 @@ enum TextRotation
     ROTATION_270
 };
 
+enum BorderMode
+{
+    BORDER_NONE,
+    BORDER_SUPPORT,
+    BORDER_NORMAL
+};
+
 class InsertTextWidget : public QWidget
 {
 Q_OBJECT
@@ -75,50 +84,58 @@ public:
     ~InsertTextWidget();
 
     Digikam::ImageIface* imageIface();
-    
+
     void   setText(QString text, QFont font, QColor color, int alignMode,
                    bool border, bool transparent, int rotation);
     void   resetEdit(void);
-    QImage makeInsertText(void);
-    
+    Digikam::DImg makeInsertText(void);
+
 private:
 
     Digikam::ImageIface *m_iface;
-    
+
     bool        m_currentMoving;
     bool        m_textBorder;
     bool        m_textTransparent;
-    
+
     int         m_alignMode;
     int         m_textRotation;
-    
+
     uint       *m_data;
     int         m_w;
     int         m_h;
-    
-    int         m_xpos;            
+
+    int         m_xpos;
     int         m_ypos;
-    
-    QPixmap    *m_pixmap;  
-    
+
+    QPixmap    *m_pixmap;
+
     QRect       m_rect;
     QRect       m_textRect;
 
     QString     m_textString;
-    
+
     QFont       m_textFont;
-    
+
     QColor      m_textColor;
-        
+
+    QColor      m_backgroundColor;
+    int         m_transparency;
 protected:
-    
+
     void paintEvent( QPaintEvent *e );
     void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );    
-    
+    void mouseMoveEvent ( QMouseEvent * e );
+
     void makePixmap(void);
+    QRect composeImage(Digikam::DImg *image, QPainter *destPainter,
+                       int x, int y,
+                       QFont font, float pointSize, int textRotation, QColor textColor,
+                       int alignMode, const QString &textString,
+                       bool transparentBackground, QColor backgroundColor,
+                       BorderMode borderMode, int borderWidth);
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin

@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_inserttext.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-14
  * Description : a digiKam image plugin for insert text  
  *               to an image.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,12 +77,16 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin for inserting text on a photograph."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                                        
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
 
     setAboutData(about);
     
@@ -178,6 +184,8 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
     gridBox2->setRowStretch(9, 10);    
     
     setUserAreaWidget(gbox2);
+
+    readSettings();
     
     // -------------------------------------------------------------
     
@@ -201,10 +209,11 @@ ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, Q
                 
     connect(m_textRotation, SIGNAL(activated(int)),
             this, SLOT(slotUpdatePreview()));
-                        
+
+    connect(this, SIGNAL(signalUpdatePreview()), SLOT(slotUpdatePreview()));
     // -------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(readSettings())); 
+    slotUpdatePreview();
 }
 
 ImageEffect_InsertText::~ImageEffect_InsertText()
@@ -240,8 +249,6 @@ void ImageEffect_InsertText::readSettings(void)
     
     static_cast<QPushButton*>(m_alignButtonGroup->find(m_alignTextMode))->setOn(true);
     slotAlignModeChanged(m_alignTextMode);
-    
-    m_previewWidget->resetEdit();
 }
     
 void ImageEffect_InsertText::writeSettings(void)
@@ -308,13 +315,13 @@ void ImageEffect_InsertText::slotAlignModeChanged(int mode)
         }
         
     m_textEdit->selectAll(false);        
-    slotUpdatePreview();
+    emit signalUpdatePreview();
 }
 
 void ImageEffect_InsertText::slotFontPropertiesChanged(const QFont &font)
 {
     m_textFont = font;
-    slotUpdatePreview();
+    emit signalUpdatePreview();
 }
 
 void ImageEffect_InsertText::slotUpdatePreview()
@@ -328,12 +335,12 @@ void ImageEffect_InsertText::finalRendering()
 {
     accept();
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    
+
     Digikam::ImageIface iface(0, 0);
-    QImage dest = m_previewWidget->makeInsertText();
-    iface.putOriginalData(i18n("Insert Text"), (uint*)dest.bits(), dest.width(), dest.height());
-       
-    kapp->restoreOverrideCursor();       
+    Digikam::DImg dest = m_previewWidget->makeInsertText();
+    iface.putOriginalImage(i18n("Insert Text"), dest.bits(), dest.width(), dest.height());
+
+    kapp->restoreOverrideCursor();
 }
 
 }  // NameSpace DigikamInsertTextImagesPlugin

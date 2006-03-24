@@ -31,12 +31,11 @@
    - Blur FX          : Done.
    - Distortion FX    : Done.
    - Emboss           : Done.
+   - Superimpose      : Done.
+   - Insert Text      : Done.
 
    > Pending plugins (by difficulty order):
 
-   - Superimpose      : TODO. ==> Simple 16 bits support. Medium.
-   - Insert Text      : TODO. ==> simple 16 bits support. Fix blending target image and text
-                                  using QPixmap like with Superimpose plugin. Medium.
    - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix.
                                   Check why antialiasing filter don't give any effects. Medium.
 

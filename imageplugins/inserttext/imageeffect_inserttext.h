@@ -91,6 +91,10 @@ private slots:
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);
 
+signals:
+
+    void signalUpdatePreview();
+
 protected:
 
     void finalRendering();    
