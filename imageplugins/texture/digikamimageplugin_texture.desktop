@@ -2,6 +2,7 @@
 Name=ImagePlugin_Texture
 Name[el]=ΠρόσθετοΕικόνας_Υφή
 Name[it]=PluginImmagini_Trama
+Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_វាយនភាព​
 Name[ms]=ImagePlugin_Tekstur
 Name[nl]=Afbeeldingsplugin_Textuur
 Name[pt_BR]=Plug-in de textura
@@ -22,6 +23,7 @@ Comment[et]=DigiKami pildile tekstuuri lisamise plugin
 Comment[fr]=Module externe pour appliquer une texture à une image
 Comment[it]=Plugin di digiKam per applicare una trama su un'immagine
 Comment[ja]=digiKam テクスチャ適用プラグイン
+Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​អនុវត្ត​វាយនភាព​លើ​រូបភាព
 Comment[ms]=Plugin digiKam untuk menerapkan tekstur kepada imej
 Comment[nl]=digiKam-pluin voor het toepassen van textuur op een afbeelding
 Comment[pa]=ਚਿੱਤਰ ਉੱਤੇ ਪਾਠ ਲਿਖਣ ਲਈ ਡਿਜ਼ੀਕੈਮ ਪਲੱਗਿੰਨ
