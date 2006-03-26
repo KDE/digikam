@@ -55,7 +55,7 @@ namespace DigikamPerspectiveImagesPlugin
 {
 
 ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title, QFrame* banner)
-                      : Digikam::ImageDlgBase(parent, title, "perspective", false, banner)
+                       : Digikam::ImageDlgBase(parent, title, "perspective", false, false, banner)
 {
     QString whatsThis;
     
@@ -93,12 +93,15 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     
     // -------------------------------------------------------------
     
-    QWidget *gbox2 = new QWidget(plainPage());
+    QWidget *gbox2          = new QWidget(plainPage());
     QGridLayout *gridLayout = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());    
-    QLabel *label1 = new QLabel(i18n("New width:"), gbox2);
+
+    QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(gbox2);
-    QLabel *label2 = new QLabel(i18n("New height:"), gbox2);
+    m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+    QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
     m_newHeightLabel = new QLabel(gbox2);
+    m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
     gridLayout->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
