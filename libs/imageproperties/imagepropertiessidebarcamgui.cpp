@@ -54,7 +54,7 @@ public:
     {
         dirtyMetadataTab   = false;
         dirtyCameraItemTab = false;
-        metadataTab            = 0;
+        metadataTab        = 0;
         cameraItemTab      = 0;
         itemInfo           = 0;
         cameraView         = 0;

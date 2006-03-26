@@ -90,10 +90,11 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
 {
     d = new ImagePropertiesMetadataTabPriv;
 
-    QVBoxLayout *vLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    QVBoxLayout *vLayout = new QVBoxLayout(this);
     d->navigateBar       = new NavigateBarWidget(this, navBar);
     d->tab               = new KTabWidget(this);
     vLayout->addWidget(d->navigateBar);
+    vLayout->addSpacing(KDialog::spacingHint());
     vLayout->addWidget(d->tab);
     
     // Exif tab area -----------------------------------------------------
