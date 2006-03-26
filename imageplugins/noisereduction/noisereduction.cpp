@@ -1,7 +1,8 @@
 /* ============================================================
- * File  : noisereduction.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-05-25
+ * File   : noisereduction.cpp
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Peter Heckert <peter dot heckert at arcor dot de>
+ * Date   : 2005-05-25
  * Description : Noise reduction threaded image filter.
  * 
  * Copyright 2005-2006 by Gilles Caulier

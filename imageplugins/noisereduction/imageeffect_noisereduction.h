@@ -1,7 +1,8 @@
 /* ============================================================
- * File  : imageeffect_noisereduction.h
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-24
+ * File   : imageeffect_noisereduction.h
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Peter Heckert <peter dot heckert at arcor dot de>
+ * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 

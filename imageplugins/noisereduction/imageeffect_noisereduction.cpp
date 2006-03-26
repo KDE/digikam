@@ -1,7 +1,8 @@
 /* ============================================================
- * File  : imageeffect_noisereduction.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-08-24
+ * File   : imageeffect_noisereduction.cpp
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Peter Heckert <peter dot heckert at arcor dot de>
+ * Date   : 2004-08-24
  * Description : noise reduction image filter for digiKam 
  *               image editor.
  * 
@@ -77,7 +78,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Peter Heckert", I18N_NOOP("Original Noise Reduction algorithm author"),
+    about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developper"),
                      "peter dot heckert at arcor dot de");
                      
     setAboutData(about);
