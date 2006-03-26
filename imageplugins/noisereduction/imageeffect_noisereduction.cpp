@@ -94,10 +94,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_radiusInput = new KDoubleNumInput(firstPage);
     m_radiusInput->setPrecision(1);
-    m_radiusInput->setRange(0.0, 3.0, 0.1, true);
+    m_radiusInput->setRange(0.0, 10.0, 0.1, true);
     QWhatsThis::add( m_radiusInput, i18n("<p><b>Radius</b>: this control selects the "
-                                         "gliding window size used for the filter. Larger values increase "
-                                         "the amount of time needed to filter each pixel in the image and "
+                                         "gliding window size used for the filter. Larger values do not increase "
+                                         "the amount of time needed to filter each pixel in the image but "
                                          "can cause blurring. This window moves across the image, and the "
                                          "color in it is smoothed to remove imperfections. "
                                          "In any case it must be about the same size as noise granularity "
@@ -190,7 +190,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_lumToleranceInput = new KDoubleNumInput(secondPage);
     m_lumToleranceInput->setPrecision(1);
-    m_lumToleranceInput->setRange(0.1, 5.0, 0.1, true);
+    m_lumToleranceInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( m_lumToleranceInput, i18n("<p><b>Luminance</b>: this control set the luminance tolerance "
                 "of image. It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance "
                 "settings to make an image correction, not the both at the same time. This settings "
@@ -204,10 +204,11 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QLabel *label3 = new QLabel(i18n("Threshold:"), secondPage);
     
     m_thresholdInput = new KDoubleNumInput(secondPage);
-    m_thresholdInput->setPrecision(1);
-    m_thresholdInput->setRange(0.1, 5.0, 0.1, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: this control set the 2nd derivative of "
-                     "luminance adjustment. This value should be set so that edges are clearly visible "
+    m_thresholdInput->setPrecision(2);
+    m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
+    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: Use the slider for coarse adjustment, "
+		     " and the spin control for fine adjustment.This controls edge detection sensitivity. "
+                     "This value should be set so that edges and details are clearly visible "
                      "and noise is smoothed out. This value is not bound to any intensity value, it is "
                      "bound to the second derivative of intensity values. Simply adjust it and watch the " 
                      "preview. Adjustment must be made carefully, because the gap between \"noisy\", "
@@ -223,7 +224,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_csmoothInput = new KDoubleNumInput(secondPage);
     m_csmoothInput->setPrecision(1);
-    m_csmoothInput->setRange(1.0, 5.0, 0.1, true);
+    m_csmoothInput->setRange(0.0, 1.0, 0.1, true);
     QWhatsThis::add( m_csmoothInput, i18n("<p><b>Color</b>: this control set the color tolerance of image. "
                 "It's recommended to use only <b>Color</b> or <b>Luminance</b> tolerance settings to "
                 "make an image correction, not the both at the same time. This settings don't influence "
@@ -331,7 +332,7 @@ void ImageEffect_NoiseReduction::resetValues()
     m_dampingInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
                     
-    m_radiusInput->setValue(1.0);
+    m_radiusInput->setValue(5.0);
     m_lumToleranceInput->setValue(1.0);
     m_thresholdInput->setValue(0.08);
     m_textureInput->setValue(0.0);

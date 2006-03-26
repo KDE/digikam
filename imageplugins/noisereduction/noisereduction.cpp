@@ -182,6 +182,11 @@ void NoiseReduction::filterImage(void)
         float t  = m_csmooth;
         float t2 = m_lsmooth;
         
+        // Values are squared, so that sliders get a nonlinear chracteristic
+	// for better adjustment accuracy when values are small.
+        t*=t;
+        t2*=t2;         
+  
         for (u = 0 ; !m_cancel && (u < width) ; u++)
         {
             float dpix[3], spix[3];
@@ -236,7 +241,7 @@ void NoiseReduction::filterImage(void)
             
             dl *= pow(lum2/0.5, m_gamma-1.0);
     
-            if (t2 >= 0.0)
+            if (t2 > 0.0)
                 dl *= (1.0 - exp(-dl*dl/(2.0*t2*t2)));        
 
             // NOTE: commented from original implementation
