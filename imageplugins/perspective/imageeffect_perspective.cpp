@@ -1,11 +1,13 @@
 /* ============================================================
  * File  : imageeffect_perspective.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-02-17
  * Description : a digiKam image editor plugin for process image 
  *               perspective adjustment.
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,14 +66,18 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
                                        digikamimageplugins_version,
                                        I18N_NOOP("A digiKam image plugin to process image perspective adjustment."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005-2006, Gilles Caulier", 
+                                       "(c) 2005-2006, Gilles Caulier\n"
+                                       "(c) 2006, Gilles Caulier and Marcel Wiesweg",
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
-    
-    setAboutData(about);    
+
+    about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
+                     "marcel dot wiesweg at gmx dot de");
+
+    setAboutData(about);
     
     // -------------------------------------------------------------
     
@@ -144,7 +150,7 @@ void ImageEffect_Perspective::slotDefault()
 void ImageEffect_Perspective::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-    m_previewWidget->applyPerspectiveAdjusment();
+    m_previewWidget->applyPerspectiveAdjustment();
     accept();   
     kapp->restoreOverrideCursor();       
 }

@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = digikamimageplugin_perspective.la
 
 digikamimageplugin_perspective_la_SOURCES = imageplugin_perspective.cpp \
 	                                    imageeffect_perspective.cpp \
-					    perspectivewidget.cpp triangle.cpp 
+					    perspectivewidget.cpp triangle.cpp matrix.cpp
 
 digikamimageplugin_perspective_la_LIBADD = $(LIB_KPARTS) $(LIBDIGIKAM_LIBS) \
 	              $(top_builddir)/digikamimageplugins/common/widgets/libdigikamimagepluginswidget.la

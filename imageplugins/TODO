@@ -33,11 +33,14 @@
    - Emboss           : Done.
    - Superimpose      : Done.
    - Insert Text      : Done.
+   - Perspective      : Done.
 
-   > Pending plugins (by difficulty order):
+   > Some pending bugs
 
-   - Perspective      : TODO. ==> simple port algorithms to 16 bits. Separate class to compute Matrix.
-                                  Check why antialiasing filter don't give any effects. Medium.
+   - Perspective      : - Check why antialiasing filter don't give any effects.
+                        - Improve settings widget.
+   - Superimpose      : - Fix dirselect widget.
+                        - Fix zooming.
 
 
 Nota: 

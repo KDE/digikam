@@ -1,10 +1,12 @@
 /* ============================================================
  * File  : perspectivewidget.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
+           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-18
  * Description : 
  * 
  * Copyright 2005 Gilles Caulier
+ * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -31,6 +33,14 @@
 #include <qpoint.h>
 #include <qrect.h>
 
+// Digikam includes.
+
+#include <digikamheaders.h>
+
+// Local includes
+
+#include "matrix.h"
+
 class QPixmap;
 
 namespace Digikam
@@ -46,7 +56,7 @@ class PerspectiveWidget : public QWidget
 Q_OBJECT
 
 public:
-    
+
     PerspectiveWidget(int width, int height, QWidget *parent=0);
     ~PerspectiveWidget();
 
@@ -56,85 +66,67 @@ public:
     QPoint getBottomLeftCorner(void);
     QPoint getBottomRightCorner(void);
     void   reset(void);
-    
+
     float getAngleTopLeft(void);
     float getAngleTopRight(void);
     float getAngleBottomLeft(void);
     float getAngleBottomRight(void);
-    
-    void  applyPerspectiveAdjusment(void);
-    
+
+    void  applyPerspectiveAdjustment(void);
+
     Digikam::ImageIface* imageIface();
 
 public slots:
-    
+
     void toggleAntiAliasing(bool a);
-        
+
 signals:
 
     void signalPerspectiveChanged( QRect newSize, float topLeftAngle, float topRightAngle,
                                    float bottomLeftAngle, float bottomRightAngle );   
 
 protected:
-    
+
     void paintEvent( QPaintEvent *e );
     void resizeEvent( QResizeEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
-private:  // Matrix 3x3 perspective transformation implementations.
-        
-    // TODO : put these methods in a separate class.
-    
-    struct Matrix3
-    {
-    double coeff[3][3];
-    };
-
-    void   matrix3Identity(Matrix3 *matrix);
-    void   matrix3Translate(Matrix3 *matrix, double x, double y);
-    void   matrix3Scale(Matrix3 *matrix, double x, double y);
-    void   matrix3Mult(const Matrix3 *matrix1, Matrix3 *matrix2);
-    void   matrix3TransformPoint(const Matrix3 *matrix, double x, double y, 
-                                 double *newx, double *newy);
-    void   matrix3Invert(Matrix3 *matrix);
-    double matrix3Determinant(const Matrix3 *matrix);
-    
 private:
 
     enum ResizingMode
     {
-    ResizingNone = 0,
-    ResizingTopLeft,
-    ResizingTopRight, 
-    ResizingBottomLeft,   
-    ResizingBottomRight
+        ResizingNone = 0,
+        ResizingTopLeft,
+        ResizingTopRight,
+        ResizingBottomLeft,
+        ResizingBottomRight
     };
-    
+
     Digikam::ImageIface *m_iface;
-    
+
     bool        m_antiAlias;
-    
+
     uint       *m_data;
     int         m_w;
     int         m_h;
     int         m_origW;
     int         m_origH;
-    
+
     int         m_xpos;
     int         m_ypos;
-    
+
     int         m_currentResizing;
-    
-    QRect       m_rect;                    
-    
+
+    QRect       m_rect;
+
     // Tranformed center area for mouse position control.
-    
+
     QPoint      m_transformedCenter;
-    
+
     // Draggable local region selection corners.
-    
+
     QRect       m_topLeftCorner;
     QRect       m_topRightCorner;
     QRect       m_bottomLeftCorner;
@@ -144,17 +136,20 @@ private:
     QPoint      m_topRightPoint;
     QPoint      m_bottomLeftPoint;
     QPoint      m_bottomRightPoint;
-    
+
     QPixmap*    m_pixmap;
+    Digikam::DImg m_previewImage;
 
 private:  // Widget methods.
-        
+
     void   updatePixmap(void);
-    void   transformAffine(uint *data, uint *newData, const Matrix3 *matrix, int w, int h);
+    void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+                           const Matrix &matrix, Digikam::DColor background);
     QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                             QPoint transTopLeft, QPoint transTopRight,
                             QPoint transBottomLeft, QPoint transBottomRight,
-                            uint* data, uint* newData);
+                            Digikam::DImg *orgImage, Digikam::DImg *destImage,
+                            Digikam::DColor background);
 };
 
 }  // NameSpace DigikamPerspectiveImagesPlugin
