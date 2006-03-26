@@ -83,7 +83,8 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
                        : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CameraItemPropertiesTabPriv;
-    QGridLayout *topLayout = new QGridLayout(this, 13, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(this, 13, 2);
+    topLayout->setSpacing(KDialog::spacingHint());
 
     d->navigateBar = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
@@ -111,6 +112,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->labelImageHeight       = new KSqueezedTextLabel(0, this);
     d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
 
+    topLayout->setRowSpacing( 0, KDialog::spacingHint() );    
     topLayout->addMultiCellWidget(title, 1, 1, 0, 2);
     topLayout->setRowStretch(2, 0);
     topLayout->addMultiCellWidget(fileName, 3, 3, 0, 0);
