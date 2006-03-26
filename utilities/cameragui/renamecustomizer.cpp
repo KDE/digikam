@@ -29,6 +29,7 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -36,6 +37,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <klineedit.h>
+#include <kdialogbase.h>
 
 // Local includes.
 
@@ -84,27 +86,24 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
                 : QButtonGroup(parent)
 {
     d = new RenameCustomizerPriv;
-    
-    // -- setup view --------------------------------------------------
+    d->changedTimer = new QTimer();
     
     setTitle(i18n("Renaming Options"));
     setRadioButtonExclusive(true);
-    
     setColumnLayout(0, Qt::Vertical);
-    layout()->setSpacing(5);
-    layout()->setMargin(10);
+    QGridLayout* mainLayout = new QGridLayout(layout(), 3, 1);
 
-    QGridLayout* mainLayout = new QGridLayout(layout());
+    // ----------------------------------------------------------------
 
     d->renameDefault = new QRadioButton(i18n("Use camera provided names"), this);
     mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
     d->renameDefaultBox = new QGroupBox( this );
     d->renameDefaultBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
+    d->renameDefaultBox->setInsideMargin(0);
     d->renameDefaultBox->setColumnLayout(0, Qt::Vertical);
 
     d->renameDefaultCase = new QLabel( i18n("Change case to"), d->renameDefaultBox );
-    d->renameDefaultCase->setIndent( 10 );
     d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 
     d->renameDefaultCaseType = new QComboBox( d->renameDefaultBox );
@@ -113,43 +112,43 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    QHBoxLayout* boxLayout =  new QHBoxLayout( d->renameDefaultBox->layout() );
-    boxLayout->setSpacing(5);
+    QHBoxLayout* boxLayout = new QHBoxLayout( d->renameDefaultBox->layout() );
+    boxLayout->addSpacing( 10 );
     boxLayout->addWidget( d->renameDefaultCase );
     boxLayout->addWidget( d->renameDefaultCaseType );
-    boxLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Expanding, QSizePolicy::Minimum ));
 
     mainLayout->addMultiCellWidget(d->renameDefaultBox, 1, 1, 0, 1);
+
+    // -------------------------------------------------------------
 
     d->renameCustom = new QRadioButton(i18n("Customize names"), this);
     mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
 
     d->renameCustomBox = new QGroupBox(this);
     d->renameCustomBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
+    d->renameCustomBox->setInsideMargin(0);
     d->renameCustomBox->setColumnLayout(0, Qt::Vertical);
 
-    // -------------------------------------------------------------
-
-    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout(), 3, 2);
-    renameCustomBoxLayout->setMargin(0);
-    renameCustomBoxLayout->setSpacing(5);
-
-    QLabel* prefixLabel  = new QLabel(i18n("Prefix:"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 0, 0);
+    QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout(), 
+                                         2, 2, KDialogBase::spacingHint());
+    renameCustomBoxLayout->setColSpacing( 0, 10 );
+    QLabel* prefixLabel = new QLabel(i18n("Prefix:"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
 
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 1, 1);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
 
-    d->renameCustomExif = new QCheckBox(i18n("Add camera provided date and time"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExif, 1, 1, 0, 1);
+    d->renameCustomExif = new QCheckBox(i18n("Add date and time"), d->renameCustomBox);
+    QWhatsThis::add( d->renameCustomExif, i18n("<p>Toogle on this option to add to filename the "
+                                               "camera provided date and time"));
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExif, 1, 1, 1, 2);
 
-    d->renameCustomSeq  = new QCheckBox(i18n("Add sequence number"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSeq, 2, 2, 0, 1);
+    d->renameCustomSeq = new QCheckBox(i18n("Add sequence number"), d->renameCustomBox);
+    QWhatsThis::add( d->renameCustomSeq, i18n("<p>Toogle on this option to add to filename a "
+                                              "sequence number"));
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSeq, 2, 2, 1, 2);
 
-    renameCustomBoxLayout->setColStretch(2, 10);
-
-    mainLayout->addItem(new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Minimum ), 3, 0);
-    mainLayout->addWidget(d->renameCustomBox, 3, 1);
+    mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
 
     // -- setup connections -------------------------------------------------
 
@@ -168,10 +167,6 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     connect(d->renameDefaultCaseType, SIGNAL(activated(const QString&)),
             this, SLOT(slotCaseTypeChanged(const QString&)));
 
-    // -- changed timer ----------------------------------------------------
-
-    d->changedTimer = new QTimer();
-    
     connect(d->changedTimer, SIGNAL(timeout()),
             this, SIGNAL(signalChanged()));
 
@@ -221,7 +216,6 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 
     return type;
 }
-
 
 void RenameCustomizer::slotRadioButtonClicked(int)
 {

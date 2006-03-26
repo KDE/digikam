@@ -48,6 +48,7 @@ extern "C"
 #include <qprogressbar.h>
 #include <qtooltip.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 
@@ -68,6 +69,7 @@ extern "C"
 
 // Local includes.
 
+#include "sidebar.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -90,109 +92,127 @@ public:
 
     CameraUIPriv()
     {
-        showAdvanced = false;
         busy         = false;
-        helpBtn      = 0;
-        closeBtn     = 0;
-        downloadBtn  = 0;
-        deleteBtn    = 0;
-        advBtn       = 0;
+        advBox       = 0;
         downloadMenu = 0;
         deleteMenu   = 0;
         cancelBtn    = 0;
         splitter     = 0;
         rightSidebar = 0;
+        leftSidebar  = 0;
     }
 
-    bool                          showAdvanced;
     bool                          busy;
 
     QStringList                   foldersToScan;
 
-    QPushButton*                  helpBtn;
-    QPushButton*                  closeBtn;
-    QPushButton*                  downloadBtn;
-    QPushButton*                  deleteBtn;
-    QPushButton*                  advBtn;
+    QPopupMenu                   *downloadMenu;
+    QPopupMenu                   *deleteMenu;
 
-    QPopupMenu*                   downloadMenu;
-    QPopupMenu*                   deleteMenu;
+    QToolButton                  *cancelBtn;
 
-    QToolButton*                  cancelBtn;
+    QWidget                      *advBox;
 
-    QVBox*                        advBox;
+    QCheckBox                    *autoRotateCheck;
+    QCheckBox                    *autoAlbumCheck;
 
-    QCheckBox*                    autoRotateCheck;
-    QCheckBox*                    autoAlbumCheck;
+    QLabel                       *status;
 
-    QLabel*                       status;
-
-    QProgressBar*                 progress;
+    QProgressBar                 *progress;
 
     QSplitter                    *splitter;
 
     KURL                          lastDestURL;
 
-    CameraController*             controller;
+    CameraController             *controller;
 
-    CameraIconView*               view;
+    CameraIconView               *view;
 
-    RenameCustomizer*             renameCustomizer;
+    RenameCustomizer             *renameCustomizer;
 
-    AnimWidget*                   anim;
+    AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
+    
+    Sidebar                      *leftSidebar;
 };    
 
 CameraUI::CameraUI(QWidget* parent, const QString& title,
                    const QString& model, const QString& port,
                    const QString& path)
-        : KDialog(parent, 0, false, WDestructiveClose)
+        : KDialogBase(Plain, title,
+                      Help|User1|User2|User3|Close, Close,
+                      parent, 0, false, true,
+                      i18n("&Select"),
+                      i18n("&Download"),
+                      i18n("D&elete"))
 {
     d = new CameraUIPriv;
+    setHelp("camerainterface.anchor", "digikam");
 
     // -- setup view -----------------------------------------
     
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
-
-    QGroupBox* viewBox = new QGroupBox(0, Qt::Horizontal, title, this);
-
-    QGridLayout* viewBoxLayout = new QGridLayout(viewBox->layout(), 1, 3, 
-                                     KDialog::spacingHint());
+    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 3);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 3 );
     viewBoxLayout->setColStretch( 2, 1 );
     viewBoxLayout->setColStretch( 3, 0 );
+    QHBox* widget = new QHBox(plainPage());
 
-    QWidget* widget   = new QWidget(this);
-    QHBoxLayout *hlay = new QHBoxLayout(widget);
-    d->splitter       = new QSplitter(widget);
-    d->view           = new CameraIconView(this, d->splitter);
-    d->rightSidebar   = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
-                                                         Digikam::Sidebar::Right);
-    hlay->addWidget(d->splitter);
-    hlay->addWidget(d->rightSidebar);
+    // -------------------------------------------------------------------------
+
+    d->leftSidebar      = new Sidebar(widget, "CameraGui Sidebar Left", Digikam::Sidebar::Left);
+    d->splitter         = new QSplitter(widget);
+    d->advBox           = new QWidget(d->leftSidebar);
+    QGridLayout* grid   = new QGridLayout( d->advBox, 2, 1 );
+    d->renameCustomizer = new RenameCustomizer(d->advBox);
+    grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
+        
+    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Information"), d->advBox);
+    d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip image"), exifBox);
+    d->autoAlbumCheck   = new QCheckBox(i18n("Created date-based sub-albums"), exifBox);
+    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
+                                              "rotated or fliped images using EXIF informations "
+                                              "provided by camera"));
+    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
+                                             "into automatically created date-based sub-albums "
+                                             "of destination album"));
     
+    grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
+    grid->setRowStretch(2, 10);
+
+    d->leftSidebar->setSplitter(d->splitter);
+    d->leftSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
+    
+    // -------------------------------------------------------------------------
+
+    d->view = new CameraIconView(this, d->splitter);
+    d->view->setRenameCustomizer(d->renameCustomizer);
+    
+    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
+                                                       Digikam::Sidebar::Right);
     viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 3);
+    viewBoxLayout->setRowSpacing(1, spacingHint());
     d->splitter->setOpaqueResize(false);
+    d->leftSidebar->loadViewState();
     d->rightSidebar->loadViewState();
         
     // -------------------------------------------------------------------------
 
-    d->cancelBtn = new QToolButton(viewBox);
+    d->cancelBtn = new QToolButton(plainPage());
     QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop", KIcon::Toolbar, 22);
     d->cancelBtn->setText(i18n("Cancel"));
     d->cancelBtn->setIconSet(iconSet);
     d->cancelBtn->setEnabled(false);
-    viewBoxLayout->addMultiCellWidget(d->cancelBtn, 1, 1, 0, 0);
+    viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
     
-    d->status = new QLabel(viewBox);
-    viewBoxLayout->addMultiCellWidget(d->status, 1, 1, 1, 1);
-    d->progress = new QProgressBar(viewBox);
-    viewBoxLayout->addMultiCellWidget(d->progress, 1, 1, 2, 2);
+    d->status = new QLabel(plainPage());
+    viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 1, 1);
+    d->progress = new QProgressBar(plainPage());
+    viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 2, 2);
     d->progress->hide();
 
-    QFrame *frame = new QFrame(viewBox);
+    QFrame *frame = new QFrame(plainPage());
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QHBoxLayout* layout = new QHBoxLayout( frame );
     layout->setMargin( 2 ); // to make sure the frame gets displayed
@@ -212,113 +232,36 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     d->anim = new AnimWidget(frame);
     layout->addWidget( d->anim );
 
-    viewBoxLayout->addMultiCellWidget(frame, 1, 1, 3, 3);
-    
-    mainLayout->addWidget(viewBox);
-
-    // -------------------------------------------------------------------------
-    
-    QHBoxLayout* btnLayout = new QHBoxLayout(0, KDialog::marginHint(), KDialog::spacingHint());
-
-    QPushButton* helpBtn;
-    QPushButton* selectBtn;
-    
-    d->advBtn      = new QPushButton(i18n("&Advanced %1").arg(">>"), this);
-    helpBtn        = new QPushButton(i18n("&Help"), this);
-    selectBtn      = new QPushButton(i18n("&Select"), this);
-    d->downloadBtn = new QPushButton(i18n("&Download"), this);
-    d->deleteBtn   = new QPushButton(i18n("D&elete"), this);
-    d->closeBtn    = new QPushButton(i18n("&Close"), this);
-    
-    btnLayout->addWidget(d->advBtn);
-    btnLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    btnLayout->addWidget(helpBtn);
-    btnLayout->addWidget(selectBtn);
-    btnLayout->addWidget(d->downloadBtn);
-    btnLayout->addWidget(d->deleteBtn);
-    btnLayout->addWidget(d->closeBtn);
-
-    mainLayout->addLayout(btnLayout);
-    
-    // -------------------------------------------------------------------------
-
-    d->advBox = new QVBox(this);
-    d->advBox->setSpacing(KDialog::spacingHint());
-    d->showAdvanced = false;
-    d->advBox->hide();
-
-    d->renameCustomizer = new RenameCustomizer(d->advBox);
-    d->view->setRenameCustomizer(d->renameCustomizer);
-
-    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera-provided Information (EXIF)"),
-                                         d->advBox);
-    d->autoRotateCheck = new QCheckBox(i18n("Automatically rotate/flip using "
-                                           "camera-provided information (EXIF)"),
-                                      exifBox);
-    d->autoAlbumCheck = new QCheckBox(i18n("Download photos into automatically "
-                                          "created date-based sub-albums of "
-                                          "destination album"),
-                                      exifBox);
-    
-    mainLayout->addWidget(d->advBox);
-
-    // -------------------------------------------------------------------------
-    // About popupmenu button using a slot for calling the camera interface
-    // anchor in Digikam handbook.
-    
-    KHelpMenu* helpMenu = new KHelpMenu(this, KApplication::kApplication()->aboutData(),
-                                        false);
-    helpMenu->menu()->removeItemAt(0);
-    helpMenu->menu()->insertItem(i18n("Digikam Handbook"),
-                                 this, SLOT(slotHelp()), 0, -1, 0);
-    helpBtn->setPopup( helpMenu->menu() );
+    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 3, 3);
 
     // -------------------------------------------------------------------------
     
     QPopupMenu* selectMenu = new QPopupMenu(this);
-    selectMenu->insertItem(i18n("Select &All"),
-                           d->view, SLOT(slotSelectAll()));
-    selectMenu->insertItem(i18n("Select N&one"),
-                           d->view, SLOT(slotSelectNone()));
-    selectMenu->insertItem(i18n("&Invert Selection"),
-                           d->view, SLOT(slotSelectInvert()));
+    selectMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()));
+    selectMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()));
+    selectMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()));
     selectMenu->insertSeparator();
-    selectMenu->insertItem(i18n("Select &New Items"),
-                           d->view, SLOT(slotSelectNew()));
-    selectBtn->setPopup(selectMenu);    
+    selectMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()));
+    actionButton(User1)->setPopup(selectMenu);    
 
     // -------------------------------------------------------------------------
-        
+
     d->downloadMenu = new QPopupMenu(this);
-    d->downloadMenu->insertItem(i18n("Download Selected"),
-                               this, SLOT(slotDownloadSelected()),
-                               0, 0);
-    d->downloadMenu->insertItem(i18n("Download All"),
-                               this, SLOT(slotDownloadAll()),
-                               0, 1);
+    d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
+    d->downloadMenu->insertItem(i18n("Download All"), this, SLOT(slotDownloadAll()), 0, 1);
     d->downloadMenu->setItemEnabled(0, false);
-    d->downloadBtn->setPopup(d->downloadMenu);
+    actionButton(User2)->setPopup(d->downloadMenu);
 
     // -------------------------------------------------------------------------
     
     d->deleteMenu = new QPopupMenu(this);
-    d->deleteMenu->insertItem(i18n("Delete Selected"),
-                             this, SLOT(slotDeleteSelected()),
-                             0, 0);
-    d->deleteMenu->insertItem(i18n("Delete All"),
-                             this, SLOT(slotDeleteAll()),
-                             0, 1);
+    d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
+    d->deleteMenu->insertItem(i18n("Delete All"), this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);
-    d->deleteBtn->setPopup(d->deleteMenu);
+    actionButton(User3)->setPopup(d->deleteMenu);
 
     // -------------------------------------------------------------------------
     
-    connect(d->closeBtn, SIGNAL(clicked()),
-            this, SLOT(close()));
-
-    connect(d->advBtn, SIGNAL(clicked()),
-            this, SLOT(slotToggleAdvanced()));
-
     connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(slotProcessURL(const QString&)));     
 
@@ -403,8 +346,37 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
 CameraUI::~CameraUI()
 {
+    delete d->leftSidebar;
     delete d->rightSidebar;
     delete d;
+}
+
+void CameraUI::readSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Camera Settings");
+    d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
+    d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    d->view->setSizePolicy(rightSzPolicy);
+
+    if(config->hasKey("Splitter Sizes"))
+        d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
+
+    resize(configDialogSize("Camera Settings"));
+}
+
+void CameraUI::saveSettings()
+{
+    saveDialogSize("Camera Settings");
+
+    KConfig* config = kapp->config();
+    config->setGroup("Camera Settings");
+    config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
+    config->writeEntry("AutoAlbum", d->autoAlbumCheck->isChecked());
+    config->writeEntry("Splitter Sizes", d->splitter->sizes());
+    config->sync();
 }
 
 void CameraUI::slotProcessURL(const QString& url)
@@ -441,12 +413,6 @@ void CameraUI::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-void CameraUI::slotHelp()
-{
-    KApplication::kApplication()->invokeHelp("camerainterface.anchor",
-                                             "digikam");
-}
-
 void CameraUI::slotBusy(bool val)
 {
     if (!val)
@@ -456,8 +422,8 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = false;
         d->cancelBtn->setEnabled(false);
-        d->downloadBtn->setEnabled(true);
-        d->deleteBtn->setEnabled(true);
+        enableButton(User2, true);
+        enableButton(User3, true);
         d->anim->stop();
         d->status->setText(i18n("Ready"));
         d->progress->hide();
@@ -471,8 +437,8 @@ void CameraUI::slotBusy(bool val)
             d->anim->start();
         d->busy = true;
         d->cancelBtn->setEnabled(true);
-        d->downloadBtn->setEnabled(false);
-        d->deleteBtn->setEnabled(false);
+        enableButton(User2, false);
+        enableButton(User3, false);
     }
 }
 
@@ -522,21 +488,6 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
                              const QImage& thumbnail)
 {
     d->view->setThumbnail(folder, file, thumbnail);
-}
-
-void CameraUI::slotToggleAdvanced()
-{
-    d->showAdvanced = !d->showAdvanced;
-    if (d->showAdvanced)
-    {
-        d->advBox->show();
-        d->advBtn->setText(i18n("&Simple %1").arg("<<"));
-    }
-    else
-    {
-        d->advBox->hide();
-        d->advBtn->setText(i18n("&Advanced %1").arg(">>"));
-    }
 }
 
 void CameraUI::slotErrorMsg(const QString& msg)
@@ -818,40 +769,6 @@ void CameraUI::slotSkipped(const QString&, const QString&)
 void CameraUI::slotDeleted(const QString& folder, const QString& file)
 {
     d->view->removeItem(folder, file);
-}
-
-void CameraUI::readSettings()
-{
-    KConfig* config = kapp->config();
-
-    int w, h;
-
-    config->setGroup("Camera Settings");
-    w = config->readNumEntry("Width", 500);
-    h = config->readNumEntry("Height", 500);
-    d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
-    d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
-    
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    if(config->hasKey("Splitter Sizes"))
-        d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
-    else 
-        d->view->setSizePolicy(rightSzPolicy);
-
-    resize(w, h);
-}
-
-void CameraUI::saveSettings()
-{
-    KConfig* config = kapp->config();
-
-    config->setGroup("Camera Settings");
-    config->writeEntry("Width", width());
-    config->writeEntry("Height", height());
-    config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
-    config->writeEntry("AutoAlbum", d->autoAlbumCheck->isChecked());
-    config->writeEntry("Splitter Sizes", d->splitter->sizes());
-    config->sync();
 }
 
 bool CameraUI::createAutoAlbum(const KURL& parentURL,

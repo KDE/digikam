@@ -29,7 +29,7 @@
 
 // KDE includes.
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 #include <kurl.h>
 
 // Local includes.
@@ -42,7 +42,7 @@ namespace Digikam
 class CameraIconViewItem;
 class CameraUIPriv;
 
-class CameraUI : public KDialog
+class CameraUI : public KDialogBase
 {
     Q_OBJECT
 
@@ -76,7 +76,6 @@ private:
 
 private slots:
 
-    void slotHelp();
     void slotProcessURL(const QString& url);
 
     void slotConnected(bool val);
@@ -101,8 +100,6 @@ private slots:
     
     void slotItemsSelected(CameraIconViewItem* item, bool selected);
     
-    void slotToggleAdvanced();
-
     void slotExifFromFile(const QString& folder, const QString& file);
     void slotExifFromData(const QByteArray& exifData);
 
