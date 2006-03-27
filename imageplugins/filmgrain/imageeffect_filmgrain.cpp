@@ -167,9 +167,7 @@ void ImageEffect_FilmGrain::putPreviewData(void)
 void ImageEffect_FilmGrain::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Film Grain"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Film Grain"), m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamFilmGrainImagesPlugin

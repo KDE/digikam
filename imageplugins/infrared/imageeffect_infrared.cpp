@@ -161,10 +161,11 @@ void ImageEffect_Infrared::prepareEffect()
     m_sensibilitySlider->setEnabled(false);
 
     Digikam::DImg image = m_imagePreviewWidget->getOriginalRegionImage();
-    int   s = 100 + 100 * m_sensibilitySlider->value();
+    int  s = 100 + 100 * m_sensibilitySlider->value();
     bool  g = m_addFilmGrain->isChecked();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Infrared(&image, this, s, g));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new Infrared(&image, this, s, g));
 }
 
 void ImageEffect_Infrared::prepareFinal()
@@ -177,7 +178,8 @@ void ImageEffect_Infrared::prepareFinal()
 
     Digikam::ImageIface iface(0, 0);
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Infrared(iface.getOriginalImg(), this, s, g));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new Infrared(iface.getOriginalImg(), this, s, g));
 }
 
 void ImageEffect_Infrared::putPreviewData(void)
@@ -188,9 +190,7 @@ void ImageEffect_Infrared::putPreviewData(void)
 void ImageEffect_Infrared::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Infrared"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Infrared"), m_threadedFilter->getTargetImage().bits());
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin
