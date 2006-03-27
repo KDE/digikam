@@ -66,7 +66,7 @@ namespace DigikamInsertTextImagesPlugin
 {
 
 ImageEffect_InsertText::ImageEffect_InsertText(QWidget* parent, QString title, QFrame* banner)
-                      : Digikam::ImageDlgBase(parent, title, "inserttext", false, banner)
+                      : Digikam::ImageDlgBase(parent, title, "inserttext", false, false, banner)
 {
     QString whatsThis;
     
