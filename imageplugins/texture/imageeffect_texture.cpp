@@ -1,8 +1,8 @@
 /* ============================================================
- * File  : imageeffect_texture.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
-           Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Date  : 2005-03-10
+ * File   : imageeffect_texture.cpp
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2005-03-10
  * Description : a digiKam image editor plugin to apply 
  *               texture on image.
  * 
@@ -157,7 +157,8 @@ void ImageEffect_Texture::prepareEffect()
 
     int b = 255 - m_blendGain->value();
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Texture(&image, this, b, texture));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new Texture(&image, this, b, texture));
 }
 
 void ImageEffect_Texture::prepareFinal()
@@ -170,7 +171,8 @@ void ImageEffect_Texture::prepareFinal()
     Digikam::ImageIface iface(0, 0);
     QString texture = getTexturePath( m_textureType->currentItem() );
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new Texture(iface.getOriginalImg(), this, b, texture));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new Texture(iface.getOriginalImg(), this, b, texture));
 }
 
 void ImageEffect_Texture::putPreviewData(void)
@@ -181,9 +183,7 @@ void ImageEffect_Texture::putPreviewData(void)
 void ImageEffect_Texture::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-
-    iface.putOriginalData(i18n("Texture"), 
-                        (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Texture"), m_threadedFilter->getTargetImage().bits());
 }
 
 QString ImageEffect_Texture::getTexturePath(int texture)
