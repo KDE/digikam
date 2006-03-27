@@ -143,9 +143,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
         : KDialogBase(Plain, title,
                       Help|User1|User2|User3|Close, Close,
                       parent, 0, false, true,
-                      i18n("&Select"),
+                      i18n("D&elete"),
                       i18n("&Download"),
-                      i18n("D&elete"))
+                      i18n("&Select"))
 {
     d = new CameraUIPriv;
     setHelp("camerainterface.anchor", "digikam");
@@ -170,7 +170,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
         
     QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Information"), d->advBox);
     d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip image"), exifBox);
-    d->autoAlbumCheck   = new QCheckBox(i18n("Created date-based sub-albums"), exifBox);
+    d->autoAlbumCheck   = new QCheckBox(i18n("Date-based sub-albums"), exifBox);
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
                                               "rotated or fliped images using EXIF informations "
                                               "provided by camera"));
@@ -242,7 +242,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     selectMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()));
     selectMenu->insertSeparator();
     selectMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()));
-    actionButton(User1)->setPopup(selectMenu);    
+    actionButton(User3)->setPopup(selectMenu);    
 
     // -------------------------------------------------------------------------
 
@@ -258,7 +258,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
     d->deleteMenu->insertItem(i18n("Delete All"), this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);
-    actionButton(User3)->setPopup(d->deleteMenu);
+    actionButton(User1)->setPopup(d->deleteMenu);
 
     // -------------------------------------------------------------------------
     
@@ -423,7 +423,7 @@ void CameraUI::slotBusy(bool val)
         d->busy = false;
         d->cancelBtn->setEnabled(false);
         enableButton(User2, true);
-        enableButton(User3, true);
+        enableButton(User1, true);
         d->anim->stop();
         d->status->setText(i18n("Ready"));
         d->progress->hide();
@@ -438,7 +438,7 @@ void CameraUI::slotBusy(bool val)
         d->busy = true;
         d->cancelBtn->setEnabled(true);
         enableButton(User2, false);
-        enableButton(User3, false);
+        enableButton(User1, false);
     }
 }
 
