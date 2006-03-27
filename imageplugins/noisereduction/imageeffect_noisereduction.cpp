@@ -207,8 +207,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_thresholdInput = new KDoubleNumInput(secondPage);
     m_thresholdInput->setPrecision(2);
     m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: Use the slider for coarse adjustment, "
-		     " and the spin control for fine adjustment.This controls edge detection sensitivity. "
+    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
+		             "and the spin control for fine adjustment. This controls edge detection sensitivity. "
                      "This value should be set so that edges and details are clearly visible "
                      "and noise is smoothed out. This value is not bound to any intensity value, it is "
                      "bound to the second derivative of intensity values. Simply adjust it and watch the " 
