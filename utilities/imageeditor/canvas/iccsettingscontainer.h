@@ -38,6 +38,14 @@ public:
     
     ICCSettingsContainer()
     {
+        bool    enableCMSetting = false;
+
+        bool    askOrApplySetting = false;
+        bool    BPCSetting = false;
+        bool    managedViewSetting = false;
+
+        int     renderingSetting = 0;
+
         workspaceSetting = QString::null;
         monitorSetting   = QString::null;
         inputSetting     = QString::null;
