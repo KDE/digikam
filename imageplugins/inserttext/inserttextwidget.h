@@ -84,11 +84,11 @@ public:
     ~InsertTextWidget();
 
     Digikam::ImageIface* imageIface();
+    Digikam::DImg        makeInsertText(void);
 
     void   setText(QString text, QFont font, QColor color, int alignMode,
                    bool border, bool transparent, int rotation);
     void   resetEdit(void);
-    Digikam::DImg makeInsertText(void);
 
 private:
 
@@ -101,12 +101,14 @@ private:
     int         m_alignMode;
     int         m_textRotation;
 
-    uint       *m_data;
+    uchar      *m_data;
     int         m_w;
     int         m_h;
 
     int         m_xpos;
     int         m_ypos;
+    
+    int         m_transparency;
 
     QPixmap    *m_pixmap;
 
@@ -120,7 +122,7 @@ private:
     QColor      m_textColor;
 
     QColor      m_backgroundColor;
-    int         m_transparency;
+    
 protected:
 
     void paintEvent( QPaintEvent *e );

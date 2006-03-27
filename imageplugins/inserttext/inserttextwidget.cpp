@@ -55,7 +55,7 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
     m_currentMoving = false;
 
     m_iface  = new Digikam::ImageIface(w, h);
-    m_data   = m_iface->getPreviewData();
+    m_data   = m_iface->getPreviewImage();
     m_w      = m_iface->previewWidth();
     m_h      = m_iface->previewHeight();
     m_pixmap = new QPixmap(w, h);
@@ -463,9 +463,9 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
     int textY = m_textRect.y() - m_rect.y();
     int old_w = m_w;
     int old_h = m_h;
-    m_data = m_iface->setPreviewSize(w, h);
-    m_w    = m_iface->previewWidth();
-    m_h    = m_iface->previewHeight();
+    m_data    = m_iface->setPreviewImageSize(w, h);
+    m_w       = m_iface->previewWidth();
+    m_h       = m_iface->previewHeight();
 
     m_pixmap = new QPixmap(w, h);
     m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
@@ -478,6 +478,7 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
         m_textRect.setY(textY + m_rect.y());
         makePixmap();
     }
+    
     blockSignals(false);
 }
 
