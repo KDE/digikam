@@ -57,11 +57,6 @@
 #include <kpopupmenu.h>
 #include <kprogress.h>
 
-// LibKexif includes.
-
-#include <libkexif/kexifdata.h>
-#include <libkexif/kexifutils.h>
-
 // Local includes.
 
 #include "canvas.h"
