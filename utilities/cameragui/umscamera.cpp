@@ -31,6 +31,13 @@ extern "C"
 #include <utime.h>
 }
 
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <cassert>
+#include <string>
+
 // QT includes.
 
 #include <qdir.h>
@@ -45,9 +52,11 @@ extern "C"
 #include <ktempfile.h>
 #include <kdebug.h>
 
-// LibKExif includes.
+// Exiv2 includes.
 
-#include <libkexif/kexifdata.h>
+#include <exiv2/exif.hpp>
+#include <exiv2/image.hpp>
+#include <exiv2/tags.hpp>
 
 // Local includes.
 
@@ -62,6 +71,18 @@ namespace Digikam
 class UMSCameraPriv
 {
 public:
+
+    enum ImageOrientation
+    {
+        ORIENTATION_NORMAL=1, 
+        ORIENTATION_HFLIP=2, 
+        ORIENTATION_ROT_180=3, 
+        ORIENTATION_VFLIP=4, 
+        ORIENTATION_ROT_90_HFLIP=5, 
+        ORIENTATION_ROT_90=6, 
+        ORIENTATION_ROT_90_VFLIP=7, 
+        ORIENTATION_ROT_270=8
+    };
 
     UMSCameraPriv()
     {
@@ -170,14 +191,70 @@ bool UMSCamera::getThumbnail(const QString& folder,
 
     // In 1st, we trying to get thumbnail from Exif data if we are JPEG file.
 
-    KExifData exifData;
-    
-    if (exifData.readFromFile(folder + "/" + itemName))
-    {
-        thumbnail = exifData.getThumbnail();
+    try
+    {    
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(folder + "/" + itemName)));
+        image->readMetadata();
+        Exiv2::ExifData &exifData = image->exifData();
+        Exiv2::DataBuf const c1(exifData.copyThumbnail());
+        thumbnail.loadFromData(c1.pData_, c1.size_);
+        
         if (!thumbnail.isNull())
-           return true;
+        {
+            QWMatrix matrix;
+            Exiv2::ExifKey key("Exif.Image.Orientation");
+            long orientation = exifData.findKey(key)->toLong();
+            kdDebug() << itemName << " ==> Orientation: " << orientation << endl;
+            
+            switch (orientation) 
+            {
+                case UMSCameraPriv::ORIENTATION_HFLIP:
+                    matrix.scale(-1, 1);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_ROT_180:
+                    matrix.rotate(180);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_VFLIP:
+                    matrix.scale(1, -1);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_ROT_90_HFLIP:
+                    matrix.scale(-1, 1);
+                    matrix.rotate(90);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_ROT_90:
+                    matrix.rotate(90);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_ROT_90_VFLIP:
+                    matrix.scale(1, -1);
+                    matrix.rotate(90);
+                    break;
+            
+                case UMSCameraPriv::ORIENTATION_ROT_270:
+                    matrix.rotate(270);
+                    break;
+                    
+                default:
+                    break;
+            }
+
+            if ( orientation != UMSCameraPriv::ORIENTATION_NORMAL )
+                thumbnail = thumbnail.xForm( matrix );
+            
+            return true;
+        }
     }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot load thumbnail using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
 
     // In 2th, we trying to get thumbnail from '.thm' files if we didn't manage to get 
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
