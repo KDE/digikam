@@ -84,7 +84,6 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 {
     d = new CameraItemPropertiesTabPriv;
     QGridLayout *topLayout = new QGridLayout(this, 13, 2, KDialog::marginHint(), KDialog::spacingHint());
-    topLayout->setSpacing(KDialog::spacingHint());
 
     d->navigateBar = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
