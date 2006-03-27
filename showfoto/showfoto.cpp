@@ -73,11 +73,6 @@ extern "C"
 #include <kpopupmenu.h>
 #include <kprogress.h>
 
-// Lib KExif includes.
-
-#include <libkexif/kexifdata.h>
-#include <libkexif/kexifutils.h>
-
 // Local includes.
 
 #include "rawfiles.h"
