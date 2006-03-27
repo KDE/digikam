@@ -202,50 +202,54 @@ bool UMSCamera::getThumbnail(const QString& folder,
         
         if (!thumbnail.isNull())
         {
-            QWMatrix matrix;
             Exiv2::ExifKey key("Exif.Image.Orientation");
-            long orientation = exifData.findKey(key)->toLong();
-            kdDebug() << itemName << " ==> Orientation: " << orientation << endl;
-            
-            switch (orientation) 
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            if (it != exifData.end())
             {
-                case UMSCameraPriv::ORIENTATION_HFLIP:
-                    matrix.scale(-1, 1);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_ROT_180:
-                    matrix.rotate(180);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_VFLIP:
-                    matrix.scale(1, -1);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_ROT_90_HFLIP:
-                    matrix.scale(-1, 1);
-                    matrix.rotate(90);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_ROT_90:
-                    matrix.rotate(90);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_ROT_90_VFLIP:
-                    matrix.scale(1, -1);
-                    matrix.rotate(90);
-                    break;
-            
-                case UMSCameraPriv::ORIENTATION_ROT_270:
-                    matrix.rotate(270);
-                    break;
-                    
-                default:
-                    break;
+                QWMatrix matrix;
+                long orientation = it->toLong();
+                kdDebug() << itemName << " ==> Orientation: " << orientation << endl;
+                
+                switch (orientation) 
+                {
+                    case UMSCameraPriv::ORIENTATION_HFLIP:
+                        matrix.scale(-1, 1);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_ROT_180:
+                        matrix.rotate(180);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_VFLIP:
+                        matrix.scale(1, -1);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_ROT_90_HFLIP:
+                        matrix.scale(-1, 1);
+                        matrix.rotate(90);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_ROT_90:
+                        matrix.rotate(90);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_ROT_90_VFLIP:
+                        matrix.scale(1, -1);
+                        matrix.rotate(90);
+                        break;
+                
+                    case UMSCameraPriv::ORIENTATION_ROT_270:
+                        matrix.rotate(270);
+                        break;
+                        
+                    default:
+                        break;
+                }
+    
+                if ( orientation != UMSCameraPriv::ORIENTATION_NORMAL )
+                    thumbnail = thumbnail.xForm( matrix );
             }
-
-            if ( orientation != UMSCameraPriv::ORIENTATION_NORMAL )
-                thumbnail = thumbnail.xForm( matrix );
-            
+                
             return true;
         }
     }
