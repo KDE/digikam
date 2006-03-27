@@ -18,18 +18,38 @@
  * 
  * ============================================================ */
 
-#include <qfile.h>
-#include <kdebug.h>
-#include <libkexif/kexifdata.h>
-
-#include "jpegmetadata.h"
+#define M_COM  0xFE
+#define M_EXIF 0xE1
 
 #define XMD_H 1
-extern "C" {
-#include <stdio.h>
-#include <jpeglib.h>
+
+// C+ includes.
+
+#include <cstdio>
+
+// C ansi includes.
+
+extern "C" 
+{
 #include <setjmp.h>
-}         
+#include <jpeglib.h>
+}
+
+// Qt includes.
+
+#include <qfile.h>
+
+// KDE includes.
+
+#include <kdebug.h>
+
+// LibKExif includes.
+
+#include <libkexif/kexifdata.h>
+
+// Local includes.
+
+#include "jpegmetadata.h"
 
 struct readJPEGMetaData_error_mgr : public jpeg_error_mgr
 {
@@ -52,9 +72,6 @@ extern "C"
 
 namespace Digikam
 {
-
-#define M_COM  0xFE
-#define M_EXIF 0xE1
 
 void readJPEGMetaData(const QString& filePath,
                       QString& comments,
@@ -142,4 +159,4 @@ void readJPEGMetaData(const QString& filePath,
     fclose(input_file);
 }
 
-}
+} // namespace Digikam
