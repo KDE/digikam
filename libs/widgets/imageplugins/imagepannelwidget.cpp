@@ -114,7 +114,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->settingsSection = settingsSection;
     d->splitter        = new QSplitter(this);
     d->previewWidget   = new QWidget(d->splitter);
-    d->mainLayout      = new QGridLayout( d->previewWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    d->mainLayout      = new QGridLayout( d->previewWidget, 2, 2, 0, KDialog::spacingHint());
     
     d->splitter->setOpaqueResize(false);
 
@@ -201,7 +201,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                  "<p>Click and drag the mouse cursor in the "
                                                  "red rectangle to change the clip focus."));
     l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
-    
+
+    // -------------------------------------------------------------
+            
     d->separateView = new QHButtonGroup(d->settings);
     d->separateView->setExclusive(true);
     d->separateView->setInsideMargin( 0 );
