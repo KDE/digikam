@@ -159,11 +159,6 @@ bool ExifWidget::decodeMetadata()
             os << *md;
             QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
-           /* QString tagTitle = QString::fromLocal8Bit(Exiv2::ExifTags::tagTitle(md->tag(), md->ifdId()));
-            QString tagDesc = QString::fromLocal8Bit(Exiv2::ExifTags::tagDesc(md->tag(), md->ifdId()));
-            
-            kdDebug() << key << " [ " << tagValue << " ] ==> " << tagTitle << " :: " << tagDesc << endl;*/
-            
             // We apply a filter to get only standard Exif tags, not maker notes.
             if (m_keysFilter.contains(key.section(".", 1, 1)))
                 metaDataMap.insert(key, tagValue);
