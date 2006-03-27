@@ -349,6 +349,11 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
     bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
 }
 
+QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
+{
+    return DImgInterface::instance()->getEmbeddedICC();
+}
+
 // -----------------------------------------------------------------------------------
 // FIXME Remove methods below when all image plugins will be ported to DImg
 
@@ -449,10 +454,6 @@ uint* ImageIface::getSelectedData()
     return DImgInterface::instance()->getSelectedData();    
 }
 
-QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
-{
-    return DImgInterface::instance()->getEmbeddedICC();
-}
 
 }   // namespace Digikam
 
