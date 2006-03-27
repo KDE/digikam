@@ -52,10 +52,6 @@
 #include <klineeditdlg.h>
 #endif
 
-// Lib Kexif includes.
-
-#include <libkexif/kexifdata.h>
-
 // Local includes.
 
 #include "album.h"
@@ -68,9 +64,9 @@ namespace Digikam
 {
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-    : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
-                   Help|Ok|Cancel, Ok,
-                   0, 0, true, true )
+              : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
+                             Help|Ok|Cancel, Ok,
+                             0, 0, true, true )
 {
     setHelp("albumpropsedit.anchor", "digikam");
     album_ = album;
@@ -168,6 +164,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         QStringList collections = settings->getAlbumCollectionNames();
         collectionCombo_->insertStringList( collections );
         int collectionIndex = collections.findIndex( album->collection() );
+        
         if ( collectionIndex != -1 )
         {
             // + 1 because of the empty item
@@ -187,16 +184,19 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         datePicker_->setDate( album->date() );
     }
 
-    // Connections -------------------------------------------
+    // -- slots connections -------------------------------------------
 
     connect(titleEdit_, SIGNAL(textChanged(const QString&)),
-            SLOT(slotTitleChanged(const QString&)));
+            this, SLOT(slotTitleChanged(const QString&)));
+            
     connect(dateLowButton, SIGNAL( clicked() ),
-            SLOT( slotDateLowButtonClicked()));
+            this, SLOT( slotDateLowButtonClicked()));
+            
     connect(dateAvgButton, SIGNAL( clicked() ),
-            SLOT( slotDateAverageButtonClicked()));
+            this, SLOT( slotDateAverageButtonClicked()));
+            
     connect(dateHighButton, SIGNAL( clicked() ),
-            SLOT( slotDateHighButtonClicked()));
+            this, SLOT( slotDateHighButtonClicked()));
     
     adjustSize();
 }
@@ -328,9 +328,9 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     if ( avDate.isValid() )
         datePicker_->setDate( avDate );
     else
-    KMessageBox::error( plainPage( ),
-                                i18n( "Could not calculate an average."),
-                                i18n( "Could Not Calculate Average" ) );
+        KMessageBox::error( plainPage( ),
+                            i18n( "Could not calculate an average."),
+                            i18n( "Could Not Calculate Average" ) );
 }
 
 }  // namespace Digikam
