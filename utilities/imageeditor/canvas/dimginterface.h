@@ -165,17 +165,6 @@ private:
     static DImgInterface *m_instance;
     
     DImgInterfacePrivate *d;
-
-// -----------------------------------------------------------------------------
-// FIXME : remove these methods when all image plugins will be ported to DImg.
-
-public: 
-    uint*  getData();
-    void   putData(uint* data, int w, int h);
-    void   putData(const QString &caller, uint* data, int w, int h);
-    uint*  getSelectedData();
-    void   putSelectedData(uint* data, bool saveUndo=true);
-
 };
 
 }  // namespace Digikam

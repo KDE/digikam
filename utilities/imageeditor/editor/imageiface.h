@@ -78,7 +78,7 @@ public:
     bool originalHasAlpha();
     QByteArray getEmbeddedICCFromOriginalImage();
 
-    /** Standard methods to get preview informations.*/
+    /** Standard methods to get/set preview informations.*/
     int  previewWidth();
     int  previewHeight();
     bool previewHasAlpha();
@@ -100,16 +100,6 @@ public:
     void convertOriginalColorDepth(int depth);
 
     void paint(QPaintDevice* device, int x, int y, int w, int h);
-
-    // FIXME : remove these methods when all image plugins will be ported to DImg.
-    uint* getPreviewData();
-    uint* getOriginalData();
-    uint* getSelectedData();
-
-    void  putPreviewData(uint* data);
-    void  putOriginalData(const QString &caller, uint* data, int w=-1, int h=-1);
-    void  putSelectedData(uint* data);
-    uint* setPreviewSize(int w, int h);
 
 private:
 
