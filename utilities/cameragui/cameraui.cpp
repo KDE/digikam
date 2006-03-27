@@ -182,7 +182,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     grid->setRowStretch(2, 10);
 
     d->leftSidebar->setSplitter(d->splitter);
-    d->leftSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
+    d->leftSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Advanced Settings"));
     
     // -------------------------------------------------------------------------
 
