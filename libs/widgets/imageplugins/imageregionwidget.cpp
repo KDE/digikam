@@ -495,22 +495,6 @@ void ImageRegionWidget::contentsMouseMoveEvent( QMouseEvent * e )
     setCursor( KCursor::handCursor() );    
 }
 
-// ---------------------------------------------------------------------------
-// FIXME remove these methods when all image plugins will be ported to DIMG.
-
-void ImageRegionWidget::updatePreviewImage(QImage *img)
-{
-    QPixmap pix( img->scale((uint)(img->width()  * d->zoomFactor),
-                            (uint)(img->height() * d->zoomFactor)));
-    QRect area = getLocalTargetImageRegion();
-    copyBlt( d->pixmap, area.x(), area.y(), &pix, 0, 0, area.width(), area.height() );
-}
-
-QImage ImageRegionWidget::getImageRegionData(void)
-{
-    return ( d->iface->getOriginalImg()->copyQImage(getImageRegionToRender()) );
-}
-
 }  // NameSpace Digikam
 
 #include "imageregionwidget.moc"

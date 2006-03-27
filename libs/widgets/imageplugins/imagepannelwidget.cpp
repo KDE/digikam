@@ -477,18 +477,6 @@ void ImagePannelWidget::updateSelectionInfo(QRect rect)
                         .arg(rect.right()).arg(rect.bottom()));
 }
 
-// FIXME remove these methods when all image plugins will be ported to DIMG.
-
-QImage ImagePannelWidget::getOriginalClipImage(void)
-{
-    return ( d->imageRegionWidget->getImageRegionData() );
-}
-
-void ImagePannelWidget::setPreviewImageData(QImage img)
-{
-    d->imageRegionWidget->updatePreviewImage(&img);
-}    
-
 }  // NameSpace Digikam
 
 #include "imagepannelwidget.moc"

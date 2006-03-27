@@ -77,10 +77,6 @@ public:
     
     void   setHighLightPoints(QPointArray pointsList);
              
-    // FIXME remove these methods when all image plugins will be ported to DIMG.
-    QImage getImageRegionData(void);
-    void   updatePreviewImage(QImage *img);
-             
 signals:
     
     void contentsMovedEvent( bool target );

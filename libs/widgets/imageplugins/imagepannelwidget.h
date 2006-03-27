@@ -79,10 +79,6 @@ public:
     
     KProgress *progressBar(void);
            
-    // FIXME remove these methods when all image plugins will be ported to DIMG.
-    QImage getOriginalClipImage(void);
-    void   setPreviewImageData(QImage img);
-           
 public slots:
 
     // Set the top/Left conner clip position.
