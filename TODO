@@ -18,9 +18,15 @@
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
      
-* Improving metadata support:
-   - removed libkexif depency        ==> under progress ! (Gilles)
-
+* Using Exiv2 instead libKExif :
+   - albumiconview.cpp    lines 1296 and 1298.
+   - kipiinterface.cpp    line 216.
+   - usmcamera.cpp        line 173.
+   - editorwindow.cpp     lines 1166 and 1215.
+   - digikamthumbnail.cpp line 92.
+   - jpegmetadata.cpp     line 143.
+   - exifrotate.cpp       lines 74 and 210.
+   
 * post conversion to qlistview: allow selection of multiple
   albums/tags/dates :
 
