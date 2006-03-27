@@ -6,7 +6,7 @@
 * Description : a digiKam image plugin for fixing dots produced by
 *               hot/stuck/dead pixels from a CCD.
 *
-* Copyright 2005 by Unai Garro and Gilles Caulier
+* Copyright 2005-2006 by Unai Garro and Gilles Caulier
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -70,7 +70,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
                                        I18N_NOOP("A digiKam image plugin for fixing dots produced by "
                                                  "hot/stuck/dead pixels from a CCD."),
                                        KAboutData::License_GPL,
-                                       "(c) 2005, Unai Garro", 
+                                       "(c) 2005-2006, Unai Garro", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
                 
@@ -157,13 +157,13 @@ void ImageEffect_HotPixels::slotAddBlackFrame()
     fileSelectDialog->setURL(m_blackFrameURL.path());
     
     if (fileSelectDialog->exec() != QDialog::Rejected)
-       {
+    {
        //Load the selected file and insert into the list
         
        m_blackFrameURL = fileSelectDialog->selectedURL();
        m_blackFrameListView->clear();
        new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
-       }
+    }
         
     delete fileSelectDialog;
 }
@@ -195,19 +195,20 @@ void ImageEffect_HotPixels::prepareEffect()
     QValueList<HotPixel> hotPixelsRegion;
     QRect area = m_imagePreviewWidget->getOriginalImageRegionToRender();
     QValueList<HotPixel>::Iterator end(m_hotPixelsList.end()); 
+    
     for (QValueList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
-        {
+    {
         HotPixel hp = (*it);
         
         if ( area.contains( hp.rect ) )
-           {
+        {
            hp.rect.moveTopLeft(QPoint::QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
            hotPixelsRegion.append(hp);
-           }
         }
+    }
 
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new HotPixelFixer(
-                       &image, this, hotPixelsRegion, interpolationMethod));
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new HotPixelFixer(&image, this, hotPixelsRegion, interpolationMethod));
 }
 
 void ImageEffect_HotPixels::prepareFinal()
@@ -215,15 +216,12 @@ void ImageEffect_HotPixels::prepareFinal()
     m_filterMethodCombo->setEnabled(false);
     m_blackFrameListView->setEnabled(false);
     enableButton(Apply, false);     
-    
-    
+        
     int interpolationMethod = m_filterMethodCombo->currentItem();
 
-
     Digikam::ImageIface iface(0, 0);
-    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod));
-			
-    
+    m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
+                       new HotPixelFixer(iface.getOriginalImg(), this,m_hotPixelsList,interpolationMethod));
 }
 
 void ImageEffect_HotPixels::putPreviewData(void)
@@ -234,8 +232,7 @@ void ImageEffect_HotPixels::putPreviewData(void)
 void ImageEffect_HotPixels::putFinalData(void)
 {
     Digikam::ImageIface iface(0, 0);
-    iface.putOriginalData(i18n("Hot Pixels Correction"), 
-                          (uint*)m_threadedFilter->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Hot Pixels Correction"), m_threadedFilter->getTargetImage().bits());
 }
 
 void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KURL& blackFrameURL)
@@ -247,6 +244,7 @@ void ImageEffect_HotPixels::slotBlackFrame(QValueList<HotPixel> hpList, const KU
     QValueList <HotPixel>::Iterator it;
     int i = 0;
     QValueList <HotPixel>::Iterator end(m_hotPixelsList.end());
+    
     for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
        pointList.setPoint(i, (*it).rect.center());
         
