@@ -118,24 +118,22 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     showButton(Try, tryAction);
 
     resize(configDialogSize(name + QString::QString(" Tool Dialog")));
-
+    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
+    
     // -------------------------------------------------------------
 
-    QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
     if (bannerFrame)
     {
-        bannerFrame->reparent( plainPage(), QPoint::QPoint(0,0) );
+        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
         topLayout->addWidget(bannerFrame);
     }
 
     // -------------------------------------------------------------
 
-    QHBoxLayout *hlay1 = new QHBoxLayout(topLayout);
-
-    m_imagePreviewWidget = new Digikam::ImagePannelWidget(240, 160,
-                                        name + QString::QString(" Tool Dialog"),
-                                        plainPage(), d->progressBar, separateViewMode);
-    hlay1->addWidget(m_imagePreviewWidget);
+    m_imagePreviewWidget = new ImagePannelWidget(240, 160,
+                               name + QString::QString(" Tool Dialog"),
+                               plainPage(), d->progressBar, separateViewMode);
+    topLayout->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------
 

@@ -41,12 +41,14 @@
 #include <kcursor.h>
 #include <kprogress.h>
 #include <kapplication.h>
+#include <kiconloader.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kseparator.h>
 
 // Local includes.
 
+#include "sidebar.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
 #include "imagepannelwidget.h"
@@ -75,6 +77,11 @@ public:
         separateView       = 0;
         progressBar        = 0;
         zoomButtons        = 0;
+        settingsSideBar    = 0;
+        splitter           = 0;        
+        settingsLayout     = 0;
+        settings           = 0;
+        previewWidget      = 0;
     }
 
     QGridLayout        *mainLayout;
@@ -84,25 +91,56 @@ public:
     
     QString             settingsSection;
     
+    QWidget            *settings;
+    QWidget            *previewWidget;
+    
+    QVBoxLayout        *settingsLayout;
+        
+    QSplitter          *splitter;
+    
     KProgress          *progressBar;
     
     ImageRegionWidget  *imageRegionWidget;
     ImagePanIconWidget *imagePanIconWidget;
+    
+    Sidebar            *settingsSideBar;
 };
     
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent,
                                      bool progress, int separateViewMode)
-                 : QWidget(parent, 0, Qt::WDestructiveClose)
+                 : QHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePannelWidgetPriv;
     d->settingsSection = settingsSection;
-    d->mainLayout      = new QGridLayout( this, 2, 3 , KDialog::marginHint(), KDialog::spacingHint());
+    d->splitter        = new QSplitter(this);
+    d->previewWidget   = new QWidget(d->splitter);
+    d->mainLayout      = new QGridLayout( d->previewWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    
+    d->splitter->setOpaqueResize(false);
+
+    // -------------------------------------------------------------
+
+    QFrame *preview = new QFrame(d->previewWidget);
+    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l1 = new QVBoxLayout(preview, 5, 0);
+    d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
+    d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
+    QWhatsThis::add( d->imageRegionWidget, i18n("<p>Here you can see the original clip image "
+                                                "which will be used for the preview computation."
+                                                "<p>Click and drag the mouse cursor in the "
+                                                "image to change the clip focus."));
+    l1->addWidget(d->imageRegionWidget, 0);
+
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Expanding,
+                              2, 1);
+    d->previewWidget->setSizePolicy(rightSzPolicy);
 
     // -------------------------------------------------------------
     
-    QLabel *zoomLabel = new QLabel(i18n("Zoom Factor:"), this);
+    QLabel *zoomLabel = new QLabel(i18n("Zoom Factor:"), d->previewWidget);
 
-    d->zoomButtons = new QHButtonGroup(this);
+    d->zoomButtons = new QHButtonGroup(d->previewWidget);
     d->zoomButtons->setExclusive(true);
     d->zoomButtons->setInsideMargin( 0 );
     d->zoomButtons->setFrameShape(QFrame::NoFrame);
@@ -138,25 +176,23 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( zoomX30Button, i18n( "<p>Press this buttom to magnify image using 3:1 zoom factor." ) );
 
     d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
-
-    // -------------------------------------------------------------
-
-    QFrame *preview = new QFrame(this);
-    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l1 = new QVBoxLayout(preview, 5, 0);
-    d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
-    d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
-    QWhatsThis::add( d->imageRegionWidget, i18n("<p>Here you can see the original clip image "
-                                                "which will be used for the preview computation."
-                                                "<p>Click and drag the mouse cursor in the "
-                                                "image to change the clip focus."));
-    l1->addWidget(d->imageRegionWidget, 0);
-
-    // -------------------------------------------------------------
-        
-    QVBoxLayout *l2 = new QVBoxLayout( KDialog::spacingHint() ); 
     
-    QFrame *frame3 = new QFrame(this);
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 2);
+    d->mainLayout->addMultiCellWidget(zoomLabel, 2, 2, 0, 0);
+    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 1, 1);
+    d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setColStretch(2, 10);
+        
+    // -------------------------------------------------------------
+
+    QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
+    d->settingsSideBar = new Sidebar(this, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar->setSplitter(d->splitter);
+    
+    d->settings       = new QWidget(d->settingsSideBar);
+    d->settingsLayout = new QVBoxLayout( d->settings, KDialog::spacingHint());    
+    
+    QFrame *frame3 = new QFrame(d->settings);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
     d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
@@ -166,7 +202,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                  "red rectangle to change the clip focus."));
     l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
     
-    d->separateView = new QHButtonGroup(this);
+    d->separateView = new QHButtonGroup(d->settings);
     d->separateView->setExclusive(true);
     d->separateView->setInsideMargin( 0 );
     d->separateView->setFrameShape(QFrame::NoFrame);
@@ -232,7 +268,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                              "be separated." ) );
     
-    d->progressBar = new KProgress(100, this);
+    d->progressBar = new KProgress(100, d->settings);
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setProgress(0);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
@@ -242,16 +278,11 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     h1->addWidget(d->separateView);
     h1->addWidget(d->progressBar);
     
-    l2->addWidget(frame3, 0, Qt::AlignHCenter);
-    l2->addLayout(h1);
-    l2->addStretch();
+    d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
+    d->settingsLayout->addLayout(h1);
 
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 2);
-    d->mainLayout->addMultiCellWidget(zoomLabel, 2, 2, 0, 0);
-    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 1, 1);
-    d->mainLayout->addMultiCellLayout(l2, 0, 0, 3, 3);
-    d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setColStretch(2, 10);
+    d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
+    d->settingsSideBar->loadViewState();
 
     // -------------------------------------------------------------
     
@@ -287,7 +318,35 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
 ImagePannelWidget::~ImagePannelWidget()
 {
     writeSettings();
+    delete d->settingsSideBar;
     delete d;
+}
+
+void ImagePannelWidget::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->settingsSection);
+    int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
+    mode = QMAX(ImageRegionWidget::SeparateViewVertical, mode);
+    mode = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
+    
+    d->imageRegionWidget->blockSignals(true);
+    d->imagePanIconWidget->blockSignals(true);
+    d->separateView->blockSignals(true);
+    d->imageRegionWidget->slotSeparateViewToggled( mode );
+    d->imagePanIconWidget->slotSeparateViewToggled( mode );
+    d->separateView->setButton( mode );
+    d->imageRegionWidget->blockSignals(false);
+    d->imagePanIconWidget->blockSignals(false);
+    d->separateView->blockSignals(false);
+}
+    
+void ImagePannelWidget::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->settingsSection);
+    config->writeEntry( "Separate View", d->separateView->selectedId() );
+    config->sync();
 }
 
 void ImagePannelWidget::slotZoomButtonReleased(int buttonId)
@@ -325,17 +384,15 @@ void ImagePannelWidget::slotPanIconTakeFocus(void)
 
 void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout( KDialog::spacingHint() ); 
-    
     if (separator)
     {
-       KSeparator *line = new KSeparator (Horizontal, this);
-       vLayout->addWidget(line);
+       KSeparator *line = new KSeparator (Horizontal, d->settings);
+       d->settingsLayout->addWidget(line);
     }
-       
-    vLayout->addWidget(w);
-    vLayout->addStretch();
-    d->mainLayout->addMultiCellLayout(vLayout, 1, 2, 3, 3);
+    
+    w->reparent( d->settings, QPoint(0, 0) );
+    d->settingsLayout->addWidget(w);
+    d->settingsLayout->addStretch();
 }
 
 void ImagePannelWidget::setEnable(bool b)
@@ -418,33 +475,6 @@ void ImagePannelWidget::updateSelectionInfo(QRect rect)
                    i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
                         .arg(rect.left()).arg(rect.top())
                         .arg(rect.right()).arg(rect.bottom()));
-}
-
-void ImagePannelWidget::readSettings(void)
-{
-    KConfig *config = kapp->config();
-    config->setGroup(d->settingsSection);
-    int mode = config->readNumEntry("Separate View", ImageRegionWidget::SeparateViewDuplicateVert);
-    mode = QMAX(ImageRegionWidget::SeparateViewVertical, mode);
-    mode = QMIN(ImageRegionWidget::SeparateViewDuplicateHorz, mode);
-    
-    d->imageRegionWidget->blockSignals(true);
-    d->imagePanIconWidget->blockSignals(true);
-    d->separateView->blockSignals(true);
-    d->imageRegionWidget->slotSeparateViewToggled( mode );
-    d->imagePanIconWidget->slotSeparateViewToggled( mode );
-    d->separateView->setButton( mode );
-    d->imageRegionWidget->blockSignals(false);
-    d->imagePanIconWidget->blockSignals(false);
-    d->separateView->blockSignals(false);
-}
-    
-void ImagePannelWidget::writeSettings(void)
-{
-    KConfig *config = kapp->config();
-    config->setGroup(d->settingsSection);
-    config->writeEntry( "Separate View", d->separateView->selectedId() );
-    config->sync();
 }
 
 // FIXME remove these methods when all image plugins will be ported to DIMG.

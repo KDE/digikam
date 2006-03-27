@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <qhbox.h>
 #include <qimage.h>
 #include <qrect.h>
 #include <qstring.h>
@@ -41,7 +41,7 @@ namespace Digikam
 class ImagePannelWidgetPriv;
 class ImageRegionWidget;
 
-class DIGIKAM_EXPORT ImagePannelWidget : public QWidget
+class DIGIKAM_EXPORT ImagePannelWidget : public QHBox
 {
 Q_OBJECT
 
