@@ -55,6 +55,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
                 m_groupItem(new IconGroupItem(this))
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
+    setMinimumSize(400, 400);
 
     CameraIconViewItem::m_newEmblem = new QPixmap(CameraIconViewItem::new_xpm);
     
@@ -164,6 +165,7 @@ void CameraIconView::slotDownloadNameChanged()
 
         viewItem->setDownloadName( downloadName );
     }
+    
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -208,18 +210,18 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
 
     switch (ccase)
     {
-    case(RenameCustomizer::UPPER):
-    {
-        dname = itemInfo->name.upper();
-        break;
-    }
-    case(RenameCustomizer::LOWER):
-    {
-        dname = itemInfo->name.lower();
-        break;
-    }
-    default:
-        break;
+        case(RenameCustomizer::UPPER):
+        {
+            dname = itemInfo->name.upper();
+            break;
+        }
+        case(RenameCustomizer::LOWER):
+        {
+            dname = itemInfo->name.lower();
+            break;
+        }
+        default:
+            break;
     };
 
     return dname;
@@ -265,23 +267,23 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     switch (result)
     {
-    case(0):
-    {
-        emit signalFileView(camItem);
-        break;
-    }
-    case(1):
-    {
-        emit signalDownload();
-        break;
-    }
-    case(2):
-    {
-        emit signalDelete();
-        break;
-    }
-    default:
-        break;
+        case(0):
+        {
+            emit signalFileView(camItem);
+            break;
+        }
+        case(1):
+        {
+            emit signalDownload();
+            break;
+        }
+        case(2):
+        {
+            emit signalDelete();
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -315,6 +317,7 @@ void CameraIconView::slotSelectNew()
 {
     blockSignals(true);
     clearSelection();
+
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
@@ -325,13 +328,13 @@ void CameraIconView::slotSelectNew()
             viewItem->setSelected(true, false);
         }
     }
+
     blockSignals(false);
     emit signalSelectionChanged();
 }
 
 void CameraIconView::startDrag()
 {
-    
 }
 
 QRect CameraIconView::itemRect() const

@@ -161,10 +161,10 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     // -------------------------------------------------------------------------
 
-    d->leftSidebar      = new Sidebar(widget, "CameraGui Sidebar Left", Digikam::Sidebar::Left);
+    d->leftSidebar      = new Sidebar(widget, "CameraGui Sidebar Left", Digikam::Sidebar::Left, true);
     d->splitter         = new QSplitter(widget);
     d->advBox           = new QWidget(d->leftSidebar);
-    QGridLayout* grid   = new QGridLayout( d->advBox, 2, 1 );
+    QGridLayout* grid   = new QGridLayout( d->advBox, 2, 1, KDialog::marginHint());
     d->renameCustomizer = new RenameCustomizer(d->advBox);
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
         
@@ -190,7 +190,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     d->view->setRenameCustomizer(d->renameCustomizer);
     
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
-                                                       Digikam::Sidebar::Right);
+                                                       Digikam::Sidebar::Right, true);
     viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 3);
     viewBoxLayout->setRowSpacing(1, spacingHint());
     d->splitter->setOpaqueResize(false);
