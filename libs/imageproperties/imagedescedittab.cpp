@@ -53,12 +53,6 @@
 #include <kdialogbase.h>
 #include <kdatetimeedit.h>
 
-// Lib KExif includes.
-
-#include <libkexif/kexifwidget.h>
-#include <libkexif/kexifutils.h>
-#include <libkexif/kexifdata.h>
-
 // Local includes.
 
 #include "albumiconitem.h"
@@ -378,16 +372,15 @@ void ImageDescEditTab::applyAllChanges()
         AlbumSettings::instance()->getSaveExifComments())
     {
         // store as JPEG Exif comment
-        KFileMetaInfo  metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
+        KFileMetaInfo metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
 
         // set Jpeg comment
         if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
             && metaInfo.containsGroup("Jpeg EXIF Data"))
         {
-            kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment"
-                      << endl;
-            metaInfo["Jpeg EXIF Data"].item("Comment")
-                .setValue(d->commentsEdit->text());
+            kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment" << endl;
+
+            metaInfo["Jpeg EXIF Data"].item("Comment").setValue(d->commentsEdit->text());
             metaInfo.applyChanges();
         }
     }
