@@ -95,7 +95,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     // ----------------------------------------------------------------
 
-    d->renameDefault = new QRadioButton(i18n("Use camera provided names"), this);
+    d->renameDefault = new QRadioButton(i18n("Camera file names"), this);
+    QWhatsThis::add( d->renameDefault, i18n("<p>Toogle on this option to use camera "
+                                            "provided image file names without modifications."));
     mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
     d->renameDefaultBox = new QGroupBox( this );
@@ -121,7 +123,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->renameCustom = new QRadioButton(i18n("Customize names"), this);
+    d->renameCustom = new QRadioButton(i18n("Customize"), this);
+    QWhatsThis::add( d->renameCustom, i18n("<p>Toogle on this option to customize image file names "
+                                           "during download."));
     mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
 
     d->renameCustomBox = new QGroupBox(this);
