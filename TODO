@@ -21,7 +21,6 @@
 * Using Exiv2 instead libKExif :
    - albumiconview.cpp    lines 1296 and 1298.
    - kipiinterface.cpp    line 216.
-   - usmcamera.cpp        line 173.
    - editorwindow.cpp     lines 1166 and 1215.
    - digikamthumbnail.cpp line 92.
    - jpegmetadata.cpp     line 143.
