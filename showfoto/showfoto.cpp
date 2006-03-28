@@ -255,7 +255,8 @@ void ShowFoto::setupUserArea()
         m_canvas          = new Digikam::Canvas(m_splitter);
         m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
-        m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
+        m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical,
+                                                      config->readBoolEntry("EXIF Rotate", true));
         
         hlay->addWidget(m_bar);
         hlay->addWidget(m_splitter);
@@ -267,7 +268,8 @@ void ShowFoto::setupUserArea()
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         m_canvas          = new Digikam::Canvas(widget2);
-        m_bar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
+        m_bar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal, 
+                                                      config->readBoolEntry("EXIF Rotate", true));
 
         vlay->addWidget(m_canvas);
         vlay->addWidget(m_bar);

@@ -61,37 +61,42 @@ public:
 
     ThumbBarViewPriv()
     {
-        firstItem = 0;
-        lastItem  = 0;
-        currItem  = 0;
-        count     = 0;
+        exifRotate = false;
+        firstItem  = 0;
+        lastItem   = 0;
+        currItem   = 0;
+        count      = 0;
         itemDict.setAutoDelete(false);
     }
     
-    ThumbBarItem    *firstItem;
-    ThumbBarItem    *lastItem;
-    ThumbBarItem    *currItem;
-    int              count;
+    bool                      clearing;
+    bool                      exifRotate;
 
-    bool             clearing;
-    int              margin;
-    int              tileSize;
-    int              orientation;
+    int                       count;
+    int                       margin;
+    int                       tileSize;
+    int                       orientation;
     
-    QTimer*          timer;
-    ThumbBarToolTip* tip;
+    QTimer                   *timer;
+
+    ThumbBarItem             *firstItem;
+    ThumbBarItem             *lastItem;
+    ThumbBarItem             *currItem;
+
+    ThumbBarToolTip          *tip;
     
     QDict<ThumbBarItem>       itemDict;
     QGuardedPtr<ThumbnailJob> thumbJob;
 };
 
-ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
+ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
             : QScrollView(parent)
 {
     d = new ThumbBarViewPriv;
     d->margin      = 5;
     d->tileSize    = 64;
     d->orientation = orientation;
+    d->exifRotate  = exifRotate;
 
     d->tip   = new ThumbBarToolTip(this);
     d->timer = new QTimer(this);
@@ -257,7 +262,7 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
     if (!d->thumbJob.isNull())
        d->thumbJob->kill();
        
-    d->thumbJob = new ThumbnailJob(item->url(), d->tileSize, true);
+    d->thumbJob = new ThumbnailJob(item->url(), d->tileSize, true, d->exifRotate);
     
     connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
@@ -511,7 +516,7 @@ void ThumbBarView::rearrangeItems()
         if (!d->thumbJob.isNull())
            d->thumbJob->kill();
 
-        d->thumbJob = new ThumbnailJob(urlList, d->tileSize, true);
+        d->thumbJob = new ThumbnailJob(urlList, d->tileSize, true, d->exifRotate);
         
         connect(d->thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
                 this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));

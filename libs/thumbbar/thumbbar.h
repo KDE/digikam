@@ -18,6 +18,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #ifndef THUMBBAR_H
@@ -53,13 +54,13 @@ public:
     
     enum Orientation
     {
-    Horizontal=0,      
-    Vertical         
+        Horizontal=0,      
+        Vertical         
     };
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Vertical);
+    ThumbBarView(QWidget* parent, int orientation=Vertical, bool exifRotate=false);
     ~ThumbBarView();
 
     int  countItems();
