@@ -20,8 +20,6 @@
  *
  * ============================================================ */
 
-#define MaxRGB 255L
-
 // C++ includes.
 
 #include <cmath>
@@ -55,6 +53,7 @@
 #include "iccsettingscontainer.h"
 #include "iofilesettingscontainer.h"
 #include "sharedloadsavethread.h"
+#include "dmetadata.h"
 #include "dimginterface.h"
 
 namespace Digikam
@@ -148,11 +147,13 @@ DImgInterface::DImgInterface()
 
     connect( d->thread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
              this, SLOT(slotImageLoaded(const QString&, const DImg&)) );
+             
     connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
     connect( d->thread, SIGNAL(signalLoadingProgress(const QString&, float)),
              this, SLOT(slotLoadingProgress(const QString&, float)) );
+             
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
 }
@@ -306,12 +307,8 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     }
 
     if (d->exifOrient)
-    {
-        // TODO: Create a new method in DImg to do it, put it into LoadSaveThread
-        // (into LoadDescription)
-        //exifRotate(filename);
-    }
-
+        exifRotate(d->filename);
+    
     emit signalImageLoaded(d->filename, valRet);
     setModified();
 }
@@ -327,64 +324,54 @@ bool DImgInterface::exifRotated()
     return d->rotatedOrFlipped;
 }
 
-void DImgInterface::exifRotate(const QString& /*filename*/)
+void DImgInterface::exifRotate(const QString& filename)
 {
-/*  FIXME : Create a new method in DImg to do it
-
     // Rotate image based on EXIF rotate tag
-    KExifData exifData;
+    
+    DMetadata metadata(filename);
+    DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
 
-    if(!exifData.readFromFile(filename))
-        return;
-
-    KExifData::ImageOrientation orientation = exifData.getImageOrientation();
-
-    imlib_context_push(d->context);
-    imlib_context_set_image(d->image);
-
-    if(orientation != KExifData::NORMAL) {
-
-        switch (orientation) {
-            case KExifData::NORMAL:
-            case KExifData::UNSPECIFIED:
+    if(orientation != DMetadata::ORIENTATION_NORMAL) 
+    {
+        switch (orientation) 
+        {
+            case DMetadata::ORIENTATION_NORMAL:
+            case DMetadata::ORIENTATION_UNSPECIFIED:
                 break;
 
-            case KExifData::HFLIP:
-                imlib_image_flip_horizontal();
+            case DMetadata::ORIENTATION_HFLIP:
+                flipHoriz();
                 break;
 
-            case KExifData::ROT_180:
+            case DMetadata::ORIENTATION_ROT_180:
                 rotate180();
                 break;
 
-            case KExifData::VFLIP:
-                imlib_image_flip_vertical();
+            case DMetadata::ORIENTATION_VFLIP:
+                flipVert();
                 break;
 
-            case KExifData::ROT_90_HFLIP:
+            case DMetadata::ORIENTATION_ROT_90_HFLIP:
                 rotate90();
-                imlib_image_flip_horizontal();
+                flipHoriz();
                 break;
 
-            case KExifData::ROT_90:
+            case DMetadata::ORIENTATION_ROT_90:
                 rotate90();
                 break;
 
-            case KExifData::ROT_90_VFLIP:
+            case DMetadata::ORIENTATION_ROT_90_VFLIP:
                 rotate90();
-                imlib_image_flip_vertical();
+                flipVert();
                 break;
 
-            case KExifData::ROT_270:
+            case DMetadata::ORIENTATION_ROT_270:
                 rotate270();
                 break;
         }
 
         d->rotatedOrFlipped = true;
     }
-
-    imlib_context_pop();
-*/
 }
 
 void DImgInterface::setExifOrient(bool exifOrient)
@@ -449,8 +436,8 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings, 
                            const QString& givenMimeType)
 {
-    // cannot undo, redo or save while saving
-    emit signalUndoStateChanged(false, false, false);
+    // No need to toggle off undo, redo or save action during saving using 
+    // signalUndoStateChanged(), this is will done by GUI implementation directly.
 
     if (d->changedBCG)
     {

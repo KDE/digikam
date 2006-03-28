@@ -60,9 +60,12 @@ public:
     /** Load Metadata from image file */
     DMetadata(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
 
+    /** File access method */
     bool load(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
     bool save(const QString& filePath, const QString& format);
 
+    bool writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
+    
     /** Metadata manipulation methods */
     QByteArray       getExif() const;
     QByteArray       getIptc() const;

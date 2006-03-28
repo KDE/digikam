@@ -36,6 +36,7 @@
 
 // Exiv2 includes.
 
+#include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 #include <exiv2/tags.hpp>
 
@@ -205,8 +206,6 @@ DImg::FORMAT DMetadata::fileFormat(const QString& filePath)
     return DImg::NONE;
 }
 
-
-
 QImage DMetadata::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
@@ -314,6 +313,49 @@ DMetadata::ImageOrientation DMetadata::getExifImageOrientation()
     }        
     
     return ORIENTATION_UNSPECIFIED;
+}
+
+bool DMetadata::writeExifImageOrientation(const QString& filePath, ImageOrientation orientation)
+{
+    try
+    {    
+        if (filePath.isEmpty())
+            return false;
+            
+        if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
+        {
+            kdDebug() << k_funcinfo << "Exif orientation tag value is not correct!" << endl;
+            return false;
+        }
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        image->readMetadata();
+        Exiv2::ExifData &exifData = image->exifData();
+        
+        if (exifData.empty())
+        {
+            kdDebug() << "Cannot set Exif Orientation tag from " << filePath 
+                      << " because there is no Exif informations available!" << endl;
+        }
+        else
+        {
+            exifData["Exif.Image.Orientation"] = (uint16_t)orientation;
+            image->setExifData(exifData);
+            image->writeMetadata();
+            kdDebug() << "Exif orientation tag set to:" << orientation << endl;
+            return true;
+        }    
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
 }
 
 }  // NameSpace Digikam

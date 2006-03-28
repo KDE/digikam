@@ -456,12 +456,10 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
     m_redoAction->setEnabled(moreRedo);
 
     if (m_allowSaving)
-    {
         m_saveAction->setEnabled(canSave);
-    }
 
     if (!moreUndo)
-        m_rotatedOrFlipped = false;
+        m_rotatedOrFlipped = false;        
 }
 
 void ImageWindow::slotAssignTag(int tagID)
@@ -487,7 +485,7 @@ void ImageWindow::slotUpdateItemInfo()
     uint index = m_urlList.findIndex(m_urlCurrent);
 
     m_rotatedOrFlipped = false;
-
+    
     QString text = m_urlCurrent.filename() +
             i18n(" (%2 of %3)")
             .arg(QString::number(index+1))

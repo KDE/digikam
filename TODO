@@ -20,7 +20,6 @@
      
 * Using Exiv2 instead libKExif :
    - albumiconview.cpp    lines 1296 and 1298.
-   - editorwindow.cpp     lines 1166 and 1215.
    - jpegmetadata.cpp     line 143.
    - exifrotate.cpp       lines 74 and 210.
    

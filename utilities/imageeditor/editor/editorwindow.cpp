@@ -63,14 +63,10 @@
 #include <kstatusbar.h>
 #include <kprogress.h>
 
-// LibKexif includes.
-
-#include <libkexif/kexifdata.h>
-#include <libkexif/kexifutils.h>
-
 // Local includes.
 
 #include "canvas.h"
+#include "dmetadata.h"
 #include "dimginterface.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -809,6 +805,10 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filePrintAction->setEnabled(val);
     d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
+    m_saveAction->setEnabled(val);
+    m_saveAsAction->setEnabled(val);
+    m_undoAction->setEnabled(val);
+    m_redoAction->setEnabled(val);
 
     QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
     
@@ -1163,7 +1163,10 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         }
 
         if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-            KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+        {
+            DMetadata metadata;
+            metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);
+        }
         
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
@@ -1212,7 +1215,10 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             m_savingContext->format.upper() == "JPEG")
         {
             if( m_rotatedOrFlipped || m_canvas->exifRotated() )
-                KExifUtils::writeOrientation(m_savingContext->saveTempFile->name(), KExifData::NORMAL);
+            {
+               DMetadata metadata;
+               metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);
+            }
         }
         
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;

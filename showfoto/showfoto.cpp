@@ -365,6 +365,7 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
+    m_canvas->setExifOrient(false);
     m_fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
 }
 
