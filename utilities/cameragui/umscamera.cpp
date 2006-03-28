@@ -31,13 +31,6 @@ extern "C"
 #include <utime.h>
 }
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
-#include <string>
-
 // QT includes.
 
 #include <qdir.h>
@@ -54,13 +47,10 @@ extern "C"
 
 // Exiv2 includes.
 
-#include <exiv2/exif.hpp>
-#include <exiv2/image.hpp>
-#include <exiv2/tags.hpp>
-
 // Local includes.
 
 #include "dimg.h"
+#include "dmetadata.h"
 #include "dcraw_parse.h"
 #include "albumsettings.h"
 #include "umscamera.h"
@@ -71,18 +61,6 @@ namespace Digikam
 class UMSCameraPriv
 {
 public:
-
-    enum ImageOrientation
-    {
-        ORIENTATION_NORMAL=1, 
-        ORIENTATION_HFLIP=2, 
-        ORIENTATION_ROT_180=3, 
-        ORIENTATION_VFLIP=4, 
-        ORIENTATION_ROT_90_HFLIP=5, 
-        ORIENTATION_ROT_90=6, 
-        ORIENTATION_ROT_90_VFLIP=7, 
-        ORIENTATION_ROT_270=8
-    };
 
     UMSCameraPriv()
     {
@@ -97,10 +75,8 @@ public:
     QString rawFilter;
 };
 
-UMSCamera::UMSCamera(const QString& model,
-                     const QString& port,
-                     const QString& path)
-    : DKCamera(model, port, path)
+UMSCamera::UMSCamera(const QString& model, const QString& port, const QString& path)
+         : DKCamera(model, port, path)
 {
     d = new UMSCameraPriv;
     
@@ -183,83 +159,18 @@ bool UMSCamera::getItemsInfoList(const QString& folder,
     return true;
 }
 
-bool UMSCamera::getThumbnail(const QString& folder,
-                             const QString& itemName,
-                             QImage& thumbnail)
+bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
     d->cancel = false;
 
     // In 1st, we trying to get thumbnail from Exif data if we are JPEG file.
 
-    try
-    {    
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(folder + "/" + itemName)));
-        image->readMetadata();
-        Exiv2::ExifData &exifData = image->exifData();
-        Exiv2::DataBuf const c1(exifData.copyThumbnail());
-        thumbnail.loadFromData(c1.pData_, c1.size_);
+    DMetadata metadata(QFile::encodeName(folder + "/" + itemName));
+    thumbnail = metadata.getExifThumbnail(true);
         
-        if (!thumbnail.isNull())
-        {
-            Exiv2::ExifKey key("Exif.Image.Orientation");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
-            if (it != exifData.end())
-            {
-                QWMatrix matrix;
-                long orientation = it->toLong();
-                kdDebug() << itemName << " ==> Orientation: " << orientation << endl;
-                
-                switch (orientation) 
-                {
-                    case UMSCameraPriv::ORIENTATION_HFLIP:
-                        matrix.scale(-1, 1);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_ROT_180:
-                        matrix.rotate(180);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_VFLIP:
-                        matrix.scale(1, -1);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_ROT_90_HFLIP:
-                        matrix.scale(-1, 1);
-                        matrix.rotate(90);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_ROT_90:
-                        matrix.rotate(90);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_ROT_90_VFLIP:
-                        matrix.scale(1, -1);
-                        matrix.rotate(90);
-                        break;
-                
-                    case UMSCameraPriv::ORIENTATION_ROT_270:
-                        matrix.rotate(270);
-                        break;
-                        
-                    default:
-                        break;
-                }
+    if (!thumbnail.isNull())
+        return true;
     
-                if ( orientation != UMSCameraPriv::ORIENTATION_NORMAL )
-                    thumbnail = thumbnail.xForm( matrix );
-            }
-                
-            return true;
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot load thumbnail using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-
     // In 2th, we trying to get thumbnail from '.thm' files if we didn't manage to get 
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
     // Using this way is always more speed than using dcraw parse utility.

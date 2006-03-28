@@ -24,6 +24,7 @@
 // QT includes.
 
 #include <qcstring.h>
+#include <qimage.h>
 
 // Local includes.
 
@@ -49,6 +50,7 @@ public:
     /** Metadata manipulation methods */
     QByteArray getExif() const;
     QByteArray getIptc() const;
+    QImage     getExifThumbnail(bool fixOrientation) const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);
@@ -58,6 +60,18 @@ private:
     DImg::FORMAT fileFormat(const QString& filePath);
 
 private:
+
+    enum ImageOrientation
+    {
+        ORIENTATION_NORMAL       = 1, 
+        ORIENTATION_HFLIP        = 2, 
+        ORIENTATION_ROT_180      = 3, 
+        ORIENTATION_VFLIP        = 4, 
+        ORIENTATION_ROT_90_HFLIP = 5, 
+        ORIENTATION_ROT_90       = 6, 
+        ORIENTATION_ROT_90_VFLIP = 7, 
+        ORIENTATION_ROT_270      = 8
+    };
 
     QByteArray m_exifMetadata;
     QByteArray m_iptcMetadata;

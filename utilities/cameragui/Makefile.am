@@ -1,5 +1,4 @@
 METASOURCES = AUTO
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 noinst_LTLIBRARIES = libcameragui.la
 
@@ -20,7 +19,8 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/libs/jpegutils \
 	      -I$(top_srcdir)/digikam/libs/imageproperties \
 	      -I$(top_srcdir)/digikam/libs/widgets/common \
-	      -I$(top_srcdir)/digikam/libs/dimg \
+          -I$(top_srcdir)/digikam/libs/dimg \
+	      -I$(top_srcdir)/digikam/libs/dmetadata \
 	      -I$(top_srcdir)/digikam/libs/dcraw \
 	      $(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
 

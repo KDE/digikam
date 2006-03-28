@@ -18,13 +18,26 @@
  * 
  * ============================================================ */
 
+ // C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <cassert>
+#include <string>
+
 // Qt includes.
 
 #include <qfile.h>
+#include <qwmatrix.h>
 
 // KDE includes.
 
 #include <kdebug.h>
+
+// Exiv2 includes.
+
+#include <exiv2/exif.hpp>
+#include <exiv2/tags.hpp>
 
 // Local includes.
 
@@ -191,5 +204,86 @@ DImg::FORMAT DMetadata::fileFormat(const QString& filePath)
     
     return DImg::NONE;
 }
+
+QImage DMetadata::getExifThumbnail(bool fixOrientation) const
+{
+    QImage thumbnail;
+    
+    if (m_exifMetadata.isEmpty())
+       return thumbnail;
+    
+    try
+    {    
+        Exiv2::ExifData exifData;
+        exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+        Exiv2::DataBuf const c1(exifData.copyThumbnail());
+        thumbnail.loadFromData(c1.pData_, c1.size_);
+        
+        if (!thumbnail.isNull())
+        {
+            if (fixOrientation)
+            {
+                Exiv2::ExifKey key("Exif.Image.Orientation");
+                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                if (it != exifData.end())
+                {
+                    QWMatrix matrix;
+                    long orientation = it->toLong();
+                    kdDebug() << " Exif Orientation: " << orientation << endl;
+                    
+                    switch (orientation) 
+                    {
+                        case ORIENTATION_HFLIP:
+                            matrix.scale(-1, 1);
+                            break;
+                    
+                        case ORIENTATION_ROT_180:
+                            matrix.rotate(180);
+                            break;
+                    
+                        case ORIENTATION_VFLIP:
+                            matrix.scale(1, -1);
+                            break;
+                    
+                        case ORIENTATION_ROT_90_HFLIP:
+                            matrix.scale(-1, 1);
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_90:
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_90_VFLIP:
+                            matrix.scale(1, -1);
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_270:
+                            matrix.rotate(270);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+        
+                    if ( orientation != ORIENTATION_NORMAL )
+                        thumbnail = thumbnail.xForm( matrix );
+                }
+                    
+                return thumbnail;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse Exif Thumbnail using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return thumbnail;
+}
+
 
 }  // NameSpace Digikam
