@@ -320,7 +320,6 @@ bool UMSCamera::getThumbnail(const QString& folder,
     }
 
     // Finaly, we trying to get thumbnail using DImg API. This way can take a while.
-    // TODO : in the future, we need to use a new DImg::getEmbeddedThumbnail() method instead !
 
     DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
 
