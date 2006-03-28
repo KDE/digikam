@@ -38,18 +38,18 @@ public:
     
     ICCSettingsContainer()
     {
-        bool    enableCMSetting = false;
+        enableCMSetting    = false;
 
-        bool    askOrApplySetting = false;
-        bool    BPCSetting = false;
-        bool    managedViewSetting = false;
+        askOrApplySetting  = false;
+        BPCSetting         = false;
+        managedViewSetting = false;
 
-        int     renderingSetting = 0;
+        renderingSetting   = 0;
 
-        workspaceSetting = QString::null;
-        monitorSetting   = QString::null;
-        inputSetting     = QString::null;
-        proofSetting     = QString::null;
+        workspaceSetting   = QString::null;
+        monitorSetting     = QString::null;
+        inputSetting       = QString::null;
+        proofSetting       = QString::null;
     };
     
     ~ICCSettingsContainer(){};
@@ -57,6 +57,7 @@ public:
 public:
 
     bool    enableCMSetting;
+    
     // FALSE -> apply
     // TRUE  -> ask
     bool    askOrApplySetting;
