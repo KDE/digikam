@@ -1,1 +1,32 @@
-See 'ChangeLog' file
+digiKam 0.9.0 :
+---------------
+
+NEW FEATURES:
+
+- Sidebars are used at all to display metadata, comments & tags, and file properties.
+- Removed imlib2 depency. Add Exiv2 and LCMS depencies.
+- New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
+- New API in digiKam core named DMetadata to manage image metadata.
+- Image Editor/showfoto support 16 bits color depth images (RAW, TIFF, PNG, PNM).
+- Ported all image plugins to new DImg API. Support of 16 bits images.
+- Ported all image filter algorithms to new DImg API. Support of 16 bits images.
+- New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, and GPS locator.
+- New ICC profiles profile viewer based on LCMS.
+- New powerfull widget to display CIE color space used by ICC profiles.
+- Redesign of all image plugins dialogs. Histogram are available at all when it's necessary. All dialogs implementation are common from digiKam core now.
+- Complete rewrite of image editor/showfoto gui implementation. Implementation is now common and is more easy to maintain!
+- Add a progress bar to Image editor/showfoto about IO image files access.
+- New implementation to load/save images file using a separate thread.
+- New powerfull Noise Reduction algorithm based on dcamnoise2 implemention.
+- New powerfull Black & White converter tool using curves adjustements.
+- Support of ICC profiles management using LCMS.
+- Advanced settings to load RAW files in Image Editor using external dcraw instance.
+- New plugin to experiment ICC profiles color corrections into images.
+- New preview rendering modes in all color correction image plugins dialogs.
+- New zooming capabilities in image plugins dialogs.
+
+...
+
+BUGFIX:
+
+==> todo
