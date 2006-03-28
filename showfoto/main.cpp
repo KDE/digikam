@@ -70,12 +70,12 @@ int main(int argc, char *argv[])
     aboutData.addAuthor ( "Tom Albers",
                           I18N_NOOP("Developer"),
                           "tomalbers at kde.nl",
-                          0);
+                          "http://www.omat.nl/drupal/?q=blog/1");
 
     aboutData.addAuthor ( "Marcel Wiesweg",
                           I18N_NOOP("Developer"),
                           "marcel dot wiesweg at gmx dot de",
-                          0);
+                          "http://www.digikam.org/?q=blog/8");
 
     aboutData.addAuthor ( "Francisco J. Cruz",
                           I18N_NOOP("Developer"),
