@@ -25,6 +25,7 @@
 
 #include <qcstring.h>
 #include <qimage.h>
+#include <qdatetime.h>
 
 // Local includes.
 
@@ -71,6 +72,7 @@ public:
     QByteArray       getIptc() const;
     QImage           getExifThumbnail(bool fixOrientation) const;
     ImageOrientation getExifImageOrientation();
+    QDateTime        getExifDateTime() const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);

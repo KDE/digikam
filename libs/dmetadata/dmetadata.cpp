@@ -315,6 +315,74 @@ DMetadata::ImageOrientation DMetadata::getExifImageOrientation()
     return ORIENTATION_UNSPECIFIED;
 }
 
+QDateTime DMetadata::getExifDateTime() const
+{
+    if (m_exifMetadata.isEmpty())
+       return QDateTime();
+
+    try
+    {    
+        Exiv2::ExifData exifData;
+        exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+
+        // Try standard Exif date time entry.
+
+        Exiv2::ExifKey key("Exif.Image.DateTime");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+        
+        if (it != exifData.end())
+        {
+            QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+
+            if (dateTime.isValid())
+            {
+                kdDebug() << " Exif Date (standard): " << dateTime << endl;
+                return dateTime;
+            }
+        }
+
+        // Bogus standard Exif date time entry. Try Exif date time original.
+
+        Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
+        Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+        
+        if (it2 != exifData.end())
+        {
+            QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
+
+            if (dateTime.isValid())
+            {
+                kdDebug() << " Exif Date (original): " << dateTime << endl;
+                return dateTime;
+            }
+        }
+
+        // Bogus Exif date time original entry. Try Exif date time digitized.
+
+        Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
+        Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+        
+        if (it3 != exifData.end())
+        {
+            QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
+
+            if (dateTime.isValid())
+            {
+                kdDebug() << " Exif Date (digitalized): " << dateTime << endl;
+                return dateTime;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse Exif date tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QDateTime();
+}
+
 bool DMetadata::writeExifImageOrientation(const QString& filePath, ImageOrientation orientation)
 {
     try
