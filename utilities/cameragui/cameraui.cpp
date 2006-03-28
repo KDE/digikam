@@ -149,11 +149,14 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     // -------------------------------------------------------------------------
     
-    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 3);
+    QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 5);
     viewBoxLayout->setColStretch( 0, 0 );
-    viewBoxLayout->setColStretch( 1, 3 );
-    viewBoxLayout->setColStretch( 2, 1 );
-    viewBoxLayout->setColStretch( 3, 0 );
+    viewBoxLayout->setColStretch( 1, 0 );
+    viewBoxLayout->setColStretch( 2, 3 );
+    viewBoxLayout->setColStretch( 3, 1 );
+    viewBoxLayout->setColStretch( 4, 0 );
+    viewBoxLayout->setColStretch( 5, 0 );
+
     QHBox* widget   = new QHBox(plainPage());
     d->splitter     = new QSplitter(widget);
     d->view         = new CameraIconView(this, d->splitter);
@@ -186,23 +189,20 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     
     // -------------------------------------------------------------------------
     
-    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 3);
+    viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 5);
     viewBoxLayout->setRowSpacing(1, spacingHint());
     d->rightSidebar->loadViewState();
         
     // -------------------------------------------------------------------------
 
-    d->cancelBtn = new QToolButton(plainPage());
+    d->cancelBtn     = new QToolButton(plainPage());
     QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop", KIcon::Toolbar, 22);
     d->cancelBtn->setText(i18n("Cancel"));
     d->cancelBtn->setIconSet(iconSet);
     d->cancelBtn->setEnabled(false);
-    viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
     
-    d->status = new QLabel(plainPage());
-    viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 1, 1);
+    d->status   = new QLabel(plainPage());
     d->progress = new QProgressBar(plainPage());
-    viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 2, 2);
     d->progress->hide();
 
     QFrame *frame = new QFrame(plainPage());
@@ -225,7 +225,12 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     d->anim = new AnimWidget(frame);
     layout->addWidget( d->anim );
 
-    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 3, 3);
+    viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
+    viewBoxLayout->addMultiCellWidget(d->status, 2, 2, 2, 2);
+    viewBoxLayout->addMultiCellWidget(d->progress, 2, 2, 3, 3);
+    viewBoxLayout->addMultiCellWidget(frame, 2, 2, 5, 5);
+    viewBoxLayout->setColSpacing(1, spacingHint());
+    viewBoxLayout->setColSpacing(4, spacingHint());
 
     // -------------------------------------------------------------------------
     
