@@ -99,7 +99,6 @@ public:
         cancelBtn    = 0;
         splitter     = 0;
         rightSidebar = 0;
-        leftSidebar  = 0;
     }
 
     bool                          busy;
@@ -133,8 +132,6 @@ public:
     AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
-    
-    Sidebar                      *leftSidebar;
 };    
 
 CameraUI::CameraUI(QWidget* parent, const QString& title,
@@ -150,22 +147,26 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     d = new CameraUIPriv;
     setHelp("camerainterface.anchor", "digikam");
 
-    // -- setup view -----------------------------------------
+    // -------------------------------------------------------------------------
     
     QGridLayout* viewBoxLayout = new QGridLayout(plainPage(), 2, 3);
     viewBoxLayout->setColStretch( 0, 0 );
     viewBoxLayout->setColStretch( 1, 3 );
     viewBoxLayout->setColStretch( 2, 1 );
     viewBoxLayout->setColStretch( 3, 0 );
-    QHBox* widget = new QHBox(plainPage());
-
+    QHBox* widget   = new QHBox(plainPage());
+    d->splitter     = new QSplitter(widget);
+    d->view         = new CameraIconView(this, d->splitter);
+    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
+                                                       Digikam::Sidebar::Right, true);
+    d->splitter->setOpaqueResize(false);
+    
     // -------------------------------------------------------------------------
 
-    d->leftSidebar      = new Sidebar(widget, "CameraGui Sidebar Left", Digikam::Sidebar::Left, true);
-    d->splitter         = new QSplitter(widget);
-    d->advBox           = new QWidget(d->leftSidebar);
+    d->advBox           = new QWidget(d->rightSidebar);
     QGridLayout* grid   = new QGridLayout( d->advBox, 2, 1, KDialog::marginHint());
     d->renameCustomizer = new RenameCustomizer(d->advBox);
+    d->view->setRenameCustomizer(d->renameCustomizer);
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
         
     QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Information"), d->advBox);
@@ -181,20 +182,12 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
     grid->setRowStretch(2, 10);
 
-    d->leftSidebar->setSplitter(d->splitter);
-    d->leftSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Advanced Settings"));
+    d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Advanced Settings"));
     
     // -------------------------------------------------------------------------
-
-    d->view = new CameraIconView(this, d->splitter);
-    d->view->setRenameCustomizer(d->renameCustomizer);
     
-    d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
-                                                       Digikam::Sidebar::Right, true);
     viewBoxLayout->addMultiCellWidget(widget, 0, 0, 0, 3);
     viewBoxLayout->setRowSpacing(1, spacingHint());
-    d->splitter->setOpaqueResize(false);
-    d->leftSidebar->loadViewState();
     d->rightSidebar->loadViewState();
         
     // -------------------------------------------------------------------------
@@ -346,7 +339,6 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
 CameraUI::~CameraUI()
 {
-    delete d->leftSidebar;
     delete d->rightSidebar;
     delete d;
 }

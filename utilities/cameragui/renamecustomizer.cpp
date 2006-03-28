@@ -95,9 +95,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     // ----------------------------------------------------------------
 
-    d->renameDefault = new QRadioButton(i18n("Camera file names"), this);
+    d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
     QWhatsThis::add( d->renameDefault, i18n("<p>Toogle on this option to use camera "
-                                            "provided image file names without modifications."));
+                                            "provided image filenames without modifications."));
     mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
     d->renameDefaultBox = new QGroupBox( this );
@@ -105,7 +105,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameDefaultBox->setInsideMargin(0);
     d->renameDefaultBox->setColumnLayout(0, Qt::Vertical);
 
-    d->renameDefaultCase = new QLabel( i18n("Change case to"), d->renameDefaultBox );
+    d->renameDefaultCase = new QLabel( i18n("Change case to:"), d->renameDefaultBox );
     d->renameDefaultCase->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 
     d->renameDefaultCaseType = new QComboBox( d->renameDefaultBox );
@@ -113,7 +113,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameDefaultCaseType->insertItem(i18n("Upper"), 1);
     d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-
+    QWhatsThis::add( d->renameDefaultCaseType, i18n("<p>Set here the method to use to change case "
+                                                    "of image filenames."));
+                                           
     QHBoxLayout* boxLayout = new QHBoxLayout( d->renameDefaultBox->layout() );
     boxLayout->addSpacing( 10 );
     boxLayout->addWidget( d->renameDefaultCase );
@@ -124,9 +126,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     // -------------------------------------------------------------
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
-    QWhatsThis::add( d->renameCustom, i18n("<p>Toogle on this option to customize image file names "
-                                           "during download."));
     mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
+    QWhatsThis::add( d->renameCustom, i18n("<p>Toogle on this option to customize image filenames "
+                                           "during download."));
 
     d->renameCustomBox = new QGroupBox(this);
     d->renameCustomBox->setFrameStyle(QFrame::NoFrame|QFrame::Plain);
@@ -141,17 +143,19 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
-
+    QWhatsThis::add( d->renameCustomPrefix, i18n("<p>Set here the string to use like a prefix of "
+                                                 "image filenames."));
+                                                 
     d->renameCustomExif = new QCheckBox(i18n("Add date and time"), d->renameCustomBox);
-    QWhatsThis::add( d->renameCustomExif, i18n("<p>Toogle on this option to add to filename the "
-                                               "camera provided date and time"));
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExif, 1, 1, 1, 2);
+    QWhatsThis::add( d->renameCustomExif, i18n("<p>Toogle on this option to add to filename the "
+                                               "camera provided date and time."));
 
     d->renameCustomSeq = new QCheckBox(i18n("Add sequence number"), d->renameCustomBox);
-    QWhatsThis::add( d->renameCustomSeq, i18n("<p>Toogle on this option to add to filename a "
-                                              "sequence number"));
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSeq, 2, 2, 1, 2);
-
+    QWhatsThis::add( d->renameCustomSeq, i18n("<p>Toogle on this option to add to filenames a "
+                                              "sequence number."));
+    
     mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
 
     // -- setup connections -------------------------------------------------
