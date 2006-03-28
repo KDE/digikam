@@ -13,6 +13,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/jpegutils \
 	   -I$(top_srcdir)/digikam/libs/dcraw \
 	   -I$(top_srcdir)/digikam/libs/dimg \
+       -I$(top_srcdir)/digikam/libs/dmetadata \
 	   -I$(top_srcdir)/digikam/libs/imageproperties \
 	   -I$(top_srcdir)/digikam/libs/threadimageio \
 	   -I$(top_srcdir)/digikam/utilities/cameragui \

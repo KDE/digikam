@@ -3,7 +3,7 @@
  *          Ralf Holzer <ralf at well.com>
  *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date   : 2004-08-02
- * Description :
+ * Description : digiKam kipi library interface.
  *
  * Copyright 2004-2006 by Gilles Caulier
  *
@@ -48,11 +48,6 @@ extern "C"
 #include <kio/netaccess.h>
 #include <kdebug.h>
 
-// LibKEXIF includes.
-
-#include <libkexif/kexifutils.h>
-#include <libkexif/kexifdata.h>
-
 // Local includes.
 
 #include "albummanager.h"
@@ -60,6 +55,7 @@ extern "C"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "dmetadata.h"
 #include "kipiinterface.h"
 
 namespace Digikam
@@ -69,8 +65,8 @@ namespace Digikam
 /////////////////////////////// IMAGE INFO IMPLEMENTATION CLASS ////////////////////////////////////////
 
 DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url )
-    : KIPI::ImageInfoShared( interface, url ),
-      palbum_(0)
+                : KIPI::ImageInfoShared( interface, url ),
+                  palbum_(0)
 {
 }
 
@@ -213,24 +209,21 @@ int DigikamImageInfo::angle()
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getExifRotate())
     {
-        KExifData exifData;
+        DMetadata metadata(_url.path());
+        DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
         
-        if (exifData.readFromFile(_url.path()))
+        switch (orientation) 
         {
-            KExifData::ImageOrientation orientation = exifData.getImageOrientation();
-
-            switch (orientation) {
-            case KExifData::ROT_180:
+            case DMetadata::ORIENTATION_ROT_180:
                 return 180;
-            case KExifData::ROT_90:
-            case KExifData::ROT_90_HFLIP:
-            case KExifData::ROT_90_VFLIP:
+            case DMetadata::ORIENTATION_ROT_90:
+            case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            case DMetadata::ORIENTATION_ROT_90_VFLIP:
                 return 90;
-            case KExifData::ROT_270:
+            case DMetadata::ORIENTATION_ROT_270:
                 return 270;
             default:
                 return 0;
-            }
         }
     }
     
@@ -239,7 +232,7 @@ int DigikamImageInfo::angle()
 
 void DigikamImageInfo::setAngle( int )
 {
-    // TODO ! This will a libKExif implementation call ?
+    // TODO : add here a Digikam::DMetadata call (thru Exiv2) to set Exif orientation tag.
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

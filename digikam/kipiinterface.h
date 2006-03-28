@@ -3,7 +3,7 @@
  *          Ralf Holzer <ralf at well.com>
  *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date   : 2004-08-02
- * Description : 
+ * Description : digiKam kipi library interface.
  * 
  * Copyright 2004-2006 by Gilles Caulier
  *
