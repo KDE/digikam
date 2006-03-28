@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-29
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-29
+ * Description : perform lossless rotation/flip to JPEG file
  * 
  * Copyright 2004-2005 by Renchi Raju
+ * Copyright      2006 by Gilles Caulier
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,13 +49,9 @@ extern "C"
 
 #include <kdebug.h>
 
-// LibKExif includes.
-
-#include <libkexif/kexifdata.h>
-#include <libkexif/kexifutils.h>
-
 // Local includes.
 
+#include "dmetadata.h"
 #include "transupp.h"
 
 namespace Digikam
@@ -71,8 +69,8 @@ bool exifRotate(const QString& file)
     QCString in  = QFile::encodeName(file);
     QCString out = QFile::encodeName(temp);
     
-    KExifData exifData;
-    if (!exifData.readFromFile(file))
+    DMetadata exifData;
+    if (!exifData.load(file))
     {
         // no exif data. return.
         return true;
@@ -87,42 +85,42 @@ bool exifRotate(const QString& file)
         
     // we have the exif info. check the orientation
 
-    switch(exifData.getImageOrientation())
+    switch(exifData.getExifImageOrientation())
     {
-        case(KExifData::UNSPECIFIED):
-        case(KExifData::NORMAL):
+        case(DMetadata::ORIENTATION_UNSPECIFIED):
+        case(DMetadata::ORIENTATION_NORMAL):
             break;
-        case(KExifData::HFLIP):
+        case(DMetadata::ORIENTATION_HFLIP):
         {
             transformoption.transform = JXFORM_FLIP_H;
             break;
         }
-        case(KExifData::ROT_180):
+        case(DMetadata::ORIENTATION_ROT_180):
         {
             transformoption.transform = JXFORM_ROT_180;
             break;
         }
-        case(KExifData::VFLIP):
+        case(DMetadata::ORIENTATION_VFLIP):
         {
             transformoption.transform = JXFORM_FLIP_V;
             break;
         }
-        case(KExifData::ROT_90_HFLIP):
+        case(DMetadata::ORIENTATION_ROT_90_HFLIP):
         {
             transformoption.transform = JXFORM_TRANSPOSE;
             break;
         }
-        case(KExifData::ROT_90):
+        case(DMetadata::ORIENTATION_ROT_90):
         {
             transformoption.transform = JXFORM_ROT_90;
             break;
         }
-        case(KExifData::ROT_90_VFLIP):
+        case(DMetadata::ORIENTATION_ROT_90_VFLIP):
         {
             transformoption.transform = JXFORM_TRANSVERSE;
             break;
         }
-        case(KExifData::ROT_270):
+        case(DMetadata::ORIENTATION_ROT_270):
         {
             transformoption.transform = JXFORM_ROT_270;
             break;
@@ -207,7 +205,7 @@ bool exifRotate(const QString& file)
     fclose(output_file);
 
     // reset the orientation of the temp file to normal
-    KExifUtils::writeOrientation(temp, KExifData::NORMAL);
+    exifData.writeExifImageOrientation(temp, DMetadata::ORIENTATION_NORMAL);
 
     // set the file modification time of the temp file to that
     // of the original file
