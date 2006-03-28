@@ -73,6 +73,8 @@ public:
     ThumbBarItem* currentItem() const;
     void setSelected(ThumbBarItem* item);
 
+    void setExifRotate(bool exifRotate);
+
     ThumbBarItem* firstItem() const;
     ThumbBarItem* lastItem()  const;
     ThumbBarItem* findItem(const QPoint& pos) const;

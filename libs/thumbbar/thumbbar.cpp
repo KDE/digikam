@@ -134,6 +134,11 @@ ThumbBarView::~ThumbBarView()
     delete d;
 }
 
+void ThumbBarView::setExifRotate(bool exifRotate)
+{
+    d->exifRotate = exifRotate;
+}
+
 int ThumbBarView::countItems()
 {
     return d->count;
