@@ -3,7 +3,8 @@ METASOURCES = AUTO
 INCLUDES = $(LIBKEXIF_CFLAGS) \
            $(all_includes) \
            -I$(top_srcdir)/digikam/libs/dmetadata \
-           -I$(top_srcdir)/digikam/libs/dimg
+           -I$(top_srcdir)/digikam/libs/dimg \
+	   -I$(top_srcdir)/digikam/digikam
 
 noinst_LTLIBRARIES = libjpegutils.la
 
