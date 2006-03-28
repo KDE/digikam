@@ -36,6 +36,7 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <khelpmenu.h>
@@ -94,7 +95,7 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     // -------------------------------------------------------------
     
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 8, 2, marginHint(), spacingHint());    
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 9, 2, marginHint(), spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
     m_newWidthLabel = new QLabel(gbox2);
@@ -132,23 +133,53 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
     gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
     gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
-    gridLayout->setRowStretch(8, 10);        
+    gridLayout->setRowStretch(8, 10);
+
+    m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
+    gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 1);
+
     setUserAreaWidget(gbox2);
-    
+
+    readSettings();
+
     // -------------------------------------------------------------
-    
+
     connect(m_previewWidget, SIGNAL(signalPerspectiveChanged(QRect, float, float, float, float)),
             this, SLOT(slotUpdateInfo(QRect, float, float, float, float)));  
+
+    connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
+            m_previewWidget, SLOT(toggleDrawWhileMoving(bool)));
+
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()
 {
+    writeSettings();
+}
+
+void ImageEffect_Perspective::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Perspective Adjustment Tool Settings");
+
+    m_drawWhileMovingCheckBox->setChecked( config->readBoolEntry("Draw while moving", true) );
+
+    m_previewWidget->toggleDrawWhileMoving(m_drawWhileMovingCheckBox->isChecked());
+}
+
+void ImageEffect_Perspective::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Perspective Adjustment Tool Settings");
+
+    config->writeEntry( "Draw while moving", m_drawWhileMovingCheckBox->isChecked() );
+    config->sync();
 }
 
 void ImageEffect_Perspective::slotDefault()
 {
     m_previewWidget->reset();
-} 
+}
 
 void ImageEffect_Perspective::finalRendering()
 {

@@ -66,6 +66,9 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     setMinimumSize(w, h);
     setMouseTracking(true);
 
+    m_drawWhileMoving = true;
+    m_currentResizing = ResizingNone;
+
     m_iface        = new Digikam::ImageIface(w, h);
     uchar *data    = m_iface->setPreviewImageSize(w, h);
     m_w            = m_iface->previewWidth();
@@ -202,6 +205,11 @@ void PerspectiveWidget::toggleAntiAliasing(bool a)
     repaint(false);
 }
 
+void PerspectiveWidget::toggleDrawWhileMoving(bool draw)
+{
+    m_drawWhileMoving = draw;
+}
+
 void PerspectiveWidget::updatePixmap(void)
 {
     m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),
@@ -213,26 +221,32 @@ void PerspectiveWidget::updatePixmap(void)
     m_bottomRightCorner.setRect(m_bottomRightPoint.x() - 7 + m_rect.topLeft().x(),
                                 m_bottomRightPoint.y() - 7 + m_rect.topLeft().y(), 8, 8);
 
-    Digikam::DImg destImage(m_previewImage.width(), m_previewImage.height(),
-                            m_previewImage.sixteenBit(), m_previewImage.hasAlpha());
-
-    Digikam::DColor background(colorGroup().background());
-
-    m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
-                                           m_topLeftPoint, m_topRightPoint,
-                                           m_bottomLeftPoint, m_bottomRightPoint,
-                                           &m_previewImage, &destImage, background);
-
-    m_iface->putPreviewImage(destImage.bits());
-
     // Draw background
 
     m_pixmap->fill(colorGroup().background());
 
-    // Draw image
+    // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
+    if (m_currentResizing == ResizingNone || m_drawWhileMoving)
+    {
+        // Create preview image
 
-    m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
-                   m_rect.width(), m_rect.height());
+        Digikam::DImg destImage(m_previewImage.width(), m_previewImage.height(),
+                                m_previewImage.sixteenBit(), m_previewImage.hasAlpha());
+
+        Digikam::DColor background(colorGroup().background());
+
+        m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
+                                               m_topLeftPoint, m_topRightPoint,
+                                               m_bottomLeftPoint, m_bottomRightPoint,
+                                               &m_previewImage, &destImage, background);
+
+        m_iface->putPreviewImage(destImage.bits());
+
+        // Draw image
+
+        m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
+                       m_rect.width(), m_rect.height());
+    }
 
     // Drawing selection borders.
 
@@ -321,18 +335,37 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * )
     {
         unsetCursor();
         m_currentResizing = ResizingNone;
+
+        // in this case, the pixmap has not been drawn on mouse move
+        if (!m_drawWhileMoving)
+        {
+            updatePixmap();
+            repaint(false);
+        }
     }
 }
 
 void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( e->state() == Qt::LeftButton &&
-         m_rect.contains( e->x(), e->y() ))
+    if ( e->state() == Qt::LeftButton )
     {
         if ( m_currentResizing != ResizingNone )
         {
             QPointArray unsablePoints;
             QPoint pm(e->x(), e->y());
+
+            if (!m_rect.contains( pm ))
+            {
+                if (pm.x() > m_rect.right())
+                    pm.setX(m_rect.right());
+                else if (pm.x() < m_rect.left())
+                    pm.setX(m_rect.left());
+
+                if (pm.y() > m_rect.bottom())
+                    pm.setY(m_rect.bottom());
+                else if (pm.y() < m_rect.top())
+                    pm.setY(m_rect.top());
+            }
 
             if ( m_currentResizing == ResizingTopLeft )
             {

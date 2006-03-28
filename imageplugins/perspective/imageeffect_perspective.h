@@ -33,6 +33,7 @@
 
 class QPushButton;
 class QLabel;
+class QCheckBox;
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -56,18 +57,21 @@ private:
     QLabel            *m_topRightAngleLabel;
     QLabel            *m_bottomLeftAngleLabel;
     QLabel            *m_bottomRightAngleLabel;
-    
+    QCheckBox         *m_drawWhileMovingCheckBox;
+
     PerspectiveWidget *m_previewWidget;
-                                                                    
+
+    void writeSettings(void);
 private slots:
 
     void slotDefault();
     void slotUpdateInfo(QRect newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
+    void readSettings(void);
 
 protected:
 
-    void finalRendering();    
+    void finalRendering();
 
 };
 

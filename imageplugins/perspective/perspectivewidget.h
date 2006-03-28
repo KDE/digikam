@@ -79,6 +79,7 @@ public:
 public slots:
 
     void toggleAntiAliasing(bool a);
+    void toggleDrawWhileMoving(bool draw);
 
 signals:
 
@@ -107,15 +108,13 @@ private:
     Digikam::ImageIface *m_iface;
 
     bool        m_antiAlias;
+    bool        m_drawWhileMoving;
 
     uint       *m_data;
     int         m_w;
     int         m_h;
     int         m_origW;
     int         m_origH;
-
-    int         m_xpos;
-    int         m_ypos;
 
     int         m_currentResizing;
 
