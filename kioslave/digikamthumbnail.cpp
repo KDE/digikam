@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2003-01-15
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2003-01-15
+ * Description : digiKam KIO slave to get image thumbnails.
  *
  * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006      by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,6 +21,12 @@
  * ============================================================ */
 
 #define XMD_H
+
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 
 // Qt Includes.
 
@@ -38,7 +45,6 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kinstance.h>
-#include <kio/global.h>
 #include <kimageio.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -49,16 +55,14 @@
 #include <klibloader.h>
 #include <kmimetype.h>
 #include <kprocess.h>
+#include <kio/global.h>
 #include <kio/thumbcreator.h>
-
-// Lib KExif includes.
-
-#include <libkexif/kexifdata.h>
 
 // Local includes
 
 #include "dcraw_parse.h"
 #include "dimg.h"
+#include "dmetadata.h"
 #include "digikamthumbnail.h"
 #include "digikam_export.h"
 
@@ -66,9 +70,6 @@
 
 extern "C"
 {
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 #include <jpeglib.h>
 #include <sys/stat.h>
@@ -80,56 +81,52 @@ extern "C"
 }
 
 using namespace KIO;
+using namespace Digikam;
 
 static void exifRotate(const QString& filePath, QImage& thumb)
 {
     // Rotate thumbnail based on EXIF rotate tag
 
-    // TODO : using Exiv2 library instead libKexif.
-    
     QWMatrix matrix;
-
-    KExifData ke;
-    ke.readFromFile(filePath);
-    KExifData::ImageOrientation orientation = ke.getImageOrientation();
-    kdDebug() << "Image Orientation: " << (KExifData::ImageOrientation)orientation << endl;
-
-    bool doXform = (orientation != KExifData::NORMAL &&
-                    orientation != KExifData::UNSPECIFIED);
+    DMetadata metadata(filePath);
+    DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
+    
+    bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
+                    orientation != DMetadata::ORIENTATION_UNSPECIFIED);
 
     switch (orientation) 
     {
-       case KExifData::NORMAL:
-       case KExifData::UNSPECIFIED:
+       case DMetadata::ORIENTATION_NORMAL:
+       case DMetadata::ORIENTATION_UNSPECIFIED:
           break;
 
-       case KExifData::HFLIP:
+       case DMetadata::ORIENTATION_HFLIP:
           matrix.scale(-1,1);
           break;
 
-       case KExifData::ROT_180:
+       case DMetadata::ORIENTATION_ROT_180:
           matrix.rotate(180);
           break;
 
-       case KExifData::VFLIP:
+       case DMetadata::ORIENTATION_VFLIP:
           matrix.scale(1,-1);
           break;
 
-       case KExifData::ROT_90_HFLIP:
+       case DMetadata::ORIENTATION_ROT_90_HFLIP:
           matrix.scale(-1,1);
           matrix.rotate(90);
           break;
 
-       case KExifData::ROT_90:
+       case DMetadata::ORIENTATION_ROT_90:
           matrix.rotate(90);
           break;
 
-       case KExifData::ROT_90_VFLIP:
+       case DMetadata::ORIENTATION_ROT_90_VFLIP:
           matrix.scale(1,-1);
           matrix.rotate(90);
           break;
 
-       case KExifData::ROT_270:
+       case DMetadata::ORIENTATION_ROT_270:
           matrix.rotate(270);
           break;
     }
@@ -341,16 +338,16 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     if (regenerate)
     {
-        // Try JPEG loading...
+        // Try JPEG loading : JPEG files without using Exif Thumb.
         if ( !loadJPEG(img, url.path()))
         {
-            // Try to load with dcraw
+            // Try to load with dcraw : RAW files.
             if (!loadDCRAW(img, url.path()))
             {
-                // Try to load with DImg
+                // Try to load with DImg : TIFF, PNG, etc.
                 if (!loadDImg(img, url.path()))
                 {
-                    // Try to load with KDE thumbcreators
+                    // Try to load with KDE thumbcreators : video files and others stuff.
                     loadKDEThumbCreator(img, url.path());
                 }
             }

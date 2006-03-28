@@ -22,7 +22,6 @@
    - albumiconview.cpp    lines 1296 and 1298.
    - kipiinterface.cpp    line 216.
    - editorwindow.cpp     lines 1166 and 1215.
-   - digikamthumbnail.cpp line 92.
    - jpegmetadata.cpp     line 143.
    - exifrotate.cpp       lines 74 and 210.
    

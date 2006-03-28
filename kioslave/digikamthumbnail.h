@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2003-01-15
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2003-01-15
+ * Description : digiKam KIO slave to get image thumbnails.
  * 
  * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006      by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,11 +27,12 @@
 
 #include <kio/slavebase.h>
 
-class KURL;
 class QCString;
 class QString;
 class QImage;
 class QApplication;
+
+class KURL;
 
 class kio_digikamthumbnailProtocol : public KIO::SlaveBase
 {
@@ -48,19 +50,22 @@ private:
     bool loadDCRAW(QImage& image,  const QString& path);
     void createThumbnailDirs();
 
-    int  cachedSize_;
+private:
+    
+    int           cachedSize_;
 
-    int org_width_;
-    int org_height_;
-    int new_width_;
-    int new_height_;
+    int           org_width_;
+    int           org_height_;
+    int           new_width_;
+    int           new_height_;
 
-    QString smallThumbPath_;
-    QString bigThumbPath_;
-
-    QApplication *app_;
     int           argc_;
     char**        argv_;
+
+    QString       smallThumbPath_;
+    QString       bigThumbPath_;
+
+    QApplication *app_;
 };
 
 #endif  // _digikamthumbnail_H_

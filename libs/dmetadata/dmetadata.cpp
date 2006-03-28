@@ -205,6 +205,8 @@ DImg::FORMAT DMetadata::fileFormat(const QString& filePath)
     return DImg::NONE;
 }
 
+
+
 QImage DMetadata::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
@@ -285,5 +287,33 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
     return thumbnail;
 }
 
+DMetadata::ImageOrientation DMetadata::getExifImageOrientation()
+{
+    if (m_exifMetadata.isEmpty())
+       return ORIENTATION_UNSPECIFIED;
+
+    try
+    {    
+        Exiv2::ExifData exifData;
+        exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+        Exiv2::ExifKey key("Exif.Image.Orientation");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+        
+        if (it != exifData.end())
+        {
+            long orientation = it->toLong();
+            kdDebug() << " Exif Orientation: " << orientation << endl;
+            return (ImageOrientation)orientation;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse Exif Orientation tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return ORIENTATION_UNSPECIFIED;
+}
 
 }  // NameSpace Digikam

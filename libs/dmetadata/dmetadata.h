@@ -36,6 +36,22 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DMetadata
 {
+
+public:
+
+    enum ImageOrientation
+    {
+        ORIENTATION_UNSPECIFIED  = 0, 
+        ORIENTATION_NORMAL       = 1, 
+        ORIENTATION_HFLIP        = 2, 
+        ORIENTATION_ROT_180      = 3, 
+        ORIENTATION_VFLIP        = 4, 
+        ORIENTATION_ROT_90_HFLIP = 5, 
+        ORIENTATION_ROT_90       = 6, 
+        ORIENTATION_ROT_90_VFLIP = 7, 
+        ORIENTATION_ROT_270      = 8
+    };
+
 public:
 
     DMetadata()  {};
@@ -48,9 +64,10 @@ public:
     bool save(const QString& filePath, const QString& format);
 
     /** Metadata manipulation methods */
-    QByteArray getExif() const;
-    QByteArray getIptc() const;
-    QImage     getExifThumbnail(bool fixOrientation) const;
+    QByteArray       getExif() const;
+    QByteArray       getIptc() const;
+    QImage           getExifThumbnail(bool fixOrientation) const;
+    ImageOrientation getExifImageOrientation();
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);
@@ -60,18 +77,6 @@ private:
     DImg::FORMAT fileFormat(const QString& filePath);
 
 private:
-
-    enum ImageOrientation
-    {
-        ORIENTATION_NORMAL       = 1, 
-        ORIENTATION_HFLIP        = 2, 
-        ORIENTATION_ROT_180      = 3, 
-        ORIENTATION_VFLIP        = 4, 
-        ORIENTATION_ROT_90_HFLIP = 5, 
-        ORIENTATION_ROT_90       = 6, 
-        ORIENTATION_ROT_90_VFLIP = 7, 
-        ORIENTATION_ROT_270      = 8
-    };
 
     QByteArray m_exifMetadata;
     QByteArray m_iptcMetadata;
