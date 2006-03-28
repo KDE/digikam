@@ -5,7 +5,7 @@ INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
               -I$(top_srcdir)/digikam/libs/dmetadata \
 	          -I$(top_srcdir)/digikam/libs/dcraw \
 	          -I$(top_srcdir)/digikam/digikam \
-	          $(LIBKEXIF_CFLAGS) $(all_includes)
+	          $(all_includes)
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 			 kio_digikamalbums.la kio_digikamdates.la \
@@ -13,7 +13,7 @@ kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 
 kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp 
 
-kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) \
+kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) $(LIB_EXIV2) \
 	                              $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries)	                          
