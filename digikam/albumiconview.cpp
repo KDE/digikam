@@ -5,6 +5,7 @@
  * Description : 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,10 +86,7 @@ extern "C"
 #include <klineeditdlg.h>
 #endif
 
-// LibKexif includes.
-
-#include <libkexif/kexifutils.h>
-#include <libkexif/kexifdata.h>
+// LibKipi includes.
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
@@ -108,6 +106,7 @@ extern "C"
 #include "pixmapmanager.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
+#include "dmetadata.h"
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
 #include "albumiconview.h"
@@ -380,6 +379,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
     url.cleanPath();
     
     AlbumIconItem *oldItem = d->itemDict[url.url()];
+    
     if( oldItem &&
        (oldItem->imageInfo()->id() != iconItem->imageInfo()->id()))
     {
@@ -397,14 +397,17 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
 
     IconGroupItem* group = firstGroup();
     IconGroupItem* tmp;
+    
     while (group)
     {
         tmp = group->nextGroup();
+        
         if (group->count() == 0)
         {
             d->albumDict.remove(((AlbumIconGroupItem*)group)->albumID());
             delete group;
         }
+        
         group = tmp;
     }
 }
@@ -433,10 +436,12 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     QPopupMenu popmenu(this);
     KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    
     if(!data || !QUriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }
+    
     paste->plug(&popmenu);
     popmenu.exec(pos);
     delete paste;    
@@ -456,8 +461,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
                                                   0, true, true);
 
     QValueVector<KService::Ptr> serviceVector;
-    KTrader::OfferList offers =
-        KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+    KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
 
     QPopupMenu openWithMenu;
 
@@ -507,6 +511,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // Bulk assignment/removal of tags --------------------------
 
     QValueList<Q_LLONG> selectedImageIDs;
+    
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected())
@@ -516,12 +521,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
         }
     }
 
-    TagsPopupMenu* assignTagsPopup =
-        new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
-    TagsPopupMenu* removeTagsPopup =
-        new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
+    TagsPopupMenu* assignTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::ASSIGN);
+    TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
+    
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
             SLOT(slotAssignTag(int)));
+            
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
             SLOT(slotRemoveTag(int)));
 
@@ -541,10 +546,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // Assign Star Rating -------------------------------------------
 
     QPopupMenu ratingMenu;
+    
     connect(&ratingMenu, SIGNAL(activated(int)),
             SLOT(slotAssignRating(int)));
 
     ratingMenu.insertItem(i18n("None"), 0);
+    
     for (int i=1; i<=5; i++)
     {
         QPixmap pix(d->ratingPixmap.width() * 5,
@@ -567,6 +574,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     KIPI::PluginLoader* kipiPluginLoader = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
+    
     for (KIPI::PluginLoader::PluginList::const_iterator it = pluginList.begin();
          it != pluginList.end(); ++it)
     {
@@ -577,17 +585,18 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
             kdDebug() << "Found JPEGLossless plugin" << endl;
 
             KActionPtrList actionList = plugin->actions();
+            
             for (KActionPtrList::const_iterator iter = actionList.begin();
                  iter != actionList.end(); ++iter)
             {
                 KAction* action = *iter;
+                
                 if (QString::fromLatin1(action->name())
                     == QString::fromLatin1("jpeglossless_rotate"))
                 {
                     action->plug(&popmenu);
                 }
             }
-
         }
     }
 
@@ -605,30 +614,34 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     int id = popmenu.exec(pos);
 
-    switch(id) {
-
-    case 10: {
-        slotDisplayItem(iconItem);
-        break;
-    }
-
-    case 15: {
-        slotRename(iconItem);
-        break;
-    }
-
-    case 16: {
-        slotDeleteSelectedItems();
-        break;
-    }
-
-    case 17: {
-        slotSetAlbumThumbnail(iconItem);
-        break;
-    }
-
-    default:
-        break;
+    switch(id) 
+    {
+      case 10: 
+      {
+          slotDisplayItem(iconItem);
+          break;
+      }
+  
+      case 15: 
+      {
+          slotRename(iconItem);
+          break;
+      }
+  
+      case 16: 
+      {
+          slotDeleteSelectedItems();
+          break;
+      }
+  
+      case 17: 
+      {
+          slotSetAlbumThumbnail(iconItem);
+          break;
+      }
+  
+      default:
+          break;
     }
 
     //---------------------------------------------------------------
@@ -789,8 +802,8 @@ void AlbumIconView::slotDeleteSelectedItems()
 {
     KURL::List  urlList;
     QStringList nameList;
-
     KURL url;
+    
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected()) {
@@ -1291,17 +1304,17 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kdDebug() << "Setting Exif Orientation to " << orientation << endl;
-
-        KExifData::ImageOrientation o = (KExifData::ImageOrientation)orientation;
-
-        if (!KExifUtils::writeOrientation((*it).path(), o))
+        kdDebug() << "Setting Exif Orientation tag to " << orientation << endl;
+        
+        DMetadata metadata;
+        DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
+        
+        if (!metadata.writeExifImageOrientation((*it).path(), o))
         {
             KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1.")
-                    .arg((*it).filename()));
+                               .arg((*it).filename()));
             return;
         }
-
     }
 
     refreshItems(urlList);
