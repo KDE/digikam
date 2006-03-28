@@ -365,7 +365,9 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    m_canvas->setExifOrient(false);
+    m_canvas->setExifOrient(config->readBoolEntry("EXIF Rotate", true));
+    m_setExifOrientationTag = config->readBoolEntry("EXIF Set Orientation", true);
+    
     m_fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
 }
 
@@ -523,6 +525,9 @@ void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
     m_saveAction->setEnabled(canSave);
+    
+    if (!moreUndo)
+        m_rotatedOrFlipped = false;        
 }
 
 void ShowFoto::toggleActions(bool val)
@@ -587,6 +592,8 @@ void ShowFoto::setup(bool iccSetupPage)
 void ShowFoto::slotUpdateItemInfo(void)
 {
     m_itemsNb = m_bar->countItems();
+    
+    m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
     

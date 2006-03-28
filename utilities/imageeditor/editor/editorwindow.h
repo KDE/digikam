@@ -72,7 +72,8 @@ protected:
 
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
-    
+    bool                     m_setExifOrientationTag;
+   
     QLabel                  *m_zoomLabel;
     QLabel                  *m_resLabel;
 

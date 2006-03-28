@@ -112,6 +112,7 @@ EditorWindow::EditorWindow(const char *name)
     m_slideShowAction        = 0;
     m_fullScreen             = false;
     m_rotatedOrFlipped       = false;
+    m_setExifOrientationTag  = true;
     
     // Settings containers instance.
 
@@ -1162,7 +1163,8 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        if( m_rotatedOrFlipped || m_canvas->exifRotated() )
+        
+        if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
         {
             DMetadata metadata;
             metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);
@@ -1214,7 +1216,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
             m_savingContext->format.upper() == "JPEG")
         {
-            if( m_rotatedOrFlipped || m_canvas->exifRotated() )
+            if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
             {
                DMetadata metadata;
                metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);

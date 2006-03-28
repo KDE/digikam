@@ -45,6 +45,7 @@ public:
         removeFullScreenButton = false;
         fullScreenHideToolBar  = false;
         slideShowInFullScreen  = true;
+        
         imagePluginsHelpAction = 0;
         accelerators           = 0;
         viewHistogramAction    = 0;

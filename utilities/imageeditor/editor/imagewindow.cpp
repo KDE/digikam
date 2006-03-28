@@ -259,6 +259,7 @@ void ImageWindow::applySettings()
     }
 
     m_canvas->setExifOrient(settings->getExifRotate());
+    m_setExifOrientationTag = settings->getExifSetOrientation();
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,

@@ -52,12 +52,14 @@ public:
 
     SetupEditorPriv()
     {
-        backgroundColor    = 0;
-        hideToolBar        = 0;
-        hideThumbBar       = 0;
-        horizontalThumbBar = 0;
-        showSplash         = 0;
-        useTrash           = 0;
+        backgroundColor       = 0;
+        hideToolBar           = 0;
+        hideThumbBar          = 0;
+        horizontalThumbBar    = 0;
+        showSplash            = 0;
+        useTrash              = 0;
+        exifRotateBox         = 0;
+        exifSetOrientationBox = 0;
     }
 
     QCheckBox    *hideToolBar;
@@ -65,6 +67,8 @@ public:
     QCheckBox    *horizontalThumbBar;
     QCheckBox    *showSplash;
     QCheckBox    *useTrash;
+    QCheckBox    *exifRotateBox;
+    QCheckBox    *exifSetOrientationBox;
     
     KColorButton *backgroundColor;
 };
@@ -86,19 +90,31 @@ SetupEditor::SetupEditor(QWidget* parent )
     d->backgroundColor = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     QWhatsThis::add( d->backgroundColor, i18n("<p>Select here the background color to use "
-                                                "for image editor area.") );
+                                              "for image editor area.") );
     backgroundColorlabel->setBuddy( d->backgroundColor );
     
-    d->hideToolBar     = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar    = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->horizontalThumbBar     = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
+    d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (need to restart showFoto)"), interfaceOptionsGroup);
     QWhatsThis::add( d->horizontalThumbBar, i18n("<p>If this option is enable, thumbnails bar will be displayed horizontally behind "
-                                            "image area. You need to restart showFoto for this option take effect.<p>"));
+                                                 "image area. You need to restart showFoto for this option take effect.<p>"));
     d->useTrash   = new QCheckBox(i18n("&Deleting items should move them to trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
     
     layout->addWidget(interfaceOptionsGroup);
         
+    // --------------------------------------------------------
+    
+    QVGroupBox *ExifGroupOptions = new QVGroupBox(i18n("Exif Actions"), parent);
+    
+    d->exifRotateBox = new QCheckBox(ExifGroupOptions);
+    d->exifRotateBox->setText(i18n("&Rotate images according to EXIF tag"));
+  
+    d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
+    d->exifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
+        
+    layout->addWidget(ExifGroupOptions);
+    
     // --------------------------------------------------------
     
     layout->addStretch();
@@ -122,6 +138,8 @@ void SetupEditor::applySettings()
     config->writeEntry("HorizontalThumbbar", d->horizontalThumbBar->isChecked());
     config->writeEntry("DeleteItem2Trash", d->useTrash->isChecked());
     config->writeEntry("ShowSplash", d->showSplash->isChecked());
+    config->writeEntry("EXIF Rotate", d->exifRotateBox->isChecked());
+    config->writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
     config->sync();
 }
 
@@ -137,7 +155,9 @@ void SetupEditor::readSettings()
     d->horizontalThumbBar->setChecked(config->readBoolEntry("HorizontalThumbbar", false));
     d->useTrash->setChecked(config->readBoolEntry("DeleteItem2Trash", false));
     d->showSplash->setChecked(config->readBoolEntry("ShowSplash", true));
-
+    d->exifRotateBox->setChecked(config->readBoolEntry("EXIF Rotate", true));
+    d->exifSetOrientationBox->setChecked(config->readBoolEntry("EXIF Set Orientation", true));
+    
     delete Black;
 }
 
