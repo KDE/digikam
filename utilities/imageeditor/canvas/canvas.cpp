@@ -643,8 +643,8 @@ void Canvas::viewportPaintEvent(QPaintEvent *e)
 void Canvas::paintViewport(const QRect& er, bool antialias)
 {
     QRect o_cr(viewportToContents(er.topLeft()),
-               viewportToContents(er.bottomRight())),
-	    cr = o_cr;
+               viewportToContents(er.bottomRight()));
+    QRect cr = o_cr;
 
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
@@ -1505,6 +1505,13 @@ void Canvas::slotSelected()
             h = QMAX(h, 0);
             w = QMIN(imageWidth(),  w);
             h = QMIN(imageHeight(), h);
+
+            // Avoid empty selection by rubberband - at least mark one pixel
+            // At high zoom factors, the rubberband may operate at subpixel level!
+            if (w == 0)
+                w = 1;
+            if (h == 0)
+                h = 1;
         }
     }
 
