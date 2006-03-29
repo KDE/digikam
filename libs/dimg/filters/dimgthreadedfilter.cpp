@@ -38,8 +38,9 @@ namespace Digikam
 
 DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, QString name)
                   : QThread()
-{ 
-    m_orgImage = orgImage->copy();
+{
+    // remove meta data
+    m_orgImage = orgImage->copyImageData();
     m_parent   = parent;
     m_cancel   = false;
     m_name     = name;

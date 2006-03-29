@@ -125,6 +125,11 @@ DImg& DImg::operator=(const DImg& image)
     return *this;
 }
 
+bool DImg::operator==(const DImg& image) const
+{
+    return m_priv == image.m_priv;
+}
+
 void DImg::reset(void)
 {
     if (m_priv->deref())
@@ -159,12 +164,19 @@ void DImg::detach()
 void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData)
 {
     // set image data, metadata is untouched
-    bool null = (width == 0) || (height == 0) || !data;
-    setImageData(null, width, height, sixteenBit, alpha);
+
+    bool null = (width == 0) || (height == 0);
+    // allocateData, or code below will set null to false
+    setImageData(true, width, height, sixteenBit, alpha);
 
     // replace data
     delete [] m_priv->data;
-    if (copyData)
+    if (null)
+    {
+        // image is null - no data
+        m_priv->data = 0;
+    }
+    else if (copyData)
     {
         int size = allocateData();
         if (data)
@@ -173,10 +185,41 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     else
     {
         if (data)
+        {
             m_priv->data = data;
+            m_priv->null = false;
+        }
         else
             allocateData();
     }
+}
+
+void DImg::putImageData(uchar *data, bool copyData)
+{
+    if (!data)
+    {
+        delete [] m_priv->data;
+        m_priv->data = 0;
+        m_priv->null = true;
+    }
+    else if (copyData)
+    {
+        memcpy(m_priv->data, data, numBytes());
+    }
+    else
+    {
+        m_priv->data = data;
+    }
+}
+
+void DImg::resetMetaData()
+{
+    m_priv->attributes.clear();
+    m_priv->embeddedText.clear();
+    m_priv->cameraModel       = QString();
+    m_priv->cameraConstructor = QString();
+    m_priv->ICCProfil         = QByteArray();
+    m_priv->metaData.clear();
 }
 
 uchar *DImg::stripImageData()
@@ -559,7 +602,7 @@ void DImg::setAttribute(const QString& key, const QVariant& value)
     m_priv->attributes.insert(key, value);
 }
 
-QVariant DImg::attribute(const QString& key)
+QVariant DImg::attribute(const QString& key) const
 {
     if (m_priv->attributes.contains(key))
         return m_priv->attributes[key];
@@ -572,7 +615,7 @@ void DImg::setEmbeddedText(const QString& key, const QString& text)
     m_priv->embeddedText.insert(key, text);
 }
 
-QString DImg::embeddedText(const QString& key)
+QString DImg::embeddedText(const QString& key) const
 {
     if (m_priv->embeddedText.contains(key))
         return m_priv->embeddedText[key];
@@ -585,7 +628,7 @@ void DImg::setCameraModel(QString model)
     m_priv->cameraModel = model;
 }
 
-QString DImg::cameraModel()
+QString DImg::cameraModel() const
 {
     return ( m_priv->cameraModel );
 }
@@ -595,12 +638,12 @@ void DImg::setCameraConstructor(QString constructor)
     m_priv->cameraConstructor = constructor;
 }
 
-QString DImg::cameraConstructor()
+QString DImg::cameraConstructor() const
 {
     return ( m_priv->cameraConstructor );
 }
 
-DColor DImg::getPixelColor(uint x, uint y)
+DColor DImg::getPixelColor(uint x, uint y) const
 {
     if (isNull() || x > width() || y > height())
     {
@@ -640,6 +683,24 @@ DImg DImg::copy()
 {
     DImg img(*this);
     img.detach();
+    return img;
+}
+
+DImg DImg::copyImageData()
+{
+    DImg img(width(), height(), sixteenBit(), hasAlpha(), bits(), true);
+    return img;
+}
+
+DImg DImg::copyMetaData()
+{
+    DImg img;
+    // copy width, height, alpha, sixteenBit, null
+    img.copyImageData(m_priv);
+    // deeply copy metadata
+    img.copyMetaData(m_priv);
+    // set image to null
+    img.m_priv->null = true;
     return img;
 }
 
@@ -688,6 +749,12 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
         return;
     }
 
+    if (w == -1 && h == -1)
+    {
+        w = src->width();
+        h = src->height();
+    }
+
     bitBlt(src->bits(), bits(), sx, sy, w, h, dx, dy,
            src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
 }
@@ -702,6 +769,12 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
     {
         kdWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
         return;
+    }
+
+    if (w == -1 && h == -1)
+    {
+        w = swidth;
+        h = sheight;
     }
 
     bitBlt(src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sixteenBit(), sdepth, bytesDepth());

@@ -102,7 +102,9 @@ public:
     DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
          RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
 
-    /** Copy image */
+    /** Copy image: Creates a shallow copy that refers to the same shared data.
+        The two images will be equal. Call detach() or copy() to create deep copies.
+    */
     DImg(const DImg& image);
 
     /** Create image from data.
@@ -116,18 +118,53 @@ public:
 
    ~DImg();
 
+    /** Equivalent to the copy constructor */
     DImg&       operator=(const DImg& image);
+
+    /** Detaches from shared data and makes sure that this image
+        is the only one referring to the data.
+        If multiple images share common data, this image makes a copy
+        of the data and detaches itself from the sharing mechanism.
+        Nothing is done if there is just a single reference.
+    */
+    void       detach();
+
+    /** Returns whether two images are equal.
+        Two images are equal if and only if they refer to the same shared data.
+        (Thus, DImg() == DImg() is not true, both instances refer two their
+         own shared data. image == DImg(image) is true.)
+        If two or more images refer to the same data, they have the same
+        image data, bits() returns the same data, they have the same metadata,
+        and a change to one image also affects the others.
+        Call detach() to split one image from the group of equal images.
+    */
+    bool        operator==(const DImg& image) const;
+
+
 
     /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above. */
     void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData = true);
 
-    /** Reset to null image */
+    /** Overloaded function, provided for convenience, behaves essentially
+        like the function above if data is not 0.
+        Uses current width, height, sixteenBit, and alpha values.
+        If data is 0, the current data is deleted and the image is set to null
+        (But metadata unchanged).
+    */
+    void        putImageData(uchar *data, bool copyData = true);
+
+    /** Reset metadata and image data to null image */
     void        reset(void);
+
+    /** Reset metadata, but do not change image data */
+    void        resetMetaData(void);
 
     /** Returns the data of this image. 
         Ownership of the buffer is passed to the caller, this image will be null afterwards.
     */
     uchar*      stripImageData();
+
+
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
@@ -154,7 +191,7 @@ public:
         In optimized code working directly on the data,
         better use the inline methods from DColor.
     */
-    DColor      getPixelColor(uint x, uint y);
+    DColor      getPixelColor(uint x, uint y) const;
     void        setPixelColor(uint x, uint y, DColor color);
 
     /**
@@ -172,29 +209,44 @@ public:
     QByteArray getICCProfil() const;
 
     void       setAttribute(const QString& key, const QVariant& value);
-    QVariant   attribute(const QString& key);
+    QVariant   attribute(const QString& key) const;
 
     void       setEmbeddedText(const QString& key, const QString& text);
-    QString    embeddedText(const QString& key);
+    QString    embeddedText(const QString& key) const;
 
     /** Save/Get camera informations witch taking the pictures.*/
     void       setCameraModel(QString model);
-    QString    cameraModel();
+    QString    cameraModel() const;
 
     void       setCameraConstructor(QString constructor);
-    QString    cameraConstructor();
+    QString    cameraConstructor() const;
+
+
 
     /** Return a deep copy of full image */
     DImg       copy();
+
+    /** Return a deep copy of the image, but do not include metadata. */
+    DImg       copyImageData();
+
+    /** Return an image that containes a deep copy of
+        this image's metadata and the information associated
+        with the image data (width, height, hasAlpha, sixteenBit),
+        but no image data, i.e. isNull() is true.
+    */
+    DImg       copyMetaData();
 
     /** Return a region of image */
     DImg       copy(QRect rect);
     DImg       copy(int x, int y, int w, int h);
 
+
+
+
     /** Copy a region of pixels from a source image to this image.
         Parameters:
         sx|sy  Coordinates in the source image of the rectangle to be copied
-        w h    Width and height of the rectangle (Default: whole source image)
+        w h    Width and height of the rectangle (Default, or when both are -1: whole source image)
         dx|dy  Coordinates in this image of the rectangle in which the region will be copied
                (Default: 0|0)
         The bit depth of source and destination must be identical.
@@ -207,6 +259,11 @@ public:
 
     /** Merge a pixels region to an image using alpha channel */
     void       bitBlend_RGBA2RGB(DImg& region, int x, int y, int w, int h);
+
+    /** Blend src image on this image (this is dest) with the specified composer
+        and multiplication flags. See documentation of DColorComposer for more info.
+        For the other arguments, see documentation of bitBltImage above.
+    */
     void       bitBlendImage(DColorComposer *composer, const DImg* src,
                              int sx, int sy, int w, int h, int dx, int dy,
                              DColorComposer::MultiplicationFlags multiplicationFlags =
@@ -240,14 +297,6 @@ public:
 
     QPixmap    convertToPixmap();
     QPixmap    convertToPixmap(QString inProfile, QString monitorProfile);
-
-    /** Detaches from shared image data and makes sure that this image
-        is the only one referring to the data. 
-        If multiple images share common data, this image makes a copy
-        of the data and detaches itself from the sharing mechanism.
-        Nothing is done if there is just a single reference.
-    */
-    void       detach();
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,
