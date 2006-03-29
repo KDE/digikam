@@ -93,15 +93,19 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     setPreviewAreaWidget(frame); 
     
     // -------------------------------------------------------------
-    
+
+    QString temp;
+    Digikam::ImageIface iface(0, 0);
+
     QWidget *gbox2          = new QWidget(plainPage());
-    QGridLayout *gridLayout = new QGridLayout( gbox2, 9, 2, marginHint(), spacingHint());
+    QGridLayout *gridLayout = new QGridLayout( gbox2, 10, 2, marginHint(), spacingHint());
 
     QLabel *label1  = new QLabel(i18n("New width:"), gbox2);
-    m_newWidthLabel = new QLabel(gbox2);
+    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gbox2);
     m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
+
     QLabel *label2   = new QLabel(i18n("New height:"), gbox2);
-    m_newHeightLabel = new QLabel(gbox2);
+    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gbox2);
     m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
     
     gridLayout->addMultiCellWidget(label1, 0, 0, 0, 0);
@@ -133,10 +137,15 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
     gridLayout->addMultiCellWidget(m_bottomLeftAngleLabel, 6, 6, 1, 2);
     gridLayout->addMultiCellWidget(label6, 7, 7, 0, 0);
     gridLayout->addMultiCellWidget(m_bottomRightAngleLabel, 7, 7, 1, 2);
-    gridLayout->setRowStretch(8, 10);
+
+    // -------------------------------------------------------------
+
+    KSeparator *line2 = new KSeparator (Horizontal, gbox2);
 
     m_drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), gbox2);
-    gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 1);
+    gridLayout->addMultiCellWidget(line2, 8, 8, 0, 2);
+    gridLayout->addMultiCellWidget(m_drawWhileMovingCheckBox, 9, 9, 0, 2);
+    gridLayout->setRowStretch(10, 10);
 
     setUserAreaWidget(gbox2);
 
@@ -149,7 +158,6 @@ ImageEffect_Perspective::ImageEffect_Perspective(QWidget* parent, QString title,
 
     connect(m_drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             m_previewWidget, SLOT(toggleDrawWhileMoving(bool)));
-
 }
 
 ImageEffect_Perspective::~ImageEffect_Perspective()

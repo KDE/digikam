@@ -91,18 +91,22 @@ ImageEffect_FreeRotation::ImageEffect_FreeRotation(QWidget* parent, QString titl
 
     // -------------------------------------------------------------
 
-    QWidget *gboxSettings = new QWidget(plainPage());
+    QString temp;
+    Digikam::ImageIface iface(0, 0);
+
+    QWidget *gboxSettings     = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 9, 2, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("New width:"), gboxSettings);
-    m_newWidthLabel = new QLabel(gboxSettings);
+    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), gboxSettings);
     m_newWidthLabel->setAlignment( AlignBottom | AlignRight );
-    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
-    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
 
     QLabel *label2 = new QLabel(i18n("New height:"), gboxSettings);
-    m_newHeightLabel = new QLabel(gboxSettings);
+    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), gboxSettings);
     m_newHeightLabel->setAlignment( AlignBottom | AlignRight );
+
+    gridSettings->addMultiCellWidget(label1, 0, 0, 0, 0);
+    gridSettings->addMultiCellWidget(m_newWidthLabel, 0, 0, 1, 2);
     gridSettings->addMultiCellWidget(label2, 1, 1, 0, 0);
     gridSettings->addMultiCellWidget(m_newHeightLabel, 1, 1, 1, 2);
 

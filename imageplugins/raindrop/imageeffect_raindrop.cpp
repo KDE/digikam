@@ -74,7 +74,7 @@ ImageEffect_RainDrop::ImageEffect_RainDrop(QWidget* parent, QString title, QFram
                      "caulier dot gilles at kdemail dot net");
 
     about->addAuthor("Pieter Z. Voloshyn", I18N_NOOP("Raindrops algorithm"), 
-                     "pieter_voloshyn at ame.com.br"); 
+                     "pieter dot voloshyn at gmail dot com"); 
 
     about->addAuthor("Marcel Wiesweg", I18N_NOOP("Developer"),
                      "marcel dot wiesweg at gmx dot de");
