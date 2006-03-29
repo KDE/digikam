@@ -45,7 +45,8 @@ class ImageIfacePriv
 {
 public:
 
-    DImg          image;
+    DImg          previewImage;
+    DImg          targetPreviewImage;
 
     int           originalWidth;
     int           originalHeight;
@@ -54,10 +55,9 @@ public:
     int           constrainWidth;
     int           constrainHeight;
 
-    uchar*        previewData;
     int           previewWidth;
     int           previewHeight;
-    
+
     QPixmap       qcheck;
     QPixmap       qpix;
     QBitmap       qmask;
@@ -71,12 +71,11 @@ ImageIface::ImageIface(int w, int h)
     d->constrainHeight = h;
     d->previewWidth    = 0;
     d->previewHeight   = 0;
-    d->previewData     = 0;
-    
+
     d->originalWidth      = DImgInterface::instance()->origWidth();
     d->originalHeight     = DImgInterface::instance()->origHeight();
     d->originalBytesDepth = DImgInterface::instance()->bytesDepth();
-    
+
     d->qpix.setMask(d->qmask);
     d->qcheck.resize(8, 8);
 
@@ -91,9 +90,6 @@ ImageIface::ImageIface(int w, int h)
 
 ImageIface::~ImageIface()
 {
-    if (d->previewData)
-        delete [] d->previewData;
-    
     delete d;
 }
 
@@ -102,48 +98,39 @@ DColor ImageIface::getColorInfoFromOriginalImage(QPoint point)
     if ( !DImgInterface::instance()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
         kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
-        return DColor::DColor();
+        return DColor();
     }
-    
-    int bytesDepth = originalSixteenBit() ? 8 : 4;
-    uchar *currentPointData = DImgInterface::instance()->getImage() + point.x()*bytesDepth +
-                              (originalWidth() * point.y() * bytesDepth);
-    return DColor::DColor(currentPointData, originalSixteenBit());
+
+    return DImgInterface::instance()->getImg()->getPixelColor(point.x(), point.y());
 }
 
 DColor ImageIface::getColorInfoFromPreviewImage(QPoint point)
 {
-    if ( !d->previewData || point.x() > previewWidth() || point.y() > previewHeight() )
+    if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
         kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
-        return DColor::DColor();
+        return DColor();
     }
-        
-    int bytesDepth = previewSixteenBit() ? 8 : 4;
-    uchar *currentPointData = d->previewData + point.x()*bytesDepth +
-                              (previewWidth() * point.y() * bytesDepth);
-    return DColor::DColor(currentPointData, previewSixteenBit());
+
+    return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
 DColor ImageIface::getColorInfoFromTargetPreviewImage(QPoint point)
 {
-    if ( d->image.isNull() || point.x() > (int)d->image.width() || point.y() > (int)d->image.height() )
+    if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
         kdWarning() << k_funcinfo << "Coordinate out of range or no image data available!" << endl;
         return DColor::DColor();
     }
-        
-    uchar *currentPointData = d->image.bits() + point.x()*d->image.bytesDepth() +
-                              (d->image.width() * point.y() * d->image.bytesDepth());
-    return DColor::DColor(currentPointData, d->image.sixteenBit());
+
+    return d->targetPreviewImage.getPixelColor(point.x(), point.y());
 }
 
 uchar* ImageIface::setPreviewImageSize(int w, int h)
 {
-    if (d->previewData)
-        delete [] d->previewData;
+    d->previewImage.reset();
+    d->targetPreviewImage.reset();
 
-    d->previewData     = 0;
     d->constrainWidth  = w;
     d->constrainHeight = h;
 
@@ -152,53 +139,40 @@ uchar* ImageIface::setPreviewImageSize(int w, int h)
 
 uchar* ImageIface::getPreviewImage()
 {
-    if (!d->previewData)
+    if (d->previewImage.isNull())
     {
-        uchar* ptr      = DImgInterface::instance()->getImage();
-        int w           = DImgInterface::instance()->origWidth();
-        int h           = DImgInterface::instance()->origHeight();
-        bool hasAlpha   = DImgInterface::instance()->hasAlpha();
-        bool sixteenBit = DImgInterface::instance()->sixteenBit();
+        DImg *im = DImgInterface::instance()->getImg();
 
-        if (!ptr || !w || !h)
+        if (!im || im->isNull())
             return 0;
 
-        DImg im(w, h, sixteenBit, hasAlpha, ptr);
-        QSize sz(im.width(), im.height());
+        QSize sz(im->width(), im->height());
         sz.scale(d->constrainWidth, d->constrainHeight, QSize::ScaleMin);
 
-        d->image         = im.smoothScale(sz.width(), sz.height());
-        d->previewWidth  = d->image.width();
-        d->previewHeight = d->image.height();
-        
-        d->previewData = new uchar[d->image.numBytes()];
-        memcpy(d->previewData, d->image.bits(), d->image.numBytes());
-        
+        d->previewImage  = im->smoothScale(sz.width(), sz.height());
+        d->previewWidth  = d->previewImage.width();
+        d->previewHeight = d->previewImage.height();
+
+        // only create another copy if needed, in putPreviewImage
+        d->targetPreviewImage = d->previewImage;
+
         d->qmask.resize(d->previewWidth, d->previewHeight);
         d->qpix.resize(d->previewWidth, d->previewHeight);
     }
 
-    int size = d->previewWidth*d->previewHeight*d->image.bytesDepth();
-    uchar* data = new uchar[size];
-    memcpy(data, d->previewData, size);
-    
-    return data;
+    DImg previewData = d->previewImage.copyImageData();
+    return previewData.stripImageData();
 }
 
 uchar* ImageIface::getOriginalImage()
 {
-    uchar *ptr = DImgInterface::instance()->getImage();
-    int    w   = DImgInterface::instance()->origWidth();
-    int    h   = DImgInterface::instance()->origHeight();
-    int    bd  = DImgInterface::instance()->bytesDepth();
+    DImg *im = DImgInterface::instance()->getImg();
 
-    if (!ptr || !w || !h) 
+    if (!im || im->isNull())
         return 0;
-        
-    uchar *origData = new uchar[w * h * bd];
-    memcpy(origData, ptr, w * h * bd);
 
-    return origData;
+    DImg origData = im->copyImageData();
+    return origData.stripImageData();
 }
 
 DImg* ImageIface::getOriginalImg()
@@ -216,12 +190,15 @@ void ImageIface::putPreviewImage(uchar* data)
     if (!data)
         return;
 
-    uchar* origData = d->image.bits();
-    int    w        = d->image.width();
-    int    h        = d->image.height();
-    int    bd       = d->image.bytesDepth();
-
-    memcpy(origData, data, w * h * bd);
+    if (d->targetPreviewImage == d->previewImage)
+    {
+        d->targetPreviewImage = DImg(d->previewImage.width(), d->previewImage.height(),
+                                     d->previewImage.sixteenBit(), d->previewImage.hasAlpha(), data);
+    }
+    else
+    {
+        d->targetPreviewImage.putImageData(data);
+    }
 }
 
 void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int h)
@@ -236,7 +213,7 @@ void ImageIface::putImageSelection(const QString &caller, uchar* data)
 {
     if (!data)
         return;
-    
+
     DImgInterface::instance()->putImageSelection(caller, data);
 }
 
@@ -310,7 +287,7 @@ int ImageIface::selectedYOrg()
 
 void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma, bool overIndicator)
 {
-    DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
+    DImg preview = d->targetPreviewImage.copyImageData();
     BCGModifier cmod;
     cmod.setOverIndicator(overIndicator);
     cmod.setGamma(gamma);
@@ -332,16 +309,16 @@ void ImageIface::convertOriginalColorDepth(int depth)
 
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 {
-    if ( !d->image.isNull() ) 
+    if ( !d->targetPreviewImage.isNull() )
     {
-        if (d->image.hasAlpha()) 
+        if (d->targetPreviewImage.hasAlpha())
         {
             QPainter p(&d->qpix);
             p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
             p.end();
         }
 
-        QPixmap pixImage = d->image.convertToPixmap();
+        QPixmap pixImage = d->targetPreviewImage.convertToPixmap();
         bitBlt ( &d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false );
 
     }
