@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-static char* MakerNoteHumanList[] =
+static const char* MakerNoteHumanList[] =
 {
      "Make",
      "Model",
@@ -77,7 +77,7 @@ static char* MakerNoteHumanList[] =
      "-1"
 };
 
-static char* ExifEntryListToIgnore[] =
+static const char* ExifEntryListToIgnore[] =
 {
      "GPSInfo",
      "Iop",

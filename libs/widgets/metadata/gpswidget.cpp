@@ -59,7 +59,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 namespace Digikam
 {
-static char* ExifHumanList[] =
+static const char* ExifHumanList[] =
 {
      "GPSLatitude",
      "GPSLongitude",
@@ -68,7 +68,7 @@ static char* ExifHumanList[] =
 };
 
 // Standard Exif Entry list from to less important to the most important for photograph.
-static char* StandardExifEntryList[] =
+static const char* StandardExifEntryList[] =
 {
      "GPSInfo",
      "-1"

@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-static char* IptcHumanList[] =
+static const char* IptcHumanList[] =
 {
      "Headline",
      "Source",

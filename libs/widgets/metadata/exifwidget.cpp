@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-static char* ExifHumanList[] =
+static const char* ExifHumanList[] =
 {
      "Make",
      "Model",
@@ -78,7 +78,7 @@ static char* ExifHumanList[] =
 
 // Standard Exif Entry list from to less important to the most important for photograph.
 // This will not including GPS informations because they are displayed on another tab.
-static char* StandardExifEntryList[] =
+static const char* StandardExifEntryList[] =
 {
      "Iop",
      "Thumbnail",
