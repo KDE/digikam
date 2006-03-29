@@ -100,8 +100,21 @@ ImageEffect_RatioCrop::ImageEffect_RatioCrop(QWidget* parent)
     m_ratioCB->insertItem( i18n("None") );
     m_ratioCB->setCurrentText( "1:1" );
     QWhatsThis::add( m_ratioCB, i18n("<p>Select here your constrained aspect ratio for cropping. "
-                                     "The Golden Ratio 1:1.618. A composition following this rule "
-                                     "is considered visually harmonious"));
+                                     "Aspect Ratio Crop tool uses a relative ratio. That means it "
+                                     "is the same if you use centimeters or inches and it doesn't "
+                                     "specify the physical size.<p>"
+                                     "You can see below a correspondence list of traditional photographic "
+                                     "paper sizes and aspect ratio crop:<p>"
+                                     "<b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 3.5x5\", 4x6\", 8x12\", "
+                                     "12x18\", 16x24\", 20x30\"<p>"
+                                     "<b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
+                                     "6x8\", 7.5x10\", 9x12\"<p>"
+                                     "<b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"<p>"
+                                     "<b>5:7</b>: 15x21cm, 30x42cm, 5x7\"<p>"
+                                     "<b>7:10</b>: 21x30cm, 42x60cm<p>"
+                                     "The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
+                                     "is considered visually harmonious but can be unadapted to print on "
+                                     "standard photographic paper."));
 
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
     m_orientCB = new QComboBox( false, cropSelection );
@@ -660,10 +673,14 @@ void ImageEffect_RatioCrop::slotOk()
     int h                      = iface->originalHeight();
     bool a                     = iface->originalHasAlpha();
     bool sb                    = iface->originalSixteenBit();
+    
+    QRect normalizedRegion = currentRegion.normalize();
+    if (normalizedRegion.right() > w) normalizedRegion.setRight(w);
+    if (normalizedRegion.bottom() > h) normalizedRegion.setBottom(h);
 
     Digikam::DImg imOrg(w, h, sb, a, data);
     delete [] data;
-    imOrg.crop(currentRegion);
+    imOrg.crop(normalizedRegion);
 
     iface->putOriginalImage(i18n("Aspect Ratio Crop"), imOrg.bits(), imOrg.width(), imOrg.height());
 
