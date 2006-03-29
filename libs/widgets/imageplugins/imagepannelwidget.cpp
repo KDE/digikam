@@ -190,7 +190,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->settingsSideBar->setSplitter(d->splitter);
     
     d->settings       = new QWidget(d->settingsSideBar);
-    d->settingsLayout = new QVBoxLayout( d->settings, KDialog::spacingHint());    
+    d->settingsLayout = new QVBoxLayout(d->settings);    
     
     QFrame *frame3 = new QFrame(d->settings);
     frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -281,7 +281,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     h1->addWidget(d->progressBar);
     
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
+    d->settingsLayout->addSpacing(KDialog::spacingHint());
     d->settingsLayout->addLayout(h1);
+    d->settingsLayout->addSpacing(KDialog::spacingHint());
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
     d->settingsSideBar->loadViewState();
@@ -393,6 +395,7 @@ void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
     }
     
     w->reparent( d->settings, QPoint(0, 0) );
+    d->settingsLayout->addSpacing(KDialog::spacingHint());
     d->settingsLayout->addWidget(w);
     d->settingsLayout->addStretch();
 }

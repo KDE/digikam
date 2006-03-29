@@ -120,9 +120,9 @@ public:
 };
 
 ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
-                                   bool loadFileSettings, bool progress,
-                                   bool guideVisible, int guideMode, QFrame* bannerFrame,
-                                   bool prevModeOptions)
+                             bool loadFileSettings, bool progress,
+                             bool guideVisible, int guideMode, QFrame* bannerFrame,
+                             bool prevModeOptions)
              : KDialogBase(Plain, 0,
                            Help|Default|User1|User2|User3|Ok|Cancel, Ok,
                            parent, 0, true, true,
@@ -155,7 +155,7 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     if (bannerFrame)
     {
-        bannerFrame->reparent( plainPage(), QPoint::QPoint(0,0) );
+        bannerFrame->reparent( plainPage(), QPoint(0, 0) );
         d->mainLayout->addMultiCellWidget(bannerFrame, 0, 0, 0, 1);
     }
 
@@ -175,8 +175,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     d->hbox              = new QHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
-    m_imagePreviewWidget = new Digikam::ImageWidget(d->splitter, desc, prevModeOptions, 
-                                                    guideMode, guideVisible);
+    m_imagePreviewWidget = new ImageWidget(d->splitter, desc, prevModeOptions, 
+                                           guideMode, guideVisible);
     
     d->splitter->setOpaqueResize(false);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred,

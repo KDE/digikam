@@ -71,7 +71,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     // -------------------------------------------------------------
     
     d->title = new QLabel(i18n("Preview Mode:"), this);
-    QGridLayout* grid = new QGridLayout( this, 1, 2, KDialog::spacingHint());
+    QGridLayout* grid = new QGridLayout(this, 3, 2);
 
     d->spotInfoLabel = new QLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
@@ -160,11 +160,13 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
 
     // -------------------------------------------------------------
     
-    grid->addMultiCellWidget(d->title, 0, 0, 0, 0);
-    grid->addMultiCellWidget(d->previewButtons, 0, 0, 1, 1);
-    grid->addMultiCellWidget(d->spotInfoLabel, 0, 0, 2, 2);
-    grid->addMultiCellWidget(frame, 1, 1, 0, 2);
-    grid->setRowStretch(1, 10);
+    grid->setRowSpacing(0, KDialog::spacingHint());
+    grid->addMultiCellWidget(d->title, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->previewButtons, 1, 1, 1, 1);
+    grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 2, 2);
+    grid->setRowSpacing(2, KDialog::spacingHint());
+    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
+    grid->setRowStretch(3, 10);
     grid->setColStretch(2, 10);
 
     // -------------------------------------------------------------
