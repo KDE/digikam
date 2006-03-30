@@ -524,4 +524,51 @@ QDateTime DMetadata::getDateTime() const
     return QDateTime();
 }
 
+bool DMetadata::writeImageComment(const QString& filePath, const QString& comment)
+{
+    try
+    {    
+        if (filePath.isEmpty())
+            return false;
+            
+        if (comment.isEmpty())
+        {
+            kdDebug() << k_funcinfo << "Comment to write is empty!" << endl;
+            return false;
+        }
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        // In first we write comments outside of Exif and IPTC if possible.
+                                              
+        image->readMetadata();
+        const std::string &str(comment.latin1());
+        image->setComment(str);
+
+        // In Second we write comments into Exif.
+                
+        Exiv2::ExifData &exifData = image->exifData();
+        exifData["Exif.Photo.UserComment"] = comment.latin1();
+        image->setExifData(exifData);
+        
+        // In Third we write comments into Iptc.
+
+        Exiv2::IptcData &iptcData = image->iptcData();
+        iptcData["Iptc.Application2.Caption"] = comment.ascii();
+        image->setIptcData(iptcData);
+    
+        image->writeMetadata();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+    
 }  // NameSpace Digikam

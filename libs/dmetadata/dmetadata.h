@@ -66,6 +66,7 @@ public:
     bool    save(const QString& filePath, const QString& format);
 
     bool    writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
+    bool    writeImageComment(const QString& filePath, const QString& comment);
     
     /** Metadata manipulation methods */
     QByteArray       getExif() const;

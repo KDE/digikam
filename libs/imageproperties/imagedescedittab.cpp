@@ -48,13 +48,13 @@
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kconfig.h>
-#include <kfilemetainfo.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
 #include <kdatetimeedit.h>
 
 // Local includes.
 
+#include "dmetadata.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
 #include "albumdb.h"
@@ -371,18 +371,10 @@ void ImageDescEditTab::applyAllChanges()
     if (AlbumSettings::instance() &&
         AlbumSettings::instance()->getSaveExifComments())
     {
-        // store as JPEG Exif comment
-        KFileMetaInfo metaInfo(info->filePath(), "image/jpeg", KFileMetaInfo::Fastest);
-
-        // set Jpeg comment
-        if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg"
-            && metaInfo.containsGroup("Jpeg EXIF Data"))
-        {
-            kdDebug() << k_funcinfo << "Contains JPEG Exif data, setting comment" << endl;
-
-            metaInfo["Jpeg EXIF Data"].item("Comment").setValue(d->commentsEdit->text());
-            metaInfo.applyChanges();
-        }
+        // Store comments in image as JPEG Exif comment, Exif comments, and Iptc Comments.
+        
+        DMetadata metadata;
+        metadata.writeImageComment(info->filePath(), d->commentsEdit->text());
     }
 
     info->removeAllTags();
