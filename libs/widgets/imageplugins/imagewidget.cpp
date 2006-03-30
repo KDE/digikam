@@ -144,8 +144,8 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     previewToogleMouseOverButton->setPixmap( QPixmap( directory + "tooglemouseover.png" ) );
     previewToogleMouseOverButton->setToggleButton(true);
     QWhatsThis::add( previewToogleMouseOverButton, i18n( "<p>If you enable this option, you will see "
-                                                         "the target image when the mouse is over image area, "
-                                                         "else the original image." ) );
+                                                         "the original image when the mouse is over image area, "
+                                                         "else the target image." ) );
 
     // -------------------------------------------------------------
     

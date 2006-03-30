@@ -573,7 +573,7 @@ void ImageGuideWidget::enterEvent( QEvent * )
 {
     if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
     {
-        d->onMouseMovePreviewToogled = true;
+        d->onMouseMovePreviewToogled = false;
         updatePixmap();
         repaint(false);
     }
@@ -583,7 +583,7 @@ void ImageGuideWidget::leaveEvent( QEvent * )
 {
     if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
     {
-        d->onMouseMovePreviewToogled = false;
+        d->onMouseMovePreviewToogled = true;
         updatePixmap();
         repaint(false);
     }
