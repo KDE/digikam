@@ -38,7 +38,9 @@
 
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
+#include <exiv2/iptc.hpp>
 #include <exiv2/tags.hpp>
+#include <exiv2/datasets.hpp>
 
 // Local includes.
 
@@ -54,6 +56,7 @@ namespace Digikam
 
 DMetadata::DMetadata(const QString& filePath, DImg::FORMAT ff)
 {
+    m_filePath = filePath;
     load(filePath, ff);
 }
 
@@ -88,35 +91,30 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
     {
         case(DImg::JPEG):
         {
-            kdDebug() << filePath << " : JPEG file identified" << endl;
             JPEGMetaLoader loader(this);
             return (loader.load(filePath));
             break;
         }
         case(DImg::PNG):
         {
-            kdDebug() << filePath << " : PNG file identified" << endl;
             PNGMetaLoader loader(this);
             return (loader.load(filePath));
             break;
         }
         case(DImg::RAW):
         {
-            kdDebug() << filePath << " : RAW file identified" << endl;
             RAWMetaLoader loader(this);
             return (loader.load(filePath));
             break;
         }
         case(DImg::TIFF):
         {
-            kdDebug() << filePath << " : TIFF file identified" << endl;
             TIFFMetaLoader loader(this);
             return (loader.load(filePath));
             break;
         }
         default:
         {
-            kdDebug() << filePath << " : Unsupported image format !!!" << endl;
             return false;
             break;
         }
@@ -315,74 +313,6 @@ DMetadata::ImageOrientation DMetadata::getExifImageOrientation()
     return ORIENTATION_UNSPECIFIED;
 }
 
-QDateTime DMetadata::getExifDateTime() const
-{
-    if (m_exifMetadata.isEmpty())
-       return QDateTime();
-
-    try
-    {    
-        Exiv2::ExifData exifData;
-        exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
-
-        // Try standard Exif date time entry.
-
-        Exiv2::ExifKey key("Exif.Image.DateTime");
-        Exiv2::ExifData::iterator it = exifData.findKey(key);
-        
-        if (it != exifData.end())
-        {
-            QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-
-            if (dateTime.isValid())
-            {
-                kdDebug() << " Exif Date (standard): " << dateTime << endl;
-                return dateTime;
-            }
-        }
-
-        // Bogus standard Exif date time entry. Try Exif date time original.
-
-        Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
-        Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-        
-        if (it2 != exifData.end())
-        {
-            QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
-
-            if (dateTime.isValid())
-            {
-                kdDebug() << " Exif Date (original): " << dateTime << endl;
-                return dateTime;
-            }
-        }
-
-        // Bogus Exif date time original entry. Try Exif date time digitized.
-
-        Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
-        Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-        
-        if (it3 != exifData.end())
-        {
-            QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
-
-            if (dateTime.isValid())
-            {
-                kdDebug() << " Exif Date (digitalized): " << dateTime << endl;
-                return dateTime;
-            }
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot parse Exif date tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-    
-    return QDateTime();
-}
-
 bool DMetadata::writeExifImageOrientation(const QString& filePath, ImageOrientation orientation)
 {
     try
@@ -424,6 +354,174 @@ bool DMetadata::writeExifImageOrientation(const QString& filePath, ImageOrientat
     }        
     
     return false;
+}
+
+QString DMetadata::getImageComment() const
+{
+    try
+    {    
+        if (m_filePath.isEmpty())
+            return QString();
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(m_filePath)));
+        
+        // In first we trying to get image comments, outside of Exif and IPTC.
+                                              
+        image->readMetadata();
+        QString comment(image->comment().c_str());
+        
+        if (!comment.isEmpty())
+           return comment;
+           
+        // In second, we trying to get Exif comments   
+                
+        if (m_exifMetadata.isEmpty())
+        {
+            Exiv2::ExifData exifData;
+            exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+            Exiv2::ExifKey key("Exif.Photo.UserComment");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            
+            if (it != exifData.end())
+            {
+                QString ExifComment(it->toString().c_str());
+    
+                if (!ExifComment.isEmpty())
+                  return ExifComment;
+            }
+        }
+        
+        // In third, we trying to get IPTC comments   
+                
+        if (m_iptcMetadata.isEmpty())
+        {
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            Exiv2::IptcKey key("Iptc.Application2.Caption");
+            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+            
+            if (it != iptcData.end())
+            {
+                QString IptcComment(it->toString().c_str());
+    
+                if (!IptcComment.isEmpty())
+                  return IptcComment;
+            }
+        }
+
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QString();
+}
+
+QDateTime DMetadata::getDateTime() const
+{
+    try
+    {    
+        // In first, trying to get Date & time from Exif tags.
+        
+        if (!m_exifMetadata.isEmpty())
+        {        
+            Exiv2::ExifData exifData;
+            exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+    
+            // Try standard Exif date time entry.
+    
+            Exiv2::ExifKey key("Exif.Image.DateTime");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            
+            if (it != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    kdDebug() << "DateTime (Exif standard): " << dateTime << endl;
+                    return dateTime;
+                }
+            }
+    
+            // Bogus standard Exif date time entry. Try Exif date time original.
+    
+            Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
+            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+            
+            if (it2 != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    kdDebug() << "DateTime (Exif original): " << dateTime << endl;
+                    return dateTime;
+                }
+            }
+    
+            // Bogus Exif date time original entry. Try Exif date time digitized.
+    
+            Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
+            Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+            
+            if (it3 != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    kdDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
+                    return dateTime;
+                }
+            }
+        }
+        
+        // In second, trying to get Date & time from Iptc tags.
+            
+        if (!m_iptcMetadata.isEmpty())
+        {        
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            Exiv2::IptcKey key("Iptc.Application2.DateCreated");
+            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+                        
+            if (it != iptcData.end())
+            {
+                QString IptcDate(it->toString().c_str());
+    
+                Exiv2::IptcKey key("Iptc.Application2.TimeCreated");
+                Exiv2::IptcData::iterator it2 = iptcData.findKey(key);
+                
+                if (it2 != iptcData.end())
+                {
+                    QString IptcTime(it2->toString().c_str());
+                    
+                    QDate date = QDate::fromString(IptcDate, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTime, Qt::ISODate);
+                    QDateTime dateTime = QDateTime(date, time);
+                    
+                    if (dateTime.isValid())
+                    {
+                        kdDebug() << "Date (IPTC): " << dateTime << endl;
+                        return dateTime;
+                    }                    
+                }
+            }                        
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse Exif date tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QDateTime();
 }
 
 }  // NameSpace Digikam
