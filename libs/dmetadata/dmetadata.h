@@ -67,6 +67,7 @@ public:
 
     bool    writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
     bool    writeImageComment(const QString& filePath, const QString& comment);
+    bool    writeImageRating(const QString& filePath, int rating);
     
     /** Metadata manipulation methods */
     QByteArray       getExif() const;
@@ -75,6 +76,7 @@ public:
     ImageOrientation getExifImageOrientation();
     QDateTime        getDateTime() const;
     QString          getImageComment() const;
+    int              getImageRating() const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);

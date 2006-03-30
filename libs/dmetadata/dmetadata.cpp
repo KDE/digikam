@@ -356,71 +356,6 @@ bool DMetadata::writeExifImageOrientation(const QString& filePath, ImageOrientat
     return false;
 }
 
-QString DMetadata::getImageComment() const
-{
-    try
-    {    
-        if (m_filePath.isEmpty())
-            return QString();
-            
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(m_filePath)));
-        
-        // In first we trying to get image comments, outside of Exif and IPTC.
-                                              
-        image->readMetadata();
-        QString comment(image->comment().c_str());
-        
-        if (!comment.isEmpty())
-           return comment;
-           
-        // In second, we trying to get Exif comments   
-                
-        if (m_exifMetadata.isEmpty())
-        {
-            Exiv2::ExifData exifData;
-            exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
-            Exiv2::ExifKey key("Exif.Photo.UserComment");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
-            if (it != exifData.end())
-            {
-                QString ExifComment(it->toString().c_str());
-    
-                if (!ExifComment.isEmpty())
-                  return ExifComment;
-            }
-        }
-        
-        // In third, we trying to get IPTC comments   
-                
-        if (m_iptcMetadata.isEmpty())
-        {
-            Exiv2::IptcData iptcData;
-            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
-            Exiv2::IptcKey key("Iptc.Application2.Caption");
-            Exiv2::IptcData::iterator it = iptcData.findKey(key);
-            
-            if (it != iptcData.end())
-            {
-                QString IptcComment(it->toString().c_str());
-    
-                if (!IptcComment.isEmpty())
-                  return IptcComment;
-            }
-        }
-
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot get Image comments using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-    
-    return QString();
-}
-
 QDateTime DMetadata::getDateTime() const
 {
     try
@@ -542,8 +477,7 @@ QDateTime DMetadata::getDateTime() const
                         return dateTime;
                     }                    
                 }
-            }                        
-            
+            }                       
         }
     }
     catch( Exiv2::Error &e )
@@ -554,6 +488,71 @@ QDateTime DMetadata::getDateTime() const
     }        
     
     return QDateTime();
+}
+
+QString DMetadata::getImageComment() const
+{
+    try
+    {    
+        if (m_filePath.isEmpty())
+            return QString();
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(m_filePath)));
+        
+        // In first we trying to get image comments, outside of Exif and IPTC.
+                                              
+        image->readMetadata();
+        QString comment(image->comment().c_str());
+        
+        if (!comment.isEmpty())
+           return comment;
+           
+        // In second, we trying to get Exif comments   
+                
+        if (m_exifMetadata.isEmpty())
+        {
+            Exiv2::ExifData exifData;
+            exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+            Exiv2::ExifKey key("Exif.Photo.UserComment");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            
+            if (it != exifData.end())
+            {
+                QString ExifComment(it->toString().c_str());
+    
+                if (!ExifComment.isEmpty())
+                  return ExifComment;
+            }
+        }
+        
+        // In third, we trying to get IPTC comments   
+                
+        if (m_iptcMetadata.isEmpty())
+        {
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            Exiv2::IptcKey key("Iptc.Application2.Caption");
+            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+            
+            if (it != iptcData.end())
+            {
+                QString IptcComment(it->toString().c_str());
+    
+                if (!IptcComment.isEmpty())
+                  return IptcComment;
+            }
+        }
+
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Image comments using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QString();
 }
 
 bool DMetadata::writeImageComment(const QString& filePath, const QString& comment)
@@ -602,5 +601,91 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
     
     return false;
 }
+
+int DMetadata::getImageRating() const
+{
+    try
+    {    
+        if (m_filePath.isEmpty())
+            return -1;
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(m_filePath)));
+        
+        image->readMetadata();
+        
+        if (m_iptcMetadata.isEmpty())
+        {
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            Exiv2::IptcKey key("Iptc.Application2.FixtureId");
+            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+            
+            if (it != iptcData.end())
+            {
+                QString IptcComment(it->toString().c_str());
     
+                if (IptcComment == QString("digiKam Image Rating=0"))
+                    return 0;
+                else if (IptcComment == QString("digiKam Image Rating=1"))
+                    return 1;
+                else if (IptcComment == QString("digiKam Image Rating=2"))
+                    return 2;
+                else if (IptcComment == QString("digiKam Image Rating=3"))
+                    return 3;
+                else if (IptcComment == QString("digiKam Image Rating=4"))
+                    return 4;
+                else if (IptcComment == QString("digiKam Image Rating=5"))
+                    return 5;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Image rating using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return -1;
+}
+
+bool DMetadata::writeImageRating(const QString& filePath, int rating)
+{
+    try
+    {    
+        if (filePath.isEmpty())
+            return false;
+            
+        if (rating < 0 || rating > 5)
+        {
+            kdDebug() << k_funcinfo << "Rating value to write out of range!" << endl;
+            return false;
+        }
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        image->readMetadata();
+        Exiv2::IptcData &iptcData = image->iptcData();
+        
+        QString temp;
+        QString ratingString("digiKam Image Rating=");
+        ratingString.append(temp.setNum(rating));
+        
+        iptcData["Iptc.Application2.FixtureId"] = ratingString.latin1();
+        image->setIptcData(iptcData);
+        image->writeMetadata();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
 }  // NameSpace Digikam
