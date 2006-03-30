@@ -138,6 +138,33 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
     repaint(false);
 }
 
+void InsertTextWidget::setPositionHint(QRect hint)
+{
+    // interpreted by composeImage
+    m_positionHint = hint;
+    if (m_textRect.isValid())
+    {
+        // invalidate current position so that hint is certainly interpreted
+        m_textRect = QRect();
+        makePixmap();
+        repaint();
+    }
+}
+
+QRect InsertTextWidget::getPositionHint()
+{
+    QRect hint;
+    if (m_textRect.isValid())
+    {
+        // We normalize on the size of the image, but we store as int. Precision loss is no problem.
+        hint.setX(      (int) ((float)(m_textRect.x() - m_rect.x())     / (float)m_rect.width()  * 10000.0) );
+        hint.setY(      (int) ((float)(m_textRect.y() - m_rect.y())     / (float)m_rect.height() * 10000.0) );
+        hint.setWidth(  (int) ((float)m_textRect.width()  / (float)m_rect.width()  * 10000.0) );
+        hint.setHeight( (int) ((float)m_textRect.height() / (float)m_rect.height() * 10000.0) );
+    }
+    return hint;
+}
+
 Digikam::DImg InsertTextWidget::makeInsertText(void)
 {
     int orgW = m_iface->originalWidth();
@@ -148,6 +175,7 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     int x, y;
     if (m_textRect.isValid())
     {
+        // convert from widget to image coordinates, then to original size
         x = lroundf( (m_textRect.x() - m_rect.x()) * ratioW);
         y = lroundf( (m_textRect.y() - m_rect.y()) * ratioH);
     }
@@ -177,10 +205,10 @@ void InsertTextWidget::makePixmap(void)
     float ratioW = (float)m_w / (float)orgW;
     float ratioH = (float)m_h / (float)orgH;
 
-    // convert from widget to image coordinates
     int x, y;
     if (m_textRect.isValid())
     {
+        // convert from widget to image coordinates
         x = m_textRect.x() - m_rect.x();
         y = m_textRect.y() - m_rect.y();
     }
@@ -265,8 +293,67 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
 
     if (x == -1 && y == -1)
     {
-        x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
-        y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+        if (m_positionHint.isValid())
+        {
+            // We assume that people tend to orient text along the edges,
+            // so we do some guessing so that positions such as "in the lower right corner"
+            // will be remembered across different image sizes.
+
+            // get relative positions
+            float fromTop =          (float)m_positionHint.top()    / 10000.0;
+            float fromBottom = 1.0 - (float)m_positionHint.bottom() / 10000.0;
+            float fromLeft =         (float)m_positionHint.left()   / 10000.0;
+            float fromRight =  1.0 - (float)m_positionHint.right()  / 10000.0;
+
+            // calculate horizontal position
+            if (fromLeft < fromRight)
+            {
+                x = (int)(fromLeft * maxWidth);
+
+                // we are placing from the smaller distance,
+                // so if now the larger distance is actually too small,
+                // fall back to standard placement, nothing to lose.
+                if (x + fontRect.width() > maxWidth)
+                    x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+            }
+            else
+            {
+                x = maxWidth - (int)(fromRight * maxWidth) - fontRect.width();
+                if ( x < 0 )
+                    x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+            }
+
+            // calculate vertical position
+            if (fromTop < fromBottom)
+            {
+                y = (int)(fromTop * maxHeight);
+                if (y + fontRect.height() > maxHeight)
+                    y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+            }
+            else
+            {
+                y = maxHeight - (int)(fromBottom * maxHeight) - fontRect.height();
+                if ( y < 0 )
+                    y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+            }
+
+            if (! QRect(x, y, fontRect.width(), fontRect.height()).
+                   intersects(QRect(0, 0, maxWidth, maxHeight)) )
+            {
+                // emergency fallback - nothing is visible
+                x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+                y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+            }
+
+            // invalidate position hint, use only once
+            m_positionHint = QRect();
+        }
+        else
+        {
+            // use standard position
+            x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+            y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+        }
     }
 
     // create a rectangle relative to image
@@ -472,13 +559,21 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
 
     if (m_textRect.isValid())
     {
+        int textWidth  = m_textRect.width();
+        int textHeight = m_textRect.height();
+
         textX = lroundf( textX * (float)m_w / (float)old_w );
         textY = lroundf( textY * (float)m_h / (float)old_h );
+        textWidth  = lroundf(textWidth  * (float)m_w / (float)old_w );
+        textHeight = lroundf(textHeight * (float)m_h / (float)old_h );
+
         m_textRect.setX(textX + m_rect.x());
         m_textRect.setY(textY + m_rect.y());
+        m_textRect.setWidth(textWidth);
+        m_textRect.setHeight(textHeight);
         makePixmap();
     }
-    
+
     blockSignals(false);
 }
 

@@ -227,13 +227,13 @@ void ImageEffect_InsertText::readSettings(void)
     config->setGroup("Insert Text Tool Settings");
     QColor *black = new QColor( 0, 0, 0 );
     QFont *defaultFont = new QFont();
-    
+
     int orgW = m_previewWidget->imageIface()->originalWidth();
     int orgH = m_previewWidget->imageIface()->originalHeight();
-    
+
     if ( orgW > orgH ) m_defaultSizeFont = (int)(orgH / 8.0);
     else m_defaultSizeFont = (int)(orgW / 8.0);
-    
+
     defaultFont->setPointSize( m_defaultSizeFont );
     m_textRotation->setCurrentItem( config->readNumEntry("Text Rotation", 0) );
     m_fontColorButton->setColor(config->readColorEntry("Font Color", black));
@@ -243,19 +243,20 @@ void ImageEffect_InsertText::readSettings(void)
     m_alignTextMode = config->readNumEntry("Text Alignment", ALIGN_LEFT);
     m_borderText->setChecked( config->readBoolEntry("Border Text", false) );
     m_transparentText->setChecked( config->readBoolEntry("Transparent Text", false) );
-    
+    m_previewWidget->setPositionHint( config->readRectEntry("Position Hint") );
+
     delete black;
     delete defaultFont;
-    
+
     static_cast<QPushButton*>(m_alignButtonGroup->find(m_alignTextMode))->setOn(true);
     slotAlignModeChanged(m_alignTextMode);
 }
-    
+
 void ImageEffect_InsertText::writeSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Insert Text Tool Settings");
-    
+
     config->writeEntry( "Text Rotation", m_textRotation->currentItem() );
     config->writeEntry( "Font Color", m_fontColorButton->color() );
     config->writeEntry( "Text String", m_textEdit->text() );
@@ -263,7 +264,8 @@ void ImageEffect_InsertText::writeSettings(void)
     config->writeEntry( "Text Alignment", m_alignTextMode );
     config->writeEntry( "Border Text", m_borderText->isChecked() );
     config->writeEntry( "Transparent Text", m_transparentText->isChecked() );
-    
+    config->writeEntry( "Position Hint", m_previewWidget->getPositionHint() );
+
     config->sync();
 }
 

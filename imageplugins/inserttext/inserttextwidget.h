@@ -90,6 +90,9 @@ public:
                    bool border, bool transparent, int rotation);
     void   resetEdit(void);
 
+    void  setPositionHint(QRect hint);
+    QRect getPositionHint();
+
 private:
 
     Digikam::ImageIface *m_iface;
@@ -122,7 +125,8 @@ private:
     QColor      m_textColor;
 
     QColor      m_backgroundColor;
-    
+
+    QRect       m_positionHint;
 protected:
 
     void paintEvent( QPaintEvent *e );
