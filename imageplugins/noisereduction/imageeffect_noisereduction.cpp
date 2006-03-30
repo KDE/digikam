@@ -88,7 +88,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QTabWidget *mainTab = new QTabWidget(m_imagePreviewWidget);
     
     QWidget* firstPage = new QWidget( mainTab );
-    QGridLayout* gridSettings = new QGridLayout( firstPage, 4, 1, marginHint());    
+    QGridLayout* gridSettings = new QGridLayout( firstPage, 6, 1, marginHint());    
     mainTab->addTab( firstPage, i18n("Details") );
     
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
@@ -109,6 +109,25 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     gridSettings->addMultiCellWidget(m_radiusInput, 0, 0, 1, 1);
     
     // -------------------------------------------------------------
+
+    QLabel *label3 = new QLabel(i18n("Threshold:"), firstPage);
+    
+    m_thresholdInput = new KDoubleNumInput(firstPage);
+    m_thresholdInput->setPrecision(2);
+    m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
+    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
+                     "and the spin control for fine adjustment. This controls edge detection sensitivity. "
+                     "This value should be set so that edges and details are clearly visible "
+                     "and noise is smoothed out. This value is not bound to any intensity value, it is "
+                     "bound to the second derivative of intensity values. Simply adjust it and watch the " 
+                     "preview. Adjustment must be made carefully, because the gap between \"noisy\", "
+                     "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
+                     "the focus of a camera."));
+
+    gridSettings->addMultiCellWidget(label3, 1, 1, 0, 0);
+    gridSettings->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
+                                                      
+    // -------------------------------------------------------------
   
     QLabel *label4 = new QLabel(i18n("Texture:"), firstPage);
     
@@ -125,8 +144,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "without blurring edges. Another way would be to decrease <b>Radius</b> and to increase "
                 "<b>Edge</b>."));
 
-    gridSettings->addMultiCellWidget(label4, 1, 1, 0, 0);
-    gridSettings->addMultiCellWidget(m_textureInput, 1, 1, 1, 1);
+    gridSettings->addMultiCellWidget(label4, 2, 2, 0, 0);
+    gridSettings->addMultiCellWidget(m_textureInput, 2, 2, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -142,8 +161,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "When this value is to high, then the adaptive filter cannot longer accurately track "
                 "image details, and noise can reappear or blur can occur."));
     
-    gridSettings->addMultiCellWidget(label7, 2, 2, 0, 0);
-    gridSettings->addMultiCellWidget(m_lookaheadInput, 2, 2, 1, 1);
+    gridSettings->addMultiCellWidget(label7, 3, 3, 0, 0);
+    gridSettings->addMultiCellWidget(m_lookaheadInput, 3, 3, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -158,9 +177,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "Set it near to maximum, if you want to remove weak noise or JPEG-artifacts, "
                 "without loosing detail."));
 
-    gridSettings->addMultiCellWidget(label5, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
-
+    gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
+    gridSettings->addMultiCellWidget(m_sharpnessInput, 4, 4, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -177,9 +195,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "then also increasing <b>Damping</b> is often useful. This setting can provides "
                 "sharpening and antialiasing effect to edges when spike noise is corrected."));
     
-    gridSettings->addMultiCellWidget(label10, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_phaseInput, 4, 4, 1, 1);
+    gridSettings->addMultiCellWidget(label10, 5, 5, 0, 0);
+    gridSettings->addMultiCellWidget(m_phaseInput, 5, 5, 1, 1);
     gridSettings->setColStretch(1, 10);
+    gridSettings->setRowStretch(6, 10);
 
     // -------------------------------------------------------------
 
@@ -202,25 +221,6 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Threshold:"), secondPage);
-    
-    m_thresholdInput = new KDoubleNumInput(secondPage);
-    m_thresholdInput->setPrecision(2);
-    m_thresholdInput->setRange(0.0, 1.0, 0.01, true);
-    QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
-		             "and the spin control for fine adjustment. This controls edge detection sensitivity. "
-                     "This value should be set so that edges and details are clearly visible "
-                     "and noise is smoothed out. This value is not bound to any intensity value, it is "
-                     "bound to the second derivative of intensity values. Simply adjust it and watch the " 
-                     "preview. Adjustment must be made carefully, because the gap between \"noisy\", "
-                     "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
-                     "the focus of a camera."));
-
-    gridSettings2->addMultiCellWidget(label3, 1, 1, 0, 0);
-    gridSettings2->addMultiCellWidget(m_thresholdInput, 1, 1, 1, 1);
-                                              
-    // -------------------------------------------------------------
-
     QLabel *label6 = new QLabel(i18n("Color:"), secondPage);
     
     m_csmoothInput = new KDoubleNumInput(secondPage);
@@ -231,8 +231,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "make an image correction, not the both at the same time. This settings don't influence "
                 "the main smoothing process controled by <b>Details</b> settings."));
 
-    gridSettings2->addMultiCellWidget(label6, 2, 2, 0, 0);
-    gridSettings2->addMultiCellWidget(m_csmoothInput, 2, 2, 1, 1);
+    gridSettings2->addMultiCellWidget(label6, 1, 1, 0, 0);
+    gridSettings2->addMultiCellWidget(m_csmoothInput, 1, 1, 1, 1);
     
     // -------------------------------------------------------------
 
@@ -245,8 +245,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "can be used to increase the tolerance values for darker areas (which commonly "
                 "are more noisy). This results in more blur for shadow areas."));
     
-    gridSettings2->addMultiCellWidget(label8, 3, 3, 0, 0);
-    gridSettings2->addMultiCellWidget(m_gammaInput, 3, 3, 1, 1);
+    gridSettings2->addMultiCellWidget(label8, 2, 2, 0, 0);
+    gridSettings2->addMultiCellWidget(m_gammaInput, 2, 2, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -261,9 +261,10 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
                 "minimum then noise and phase jitter at edges can occur. It can supress spike noise when " 
                 "increased and this is the preferred method to remove it."));
     
-    gridSettings2->addMultiCellWidget(label9, 4, 4, 0, 0);
-    gridSettings2->addMultiCellWidget(m_dampingInput, 4, 4, 1, 1);
+    gridSettings2->addMultiCellWidget(label9, 3, 3, 0, 0);
+    gridSettings2->addMultiCellWidget(m_dampingInput, 3, 3, 1, 1);
     gridSettings2->setColStretch(1, 10);
+    gridSettings2->setRowStretch(4, 10);
 
     m_imagePreviewWidget->setUserAreaWidget(mainTab);
     
@@ -311,7 +312,6 @@ void ImageEffect_NoiseReduction::renderingFinished()
     m_thresholdInput->setEnabled(true);
     m_textureInput->setEnabled(true);
     m_sharpnessInput->setEnabled(true);
-
     m_csmoothInput->setEnabled(true);
     m_lookaheadInput->setEnabled(true);
     m_gammaInput->setEnabled(true);
@@ -326,7 +326,6 @@ void ImageEffect_NoiseReduction::resetValues()
     m_thresholdInput->setEnabled(true);
     m_textureInput->setEnabled(true);
     m_sharpnessInput->setEnabled(true);
-
     m_csmoothInput->setEnabled(true);
     m_lookaheadInput->setEnabled(true);
     m_gammaInput->setEnabled(true);
@@ -338,7 +337,6 @@ void ImageEffect_NoiseReduction::resetValues()
     m_thresholdInput->setValue(0.08);
     m_textureInput->setValue(0.0);
     m_sharpnessInput->setValue(0.25);
-
     m_csmoothInput->setValue(1.0);
     m_lookaheadInput->setValue(2.0);
     m_gammaInput->setValue(1.0);
@@ -350,7 +348,6 @@ void ImageEffect_NoiseReduction::resetValues()
     m_thresholdInput->setEnabled(false);
     m_textureInput->setEnabled(false);
     m_sharpnessInput->setEnabled(false);
-
     m_csmoothInput->setEnabled(false);
     m_lookaheadInput->setEnabled(false);
     m_gammaInput->setEnabled(false);
@@ -365,7 +362,6 @@ void ImageEffect_NoiseReduction::prepareEffect()
     m_thresholdInput->setEnabled(false);
     m_textureInput->setEnabled(false);
     m_sharpnessInput->setEnabled(false);
-
     m_csmoothInput->setEnabled(false);
     m_lookaheadInput->setEnabled(false);
     m_gammaInput->setEnabled(false);
@@ -377,7 +373,6 @@ void ImageEffect_NoiseReduction::prepareEffect()
     double th = m_thresholdInput->value();
     double tx = m_textureInput->value();
     double s  = m_sharpnessInput->value();
-
     double c  = m_csmoothInput->value();
     double a  = m_lookaheadInput->value();
     double g  = m_gammaInput->value();
@@ -397,7 +392,6 @@ void ImageEffect_NoiseReduction::prepareFinal()
     m_thresholdInput->setEnabled(false);
     m_textureInput->setEnabled(false);
     m_sharpnessInput->setEnabled(false);
-
     m_csmoothInput->setEnabled(false);
     m_lookaheadInput->setEnabled(false);
     m_gammaInput->setEnabled(false);
@@ -409,7 +403,6 @@ void ImageEffect_NoiseReduction::prepareFinal()
     double th = m_thresholdInput->value();
     double tx = m_textureInput->value();
     double s  = m_sharpnessInput->value();
-
     double c  = m_csmoothInput->value();
     double a  = m_lookaheadInput->value();
     double g  = m_gammaInput->value();
@@ -460,7 +453,6 @@ void ImageEffect_NoiseReduction::slotUser3()
         m_thresholdInput->setValue( stream.readLine().toDouble() );
         m_textureInput->setValue( stream.readLine().toDouble() );
         m_sharpnessInput->setValue( stream.readLine().toDouble() );
-
         m_csmoothInput->setValue( stream.readLine().toDouble() );
         m_lookaheadInput->setValue( stream.readLine().toDouble() );
         m_gammaInput->setValue( stream.readLine().toDouble() );
@@ -494,7 +486,6 @@ void ImageEffect_NoiseReduction::slotUser2()
         stream << m_thresholdInput->value() << "\n";    
         stream << m_textureInput->value() << "\n";    
         stream << m_sharpnessInput->value() << "\n";    
-
         stream << m_csmoothInput->value() << "\n";    
         stream << m_lookaheadInput->value() << "\n";    
         stream << m_gammaInput->value() << "\n";    
