@@ -1,10 +1,9 @@
 METASOURCES = AUTO
 
-INCLUDES = $(LIBKEXIF_CFLAGS) \
-           $(all_includes) \
+INCLUDES = $(all_includes) \
            -I$(top_srcdir)/digikam/libs/dmetadata \
            -I$(top_srcdir)/digikam/libs/dimg \
-	   -I$(top_srcdir)/digikam/digikam
+	       -I$(top_srcdir)/digikam/digikam
 
 noinst_LTLIBRARIES = libjpegutils.la
 
@@ -12,4 +11,4 @@ libjpegutils_la_SOURCES = jpegmetadata.cpp exifrotate.cpp transupp.cpp
 
 libjpegutils_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-libjpegutils_la_LIBADD  = $(LIBJPEG) $(LIBKEXIF_LIBS) 
+libjpegutils_la_LIBADD  = $(LIBJPEG) 

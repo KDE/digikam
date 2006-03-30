@@ -180,37 +180,6 @@ if test "x$have_libkipi" != "xyes"; then
 fi
 
 #------------------------------------------------------------------
-# Check for libkexif
-#------------------------------------------------------------------
-
-
-if test "$PKGCONFIGFOUND" = "yes" ; then
-   # check for libkexif
-   have_libkexif=no
-
-  KDE_PKG_CHECK_MODULES(LIBKEXIF, libkexif >= 0.2,
-   	                have_libkexif=yes, have_libkexif=no)
-
-  if test "x$have_libkexif" = "xno"; then
-       LIBKEXIF_CFLAGS=""
-       LIBKEXIF_LIBS=""
-       AC_MSG_RESULT([not found])
-  else
-       AC_MSG_RESULT([found])
-  fi
-else
-   LIBKEXIF_CFLAGS=""
-   LIBKEXIF_LIBS=""
-   AC_MSG_RESULT([not found])
-fi 
-AC_SUBST(LIBKEXIF_CFLAGS)
-AC_SUBST(LIBKEXIF_LIBS)
-
-if test "x$have_libkexif" != "xyes"; then
-   DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
-fi
-
-#------------------------------------------------------------------
 # Check for libtiff
 #------------------------------------------------------------------
 

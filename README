@@ -60,9 +60,8 @@ KDE      >= 3.x        http://www.kde.org
 gphoto2  >= 2.x        http://www.gphoto.org
 sqlite   >= 3.x        http://www.sqlite.org
 dcraw    >= 8.0        http://www.cybercom.net/~dcoffin/dcraw
-exiv2    >= 0.9.x      http://home.arcor.de/ahuggel/exiv2
+exiv2    >= 0.9.x      http://www.exiv2.org
 libkipi  >= 0.1        http://extragear.kde.org/apps/kipi
-libkexif >= 0.2        http://www.digikam.org
 liblcms  >= 1.14.x     http://www.littlecms.com
 libtiff  >= 3.5.x      http://www.remotesensing.org/libtiff
 libpng   >= 1.2.x      http://www.libpng.org/pub/png/libpng.html
@@ -73,7 +72,7 @@ In the source directory do :
 
 1) export WANT_AUTOCONF_2_5=1
 2) export KDEDIR=KDE_installation_dir_on_your_system
-3) if you are installing libkipi/libkexif in a non-standard location
+3) if you are installing libkipi in a non-standard location
   let pkg-config know about their paths:
   export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/path/to/installation/lib/pkgconfig
 4) make -f Makefile.cvs

@@ -4,7 +4,7 @@ digiKam 0.9.0 :
 NEW FEATURES:
 
 - Sidebars are used at all to display metadata, comments & tags, and file properties.
-- Removed imlib2 depency. Add Exiv2 and LCMS depencies.
+- Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
 - New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
 - New API in digiKam core named DMetadata to manage image metadata.
 - Image Editor/showfoto support 16 bits color depth images (RAW, TIFF, PNG, PNM).

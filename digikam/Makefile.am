@@ -1,7 +1,6 @@
+KDE_OPTIONS = nofinal
 SUBDIRS = pics icons 
-
-lib_LTLIBRARIES = libdigikam.la
-bin_PROGRAMS = digikam
+METASOURCES = AUTO  
 
 INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/libs/histogram \
@@ -22,7 +21,11 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/ \
-	   $(LIBKIPI_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
+	   $(LIBKIPI_CFLAGS) $(all_includes)
+
+# -- shared digiKam library rules -----------------------------------------------
+       
+lib_LTLIBRARIES = libdigikam.la
 
 libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
@@ -49,7 +52,7 @@ libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			dcopiface.cpp dcopiface.skel
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
-			           $(LIBKEXIF_LIBS) $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
+			           $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
 		               $(top_builddir)/digikam/sqlite/libsqlite.la \
 		               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
@@ -66,32 +69,27 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 
 libdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
+# -- main digiKam binary target file rules ----------------------------------------------
+
+bin_PROGRAMS = digikam
 
 digikam_SOURCES = main.cpp
 digikam_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) \
-		  $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
-		  libdigikam.la
+		          $(LIBSOCKET) $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \
+		          libdigikam.la
 
 digikam_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(LIB_KUTILS)
+
+rcdir = $(kde_datadir)/digikam
+rc_DATA = digikamui.rc
 
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp
 
-METASOURCES = AUTO  
-
-# this is where the kdelnk file will go 
 kdelnkdir   = $(kde_appsdir)/Graphics
 kdelnk_DATA = digikam.desktop
 
-
-# Uncomment the following two lines if you add a ui.rc file for your application to make use of
-# KDE2 XML GUI builing
-rcdir = $(kde_datadir)/digikam
-rc_DATA = digikamui.rc
-
 include_HEADERS = digikam_export.h
-
-KDE_OPTIONS = nofinal
 
 include ../../admin/Doxyfile.am
 noinst_HEADERS = dcopiface.h
