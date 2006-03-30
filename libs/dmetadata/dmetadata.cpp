@@ -487,31 +487,63 @@ QDateTime DMetadata::getDateTime() const
         {        
             Exiv2::IptcData iptcData;
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
-            Exiv2::IptcKey key("Iptc.Application2.DateCreated");
-            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+            
+            // Try creation Iptc date time entries.
+    
+            Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
+            Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
                         
             if (it != iptcData.end())
             {
-                QString IptcDate(it->toString().c_str());
+                QString IptcDateCreated(it->toString().c_str());
     
-                Exiv2::IptcKey key("Iptc.Application2.TimeCreated");
-                Exiv2::IptcData::iterator it2 = iptcData.findKey(key);
+                Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
+                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
                 
                 if (it2 != iptcData.end())
                 {
-                    QString IptcTime(it2->toString().c_str());
+                    QString IptcTimeCreated(it2->toString().c_str());
                     
-                    QDate date = QDate::fromString(IptcDate, Qt::ISODate);
-                    QTime time = QTime::fromString(IptcTime, Qt::ISODate);
+                    QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
                     
                     if (dateTime.isValid())
                     {
-                        kdDebug() << "Date (IPTC): " << dateTime << endl;
+                        kdDebug() << "Date (IPTC created): " << dateTime << endl;
                         return dateTime;
                     }                    
                 }
             }                        
+            
+            // Try digitization Iptc date time entries.
+    
+            Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
+            Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
+                        
+            if (it3 != iptcData.end())
+            {
+                QString IptcDateDigitization(it3->toString().c_str());
+    
+                Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
+                Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
+                
+                if (it4 != iptcData.end())
+                {
+                    QString IptcTimeDigitization(it4->toString().c_str());
+                    
+                    QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
+                    QDateTime dateTime = QDateTime(date, time);
+                    
+                    if (dateTime.isValid())
+                    {
+                        kdDebug() << "Date (IPTC digitalized): " << dateTime << endl;
+                        return dateTime;
+                    }                    
+                }
+            }                        
+            
         }
     }
     catch( Exiv2::Error &e )
