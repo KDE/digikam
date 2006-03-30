@@ -65,35 +65,34 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 {
     d = new SetupMetadataPriv;
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
-    QVBoxLayout *layout     = new QVBoxLayout( this, 0, KDialog::spacingHint());
 
    // --------------------------------------------------------
 
-   // NOTE: put this back in when/if there are other, non-EXIF settings here
-   /*   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);*/
+   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
 
-   QLabel* explanation = new QLabel(this);
+   QLabel* explanation = new QLabel(iconExifGroup);
    explanation->setAlignment(explanation->alignment() | WordBreak);
-   explanation->setText(i18n("EXIF is a standard used by most digital cameras today to store "
+   explanation->setText(i18n("<b>EXIF</b> is a standard used by most digital cameras today to store "
                              "information such as comments in image files. You can learn more "
                              "about EXIF at www.exif.org."));
-   layout->addWidget(explanation);
+   //layout->addWidget(explanation);
 
-   d->iconSaveExifBox = new QCheckBox(this);
+   d->iconSaveExifBox = new QCheckBox(iconExifGroup);
    d->iconSaveExifBox->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
-   layout->addWidget(d->iconSaveExifBox);
+   //layout->addWidget(d->iconSaveExifBox);
 
-   d->iconExifRotateBox = new QCheckBox(this);
+   d->iconExifRotateBox = new QCheckBox(iconExifGroup);
    d->iconExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
-   layout->addWidget(d->iconExifRotateBox);
+   //layout->addWidget(d->iconExifRotateBox);
 
-   d->iconExifSetOrientationBox = new QCheckBox(this);
+   d->iconExifSetOrientationBox = new QCheckBox(iconExifGroup);
    d->iconExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
-   layout->addWidget(d->iconExifSetOrientationBox);
+   
+   mainLayout->addWidget(iconExifGroup);
 
    // --------------------------------------------------------
 
-   layout->addStretch();
+   mainLayout->addStretch();
 
    readSettings();
    adjustSize();
