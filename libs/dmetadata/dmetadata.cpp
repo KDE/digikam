@@ -625,17 +625,17 @@ int DMetadata::getImageRating() const
             {
                 QString IptcComment(it->toString().c_str());
     
-                if (IptcComment == QString("digiKam Image Rating=0"))
+                if (IptcComment == QString("digiKam Rating=0"))
                     return 0;
-                else if (IptcComment == QString("digiKam Image Rating=1"))
+                else if (IptcComment == QString("digiKam Rating=1"))
                     return 1;
-                else if (IptcComment == QString("digiKam Image Rating=2"))
+                else if (IptcComment == QString("digiKam Rating=2"))
                     return 2;
-                else if (IptcComment == QString("digiKam Image Rating=3"))
+                else if (IptcComment == QString("digiKam Rating=3"))
                     return 3;
-                else if (IptcComment == QString("digiKam Image Rating=4"))
+                else if (IptcComment == QString("digiKam Rating=4"))
                     return 4;
-                else if (IptcComment == QString("digiKam Image Rating=5"))
+                else if (IptcComment == QString("digiKam Rating=5"))
                     return 5;
             }
         }
@@ -670,7 +670,7 @@ bool DMetadata::writeImageRating(const QString& filePath, int rating)
         Exiv2::IptcData &iptcData = image->iptcData();
         
         QString temp;
-        QString ratingString("digiKam Image Rating=");
+        QString ratingString("digiKam Rating=");
         ratingString.append(temp.setNum(rating));
         
         iptcData["Iptc.Application2.FixtureId"] = ratingString.latin1();
