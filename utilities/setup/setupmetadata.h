@@ -1,8 +1,8 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- *         Ralf Holzer <ralf at well.com>
- * Date  : 2003-08-03
- * Description : setup Image Editor tab.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Ralf Holzer <ralf at well.com>
+ * Date   : 2003-08-03
+ * Description : setup Metadata tab.
  * 
  * Copyright 2003-2004 by Ralf Holzer and Gilles Caulier
  * Copyright 2005-2006 by Gilles Caulier
@@ -20,8 +20,8 @@
  * 
  * ============================================================ */
 
-#ifndef SETUPEXIF_H
-#define SETUPEXIF_H
+#ifndef SETUPMETADATA_H
+#define SETUPMETADATA_H
 
 // Qt includes.
 
@@ -29,16 +29,17 @@
 
 namespace Digikam
 {
-class SetupExifPriv;
 
-class SetupExif : public QWidget
+class SetupMetadataPriv;
+
+class SetupMetadata : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    SetupExif(QWidget* parent = 0);
-    ~SetupExif();
+    SetupMetadata(QWidget* parent = 0);
+    ~SetupMetadata();
 
     void applySettings();
 
@@ -48,10 +49,10 @@ private:
 
 private:
 
-    SetupExifPriv* d;
+    SetupMetadataPriv* d;
    
 };
 
 }  // namespace Digikam
 
-#endif // SETUPEXIF_H 
+#endif // SETUPMETADATA_H 

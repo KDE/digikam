@@ -1,8 +1,8 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- *         Ralf Holzer <ralf at well.com>
- * Date  : 2003-08-03
- * Description : setup Image Editor tab.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Ralf Holzer <ralf at well.com>
+ * Date   : 2003-08-03
+ * Description : setup Metadata tab.
  * 
  * Copyright 2003-2004 by Ralf Holzer and Gilles Caulier
  * Copyright 2005-2006 by Gilles Caulier
@@ -39,16 +39,16 @@
 // // Local includes.
 
 #include "albumsettings.h"
-#include "setupexif.h"
+#include "setupmetadata.h"
 
 namespace Digikam
 {
 
-class SetupExifPriv
+class SetupMetadataPriv
 {
 public:
 
-    SetupExifPriv()
+    SetupMetadataPriv()
     {
         iconSaveExifBox           = 0;
         iconExifRotateBox         = 0;
@@ -60,13 +60,12 @@ public:
     QCheckBox *iconExifSetOrientationBox;
 };
 
-SetupExif::SetupExif(QWidget* parent )
-         : QWidget(parent)
+SetupMetadata::SetupMetadata(QWidget* parent )
+             : QWidget(parent)
 {
-    d = new SetupExifPriv;
+    d = new SetupMetadataPriv;
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
-
-    QVBoxLayout *layout = new QVBoxLayout( this, 0, KDialog::spacingHint());
+    QVBoxLayout *layout     = new QVBoxLayout( this, 0, KDialog::spacingHint());
 
    // --------------------------------------------------------
 
@@ -102,12 +101,12 @@ SetupExif::SetupExif(QWidget* parent )
    mainLayout->addWidget(this);
 }
 
-SetupExif::~SetupExif()
+SetupMetadata::~SetupMetadata()
 {
     delete d;
 }
 
-void SetupExif::applySettings()
+void SetupMetadata::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -120,7 +119,7 @@ void SetupExif::applySettings()
     settings->saveSettings();
 }
 
-void SetupExif::readSettings()
+void SetupMetadata::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
 
@@ -133,4 +132,4 @@ void SetupExif::readSettings()
 
 }  // namespace Digikam
 
-#include "setupexif.moc"
+#include "setupmetadata.moc"
