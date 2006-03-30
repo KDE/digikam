@@ -12,7 +12,7 @@ libcameragui_la_SOURCES = cameraui.cpp cameraiconview.cpp  \
 libcameragui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libcameragui_la_LIBADD  = $(top_builddir)/digikam/libs/imageproperties/libimagepropertiescamgui.la \
-	                      $(LIB_GPHOTO) $(LIBKEXIF_LIBS) $(LIBJPEG)
+	                      $(LIB_GPHOTO) $(LIBJPEG)
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
@@ -22,7 +22,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
           -I$(top_srcdir)/digikam/libs/dimg \
 	      -I$(top_srcdir)/digikam/libs/dmetadata \
 	      -I$(top_srcdir)/digikam/libs/dcraw \
-	      $(GPHOTO_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes)
+	      $(GPHOTO_CFLAGS) $(all_includes)
 
 digikamcameraguiicondir = $(kde_datadir)/digikam/icons
 digikamcameraguiicon_ICON = AUTO

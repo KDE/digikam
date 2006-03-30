@@ -1,11 +1,11 @@
 METASOURCES = AUTO  
 
-INCLUDES    = -I$(top_srcdir)/digikam/libs/jpegutils \
-	      -I$(top_srcdir)/digikam/libs/dimg \
-              -I$(top_srcdir)/digikam/libs/dmetadata \
-	      -I$(top_srcdir)/digikam/libs/dcraw \
-	      -I$(top_srcdir)/digikam/digikam \
-	      $(all_includes)
+INCLUDES = -I$(top_srcdir)/digikam/libs/jpegutils \
+	       -I$(top_srcdir)/digikam/libs/dimg \
+           -I$(top_srcdir)/digikam/libs/dmetadata \
+	       -I$(top_srcdir)/digikam/libs/dcraw \
+	       -I$(top_srcdir)/digikam/digikam \
+	       $(all_includes)
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 			 kio_digikamalbums.la kio_digikamdates.la \
@@ -39,9 +39,9 @@ kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGI
 kio_digikamalbums_la_SOURCES = digikamalbums.cpp sqlitedb.cpp
 
 kio_digikamalbums_la_LIBADD  = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-			       $(LIB_KIO) $(LIB_SQLITE3) $(LIB_EXIV2) \
-	                       $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
-	                       $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
+	                           $(LIB_KIO) $(LIB_SQLITE3) $(LIB_EXIV2) \
+	                           $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
+	                           $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 

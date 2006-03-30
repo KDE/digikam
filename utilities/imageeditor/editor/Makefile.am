@@ -5,8 +5,7 @@ noinst_LTLIBRARIES = libdimgeditor.la libshowfoto.la
 libdimgeditor_la_SOURCES = editorwindow.cpp imageiface.cpp \
 	 		               imagewindow.cpp iofileprogressbar.cpp  
 
-libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) \
-	 	                   $(LIBKEXIF_LIBS)
+libdimgeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_KDEPRINT) 
 
 libdimgeditor_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libdimgeditortools.la 
 
