@@ -1,10 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2003-16-10
+ * Date   : 2003-16-10
  * Description : 
  * 
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,20 +43,6 @@ class AlbumSettingsPrivate
 {
 public:
 
-    KConfig *config;
-
-    QString     albumLibraryPath;
-    QStringList albumCollectionNames;
-    QString     imageFilefilter;
-    QString     movieFilefilter;
-    QString     audioFilefilter;
-    QString     rawFilefilter;
-
-    int         thumbnailSize;
-    
-    AlbumSettings::AlbumSortOrder albumSortOrder;
-    AlbumSettings::ImageSortOrder  imageSortOrder;
-
     bool showToolTips;
     bool showSplash;
     bool useTrash;
@@ -71,8 +58,23 @@ public:
     bool saveExifComments;
     bool exifRotate;
     bool exifSetOrientation;
+    bool saveIptcRating;
 
-    QString currentTheme;
+    int  thumbnailSize;
+
+    QString      currentTheme;
+    QString      albumLibraryPath;
+    QStringList  albumCollectionNames;
+    QString      imageFilefilter;
+    QString      movieFilefilter;
+    QString      audioFilefilter;
+    QString      rawFilefilter;
+    
+    KConfig     *config;
+
+    AlbumSettings::AlbumSortOrder albumSortOrder;
+    AlbumSettings::ImageSortOrder  imageSortOrder;
+
 };
 
 
@@ -125,9 +127,9 @@ void AlbumSettings::init()
       
     d->thumbnailSize   = ThumbnailSize::Medium;
 
-    d->showToolTips = true;
-    d->showSplash   = true;
-    d->useTrash     = true;
+    d->showToolTips       = true;
+    d->showSplash         = true;
+    d->useTrash           = true;
     
     d->iconShowName       = false;
     d->iconShowSize       = false;
@@ -139,6 +141,7 @@ void AlbumSettings::init()
     d->saveExifComments   = false;
     d->exifRotate         = false;
     d->exifSetOrientation = false;
+    d->saveIptcRating     = false;
 }
 
 void AlbumSettings::readSettings()
@@ -147,12 +150,9 @@ void AlbumSettings::readSettings()
 
     config->setGroup("Album Settings");
     
-    d->albumLibraryPath = 
-            config->readPathEntry("Album Path",
-                              QString::null);
+    d->albumLibraryPath = config->readPathEntry("Album Path", QString::null);
 
-    QStringList collectionList =
-        config->readListEntry("Album Collections");
+    QStringList collectionList = config->readListEntry("Album Collections");
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
@@ -205,27 +205,17 @@ void AlbumSettings::readSettings()
     d->currentTheme = config->readEntry("Theme", i18n("Default"));
     
     config->setGroup("EXIF Settings");
+    d->saveExifComments = config->readBoolEntry("Save EXIF Comments", false);
+    d->exifRotate = config->readBoolEntry("EXIF Rotate", false);
+    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
-    d->saveExifComments = config->readBoolEntry("Save EXIF Comments",
-                                                false);
-    
-    d->exifRotate = config->readBoolEntry("EXIF Rotate",
-                                          false);
-    
-    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation",
-                                                  false);
-
+    config->setGroup("IPTC Settings");
+    d->saveIptcRating = config->readBoolEntry("Save IPTC Rating", false);
+                                                  
     config->setGroup("General Settings");
-    
-    d->showSplash =
-        config->readBoolEntry("Show Splash", true);
-
-    d->useTrash =
-        config->readBoolEntry("Use Trash", true);
-
-    d->scanAtStart =
-        config->readBoolEntry("Scan At Start", true);
-
+    d->showSplash  = config->readBoolEntry("Show Splash", true);
+    d->useTrash    = config->readBoolEntry("Use Trash", true);
+    d->scanAtStart = config->readBoolEntry("Scan At Start", true);
 }
 
 void AlbumSettings::saveSettings()
@@ -286,22 +276,16 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Theme", d->currentTheme);
     
     config->setGroup("EXIF Settings");
+    config->writeEntry("Save EXIF Comments", d->saveExifComments);
+    config->writeEntry("EXIF Rotate", d->exifRotate);
+    config->writeEntry("EXIF Set Orientation", d->exifSetOrientation);
 
-    config->writeEntry("Save EXIF Comments",
-                       d->saveExifComments);
-                       
-    config->writeEntry("EXIF Rotate",
-                       d->exifRotate);
-                       
-    config->writeEntry("EXIF Set Orientation",
-                       d->exifSetOrientation);
-
+    config->setGroup("IPTC Settings");
+    config->writeEntry("Save IPTC Rating", d->saveIptcRating);
+                           
     config->setGroup("General Settings");
-    
     config->writeEntry("Show Splash", d->showSplash);
-
     config->writeEntry("Use Trash", d->useTrash);
-
     config->writeEntry("Scan At Start", d->scanAtStart);
     
     config->sync();
@@ -550,6 +534,16 @@ void AlbumSettings::setExifSetOrientation(bool val)
 bool AlbumSettings::getExifSetOrientation() const
 {
     return d->exifSetOrientation;
+}
+
+void AlbumSettings::setSaveIptcRating(bool val)
+{
+    d->saveIptcRating = val;
+}
+
+bool AlbumSettings::getSaveIptcRating() const
+{
+    return d->saveIptcRating;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

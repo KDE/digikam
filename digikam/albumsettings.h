@@ -1,10 +1,11 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2003-16-10
+ * Date   : 2003-16-10
  * Description : 
  * 
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -127,6 +128,9 @@ public:
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
 
+    void setSaveIptcRating(bool val);
+    bool getSaveIptcRating() const;
+    
     void setShowToolTips(bool val);
     bool getShowToolTips() const;
     

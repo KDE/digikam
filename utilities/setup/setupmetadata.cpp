@@ -53,11 +53,13 @@ public:
         iconSaveExifBox           = 0;
         iconExifRotateBox         = 0;
         iconExifSetOrientationBox = 0;
+        iconSaveRatingIptcBox     = 0;
     }
 
     QCheckBox *iconSaveExifBox;
     QCheckBox *iconExifRotateBox;
     QCheckBox *iconExifSetOrientationBox;
+    QCheckBox *iconSaveRatingIptcBox;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
@@ -66,38 +68,48 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d = new SetupMetadataPriv;
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
 
-   // --------------------------------------------------------
-
-   QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
-
-   QLabel* explanation = new QLabel(iconExifGroup);
-   explanation->setAlignment(explanation->alignment() | WordBreak);
-   explanation->setText(i18n("<b>EXIF</b> is a standard used by most digital cameras today to store "
-                             "information such as comments in image files. You can learn more "
-                             "about EXIF at www.exif.org."));
-   //layout->addWidget(explanation);
-
-   d->iconSaveExifBox = new QCheckBox(iconExifGroup);
-   d->iconSaveExifBox->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
-   //layout->addWidget(d->iconSaveExifBox);
-
-   d->iconExifRotateBox = new QCheckBox(iconExifGroup);
-   d->iconExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
-   //layout->addWidget(d->iconExifRotateBox);
-
-   d->iconExifSetOrientationBox = new QCheckBox(iconExifGroup);
-   d->iconExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
-   
-   mainLayout->addWidget(iconExifGroup);
-
-   // --------------------------------------------------------
-
-   mainLayout->addStretch();
-
-   readSettings();
-   adjustSize();
-
-   mainLayout->addWidget(this);
+    // --------------------------------------------------------
+  
+    QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
+  
+    QLabel* explanation = new QLabel(iconExifGroup);
+    explanation->setAlignment(explanation->alignment() | WordBreak);
+    explanation->setText(i18n("<b>EXIF</b> is a standard used by most digital cameras today to store "
+                              "information such as comments in image files. You can learn more "
+                              "about EXIF at <i>www.exif.org</i>."));
+  
+    d->iconSaveExifBox = new QCheckBox(iconExifGroup);
+    d->iconSaveExifBox->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
+  
+    d->iconExifRotateBox = new QCheckBox(iconExifGroup);
+    d->iconExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
+  
+    d->iconExifSetOrientationBox = new QCheckBox(iconExifGroup);
+    d->iconExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
+    
+    mainLayout->addWidget(iconExifGroup);
+  
+    // --------------------------------------------------------
+  
+    QGroupBox *iconIptcGroup = new QGroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
+  
+    QLabel* explanation2 = new QLabel(iconIptcGroup);
+    explanation2->setAlignment(explanation2->alignment() | WordBreak);
+    explanation2->setText(i18n("<b>IPTC</b> is an another standard used in digital photography to store "
+                               "embeded information in image files. You can learn more "
+                               "about IPTC at <i>www.iptc.org</i>."));
+  
+    d->iconSaveRatingIptcBox = new QCheckBox(iconIptcGroup);
+    d->iconSaveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
+    
+    mainLayout->addWidget(iconIptcGroup);
+  
+    mainLayout->addStretch();
+  
+    readSettings();
+    adjustSize();
+  
+    mainLayout->addWidget(this);
 }
 
 SetupMetadata::~SetupMetadata()
@@ -115,6 +127,8 @@ void SetupMetadata::applySettings()
     settings->setExifRotate(d->iconExifRotateBox->isChecked());
     settings->setExifSetOrientation(d->iconExifSetOrientationBox->isChecked());
 
+    settings->setSaveIptcRating(d->iconSaveRatingIptcBox->isChecked());
+
     settings->saveSettings();
 }
 
@@ -127,6 +141,8 @@ void SetupMetadata::readSettings()
     d->iconSaveExifBox->setChecked(settings->getSaveExifComments());
     d->iconExifRotateBox->setChecked(settings->getExifRotate());
     d->iconExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
+    
+    d->iconSaveRatingIptcBox->setChecked(settings->getSaveIptcRating());
 }
 
 }  // namespace Digikam

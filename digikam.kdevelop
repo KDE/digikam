@@ -13,11 +13,7 @@
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
-    <ignoreparts>
-      <part>kdevscripting</part>
-      <part>kdevdistpart</part>
-      <part>kdevpartexplorer</part>
-    </ignoreparts>
+    <ignoreparts/>
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>

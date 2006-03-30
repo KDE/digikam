@@ -362,21 +362,28 @@ void ImageDescEditTab::applyAllChanges()
     if (!d->currItem)
         return;
 
+    DMetadata metadata;
     ImageInfo* info = d->currItem->imageInfo();
 
     info->setCaption(d->commentsEdit->text());
     info->setDateTime(d->dateTimeEdit->dateTime());
     info->setRating(d->ratingWidget->rating());
 
-    if (AlbumSettings::instance() &&
-        AlbumSettings::instance()->getSaveExifComments())
+    if (AlbumSettings::instance())
     {
-        // Store comments in image as JPEG Exif comment, Exif comments, and Iptc Comments.
+        if (AlbumSettings::instance()->getSaveExifComments())
+        {
+            // Store comments in image as JPEG Exif comment, Exif comments, and Iptc Comments.
+            metadata.writeImageComment(info->filePath(), d->commentsEdit->text());
+        }
         
-        DMetadata metadata;
-        metadata.writeImageComment(info->filePath(), d->commentsEdit->text());
+        if (AlbumSettings::instance()->getSaveIptcRating())
+        {
+            // Store Image rating as Iptc tag.
+            metadata.writeImageRating(info->filePath(), d->ratingWidget->rating());
+        }
     }
-
+    
     info->removeAllTags();
     QListViewItemIterator it(d->tagsView);
     while (it.current())
