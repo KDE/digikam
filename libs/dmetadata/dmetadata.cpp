@@ -413,7 +413,7 @@ QString DMetadata::getImageComment() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
+        kdDebug() << "Cannot get Image comments using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
