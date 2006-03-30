@@ -555,7 +555,7 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
         // In Third we write comments into Iptc.
 
         Exiv2::IptcData &iptcData = image->iptcData();
-        iptcData["Iptc.Application2.Caption"] = comment.ascii();
+        iptcData["Iptc.Application2.Caption"] = comment.latin1();
         image->setIptcData(iptcData);
     
         image->writeMetadata();
