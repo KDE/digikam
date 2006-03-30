@@ -21,6 +21,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <kfilemetainfo.h>
 
 // Local includes.
 
@@ -37,20 +38,25 @@ void readJPEGMetaData(const QString& filePath,
     comments = QString();
     datetime = QDateTime();
     
-    DMetadata metadata(filePath);
+    KFileMetaInfo metaInfo(filePath, "image/jpeg", KFileMetaInfo::Fastest);
 
-    // Trying to get comments from image :
-    // In first, from standard JPEG comments, or
-    // In second, from Exif comments tag, or
-    // In third, from IPTC comments tag.
+    if (metaInfo.mimeType() == "image/jpeg" && metaInfo.containsGroup("Jpeg EXIF Data"))
+    {
+        DMetadata metadata(filePath);
+    
+        // Trying to get comments from image :
+        // In first, from standard JPEG comments, or
+        // In second, from Exif comments tag, or
+        // In third, from IPTC comments tag.
+            
+        comments = metadata.getImageComment();
         
-    comments = metadata.getImageComment();
-    
-    // Trying to get date and time from image :
-    // In first, from Exif date & time tags, or
-    // In second, from IPTC date & time tags.
-    
-    datetime = metadata.getDateTime();
+        // Trying to get date and time from image :
+        // In first, from Exif date & time tags, or
+        // In second, from IPTC date & time tags.
+        
+        datetime = metadata.getDateTime();
+    }
 }
 
 } // namespace Digikam
