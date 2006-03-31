@@ -34,6 +34,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kactivelabel.h>
 #include <kdialog.h>
 
 // // Local includes.
@@ -74,12 +75,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     QGroupBox *ExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
   
-    QLabel* explanation = new QLabel(ExifGroup);
-    explanation->setAlignment(explanation->alignment() | WordBreak);
-    explanation->setText(i18n("<b>EXIF</b> is a standard used by most digital cameras today to store "
-                              "technicals information about photograph. You can learn more "
-                              "about EXIF at <i>www.exif.org</i>."));
-  
     d->ExifRotateBox = new QCheckBox(ExifGroup);
     d->ExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
   
@@ -92,12 +87,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     QGroupBox *IptcGroup = new QGroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
   
-    QLabel* explanation2 = new QLabel(IptcGroup);
-    explanation2->setAlignment(explanation2->alignment() | WordBreak);
-    explanation2->setText(i18n("<b>IPTC</b> is an another standard used in digital photography to store "
-                               "embeded informations in image files. You can learn more "
-                               "about IPTC at <i>www.iptc.org</i>."));
-
     d->saveRatingIptcBox = new QCheckBox(IptcGroup);
     d->saveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
     QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toogle on this option to store image rating "
@@ -120,6 +109,19 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                                               "into Exif and IPTC tags."));
     
     mainLayout->addWidget(commonGroup);
+    mainLayout->addSpacing(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+    
+    KActiveLabel* explanation = new KActiveLabel(parent);
+    explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
+                              "technicals information about photograph. You can learn more "
+                              "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
+                              "<p><b>IPTC</b> is an another standard used in digital photography to store "
+                              "embeded informations in pictures. You can learn more "
+                              "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
+    
+    mainLayout->addWidget(explanation);
 
     mainLayout->addStretch();
   
