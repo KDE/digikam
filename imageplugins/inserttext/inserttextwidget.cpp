@@ -188,7 +188,7 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     // Get original image
     Digikam::DImg image = m_iface->getOriginalImg()->copy();
 
-    int borderWidth = QMIN(1, lroundf(2*ratioW));
+    int borderWidth = QMAX(1, lroundf(ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
                   m_textFont, m_textFont.pointSizeFloat(),
@@ -386,9 +386,10 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     // create a rectangle relative to textArea, excluding the border and spacing
     QRect textAreaTextRect( borderWidth + spacing, borderWidth + spacing, fontWidth, fontHeight );
 
-    // create a rectangle relative to textArea, including the border
-    QRect textAreaDrawRect( 0, 0, fontWidth + 2 * borderWidth + 2 * spacing, fontHeight + 2 * borderWidth + 2 * spacing );
-
+    // create a rectangle relative to textArea, including the border,
+    // for drawing the rectangle, taking into account that the width of the QPen goes in and out in equal parts
+    QRect textAreaDrawRect( borderWidth / 2, borderWidth / 2, fontWidth + borderWidth + 2 * spacing,
+                            fontHeight + borderWidth + 2 * spacing );
 
     // cut out the text area
     Digikam::DImg textArea = image->copy(drawRect);
@@ -429,7 +430,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     p.save();
 
     // translate to origin of text, leaving space for the border
-    p.translate(textAreaBackgroundRect.x(), textAreaBackgroundRect.y());
+    p.translate(textAreaTextRect.x(), textAreaTextRect.y());
 
     switch(textRotation)
     {
