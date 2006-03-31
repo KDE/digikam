@@ -24,9 +24,11 @@ NEW FEATURES:
 - New plugin to experiment ICC profiles color corrections into images.
 - New preview rendering modes in all color correction image plugins dialogs.
 - New zooming capabilities in image plugins dialogs.
+- Rating/DateTime/Comments are now stored in Exif and/or IPTC metadata.
 
 ...
 
-BUGFIX:
+BUGFIX from B.K.O:
 
-==> todo
+==> 116248
+==> 115441
