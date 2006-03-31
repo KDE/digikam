@@ -371,10 +371,16 @@ void ImageDescEditTab::applyAllChanges()
 
     if (AlbumSettings::instance())
     {
-        if (AlbumSettings::instance()->getSaveExifComments())
+        if (AlbumSettings::instance()->getSaveComments())
         {
-            // Store comments in image as JPEG Exif comment, Exif comments, and Iptc Comments.
+            // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
             metadata.writeImageComment(info->filePath(), d->commentsEdit->text());
+        }
+
+        if (AlbumSettings::instance()->getSaveDateTime())
+        {
+            // Store Image Date & Time as Exif and Iptc tags.
+            metadata.writeDateTime(info->filePath(), d->dateTimeEdit->dateTime());
         }
         
         if (AlbumSettings::instance()->getSaveIptcRating())

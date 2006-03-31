@@ -50,16 +50,18 @@ public:
 
     SetupMetadataPriv()
     {
-        iconSaveExifBox           = 0;
-        iconExifRotateBox         = 0;
-        iconExifSetOrientationBox = 0;
-        iconSaveRatingIptcBox     = 0;
+        saveCommentsBox       = 0;
+        ExifRotateBox         = 0;
+        ExifSetOrientationBox = 0;
+        saveRatingIptcBox     = 0;
+        saveDateTimeBox       = 0;
     }
 
-    QCheckBox *iconSaveExifBox;
-    QCheckBox *iconExifRotateBox;
-    QCheckBox *iconExifSetOrientationBox;
-    QCheckBox *iconSaveRatingIptcBox;
+    QCheckBox *saveCommentsBox;
+    QCheckBox *ExifRotateBox;
+    QCheckBox *ExifSetOrientationBox;
+    QCheckBox *saveRatingIptcBox;
+    QCheckBox *saveDateTimeBox;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
@@ -70,40 +72,55 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
   
-    QGroupBox *iconExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
+    QGroupBox *ExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
   
-    QLabel* explanation = new QLabel(iconExifGroup);
+    QLabel* explanation = new QLabel(ExifGroup);
     explanation->setAlignment(explanation->alignment() | WordBreak);
     explanation->setText(i18n("<b>EXIF</b> is a standard used by most digital cameras today to store "
-                              "information such as comments in image files. You can learn more "
+                              "technicals information about photograph. You can learn more "
                               "about EXIF at <i>www.exif.org</i>."));
   
-    d->iconSaveExifBox = new QCheckBox(iconExifGroup);
-    d->iconSaveExifBox->setText(i18n("&Save image comments as embedded comments (JFIF) in JPEG images"));
+    d->ExifRotateBox = new QCheckBox(ExifGroup);
+    d->ExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
   
-    d->iconExifRotateBox = new QCheckBox(iconExifGroup);
-    d->iconExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
-  
-    d->iconExifSetOrientationBox = new QCheckBox(iconExifGroup);
-    d->iconExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
+    d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
+    d->ExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
     
-    mainLayout->addWidget(iconExifGroup);
+    mainLayout->addWidget(ExifGroup);
   
     // --------------------------------------------------------
   
-    QGroupBox *iconIptcGroup = new QGroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
+    QGroupBox *IptcGroup = new QGroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
   
-    QLabel* explanation2 = new QLabel(iconIptcGroup);
+    QLabel* explanation2 = new QLabel(IptcGroup);
     explanation2->setAlignment(explanation2->alignment() | WordBreak);
     explanation2->setText(i18n("<b>IPTC</b> is an another standard used in digital photography to store "
-                               "embeded information in image files. You can learn more "
+                               "embeded informations in image files. You can learn more "
                                "about IPTC at <i>www.iptc.org</i>."));
-  
-    d->iconSaveRatingIptcBox = new QCheckBox(iconIptcGroup);
-    d->iconSaveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
+
+    d->saveRatingIptcBox = new QCheckBox(IptcGroup);
+    d->saveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
+    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toogle on this option to store image rating "
+                                                "into IPTC tag."));
     
-    mainLayout->addWidget(iconIptcGroup);
+    mainLayout->addWidget(IptcGroup);
+
+    // --------------------------------------------------------
   
+    QGroupBox *commonGroup = new QGroupBox(1, Qt::Horizontal, i18n("Common Metadata Actions"), parent);
+  
+    d->saveCommentsBox = new QCheckBox(commonGroup);
+    d->saveCommentsBox->setText(i18n("&Save image comments as embedded comments"));
+    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Toogle on this option to store image comments "
+                                              "into JFIF section, Exif tag, and IPTC tag."));
+
+    d->saveDateTimeBox = new QCheckBox(commonGroup);
+    d->saveDateTimeBox->setText(i18n("&Save image time stamp as tags"));
+    QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Toogle on this option to store image date and time "
+                                              "into Exif and IPTC tags."));
+    
+    mainLayout->addWidget(commonGroup);
+
     mainLayout->addStretch();
   
     readSettings();
@@ -123,12 +140,11 @@ void SetupMetadata::applySettings()
 
     if (!settings) return;
 
-    settings->setSaveExifComments(d->iconSaveExifBox->isChecked());
-    settings->setExifRotate(d->iconExifRotateBox->isChecked());
-    settings->setExifSetOrientation(d->iconExifSetOrientationBox->isChecked());
-
-    settings->setSaveIptcRating(d->iconSaveRatingIptcBox->isChecked());
-
+    settings->setExifRotate(d->ExifRotateBox->isChecked());
+    settings->setExifSetOrientation(d->ExifSetOrientationBox->isChecked());
+    settings->setSaveIptcRating(d->saveRatingIptcBox->isChecked());
+    settings->setSaveComments(d->saveCommentsBox->isChecked());
+    settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
     settings->saveSettings();
 }
 
@@ -138,11 +154,11 @@ void SetupMetadata::readSettings()
 
     if (!settings) return;
 
-    d->iconSaveExifBox->setChecked(settings->getSaveExifComments());
-    d->iconExifRotateBox->setChecked(settings->getExifRotate());
-    d->iconExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
-    
-    d->iconSaveRatingIptcBox->setChecked(settings->getSaveIptcRating());
+    d->ExifRotateBox->setChecked(settings->getExifRotate());
+    d->ExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
+    d->saveRatingIptcBox->setChecked(settings->getSaveIptcRating());
+    d->saveCommentsBox->setChecked(settings->getSaveComments());
+    d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
 }
 
 }  // namespace Digikam

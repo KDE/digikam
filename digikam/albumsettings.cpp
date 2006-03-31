@@ -41,6 +41,7 @@ namespace Digikam
 
 class AlbumSettingsPrivate 
 {
+
 public:
 
     bool showToolTips;
@@ -55,20 +56,22 @@ public:
     bool iconShowResolution;
     bool iconShowTags;
     bool iconShowRating;
-    bool saveExifComments;
     bool exifRotate;
     bool exifSetOrientation;
     bool saveIptcRating;
+    bool saveComments;
+    bool saveDateTime;
 
     int  thumbnailSize;
 
     QString      currentTheme;
     QString      albumLibraryPath;
-    QStringList  albumCollectionNames;
     QString      imageFilefilter;
     QString      movieFilefilter;
     QString      audioFilefilter;
     QString      rawFilefilter;
+
+    QStringList  albumCollectionNames;
     
     KConfig     *config;
 
@@ -89,9 +92,7 @@ AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
     d->config = kapp->config();
-
     instance_ = this;
-    
     init();
 }
 
@@ -138,10 +139,11 @@ void AlbumSettings::init()
     d->iconShowResolution = false;
     d->iconShowTags       = true;
     d->iconShowRating     = true;
-    d->saveExifComments   = false;
     d->exifRotate         = false;
     d->exifSetOrientation = false;
     d->saveIptcRating     = false;
+    d->saveComments       = false;
+    d->saveDateTime       = false;
 }
 
 void AlbumSettings::readSettings()
@@ -159,44 +161,33 @@ void AlbumSettings::readSettings()
         d->albumCollectionNames = collectionList;
     }
 
-    d->albumSortOrder =
-        AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
-                                                           (int)AlbumSettings::ByFolder));
+    d->albumSortOrder = AlbumSettings::AlbumSortOrder(config->readNumEntry("Album Sort Order",
+                                                      (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder =
-        AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
-                                                          (int)AlbumSettings::ByIName));
+    d->imageSortOrder = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
+                                                      (int)AlbumSettings::ByIName));
     
-    d->imageFilefilter = config->readEntry("File Filter",
-                                           d->imageFilefilter);
+    d->imageFilefilter = config->readEntry("File Filter", d->imageFilefilter);
 
-    d->movieFilefilter = config->readEntry("Movie File Filter",
-                                           d->movieFilefilter);
+    d->movieFilefilter = config->readEntry("Movie File Filter", d->movieFilefilter);
 
-    d->audioFilefilter = config->readEntry("Audio File Filter",
-                                           d->audioFilefilter);
+    d->audioFilefilter = config->readEntry("Audio File Filter", d->audioFilefilter);
                               
-    d->rawFilefilter = config->readEntry("Raw File Filter",
-                                         d->rawFilefilter);
+    d->rawFilefilter = config->readEntry("Raw File Filter", d->rawFilefilter);
                               
-    d->thumbnailSize = config->readNumEntry("Default Icon Size",
-                             ThumbnailSize::Medium);
+    d->thumbnailSize = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
 
-    d->showToolTips   = config->readBoolEntry("Show ToolTips", true);
+    d->showToolTips = config->readBoolEntry("Show ToolTips", true);
     
     d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
 
-    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution",
-                                                  false);                                 
+    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);   
 
-    d->iconShowSize = config->readBoolEntry("Icon Show Size",
-                              false);
+    d->iconShowSize = config->readBoolEntry("Icon Show Size", false);
 
-    d->iconShowDate = config->readBoolEntry("Icon Show Date",
-                                            true);
+    d->iconShowDate = config->readBoolEntry("Icon Show Date", true);
 
-    d->iconShowComments = config->readBoolEntry("Icon Show Comments",
-                                                true);
+    d->iconShowComments = config->readBoolEntry("Icon Show Comments", true);
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
 
@@ -205,12 +196,13 @@ void AlbumSettings::readSettings()
     d->currentTheme = config->readEntry("Theme", i18n("Default"));
     
     config->setGroup("EXIF Settings");
-    d->saveExifComments = config->readBoolEntry("Save EXIF Comments", false);
     d->exifRotate = config->readBoolEntry("EXIF Rotate", false);
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
-    config->setGroup("IPTC Settings");
-    d->saveIptcRating = config->readBoolEntry("Save IPTC Rating", false);
+    config->setGroup("Metadata Settings");
+    d->saveIptcRating   = config->readBoolEntry("Save IPTC Rating", false);
+    d->saveComments     = config->readBoolEntry("Save EXIF Comments", false);
+    d->saveDateTime     = config->readBoolEntry("Save Date Time", false);
                                                   
     config->setGroup("General Settings");
     d->showSplash  = config->readBoolEntry("Show Splash", true);
@@ -223,65 +215,33 @@ void AlbumSettings::saveSettings()
     KConfig* config = d->config;
 
     config->setGroup("Album Settings");
-
     config->writePathEntry("Album Path", d->albumLibraryPath);
-
-    config->writeEntry("Album Collections",
-                       d->albumCollectionNames);
-
-    config->writeEntry("Album Sort Order",
-                       (int)d->albumSortOrder);
-
-    config->writeEntry("Image Sort Order",
-                       (int)d->imageSortOrder);
-    
-    config->writeEntry("File Filter",
-                       d->imageFilefilter);
-
-    config->writeEntry("Movie File Filter",
-                       d->movieFilefilter);
-    
-    config->writeEntry("Audio File Filter",
-                       d->audioFilefilter);
-                           
-    config->writeEntry("Raw File Filter",
-                       d->rawFilefilter);
-    
-    config->writeEntry("Default Icon Size",
-                       QString::number(d->thumbnailSize));
-
+    config->writeEntry("Album Collections", d->albumCollectionNames);
+    config->writeEntry("Album Sort Order", (int)d->albumSortOrder);
+    config->writeEntry("Image Sort Order", (int)d->imageSortOrder);
+    config->writeEntry("File Filter", d->imageFilefilter);
+    config->writeEntry("Movie File Filter", d->movieFilefilter);
+    config->writeEntry("Audio File Filter", d->audioFilefilter);
+    config->writeEntry("Raw File Filter", d->rawFilefilter);
+    config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     config->writeEntry("Show ToolTips", d->showToolTips);
-    
-    config->writeEntry("Icon Show Name",
-                       d->iconShowName);
-
-    config->writeEntry("Icon Show Resolution",
-                       d->iconShowResolution);
-                                                      
-    config->writeEntry("Icon Show Size",
-                       d->iconShowSize);
-                       
-    config->writeEntry("Icon Show Date",
-                       d->iconShowDate);
-                       
-    config->writeEntry("Icon Show Comments",
-                       d->iconShowComments);
-                       
-    config->writeEntry("Icon Show Tags",
-                       d->iconShowTags);
-
-    config->writeEntry("Icon Show Rating",
-                       d->iconShowRating);
-    
+    config->writeEntry("Icon Show Name", d->iconShowName);
+    config->writeEntry("Icon Show Resolution", d->iconShowResolution);
+    config->writeEntry("Icon Show Size", d->iconShowSize);
+    config->writeEntry("Icon Show Date", d->iconShowDate);
+    config->writeEntry("Icon Show Comments", d->iconShowComments);
+    config->writeEntry("Icon Show Tags", d->iconShowTags);
+    config->writeEntry("Icon Show Rating", d->iconShowRating);
     config->writeEntry("Theme", d->currentTheme);
     
     config->setGroup("EXIF Settings");
-    config->writeEntry("Save EXIF Comments", d->saveExifComments);
     config->writeEntry("EXIF Rotate", d->exifRotate);
     config->writeEntry("EXIF Set Orientation", d->exifSetOrientation);
 
-    config->setGroup("IPTC Settings");
+    config->setGroup("Metadata Settings");
     config->writeEntry("Save IPTC Rating", d->saveIptcRating);
+    config->writeEntry("Save EXIF Comments", d->saveComments);
+    config->writeEntry("Save Date Time", d->saveDateTime);
                            
     config->setGroup("General Settings");
     config->writeEntry("Show Splash", d->showSplash);
@@ -506,16 +466,6 @@ bool AlbumSettings::getIconShowRating() const
     return d->iconShowRating;
 }
 
-void AlbumSettings::setSaveExifComments(bool val)
-{
-    d->saveExifComments = val;
-}
-
-bool AlbumSettings::getSaveExifComments() const
-{
-    return d->saveExifComments;
-}
-
 void AlbumSettings::setExifRotate(bool val)
 {
     d->exifRotate = val;
@@ -544,6 +494,26 @@ void AlbumSettings::setSaveIptcRating(bool val)
 bool AlbumSettings::getSaveIptcRating() const
 {
     return d->saveIptcRating;
+}
+
+void AlbumSettings::setSaveComments(bool val)
+{
+    d->saveComments = val;
+}
+
+bool AlbumSettings::getSaveComments() const
+{
+    return d->saveComments;
+}
+
+void AlbumSettings::setSaveDateTime(bool val)
+{
+    d->saveDateTime = val;
+}
+
+bool AlbumSettings::getSaveDateTime() const
+{
+    return d->saveDateTime;
 }
 
 void AlbumSettings::setShowToolTips(bool val)

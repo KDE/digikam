@@ -121,7 +121,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("folder_image", KIcon::SizeMedium));
     d->generalPage = new SetupGeneral(d->page_general, this);
 
-    d->page_metadata = addPage(i18n("Embedded Info"), i18n("Embedded Image Information"),
+    d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Information"),
                                BarIcon("exifinfo", KIcon::SizeMedium));
     d->metadataPage = new SetupMetadata(d->page_metadata);
 

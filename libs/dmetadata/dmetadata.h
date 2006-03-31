@@ -62,12 +62,14 @@ public:
     DMetadata(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
 
     /** File access method */
-    bool    load(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
-    bool    save(const QString& filePath, const QString& format);
+    bool load(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
+    bool save(const QString& filePath, const QString& format);
 
-    bool    writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
-    bool    writeImageComment(const QString& filePath, const QString& comment);
-    bool    writeImageRating(const QString& filePath, int rating);
+    bool writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
+    bool writeDateTime(const QString& filePath, const QDateTime& dateTime);
+    bool writeImageComment(const QString& filePath, const QString& comment);
+    bool writeImageRating(const QString& filePath, int rating);
+    bool writeImageTags(const QString& filePath, const QString& tags);
     
     /** Metadata manipulation methods */
     QByteArray       getExif() const;
@@ -77,6 +79,7 @@ public:
     QDateTime        getDateTime() const;
     QString          getImageComment() const;
     int              getImageRating() const;
+    QString          getImageTags() const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);

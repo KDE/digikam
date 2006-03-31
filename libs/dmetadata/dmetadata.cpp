@@ -490,6 +490,57 @@ QDateTime DMetadata::getDateTime() const
     return QDateTime();
 }
 
+bool DMetadata::writeDateTime(const QString& filePath, const QDateTime& dateTime)
+{
+    try
+    {    
+        if (filePath.isEmpty())
+            return false;
+            
+        if (dateTime.date().isValid())
+        {
+            kdDebug() << k_funcinfo << "Date to write is not valid (" << dateTime.date() << ")" << endl;
+            return false;
+        }
+            
+        if (dateTime.time().isValid())
+        {
+            kdDebug() << k_funcinfo << "Time to write is not valid (" << dateTime.time() << ")" << endl;
+            return false;
+        }
+
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        // In first we write date & time into Exif.
+                
+        Exiv2::ExifData &exifData = image->exifData();
+        const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
+        exifData["Exif.Image.DateTime"] = exifdatetime;
+        image->setExifData(exifData);
+        
+        // In Second we write date & time into Iptc.
+
+        Exiv2::IptcData &iptcData = image->iptcData();
+        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
+        iptcData["Iptc.Application2.DateCreated"] = iptcdate;
+        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
+        iptcData["Iptc.Application2.TimeCreated"] = iptctime;
+        image->setIptcData(iptcData);
+    
+        image->writeMetadata();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
 QString DMetadata::getImageComment() const
 {
     try
@@ -625,24 +676,24 @@ int DMetadata::getImageRating() const
             {
                 QString IptcComment(it->toString().c_str());
     
-                if (IptcComment == QString("digiKam Rating=0"))
+                if (IptcComment == QString("digiKamRating=0"))
                     return 0;
-                else if (IptcComment == QString("digiKam Rating=1"))
+                else if (IptcComment == QString("digiKamRating=1"))
                     return 1;
-                else if (IptcComment == QString("digiKam Rating=2"))
+                else if (IptcComment == QString("digiKamRating=2"))
                     return 2;
-                else if (IptcComment == QString("digiKam Rating=3"))
+                else if (IptcComment == QString("digiKamRating=3"))
                     return 3;
-                else if (IptcComment == QString("digiKam Rating=4"))
+                else if (IptcComment == QString("digiKamRating=4"))
                     return 4;
-                else if (IptcComment == QString("digiKam Rating=5"))
+                else if (IptcComment == QString("digiKamRating=5"))
                     return 5;
             }
         }
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Image rating using Exiv2 (" 
+        kdDebug() << "Cannot get Image Rating tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -670,7 +721,7 @@ bool DMetadata::writeImageRating(const QString& filePath, int rating)
         Exiv2::IptcData &iptcData = image->iptcData();
         
         QString temp;
-        QString ratingString("digiKam Rating=");
+        QString ratingString("digiKamRating=");
         ratingString.append(temp.setNum(rating));
         
         iptcData["Iptc.Application2.FixtureId"] = ratingString.latin1();
@@ -680,7 +731,78 @@ bool DMetadata::writeImageRating(const QString& filePath, int rating)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+        kdDebug() << "Cannot set Rating tag into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+// -- METHODS BELOW ARE UNTESTED ---------------------------------
+
+QString DMetadata::getImageTags() const
+{
+    try
+    {    
+        if (m_filePath.isEmpty())
+            return QString();
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(m_filePath)));
+        
+        image->readMetadata();
+        
+        if (m_iptcMetadata.isEmpty())
+        {
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            Exiv2::IptcKey key("Iptc.Application2.Keywords");
+            Exiv2::IptcData::iterator it = iptcData.findKey(key);
+            
+            if (it != iptcData.end())
+            {
+                QString tags(it->toString().c_str());
+                
+                if (tags.startsWith("digiKam Tags="))
+                    return tags.remove(0, 13);
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get digiKam Tags using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QString();
+}
+
+bool DMetadata::writeImageTags(const QString& filePath, const QString& tags)
+{
+    try
+    {    
+        if (filePath.isEmpty())
+            return false;
+            
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        image->readMetadata();
+        Exiv2::IptcData &iptcData = image->iptcData();
+        
+        QString tagsString("digiKam Tags=");
+        tagsString.append(tags);
+        
+        iptcData["Iptc.Application2.Keywords"] = tagsString.latin1();
+        image->setIptcData(iptcData);
+        image->writeMetadata();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set digiKam Tags into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        

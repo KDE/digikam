@@ -127,18 +127,11 @@ void DigikamImageInfo::setDescription( const QString& description )
         db->setItemCaption(p->id(), _url.fileName(), description);
 
         AlbumSettings *settings = AlbumSettings::instance();
-        if (settings->getSaveExifComments())
+        if (settings->getSaveComments())
         {
-            KFileMetaInfo metaInfo(_url.path(), "image/jpeg", KFileMetaInfo::Fastest);
-            if (metaInfo.isValid () && metaInfo.mimeType() == "image/jpeg")
-            {
-               // store as JPEG JFIF comment
-                if (metaInfo.containsGroup("Jpeg EXIF Data"))
-                {
-                    metaInfo["Jpeg EXIF Data"].item("Comment").setValue(description);
-                    metaInfo.applyChanges();
-                }
-            }
+            // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
+            DMetadata metadata;
+            metadata.writeImageComment(_url.path(), description);
         }
     }
 }

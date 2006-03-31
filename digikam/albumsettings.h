@@ -119,9 +119,6 @@ public:
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
     
-    void setSaveExifComments(bool val);
-    bool getSaveExifComments() const;
-
     void setExifRotate(bool val);
     bool getExifRotate() const;
 
@@ -130,6 +127,12 @@ public:
 
     void setSaveIptcRating(bool val);
     bool getSaveIptcRating() const;
+
+    void setSaveComments(bool val);
+    bool getSaveComments() const;
+
+    void setSaveDateTime(bool val);
+    bool getSaveDateTime() const;
     
     void setShowToolTips(bool val);
     bool getShowToolTips() const;
