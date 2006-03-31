@@ -73,11 +73,16 @@ DigikamView::DigikamView(QWidget *parent)
     mParent      = static_cast<DigikamApp *>(parent);
     mAlbumMan    = AlbumManager::instance();
     mMainSidebar = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
+
     mSplitter    = new QSplitter(this);
-    
+    mSplitter->setFrameStyle( QFrame::NoFrame );
+    mSplitter->setFrameShadow( QFrame::Plain );
+    mSplitter->setFrameShape( QFrame::NoFrame );
+    mSplitter->setOpaqueResize(false);
+
     mMainSidebar->setSplitter(mSplitter);
     
-    mIconView     = new AlbumIconView(mSplitter);
+    mIconView    = new AlbumIconView(mSplitter);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     mIconView->setSizePolicy(rightSzPolicy);
 
@@ -100,8 +105,6 @@ DigikamView::DigikamView(QWidget *parent)
 
     mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
     
-    mSplitter->setOpaqueResize(false);
-
     setupConnections();
 
     mAlbumMan->setItemHandler(mIconView);
@@ -186,10 +189,9 @@ void DigikamView::loadViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
+
     if(config->hasKey("SplitterSizes"))
-    {
         mSplitter->setSizes(config->readIntListEntry("SplitterSizes"));
-    }
     
     mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
 }
