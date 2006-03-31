@@ -56,6 +56,9 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");  
     
+    // If digiKam have been started to the first time, there is no image plugins list 
+    // available ==> we load all by default.
+    
     if ( config->readEntry("ImagePlugins List").isNull() )   
     {
         KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
@@ -66,6 +69,10 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
             KService::Ptr service = *iter;
             imagePluginsList2Load.append(service->library());
         }
+        
+        // Create the plugins list to config file.
+        config->writeEntry("ImagePlugins List", imagePluginsList2Load);
+        config->sync();
     }
     else
         imagePluginsList2Load = config->readListEntry("ImagePlugins List");
@@ -128,7 +135,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             break;
        }
     }
-
     
     // Load all other image plugins after (make a coherant menu construction in Image Editor).
       
