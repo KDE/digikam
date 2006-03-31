@@ -68,26 +68,30 @@
 DigikamView::DigikamView(QWidget *parent)
     : QHBox(parent)
 {
-    mParent = static_cast<DigikamApp *>(parent);
-
-    mAlbumMan = AlbumManager::instance();
-
+    mParent      = static_cast<DigikamApp *>(parent);
+    mAlbumMan    = AlbumManager::instance();
     mMainSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Left);
-    
-    mSplitter = new QSplitter(this);
-    
+
+    mSplitter    = new QSplitter(this);
+    msplitter->setFrameStyle( QFrame::NoFrame );
+    msplitter->setFrameShadow( QFrame::Plain );
+    msplitter->setFrameShape( QFrame::NoFrame );
+    mSplitter->setOpaqueResize(false);
+
     mMainSidebar->setSplitter(mSplitter);
     
     mIconView = new AlbumIconView(mSplitter);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    mIconView->setSizePolicy(rightSzPolicy);
     
     mRightSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Right, true);
     mRightSidebar->setSplitter(mSplitter);    
     
-    mFolderView = new AlbumFolderView(this);
-    mDateFolderView = new DateFolderView(this);
-    mTagFolderView = new TagFolderView(this);
+    mFolderView       = new AlbumFolderView(this);
+    mDateFolderView   = new DateFolderView(this);
+    mTagFolderView    = new TagFolderView(this);
     mSearchFolderView = new SearchFolderView(this);
-    mTagFilterView = new TagFilterView(this);    
+    mTagFilterView    = new TagFilterView(this);    
     
     mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
     mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
@@ -124,10 +128,13 @@ void DigikamView::setupConnections()
 
     connect(mAlbumMan, SIGNAL(signalAlbumCurrentChanged(Album*)),
             this, SLOT(slot_albumSelected(Album*)));
+
     connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slot_albumsCleared()));
+
     connect(mAlbumMan, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));    
     
@@ -151,31 +158,18 @@ void DigikamView::setupConnections()
     // -- Sidebar Connections -------------------------------------
 
     connect(mMainSidebar, SIGNAL(signalChangedTab(QWidget*)),
-            SLOT(slotLeftSidebarChangedTab(QWidget*)));
-
+            this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
 }
 
 void DigikamView::loadViewState()
 {
-    QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
-                             QSizePolicy::Expanding,
-                             1, 1);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
+
     if(config->hasKey("SplitterSizes"))
-    {
         mSplitter->setSizes(config->readIntListEntry("SplitterSizes"));
-    }
-    else 
-    {
-        mIconView->setSizePolicy(rightSzPolicy);
-    }    
     
-    mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
-    
+    mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);    
 }
 
 void DigikamView::saveViewState()
