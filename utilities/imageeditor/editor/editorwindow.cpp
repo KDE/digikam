@@ -1213,8 +1213,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write exif if both src and destination are jpeg files
 
-        if (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" &&
-            m_savingContext->format.upper() == "JPEG")
+        if ( (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" ||
+              QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPG") &&
+             (m_savingContext->format.upper() == "JPEG" || m_savingContext->format.upper() == "JPG") )
         {
             if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
             {
