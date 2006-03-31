@@ -482,7 +482,7 @@ QDateTime DMetadata::getDateTime() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif date tag using Exiv2 (" 
+        kdDebug() << "Cannot parse Exif date & time tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -496,36 +496,27 @@ bool DMetadata::writeDateTime(const QString& filePath, const QDateTime& dateTime
     {    
         if (filePath.isEmpty())
             return false;
-            
-        if (dateTime.date().isValid())
-        {
-            kdDebug() << k_funcinfo << "Date to write is not valid (" << dateTime.date() << ")" << endl;
-            return false;
-        }
-            
-        if (dateTime.time().isValid())
-        {
-            kdDebug() << k_funcinfo << "Time to write is not valid (" << dateTime.time() << ")" << endl;
-            return false;
-        }
-
+        
+        kdDebug() << filePath << " ==> Date&Time: " << dateTime.toString(Qt::ISODate) << endl;
+        
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
+        image->readMetadata();
         
         // In first we write date & time into Exif.
                 
         Exiv2::ExifData &exifData = image->exifData();
         const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
-        exifData["Exif.Image.DateTime"] = exifdatetime;
+        exifData["Exif.Photo.DateTimeDigitized"] = exifdatetime;
         image->setExifData(exifData);
         
         // In Second we write date & time into Iptc.
 
         Exiv2::IptcData &iptcData = image->iptcData();
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
-        iptcData["Iptc.Application2.DateCreated"] = iptcdate;
+        iptcData["Iptc.Application2.DigitizationDate"] = iptcdate;
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
-        iptcData["Iptc.Application2.TimeCreated"] = iptctime;
+        iptcData["Iptc.Application2.DigitizationTime"] = iptctime;
         image->setIptcData(iptcData);
     
         image->writeMetadata();
@@ -533,7 +524,7 @@ bool DMetadata::writeDateTime(const QString& filePath, const QDateTime& dateTime
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -618,6 +609,8 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
             kdDebug() << k_funcinfo << "Comment to write is empty!" << endl;
             return false;
         }
+
+        kdDebug() << filePath << " ==> Comment: " << comment << endl;
             
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
@@ -713,6 +706,8 @@ bool DMetadata::writeImageRating(const QString& filePath, int rating)
             kdDebug() << k_funcinfo << "Rating value to write out of range!" << endl;
             return false;
         }
+
+        kdDebug() << filePath << " ==> Rating: " << rating << endl;
             
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
@@ -785,7 +780,9 @@ bool DMetadata::writeImageTags(const QString& filePath, const QString& tags)
     {    
         if (filePath.isEmpty())
             return false;
-            
+
+        kdDebug() << filePath << " ==> Tags: " << tags << endl;
+                        
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
         
