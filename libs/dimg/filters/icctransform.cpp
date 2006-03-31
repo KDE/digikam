@@ -64,6 +64,7 @@ public:
 IccTransform::IccTransform()
 {
     d = new IccTransformPriv;
+    cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
 IccTransform::~IccTransform()
