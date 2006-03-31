@@ -73,9 +73,9 @@ DigikamView::DigikamView(QWidget *parent)
     mMainSidebar = new Digikam::Sidebar(this, Digikam::Sidebar::Left);
 
     mSplitter    = new QSplitter(this);
-    msplitter->setFrameStyle( QFrame::NoFrame );
-    msplitter->setFrameShadow( QFrame::Plain );
-    msplitter->setFrameShape( QFrame::NoFrame );
+    mSplitter->setFrameStyle( QFrame::NoFrame );
+    mSplitter->setFrameShadow( QFrame::Plain );
+    mSplitter->setFrameShape( QFrame::NoFrame );
     mSplitter->setOpaqueResize(false);
 
     mMainSidebar->setSplitter(mSplitter);
