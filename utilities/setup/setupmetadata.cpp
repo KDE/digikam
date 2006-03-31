@@ -110,7 +110,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QGroupBox *commonGroup = new QGroupBox(1, Qt::Horizontal, i18n("Common Metadata Actions"), parent);
   
     d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image comments as embedded comments"));
+    d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
     QWhatsThis::add( d->saveCommentsBox, i18n("<p>Toogle on this option to store image comments "
                                               "into JFIF section, Exif tag, and IPTC tag."));
 
