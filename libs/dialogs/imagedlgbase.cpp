@@ -131,8 +131,11 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
 
     d->hbox     = new QHBox(plainPage());
     d->splitter = new QSplitter(d->hbox);
-    
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );    
     d->splitter->setOpaqueResize(false);
+    
     d->mainLayout->addMultiCellWidget(d->hbox, 1, 2, 0, 1);
     d->mainLayout->setColStretch(0, 10);
     d->mainLayout->setRowStretch(2, 10);

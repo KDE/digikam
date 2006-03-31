@@ -116,6 +116,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->previewWidget   = new QWidget(d->splitter);
     d->mainLayout      = new QGridLayout( d->previewWidget, 2, 2, 0, KDialog::spacingHint());
     
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );    
     d->splitter->setOpaqueResize(false);
 
     // -------------------------------------------------------------
@@ -131,9 +134,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                 "image to change the clip focus."));
     l1->addWidget(d->imageRegionWidget, 0);
 
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     d->previewWidget->setSizePolicy(rightSzPolicy);
 
     // -------------------------------------------------------------

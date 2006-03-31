@@ -175,13 +175,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     d->hbox              = new QHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
-    m_imagePreviewWidget = new ImageWidget(d->splitter, desc, prevModeOptions, 
-                                           guideMode, guideVisible);
+    m_imagePreviewWidget = new ImageWidget(d->splitter, desc, prevModeOptions, guideMode, guideVisible);
     
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );    
     d->splitter->setOpaqueResize(false);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     m_imagePreviewWidget->setSizePolicy(rightSzPolicy);
 
     QString sbName(d->name + QString(" Image Plugin Sidebar"));

@@ -247,12 +247,15 @@ void ShowFoto::setupUserArea()
     config->setGroup("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
-
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    
     if(!config->readBoolEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new QSplitter(widget);
         m_canvas          = new Digikam::Canvas(m_splitter);
+        m_canvas->setSizePolicy(rightSzPolicy);
+        
         m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
         m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
@@ -267,6 +270,8 @@ void ShowFoto::setupUserArea()
         QWidget* widget2  = new QWidget(m_splitter);
         QVBoxLayout *vlay = new QVBoxLayout(widget2);
         m_canvas          = new Digikam::Canvas(widget2);
+        m_canvas->setSizePolicy(rightSzPolicy);
+
         m_bar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
 
         vlay->addWidget(m_canvas);
@@ -280,6 +285,9 @@ void ShowFoto::setupUserArea()
         hlay->addWidget(m_rightSidebar);        
     }        
 
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
     m_rightSidebar->loadViewState();    

@@ -160,8 +160,15 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     QHBox* widget   = new QHBox(plainPage());
     d->splitter     = new QSplitter(widget);
     d->view         = new CameraIconView(this, d->splitter);
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    d->view->setSizePolicy(rightSzPolicy);
+        
     d->rightSidebar = new ImagePropertiesSideBarCamGui(widget, "CameraGui Sidebar Right", d->splitter,
                                                        Digikam::Sidebar::Right, true);
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );       
     d->splitter->setOpaqueResize(false);
     
     // -------------------------------------------------------------------------
@@ -354,9 +361,6 @@ void CameraUI::readSettings()
     config->setGroup("Camera Settings");
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
     d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
-    
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    d->view->setSizePolicy(rightSzPolicy);
 
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));

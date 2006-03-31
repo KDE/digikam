@@ -194,15 +194,18 @@ void ImageWindow::setupUserArea()
     
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
+    
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    m_canvas->setSizePolicy(rightSzPolicy);
+        
     m_rightSidebar   = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
                                                     Sidebar::Right, true, false);
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
-
     lay->addWidget(m_splitter);
     lay->addWidget(m_rightSidebar);
     
+    m_splitter->setFrameStyle( QFrame::NoFrame );
+    m_splitter->setFrameShadow( QFrame::Plain );
+    m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
 }

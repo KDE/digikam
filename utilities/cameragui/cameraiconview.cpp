@@ -55,7 +55,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
                 m_groupItem(new IconGroupItem(this))
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
-    setMinimumSize(300, 300);
+    setMinimumSize(450, 400);
 
     CameraIconViewItem::m_newEmblem = new QPixmap(CameraIconViewItem::new_xpm);
     
