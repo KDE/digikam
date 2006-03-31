@@ -72,14 +72,17 @@ DigikamView::DigikamView(QWidget *parent)
 {
     mParent      = static_cast<DigikamApp *>(parent);
     mAlbumMan    = AlbumManager::instance();
-    mMainSidebar = new Digikam::Sidebar(this, "Digikam Left Sidebar", Digikam::Sidebar::Left);
+    mMainSidebar = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
     mSplitter    = new QSplitter(this);
     
     mMainSidebar->setSplitter(mSplitter);
     
     mIconView     = new AlbumIconView(mSplitter);
-    mRightSidebar = new Digikam::ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", mSplitter, 
-                                                          Digikam::Sidebar::Right, true, true);
+    QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
+    mIconView->setSizePolicy(rightSzPolicy);
+
+    mRightSidebar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", mSplitter, 
+                                                 Sidebar::Right, true, true);
     
     // To the left.
     mFolderView       = new AlbumFolderView(this);
@@ -181,22 +184,12 @@ void DigikamView::setupConnections()
 
 void DigikamView::loadViewState()
 {
-    QSizePolicy leftSzPolicy(QSizePolicy::Preferred,
-                             QSizePolicy::Expanding,
-                             1, 1);
-    QSizePolicy rightSzPolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Expanding,
-                              2, 1);
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
     if(config->hasKey("SplitterSizes"))
     {
         mSplitter->setSizes(config->readIntListEntry("SplitterSizes"));
     }
-    else 
-    {
-        mIconView->setSizePolicy(rightSzPolicy);
-    }    
     
     mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
 }
