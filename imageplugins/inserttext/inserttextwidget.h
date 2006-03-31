@@ -141,7 +141,7 @@ protected:
                        QFont font, float pointSize, int textRotation, QColor textColor,
                        int alignMode, const QString &textString,
                        bool transparentBackground, QColor backgroundColor,
-                       BorderMode borderMode, int borderWidth);
+                       BorderMode borderMode, int borderWidth, int spacing);
 };
 
 }  // NameSpace DigikamInsertTextImagesPlugin

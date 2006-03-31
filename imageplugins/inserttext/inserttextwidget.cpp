@@ -188,12 +188,13 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     // Get original image
     Digikam::DImg image = m_iface->getOriginalImg()->copy();
 
+    int borderWidth = QMIN(1, lroundf(2*ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
                   m_textFont, m_textFont.pointSizeFloat(),
                   m_textRotation, m_textColor, m_alignMode, m_textString,
                   m_textTransparent, m_backgroundColor,
-                  m_textBorder ? BORDER_NORMAL : BORDER_NONE, 1);
+                  m_textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
 
     return image;
 }
@@ -242,7 +243,7 @@ void InsertTextWidget::makePixmap(void)
                                    m_textFont, m_textFont.pointSizeFloat() * ((ratioW > ratioH) ? ratioW : ratioH),
                                    m_textRotation, m_textColor, m_alignMode, m_textString,
                                    m_textTransparent, m_backgroundColor,
-                                   m_textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1);
+                                   m_textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
 
     p.end();
 
@@ -264,7 +265,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString &textString,
                                      bool transparentBackground, QColor backgroundColor,
-                                     BorderMode borderMode, int borderWidth)
+                                     BorderMode borderMode, int borderWidth, int spacing)
 {
     /*
         The problem we have to solve is that we have no pixel access to font rendering,
@@ -291,8 +292,28 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     QFontMetrics fontMt( font );
     QRect fontRect = fontMt.boundingRect(0, 0, maxWidth, maxHeight, 0, textString);
 
+    int fontWidth, fontHeight;
+
+    switch(textRotation)
+    {
+        case ROTATION_NONE:
+        case ROTATION_180:
+        default:
+            fontWidth = fontRect.width();
+            fontHeight = fontRect.height();
+            break;
+
+        case ROTATION_90:
+        case ROTATION_270:
+            fontWidth = fontRect.height();
+            fontHeight = fontRect.width();
+            break;
+    }
+
+    // x, y == -1 means that we have to find a good initial position for the text here
     if (x == -1 && y == -1)
     {
+        // was a valid position hint stored from last use?
         if (m_positionHint.isValid())
         {
             // We assume that people tend to orient text along the edges,
@@ -313,36 +334,36 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
                 // we are placing from the smaller distance,
                 // so if now the larger distance is actually too small,
                 // fall back to standard placement, nothing to lose.
-                if (x + fontRect.width() > maxWidth)
-                    x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+                if (x + fontWidth > maxWidth)
+                    x = QMAX( (maxWidth - fontWidth) / 2, 0);
             }
             else
             {
-                x = maxWidth - (int)(fromRight * maxWidth) - fontRect.width();
+                x = maxWidth - (int)(fromRight * maxWidth) - fontWidth;
                 if ( x < 0 )
-                    x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
+                    x = QMAX( (maxWidth - fontWidth) / 2, 0);
             }
 
             // calculate vertical position
             if (fromTop < fromBottom)
             {
                 y = (int)(fromTop * maxHeight);
-                if (y + fontRect.height() > maxHeight)
-                    y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+                if (y + fontHeight > maxHeight)
+                    y = QMAX( (maxHeight - fontHeight) / 2, 0);
             }
             else
             {
-                y = maxHeight - (int)(fromBottom * maxHeight) - fontRect.height();
+                y = maxHeight - (int)(fromBottom * maxHeight) - fontHeight;
                 if ( y < 0 )
-                    y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+                    y = QMAX( (maxHeight - fontHeight) / 2, 0);
             }
 
-            if (! QRect(x, y, fontRect.width(), fontRect.height()).
+            if (! QRect(x, y, fontWidth, fontHeight).
                    intersects(QRect(0, 0, maxWidth, maxHeight)) )
             {
                 // emergency fallback - nothing is visible
-                x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
-                y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+                x = QMAX( (maxWidth - fontWidth) / 2, 0);
+                y = QMAX( (maxHeight - fontHeight) / 2, 0);
             }
 
             // invalidate position hint, use only once
@@ -351,52 +372,23 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
         else
         {
             // use standard position
-            x = QMAX( (maxWidth - fontRect.width()) / 2, 0);
-            y = QMAX( (maxHeight - fontRect.height()) / 2, 0);
+            x = QMAX( (maxWidth - fontWidth) / 2, 0);
+            y = QMAX( (maxHeight - fontHeight) / 2, 0);
         }
     }
 
     // create a rectangle relative to image
-    QRect drawRect;
-    drawRect.setX(x);
-    drawRect.setY(y);
+    QRect drawRect( x, y, fontWidth + 2 * borderWidth + 2 * spacing, fontHeight + 2 * borderWidth  + 2 * spacing);
 
     // create a rectangle relative to textArea, excluding the border
-    QRect textAreaTextRect;
-    textAreaTextRect.setX(borderWidth);
-    textAreaTextRect.setY(borderWidth);
+    QRect textAreaBackgroundRect( borderWidth, borderWidth, fontWidth + 2 * spacing, fontHeight + 2 * spacing);
+
+    // create a rectangle relative to textArea, excluding the border and spacing
+    QRect textAreaTextRect( borderWidth + spacing, borderWidth + spacing, fontWidth, fontHeight );
 
     // create a rectangle relative to textArea, including the border
-    QRect textAreaDrawRect;
-    textAreaDrawRect.setX(0);
-    textAreaDrawRect.setY(0);
+    QRect textAreaDrawRect( 0, 0, fontWidth + 2 * borderWidth + 2 * spacing, fontHeight + 2 * borderWidth + 2 * spacing );
 
-    switch(textRotation)
-    {
-        case ROTATION_NONE:
-        case ROTATION_180:
-            drawRect.setWidth(fontRect.width() + 2 * borderWidth);
-            drawRect.setHeight(fontRect.height() + 2 * borderWidth);
-
-            textAreaTextRect.setWidth(fontRect.width());
-            textAreaTextRect.setHeight(fontRect.height());
-
-            textAreaDrawRect.setWidth(fontRect.width() + 2 * borderWidth);
-            textAreaDrawRect.setHeight(fontRect.height() + 2 * borderWidth);
-            break;
-
-        case ROTATION_90:
-        case ROTATION_270:
-            drawRect.setWidth(fontRect.height() + 2 * borderWidth);
-            drawRect.setHeight(fontRect.width() + 2 * borderWidth);
-
-            textAreaTextRect.setWidth(fontRect.height());
-            textAreaTextRect.setHeight(fontRect.width());
-
-            textAreaDrawRect.setWidth(fontRect.height() + 2 * borderWidth);
-            textAreaDrawRect.setHeight(fontRect.width() + 2 * borderWidth);
-            break;
-    }
 
     // cut out the text area
     Digikam::DImg textArea = image->copy(drawRect);
@@ -404,17 +396,17 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     if (textArea.isNull())
         return QRect();
 
-    // compose semi-transparent bachground over textArea
+    // compose semi-transparent background over textArea
     if (transparentBackground)
     {
-        Digikam::DImg transparentLayer(textAreaTextRect.width(), textAreaTextRect.height(), textArea.sixteenBit(), true);
+        Digikam::DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
         Digikam::DColor transparent(backgroundColor);
         transparent.setAlpha(m_transparency);
         if (image->sixteenBit())
             transparent.convertToSixteenBit();
         transparentLayer.fill(transparent);
         textArea.bitBlendImage(composer, &transparentLayer, 0, 0, transparentLayer.width(), transparentLayer.height(),
-                               textAreaTextRect.x(), textAreaTextRect.y());
+                               textAreaBackgroundRect.x(), textAreaBackgroundRect.y());
     }
 
     Digikam::DImg textNotDrawn;
@@ -437,7 +429,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     p.save();
 
     // translate to origin of text, leaving space for the border
-    p.translate(textAreaTextRect.x(), textAreaTextRect.y());
+    p.translate(textAreaBackgroundRect.x(), textAreaBackgroundRect.y());
 
     switch(textRotation)
     {
@@ -471,7 +463,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
 
     if (borderMode == BORDER_NORMAL)      // Decorative border using text color.
     {
-        p.setPen( QPen::QPen(textColor, 2, Qt::SolidLine,
+        p.setPen( QPen::QPen(textColor, borderWidth, Qt::SolidLine,
                   Qt::SquareCap, Qt::RoundJoin) ) ;
         p.drawRect(textAreaDrawRect);
     }
