@@ -80,7 +80,8 @@ DigikamFirstRun::DigikamFirstRun( KConfig* config,
     config_ = config;
     ui = new DigikamFirstFirstRunWidget(this);
     setMainWidget(ui);
-    ui->path->setURL(QDir::homeDirPath() + i18n("This is a path name so you should include the slash in the translation","/Pictures"));
+    ui->path->setURL(QDir::homeDirPath() + i18n("This is a path name so you should "
+                     "include the slash in the translation","/Pictures"));
     ui->path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
@@ -97,7 +98,8 @@ void DigikamFirstRun::slotOk()
     QString albumLibraryFolder = ui->path->url();
     if (albumLibraryFolder.isEmpty())
     {
-        KMessageBox::sorry(this, i18n("You must select a folder for Digikam to use as the Album Library folder."));
+        KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
+                                      "use as the Album Library folder."));
         return;
     }
 
@@ -108,7 +110,7 @@ void DigikamFirstRun::slotOk()
 
     if (KURL(albumLibraryFolder).equals(KURL(QDir::homeDirPath()), true))
     {
-        KMessageBox::sorry(this, i18n("Digikam cannot use your home folder as the Album Library folder."));
+        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as the Album Library folder."));
         return;
     }
 
@@ -131,7 +133,7 @@ void DigikamFirstRun::slotOk()
         if (!targetPath.mkdir(albumLibraryFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("<qt>Digikam could not create the folder shown below. "
+                               i18n("<qt>digiKam could not create the folder shown below. "
                                     "Please select a different location."
                                     "<p><b>%1</b></p></qt>").arg(albumLibraryFolder),
                                i18n("Create Folder Failed"));
@@ -140,9 +142,10 @@ void DigikamFirstRun::slotOk()
     }
 
     QFileInfo path(albumLibraryFolder);
-    if (!path.isWritable()) {
+    if (!path.isWritable()) 
+    {
         KMessageBox::information(this, i18n("No write access for this path.\n"
-                                         "Warning: the comments and tag features will not work."));
+                                            "Warning: the comments and tag features will not work."));
         return;
     }
 
@@ -153,15 +156,15 @@ void DigikamFirstRun::slotOk()
     config_->writePathEntry("Album Path", albumLibraryFolder);
     config_->sync();
 
-    QDialog::accept();
+    KDialogBase::accept();
 
     QString ErrorMsg, URL;
 
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
         kdError() << ErrorMsg << endl;
-        KMessageBox::sorry(this, i18n("Cannot restart Digikam automatically.\n"
-                                   "Please restart Digikam manually."));
+        KMessageBox::sorry(this, i18n("Cannot restart digiKam automatically.\n"
+                                      "Please restart digiKam manually."));
     }
 }
 
