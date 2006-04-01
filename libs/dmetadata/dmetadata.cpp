@@ -624,7 +624,9 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
         // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
 
         Exiv2::IptcData &iptcData = image->iptcData();
-        iptcData["Iptc.Application2.Caption"] = comment.latin1().truncate(2000);
+        QString commentIptc = comment;
+        commentIptc.truncate(2000);
+        iptcData["Iptc.Application2.Caption"] = commentIptc.latin1();
         image->setIptcData(iptcData);
     
         image->writeMetadata();
@@ -742,7 +744,8 @@ bool DMetadata::writeImageKeywords(const QString& filePath, const QStringList& k
         Exiv2::IptcData &iptcData = image->iptcData();
         
         // Keywords IPTC tag is limited to 64 char.
-        QString keywordsString = keywords.join(" ").truncate(64);
+        QString keywordsString = keywords.join(" ");
+        keywordsString.truncate(64);
         kdDebug() << filePath << " ==> Keywords: " << keywordsString << endl;
         
         iptcData["Iptc.Application2.Keywords"] = keywordsString.latin1();
