@@ -60,7 +60,7 @@ static const char* IptcHumanList[] =
      "Copyright",
      "Program",
      "Keywords",
-     "FixtureId"
+     "FixtureId",
      "-1"
 };
 
