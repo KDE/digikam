@@ -59,6 +59,7 @@ public:
     bool exifRotate;
     bool exifSetOrientation;
     bool saveIptcRating;
+    bool saveIptcTags;
     bool saveComments;
     bool saveDateTime;
 
@@ -141,6 +142,7 @@ void AlbumSettings::init()
     d->iconShowRating     = true;
     d->exifRotate         = false;
     d->exifSetOrientation = false;
+    d->saveIptcTags       = false;
     d->saveIptcRating     = false;
     d->saveComments       = false;
     d->saveDateTime       = false;
@@ -200,6 +202,7 @@ void AlbumSettings::readSettings()
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
     config->setGroup("Metadata Settings");
+    d->saveIptcTags     = config->readBoolEntry("Save IPTC Tags", false);
     d->saveIptcRating   = config->readBoolEntry("Save IPTC Rating", false);
     d->saveComments     = config->readBoolEntry("Save EXIF Comments", false);
     d->saveDateTime     = config->readBoolEntry("Save Date Time", false);
@@ -239,6 +242,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("EXIF Set Orientation", d->exifSetOrientation);
 
     config->setGroup("Metadata Settings");
+    config->writeEntry("Save IPTC Tags", d->saveIptcTags);
     config->writeEntry("Save IPTC Rating", d->saveIptcRating);
     config->writeEntry("Save EXIF Comments", d->saveComments);
     config->writeEntry("Save Date Time", d->saveDateTime);
@@ -484,6 +488,16 @@ void AlbumSettings::setExifSetOrientation(bool val)
 bool AlbumSettings::getExifSetOrientation() const
 {
     return d->exifSetOrientation;
+}
+
+void AlbumSettings::setSaveIptcTags(bool val)
+{
+    d->saveIptcTags = val;
+}
+
+bool AlbumSettings::getSaveIptcTags() const
+{
+    return d->saveIptcTags;
 }
 
 void AlbumSettings::setSaveIptcRating(bool val)

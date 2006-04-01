@@ -601,14 +601,8 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
 {
     try
     {    
-        if (filePath.isEmpty())
+        if (filePath.isEmpty() || comment.isEmpty())
             return false;
-            
-        if (comment.isEmpty())
-        {
-            kdDebug() << k_funcinfo << "Comment to write is empty!" << endl;
-            return false;
-        }
 
         kdDebug() << filePath << " ==> Comment: " << comment << endl;
             
@@ -627,10 +621,10 @@ bool DMetadata::writeImageComment(const QString& filePath, const QString& commen
         exifData["Exif.Photo.UserComment"] = comment.latin1();
         image->setExifData(exifData);
         
-        // In Third we write comments into Iptc.
+        // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
 
         Exiv2::IptcData &iptcData = image->iptcData();
-        iptcData["Iptc.Application2.Caption"] = comment.latin1();
+        iptcData["Iptc.Application2.Caption"] = comment.latin1().truncate(2000);
         image->setIptcData(iptcData);
     
         image->writeMetadata();
@@ -734,9 +728,41 @@ bool DMetadata::writeImageRating(const QString& filePath, int rating)
     return false;
 }
 
+bool DMetadata::writeImageKeywords(const QString& filePath, const QStringList& keywords)
+{
+    try
+    {    
+        if (filePath.isEmpty() || keywords.isEmpty())
+            return false;
+
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        
+        image->readMetadata();
+        Exiv2::IptcData &iptcData = image->iptcData();
+        
+        // Keywords IPTC tag is limited to 64 char.
+        QString keywordsString = keywords.join(" ").truncate(64);
+        kdDebug() << filePath << " ==> Keywords: " << keywordsString << endl;
+        
+        iptcData["Iptc.Application2.Keywords"] = keywordsString.latin1();
+        image->setIptcData(iptcData);
+        image->writeMetadata();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Keywords into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
 // -- METHODS BELOW ARE UNTESTED ---------------------------------
 
-QString DMetadata::getImageTags() const
+QStringList DMetadata::getImageKeywords() const
 {
     try
     {    
@@ -757,54 +783,21 @@ QString DMetadata::getImageTags() const
             
             if (it != iptcData.end())
             {
-                QString tags(it->toString().c_str());
-                
-                if (tags.startsWith("digiKam Tags="))
-                    return tags.remove(0, 13);
+                QStringList keywords;
+                QString keywordsString(it->toString().c_str());
+                keywords.split(" ", keywordsString);
+                return keywords;
             }
         }
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get digiKam Tags using Exiv2 (" 
+        kdDebug() << "Cannot get Keywords using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
     
     return QString();
-}
-
-bool DMetadata::writeImageTags(const QString& filePath, const QString& tags)
-{
-    try
-    {    
-        if (filePath.isEmpty())
-            return false;
-
-        kdDebug() << filePath << " ==> Tags: " << tags << endl;
-                        
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
-        
-        image->readMetadata();
-        Exiv2::IptcData &iptcData = image->iptcData();
-        
-        QString tagsString("digiKam Tags=");
-        tagsString.append(tags);
-        
-        iptcData["Iptc.Application2.Keywords"] = tagsString.latin1();
-        image->setIptcData(iptcData);
-        image->writeMetadata();
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot set digiKam Tags into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-    
-    return false;
 }
 
 }  // NameSpace Digikam

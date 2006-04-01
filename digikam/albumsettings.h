@@ -125,6 +125,9 @@ public:
     void setExifSetOrientation(bool val);
     bool getExifSetOrientation() const;
 
+    void setSaveIptcTags(bool val);
+    bool getSaveIptcTags() const;
+
     void setSaveIptcRating(bool val);
     bool getSaveIptcRating() const;
 

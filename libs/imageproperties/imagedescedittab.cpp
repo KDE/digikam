@@ -363,11 +363,27 @@ void ImageDescEditTab::applyAllChanges()
         return;
 
     DMetadata metadata;
-    ImageInfo* info = d->currItem->imageInfo();
+    QStringList keywordsList;
 
+    ImageInfo* info = d->currItem->imageInfo();
     info->setCaption(d->commentsEdit->text());
     info->setDateTime(d->dateTimeEdit->dateTime());
     info->setRating(d->ratingWidget->rating());
+    info->removeAllTags();
+
+    QListViewItemIterator it(d->tagsView);
+    while (it.current())
+    {
+        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
+        if (tItem && tItem->isOn())
+        {
+            info->setTag(tItem->m_album->id());
+            keywordsList.append(tItem->m_album->title());
+        }
+        ++it;
+    }
+
+    // Store data in image metadata.
 
     if (AlbumSettings::instance())
     {
@@ -388,18 +404,9 @@ void ImageDescEditTab::applyAllChanges()
             // Store Image rating as Iptc tag.
             metadata.writeImageRating(info->filePath(), d->ratingWidget->rating());
         }
-    }
-    
-    info->removeAllTags();
-    QListViewItemIterator it(d->tagsView);
-    while (it.current())
-    {
-        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
-        if (tItem && tItem->isOn())
-        {
-            info->setTag(tItem->m_album->id());
-        }
-        ++it;
+
+        // Store Image Tags like Iptc keywords tag.
+        metadata.writeImageKeywords(info->filePath(), keywordsList);
     }
 
     d->modified = false;

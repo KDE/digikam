@@ -55,6 +55,7 @@ public:
         ExifRotateBox         = 0;
         ExifSetOrientationBox = 0;
         saveRatingIptcBox     = 0;
+        saveTagsIptcBox       = 0;
         saveDateTimeBox       = 0;
     }
 
@@ -62,6 +63,7 @@ public:
     QCheckBox *ExifRotateBox;
     QCheckBox *ExifSetOrientationBox;
     QCheckBox *saveRatingIptcBox;
+    QCheckBox *saveTagsIptcBox;
     QCheckBox *saveDateTimeBox;
 };
 
@@ -86,12 +88,17 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     // --------------------------------------------------------
   
     QGroupBox *IptcGroup = new QGroupBox(1, Qt::Horizontal, i18n("IPTC Actions"), parent);
+
+    d->saveTagsIptcBox = new QCheckBox(IptcGroup);
+    d->saveTagsIptcBox->setText(i18n("&Save image tags as IPTC keywords tag"));
+    QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Toogle on this option to store image tags "
+                                                "into IPTC keywords tag."));
   
     d->saveRatingIptcBox = new QCheckBox(IptcGroup);
     d->saveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
     QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toogle on this option to store image rating "
                                                 "into IPTC tag."));
-    
+   
     mainLayout->addWidget(IptcGroup);
 
     // --------------------------------------------------------
@@ -145,6 +152,7 @@ void SetupMetadata::applySettings()
     settings->setExifRotate(d->ExifRotateBox->isChecked());
     settings->setExifSetOrientation(d->ExifSetOrientationBox->isChecked());
     settings->setSaveIptcRating(d->saveRatingIptcBox->isChecked());
+    settings->setSaveIptcTags(d->saveTagsIptcBox->isChecked());
     settings->setSaveComments(d->saveCommentsBox->isChecked());
     settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
     settings->saveSettings();
@@ -159,6 +167,7 @@ void SetupMetadata::readSettings()
     d->ExifRotateBox->setChecked(settings->getExifRotate());
     d->ExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
     d->saveRatingIptcBox->setChecked(settings->getSaveIptcRating());
+    d->saveTagsIptcBox->setChecked(settings->getSaveIptcTags());
     d->saveCommentsBox->setChecked(settings->getSaveComments());
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
 }

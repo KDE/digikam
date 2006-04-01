@@ -69,7 +69,7 @@ public:
     bool writeDateTime(const QString& filePath, const QDateTime& dateTime);
     bool writeImageComment(const QString& filePath, const QString& comment);
     bool writeImageRating(const QString& filePath, int rating);
-    bool writeImageTags(const QString& filePath, const QString& tags);
+    bool writeImageKeywords(const QString& filePath, const QStringList& keywords);
     
     /** Metadata manipulation methods */
     QByteArray       getExif() const;
@@ -79,7 +79,7 @@ public:
     QDateTime        getDateTime() const;
     QString          getImageComment() const;
     int              getImageRating() const;
-    QString          getImageTags() const;
+    QStringList      getImageKeywords() const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);
