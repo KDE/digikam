@@ -315,32 +315,7 @@ void ImageDescEditTab::populateTags()
     {
         TAlbum* tag  = (TAlbum*)(*it);
 
-        TAlbumCheckListItem* viewItem = 0;
-
-        if (tag->isRoot())
-        {
-            viewItem = new TAlbumCheckListItem(d->tagsView, tag);
-        }
-        else
-        {
-            QCheckListItem* parentItem = (QCheckListItem*)(tag->parent()->extraData(this));
-            
-            if (!parentItem)
-            {
-                kdWarning() << "Failed to find parent for Tag " << tag->title()
-                            << endl;
-                continue;
-            }
-
-            viewItem = new TAlbumCheckListItem(parentItem, tag);
-        }
-
-        if (viewItem)
-        {
-            viewItem->setOpen(true);
-            viewItem->setPixmap(0, tagThumbnail(tag));
-            tag->setExtraData(this, viewItem);
-        }
+        slotAlbumAdded(tag);
     }
 }
 
@@ -438,7 +413,7 @@ void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
     PAlbum *album = currItem->imageInfo()->album();
     if (!album)
     {
-        kdWarning() << "Failed to find parent album for"
+        kdWarning() << k_funcinfo << "Failed to find parent album for"
                     << fileURL << endl;
         return;
     }
@@ -627,25 +602,38 @@ void ImageDescEditTab::tagEdit(TAlbum* album)
 
 void ImageDescEditTab::slotAlbumAdded(Album* a)
 {
-    if (!a || a->isRoot() || a->type() != Album::TAG)
+    if (!a || a->type() != Album::TAG)
         return;
 
-    TAlbum* album = (TAlbum*)a;
+    TAlbumCheckListItem* viewItem = 0;
 
-    QCheckListItem* parentItem  =
-        (QCheckListItem*)(album->parent()->extraData(this));
+    TAlbum* tag = (TAlbum*)a;
 
-    if (!parentItem)
+    if (tag->isRoot())
     {
-        kdWarning() << "Failed to find parent for Tag " << album->title()
-                    << endl;
-        return;
+        viewItem = new TAlbumCheckListItem(d->tagsView, tag);
+    }
+    else
+    {
+        QCheckListItem* parentItem = (QCheckListItem*)(tag->parent()->extraData(this));
+
+        if (!parentItem)
+        {
+            kdWarning() << k_funcinfo << "Failed to find parent for Tag " << tag->title()
+                        << endl;
+            return;
+        }
+
+        viewItem = new TAlbumCheckListItem(parentItem, tag);
     }
 
-    TAlbumCheckListItem* viewItem = new TAlbumCheckListItem(parentItem, album);
-    viewItem->setOpen(true);
-    viewItem->setPixmap(0, tagThumbnail(album));
-    album->setExtraData(this, viewItem);
+    if (viewItem)
+    {
+        viewItem->setOpen(true);
+        viewItem->setPixmap(0, tagThumbnail(tag));
+        tag->setExtraData(this, viewItem);
+    }
+
 }
 
 void ImageDescEditTab::slotAlbumDeleted(Album* a)
