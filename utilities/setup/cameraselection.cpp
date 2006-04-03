@@ -25,7 +25,6 @@
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlistview.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
@@ -37,8 +36,10 @@
 // KDE includes.
 
 #include <kglobalsettings.h>
+#include <kactivelabel.h>
 #include <kurlrequester.h>
 #include <klocale.h>
+#include <klistview.h>
 
 // Local includes.
 
@@ -64,8 +65,6 @@ public:
         umsMountURL      = 0;
     }
 
-    QListView     *listView;
-
     QLineEdit     *titleEdit;
 
     QVButtonGroup *portButtonGroup;
@@ -81,6 +80,8 @@ public:
     QString        UMSCameraNameShown;
 
     QStringList    serialPortList;
+    
+    KListView     *listView;
 
     KURLRequester *umsMountURL;
 };
@@ -97,40 +98,33 @@ CameraSelection::CameraSelection( QWidget* parent )
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     
-    QVBoxLayout *topLayout =
-        new QVBoxLayout( page, 5, 5 ); 
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 5, 5 ); 
 
-    QGroupBox* mainBox = new QGroupBox( page );
-    mainBox->setTitle( i18n( "Camera Configuration" ) );
-    mainBox->setColumnLayout(0, Qt::Vertical );
-    mainBox->layout()->setSpacing( 5 );
-    mainBox->layout()->setMargin( 5 );
-    QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout() );
-    mainBoxLayout->setAlignment( Qt::AlignTop );
+    // --------------------------------------------------------------
 
-    d->listView = new QListView( mainBox );
-    d->listView->addColumn( i18n("Cameras") );
-    d->listView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
-                                         QSizePolicy::Expanding));
-    mainBoxLayout->addMultiCellWidget( d->listView, 0, 4, 0, 0 );
-
-    QGroupBox* titleBox = new QGroupBox( mainBox );
-    titleBox->setTitle( i18n("Camera Title") );
-    titleBox->setColumnLayout(0, Qt::Vertical );
-    titleBox->layout()->setSpacing( 5 );
-    titleBox->layout()->setMargin( 5 );
-    QVBoxLayout* titleBoxLayout = new QVBoxLayout( titleBox->layout() );
-
-    d->titleEdit = new QLineEdit( titleBox );
-    titleBoxLayout->addWidget( d->titleEdit );
-
-    mainBoxLayout->addWidget( titleBox, 0, 1 );
+    QGroupBox* mainBox = new QGroupBox( 0, Qt::Vertical, i18n( "Camera Configuration" ), page );
+    mainBox->setInsideMargin(KDialogBase::marginHint());
+    mainBox->setInsideSpacing(KDialogBase::spacingHint());  
     
-    d->portButtonGroup = new QVButtonGroup( mainBox );
-    d->portButtonGroup->setTitle( i18n( "Camera Port Type" ) );
+    QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout(), 5, 1, KDialog::spacingHint() );
+    
+    // --------------------------------------------------------------
+
+    d->listView = new KListView( mainBox );
+    d->listView->addColumn( i18n("Camera List") );
+    d->listView->setAllColumnsShowFocus(true);
+    d->listView->setResizeMode(KListView::LastColumn);
+    d->listView->setMinimumWidth(350);
+
+    // --------------------------------------------------------------
+
+    QGroupBox* titleBox = new QGroupBox( 1, Qt::Vertical, i18n("Camera Title"), mainBox );
+    d->titleEdit = new QLineEdit( titleBox );
+    
+    // --------------------------------------------------------------
+    
+    d->portButtonGroup = new QVButtonGroup( i18n("Camera Port Type"), mainBox );
     d->portButtonGroup->setRadioButtonExclusive( true );
-    d->portButtonGroup->layout()->setSpacing( 5 );
-    d->portButtonGroup->layout()->setMargin( 5 );
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
@@ -138,50 +132,43 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
 
-    mainBoxLayout->addWidget( d->portButtonGroup, 1, 1 );
-
-    QGroupBox* portPathBox = new QGroupBox( mainBox );
-    portPathBox->setTitle( i18n( "Camera Port Path" ) );
-    portPathBox->setColumnLayout(0, Qt::Vertical );
-    portPathBox->layout()->setSpacing( 5 );
-    portPathBox->layout()->setMargin( 5 );
-    QVBoxLayout* portPathBoxLayout = new QVBoxLayout( portPathBox->layout() );
-    portPathBoxLayout->setAlignment( Qt::AlignTop );
-
+    // --------------------------------------------------------------
+    
+    QGroupBox* portPathBox = new QGroupBox( 1, Qt::Horizontal, i18n( "Camera Port Path" ), mainBox );
     d->portPathLabel = new QLabel( portPathBox);
-    d->portPathLabel->setText( i18n( "only for serial port\n"
-			             "cameras" ) );
-    portPathBoxLayout->addWidget( d->portPathLabel );
+    d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    portPathBoxLayout->addWidget( d->portPathComboBox );
 
-    mainBoxLayout->addWidget( portPathBox, 2, 1 );
+    // --------------------------------------------------------------
 
-    QGroupBox* umsMountBox = new QGroupBox( mainBox );
-    umsMountBox->setTitle( i18n( "Camera Mount Path" ) );
-    umsMountBox->setColumnLayout(0, Qt::Vertical );
-    umsMountBox->layout()->setSpacing( 5 );
-    umsMountBox->layout()->setMargin( 5 );
-    QVBoxLayout* umsMountBoxLayout = new QVBoxLayout( umsMountBox->layout() );
-    umsMountBoxLayout->setAlignment( Qt::AlignTop );
+    QGroupBox* umsMountBox = new QGroupBox( 1, Qt::Horizontal, i18n( "Camera Mount Path"), mainBox );
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
-    umsMountLabel->setText( i18n( "only for USB/IEEE mass storage\n"
-                                  "cameras" ) );
-    umsMountBoxLayout->addWidget( umsMountLabel );
+    umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
 
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+    
+    // --------------------------------------------------------------
+    
+    KActiveLabel* explanation = new KActiveLabel(mainBox);
+    explanation->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera, please use <b>%1</b> from camera list.<p> "
+                              "<p>To see a fresh list of supported cameras, take a look at "
+                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>")
+                              .arg(d->UMSCameraNameShown));    
 
-    umsMountBoxLayout->addWidget( d->umsMountURL );
-    mainBoxLayout->addWidget( umsMountBox, 3, 1 );
-
-    QSpacerItem* spacer = new QSpacerItem( 20, 20,
-                                           QSizePolicy::Minimum,
-                                           QSizePolicy::Expanding );
-    mainBoxLayout->addItem( spacer, 4, 1 );
+    // --------------------------------------------------------------
+    
+    mainBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
+    mainBoxLayout->addMultiCellWidget( titleBox, 0, 0, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( d->portButtonGroup, 1, 1, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( portPathBox, 2, 2, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( umsMountBox, 3, 3, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( explanation, 4, 4, 1, 1 );
+    mainBoxLayout->setColStretch( 0, 10 );
+    mainBoxLayout->setRowStretch( 5, 10 );
 
     topLayout->addWidget( mainBox );
 
@@ -246,17 +233,17 @@ void CameraSelection::getCameraList()
 {
     int count = 0;
     QStringList clist;
-
-    GPIface::getSupportedCameras(count, clist);
-
     QString cname;
-    for (int i=0; i<count; i++) 
+    
+    GPIface::getSupportedCameras(count, clist);
+    
+    for (int i = 0 ; i < count ; i++) 
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
-            new QListViewItem(d->listView, d->UMSCameraNameShown);
+            new KListViewItem(d->listView, d->UMSCameraNameShown);
         else
-            new QListViewItem(d->listView, cname);
+            new KListViewItem(d->listView, cname);
     }
 }
 
