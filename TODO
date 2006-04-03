@@ -35,6 +35,7 @@ B.K.O files to fix :
 ==> 115423.  (Main Interface: thumbnails view jumps to top when new photos are added)
 ==> 119741.  (Image Editor:   restore image editor if already open)
 ==> 116148.  (Image Editor:   auto-scrolling when selecting large area)
+==> 111446.  (Image Editor:   Bad behaviour when out of disk space)
 
 
 LATER 0.9.0 TODO LIST
