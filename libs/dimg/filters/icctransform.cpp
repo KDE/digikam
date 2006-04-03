@@ -167,7 +167,20 @@ void IccTransform::apply(DImg& image)
         inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
     }
 
+    if (inprofile == NULL)
+    {
+        kdDebug() << "Error: Input profile is NULL" << endl;
+        return;
+    }
+
     outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
+
+    if (outprofile == NULL)
+    {
+        kdDebug() << "Error: Output profile is NULL" << endl;
+        cmsCloseProfile(inprofile);
+        return;
+    }
 
     if (!d->do_proof_profile)
     {
@@ -265,6 +278,14 @@ void IccTransform::apply(DImg& image)
     else
     {
         proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+
+        if (proofprofile == NULL)
+        {
+            kdDebug() << "Error: Input profile is NULL" << endl;
+            cmsCloseProfile(inprofile);
+            cmsCloseProfile(outprofile);
+            return;
+        }
 
         if (image.sixteenBit())
         {
@@ -383,8 +404,21 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
     }
 
+     if (inprofile == NULL)
+    {
+        kdDebug() << "Error: Input profile is NULL" << endl;
+        return;
+    }
+
     outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ),
 "r");
+
+    if (outprofile == NULL)
+    {
+        kdDebug() << "Error: Output profile is NULL" << endl;
+        cmsCloseProfile(inprofile);
+        return;
+    }
 
     if (useBPC)
     {
@@ -485,6 +519,14 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     else
     {
         proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+
+        if (proofprofile == NULL)
+        {
+            kdDebug() << "Error: Input profile is NULL" << endl;
+            cmsCloseProfile(inprofile);
+            cmsCloseProfile(outprofile);
+            return;
+        }
 
         transformFlags |= cmsFLAGS_SOFTPROOFING;
         if (checkGamut)
