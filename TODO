@@ -38,6 +38,7 @@ B.K.O files to fix :
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
 ==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120053  (Main Interface: whatthis info not closed when albumview is scrolled)
+==> 120241: (Main Interface: utf8 display and edit)
 
 
 LATER 0.9.0 TODO LIST
