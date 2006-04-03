@@ -69,6 +69,7 @@ extern "C"
 
 // Local includes.
 
+#include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
@@ -92,13 +93,24 @@ public:
 
     CameraUIPriv()
     {
-        busy         = false;
-        advBox       = 0;
-        downloadMenu = 0;
-        deleteMenu   = 0;
-        cancelBtn    = 0;
-        splitter     = 0;
-        rightSidebar = 0;
+        busy              = false;
+        advBox            = 0;
+        downloadMenu      = 0;
+        deleteMenu        = 0;
+        cancelBtn         = 0;
+        splitter          = 0;
+        rightSidebar      = 0;
+        fixDateTimeCheck  = 0;
+        autoRotateCheck   = 0;
+        autoAlbumCheck    = 0;
+        status            = 0;
+        progress          = 0;
+        controller        = 0;
+        view              = 0;
+        renameCustomizer  = 0;
+        anim              = 0;
+        dateTimeEdit      = 0;
+        setPhotographerId = 0;
     }
 
     bool                          busy;
@@ -114,6 +126,8 @@ public:
 
     QCheckBox                    *autoRotateCheck;
     QCheckBox                    *autoAlbumCheck;
+    QCheckBox                    *fixDateTimeCheck;
+    QCheckBox                    *setPhotographerId;
 
     QLabel                       *status;
 
@@ -123,6 +137,8 @@ public:
 
     KURL                          lastDestURL;
 
+    KDateTimeEdit                *dateTimeEdit;
+    
     CameraController             *controller;
 
     CameraIconView               *view;
@@ -157,9 +173,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     viewBoxLayout->setColStretch( 4, 0 );
     viewBoxLayout->setColStretch( 5, 0 );
 
-    QHBox* widget   = new QHBox(plainPage());
-    d->splitter     = new QSplitter(widget);
-    d->view         = new CameraIconView(this, d->splitter);
+    QHBox* widget = new QHBox(plainPage());
+    d->splitter   = new QSplitter(widget);
+    d->view       = new CameraIconView(this, d->splitter);
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     d->view->setSizePolicy(rightSzPolicy);
@@ -174,12 +190,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     // -------------------------------------------------------------------------
 
     d->advBox           = new QWidget(d->rightSidebar);
-    QGridLayout* grid   = new QGridLayout( d->advBox, 2, 1, KDialog::marginHint());
+    QGridLayout* grid   = new QGridLayout( d->advBox, 3, 1, KDialog::marginHint());
     d->renameCustomizer = new RenameCustomizer(d->advBox);
     d->view->setRenameCustomizer(d->renameCustomizer);
-    grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
         
-    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Information"), d->advBox);
+    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Informations"), d->advBox);
     d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip image"), exifBox);
     d->autoAlbumCheck   = new QCheckBox(i18n("Date-based sub-albums"), exifBox);
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
@@ -188,9 +203,22 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
     QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
                                              "into automatically created date-based sub-albums "
                                              "of destination album"));
+
+    QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations"), d->advBox);
+    d->setPhotographerId = new QCheckBox(i18n("Set photographer identity"), OnFlyBox);
+    d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), OnFlyBox);
+    d->dateTimeEdit      = new KDateTimeEdit( OnFlyBox, "datepicker");
     
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to write photographer identity "
+                                                "into IPTC tags using main digiKam metadata settings."));
+    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
+                                               "tags to the right values if your camera don't set "
+                                               "properlly these tags when pictures are taken."));
+                                               
+    grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
     grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
-    grid->setRowStretch(2, 10);
+    grid->addMultiCellWidget(OnFlyBox, 2, 2, 0, 1);
+    grid->setRowStretch(3, 10);
 
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Advanced Settings"));
     
@@ -267,6 +295,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     // -------------------------------------------------------------------------
     
+    connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
+            d->dateTimeEdit, SLOT(setEnabled(bool)));
+            
     connect(pixmapLogo, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(slotProcessURL(const QString&)));     
 
@@ -361,10 +392,14 @@ void CameraUI::readSettings()
     config->setGroup("Camera Settings");
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
     d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
-
+    d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
+    d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
+    
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
 
+    d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
+    
     resize(configDialogSize("Camera Settings"));
 }
 
@@ -376,6 +411,8 @@ void CameraUI::saveSettings()
     config->setGroup("Camera Settings");
     config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
     config->writeEntry("AutoAlbum", d->autoAlbumCheck->isChecked());
+    config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
+    config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
     config->writeEntry("Splitter Sizes", d->splitter->sizes());
     config->sync();
 }
@@ -558,17 +595,29 @@ void CameraUI::slotDownload(bool onlySelected)
     
     d->controller->downloadPrep();
 
+    QString author, authorTitle, city, province, country;
     QString downloadName;
     QString name;
     QString folder;
     time_t  mtime;
-    bool    autoRotate;
-    bool    autoAlbum;
-
-    autoRotate = d->autoRotateCheck->isChecked();
-    autoAlbum  = d->autoAlbumCheck->isChecked();
-
-    int total = 0;
+    int     total = 0;
+    
+    bool autoRotate        = d->autoRotateCheck->isChecked();
+    bool autoAlbum         = d->autoAlbumCheck->isChecked();
+    bool fixDateTime       = d->fixDateTimeCheck->isChecked();
+    QDateTime newDateTime  = d->dateTimeEdit->dateTime();
+    bool setPhotographerId = d->setPhotographerId->isChecked();
+    
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (settings)
+    {
+        author      = settings->getIptcAuthor();
+        authorTitle = settings->getIptcAuthorTitle();
+        city        = settings->getIptcCity();
+        province    = settings->getIptcProvince();
+        country     = settings->getIptcCountry();        
+    }
+    
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
@@ -576,12 +625,13 @@ void CameraUI::slotDownload(bool onlySelected)
             continue;
 
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        folder = iconItem->m_itemInfo->folder;
-        name   = iconItem->m_itemInfo->name;
+        folder       = iconItem->m_itemInfo->folder;
+        name         = iconItem->m_itemInfo->name;
         downloadName = iconItem->getDownloadName();
         mtime        = iconItem->m_itemInfo->mtime;
         
         KURL u(url);
+        
         if (autoAlbum)
         {
             QDateTime date;
@@ -603,7 +653,9 @@ void CameraUI::slotDownload(bool onlySelected)
             d->foldersToScan.append(u.path());
             u.addPath(downloadName.isEmpty() ? name : downloadName);
         }
-        d->controller->download(folder, name, u.path(), autoRotate);
+        
+        d->controller->download(folder, name, u.path(), autoRotate, fixDateTime, newDateTime,
+                                setPhotographerId, author, authorTitle, city, province, country);
         addFileExtension(QFileInfo(u.path()).extension(false));
         total++;
     }
@@ -818,8 +870,7 @@ bool CameraUI::createAutoAlbum(const KURL& parentURL,
         return false;
     }
 
-    return aman->createPAlbum(parent, name, QString(""),
-                              date, QString(""), errMsg);
+    return aman->createPAlbum(parent, name, QString(""), date, QString(""), errMsg);
 }
 
 void CameraUI::addFileExtension(const QString& ext)

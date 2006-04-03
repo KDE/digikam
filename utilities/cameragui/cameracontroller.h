@@ -30,9 +30,9 @@
 
 #include "gpiteminfo.h"
 
-class QString;
+/*class QString;
 class QStringList;
-class QImage;
+class QImage;*/
 
 namespace Digikam
 {
@@ -56,7 +56,11 @@ public:
 
     void downloadPrep();
     void download(const QString& folder, const QString& file,
-                  const QString& dest, bool autoRotate);
+                  const QString& dest, bool autoRotate, bool fixDateTime, 
+                  const QDateTime& newDateTime, bool setPhotographerId,
+                  const QString& author, const QString& authorTitle,
+                  const QString& city, const QString& province, 
+                  const QString& country);
 
     void deleteFile(const QString& folder, const QString& file);
 

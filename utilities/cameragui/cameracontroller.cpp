@@ -61,6 +61,7 @@ extern "C"
 #include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
+#include "dmetadata.h"
 #include "exifrotate.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
@@ -129,16 +130,19 @@ class CameraControllerPriv
 {
 public:
 
+    bool                   close;
+    bool                   overwriteAll;
+    bool                   skipAll;
+    
+    int                    downloadTotal;
+    
     QWidget*               parent;
+    
+    QTimer*                timer;
+    
     CameraThread*          thread;
     DKCamera*              camera;
     MTQueue<CameraCommand> cmdQueue;
-    QTimer*                timer;
-    bool                   close;
-
-    bool                   overwriteAll;
-    bool                   skipAll;
-    int                    downloadTotal;
 };
 
 class CameraThread : public QThread
@@ -310,32 +314,49 @@ void CameraThread::run()
         }
         case(CameraCommand::gp_download):
         {
-            QString folder     = cmd->map["folder"].asString();
-            QString file       = cmd->map["file"].asString();
-            QString dest       = cmd->map["dest"].asString();
-            bool    autoRotate = cmd->map["autoRotate"].asBool();
-
-            sendInfo(i18n("Downloading file %1...")
-                     .arg(file));
+            QString   folder            = cmd->map["folder"].asString();
+            QString   file              = cmd->map["file"].asString();
+            QString   dest              = cmd->map["dest"].asString();
+            bool      autoRotate        = cmd->map["autoRotate"].asBool();
+            bool      fixDateTime       = cmd->map["fixDateTime"].asBool();
+            QDateTime newDateTime       = cmd->map["newDateTime"].asDateTime();
+            bool      setPhotographerId = cmd->map["setPhotographerId"].asBool();
+            QString   author            = cmd->map["author"].asString();
+            QString   authorTitle       = cmd->map["authorTitle"].asString();
+            QString   city              = cmd->map["city"].asString();
+            QString   province          = cmd->map["province"].asString();
+            QString   country           = cmd->map["country"].asString();
+            sendInfo(i18n("Downloading file %1...").arg(file));
 
             // download to a temp file
             KURL tempURL(dest);
             tempURL = tempURL.upURL();
-            tempURL.addPath( QString(".digikam-camera-%1")
-                             .arg(getpid()));
+            tempURL.addPath( QString(".digikam-camera-%1").arg(getpid()));
 
-            bool result = d->camera->downloadItem(folder, file,
-                                                  tempURL.path());
+            bool result = d->camera->downloadItem(folder, file, tempURL.path());
 
             if (result)
             {
                 if (autoRotate)
                 {
-                    sendInfo(i18n("EXIF rotating file %1...")
-                             .arg(file));
+                    sendInfo(i18n("EXIF rotating file %1...").arg(file));
                     Digikam::exifRotate(tempURL.path());
                 }
 
+                if (fixDateTime || setPhotographerId)
+                {
+                    sendInfo(i18n("Set Metadata tags to file %1...").arg(file));
+                    DMetadata metadata(tempURL.path());
+                    
+                    if (fixDateTime)
+                        metadata.setImageDateTime(newDateTime);
+                    
+                    if (setPhotographerId)
+                        metadata.setImagePhotographerId(author, authorTitle, city, province, country);
+                    
+                    metadata.applyChanges();
+                }
+                
                 // move the file to the destination file
                 if (rename(QFile::encodeName(tempURL.path()),
                            QFile::encodeName(dest)) != 0)
@@ -568,7 +589,11 @@ void CameraController::downloadPrep()
 }
 
 void CameraController::download(const QString& folder, const QString& file,
-                                const QString& dest, bool autoRotate)
+                                const QString& dest, bool autoRotate, bool fixDateTime, 
+                                const QDateTime& newDateTime, bool setPhotographerId,
+                                const QString& author, const QString& authorTitle,
+                                const QString& city, const QString& province, 
+                                const QString& country)
 {
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_download;
@@ -576,6 +601,14 @@ void CameraController::download(const QString& folder, const QString& file,
     cmd->map.insert("file", QVariant(file));
     cmd->map.insert("dest", QVariant(dest));
     cmd->map.insert("autoRotate", QVariant(autoRotate, 0));
+    cmd->map.insert("fixDateTime", QVariant(fixDateTime, 0));
+    cmd->map.insert("newDateTime", QVariant(newDateTime));
+    cmd->map.insert("setPhotographerId", QVariant(setPhotographerId, 0));
+    cmd->map.insert("author", QVariant(author));
+    cmd->map.insert("authorTitle", QVariant(authorTitle));
+    cmd->map.insert("city", QVariant(city));
+    cmd->map.insert("province", QVariant(province));
+    cmd->map.insert("country", QVariant(country));
     d->cmdQueue.enqueue(cmd);
 }
 
@@ -867,8 +900,7 @@ void CameraController::slotProcessNext()
             }
         }
 
-        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));
-        
+        cmd->map["dest"] = QVariant(QDeepCopy<QString>(dest));        
     }
 
     if (cancel)
@@ -880,8 +912,7 @@ void CameraController::slotProcessNext()
     else if (skip)
     {
         d->cmdQueue.dequeue();
-        emit signalInfoMsg(i18n("Skipped file %1")
-                           .arg(file));
+        emit signalInfoMsg(i18n("Skipped file %1").arg(file));
         emit signalSkipped(folder, file);        
         d->timer->start(50, false);
         return;
