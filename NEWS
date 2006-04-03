@@ -24,7 +24,10 @@ NEW FEATURES:
 - New plugin to experiment ICC profiles color corrections into images.
 - New preview rendering modes in all color correction image plugins dialogs.
 - New zooming capabilities in image plugins dialogs.
-- Tags/Rating/DateTime/Comments/PhotgraphersID are now stored in Exif and/or IPTC metadata tags.
+- Tags/Rating/DateTime/Comments/PhotographersID are now stored in Exif and/or IPTC metadata tags.
+- CameraGUI : new option to set metadata DateTime/PhotographerId tags on the fly.
+- digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
+
 
 ...
 
