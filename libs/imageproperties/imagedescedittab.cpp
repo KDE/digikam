@@ -50,10 +50,10 @@
 #include <kconfig.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
-#include <kdatetimeedit.h>
 
 // Local includes.
 
+#include "kdatetimeedit.h"
 #include "dmetadata.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
