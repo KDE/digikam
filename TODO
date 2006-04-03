@@ -30,10 +30,11 @@
 
 B.K.O files to fix :
 
-==> 118501.  (Exif lost when modifying the images)
-==> 94362.   (Cameragui: read only on the fly option)
-==> 115423.  (thumbnails view jumps to top when new photos are added)
-==> 119741.  (Restore image editor if already open).
+==> 118501.  (Image Editor:   Exif lost when modifying the images)
+==> 94362.   (CameraGui:      read only on the fly option)
+==> 115423.  (Main Interface: thumbnails view jumps to top when new photos are added)
+==> 119741.  (Image Editor:   restore image editor if already open)
+==> 116148.  (Image Editor:   auto-scrolling when selecting large area)
 
 
 LATER 0.9.0 TODO LIST
