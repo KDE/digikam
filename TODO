@@ -39,7 +39,7 @@ B.K.O files to fix :
 ==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120053  (Main Interface: whatthis info not closed when albumview is scrolled)
 ==> 120241: (Main Interface: utf8 display and edit)
-
+==> 121242: (Showfoto:       mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
