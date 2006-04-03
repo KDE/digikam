@@ -30,12 +30,13 @@
 
 B.K.O files to fix :
 
-==> 118501.  (Image Editor:   Exif lost when modifying the images)
-==> 94362.   (CameraGui:      read only on the fly option)
-==> 115423.  (Main Interface: thumbnails view jumps to top when new photos are added)
-==> 119741.  (Image Editor:   restore image editor if already open)
-==> 116148.  (Image Editor:   auto-scrolling when selecting large area)
-==> 111446.  (Image Editor:   Bad behaviour when out of disk space)
+==> 118501  (Image Editor:   Exif lost when modifying the images)
+==> 94362   (CameraGui:      read only on the fly option)
+==> 115423  (Main Interface: thumbnails view jumps to top when new photos are added)
+==> 119741  (Image Editor:   restore image editor if already open)
+==> 116148  (Image Editor:   auto-scrolling when selecting large area)
+==> 111446  (Image Editor:   bad behaviour when out of disk space)
+==> 114241  (Main Interface: image comments encoding unreadable after moving an album )
 
 
 LATER 0.9.0 TODO LIST
