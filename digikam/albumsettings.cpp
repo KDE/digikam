@@ -56,10 +56,14 @@ public:
     bool iconShowResolution;
     bool iconShowTags;
     bool iconShowRating;
+
     bool exifRotate;
     bool exifSetOrientation;
+
     bool saveIptcRating;
     bool saveIptcTags;
+    bool saveIptcPhotographerId;
+
     bool saveComments;
     bool saveDateTime;
 
@@ -71,6 +75,12 @@ public:
     QString      movieFilefilter;
     QString      audioFilefilter;
     QString      rawFilefilter;
+
+    QString      author;
+    QString      authorTitle;
+    QString      city;
+    QString      province;
+    QString      country;
 
     QStringList  albumCollectionNames;
     
@@ -125,9 +135,9 @@ void AlbumSettings::init()
     
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
-    d->rawFilefilter   = QString::QString(raw_file_extentions);
+    d->rawFilefilter      = QString(raw_file_extentions);
       
-    d->thumbnailSize   = ThumbnailSize::Medium;
+    d->thumbnailSize      = ThumbnailSize::Medium;
 
     d->showToolTips       = true;
     d->showSplash         = true;
@@ -140,10 +150,14 @@ void AlbumSettings::init()
     d->iconShowResolution = false;
     d->iconShowTags       = true;
     d->iconShowRating     = true;
+
     d->exifRotate         = false;
     d->exifSetOrientation = false;
-    d->saveIptcTags       = false;
-    d->saveIptcRating     = false;
+
+    d->saveIptcTags           = false;
+    d->saveIptcRating         = false;
+    d->saveIptcPhotographerId = false;
+
     d->saveComments       = false;
     d->saveDateTime       = false;
 }
@@ -202,10 +216,18 @@ void AlbumSettings::readSettings()
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
     config->setGroup("Metadata Settings");
-    d->saveIptcTags     = config->readBoolEntry("Save IPTC Tags", false);
-    d->saveIptcRating   = config->readBoolEntry("Save IPTC Rating", false);
-    d->saveComments     = config->readBoolEntry("Save EXIF Comments", false);
-    d->saveDateTime     = config->readBoolEntry("Save Date Time", false);
+    d->saveIptcTags           = config->readBoolEntry("Save IPTC Tags", false);
+    d->saveIptcRating         = config->readBoolEntry("Save IPTC Rating", false);
+    d->saveIptcPhotographerId = config->readBoolEntry("Save IPTC Photographer ID", false);
+
+    d->saveComments           = config->readBoolEntry("Save EXIF Comments", false);
+    d->saveDateTime           = config->readBoolEntry("Save Date Time", false);
+
+    d->author                 = config->readEntry("IPTC Author", QString::null);
+    d->authorTitle            = config->readEntry("IPTC Author Title", QString::null);
+    d->city                   = config->readEntry("IPTC City", QString::null);
+    d->province               = config->readEntry("IPTC Province", QString::null);
+    d->country                = config->readEntry("IPTC Country", QString::null);
                                                   
     config->setGroup("General Settings");
     d->showSplash  = config->readBoolEntry("Show Splash", true);
@@ -244,9 +266,17 @@ void AlbumSettings::saveSettings()
     config->setGroup("Metadata Settings");
     config->writeEntry("Save IPTC Tags", d->saveIptcTags);
     config->writeEntry("Save IPTC Rating", d->saveIptcRating);
+    config->writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
+
     config->writeEntry("Save EXIF Comments", d->saveComments);
     config->writeEntry("Save Date Time", d->saveDateTime);
-                           
+
+    config->writeEntry("IPTC Author", d->author);
+    config->writeEntry("IPTC Author Title", d->authorTitle);
+    config->writeEntry("IPTC City", d->city);
+    config->writeEntry("IPTC Province", d->province);
+    config->writeEntry("IPTC Country", d->country);
+
     config->setGroup("General Settings");
     config->writeEntry("Show Splash", d->showSplash);
     config->writeEntry("Use Trash", d->useTrash);
@@ -508,6 +538,66 @@ void AlbumSettings::setSaveIptcRating(bool val)
 bool AlbumSettings::getSaveIptcRating() const
 {
     return d->saveIptcRating;
+}
+
+void AlbumSettings::setSaveIptcPhotographerId(bool val)
+{
+    d->saveIptcPhotographerId = val;
+}
+
+bool AlbumSettings::getSaveIptcPhotographerId() const
+{
+    return d->saveIptcPhotographerId;
+}
+
+void AlbumSettings::setIptcAuthor(const QString& author)
+{
+    d->author = author;
+}
+
+QString AlbumSettings::getIptcAuthor() const
+{
+    return d->author;
+}
+
+void AlbumSettings::setIptcAuthorTitle(const QString& authorTitle)
+{
+    d->authorTitle = authorTitle;
+}
+
+QString AlbumSettings::getIptcAuthorTitle() const
+{
+    return d->authorTitle;
+}
+
+void AlbumSettings::setIptcCity(const QString& city)
+{
+    d->city = city;
+}
+
+QString AlbumSettings::getIptcCity() const
+{
+    return d->city;
+}
+
+void AlbumSettings::setIptcProvince(const QString& province)
+{
+    d->province = province;
+}
+
+QString AlbumSettings::getIptcProvince() const
+{
+    return d->province;
+}
+
+void AlbumSettings::setIptcCountry(const QString& country)
+{
+    d->country = country;
+}
+
+QString AlbumSettings::getIptcCountry() const
+{
+    return d->country;
 }
 
 void AlbumSettings::setSaveComments(bool val)

@@ -141,10 +141,10 @@ void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT ff)
 
 void DImgLoader::saveMetadata(const QString& filePath)
 {
-    DMetadata metaDataToFile;
+    DMetadata metaDataToFile(filePath);
     metaDataToFile.setExif(m_image->getExif());
     metaDataToFile.setIptc(m_image->getIptc());
-    metaDataToFile.save(filePath, imageGetAttribute("savedformat").toString());
+    metaDataToFile.applyChanges();
 }
 
 }  // NameSpace Digikam

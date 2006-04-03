@@ -85,7 +85,7 @@ bool exifRotate(const QString& file)
         
     // we have the exif info. check the orientation
 
-    switch(exifData.getExifImageOrientation())
+    switch(exifData.getImageOrientation())
     {
         case(DMetadata::ORIENTATION_UNSPECIFIED):
         case(DMetadata::ORIENTATION_NORMAL):
@@ -205,7 +205,9 @@ bool exifRotate(const QString& file)
     fclose(output_file);
 
     // reset the orientation of the temp file to normal
-    exifData.writeExifImageOrientation(temp, DMetadata::ORIENTATION_NORMAL);
+    exifData.load(temp);
+    exifData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+    exifData.applyChanges();
 
     // set the file modification time of the temp file to that
     // of the original file

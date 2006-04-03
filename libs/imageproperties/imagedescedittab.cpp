@@ -337,15 +337,14 @@ void ImageDescEditTab::applyAllChanges()
     if (!d->currItem)
         return;
 
-    DMetadata metadata;
-    QStringList keywordsList;
-
     ImageInfo* info = d->currItem->imageInfo();
+
     info->setCaption(d->commentsEdit->text());
     info->setDateTime(d->dateTimeEdit->dateTime());
     info->setRating(d->ratingWidget->rating());
     info->removeAllTags();
 
+    QStringList keywordsList;
     QListViewItemIterator it(d->tagsView);
     while (it.current())
     {
@@ -362,26 +361,43 @@ void ImageDescEditTab::applyAllChanges()
 
     if (AlbumSettings::instance())
     {
+        DMetadata metadata(info->filePath());
+
         if (AlbumSettings::instance()->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-            metadata.writeImageComment(info->filePath(), d->commentsEdit->text());
+            metadata.setImageComment(d->commentsEdit->text());
         }
 
         if (AlbumSettings::instance()->getSaveDateTime())
         {
             // Store Image Date & Time as Exif and Iptc tags.
-            metadata.writeDateTime(info->filePath(), d->dateTimeEdit->dateTime());
+            metadata.setImageDateTime(d->dateTimeEdit->dateTime());
         }
         
         if (AlbumSettings::instance()->getSaveIptcRating())
         {
             // Store Image rating as Iptc tag.
-            metadata.writeImageRating(info->filePath(), d->ratingWidget->rating());
+            metadata.setImageRating(d->ratingWidget->rating());
         }
 
-        // Store Image Tags like Iptc keywords tag.
-        metadata.writeImageKeywords(info->filePath(), keywordsList);
+        if (AlbumSettings::instance()->getSaveIptcTags())
+        {
+            // Store Image Tags like Iptc keywords tag.
+            metadata.setImageKeywords(keywordsList);
+        }
+
+        if (AlbumSettings::instance()->getSaveIptcPhotographerId())
+        {
+            // Store Photograph indentity into Iptc tags.
+            metadata.setImagePhotographerId(AlbumSettings::instance()->getIptcAuthor(),
+                                            AlbumSettings::instance()->getIptcAuthorTitle(),
+                                            AlbumSettings::instance()->getIptcCity(),
+                                            AlbumSettings::instance()->getIptcProvince(),
+                                            AlbumSettings::instance()->getIptcCountry());
+        }
+        
+        metadata.applyChanges();
     }
 
     d->modified = false;

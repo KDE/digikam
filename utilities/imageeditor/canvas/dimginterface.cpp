@@ -329,7 +329,7 @@ void DImgInterface::exifRotate(const QString& filename)
     // Rotate image based on EXIF rotate tag
     
     DMetadata metadata(filename);
-    DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
+    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
     if(orientation != DMetadata::ORIENTATION_NORMAL) 
     {

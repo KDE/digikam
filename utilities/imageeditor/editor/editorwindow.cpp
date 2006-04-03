@@ -1166,8 +1166,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         
         if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
         {
-            DMetadata metadata;
-            metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);
+            DMetadata metadata(m_savingContext->saveTempFile->name());
+            metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+            metadata.applyChanges();
         }
         
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
@@ -1219,8 +1220,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
             {
-               DMetadata metadata;
-               metadata.writeExifImageOrientation(m_savingContext->saveTempFile->name(), DMetadata::ORIENTATION_NORMAL);
+               DMetadata metadata(m_savingContext->saveTempFile->name());
+               metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+               metadata.applyChanges();
             }
         }
         

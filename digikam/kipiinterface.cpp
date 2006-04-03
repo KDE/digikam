@@ -130,8 +130,9 @@ void DigikamImageInfo::setDescription( const QString& description )
         if (settings->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-            DMetadata metadata;
-            metadata.writeImageComment(_url.path(), description);
+            DMetadata metadata(_url.path());
+            metadata.setImageComment(description);
+            metadata.applyChanges();
         }
     }
 }
@@ -203,7 +204,7 @@ int DigikamImageInfo::angle()
     if (settings->getExifRotate())
     {
         DMetadata metadata(_url.path());
-        DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
+        DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
         
         switch (orientation) 
         {

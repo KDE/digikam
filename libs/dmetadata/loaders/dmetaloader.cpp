@@ -115,6 +115,9 @@ bool DMetaLoader::saveWithExiv2(const QString& filePath)
 
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
+        
+        // To prevent lost other metadata like image comments for ex.
+        image->readMetadata(); 
 
         // Exif metadata ----------------------------------
         

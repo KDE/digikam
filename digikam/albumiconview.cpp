@@ -1306,10 +1306,11 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     {
         kdDebug() << "Setting Exif Orientation tag to " << orientation << endl;
         
-        DMetadata metadata;
+        DMetadata metadata((*it).path());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
-        
-        if (!metadata.writeExifImageOrientation((*it).path(), o))
+        metadata.setImageOrientation(o);
+
+        if (!metadata.applyChanges())
         {
             KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1.")
                                .arg((*it).filename()));

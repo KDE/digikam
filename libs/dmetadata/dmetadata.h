@@ -27,6 +27,11 @@
 #include <qimage.h>
 #include <qdatetime.h>
 
+// Exiv2 includes.
+
+#include <exiv2/types.hpp>
+#include <exiv2/iptc.hpp>
+
 // Local includes.
 
 #include "dimg.h"
@@ -61,39 +66,49 @@ public:
     /** Load Metadata from image file */
     DMetadata(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
 
+    bool applyChanges();
+
     /** File access method */
     bool load(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
-    bool save(const QString& filePath, const QString& format);
+    bool save(const QString& filePath, DImg::FORMAT ff);
 
-    bool writeExifImageOrientation(const QString& filePath, ImageOrientation orientation);
-    bool writeDateTime(const QString& filePath, const QDateTime& dateTime);
-    bool writeImageComment(const QString& filePath, const QString& comment);
-    bool writeImageRating(const QString& filePath, int rating);
-    bool writeImageKeywords(const QString& filePath, const QStringList& keywords);
-    
     /** Metadata manipulation methods */
     QByteArray       getExif() const;
     QByteArray       getIptc() const;
+
+    void setExif(const QByteArray& data);
+    void setIptc(const QByteArray& data);
+    
+    void setExif(Exiv2::DataBuf const data);
+    void setIptc(Exiv2::DataBuf const data);
+
     QImage           getExifThumbnail(bool fixOrientation) const;
-    ImageOrientation getExifImageOrientation();
-    QDateTime        getDateTime() const;
+    ImageOrientation getImageOrientation();
+    QDateTime        getImageDateTime() const;
     QString          getImageComment() const;
     int              getImageRating() const;
     QStringList      getImageKeywords() const;
 
-    void setExif(const QByteArray& data);
-    void setIptc(const QByteArray& data);
+    bool setImageOrientation(ImageOrientation orientation);
+    bool setImageDateTime(const QDateTime& dateTime);
+    bool setImageComment(const QString& comment);
+    bool setImageRating(int rating);
+    bool setImageKeywords(const QStringList& keywords);
+    bool setImagePhotographerId(const QString& author, const QString& authorTitle,
+                                const QString& city, const QString& province, const QString& country);
 
 private:
 
     DImg::FORMAT fileFormat(const QString& filePath);
+    bool setImageProgramId(Exiv2::IptcData& iptcData);
 
 private:
 
-    QString    m_filePath;
+    QString      m_filePath;
+    DImg::FORMAT m_fileFormat;
 
-    QByteArray m_exifMetadata;
-    QByteArray m_iptcMetadata;
+    QByteArray   m_exifMetadata;
+    QByteArray   m_iptcMetadata;
 
     friend class DMetaLoader;
 };

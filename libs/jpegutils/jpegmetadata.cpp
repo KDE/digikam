@@ -58,7 +58,7 @@ void readJPEGMetaData(const QString& filePath,
             // In first, from Exif date & time tags, or
             // In second, from IPTC date & time tags.
             
-            datetime = metadata.getDateTime();
+            datetime = metadata.getImageDateTime();
         }
     }
 }

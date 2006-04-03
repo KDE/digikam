@@ -89,7 +89,7 @@ static void exifRotate(const QString& filePath, QImage& thumb)
 
     QWMatrix matrix;
     DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getExifImageOrientation();
+    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
     
     bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
                     orientation != DMetadata::ORIENTATION_UNSPECIFIED);
