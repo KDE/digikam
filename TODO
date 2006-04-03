@@ -36,7 +36,8 @@ B.K.O files to fix :
 ==> 119741  (Image Editor:   restore image editor if already open)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
-==> 114241  (Main Interface: image comments encoding unreadable after moving an album )
+==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
+==> 120053  (Main Interface: whatthis info not closed when albumview is scrolled)
 
 
 LATER 0.9.0 TODO LIST
