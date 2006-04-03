@@ -392,6 +392,18 @@ bool CameraUI::isBusy() const
 
 void CameraUI::closeEvent(QCloseEvent* e)
 {
+    dialogClosed();
+    e->accept();
+}
+
+void CameraUI::slotClose()
+{
+    dialogClosed();
+    reject();
+}
+
+void CameraUI::dialogClosed()
+{
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
     // completely setup. That is why as an extra safeguard run scanlib
@@ -411,7 +423,6 @@ void CameraUI::closeEvent(QCloseEvent* e)
 
     delete d->controller;
     saveSettings();
-    e->accept();
 }
 
 void CameraUI::slotBusy(bool val)

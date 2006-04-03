@@ -68,6 +68,7 @@ private:
 
     void readSettings();
     void saveSettings();
+    void dialogClosed();
     bool createAutoAlbum(const KURL& parentURL,
                          const QString& name,
                          const QDate& date,
@@ -76,6 +77,7 @@ private:
 
 private slots:
 
+    void slotClose();
     void slotProcessURL(const QString& url);
 
     void slotConnected(bool val);
