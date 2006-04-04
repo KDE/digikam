@@ -41,6 +41,7 @@ B.K.O files to fix :
 ==> 120241  (Main Interface: utf8 display and edit)
 ==> 121242  (Showfoto:       mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 ==> 122374  (Image Editor:   ignores read-only permission during saving)
+==> 123742  (kioslave:       thumbnails seem to be handled differently by digiKam and Konqueror)
 
 
 LATER 0.9.0 TODO LIST
