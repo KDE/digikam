@@ -37,7 +37,7 @@ class SuperImpose
 {
 public:
     SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
-                QRect orgImageSelection, bool fast = false,
+                QRect orgImageSelection,
                 Digikam::DColorComposer::CompositingOperation
                 compositeRule = Digikam::DColorComposer::PorterDuffNone);
 
@@ -51,7 +51,6 @@ private:
     Digikam::DImg m_template;
     Digikam::DImg m_destImage;
     QRect         m_selection;
-    bool          m_fast;
     Digikam::DColorComposer::CompositingOperation m_compositeRule;
 };
 

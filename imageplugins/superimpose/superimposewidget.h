@@ -85,7 +85,7 @@ private:
     int         m_xpos;
     int         m_ypos;
     int         m_editMode;
-    int         m_zoomFactor;
+    float       m_zoomFactor;
 
     QPixmap    *m_pixmap;              // For image region selection manipulations.
 
@@ -104,9 +104,10 @@ protected:
     void mouseReleaseEvent ( QMouseEvent * e );
     void mouseMoveEvent ( QMouseEvent * e );
 
-    void zoomSelection(int deltaZoomFactor);
+    bool zoomSelection(float deltaZoomFactor);
     void moveSelection(int x, int y);
     void makePixmap(void);
+    void setEditModeCursor();
 };
 
 }  // NameSpace DigikamSuperImposeImagesPlugin

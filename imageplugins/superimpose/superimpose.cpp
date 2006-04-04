@@ -31,14 +31,13 @@ namespace DigikamSuperImposeImagesPlugin
 {
 
 SuperImpose::SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
-                         QRect orgImageSelection, bool fast,
+                         QRect orgImageSelection,
                          Digikam::DColorComposer::CompositingOperation compositeRule)
     //: Digikam::DImgThreadedFilter(orgImage, parent, "Superimpose")
 {
     m_orgImage      = *orgImage;
     m_template      = *templ;
     m_selection     = orgImageSelection;
-    m_fast          = fast;
     m_compositeRule = compositeRule;
 
     filterImage();
@@ -54,7 +53,7 @@ void SuperImpose::filterImage(void)
 
     // take selection of src image and scale it to size of template
     m_destImage = m_orgImage.smoothScaleSection(m_selection.x(), m_selection.y(),
-            m_selection.width(), m_selection.height(), templateWidth, templateHeight);
+                m_selection.width(), m_selection.height(), templateWidth, templateHeight);
 
     // convert depth if necessary
     m_template.convertToDepthOfImage(&m_destImage);
@@ -62,10 +61,10 @@ void SuperImpose::filterImage(void)
     // get composer for compositing rule
     Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(m_compositeRule);
     Digikam::DColorComposer::MultiplicationFlags flags = Digikam::DColorComposer::NoMultiplication;
-    if (m_destImage.hasAlpha())
-        flags = Digikam::DColorComposer::DemultiplyDst;
+    if (m_compositeRule != Digikam::DColorComposer::PorterDuffNone)
+        flags = Digikam::DColorComposer::MultiplicationFlagsDImg;
     // do alpha blending of template on dest image
-    m_destImage.bitBlendImage(composer, &m_template, 0, 0, templateWidth, templateHeight, 0, 0);
+    m_destImage.bitBlendImage(composer, &m_template, 0, 0, templateWidth, templateHeight, 0, 0, flags);
 
     delete composer;
 }
