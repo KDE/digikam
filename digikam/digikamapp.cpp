@@ -107,11 +107,11 @@ DigikamApp::DigikamApp()
 
     mAlbumManager = AlbumManager::instance();
     AlbumLister::instance();
-    
+
     mCameraMediaList = new QPopupMenu;
     connect( mCameraMediaList, SIGNAL( aboutToShow() ),
              SLOT( slotCameraMediaMenu() ) );
-    
+
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
     connect(mCameraList, SIGNAL(signalCameraAdded(CameraType *)),
@@ -126,7 +126,13 @@ DigikamApp::DigikamApp()
 
     applyMainWindowSettings(m_config);
 
+    // Actual file scanning is done in main() - is this necessary here?
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
+
+    if(mSplash)
+        mSplash->message(i18n("Reading database"), AlignLeft, white);
+
+    // Read albums from database
     mAlbumManager->startScan();
 
     // Load KIPI Plugins.
@@ -136,7 +142,7 @@ DigikamApp::DigikamApp()
     populateThemes();
 
     setAutoSaveSettings();
-    
+
     mDcopIface = new DCOPIface(this, "camera");
     connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), 
             this, SLOT(slotCameraAutoDetect()));
@@ -231,6 +237,9 @@ bool DigikamApp::queryClose()
 
 void DigikamApp::setupView()
 {
+    if(mSplash)
+        mSplash->message(i18n("Initializing Main View"), AlignLeft, white);
+
     mView = new DigikamView(this);
     setCentralWidget(mView);
     mView->applySettings(mAlbumSettings);
@@ -1338,6 +1347,9 @@ void DigikamApp::loadCameras()
 
 void DigikamApp::populateThemes()
 {
+    if(mSplash)
+        mSplash->message(i18n("Loading themes"), AlignLeft, white);
+
     ThemeEngine::instance()->scanThemes();
     QStringList themes(ThemeEngine::instance()->themeNames());
 
