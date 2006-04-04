@@ -59,16 +59,16 @@ public:
 
     IconViewPriv()
     {
-        firstGroup = 0;
-        lastGroup  = 0;
-        currItem   = 0;
-        anchorItem = 0;
-        clearing   = false;
-        spacing    = 10;
+        firstGroup     = 0;
+        lastGroup      = 0;
+        currItem       = 0;
+        anchorItem     = 0;
+        clearing       = false;
+        spacing        = 10;
 
-        rubber       = 0;
-        dragging     = false;
-        pressedMoved = false;
+        rubber         = 0;
+        dragging       = false;
+        pressedMoved   = false;
         
         firstContainer = 0;
         lastContainer  = 0;
@@ -79,27 +79,30 @@ public:
         updateTimer    = 0;
     }
     
-    IconGroupItem*  firstGroup;
-    IconGroupItem*  lastGroup;
-    IconItem*       currItem;
-    IconItem*       anchorItem;
-
-    bool            clearing;
-    QTimer*         updateTimer;
-    int             spacing;
+    bool               clearing;
+    bool               showTips;
+    bool               pressedMoved;
+    bool               dragging;
+    
+    int                spacing;
 
     QPtrDict<IconItem> selectedItems;
     QPtrDict<IconItem> prevSelectedItems;
 
     QRect*             rubber;
-    bool               dragging;
-    QPoint             dragStartPos;
-    bool               pressedMoved;
     
-    IconItem*          toolTipItem;
+    QPoint             dragStartPos;
+    
+    QTimer*            updateTimer;
     QTimer*            toolTipTimer;
-    bool               showTips;
 
+    IconItem*          toolTipItem;
+    IconItem*          currItem;
+    IconItem*          anchorItem;
+    
+    IconGroupItem*     firstGroup;
+    IconGroupItem*     lastGroup;
+    
     struct ItemContainer 
     {
         ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r) 
@@ -133,22 +136,21 @@ static int cmpItems( const void *n1, const void *n2 )
     return i1->group->compare( i2->group );
 }
 
-
 IconView::IconView(QWidget* parent, const char* name)
-    : QScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
+        : QScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
-    
     viewport()->setFocusProxy(this);
     viewport()->setFocusPolicy(QWidget::WheelFocus);
     viewport()->setMouseTracking(true);
 
     d = new IconViewPriv;
-    d->updateTimer = new QTimer(this);
+    d->updateTimer  = new QTimer(this);
     d->toolTipTimer = new QTimer(this);
     
     connect(d->updateTimer, SIGNAL(timeout()),
             SLOT(slotUpdate()));
+            
     connect(d->toolTipTimer, SIGNAL(timeout()),
             SLOT(slotToolTip()));
 
@@ -161,9 +163,7 @@ IconView::~IconView()
 
     delete d->updateTimer;
     delete d->toolTipTimer;
-
     delete d->rubber;
-    
     delete d;
 }
 
@@ -202,6 +202,7 @@ void IconView::setCurrentItem(IconItem* item)
 {
     d->currItem = item;
     d->anchorItem = d->currItem;
+    
     if (d->currItem)
     {
         d->currItem->setSelected(true, true);
@@ -449,7 +450,8 @@ void IconView::takeItem(IconItem* item)
 
     // First remove item from any containers holding it
     IconViewPriv::ItemContainer *tmp = d->firstContainer;
-    while (tmp) {
+    while (tmp) 
+    {
         tmp->items.remove(item);
         tmp = tmp->next;
     }
@@ -497,29 +499,35 @@ void IconView::sort()
     int gcount = groupCount();
     
     // then sort the groups themselves
-   IconViewPriv::SortableItem *groups
-        = new IconViewPriv::SortableItem[ gcount ];
+    IconViewPriv::SortableItem *groups = new IconViewPriv::SortableItem[ gcount ];
 
     IconGroupItem *group = d->firstGroup;
     int i = 0;
+    
     for ( ; group; group = group->m_next )
         groups[ i++ ].group = group;
 
-    qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ),
-           cmpItems );
+    qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ), cmpItems );
 
     IconGroupItem *prev = 0;
     group = 0;
-    for ( i = 0; i < (int)gcount; ++i ) {
+    
+    for ( i = 0; i < (int)gcount; ++i ) 
+    {
         group = groups[ i ].group;
-        if ( group ) {
+        if ( group ) 
+        {
             group->m_prev = prev;
+            
             if ( group->m_prev )
                 group->m_prev->m_next = group;
+            
             group->m_next = 0;
         }
+        
         if ( i == 0 )
             d->firstGroup = group;
+            
         if ( i == (int)gcount - 1 )
             d->lastGroup = group;
         prev = group;
@@ -671,8 +679,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
 
 QRect IconView::contentsRectToViewport(const QRect& r) const
 {
-    QRect vr = QRect(contentsToViewport(QPoint(r.x(), r.y())),
-                     r.size());
+    QRect vr = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());
     return vr;
 }
 
@@ -704,11 +711,13 @@ void IconView::rebuildContainers()
         {
             c->items.append( item );
             c = c->next;
+            
             if (!c) 
             {
                 appendContainer();
                 c = d->lastContainer;
             }
+            
             c->items.append(item);
             item = item->nextItem();
             c = c->prev;
@@ -905,8 +914,10 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         IconItem* prevCurrItem = d->currItem;
         d->currItem   = item;
         d->anchorItem = item;
+        
         if (prevCurrItem)
             prevCurrItem->repaint();
+        
         d->currItem->repaint();
 
         d->dragging = true;
@@ -926,6 +937,7 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         // ctrl is pressed. make sure our current selection is not lost
         d->prevSelectedItems.clear();
         QPtrDictIterator<IconItem> it( d->selectedItems );
+        
         for ( ; it.current(); ++it )
         {
             d->prevSelectedItems.insert(it.current(), it.current());
@@ -1021,7 +1033,6 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         }
         return;
     }
-
 
     if (!d->rubber)
         return;
@@ -1170,7 +1181,8 @@ void IconView::contentsMouseDoubleClickEvent(QMouseEvent *e)
         return;
 
     IconItem *item = findItem(e->pos());
-    if (item) {
+    if (item) 
+    {
         itemClickedToOpen(item);
     }
 }
@@ -1184,409 +1196,409 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
     switch ( e->key() ) 
     {
-    case Key_Home: 
-    {
-        IconItem* tmp = d->currItem;
-        d->currItem = firstItem();
-        d->anchorItem = d->currItem;
-        if (tmp)
-            tmp->repaint();
-
-        firstItem()->setSelected(true, true);
-        ensureItemVisible(firstItem());
-        handled = true;
-        break;
-    }
-
-    case Key_End: 
-    {
-        IconItem* tmp = d->currItem;
-        d->currItem   = lastItem();
-        d->anchorItem = d->currItem;
-        if (tmp)
-            tmp->repaint();
-
-        lastItem()->setSelected(true, true);
-        ensureItemVisible(lastItem());
-        handled = true;
-        break;
-    }
-
-    case Key_Enter:
-    case Key_Return: 
-    {
-        if (d->currItem)
+        case Key_Home: 
         {
-            emit signalReturnPressed(d->currItem);
-            handled = true;
-        }
-        break;
-    }
-
-    case Key_Right: 
-    {
-        IconItem *item = 0;
-        
-        if (d->currItem)
-        {
-            if (d->currItem->nextItem())
-            {
-                if (e->state() & Qt::ControlButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->nextItem();
-                    d->anchorItem = d->currItem;
-                    tmp->repaint();
-                    d->currItem->repaint();
-
-                    item = d->currItem;
-                }
-                else if (e->state() & Qt::ShiftButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->nextItem();
-                    tmp->repaint();
-
-                    // if the anchor is behind us, move forward preserving
-                    // the previously selected item. otherwise unselect the
-                    // previously selected item
-                    if (!anchorIsBehind())
-                        tmp->setSelected(false, false);
-
-                    d->currItem->setSelected(true, false);
-                    
-                    item = d->currItem;
-                }
-                else
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->nextItem();
-                    d->anchorItem = d->currItem;
-                    d->currItem->setSelected(true, true);
-                    tmp->repaint();
-                    
-                    item = d->currItem;
-                }
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
+            IconItem* tmp = d->currItem;
+            d->currItem = firstItem();
             d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
-
-    case Key_Left: 
-    {
-        IconItem *item = 0;
-        
-        if (d->currItem)
-        {
-            if (d->currItem->prevItem())
-            {
-                if (e->state() & Qt::ControlButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->prevItem();
-                    d->anchorItem = d->currItem;
-                    tmp->repaint();
-                    d->currItem->repaint();
-
-                    item = d->currItem;
-                }
-                else if (e->state() & Qt::ShiftButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->prevItem();
-                    tmp->repaint();
-
-                    // if the anchor is ahead of us, move forward preserving
-                    // the previously selected item. otherwise unselect the
-                    // previously selected item
-                    if (anchorIsBehind())
-                        tmp->setSelected(false, false);
-
-                    d->currItem->setSelected(true, false);
-                    
-                    item = d->currItem;
-                }
-                else
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = d->currItem->prevItem();
-                    d->anchorItem = d->currItem;
-                    d->currItem->setSelected(true, true);
-                    tmp->repaint();
-                    
-                    item = d->currItem;
-                }
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
-            d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
-
-    case Key_Up:
-    {
-        IconItem *item = 0;
-        
-        if (d->currItem)
-        {
-            int x = d->currItem->x() + itemRect().width()/2;
-            int y = d->currItem->y() - d->spacing*2;
-
-            IconItem *it = 0;
-
-            while (!it && y > 0)
-            {
-                it  = findItem(QPoint(x,y));
-                y  -= d->spacing * 2;
-            }
-
-            if (it)            
-            {
-                if (e->state() & Qt::ControlButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    d->anchorItem = it;
-                    tmp->repaint();
-                    d->currItem->repaint();
-
-                    item = d->currItem;
-                }
-                else if (e->state() & Qt::ShiftButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    tmp->repaint();
-
-                    clearSelection();
-                    if (anchorIsBehind())
-                    {
-                        for (IconItem* i = d->currItem; i; i = i->prevItem())
-                        {
-                            i->setSelected(true, false);
-                            if (i == d->anchorItem)
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        for (IconItem* i = d->currItem; i; i = i->nextItem())
-                        {
-                            i->setSelected(true, false);
-                            if (i == d->anchorItem)
-                                break;
-                        }
-                    }
-
-                    item = d->currItem; 
-                }
-                else
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    d->anchorItem = it;
-                    d->currItem->setSelected(true, true);
-                    tmp->repaint();
-                    
-                    item = d->currItem;
-                }
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
-            d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
-
-    case Key_Down:
-    {
-        IconItem *item = 0;
-        
-        if (d->currItem)
-        {
-            int x = d->currItem->x() + itemRect().width()/2;
-            int y = d->currItem->y() + itemRect().height() + d->spacing*2;
-
-            IconItem *it = 0;
-
-            while (!it && y < contentsHeight())
-            {
-                it  = findItem(QPoint(x,y));
-                y  += d->spacing * 2;
-            }
-
-            if (it)            
-            {
-                if (e->state() & Qt::ControlButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    d->anchorItem = it;
-                    tmp->repaint();
-                    d->currItem->repaint();
-
-                    item = d->currItem;
-                }
-                else if (e->state() & Qt::ShiftButton)
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    tmp->repaint();
-
-                    clearSelection();
-                    if (anchorIsBehind())
-                    {
-                        for (IconItem* i = d->currItem; i; i = i->prevItem())
-                        {
-                            i->setSelected(true, false);
-                            if (i == d->anchorItem)
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        for (IconItem* i = d->currItem; i; i = i->nextItem())
-                        {
-                            i->setSelected(true, false);
-                            if (i == d->anchorItem)
-                                break;
-                        }
-                    }
-
-                    item = d->currItem; 
-                }
-                else
-                {
-                    IconItem* tmp = d->currItem;
-                    d->currItem   = it;
-                    d->anchorItem = it;
-                    d->currItem->setSelected(true, true);
-                    tmp->repaint();
-                    
-                    item = d->currItem;
-                }
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
-            d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
-
-    case Key_Next: 
-    {
-        IconItem *item = 0;
-
-        if (d->currItem)
-        {
-            QRect r( 0, d->currItem->y() + visibleHeight(),
-                     contentsWidth(), visibleHeight() );
-            IconItem *ni = findFirstVisibleItem(r);
-
-            if (!ni) 
-            {
-                r = QRect( 0, d->currItem->y() + itemRect().height(),
-                           contentsWidth(), contentsHeight() );
-                ni = findLastVisibleItem( r );
-            }
-
-            if (ni) 
-            {
-                IconItem* tmp = d->currItem;
-                d->currItem   = ni;
-                d->anchorItem = ni;
-                item          = ni;
+            if (tmp)
                 tmp->repaint();
-                d->currItem->setSelected(true, true);
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
-            d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
-
-    case Key_Prior: 
-    {
-        IconItem *item = 0;
-
-        if (d->currItem)
-        {
-            QRect r(0, d->currItem->y() - visibleHeight(),
-                    contentsWidth(), visibleHeight() );
-
-            IconItem *ni = findFirstVisibleItem(r);
-
-            if (!ni) 
-            {
-                r = QRect( 0, 0, contentsWidth(), d->currItem->y() );
-                ni = findFirstVisibleItem( r );
-            }
-
-            if (ni) 
-            {
-                IconItem* tmp = d->currItem;
-                d->currItem   = ni;
-                d->anchorItem = ni;
-                item          = ni;
-                tmp->repaint();
-                d->currItem->setSelected(true, true);
-            }
-        }
-        else
-        {
-            d->currItem   = firstItem();
-            d->anchorItem = d->currItem;
-            d->currItem->setSelected(true, true);
-            item = d->currItem;
-        }
-
-        ensureItemVisible(item);
-        handled = true;
-        break;
-    }
     
-    default:
-        break;
+            firstItem()->setSelected(true, true);
+            ensureItemVisible(firstItem());
+            handled = true;
+            break;
+        }
+    
+        case Key_End: 
+        {
+            IconItem* tmp = d->currItem;
+            d->currItem   = lastItem();
+            d->anchorItem = d->currItem;
+            if (tmp)
+                tmp->repaint();
+    
+            lastItem()->setSelected(true, true);
+            ensureItemVisible(lastItem());
+            handled = true;
+            break;
+        }
+    
+        case Key_Enter:
+        case Key_Return: 
+        {
+            if (d->currItem)
+            {
+                emit signalReturnPressed(d->currItem);
+                handled = true;
+            }
+            break;
+        }
+    
+        case Key_Right: 
+        {
+            IconItem *item = 0;
+            
+            if (d->currItem)
+            {
+                if (d->currItem->nextItem())
+                {
+                    if (e->state() & Qt::ControlButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->nextItem();
+                        d->anchorItem = d->currItem;
+                        tmp->repaint();
+                        d->currItem->repaint();
+    
+                        item = d->currItem;
+                    }
+                    else if (e->state() & Qt::ShiftButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->nextItem();
+                        tmp->repaint();
+    
+                        // if the anchor is behind us, move forward preserving
+                        // the previously selected item. otherwise unselect the
+                        // previously selected item
+                        if (!anchorIsBehind())
+                            tmp->setSelected(false, false);
+    
+                        d->currItem->setSelected(true, false);
+                        
+                        item = d->currItem;
+                    }
+                    else
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->nextItem();
+                        d->anchorItem = d->currItem;
+                        d->currItem->setSelected(true, true);
+                        tmp->repaint();
+                        
+                        item = d->currItem;
+                    }
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+    
+        case Key_Left: 
+        {
+            IconItem *item = 0;
+            
+            if (d->currItem)
+            {
+                if (d->currItem->prevItem())
+                {
+                    if (e->state() & Qt::ControlButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->prevItem();
+                        d->anchorItem = d->currItem;
+                        tmp->repaint();
+                        d->currItem->repaint();
+    
+                        item = d->currItem;
+                    }
+                    else if (e->state() & Qt::ShiftButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->prevItem();
+                        tmp->repaint();
+    
+                        // if the anchor is ahead of us, move forward preserving
+                        // the previously selected item. otherwise unselect the
+                        // previously selected item
+                        if (anchorIsBehind())
+                            tmp->setSelected(false, false);
+    
+                        d->currItem->setSelected(true, false);
+                        
+                        item = d->currItem;
+                    }
+                    else
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = d->currItem->prevItem();
+                        d->anchorItem = d->currItem;
+                        d->currItem->setSelected(true, true);
+                        tmp->repaint();
+                        
+                        item = d->currItem;
+                    }
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+    
+        case Key_Up:
+        {
+            IconItem *item = 0;
+            
+            if (d->currItem)
+            {
+                int x = d->currItem->x() + itemRect().width()/2;
+                int y = d->currItem->y() - d->spacing*2;
+    
+                IconItem *it = 0;
+    
+                while (!it && y > 0)
+                {
+                    it  = findItem(QPoint(x,y));
+                    y  -= d->spacing * 2;
+                }
+    
+                if (it)            
+                {
+                    if (e->state() & Qt::ControlButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        d->anchorItem = it;
+                        tmp->repaint();
+                        d->currItem->repaint();
+    
+                        item = d->currItem;
+                    }
+                    else if (e->state() & Qt::ShiftButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        tmp->repaint();
+    
+                        clearSelection();
+                        if (anchorIsBehind())
+                        {
+                            for (IconItem* i = d->currItem; i; i = i->prevItem())
+                            {
+                                i->setSelected(true, false);
+                                if (i == d->anchorItem)
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            for (IconItem* i = d->currItem; i; i = i->nextItem())
+                            {
+                                i->setSelected(true, false);
+                                if (i == d->anchorItem)
+                                    break;
+                            }
+                        }
+    
+                        item = d->currItem; 
+                    }
+                    else
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        d->anchorItem = it;
+                        d->currItem->setSelected(true, true);
+                        tmp->repaint();
+                        
+                        item = d->currItem;
+                    }
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+    
+        case Key_Down:
+        {
+            IconItem *item = 0;
+            
+            if (d->currItem)
+            {
+                int x = d->currItem->x() + itemRect().width()/2;
+                int y = d->currItem->y() + itemRect().height() + d->spacing*2;
+    
+                IconItem *it = 0;
+    
+                while (!it && y < contentsHeight())
+                {
+                    it  = findItem(QPoint(x,y));
+                    y  += d->spacing * 2;
+                }
+    
+                if (it)            
+                {
+                    if (e->state() & Qt::ControlButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        d->anchorItem = it;
+                        tmp->repaint();
+                        d->currItem->repaint();
+    
+                        item = d->currItem;
+                    }
+                    else if (e->state() & Qt::ShiftButton)
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        tmp->repaint();
+    
+                        clearSelection();
+                        if (anchorIsBehind())
+                        {
+                            for (IconItem* i = d->currItem; i; i = i->prevItem())
+                            {
+                                i->setSelected(true, false);
+                                if (i == d->anchorItem)
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            for (IconItem* i = d->currItem; i; i = i->nextItem())
+                            {
+                                i->setSelected(true, false);
+                                if (i == d->anchorItem)
+                                    break;
+                            }
+                        }
+    
+                        item = d->currItem; 
+                    }
+                    else
+                    {
+                        IconItem* tmp = d->currItem;
+                        d->currItem   = it;
+                        d->anchorItem = it;
+                        d->currItem->setSelected(true, true);
+                        tmp->repaint();
+                        
+                        item = d->currItem;
+                    }
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+    
+        case Key_Next: 
+        {
+            IconItem *item = 0;
+    
+            if (d->currItem)
+            {
+                QRect r( 0, d->currItem->y() + visibleHeight(),
+                        contentsWidth(), visibleHeight() );
+                IconItem *ni = findFirstVisibleItem(r);
+    
+                if (!ni) 
+                {
+                    r = QRect( 0, d->currItem->y() + itemRect().height(),
+                              contentsWidth(), contentsHeight() );
+                    ni = findLastVisibleItem( r );
+                }
+    
+                if (ni) 
+                {
+                    IconItem* tmp = d->currItem;
+                    d->currItem   = ni;
+                    d->anchorItem = ni;
+                    item          = ni;
+                    tmp->repaint();
+                    d->currItem->setSelected(true, true);
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+    
+        case Key_Prior: 
+        {
+            IconItem *item = 0;
+    
+            if (d->currItem)
+            {
+                QRect r(0, d->currItem->y() - visibleHeight(),
+                        contentsWidth(), visibleHeight() );
+    
+                IconItem *ni = findFirstVisibleItem(r);
+    
+                if (!ni) 
+                {
+                    r = QRect( 0, 0, contentsWidth(), d->currItem->y() );
+                    ni = findFirstVisibleItem( r );
+                }
+    
+                if (ni) 
+                {
+                    IconItem* tmp = d->currItem;
+                    d->currItem   = ni;
+                    d->anchorItem = ni;
+                    item          = ni;
+                    tmp->repaint();
+                    d->currItem->setSelected(true, true);
+                }
+            }
+            else
+            {
+                d->currItem   = firstItem();
+                d->anchorItem = d->currItem;
+                d->currItem->setSelected(true, true);
+                item = d->currItem;
+            }
+    
+            ensureItemVisible(item);
+            handled = true;
+            break;
+        }
+        
+        default:
+            break;
     }
 
     if (!handled)
@@ -1702,10 +1714,12 @@ IconItem* IconView::findLastVisibleItem(const QRect& r) const
                 
                 if ( r.intersects( item->rect() ) ) 
                 {
-                    if ( !i ) {
+                    if ( !i ) 
+                    {
                         i = item;
                     }
-                    else {
+                    else 
+                    {
                         QRect r2 = item->rect();
                         QRect r3 = i->rect();
                         if ( r2.y() > r3.y() )
@@ -1772,6 +1786,7 @@ void IconView::itemClickedToOpen(IconItem* item)
     IconItem* prevCurrItem = d->currItem;
     d->currItem   = item;
     d->anchorItem = item;
+    
     if (prevCurrItem)
         prevCurrItem->repaint();
 
