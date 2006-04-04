@@ -1610,6 +1610,9 @@ void IconView::keyPressEvent(QKeyEvent* e)
     {
         emit signalSelectionChanged();
         viewport()->update();
+        d->toolTipItem = 0;
+        d->toolTipTimer->stop();
+        slotToolTip();
     }
 }
 
