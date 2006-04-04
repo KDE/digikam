@@ -25,13 +25,19 @@
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qlistview.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
+#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kurllabel.h>
+#include <kiconloader.h>
+#include <kglobalsettings.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -56,12 +62,12 @@ public:
         autoDetectButton = 0;
     }
 
-    QListView*   listView;
+    KListView   *listView;
 
-    QPushButton* addButton;
-    QPushButton* removeButton;
-    QPushButton* editButton;
-    QPushButton* autoDetectButton;
+    QPushButton *addButton;
+    QPushButton *removeButton;
+    QPushButton *editButton;
+    QPushButton *autoDetectButton;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -73,15 +79,17 @@ SetupCamera::SetupCamera( QWidget* parent )
     QGridLayout* groupBoxLayout = new QGridLayout( this, 2, 5, 0, KDialog::spacingHint() );
     groupBoxLayout->setAlignment( Qt::AlignTop );
 
-    d->listView = new QListView( this );
+    d->listView = new KListView( this );
     d->listView->addColumn( i18n("Title") );
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
     d->listView->addColumn( i18n("Path") );
     d->listView->setAllColumnsShowFocus(true);
-    groupBoxLayout->addMultiCellWidget( d->listView, 0, 4, 0, 0 );
+    groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
     QWhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
-                                     "via the Gphoto interface."));
+                                       "via the Gphoto interface."));
+
+    // -------------------------------------------------------------
 
     d->addButton = new QPushButton( this );
     groupBoxLayout->addWidget( d->addButton, 0, 1 );
@@ -104,6 +112,15 @@ SetupCamera::SetupCamera( QWidget* parent )
                                            QSizePolicy::Expanding );
     groupBoxLayout->addItem( spacer, 4, 1 );
 
+    KURLLabel *gphotoLogoLabel = new KURLLabel(this);
+    gphotoLogoLabel->setText(QString::null);
+    gphotoLogoLabel->setURL("http://www.gphoto.org");
+    KGlobal::dirs()->addResourceType("gphotologo", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("gphotologo", "gphotologo.png");
+    gphotoLogoLabel->setPixmap( QPixmap( directory + "gphotologo.png" ) );
+    QToolTip::add(gphotoLogoLabel, i18n("Visit Gphoto project website"));
+    groupBoxLayout->addWidget( gphotoLogoLabel, 5, 1 );
+
     adjustSize();
     mainLayout->addWidget(this);
 
@@ -112,7 +129,10 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 
-    // connections
+    // -------------------------------------------------------------
+
+    connect(gphotoLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processGphotoURL(const QString&)));
 
     connect(d->listView, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -136,10 +156,11 @@ SetupCamera::SetupCamera( QWidget* parent )
     if (clist) 
     {
         QPtrList<CameraType>* cl = clist->cameraList();
+
         for (CameraType *ctype = cl->first(); ctype;
              ctype = cl->next()) 
         {
-            new QListViewItem(d->listView, ctype->title(), ctype->model(),
+            new KListViewItem(d->listView, ctype->title(), ctype->model(),
                               ctype->port(), ctype->path());
         }
     }
@@ -148,6 +169,11 @@ SetupCamera::SetupCamera( QWidget* parent )
 SetupCamera::~SetupCamera()
 {
     delete d;
+}
+
+void SetupCamera::processGphotoURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void SetupCamera::slotSelectionChanged()
@@ -191,8 +217,8 @@ void SetupCamera::slotEditCamera()
     if (!item) return;
 
     CameraSelection *select = new CameraSelection;
-    select->setCamera(item->text(0), item->text(1),
-                      item->text(2), item->text(3));
+    select->setCamera(item->text(0), item->text(1), item->text(2), item->text(3));
+
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&, 
                                            const QString&, const QString&)),
             this,   SLOT(slotEditedCamera(const QString&, const QString&, 
@@ -225,14 +251,14 @@ void SetupCamera::slotAutoDetectCamera()
     {
        KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
                                 .arg(model).arg(port));
-       new QListViewItem(d->listView, model, model, port, "/");
+       new KListViewItem(d->listView, model, model, port, "/");
     }
 }
 
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    new QListViewItem(d->listView, title, model, port, path);
+    new KListViewItem(d->listView, title, model, port, path);
 }
 
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
@@ -250,6 +276,7 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 void SetupCamera::applySettings()
 {
     CameraList* clist = CameraList::instance();
+
     if (clist) 
     {
         clist->clear();
