@@ -154,7 +154,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     // --------------------------------------------------------------
     
     KActiveLabel* explanation = new KActiveLabel(mainBox);
-    explanation->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera, please use <b>%1</b> from camera list.<p> "
+    explanation->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera (which appears like an "
+                              "removable drive), please use <b>%1</b> from camera list.<p> "
                               "<p>To see a fresh list of supported cameras, take a look at "
                               "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>")
                               .arg(d->UMSCameraNameShown));    
