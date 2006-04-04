@@ -61,7 +61,7 @@ public:
     ImageGuideDlg(QWidget* parent, QString title, QString name,
                   bool loadFileSettings=false, bool progress=true,
                   bool guideVisible=true,
-                  int guideMode=Digikam::ImageGuideWidget::HVGuideMode,
+                  int guideMode=ImageGuideWidget::HVGuideMode,
                   QFrame* bannerFrame=0,
                   bool prevModeOptions=false);
     ~ImageGuideDlg();

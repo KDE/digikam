@@ -193,7 +193,7 @@ Canvas::Canvas(QWidget *parent)
     d->histoMovingDirtyRect = QRect(0, 0, 0, 0);
     d->histoMovingRepainting = false;
 
-    d->histoChannelType = Digikam::ImageHistogram::ValueChannel;
+    d->histoChannelType = ImageHistogram::ValueChannel;
 
     connect(d->im, SIGNAL(signalModified()),
             SLOT(slotModified()));

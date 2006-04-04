@@ -138,7 +138,7 @@ ImageGuideWidget::~ImageGuideWidget()
     delete d;
 }
 
-Digikam::ImageIface* ImageGuideWidget::imageIface()
+ImageIface* ImageGuideWidget::imageIface()
 {
     return d->iface;
 }

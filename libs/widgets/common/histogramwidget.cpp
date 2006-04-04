@@ -453,39 +453,39 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
     switch(m_channelType)
     {
-       case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::GreenChannel);  
+       case HistogramWidget::GreenChannelHistogram:    // Green channel.
+          max = histogram->getMaximum(ImageHistogram::GreenChannel);  
           break;
 
-       case Digikam::HistogramWidget::BlueChannelHistogram:     // Blue channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::BlueChannel);    
+       case HistogramWidget::BlueChannelHistogram:     // Blue channel.
+          max = histogram->getMaximum(ImageHistogram::BlueChannel);    
           break;
 
-       case Digikam::HistogramWidget::RedChannelHistogram:      // Red channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::RedChannel); 
+       case HistogramWidget::RedChannelHistogram:      // Red channel.
+          max = histogram->getMaximum(ImageHistogram::RedChannel); 
           break;
 
-       case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::AlphaChannel);  
+       case HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
+          max = histogram->getMaximum(ImageHistogram::AlphaChannel);  
           break;
 
-       case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
-          max = QMAX (QMAX (histogram->getMaximum(Digikam::ImageHistogram::RedChannel),
-                            histogram->getMaximum(Digikam::ImageHistogram::GreenChannel)),
-                      histogram->getMaximum(Digikam::ImageHistogram::BlueChannel));  
+       case HistogramWidget::ColorChannelsHistogram:   // All color channels.
+          max = QMAX (QMAX (histogram->getMaximum(ImageHistogram::RedChannel),
+                            histogram->getMaximum(ImageHistogram::GreenChannel)),
+                      histogram->getMaximum(ImageHistogram::BlueChannel));  
           break;
 
-       case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
-          max = histogram->getMaximum(Digikam::ImageHistogram::ValueChannel); 
+       case HistogramWidget::ValueHistogram:           // Luminosity.
+          max = histogram->getMaximum(ImageHistogram::ValueChannel); 
           break;
     }
 
     switch (m_scaleType)
     {
-       case Digikam::HistogramWidget::LinScaleHistogram:
+       case HistogramWidget::LinScaleHistogram:
           break;
 
-       case Digikam::HistogramWidget::LogScaleHistogram:
+       case HistogramWidget::LogScaleHistogram:
           if (max > 0.0)
               max = log (max);
           else
@@ -520,34 +520,34 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
           switch(m_channelType)
           {
-             case Digikam::HistogramWidget::GreenChannelHistogram:    // Green channel.
-                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
+             case HistogramWidget::GreenChannelHistogram:    // Green channel.
+                v = histogram->getValue(ImageHistogram::GreenChannel, i++);   
                 break;
 
-             case Digikam::HistogramWidget::BlueChannelHistogram:     // Blue channel.
-                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i++);   
+             case HistogramWidget::BlueChannelHistogram:     // Blue channel.
+                v = histogram->getValue(ImageHistogram::BlueChannel, i++);   
                 break;
 
-             case Digikam::HistogramWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
+             case HistogramWidget::RedChannelHistogram:      // Red channel.
+                v = histogram->getValue(ImageHistogram::RedChannel, i++);    
                 break;
 
-             case Digikam::HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i++);   
+             case HistogramWidget::AlphaChannelHistogram:    // Alpha channel.
+                v = histogram->getValue(ImageHistogram::AlphaChannel, i++);   
                 break;
 
-             case Digikam::HistogramWidget::ColorChannelsHistogram:   // All color channels.
-                vr = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);   
-                vg = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);   
-                vb = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);   
+             case HistogramWidget::ColorChannelsHistogram:   // All color channels.
+                vr = histogram->getValue(ImageHistogram::RedChannel, i++);   
+                vg = histogram->getValue(ImageHistogram::GreenChannel, i);   
+                vb = histogram->getValue(ImageHistogram::BlueChannel, i);   
                 break;
 
-             case Digikam::HistogramWidget::ValueHistogram:           // Luminosity.
-                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, i++);   
+             case HistogramWidget::ValueHistogram:           // Luminosity.
+                v = histogram->getValue(ImageHistogram::ValueChannel, i++);   
                 break;
           }
 
-          if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
+          if ( m_channelType != HistogramWidget::ColorChannelsHistogram )
           {
              if (v > value)
                 value = v;
@@ -564,15 +564,15 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       }
       while (i < j);
 
-      if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
+      if ( m_channelType != HistogramWidget::ColorChannelsHistogram )
       {
          switch (m_scaleType)
          {
-            case Digikam::HistogramWidget::LinScaleHistogram:
+            case HistogramWidget::LinScaleHistogram:
               y = (int) ((wHeight * value) / max);
               break;
 
-            case Digikam::HistogramWidget::LogScaleHistogram:
+            case HistogramWidget::LogScaleHistogram:
               if (value <= 0.0) value = 1.0;
               y = (int) ((wHeight * log (value)) / max);
               break;
@@ -586,13 +586,13 @@ void HistogramWidget::paintEvent( QPaintEvent * )
       {
          switch (m_scaleType)
          {
-            case Digikam::HistogramWidget::LinScaleHistogram:
+            case HistogramWidget::LinScaleHistogram:
               yr = (int) ((wHeight * value_r) / max);
               yg = (int) ((wHeight * value_g) / max);
               yb = (int) ((wHeight * value_b) / max);
               break;
 
-            case Digikam::HistogramWidget::LogScaleHistogram:
+            case HistogramWidget::LogScaleHistogram:
               if (value_r <= 0.0) value_r = 1.0;
               if (value_g <= 0.0) value_g = 1.0;
               if (value_b <= 0.0) value_b = 1.0;
@@ -611,7 +611,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
       // Drawing the histogram + selection or only the histogram.
 
-      if ( m_channelType != Digikam::HistogramWidget::ColorChannelsHistogram )
+      if ( m_channelType != HistogramWidget::ColorChannelsHistogram )
       {
          if ( d->selectMode == true )   // Selection mode enable ?
          {
@@ -663,11 +663,11 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                // Witch color must be used on the foreground with all colors channel mode?
                switch (m_colorType) 
                {
-                  case Digikam::HistogramWidget::RedColor:
+                  case HistogramWidget::RedColor:
                     p1.drawLine(x, wHeight, x, wHeight - yr);
                     break;
 
-                  case Digikam::HistogramWidget::GreenColor:
+                  case HistogramWidget::GreenColor:
                     p1.drawLine(x, wHeight, x, wHeight - yg);
                     break;
 
@@ -681,7 +681,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
                // Which color must be used on the foreground with all colors channel mode?
                switch (m_colorType) 
                {
-                  case Digikam::HistogramWidget::RedColor:
+                  case HistogramWidget::RedColor:
                     p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yg);
                     p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
@@ -704,7 +704,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
                     break;
 
-                  case Digikam::HistogramWidget::GreenColor:
+                  case HistogramWidget::GreenColor:
                     p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                     p1.drawLine(x, wHeight, x, wHeight - yb);
                     p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
@@ -757,7 +757,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
             // Which color must be used on the foreground with all colors channel mode?
             switch (m_colorType) 
             {
-               case Digikam::HistogramWidget::RedColor:
+               case HistogramWidget::RedColor:
                  p1.setPen(QPen::QPen(Qt::green, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yg);
                  p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
@@ -780,7 +780,7 @@ void HistogramWidget::paintEvent( QPaintEvent * )
 
                  break;
 
-               case Digikam::HistogramWidget::GreenColor:
+               case HistogramWidget::GreenColor:
                  p1.setPen(QPen::QPen(Qt::blue, 1, Qt::SolidLine));
                  p1.drawLine(x, wHeight, x, wHeight - yb);
                  p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));

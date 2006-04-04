@@ -84,7 +84,7 @@ public:
 ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, const char *name,
                                                            QSplitter *splitter, Side side,
                                                            bool mimimizedDefault)
-                            : Digikam::Sidebar(parent, name, side, mimimizedDefault)
+                            : Sidebar(parent, name, side, mimimizedDefault)
 {
     d = new ImagePropertiesSideBarCamGuiPriv;
     d->cameraItemTab = new CameraItemPropertiesTab(parent, true);

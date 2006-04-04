@@ -43,7 +43,7 @@ class AlbumIconView;
 class AlbumIconItem;
 class ImagePropertiesSideBarDBPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public Digikam::ImagePropertiesSideBar
+class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
     Q_OBJECT
 

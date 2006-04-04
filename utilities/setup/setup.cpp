@@ -147,7 +147,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Image Editor Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
-    d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
+    d->slideshowPage = new SetupSlideShow(d->page_slideshow);
     
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor ICC Profiles Management"),
                           BarIcon("colorize", KIcon::SizeMedium));

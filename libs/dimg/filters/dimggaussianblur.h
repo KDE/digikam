@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgGaussianBlur : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT DImgGaussianBlur : public DImgThreadedFilter
 {
 
 public:

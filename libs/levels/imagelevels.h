@@ -59,8 +59,8 @@ public:
     // Methods for to manipulate the levels data.        
     
     void   levelsChannelReset(int channel);
-    void   levelsAuto(Digikam::ImageHistogram *hist);
-    void   levelsChannelAuto(Digikam::ImageHistogram *hist, int channel);
+    void   levelsAuto(ImageHistogram *hist);
+    void   levelsChannelAuto(ImageHistogram *hist, int channel);
     int    levelsInputFromColor(int channel, DColor color);
     void   levelsBlackToneAdjustByColors(int channel, DColor color);
     void   levelsGrayToneAdjustByColors(int channel, DColor color);

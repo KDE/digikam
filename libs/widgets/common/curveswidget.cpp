@@ -106,7 +106,7 @@ public:
 
 CurvesWidget::CurvesWidget(int w, int h, 
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
-                           Digikam::ImageCurves *curves, QWidget *parent, 
+                           ImageCurves *curves, QWidget *parent, 
                            bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
@@ -126,7 +126,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     connect( d->blinkTimer, SIGNAL(timeout()),
              this, SLOT(slotBlinkTimerDone()) );
     
-    m_imageHistogram = new Digikam::ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
+    m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits, this);
 }
 
 CurvesWidget::~CurvesWidget()
@@ -157,7 +157,7 @@ void CurvesWidget::curveTypeChanged(void)
 {
     switch ( d->curves->getCurveType(m_channelType) )
        {
-       case Digikam::ImageCurves::CURVE_SMOOTH:
+       case ImageCurves::CURVE_SMOOTH:
   
           //  pick representative points from the curve and make them control points
           
@@ -175,7 +175,7 @@ void CurvesWidget::curveTypeChanged(void)
           d->curves->curvesCalculateCurve(m_channelType);
           break;
          
-       case Digikam::ImageCurves::CURVE_FREE:
+       case ImageCurves::CURVE_FREE:
           break;
        }
                        
@@ -187,7 +187,7 @@ void CurvesWidget::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    Digikam::ImageHistogram::EventData *ed = (Digikam::ImageHistogram::EventData*) event->data();
+    ImageHistogram::EventData *ed = (ImageHistogram::EventData*) event->data();
 
     if (!ed) return;
 
@@ -275,7 +275,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     int    wWidth = width();
     int    wHeight = height();
     double max;
-    class Digikam::ImageHistogram *histogram; 
+    class ImageHistogram *histogram; 
     
     histogram = m_imageHistogram;
     
@@ -286,23 +286,23 @@ void CurvesWidget::paintEvent( QPaintEvent * )
     switch(m_channelType)
     {
        case CurvesWidget::GreenChannelHistogram:    // Green channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::GreenChannel);  
+          max = histogram->getMaximum(ImageHistogram::GreenChannel);  
           break;
              
        case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::BlueChannel);    
+          max = histogram->getMaximum(ImageHistogram::BlueChannel);    
           break;
              
        case CurvesWidget::RedChannelHistogram:      // Red channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::RedChannel); 
+          max = histogram->getMaximum(ImageHistogram::RedChannel); 
           break;
 
        case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = histogram->getMaximum(Digikam::ImageHistogram::AlphaChannel);  
+          max = histogram->getMaximum(ImageHistogram::AlphaChannel);  
           break;
        
        case CurvesWidget::ValueHistogram:           // Luminosity.
-          max = histogram->getMaximum(Digikam::ImageHistogram::ValueChannel); 
+          max = histogram->getMaximum(ImageHistogram::ValueChannel); 
           break;
     }            
              
@@ -346,23 +346,23 @@ void CurvesWidget::paintEvent( QPaintEvent * )
           switch(m_channelType)
           {
              case CurvesWidget::RedChannelHistogram:      // Red channel.
-                v = histogram->getValue(Digikam::ImageHistogram::RedChannel, i++);    
+                v = histogram->getValue(ImageHistogram::RedChannel, i++);    
                 break;
              
              case CurvesWidget::GreenChannelHistogram:    // Green channel.
-                v = histogram->getValue(Digikam::ImageHistogram::GreenChannel, i++);   
+                v = histogram->getValue(ImageHistogram::GreenChannel, i++);   
                 break;
              
              case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-                v = histogram->getValue(Digikam::ImageHistogram::BlueChannel, i++);   
+                v = histogram->getValue(ImageHistogram::BlueChannel, i++);   
                 break;
              
              case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-                v = histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i++);   
+                v = histogram->getValue(ImageHistogram::AlphaChannel, i++);   
                 break;
 
              case CurvesWidget::ValueHistogram:           // Luminosity.
-                v = histogram->getValue(Digikam::ImageHistogram::ValueChannel, i++);   
+                v = histogram->getValue(ImageHistogram::ValueChannel, i++);   
                 break;
           }            
             
@@ -423,7 +423,7 @@ void CurvesWidget::paintEvent( QPaintEvent * )
    
    // Drawing curves points.
    
-   if ( !d->readOnlyMode && d->curves->getCurveType(m_channelType) == Digikam::ImageCurves::CURVE_SMOOTH )
+   if ( !d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH )
    {      
       p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
             
@@ -575,7 +575,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
 
    switch( d->curves->getCurveType(m_channelType) )
    {
-      case Digikam::ImageCurves::CURVE_SMOOTH:
+      case ImageCurves::CURVE_SMOOTH:
       {   
          // Determine the leftmost and rightmost points.
          
@@ -608,7 +608,7 @@ void CurvesWidget::mousePressEvent ( QMouseEvent * e )
          break;
       }
 
-      case Digikam::ImageCurves::CURVE_FREE:
+      case ImageCurves::CURVE_FREE:
       {
 
          d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegment() - y);
@@ -673,7 +673,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
    
    switch ( d->curves->getCurveType(m_channelType) )
    {
-      case Digikam::ImageCurves::CURVE_SMOOTH:
+      case ImageCurves::CURVE_SMOOTH:
       {  
          if (d->grabPoint == -1)   // If no point is grabbed...
          {
@@ -706,7 +706,7 @@ void CurvesWidget::mouseMoveEvent ( QMouseEvent * e )
          break;
       }
 
-      case Digikam::ImageCurves::CURVE_FREE:
+      case ImageCurves::CURVE_FREE:
       {        
         if (d->grabPoint != -1)
         {

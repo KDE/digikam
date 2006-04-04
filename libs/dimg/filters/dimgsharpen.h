@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgSharpen : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT DImgSharpen : public DImgThreadedFilter
 {
 
 public:

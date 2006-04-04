@@ -51,7 +51,7 @@ public:
 
     static ImagePluginLoader* instance();
 
-    QPtrList<Digikam::ImagePlugin> pluginList();
+    QPtrList<ImagePlugin> pluginList();
     void loadPluginsFromList(const QStringList& list);
     
     // Return true if plugin library is loaded in memory.
@@ -64,14 +64,14 @@ private:
 
 private:
 
-    typedef QPair<QString,Digikam::ImagePlugin*> PluginType;
-    typedef QValueList< PluginType >             PluginList;
+    typedef QPair<QString, ImagePlugin*>  PluginType;
+    typedef QValueList< PluginType >      PluginList;
     
-    static ImagePluginLoader                    *m_instance;
+    static ImagePluginLoader             *m_instance;
     
-    SplashScreen                                *m_splash;
+    SplashScreen                         *m_splash;
 
-    PluginList                                   m_pluginList;
+    PluginList                            m_pluginList;
     
 };
 

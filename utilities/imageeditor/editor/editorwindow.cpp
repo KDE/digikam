@@ -388,7 +388,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Init SlideShow instance -------------------------------------------------
     
-    m_slideShow = new Digikam::SlideShow(m_firstAction, m_forwardAction);
+    m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
 }
 
 void EditorWindow::setupStandardAccelerators()
@@ -488,9 +488,9 @@ void EditorWindow::slotEditKeys()
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
     
-    QPtrList<Digikam::ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
+    QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
 
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin)
@@ -507,7 +507,7 @@ void EditorWindow::slotResize()
     int width  = m_canvas->imageWidth();
     int height = m_canvas->imageHeight();
 
-    Digikam::ImageResizeDlg dlg(this, &width, &height);
+    ImageResizeDlg dlg(this, &width, &height);
     
     if (dlg.exec() == QDialog::Accepted &&
         (width != m_canvas->imageWidth() ||
@@ -616,9 +616,9 @@ void EditorWindow::unplugActionAccel(KAction* action)
 
 void EditorWindow::loadImagePlugins()
 {
-    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
 
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin)
@@ -634,9 +634,9 @@ void EditorWindow::loadImagePlugins()
 
 void EditorWindow::unLoadImagePlugins()
 {
-    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
 
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin) 
@@ -811,9 +811,9 @@ void EditorWindow::toggleStandardActions(bool val)
     m_undoAction->setEnabled(val);
     m_redoAction->setEnabled(val);
 
-    QPtrList<Digikam::ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
+    QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
     
-    for (Digikam::ImagePlugin* plugin = pluginList.first();
+    for (ImagePlugin* plugin = pluginList.first();
          plugin; plugin = pluginList.next())
     {
         if (plugin) 

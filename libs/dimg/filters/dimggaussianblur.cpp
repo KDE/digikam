@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, int radius)
-                : Digikam::DImgThreadedFilter(orgImage, parent, "GaussianBlur")
+                : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 { 
     m_radius = radius;
     initFilter();
@@ -49,8 +49,8 @@ DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, int radius)
 DImgGaussianBlur::DImgGaussianBlur(DImgThreadedFilter *parentFilter,
                                    const DImg &orgImage, const DImg &destImage,
                                    int progressBegin, int progressEnd, int radius)
-                : Digikam::DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                              parentFilter->filterName() + ": GaussianBlur")
+                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                     parentFilter->filterName() + ": GaussianBlur")
 {
     m_radius = radius;
     filterImage();

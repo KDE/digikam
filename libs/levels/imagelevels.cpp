@@ -141,21 +141,21 @@ void ImageLevels::levelsChannelReset(int channel)
     d->levels->high_output[channel] = d->sixteenBit ? 65535 : 255;
 }
 
-void ImageLevels::levelsAuto(Digikam::ImageHistogram *hist)
+void ImageLevels::levelsAuto(ImageHistogram *hist)
 {
     if (!d->levels || !hist) return;
 
-    levelsChannelReset(Digikam::ImageHistogram::ValueChannel);
+    levelsChannelReset(ImageHistogram::ValueChannel);
 
-    for (int channel = Digikam::ImageHistogram::RedChannel ;
-         channel <= Digikam::ImageHistogram::BlueChannel ;
+    for (int channel = ImageHistogram::RedChannel ;
+         channel <= ImageHistogram::BlueChannel ;
          channel++)
     {
        levelsChannelAuto(hist, channel);
     }
 }
 
-void ImageLevels::levelsChannelAuto(Digikam::ImageHistogram *hist, int channel)
+void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
 {
     int    i;
     double count, new_count, percentage, next_percentage;
@@ -215,16 +215,16 @@ int ImageLevels::levelsInputFromColor(int channel, DColor color)
 {
     switch (channel)
     {
-       case Digikam::ImageHistogram::ValueChannel:
+       case ImageHistogram::ValueChannel:
           return QMAX (QMAX (color.red(), color.green()), color.blue());
        
-       case Digikam::ImageHistogram::RedChannel:
+       case ImageHistogram::RedChannel:
           return color.red();
        
-       case Digikam::ImageHistogram::GreenChannel:
+       case ImageHistogram::GreenChannel:
           return color.green();
     
-       case Digikam::ImageHistogram::BlueChannel:
+       case ImageHistogram::BlueChannel:
           return color.blue();
     }
 

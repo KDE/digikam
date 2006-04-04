@@ -251,27 +251,27 @@ double ImageHistogram::getCount(int channel, int start, int end)
 
     switch(channel)
     {
-    case Digikam::ImageHistogram::ValueChannel:
+    case ImageHistogram::ValueChannel:
         for (i = start ; i <= end ; i++)
             count += d->histogram[i].value;
         break;
 
-    case Digikam::ImageHistogram::RedChannel:
+    case ImageHistogram::RedChannel:
         for (i = start ; i <= end ; i++)
             count += d->histogram[i].red;
         break;
 
-    case Digikam::ImageHistogram::GreenChannel:
+    case ImageHistogram::GreenChannel:
         for (i = start ; i <= end ; i++)
             count += d->histogram[i].green;
         break;
 
-    case Digikam::ImageHistogram::BlueChannel:
+    case ImageHistogram::BlueChannel:
         for (i = start ; i <= end ; i++)
             count += d->histogram[i].blue;
         break;
 
-    case Digikam::ImageHistogram::AlphaChannel:
+    case ImageHistogram::AlphaChannel:
         for (i = start ; i <= end ; i++)
             count += d->histogram[i].alpha;
         break;
@@ -304,27 +304,27 @@ double ImageHistogram::getMean(int channel, int start, int end)
 
     switch(channel)
     {
-        case Digikam::ImageHistogram::ValueChannel:
+        case ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
                 mean += i * d->histogram[i].value;
             break;
 
-        case Digikam::ImageHistogram::RedChannel:
+        case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
                 mean += i * d->histogram[i].red;
             break;
 
-        case Digikam::ImageHistogram::GreenChannel:
+        case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
                 mean += i * d->histogram[i].green;
             break;
 
-        case Digikam::ImageHistogram::BlueChannel:
+        case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
                 mean += i * d->histogram[i].blue;
             break;
 
-        case Digikam::ImageHistogram::AlphaChannel:
+        case ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++)
                 mean += i * d->histogram[i].alpha;
             break;
@@ -356,7 +356,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
 
     switch(channel)
     {
-        case Digikam::ImageHistogram::ValueChannel:
+        case ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
             {
                 sum += d->histogram[i].value;
@@ -364,7 +364,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case Digikam::ImageHistogram::RedChannel:
+        case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
             {
                 sum += d->histogram[i].red;
@@ -372,7 +372,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case Digikam::ImageHistogram::GreenChannel:
+        case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
             {
                 sum += d->histogram[i].green;
@@ -380,7 +380,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case Digikam::ImageHistogram::BlueChannel:
+        case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
             {
                 sum += d->histogram[i].blue;
@@ -388,7 +388,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case Digikam::ImageHistogram::AlphaChannel:
+        case ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++) 
             {
                 sum += d->histogram[i].alpha;
@@ -423,27 +423,27 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
 
     switch(channel)
     {
-        case Digikam::ImageHistogram::ValueChannel:
+        case ImageHistogram::ValueChannel:
             for (i = start ; i <= end ; i++)
                 dev += (i - mean) * (i - mean) * d->histogram[i].value;
             break;
 
-        case Digikam::ImageHistogram::RedChannel:
+        case ImageHistogram::RedChannel:
             for (i = start ; i <= end ; i++)
                 dev += (i - mean) * (i - mean) * d->histogram[i].red;
             break;
 
-        case Digikam::ImageHistogram::GreenChannel:
+        case ImageHistogram::GreenChannel:
             for (i = start ; i <= end ; i++)
                 dev += (i - mean) * (i - mean) * d->histogram[i].green;
             break;
 
-        case Digikam::ImageHistogram::BlueChannel:
+        case ImageHistogram::BlueChannel:
             for (i = start ; i <= end ; i++)
                 dev += (i - mean) * (i - mean) * d->histogram[i].blue;
             break;
 
-        case Digikam::ImageHistogram::AlphaChannel:
+        case ImageHistogram::AlphaChannel:
             for (i = start ; i <= end ; i++)
                 dev += (i - mean) * (i - mean) * d->histogram[i].alpha;
             break;
@@ -465,23 +465,23 @@ double ImageHistogram::getValue(int channel, int bin)
 
     switch(channel)
     {
-       case Digikam::ImageHistogram::ValueChannel:
+       case ImageHistogram::ValueChannel:
           value = d->histogram[bin].value;
           break;
 
-       case Digikam::ImageHistogram::RedChannel:
+       case ImageHistogram::RedChannel:
           value = d->histogram[bin].red;
           break;
 
-       case Digikam::ImageHistogram::GreenChannel:
+       case ImageHistogram::GreenChannel:
           value = d->histogram[bin].green;
           break;
 
-       case Digikam::ImageHistogram::BlueChannel:
+       case ImageHistogram::BlueChannel:
           value = d->histogram[bin].blue;
           break;
 
-       case Digikam::ImageHistogram::AlphaChannel:
+       case ImageHistogram::AlphaChannel:
           value = d->histogram[bin].alpha;
           break;
 
@@ -503,31 +503,31 @@ double ImageHistogram::getMaximum(int channel)
 
     switch(channel)
     {
-       case Digikam::ImageHistogram::ValueChannel:
+       case ImageHistogram::ValueChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
              if (d->histogram[x].value > max)
                 max = d->histogram[x].value;
           break;
 
-       case Digikam::ImageHistogram::RedChannel:
+       case ImageHistogram::RedChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
              if (d->histogram[x].red > max)
                 max = d->histogram[x].red;
           break;
 
-       case Digikam::ImageHistogram::GreenChannel:
+       case ImageHistogram::GreenChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
              if (d->histogram[x].green > max)
                 max = d->histogram[x].green;
           break;
 
-       case Digikam::ImageHistogram::BlueChannel:
+       case ImageHistogram::BlueChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
              if (d->histogram[x].blue > max)
                 max = d->histogram[x].blue;
           break;
 
-       case Digikam::ImageHistogram::AlphaChannel:
+       case ImageHistogram::AlphaChannel:
           for (x = 0 ; x < d->histoSegments ; x++)
              if (d->histogram[x].alpha > max)
                 max = d->histogram[x].alpha;

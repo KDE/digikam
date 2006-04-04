@@ -52,7 +52,7 @@ public:
 
     CtrlPanelDlg(QWidget* parent, QString title, QString name,
                  bool loadFileSettings=false, bool tryAction=false, bool progressBar=true,
-                 int separateViewMode=Digikam::ImagePannelWidget::SeparateViewAll,
+                 int separateViewMode=ImagePannelWidget::SeparateViewAll,
                  QFrame* bannerFrame=0);
     ~CtrlPanelDlg();
 

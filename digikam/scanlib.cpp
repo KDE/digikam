@@ -4,7 +4,7 @@
  * Description : 
  * 
  * Copyright 2005-2006 by Tom Albers
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -100,9 +100,7 @@ void ScanLib::startScan()
     deleteStaleEntries();
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->setSetting("Scanned",
-                   QDateTime::currentDateTime().toString(Qt::ISODate));
-
+    db->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 void ScanLib::findFoldersWhichDoNotExist()
@@ -112,6 +110,7 @@ void ScanLib::findFoldersWhichDoNotExist()
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
     AlbumInfo::List aList = db->scanAlbums();
+    
     for (AlbumInfo::List::iterator it = aList.begin(); it != aList.end(); ++it)
     {
         AlbumInfo info = *it;
@@ -320,8 +319,8 @@ void ScanLib::allFiles(const QString& directory)
     }
     
     QStringList filesInAlbum = db->getItemNamesInAlbum( albumID );
-
     QMap<QString, bool> filesFoundInDB;
+    
     for (QStringList::iterator it = filesInAlbum.begin();
          it != filesInAlbum.end(); ++it)
     {
@@ -387,7 +386,7 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    Digikam::readJPEGMetaData(filePath, comment, datetime);
+    readJPEGMetaData(filePath, comment, datetime);
     
     if ( !datetime.isValid() )
     {
@@ -409,7 +408,7 @@ void ScanLib::updateItemDate(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    Digikam::readJPEGMetaData(filePath, comment, datetime);
+    readJPEGMetaData(filePath, comment, datetime);
     
     if ( !datetime.isValid() )
     {
@@ -425,6 +424,7 @@ void ScanLib::deleteStaleEntries()
 {
     QStringList listToBeDeleted;
     QValueList< QPair<QString,int> >::iterator it;
+    
     for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end(); ++it)
     {
         AlbumDB* dbstore = AlbumManager::instance()->albumDB();

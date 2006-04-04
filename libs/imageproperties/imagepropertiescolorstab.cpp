@@ -206,7 +206,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
-    d->scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
+    d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-lin", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
@@ -214,7 +214,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
-    d->scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
+    d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
@@ -244,7 +244,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     
     QPushButton *fullImageButton = new QPushButton( d->regionBG );
     QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
-    d->regionBG->insert(fullImageButton, Digikam::HistogramWidget::FullImageHistogram);
+    d->regionBG->insert(fullImageButton, HistogramWidget::FullImageHistogram);
     KGlobal::dirs()->addResourceType("image-full", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
     fullImageButton->setPixmap( QPixmap( directory + "image-full.png" ) );
@@ -252,7 +252,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     
     QPushButton *SelectionImageButton = new QPushButton( d->regionBG );
     QToolTip::add( SelectionImageButton, i18n( "<p>Selection" ) );
-    d->regionBG->insert(SelectionImageButton, Digikam::HistogramWidget::ImageSelectionHistogram);
+    d->regionBG->insert(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
     KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
     SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
@@ -361,18 +361,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
     iccbox->setFrameStyle (QFrame::NoFrame);
 
-    d->infoHeader            = new QLabel(0, iccbox);
-    QGroupBox *iccdetail     = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
-    QLabel *labelName        = new QLabel(i18n("Name: "), iccdetail);
-    d->labelICCName          = new KSqueezedTextLabel(0, iccdetail);
-    QLabel *labelDescription = new QLabel(i18n("Description: "), iccdetail);
-    d->labelICCDescription   = new KSqueezedTextLabel(0, iccdetail);
-    QLabel *labelCright      = new QLabel(i18n("Copyright: "), iccdetail);
-    d->labelICCCopyright     = new KSqueezedTextLabel(0, iccdetail);
-    QLabel *labelIntent      = new QLabel(i18n("Rendering Intent: "), iccdetail);
-    d->labelICCIntent        = new KSqueezedTextLabel(0, iccdetail);
-    QLabel *labelColor       = new QLabel(i18n("Color Space: "), iccdetail);
-    d->labelICCColorSpace    = new KSqueezedTextLabel(0, iccdetail);
+    d->infoHeader          = new QLabel(0, iccbox);
+    QGroupBox *iccdetail   = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
+    new QLabel(i18n("Name: "), iccdetail);
+    d->labelICCName        = new KSqueezedTextLabel(0, iccdetail);
+    new QLabel(i18n("Description: "), iccdetail);
+    d->labelICCDescription = new KSqueezedTextLabel(0, iccdetail);
+    new QLabel(i18n("Copyright: "), iccdetail);
+    d->labelICCCopyright   = new KSqueezedTextLabel(0, iccdetail);
+    new QLabel(i18n("Rendering Intent: "), iccdetail);
+    d->labelICCIntent      = new KSqueezedTextLabel(0, iccdetail);
+    new QLabel(i18n("Color Space: "), iccdetail);
+    d->labelICCColorSpace  = new KSqueezedTextLabel(0, iccdetail);
 
     d->cieTongue = new CIETongueWidget(256, 256, iccprofilePage);
     
@@ -602,11 +602,11 @@ void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
     else 
     {
         d->regionBG->hide();
-        slotRenderingChanged(Digikam::HistogramWidget::FullImageHistogram);
+        slotRenderingChanged(HistogramWidget::FullImageHistogram);
     }
 }
 
-void ImagePropertiesColorsTab::slotRefreshOptions(bool sixteenBit)
+void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
 {
     slotChannelChanged(d->channelCB->currentItem());
     slotScaleChanged(d->scaleBG->selectedId());
@@ -627,37 +627,37 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
     switch(channel)
     {
     case RedChannel: 
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::RedChannelHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
         d->colorsCB->setEnabled(false);
         break;
        
     case GreenChannel:
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::GreenChannelHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
         d->colorsCB->setEnabled(false);
         break;
           
     case BlueChannel:        
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::BlueChannelHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
         d->colorsCB->setEnabled(false);
         break;
 
     case AlphaChannel:
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::AlphaChannelHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(false);
         break;
           
     case ColorChannels:
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::ColorChannelsHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(true);
         break;
                               
     default:          // Luminosity.
-        d->histogramWidget->m_channelType = Digikam::HistogramWidget::ValueHistogram;
+        d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(false);
         break;
@@ -678,15 +678,15 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
     switch(color)
     {
     case AllColorsGreen:
-        d->histogramWidget->m_colorType = Digikam::HistogramWidget::GreenColor;
+        d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
         break;
        
     case AllColorsBlue:
-        d->histogramWidget->m_colorType = Digikam::HistogramWidget::BlueColor;
+        d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
         break;
 
     default:          // Red.
-        d->histogramWidget->m_colorType = Digikam::HistogramWidget::RedColor;
+        d->histogramWidget->m_colorType = HistogramWidget::RedColor;
         break;
     }
 
@@ -759,7 +759,7 @@ void ImagePropertiesColorsTab::updateStatistiques()
     int max = d->maxInterv->value();
     int channel = d->channelCB->currentItem();
 
-    if ( channel == Digikam::HistogramWidget::ColorChannelsHistogram )
+    if ( channel == HistogramWidget::ColorChannelsHistogram )
         channel = d->colorsCB->currentItem()+1;
                
     double mean = d->histogramWidget->m_imageHistogram->getMean(channel, min, max);

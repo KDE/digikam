@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double sigma)
-           : Digikam::DImgThreadedFilter(orgImage, parent, "Sharpen")
+           : DImgThreadedFilter(orgImage, parent, "Sharpen")
 { 
     m_radius = radius;
     m_sigma  = sigma;
@@ -53,15 +53,15 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double 
 DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
                          const DImg &orgImage, const DImg &destImage,
                          int progressBegin, int progressEnd, double radius, double sigma)
-           : Digikam::DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                         parentFilter->filterName() + ": Sharpen")
+           : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                parentFilter->filterName() + ": Sharpen")
 {
     m_radius = radius;
     m_sigma  = sigma;
     // We need to provide support for orgImage == destImage.
     // The algorithm does not support this out of the box, so use a temporary.
     if (orgImage.bits() == destImage.bits())
-        m_destImage = Digikam::DImg(destImage.width(), destImage.height(), destImage.sixteenBit());
+        m_destImage = DImg(destImage.width(), destImage.height(), destImage.sixteenBit());
     filterImage();
     if (orgImage.bits() == destImage.bits())
         memcpy(destImage.bits(), m_destImage.bits(), m_destImage.numBytes());

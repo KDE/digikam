@@ -74,7 +74,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     register long         i;               
     
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, sixteenBit);
+    ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
     
     // Memory allocation.
     map          = new double_packet[histogram->getHistogramSegment()];
@@ -103,10 +103,10 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
     
     for(i = 0 ; i < histogram->getHistogramSegment() ; i++)
     {
-       intensity.red   += histogram->getValue(Digikam::ImageHistogram::RedChannel, i);
-       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, i);
-       intensity.blue  += histogram->getValue(Digikam::ImageHistogram::BlueChannel, i);
-       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, i);
+       intensity.red   += histogram->getValue(ImageHistogram::RedChannel, i);
+       intensity.green += histogram->getValue(ImageHistogram::GreenChannel, i);
+       intensity.blue  += histogram->getValue(ImageHistogram::BlueChannel, i);
+       intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, i);
        map[i]          = intensity;
     }
 
@@ -224,7 +224,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     unsigned long         threshold_intensity;
         
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, sixteenBit);
+    ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
     
     // Memory allocation.
     normalize_map = new int_packet[histogram->getHistogramSegment()];
@@ -255,7 +255,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
     {
-       intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)high.red);
+       intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
        
        if( intensity.red > threshold_intensity )
           break;
@@ -268,7 +268,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         
        for(low.red = 0 ; low.red < histogram->getHistogramSegment()-1 ; low.red++)
        {
-          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)low.red);
+          intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)low.red);
           
           if( intensity.red > threshold_intensity )
               break;
@@ -278,7 +278,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.red = histogram->getHistogramSegment()-1 ; high.red != 0 ; high.red--)
        {
-          intensity.red += histogram->getValue(Digikam::ImageHistogram::RedChannel, (int)high.red);
+          intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
           
           if( intensity.red > threshold_intensity )
              break;
@@ -291,7 +291,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
     {
-       intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)high.green);
+       intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
        
        if( intensity.green > threshold_intensity )
           break;
@@ -304,7 +304,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(low.green = 0 ; low.green < histogram->getHistogramSegment()-1 ; low.green++)
        {
-          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)low.green);
+          intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)low.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -314,7 +314,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.green = histogram->getHistogramSegment()-1 ; high.green != 0 ; high.green--)
        {
-          intensity.green += histogram->getValue(Digikam::ImageHistogram::GreenChannel, (int)high.green);
+          intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
           
           if( intensity.green > threshold_intensity )
              break;
@@ -327,7 +327,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
     {
-       intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)high.blue);
+       intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
        
        if( intensity.blue > threshold_intensity )
           break;
@@ -340,7 +340,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
         
        for(low.blue = 0 ; low.blue < histogram->getHistogramSegment()-1 ; low.blue++)
        {
-          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)low.blue);
+          intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)low.blue);
           
           if( intensity.blue > threshold_intensity )
               break;
@@ -350,7 +350,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.blue = histogram->getHistogramSegment()-1 ; high.blue != 0 ; high.blue--)
        {
-          intensity.blue += histogram->getValue(Digikam::ImageHistogram::BlueChannel, (int)high.blue);
+          intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
           
           if( intensity.blue > threshold_intensity )
              break;
@@ -363,7 +363,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
     
     for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
     {
-       intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)high.alpha);
+       intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
        
        if( intensity.alpha > threshold_intensity )
           break;
@@ -376,7 +376,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegment()-1 ; low.alpha++)
        {
-          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)low.alpha);
+          intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)low.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
@@ -386,7 +386,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        
        for(high.alpha = histogram->getHistogramSegment()-1 ; high.alpha != 0 ; high.alpha--)
        {
-          intensity.alpha += histogram->getValue(Digikam::ImageHistogram::AlphaChannel, (int)high.alpha);
+          intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
           
           if( intensity.alpha > threshold_intensity )
              break;
@@ -643,16 +643,16 @@ void DImgImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool
        desData = new uchar[w*h*4];
        
     // Create an histogram of the current image.     
-    Digikam::ImageHistogram *histogram = new Digikam::ImageHistogram(data, w, h, sixteenBit);
+    ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
   
     // Create an empty instance of levels to use.
-    Digikam::ImageLevels *levels = new Digikam::ImageLevels(sixteenBit);
+    ImageLevels *levels = new ImageLevels(sixteenBit);
   
     // Initialize an auto levels correction of the histogram.
     levels->levelsAuto(histogram);
 
     // Calculate the LUT to apply on the image.
-    levels->levelsLutSetup(Digikam::ImageHistogram::AlphaChannel);
+    levels->levelsLutSetup(ImageHistogram::AlphaChannel);
   
     // Apply the lut to the image.
     levels->levelsLutProcess(data, desData, w, h);

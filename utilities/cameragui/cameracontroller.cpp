@@ -340,7 +340,7 @@ void CameraThread::run()
                 if (autoRotate)
                 {
                     sendInfo(i18n("EXIF rotating file %1...").arg(file));
-                    Digikam::exifRotate(tempURL.path());
+                    exifRotate(tempURL.path());
                 }
 
                 if (fixDateTime || setPhotographerId)

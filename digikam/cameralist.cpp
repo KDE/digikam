@@ -50,19 +50,20 @@ class CameraListPrivate
 {
 public:
 
+    bool                 modified;
+    
     QPtrList<CameraType> clist;
-    QString file;
-    bool    modified;
+    QString              file;
 };
 
 CameraList::CameraList(QObject *parent, const QString& file)
-    : QObject(parent)
+          : QObject(parent)
 {
     d = new CameraListPrivate;
     d->clist.setAutoDelete(true);
-    d->file = file;
+    d->file     = file;
     d->modified = false;
-    instance_ = this;
+    instance_   = this;
 }
 
 CameraList::~CameraList()
@@ -94,8 +95,8 @@ bool CameraList::load()
 
     
     for (QDomNode n = docElem.firstChild();
-         !n.isNull(); n = n.nextSibling()) {
-
+         !n.isNull(); n = n.nextSibling()) 
+    {
         QDomElement e = n.toElement();
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
@@ -105,13 +106,11 @@ bool CameraList::load()
         QString port   = e.attribute("port");
         QString path   = e.attribute("path");
 
-        CameraType *ctype = new CameraType(title, model,
-                                           port, path);
+        CameraType *ctype = new CameraType(title, model, port, path);
         insertPrivate(ctype);
     }
 
     return true;
-
 }
 
 bool CameraList::close()
@@ -126,8 +125,8 @@ bool CameraList::close()
     QDomElement docElem=doc.documentElement();
     
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) {
-
+         ctype = d->clist.next()) 
+    {
        QDomElement elem = doc.createElement("item");
        elem.setAttribute("title", ctype->title());
        elem.setAttribute("model", ctype->model());
@@ -186,7 +185,8 @@ QPtrList<CameraType>* CameraList::cameraList()
 CameraType* CameraList::find(const QString& title)
 {
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) {
+         ctype = d->clist.next()) 
+    {
         if (ctype->title() == title)
             return ctype;
     }
@@ -198,20 +198,20 @@ CameraType* CameraList::autoDetect(bool& retry)
     retry = false;
     
     QString model, port;
-    if (Digikam::GPIface::autoDetect(model, port) != 0)
+    if (GPIface::autoDetect(model, port) != 0)
     {
-        retry = ( KMessageBox::warningYesNo(0,
-                                            i18n("Failed to auto-detect camera; "
-                                                 "please make sure it is connected "
-                                                 "properly and is turned on. "
-                                                 "Would you like to try again?"))
+        retry = ( KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
+                                                    "please make sure it is connected "
+                                                    "properly and is turned on. "
+                                                    "Would you like to try again?"))
                  == KMessageBox::Yes );
         return 0;
     }
 
     // check if the camera is already in the list
     for (CameraType *ctype = d->clist.first(); ctype;
-         ctype = d->clist.next()) {
+         ctype = d->clist.next()) 
+    {
         // we can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:
         if (ctype->model() == model)
@@ -228,7 +228,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     // connected at the same time (whack them if they do).
 
     if (port.startsWith("usb:"))
-    	port = "usb:";
+        port = "usb:";
 
     CameraType* ctype = new CameraType(model, model, port, "/");
     insert(ctype);
@@ -240,7 +240,8 @@ void CameraList::clear()
 {
     
     CameraType *ctype = d->clist.first();
-    while (ctype) {
+    while (ctype) 
+    {
         remove(ctype);
         ctype = d->clist.first();
     }

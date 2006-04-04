@@ -71,7 +71,7 @@ public:
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
                                                    Side side, bool mimimizedDefault, bool navBar)
-                        : Digikam::ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, navBar)
+                        : ImagePropertiesSideBar(parent, name, splitter, side, mimimizedDefault, navBar)
 {
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, navBar);

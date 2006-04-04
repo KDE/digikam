@@ -124,44 +124,46 @@ public:
         imageLister   = 0;
         currentAlbum  = 0;
         albumSettings = 0;
+        pixMan        = 0;
+        toolTip       = 0;
     }
-
-    AlbumLister                  *imageLister;
-    Album                        *currentAlbum;
-    const AlbumSettings          *albumSettings;
-    QIntDict<AlbumIconGroupItem>  albumDict;
-    PixmapManager                *pixMan;
-
-    ThumbnailSize thumbSize;
 
     QString albumTitle;
     QString albumDate;
     QString albumComments;
 
-    QRect itemRect;
-    QRect itemRatingRect;
-    QRect itemDateRect;
-    QRect itemPixmapRect;
-    QRect itemNameRect;
-    QRect itemCommentsRect;
-    QRect itemResolutionRect;
-    QRect itemSizeRect;
-    QRect itemTagRect;
-    QRect bannerRect;
+    QRect   itemRect;
+    QRect   itemRatingRect;
+    QRect   itemDateRect;
+    QRect   itemPixmapRect;
+    QRect   itemNameRect;
+    QRect   itemCommentsRect;
+    QRect   itemResolutionRect;
+    QRect   itemSizeRect;
+    QRect   itemTagRect;
+    QRect   bannerRect;
 
     QPixmap itemRegPixmap;
     QPixmap itemSelPixmap;
     QPixmap bannerPixmap;
     QPixmap ratingPixmap;
 
-    QFont fnReg;
-    QFont fnCom;
-    QFont fnXtra;
+    QFont   fnReg;
+    QFont   fnCom;
+    QFont   fnXtra;
 
-    QDict<AlbumIconItem> itemDict;
-    AlbumFileTip*        toolTip;
+    QDict<AlbumIconItem>          itemDict;
+    
+    AlbumLister                  *imageLister;
+    Album                        *currentAlbum;
+    const AlbumSettings          *albumSettings;
+    QIntDict<AlbumIconGroupItem>  albumDict;
+    PixmapManager                *pixMan;
+
+    ThumbnailSize                 thumbSize;
+    
+    AlbumFileTip                 *toolTip;
 };
-
 
 AlbumIconView::AlbumIconView(QWidget* parent)
              : IconView(parent)
@@ -170,8 +172,7 @@ AlbumIconView::AlbumIconView(QWidget* parent)
     d->init();
     d->imageLister = AlbumLister::instance();
     d->pixMan      = new PixmapManager(this);
-
-    d->toolTip = new AlbumFileTip(this);
+    d->toolTip     = new AlbumFileTip(this);
 
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -452,8 +453,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     if (!item)
         return;
     
-    AlbumIconItem* iconItem
-        = static_cast<AlbumIconItem *>(item);
+    AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(item);
 
     // --------------------------------------------------------
 
@@ -646,7 +646,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     //---------------------------------------------------------------
 
-    if (id >= 100 && id < 1000) {
+    if (id >= 100 && id < 1000) 
+    {
         KService::Ptr imageServicePtr = serviceVector[id-100];
         KURL::List urlList;
         for (IconItem *it = firstItem(); it; it=it->nextItem())
@@ -806,9 +807,9 @@ void AlbumIconView::slotDeleteSelectedItems()
     
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
-        if (it->isSelected()) {
-            AlbumIconItem *iconItem =
-                static_cast<AlbumIconItem *>(it);
+        if (it->isSelected()) 
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             url = iconItem->imageInfo()->kurl();
             urlList.append(url);
             nameList.append(iconItem->imageInfo()->name());
@@ -904,7 +905,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
             urlList.append(iconItem->imageInfo()->kurl());
     }
 
-    Digikam::ImageWindow *imview = Digikam::ImageWindow::imagewindow();
+    ImageWindow *imview = ImageWindow::imagewindow();
     
     imview->disconnect(this);
 
@@ -921,7 +922,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
                     item->imageInfo()->kurl(),
                     d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
                     true,
-                    this);  // Allow to use image properties and comments/tags dialogs
+                    this); 
 
     if (imview->isHidden())
         imview->show();
@@ -1032,7 +1033,8 @@ void AlbumIconView::contentsDragMoveEvent(QDragMoveEvent *event)
                              !CameraDragObject::canDecode(event) &&
                              !TagListDrag::canDecode(event) &&
                              !TagDrag::canDecode(event))
-        || event->source() == this) {
+        || event->source() == this) 
+    {
         event->ignore();
         return;
     }
@@ -1072,21 +1074,24 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
-        switch(id) {
-        case 10: {
-            KIO::Job* job = DIO::move(srcURLs, destURL);
-            connect(job, SIGNAL(result(KIO::Job*)),
-                    SLOT(slotDIOResult(KIO::Job*)));
-            break;
-        }
-        case 11: {
-            KIO::Job* job = DIO::copy(srcURLs, destURL);
-            connect(job, SIGNAL(result(KIO::Job*)),
-                    SLOT(slotDIOResult(KIO::Job*)));
-            break;
-        }
-        default:
-            break;
+        switch(id) 
+        {
+            case 10: 
+            {
+                KIO::Job* job = DIO::move(srcURLs, destURL);
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            case 11: 
+            {
+                KIO::Job* job = DIO::copy(srcURLs, destURL);
+                connect(job, SIGNAL(result(KIO::Job*)),
+                        SLOT(slotDIOResult(KIO::Job*)));
+                break;
+            }
+            default:
+                break;
         }
     }
     else if(TagDrag::canDecode(event))
@@ -1109,30 +1114,31 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
             popMenu.setMouseTracking(true);
             int id = popMenu.exec(QCursor::pos());
-            switch(id) {
-            case 10:
+            switch(id) 
             {
-                AlbumIconItem *albumItem = findItem(event->pos());
-                if (albumItem)
+                case 10:
                 {
-                    albumItem->imageInfo()->setTag(tagID);
-                }
-
-                for (IconItem *it = firstItem(); it; it = it->nextItem())
-                {
-                    if (it->isSelected())
+                    AlbumIconItem *albumItem = findItem(event->pos());
+                    if (albumItem)
                     {
-                        AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
                         albumItem->imageInfo()->setTag(tagID);
                     }
+    
+                    for (IconItem *it = firstItem(); it; it = it->nextItem())
+                    {
+                        if (it->isSelected())
+                        {
+                            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                            albumItem->imageInfo()->setTag(tagID);
+                        }
+                    }
+    
+                    d->imageLister->refresh();
+                    updateContents();
+                    break;
                 }
-
-                d->imageLister->refresh();
-                updateContents();
-                break;
-            }
-            default:
-                break;
+                default:
+                    break;
             }
         }
     }
@@ -1150,41 +1156,43 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
 
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
-        switch(id) {
-        case 10:
+        switch(id) 
         {
-            AlbumIconItem *albumItem = findItem(event->pos());
-            if (albumItem)
+            case 10:
             {
-                for (QValueList<int>::iterator it = tagIDs.begin();
-                     it != tagIDs.end(); ++it)
+                AlbumIconItem *albumItem = findItem(event->pos());
+                if (albumItem)
                 {
-                    albumItem->imageInfo()->setTag(*it);
-                }
-            }
-
-            for (IconItem *it = firstItem(); it; it = it->nextItem())
-            {
-                if (it->isSelected())
-                {
-                    AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
                     for (QValueList<int>::iterator it = tagIDs.begin();
-                         it != tagIDs.end(); ++it)
+                        it != tagIDs.end(); ++it)
                     {
                         albumItem->imageInfo()->setTag(*it);
                     }
                 }
+    
+                for (IconItem *it = firstItem(); it; it = it->nextItem())
+                {
+                    if (it->isSelected())
+                    {
+                        AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
+                        for (QValueList<int>::iterator it = tagIDs.begin();
+                            it != tagIDs.end(); ++it)
+                        {
+                            albumItem->imageInfo()->setTag(*it);
+                        }
+                    }
+                }
+    
+                d->imageLister->refresh();
+                updateContents();
+                break;
             }
-
-            d->imageLister->refresh();
-            updateContents();
-            break;
-        }
-        default:
-            break;
+            default:
+                break;
         }
     }
-    else {
+    else 
+    {
         event->ignore();
     }
 }
@@ -1292,7 +1300,8 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
-        if (it->isSelected()) {
+        if (it->isSelected()) 
+        {
             AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
             urlList.append(iconItem->imageInfo()->kurl());
         }
@@ -1597,7 +1606,7 @@ AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
 
     AlbumIconItem* firstItem = static_cast<AlbumIconItem*>(fItem);
     AlbumIconItem* lastItem  = static_cast<AlbumIconItem*>(lItem);
-    AlbumIconItem* item = firstItem;
+    AlbumIconItem* item      = firstItem;
     while (item)
     {
         if (item->dirty_)

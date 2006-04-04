@@ -226,7 +226,7 @@ int DigikamImageInfo::angle()
 
 void DigikamImageInfo::setAngle( int )
 {
-    // TODO : add here a Digikam::DMetadata call (thru Exiv2) to set Exif orientation tag.
+    // TODO : add here a DMetadata call (thru Exiv2) to set Exif orientation tag.
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

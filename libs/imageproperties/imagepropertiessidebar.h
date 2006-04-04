@@ -42,7 +42,7 @@ class DImg;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
-class DIGIKAM_EXPORT ImagePropertiesSideBar : public Digikam::Sidebar
+class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 {
     Q_OBJECT
 

@@ -36,12 +36,12 @@
 
 #include <kapplication.h>
 #include <kmainwindow.h>
+#include <kio/global.h>
 
 // Local includes.
 
 #include "digikam_export.h"
 #include "dcopiface.h"
-#include <kio/global.h>
 
 class KAction;
 class KActionMenu;
@@ -107,18 +107,14 @@ protected:
     bool queryClose();
 
 protected slots:
+
     void slotCameraMediaMenuEntries( KIO::Job *, const KIO::UDSEntryList & );
 
 private:
 
-    static DigikamApp     *m_instance;
-    AlbumManager          *mAlbumManager;
-    
-    ImagePluginLoader     *m_ImagePluginsLoader;
+    bool                   mFullScreen;
     
     // KIPI plugins support
-    KIPI::PluginLoader    *KipiPluginLoader_;
-    DigikamKipiInterface  *KipiInterface_;
     QPtrList<KAction>      m_kipiFileActionsExport;
     QPtrList<KAction>      m_kipiFileActionsImport;
     QPtrList<KAction>      m_kipiImageActions;
@@ -126,22 +122,13 @@ private:
     QPtrList<KAction>      m_kipiBatchActions;
     QPtrList<KAction>      m_kipiAlbumActions;
 
-    KConfig               *m_config;    
-    
-    DigikamView           *mView;
-    CameraList            *mCameraList;
     QPopupMenu            *mCameraMediaList;
     QMap<int, QString>     mMediaItems;
 
-    bool                   mFullScreen;
-
-    Digikam::SplashScreen *mSplash;
-    
     QString                mCameraGuiPath;
-    
-    // Album Settings
-    AlbumSettings         *mAlbumSettings;
 
+    KConfig               *m_config;    
+    
     // Camera Actions
     KActionMenu           *mCameraMenuAction;
 
@@ -202,7 +189,19 @@ private:
     KAction               *mTipAction;
     KAction               *mKipiHelpAction;
     KAction               *mGammaAdjustmentAction;
+    
+    AlbumSettings         *mAlbumSettings;
+    SplashScreen          *mSplash;
     DCOPIface             *mDcopIface;
+    AlbumManager          *mAlbumManager;
+    ImagePluginLoader     *m_ImagePluginsLoader;
+    DigikamKipiInterface  *KipiInterface_;
+    DigikamView           *mView;
+    CameraList            *mCameraList;
+    
+    static DigikamApp     *m_instance;
+
+    KIPI::PluginLoader    *KipiPluginLoader_;
 
 private slots:
 

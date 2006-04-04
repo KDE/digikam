@@ -473,7 +473,7 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
 {
     if (!event) return;
 
-    Digikam::DImgThreadedFilter::EventData *ed = (Digikam::DImgThreadedFilter::EventData*) event->data();
+    DImgThreadedFilter::EventData *ed = (DImgThreadedFilter::EventData*) event->data();
 
     if (!ed) return;
 

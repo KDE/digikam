@@ -98,7 +98,7 @@ DigikamApp::DigikamApp()
     if(m_config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
     {
-        mSplash = new Digikam::SplashScreen("digikam-splash.png");
+        mSplash = new SplashScreen("digikam-splash.png");
     }
 
     mAlbumSettings = new AlbumSettings();
@@ -145,8 +145,8 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
-    if (Digikam::ImageWindow::imagewindowCreated())
-        delete Digikam::ImageWindow::imagewindow();
+    if (ImageWindow::imagewindowCreated())
+        delete ImageWindow::imagewindow();
 
     if (mView)
         delete mView;
@@ -157,7 +157,7 @@ DigikamApp::~DigikamApp()
     delete mAlbumManager;
     delete AlbumLister::instance();
 
-    Digikam::LoadingCacheInterface::cleanUp();
+    LoadingCacheInterface::cleanUp();
 
     m_instance = 0;
 }
@@ -954,9 +954,9 @@ void DigikamApp::slotDownloadImages()
         mCameraMenuAction->insert(cAction, 0);
      }
           
-    Digikam::CameraUI* cgui = new Digikam::CameraUI(this, 
-                              i18n("Images found in %1").arg(mCameraGuiPath),
-                              "directory browse","Fixed", mCameraGuiPath);
+    CameraUI* cgui = new CameraUI(this, 
+                         i18n("Images found in %1").arg(mCameraGuiPath),
+                         "directory browse","Fixed", mCameraGuiPath);
     cgui->show();
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
@@ -970,8 +970,8 @@ void DigikamApp::slotCameraConnect()
 
     if (ctype)
     {
-        Digikam::CameraUI* cgui = new Digikam::CameraUI(this, ctype->title(), ctype->model(),
-                                  ctype->port(), ctype->path());
+        CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+                             ctype->port(), ctype->path());
         cgui->show();
         connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
                 mView, SLOT(slotSelectAlbum(const KURL&)));
@@ -1070,7 +1070,7 @@ void DigikamApp::slotCameraAutoDetect()
 
 void DigikamApp::slotSetup()
 {
-    Digikam::Setup setup(this);
+    Setup setup(this);
 
     // To show the number of KIPI plugins in the setup dialog.
 
@@ -1088,7 +1088,7 @@ void DigikamApp::slotSetup()
 
 void DigikamApp::slotSetupCamera()
 {
-    Digikam::Setup setup(this, 0, Digikam::Setup::Camera);
+    Setup setup(this, 0, Setup::Camera);
 
     // For to show the number of KIPI plugins in the setup dialog.
 
@@ -1107,17 +1107,19 @@ void DigikamApp::slotSetupCamera()
 void DigikamApp::slotSetupChanged()
 {
     // raw loading options might have changed
-    Digikam::LoadingCacheInterface::cleanCache();
+    LoadingCacheInterface::cleanCache();
 
     if(mAlbumSettings->getAlbumLibraryPath() != mAlbumManager->getLibraryPath())
         mView->clearHistory();
+    
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mAlbumManager->startScan();
 
     mView->applySettings(mAlbumSettings);
     updateDeleteTrashMenu();
-    if (Digikam::ImageWindow::imagewindowCreated())
-        Digikam::ImageWindow::imagewindow()->applySettings();
+    
+    if (ImageWindow::imagewindowCreated())
+        ImageWindow::imagewindow()->applySettings();
 
     m_config->sync();
 }
@@ -1217,7 +1219,7 @@ void DigikamApp::loadPlugins()
     // Setting the initial menu options after all plugins have been loaded
     mView->slot_albumSelected(mAlbumManager->currentAlbum());
 
-    m_ImagePluginsLoader = new Digikam::ImagePluginLoader(this, mSplash);
+    m_ImagePluginsLoader = new ImagePluginLoader(this, mSplash);
 }
 
 void DigikamApp::slotKipiPluginPlug()
@@ -1326,8 +1328,10 @@ void DigikamApp::populateThemes()
 
     mThemeMenuAction->setItems(themes);
     int index = themes.findIndex(mAlbumSettings->getCurrentTheme());
+    
     if (index == -1)
         index = themes.findIndex(i18n("Default"));
+        
     mThemeMenuAction->setCurrentItem(index);
     ThemeEngine::instance()->slotChangeTheme(mThemeMenuAction->currentText());
 }

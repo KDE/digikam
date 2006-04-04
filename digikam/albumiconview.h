@@ -58,8 +58,8 @@ class ThumbnailSize;
 class Album;
 class PixmapManager;
 
-class AlbumIconView : public Digikam::IconView,
-                      public Digikam::AlbumItemHandler
+class AlbumIconView : public IconView,
+                      public AlbumItemHandler
 {
     Q_OBJECT
 
@@ -75,7 +75,7 @@ public:
     void applySettings(const AlbumSettings* settings);
     const AlbumSettings* settings() const;
 
-    void    refreshIcon(AlbumIconItem* item);
+    void refreshIcon(AlbumIconItem* item);
 
     AlbumIconItem* firstSelectedItem() const;
 
@@ -123,13 +123,6 @@ protected:
 
     bool acceptToolTip(IconItem *item, const QPoint &mousePos);
     
-private:
-
-    AlbumIconViewPrivate *d;
-
-    void updateBannerRectPixmap();
-    void updateItemRectsPixmap();
-
 private slots:
 
     void slotImageListerNewItems(const ImageInfoList& itemList);
@@ -179,6 +172,16 @@ signals:
     void signalItemsAdded();
     void signalItemDeleted(AlbumIconItem* iconItem);
     void signalCleared();
+
+private:
+    
+    void updateBannerRectPixmap();
+    void updateItemRectsPixmap();
+        
+private:
+
+    AlbumIconViewPrivate *d;
+    
 };
 
 }  // namespace Digikam
