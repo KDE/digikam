@@ -104,7 +104,7 @@ private:
     void neonFindEdges(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool neon, int Intensity, int BW);
 
 
-    void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
+    void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                                          uchar *data, uchar *pResBits,
                                          int w, int h, double nw, double nh, bool AntiAlias);
     /*
