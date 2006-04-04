@@ -38,6 +38,7 @@
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qmap.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -50,6 +51,10 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kurllabel.h>
+#include <kiconloader.h>
+#include <kglobalsettings.h>
+#include <kstandarddirs.h>
 
 // lcms includes.
 
@@ -136,38 +141,51 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint());
 
-   // --------------------------------------------------------
+    // --------------------------------------------------------
+    
+    QGroupBox *colorPolicy = new QGroupBox(0, Qt::Horizontal, i18n("Color Management Policy"), parent);
+    QGridLayout* grid = new QGridLayout( colorPolicy->layout(), 1, 2, KDialog::spacingHint());
+    
+    d->enableColorManagement = new QCheckBox(colorPolicy);
+    d->enableColorManagement->setText(i18n("Enable Color Management"));
+    QWhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
+                                                    "<li>Unchecked: Color Management is disabled</li></ul>"));
+    
+    KURLLabel *lcmsLogoLabel = new KURLLabel(colorPolicy);
+    lcmsLogoLabel->setText(QString::null);
+    lcmsLogoLabel->setURL("http://www.littlecms.com");
+    KGlobal::dirs()->addResourceType("lcmslogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("lcmslogo", "lcmslogo.png");
+    lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
+    QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-   QVGroupBox *colorPolicy = new QVGroupBox(parent);
-   colorPolicy->setTitle(i18n("Color Management Policy"));
+    QButtonGroup *behaviour = new QButtonGroup(2, Qt::Vertical, i18n("Behaviour"), colorPolicy);
+    
+    d->defaultApplyICC = new QRadioButton(behaviour);
+    d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
+    QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, Digikam applies the Workspace default color profile to an image without asking when this has not embedded profile or the embedded profile is not the same that the workspace one.</p>"));
+    
+    d->defaultAskICC = new QRadioButton(behaviour);
+    d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
+    QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
+    
+    grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
+    grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
+    grid->addMultiCellWidget(behaviour, 1, 1, 0, 2);
+    grid->setColStretch(1, 10);
 
-   d->enableColorManagement = new QCheckBox(colorPolicy);
-   d->enableColorManagement->setText(i18n("Enable Color Management"));
-   QWhatsThis::add( d->enableColorManagement, i18n("<ul><li>Checked: Color Management is enabled</li>"
-                                                  "<li>Unchecked: Color Management is disabled</li></ul>"));
-
-   QButtonGroup *behaviour = new QButtonGroup(2, Qt::Vertical, i18n("Behaviour"),colorPolicy);
-
-   d->defaultApplyICC = new QRadioButton(behaviour);
-   d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
-   QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, Digikam applies the Workspace default color profile to an image without asking when this has not embedded profile or the embedded profile is not the same that the workspace one.</p>"));
-
-   d->defaultAskICC = new QRadioButton(behaviour);
-   d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
-   QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
-
-   layout->addWidget(colorPolicy);
-
-   // --------------------------------------------------------
-   
-   QHGroupBox * defaultPath = new QHGroupBox(parent);
-   defaultPath->setTitle(i18n("Color Profiles Directory"));
-
-   d->defaultPathKU = new KURLRequester(defaultPath);
-   d->defaultPathKU->setMode(KFile::Directory);
-   QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
-
-   layout->addWidget(defaultPath);
+    layout->addWidget(colorPolicy);
+    
+    // --------------------------------------------------------
+    
+    QHGroupBox * defaultPath = new QHGroupBox(parent);
+    defaultPath->setTitle(i18n("Color Profiles Directory"));
+    
+    d->defaultPathKU = new KURLRequester(defaultPath);
+    d->defaultPathKU->setMode(KFile::Directory);
+    QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
+    
+    layout->addWidget(defaultPath);
 
     // --------------------------------------------------------
     
@@ -233,8 +251,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     "Image Editor window.</p>"));
     
     layout->addWidget(mv);
-    
-    // --------------------------------------------------------
 
     // --------------------------------------------------------
     
@@ -269,6 +285,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     
     // --------------------------------------------------------
     
+    connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processLCMSURL(const QString&)));
+
     connect(d->enableColorManagement, SIGNAL(toggled(bool)),
             this, SLOT(slotToggledWidgets(bool)));
 
@@ -319,11 +338,16 @@ SetupICC::~SetupICC()
     delete d;
 }
 
+void SetupICC::processLCMSURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
+}
+
 void SetupICC::applySettings()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("Color Management");
+
     config->writeEntry("EnableCM", d->enableColorManagement->isChecked());
     
     if (!d->enableColorManagement->isChecked())
@@ -350,8 +374,9 @@ void SetupICC::applySettings()
     config->writePathEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
     config->writePathEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
     config->writeEntry("ManagedView", d->managedView->isChecked());
+
     kdDebug() << "proof: " << d->proofProfilesKC->currentItem() << endl;
-kdDebug() << d->proofICCFiles_file[d->proofProfilesKC->currentItem()] << endl;
+    kdDebug() << d->proofICCFiles_file[d->proofProfilesKC->currentItem()] << endl;
 }
 
 void SetupICC::readSettings()
@@ -388,13 +413,11 @@ void SetupICC::readSettings()
     d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
     d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-
 }
 
 void SetupICC::fillCombos()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("Color Management");
     
     kdDebug()<< config->readPathEntry("DefaultPath") << endl;
@@ -404,7 +427,6 @@ void SetupICC::fillCombos()
     const QFileInfoList* files = profilesDir.entryInfoList();
     QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
     m_proofICCFiles_description=0, m_workICCFiles_description=0;
-
 
     if (files)
     {
@@ -482,6 +504,7 @@ void SetupICC::fillCombos()
     {
         kdDebug() << "No List" << endl;
     }
+
     d->inProfilesKC->insertStringList(m_inICCFiles_description);
     d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
     d->workProfilesKC->insertStringList(m_workICCFiles_description);
@@ -516,8 +539,8 @@ void SetupICC::slotToggledWidgets(bool t)
     if (t)
     {
         KConfig* config = kapp->config();
-
         config->setGroup("Color Management");
+
         if (config->readBoolEntry("BehaviourICC"))
         {
             d->defaultApplyICC->setChecked(true);
@@ -641,6 +664,7 @@ void SetupICC::slotFillCombos(const QString& url)
         KMessageBox::sorry(this,message);
         return;
     }
+
     d->inProfilesKC->clear();
     m_inICCFiles_description.remove(m_inICCFiles_description.begin());
     d->inProfilesKC->insertStringList(m_inICCFiles_description);
@@ -657,10 +681,8 @@ void SetupICC::slotFillCombos(const QString& url)
     d->inICCFiles_file.remove(d->inICCFiles_file.begin());
     d->monitorICCFiles_file.remove(d->monitorICCFiles_file.begin());
     d->proofICCFiles_file.remove(d->proofICCFiles_file.begin());
-    d->ICCPath["WorkProfile"] =
-    d->workICCFiles_file[d->workProfilesKC->currentItem()];
-    d->ICCPath["InProfile"] =
-d->inICCFiles_file[d->inProfilesKC->currentItem()];
+    d->ICCPath["WorkProfile"] = d->workICCFiles_file[d->workProfilesKC->currentItem()];
+    d->ICCPath["InProfile"] = d->inICCFiles_file[d->inProfilesKC->currentItem()];
     d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
     d->ICCPath["ProofProfile"] = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
 }
