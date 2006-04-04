@@ -366,6 +366,9 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
         if (img.depth() != 32)
             img = img.convertDepth(32);
+            
+        if (exif)
+            exifRotate(url.path(), img);
 
         img.setText(QString("Thumb::URI").latin1(),
                      0, uri);
@@ -384,8 +387,6 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     }
 
     img = img.smoothScale(size, size, QImage::ScaleMin);
-    if (exif)
-        exifRotate(url.path(), img);
 
     if (img.isNull())
     {
