@@ -1136,8 +1136,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
     if (isNull())
         return QPixmap();
 
-    DImg img(*this);
-    img.detach();
+    DImg img = copy(0, 0, width(), height());
 
     IccTransform trans;
 
@@ -1148,6 +1147,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
                            QFile::encodeName(monitorProfile) );
         trans.apply( img );
     }
+    // With embedd profile.
     else
     {
         trans.getEmbeddedProfile( img );
@@ -1155,7 +1155,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
         trans.apply( img );
     }
 
-
+    img.convertToPixmap();
 }
 
 
