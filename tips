@@ -41,7 +41,7 @@
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can view the <b>EXIF</b> information of a photo by using its properties dialog?
+... that you can view the <b>Exif</b>, <b>MakerNotes</b>, and <b>IPTC</b> informations of a photo by using its <b>Metadata</b> sidebar tab?
 </td>
 </tr>
 </table>
@@ -258,7 +258,7 @@
 <img src="crystalsvg/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can edit the comments of the current image opened in the digiKam image editor?
+... that you can edit the comments of the current image opened in the digiKam image editor using <b>Comments and Tags</b> sidebar tab?
 </td>
 </tr>
 </table>
