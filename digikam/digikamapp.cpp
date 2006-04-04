@@ -236,6 +236,7 @@ void DigikamApp::setupView()
 
     connect(mView, SIGNAL(signal_albumSelected(bool)),
             this, SLOT(slot_albumSelected(bool)));
+            
     connect(mView, SIGNAL(signal_tagSelected(bool)),
             this, SLOT(slot_tagSelected(bool)));
 
@@ -431,8 +432,9 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     QSignalMapper *exifOrientationMapper = new QSignalMapper( mView );
+    
     connect( exifOrientationMapper, SIGNAL( mapped( int ) ),
-              mView, SLOT( slot_imageExifOrientation( int ) ) );
+             mView, SLOT( slot_imageExifOrientation( int ) ) );
 
     mImageExifOrientationActionMenu = new KActionMenu(i18n("Correct Exif Orientation Tag"),
                                                       actionCollection(),
@@ -617,6 +619,7 @@ void DigikamApp::setupActions()
     // are plugged into the toolbar at startup
     if (mSplash)
         mSplash->message(i18n("Loading cameras"), AlignLeft, white);
+    
     loadCameras();
 
     createGUI(QString::fromLatin1( "digikamui.rc" ), false);
@@ -695,6 +698,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
     mForwardActionMenu->popupMenu()->clear();
     QStringList titles;
     mView->getForwardHistory(titles);
+    
     if(!titles.isEmpty())
     {
         int id = 1;
@@ -877,7 +881,6 @@ void DigikamApp::slot_exit()
     close();
 }
 
-
 QString DigikamApp::convertToLocalUrl( const QString& folder )
 {
     // This function is copied from k3b.
@@ -905,6 +908,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         }
 #endif
     }
+    
     return url.path();
  }
 
@@ -934,6 +938,7 @@ void DigikamApp::slotDownloadImages()
         return;
 
     bool alreadyThere = false;
+    
     for (uint i = 0 ; i != actionCollection()->count() ; i++)
     {
         if (actionCollection()->action(i)->name() == mCameraGuiPath)
@@ -958,8 +963,10 @@ void DigikamApp::slotDownloadImages()
                          i18n("Images found in %1").arg(mCameraGuiPath),
                          "directory browse","Fixed", mCameraGuiPath);
     cgui->show();
+    
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
+    
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
             SLOT(slotSetupChanged()));
 }
@@ -973,8 +980,10 @@ void DigikamApp::slotCameraConnect()
         CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
                              ctype->port(), ctype->path());
         cgui->show();
+        
         connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
                 mView, SLOT(slotSelectAlbum(const KURL&)));
+        
         connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
                 SLOT(slotSetupChanged()));
     }
@@ -1002,6 +1011,7 @@ void DigikamApp::slotCameraMediaMenu()
         
     KURL kurl("media:/");
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
+    
     connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
              SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
 }
@@ -1014,25 +1024,27 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
     {
         QString name;
         QString path;
-        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++ et ) {
+        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++ et ) 
+        {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
             kdDebug() << ( *et ).m_str << endl;
-       }
-       if (!name.isEmpty() && !path.isEmpty())
-       {
+        }
+       
+        if (!name.isEmpty() && !path.isEmpty())
+        {
             if (i==0)
                 mCameraMediaList->clear();
             
             mMediaItems[i] = path;
             
             mCameraMediaList->insertItem( name,  this, 
-                               SLOT(slotDownloadImagesFromMedia( int )),i,0);
+                              SLOT(slotDownloadImagesFromMedia( int )),i,0);
             mCameraMediaList->setItemParameter(i, i);
             i++;
-       }
+        }
     }
 }
 
@@ -1056,6 +1068,7 @@ void DigikamApp::slotCameraAutoDetect()
     bool retry = false;
 
     CameraType* ctype = mCameraList->autoDetect(retry);
+    
     if (!ctype && retry)
     {
         QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -1159,6 +1172,7 @@ void DigikamApp::slotConfToolbars()
         plugActionList( QString::fromLatin1("album_actions"), m_kipiAlbumActions );
         plugActionList( QString::fromLatin1("file_actions_export"), m_kipiFileActionsExport );
     }
+    
     delete dlg;
 }
 
