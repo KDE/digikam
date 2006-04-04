@@ -1171,6 +1171,7 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
     d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
+    viewport()->update();
 
     QScrollView::contentsWheelEvent(e);
 }
