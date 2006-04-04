@@ -5,6 +5,7 @@
  * Description : 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Gilles Caulier
  * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
