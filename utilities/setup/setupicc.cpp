@@ -193,11 +193,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     // --------------------------------------------------------
     
     QGroupBox *profiles = new QGroupBox(0, Qt::Horizontal, i18n("ICC Settings"), parent);
-    QGridLayout* grid2  = new QGridLayout( profiles->layout(), 3, 2, KDialog::spacingHint());
+    QGridLayout* grid2  = new QGridLayout( profiles->layout(), 3, 3, KDialog::spacingHint());
     grid2->setColStretch(1, 10);
 
     QLabel *workProfiles = new QLabel(i18n("Workspace profile: "), profiles);
     d->workProfilesKC = new KComboBox(false, profiles);
+    d->workProfilesKC->setMaximumWidth(300);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select an apropiate one for edition purpose.</p>"
@@ -207,11 +208,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "information about the selected profile.</p>"));
 
     grid2->addMultiCellWidget(workProfiles, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 2, 2);
+    grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 2, 2);
+    grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 3, 3);
 
     QLabel *monitorProfiles = new QLabel(i18n("Monitor profile: "), profiles);
     d->monitorProfilesKC = new KComboBox(false, profiles);
+    d->monitorProfilesKC->setMaximumWidth(300);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor.</p>"));
     d->infoMonitorProfiles = new QPushButton("Info", profiles);
@@ -219,11 +221,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "information about the selected profile.</p>"));
 
     grid2->addMultiCellWidget(monitorProfiles, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 2, 2);
+    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 2, 2);
+    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 3, 3);
 
     QLabel *inProfiles = new QLabel(i18n("Input profile: "), profiles);
     d->inProfilesKC = new KComboBox(false, profiles);
+    d->inProfilesKC->setMaximumWidth(300);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
                      "(scanner, camera, ...)</p>"));
@@ -232,11 +235,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "information about the selected profile.</p>"));
 
     grid2->addMultiCellWidget(inProfiles, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 1, 1);
-    grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 2, 2);
+    grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 2, 2);
+    grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 3, 3);
 
     QLabel *proofProfiles = new QLabel(i18n("Soft proof profile: "), profiles);
     d->proofProfilesKC = new KComboBox(false, profiles);
+    d->proofProfilesKC->setMaximumWidth(300);
     proofProfiles->setBuddy(d->proofProfilesKC);
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
@@ -246,8 +250,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "information about the selected profile.</p>"));
 
     grid2->addMultiCellWidget(proofProfiles, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 1, 1);
-    grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 2, 2);
+    grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 2, 2);
+    grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 3, 3);
 
     fillCombos();
 
