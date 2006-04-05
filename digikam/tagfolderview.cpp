@@ -158,11 +158,13 @@ TagFolderView::TagFolderView(QWidget *parent)
             SLOT(slotAlbumAdded(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
             SLOT(slotAlbumDeleted(Album*)));
+    connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
+            SLOT(slotAlbumRenamed(Album*)));
     connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
             SLOT(slotAlbumsCleared()));
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
-    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+    connect(d->albumMan, SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
             SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
     connect(this, SIGNAL(selectionChanged()),
@@ -260,6 +262,22 @@ void TagFolderView::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
         newPItem->insertItem(item);
     else
         insertItem(item);
+}
+
+void TagFolderView::slotAlbumRenamed(Album* album)
+{
+    if (!album)
+        return;
+
+    TAlbum* tag = dynamic_cast<TAlbum*>(album);
+    if (!tag)
+        return;
+
+    TagFolderViewItem* item = (TagFolderViewItem*)(tag->extraData(this));
+    if (item)
+    {
+        item->setText(0, tag->title());
+    }
 }
 
 void TagFolderView::slotSelectionChanged()

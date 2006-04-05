@@ -66,6 +66,7 @@ private slots:
     void slotAlbumAdded(Album *);
     void slotSelectionChanged();
     void slotAlbumDeleted(Album*);
+    void slotAlbumRenamed(Album*);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
