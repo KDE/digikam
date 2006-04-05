@@ -195,6 +195,12 @@ void ICCPreviewWidget::getICCData( const KURL &url)
                 case icSigLinkClass:
                     device = i18n("Link device");
                     break;
+                case icSigAbstractClass:
+                    device = i18n("Abstract");
+                    break;
+                case icSigNamedColorClass:
+                    device = i18n("Named color");
+                    break;
             }
 
     d->deviceClass->setText(device);
