@@ -1,3 +1,226 @@
+v0.8.2-beta1   		9-Apr-2006
+----------------------------------------------------------------------------
+
+2006-04-05 21:24 +0000 [r526895]  ach
+
+	* digikam/version.h, digikam/digikam.lsm, digikam/TODO,
+	  digikam/release_digikam.rb: digikam stable: o start preparing
+	  0.8.2-beta1 release o TODO: commit notes about media:. On my disk
+	  for ages.
+
+2006-04-04 11:41 +0000 [r526298]  cgilles
+
+	* digikam/digikam/iconview.cpp: digikam from trunk : bugfix :
+	  cleanup whatthis image info when album content is scroll with
+	  keys CCMAIL: digikam-devel@kde.org CCBUGS: 120053
+
+2006-04-04 11:29 +0000 [r526293]  cgilles
+
+	* digikam/digikam/iconview.cpp: digikam from stable : bugfix :
+	  cleanup whatthis image info when album content is scroll with the
+	  mouse CCMAIL: digikam-devel@kde.org CCBUGS: 120052
+
+2006-03-31 19:21 +0000 [r525080-525081]  cgilles
+
+	* digikam/digikam/digikamview.cpp: compile
+
+	* digikam/digikam/digikamview.cpp: digikam from stable : fix
+	  sidebar sizes and splitter border attributes from main interface.
+	  CCBUGS: 115460
+
+2006-03-31 11:49 +0000 [r524853]  cgilles
+
+	* digikam/utilities/imageeditor/imagepluginloader.cpp: digikam from
+	  stable : bug fix : enable all Image Editor/Showfoto image plugins
+	  by default in setup dialog. CCMAIL : digikam-devel@kde.org CCBUGS
+	  : 116248
+
+2006-03-26 07:27 +0000 [r522589]  cgilles
+
+	* digikam/kioslave/digikamtags.cpp,
+	  digikam/kioslave/digikamdates.cpp,
+	  digikam/kioslave/digikamalbums.cpp,
+	  digikam/kioslave/digikamsearch.cpp: Digikam from stable : Fix
+	  wrong cast into kioslave. This bug crash digikam during album
+	  item thumbs rendering or stop it to the first item of each album
+	  Nota : these patch have been already applied to trunk branch
+	  (0.9.0-svn) CCMAIL: digikam-devel@kde.org CCBUGS: 121905
+
+2006-03-20 12:36 +0000 [r520584]  cgilles
+
+	* digikam/digikam/albumiconview.cpp, digikam/digikam/digikamview.h,
+	  digikam/digikam/digikamapp.cpp, digikam/digikam/albumiconview.h,
+	  digikam/digikam/digikamapp.h, digikam/digikam/digikamview.cpp,
+	  digikam/libs/histogram/imagehistogram.cpp: digikam from stable :
+	  Rating image using keyboard shortcuts CTRL+0/1/2/3/4/5 from main
+	  interface CCMAIL: digikam-devel@kde.org CCBUGS: 123646
+
+2006-03-06 08:17 +0000 [r516187]  cgilles
+
+	* digikam/kioslave/digikamthumbnail.cpp,
+	  digikam/kioslave/exiforientation_p.h (removed): digikam from
+	  stable : Fix Exif auto-rotate thumbnails method in kioslave to
+	  use libKexif instead embedded implementation. CCMAIL:
+	  digikam-devel@kde.org CCBUGS: 119946
+
+2006-02-12 19:46 +0000 [r508806]  toma
+
+	* digikam/digikam/albumpropsedit.cpp: Backport different wording
+
+2006-02-12 19:36 +0000 [r508803-508804]  toma
+
+	* digikam/showfoto/showfoto.cpp: backport SVN commit 495808 by
+	  mhunter: Typographical corrections and changes skipped:
+	  utilities/imageeditor/editor/imagewindow.cpp
+
+	* digikam/digikam/scanlib.cpp,
+	  digikam/libs/widgets/imagepannelwidget.cpp: Backport SVN commit
+	  495834 by mhunter: Typographical corrections and changes (skipped
+	  imagedescedittap.cpp as this does not exists)
+
+2006-02-12 19:29 +0000 [r508796]  toma
+
+	* digikam/digikam/digikamapp.cpp: Comment out part so it compiles
+	  again for lower kdelibs. Feature is now officially broken of
+	  course.
+
+2006-02-12 19:04 +0000 [r508791]  toma
+
+	* digikam/digikam/albumdb.cpp, digikam/digikam/albumpropsedit.cpp,
+	  digikam/digikam/albumdb.h, digikam/digikam/albumpropsedit.h:
+	  backport SVN commit 508790 by toma: Add two other buttons to the
+	  property settings of the album. Lowest and Highest date. CCBUG:
+	  120963
+
+2006-02-09 16:00 +0000 [r507591]  cgilles
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digikam from
+	  stable : using uchar bytes array always working to detect
+	  JPEG/TIFF file format. CCBUGS: 121646
+
+2006-02-09 14:27 +0000 [r507545]  cgilles
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digiKam from
+	  stable (0.8.2) : using KFileMetaInfo in imlib2 interface to get
+	  image mime type from JPEG and PNG file format to prevent any
+	  endianess problems with JPEG file under PPC. Please report me if
+	  all is right now. CCBUG : 121646
+
+2006-02-09 10:12 +0000 [r507467]  cgilles
+
+	* digikam/utilities/cameragui/umscamera.cpp: digiKam from stable :
+	  fix upper THM extension
+
+2006-02-06 16:35 +0000 [r506377-506378]  cgilles
+
+	* digikam/utilities/cameragui/umscamera.cpp: oups compile!
+
+	* digikam/utilities/cameragui/umscamera.cpp: digikam from stable :
+	  USM camera bug fix : if THM file exist with a camera item, well
+	  remove it also when camera item is deleted. Tested with my Dynax
+	  5D. CCMAIL : digikam-devel@kde.org
+
+2006-02-05 20:45 +0000 [r506139]  cgilles
+
+	* digikam/libs/dcraw/rawfiles.h: why 'jpg' and 'tif' mime types are
+	  includes in RAW file mime types ?
+
+2006-02-03 21:03 +0000 [r505430]  toma
+
+	* digikam/kioslave/digikamsearch.cpp: I'm very sorry I made the
+	  search as good as useless in 0.8.1. I hope this fixes this issue
+	  (thanks for the hint Maxime). Can anyone fonfirm that? BUG:
+	  120479,120775
+
+2006-02-03 11:17 +0000 [r505168]  cgilles
+
+	* digikam/utilities/cameragui/umscamera.cpp: digikam from stable :
+	  CameraGUI : backport method to get thumbnails from .THM files
+	  with USM cameras CCMAIL: digikam-devel@kde.org
+
+2006-01-29 15:52 +0000 [r503563]  cgilles
+
+	* digikam/utilities/setup/cameraselection.cpp: Digikam 0.9.0 from
+	  stable : why using a private QLabel member and using a local
+	  QLabel instance instead ?
+
+2006-01-25 07:05 +0000 [r502188]  cgilles
+
+	* digikam/imageplugins/imageeffect_sharpen.cpp,
+	  digikam/imageplugins/imageeffect_blur.cpp: digikam from stable :
+	  do not render preview effect if final rendering is already in
+	  progress in image. CCBUG: 120736
+
+2006-01-23 10:23 +0000 [r501539]  cgilles
+
+	* digikam/digikam/albumiconview.cpp,
+	  digikam/digikam/albumicongroupitem.cpp,
+	  digikam/digikam/digikamapp.cpp, digikam/digikam/folderview.cpp,
+	  digikam/digikam/Makefile.am, digikam/digikam/albumiconitem.cpp,
+	  digikam/digikam/ratingwidget.cpp: digikam from stable : compile
+	  using Digikam namespace with ThemeEngine class
+
+2006-01-23 09:04 +0000 [r501523-501525]  cgilles
+
+	* digikam/libs/themeengine/Makefile.am,
+	  digikam/libs/themeengine/themeengine.cpp,
+	  digikam/libs/themeengine/themeengine.h,
+	  digikam/libs/themeengine/texture.cpp,
+	  digikam/libs/themeengine/theme.cpp,
+	  digikam/libs/themeengine/texture.h,
+	  digikam/libs/themeengine/theme.h: digikam from stable : backport
+	  Theme engine from trunk to sync implementation. No change here,
+	  just using 'd' private internal class.
+
+	* digikam/libs/widgets/sidebar.h, digikam/libs/widgets/sidebar.cpp:
+	  digikam from stable : backport SideBar from trunk to sync
+	  implementation. No change here, just using 'd' private internal
+	  class.
+
+	* digikam/libs/widgets/colorgradientwidget.cpp,
+	  digikam/libs/widgets/colorgradientwidget.h: digikam from stable :
+	  backport ColorGradientWidget from trunk witch improving color
+	  gradient rendering
+
+2006-01-22 19:56 +0000 [r501405]  cgilles
+
+	* digikam/version.h, digikam/digikam.lsm: bump to 0.8.2-svn
+
+2006-01-22 19:52 +0000 [r501399-501400]  cgilles
+
+	* digikam/AUTHORS: update
+
+	* digikam/utilities/splashscreen/digikam-splash.png: digikam from
+	  stable : digikam 0.8.2 splash from Andrea Gagliardi CCMAIL:
+	  andrea at euronia dot it
+
+2006-01-22 19:23 +0000 [r501389]  cgilles
+
+	* digikam/showfoto/pics/showfoto-splash.png: digikam from stable :
+	  showfoto 0.3.2 spash from Julien Narboux CCMAIL:
+	  Julien.Narboux@inria.fr
+
+2006-01-22 17:02 +0000 [r501339]  cgilles
+
+	* digikam/AUTHORS, digikam/showfoto/pics/showfoto-splash.png:
+	  update
+
+2006-01-17 21:40 +0000 [r499465]  ach
+
+	* digikam/kioslave/Makefile.am, digikam/kioslave/parse.c (removed):
+	  digikam trunk: remove kioslave/parse.c no longer needed.
+
+2006-01-17 12:28 +0000 [r499258]  cgilles
+
+	* digikam/digikam/pics/Makefile.am: cleanup
+
+2006-01-17 12:05 +0000 [r499246]  cgilles
+
+	* digikam/digikam/pics/Makefile.am: digikam from stable : no need
+	  to have different rule to install rating icon. CCMAIL:
+	  ach@mpe.mpg.de, ntung@free.fr
+
+
 v0.8.1   		18-01-2006
 ----------------------------------------------------------------------------
 2006-01-16 toma

@@ -10,28 +10,32 @@ Notice to make release tarballs from SVN
    - svnbase.
    - addPo (for example addPo = ["showfoto"] if showofoto is include in digikam tarball).
    
-Note : docs must be set to 'no' because the documentation must be packaged in a separate tarball to decrease the source code tarball size. There is a seperate script to generate this.
+Note: docs must be set to 'no' release_digikam.rb because the documentation must
+      be packaged in a separate tarball to decrease the source code tarball size.
+      There is the seperate script release_digikam_docs.rb to generate this.
+      
+3/ Update ChangeLog with entries since last release:
+   - in existing ChangeLog for the most recent entry
+   - release_digikam_cl.sh and modify 'startfrom' and the svn account
+   - the script and add the generated ChangeLog.new-entries to
+     the ChangeLog file (check for overlap/duplicates)
+   - a release tag at the top of ChangeLog as for the other releases
+   - the ChangeLog.new-entries
 
-3/ Commit changed files to svn.
+4/ Look at new ChangeLog entries and add highlights to NEWS file
+    (this can be used for the release announcement too)
+TODO:
+   add a recipe/script that converts CCBUGS: <bug#> from ChangeLog.new-entries
+   to #<bugno>: title of the bug.  It needs a check if bug is still closed
+   otherwise reopened bugs are reported as fixed.
 
-4/ Backup old ChangeLog file to ChangeLog.old.
+5/ Commit changed files to svn.
 
-5/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. Please check if ChangeLog file is updated properly.
-
-svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
-Just copying this tarball content on digikam root directory to use it.
-
-Note : svn2cl need xstlproc program. Please install it before.
-
-6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog.
-
-7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
-
-8/ Run release_digikam.rb script and the releas_digikam_docs.rb
+8/ Run release_digikam.rb script and the release_digikam_docs.rb 
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
-10/ Upload tarball to digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from pakagers before posting an offical release annoucement.
+10/ Upload tarball to digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from packagers before posting an offical release annoucement.
 
 11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/)
 
