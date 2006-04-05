@@ -47,6 +47,10 @@ private:
 
     void readSettings();
 
+private slots:
+
+    void processExiv2URL(const QString& url);
+
 private:
 
     SetupMetadataPriv* d;

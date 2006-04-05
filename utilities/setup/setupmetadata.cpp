@@ -30,6 +30,8 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
+#include <qhbox.h>
 
 // KDE includes.
 
@@ -37,6 +39,11 @@
 #include <kactivelabel.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <kurllabel.h>
+#include <kiconloader.h>
+#include <kglobalsettings.h>
+#include <kstandarddirs.h>
+#include <kapplication.h>
 
 // // Local includes.
 
@@ -187,7 +194,17 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
     
-    KActiveLabel* explanation = new KActiveLabel(parent);
+    QHBox *hbox = new QHBox(parent);
+
+    KURLLabel *exiv2LogoLabel = new KURLLabel(hbox);
+    exiv2LogoLabel->setText(QString::null);
+    exiv2LogoLabel->setURL("http://www.exiv2.org");
+    KGlobal::dirs()->addResourceType("exiv2logo", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("exiv2logo", "exiv2logo.png");
+    exiv2LogoLabel->setPixmap( QPixmap( directory + "exiv2logo.png" ) );
+    QToolTip::add(exiv2LogoLabel, i18n("Visit Exiv2 project website"));
+
+    KActiveLabel* explanation = new KActiveLabel(hbox);
     explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
                               "technicals information about photograph. You can learn more "
                               "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
@@ -195,13 +212,17 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                               "embeded informations in pictures. You can learn more "
                               "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
     
-    mainLayout->addWidget(explanation);
-
+    mainLayout->addWidget(hbox);
     mainLayout->addStretch();
+
+    // --------------------------------------------------------
 
     connect(d->savePhotographerIdIptcBox, SIGNAL(toggled(bool)),
             d->photographerIdGroup, SLOT(setEnabled(bool)));
   
+    connect(exiv2LogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processExiv2URL(const QString&)));
+
     readSettings();
     adjustSize();
   
@@ -211,6 +232,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 SetupMetadata::~SetupMetadata()
 {
     delete d;
+}
+
+void SetupMetadata::processExiv2URL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void SetupMetadata::applySettings()
