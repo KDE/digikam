@@ -67,7 +67,7 @@ public:
     
     SetupEditor              *editorPage;
 
-    Digikam::SetupICC                 *iccPage;
+    Digikam::SetupICC        *iccPage;
     Digikam::SetupIOFiles    *iofilesPage;
     Digikam::SetupImgPlugins *imgpluginsPage;
     Digikam::SetupSlideShow  *slideshowPage;
@@ -81,23 +81,23 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     setHelp("setupdialog.anchor", "showfoto");
 
     d->page_editor = addPage(i18n("General"), i18n("General Settings"),
-                        BarIcon("showfoto", KIcon::SizeMedium));
+                             BarIcon("showfoto", KIcon::SizeMedium));
     d->editorPage = new SetupEditor(d->page_editor);
 
     d->page_iofiles = addPage(i18n("IO files"), i18n("IO Image Files Settings"),
-                          BarIcon("pipe", KIcon::SizeMedium));
+                              BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new Digikam::SetupIOFiles(d->page_iofiles);
     
-    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins List"),
-                           BarIcon("digikamimageplugins", KIcon::SizeMedium));
+    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Plugins Settings"),
+                                 BarIcon("digikamimageplugins", KIcon::SizeMedium));
     d->imgpluginsPage = new Digikam::SetupImgPlugins(d->page_imgplugins);
 
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Slide Show Settings"),
-                             BarIcon("slideshow", KIcon::SizeMedium));
+                                BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
 
-    d->page_icc = addPage(i18n("ICC Profiles"), i18n("ICC Profiles"),
-                       BarIcon("colorize", KIcon::SizeMedium));
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Profiles Management"),
+                          BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new Digikam::SetupICC(d->page_icc);
 
     connect(this, SIGNAL(okClicked()),

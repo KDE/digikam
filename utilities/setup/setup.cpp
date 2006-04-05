@@ -117,7 +117,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d = new SetupPrivate;
     setHelp("setupdialog.anchor", "digikam");
 
-    d->page_general = addPage(i18n("Albums"), i18n("Albums"),
+    d->page_general = addPage(i18n("Albums"), i18n("Albums Settings"),
                               BarIcon("folder_image", KIcon::SizeMedium));
     d->generalPage = new SetupGeneral(d->page_general, this);
 
@@ -129,7 +129,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                   BarIcon("fileopen", KIcon::SizeMedium));
     d->collectionsPage = new SetupCollections(d->page_collections);
 
-    d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types"),
+    d->page_mime = addPage(i18n("Mime Types"), i18n("File (MIME) Types Settings"),
                            BarIcon("filetypes", KIcon::SizeMedium));
     d->mimePage = new SetupMime(d->page_mime);
 
@@ -141,7 +141,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                               BarIcon("pipe", KIcon::SizeMedium));
     d->iofilesPage = new SetupIOFiles(d->page_iofiles);
 
-    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins"),
+    d->page_imgplugins = addPage(i18n("Image Plugins"), i18n("Image Editor Plugins Settings"),
                                  BarIcon("digikamimageplugins", KIcon::SizeMedium));
     d->imgpluginsPage = new SetupImgPlugins(d->page_imgplugins);
 
@@ -149,19 +149,19 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new SetupSlideShow(d->page_slideshow);
     
-    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor ICC Profiles Management"),
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor Color Profiles Management"),
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new SetupICC(d->page_icc, this);
 
-    d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins"),
+    d->page_plugins = addPage(i18n("Kipi Plugins"), i18n("Main Interface Plugins Settings"),
                               BarIcon("kipi", KIcon::SizeMedium));
     d->pluginsPage = new SetupPlugins(d->page_plugins);
 
-    d->page_camera = addPage(i18n("Cameras"), i18n("Cameras"),
+    d->page_camera = addPage(i18n("Cameras"), i18n("Cameras Settings"),
                              BarIcon("digitalcam", KIcon::SizeMedium));
     d->cameraPage = new SetupCamera(d->page_camera);
 
-    d->page_misc = addPage(i18n("Miscellaneous"), i18n("Miscellaneous"),
+    d->page_misc = addPage(i18n("Miscellaneous"), i18n("Miscellaneous Settings"),
                            BarIcon("misc", KIcon::SizeMedium));
     d->miscPage = new SetupMisc(d->page_misc);
 
