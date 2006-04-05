@@ -110,6 +110,7 @@ public slots:
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumDeleted(Album *album);
+    void slotAlbumRenamed(Album *album);
     void slotSelectAlbum(const KURL &url);
 
     // Tag action slots

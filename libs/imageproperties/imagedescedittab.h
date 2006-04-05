@@ -86,6 +86,10 @@ protected:
 private:    
 
     void applyAllChanges();
+    void updateTagsView();
+    void updateComments();
+    void updateRating();
+    void updateDate();
 
     void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);
@@ -104,6 +108,12 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
+
+    void slotImageTagsChanged(Q_LLONG imageId);
+    void slotImagesChanged(int albumId);
+    void slotImageRatingChanged(Q_LLONG imageId);
+    void slotImageDateChanged(Q_LLONG imageId);
+    void slotImageCaptionChanged(Q_LLONG imageId);
 
 private:
 

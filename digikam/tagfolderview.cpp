@@ -44,6 +44,7 @@
 #include "dragobjects.h"
 #include "folderitem.h"
 #include "dio.h"
+#include "imageattributeswatch.h"
 
 // X11 Includes.
 
@@ -476,8 +477,6 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
         else
             item->setPixmap(0, getBlendedIcon(tag));
     }
-
-    emit signalTagsAssigned();
 }
 
 void TagFolderView::tagDelete()
@@ -736,7 +735,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
             db->commitTransaction();
 
-            emit signalTagsAssigned();
+            ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
         }
     }
 }

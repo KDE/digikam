@@ -47,6 +47,7 @@
 #include "syncjob.h"
 #include "dragobjects.h"
 #include "folderitem.h"
+#include "imageattributeswatch.h"
 #include "tagcreatedlg.h"
 #include "tagfilterview.h"
 
@@ -323,7 +324,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             }
             db->commitTransaction();
 
-            emit signalTagsAssigned();
+            ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
         }
     }
 }

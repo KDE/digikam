@@ -45,6 +45,7 @@ extern "C"
 #include "albummanager.h"
 #include "dio.h"
 #include "imageinfo.h"
+#include "imageattributeswatch.h"
 
 namespace Digikam
 {
@@ -180,12 +181,14 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     AlbumDB* db  = m_man->albumDB();
     db->setItemDate(m_ID, dateTime);
     m_datetime = dateTime;
+    ImageAttributesWatch::instance()->imageDateChanged(m_ID);
 }
 
 void ImageInfo::setCaption(const QString& caption)
 {
     AlbumDB* db  = m_man->albumDB();
     return db->setItemCaption(m_ID, caption);
+    ImageAttributesWatch::instance()->imageCaptionChanged(m_ID);
 }
 
 QString ImageInfo::caption() const
@@ -228,18 +231,21 @@ void ImageInfo::setTag(int tagID)
 {
     AlbumDB* db  = m_man->albumDB();
     db->addItemTag(m_ID, tagID);
+    ImageAttributesWatch::instance()->imageTagsChanged(m_ID);
 }
 
 void ImageInfo::removeTag(int tagID)
 {
     AlbumDB* db  = m_man->albumDB();
     db->removeItemTag(m_ID, tagID);
+    ImageAttributesWatch::instance()->imageTagsChanged(m_ID);
 }
 
 void ImageInfo::removeAllTags()
 {
     AlbumDB *db = m_man->albumDB();
     db->removeItemAllTags(m_ID);
+    ImageAttributesWatch::instance()->imageTagsChanged(m_ID);
 }
 
 int ImageInfo::rating() const
@@ -252,6 +258,7 @@ void ImageInfo::setRating(int value)
 {
     AlbumDB* db  = m_man->albumDB();
     db->setItemRating(m_ID, value);
+    ImageAttributesWatch::instance()->imageRatingChanged(m_ID);
 }
 
 void ImageInfo::refresh()

@@ -144,6 +144,9 @@ void DigikamView::setupConnections()
     connect(mAlbumMan, SIGNAL(signalAlbumItemsSelected(bool) ),
             this, SLOT(slot_imageSelected()));
 
+    connect(mAlbumMan, SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
     // -- IconView Connections -------------------------------------
 
     connect(mIconView, SIGNAL(signalItemsAdded()),
@@ -154,13 +157,7 @@ void DigikamView::setupConnections()
 
     connect(mIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
             this, SIGNAL(signal_noCurrentItem()));
-    
-    connect(mTagFolderView, SIGNAL(signalTagsAssigned()),
-            mIconView->viewport(), SLOT(update()));
 
-    connect(mTagFilterView, SIGNAL(signalTagsAssigned()),
-            mIconView->viewport(), SLOT(update()));
-    
     connect(mFolderView, SIGNAL(signalAlbumModified()),
             mIconView, SLOT(slotAlbumModified()));
 
@@ -345,6 +342,14 @@ void DigikamView::slotAlbumDeleted(Album *delalbum)
         mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
         mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
     }
+}
+
+void DigikamView::slotAlbumRenamed(Album *album)
+{
+    // display changed names
+
+    if (album == mAlbumMan->currentAlbum())
+        mIconView->updateContents();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)

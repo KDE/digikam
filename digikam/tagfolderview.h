@@ -57,10 +57,6 @@ protected:
     
     void selectItem(int id);    
 
-signals:
-
-    void signalTagsAssigned();
-    
 private slots:
 
     void slotAlbumAdded(Album *);

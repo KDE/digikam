@@ -66,6 +66,7 @@
 #include "imageinfo.h"
 #include "ratingwidget.h"
 #include "imagedescedittab.h"
+#include "imageattributeswatch.h"
 
 namespace Digikam
 {
@@ -107,8 +108,9 @@ public:
     ImageDescEditTabPriv()
     {
         modified           = false;
+        ignoreImageAttributesWatch = false;
         recentTagsBtn      = 0;
-        tagsSearchClearBtn = 0 ;
+        tagsSearchClearBtn = 0;
         commentsEdit       = 0;
         tagsSearchEdit     = 0;
         dateTimeEdit       = 0;
@@ -119,6 +121,8 @@ public:
     }
 
     bool               modified;
+
+    bool               ignoreImageAttributesWatch;
 
     QPushButton       *recentTagsBtn;
 
@@ -265,6 +269,23 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
+
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
+            this, SLOT(slotImageTagsChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImagesChanged(int)),
+            this, SLOT(slotImagesChanged(int)));
+
+    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
+            this, SLOT(slotImageRatingChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImageDateChanged(Q_LLONG)),
+            this, SLOT(slotImageDateChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
+            this, SLOT(slotImageCaptionChanged(Q_LLONG)));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -339,6 +360,9 @@ void ImageDescEditTab::applyAllChanges()
 
     ImageInfo* info = d->currItem->imageInfo();
 
+    // we are now changing attributes ourselves
+    d->ignoreImageAttributesWatch = true;
+
     info->setCaption(d->commentsEdit->text());
     info->setDateTime(d->dateTimeEdit->dateTime());
     info->setRating(d->ratingWidget->rating());
@@ -356,6 +380,8 @@ void ImageDescEditTab::applyAllChanges()
         }
         ++it;
     }
+
+    d->ignoreImageAttributesWatch = false;
 
     // Store data in image metadata.
 
@@ -426,7 +452,7 @@ void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
     d->navigateBar->setFileName(info->name());
     d->navigateBar->setButtonsState(itemType);
 
-    PAlbum *album = currItem->imageInfo()->album();
+    PAlbum *album = info->album();
     if (!album)
     {
         kdWarning() << k_funcinfo << "Failed to find parent album for"
@@ -434,21 +460,23 @@ void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
         return;
     }
 
-    d->commentsEdit->blockSignals(true);
-    d->dateTimeEdit->blockSignals(true);
+    updateComments();
+    updateRating();
+    updateDate();
+    updateTagsView();
+}
+
+void ImageDescEditTab::updateTagsView()
+{
     d->tagsView->blockSignals(true);
 
-    d->commentsEdit->setText(info->caption());
-    d->dateTimeEdit->setDateTime(info->dateTime());
-    d->ratingWidget->setRating(info->rating());
-
-    QValueList<int> tagIDs = info->tagIDs();
+    QValueList<int> tagIDs = d->currItem->imageInfo()->tagIDs();
 
     QListViewItemIterator it( d->tagsView);
     while (it.current())
     {
         TAlbumCheckListItem* tItem =
-            dynamic_cast<TAlbumCheckListItem*>(it.current());
+                dynamic_cast<TAlbumCheckListItem*>(it.current());
 
         if (tItem)
         {
@@ -460,9 +488,28 @@ void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
         ++it;
     }
 
-    d->commentsEdit->blockSignals(false);
-    d->dateTimeEdit->blockSignals(false);
     d->tagsView->blockSignals(false);
+}
+
+void ImageDescEditTab::updateComments()
+{
+    d->commentsEdit->blockSignals(true);
+    d->commentsEdit->setText(d->currItem->imageInfo()->caption());
+    d->commentsEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::updateRating()
+{
+    d->ratingWidget->blockSignals(true);
+    d->ratingWidget->setRating(d->currItem->imageInfo()->rating());
+    d->ratingWidget->blockSignals(false);
+}
+
+void ImageDescEditTab::updateDate()
+{
+    d->dateTimeEdit->blockSignals(true);
+    d->dateTimeEdit->setDateTime(d->currItem->imageInfo()->dateTime());
+    d->dateTimeEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint &, int )
@@ -698,6 +745,39 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     }
 
     viewItem->setText(0, album->title());
+}
+
+void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
+{
+    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+        updateTagsView();
+}
+
+void ImageDescEditTab::slotImagesChanged(int albumId)
+{
+    Album *a = AlbumManager::instance()->findAlbum(albumId);
+    if (!d->ignoreImageAttributesWatch && !d->currItem || !a || a->isRoot() || a->type() != Album::TAG)
+        return;
+
+    updateTagsView();
+}
+
+void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
+{
+    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+        updateRating();
+}
+
+void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
+{
+    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+        updateComments();
+}
+
+void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
+{
+    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+        updateDate();
 }
 
 QPixmap ImageDescEditTab::tagThumbnail(TAlbum* album) const

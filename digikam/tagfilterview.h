@@ -47,10 +47,6 @@ protected:
     bool acceptDrop(const QDropEvent *e) const;
     void contentsDropEvent(QDropEvent *e);
 
-signals:
-
-    void signalTagsAssigned();
-    
 private slots:
 
     void slotTagAdded(Album* album);

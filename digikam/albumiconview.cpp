@@ -111,6 +111,7 @@ extern "C"
 #include "albumicongroupitem.h"
 #include "albumiconview.h"
 #include "albumdb.h"
+#include "imageattributeswatch.h"
 
 namespace Digikam
 {
@@ -232,6 +233,26 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(d->pixMan, SIGNAL(signalPixmap(const KURL&)),
             SLOT(slotGotThumbnail(const KURL&)));
+
+    // -- ImageAttributesWatch connections ------------------------------
+
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalImageTagsChanged(Q_LLONG)),
+            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImagesChanged(int)),
+            this, SLOT(slotAlbumImagesChanged(int)));
+
+    connect(watch, SIGNAL(signalImageRatingChanged(Q_LLONG)),
+            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImageDateChanged(Q_LLONG)),
+            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+
+    connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
+            this, SLOT(slotImageAttributesChanged(Q_LLONG)));
+
 }
 
 AlbumIconView::~AlbumIconView()
@@ -1717,6 +1738,21 @@ void AlbumIconView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
+}
+
+void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
+{
+    // we might check if the item with imageId is currently visible,
+    // but I think it is ok to simply repaint in any case.
+    // We also do not need to check whether the change originates
+    // from our own actions above, the additional update should be killed by Qt.
+    updateContents();
+}
+
+void AlbumIconView::slotAlbumImagesChanged(int albumId)
+{
+    // Same considerations as above
+    updateContents();
 }
 
 }  // namespace Digikam

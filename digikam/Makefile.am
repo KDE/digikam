@@ -32,10 +32,10 @@ libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			albumlister.cpp dragobjects.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
-		    albumfolderview.cpp \
-		    albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
-		    albumpropsedit.cpp albumsettings.cpp \
-		    cameralist.cpp cameratype.cpp cameradragobject.cpp \
+			albumfolderview.cpp \
+			albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
+			albumpropsedit.cpp albumsettings.cpp \
+			cameralist.cpp cameratype.cpp cameradragobject.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
@@ -48,11 +48,11 @@ libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
 			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
 			upgradedb_sqlite2tosqlite3.cpp squeezedcombobox.cpp \
-			ratingwidget.cpp digikamfirstrun.cpp \
+			ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
 			dcopiface.cpp dcopiface.skel
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
-			           $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
+		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
 		               $(top_builddir)/digikam/sqlite/libsqlite.la \
 		               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 		               $(top_builddir)/digikam/libs/themeengine/libthemeengine.la \
@@ -60,7 +60,7 @@ libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		               $(top_builddir)/digikam/libs/dialogs/libdialog.la \
 		               $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 		               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesdigikam.la \
-	                   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
+		               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 		               $(top_builddir)/digikam/utilities/cameragui/libcameragui.la \
 		               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
 		               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \

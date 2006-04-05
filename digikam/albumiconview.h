@@ -147,7 +147,10 @@ private slots:
     void slotRemoveTag(int tagID);
 
     void slotDIOResult(KIO::Job* job);
-    
+
+    void slotImageAttributesChanged(Q_LLONG imageId);
+    void slotAlbumImagesChanged(int albumId);
+
 public slots:
 
     void slotSetExifOrientation(int orientation);
