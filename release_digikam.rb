@@ -9,10 +9,10 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.8.1"
+version    = "0.8.2-rc1"
 docs       = "no"
 
-svnbase    = "https://toma@svn.kde.org/home/kde"
+svnbase    = "https://ach@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
@@ -32,7 +32,7 @@ ENV["UNSERMAKE"] = "no"
 puts "Fetching #{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
-`rm -rf folder.tar.bz2 2> /dev/null`
+`rm -rf #{folder}.tar.bz2 2> /dev/null`
 
 Dir.mkdir( folder )
 Dir.chdir( folder )
@@ -180,7 +180,8 @@ puts "\n"
 puts "Compressing..  "
 Dir.chdir( ".." ) # root folder
 `tar -jcf #{folder}.tar.bz2 #{folder}`
-`rm -rf #{folder}`
+
+#`rm -rf #{folder}`
 puts "done.\n"
 
 
