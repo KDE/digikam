@@ -336,8 +336,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     
     readSettings();
     adjustSize();
-
-//    mainLayout->addWidget(this);
 }
 
 SetupICC::~SetupICC()
