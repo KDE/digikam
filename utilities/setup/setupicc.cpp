@@ -134,11 +134,8 @@ public:
 SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
         : QWidget(parent)
 {
-//     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
     d = new SetupICCPriv();
-
     d->mainDialog = dialog;
-
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint());
 
     // --------------------------------------------------------
@@ -163,11 +160,16 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     
     d->defaultApplyICC = new QRadioButton(behaviour);
     d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
-    QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, Digikam applies the Workspace default color profile to an image without asking when this has not embedded profile or the embedded profile is not the same that the workspace one.</p>"));
+    QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, digiKam applies the "
+                     "Workspace default color profile to an image without asking when this has not "
+                     "embedded profile or the embedded profile is not the same that the workspace one.</p>"));
     
     d->defaultAskICC = new QRadioButton(behaviour);
     d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
-    QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, Digikam asks to the user before it applies the Workspace default color profile to an image which has not embedded profile or, if the image has an embbeded profile, this is not the same that the workspace one.</p>"));
+    QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, digiKam asks to the user "
+                     "before it applies the Workspace default color profile to an image which has not "
+                     "embedded profile or, if the image has an embbeded profile, this is not the same "
+                     "that the workspace one.</p>"));
     
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
     grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
@@ -183,58 +185,69 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     
     d->defaultPathKU = new KURLRequester(defaultPath);
     d->defaultPathKU->setMode(KFile::Directory);
-    QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder.\nYou must storage your color profiles in this directory.</p>"));
+    QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder. "
+                     "You must storage your color profiles in this directory.</p>"));
     
     layout->addWidget(defaultPath);
 
     // --------------------------------------------------------
     
-    QVGroupBox *profiles = new QVGroupBox(parent);
-    profiles->setTitle(i18n("ICC Settings"));
+    QGroupBox *profiles = new QGroupBox(0, Qt::Horizontal, i18n("ICC Settings"), parent);
+    QGridLayout* grid2  = new QGridLayout( profiles->layout(), 3, 2, KDialog::spacingHint());
+    grid2->setColStretch(1, 10);
 
-    QHBox *workProfilesSettings = new QHBox(profiles);
-    workProfilesSettings->setSpacing(KDialog::spacingHint());
-
-    QLabel *workProfiles = new QLabel(i18n("Workspace profile: "), workProfilesSettings);
-    d->workProfilesKC = new KComboBox(false, workProfilesSettings);
+    QLabel *workProfiles = new QLabel(i18n("Workspace profile: "), profiles);
+    d->workProfilesKC = new KComboBox(false, profiles);
     workProfiles->setBuddy(d->workProfilesKC);
-    QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color space of this profile, so you must select an apropiate one for edition purpose.</p><p> These color profiles are device independents.</p>"));
-    d->infoWorkProfiles = new QPushButton("Info", workProfilesSettings);
-    d->infoWorkProfiles->setMaximumWidth(60);
-    QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
+                     "space of this profile, so you must select an apropiate one for edition purpose.</p>"
+                     "<p>These color profiles are device independents.</p>"));
+    d->infoWorkProfiles = new QPushButton("Info", profiles);
+    QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled "
+                     "information about the selected profile.</p>"));
 
-    QHBox *monitorProfilesSettings = new QHBox(profiles);
-    monitorProfilesSettings->setSpacing(KDialog::spacingHint());
+    grid2->addMultiCellWidget(workProfiles, 0, 0, 0, 0);
+    grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 2, 2);
 
-    QLabel *monitorProfiles = new QLabel(i18n("Monitor profile: "), monitorProfilesSettings);
-    d->monitorProfilesKC = new KComboBox(false, monitorProfilesSettings);
+    QLabel *monitorProfiles = new QLabel(i18n("Monitor profile: "), profiles);
+    d->monitorProfilesKC = new KComboBox(false, profiles);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor.</p>"));
-    d->infoMonitorProfiles = new QPushButton("Info", monitorProfilesSettings);
-    d->infoMonitorProfiles->setMaximumWidth(60);
-    QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    d->infoMonitorProfiles = new QPushButton("Info", profiles);
+    QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
+                     "information about the selected profile.</p>"));
 
-    QHBox *inProfilesSettings = new QHBox(profiles);
-    inProfilesSettings->setSpacing(KDialog::spacingHint());
+    grid2->addMultiCellWidget(monitorProfiles, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 1, 1);
+    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 2, 2);
 
-    QLabel *inProfiles = new QLabel(i18n("Input profile: "), inProfilesSettings);
-    d->inProfilesKC = new KComboBox(false, inProfilesSettings);
+    QLabel *inProfiles = new QLabel(i18n("Input profile: "), profiles);
+    d->inProfilesKC = new KComboBox(false, profiles);
     inProfiles->setBuddy(d->inProfilesKC);
-    QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device (scanner, camera, ...)</p>"));
-    d->infoInProfiles = new QPushButton("Info", inProfilesSettings);
-    d->infoInProfiles->setMaximumWidth(60);
-    QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
+                     "(scanner, camera, ...)</p>"));
+    d->infoInProfiles = new QPushButton("Info", profiles);
+    QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled "
+                     "information about the selected profile.</p>"));
 
-    QHBox *proofProfilesSettings = new QHBox(profiles);
-    proofProfilesSettings->setSpacing(KDialog::spacingHint());
+    grid2->addMultiCellWidget(inProfiles, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 1, 1);
+    grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 2, 2);
 
-    QLabel *proofProfiles = new QLabel(i18n("Soft proof profile: "), proofProfilesSettings);
-    d->proofProfilesKC = new KComboBox(false, proofProfilesSettings);
+    QLabel *proofProfiles = new QLabel(i18n("Soft proof profile: "), profiles);
+    d->proofProfilesKC = new KComboBox(false, profiles);
     proofProfiles->setBuddy(d->proofProfilesKC);
-    QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device (usually, your printer). This profile will be used to do a soft proof, so you will be able to preview how an image will be rendered in an output device.</p>"));
-    d->infoProofProfiles = new QPushButton("Info", proofProfilesSettings);
-    d->infoProofProfiles->setMaximumWidth(60);
-    QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled information about the selected profile.</p>"));
+    QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
+                     "(usually, your printer). This profile will be used to do a soft proof, so you will "
+                     "be able to preview how an image will be rendered in an output device.</p>"));
+    d->infoProofProfiles = new QPushButton("Info", profiles);
+    QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled "
+                     "information about the selected profile.</p>"));
+
+    grid2->addMultiCellWidget(proofProfiles, 3, 3, 0, 0);
+    grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 1, 1);
+    grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 2, 2);
 
     fillCombos();
 
@@ -242,31 +255,25 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
      // --------------------------------------------------------
     
-    QVGroupBox * mv = new QVGroupBox(i18n("Colormanaged View"), parent);
+    QVGroupBox * advancedSettingsBox = new QVGroupBox(i18n("Advanced Settings"), parent);
 
-    d->managedView = new QCheckBox(mv);
-    d->managedView->setText(i18n("Use Colormanaged view."));
+    d->managedView = new QCheckBox(advancedSettingsBox);
+    d->managedView->setText(i18n("Use Colormanaged view"));
     QWhatsThis::add( d->managedView, i18n("<p>You have to use this option if " 
-    "you want to use your Monitor Color Profile to show your pictures in "
-    "Image Editor window.</p>"));
-    
-    layout->addWidget(mv);
+                     "you want to use your Monitor Color Profile to show your pictures in "
+                     "Image Editor window.</p>"));
 
-    // --------------------------------------------------------
-    
-    QVGroupBox * bpc = new QVGroupBox(i18n("BPC Algorithm"), parent);
-
-    d->bpcAlgorithm = new QCheckBox(bpc);
+    d->bpcAlgorithm = new QCheckBox(advancedSettingsBox);
     d->bpcAlgorithm->setText(i18n("Use Black Point Compensation"));
-    QWhatsThis::add( d->bpcAlgorithm, i18n("<p>BPC is a way to make adjustments between the maximum black levels of digital files and the black capabilities of various digital devices.</p>"));
-    
-    layout->addWidget(bpc);
-    
-    // --------------------------------------------------------
-    
-    QHGroupBox *intents = new QHGroupBox(i18n("Rendering Intents"), parent);
+    QWhatsThis::add( d->bpcAlgorithm, i18n("<p>BPC is a way to make adjustments between the maximum "
+                     "black levels of digital files and the black capabilities of various "
+                     "digital devices.</p>"));
 
-    d->renderingIntentKC = new KComboBox(false, intents);
+    QHBox *hbox = new QHBox(advancedSettingsBox);
+    QLabel *lablel = new QLabel(hbox);
+    lablel->setText(i18n("Rendering Intents:"));
+
+    d->renderingIntentKC = new KComboBox(false, hbox);
     d->renderingIntentKC->insertItem("Perceptual");
     d->renderingIntentKC->insertItem("Relative Colorimetric");
     d->renderingIntentKC->insertItem("Saturation");
@@ -281,8 +288,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to achieve the desired effects.\n"
     "This intent is most suitable for business graphics such as charts, where it is more important that the colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
 
-    layout->addWidget(intents);
-    
+    layout->addWidget(advancedSettingsBox);
+
     // --------------------------------------------------------
     
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
@@ -516,6 +523,7 @@ void SetupICC::slotToggledWidgets(bool t)
     d->bpcAlgorithm->setEnabled(t);
     d->bpcAlgorithm->setChecked(t);
 
+    d->managedView->setEnabled(t);
     d->managedView->setChecked(t);
  
     d->defaultApplyICC->setEnabled(t); 
