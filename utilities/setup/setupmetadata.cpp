@@ -99,13 +99,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
   
-    QGroupBox *ExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("Exif Actions"), parent);
+    QGroupBox *ExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("EXIF Actions"), parent);
   
     d->ExifRotateBox = new QCheckBox(ExifGroup);
-    d->ExifRotateBox->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
+    d->ExifRotateBox->setText(i18n("&Rotate images/thumbs according to orientation tag"));
   
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
-    d->ExifSetOrientationBox->setText(i18n("Set &EXIF orientation tag to normal after rotate/flip"));
+    d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
     
     mainLayout->addWidget(ExifGroup);
   
@@ -116,7 +116,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as IPTC keywords tag"));
     QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Toogle on this option to store image tags "
-                                                "into IPTC keywords tag."));
+                                              "into IPTC keywords tag."));
   
     d->saveRatingIptcBox = new QCheckBox(IptcGroup);
     d->saveRatingIptcBox->setText(i18n("&Save image rating as IPTC tag"));
@@ -147,7 +147,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
     QWhatsThis::add( d->authorTitleEdit, i18n("<p>Set here the photographer title. This field is limited "
-                                         "to 32 ASCII charactors."));
+                                              "to 32 ASCII charactors."));
 
     QLabel *label3 = new QLabel(i18n("City:"), d->photographerIdGroup);
     d->cityEdit = new KLineEdit(d->photographerIdGroup);
