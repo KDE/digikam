@@ -33,7 +33,7 @@
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES 
+//#define ENABLE_DEBUG_MESSAGES
 
 // C ansi includes.
 
@@ -161,10 +161,32 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Recording ICC profile marker (from iccjpeg.c)
     setup_read_icc_profile(&cinfo);
 
+    // read image information
     jpeg_read_header(&cinfo, true);
+
+    // set decompression parameters
     cinfo.do_fancy_upsampling = false;
     cinfo.do_block_smoothing  = false;
-    cinfo.out_color_space     = JCS_RGB;
+    // Libjpeg handles the following conversions:
+    // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
+    // So we cannot get RGB from CMYK or YCCK, CMYK conversion is handled below
+    switch (cinfo.jpeg_color_space)
+    {
+        case JCS_UNKNOWN:
+            // perhaps jpeg_read_header did some guessing, leave value unchanged
+            break;
+        case JCS_GRAYSCALE:
+        case JCS_RGB:
+        case JCS_YCbCr:
+            cinfo.out_color_space     = JCS_RGB;
+            break;
+        case JCS_CMYK:
+        case JCS_YCCK:
+            cinfo.out_color_space     = JCS_CMYK;
+            break;
+    }
+
+    // initialize decompression
     jpeg_start_decompress(&cinfo);
 
     // some pseudo-progress
@@ -190,15 +212,24 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    if (cinfo.output_components != 3 && cinfo.output_components != 1)
+    // We only take RGB with 1 or 3 components, or CMYK with 4 components
+    if (!(
+           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+        ))
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
-        kdDebug() << k_funcinfo << "Number of JPEG color components unsupported!" << endl;
+        kdDebug() << k_funcinfo
+                  << "JPEG colorspace ("
+                  << cinfo.out_color_space
+                  << ") or Number of JPEG color components ("
+                  << cinfo.output_components
+                  << ") unsupported!" << endl;
         return false;
     }
 
-    data = new uchar[w * 16 * 3];
+    data = new uchar[w * 16 * cinfo.output_components];
 
     if (!data)
     {
@@ -309,6 +340,56 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     ptr2[0] = ptr[0];
 
                     ptr  ++;
+                    ptr2 += 4;
+                }
+            }
+        }
+    }
+    else // CMYK
+    {
+        for (i = 0; i < cinfo.rec_outbuf_height; i++)
+            line[i] = data + (i * w * 4);
+
+        int checkPoint = 0;
+        for (l = 0; l < h; l += cinfo.rec_outbuf_height)
+        {
+            // use 0-10% and 90-100% for pseudo-progress
+            if (observer && l >= checkPoint)
+            {
+                checkPoint += granularity(observer, h, 0.8);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] data;
+                    delete [] dest;
+                    jpeg_destroy_decompress(&cinfo);
+                    fclose(file);
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+            }
+
+            jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
+            scans = cinfo.rec_outbuf_height;
+
+            if ((h - l) < scans)
+                scans = h - l;
+
+            ptr = data;
+
+            for (y = 0; y < scans; y++)
+            {
+                for (x = 0; x < w; x++)
+                {
+                    // Inspired by Qt's JPEG loader
+
+                    int k = ptr[3];
+
+                    ptr2[3] = 0xFF;
+                    ptr2[2] = k * ptr[0] / 255;
+                    ptr2[1] = k * ptr[1] / 255;
+                    ptr2[0] = k * ptr[2] / 255;
+
+                    ptr  += 4;
                     ptr2 += 4;
                 }
             }

@@ -491,10 +491,35 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     cinfo.scale_num=1;
     cinfo.scale_denom=scale;
 
-    // Create QImage
+    switch (cinfo.jpeg_color_space)
+    {
+        case JCS_UNKNOWN:
+            break;
+        case JCS_GRAYSCALE:
+        case JCS_RGB:
+        case JCS_YCbCr:
+            cinfo.out_color_space     = JCS_RGB;
+            break;
+        case JCS_CMYK:
+        case JCS_YCCK:
+            cinfo.out_color_space     = JCS_CMYK;
+            break;
+    }
+
     jpeg_start_decompress(&cinfo);
 
     QImage img;
+
+    // We only take RGB with 1 or 3 components, or CMYK with 4 components
+    if (!(
+           (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
+        || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+        ))
+    {
+        jpeg_destroy_decompress(&cinfo);
+        fclose(inputFile);
+        return false;
+    }
 
     switch(cinfo.output_components) 
     {
@@ -508,8 +533,6 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
             for (int i=0; i<256; i++)
                 img.setColor(i, qRgb(i,i,i));
             break;
-        default:
-            return false;
     }
 
     uchar** lines = img.jumpTable();
@@ -519,7 +542,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     jpeg_finish_decompress(&cinfo);
 
     // Expand 24->32 bpp
-    if ( cinfo.output_components == 3 ) 
+    if ( cinfo.output_components == 3 )
     {
         for (uint j=0; j<cinfo.output_height; j++) 
         {
@@ -528,8 +551,24 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
             for (uint i=cinfo.output_width; i--; ) 
             {
-                in-=3;
+                in -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
+            }
+        }
+    }
+    else if ( cinfo.output_components == 4 )
+    {
+        // CMYK conversion
+        for (uint j=0; j<cinfo.output_height; j++)
+        {
+            uchar *in = img.scanLine(j) + cinfo.output_width*4;
+            QRgb *out = (QRgb*)( img.scanLine(j) );
+
+            for (uint i=cinfo.output_width; i--; )
+            {
+                in -= 4;
+                int k = in[3];
+                out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
             }
         }
     }
