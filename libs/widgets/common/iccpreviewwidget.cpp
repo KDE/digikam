@@ -72,38 +72,37 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
     d = new ICCPreviewWidgetPriv;
 
     QVBoxLayout *layout  = new QVBoxLayout(this, 0,  KDialog::spacingHint());
-   
     QVGroupBox *metaData = new QVGroupBox(this);
     
     QHGroupBox *name = new QHGroupBox(metaData);
     name->setFrameStyle(QFrame::NoFrame);
     QLabel *label1 = new QLabel(name);
     label1->setText(i18n("Name: "));
-    d->name = new KSqueezedTextLabel(0, name);
+    d->name = new KSqueezedTextLabel(QString::null, name);
 
     QHGroupBox *description = new QHGroupBox(metaData);
     description->setFrameStyle(QFrame::NoFrame);
     QLabel *label2 = new QLabel(description);
     label2->setText(i18n("Description: "));
-    d->description = new KSqueezedTextLabel(0, description);
+    d->description = new KSqueezedTextLabel(QString::null, description);
 
     QHGroupBox *colorSpace = new QHGroupBox(metaData);
     colorSpace->setFrameStyle(QFrame::NoFrame);
     QLabel *label3 = new QLabel(colorSpace);
     label3->setText(i18n("Color space: "));
-    d->colorSpace = new KSqueezedTextLabel(0, colorSpace);
+    d->colorSpace = new KSqueezedTextLabel(QString::null, colorSpace);
 
     QHGroupBox *deviceClass = new QHGroupBox(metaData);
     deviceClass->setFrameStyle(QFrame::NoFrame);
     QLabel *label4 = new QLabel(deviceClass);
     label4->setText(i18n("Device class: "));
-    d->deviceClass = new KSqueezedTextLabel(0, deviceClass);
+    d->deviceClass = new KSqueezedTextLabel(QString::null, deviceClass);
 
     QHGroupBox *renderingIntent = new QHGroupBox(metaData);
     renderingIntent->setFrameStyle(QFrame::NoFrame);
     QLabel *label5 = new QLabel(renderingIntent);
     label5->setText(i18n("Rendering intent: "));
-    d->renderingIntent = new KSqueezedTextLabel(0, renderingIntent);
+    d->renderingIntent = new KSqueezedTextLabel(QString::null, renderingIntent);
     
     layout->addWidget(metaData);
 }
