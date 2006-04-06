@@ -33,16 +33,16 @@ NEW FEATURES:
 
 BUGFIX from B.K.O:
 
-==> 116248
-==> 115441
-==> 115460
-==> 124688
-==> 109253
-==> 115764
-==> 121487
-==> 120052
-==> 120053
-==> 123522
-
+==> 116248 (Ask user which plugins should be enabled on first startup )
+==> 115441 (resize EXIF-rotated images doesn't work)
+==> 115460 (opening and closing right pane with tag filter also changes width of left pane and vv )
+==> 124688 (Digikam loading time is big because of : WARNING: Failed to find parent for Tag)
+==> 109253 (Digikam does not store comments in image EXIF tags)
+==> 115764 (Modify EXIF creation date)
+==> 121487 ("Tip of the day" text gets cut off)
+==> 120052 (redraw problem with whatthis info of an image show and start scrolling with the mouse)
+==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursur keys )
+==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
+==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
 
 ...
