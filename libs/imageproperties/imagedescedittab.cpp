@@ -359,6 +359,7 @@ void ImageDescEditTab::applyAllChanges()
         return;
 
     ImageInfo* info = d->currItem->imageInfo();
+    QStringList oldKeywords = info->tagNames();
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
@@ -368,7 +369,6 @@ void ImageDescEditTab::applyAllChanges()
     info->setRating(d->ratingWidget->rating());
     info->removeAllTags();
 
-    QStringList keywordsList;
     QListViewItemIterator it(d->tagsView);
     while (it.current())
     {
@@ -376,7 +376,6 @@ void ImageDescEditTab::applyAllChanges()
         if (tItem && tItem->isOn())
         {
             info->setTag(tItem->m_album->id());
-            keywordsList.append(tItem->m_album->title());
         }
         ++it;
     }
@@ -410,7 +409,7 @@ void ImageDescEditTab::applyAllChanges()
         if (AlbumSettings::instance()->getSaveIptcTags())
         {
             // Store Image Tags like Iptc keywords tag.
-            metadata.setImageKeywords(keywordsList);
+            metadata.setImageKeywords(oldKeywords, info->tagNames());
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())

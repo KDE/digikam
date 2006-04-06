@@ -62,6 +62,7 @@
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dimg.h"
+#include "dmetadata.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "imageresizedlg.h"
@@ -471,7 +472,21 @@ void ImageWindow::slotAssignTag(int tagID)
     IconItem* item = m_view->findItem(m_urlCurrent.url());
     if (item)
     {
-        ((AlbumIconItem*)item)->imageInfo()->setTag(tagID);                
+        ImageInfo* info         = ((AlbumIconItem*)item)->imageInfo();
+        QStringList oldKeywords = info->tagNames();
+        info->setTag(tagID);
+
+        // Store Image Tags like Iptc keywords tag.
+    
+        if (AlbumSettings::instance())
+        {
+            if (AlbumSettings::instance()->getSaveIptcRating())
+            {
+                DMetadata metadata(info->filePath());
+                metadata.setImageKeywords(oldKeywords, info->tagNames());
+                metadata.applyChanges();
+            }
+        }      
     }
 }
 
@@ -480,7 +495,21 @@ void ImageWindow::slotRemoveTag(int tagID)
     IconItem* item = m_view->findItem(m_urlCurrent.url());
     if (item)
     {
-        ((AlbumIconItem*)item)->imageInfo()->removeTag(tagID);                
+        ImageInfo* info = ((AlbumIconItem*)item)->imageInfo();
+        QStringList oldKeywords  = info->tagNames();
+        info->removeTag(tagID);
+
+        // Update Image Tags like Iptc keywords tags.
+
+        if (AlbumSettings::instance())
+        {
+            if (AlbumSettings::instance()->getSaveIptcRating())
+            {
+                DMetadata metadata(info->filePath());
+                metadata.setImageKeywords(oldKeywords, info->tagNames());
+                metadata.applyChanges();
+            }
+        }
     }
 }
 

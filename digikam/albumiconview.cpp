@@ -546,14 +546,14 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     TagsPopupMenu* removeTagsPopup = new TagsPopupMenu(selectedImageIDs, 1000, TagsPopupMenu::REMOVE);
     
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
-            SLOT(slotAssignTag(int)));
+            this, SLOT(slotAssignTag(int)));
             
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
-            SLOT(slotRemoveTag(int)));
+            this, SLOT(slotRemoveTag(int)));
 
     popmenu.insertItem(i18n("Assign Tag"), assignTagsPopup);
 
-    int removeTagId =  popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
+    int removeTagId = popmenu.insertItem(i18n("Remove Tag"), removeTagsPopup);
 
     AlbumManager* man = AlbumManager::instance();
 
@@ -569,11 +569,11 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     QPopupMenu ratingMenu;
     
     connect(&ratingMenu, SIGNAL(activated(int)),
-            SLOT(slotAssignRating(int)));
+            this, SLOT(slotAssignRating(int)));
 
     ratingMenu.insertItem(i18n("None"), 0);
     
-    for (int i=1; i<=5; i++)
+    for (int i = 1 ; i <= 5 ; i++)
     {
         QPixmap pix(d->ratingPixmap.width() * 5,
                     d->ratingPixmap.height());
@@ -1663,7 +1663,21 @@ void AlbumIconView::slotAssignTag(int tagID)
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            albumItem->imageInfo()->setTag(tagID);
+            ImageInfo* info          = albumItem->imageInfo();
+            QStringList oldKeywords  = info->tagNames();
+            info->setTag(tagID);
+
+            // Store Image Tags like Iptc keywords tag.
+        
+            if (AlbumSettings::instance())
+            {
+                if (AlbumSettings::instance()->getSaveIptcRating())
+                {
+                    DMetadata metadata(info->filePath());
+                    metadata.setImageKeywords(oldKeywords, info->tagNames());
+                    metadata.applyChanges();
+                }
+            }
         }
     }
 
@@ -1677,7 +1691,21 @@ void AlbumIconView::slotRemoveTag(int tagID)
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            albumItem->imageInfo()->removeTag(tagID);
+            ImageInfo* info          = albumItem->imageInfo();
+            QStringList oldKeywords  = info->tagNames();
+            info->removeTag(tagID);
+
+            // Update Image Tags like Iptc keywords tags.
+
+            if (AlbumSettings::instance())
+            {
+                if (AlbumSettings::instance()->getSaveIptcRating())
+                {
+                    DMetadata metadata(info->filePath());
+                    metadata.setImageKeywords(oldKeywords, info->tagNames());
+                    metadata.applyChanges();
+                }
+            }
         }
     }
 
@@ -1692,12 +1720,25 @@ void AlbumIconView::slotAssignRating(int rating)
 {
     rating = QMIN(5, QMAX(0, rating));
     
-    for (IconItem *it = firstItem(); it; it = it->nextItem())
+    for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
         if (it->isSelected())
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-            albumItem->imageInfo()->setRating(rating);
+            ImageInfo* info = albumItem->imageInfo();
+            info->setRating(rating);
+
+            // Store Image rating as Iptc tag.
+        
+            if (AlbumSettings::instance())
+            {
+                if (AlbumSettings::instance()->getSaveIptcRating())
+                {
+                    DMetadata metadata(info->filePath());
+                    metadata.setImageRating(rating);
+                    metadata.applyChanges();
+                }
+            }
         }
     }
 
@@ -1740,7 +1781,7 @@ void AlbumIconView::slotDIOResult(KIO::Job* job)
         job->showErrorDialog(this);
 }
 
-void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
+void AlbumIconView::slotImageAttributesChanged(Q_LLONG /*imageId*/)
 {
     // we might check if the item with imageId is currently visible,
     // but I think it is ok to simply repaint in any case.
@@ -1749,7 +1790,7 @@ void AlbumIconView::slotImageAttributesChanged(Q_LLONG imageId)
     updateContents();
 }
 
-void AlbumIconView::slotAlbumImagesChanged(int albumId)
+void AlbumIconView::slotAlbumImagesChanged(int /*albumId*/)
 {
     // Same considerations as above
     updateContents();

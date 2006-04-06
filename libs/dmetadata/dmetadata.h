@@ -93,7 +93,8 @@ public:
     bool setImageDateTime(const QDateTime& dateTime);
     bool setImageComment(const QString& comment);
     bool setImageRating(int rating);
-    bool setImageKeywords(const QStringList& keywords);
+    bool setImageKeywords(const QStringList& oldKeywords, 
+                          const QStringList& newKeywords);
     bool setImagePhotographerId(const QString& author, const QString& authorTitle,
                                 const QString& city, const QString& province, const QString& country);
 

@@ -823,29 +823,42 @@ QStringList DMetadata::getImageKeywords() const
     return QString();
 }
 
-bool DMetadata::setImageKeywords(const QStringList& keywords)
+bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
 {
     try
     {    
-        if (keywords.isEmpty())
-            return false;
-
-        QStringList keys = keywords;
+        QStringList oldkeys = oldKeywords;
+        QStringList newkeys = newKeywords;
         
         Exiv2::IptcData iptcData;
         if (!m_iptcMetadata.isEmpty())
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
         
         setImageProgramId(iptcData);
-        kdDebug() << m_filePath << " ==> Keywords: " << keywords << endl;
+        kdDebug() << m_filePath << " ==> Keywords: " << newkeys << endl;
         
-        // Keywords IPTC tag is limited to 64 char but can be redondancy.
-        
-        for (QStringList::iterator it = keys.begin(); it != keys.end(); ++it)
+        // Remove all old keywords.
+        Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
+
+        while(true)
+        {
+            Exiv2::IptcData::iterator it = iptcData.findKey(iptcTag);
+            if (it == iptcData.end())
+                break;
+
+            QString key = QString::fromLocal8Bit(it->key().c_str());
+            QString val(it->toString().c_str());
+            
+            if (oldKeywords.contains(val))
+                iptcData.erase(it);
+        }
+
+        // Add new keywords. Note that Keywords IPTC tag is limited to 64 char but can be redondant.
+
+        for (QStringList::iterator it = newkeys.begin(); it != newkeys.end(); ++it)
         {
             QString key = *it;
             key.truncate(64);
-            Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
             
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(key.latin1());
