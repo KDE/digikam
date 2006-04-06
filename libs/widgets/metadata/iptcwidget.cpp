@@ -60,7 +60,7 @@ static const char* IptcHumanList[] =
      "Copyright",
      "Program",
      "Keywords",
-     "FixtureId",
+     "Urgency",
      "-1"
 };
 
@@ -125,13 +125,24 @@ bool IptcWidget::decodeMetadata()
         for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
             QString key = QString::fromLocal8Bit(md->key().c_str());
-
+            
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
             QString value = QString::fromLocal8Bit(os.str().c_str());
 
-            metaDataMap.insert(key, value);
+            // Some IPTC key are redondancy. check if already one exist...
+            MetaDataMap::iterator it = metaDataMap.find(key);
+            
+            if (it == metaDataMap.end())
+                metaDataMap.insert(key, value);
+            else
+            {
+                QString v = *it;
+                v.append(", ");
+                v.append(value);
+                metaDataMap.replace(key, v);
+            }                
         }
 
         // Update all metadata contents.        
