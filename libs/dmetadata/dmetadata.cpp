@@ -669,6 +669,22 @@ bool DMetadata::setImageComment(const QString& comment)
     return false;
 }
 
+/*
+Iptc.Application2.Urgency <==> digiKam Rating links:
+
+digiKam     IPTC
+Rating      Urgency
+
+0 star  <=>  8          // Least important
+1 star  <=>  7
+1 star  <==  6
+2 star  <=>  5
+3 star  <=>  4
+4 star  <==  3
+4 star  <=>  2
+5 star  <=>  1          // Most important
+*/
+
 int DMetadata::getImageRating() const
 {
     try
@@ -680,25 +696,29 @@ int DMetadata::getImageRating() const
         {
             Exiv2::IptcData iptcData;
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
-            Exiv2::IptcKey key("Iptc.Application2.FixtureId");
+            Exiv2::IptcKey key("Iptc.Application2.Urgency");
             Exiv2::IptcData::iterator it = iptcData.findKey(key);
             
             if (it != iptcData.end())
             {
-                QString IptcComment(it->toString().c_str());
+                QString IptcUrgency(it->toString().c_str());
     
-                if (IptcComment == QString("digiKamRating=0"))
-                    return 0;
-                else if (IptcComment == QString("digiKamRating=1"))
-                    return 1;
-                else if (IptcComment == QString("digiKamRating=2"))
-                    return 2;
-                else if (IptcComment == QString("digiKamRating=3"))
-                    return 3;
-                else if (IptcComment == QString("digiKamRating=4"))
-                    return 4;
-                else if (IptcComment == QString("digiKamRating=5"))
+                if (IptcUrgency == QString("1"))
                     return 5;
+                else if (IptcUrgency == QString("2"))
+                    return 4;
+                else if (IptcUrgency == QString("3"))
+                    return 4;
+                else if (IptcUrgency == QString("4"))
+                    return 3;
+                else if (IptcUrgency == QString("5"))
+                    return 2;
+                else if (IptcUrgency == QString("6"))
+                    return 1;
+                else if (IptcUrgency == QString("7"))
+                    return 1;
+                else if (IptcUrgency == QString("8"))
+                    return 0;
             }
         }
     }
@@ -729,12 +749,31 @@ bool DMetadata::setImageRating(int rating)
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
 
         setImageProgramId(iptcData);
+        QString urgencyTag;
         
-        QString temp;
-        QString ratingString("digiKamRating=");
-        ratingString.append(temp.setNum(rating));
+        switch(rating)
+        {
+            case 0:
+                urgencyTag = QString("8");
+                break;
+            case 1:
+                urgencyTag = QString("7");
+                break;
+            case 2:
+                urgencyTag = QString("5");
+                break;
+            case 3:
+                urgencyTag = QString("4");
+                break;
+            case 4:
+                urgencyTag = QString("3");
+                break;
+            case 5:
+                urgencyTag = QString("1");
+                break;
+        }
         
-        iptcData["Iptc.Application2.FixtureId"] = ratingString.latin1();
+        iptcData["Iptc.Application2.Urgency"] = urgencyTag.ascii();
         setIptc(iptcData.copy());
 
         return true;
@@ -749,6 +788,41 @@ bool DMetadata::setImageRating(int rating)
     return false;
 }
 
+// Warning: this method haven't be tested yet!
+QStringList DMetadata::getImageKeywords() const
+{
+    try
+    {    
+        if (m_iptcMetadata.isEmpty())
+        {
+            Exiv2::IptcData iptcData;
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+            QStringList keywords;
+            
+            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            {
+                QString key = QString::fromLocal8Bit(it->key().c_str());
+                
+                if (key == QString("Iptc.Application2.Keywords"))
+                {
+                    QString val(it->toString().c_str());
+                    keywords.append(val);
+                }
+            }
+            
+            return keywords;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Keywords from image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QString();
+}
+
 bool DMetadata::setImageKeywords(const QStringList& keywords)
 {
     try
@@ -756,18 +830,28 @@ bool DMetadata::setImageKeywords(const QStringList& keywords)
         if (keywords.isEmpty())
             return false;
 
+        QStringList keys = keywords;
+        
         Exiv2::IptcData iptcData;
         if (!m_iptcMetadata.isEmpty())
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
         
         setImageProgramId(iptcData);
-
-        // Keywords IPTC tag is limited to 64 char.
-        QString keywordsString = keywords.join(" ");
-        keywordsString.truncate(64);
-        kdDebug() << m_filePath << " ==> Keywords: " << keywordsString << endl;
+        kdDebug() << m_filePath << " ==> Keywords: " << keywords << endl;
         
-        iptcData["Iptc.Application2.Keywords"] = keywordsString.latin1();
+        // Keywords IPTC tag is limited to 64 char but can be redondancy.
+        
+        for (QStringList::iterator it = keys.begin(); it != keys.end(); ++it)
+        {
+            QString key = *it;
+            key.truncate(64);
+            Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
+            
+            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
+            val->read(key.latin1());
+            iptcData.add(iptcTag, val.get());        
+        }
+        
         setIptc(iptcData.copy());
         return true;
     }
@@ -851,38 +935,6 @@ bool DMetadata::setImageProgramId(Exiv2::IptcData& iptcData)
     }        
     
     return false;
-}
-
-// -- METHODS BELOW ARE UNTESTED ---------------------------------
-
-QStringList DMetadata::getImageKeywords() const
-{
-    try
-    {    
-        if (m_iptcMetadata.isEmpty())
-        {
-            Exiv2::IptcData iptcData;
-            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
-            Exiv2::IptcKey key("Iptc.Application2.Keywords");
-            Exiv2::IptcData::iterator it = iptcData.findKey(key);
-            
-            if (it != iptcData.end())
-            {
-                QStringList keywords;
-                QString keywordsString(it->toString().c_str());
-                keywords.split(" ", keywordsString);
-                return keywords;
-            }
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot get Keywords from image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-    
-    return QString();
 }
 
 }  // NameSpace Digikam
