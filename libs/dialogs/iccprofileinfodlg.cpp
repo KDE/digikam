@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <ksqueezedtextlabel.h>
 
 // Lcms includes.
 
@@ -85,38 +86,38 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
             break;
     }
 
-    QGridLayout* grid = new QGridLayout( plainPage(), 11, 1, marginHint(), spacingHint());
-    
+    QGridLayout* grid = new QGridLayout( plainPage(), 6, 1);
+        
     QLabel *label1 = new QLabel(i18n("<p><b>Name:</b>"), plainPage());
-    QLabel *label2 = new QLabel(profileName, plainPage());
-    grid->addMultiCellWidget(label1, 0, 0, 0, 1);
-    grid->addMultiCellWidget(label2, 1, 1, 0, 1);
+    KSqueezedTextLabel *label2 = new KSqueezedTextLabel(profileName, plainPage());
+    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
+    grid->addMultiCellWidget(label2, 0, 0, 1, 1);
                                      
     QLabel *label3 = new QLabel(i18n("<p><b>Description:</b>"), plainPage());
-    QLabel *label4 = new QLabel(profileDescription, plainPage());
-    grid->addMultiCellWidget(label3, 2, 2, 0, 1);
-    grid->addMultiCellWidget(label4, 3, 3, 0, 1);
+    KSqueezedTextLabel *label4 = new KSqueezedTextLabel(profileDescription, plainPage());
+    grid->addMultiCellWidget(label3, 1, 1, 0, 0);
+    grid->addMultiCellWidget(label4, 1, 1, 1, 1);
                                      
     QLabel *label5 = new QLabel(i18n("<p><b>Copyright:</b>"), plainPage());
-    QLabel *label6 = new QLabel(profileManufacturer, plainPage());
-    grid->addMultiCellWidget(label5, 4, 4, 0, 1);
-    grid->addMultiCellWidget(label6, 5, 5, 0, 1);
+    KSqueezedTextLabel *label6 = new KSqueezedTextLabel(profileManufacturer, plainPage());
+    grid->addMultiCellWidget(label5, 2, 2, 0, 0);
+    grid->addMultiCellWidget(label6, 2, 2, 1, 1);
 
     QLabel *label7 = new QLabel(i18n("<p><b>Rendering Intent:</b>"), plainPage());
-    QLabel *label8 = new QLabel(intent, plainPage());
-    grid->addMultiCellWidget(label7, 6, 6, 0, 1);
-    grid->addMultiCellWidget(label8, 7, 7, 0, 1);
+    KSqueezedTextLabel *label8 = new KSqueezedTextLabel(intent, plainPage());
+    grid->addMultiCellWidget(label7, 3, 3, 0, 0);
+    grid->addMultiCellWidget(label8, 3, 3, 1, 1);
                                      
     QLabel *label9  = new QLabel(i18n("<p><b>Path:</b>"), plainPage());
-    QLabel *label10 = new QLabel(profilePath, plainPage());
-    grid->addMultiCellWidget(label9, 8, 8, 0, 1);
-    grid->addMultiCellWidget(label10, 9, 9, 0, 1);
+    KSqueezedTextLabel *label10 = new KSqueezedTextLabel(profilePath, plainPage());
+    grid->addMultiCellWidget(label9, 4, 4, 0, 0);
+    grid->addMultiCellWidget(label10, 4, 4, 1, 1);
                                      
     QLabel *label11  = new QLabel(i18n("<p><b>CIE diagram:</b>"), plainPage());
     CIETongueWidget *cieTongue = new CIETongueWidget(256, 256, plainPage());
     cieTongue->setProfileHandler(hProfile);
-    grid->addMultiCellWidget(label11, 10, 10, 0, 1);
-    grid->addMultiCellWidget(cieTongue, 11, 11, 1, 1);
+    grid->addMultiCellWidget(label11, 5, 5, 0, 1);
+    grid->addMultiCellWidget(cieTongue, 6, 6, 1, 1);
 
     cmsCloseProfile(hProfile);
 }
