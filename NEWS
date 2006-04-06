@@ -44,5 +44,6 @@ BUGFIX from B.K.O:
 ==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursur keys )
 ==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
 ==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
+==> 113997 (option to store tags in image)
 
 ...
