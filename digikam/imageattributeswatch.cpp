@@ -19,7 +19,6 @@
  * 
  * ============================================================ */
 
-
 // Local includes
 
 #include "imageattributeswatch.h"
@@ -71,7 +70,6 @@ void ImageAttributesWatch::imageCaptionChanged(Q_LLONG imageId)
     emit signalImageCaptionChanged(imageId);
 }
 
+} // namespace Digikam
 
-
-}
-
+#include "imageattributeswatch.moc"
