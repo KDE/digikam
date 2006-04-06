@@ -39,7 +39,7 @@ public:
     bool load(const QString& filePath);
     bool save(const QString& filePath);
 
-    bool isReadOnly() const { return true; };
+    bool isReadOnly() const { return false; };
 };
 
 }  // NameSpace Digikam
