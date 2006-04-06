@@ -48,7 +48,14 @@ class ICCPreviewWidgetPriv
 {
 public:
 
-    ICCPreviewWidgetPriv(){}
+    ICCPreviewWidgetPriv()
+    {
+        name            = 0;
+        description     = 0;
+        colorSpace      = 0;
+        deviceClass     = 0;
+        renderingIntent = 0;
+    }
 
     KSqueezedTextLabel *name;
     KSqueezedTextLabel *description;
@@ -64,34 +71,38 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
 {
     d = new ICCPreviewWidgetPriv;
 
-    //TODO
     QVBoxLayout *layout  = new QVBoxLayout(this, 0,  KDialog::spacingHint());
    
     QVGroupBox *metaData = new QVGroupBox(this);
     
     QHGroupBox *name = new QHGroupBox(metaData);
     name->setFrameStyle(QFrame::NoFrame);
-    QLabel *label1 = new QLabel(i18n("Name: "), name);
+    QLabel *label1 = new QLabel(name);
+    label1->setText(i18n("Name: "));
     d->name = new KSqueezedTextLabel(0, name);
 
     QHGroupBox *description = new QHGroupBox(metaData);
     description->setFrameStyle(QFrame::NoFrame);
-    QLabel *label2 = new QLabel(i18n("Description: "), description);
+    QLabel *label2 = new QLabel(description);
+    label2->setText(i18n("Description: "));
     d->description = new KSqueezedTextLabel(0, description);
 
     QHGroupBox *colorSpace = new QHGroupBox(metaData);
     colorSpace->setFrameStyle(QFrame::NoFrame);
-    QLabel *label3 = new QLabel(i18n("Color space: "), colorSpace);
+    QLabel *label3 = new QLabel(colorSpace);
+    label3->setText(i18n("Color space: "));
     d->colorSpace = new KSqueezedTextLabel(0, colorSpace);
 
     QHGroupBox *deviceClass = new QHGroupBox(metaData);
     deviceClass->setFrameStyle(QFrame::NoFrame);
-    QLabel *label4 = new QLabel(i18n("Device class: "), deviceClass);
+    QLabel *label4 = new QLabel(deviceClass);
+    label4->setText(i18n("Device class: "));
     d->deviceClass = new KSqueezedTextLabel(0, deviceClass);
 
     QHGroupBox *renderingIntent = new QHGroupBox(metaData);
     renderingIntent->setFrameStyle(QFrame::NoFrame);
-    QLabel *label5 = new QLabel(i18n("Rendering intent: "), renderingIntent);
+    QLabel *label5 = new QLabel(renderingIntent);
+    label5->setText(i18n("Rendering intent: "));
     d->renderingIntent = new KSqueezedTextLabel(0, renderingIntent);
     
     layout->addWidget(metaData);
@@ -104,7 +115,6 @@ ICCPreviewWidget::~ICCPreviewWidget()
 
 void ICCPreviewWidget::showPreview( const KURL &url)
 {
-    //TODO
     if (url.isLocalFile())
     {
         kdDebug() << "Is Local file" << endl;
@@ -121,7 +131,6 @@ void ICCPreviewWidget::showPreview( const KURL &url)
 
 void ICCPreviewWidget::clearPreview()
 {
-    //TODO
     d->name->clear();
     d->description->clear();
     d->colorSpace->clear();
@@ -146,67 +155,65 @@ void ICCPreviewWidget::getICCData( const KURL &url)
     d->description->setText(QString(cmsTakeProductDesc(tmpProfile)));
 
     switch (cmsGetColorSpace(tmpProfile))
-        {
-            case icSigLabData:
-                space = i18n("Lab");
-                break;
-            case icSigLuvData:
-                space = i18n("Luv");
-                break;
-            case icSigRgbData:
-                space = i18n("RGB");
-                break;
-            case icSigGrayData:
-                space = i18n("GRAY");
-                break;
-            case icSigHsvData:
-                space = i18n("HSV");
-                break;
-            case icSigHlsData:
-                space = i18n("HLS");
-                break;
-            case icSigCmykData:
-                space = i18n("CMYK");
-                break;
-            case icSigCmyData:
-                space= i18n("CMY");
-                break;
-            default:
-                space = i18n("Other");
-                break;
-        }
+    {
+        case icSigLabData:
+            space = i18n("Lab");
+            break;
+        case icSigLuvData:
+            space = i18n("Luv");
+            break;
+        case icSigRgbData:
+            space = i18n("RGB");
+            break;
+        case icSigGrayData:
+            space = i18n("GRAY");
+            break;
+        case icSigHsvData:
+            space = i18n("HSV");
+            break;
+        case icSigHlsData:
+            space = i18n("HLS");
+            break;
+        case icSigCmykData:
+            space = i18n("CMYK");
+            break;
+        case icSigCmyData:
+            space= i18n("CMY");
+            break;
+        default:
+            space = i18n("Other");
+            break;
+    }
 
-     d->colorSpace->setText(space);
+    d->colorSpace->setText(space);
 
-     switch ((int)cmsGetDeviceClass(tmpProfile))
-            {
-                case icSigInputClass:
-                    device = i18n("Input device");
-                    break;
-                case icSigDisplayClass:
-                    device = i18n("Display device");
-                    break;
-                case icSigOutputClass:
-                    device = i18n("Output device");
-                    break;
-                case icSigColorSpaceClass:
-                    device = i18n("Color space");
-                    break;
-                case icSigLinkClass:
-                    device = i18n("Link device");
-                    break;
-                case icSigAbstractClass:
-                    device = i18n("Abstract");
-                    break;
-                case icSigNamedColorClass:
-                    device = i18n("Named color");
-                    break;
-            }
+    switch ((int)cmsGetDeviceClass(tmpProfile))
+    {
+        case icSigInputClass:
+            device = i18n("Input device");
+            break;
+        case icSigDisplayClass:
+            device = i18n("Display device");
+            break;
+        case icSigOutputClass:
+            device = i18n("Output device");
+            break;
+        case icSigColorSpaceClass:
+            device = i18n("Color space");
+            break;
+        case icSigLinkClass:
+            device = i18n("Link device");
+            break;
+        case icSigAbstractClass:
+            device = i18n("Abstract");
+            break;
+        case icSigNamedColorClass:
+            device = i18n("Named color");
+            break;
+    }
 
     d->deviceClass->setText(device);
 
-    int profileIntent = cmsTakeRenderingIntent(tmpProfile);
-    
     //"Decode" profile rendering intent
     switch (cmsTakeRenderingIntent(tmpProfile))
     {
@@ -223,6 +230,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             intent = i18n("Absolute Colorimetric");
             break;
     }
+    
     d->renderingIntent->setText(intent);
 
     cmsCloseProfile(tmpProfile);
