@@ -1,6 +1,9 @@
 Notice to make release tarballs from SVN
 ----------------------------------------
 
+0/ If the tarball will be created from trunk, check/merge/copy from
+   the stable the files: release_* and Changelog.
+
 1/ Update the release info in these files and commit it to svn :
    - digikam/version.h
    - digikam/digikam.lsm - update date as well
