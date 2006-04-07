@@ -323,9 +323,10 @@ void CameraThread::run()
             bool      setPhotographerId = cmd->map["setPhotographerId"].asBool();
             QString   author            = cmd->map["author"].asString();
             QString   authorTitle       = cmd->map["authorTitle"].asString();
-            QString   city              = cmd->map["city"].asString();
-            QString   province          = cmd->map["province"].asString();
-            QString   country           = cmd->map["country"].asString();
+            bool      setCredits        = cmd->map["setCredits"].asBool();
+            QString   credit            = cmd->map["credit"].asString();
+            QString   source            = cmd->map["source"].asString();
+            QString   copyright         = cmd->map["copyright"].asString();
             sendInfo(i18n("Downloading file %1...").arg(file));
 
             // download to a temp file
@@ -352,8 +353,11 @@ void CameraThread::run()
                         metadata.setImageDateTime(newDateTime);
                     
                     if (setPhotographerId)
-                        metadata.setImagePhotographerId(author, authorTitle, city, province, country);
-                    
+                        metadata.setImagePhotographerId(author, authorTitle);
+
+                    if (setCredits)
+                        metadata.setImageCredits(credit, source, copyright);
+                                                                
                     metadata.applyChanges();
                 }
                 
@@ -592,8 +596,8 @@ void CameraController::download(const QString& folder, const QString& file,
                                 const QString& dest, bool autoRotate, bool fixDateTime, 
                                 const QDateTime& newDateTime, bool setPhotographerId,
                                 const QString& author, const QString& authorTitle,
-                                const QString& city, const QString& province, 
-                                const QString& country)
+                                bool setCredits, const QString& credit, 
+                                const QString& source, const QString& copyright)
 {
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_download;
@@ -606,9 +610,10 @@ void CameraController::download(const QString& folder, const QString& file,
     cmd->map.insert("setPhotographerId", QVariant(setPhotographerId, 0));
     cmd->map.insert("author", QVariant(author));
     cmd->map.insert("authorTitle", QVariant(authorTitle));
-    cmd->map.insert("city", QVariant(city));
-    cmd->map.insert("province", QVariant(province));
-    cmd->map.insert("country", QVariant(country));
+    cmd->map.insert("setCredits", QVariant(setCredits, 0));
+    cmd->map.insert("credit", QVariant(credit));
+    cmd->map.insert("source", QVariant(source));
+    cmd->map.insert("copyright", QVariant(copyright));
     d->cmdQueue.enqueue(cmd);
 }
 

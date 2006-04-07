@@ -111,6 +111,7 @@ public:
         anim              = 0;
         dateTimeEdit      = 0;
         setPhotographerId = 0;
+        setCredits        = 0;
     }
 
     bool                          busy;
@@ -128,6 +129,7 @@ public:
     QCheckBox                    *autoAlbumCheck;
     QCheckBox                    *fixDateTimeCheck;
     QCheckBox                    *setPhotographerId;
+    QCheckBox                    *setCredits;
 
     QLabel                       *status;
 
@@ -206,11 +208,14 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
 
     QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations"), d->advBox);
     d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), OnFlyBox);
+    d->setCredits        = new QCheckBox(i18n("Set default credit and copyright"), OnFlyBox);
     d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), OnFlyBox);
     d->dateTimeEdit      = new KDateTimeEdit( OnFlyBox, "datepicker");
     
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to write photographer identity "
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default photographer identity "
                                                 "into IPTC tags using main digiKam metadata settings."));
+    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit and copyrigth informations "
+                                         "into IPTC tags using main digiKam metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
                                                "tags to the right values if your camera don't set "
                                                "properlly these tags when pictures are taken."));
@@ -394,6 +399,7 @@ void CameraUI::readSettings()
     d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
     d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
     d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
+    d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
     
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
@@ -413,6 +419,7 @@ void CameraUI::saveSettings()
     config->writeEntry("AutoAlbum", d->autoAlbumCheck->isChecked());
     config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
     config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
+    config->writeEntry("SetCredits", d->setCredits->isChecked());
     config->writeEntry("Splitter Sizes", d->splitter->sizes());
     config->sync();
 }
@@ -595,7 +602,7 @@ void CameraUI::slotDownload(bool onlySelected)
     
     d->controller->downloadPrep();
 
-    QString author, authorTitle, city, province, country;
+    QString author, authorTitle, credit, source, copyright;
     QString downloadName;
     QString name;
     QString folder;
@@ -607,15 +614,16 @@ void CameraUI::slotDownload(bool onlySelected)
     bool fixDateTime       = d->fixDateTimeCheck->isChecked();
     QDateTime newDateTime  = d->dateTimeEdit->dateTime();
     bool setPhotographerId = d->setPhotographerId->isChecked();
+    bool setCredits        = d->setCredits->isChecked();
     
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
         author      = settings->getIptcAuthor();
         authorTitle = settings->getIptcAuthorTitle();
-        city        = settings->getIptcCity();
-        province    = settings->getIptcProvince();
-        country     = settings->getIptcCountry();        
+        credit      = settings->getIptcCredit();
+        source      = settings->getIptcSource();
+        copyright   = settings->getIptcCopyright();        
     }
     
     for (IconItem* item = d->view->firstItem(); item;
@@ -655,7 +663,8 @@ void CameraUI::slotDownload(bool onlySelected)
         }
         
         d->controller->download(folder, name, u.path(), autoRotate, fixDateTime, newDateTime,
-                                setPhotographerId, author, authorTitle, city, province, country);
+                                setPhotographerId, author, authorTitle, 
+                                setCredits, credit, source, copyright);
         addFileExtension(QFileInfo(u.path()).extension(false));
         total++;
     }

@@ -13,7 +13,7 @@ libsetup_la_SOURCES = setup.cpp setupcamera.cpp setupimgplugins.cpp \
 	                  gpiface.cpp setupmime.cpp setupplugins.cpp \
 	                  setupcollections.cpp setupmetadata.cpp \
 	                  setupeditor.cpp setupmisc.cpp setupicc.cpp \
-	                  setupiofiles.cpp setupslideshow.cpp 
+	                  setupiofiles.cpp setupslideshow.cpp setupidentity.cpp 
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 

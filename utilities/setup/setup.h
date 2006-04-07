@@ -43,7 +43,7 @@ public:
     enum Page 
     {
         General = 0,
-        Exif,
+        Metadata,
         Collections,
         Mime,
         Editor,

@@ -30,10 +30,6 @@
 
 #include "gpiteminfo.h"
 
-/*class QString;
-class QStringList;
-class QImage;*/
-
 namespace Digikam
 {
 
@@ -59,8 +55,8 @@ public:
                   const QString& dest, bool autoRotate, bool fixDateTime, 
                   const QDateTime& newDateTime, bool setPhotographerId,
                   const QString& author, const QString& authorTitle,
-                  const QString& city, const QString& province, 
-                  const QString& country);
+                  bool setCredits, const QString& credit, 
+                  const QString& source, const QString& copyright);
 
     void deleteFile(const QString& folder, const QString& file);
 
@@ -98,6 +94,7 @@ private slots:
 private:
 
     CameraControllerPriv *d;
+    
     friend class CameraThread;
 };
     

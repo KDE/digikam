@@ -95,8 +95,8 @@ public:
     bool setImageRating(int rating);
     bool setImageKeywords(const QStringList& oldKeywords, 
                           const QStringList& newKeywords);
-    bool setImagePhotographerId(const QString& author, const QString& authorTitle,
-                                const QString& city, const QString& province, const QString& country);
+    bool setImagePhotographerId(const QString& author, const QString& authorTitle);
+    bool setImageCredits(const QString& credit, const QString& source, const QString& copyright);
 
 private:
 

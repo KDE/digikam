@@ -878,8 +878,7 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
     return false;
 }
 
-bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle,
-                const QString& city, const QString& province, const QString& country)
+bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle)
 {
     try
     {    
@@ -901,30 +900,53 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
         kdDebug() << m_filePath << " ==> Author Title: " << BylineTitle << endl;
         iptcData["Iptc.Application2.BylineTitle"] = BylineTitle.latin1();
 
-        // City IPTC tag is limited to 32 char.
-        QString City = city;
-        City.truncate(32);
-        kdDebug() << m_filePath << " ==> City: " << City << endl;
-        iptcData["Iptc.Application2.City"] = City.latin1();
-
-        // ProvinceState IPTC tag is limited to 32 char.
-        QString ProvinceState = province;
-        ProvinceState.truncate(32);
-        kdDebug() << m_filePath << " ==> Province: " << ProvinceState << endl;
-        iptcData["Iptc.Application2.ProvinceState"] = ProvinceState.latin1();
-
-        // CountryName IPTC tag is limited to 32 char.
-        QString CountryName = country;
-        CountryName.truncate(64);
-        kdDebug() << m_filePath << " ==> Country: " << CountryName << endl;
-        iptcData["Iptc.Application2.CountryName"] = CountryName.latin1();
-
         setIptc(iptcData.copy());
         return true;
     }
     catch( Exiv2::Error &e )
     {
         kdDebug() << "Cannot set Photographer identity into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+bool DMetadata::setImageCredits(const QString& credit, const QString& source, const QString& copyright)
+{
+    try
+    {    
+        Exiv2::IptcData iptcData;
+        if (!m_iptcMetadata.isEmpty())
+            iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
+
+        setImageProgramId(iptcData);
+
+        // Credit IPTC tag is limited to 32 char.
+        QString Credit = credit;
+        Credit.truncate(32);
+        kdDebug() << m_filePath << " ==> Credit: " << Credit << endl;
+        iptcData["Iptc.Application2.Credit"] = Credit.latin1();
+
+        // Source IPTC tag is limited to 32 char.
+        QString Source = source;
+        Source.truncate(32);
+        kdDebug() << m_filePath << " ==> Source: " << Source << endl;
+        iptcData["Iptc.Application2.Source"] = Source.latin1();
+
+        // Copyright IPTC tag is limited to 128 char.
+        QString Copyright = copyright;
+        Copyright.truncate(128);
+        kdDebug() << m_filePath << " ==> Copyright: " << Copyright << endl;
+        iptcData["Iptc.Application2.Copyright"] = Copyright.latin1();
+
+        setIptc(iptcData.copy());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Credits identity into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        

@@ -63,6 +63,7 @@ public:
     bool saveIptcRating;
     bool saveIptcTags;
     bool saveIptcPhotographerId;
+    bool saveIptcCredits;
 
     bool saveComments;
     bool saveDateTime;
@@ -78,23 +79,22 @@ public:
 
     QString      author;
     QString      authorTitle;
-    QString      city;
-    QString      province;
-    QString      country;
+    QString      credit;
+    QString      source;
+    QString      copyright;
 
     QStringList  albumCollectionNames;
     
     KConfig     *config;
 
     AlbumSettings::AlbumSortOrder albumSortOrder;
-    AlbumSettings::ImageSortOrder  imageSortOrder;
-
+    AlbumSettings::ImageSortOrder imageSortOrder;
 };
 
 
 AlbumSettings* AlbumSettings::instance_ = 0;
 
-AlbumSettings * AlbumSettings::instance()
+AlbumSettings* AlbumSettings::instance()
 {
     return instance_;
 }
@@ -151,15 +151,16 @@ void AlbumSettings::init()
     d->iconShowTags       = true;
     d->iconShowRating     = true;
 
-    d->exifRotate         = false;
-    d->exifSetOrientation = false;
+    d->exifRotate             = false;
+    d->exifSetOrientation     = false;
 
     d->saveIptcTags           = false;
     d->saveIptcRating         = false;
     d->saveIptcPhotographerId = false;
-
-    d->saveComments       = false;
-    d->saveDateTime       = false;
+    d->saveIptcCredits        = false;
+    
+    d->saveComments           = false;
+    d->saveDateTime           = false;
 }
 
 void AlbumSettings::readSettings()
@@ -219,15 +220,16 @@ void AlbumSettings::readSettings()
     d->saveIptcTags           = config->readBoolEntry("Save IPTC Tags", false);
     d->saveIptcRating         = config->readBoolEntry("Save IPTC Rating", false);
     d->saveIptcPhotographerId = config->readBoolEntry("Save IPTC Photographer ID", false);
+    d->saveIptcCredits        = config->readBoolEntry("Save IPTC Credits", false);
 
     d->saveComments           = config->readBoolEntry("Save EXIF Comments", false);
     d->saveDateTime           = config->readBoolEntry("Save Date Time", false);
 
     d->author                 = config->readEntry("IPTC Author", QString::null);
     d->authorTitle            = config->readEntry("IPTC Author Title", QString::null);
-    d->city                   = config->readEntry("IPTC City", QString::null);
-    d->province               = config->readEntry("IPTC Province", QString::null);
-    d->country                = config->readEntry("IPTC Country", QString::null);
+    d->credit                 = config->readEntry("IPTC Credit", QString::null);
+    d->source                 = config->readEntry("IPTC Source", QString::null);
+    d->copyright              = config->readEntry("IPTC Copyright", QString::null);
                                                   
     config->setGroup("General Settings");
     d->showSplash  = config->readBoolEntry("Show Splash", true);
@@ -267,15 +269,16 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Save IPTC Tags", d->saveIptcTags);
     config->writeEntry("Save IPTC Rating", d->saveIptcRating);
     config->writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
+    config->writeEntry("Save IPTC Credits", d->saveIptcCredits);
 
     config->writeEntry("Save EXIF Comments", d->saveComments);
     config->writeEntry("Save Date Time", d->saveDateTime);
 
     config->writeEntry("IPTC Author", d->author);
     config->writeEntry("IPTC Author Title", d->authorTitle);
-    config->writeEntry("IPTC City", d->city);
-    config->writeEntry("IPTC Province", d->province);
-    config->writeEntry("IPTC Country", d->country);
+    config->writeEntry("IPTC Credit", d->credit);
+    config->writeEntry("IPTC Source", d->source);
+    config->writeEntry("IPTC Copyright", d->copyright);
 
     config->setGroup("General Settings");
     config->writeEntry("Show Splash", d->showSplash);
@@ -550,6 +553,16 @@ bool AlbumSettings::getSaveIptcPhotographerId() const
     return d->saveIptcPhotographerId;
 }
 
+void AlbumSettings::setSaveIptcCredits(bool val)
+{
+    d->saveIptcCredits = val;
+}
+
+bool AlbumSettings::getSaveIptcCredits() const
+{
+    return d->saveIptcCredits;
+}
+
 void AlbumSettings::setIptcAuthor(const QString& author)
 {
     d->author = author;
@@ -570,34 +583,34 @@ QString AlbumSettings::getIptcAuthorTitle() const
     return d->authorTitle;
 }
 
-void AlbumSettings::setIptcCity(const QString& city)
+void AlbumSettings::setIptcCredit(const QString& credit)
 {
-    d->city = city;
+    d->credit = credit;
 }
 
-QString AlbumSettings::getIptcCity() const
+QString AlbumSettings::getIptcCredit() const
 {
-    return d->city;
+    return d->credit;
 }
 
-void AlbumSettings::setIptcProvince(const QString& province)
+void AlbumSettings::setIptcSource(const QString& source)
 {
-    d->province = province;
+    d->source = source;
 }
 
-QString AlbumSettings::getIptcProvince() const
+QString AlbumSettings::getIptcSource() const
 {
-    return d->province;
+    return d->source;
 }
 
-void AlbumSettings::setIptcCountry(const QString& country)
+void AlbumSettings::setIptcCopyright(const QString& copyright)
 {
-    d->country = country;
+    d->copyright = copyright;
 }
 
-QString AlbumSettings::getIptcCountry() const
+QString AlbumSettings::getIptcCopyright() const
 {
-    return d->country;
+    return d->copyright;
 }
 
 void AlbumSettings::setSaveComments(bool val)

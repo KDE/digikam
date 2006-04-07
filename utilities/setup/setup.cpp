@@ -35,6 +35,7 @@
 
 #include "setupgeneral.h"
 #include "setupmetadata.h"
+#include "setupidentity.h"
 #include "setupcollections.h"
 #include "setupmime.h"
 #include "setupeditor.h"
@@ -58,6 +59,7 @@ public:
     {
         page_general     = 0;
         page_metadata    = 0;
+        page_identity    = 0;
         page_collections = 0;
         page_mime        = 0;
         page_editor      = 0;
@@ -71,6 +73,7 @@ public:
         
         generalPage      = 0;
         metadataPage     = 0;
+        identityPage     = 0;
         collectionsPage  = 0;
         mimePage         = 0;
         editorPage       = 0;
@@ -85,6 +88,7 @@ public:
 
     QFrame           *page_general;
     QFrame           *page_metadata;
+    QFrame           *page_identity;
     QFrame           *page_collections;
     QFrame           *page_mime;
     QFrame           *page_editor;
@@ -98,6 +102,7 @@ public:
 
     SetupGeneral     *generalPage;
     SetupMetadata    *metadataPage;
+    SetupIdentity    *identityPage;
     SetupCollections *collectionsPage;
     SetupMime        *mimePage;
     SetupEditor      *editorPage;
@@ -124,6 +129,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Informations Management"),
                                BarIcon("exifinfo", KIcon::SizeMedium));
     d->metadataPage = new SetupMetadata(d->page_metadata);
+
+    d->page_identity = addPage(i18n("Identity"), i18n("Default IPTC identity informations"),
+                               BarIcon("identity", KIcon::SizeMedium));
+    d->identityPage = new SetupIdentity(d->page_identity);
 
     d->page_collections = addPage(i18n("Collections"), i18n("Album Collections"),
                                   BarIcon("fileopen", KIcon::SizeMedium));
@@ -180,10 +189,11 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     d->generalPage->applySettings();
+    d->metadataPage->applySettings();
+    d->identityPage->applySettings();
     d->collectionsPage->applySettings();
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
-    d->metadataPage->applySettings();
     d->editorPage->applySettings();
     d->iofilesPage->applySettings();
     d->imgpluginsPage->applySettings();

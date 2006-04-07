@@ -134,20 +134,23 @@ public:
     void setSaveIptcPhotographerId(bool val);
     bool getSaveIptcPhotographerId() const;
 
+    void setSaveIptcCredits(bool val);
+    bool getSaveIptcCredits() const;
+
     void setIptcAuthor(const QString& author);
     QString getIptcAuthor() const;
 
     void setIptcAuthorTitle(const QString& authorTitle);
     QString getIptcAuthorTitle() const;
 
-    void setIptcCity(const QString& city);
-    QString getIptcCity() const;
+    void setIptcCredit(const QString& credit);
+    QString getIptcCredit() const;
 
-    void setIptcProvince(const QString& province);
-    QString getIptcProvince() const;
+    void setIptcSource(const QString& source);
+    QString getIptcSource() const;
 
-    void setIptcCountry(const QString& country);
-    QString getIptcCountry() const;
+    void setIptcCopyright(const QString& copyright);
+    QString getIptcCopyright() const;
 
     void setSaveComments(bool val);
     bool getSaveComments() const;

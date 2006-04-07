@@ -416,10 +416,15 @@ void ImageDescEditTab::applyAllChanges()
         {
             // Store Photograph indentity into Iptc tags.
             metadata.setImagePhotographerId(AlbumSettings::instance()->getIptcAuthor(),
-                                            AlbumSettings::instance()->getIptcAuthorTitle(),
-                                            AlbumSettings::instance()->getIptcCity(),
-                                            AlbumSettings::instance()->getIptcProvince(),
-                                            AlbumSettings::instance()->getIptcCountry());
+                                            AlbumSettings::instance()->getIptcAuthorTitle());
+        }
+
+        if (AlbumSettings::instance()->getSaveIptcCredits())
+        {
+            // Store Photograph indentity into Iptc tags.
+            metadata.setImageCredits(AlbumSettings::instance()->getIptcCredit(),
+                                     AlbumSettings::instance()->getIptcSource(),
+                                     AlbumSettings::instance()->getIptcCopyright());
         }
         
         metadata.applyChanges();
