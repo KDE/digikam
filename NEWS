@@ -45,5 +45,6 @@ BUGFIX from B.K.O:
 ==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
 ==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
 ==> 113997 (option to store tags in image)
+==> 123742 (preview-pictures seem to be handled differently by Digikam and Konqueror)
 
 ...
