@@ -25,7 +25,7 @@ NEW FEATURES:
 - New preview rendering modes in all color correction image plugins dialogs.
 - New zooming capabilities in image plugins dialogs.
 - Tags/Rating/DateTime/Comments/PhotographersID are now stored in Exif and/or IPTC metadata tags.
-- CameraGUI : new option to set metadata DateTime/PhotographerId tags on the fly.
+- CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
 - digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
 
 
@@ -45,6 +45,7 @@ BUGFIX from B.K.O:
 ==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
 ==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
 ==> 113997 (option to store tags in image)
-==> 123742 (preview-pictures seem to be handled differently by Digikam and Konqueror)
+==> 123742 (preview-pictures seem to be handled differently by digiKam and Konqueror)
+==> 121308 (Mass storage and PTP usability).
 
 ...
