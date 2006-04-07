@@ -298,11 +298,9 @@ kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv
     createThumbnailDirs();
 }
 
-
 kio_digikamthumbnailProtocol::~kio_digikamthumbnailProtocol()
 {
 }
-
 
 void kio_digikamthumbnailProtocol::get(const KURL& url )
 {
@@ -334,7 +332,6 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         error(KIO::ERR_INTERNAL, i18n("File does not exist"));
         return;
     }
-
     
     img = loadPNG(thumbPath);
     if (!img.isNull())
@@ -377,13 +374,13 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
         if (img.depth() != 32)
             img = img.convertDepth(32);
+            
+        if (exif)
+            exifRotate(url.path(), img);            
 
-        img.setText(QString("Thumb::URI").latin1(),
-                     0, uri);
-        img.setText(QString("Thumb::MTime").latin1(),
-                     0, QString::number(st.st_mtime));
-        img.setText(QString("Software").latin1(),
-                     0, QString("Digikam Thumbnail Generator"));
+        img.setText(QString("Thumb::URI").latin1(), 0, uri);
+        img.setText(QString("Thumb::MTime").latin1(), 0, QString::number(st.st_mtime));
+        img.setText(QString("Software").latin1(), 0, QString("Digikam Thumbnail Generator"));
 
         KTempFile temp(thumbPath + "-digikam-", ".png");
         if (temp.status() == 0)
@@ -395,8 +392,6 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     }
 
     img = img.smoothScale(size, size, QImage::ScaleMin);
-    if (exif)
-        exifRotate(url.path(), img);
 
     if (img.isNull())
     {
