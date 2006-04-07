@@ -44,14 +44,15 @@ public:
     {
         General = 0,
         Metadata,
+        Identify,
         Collections,
         Mime,
         Editor,
         IOFiles,
         ImagePlugins,
         Slideshow,
-        Icc,
-        Plugins,
+        IccProfiles,
+        KipiPlugins,
         Camera,
         Miscellaneous
     };

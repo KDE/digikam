@@ -571,7 +571,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 void ImageWindow::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::Icc : Setup::Editor);
+    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::Editor);
     
     if (setup.exec() != QDialog::Accepted)
         return;
