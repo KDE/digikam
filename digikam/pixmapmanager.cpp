@@ -169,8 +169,16 @@ void PixmapManager::slotFailedThumbnail(const KURL& url)
     dir = dir + "/image_broken.png";
 
     QImage img(dir);
-    img = img.smoothScale(m_size, m_size, QImage::ScaleMin);
-    
+
+    QSize size(img.size());
+    size.scale(m_size, m_size, QSize::ScaleMin);
+    if (size.width() < img.width() && size.height() < img.height())
+    {
+        // only scale down
+        // do not scale up, looks bad
+        img = img.smoothScale(size);
+    }
+
     m_cache->remove(url.path());
     QPixmap* thumb = new QPixmap(img);
     m_cache->insert(url.path(), thumb);
