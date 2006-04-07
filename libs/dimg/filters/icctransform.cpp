@@ -155,6 +155,7 @@ void IccTransform::apply(DImg& image)
             intent = INTENT_ABSOLUTE_COLORIMETRIC;
             break;
     }
+    
     kdDebug() << "intent: " << getRenderingIntent() << endl;
 
     if (d->has_profile)
@@ -189,7 +190,7 @@ void IccTransform::apply(DImg& image)
             if (image.hasAlpha())
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAYA_16;
                          break;
@@ -198,7 +199,8 @@ void IccTransform::apply(DImg& image)
                          break;
                      default:
                          inputFormat = TYPE_BGRA_16;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -209,7 +211,7 @@ void IccTransform::apply(DImg& image)
             else
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAY_16;
                          break;
@@ -218,7 +220,8 @@ void IccTransform::apply(DImg& image)
                          break;
                      default:
                          inputFormat = TYPE_BGR_16;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -226,14 +229,13 @@ void IccTransform::apply(DImg& image)
                                                 intent,
                                                 cmsFLAGS_WHITEBLACKCOMPENSATION);
             }
-
         }
         else
         {
             if (image.hasAlpha())
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAYA_8;
                          break;
@@ -242,7 +244,8 @@ void IccTransform::apply(DImg& image)
                          break;
                      default:
                          inputFormat = TYPE_BGRA_8;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -253,7 +256,7 @@ void IccTransform::apply(DImg& image)
             else
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAYA_8;
                          break;
@@ -264,7 +267,8 @@ void IccTransform::apply(DImg& image)
                      default:
                          inputFormat = TYPE_BGR_8;
                          kdDebug() << "input profile: default no alpha" << endl;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -272,7 +276,6 @@ void IccTransform::apply(DImg& image)
                                                 intent,
                                                 cmsFLAGS_WHITEBLACKCOMPENSATION);
             }
-
         }
     }
     else
@@ -370,7 +373,6 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
     cmsHTRANSFORM transform;
     int transformFlags = 0, inputFormat = 0;
-    int renderingIntent;
 
     switch (intent)
     {
@@ -410,8 +412,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         return;
     }
 
-    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ),
-"r");
+    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
 
     if (outprofile == NULL)
     {
@@ -432,7 +433,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             if (image.hasAlpha())
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAYA_16;
                          break;
@@ -441,7 +442,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                          break;
                      default:
                          inputFormat = TYPE_BGRA_16;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -452,7 +454,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             else
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAY_16;
                          break;
@@ -461,7 +463,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                          break;
                      default:
                          inputFormat = TYPE_BGR_16;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -476,7 +479,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             if (image.hasAlpha())
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAYA_8;
                          break;
@@ -485,7 +488,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                          break;
                      default:
                          inputFormat = TYPE_BGRA_8;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -496,7 +500,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             else
             {
                 switch (cmsGetColorSpace(inprofile))
-                 {
+                {
                      case icSigGrayData:
                          inputFormat = TYPE_GRAY_8;
                          break;
@@ -505,7 +509,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                          break;
                      default:
                          inputFormat = TYPE_BGR_8;
-                 }
+                }
+                
                 transform = cmsCreateTransform( inprofile,
                                                 inputFormat,
                                                 outprofile,
@@ -621,7 +626,6 @@ QString IccTransform::getProfileDescription(QString profile)
     QString _description = cmsTakeProductDesc(_profile);
     cmsCloseProfile(_profile);
     return _description;
-
 }
 
 int IccTransform::getRenderingIntent()
