@@ -36,8 +36,9 @@
 #include <kurllabel.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -62,12 +63,12 @@ public:
         autoDetectButton = 0;
     }
 
-    KListView   *listView;
-
     QPushButton *addButton;
     QPushButton *removeButton;
     QPushButton *editButton;
     QPushButton *autoDetectButton;
+    
+    KListView   *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -108,8 +109,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->editButton->setText( i18n( "&Edit..." ) );
     d->autoDetectButton->setText( i18n( "Auto-&Detect" ) );
 
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum,
-                                           QSizePolicy::Expanding );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     groupBoxLayout->addItem( spacer, 4, 1 );
 
     KURLLabel *gphotoLogoLabel = new KURLLabel(this);
@@ -230,8 +230,12 @@ void SetupCamera::slotEditCamera()
 void SetupCamera::slotAutoDetectCamera()
 {
     QString model, port;
-
-    if (GPIface::autoDetect(model, port) != 0) 
+    
+    kapp->setOverrideCursor( KCursor::waitCursor() );
+    int ret = GPIface::autoDetect(model, port);
+    kapp->restoreOverrideCursor();
+    
+    if (ret != 0) 
     {
         KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
                                      "Please check if your camera is turned on "
@@ -245,13 +249,13 @@ void SetupCamera::slotAutoDetectCamera()
     
     if (d->listView->findItem(model,1))
     {
-       KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
+        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
     }
     else 
     {
-       KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
-                                .arg(model).arg(port));
-       new KListViewItem(d->listView, model, model, port, "/");
+        KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
+                                 .arg(model).arg(port));
+        new KListViewItem(d->listView, model, model, port, "/");
     }
 }
 
@@ -262,7 +266,7 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
 }
 
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
-                                  const QString& port, const QString& path)
+                                   const QString& port, const QString& path)
 {
     QListViewItem *item = d->listView->currentItem();
     if (!item) return;

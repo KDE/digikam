@@ -1,10 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-02-19
- * Description : 
+ * Description : Gphoto2 interface
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -52,8 +52,7 @@ int GPIface::autoDetect(QString& model, QString& port)
     gp_abilities_list_load (abilList, context);
     gp_port_info_list_new (&infoList);
     gp_port_info_list_load (infoList);
-    gp_abilities_list_detect (abilList, infoList,
-                              camList, context);
+    gp_abilities_list_detect (abilList, infoList, camList, context);
     gp_abilities_list_free (abilList);
     gp_port_info_list_free (infoList);
 
@@ -61,7 +60,8 @@ int GPIface::autoDetect(QString& model, QString& port)
 
     int count = gp_list_count (camList);
 
-    if (count<=0) {
+    if (count<=0) 
+    {
         gp_list_free (camList);
         return -1;
     }
@@ -112,13 +112,16 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     gp_abilities_list_load( abilList, context );
 
     count = gp_abilities_list_count( abilList );
-    if ( count < 0) {
+    if ( count < 0) 
+    {
         gp_context_unref( context );
         qWarning("failed to get list of cameras");
         return;
     }
-    else {
-        for (int i=0; i<count; i++) {
+    else 
+    {
+        for (int i=0; i<count; i++) 
+        {
             const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
             cname = abil.model;
@@ -128,7 +131,6 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
 
     gp_abilities_list_free( abilList );
     gp_context_unref( context );
-
 }
 
 void GPIface::getSupportedPorts(QStringList& plist)
@@ -143,17 +145,16 @@ void GPIface::getSupportedPorts(QStringList& plist)
 
     int numPorts = gp_port_info_list_count( list );
 
-    for (int i = 0; i < numPorts; i++) {
+    for (int i = 0; i < numPorts; i++) 
+    {
         gp_port_info_list_get_info( list, i, &info );
         plist.append( info.path );
     }
 
     gp_port_info_list_free( list );
-    
 }
 
-void GPIface::getCameraSupportedPorts(const QString& model,
-                                      QStringList& plist)
+void GPIface::getCameraSupportedPorts(const QString& model, QStringList& plist)
 {
     int i = 0;
     plist.clear();
@@ -166,13 +167,13 @@ void GPIface::getCameraSupportedPorts(const QString& model,
 
     gp_abilities_list_new (&abilList);
     gp_abilities_list_load (abilList, context);
-    i = gp_abilities_list_lookup_model (abilList,
-                                        model.local8Bit().data());
+    i = gp_abilities_list_lookup_model (abilList, model.local8Bit().data());
     gp_abilities_list_get_abilities (abilList, i, &abilities);
     gp_abilities_list_free (abilList);
 
     if (abilities.port & GP_PORT_SERIAL)
         plist.append("serial");
+        
     if (abilities.port & GP_PORT_USB)
         plist.append("usb");
 

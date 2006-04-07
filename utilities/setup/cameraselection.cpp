@@ -41,6 +41,8 @@
 #include <klocale.h>
 #include <klistview.h>
 #include <klineedit.h>
+#include <kcursor.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -91,6 +93,7 @@ CameraSelection::CameraSelection( QWidget* parent )
                : KDialogBase(parent, 0, true, i18n("Camera Selection"),
                              Help|Ok|Cancel, Ok, true)
 {
+    kapp->setOverrideCursor( KCursor::waitCursor() );
     d = new CameraSelectionPriv;
     setHelp("cameraselection.anchor", "digikam");
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
@@ -204,9 +207,10 @@ CameraSelection::CameraSelection( QWidget* parent )
             this, SLOT(slotOkClicked()));
     
     // Initialize  --------------------------------------------------
-
+    
     getCameraList();
     getSerialPortList();
+    kapp->restoreOverrideCursor();
 }
 
 CameraSelection::~CameraSelection()
