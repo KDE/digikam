@@ -282,15 +282,28 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->renderingIntentKC->insertItem("Relative Colorimetric");
     d->renderingIntentKC->insertItem("Saturation");
     d->renderingIntentKC->insertItem("Absolute Colorimetric");
-    QWhatsThis::add( d->renderingIntentKC, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be compressed or expanded to fill the gamut of the destination device, so that gray balance is preserved but colorimetric accuracy may not be preserved.\n"
-    "In other words, if certain colors in an image fall outside of the range of colors that the output device can render, the picture intent will cause all the colors in the image to be adjusted so that the every color in the image falls within the range that can be rendered and so that the relationship between colors is preserved as much as possible.\n"
-    "This intent is most suitable for display of photographs and images, and is the default intent.</li>"
-    "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the output device can render are adjusted to the closest color that can be rendered, while all other colors are left unchanged.\n"
-    "This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, logo colors, ...).</li>"
-    "<li>Relative Colorimetric intent is defined such that any colors that fall outside the range that the output device can render are adjusted to the closest color that can be rendered, while all other colors are left unchanged. Proof intent does not preserve the white point.</li>"
-    "<li>Saturarion intent preserves the saturation of colors in the image at the possible expense of hue and lightness.\n"
-    "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to achieve the desired effects.\n"
-    "This intent is most suitable for business graphics such as charts, where it is more important that the colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
+    QWhatsThis::add( d->renderingIntentKC, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be "
+                     "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
+                     "preserved but colorimetric accuracy may not be preserved.\n"
+                     "In other words, if certain colors in an image fall outside of the range of colors that the output "
+                     "device can render, the picture intent will cause all the colors in the image to be adjusted so that "
+                     "the every color in the image falls within the range that can be rendered and so that the relationship "
+                     "between colors is preserved as much as possible.\n"
+                     "This intent is most suitable for display of photographs and images, and is the default intent.</li>"
+                     "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the output device "
+                     "can render are adjusted to the closest color that can be rendered, while all other colors are "
+                     "left unchanged.\n"
+                     "This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
+                     "logo colors, ...).</li>"
+                     "<li>Relative Colorimetric intent is defined such that any colors that fall outside the range that the "
+                     "output device can render are adjusted to the closest color that can be rendered, while all other colors "
+                     "are left unchanged. Proof intent does not preserve the white point.</li>"
+                     "<li>Saturarion intent preserves the saturation of colors in the image at the possible expense of "
+                     "hue and lightness.\n"
+                     "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
+                     "achieve the desired effects.\n"
+                     "This intent is most suitable for business graphics such as charts, where it is more important that the "
+                     "colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
 
     layout->addWidget(advancedSettingsBox);
 
@@ -426,11 +439,11 @@ void SetupICC::readSettings()
     d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    d->ICCPath["InProfile"]=config->readPathEntry("InProfileFile");
-    d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
-    d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-    d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+    d->ICCPath["InProfile"]      = config->readPathEntry("InProfileFile");
+    d->ICCPath["WorkProfile"]    = config->readPathEntry("WorkProfileFile");
+    d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+    d->ICCPath["ProofProfile"]   = config->readPathEntry("ProofProfileFile");
 }
 
 void SetupICC::fillCombos()
@@ -471,6 +484,7 @@ void SetupICC::fillCombos()
                     {
                         m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->inICCFiles_file.append(fileName);
                     break;
                     
@@ -486,6 +500,7 @@ void SetupICC::fillCombos()
                         m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                         m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->monitorICCFiles_file.append(fileName);
                     d->workICCFiles_file.append(fileName);
                     break;
@@ -500,6 +515,7 @@ void SetupICC::fillCombos()
                     {
                         m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->proofICCFiles_file.append(fileName);
                     break;
                 
@@ -515,6 +531,7 @@ void SetupICC::fillCombos()
                         m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                         m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->workICCFiles_file.append(fileName);
                     d->inICCFiles_file.append(fileName);
                     break;
@@ -581,11 +598,11 @@ void SetupICC::slotToggledWidgets(bool t)
         d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
         d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
         d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-        d->ICCPath["InProfile"]=config->readPathEntry("InProfileFile");
-        d->ICCPath["WorkProfile"] = config->readPathEntry("WorkProfileFile");
-        d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-        d->ICCPath["ProofProfile"] = config->readPathEntry("ProofProfileFile");
         d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+        d->ICCPath["InProfile"]      = config->readPathEntry("InProfileFile");
+        d->ICCPath["WorkProfile"]    = config->readPathEntry("WorkProfileFile");
+        d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
+        d->ICCPath["ProofProfile"]   = config->readPathEntry("ProofProfileFile");
     }
 }
 
@@ -631,6 +648,7 @@ void SetupICC::slotFillCombos(const QString& url)
                     {
                         m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->inICCFiles_file.append(fileName);
                     break;
                 
@@ -646,11 +664,13 @@ void SetupICC::slotFillCombos(const QString& url)
                         m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                         m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->monitorICCFiles_file.append(fileName);
                     d->workICCFiles_file.append(fileName);
                     break;
                 
                 case icSigOutputClass:
+                
                     if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                     {
                         m_proofICCFiles_description.append(fileName);
@@ -664,6 +684,7 @@ void SetupICC::slotFillCombos(const QString& url)
                     break;
                 
                 case icSigColorSpaceClass:
+                
                     if(QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                     {
                         m_workICCFiles_description.append(fileName);
@@ -674,6 +695,7 @@ void SetupICC::slotFillCombos(const QString& url)
                         m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                         m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
                     }
+                    
                     d->workICCFiles_file.append(fileName);
                     d->inICCFiles_file.append(fileName);
                     break;
@@ -708,10 +730,10 @@ void SetupICC::slotFillCombos(const QString& url)
     d->inICCFiles_file.remove(d->inICCFiles_file.begin());
     d->monitorICCFiles_file.remove(d->monitorICCFiles_file.begin());
     d->proofICCFiles_file.remove(d->proofICCFiles_file.begin());
-    d->ICCPath["WorkProfile"] = d->workICCFiles_file[d->workProfilesKC->currentItem()];
-    d->ICCPath["InProfile"] = d->inICCFiles_file[d->inProfilesKC->currentItem()];
+    d->ICCPath["WorkProfile"]    = d->workICCFiles_file[d->workProfilesKC->currentItem()];
+    d->ICCPath["InProfile"]      = d->inICCFiles_file[d->inProfilesKC->currentItem()];
     d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
-    d->ICCPath["ProofProfile"] = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
+    d->ICCPath["ProofProfile"]   = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
 }
 
 void SetupICC::slotClickedWork()
