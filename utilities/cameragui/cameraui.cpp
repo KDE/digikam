@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-16
- * Description : 
+ * Description : Camera interface dialog
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
@@ -205,7 +205,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& title,
                                              "of destination album"));
 
     QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations"), d->advBox);
-    d->setPhotographerId = new QCheckBox(i18n("Set photographer identity"), OnFlyBox);
+    d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), OnFlyBox);
     d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), OnFlyBox);
     d->dateTimeEdit      = new KDateTimeEdit( OnFlyBox, "datepicker");
     
