@@ -60,8 +60,8 @@ private:
 
 private slots:
 
-    void slotChangeAlbumPath();
-    void slotPathEdited(const QString& newPath);
+    void slotChangeAlbumPath(const QString &);
+    void slotPathEdited(const QString&);
 
 private:
 

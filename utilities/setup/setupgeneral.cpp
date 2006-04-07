@@ -31,8 +31,6 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
 #include <qdir.h>
 #include <qlistbox.h>
 #include <qwhatsthis.h>
@@ -46,6 +44,7 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <klineeditdlg.h>
+#include <kurlrequester.h>
 
 // // Local includes.
 
@@ -73,25 +72,25 @@ public:
         iconShowRatingBox     = 0;
     }
 
-    QLineEdit   *albumPathEdit;
+    QCheckBox     *showToolTipsBox;
+    QCheckBox     *iconShowNameBox;
+    QCheckBox     *iconShowSizeBox;
+    QCheckBox     *iconShowDateBox;
+    QCheckBox     *iconShowResolutionBox;
+    QCheckBox     *iconShowCommentsBox;
+    QCheckBox     *iconShowTagsBox;
+    QCheckBox     *iconShowRatingBox;
 
-    QCheckBox   *showToolTipsBox;
-    QCheckBox   *iconShowNameBox;
-    QCheckBox   *iconShowSizeBox;
-    QCheckBox   *iconShowDateBox;
-    QCheckBox   *iconShowResolutionBox;
-    QCheckBox   *iconShowCommentsBox;
-    QCheckBox   *iconShowTagsBox;
-    QCheckBox   *iconShowRatingBox;
+    KURLRequester *albumPathEdit;
 
-    KDialogBase *mainDialog;
+    KDialogBase   *mainDialog;
 };
 
 SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
             : QWidget(parent)
 {
     d = new SetupGeneralPriv;
-    d->mainDialog = dialog;
+    d->mainDialog       = dialog;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
@@ -99,17 +98,19 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QHGroupBox *albumPathBox = new QHGroupBox(parent);
     albumPathBox->setTitle(i18n("Album &Library Path"));
     
-    d->albumPathEdit = new QLineEdit(albumPathBox);
+    d->albumPathEdit = new KURLRequester(albumPathBox);
+    d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
     QWhatsThis::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
-                                            "library in your computer.\n"
-                                            "Write access is required for this path."));
+                                            "library in your computer."
+                                            "<p>Write access is required for this path and do not use a "
+                                            "remote path here, like an NFS mounted file system."));
     
-    QPushButton *changePathButton = new QPushButton(i18n("&Change..."),
-                                                    albumPathBox);
-    connect(changePathButton, SIGNAL(clicked()),
-            this, SLOT(slotChangeAlbumPath()));
-    connect( d->albumPathEdit, SIGNAL(textChanged(const QString&)),
-                this, SLOT(slotPathEdited(const QString&)) );
+
+    connect(d->albumPathEdit, SIGNAL(urlSelected(const QString &)),
+            this, SLOT(slotChangeAlbumPath(const QString &)));
+
+    connect(d->albumPathEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotPathEdited(const QString&)) );
     
     layout->addWidget(albumPathBox);
     
@@ -128,7 +129,7 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     iconTextGroup->setColumnLayout(0, Qt::Vertical );
     iconTextGroup->layout()->setMargin(KDialog::marginHint());
     QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 3, 8,
-                                                        KDialog::spacingHint());
+                                                     KDialog::spacingHint());
     
     d->iconShowNameBox = new QCheckBox(iconTextGroup);
     d->iconShowNameBox->setText(i18n("Show file &name"));
@@ -176,10 +177,9 @@ SetupGeneral::~SetupGeneral()
 void SetupGeneral::applySettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
-
     if (!settings) return;
 
-    settings->setAlbumLibraryPath(d->albumPathEdit->text());
+    settings->setAlbumLibraryPath(d->albumPathEdit->url());
 
     settings->setShowToolTips(d->showToolTipsBox->isChecked());
 
@@ -200,7 +200,7 @@ void SetupGeneral::readSettings()
 
     if (!settings) return;
 
-    d->albumPathEdit->setText(settings->getAlbumLibraryPath());
+    d->albumPathEdit->setURL(settings->getAlbumLibraryPath());
 
     d->showToolTipsBox->setChecked(settings->getShowToolTips());
 
@@ -213,10 +213,8 @@ void SetupGeneral::readSettings()
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
 }
 
-void SetupGeneral::slotChangeAlbumPath()
+void SetupGeneral::slotChangeAlbumPath(const QString &result)
 {
-    QString result = KFileDialog::getExistingDirectory(d->albumPathEdit->text(), this);
-
     if (KURL(result).equals(KURL(QDir::homeDirPath()), true)) 
     {
         KMessageBox::sorry(0, i18n("Sorry; cannot use home directory as albums library."));
@@ -229,12 +227,6 @@ void SetupGeneral::slotChangeAlbumPath()
     {
         KMessageBox::information(0, i18n("No write access for this path.\n"
                                          "Warning: the comments and tag features will not work."));
-    	return;
-    }
-
-    if (!result.isEmpty()) 
-    {
-        d->albumPathEdit->setText(result);
     }
 }
 
@@ -248,7 +240,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
     if (!newPath.startsWith("/")) 
     {
-        d->albumPathEdit->setText(QDir::homeDirPath()+"/"+newPath);
+        d->albumPathEdit->setURL(QDir::homeDirPath() + "/" + newPath);
     }
 
     QFileInfo targetPath(newPath);
