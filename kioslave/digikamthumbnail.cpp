@@ -150,7 +150,7 @@ static QImage loadPNG(const QString& path)
     int                 bit_depth, color_type, interlace_type;
 
     has_alpha = 0;
-    has_grey = 0;
+    has_grey  = 0;
 
     QImage qimage;
 
@@ -215,7 +215,6 @@ static QImage loadPNG(const QString& path)
 
     if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY)
         has_grey = 1;
-
 
     unsigned char     **lines;
     int                 i;
@@ -370,12 +369,9 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         if (exif)
             exifRotate(url.path(), img);
 
-        img.setText(QString("Thumb::URI").latin1(),
-                     0, uri);
-        img.setText(QString("Thumb::MTime").latin1(),
-                     0, QString::number(st.st_mtime));
-        img.setText(QString("Software").latin1(),
-                     0, QString("Digikam Thumbnail Generator"));
+        img.setText(QString("Thumb::URI").latin1(), 0, uri);
+        img.setText(QString("Thumb::MTime").latin1(), 0, QString::number(st.st_mtime));
+        img.setText(QString("Software").latin1(), 0, QString("Digikam Thumbnail Generator"));
 
         KTempFile temp(thumbPath + "-digikam-", ".png");
         if (temp.status() == 0)
@@ -443,8 +439,7 @@ extern "C"
 {
     static void myjpeg_error_exit(j_common_ptr cinfo)
     {
-        myjpeg_error_mgr* myerr =
-            (myjpeg_error_mgr*) cinfo->err;
+        myjpeg_error_mgr* myerr = (myjpeg_error_mgr*) cinfo->err;
 
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
@@ -455,21 +450,22 @@ extern "C"
 
 bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 {
-    QString format=QImageIO::imageFormat(path);
+    QString format = QImageIO::imageFormat(path);
     if (format !="JPEG") return false;
 
     FILE* inputFile=fopen(QFile::encodeName(path), "rb");
     if(!inputFile)
         return false;
 
-    struct jpeg_decompress_struct    cinfo;
-    struct myjpeg_error_mgr jerr;
+    struct jpeg_decompress_struct cinfo;
+    struct myjpeg_error_mgr       jerr;
 
     // JPEG error handling - thanks to Marcus Meissner
     cinfo.err             = jpeg_std_error(&jerr);
     cinfo.err->error_exit = myjpeg_error_exit;
 
-    if (setjmp(jerr.setjmp_buffer)) {
+    if (setjmp(jerr.setjmp_buffer)) 
+    {
         jpeg_destroy_decompress(&cinfo);
         fclose(inputFile);
         return false;
@@ -498,11 +494,11 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
         case JCS_GRAYSCALE:
         case JCS_RGB:
         case JCS_YCbCr:
-            cinfo.out_color_space     = JCS_RGB;
+            cinfo.out_color_space = JCS_RGB;
             break;
         case JCS_CMYK:
         case JCS_YCCK:
-            cinfo.out_color_space     = JCS_CMYK;
+            cinfo.out_color_space = JCS_CMYK;
             break;
     }
 
@@ -528,17 +524,16 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
             img.create( cinfo.output_width, cinfo.output_height, 32 );
             break;
         case 1: // B&W image
-            img.create( cinfo.output_width, cinfo.output_height,
-                        8, 256 );
-            for (int i=0; i<256; i++)
-                img.setColor(i, qRgb(i,i,i));
+            img.create( cinfo.output_width, cinfo.output_height, 8, 256 );
+            for (int i = 0 ; i < 256 ; i++)
+                img.setColor(i, qRgb(i, i, i));
             break;
     }
 
     uchar** lines = img.jumpTable();
     while (cinfo.output_scanline < cinfo.output_height)
-        jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline,
-                            cinfo.output_height);
+        jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
+        
     jpeg_finish_decompress(&cinfo);
 
     // Expand 24->32 bpp
