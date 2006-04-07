@@ -46,6 +46,7 @@ BUGFIX from B.K.O:
 ==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
 ==> 113997 (option to store tags in image)
 ==> 123742 (preview-pictures seem to be handled differently by digiKam and Konqueror)
-==> 121308 (Mass storage and PTP usability).
+==> 121308 (Mass storage and PTP usability)
+==> 121306 (Add copyright/license during download)
 
 ...
