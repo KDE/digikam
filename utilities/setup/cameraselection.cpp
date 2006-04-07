@@ -31,7 +31,7 @@
 #include <qlayout.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qlineedit.h>
+#include <qwhatsthis.h>
 
 // KDE includes.
 
@@ -40,6 +40,7 @@
 #include <kurlrequester.h>
 #include <klocale.h>
 #include <klistview.h>
+#include <klineedit.h>
 
 // Local includes.
 
@@ -65,8 +66,6 @@ public:
         umsMountURL      = 0;
     }
 
-    QLineEdit     *titleEdit;
-
     QVButtonGroup *portButtonGroup;
 
     QRadioButton  *usbButton;
@@ -80,6 +79,8 @@ public:
     QString        UMSCameraNameShown;
 
     QStringList    serialPortList;
+    
+    KLineEdit     *titleEdit;
     
     KListView     *listView;
 
@@ -98,15 +99,14 @@ CameraSelection::CameraSelection( QWidget* parent )
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 5, 5 ); 
+    QVBoxLayout *topLayout = new QVBoxLayout( page ); 
 
     // --------------------------------------------------------------
 
     QGroupBox* mainBox = new QGroupBox( 0, Qt::Vertical, i18n( "Camera Configuration" ), page );
     mainBox->setInsideMargin(KDialogBase::marginHint());
     mainBox->setInsideSpacing(KDialogBase::spacingHint());  
-    
-    QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout(), 5, 1, KDialog::spacingHint() );
+    QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout(), 6, 1, KDialog::spacingHint() );
     
     // --------------------------------------------------------------
 
@@ -115,11 +115,15 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(KListView::LastColumn);
     d->listView->setMinimumWidth(350);
-
+    QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All default settings on the right "
+                                       "will be set automaticly.</p><p>This list have been generated "
+                                       "using gphoto2 library installed in your computer.</p>"));
+    
     // --------------------------------------------------------------
 
     QGroupBox* titleBox = new QGroupBox( 1, Qt::Vertical, i18n("Camera Title"), mainBox );
-    d->titleEdit = new QLineEdit( titleBox );
+    d->titleEdit = new KLineEdit( titleBox );
+    QWhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to indentify this camera.</p>"));
     
     // --------------------------------------------------------------
     
@@ -128,9 +132,11 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
+    QWhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
+    QWhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
     
@@ -140,6 +146,8 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
+    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. This option is only "
+                                               "require if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------
 
@@ -150,31 +158,42 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+    QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This option is only "
+                                          "require if you use an <b>Usb Mass Storage</b> camera.</p>"));
     
     // --------------------------------------------------------------
     
+    KActiveLabel* link = new KActiveLabel(mainBox);
+    link->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera (which appears like a "
+                       "removable drive), please use <a href=\"umscamera\">%1</a> from camera list.</p>")
+                       .arg(d->UMSCameraNameShown));
+    
     KActiveLabel* explanation = new KActiveLabel(mainBox);
-    explanation->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera (which appears like a "
-                              "removable drive), please use <b>%1</b> from camera list.<p> "
-                              "<p>To see a fresh list of supported cameras, take a look at "
-                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>")
-                              .arg(d->UMSCameraNameShown));    
+    explanation->setText(i18n("<p>To see a fresh list of supported cameras, take a look at "
+                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>"));    
 
     // --------------------------------------------------------------
     
-    mainBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
+    mainBoxLayout->addMultiCellWidget( d->listView, 0, 6, 0, 0 );
     mainBoxLayout->addMultiCellWidget( titleBox, 0, 0, 1, 1 );
     mainBoxLayout->addMultiCellWidget( d->portButtonGroup, 1, 1, 1, 1 );
     mainBoxLayout->addMultiCellWidget( portPathBox, 2, 2, 1, 1 );
     mainBoxLayout->addMultiCellWidget( umsMountBox, 3, 3, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( explanation, 4, 4, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( link, 4, 4, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( explanation, 5, 5, 1, 1 );
     mainBoxLayout->setColStretch( 0, 10 );
-    mainBoxLayout->setRowStretch( 5, 10 );
+    mainBoxLayout->setRowStretch( 6, 10 );
 
     topLayout->addWidget( mainBox );
 
     // Connections --------------------------------------------------
 
+    disconnect(link, SIGNAL(linkClicked(const QString &)),
+               link, SLOT(openLink(const QString &)));
+    
+    connect(link, SIGNAL(linkClicked(const QString &)),
+            this, SLOT(slotUMSCameraLinkUsed()));
+    
     connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
             this, SLOT(slotSelectionChanged(QListViewItem *)));
 
@@ -193,6 +212,16 @@ CameraSelection::CameraSelection( QWidget* parent )
 CameraSelection::~CameraSelection()
 {
     delete d;
+}
+
+void CameraSelection::slotUMSCameraLinkUsed()
+{
+    QListViewItem *item = d->listView->findItem(d->UMSCameraNameShown, 0);
+    if (item)
+    {
+        d->listView->setCurrentItem(item);
+        d->listView->ensureItemVisible(item);
+    }
 }
 
 void CameraSelection::setCamera(const QString& title, const QString& model,
