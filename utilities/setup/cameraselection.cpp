@@ -35,6 +35,7 @@
 
 // KDE includes.
 
+#include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kactivelabel.h>
 #include <kurlrequester.h>
@@ -161,19 +162,34 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-    QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This option is only "
-                                          "require if you use an <b>Usb Mass Storage</b> camera.</p>"));
+    QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
+                                          "option is only require if you use an <b>Usb Mass Storage</b> "
+                                          "camera.</p>"));
     
     // --------------------------------------------------------------
     
-    KActiveLabel* link = new KActiveLabel(mainBox);
+    QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, mainBox );
+    box2->setFrameStyle( QFrame::NoFrame );
+    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 1, KDialog::spacingHint() );
+
+    QLabel* logo = new QLabel( box2 );
+
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 92, 
+                    KIcon::DefaultState, 0, true));
+
+    KActiveLabel* link = new KActiveLabel(box2);
     link->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera (which appears like a "
                        "removable drive), please use <a href=\"umscamera\">%1</a> from camera list.</p>")
                        .arg(d->UMSCameraNameShown));
     
-    KActiveLabel* explanation = new KActiveLabel(mainBox);
+    KActiveLabel* explanation = new KActiveLabel(box2);
     explanation->setText(i18n("<p>To see a fresh list of supported cameras, take a look at "
-                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>"));    
+                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>"));
+
+    box2Layout->addMultiCellWidget( logo, 0, 1, 0, 0 );
+    box2Layout->addMultiCellWidget( link, 0, 0, 1, 1 );
+    box2Layout->addMultiCellWidget( explanation, 1, 1, 1, 1 );
 
     // --------------------------------------------------------------
     
@@ -182,8 +198,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     mainBoxLayout->addMultiCellWidget( d->portButtonGroup, 1, 1, 1, 1 );
     mainBoxLayout->addMultiCellWidget( portPathBox, 2, 2, 1, 1 );
     mainBoxLayout->addMultiCellWidget( umsMountBox, 3, 3, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( link, 4, 4, 1, 1 );
-    mainBoxLayout->addMultiCellWidget( explanation, 5, 5, 1, 1 );
+    mainBoxLayout->addMultiCellWidget( box2, 4, 5, 1, 1 );
     mainBoxLayout->setColStretch( 0, 10 );
     mainBoxLayout->setRowStretch( 6, 10 );
 
