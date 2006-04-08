@@ -158,6 +158,7 @@ bool ExifWidget::decodeMetadata()
             std::ostringstream os;
             os << *md;
             QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            tagValue.replace("\n", " ");
 
             // We apply a filter to get only standard Exif tags, not maker notes.
             if (m_keysFilter.contains(key.section(".", 1, 1)))

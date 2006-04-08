@@ -156,6 +156,7 @@ bool MakerNoteWidget::decodeMetadata()
             std::ostringstream os;
             os << *md;
             QString value = QString::fromLocal8Bit(os.str().c_str());
+            value.replace("\n", " ");
 
             // We apply a filter to get only standard Exif tags, not maker notes.
             if (!m_keysFilter.contains(key.section(".", 1, 1)))

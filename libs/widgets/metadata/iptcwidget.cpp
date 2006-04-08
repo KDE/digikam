@@ -131,6 +131,8 @@ bool IptcWidget::decodeMetadata()
             std::ostringstream os;
             os << *md;
             QString value = QString::fromLocal8Bit(os.str().c_str());
+            // To make a string just on one line.
+            value.replace("\n", " ");
 
             // Some IPTC key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
