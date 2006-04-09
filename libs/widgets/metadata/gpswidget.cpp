@@ -83,7 +83,8 @@ public:
     {
         longLabel     = 0;
         latLabel      = 0;
-        detailsButton = 0;
+        detailsButton1 = 0;
+        detailsButton2 = 0;
         map           = 0;
         longTitle     = 0;
         latTitle      = 0;
@@ -97,7 +98,8 @@ public:
     QStringList     tagsfilter;
     QStringList     keysFilter;
     
-    QPushButton    *detailsButton;
+    QPushButton    *detailsButton1;
+    QPushButton    *detailsButton2;
     
     WorldMapWidget *map;
 };
@@ -123,19 +125,23 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     d->longLabel = new QLabel(gpsInfo);
     d->latLabel  = new QLabel(gpsInfo);
 
-    d->detailsButton = new QPushButton(i18n("More details..."), gpsInfo);
+    d->detailsButton1 = new QPushButton(i18n("Show with Google Maps"), gpsInfo);
+    d->detailsButton2 = new QPushButton(i18n("Show with MapQuest"), gpsInfo);
 
     layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
     layout->addMultiCellWidget(d->latTitle, 1, 1, 0, 0);
     layout->addMultiCellWidget(d->latLabel, 1, 1, 1, 1);
     layout->addMultiCellWidget(d->longTitle, 2, 2, 0, 0);
     layout->addMultiCellWidget(d->longLabel, 2, 2, 1, 1);
-    layout->addMultiCellWidget(d->detailsButton, 3, 3, 0, 0);
+    layout->addMultiCellWidget(d->detailsButton1, 3, 3, 0, 0);
+    layout->addMultiCellWidget(d->detailsButton2, 4, 4, 0, 0);
     layout->setColStretch(2, 10);
     layout->setRowStretch(4, 10);
 
-    connect(d->detailsButton, SIGNAL(clicked()),
-            this, SLOT(slotGPSDetails()));
+    connect(d->detailsButton1, SIGNAL(clicked()),
+            this, SLOT(slotGPSDetails1()));
+    connect(d->detailsButton2, SIGNAL(clicked()),
+            this, SLOT(slotGPSDetails2()));
             
     setUserAreaWidget(gpsInfo);
     decodeMetadata();
@@ -189,7 +195,7 @@ bool GPSWidget::decodeMetadata()
             d->longLabel->setEnabled(false);
             d->latLabel->setEnabled(false);
             d->map->setEnabled(false);
-            d->detailsButton->setEnabled(false);
+            d->detailsButton1->setEnabled(false);
             kdDebug() << "Cannot parse EXIF metadata using Exiv2" << endl;
             return false;
         }
@@ -223,7 +229,8 @@ bool GPSWidget::decodeMetadata()
             d->longLabel->setEnabled(false);
             d->latLabel->setEnabled(false);
             d->map->setEnabled(false);
-            d->detailsButton->setEnabled(false);
+            d->detailsButton1->setEnabled(false);
+            d->detailsButton2->setEnabled(false);
             setGPSPosition(0.0, 0.0);
             return false;
         }
@@ -233,7 +240,8 @@ bool GPSWidget::decodeMetadata()
         d->longLabel->setEnabled(true);
         d->latLabel->setEnabled(true);
         d->map->setEnabled(true);
-        d->detailsButton->setEnabled(true);
+        d->detailsButton1->setEnabled(true);
+        d->detailsButton2->setEnabled(true);
         return true;
     }
     catch (Exiv2::Error& e)
@@ -243,7 +251,8 @@ bool GPSWidget::decodeMetadata()
         d->longLabel->setEnabled(false);
         d->latLabel->setEnabled(false);
         d->map->setEnabled(false);
-        d->detailsButton->setEnabled(false);
+        d->detailsButton1->setEnabled(false);
+        d->detailsButton2->setEnabled(false);
         setGPSPosition(0.0, 0.0);
         kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromLocal8Bit(e.what().c_str())
@@ -307,7 +316,20 @@ void GPSWidget::setGPSPosition(double lat, double lng)
     d->map->setGPSPosition(lat, lng);
 }
 
-void GPSWidget::slotGPSDetails(void)
+void GPSWidget::slotGPSDetails1(void)
+{
+    QString val;
+	QString url("http://maps.google.com/?spn=0.1,0.15");
+    url.append("&ll=");
+    url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+    url.append(",");
+    url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+    url.append("&t=h");
+    
+    KApplication::kApplication()->invokeBrowser(url);
+}
+
+void GPSWidget::slotGPSDetails2(void)
 {
     QString val;
     QString url("http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=address&latlongtype=decimal");
@@ -317,7 +339,7 @@ void GPSWidget::slotGPSDetails(void)
     url.append(val.setNum(d->map->getLongitude(), 'f', 8));
     
     KApplication::kApplication()->invokeBrowser(url);
-}
+} 
 
 bool GPSWidget::decodeGPSPosition(void)
 {
