@@ -57,8 +57,7 @@ public:
 
 private slots:
 
-    void slotGPSDetails1(void);
-    void slotGPSDetails2(void);
+    void slotGPSDetails(void);
 
 private:
 
