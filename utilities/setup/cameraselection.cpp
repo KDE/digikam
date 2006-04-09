@@ -23,7 +23,7 @@
 // Qt includes.
 
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -91,8 +91,8 @@ public:
 };
 
 CameraSelection::CameraSelection( QWidget* parent )
-               : KDialogBase(parent, 0, true, i18n("Camera Selection"),
-                             Help|Ok|Cancel, Ok, true)
+               : KDialogBase(Plain, i18n("Camera Configuration"),
+                             Help|Ok|Cancel, Ok, parent, 0, true, true)
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
     d = new CameraSelectionPriv;
@@ -100,62 +100,58 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
 
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
-    
-    QVBoxLayout *topLayout = new QVBoxLayout( page ); 
-
-    // --------------------------------------------------------------
-
-    QGroupBox* mainBox = new QGroupBox( 0, Qt::Vertical, i18n( "Camera Configuration" ), page );
-    mainBox->setInsideMargin(KDialogBase::marginHint());
-    mainBox->setInsideSpacing(KDialogBase::spacingHint());  
-    QGridLayout* mainBoxLayout = new QGridLayout( mainBox->layout(), 6, 1, KDialog::spacingHint() );
+    QGridLayout* mainBoxLayout = new QGridLayout( plainPage(), 6, 1, 0, KDialog::spacingHint() );
+    mainBoxLayout->setColStretch( 0, 10 );
+    mainBoxLayout->setRowStretch( 6, 10 );
     
     // --------------------------------------------------------------
 
-    d->listView = new KListView( mainBox );
+    d->listView = new KListView( plainPage() );
     d->listView->addColumn( i18n("Camera List") );
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setResizeMode(KListView::LastColumn);
     d->listView->setMinimumWidth(350);
-    QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All default settings on the right "
+    QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
+                                       "default settings on the right panel "
                                        "will be set automaticly.</p><p>This list have been generated "
                                        "using gphoto2 library installed in your computer.</p>"));
     
     // --------------------------------------------------------------
 
-    QGroupBox* titleBox = new QGroupBox( 1, Qt::Vertical, i18n("Camera Title"), mainBox );
+    QVGroupBox* titleBox = new QVGroupBox( i18n("Camera Title"), plainPage() );
     d->titleEdit = new KLineEdit( titleBox );
-    QWhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to indentify this camera.</p>"));
+    QWhatsThis::add( d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
+                                        "identify this camera.</p>"));
     
     // --------------------------------------------------------------
     
-    d->portButtonGroup = new QVButtonGroup( i18n("Camera Port Type"), mainBox );
+    d->portButtonGroup = new QVButtonGroup( i18n("Camera Port Type"), plainPage() );
     d->portButtonGroup->setRadioButtonExclusive( true );
 
     d->usbButton = new QRadioButton( d->portButtonGroup );
     d->usbButton->setText( i18n( "USB" ) );
-    QWhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your computer using an USB cable.</p>"));
+    QWhatsThis::add( d->usbButton, i18n("<p>Select this option if your camera is connected to your "
+                     "computer using an USB cable.</p>"));
 
     d->serialButton = new QRadioButton( d->portButtonGroup );
     d->serialButton->setText( i18n( "Serial" ) );
-    QWhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your computer using a serial cable.</p>"));
+    QWhatsThis::add( d->serialButton, i18n("<p>Select this option if your camera is connected to your "
+                     "computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
     
-    QGroupBox* portPathBox = new QGroupBox( 1, Qt::Horizontal, i18n( "Camera Port Path" ), mainBox );
+    QVGroupBox* portPathBox = new QVGroupBox( i18n( "Camera Port Path" ), plainPage() );
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
 
     d->portPathComboBox = new QComboBox( false, portPathBox );
     d->portPathComboBox->setDuplicatesEnabled( false );
-    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. This option is only "
-                                               "require if you use a serial camera.</p>"));
+    QWhatsThis::add( d->portPathComboBox, i18n("<p>Select here the serial port to use on your computer. "
+                     "This option is only require if you use a serial camera.</p>"));
 
     // --------------------------------------------------------------
 
-    QGroupBox* umsMountBox = new QGroupBox( 1, Qt::Horizontal, i18n( "Camera Mount Path"), mainBox );
+    QVGroupBox* umsMountBox = new QVGroupBox( i18n( "Camera Mount Path"), plainPage() );
 
     QLabel* umsMountLabel = new QLabel( umsMountBox );
     umsMountLabel->setText( i18n( "Note: only for USB/IEEE mass storage camera" ) );
@@ -168,28 +164,30 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     // --------------------------------------------------------------
     
-    QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, mainBox );
+    QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, plainPage() );
     box2->setFrameStyle( QFrame::NoFrame );
-    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 1, KDialog::spacingHint() );
+    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 2 );
 
     QLabel* logo = new QLabel( box2 );
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 92, 
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 64, 
                     KIcon::DefaultState, 0, true));
 
     KActiveLabel* link = new KActiveLabel(box2);
-    link->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera (which appears like a "
-                       "removable drive), please use <a href=\"umscamera\">%1</a> from camera list.</p>")
+    link->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera<br>"
+                       "(which appears like a removable drive), please<br>"
+                       "use <a href=\"umscamera\">%1</a> from camera list.</p>") 
                        .arg(d->UMSCameraNameShown));
     
     KActiveLabel* explanation = new KActiveLabel(box2);
-    explanation->setText(i18n("<p>To see a fresh list of supported cameras, take a look at "
-                              "<a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>this url</a>.</p>"));
+    explanation->setText(i18n("<p>A fresh list of camera settings to use is<br>"
+                              "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
+                              "this url</a>.</p>"));
 
-    box2Layout->addMultiCellWidget( logo, 0, 1, 0, 0 );
-    box2Layout->addMultiCellWidget( link, 0, 0, 1, 1 );
-    box2Layout->addMultiCellWidget( explanation, 1, 1, 1, 1 );
+    box2Layout->addMultiCellWidget( logo, 0, 0, 0, 0 );
+    box2Layout->addMultiCellWidget( link, 0, 1, 1, 1 );
+    box2Layout->addMultiCellWidget( explanation, 1, 2, 1, 1 );
 
     // --------------------------------------------------------------
     
@@ -199,10 +197,6 @@ CameraSelection::CameraSelection( QWidget* parent )
     mainBoxLayout->addMultiCellWidget( portPathBox, 2, 2, 1, 1 );
     mainBoxLayout->addMultiCellWidget( umsMountBox, 3, 3, 1, 1 );
     mainBoxLayout->addMultiCellWidget( box2, 4, 5, 1, 1 );
-    mainBoxLayout->setColStretch( 0, 10 );
-    mainBoxLayout->setRowStretch( 6, 10 );
-
-    topLayout->addWidget( mainBox );
 
     // Connections --------------------------------------------------
 
