@@ -61,6 +61,7 @@ private:
     
 private slots:
 
+    void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();
     void slotSelectionChanged(QListViewItem *item);
     void slotPortChanged();

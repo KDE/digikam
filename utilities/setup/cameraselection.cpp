@@ -80,6 +80,7 @@ public:
 
     QString        UMSCameraNameActual;
     QString        UMSCameraNameShown;
+    QString        PTPCameraNameShown;
 
     QStringList    serialPortList;
     
@@ -99,6 +100,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     setHelp("cameraselection.anchor", "digikam");
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
+    d->PTPCameraNameShown  = QString("USB PTP Class Camera");
 
     QGridLayout* mainBoxLayout = new QGridLayout( plainPage(), 6, 1, 0, KDialog::spacingHint() );
     mainBoxLayout->setColStretch( 0, 10 );
@@ -166,7 +168,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, plainPage() );
     box2->setFrameStyle( QFrame::NoFrame );
-    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 2 );
+    QGridLayout* box2Layout = new QGridLayout( box2->layout(), 1, 5 );
 
     QLabel* logo = new QLabel( box2 );
 
@@ -179,15 +181,22 @@ CameraSelection::CameraSelection( QWidget* parent )
                        "(which appears like a removable drive), please<br>"
                        "use <a href=\"umscamera\">%1</a> from camera list.</p>") 
                        .arg(d->UMSCameraNameShown));
-    
+
+    KActiveLabel* link2 = new KActiveLabel(box2);
+    link2->setText(i18n("<p>To set a <b>Generic PTP Usb Device</b><br>"
+                        "(which use Picture Transfert Protocol), please<br>"
+                        "use <a href=\"ptpcamera\">%1</a> from camera list.</p>")
+                        .arg(d->PTPCameraNameShown));
+                           
     KActiveLabel* explanation = new KActiveLabel(box2);
-    explanation->setText(i18n("<p>A fresh list of camera settings to use is<br>"
+    explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this url</a>.</p>"));
 
     box2Layout->addMultiCellWidget( logo, 0, 0, 0, 0 );
     box2Layout->addMultiCellWidget( link, 0, 1, 1, 1 );
-    box2Layout->addMultiCellWidget( explanation, 1, 2, 1, 1 );
+    box2Layout->addMultiCellWidget( link2, 2, 3, 1, 1 );
+    box2Layout->addMultiCellWidget( explanation, 4, 5, 1, 1 );
 
     // --------------------------------------------------------------
     
@@ -205,7 +214,13 @@ CameraSelection::CameraSelection( QWidget* parent )
     
     connect(link, SIGNAL(linkClicked(const QString &)),
             this, SLOT(slotUMSCameraLinkUsed()));
+
+    disconnect(link2, SIGNAL(linkClicked(const QString &)),
+               link2, SLOT(openLink(const QString &)));
     
+    connect(link2, SIGNAL(linkClicked(const QString &)),
+            this, SLOT(slotPTPCameraLinkUsed()));
+                
     connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
             this, SLOT(slotSelectionChanged(QListViewItem *)));
 
@@ -230,6 +245,16 @@ CameraSelection::~CameraSelection()
 void CameraSelection::slotUMSCameraLinkUsed()
 {
     QListViewItem *item = d->listView->findItem(d->UMSCameraNameShown, 0);
+    if (item)
+    {
+        d->listView->setCurrentItem(item);
+        d->listView->ensureItemVisible(item);
+    }
+}
+
+void CameraSelection::slotPTPCameraLinkUsed()
+{
+    QListViewItem *item = d->listView->findItem(d->PTPCameraNameShown, 0);
     if (item)
     {
         d->listView->setCurrentItem(item);
