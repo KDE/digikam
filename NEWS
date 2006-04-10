@@ -50,5 +50,6 @@ BUGFIX from B.K.O:
 ==> 121306 (Add copyright/license during download)
 ==> 111560 (Be able to locate photos on a map)
 ==> 122747 (Will not build with GCC 4.1)
+==> 91811  (find pictures by meta tag info, date)
 
 ...
