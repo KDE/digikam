@@ -380,13 +380,14 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     if (albumURL.isEmpty())
         return;
 
-    QString comment;
+    QString   comment;
     QDateTime datetime;
+    int       rating;
     
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    readJPEGMetaData(filePath, comment, datetime);
+    readJPEGMetaData(filePath, comment, datetime, rating);
     
     if ( !datetime.isValid() )
     {
@@ -395,20 +396,21 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     }
 
     AlbumDB* dbstore = AlbumManager::instance()->albumDB();
-    dbstore->addItem(albumID, filename, datetime,comment);
+    dbstore->addItem(albumID, filename, datetime, comment, rating);
 }
 
 void ScanLib::updateItemDate(const QString& albumURL,
                              const QString& filename,
                              int albumID)
 {
-    QString comment;
+    QString   comment;
     QDateTime datetime;
+    int       rating;
     
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
     
-    readJPEGMetaData(filePath, comment, datetime);
+    readJPEGMetaData(filePath, comment, datetime, rating);
     
     if ( !datetime.isValid() )
     {

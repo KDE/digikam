@@ -571,7 +571,7 @@ QString DMetadata::getImageComment() const
            
         // In second, we trying to get Exif comments   
                 
-        if (m_exifMetadata.isEmpty())
+        if (!m_exifMetadata.isEmpty())
         {
             Exiv2::ExifData exifData;
             exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
@@ -589,7 +589,7 @@ QString DMetadata::getImageComment() const
         
         // In third, we trying to get IPTC comments   
                 
-        if (m_iptcMetadata.isEmpty())
+        if (!m_iptcMetadata.isEmpty())
         {
             Exiv2::IptcData iptcData;
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
@@ -692,7 +692,7 @@ int DMetadata::getImageRating() const
         if (m_filePath.isEmpty())
             return -1;
             
-        if (m_iptcMetadata.isEmpty())
+        if (!m_iptcMetadata.isEmpty())
         {
             Exiv2::IptcData iptcData;
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());
@@ -793,7 +793,7 @@ QStringList DMetadata::getImageKeywords() const
 {
     try
     {    
-        if (m_iptcMetadata.isEmpty())
+        if (!m_iptcMetadata.isEmpty())
         {
             Exiv2::IptcData iptcData;
             iptcData.load((const Exiv2::byte*)m_iptcMetadata.data(), m_iptcMetadata.size());

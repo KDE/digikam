@@ -1285,15 +1285,16 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 {
     QString   comment;
     QDateTime datetime;
-
-    Digikam::readJPEGMetaData(filePath, comment, datetime);
+    int       rating;
+    
+    Digikam::readJPEGMetaData(filePath, comment, datetime, rating);
 
     if (!datetime.isValid())
     {
         QFileInfo info(filePath);
         datetime = info.lastModified();
     }
-
+       
     m_sqlDB.execSql(QString("REPLACE INTO Images "
                             "(dirid, name, datetime, caption) "
                             "VALUES(%1, '%2', '%3', '%4')")
@@ -1301,6 +1302,18 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
                          escapeString(QFileInfo(filePath).fileName()),
                          datetime.toString(Qt::ISODate),
                          escapeString(comment)));
+
+    Q_LLONG imageID = m_sqlDB.lastInsertedRow();
+    
+    if (imageID != -1 && rating != -1)
+    {
+        m_sqlDB.execSql(QString("REPLACE INTO ImageProperties "
+                                "(imageid, property, value) "
+                                "VALUES(%1, '%2', '%3');")
+                        .arg(imageID)
+                        .arg("Rating")
+                        .arg(rating) );                        
+    } 
 }
 
 void kio_digikamalbums::delImage(int albumID, const QString& name)

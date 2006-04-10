@@ -966,18 +966,23 @@ int AlbumDB::getOrCreateAlbumId(const QString& folder)
 Q_LLONG AlbumDB::addItem(int albumID,
                          const QString& name,
                          const QDateTime& datetime,
-                         const QString& comment)
+                         const QString& comment,
+                         int rating)
 {
     execSql ( QString ("REPLACE INTO Images "
                        "( caption , datetime, name, dirid ) "
                        " VALUES ('%1','%2','%3',%4) " )
-
               .arg(escapeString(comment),
                    datetime.toString(Qt::ISODate),
                    escapeString(name),
                    QString::number(albumID)) );
-
-    return sqlite3_last_insert_rowid(m_db);
+    
+    Q_LLONG item = sqlite3_last_insert_rowid(m_db);
+    
+    if ( item != -1 && rating != -1 )               
+        setItemRating(item, rating);
+    
+    return item;
 }
 
 bool AlbumDB::setItemDate(Q_LLONG imageID,

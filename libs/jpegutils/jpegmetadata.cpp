@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-06-13
- * Description : 
+ * Description : JPEG files metadata parser.
  * 
  * Copyright 2005 by Renchi Raju
-
+ * Copyright 2006 by Caulier Gilles
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -31,12 +33,12 @@
 namespace Digikam
 {
 
-void readJPEGMetaData(const QString& filePath,
-                      QString& comments,
-                      QDateTime& datetime)
+void readJPEGMetaData(const QString& filePath, QString& comments,
+                      QDateTime& datetime, int& rating)
 {
     comments = QString();
     datetime = QDateTime();
+    rating   = 0;
     
     KFileMetaInfo metaInfo(filePath, "image/jpeg", KFileMetaInfo::Fastest);
 
@@ -49,16 +51,20 @@ void readJPEGMetaData(const QString& filePath,
         
             // Trying to get comments from image :
             // In first, from standard JPEG comments, or
-            // In second, from Exif comments tag, or
+            // In second, from EXIF comments tag, or
             // In third, from IPTC comments tag.
                 
             comments = metadata.getImageComment();
             
             // Trying to get date and time from image :
-            // In first, from Exif date & time tags, or
+            // In first, from EXIF date & time tags, or
             // In second, from IPTC date & time tags.
             
             datetime = metadata.getImageDateTime();
+
+            // Trying to get image rating from IPTC Urgency tag.
+            
+            rating = metadata.getImageRating();
         }
     }
 }

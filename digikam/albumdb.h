@@ -256,11 +256,14 @@ public:
      * the exif-datetime, but if not available the modification date.
      * @param comment The user comment as found in the exif-headers of the 
      * file.
+     * @param rating The user rating as found in the iptc-headers of the 
+     * file.
      * @return the id of item added or -1 if it fails
      */
     Q_LLONG addItem(int albumID, const QString& name,
                     const QDateTime& datetime,
-                    const QString& comment);
+                    const QString& comment,
+                    int rating);
     
     /**
      * Update the date of a item to supplied date
