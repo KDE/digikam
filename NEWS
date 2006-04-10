@@ -19,12 +19,12 @@ NEW FEATURES:
 - New implementation to load/save images file using a separate thread.
 - New powerfull Noise Reduction algorithm based on dcamnoise2 implemention.
 - New powerfull Black & White converter tool using curves adjustements.
-- Support of ICC profiles management using LCMS.
+- Support of ICC color profiles management using LCMS into Image editor/showfoto.
 - Advanced settings to load RAW files in Image Editor using external dcraw instance.
-- New plugin to experiment ICC profiles color corrections into images.
+- New plugin to experiment ICC profiles to perform color corrections into images.
 - New preview rendering modes in all color correction image plugins dialogs.
 - New zooming capabilities in image plugins dialogs.
-- Tags/Rating/DateTime/Comments/PhotographersID are now stored in Exif and/or IPTC metadata tags.
+- Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif and/or IPTC metadata tags.
 - CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
 - digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
 
@@ -43,7 +43,7 @@ BUGFIX from B.K.O:
 ==> 120052 (redraw problem with whatthis info of an image show and start scrolling with the mouse)
 ==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursur keys )
 ==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
-==> 121905 (albums not displayed corectly and digikam crashes with St9bad_alloc)
+==> 121905 (albums not displayed correctly and digikam crashes with St9bad_alloc)
 ==> 113997 (option to store tags in image)
 ==> 123742 (preview-pictures seem to be handled differently by digiKam and Konqueror)
 ==> 121308 (Mass storage and PTP usability)
