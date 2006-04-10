@@ -48,5 +48,6 @@ BUGFIX from B.K.O:
 ==> 123742 (preview-pictures seem to be handled differently by digiKam and Konqueror)
 ==> 121308 (Mass storage and PTP usability)
 ==> 121306 (Add copyright/license during download)
+==> 111560 (Be able to locate photos on a map)
 
 ...
