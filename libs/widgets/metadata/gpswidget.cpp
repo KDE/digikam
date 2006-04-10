@@ -119,30 +119,41 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     for (int i=0 ; QString(ExifHumanList[i]) != QString("-1") ; i++)
         d->tagsfilter << ExifHumanList[i];
 
+    // --------------------------------------------------------
+            
     QWidget *gpsInfo    = new QWidget(this);
     QGridLayout *layout = new QGridLayout(gpsInfo, 4, 2);
+    d->map              = new WorldMapWidget(gpsInfo);
 
-    d->map = new WorldMapWidget(gpsInfo);
-
+    // --------------------------------------------------------
+        
     d->latTitle  = new QLabel(i18n("Latitude:"), gpsInfo);
     d->longTitle = new QLabel(i18n("Longitude:"), gpsInfo);
     d->longLabel = new QLabel(gpsInfo);
     d->latLabel  = new QLabel(gpsInfo);
+    d->longLabel->setAlignment( AlignBottom | AlignRight );
+    d->latLabel->setAlignment( AlignBottom | AlignRight );
 
+    // --------------------------------------------------------
+    
     QGroupBox* box2 = new QGroupBox( 0, Qt::Vertical, gpsInfo );
+    box2->setInsideMargin(0);
+    box2->setInsideSpacing(0);    
     box2->setFrameStyle( QFrame::NoFrame );
     QGridLayout* box2Layout = new QGridLayout( box2->layout(), 0, 2, KDialog::spacingHint() );
 
     d->detailsCombo  = new QComboBox( false, box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsCombo->insertItem(QString("Map Quest"), 0);
-    d->detailsCombo->insertItem(QString("Google Maps"), 1);
-    d->detailsCombo->insertItem(QString("Msn Maps"), 2);
-
+    d->detailsCombo->insertItem(QString("Map Quest"), MapQuest);
+    d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
+    d->detailsCombo->insertItem(QString("Msn Maps"), MsnMaps);
+    
     box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
     box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 1, 1 );
     box2Layout->setColStretch(2, 10);
 
+    // --------------------------------------------------------
+    
     layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
     layout->addMultiCellWidget(d->latTitle, 1, 1, 0, 0);
     layout->addMultiCellWidget(d->latLabel, 1, 1, 1, 1);
@@ -152,6 +163,8 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     layout->setColStretch(2, 10);
     layout->setRowStretch(4, 10);
 
+    // --------------------------------------------------------
+    
     connect(d->detailsButton, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
             
@@ -164,50 +177,58 @@ GPSWidget::~GPSWidget()
     delete d;
 }
 
+int GPSWidget::getWebGPSLocator(void)
+{
+    return ( d->detailsCombo->currentItem() );
+}
+    
+void GPSWidget::setWebGPSLocator(int locator)
+{
+    d->detailsCombo->setCurrentItem(locator);
+}
+    
 void GPSWidget::slotGPSDetails(void)
 {
-    QString val;
+    QString val, url;
 
-    switch(d->detailsCombo->currentItem())
+    switch( getWebGPSLocator() )
     {
-        case 0:  // Map guest
+        case MapQuest:
         {
-            QString url("http://www.mapquest.com/maps/map.adp?searchtype=address"
+            url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
                         "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
             url.append(val.setNum(d->map->getLatitude(), 'f', 8));
             url.append("&longitude=");
             url.append(val.setNum(d->map->getLongitude(), 'f', 8));
-            
-            KApplication::kApplication()->invokeBrowser(url);
             break;
         }
 
-        case 1:  // Google maps
+        case GoogleMaps: 
         {
-            QString url("http://maps.google.com/?spn=0.1,0.15");
+            url.append("http://maps.google.com/?spn=0.1,0.15");
             url.append("&ll=");
             url.append(val.setNum(d->map->getLatitude(), 'f', 8));
             url.append(",");
             url.append(val.setNum(d->map->getLongitude(), 'f', 8));
             url.append("&t=h");
-            KApplication::kApplication()->invokeBrowser(url);
             break;
         }
 
-        case 2:  // Msn Maps
+        case MsnMaps:  
         {
-            QString url("http://maps.msn.com/map.aspx?");
+            url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
             url.append(val.setNum(d->map->getLatitude(), 'f', 8));
             url.append("&lons1=");
             url.append(val.setNum(d->map->getLongitude(), 'f', 8));
             url.append("&name=HERE");            
             url.append("&alts1=7");            
-            KApplication::kApplication()->invokeBrowser(url);
             break;
-        }
+        }        
     }
+    
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 QString GPSWidget::getMetadataTitle(void)

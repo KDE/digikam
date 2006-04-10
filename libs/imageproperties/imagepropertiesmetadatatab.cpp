@@ -140,9 +140,12 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     d->exifWidget->setMode(config->readNumEntry("EXIF Level", ExifWidget::SIMPLE));
     d->makernoteWidget->setMode(config->readNumEntry("MAKERNOTE Level", MakerNoteWidget::SIMPLE));
     d->iptcWidget->setMode(config->readNumEntry("IPTC Level", IptcWidget::SIMPLE));
-    d->gpsWidget->setMode(config->readNumEntry("GPS Level", GPSWidget::SIMPLE));    d->exifWidget->setCurrentItemByKey(config->readEntry("Current EXIF Item", QString()));
+    d->gpsWidget->setMode(config->readNumEntry("GPS Level", GPSWidget::SIMPLE));
+    d->exifWidget->setCurrentItemByKey(config->readEntry("Current EXIF Item", QString()));
     d->makernoteWidget->setCurrentItemByKey(config->readEntry("Current MAKERNOTE Item", QString()));
-    d->iptcWidget->setCurrentItemByKey(config->readEntry("Current IPTC Item", QString()));    d->gpsWidget->setCurrentItemByKey(config->readEntry("Current GPS Item", QString()));
+    d->iptcWidget->setCurrentItemByKey(config->readEntry("Current IPTC Item", QString()));
+    d->gpsWidget->setCurrentItemByKey(config->readEntry("Current GPS Item", QString()));
+    d->gpsWidget->setWebGPSLocator(config->readNumEntry("Current Web GPS Locator", GPSWidget::MapQuest));
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
@@ -158,6 +161,7 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     config->writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
     config->writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
     config->writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
+    config->writeEntry("Current Web GPS Locator", d->gpsWidget->getWebGPSLocator());
     delete d;
 }
 

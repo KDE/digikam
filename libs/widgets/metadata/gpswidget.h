@@ -43,6 +43,15 @@ class DIGIKAM_EXPORT GPSWidget : public MetadataWidget
     
 public:
 
+    enum WebGPSLocator
+    {
+        MapQuest = 0,
+        GoogleMaps,
+        MsnMaps
+    };
+
+public:
+
     GPSWidget(QWidget* parent, const char* name=0);
     ~GPSWidget();
 
@@ -54,6 +63,9 @@ public:
     QString getTagTitle(const QString& key);
 
     QString getMetadataTitle(void);
+    
+    int  getWebGPSLocator(void);
+    void setWebGPSLocator(int locator);
 
 private slots:
 

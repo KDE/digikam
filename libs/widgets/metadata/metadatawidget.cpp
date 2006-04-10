@@ -90,7 +90,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->mainLayout = new QGridLayout(this, 2, 4, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel* modeLabel = new QLabel(i18n("Level of detail:"), this);
-    d->modeCombo = new QComboBox(this);
+    d->modeCombo      = new QComboBox(this);
     d->modeCombo->insertItem(i18n("Simple"));
     d->modeCombo->insertItem(i18n("Full"));
     d->mainLayout->addMultiCellWidget(modeLabel, 0, 0, 0, 1);
@@ -258,34 +258,39 @@ void MetadataWidget::slotPrintMetadata(void)
     if ( printer.setup( this ) )
     {
         QPainter p( &printer );
-	if ( !p.device() ) return;
+        
+        if ( !p.device() ) 
+            return;
+            
         QPaintDeviceMetrics metrics(p.device());
-	int dpiy = metrics.logicalDpiY();
-	int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
-	QRect view( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
-	QFont font(KApplication::font());
- 	font.setPointSize( 10 ); // we define 10pt to be a nice base size for printing
-	QSimpleRichText richText( textmetadata, font,
-				  QString::null,
-				  QStyleSheet::defaultSheet(),
-				  QMimeSourceFactory::defaultFactory(),
-				  view.height() );
-	richText.setWidth( &p, view.width() );
-	int page = 1;
-                
-	do 
+        int dpiy = metrics.logicalDpiY();
+        int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
+        QRect view( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
+        QFont font(KApplication::font());
+        font.setPointSize( 10 ); // we define 10pt to be a nice base size for printing
+        QSimpleRichText richText( textmetadata, font,
+                                  QString::null,
+                                  QStyleSheet::defaultSheet(),
+                                  QMimeSourceFactory::defaultFactory(),
+                                  view.height() );
+        richText.setWidth( &p, view.width() );
+        int page = 1;
+                    
+        do 
         {
-	    richText.draw( &p, margin, margin, view, colorGroup() );
-	    view.moveBy( 0, view.height() );
-	    p.translate( 0 , -view.height() );
-	    p.setFont( font );
-	    p.drawText( view.right() - p.fontMetrics().width( QString::number( page ) ),
-			view.bottom() + p.fontMetrics().ascent() + 5, QString::number( page ) );
-	    if ( view.top() - margin >= richText.height() )
-		break;
-	    printer.newPage();
-	    page++;
-	} 
+            richText.draw( &p, margin, margin, view, colorGroup() );
+            view.moveBy( 0, view.height() );
+            p.translate( 0 , -view.height() );
+            p.setFont( font );
+            p.drawText( view.right() - p.fontMetrics().width( QString::number( page ) ),
+                        view.bottom() + p.fontMetrics().ascent() + 5, QString::number( page ) );
+            
+            if ( view.top() - margin >= richText.height() )
+                break;
+            
+            printer.newPage();
+            page++;
+        } 
         while (true);
     }
 }
