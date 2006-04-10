@@ -30,24 +30,25 @@
 
 B.K.O files to fix :
 
-==> 118501  (Image Editor:   Exif lost when modifying the images)
 ==> 115423  (Main Interface: thumbnails view jumps to top when new photos are added)
+==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
+==> 120241  (Main Interface: utf8 display and edit)
+==> 118501  (Image Editor:   Exif lost when modifying the images)
 ==> 119741  (Image Editor:   restore image editor if already open)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
-==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
-==> 120241  (Main Interface: utf8 display and edit)
-==> 121242  (Showfoto:       mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 ==> 122374  (Image Editor:   ignores read-only permission during saving)
+==> 121242  (Showfoto:       mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 ==> 122747  (General:        Will not build with GCC 4.1)
+==> 91811   (General:        find pictures by meta tag info, date)
 
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
 * Improving metadata support:
    - Better embbeded thumbnail support, especially for TIFF/EP ?
-   - Improved metadata from TIFF file format. Add DNG file format if it's possible...
-   - Improved PNG file format support : PNG vs DNG file format : PNG is the ultimate photographs data container in OpenSource world ?
+   - Add DNG file format.
+   - Improved PNG Metadata file format support.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
