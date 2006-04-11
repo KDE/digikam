@@ -172,9 +172,9 @@ protected:
 
 private:
     
-    QObject              *parent;
-
     CameraControllerPriv *d;
+    
+    QObject              *parent;
 };
 
 CameraThread::CameraThread(CameraController* controller)
