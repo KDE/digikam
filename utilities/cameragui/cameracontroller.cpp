@@ -141,6 +141,7 @@ public:
     bool                    close;
     bool                    overwriteAll;
     bool                    skipAll;
+    bool                    canceled;
     
     int                     downloadTotal;
     
@@ -348,7 +349,7 @@ void CameraThread::run()
     
                     if (fixDateTime || setPhotographerId || setCredits)
                     {
-                        sendInfo(i18n("Set Metadata tags to file %1...").arg(file));
+                        sendInfo(i18n("Setting Metadata tags to file %1...").arg(file));
                         DMetadata metadata(tempURL.path());
                         
                         if (fixDateTime)
@@ -491,7 +492,6 @@ void CameraThread::sendError(const QString& msg)
     QApplication::postEvent(parent, event);
 }
 
-
 void CameraThread::sendInfo(const QString& msg)
 {
     CameraEvent* event = new CameraEvent(CameraEvent::gp_infomsg);
@@ -508,6 +508,7 @@ CameraController::CameraController(QWidget* parent, const QString& model,
 {
     d = new CameraControllerPriv;	
     d->parent        = parent;
+    d->canceled      = false;
     d->close         = false;
     d->overwriteAll  = false;
     d->skipAll       = false;
@@ -536,7 +537,8 @@ CameraController::~CameraController()
     }
     
     d->camera->cancel();
-    d->close = true;
+    d->canceled = true;
+    d->close    = true;
 
     while (d->thread->running())
         d->thread->wait();
@@ -548,6 +550,7 @@ CameraController::~CameraController()
 
 void CameraController::slotConnect()
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_connect;
     d->cmdQueue.enqueue(cmd);
@@ -555,6 +558,7 @@ void CameraController::slotConnect()
 
 void CameraController::listFolders()
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_listfolders;
     d->cmdQueue.enqueue(cmd);
@@ -562,6 +566,7 @@ void CameraController::listFolders()
 
 void CameraController::listFiles(const QString& folder)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_listfiles;
     cmd->map.insert("folder", QVariant(folder));
@@ -570,6 +575,7 @@ void CameraController::listFiles(const QString& folder)
 
 void CameraController::getThumbnail(const QString& folder, const QString& file)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_thumbnail;
     cmd->map.insert("folder", QVariant(folder));
@@ -579,6 +585,7 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
 
 void CameraController::getExif(const QString& folder, const QString& file)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_exif;
     cmd->map.insert("folder", QVariant(folder));
@@ -600,6 +607,7 @@ void CameraController::download(const QString& folder, const QString& file,
                                 bool setCredits, const QString& credit, 
                                 const QString& source, const QString& copyright)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_download;
     cmd->map.insert("folder", QVariant(folder));
@@ -620,6 +628,7 @@ void CameraController::download(const QString& folder, const QString& file,
 
 void CameraController::deleteFile(const QString& folder, const QString& file)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_delete;
     cmd->map.insert("folder", QVariant(folder));
@@ -629,6 +638,7 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
 
 void CameraController::openFile(const QString& folder, const QString& file)
 {
+    d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_open;
     cmd->map.insert("folder", QVariant(folder));
@@ -639,6 +649,7 @@ void CameraController::openFile(const QString& folder, const QString& file)
 
 void CameraController::slotCancel()
 {
+    d->canceled = true;
     d->cmdQueue.flush();   
     d->camera->cancel();
 }
@@ -671,7 +682,8 @@ void CameraController::customEvent(QCustomEvent* e)
     }
     case (CameraEvent::gp_infomsg) :
     {
-        emit signalInfoMsg(QDeepCopy<QString>(event->msg));
+        if (!d->canceled)
+            emit signalInfoMsg(QDeepCopy<QString>(event->msg));
         break;
     }
     case (CameraEvent::gp_listedfolders) :
@@ -732,16 +744,19 @@ void CameraController::customEvent(QCustomEvent* e)
 
         QString msg = i18n("Failed to download file %1.").arg(file);
         
-        if (d->cmdQueue.isEmpty())
+        if (!d->canceled)
         {
-            KMessageBox::error(d->parent, msg);
-        }
-        else
-        {
-            msg += i18n(" Do you want to continue?");
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
-            if (result != KMessageBox::Continue)
-                slotCancel();
+            if (d->cmdQueue.isEmpty())
+            {
+                KMessageBox::error(d->parent, msg);
+            }
+            else
+            {
+                msg += i18n(" Do you want to continue?");
+                int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                if (result != KMessageBox::Continue)
+                    slotCancel();
+            }
         }
 
         d->timer->start(50);
@@ -764,16 +779,19 @@ void CameraController::customEvent(QCustomEvent* e)
 
         QString msg = i18n("Failed to delete file %1.").arg(file);
         
-        if (d->cmdQueue.isEmpty())
+        if (!d->canceled)
         {
-            KMessageBox::error(d->parent, msg);
-        }
-        else
-        {
-            msg += i18n(" Do you want to continue?");
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
-            if (result != KMessageBox::Continue)
-                slotCancel();
+            if (d->cmdQueue.isEmpty())
+            {
+                KMessageBox::error(d->parent, msg);
+            }
+            else
+            {
+                msg += i18n(" Do you want to continue?");
+                int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                if (result != KMessageBox::Continue)
+                    slotCancel();
+            }
         }
 
         d->timer->start(50);
@@ -850,6 +868,7 @@ void CameraController::slotProcessNext()
         if (!d->overwriteAll)
         {
             struct stat info;
+            
             while (::stat(QFile::encodeName(dest), &info) == 0)
             {
                 if (d->skipAll)
