@@ -28,6 +28,11 @@ NEW FEATURES:
 - CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
 - digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
 
+- Showfoto : image properties sidebar support
+- Showfoto : all images from a folder can be loaded at the same time.
+- Showfoto : Add 16 bits/color/pixel support (DImg API).
+- Showfoto : Thumbbar moved to the left. Image properties side bar to the right to make a consistant GUI with digiKam main interface.
+- Showfoto : Thumbbar moved can be used to the bottom in horizontal.
 
 ...
 
