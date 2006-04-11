@@ -28,7 +28,7 @@
  
 // KDE includes.
 
-#include "kprogress.h"
+#include <kprogress.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcursor.h>
