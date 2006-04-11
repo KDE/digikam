@@ -154,7 +154,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
     d->cameraItem         = 0;
     d->exifData           = QByteArray();
     d->currentURL         = KURL();
-    d->dirtyMetadataTab       = false;
+    d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
 
     d->cameraItemTab->setCurrentItem();
