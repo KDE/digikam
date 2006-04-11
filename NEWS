@@ -51,5 +51,10 @@ BUGFIX from B.K.O:
 ==> 111560 (Be able to locate photos on a map)
 ==> 122747 (Will not build with GCC 4.1)
 ==> 91811  (find pictures by meta tag info, date)
-
+==> 87823  (displaying images with ICC color profile when possible)
+==> 103176 (16bit/channel framework for digikam)
+==> 109096 (provide quick access to image comment)
+==> 109817 (feature request for image properties dialog in image editor)
+==> 109992 (Preview in comments editor resizeable)
+==> 113103 (Show digikam comments into digikam image editor)
 ...
