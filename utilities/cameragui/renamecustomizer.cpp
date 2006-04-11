@@ -58,7 +58,7 @@ public:
         renameCustomBox       = 0;
         renameDefaultCase     = 0;
         renameDefaultCaseType = 0;
-        renameCustomExif      = 0;
+        renameCustomExifDate  = 0;
         renameCustomSeq       = 0;
         changedTimer          = 0;
         renameCustomPrefix    = 0;
@@ -74,7 +74,7 @@ public:
 
     QComboBox    *renameDefaultCaseType;
 
-    QCheckBox    *renameCustomExif;
+    QCheckBox    *renameCustomExifDate;
     QCheckBox    *renameCustomSeq;
 
     QTimer       *changedTimer;
@@ -146,9 +146,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     QWhatsThis::add( d->renameCustomPrefix, i18n("<p>Set here the string to use like a prefix of "
                                                  "image filenames."));
                                                  
-    d->renameCustomExif = new QCheckBox(i18n("Add date and time"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExif, 1, 1, 1, 2);
-    QWhatsThis::add( d->renameCustomExif, i18n("<p>Toogle on this option to add to filename the "
+    d->renameCustomExifDate = new QCheckBox(i18n("Add date and time"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomExifDate, 1, 1, 1, 2);
+    QWhatsThis::add( d->renameCustomExifDate, i18n("<p>Toogle on this option to add to filename the "
                                                "camera provided date and time."));
 
     d->renameCustomSeq = new QCheckBox(i18n("Add sequence number"), d->renameCustomBox);
@@ -166,7 +166,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotPrefixChanged(const QString&)));
             
-    connect(d->renameCustomExif, SIGNAL(toggled(bool)),
+    connect(d->renameCustomExifDate, SIGNAL(toggled(bool)),
             this, SLOT(slotExifChanged(bool)));
             
     connect(d->renameCustomSeq, SIGNAL(toggled(bool)),
@@ -203,7 +203,7 @@ QString RenameCustomizer::nameTemplate() const
     {
         QString templ(d->renameCustomPrefix->text());
 
-        if (d->renameCustomExif->isChecked())
+        if (d->renameCustomExifDate->isChecked())
             templ += "%Y%m%d-%H:%M:%S";
 
         if (d->renameCustomSeq->isChecked())
@@ -290,7 +290,7 @@ void RenameCustomizer::readSettings()
 
     d->renameDefaultCaseType->setCurrentItem(chcaseT);
     d->renameCustomPrefix->setText(prefix);
-    d->renameCustomExif->setChecked(exif);
+    d->renameCustomExifDate->setChecked(exif);
     d->renameCustomSeq->setChecked(seq);
 }
 
@@ -302,7 +302,7 @@ void RenameCustomizer::saveSettings()
     config->writeEntry("Rename Use Default",
                        d->renameDefault->isChecked());
     config->writeEntry("Rename Add Exif",
-                       d->renameCustomExif->isChecked());
+                       d->renameCustomExifDate->isChecked());
     config->writeEntry("Rename Add Sequence",
                        d->renameCustomSeq->isChecked());
     config->writeEntry("Case Type",
