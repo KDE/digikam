@@ -1,10 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2003-01-21
- * Description : 
+ * Description : Gphoto2 camera interface
  * 
  * Copyright 2003 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
