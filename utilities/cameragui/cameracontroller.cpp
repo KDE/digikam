@@ -130,19 +130,29 @@ class CameraControllerPriv
 {
 public:
 
-    bool                   close;
-    bool                   overwriteAll;
-    bool                   skipAll;
+    CameraControllerPriv()
+    {
+        parent = 0; 
+        timer  = 0; 
+        thread = 0; 
+        camera = 0; 
+    }
     
-    int                    downloadTotal;
+    bool                    close;
+    bool                    overwriteAll;
+    bool                    skipAll;
     
-    QWidget*               parent;
+    int                     downloadTotal;
     
-    QTimer*                timer;
+    QWidget                *parent;
     
-    CameraThread*          thread;
-    DKCamera*              camera;
-    MTQueue<CameraCommand> cmdQueue;
+    QTimer                 *timer;
+    
+    CameraThread           *thread;
+    
+    DKCamera               *camera;
+    
+    MTQueue<CameraCommand>  cmdQueue;
 };
 
 class CameraThread : public QThread
@@ -162,8 +172,9 @@ protected:
 
 private:
     
-    CameraControllerPriv* d;
-    QObject*              parent;
+    QObject              *parent;
+
+    CameraControllerPriv *d;
 };
 
 CameraThread::CameraThread(CameraController* controller)
@@ -507,12 +518,11 @@ void CameraThread::sendInfo(const QString& msg)
 CameraController::CameraController(QWidget* parent, const QString& model,
                                    const QString& port,
                                    const QString& path)
-    : QObject(parent)
+                : QObject(parent)
 {
     d = new CameraControllerPriv;	
     d->parent        = parent;
     d->close         = false;
-
     d->overwriteAll  = false;
     d->skipAll       = false;
     d->downloadTotal = 0;
@@ -526,20 +536,25 @@ CameraController::CameraController(QWidget* parent, const QString& model,
     d->timer  = new QTimer();
 
     connect(d->timer, SIGNAL(timeout()),
-            SLOT(slotProcessNext()));
+            this, SLOT(slotProcessNext()));
 
     d->timer->start(50, false);
 }
 
 CameraController::~CameraController()
 {
-    delete d->timer;
+    if (d->timer->isActive()) 
+    {
+        d->timer->stop();
+        delete d->timer;
+    }
     
     d->camera->cancel();
     d->close = true;
 
     while (d->thread->running())
         d->thread->wait();
+        
     delete d->thread;
     delete d->camera;
     delete d;
