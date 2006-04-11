@@ -379,7 +379,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
             this, SLOT(slotExifFromData(const QByteArray&)));
 
     connect(d->cancelBtn, SIGNAL(clicked()),
-            d->controller, SLOT(slotCancel()));
+            this, SLOT(slotCancelButton()));
 
     d->view->setFocus();
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
@@ -434,6 +434,13 @@ bool CameraUI::isBusy() const
     return d->busy;
 }
 
+void CameraUI::slotCancelButton()
+{
+    d->status->setText(i18n("Cancelling current operation, please wait..."));
+    d->progress->hide();
+    QTimer::singleShot(0, d->controller, SLOT(slotCancel()));
+}
+
 void CameraUI::closeEvent(QCloseEvent* e)
 {
     dialogClosed();
@@ -448,10 +455,20 @@ void CameraUI::slotClose()
 
 void CameraUI::dialogClosed()
 {
+    d->status->setText(i18n("Disconnecting from camera, please Wait..."));
+    d->progress->hide();
+    
+    delete d->controller;
+    
+    //---------------------------------------------------
+        
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
+    
+    // Scan must be done later than controller instance is closed.
+    
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
@@ -464,8 +481,7 @@ void CameraUI::dialogClosed()
 
     if(!d->lastDestURL.isEmpty())
         emit signalLastDestination(d->lastDestURL);
-
-    delete d->controller;
+    
     saveSettings();
 }
 

@@ -78,6 +78,7 @@ private:
 private slots:
 
     void slotClose();
+    void slotCancelButton();
     void slotProcessURL(const QString& url);
 
     void slotConnected(bool val);
