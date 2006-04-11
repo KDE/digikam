@@ -277,7 +277,7 @@ void CameraThread::run()
                      .arg(file));
 
             char* edata = 0;
-            int   esize;
+            int   esize = 0;
             d->camera->getExif(folder, file, &edata, esize);
 
             if (!edata || !esize)
