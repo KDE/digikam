@@ -45,6 +45,13 @@ public:
         LOWER
     };
 
+    enum CustomOptions
+    {
+        ADDDATETIME = 0,
+        ADDSEQNUMB,
+        ADDBOTH
+    };
+
     RenameCustomizer(QWidget* parent);
     ~RenameCustomizer();
 
@@ -66,8 +73,7 @@ private slots:
 
     void slotRadioButtonClicked(int);
     void slotPrefixChanged(const QString&);
-    void slotExifChanged(bool);
-    void slotSeqChanged(bool);
+    void slotCustomOptionsChanged(const QString&);
     void slotCaseTypeChanged(const QString&);
 
 private:
