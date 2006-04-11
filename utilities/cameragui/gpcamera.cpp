@@ -215,7 +215,6 @@ bool GPCamera::doConnect()
 
     // -- Now try to initialize the camera -----------------
 
-
     status = new GPStatus();
 
     // Try and initialize the camera to see if its connected
@@ -380,13 +379,15 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
     CameraList *clist;
     const char *cname;
 
-    if (status) {
+    if (status) 
+    {
         delete status;
         status = 0;
     }
     status = new GPStatus;
     
     gp_list_new(&clist);
+    
     if (gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, status->context) 
         != GP_OK) 
     {
@@ -563,6 +564,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         delete status;
         status = 0;
     }
+    
     status = new GPStatus;
     
     if (gp_camera_file_get(d->camera, QFile::encodeName(folder),
@@ -575,6 +577,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         status = 0;
         return false;
     }
+    
     delete status;
     status = 0;
 
@@ -596,6 +599,7 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
         delete status;
         status = 0;
     }
+    
     status = new GPStatus;
 
     if (gp_camera_file_delete(d->camera, QFile::encodeName(folder),
@@ -639,6 +643,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
         delete status;
         status = 0;
     }
+    
     status = new GPStatus;
     
     if (gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
@@ -674,6 +679,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName,
         delete status;
         status = 0;
     }
+    
     status = new GPStatus;
 
     if (gp_camera_folder_put_file(d->camera,
