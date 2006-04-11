@@ -275,9 +275,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     // -------------------------------------------------------------------------
     
     QPopupMenu* selectMenu = new QPopupMenu(this);
-    selectMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()));
-    selectMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()));
-    selectMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()));
+    selectMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    CTRL+Key_A);
+    selectMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   CTRL+Key_U);
+    selectMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), CTRL+Key_Asterisk);
     selectMenu->insertSeparator();
     selectMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()));
     actionButton(User3)->setPopup(selectMenu);    
@@ -478,6 +478,7 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = false;
         d->cancelBtn->setEnabled(false);
+        d->advBox->setEnabled(true);
         enableButton(User2, true);
         enableButton(User1, true);
         d->anim->stop();
@@ -491,8 +492,10 @@ void CameraUI::slotBusy(bool val)
         
         if (!d->anim->running())
             d->anim->start();
+            
         d->busy = true;
         d->cancelBtn->setEnabled(true);
+        d->advBox->setEnabled(false);
         enableButton(User2, false);
         enableButton(User1, false);
     }
