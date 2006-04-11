@@ -272,7 +272,7 @@ void CameraThread::run()
 
             if (!thumbnail.isNull())
             {
-                thumbnail = thumbnail.smoothScale(128,128,QImage::ScaleMin);
+                thumbnail = thumbnail.smoothScale(128, 128, QImage::ScaleMin);
         
                 CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
                 event->map.insert("folder", QVariant(folder));
@@ -344,7 +344,7 @@ void CameraThread::run()
                     exifRotate(tempURL.path());
                 }
 
-                if (fixDateTime || setPhotographerId)
+                if (fixDateTime || setPhotographerId || setCredits)
                 {
                     sendInfo(i18n("Set Metadata tags to file %1...").arg(file));
                     DMetadata metadata(tempURL.path());
