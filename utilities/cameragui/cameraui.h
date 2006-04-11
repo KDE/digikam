@@ -48,7 +48,7 @@ class CameraUI : public KDialogBase
 
 public:
 
-    CameraUI(QWidget* parent, const QString& title,
+    CameraUI(QWidget* parent, const QString& cameraTitle,
              const QString& model, const QString& port,
              const QString& path);
     ~CameraUI();

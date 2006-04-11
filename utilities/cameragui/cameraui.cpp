@@ -152,10 +152,10 @@ public:
     ImagePropertiesSideBarCamGui *rightSidebar;
 };    
 
-CameraUI::CameraUI(QWidget* parent, const QString& title,
+CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path)
-        : KDialogBase(Plain, title,
+        : KDialogBase(Plain, cameraTitle,
                       Help|User1|User2|User3|Close, Close,
                       parent, 0, false, true,
                       i18n("D&elete"),
@@ -804,7 +804,8 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
     kdDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
     CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
-    d->rightSidebar->itemChanged(item->itemInfo(), KURL::KURL(), exifData, d->view, item);
+    KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
+    d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
@@ -813,7 +814,11 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
     d->deleteMenu->setItemEnabled(0, selected);
 
     if (selected)
+    {
+        KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
+        d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
         d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
+    }
     else
         d->rightSidebar->slotNoCurrentItem();
 }
