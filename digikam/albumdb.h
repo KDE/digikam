@@ -489,14 +489,16 @@ public:
 
     /**
      * Copy the attributes of an item to a different item. Useful when
-     * say a file is copied
+     * say a file is copied.
+     * The operation fails (returns -1) of src and dest are identical.
      * @param  srcAlbumID the id of the source album
      * @param  dstAlbumID the id of the destination album
      * @param  srcName    the name of the source file
      * @param  dstName    the name of the destination file
+     * @return the id of item added or -1 if it fails
      */
-    void copyItem(int srcAlbumID, const QString& srcName,
-                  int dstAlbumID, const QString& dstName);
+    int copyItem(int srcAlbumID, const QString& srcName,
+                 int dstAlbumID, const QString& dstName);
 
     /**
      * This will execute a given SQL statement to the database.

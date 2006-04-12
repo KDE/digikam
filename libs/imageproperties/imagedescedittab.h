@@ -40,18 +40,19 @@ namespace Digikam
 class AlbumIconItem;
 class Album;
 class TAlbum;
+class ImageInfo;
 class ImageDescEditTabPriv;
 
 class TAlbumListView : public QListView
 {
     Q_OBJECT
-    
+
 public:
 
     TAlbumListView(QWidget* parent);
 
     void emitSignalItemStateChanged();
-    
+
 signals:
 
     void signalItemStateChanged();
@@ -69,21 +70,21 @@ public:
     ~ImageDescEditTab();
 
     void assignRating(int rating);
-    void setItem(AlbumIconItem* currItem=0, int itemType=0);
+    void setItem(ImageInfo *info=0, int itemType=0);
     void populateTags();
-        
+
 signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void); 
-        
+
+    void signalFirstItem(void);
+    void signalPrevItem(void);
+    void signalNextItem(void);
+    void signalLastItem(void);
+
 protected:
 
     bool eventFilter(QObject *o, QEvent *e);
 
-private:    
+private:
 
     void applyAllChanges();
     void updateTagsView();
@@ -96,7 +97,7 @@ private:
     void tagDelete(TAlbum *album);
 
     QPixmap tagThumbnail(TAlbum* album) const;
-    
+
 private slots:
 
     void slotModified();

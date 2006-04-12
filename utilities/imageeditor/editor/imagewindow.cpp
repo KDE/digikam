@@ -287,6 +287,27 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
 }
 
+void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
+                                 const QString& caption, bool allowSaving, AlbumIconView* view)
+{
+    m_imageInfoList    = imageInfoList;
+    m_imageInfoCurrent = imageInfoCurrent;
+
+    m_imageInfoList.setAutoDelete(true);
+
+    // create URL list
+    KURL::List urlList;
+
+    ImageInfoListIterator it(m_imageInfoList);
+    ImageInfo *info;
+    for (; (info = it.current()); ++it)
+    {
+        urlList.append(info->kurl());
+    }
+
+    loadURL(urlList, imageInfoCurrent->kurl(), caption, allowSaving, view);
+}
+
 void ImageWindow::slotLoadCurrent()
 {
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
@@ -332,12 +353,14 @@ void ImageWindow::slotForward()
         return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    int index = m_imageInfoList.find(m_imageInfoCurrent);
 
     if (it != m_urlList.end()) 
     {
         if (m_urlCurrent != m_urlList.last())
         {
            KURL urlNext = *(++it);
+           m_imageInfoCurrent = m_imageInfoList.at(index + 1);
            m_urlCurrent = urlNext;
            slotLoadCurrent();
         }
@@ -350,12 +373,14 @@ void ImageWindow::slotBackward()
         return;
 
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    int index = m_imageInfoList.find(m_imageInfoCurrent);
 
     if (it != m_urlList.begin()) 
     {
         if (m_urlCurrent != m_urlList.first())
         {
             KURL urlPrev = *(--it);
+            m_imageInfoCurrent = m_imageInfoList.at(index - 1);
             m_urlCurrent = urlPrev;
             slotLoadCurrent();
         }
@@ -366,8 +391,9 @@ void ImageWindow::slotFirst()
 {
     if(!promptUserSave(m_urlCurrent))
         return;
-    
+
     m_urlCurrent = m_urlList.first();
+    m_imageInfoCurrent = m_imageInfoList.first();
     slotLoadCurrent();
 }
 
@@ -375,8 +401,9 @@ void ImageWindow::slotLast()
 {
     if(!promptUserSave(m_urlCurrent))
         return;
-    
+
     m_urlCurrent = m_urlList.last();
+    m_imageInfoCurrent = m_imageInfoList.first();
     slotLoadCurrent();
 }
 
@@ -388,43 +415,39 @@ void ImageWindow::slotContextMenu()
         TagsPopupMenu* removeTagsMenu = 0;
         int separatorID = -1;
 
-        if (m_view)
+        if (m_imageInfoCurrent)
         {
-            IconItem* item = m_view->findItem(m_urlCurrent.url());
-            if (item)
-            {
-                Q_LLONG id = ((AlbumIconItem*)item)->imageInfo()->id();
-                QValueList<Q_LLONG> idList;
-                idList.append(id);
+            Q_LLONG id = m_imageInfoCurrent->id();
+            QValueList<Q_LLONG> idList;
+            idList.append(id);
 
-                assignTagsMenu = new TagsPopupMenu(idList, 1000,
-                                                   TagsPopupMenu::ASSIGN);
-                removeTagsMenu = new TagsPopupMenu(idList, 2000,
-                                                   TagsPopupMenu::REMOVE);
+            assignTagsMenu = new TagsPopupMenu(idList, 1000,
+                                               TagsPopupMenu::ASSIGN);
+            removeTagsMenu = new TagsPopupMenu(idList, 2000,
+                                               TagsPopupMenu::REMOVE);
 
-                separatorID = m_contextMenu->insertSeparator();
+            separatorID = m_contextMenu->insertSeparator();
 
-                m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
-                int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+            m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
+            int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
 
-                connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-                        SLOT(slotAssignTag(int)));
-                connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-                        SLOT(slotRemoveTag(int)));
+            connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
+                    SLOT(slotAssignTag(int)));
+            connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
+                    SLOT(slotRemoveTag(int)));
 
-                AlbumDB* db = AlbumManager::instance()->albumDB();
-                if (!db->hasTags( idList ))
-                    m_contextMenu->setItemEnabled(i,false);
-            }
+            AlbumDB* db = AlbumManager::instance()->albumDB();
+            if (!db->hasTags( idList ))
+                m_contextMenu->setItemEnabled(i,false);
         }
-        
+
         m_contextMenu->exec(QCursor::pos());
 
         if (separatorID != -1)
         {
             m_contextMenu->removeItem(separatorID);
         }
-        
+
         delete assignTagsMenu;
         delete removeTagsMenu;
     }
@@ -441,16 +464,21 @@ void ImageWindow::slotChanged()
     if (m_urlCurrent.isValid())
     {
         KURL u(m_urlCurrent.directory());
-        PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
-        
+
         QRect sel           = m_canvas->getSelectedArea();
         DImg* img           = DImgInterface::instance()->getImg();
-        AlbumIconItem* item = 0;
-        
-        if (palbum)
-           item = m_view->findItem(m_urlCurrent.url());
-            
-        m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img, m_view, item);
+
+        if (m_imageInfoCurrent)
+        {
+            KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+            bool hasPrevious = it != m_urlList.end();
+            bool hasNext     = it != m_urlList.begin();
+
+            m_rightSidebar->itemChanged(m_urlCurrent.url(), m_imageInfoCurrent,
+                                        hasPrevious, hasNext, sel.isNull() ? 0 : &sel, img);
+        }
+        else
+            m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img);
     }
 }
 
@@ -469,35 +497,11 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
 
 void ImageWindow::slotAssignTag(int tagID)
 {
-    IconItem* item = m_view->findItem(m_urlCurrent.url());
-    if (item)
+    if (m_imageInfoCurrent)
     {
-        ImageInfo* info         = ((AlbumIconItem*)item)->imageInfo();
-        QStringList oldKeywords = info->tagNames();
-        info->setTag(tagID);
+        QStringList oldKeywords = m_imageInfoCurrent->tagNames();
 
-        // Store Image Tags like Iptc keywords tag.
-    
-        if (AlbumSettings::instance())
-        {
-            if (AlbumSettings::instance()->getSaveIptcRating())
-            {
-                DMetadata metadata(info->filePath());
-                metadata.setImageKeywords(oldKeywords, info->tagNames());
-                metadata.applyChanges();
-            }
-        }      
-    }
-}
-
-void ImageWindow::slotRemoveTag(int tagID)
-{
-    IconItem* item = m_view->findItem(m_urlCurrent.url());
-    if (item)
-    {
-        ImageInfo* info = ((AlbumIconItem*)item)->imageInfo();
-        QStringList oldKeywords  = info->tagNames();
-        info->removeTag(tagID);
+        m_imageInfoCurrent->setTag(tagID);
 
         // Update Image Tags like Iptc keywords tags.
 
@@ -505,8 +509,30 @@ void ImageWindow::slotRemoveTag(int tagID)
         {
             if (AlbumSettings::instance()->getSaveIptcRating())
             {
-                DMetadata metadata(info->filePath());
-                metadata.setImageKeywords(oldKeywords, info->tagNames());
+                DMetadata metadata(m_imageInfoCurrent->filePath());
+                metadata.setImageKeywords(oldKeywords, m_imageInfoCurrent->tagNames());
+                metadata.applyChanges();
+            }
+        }
+    }
+}
+
+void ImageWindow::slotRemoveTag(int tagID)
+{
+    if (m_imageInfoCurrent)
+    {
+        QStringList oldKeywords = m_imageInfoCurrent->tagNames();
+
+        m_imageInfoCurrent->removeTag(tagID);
+
+        // Update Image Tags like Iptc keywords tags.
+
+        if (AlbumSettings::instance())
+        {
+            if (AlbumSettings::instance()->getSaveIptcRating())
+            {
+                DMetadata metadata(m_imageInfoCurrent->filePath());
+                metadata.setImageKeywords(oldKeywords, m_imageInfoCurrent->tagNames());
                 metadata.applyChanges();
             }
         }
@@ -622,6 +648,10 @@ void ImageWindow::saveIsComplete()
 
 void ImageWindow::saveAsIsComplete()
 {
+    // Nothing to be done if operating without database
+    if (!m_imageInfoCurrent)
+        return;
+
     // Find the src and dest albums ------------------------------------------
 
     KURL srcDirURL(QDir::cleanDirPath(m_savingContext->srcURL.directory()));
@@ -634,29 +664,34 @@ void ImageWindow::saveAsIsComplete()
     {
         // Now copy the metadata of the original file to the new file ------------
 
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->copyItem(srcAlbum->id(), m_savingContext->srcURL.fileName(),
-                     dstAlbum->id(), m_savingContext->destinationURL.fileName());
+        ImageInfo newInfo(m_imageInfoCurrent->copyItem(dstAlbum, m_savingContext->destinationURL.fileName()));
 
-        // Add new file URL into list if the new file has been added in the current Album
-
-        if ( srcAlbum == dstAlbum &&                        // Target Album = current Album ?
-             m_urlList.find(m_savingContext->destinationURL) == m_urlList.end() )    // The image file not already exist
-        {                                                   // in the list.
+        if ( m_urlList.find(m_savingContext->destinationURL) == m_urlList.end() )
+        {   // The image file did not exist in the list.
             KURL::List::iterator it = m_urlList.find(m_savingContext->srcURL);
+            int index = m_urlList.findIndex(m_savingContext->srcURL);
             m_urlList.insert(it, m_savingContext->destinationURL);
-            m_urlCurrent = m_savingContext->destinationURL;
-            m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
-            slotUpdateItemInfo();
-            // only cache here. Of course, when saving to a different album, this might be opened in main view,
-            // but the probability of wasting cache memory is high.
-            LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+            m_imageInfoCurrent = new ImageInfo(newInfo);
+            m_imageInfoList.insert(index, m_imageInfoCurrent);
         }
-        else
+        else if (m_urlCurrent != m_savingContext->destinationURL)
         {
-            //TODO: make the user aware that the new path has not been loaded
-            //      and that he is still working on the same image as before the saveAs()
+            for (ImageInfo *info = m_imageInfoList.first(); info; info = m_imageInfoList.next())
+            {
+                if (info->kurl() == m_savingContext->destinationURL)
+                {
+                    m_imageInfoCurrent = new ImageInfo(newInfo);
+                    // setAutoDelete is true
+                    m_imageInfoList.replace(m_imageInfoList.at(), m_imageInfoCurrent);
+                    break;
+                }
+            }
         }
+
+        m_urlCurrent = m_savingContext->destinationURL;
+        m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
+        slotUpdateItemInfo();
+        LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
         // notify main app that file changed or a file is added
         if(m_savingContext->destinationExisted)
@@ -675,8 +710,8 @@ void ImageWindow::saveAsIsComplete()
     }
     else
     {
-        //TODO: make the user aware that the new path has not been because it is outside
-        //      the digikam album hierachy
+        //TODO: make the user aware that the new path has not been used as new current filename
+        //      because it is outside the digikam album hierachy
     }
 }
 

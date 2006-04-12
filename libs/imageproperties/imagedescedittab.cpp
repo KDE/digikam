@@ -114,7 +114,7 @@ public:
         commentsEdit       = 0;
         tagsSearchEdit     = 0;
         dateTimeEdit       = 0;
-        currItem           = 0;
+        currInfo           = 0;
         tagsView           = 0;
         ratingWidget       = 0;
         navigateBar        = 0;
@@ -134,12 +134,12 @@ public:
 
     KDateTimeEdit     *dateTimeEdit;
 
-    AlbumIconItem     *currItem;
+    ImageInfo         *currInfo;
 
     TAlbumListView    *tagsView;
 
     RatingWidget      *ratingWidget;
-    
+
     NavigateBarWidget *navigateBar;
 };
 
@@ -354,20 +354,19 @@ void ImageDescEditTab::applyAllChanges()
 {
     if (!d->modified)
         return;
-    
-    if (!d->currItem)
+
+    if (!d->currInfo)
         return;
 
-    ImageInfo* info = d->currItem->imageInfo();
-    QStringList oldKeywords = info->tagNames();
+    QStringList oldKeywords = d->currInfo->tagNames();
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
 
-    info->setCaption(d->commentsEdit->text());
-    info->setDateTime(d->dateTimeEdit->dateTime());
-    info->setRating(d->ratingWidget->rating());
-    info->removeAllTags();
+    d->currInfo->setCaption(d->commentsEdit->text());
+    d->currInfo->setDateTime(d->dateTimeEdit->dateTime());
+    d->currInfo->setRating(d->ratingWidget->rating());
+    d->currInfo->removeAllTags();
 
     QListViewItemIterator it(d->tagsView);
     while (it.current())
@@ -375,7 +374,7 @@ void ImageDescEditTab::applyAllChanges()
         TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
         if (tItem && tItem->isOn())
         {
-            info->setTag(tItem->m_album->id());
+            d->currInfo->setTag(tItem->m_album->id());
         }
         ++it;
     }
@@ -386,7 +385,7 @@ void ImageDescEditTab::applyAllChanges()
 
     if (AlbumSettings::instance())
     {
-        DMetadata metadata(info->filePath());
+        DMetadata metadata(d->currInfo->filePath());
 
         if (AlbumSettings::instance()->getSaveComments())
         {
@@ -399,7 +398,7 @@ void ImageDescEditTab::applyAllChanges()
             // Store Image Date & Time as Exif and Iptc tags.
             metadata.setImageDateTime(d->dateTimeEdit->dateTime());
         }
-        
+
         if (AlbumSettings::instance()->getSaveIptcRating())
         {
             // Store Image rating as Iptc tag.
@@ -409,7 +408,7 @@ void ImageDescEditTab::applyAllChanges()
         if (AlbumSettings::instance()->getSaveIptcTags())
         {
             // Store Image Tags like Iptc keywords tag.
-            metadata.setImageKeywords(oldKeywords, info->tagNames());
+            metadata.setImageKeywords(oldKeywords, d->currInfo->tagNames());
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())
@@ -426,37 +425,36 @@ void ImageDescEditTab::applyAllChanges()
                                      AlbumSettings::instance()->getIptcSource(),
                                      AlbumSettings::instance()->getIptcCopyright());
         }
-        
+
         metadata.applyChanges();
     }
 
     d->modified = false;
 }
 
-void ImageDescEditTab::setItem(AlbumIconItem* currItem, int itemType)
+void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
 {
     applyAllChanges();
-    
-    if (!currItem)
+
+    if (!info)
     {
        d->navigateBar->setFileName();
        d->commentsEdit->clear();
-       d->currItem = 0;
+       d->currInfo = 0;
        setEnabled(false);
        return;
     }
 
     setEnabled(true);
-    d->currItem = currItem;
+    d->currInfo = info;
     d->modified = false;
-    
-    ImageInfo* info = currItem->imageInfo();
+
     KURL fileURL;
-    fileURL.setPath(info->filePath());
-    d->navigateBar->setFileName(info->name());
+    fileURL.setPath(d->currInfo->filePath());
+    d->navigateBar->setFileName(d->currInfo->name());
     d->navigateBar->setButtonsState(itemType);
 
-    PAlbum *album = info->album();
+    PAlbum *album = d->currInfo->album();
     if (!album)
     {
         kdWarning() << k_funcinfo << "Failed to find parent album for"
@@ -474,7 +472,7 @@ void ImageDescEditTab::updateTagsView()
 {
     d->tagsView->blockSignals(true);
 
-    QValueList<int> tagIDs = d->currItem->imageInfo()->tagIDs();
+    QValueList<int> tagIDs = d->currInfo->tagIDs();
 
     QListViewItemIterator it( d->tagsView);
     while (it.current())
@@ -498,21 +496,21 @@ void ImageDescEditTab::updateTagsView()
 void ImageDescEditTab::updateComments()
 {
     d->commentsEdit->blockSignals(true);
-    d->commentsEdit->setText(d->currItem->imageInfo()->caption());
+    d->commentsEdit->setText(d->currInfo->caption());
     d->commentsEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
-    d->ratingWidget->setRating(d->currItem->imageInfo()->rating());
+    d->ratingWidget->setRating(d->currInfo->rating());
     d->ratingWidget->blockSignals(false);
 }
 
 void ImageDescEditTab::updateDate()
 {
     d->dateTimeEdit->blockSignals(true);
-    d->dateTimeEdit->setDateTime(d->currItem->imageInfo()->dateTime());
+    d->dateTimeEdit->setDateTime(d->currInfo->dateTime());
     d->dateTimeEdit->blockSignals(false);
 }
 
@@ -753,14 +751,14 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
 
 void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateTagsView();
 }
 
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     Album *a = AlbumManager::instance()->findAlbum(albumId);
-    if (!d->ignoreImageAttributesWatch && !d->currItem || !a || a->isRoot() || a->type() != Album::TAG)
+    if (!d->ignoreImageAttributesWatch && !d->currInfo || !a || a->isRoot() || a->type() != Album::TAG)
         return;
 
     updateTagsView();
@@ -768,19 +766,19 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
 
 void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateRating();
 }
 
 void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateComments();
 }
 
 void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currItem && d->currItem->imageInfo()->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateDate();
 }
 

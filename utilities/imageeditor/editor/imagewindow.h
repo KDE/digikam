@@ -34,6 +34,7 @@
 // Local includes.
 
 #include "editorwindow.h"
+#include "imageinfo.h"
 
 class QStringList;
 
@@ -55,7 +56,12 @@ public:
                  const QString& caption=QString::null,
                  bool allowSaving=true,
                  AlbumIconView* view=0L);
-                 
+
+    void loadImageInfos(const ImageInfoList &imageInfoList,
+                        ImageInfo *imageInfoCurrent,
+                        const QString& caption, bool allowSaving,
+                        AlbumIconView* view=0);
+
     static ImageWindow* imagewindow();
     static bool         imagewindowCreated();
 
@@ -73,7 +79,7 @@ private:
     // If image editor is launched by camera interface, current
     // image cannot be saved.
     bool                      m_allowSaving;
-    
+
     KURL::List                m_urlList;
     KURL                      m_urlCurrent;
 
@@ -84,11 +90,11 @@ private:
     KAction                  *m_3Star;
     KAction                  *m_4Star;
     KAction                  *m_5Star;
-    
-    // Allow to use Image properties and
-    // Comments/Tags dialogs from main window.
+
     AlbumIconView            *m_view;
-    
+    ImageInfoList             m_imageInfoList;
+    ImageInfo                *m_imageInfoCurrent;
+
     ImagePropertiesSideBarDB *m_rightSidebar;
 
     static ImageWindow       *m_instance;

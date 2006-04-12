@@ -501,8 +501,8 @@ void DigikamView::slot_imageSelected()
         if (item->isSelected())
         {
             selected = true;
-            AlbumIconItem *firstSelectedItem = mIconView->firstSelectedItem();            
-            mRightSidebar->itemChanged(firstSelectedItem->imageInfo()->kurl(), 0, 0, mIconView, firstSelectedItem);
+            AlbumIconItem *firstSelectedItem = mIconView->firstSelectedItem();
+            mRightSidebar->itemChanged(firstSelectedItem->imageInfo()->kurl(), mIconView, firstSelectedItem, 0, 0);
 
             break;
         }

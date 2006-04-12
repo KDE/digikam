@@ -41,6 +41,7 @@ namespace Digikam
 class DImg;
 class AlbumIconView;
 class AlbumIconItem;
+class ImageInfo;
 class ImagePropertiesSideBarDBPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
@@ -51,21 +52,25 @@ public:
 
     ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Left, 
                              bool mimimizedDefault=false, bool navBar=true);
-                    
+
     ~ImagePropertiesSideBarDB();
-    
-    void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0,
-                     AlbumIconView* view=0, AlbumIconItem* item=0);
-                    
-    void populateTags(void);                               
-    
+
+    virtual void itemChanged(const KURL& url, AlbumIconView* view,
+                             AlbumIconItem* item, QRect *rect=0, DImg *img=0);
+    virtual void itemChanged(const KURL& url, ImageInfo *info,
+                             bool hasPrevious, bool hasNext,
+                             QRect *rect=0, DImg *img=0);
+    virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
+
+    void populateTags(void);
+
 signals:
 
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void);  
-                                   
+    void signalFirstItem(void);
+    void signalPrevItem(void);
+    void signalNextItem(void);
+    void signalLastItem(void);
+
 public slots:
 
     void slotAssignRating(int rating);
@@ -75,7 +80,7 @@ public slots:
     void slotAssignRatingThreeStar();
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
-    
+
     virtual void slotNoCurrentItem(void);
 
 private slots:
@@ -85,7 +90,10 @@ private slots:
 private:
 
     ImagePropertiesSideBarDBPriv* d;
-        
+    void itemChanged(const KURL& url, QRect *rect, DImg *img,
+                     AlbumIconView* view, AlbumIconItem* item,
+                     ImageInfo *info, bool hasPrevious, bool hasNext);
+
 };
 
 }  // NameSpace Digikam

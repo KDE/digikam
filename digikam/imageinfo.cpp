@@ -52,6 +52,11 @@ namespace Digikam
 
 AlbumManager* ImageInfo::m_man = 0;
 
+ImageInfo::ImageInfo()
+    : m_ID(-1), m_albumID(-1), m_size(0), m_viewitem(0)
+{
+}
+
 ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
                      const QDateTime& datetime, size_t size,
                      const QSize& dims)
@@ -66,6 +71,11 @@ ImageInfo::ImageInfo(Q_LLONG ID, int albumID, const QString& name,
 
 ImageInfo::~ImageInfo()
 {
+}
+
+bool ImageInfo::isNull() const
+{
+    return m_ID != -1;
 }
 
 QString ImageInfo::name() const
@@ -259,6 +269,27 @@ void ImageInfo::setRating(int value)
     AlbumDB* db  = m_man->albumDB();
     db->setItemRating(m_ID, value);
     ImageAttributesWatch::instance()->imageRatingChanged(m_ID);
+}
+
+ImageInfo ImageInfo::copyItem(PAlbum *dstAlbum, const QString &dstFileName)
+{
+    kdDebug() << "ImageInfo::copyItem " << m_albumID << " " << m_name << " to " << dstAlbum->id() << " " << dstFileName << endl;
+    if (dstAlbum->id() == m_albumID && dstFileName == m_name)
+        return (*this);
+
+    AlbumDB* db = m_man->albumDB();
+    int id = db->copyItem(m_albumID, m_name, dstAlbum->id(), dstFileName);
+
+    if (id == -1)
+        return ImageInfo();
+    ImageInfo info;
+    info.m_ID      = id;
+    info.m_albumID = dstAlbum->id();
+    info.m_name    = dstFileName;
+    // set size and datetime
+    info.refresh();
+    // m_dims is not set, m_viewItem is left 0
+    return info;
 }
 
 void ImageInfo::refresh()

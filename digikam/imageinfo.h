@@ -58,6 +58,12 @@ public:
 
     /**
      * Constructor
+     * Creates a null image info
+     */
+    ImageInfo();
+
+    /**
+     * Constructor
      * @param     ID       unique ID for this image
      * @param     albumID  id of the PAlbum to which this item belongs
      * @param     name     name of the image
@@ -73,6 +79,11 @@ public:
      * Destructor
      */
     ~ImageInfo();
+
+    /**
+     * Returns if this objects contains valid data
+     */
+    bool      isNull() const;
 
     /**
      * @return the name of the image
@@ -198,9 +209,17 @@ public:
     void        removeAllTags();
 
     int         rating() const;
-    
+
     void        setRating(int value);
-    
+
+    /**
+     * Copy database information of this item to a newly created item
+     * @param  dstAlbum    destination album
+     * @param  dstFileName new filename
+     * @return an ImageInfo object of the new item
+     */
+    ImageInfo   copyItem(PAlbum *dstAlbum, const QString &dstFileName);
+
     /**
      * Assign a viewitem for this item. This is useful when a view has a
      * corresponding viewitem for this item and wants to access the viewitem, given
@@ -221,12 +240,8 @@ public:
      * the updated size 
      */
     void        refresh();
-    
-private:
 
-    ImageInfo() {}
-    ImageInfo(const ImageInfo& ) {}
-    ImageInfo& operator=(const ImageInfo& ) {return *this;}
+private:
 
     Q_LLONG               m_ID;
     int                   m_albumID;

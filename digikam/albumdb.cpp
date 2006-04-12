@@ -1173,9 +1173,13 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
                   QString::number(srcAlbumID), escapeString(srcName)) );
 }
 
-void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
-                       int dstAlbumID, const QString& dstName)
+int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
+                      int dstAlbumID, const QString& dstName)
 {
+    // check for src == dest
+    if (srcAlbumID == dstAlbumID && srcName == dstName)
+        return -1;
+
     // first delete any stale database entries if any
     deleteItem(dstAlbumID, dstName);
 
@@ -1185,15 +1189,26 @@ void AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(QString::number(dstAlbumID), escapeString(dstName),
                   QString::number(srcAlbumID), escapeString(srcName)) );
 
+    int id = sqlite3_last_insert_rowid(m_db);
+
+    // I think this can be done much easier:
+    /*
     execSql( QString("INSERT INTO ImageTags (imageid, tagid) \n"
-                     "SELECT I.id, T.tagid FROM Images AS I, ImageTags AS T WHERE \n"
+                     "SELECT %1, tagid FROM ImageTags \n"
+                     "WHERE imageid=%2 ;)
+              .arg(QString::number(id), QString::number(id)) );
+    */
+
+    execSql( QString("INSERT INTO ImageTags (imageid, tagid) \n"
+                     "SELECT DISTINCT I.id, T.tagid FROM Images AS I, ImageTags AS T WHERE \n"
                      "     I.id=(SELECT Images.id FROM Images WHERE \n"
                      "           dirid=%1 AND name='%2') \n"
                      "AND  T.tagid IN (SELECT tagid FROM ImageTags WHERE \n"
                      "                   imageid=(SELECT id FROM Images WHERE \n"
-                     "                             dirid=%3 AND name='%4'))")
+                     "                             dirid=%3 AND name='%4'));")
              .arg(QString::number(dstAlbumID), escapeString(dstName), 
                   QString::number(srcAlbumID), escapeString(srcName)) );
+    return id;
 }
 
 Q_LLONG AlbumDB::lastInsertedRow()

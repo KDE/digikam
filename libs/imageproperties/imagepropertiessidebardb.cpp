@@ -56,17 +56,24 @@ public:
     {
         currentView       = 0;
         currentItem       = 0;
+        currentInfo       = 0;
         desceditTab       = 0;
-        dirtyDesceditTab  = false;
+        dirtyDesceditTab    = false;
+        currentItemPosition = NavigateBarWidget::ItemCurrent;
     }
 
     bool              dirtyDesceditTab;
 
     AlbumIconView    *currentView;
-    
+
     AlbumIconItem    *currentItem;
 
+    ImageInfo        *currentInfo;
+
     ImageDescEditTab *desceditTab;
+
+    NavigateBarWidget::CurrentItemPosition
+                      currentItemPosition;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -125,22 +132,52 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
+void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view,
+                                           AlbumIconItem* item, QRect *rect, DImg *img)
+{
+    bool hasPrevious = view->firstItem() != item;
+    bool hasNext = view->lastItem() != item;
+    itemChanged(url, rect, img, view, item, item->imageInfo(), hasPrevious, hasNext);
+}
+
+void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
+                                           bool hasPrevious, bool hasNext,
+                                           QRect *rect, DImg *img)
+{
+    itemChanged(url, rect, img, 0, 0, info, hasPrevious, hasNext);
+}
+
+void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *img)
+{
+    itemChanged(url, rect, img, 0, 0, 0, false, false);
+}
+
 void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *img,
-                                           AlbumIconView* view, AlbumIconItem* item)
+                                           AlbumIconView* view, AlbumIconItem* item,
+                                           ImageInfo *info, bool hasPrevious, bool hasNext)
 {
     if (!url.isValid())
         return;
-    
+
     m_currentURL        = url;
     m_currentRect       = rect;
     m_image             = img;
     m_dirtyMetadataTab  = false;
     m_dirtyColorTab     = false;
+    d->dirtyDesceditTab = false;
+
     d->currentView      = view;
     d->currentItem      = item;
-    d->dirtyDesceditTab = false;
-        
-    slotChangedTab( getActiveTab() );    
+    d->currentInfo      = info;
+
+    if (!hasPrevious)
+        d->currentItemPosition = NavigateBarWidget::ItemFirst;
+    else if (!hasNext)
+        d->currentItemPosition = NavigateBarWidget::ItemLast;
+    else
+        d->currentItemPosition = NavigateBarWidget::ItemCurrent;
+
+    slotChangedTab( getActiveTab() );
 }
 
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
@@ -162,7 +199,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
     // No database data available, for example in the case of image editor is 
     // launched from camera GUI.
-    if (!d->currentView || !d->currentItem)
+    if (!d->currentInfo)
     {
         if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
@@ -189,36 +226,29 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     }
     else    // Data from database available...
     {
-        int currentItemType = NavigateBarWidget::ItemCurrent;
-        
-        if (d->currentView->firstItem() == d->currentItem)
-            currentItemType = NavigateBarWidget::ItemFirst;
-        else if (d->currentView->lastItem() == d->currentItem)
-            currentItemType = NavigateBarWidget::ItemLast;
-        
         if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
-                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
-                                              m_currentURL.fileName(), currentItemType);
+                m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(),
+                                              m_currentURL.fileName(), d->currentItemPosition);
             else
-                m_metadataTab->setCurrentURL(m_currentURL, currentItemType);
+                m_metadataTab->setCurrentURL(m_currentURL, d->currentItemPosition);
 
             m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            m_colorTab->setData(m_currentURL, m_currentRect, m_image, currentItemType);
+            m_colorTab->setData(m_currentURL, m_currentRect, m_image, d->currentItemPosition);
             m_dirtyColorTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
-           d->desceditTab->setItem(d->currentItem, currentItemType);
-           d->dirtyDesceditTab = true;
+            d->desceditTab->setItem(d->currentInfo, d->currentItemPosition);
+            d->dirtyDesceditTab = true;
         }
     }
 
-    setCursor( KCursor::arrowCursor() );
+    unsetCursor();
 }
 
 void ImagePropertiesSideBarDB::slotAssignRating(int rating)

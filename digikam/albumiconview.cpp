@@ -915,7 +915,8 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     // Run Digikam ImageEditor with all image files in the current Album.
 
-    KURL::List urlList;
+    ImageInfoList imageInfoList;
+    ImageInfo *currentImageInfo = 0;
 
     for (IconItem *it = firstItem() ; it ; it = it->nextItem())
     {
@@ -923,27 +924,33 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
         QString fileExtension = iconItem->imageInfo()->kurl().fileName().section( '.', -1 );
 
         if ( imagefilter.find(fileExtension) != -1 )
-            urlList.append(iconItem->imageInfo()->kurl());
+        {
+            ImageInfo *info = new ImageInfo(*iconItem->imageInfo());
+            info->setViewItem(0);
+            imageInfoList.append(info);
+            if (iconItem == item)
+                currentImageInfo = info;
+        }
     }
 
     ImageWindow *imview = ImageWindow::imagewindow();
-    
+
     imview->disconnect(this);
 
     connect(imview, SIGNAL(signalFileAdded(const KURL&)),
             this, SLOT(slotFilesModified()));
-            
+
     connect(imview, SIGNAL(signalFileModified(const KURL&)),
             this, SLOT(slotFilesModified(const KURL&)));
-            
+
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             this, SLOT(slotFilesModified()));
 
-    imview->loadURL(urlList,
-                    item->imageInfo()->kurl(),
-                    d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
-                    true,
-                    this); 
+    imview->loadImageInfos(imageInfoList,
+                           currentImageInfo,
+                           d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
+                           true,
+                           this);
 
     if (imview->isHidden())
         imview->show();
