@@ -3,36 +3,50 @@ digiKam 0.9.0 :
 
 NEW FEATURES:
 
-- Sidebars are used at all to display metadata, comments & tags, and file properties.
-- Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
-- New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
-- New API in digiKam core named DMetadata to manage image metadata.
-- Image Editor/showfoto support 16 bits color depth images (RAW, TIFF, PNG, PNM).
-- Ported all image plugins to new DImg API. Support of 16 bits images.
-- Ported all image filter algorithms to new DImg API. Support of 16 bits images.
-- New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, and GPS locator.
-- New ICC profiles profile viewer based on LCMS.
-- New powerfull widget to display CIE color space used by ICC profiles.
-- Redesign of all image plugins dialogs. Histogram are available at all when it's necessary. All dialogs implementation are common from digiKam core now.
-- Complete rewrite of image editor/showfoto gui implementation. Implementation is now common and is more easy to maintain!
-- Add a progress bar to Image editor/showfoto about IO image files access.
-- New implementation to load/save images file using a separate thread.
-- New powerfull Noise Reduction algorithm based on dcamnoise2 implemention.
-- New powerfull Black & White converter tool using curves adjustements.
-- Support of ICC color profiles management using LCMS into Image editor/showfoto.
-- Advanced settings to load RAW files in Image Editor using external dcraw instance.
-- New plugin to experiment ICC profiles to perform color corrections into images.
-- New preview rendering modes in all color correction image plugins dialogs.
-- New zooming capabilities in image plugins dialogs.
-- Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif and/or IPTC metadata tags.
-- CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
-- digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
+General : Sidebars are used at all to display metadata, comments & tags, and file properties.
+General : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
+General : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
+General : New API in digiKam core named DMetadata to manage image metadata.
+General : Ported all image filter algorithms to new DImg API. Support of 16 bits images.
+General : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, and GPS locator.
+General : New ICC profiles profile viewer based on LCMS.
+General : New powerfull widget to display CIE color space used by ICC profiles.
+General : New implementation to load/save images file using a separate thread.
+General : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif and/or IPTC metadata tags.
+General : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
 
-- Showfoto : image properties sidebar support
-- Showfoto : all images from a folder can be loaded at the same time.
-- Showfoto : Add 16 bits/color/pixel support (DImg API).
-- Showfoto : Thumbbar moved to the left. Image properties side bar to the right to make a consistant GUI with digiKam main interface.
-- Showfoto : Thumbbar moved can be used to the bottom in horizontal.
+Image Editor : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
+Image Editor : Complete rewrite of image editor/showfoto gui implementation. Implementation is now common 
+               and is more easy to maintain!
+Image Editor : Add a progress bar to Image editor/showfoto about IO image files access.
+Image Editor : Support of ICC color profiles management using LCMS into Image editor/showfoto.
+Image Editor : digiKam setup is now available from Image Editor menu.
+
+Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
+Image Plugins : New powerfull Black & White converter tool using curves adjustements.
+Image Plugins : New plugin to experiment ICC profiles to perform color corrections into images.
+Image Plugins : New preview rendering modes in all color correction image plugins dialogs.
+Image Plugins : Redesign/polishing of all image plugins dialogs. Histogram are available at all 
+                when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam core now.
+Image Plugins : New zooming capabilities in image plugins dialogs.
+Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
+Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
+
+Setup : Advanced settings to load RAW files in Image Editor using external dcraw instance.
+Setup : Setup implementation are now common between Showfoto and digiKam.
+Setup : new Identity setup page to set default strings informations about Photographer and copyright used 
+        when IPTC tags are updated.
+
+CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
+
+Showfoto : image properties sidebar support
+Showfoto : all images from a folder can be loaded at the same time.
+Showfoto : Add 16 bits/color/pixel support (DImg API).
+Showfoto : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the 
+           right to make a consistant GUI with digiKam main interface.
+Showfoto : Thumbbar can be used to the bottom in horizontal mode.
+Showfoto : New Exif Auto-rotate option like in digiKam ImageEditor.
+Showfoto : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
 
 ...
 
@@ -62,4 +76,6 @@ BUGFIX from B.K.O:
 ==> 109817 (feature request for image properties dialog in image editor)
 ==> 109992 (Preview in comments editor resizeable)
 ==> 113103 (Show digikam comments into digikam image editor)
+==> 124939 (Improve import picture nomenclature)
+
 ...
