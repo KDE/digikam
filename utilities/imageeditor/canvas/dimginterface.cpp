@@ -607,9 +607,6 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     d->cmod.applyBCG(img);
     img.convertDepth(32);
 
-/*    QPixmap pix(img.convertToPixmap());
-    bitBlt(p, dx, dy, &pix, 0, 0);
-*/
     if (d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
