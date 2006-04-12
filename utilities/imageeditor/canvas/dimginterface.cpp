@@ -670,6 +670,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     {
         QPixmap pix(img.convertToPixmap());
         bitBlt(p, dx, dy, &pix, 0, 0);
+    }
 }
 
 void DImgInterface::zoom(double val)
