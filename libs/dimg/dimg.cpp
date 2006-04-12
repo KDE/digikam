@@ -1136,7 +1136,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
     if (isNull())
         return QPixmap();
 
-    DImg img = copy(0, 0, width(), height());
+    DImg img = copy();
 
     IccTransform trans;
 
