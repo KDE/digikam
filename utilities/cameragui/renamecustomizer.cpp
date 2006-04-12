@@ -146,7 +146,7 @@ QString RenameCustomizer::nameTemplate() const
         QString templ(m_renameCustomPrefix->text());
 
         if (m_renameCustomExif->isChecked())
-            templ += "%Y%m%d-%H:%M:%S";
+            templ += "%Y%m%dT%H%M%S"; 
 
         if (m_renameCustomSeq->isChecked())
             templ += "-%%04d";
