@@ -205,13 +205,13 @@ QString RenameCustomizer::nameTemplate() const
         switch (d->renameCustomOptions->currentItem())
         {
         case ADDDATETIME:
-            templ += "%Y%m%d-%H:%M:%S";
+            templ += "%Y%m%dT%H%M%S"; 
             break;
         case ADDSEQNUMB:
             templ += "-%%04d";
             break;
         case ADDBOTH:
-            templ += "%Y%m%d-%H:%M:%S";
+            templ += "%Y%m%dT%H%M%S"; 
             templ += "-%%04d";
             break;
         }
