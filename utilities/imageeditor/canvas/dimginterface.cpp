@@ -660,8 +660,16 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    QPixmap pix(img.convertToPixmap());
-    bitBlt(p, dx, dy, &pix, 0, 0);
+    if (d->cmSettings->managedViewSetting)
+    {
+        QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
+                                        d->cmSettings->monitorSetting));
+        bitBlt(p, dx, dy, &pix, 0, 0);
+    }
+    else
+    {
+        QPixmap pix(img.convertToPixmap());
+        bitBlt(p, dx, dy, &pix, 0, 0);
 }
 
 void DImgInterface::zoom(double val)
