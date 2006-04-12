@@ -1131,7 +1131,7 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
+QPixmap DImg::convertToPixmap(QString inProfile, QString monitorProfile)
 {
     if (isNull())
         return QPixmap();
@@ -1147,7 +1147,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
                            QFile::encodeName(monitorProfile) );
         trans.apply( img );
     }
-    // With embedd profile.
+    // With embedded profile.
     else
     {
         trans.getEmbeddedProfile( img );
@@ -1155,7 +1155,7 @@ QPixmap DImg::convertToPixmap( QString inProfile, QString monitorProfile)
         trans.apply( img );
     }
 
-    img.convertToPixmap();
+    return (img.convertToPixmap());
 }
 
 
