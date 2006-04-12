@@ -98,7 +98,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Profiles Management"),
                           BarIcon("colorize", KIcon::SizeMedium));
-    d->iccPage = new Digikam::SetupICC(d->page_icc);
+    d->iccPage = new Digikam::SetupICC(d->page_icc, this);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
