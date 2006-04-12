@@ -64,7 +64,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupIdentityPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
 

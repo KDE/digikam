@@ -76,7 +76,7 @@ public:
 };
 
 SetupCollections::SetupCollections(QWidget* parent )
-            : QWidget(parent)
+                : QWidget(parent)
 {
     d = new SetupCollectionsPriv;
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);

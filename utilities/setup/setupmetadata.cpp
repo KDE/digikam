@@ -82,7 +82,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
              : QWidget(parent)
 {
     d = new SetupMetadataPriv;
-    QVBoxLayout *mainLayout = new QVBoxLayout(parent);
+    QVBoxLayout *mainLayout = new QVBoxLayout(parent, 0, KDialog::spacingHint());
 
     // --------------------------------------------------------
   

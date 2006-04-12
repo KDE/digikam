@@ -63,7 +63,7 @@ SetupMime::SetupMime(QWidget* parent )
          : QWidget(parent)
 {
     d = new SetupMimePriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
     

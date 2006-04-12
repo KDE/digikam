@@ -105,7 +105,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
             : QWidget(parent)
 {
     d = new SetupIOFilesPriv;
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
     
