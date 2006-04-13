@@ -1136,6 +1136,12 @@ QPixmap DImg::convertToPixmap(QString inProfile, QString monitorProfile)
     if (isNull())
         return QPixmap();
 
+    if (monitorProfile.isNull())
+    {
+        kdDebug() << k_funcinfo << " : monitor profile filename is null!" << endl;
+        return convertToPixmap();
+    }
+    
     DImg img = copy();
 
     IccTransform trans;
