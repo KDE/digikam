@@ -41,13 +41,13 @@ Q_OBJECT
 
 public:
      
-    DirSelectWidget( KURL rootUrl=KURL::KURL("/"), KURL currentUrl=KURL::KURL(), 
+    DirSelectWidget( KURL rootUrl=KURL("/"), KURL currentUrl=KURL(), 
                  QWidget* parent=0, const char* name=0, QString headerLabel=QString::null);
     ~DirSelectWidget();
      
     KURL path() const;
     KURL rootPath(void);
-    void setRootPath(KURL rootUrl, KURL currentUrl=KURL::KURL(QString::QString::null));
+    void setRootPath(KURL rootUrl, KURL currentUrl=KURL(QString::null));
     void setCurrentPath(KURL currentUrl);
 
 signals :

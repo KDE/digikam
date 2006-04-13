@@ -130,7 +130,7 @@ void ImageEffect_HotPixels::readSettings(void)
 {
     KConfig *config = kapp->config();
     config->setGroup("Hot Pixels Tool Settings");
-    m_blackFrameURL = KURL::KURL( config->readEntry("Last Black Frame File", QString::null) );
+    m_blackFrameURL = KURL( config->readEntry("Last Black Frame File", QString::null) );
     m_filterMethodCombo->setCurrentItem( config->readNumEntry("Filter Method",
                                          HotPixelFixer::QUADRATIC_INTERPOLATION) );
     

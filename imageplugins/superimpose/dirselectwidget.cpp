@@ -111,7 +111,7 @@ void DirSelectWidget::setCurrentPath(KURL currentUrl)
     QString currentPath = QDir::cleanDirPath(currentUrl.path());
     currentPath = currentPath.mid( d->m_rootUrl.path().length() );
     d->m_pendingPath.clear();    
-    d->m_handled = QString::QString("");
+    d->m_handled = QString("");
     d->m_pendingPath = QStringList::split( "/", currentPath, true );
     
     if ( !d->m_pendingPath[0].isEmpty() )
