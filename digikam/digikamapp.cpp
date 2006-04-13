@@ -82,6 +82,8 @@ using KIO::UDSEntry;
 #include "thumbnailsize.h"
 #include "scanlib.h"
 #include "loadingcacheinterface.h"
+#include "imageattributeswatch.h"
+#include "dcrawbinary.h"
 
 namespace Digikam
 {
@@ -164,7 +166,9 @@ DigikamApp::~DigikamApp()
     delete mAlbumManager;
     delete AlbumLister::instance();
 
+    ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
+    DcrawBinary::cleanUp();
 
     m_instance = 0;
 }

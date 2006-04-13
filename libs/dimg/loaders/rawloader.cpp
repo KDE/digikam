@@ -51,6 +51,7 @@ extern "C"
 #include "dimg.h"
 #include "dcraw_parse.h"
 #include "rawloader.h"
+#include "dcrawbinary.h"
 
 namespace Digikam
 {
@@ -88,7 +89,8 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
 
-    command = "dcraw -c -2 ";
+    command = DcrawBinary::instance()->path();
+    command += " -c -2 ";
     
     if (m_rawDecodingSettings.cameraColorBalance)
         command += "-w ";
@@ -260,8 +262,9 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -B : Use bilateral filter to smooth noise while preserving edges.
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
-    
-    command = "dcraw -c -4 ";
+
+    command = DcrawBinary::instance()->path();
+    command += " -c -4 ";
     
     if (m_rawDecodingSettings.cameraColorBalance)
         command += "-w ";
