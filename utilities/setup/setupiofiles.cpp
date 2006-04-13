@@ -155,7 +155,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     grid1->addMultiCellWidget(d->labelQuality, 6, 6, 0, 0);
     grid1->addMultiCellWidget(d->RAWquality, 6, 6, 1, 1);
 
-    d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction during decoding (slow)"),
+    d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction during decoding (warning: slow)"),
                                             RAWfileOptionsGroup);
     QWhatsThis::add( d->enableNoiseReduction, i18n("<p>Toggle bilateral filter to smooth noise while "
                      "preserving edges. This option can be use to reduce low noise. The pictures edges "

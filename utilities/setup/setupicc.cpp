@@ -205,7 +205,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "<p>These color profiles are device independents.</p>"));
     d->infoWorkProfiles = new QPushButton("Info", profiles);
     QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled "
-                     "information about the selected profile.</p>"));
+                     "information about the selected workspace profile.</p>"));
 
     grid2->addMultiCellWidget(workProfiles, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 1, 1);
@@ -215,10 +215,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfilesKC    = new KComboBox(false, profiles);
     d->monitorProfilesKC->setMaximumWidth(320);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
-    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor.</p>"));
+    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
+                                                "You need to toogle on <b>Use color managed view</b> option from "
+                                                "the Advanced Settings pannel to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton("Info", profiles);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
-                     "information about the selected profile.</p>"));
+                     "information about the selected monitor profile.</p>"));
 
     grid2->addMultiCellWidget(monitorProfiles, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 1, 1);
@@ -229,10 +231,10 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->inProfilesKC->setMaximumWidth(320);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
-                     "(scanner, camera, ...)</p>"));
+                     "(usually, your camera, scanner...)</p>"));
     d->infoInProfiles = new QPushButton("Info", profiles);
     QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled "
-                     "information about the selected profile.</p>"));
+                     "information about the selected input profile.</p>"));
 
     grid2->addMultiCellWidget(inProfiles, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 1, 1);
@@ -247,7 +249,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "be able to preview how an image will be rendered in an output device.</p>"));
     d->infoProofProfiles = new QPushButton("Info", profiles);
     QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled "
-                     "information about the selected profile.</p>"));
+                     "information about the selected soft proof profile.</p>"));
 
     grid2->addMultiCellWidget(proofProfiles, 3, 3, 0, 0);
     grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 1, 1);
@@ -262,14 +264,15 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QVGroupBox * advancedSettingsBox = new QVGroupBox(i18n("Advanced Settings"), parent);
 
     d->managedView = new QCheckBox(advancedSettingsBox);
-    d->managedView->setText(i18n("Use Colormanaged view"));
+    d->managedView->setText(i18n("Use color managed view (warning: slow)"));
     QWhatsThis::add( d->managedView, i18n("<p>You have to use this option if " 
-                     "you want to use your Monitor Color Profile to show your pictures in "
-                     "Image Editor window.</p>"));
+                     "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
+                     "Image Editor window. Warning : this option can take a while to render "
+                     "pictures on the screen, especially with slow computer.</p>"));
 
     d->bpcAlgorithm = new QCheckBox(advancedSettingsBox);
-    d->bpcAlgorithm->setText(i18n("Use Black Point Compensation"));
-    QWhatsThis::add( d->bpcAlgorithm, i18n("<p>BPC is a way to make adjustments between the maximum "
+    d->bpcAlgorithm->setText(i18n("Use black point compensation"));
+    QWhatsThis::add( d->bpcAlgorithm, i18n("<p><b>Black Point Compensation</b> is a way to make adjustments between the maximum "
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
 
@@ -282,28 +285,28 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->renderingIntentKC->insertItem("Relative Colorimetric");
     d->renderingIntentKC->insertItem("Saturation");
     d->renderingIntentKC->insertItem("Absolute Colorimetric");
-    QWhatsThis::add( d->renderingIntentKC, i18n("<ul><li>Perceptual intent causes the full gamut of the image to be "
+    QWhatsThis::add( d->renderingIntentKC, i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
                      "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
-                     "preserved but colorimetric accuracy may not be preserved.\n"
-                     "In other words, if certain colors in an image fall outside of the range of colors that the output "
+                     "preserved but colorimetric accuracy may not be preserved.</p>"
+                     "<p>In other words, if certain colors in an image fall outside of the range of colors that the output "
                      "device can render, the picture intent will cause all the colors in the image to be adjusted so that "
                      "the every color in the image falls within the range that can be rendered and so that the relationship "
-                     "between colors is preserved as much as possible.\n"
-                     "This intent is most suitable for display of photographs and images, and is the default intent.</li>"
-                     "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the output device "
+                     "between colors is preserved as much as possible.</p>"
+                     "<p>This intent is most suitable for display of photographs and images, and is the default intent.</p></li>"
+                     "<li><p><b>Absolute Colorimetric intent</b> causes any colors that fall outside the range that the output device "
                      "can render are adjusted to the closest color that can be rendered, while all other colors are "
-                     "left unchanged.\n"
-                     "This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
-                     "logo colors, ...).</li>"
-                     "<li>Relative Colorimetric intent is defined such that any colors that fall outside the range that the "
+                     "left unchanged.</p>"
+                     "<p>This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
+                     "logo colors, ...).</p></li>"
+                     "<li><p><b>Relative Colorimetric intent</b> is defined such that any colors that fall outside the range that the "
                      "output device can render are adjusted to the closest color that can be rendered, while all other colors "
-                     "are left unchanged. Proof intent does not preserve the white point.</li>"
-                     "<li>Saturarion intent preserves the saturation of colors in the image at the possible expense of "
-                     "hue and lightness.\n"
-                     "Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
-                     "achieve the desired effects.\n"
-                     "This intent is most suitable for business graphics such as charts, where it is more important that the "
-                     "colors be vivid and contrast well with each other rather than a specific color.</li></ul>"));
+                     "are left unchanged. Proof intent does not preserve the white point.</p></li>"
+                     "<li><p><b>Saturarion intent</b> preserves the saturation of colors in the image at the possible expense of "
+                     "hue and lightness.</p>"
+                     "<p>Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
+                     "achieve the desired effects.</p>"
+                     "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
+                     "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
 
     layout->addWidget(advancedSettingsBox);
 
