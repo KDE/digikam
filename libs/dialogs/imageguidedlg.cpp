@@ -195,36 +195,25 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->settings = new QWidget(plainPage());
+    d->settings       = new QWidget(plainPage());
     d->settingsLayout = new QGridLayout( d->settings, 1, 0);
-    
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
     
-    QWidget *gboxProgressBar = new QWidget(d->settings);
-    QGridLayout* grid2 = new QGridLayout( gboxProgressBar, 0, 0, marginHint());
-    d->progressBar = new KProgress(100, gboxProgressBar);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
-    d->progressBar->setValue(0);
-    setProgressVisible(d->progress);
-    grid2->addMultiCellWidget(d->progressBar, 0, 0, 0, 0);
-    vLayout->addWidget(gboxProgressBar);
-
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
-    QGridLayout* grid = new QGridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
-    KSeparator *line = new KSeparator (Horizontal, gboxGuideSettings);
+    QGridLayout* grid          = new QGridLayout( gboxGuideSettings, 2, 2, 0, spacingHint());
+    KSeparator *line           = new KSeparator (Horizontal, gboxGuideSettings);
     grid->addMultiCellWidget(line, 0, 0, 0, 2);
 
-    QLabel *label5 = new QLabel(i18n("Guide color:"), gboxGuideSettings);
+    QLabel *label5  = new QLabel(i18n("Guide color:"), gboxGuideSettings);
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
     QWhatsThis::add( d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label5, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->guideColorBt, 1, 1, 1, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
-    d->guideSize = new QSpinBox( 1, 5, 1, gboxGuideSettings);
+    d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
     QWhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
     grid->addMultiCellWidget(d->guideSize, 2, 2, 1, 2);
@@ -233,6 +222,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     else gboxGuideSettings->hide();
 
     vLayout->addWidget(gboxGuideSettings);
+
+    d->progressBar = new KProgress(100, d->settings);
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
+    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setValue(0);
+    setProgressVisible(false);
+    vLayout->addWidget(d->progressBar);
+
     vLayout->addStretch(10);
     d->settingsLayout->addMultiCellLayout(vLayout, 1, 1, 0, 0);
 
@@ -335,6 +332,7 @@ void ImageGuideDlg::abortPreview()
 {
     d->currentRenderingMode = ImageGuideDlgPriv::NoneRendering;
     d->progressBar->setValue(0);
+    setProgressVisible(false);
     enableButton(Ok, true);
     enableButton(User1, false);
     enableButton(User2, true);
@@ -441,6 +439,7 @@ void ImageGuideDlg::slotEffect()
     enableButton(User3,   false);
     enableButton(Default, false);
     d->progressBar->setValue(0);
+    if (d->progress) setProgressVisible(true);
 
     if (m_threadedFilter)
        delete m_threadedFilter;

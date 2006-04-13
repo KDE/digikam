@@ -117,7 +117,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    resize(configDialogSize(name + QString::QString(" Tool Dialog")));
+    resize(configDialogSize(name + QString(" Tool Dialog")));
     QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0, spacingHint());
     
     // -------------------------------------------------------------
@@ -131,7 +131,7 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
     // -------------------------------------------------------------
 
     m_imagePreviewWidget = new ImagePannelWidget(240, 160,
-                               name + QString::QString(" Tool Dialog"),
+                               name + QString(" Tool Dialog"),
                                plainPage(), d->progressBar, separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
 
@@ -188,6 +188,7 @@ void CtrlPanelDlg::abortPreview()
     m_imagePreviewWidget->setProgress(0);
     m_imagePreviewWidget->setPreviewImageWaitCursor(false);
     m_imagePreviewWidget->setEnable(true);
+    m_imagePreviewWidget->setProgressVisible(false);
     enableButton(Ok,      true);
     enableButton(User1,   false);
     enableButton(User2,   true);
@@ -225,7 +226,7 @@ void CtrlPanelDlg::slotCancel()
        kapp->restoreOverrideCursor();
     }
     
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    saveDialogSize(d->name + QString(" Tool Dialog"));
     done(Cancel);
 }
 
@@ -239,7 +240,7 @@ void CtrlPanelDlg::closeEvent(QCloseEvent *e)
        kapp->restoreOverrideCursor();
     }
 
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    saveDialogSize(d->name + QString(" Tool Dialog"));
     e->accept();
 }
 
@@ -295,6 +296,7 @@ void CtrlPanelDlg::slotEffect()
     kdDebug() << "Preview " << d->name << " started..." << endl;
 
     m_imagePreviewWidget->setEnable(false);
+    m_imagePreviewWidget->setProgressVisible(true);
     enableButton(Ok,      false);
     enableButton(User1,   true);
     enableButton(User2,   false);
@@ -314,10 +316,11 @@ void CtrlPanelDlg::slotOk()
 {
     d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
     kdDebug() << "Final " << d->name << " started..." << endl;
-    saveDialogSize(d->name + QString::QString(" Tool Dialog"));
+    saveDialogSize(d->name + QString(" Tool Dialog"));
     writeUserSettings();
 
     m_imagePreviewWidget->setEnable(false);
+    m_imagePreviewWidget->setProgressVisible(true);
     enableButton(Ok,      false);
     enableButton(User1,   false);
     enableButton(User2,   false);

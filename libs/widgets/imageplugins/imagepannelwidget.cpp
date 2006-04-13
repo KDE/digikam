@@ -275,13 +275,14 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
     d->progressBar->setProgress(0);
     d->progressBar->setMaximumHeight( fontMetrics().height() );
-    setProgressVisible(progress);
     
+    QSpacerItem* spacer = new QSpacerItem( KDialog::spacingHint(), KDialog::spacingHint(),
+                                           QSizePolicy::Expanding, QSizePolicy::Minimum );
+
     QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
-    h1->addSpacing(KDialog::marginHint());
     h1->addWidget(d->separateView);
+    h1->addItem(spacer);
     h1->addWidget(d->progressBar);
-    h1->addSpacing(KDialog::marginHint());
     
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
@@ -293,6 +294,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
 
     // -------------------------------------------------------------
     
+    setProgressVisible(false);
     QTimer::singleShot(0, this, SLOT(slotInitGui())); 
     
     // -------------------------------------------------------------
