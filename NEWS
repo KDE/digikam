@@ -78,4 +78,6 @@ BUGFIX from B.K.O:
 ==> 113103 (Show digikam comments into digikam image editor)
 ==> 124939 (Improve import picture nomenclature)
 ==> 113915 (Tags are lost after "Save As..."ing)
+==> 103245 (Image Effects are inaccessible from image editor)
+
 ...
