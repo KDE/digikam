@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-12-08
- * Description : ICC Settings Container..
+ * Description : ICC Settings Container.
  * 
  * Copyright 2005-2006 by  F.J. Cruz
  *
@@ -38,7 +38,7 @@ public:
     
     ICCSettingsContainer()
     {
-        enableCMSetting    = false;
+        enableCMSetting    = false;  // IMPORTANT: by default, ICC color management must be disable.
 
         askOrApplySetting  = false;
         BPCSetting         = false;

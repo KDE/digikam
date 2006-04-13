@@ -434,15 +434,11 @@ void ShowFoto::slotOpenURL(const KURL& url)
 #endif
     
     if (m_ICCSettings->enableCMSetting)
-    {
         kdDebug() << "enableCMSetting=true" << endl;
-        m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
-    }
     else
-    {
         kdDebug() << "enableCMSetting=false" << endl;
-        m_canvas->load(localFile, 0, m_IOFileSettings);
-    }
+        
+    m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
 }
 
 void ShowFoto::toggleGUI2FullScreen()

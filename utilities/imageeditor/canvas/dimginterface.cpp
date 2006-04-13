@@ -200,22 +200,20 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         return;
 
     bool apply;
-    bool valRet     = false;
-
-    d->image = img;
+    bool valRet = false;
+    d->image    = img;
 
     if (!d->image.isNull())
     {
         d->origWidth  = d->image.width();
         d->origHeight = d->image.height();
         d->valid      = true;
-
         d->width      = d->origWidth;
         d->height     = d->origHeight;
 
         valRet        = true;
         
-        if (d->cmSettings)
+        if (d->cmSettings->enableCMSetting)
         {
             if (d->cmSettings->askOrApplySetting)
             {
@@ -451,6 +449,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // Try hard to find a mimetype.
     QString mimeType = givenMimeType;
+    
     // This is possibly empty
     if (mimeType.isEmpty())
     {
