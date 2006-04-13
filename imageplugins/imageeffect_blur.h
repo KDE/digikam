@@ -27,12 +27,6 @@
 
 class KIntNumInput;
 
-namespace Digikam
-{
-class ImagePannelWidget;
-class DImgGaussianBlur;
-}
-
 namespace DigikamImagesPluginCore
 {
 

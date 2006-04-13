@@ -25,15 +25,7 @@
 
 #include "ctrlpaneldlg.h"
 
-class QTimer;
-
 class KIntNumInput;
-
-namespace Digikam
-{
-class ImagePannelWidget;
-class DImgSharpen;
-}
 
 namespace DigikamImagesPluginCore
 {
