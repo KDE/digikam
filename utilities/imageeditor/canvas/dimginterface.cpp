@@ -606,7 +606,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     d->cmod.applyBCG(img);
     img.convertDepth(32);
 
-    if (d->cmSettings->managedViewSetting)
+    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
                                         d->cmSettings->monitorSetting));
@@ -659,7 +659,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    if (d->cmSettings->managedViewSetting)
+    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
         QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
                                         d->cmSettings->monitorSetting));

@@ -329,7 +329,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 
         if (iccSettings)
         {
-            if (iccSettings->managedViewSetting)
+            if (iccSettings->enableCMSetting && iccSettings->managedViewSetting)
             {
                 pixImage = d->targetPreviewImage.convertToPixmap(iccSettings->inputSetting,
                                                  iccSettings->monitorSetting);
