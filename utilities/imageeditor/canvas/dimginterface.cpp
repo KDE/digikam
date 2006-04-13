@@ -169,24 +169,24 @@ void DImgInterface::load(const QString& filename,
                          ICCSettingsContainer *cmSettings,
                          IOFileSettingsContainer* iofileSettings)
 {
-    d->valid      = false;
-    d->filename   = filename;
-    d->width      = 0;
-    d->height     = 0;
-    d->origWidth  = 0;
-    d->origHeight = 0;
-    d->selX       = 0;
-    d->selY       = 0;
-    d->selW       = 0;
-    d->selH       = 0;
-    d->gamma      = 1.0;
-    d->contrast   = 1.0;
-    d->brightness = 0.0;
-    d->changedBCG = false;
-    d->cmod.reset();
-
+    d->valid          = false;
+    d->filename       = filename;
+    d->width          = 0;
+    d->height         = 0;
+    d->origWidth      = 0;
+    d->origHeight     = 0;
+    d->selX           = 0;
+    d->selY           = 0;
+    d->selW           = 0;
+    d->selH           = 0;
+    d->gamma          = 1.0;
+    d->contrast       = 1.0;
+    d->brightness     = 0.0;
+    d->changedBCG     = false;
     d->cmSettings     = cmSettings;
     d->iofileSettings = iofileSettings;
+    
+    d->cmod.reset();
     d->undoMan->clear();
 
     d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
@@ -253,7 +253,8 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                     {
                         kdDebug() << "Pressed YES" << endl;
-                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting), QFile::encodeName(d->cmSettings->workspaceSetting));
+                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
+                                           QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
                     }
                 }
@@ -271,7 +272,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 else
                 {
                     if (trans.getEmbeddedProfileDescriptor()
-                    != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
+                        != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
 
