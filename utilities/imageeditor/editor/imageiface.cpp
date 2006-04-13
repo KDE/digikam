@@ -45,22 +45,22 @@ class ImageIfacePriv
 {
 public:
 
-    DImg          previewImage;
-    DImg          targetPreviewImage;
+    int     originalWidth;
+    int     originalHeight;
+    int     originalBytesDepth;
 
-    int           originalWidth;
-    int           originalHeight;
-    int           originalBytesDepth;
+    int     constrainWidth;
+    int     constrainHeight;
 
-    int           constrainWidth;
-    int           constrainHeight;
+    int     previewWidth;
+    int     previewHeight;
 
-    int           previewWidth;
-    int           previewHeight;
-
-    QPixmap       qcheck;
-    QPixmap       qpix;
-    QBitmap       qmask;
+    QPixmap qcheck;
+    QPixmap qpix;
+    QBitmap qmask;
+    
+    DImg    previewImage;
+    DImg    targetPreviewImage;
 };
 
 ImageIface::ImageIface(int w, int h)
@@ -307,6 +307,11 @@ void ImageIface::convertOriginalColorDepth(int depth)
     DImgInterface::instance()->convertDepth(depth);
 }
 
+QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
+{
+    return DImgInterface::instance()->getEmbeddedICC();
+}
+
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 {
     if ( !d->targetPreviewImage.isNull() )
@@ -320,15 +325,9 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 
         QPixmap pixImage = d->targetPreviewImage.convertToPixmap();
         bitBlt ( &d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false );
-
     }
 
     bitBlt(device, x, y, &d->qpix, 0, 0, -1, -1, Qt::CopyROP, false);
-}
-
-QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
-{
-    return DImgInterface::instance()->getEmbeddedICC();
 }
 
 }   // namespace Digikam
