@@ -51,7 +51,7 @@ public:
     ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar=true);
     ~ImagePropertiesColorsTab();
 
-    void setData(const KURL& url=KURL::KURL(), QRect *selectionArea=0, 
+    void setData(const KURL& url=KURL(), QRect *selectionArea=0, 
                  DImg *img=0, int itemType=0);
 
     void setSelection(QRect *selectionArea);

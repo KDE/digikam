@@ -670,7 +670,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     // Added RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
     filter.append (" ");
-    filter.append ( QString::QString(raw_file_extentions) );  
+    filter.append ( QString(raw_file_extentions) );  
     filter.append (" ");
 
     QString patterns = filter.lower();
@@ -701,7 +701,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( m_bar, KURL::KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( m_bar, KURL(fi->filePath()) );
         ++it;
     }
         

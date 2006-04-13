@@ -116,7 +116,7 @@ ImageDlgBase::ImageDlgBase(QWidget* parent, QString title, QString name,
     showButton(User3, loadFileSettings);
     showButton(Try, tryAction);
 
-    resize(configDialogSize(name + QString::QString(" Tool Dialog")));
+    resize(configDialogSize(name + QString(" Tool Dialog")));
 
     // -------------------------------------------------------------
 

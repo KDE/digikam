@@ -85,7 +85,7 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
 
 void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
-    m_currentURL = KURL::KURL();
+    m_currentURL = KURL();
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
     m_dirtyMetadataTab  = false;

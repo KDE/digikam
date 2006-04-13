@@ -48,7 +48,7 @@ public:
     ImagePropertiesMetaDataTab(QWidget* parent, bool navBar=true);
     ~ImagePropertiesMetaDataTab();
 
-    void setCurrentURL(const KURL& url=KURL::KURL(), int itemType=0);
+    void setCurrentURL(const KURL& url=KURL(), int itemType=0);
     void setCurrentData(const QByteArray& exifData=QByteArray(), 
                         const QByteArray& iptcData=QByteArray(), 
                         const QString& filename=QString::null, int itemType=0);

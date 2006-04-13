@@ -696,10 +696,10 @@ void TIFFLoader::getTiffTextTag(TIFF* tif, int tag)
             imageMetaData().insert(tag, ba);
 
             if (tiffTag == TIFFTAG_MODEL)
-            imageSetCameraModel(QString::QString(text));
+                imageSetCameraModel(QString(text));
 
             if (tiffTag == TIFFTAG_MAKE)
-            imageSetCameraConstructor(QString::QString(text));
+                imageSetCameraConstructor(QString(text));
         }
     }
 }

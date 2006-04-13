@@ -226,8 +226,8 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     
     if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), &constructor[0], &model[0]) == 0 )
     {
-        imageSetCameraModel(QString::QString(model));
-        imageSetCameraConstructor(QString::QString(constructor));
+        imageSetCameraModel(QString(model));
+        imageSetCameraConstructor(QString(constructor));
     }
 
     //----------------------------------------------------------
@@ -402,8 +402,8 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     
     if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), constructor, model) == 0 )
     {
-        imageSetCameraModel(QString::QString(model));
-        imageSetCameraConstructor(QString::QString(constructor));
+        imageSetCameraModel(QString(model));
+        imageSetCameraConstructor(QString(constructor));
     }
 
     //----------------------------------------------------------
