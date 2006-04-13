@@ -34,6 +34,7 @@
 
 // Local includes.
 
+#include "iccsettingscontainer.h"
 #include "dimginterface.h"
 #include "bcgmodifier.h"
 #include "imageiface.h"
@@ -322,8 +323,27 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
             p.drawTiledPixmap(0, 0, d->qpix.width(), d->qpix.height(), d->qcheck);
             p.end();
         }
+        
+        QPixmap pixImage;
+        ICCSettingsContainer* iccSettings = DImgInterface::instance()->getICCSettings();
 
-        QPixmap pixImage = d->targetPreviewImage.convertToPixmap();
+        if (iccSettings)
+        {
+            if (iccSettings->managedViewSetting)
+            {
+                pixImage = d->targetPreviewImage.convertToPixmap(iccSettings->inputSetting,
+                                                 iccSettings->monitorSetting);
+            }
+            else
+            {
+                pixImage = d->targetPreviewImage.convertToPixmap();
+            }
+        }
+        else
+        {
+            pixImage = d->targetPreviewImage.convertToPixmap();
+        }
+        
         bitBlt ( &d->qpix, 0, 0, &pixImage, 0, 0, w, h, Qt::CopyROP, false );
     }
 

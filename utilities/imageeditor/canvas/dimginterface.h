@@ -134,7 +134,9 @@ public:
     void   putImageSelection(const QString &caller, uchar* data);
 
     QByteArray getEmbeddedICC();
-
+    
+    ICCSettingsContainer *getICCSettings();
+    
     QString getImageFileName();
 
 protected slots:

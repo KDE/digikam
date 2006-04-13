@@ -68,20 +68,19 @@ public:
 
     DImgInterfacePrivate()
     {
-        undoMan         = 0;
-        cmSettings      = 0;
-        iofileSettings  = 0;
-        thread          = 0;
-        width           = 0;
-        height          = 0;
-        origWidth       = 0;
-        origHeight      = 0;
-        selX            = 0;
-        selY            = 0;
-        selW            = 0;
-        selH            = 0;
-        zoom            = 1.0;
-        
+        undoMan          = 0;
+        cmSettings       = 0;
+        iofileSettings   = 0;
+        thread           = 0;
+        width            = 0;
+        height           = 0;
+        origWidth        = 0;
+        origHeight       = 0;
+        selX             = 0;
+        selY             = 0;
+        selW             = 0;
+        selH             = 0;
+        zoom             = 1.0;
         exifOrient       = false;
         valid            = false;
         rotatedOrFlipped = false;
@@ -982,6 +981,11 @@ QByteArray DImgInterface::getEmbeddedICC()
 QString DImgInterface::getImageFileName()
 {
     return d->filename.section( '/', -1 );
+}
+
+ICCSettingsContainer* DImgInterface::getICCSettings()
+{
+    return d->cmSettings;
 }
 
 }  // namespace Digikam
