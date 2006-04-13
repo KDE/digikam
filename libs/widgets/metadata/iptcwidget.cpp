@@ -60,6 +60,7 @@ static const char* IptcHumanList[] =
      "Writer",
      "Copyright",
      "Program",
+     "ProgramVersion",
      "Keywords",
      "Urgency",
      "-1"
