@@ -87,40 +87,40 @@ public:
         rotatedOrFlipped = false;
     }
 
-    bool          valid;
-    bool          rotatedOrFlipped;
-    bool          exifOrient;
-
-    int           width;
-    int           height;
-    int           origWidth;
-    int           origHeight;
-    int           selX;
-    int           selY;
-    int           selW;
-    int           selH;
+    bool                     valid;
+    bool                     rotatedOrFlipped;
+    bool                     exifOrient;
+    bool                     changedBCG;
     
-    double        zoom;
-
-    float         gamma;
-    float         brightness;
-    float         contrast;
-    bool          changedBCG;
-
-    QString       filename;
-    QString       savingFilename;
-
-    DImg          image;
-
-    UndoManager  *undoMan;
+    int                      width;
+    int                      height;
+    int                      origWidth;
+    int                      origHeight;
+    int                      selX;
+    int                      selY;
+    int                      selW;
+    int                      selH;
     
-    BCGModifier   cmod;
+    float                    gamma;
+    float                    brightness;
+    float                    contrast;
 
-    ICCSettingsContainer *cmSettings;
+    double                   zoom;
+    
+    QString                  filename;
+    QString                  savingFilename;
+
+    DImg                     image;
+
+    UndoManager             *undoMan;
+    
+    BCGModifier              cmod;
+
+    ICCSettingsContainer    *cmSettings;
 
     IOFileSettingsContainer *iofileSettings;
 
-    SharedLoadSaveThread *thread;
+    SharedLoadSaveThread    *thread;
 };
 
 DImgInterface* DImgInterface::instance()
