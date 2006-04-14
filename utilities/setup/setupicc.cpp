@@ -80,6 +80,7 @@ public:
      {
         enableColorManagement = 0;
         bpcAlgorithm          = 0;
+        managedView           = 0;
         defaultApplyICC       = 0;
         defaultAskICC         = 0;
         defaultPathKU         = 0;
@@ -385,6 +386,10 @@ void SetupICC::readSettings()
     config->setGroup("Color Management");
 
     d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
+    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+    slotToggledWidgets(d->enableColorManagement->isChecked());
     
     if (config->readBoolEntry("BehaviourICC"))
         d->defaultApplyICC->setChecked(true);
@@ -398,11 +403,6 @@ void SetupICC::readSettings()
     d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
     d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
     d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
-    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-
-    slotToggledWidgets(d->enableColorManagement->isChecked());
 }
 
 void SetupICC::slotFillCombos(const QString& url)
@@ -515,7 +515,7 @@ void SetupICC::fillCombos(const QString& url, bool report)
         
         if (report)
         {
-            QString message = i18n("<p>Sorry, there is no profiles files in ");
+            QString message = i18n("<p>Sorry, there is no ICC profiles files in ");
             message.append(url);
             message.append(i18n("</p>"));
             KMessageBox::sorry(this,message);
@@ -529,6 +529,15 @@ void SetupICC::fillCombos(const QString& url, bool report)
     
     d->monitorProfilesKC->clear();
     d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
+    if (d->monitorICCPath.keys().isEmpty())
+    {
+        d->managedView->setEnabled(false);
+        d->managedView->setChecked(false);
+    }
+    else
+    {
+        d->managedView->setEnabled(true);
+    }
     
     d->workProfilesKC->clear();
     d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
