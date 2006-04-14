@@ -82,6 +82,7 @@ using KIO::UDSEntry;
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "scanlib.h"
+#include "dcrawbinary.h"
 
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
@@ -154,6 +155,8 @@ DigikamApp::~DigikamApp()
 
     delete mAlbumManager;
     delete AlbumLister::instance();
+
+    Digikam::DcrawBinary::cleanUp();
 
     m_instance = 0;
 }

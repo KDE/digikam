@@ -107,6 +107,7 @@ extern "C"
 #include "thumbnailsize.h"
 #include "themeengine.h"
 #include "pixmapmanager.h"
+#include "dcrawbinary.h"
 
 #include "cameradragobject.h"
 #include "dragobjects.h"
@@ -879,9 +880,13 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     QString currentFileExtension =
         item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper() + 
-                          settings->getRawFileFilter().lower() +
-                          settings->getRawFileFilter().upper();
+                          settings->getImageFileFilter().upper();
+
+    if (Digikam::DcrawBinary::instance()->isAvailable())
+    {
+        imagefilter += settings->getRawFileFilter().lower() +
+                       settings->getRawFileFilter().upper();
+    }
 
     // If the current item isn't an image file.
     if ( !imagefilter.contains(currentFileExtension) )

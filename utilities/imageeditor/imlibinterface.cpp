@@ -64,6 +64,7 @@ extern "C"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "imlibinterface.h"
+#include "dcrawbinary.h"
 
 namespace Digikam
 {
@@ -300,7 +301,8 @@ bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
             // -2 : 8bit ppm output
             // -w : Use camera white balance, if possible  
             // -a : Use automatic white balance
-            command  = "dcraw -c -2 -w -a -q 0 ";
+            command  = DcrawBinary::instance()->path();
+            command += " -c -2 -w -a -q 0 ";
             command += QFile::encodeName( KProcess::quote( filename ) );
             kdWarning() << "Running dcraw command : " << command << endl;
         

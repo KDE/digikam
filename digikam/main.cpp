@@ -53,6 +53,7 @@
 #include "albummanager.h"
 #include "digikamapp.h"
 #include "digikamfirstrun.h"
+#include "dcrawbinary.h"
 
 static KCmdLineOptions options[] =
 {
@@ -224,6 +225,9 @@ int main(int argc, char *argv[])
         firstRun->show();
         return app.exec();
     }
+
+    if (!Digikam::DcrawBinary::instance()->checkSystem())
+        return 1;
 
     AlbumManager* man = new AlbumManager();
     man->setLibraryPath(albumPath);

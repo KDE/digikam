@@ -36,6 +36,7 @@
 // Local includes.
 
 #include "showfoto.h"
+#include "dcrawbinary.h"
 
 static KCmdLineOptions options[] =
 {
@@ -88,6 +89,9 @@ int main(int argc, char *argv[])
 
     KApplication app;
     KImageIO::registerFormats();
+
+    if (!Digikam::DcrawBinary::instance()->checkSystem())
+        return 1;
 
     KURL::List urlList;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
