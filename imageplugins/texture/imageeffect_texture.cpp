@@ -81,7 +81,7 @@ ImageEffect_Texture::ImageEffect_Texture(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Type:"), gboxSettings);
 
     m_textureType = new QComboBox( false, gboxSettings );

@@ -85,7 +85,7 @@ ImageEffect_BlurFX::ImageEffect_BlurFX(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, 0, spacingHint());
     
     m_effectTypeLabel = new QLabel(i18n("Type:"), gboxSettings);
     

@@ -73,7 +73,7 @@ ImageEffect_Charcoal::ImageEffect_Charcoal(QWidget* parent, QString title, QFram
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Pencil size:"), gboxSettings);
     
     m_pencilInput = new KIntNumInput(gboxSettings);

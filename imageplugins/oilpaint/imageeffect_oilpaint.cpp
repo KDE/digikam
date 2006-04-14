@@ -79,7 +79,7 @@ ImageEffect_OilPaint::ImageEffect_OilPaint(QWidget* parent, QString title, QFram
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 3, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Brush size:"), gboxSettings);
 
     m_brushSizeInput = new KIntNumInput(gboxSettings);

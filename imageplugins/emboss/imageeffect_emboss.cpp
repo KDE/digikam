@@ -81,7 +81,7 @@ ImageEffect_Emboss::ImageEffect_Emboss(QWidget* parent, QString title, QFrame* b
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label1 = new QLabel(i18n("Depth:"), gboxSettings);
     
     m_depthInput = new KIntNumInput(gboxSettings);

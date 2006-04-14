@@ -85,7 +85,7 @@ ImageEffect_HotPixels::ImageEffect_HotPixels(QWidget* parent,QString title, QFra
     // -------------------------------------------------------------
     
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 2, 2, 0, spacingHint());
     
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), gboxSettings);
     m_filterMethodCombo = new QComboBox(gboxSettings);

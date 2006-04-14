@@ -75,7 +75,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 5, 1, 0, spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
