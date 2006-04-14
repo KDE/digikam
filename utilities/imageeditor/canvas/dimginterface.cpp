@@ -338,33 +338,33 @@ void DImgInterface::exifRotate(const QString& filename)
                 break;
 
             case DMetadata::ORIENTATION_HFLIP:
-                flipHoriz();
+                flipHoriz(false);
                 break;
 
             case DMetadata::ORIENTATION_ROT_180:
-                rotate180();
+                rotate180(false);
                 break;
 
             case DMetadata::ORIENTATION_VFLIP:
-                flipVert();
+                flipVert(false);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                rotate90();
-                flipHoriz();
+                rotate90(false);
+                flipHoriz(false);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90:
-                rotate90();
+                rotate90(false);
                 break;
 
             case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                rotate90();
-                flipVert();
+                rotate90(false);
+                flipVert(false);
                 break;
 
             case DMetadata::ORIENTATION_ROT_270:
-                rotate270();
+                rotate270(false);
                 break;
         }
 
