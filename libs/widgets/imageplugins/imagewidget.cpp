@@ -48,7 +48,6 @@ public:
 
     ImageWidgetPriv()
     {
-        title          = 0;
         spotInfoLabel  = 0;
         previewButtons = 0;
         previewWidget  = 0;
@@ -57,7 +56,6 @@ public:
     QHButtonGroup    *previewButtons;
 
     QLabel           *spotInfoLabel;
-    QLabel           *title;
 
     ImageGuideWidget *previewWidget;
 };
@@ -70,8 +68,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
 
     // -------------------------------------------------------------
     
-    d->title = new QLabel(i18n("Preview Mode:"), this);
-    QGridLayout* grid = new QGridLayout(this, 3, 2);
+    QGridLayout* grid = new QGridLayout(this, 1, 3);
 
     d->spotInfoLabel = new QLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
@@ -161,13 +158,12 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     // -------------------------------------------------------------
     
     grid->setRowSpacing(0, KDialog::spacingHint());
-    grid->addMultiCellWidget(d->title, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->previewButtons, 1, 1, 1, 1);
-    grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 2, 2);
+    grid->addMultiCellWidget(d->previewButtons, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->spotInfoLabel, 1, 1, 1, 1);
     grid->setRowSpacing(2, KDialog::spacingHint());
-    grid->addMultiCellWidget(frame, 3, 3, 0, 2);
+    grid->addMultiCellWidget(frame, 3, 3, 0, 1);
     grid->setRowStretch(3, 10);
-    grid->setColStretch(2, 10);
+    grid->setColStretch(1, 10);
 
     // -------------------------------------------------------------
     
@@ -196,7 +192,6 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     else
     {
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
-        d->title->hide();
         d->spotInfoLabel->hide();
         d->previewButtons->hide();    
     }     
@@ -261,7 +256,7 @@ void ImageWidget::setRenderingPreviewMode(int mode)
 void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point)
 {
     DColor color = col;
-    d->spotInfoLabel->setText(i18n("<small>(%1,%2) RGBA:%3,%4,%5,%6</small>")
+    d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6")
                              .arg(point.x()).arg(point.y())
                              .arg(color.red()).arg(color.green())
                              .arg(color.blue()).arg(color.alpha()) );
