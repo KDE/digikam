@@ -144,32 +144,42 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->zoomButtons->setInsideMargin( 0 );
     d->zoomButtons->setFrameShape(QFrame::NoFrame);
 
-    QPushButton *zoomX10Button = new QPushButton( "x1", d->zoomButtons );
-    zoomX10Button->setMaximumHeight( fontMetrics().height() );
+    QPushButton *zoomX10Button = new QPushButton( d->zoomButtons );
+    KGlobal::dirs()->addResourceType("zoom10", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("zoom10", "zoom10.png");
+    zoomX10Button->setPixmap( QPixmap( directory + "zoom10.png" ) );
     d->zoomButtons->insert(zoomX10Button, ImagePannelWidgetPriv::ZoomX10);
     zoomX10Button->setToggleButton(true);
     QWhatsThis::add( zoomX10Button, i18n( "<p>Press this buttom to not magnify image" ) );
 
-    QPushButton *zoomX15Button = new QPushButton( "x1.5", d->zoomButtons );
-    zoomX15Button->setMaximumHeight( fontMetrics().height() );
+    QPushButton *zoomX15Button = new QPushButton( d->zoomButtons );
+    KGlobal::dirs()->addResourceType("zoom15", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("zoom15", "zoom15.png");
+    zoomX15Button->setPixmap( QPixmap( directory + "zoom15.png" ) );
     d->zoomButtons->insert(zoomX15Button, ImagePannelWidgetPriv::ZoomX15);
     zoomX15Button->setToggleButton(true);
     QWhatsThis::add( zoomX15Button, i18n( "<p>Press this buttom to magnify image using 1.5:1 zoom factor." ) );
 
-    QPushButton *zoomX20Button = new QPushButton( "x2", d->zoomButtons );
-    zoomX20Button->setMaximumHeight( fontMetrics().height() );
+    QPushButton *zoomX20Button = new QPushButton( d->zoomButtons );
+    KGlobal::dirs()->addResourceType("zoom20", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("zoom20", "zoom20.png");
+    zoomX20Button->setPixmap( QPixmap( directory + "zoom20.png" ) );
     d->zoomButtons->insert(zoomX20Button, ImagePannelWidgetPriv::ZoomX20);
     zoomX20Button->setToggleButton(true);
     QWhatsThis::add( zoomX20Button, i18n( "<p>Press this buttom to magnify image using 2:1 zoom factor." ) );
 
-    QPushButton *zoomX25Button = new QPushButton( "x2.5", d->zoomButtons );
-    zoomX25Button->setMaximumHeight( fontMetrics().height() );
+    QPushButton *zoomX25Button = new QPushButton( d->zoomButtons );
+    KGlobal::dirs()->addResourceType("zoom25", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("zoom25", "zoom25.png");
+    zoomX25Button->setPixmap( QPixmap( directory + "zoom25.png" ) );
     d->zoomButtons->insert(zoomX25Button, ImagePannelWidgetPriv::ZoomX25);
     zoomX25Button->setToggleButton(true);
     QWhatsThis::add( zoomX25Button, i18n( "<p>Press this buttom to magnify image using 2.5:1 zoom factor." ) );
 
-    QPushButton *zoomX30Button = new QPushButton( "x3", d->zoomButtons );
-    zoomX30Button->setMaximumHeight( fontMetrics().height() );
+    QPushButton *zoomX30Button = new QPushButton( d->zoomButtons );
+    KGlobal::dirs()->addResourceType("zoom30", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("zoom30", "zoom30.png");
+    zoomX30Button->setPixmap( QPixmap( directory + "zoom30.png" ) );
     d->zoomButtons->insert(zoomX30Button, ImagePannelWidgetPriv::ZoomX30);
     zoomX30Button->setToggleButton(true);
     QWhatsThis::add( zoomX30Button, i18n( "<p>Press this buttom to magnify image using 3:1 zoom factor." ) );
@@ -189,7 +199,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        QPushButton *duplicateHorButton = new QPushButton( d->separateView );
        d->separateView->insert(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
        KGlobal::dirs()->addResourceType("duplicatebothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       QString directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
+       directory = KGlobal::dirs()->findResourceDir("duplicatebothhorz", "duplicatebothhorz.png");
        duplicateHorButton->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
        duplicateHorButton->setToggleButton(true);
        QWhatsThis::add( duplicateHorButton, i18n("<p>If you enable this option, you will separate the preview area "
@@ -215,7 +225,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
        QPushButton *separateHorButton = new QPushButton( d->separateView );
        d->separateView->insert(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
        KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
-       QString directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
+       directory = KGlobal::dirs()->findResourceDir("bothhorz", "bothhorz.png");
        separateHorButton->setPixmap( QPixmap( directory + "bothhorz.png" ) );
        separateHorButton->setToggleButton(true);
        QWhatsThis::add( separateHorButton, i18n( "<p>If you enable this option, you will separate the preview area "
@@ -238,7 +248,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QPushButton *noSeparateButton = new QPushButton( d->separateView );
     d->separateView->insert(noSeparateButton, ImageRegionWidget::SeparateViewNone);
     KGlobal::dirs()->addResourceType("target", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("target", "target.png");
+    directory = KGlobal::dirs()->findResourceDir("target", "target.png");
     noSeparateButton->setPixmap( QPixmap( directory + "target.png" ) );
     noSeparateButton->setToggleButton(true);
     QWhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
