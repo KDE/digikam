@@ -56,7 +56,7 @@ ImageEffect_Sharpen::ImageEffect_Sharpen(QWidget* parent)
     setHelp("blursharpentool.anchor", KApplication::kApplication()->aboutData()->appName());
     
     QWidget *gboxSettings     = new QWidget(m_imagePreviewWidget);
-    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, marginHint(), spacingHint());
+    QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
     QLabel *label             = new QLabel(i18n("Sharpness:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings);

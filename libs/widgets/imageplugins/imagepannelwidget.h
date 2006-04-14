@@ -73,7 +73,7 @@ public:
     void   setProgressVisible(bool b);
     void   setProgressWhatsThis(QString desc);
 
-    void   setUserAreaWidget(QWidget *w, bool separator=true);
+    void   setUserAreaWidget(QWidget *w);
     
     void   setPanIconHighLightPoints(QPointArray pt);
     

@@ -139,8 +139,6 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
 
     // -------------------------------------------------------------
     
-    QLabel *zoomLabel = new QLabel(i18n("Zoom Factor:"), d->previewWidget);
-
     d->zoomButtons = new QHButtonGroup(d->previewWidget);
     d->zoomButtons->setExclusive(true);
     d->zoomButtons->setInsideMargin( 0 );
@@ -178,41 +176,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
 
     d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
 
-    d->progressBar = new KProgress(100, d->previewWidget);
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
-    d->progressBar->setProgress(0);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
-    
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
-    d->mainLayout->addMultiCellWidget(zoomLabel, 2, 2, 0, 0);
-    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 1, 1);
-    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 3, 3);
-
-    d->mainLayout->setRowStretch(1, 10);
-    d->mainLayout->setColStretch(2, 10);
-        
     // -------------------------------------------------------------
-
-    QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
-    d->settingsSideBar = new Sidebar(this, sbName.ascii(), Sidebar::Right);
-    d->settingsSideBar->setSplitter(d->splitter);
     
-    d->settings       = new QWidget(d->settingsSideBar);
-    d->settingsLayout = new QVBoxLayout(d->settings);    
-    
-    QFrame *frame3 = new QFrame(d->settings);
-    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
-    d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
-    QWhatsThis::add( d->imagePanIconWidget, i18n("<p>Here you can see the original image panel "
-                                                 "which can help you to select the clip preview."
-                                                 "<p>Click and drag the mouse cursor in the "
-                                                 "red rectangle to change the clip focus."));
-    l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
-
-    // -------------------------------------------------------------
-            
-    d->separateView = new QHButtonGroup(d->settings);
+    d->separateView = new QHButtonGroup(d->previewWidget);
     d->separateView->setExclusive(true);
     d->separateView->setInsideMargin( 0 );
     d->separateView->setFrameShape(QFrame::NoFrame);
@@ -245,7 +211,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
         
     if (separateViewMode == SeparateViewNormal ||
         separateViewMode == SeparateViewAll)
-       {
+    {
        QPushButton *separateHorButton = new QPushButton( d->separateView );
        d->separateView->insert(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
        KGlobal::dirs()->addResourceType("bothhorz", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -267,7 +233,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
                                                  "vertically, displaying the original and target image "
                                                  "at the same time. The original is to the left of the "
                                                  "red dashed line, the target to the right of it." ) );
-       }
+    }
        
     QPushButton *noSeparateButton = new QPushButton( d->separateView );
     d->separateView->insert(noSeparateButton, ImageRegionWidget::SeparateViewNone);
@@ -278,9 +244,43 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                              "be separated." ) );
     
+    // -------------------------------------------------------------
+    
+    d->progressBar = new KProgress(100, d->previewWidget);
+    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setProgress(0);
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
+
+    // -------------------------------------------------------------
+        
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
+    d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 0, 0);
+    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 2, 2);
+    d->mainLayout->addMultiCellWidget(d->separateView, 2, 2, 3, 3);
+    
+    d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setColStretch(1, 10);
+        
+    // -------------------------------------------------------------
+
+    QString sbName(d->settingsSection + QString(" Image Plugin Sidebar"));
+    d->settingsSideBar = new Sidebar(this, sbName.ascii(), Sidebar::Right);
+    d->settingsSideBar->setSplitter(d->splitter);
+    
+    d->settings       = new QWidget(d->settingsSideBar);
+    d->settingsLayout = new QVBoxLayout(d->settings);    
+    
+    QFrame *frame3 = new QFrame(d->settings);
+    frame3->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* l3 = new QVBoxLayout(frame3, 5, 0);
+    d->imagePanIconWidget = new ImagePanIconWidget(360, 240, frame3);
+    QWhatsThis::add( d->imagePanIconWidget, i18n("<p>Here you can see the original image panel "
+                                                 "which can help you to select the clip preview."
+                                                 "<p>Click and drag the mouse cursor in the "
+                                                 "red rectangle to change the clip focus."));
+    l3->addWidget(d->imagePanIconWidget, 0, Qt::AlignCenter);
+
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
-    d->settingsLayout->addSpacing(KDialog::spacingHint());
-    d->settingsLayout->addWidget(d->separateView, 0, Qt::AlignHCenter);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
@@ -385,14 +385,8 @@ void ImagePannelWidget::slotPanIconTakeFocus(void)
     d->imageRegionWidget->restorePixmapRegion();
 }
 
-void ImagePannelWidget::setUserAreaWidget(QWidget *w, bool separator)
+void ImagePannelWidget::setUserAreaWidget(QWidget *w)
 {
-    if (separator)
-    {
-       KSeparator *line = new KSeparator (Horizontal, d->settings);
-       d->settingsLayout->addWidget(line);
-    }
-    
     w->reparent( d->settings, QPoint(0, 0) );
     d->settingsLayout->addSpacing(KDialog::spacingHint());
     d->settingsLayout->addWidget(w);
