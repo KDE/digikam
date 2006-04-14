@@ -41,6 +41,7 @@ DcrawBinary *DcrawBinary::m_instance = 0;
 
 DcrawBinary::DcrawBinary()
 {
+    m_available = false;
 }
 
 DcrawBinary::~DcrawBinary()
@@ -69,7 +70,9 @@ bool DcrawBinary::checkSystem()
 
     QString appName = KGlobal::instance()->aboutData()->programName();
 
-    if (!process.start()) {
+    m_available = process.start();
+
+    if (!m_available) {
         int ret = KMessageBox::warningContinueCancel(
                            kapp->activeWindow(),
                            i18n("<qt><p>Unable to find the dcraw executable:<br> "
@@ -93,12 +96,19 @@ bool DcrawBinary::checkSystem()
             return false;
     }
 
+    // Veturn true even if m_available is false,
+    // return value indicates whether the user wants to abort or continue
     return true;
 }
 
 const char *DcrawBinary::path()
 {
     return "dcraw";
+}
+
+bool DcrawBinary::isAvailable()
+{
+    return m_available;
 }
 
 }

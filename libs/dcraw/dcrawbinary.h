@@ -35,10 +35,13 @@ public:
     bool checkSystem();
 
     const char *path();
+    bool isAvailable();
 private:
     DcrawBinary();
     ~DcrawBinary();
     static DcrawBinary *m_instance;
+
+    bool m_available;
 };
 
 

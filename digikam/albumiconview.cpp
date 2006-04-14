@@ -112,6 +112,7 @@ extern "C"
 #include "albumiconview.h"
 #include "albumdb.h"
 #include "imageattributeswatch.h"
+#include "dcrawbinary.h"
 
 namespace Digikam
 {
@@ -892,9 +893,14 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 
     QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
     QString imagefilter = settings->getImageFileFilter().lower() +
-                          settings->getImageFileFilter().upper() + 
-                          settings->getRawFileFilter().lower() +
-                          settings->getRawFileFilter().upper();
+                          settings->getImageFileFilter().upper();
+
+    if (DcrawBinary::instance()->isAvailable())
+    {
+        // add raw files only if dcraw is available
+        imagefilter += settings->getRawFileFilter().lower() +
+                       settings->getRawFileFilter().upper();
+    }
 
     // If the current item isn't an image file.
     if ( !imagefilter.contains(currentFileExtension) )
