@@ -114,7 +114,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     d->settingsSection = settingsSection;
     d->splitter        = new QSplitter(this);
     d->previewWidget   = new QWidget(d->splitter);
-    d->mainLayout      = new QGridLayout( d->previewWidget, 2, 2, 0, KDialog::spacingHint());
+    d->mainLayout      = new QGridLayout( d->previewWidget, 2, 3, 0, KDialog::spacingHint());
     
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
@@ -177,10 +177,17 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( zoomX30Button, i18n( "<p>Press this buttom to magnify image using 3:1 zoom factor." ) );
 
     d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
+
+    d->progressBar = new KProgress(100, d->previewWidget);
+    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
+    d->progressBar->setProgress(0);
+    d->progressBar->setMaximumHeight( fontMetrics().height() );
     
-    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 2);
+    d->mainLayout->addMultiCellWidget(preview, 0, 1, 0, 3);
     d->mainLayout->addMultiCellWidget(zoomLabel, 2, 2, 0, 0);
     d->mainLayout->addMultiCellWidget(d->zoomButtons, 2, 2, 1, 1);
+    d->mainLayout->addMultiCellWidget(d->progressBar, 2, 2, 3, 3);
+
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setColStretch(2, 10);
         
@@ -271,22 +278,9 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QW
     QWhatsThis::add( noSeparateButton, i18n( "<p>If you enable this option, the preview area will not "
                                              "be separated." ) );
     
-    d->progressBar = new KProgress(100, d->settings);
-    QWhatsThis::add(d->progressBar ,i18n("<p>This is the current percentage of the task completed."));
-    d->progressBar->setProgress(0);
-    d->progressBar->setMaximumHeight( fontMetrics().height() );
-    
-    QSpacerItem* spacer = new QSpacerItem( KDialog::spacingHint(), KDialog::spacingHint(),
-                                           QSizePolicy::Expanding, QSizePolicy::Minimum );
-
-    QHBoxLayout *h1 = new QHBoxLayout( KDialog::spacingHint() ); 
-    h1->addWidget(d->separateView);
-    h1->addItem(spacer);
-    h1->addWidget(d->progressBar);
-    
     d->settingsLayout->addWidget(frame3, 0, Qt::AlignHCenter);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
-    d->settingsLayout->addLayout(h1);
+    d->settingsLayout->addWidget(d->separateView, 0, Qt::AlignHCenter);
     d->settingsLayout->addSpacing(KDialog::spacingHint());
 
     d->settingsSideBar->appendTab(d->settings, SmallIcon("configure"), i18n("Settings"));    
