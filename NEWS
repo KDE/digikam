@@ -79,5 +79,6 @@ BUGFIX from B.K.O:
 ==> 124939 (Improve import picture nomenclature)
 ==> 113915 (Tags are lost after "Save As..."ing)
 ==> 103245 (Image Effects are inaccessible from image editor)
+==> 125589 (saving user preferences not possible)
 
 ...
