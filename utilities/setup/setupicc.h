@@ -49,7 +49,7 @@ public:
 private:
 
     void readSettings();
-    void fillCombos();
+    void fillCombos(const QString& path, bool report);
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
@@ -63,10 +63,6 @@ private slots:
     void slotClickedWork();
     void slotClickedMonitor();
     void slotClickedProof();
-    void slotChangeWorkProfile(int index);
-    void slotChangeInProfile(int index);
-    void slotChangeMonitorProfile(int index);
-    void slotChangeProofProfile(int index);
 
 private:
 

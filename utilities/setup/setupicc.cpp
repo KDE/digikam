@@ -72,63 +72,55 @@
 namespace Digikam
 {
 
-typedef QMap<QString, QString> ICCfilesPath;
-
 class SetupICCPriv
 {
 public:
 
      SetupICCPriv()
      {
-        enableColorManagement   = 0;
-        bpcAlgorithm            = 0;
-        defaultApplyICC         = 0;
-        defaultAskICC           = 0;
-        inICCFiles_file         = 0;
-        workICCFiles_file       = 0;
-        proofICCFiles_file      = 0;
-        monitorICCFiles_file    = 0;
-        defaultPathKU           = 0;
-        inProfilesKC            = 0;
-        workProfilesKC          = 0;
-        proofProfilesKC         = 0;
-        monitorProfilesKC       = 0;
-        renderingIntentKC       = 0;
-        infoWorkProfiles        = 0;
-        infoMonitorProfiles     = 0;
-        infoInProfiles          = 0;
-        infoProofProfiles       = 0;
-        ICCPath                 = QMap<QString, QString>();
+        enableColorManagement = 0;
+        bpcAlgorithm          = 0;
+        defaultApplyICC       = 0;
+        defaultAskICC         = 0;
+        defaultPathKU         = 0;
+        inProfilesKC          = 0;
+        workProfilesKC        = 0;
+        proofProfilesKC       = 0;
+        monitorProfilesKC     = 0;
+        renderingIntentKC     = 0;
+        infoWorkProfiles      = 0;
+        infoMonitorProfiles   = 0;
+        infoInProfiles        = 0;
+        infoProofProfiles     = 0;
      }
 
-    QCheckBox       *enableColorManagement;
-    QCheckBox       *bpcAlgorithm;
-    QCheckBox       *managedView;
+    QCheckBox     *enableColorManagement;
+    QCheckBox     *bpcAlgorithm;
+    QCheckBox     *managedView;
     
-    QRadioButton    *defaultApplyICC;
-    QRadioButton    *defaultAskICC;
+    QRadioButton  *defaultApplyICC;
+    QRadioButton  *defaultAskICC;
 
-    QStringList      inICCFiles_file;
-    QStringList      workICCFiles_file;
-    QStringList      proofICCFiles_file;
-    QStringList      monitorICCFiles_file;
-
-    QPushButton     *infoWorkProfiles;
-    QPushButton     *infoMonitorProfiles;
-    QPushButton     *infoInProfiles;
-    QPushButton     *infoProofProfiles;
+    QPushButton   *infoWorkProfiles;
+    QPushButton   *infoMonitorProfiles;
+    QPushButton   *infoInProfiles;
+    QPushButton   *infoProofProfiles;
     
-    KURLRequester   *defaultPathKU;
+    KURLRequester *defaultPathKU;
 
-    KComboBox       *inProfilesKC;
-    KComboBox       *workProfilesKC;
-    KComboBox       *proofProfilesKC;
-    KComboBox       *monitorProfilesKC;
-    KComboBox       *renderingIntentKC;
+    KComboBox     *inProfilesKC;
+    KComboBox     *workProfilesKC;
+    KComboBox     *proofProfilesKC;
+    KComboBox     *monitorProfilesKC;
+    KComboBox     *renderingIntentKC;
 
-    KDialogBase     *mainDialog;
-
-    ICCfilesPath     ICCPath;
+    KDialogBase   *mainDialog;
+   
+    // Maps to store profile descriptions and profile file path
+    QMap<QString, QString> inICCPath;
+    QMap<QString, QString> workICCPath;
+    QMap<QString, QString> proofICCPath;
+    QMap<QString, QString> monitorICCPath;
 };
 
 SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
@@ -184,9 +176,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     defaultPath->setTitle(i18n("Color Profiles Directory"));
     
     d->defaultPathKU = new KURLRequester(defaultPath);
-    d->defaultPathKU->setMode(KFile::Directory);
+    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
     QWhatsThis::add( d->defaultPathKU, i18n("<p>Default path to the color profiles folder. "
-                     "You must storage your color profiles in this directory.</p>"));
+                     "You must store all your color profiles in this directory.</p>"));
     
     layout->addWidget(defaultPath);
 
@@ -255,8 +247,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 1, 1);
     grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 2, 2);
 
-    fillCombos();
-
     layout->addWidget(profiles);
 
      // --------------------------------------------------------
@@ -309,7 +299,10 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
 
     layout->addWidget(advancedSettingsBox);
+    layout->addStretch();
 
+    readSettings();
+    
     // --------------------------------------------------------
     
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
@@ -318,27 +311,15 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     connect(d->enableColorManagement, SIGNAL(toggled(bool)),
             this, SLOT(slotToggledWidgets(bool)));
 
-    connect(d->proofProfilesKC, SIGNAL(highlighted(int)),
-            this, SLOT(slotChangeProofProfile(int)));
-    
     connect(d->infoProofProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedProof()) );
 
-    connect(d->inProfilesKC, SIGNAL(highlighted(int)),
-            this, SLOT(slotChangeInProfile(int)));
-    
     connect(d->infoInProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedIn()) );
 
-    connect(d->monitorProfilesKC, SIGNAL(highlighted(int)),
-            this, SLOT(slotChangeMonitorProfile(int)));
-    
     connect(d->infoMonitorProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedMonitor()) );
 
-    connect(d->workProfilesKC, SIGNAL(highlighted(int)),
-            this, SLOT(slotChangeWorkProfile(int)));
-            
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
 
@@ -350,11 +331,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     // --------------------------------------------------------
 
-    layout->addStretch();
-
-    slotToggledWidgets(false);
-    
-    readSettings();
     adjustSize();
 }
 
@@ -379,13 +355,9 @@ void SetupICC::applySettings()
         return;          // No need to write settings in this case.
 
     if (d->defaultApplyICC->isChecked())
-    {
         config->writeEntry("BehaviourICC", true);
-    }
     else
-    {
         config->writeEntry("BehaviourICC", false);
-    }
 
     config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
@@ -396,21 +368,14 @@ void SetupICC::applySettings()
     config->writeEntry("RenderingIntent", d->renderingIntentKC->currentItem());
     config->writeEntry("ManagedView", d->managedView->isChecked());
 
-    if (d->inProfilesKC->count() != 0)
-        config->writePathEntry("InProfileFile", d->inICCFiles_file[d->inProfilesKC->currentItem()]);
-    
-    if (d->workProfilesKC->count() != 0)
-        config->writePathEntry("WorkProfileFile", d->workICCFiles_file[d->workProfilesKC->currentItem()]);
-    
-    if (d->monitorProfilesKC->count() != 0)
-        config->writePathEntry("MonitorProfileFile", d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()]);
-    
-    if (d->proofProfilesKC->count() != 0)
-    {
-        config->writePathEntry("ProofProfileFile", d->proofICCFiles_file[d->proofProfilesKC->currentItem()]);
-        kdDebug() << "proof: " << d->proofProfilesKC->currentItem() << endl;
-        kdDebug() << d->proofICCFiles_file[d->proofProfilesKC->currentItem()] << endl;
-    }
+    config->writePathEntry("InProfileFile", 
+            *(d->inICCPath.find(d->inProfilesKC->currentText())));
+    config->writePathEntry("WorkProfileFile", 
+            *(d->workICCPath.find(d->workProfilesKC->currentText())));
+    config->writePathEntry("MonitorProfileFile",
+            *(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
+    config->writePathEntry("ProofProfileFile", 
+            *(d->proofICCPath.find(d->proofProfilesKC->currentText())));
 }
 
 void SetupICC::readSettings()
@@ -421,21 +386,14 @@ void SetupICC::readSettings()
 
     d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     
-    if (!d->enableColorManagement->isChecked())
-        return;          // No need to read settings in this case.
-    
-    slotToggledWidgets(true);
-
     if (config->readBoolEntry("BehaviourICC"))
-    {
         d->defaultApplyICC->setChecked(true);
-    }
     else
-    {
         d->defaultAskICC->setChecked(true);
-    }
 
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
+    fillCombos(d->defaultPathKU->url(), false);
+
     d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
     d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
     d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
@@ -443,25 +401,34 @@ void SetupICC::readSettings()
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-    d->ICCPath["InProfile"]      = config->readPathEntry("InProfileFile");
-    d->ICCPath["WorkProfile"]    = config->readPathEntry("WorkProfileFile");
-    d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-    d->ICCPath["ProofProfile"]   = config->readPathEntry("ProofProfileFile");
+
+    slotToggledWidgets(d->enableColorManagement->isChecked());
 }
 
-void SetupICC::fillCombos()
+void SetupICC::slotFillCombos(const QString& url)
 {
-    KConfig* config = kapp->config();
-    config->setGroup("Color Management");
-    
-    kdDebug()<< config->readPathEntry("DefaultPath") << endl;
+    fillCombos(url, true);
+}
+
+void SetupICC::fillCombos(const QString& url, bool report)
+{
     cmsHPROFILE tmpProfile=0;
-    QDir profilesDir(QFile::encodeName(config->readPathEntry("DefaultPath")), "*.icc;*.icm", QDir::Files);
+
+    if (url.isEmpty())
+    {
+        d->mainDialog->enableButtonOK(false);
+        
+        if (report)
+            KMessageBox::sorry(this, i18n("<p>You must set a default path to color profiles files.</p>"));
+            
+        return;
+    }
+    d->mainDialog->enableButtonOK(true);
+    
+    QDir profilesDir(QFile::encodeName(url), "*.icc;*.icm", QDir::Files);
 
     const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
-    m_proofICCFiles_description=0, m_workICCFiles_description=0;
-
+    
     if (files)
     {
         QFileInfoListIterator it(*files);
@@ -469,102 +436,115 @@ void SetupICC::fillCombos()
 
         while ((fileInfo = it.current()) != 0)
         {
-            ++it;
             QString fileName = fileInfo->filePath();
             tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
             QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-            kdDebug() << "Device class: " << cmsGetDeviceClass(tmpProfile) << endl;
 
             switch ((int)cmsGetDeviceClass(tmpProfile))
             {
                 case icSigInputClass:
                     
                     if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_inICCFiles_description.append(fileName);
-                    }
+                        d->inICCPath.insert(fileName, fileName);
                     else
-                    {
-                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
+                        d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                     
-                    d->inICCFiles_file.append(fileName);
+                    kdDebug() << "ICC file: " << fileName << " ==> Input device class (" 
+                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                     break;
-                    
+                
                 case icSigDisplayClass:
                     
                     if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                     {
-                        m_monitorICCFiles_description.append(fileName);
-                        m_workICCFiles_description.append(fileName);
+                        d->monitorICCPath.insert(fileName, fileName);
+                        d->workICCPath.insert(fileName, fileName);
                     }
                     else
                     {
-                        m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                        d->monitorICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                     }
-                    
-                    d->monitorICCFiles_file.append(fileName);
-                    d->workICCFiles_file.append(fileName);
+
+                    kdDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
+                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                     break;
                 
                 case icSigOutputClass:
                 
                     if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_proofICCFiles_description.append(fileName);
-                    }
+                        d->proofICCPath.insert(fileName, fileName);
                     else
-                    {
-                        m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
-                    
-                    d->proofICCFiles_file.append(fileName);
+                        d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+
+                    kdDebug() << "ICC file: " << fileName << " ==> Output device class (" 
+                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                     break;
                 
                 case icSigColorSpaceClass:
                 
-                    if(QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
                     {
-                        m_workICCFiles_description.append(fileName);
-                        m_inICCFiles_description.append(fileName);
+                        d->inICCPath.insert(fileName, fileName);
+                        d->workICCPath.insert(fileName, fileName);
                     }
                     else
                     {
-                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
+                        d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                     }
-                    
-                    d->workICCFiles_file.append(fileName);
-                    d->inICCFiles_file.append(fileName);
+
+                    kdDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
+                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                    break;
+            
+                default:
+                    kdDebug() << "ICC file: " << fileName << " ==> UNKNOW device class (" 
+                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                     break;
             }
 
             cmsCloseProfile(tmpProfile);
+            ++it;
         }
     }
-    else
+    else 
     {
-        kdDebug() << "No List" << endl;
+        d->mainDialog->enableButtonOK(false);
+        kdDebug() << "No ICC profile files found!!!" << endl;
+        
+        if (report)
+        {
+            QString message = i18n("<p>Sorry, there is no profiles files in ");
+            message.append(url);
+            message.append(i18n("</p>"));
+            KMessageBox::sorry(this,message);
+        }
+        
+        return;
     }
 
-    d->inProfilesKC->insertStringList(m_inICCFiles_description);
-    d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
-    d->workProfilesKC->insertStringList(m_workICCFiles_description);
-    d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
+    d->inProfilesKC->clear();
+    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
+    
+    d->monitorProfilesKC->clear();
+    d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
+    
+    d->workProfilesKC->clear();
+    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
+    
+    d->proofProfilesKC->clear();
+    d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
 }
 
 void SetupICC::slotToggledWidgets(bool t)
 { 
     d->bpcAlgorithm->setEnabled(t);
-    d->bpcAlgorithm->setChecked(t);
 
     d->managedView->setEnabled(t);
-    d->managedView->setChecked(t);
  
     d->defaultApplyICC->setEnabled(t); 
     d->defaultAskICC->setEnabled(t);
-    d->defaultAskICC->setChecked(t);
     d->defaultApplyICC->setChecked(t);
     
     d->defaultPathKU->setEnabled(t);
@@ -579,184 +559,26 @@ void SetupICC::slotToggledWidgets(bool t)
     d->infoMonitorProfiles->setEnabled(t);
     d->infoInProfiles->setEnabled(t);
     d->infoProofProfiles->setEnabled(t);
-
-    if (t)
-    {
-        KConfig* config = kapp->config();
-        config->setGroup("Color Management");
-
-        if (config->readBoolEntry("BehaviourICC"))
-        {
-            d->defaultApplyICC->setChecked(true);
-        }
-        else
-        {
-            d->defaultAskICC->setChecked(false);
-        }
-
-        d->defaultPathKU->setURL(config->readPathEntry("DefaultPath"));
-        d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
-        d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
-        d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
-        d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
-        d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-        d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-        d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-        d->ICCPath["InProfile"]      = config->readPathEntry("InProfileFile");
-        d->ICCPath["WorkProfile"]    = config->readPathEntry("WorkProfileFile");
-        d->ICCPath["MonitorProfile"] = config->readPathEntry("MonitorProfileFile");
-        d->ICCPath["ProofProfile"]   = config->readPathEntry("ProofProfileFile");
-    }
-}
-
-void SetupICC::slotFillCombos(const QString& url)
-{
-    cmsHPROFILE tmpProfile=0;
-
-    if (url.isEmpty())
-    {
-        d->mainDialog->enableButtonOK(false);
-        KMessageBox::sorry(this, i18n("<p>You must set a default path to color profiles files.</p>"));
-        return;
-    }
-    d->mainDialog->enableButtonOK(true);
-    
-    QDir profilesDir(QFile::encodeName(url), "*.icc;*.icm", QDir::Files);
-
-    const QFileInfoList* files = profilesDir.entryInfoList();
-    QStringList m_monitorICCFiles_description=0, m_inICCFiles_description=0,
-    m_proofICCFiles_description=0, m_workICCFiles_description=0;
-
-    if (files)
-    {
-        QFileInfoListIterator it(*files);
-        QFileInfo *fileInfo;
-
-        while ((fileInfo = it.current()) != 0)
-        {
-            ++it;
-            QString fileName = fileInfo->filePath();
-            tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
-            QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-
-            switch ((int)cmsGetDeviceClass(tmpProfile))
-            {
-                case icSigInputClass:
-                    
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_inICCFiles_description.append(fileName);
-                    }
-                    else
-                    {
-                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
-                    
-                    d->inICCFiles_file.append(fileName);
-                    break;
-                
-                case icSigDisplayClass:
-                    
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_monitorICCFiles_description.append(fileName);
-                        m_workICCFiles_description.append(fileName);
-                    }
-                    else
-                    {
-                        m_monitorICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
-                    
-                    d->monitorICCFiles_file.append(fileName);
-                    d->workICCFiles_file.append(fileName);
-                    break;
-                
-                case icSigOutputClass:
-                
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_proofICCFiles_description.append(fileName);
-                    }
-                    else
-                    {
-                        m_proofICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
-                    
-                    d->proofICCFiles_file.append(fileName);
-                    break;
-                
-                case icSigColorSpaceClass:
-                
-                    if(QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                    {
-                        m_workICCFiles_description.append(fileName);
-                        m_inICCFiles_description.append(fileName);
-                    }
-                    else
-                    {
-                        m_workICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                        m_inICCFiles_description.append(QString(cmsTakeProductDesc(tmpProfile)));
-                    }
-                    
-                    d->workICCFiles_file.append(fileName);
-                    d->inICCFiles_file.append(fileName);
-                    break;
-            }
-
-            cmsCloseProfile(tmpProfile);
-        }
-    }
-    else 
-    {
-        d->mainDialog->enableButtonOK(false);
-        QString message = i18n("<p>Sorry, there is no profiles files in ");
-        message.append(url);
-        message.append(i18n("</p>"));
-        KMessageBox::sorry(this,message);
-        return;
-    }
-
-    d->inProfilesKC->clear();
-    m_inICCFiles_description.remove(m_inICCFiles_description.begin());
-    d->inProfilesKC->insertStringList(m_inICCFiles_description);
-    d->monitorProfilesKC->clear();
-    m_monitorICCFiles_description.remove(m_monitorICCFiles_description.begin());
-    d->monitorProfilesKC->insertStringList(m_monitorICCFiles_description);
-    d->workProfilesKC->clear();
-    m_workICCFiles_description.remove(m_workICCFiles_description.begin());
-    d->workProfilesKC->insertStringList(m_workICCFiles_description);
-    d->proofProfilesKC->clear();
-    m_proofICCFiles_description.remove(m_proofICCFiles_description.begin());
-    d->proofProfilesKC->insertStringList(m_proofICCFiles_description);
-    d->workICCFiles_file.remove(d->workICCFiles_file.begin());
-    d->inICCFiles_file.remove(d->inICCFiles_file.begin());
-    d->monitorICCFiles_file.remove(d->monitorICCFiles_file.begin());
-    d->proofICCFiles_file.remove(d->proofICCFiles_file.begin());
-    d->ICCPath["WorkProfile"]    = d->workICCFiles_file[d->workProfilesKC->currentItem()];
-    d->ICCPath["InProfile"]      = d->inICCFiles_file[d->inProfilesKC->currentItem()];
-    d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[d->monitorProfilesKC->currentItem()];
-    d->ICCPath["ProofProfile"]   = d->proofICCFiles_file[d->proofProfilesKC->currentItem()];
 }
 
 void SetupICC::slotClickedWork()
 {
-   profileInfo(d->ICCPath["WorkProfile"]);
+    profileInfo(*(d->workICCPath.find(d->workProfilesKC->currentText())));
 }
 
 void SetupICC::slotClickedIn()
 {
-    profileInfo(d->ICCPath["InProfile"]);
+    profileInfo(*(d->inICCPath.find(d->inProfilesKC->currentText())));
 }
 
 void SetupICC::slotClickedMonitor()
 {
-    profileInfo(d->ICCPath["MonitorProfile"]);
+    profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->currentText())));
 }
 
 void SetupICC::slotClickedProof()
 {
-    profileInfo(d->ICCPath["ProofProfile"]);
+    profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->currentText())));
 }
 
 void SetupICC::profileInfo(const QString& profile)
@@ -769,26 +591,6 @@ void SetupICC::profileInfo(const QString& profile)
 
     ICCProfileInfoDlg infoDlg(this, profile);
     infoDlg.exec();
-}
-
-void SetupICC::slotChangeWorkProfile(int index)
-{
-    d->ICCPath["WorkProfile"] = d->workICCFiles_file[index];
-}
-
-void SetupICC::slotChangeInProfile(int index)
-{
-    d->ICCPath["InProfile"] = d->inICCFiles_file[index];
-}
-
-void SetupICC::slotChangeMonitorProfile(int index)
-{
-    d->ICCPath["MonitorProfile"] = d->monitorICCFiles_file[index];
-}
-
-void SetupICC::slotChangeProofProfile(int index)
-{
-    d->ICCPath["ProofProfile"] = d->proofICCFiles_file[index];
 }
 
 }  // namespace Digikam
