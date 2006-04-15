@@ -1,7 +1,8 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-01
- * Description : 
+ * Description : a widget to display an image preview with some 
+ *               modes to compare effect results.
  * 
  * Copyright 2006 by Gilles Caulier
  *
@@ -21,7 +22,6 @@
 // Qt includes.
  
 #include <qwhatsthis.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qhbuttongroup.h>
@@ -29,6 +29,7 @@
 
 // KDE includes.
 
+#include <ksqueezedtextlabel.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -53,11 +54,11 @@ public:
         previewWidget  = 0;
     }
 
-    QHButtonGroup    *previewButtons;
+    QHButtonGroup      *previewButtons;
 
-    QLabel           *spotInfoLabel;
+    KSqueezedTextLabel *spotInfoLabel;
 
-    ImageGuideWidget *previewWidget;
+    ImageGuideWidget   *previewWidget;
 };
 
 ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis, 
@@ -70,7 +71,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     
     QGridLayout* grid = new QGridLayout(this, 1, 3);
 
-    d->spotInfoLabel = new QLabel(this);
+    d->spotInfoLabel = new KSqueezedTextLabel(this);
     d->spotInfoLabel->setAlignment(Qt::AlignRight);
 
     // -------------------------------------------------------------
