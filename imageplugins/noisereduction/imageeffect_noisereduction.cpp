@@ -332,7 +332,7 @@ void ImageEffect_NoiseReduction::resetValues()
     m_dampingInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
                     
-    m_radiusInput->setValue(5.0);
+    m_radiusInput->setValue(1.0);
     m_lumToleranceInput->setValue(1.0);
     m_thresholdInput->setValue(0.08);
     m_textureInput->setValue(0.0);
