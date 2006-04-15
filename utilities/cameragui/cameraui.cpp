@@ -35,7 +35,6 @@ extern "C"
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qiconview.h>
-#include <qlabel.h>
 #include <qvbox.h>
 #include <qpopupmenu.h>
 #include <qsplitter.h>
@@ -45,7 +44,6 @@ extern "C"
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qprogressbar.h>
 #include <qtooltip.h>
 #include <qtimer.h>
 #include <qwhatsthis.h>
@@ -55,6 +53,7 @@ extern "C"
 // KDE includes.
 
 #include <kmessagebox.h>
+#include <kprogress.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -66,6 +65,7 @@ extern "C"
 #include <kdebug.h>
 #include <kcalendarsystem.h>
 #include <kurllabel.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes.
 
@@ -131,11 +131,11 @@ public:
     QCheckBox                    *setPhotographerId;
     QCheckBox                    *setCredits;
 
-    QLabel                       *status;
-
-    QProgressBar                 *progress;
-
     QSplitter                    *splitter;
+
+    KProgress                    *progress;
+
+    KSqueezedTextLabel           *status;
 
     KURL                          lastDestURL;
 
@@ -241,8 +241,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     d->cancelBtn->setIconSet(iconSet);
     d->cancelBtn->setEnabled(false);
     
-    d->status   = new QLabel(plainPage());
-    d->progress = new QProgressBar(plainPage());
+    d->status   = new KSqueezedTextLabel(plainPage());
+    d->progress = new KProgress(plainPage());
+    d->progress->setMaximumHeight( fontMetrics().height() );
     d->progress->hide();
 
     QFrame *frame = new QFrame(plainPage());
