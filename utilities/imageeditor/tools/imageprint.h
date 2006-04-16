@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-07-13
- * Description :
+ * Description : image editor printing interface.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,48 +32,35 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
-// Digikam includes
-
-#include "dimg.h"
-
-class QCheckBox;
-class QRadioButton;
-class QPushButton;
-
-class KComboBox;
-class KDoubleNumInput;
-
 namespace Digikam
 {
+
+class ImagePrintPrivate;
 
 class ImagePrint
 {
 public:
 
-    ImagePrint(DImg& image, KPrinter& printer,
-               const QString& fileName);
+    ImagePrint(DImg& image, KPrinter& printer, const QString& fileName);
     ~ImagePrint();
 
     bool printImageWithQt();
 
 private:
 
-    QString minimizeString( QString text, const QFontMetrics& metrics,
-                            int maxWidth );
+    QString minimizeString(QString text, const QFontMetrics& metrics, int maxWidth);
     void readSettings();
     
 private:
 
-    DImg          m_image;
-    KPrinter&     m_printer;
-    QString       m_filename;
-    QString       m_inProfilePath;
-    QString       m_outputProfilePath;
+    KPrinter&          m_printer;
 
+    ImagePrintPrivate *d;
 };
 
-
 ///////////////////////////////////////////////////////////////////////////////////
+
+class ImageEditorPrintDialogPagePrivate;
 
 class ImageEditorPrintDialogPage : public KPrintDialogPage
 {
@@ -95,22 +82,11 @@ private slots:
 
 private:
 
-    QRadioButton    *m_scaleToFit;
-    QRadioButton    *m_scale;
-    KDoubleNumInput *m_width;
-    KDoubleNumInput *m_height;
-    KComboBox       *m_units;
-    QCheckBox       *m_addFileName;
-    QCheckBox       *m_blackwhite;
-    QCheckBox       *m_autoRotate;
-    QCheckBox       *m_colorManaged;
-    QPushButton     *m_cmPreferences;
-
-    bool             m_cmEnabled;
-
-    QWidget         *m_parent;
-
     void readSettings();
+
+private:
+
+    ImageEditorPrintDialogPagePrivate *d;
 };
 
 }  // namespace Digikam

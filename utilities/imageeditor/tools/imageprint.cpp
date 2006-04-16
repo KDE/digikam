@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-07-13
- * Description :
+ * Description : image editor printing interface.
  *
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * Original printing code from Kuickshow program.
  * Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
@@ -64,205 +64,44 @@
 
 // Local includes
 
-#include "imageprint.h"
+#include "dimg.h"
 #include "editorwindow.h"
 #include "icctransform.h"
-
+#include "imageprint.h"
 
 namespace Digikam
 {
 
-// Image printdialog class -------------------------------------------------------------
-
-ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
-                          : KPrintDialogPage( parent, name )
+class ImagePrintPrivate
 {
-    m_parent = parent;
-    setTitle( i18n("Image Settings") );
 
-    readSettings();
+public:
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin( KDialog::marginHint() );
-    layout->setSpacing( KDialog::spacingHint() );
+    ImagePrintPrivate(){}
 
-    m_addFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
-    m_addFileName->setChecked( false );
-    layout->addWidget( m_addFileName );
+    QString filename;
+    QString inProfilePath;
+    QString outputProfilePath;
 
-    m_blackwhite = new QCheckBox ( i18n("Print image in &black and white"), this);
-    m_blackwhite->setChecked( false );
-    layout->addWidget (m_blackwhite );
-
-    m_autoRotate = new QCheckBox( i18n("&Auto-rotate page"), this );
-    m_autoRotate->setChecked( false );
-    layout->addWidget( m_autoRotate );
-
-    QVButtonGroup *cmgroup = new QVButtonGroup(i18n("Color Management Settings"), this);
-    layout->addWidget(cmgroup);
-
-    QHBox *cmbox = new QHBox(cmgroup);
-    layout->addWidget(cmbox);
-    cmbox->setSpacing(KDialog::spacingHint());
-    QWidget *wth = new QWidget(cmbox);
-
-    m_colorManaged = new QCheckBox(i18n("Color Management"), cmbox);
-    m_colorManaged->setChecked( false );
-
-    m_cmPreferences = new QPushButton(i18n("Settings"), cmbox);
-
-    wth->setFixedWidth(m_colorManaged->style().subRect( QStyle::SR_CheckBoxIndicator, m_colorManaged ).width());
-    wth = new QWidget(cmbox);
-    cmbox->setStretchFactor(wth, 1);
-
-    connect( m_colorManaged, SIGNAL(toggled(bool)),
-            this, SLOT(slotAlertSettings( bool )) );
-
-    connect( m_cmPreferences, SIGNAL(clicked()),
-             this, SLOT(slotSetupDlg()) );
-    
-
-    QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
-    group->setRadioButtonExclusive( true );
-    layout->addWidget( group );
-
-    m_scaleToFit = new QRadioButton( i18n("Scale image to &fit"), group );
-    m_scaleToFit->setChecked( true );
-
-    m_scale = new QRadioButton( i18n("Print e&xact size: "), group );
-
-    connect( m_scale, SIGNAL( toggled( bool )),
-             this, SLOT( toggleScaling( bool )));
-
-    QHBox *hb = new QHBox( group );
-    layout->addWidget( hb );
-    hb->setSpacing( KDialog::spacingHint() );
-    QWidget *w = new QWidget(hb);
-    w->setFixedWidth(m_scale->style().subRect( QStyle::SR_RadioButtonIndicator, m_scale ).width());
-
-    m_width = new KDoubleNumInput( hb, "exact width" );
-    m_width->setMinValue( 1 );
-
-    new QLabel( "x", hb );
-
-    m_height = new KDoubleNumInput( hb, "exact height" );
-    m_height->setMinValue( 1 );
-
-    m_units = new KComboBox( false, hb, "unit combobox" );
-    m_units->insertItem( i18n("Centimeters") );
-    m_units->insertItem( i18n("Inches") );
-
-    w = new QWidget(hb);
-    hb->setStretchFactor( w, 1 );
-}
-
-ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
-{
-}
-
-void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
-                                           bool /*incldef*/ )
-{
-    QString t = "true";
-    QString f = "false";
-
-    opts["app-imageeditor-printFilename"] = m_addFileName->isChecked() ? t : f;
-    opts["app-imageeditor-blackwhite"] = m_blackwhite->isChecked() ? t : f;
-    opts["app-imageeditor-scaleToFit"] = m_scaleToFit->isChecked() ? t : f;
-    opts["app-imageeditor-scale"] = m_scale->isChecked() ? t : f;
-    opts["app-imageeditor-scale-unit"] = m_units->currentText();
-    opts["app-imageeditor-scale-width"] = QString::number( m_width->value() );
-    opts["app-imageeditor-scale-height"] = QString::number( m_height->value() );
-    opts["app-imageeditor-auto-rotate"] = m_autoRotate->isChecked() ? t : f;
-    opts["app-imageeditor-color-managed"] = m_colorManaged->isChecked() ? t : f;
-}
-
-
-void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
-{
-    QString t = "true";
-    QString f = "false";
-
-    m_addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
-    // This sound strange, but if I copy the code on the line above, the checkbox
-    // was always checked. And this isn't the wanted behavior. So, with this works.
-    // KPrint magic ;-)
-    m_blackwhite->setChecked ( false );
-    m_scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
-    m_scale->setChecked( opts["app-imageeditor-scale"] == t );
-    m_autoRotate->setChecked( opts["app-imageeditor-auto-rotate"] == t );
-
-    m_colorManaged->setChecked( false );
-
-    m_units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
-
-    bool   ok;
-    double val;
-
-    val = opts["app-imageeditor-scale-width"].toDouble( &ok );
-
-    if ( ok )
-        m_width->setValue( val );
-
-    val = opts["app-imageeditor-scale-height"].toDouble( &ok );
-
-    if ( ok )
-        m_height->setValue( val );
-
-    if ( m_scale->isChecked() == m_scaleToFit->isChecked() )
-        m_scaleToFit->setChecked( !m_scale->isChecked() );
-
-    toggleScaling( m_scale->isChecked() );
-}
-
-void ImageEditorPrintDialogPage::toggleScaling( bool enable )
-{
-    m_width->setEnabled( enable );
-    m_height->setEnabled( enable );
-    m_units->setEnabled( enable );
-}
-
-void ImageEditorPrintDialogPage::readSettings()
-{
-    ///TODO implement me
-    KConfig* config = kapp->config();
-
-    config->setGroup("Color Management");
-
-    m_cmEnabled = config->readBoolEntry("EnableCM", false);
-}
-
-void ImageEditorPrintDialogPage::slotSetupDlg()
-{
-    EditorWindow* editor = dynamic_cast<EditorWindow*>(m_parent);
-    editor->setup(true);
-}
-
-void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
-{
-    if (t && !m_cmEnabled)
-    {
-        QString message = i18n("<p>Color Management is disabled</p> \
-                                <p>You can enabled now clicking on \"Settings\" button.</p>");
-        KMessageBox::information(this, message);
-        m_colorManaged->setChecked(!t);
-    }
-}
-
-// Image print class -----------------------------------------------------------------
+    DImg    image;
+};
 
 ImagePrint::ImagePrint(DImg& image, KPrinter& printer, const QString& filename)
-          : m_image( image ), m_printer( printer ), m_filename( filename )
+          : m_printer(printer)
 {
+    d = new ImagePrintPrivate();
+    d->image    = image;
+    d->filename = filename;
 }
 
 ImagePrint::~ImagePrint()
 {
+    delete d;
 }
 
 bool ImagePrint::printImageWithQt()
 {
-    if ( m_image.isNull() )
+    if ( d->image.isNull() )
     {
         kdWarning() << "Supplied Image for printing is null" << endl;
         return false;
@@ -271,28 +110,24 @@ bool ImagePrint::printImageWithQt()
     QString t = "true";
     QString f = "false";
 
-    // TODO : perform all prepare to print transformations using DImg methods.
-    // Paco, we will need to apply printer ICC profile here !
     if (m_printer.option( "app-imageeditor-color-managed") != f)
     {
         IccTransform *transform = new IccTransform();
         readSettings();
 
-        if (m_image.getICCProfil().isNull())
+        if (d->image.getICCProfil().isNull())
         {
-            transform->setProfiles( m_inProfilePath, m_outputProfilePath );
+            transform->setProfiles( d->inProfilePath, d->outputProfilePath );
         }
         else
         {
-            transform->setProfiles(m_outputProfilePath);
+            transform->setProfiles(d->outputProfilePath);
         }
-
         
-        transform->apply( m_image );
+        transform->apply( d->image );
     }
     
-    
-    QImage image2Print = m_image.copyQImage();
+    QImage image2Print = d->image.copyQImage();
 
     // Black & white print ?
     if ( m_printer.option( "app-imageeditor-blackwhite" ) != f)
@@ -326,7 +161,8 @@ bool ImagePrint::printImageWithQt()
     if ( m_printer.option( "app-imageeditor-scaleToFit" ) != f )
     {
         if ( m_printer.option( "app-imageeditor-auto-rotate" ) == t )
-            m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait : KPrinter::Landscape );
+            m_printer.setOrientation( size.width() <= size.height() ? KPrinter::Portrait 
+                                       : KPrinter::Landscape );
 
         // Scale image to fit pagesize
         w = metrics.width();
@@ -399,7 +235,7 @@ bool ImagePrint::printImageWithQt()
 
     if ( printFilename )
     {
-        QString fname = minimizeString( m_filename, fm, w );
+        QString fname = minimizeString( d->filename, fm, w );
 
         if ( !fname.isEmpty() )
         {
@@ -453,8 +289,225 @@ void ImagePrint::readSettings()
 
     config->setGroup("Color Management");
 
-    m_inProfilePath = config->readPathEntry("InProfileFile");
-    m_outputProfilePath = config->readPathEntry("ProofProfileFile");
+    d->inProfilePath = config->readPathEntry("InProfileFile");
+    d->outputProfilePath = config->readPathEntry("ProofProfileFile");
+}
+
+// Image print dialog class -------------------------------------------------------------
+
+class ImageEditorPrintDialogPagePrivate
+{
+
+public:
+
+    ImageEditorPrintDialogPagePrivate()
+    {
+        cmEnabled     = false;
+        scaleToFit    = 0;
+        scale         = 0;
+        addFileName   = 0;
+        blackwhite    = 0;
+        autoRotate    = 0;
+        colorManaged  = 0;
+        cmPreferences = 0;
+        parent        = 0;
+        width         = 0;
+        height        = 0;
+        units         = 0;
+    }
+
+    bool             cmEnabled;
+
+    QRadioButton    *scaleToFit;
+    QRadioButton    *scale;
+
+    QCheckBox       *addFileName;
+    QCheckBox       *blackwhite;
+    QCheckBox       *autoRotate;
+    QCheckBox       *colorManaged;
+
+    QPushButton     *cmPreferences;
+
+    QWidget         *parent;
+
+    KDoubleNumInput *width;
+    KDoubleNumInput *height;
+
+    KComboBox       *units;
+};
+
+ImageEditorPrintDialogPage::ImageEditorPrintDialogPage( QWidget *parent, const char *name )
+                          : KPrintDialogPage( parent, name )
+{
+    d = new ImageEditorPrintDialogPagePrivate;
+    d->parent = parent;
+    setTitle( i18n("Image Settings") );
+
+    readSettings();
+
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
+
+    d->addFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
+    d->addFileName->setChecked( false );
+    layout->addWidget( d->addFileName );
+
+    d->blackwhite = new QCheckBox ( i18n("Print image in &black and white"), this);
+    d->blackwhite->setChecked( false );
+    layout->addWidget (d->blackwhite );
+
+    d->autoRotate = new QCheckBox( i18n("&Auto-rotate page"), this );
+    d->autoRotate->setChecked( false );
+    layout->addWidget( d->autoRotate );
+
+    QVButtonGroup *cmgroup = new QVButtonGroup(i18n("Color Management Settings"), this);
+    layout->addWidget(cmgroup);
+
+    QHBox *cmbox = new QHBox(cmgroup);
+    layout->addWidget(cmbox);
+    cmbox->setSpacing(KDialog::spacingHint());
+    QWidget *wth = new QWidget(cmbox);
+
+    d->colorManaged = new QCheckBox(i18n("Color Management"), cmbox);
+    d->colorManaged->setChecked( false );
+
+    d->cmPreferences = new QPushButton(i18n("Settings"), cmbox);
+
+    wth->setFixedWidth(d->colorManaged->style().subRect( QStyle::SR_CheckBoxIndicator, 
+                                                         d->colorManaged ).width());
+    wth = new QWidget(cmbox);
+    cmbox->setStretchFactor(wth, 1);
+
+    connect( d->colorManaged, SIGNAL(toggled(bool)),
+             this, SLOT(slotAlertSettings( bool )) );
+
+    connect( d->cmPreferences, SIGNAL(clicked()),
+             this, SLOT(slotSetupDlg()) );
+    
+
+    QVButtonGroup *group = new QVButtonGroup( i18n("Scaling"), this );
+    group->setRadioButtonExclusive( true );
+    layout->addWidget( group );
+
+    d->scaleToFit = new QRadioButton( i18n("Scale image to &fit"), group );
+    d->scaleToFit->setChecked( true );
+
+    d->scale = new QRadioButton( i18n("Print e&xact size: "), group );
+
+    connect( d->scale, SIGNAL( toggled( bool )),
+             this, SLOT( toggleScaling( bool )));
+
+    QHBox *hb = new QHBox( group );
+    layout->addWidget( hb );
+    hb->setSpacing( KDialog::spacingHint() );
+    QWidget *w = new QWidget(hb);
+    w->setFixedWidth(d->scale->style().subRect( QStyle::SR_RadioButtonIndicator, d->scale ).width());
+
+    d->width = new KDoubleNumInput( hb, "exact width" );
+    d->width->setMinValue( 1 );
+
+    new QLabel( "x", hb );
+
+    d->height = new KDoubleNumInput( hb, "exact height" );
+    d->height->setMinValue( 1 );
+
+    d->units = new KComboBox( false, hb, "unit combobox" );
+    d->units->insertItem( i18n("Centimeters") );
+    d->units->insertItem( i18n("Inches") );
+
+    w = new QWidget(hb);
+    hb->setStretchFactor( w, 1 );
+}
+
+ImageEditorPrintDialogPage::~ImageEditorPrintDialogPage()
+{
+    delete d;
+}
+
+void ImageEditorPrintDialogPage::getOptions( QMap<QString,QString>& opts,
+                                             bool /*incldef*/ )
+{
+    QString t = "true";
+    QString f = "false";
+
+    opts["app-imageeditor-printFilename"] = d->addFileName->isChecked() ? t : f;
+    opts["app-imageeditor-blackwhite"] = d->blackwhite->isChecked() ? t : f;
+    opts["app-imageeditor-scaleToFit"] = d->scaleToFit->isChecked() ? t : f;
+    opts["app-imageeditor-scale"] = d->scale->isChecked() ? t : f;
+    opts["app-imageeditor-scale-unit"] = d->units->currentText();
+    opts["app-imageeditor-scale-width"] = QString::number( d->width->value() );
+    opts["app-imageeditor-scale-height"] = QString::number( d->height->value() );
+    opts["app-imageeditor-auto-rotate"] = d->autoRotate->isChecked() ? t : f;
+    opts["app-imageeditor-color-managed"] = d->colorManaged->isChecked() ? t : f;
+}
+
+void ImageEditorPrintDialogPage::setOptions( const QMap<QString,QString>& opts )
+{
+    QString t = "true";
+    QString f = "false";
+
+    d->addFileName->setChecked( opts["app-imageeditor-printFilename"] != f );
+    // This sound strange, but if I copy the code on the line above, the checkbox
+    // was always checked. And this isn't the wanted behavior. So, with this works.
+    // KPrint magic ;-)
+    d->blackwhite->setChecked ( false );
+    d->scaleToFit->setChecked( opts["app-imageeditor-scaleToFit"] != f );
+    d->scale->setChecked( opts["app-imageeditor-scale"] == t );
+    d->autoRotate->setChecked( opts["app-imageeditor-auto-rotate"] == t );
+
+    d->colorManaged->setChecked( false );
+
+    d->units->setCurrentItem( opts["app-imageeditor-scale-unit"] );
+
+    bool   ok;
+    double val;
+
+    val = opts["app-imageeditor-scale-width"].toDouble( &ok );
+
+    if ( ok )
+        d->width->setValue( val );
+
+    val = opts["app-imageeditor-scale-height"].toDouble( &ok );
+
+    if ( ok )
+        d->height->setValue( val );
+
+    if ( d->scale->isChecked() == d->scaleToFit->isChecked() )
+        d->scaleToFit->setChecked( !d->scale->isChecked() );
+
+    toggleScaling( d->scale->isChecked() );
+}
+
+void ImageEditorPrintDialogPage::toggleScaling( bool enable )
+{
+    d->width->setEnabled( enable );
+    d->height->setEnabled( enable );
+    d->units->setEnabled( enable );
+}
+
+void ImageEditorPrintDialogPage::readSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management");
+    d->cmEnabled = config->readBoolEntry("EnableCM", false);
+}
+
+void ImageEditorPrintDialogPage::slotSetupDlg()
+{
+    EditorWindow* editor = dynamic_cast<EditorWindow*>(d->parent);
+    editor->setup(true);
+}
+
+void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
+{
+    if (t && !d->cmEnabled)
+    {
+        QString message = i18n("<p>Color Management is disabled</p> \
+                                <p>You can enabled now clicking on \"Settings\" button.</p>");
+        KMessageBox::information(this, message);
+        d->colorManaged->setChecked(!t);
+    }
 }
 
 }  // namespace Digikam
