@@ -2,8 +2,8 @@
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- * Description : digiKam image editor ICC profile
- *               correction tool
+ * Description : digiKam image editor to correct an image using
+ *               an ICC color profile
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -291,7 +291,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info"), spaceProfileBG);
 
-
     secondPageLayout->addWidget(spaceProfileBG);
     secondPageLayout->addStretch();
 
@@ -321,7 +320,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info"), proofProfileBG);
-
 
     thirdPageLayout->addWidget(proofProfileBG);
     thirdPageLayout->addStretch();
@@ -359,7 +357,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- End Fourth Page ------------------------------------
 
     gridSettings->addMultiCellWidget(m_tabsWidgets, 4, 4, 0, 2);
-
     gridSettings->setRowStretch(6, 10);    
     setUserAreaWidget(gboxSettings);
 
@@ -392,7 +389,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     // -------------------------------------------------------------
 
     enableButtonOK( false );
-
     readSettings();
 }
 
@@ -489,8 +485,7 @@ void ImageEffect_ICCProof::slotEffect()
     memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
     m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
-    kapp->restoreOverrideCursor();
-    
+    kapp->restoreOverrideCursor();    
 }
 
 void ImageEffect_ICCProof::finalRendering()
@@ -516,10 +511,7 @@ void ImageEffect_ICCProof::finalRendering()
             QString tmpInPath;
             QString tmpProofPath;
             QString tmpSpacePath;
-
-            bool inCondition;
             bool proofCondition;
-            bool spaceCondiiton;
             
             ///////////////////////////////////////
             // Get parameters for transformation //
@@ -594,8 +586,6 @@ void ImageEffect_ICCProof::finalRendering()
                     transform.setProfiles( tmpInPath, tmpSpacePath );
                 }
             }
-        
-
             
             if (m_useEmbeddedProfile->isChecked())
             {
@@ -748,8 +738,7 @@ void ImageEffect_ICCProof::slotTry()
         kdDebug() << "Doing updateData" << endl;
         m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
         kapp->restoreOverrideCursor();
-    }
-    
+    }    
 }
 
 void ImageEffect_ICCProof::readSettings()
@@ -805,7 +794,6 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
 }
 
-
 /*!
     \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotProofICCInfo()
  */
@@ -821,7 +809,6 @@ void ImageEffect_ICCProof::slotProofICCInfo()
     }
 }
 
-
 /*!
     \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotSpaceICCInfo()
  */
@@ -836,7 +823,6 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
         getICCInfo(m_spaceProfileCB->url());
     }
 }
-
 
 /*!
     \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotDisplayICCInfo()

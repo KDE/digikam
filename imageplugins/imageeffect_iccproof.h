@@ -2,8 +2,8 @@
  * Author: F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- * Description : digiKam image editor ICC profile
- *               correction tool
+ * Description : digiKam image editor to correct an image using
+ *               an ICC color profile
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +58,6 @@ class ImageEffect_ICCProof : public Digikam::ImageDlgBase
 public:
     
     ImageEffect_ICCProof(QWidget* parent);
-
     ~ImageEffect_ICCProof();
 
 private:
