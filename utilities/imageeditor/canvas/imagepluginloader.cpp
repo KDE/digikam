@@ -2,8 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-06-04
- * Description : load digiKam image editor plugins list 
- *               configured in setup dialog.
+ * Description : image plugins loader for  digiKam image editor
  * 
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  * Copyright 2006 by Gilles Caulier
@@ -39,6 +38,26 @@
 namespace Digikam
 {
 
+class ImagePluginLoaderPrivate
+{
+
+public:
+
+    typedef QPair<QString, ImagePlugin*>  PluginType;
+    typedef QValueList< PluginType >      PluginList;
+
+public:
+
+    ImagePluginLoaderPrivate()
+    {
+        splash = 0;
+    }
+
+    SplashScreen *splash;
+
+    PluginList    pluginList;
+};
+
 ImagePluginLoader* ImagePluginLoader::m_instance=0;
 
 ImagePluginLoader* ImagePluginLoader::instance()
@@ -50,7 +69,8 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
                  : QObject(parent)
 {
     m_instance = this;
-    m_splash   = splash;
+    d = new ImagePluginLoaderPrivate;
+    d->splash = splash;
     
     QStringList imagePluginsList2Load;
     KConfig* config = kapp->config();
@@ -82,6 +102,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
 
 ImagePluginLoader::~ImagePluginLoader()
 {
+    delete d;
     m_instance = 0;
 }
 
@@ -104,32 +125,30 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
             if (!pluginIsLoaded(service->name()) )
             {
                 int error;
-                plugin = KParts::ComponentFactory
-                         ::createInstanceFromService<ImagePlugin>(service, this,
-                                                                           service->name().local8Bit(),
-                                                                           0, &error);
+                plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
+                                 service, this, service->name().local8Bit(), 0, &error);
 
                 if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
                 {
-                    m_pluginList.append(PluginType(service->name(), plugin));
+                    d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
                 
                     kdDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
                  
-                    if (m_splash)      
-                        m_splash->message(i18n("Loading: %1").arg(service->name()));
+                    if (d->splash)      
+                        d->splash->message(i18n("Loading: %1").arg(service->name()));
                     
                     ++cpt;
                 }
                 else
                 {
-                    kdWarning(  ) << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
-                                  << service->name()
-                                  << " (" << service->library() << ")"
-                                  << " with error number "
-                                  << error << endl;
+                    kdWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                                << service->name()
+                                << " (" << service->library() << ")"
+                                << " with error number "
+                                << error << endl;
                     if (error == KParts::ComponentFactory::ErrNoLibrary)
-                        kdWarning(  ) << "KLibLoader says: "
-                                      << KLibLoader::self()->lastErrorMessage() << endl;
+                        kdWarning() << "KLibLoader says: "
+                                    << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
             break;
@@ -146,7 +165,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         if (!list.contains(service->library()) && service->library() != "digikamimageplugin_core")
         {
             if ((plugin = pluginIsLoaded(service->name())) != NULL)
-                m_pluginList.remove(PluginType(service->name(),plugin));
+                d->pluginList.remove(ImagePluginLoaderPrivate::PluginType(service->name(),plugin));
         }
         else 
         {
@@ -154,19 +173,17 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 continue;
             else
             {
-                plugin = KParts::ComponentFactory
-                         ::createInstanceFromService<ImagePlugin>(service, this,
-                                                                           service->name().local8Bit(),
-                                                                           0);
+                plugin = KParts::ComponentFactory::createInstanceFromService<ImagePlugin>(
+                                 service, this, service->name().local8Bit(), 0);
 
                 if (plugin)
                 {
-                    m_pluginList.append(PluginType(service->name(), plugin));
+                    d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
                 
                     kdDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
                 
-                    if (m_splash)      
-                        m_splash->message(i18n("Loading: %1").arg(service->name()));
+                    if (d->splash)      
+                        d->splash->message(i18n("Loading: %1").arg(service->name()));
                 
                     ++cpt;
                 }
@@ -174,20 +191,21 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
         }
     }
 
-    if (m_splash)      
-        m_splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));    
+    if (d->splash)      
+        d->splash->message(i18n("1 Image Plugin Loaded", "%n Image Plugins Loaded", cpt));    
 
-    m_splash = 0;        // Splashcreen is only lanched at the first time.
+    d->splash = 0;       // Splashcreen is only lanched at the first time.
                          // If user change plugins list to use in setup, don't try to 
                          // use the old splashscreen instance.
 }
 
 ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
 {
-    if ( m_pluginList.isEmpty() )
+    if ( d->pluginList.isEmpty() )
         return 0;
 
-    for (PluginList::iterator it = m_pluginList.begin(); it != m_pluginList.end(); ++it)
+    for (ImagePluginLoaderPrivate::PluginList::iterator it = d->pluginList.begin(); 
+         it != d->pluginList.end(); ++it)
     {
         if ((*it).first == name )
             return (*it).second;
@@ -219,7 +237,8 @@ QPtrList<ImagePlugin> ImagePluginLoader::pluginList()
 {
     QPtrList<ImagePlugin> list;
 
-    for (PluginList::iterator it = m_pluginList.begin(); it != m_pluginList.end(); ++it)
+    for (ImagePluginLoaderPrivate::PluginList::iterator it = d->pluginList.begin(); 
+         it != d->pluginList.end(); ++it)
     {
         list.append((*it).second);
     }

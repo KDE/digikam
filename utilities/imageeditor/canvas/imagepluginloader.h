@@ -2,8 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-06-04
- * Description : load digiKam image editor plugins list 
- *               configured in setup dialog.
+ * Description : image plugins loader for  digiKam image editor
  *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  * Copyright 2006 by Gilles Caulier
@@ -40,6 +39,7 @@ namespace Digikam
 {
 
 class SplashScreen;
+class ImagePluginLoaderPrivate;
 
 class ImagePluginLoader : public QObject
 {
@@ -64,15 +64,9 @@ private:
 
 private:
 
-    typedef QPair<QString, ImagePlugin*>  PluginType;
-    typedef QValueList< PluginType >      PluginList;
-    
     static ImagePluginLoader             *m_instance;
-    
-    SplashScreen                         *m_splash;
 
-    PluginList                            m_pluginList;
-    
+    ImagePluginLoaderPrivate *d;
 };
 
 }  // namespace Digikam
