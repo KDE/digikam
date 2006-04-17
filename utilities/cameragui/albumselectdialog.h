@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-06-16
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-06-16
+ * Description : a dialog to select a target album to downoad
+ *               pictures from camera
  * 
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +39,8 @@ class PAlbum;
 namespace Digikam
 {
 
+class AlbumSelectDialogPrivate;
+
 class AlbumSelectDialog : public KDialogBase
 {
     Q_OBJECT
@@ -46,13 +51,14 @@ public:
                       const QString& header=QString::null,
                       const QString& newAlbumString=QString::null,
                       bool allowRootSelection=false);
+    ~AlbumSelectDialog();
+
 
     static PAlbum* selectAlbum(QWidget* parent,
                                PAlbum* albumToSelect,
                                const QString& header=QString::null,
                                const QString& newAlbumString=QString::null,
                                bool allowRootSelection=false);
-
 
 private slots:
 
@@ -65,10 +71,7 @@ private slots:
     
 private:
 
-    bool                       m_allowRootSelection;
-    FolderView*                m_folderView;
-    QString                    m_newAlbumString;
-    QMap<FolderItem*, PAlbum*> m_albumMap;
+    AlbumSelectDialogPrivate * d;
 };
 
 }  // namespace Digikam
