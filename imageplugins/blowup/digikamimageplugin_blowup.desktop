@@ -2,6 +2,7 @@
 Name=ImagePlugin_BlowUp
 Name[bg]=Приставка за снимки - Цифрово увеличение
 Name[el]=ΠρόσθετοΕικόνας_Αστάθεια
+Name[hr]=Uvećanje
 Name[it]=PluginImmagini_Espansione
 Name[nl]=Afbeeldingsplugin_Opblazen
 Name[pt_BR]=Plug-in de explosão
@@ -22,6 +23,7 @@ Comment[el]=Πρόσθετο αστάθειας μιας φωτογραφίας 
 Comment[es]=Plugin de digiKam para ampliar una fotografía
 Comment[et]=DigiKami foto suurendamise plugin
 Comment[fr]=Module externe pour agrandir une image
+Comment[hr]=digiKam dodatak za uvećanje fotografija
 Comment[it]=Plugin di digiKam per espandere una fotografia
 Comment[ja]=digiKam 写真引き伸ばしプラグイン
 Comment[nl]=digiKam-pluin voor het opblazen van een foto

@@ -2,6 +2,7 @@
 Name=ImagePlugin_Refocus
 Name[bg]=Приставка за снимки - Промяна на фокуса
 Name[el]=ΠρόσθετοΕικόνας_Επανεστίαση
+Name[hr]=Izmjena fokusa
 Name[it]=PluginImmagini_RimettiAFuoco
 Name[nl]=Afbeeldingsplugin_OpnieuwFocussen
 Name[pt_BR]=Plug-in de re-foco da imagem
@@ -22,6 +23,7 @@ Comment[el]=Πρόσθετο για την επανεστίαση μιας ει�
 Comment[es]=Plugin de digiKam para refocalizar una imagen
 Comment[et]=DigiKami pildi fookuse muutmise plugin
 Comment[fr]=Module externe pour rendre une image nette (Refocus)
+Comment[hr]=digiKam dodatak za izmjenu fokusa slike
 Comment[it]=Plugin di digiKam per rimettere a fuoco un'immagine
 Comment[ja]=digiKam リフォーカス補正プラグイン
 Comment[nl]=digiKam-plugin voor het opnieuw focussen van een afbeelding
