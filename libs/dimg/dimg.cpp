@@ -34,6 +34,7 @@ extern "C"
 // Qt includes.
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qmap.h>
 
 // KDE includes.
@@ -95,7 +96,6 @@ DImg::DImg(const DImg &image, int w, int h)
     setImageDimension(w, h);
     allocateData();
 }
-
 
 DImg::~DImg()
 {
@@ -284,7 +284,6 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 
 bool DImg::load(const QString& filePath, DImgLoaderObserver *observer,
                 RawDecodingSettings rawDecodingSettings)
-
 {
     FORMAT format = fileFormat(filePath);
 
@@ -429,6 +428,27 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 {
     if ( filePath == QString::null )
         return NONE;
+
+    // In first we trying to check the file extension. This is mandatory because
+    // some tiff files are detected like RAW files by dcraw::parse method.
+
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists())
+    {
+        kdDebug() << k_funcinfo << "Failed to open file" << endl;
+        return NONE;
+    }
+    
+    QString ext = fileInfo.extension().upper();
+
+    if (ext == QString("JPEG") || ext == QString("JPG"))
+        return JPEG;
+    else if (ext == QString("PNG"))
+        return PNG;
+    else if (ext == QString("TIFF") || ext == QString("TIF"))
+        return TIFF;
+
+    // In second, we trying to parse file header.
 
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     
