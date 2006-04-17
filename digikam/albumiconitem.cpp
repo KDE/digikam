@@ -259,6 +259,19 @@ void AlbumIconItem::paintItem()
         p.setFont(view_->itemFontXtra());
         QString str;
         dateToString(date, str);
+        str = i18n("created : %1").arg(str);
+        p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
+    }
+    
+    if (settings->getIconShowModDate())
+    {
+        QDateTime date(info_->modDateTime());
+
+        r = view_->itemModDateRect();    
+        p.setFont(view_->itemFontXtra());
+        QString str;
+        dateToString(date, str);
+        str = i18n("modified : %1").arg(str);
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), str));
     }
     

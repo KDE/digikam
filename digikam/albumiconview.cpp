@@ -137,6 +137,7 @@ public:
     QRect   itemRect;
     QRect   itemRatingRect;
     QRect   itemDateRect;
+    QRect   itemModDateRect;
     QRect   itemPixmapRect;
     QRect   itemNameRect;
     QRect   itemCommentsRect;
@@ -1379,6 +1380,11 @@ QRect AlbumIconView::itemDateRect() const
     return d->itemDateRect;
 }
 
+QRect AlbumIconView::itemModDateRect() const
+{
+    return d->itemModDateRect;
+}
+
 QRect AlbumIconView::itemPixmapRect() const
 {
     return d->itemPixmapRect;
@@ -1500,6 +1506,7 @@ void AlbumIconView::updateItemRectsPixmap()
     d->itemRect = QRect(0,0,0,0);
     d->itemRatingRect = QRect(0,0,0,0);
     d->itemDateRect = QRect(0,0,0,0);
+    d->itemModDateRect = QRect(0,0,0,0);
     d->itemPixmapRect = QRect(0,0,0,0);
     d->itemNameRect = QRect(0,0,0,0);
     d->itemCommentsRect = QRect(0,0,0,0);
@@ -1569,6 +1576,12 @@ void AlbumIconView::updateItemRectsPixmap()
     {
         d->itemDateRect = QRect(margin, y, w, oneRowXtraRect.height());
         y = d->itemDateRect.bottom();
+    }
+
+    if (d->albumSettings->getIconShowModDate())
+    {
+        d->itemModDateRect = QRect(margin, y, w, oneRowXtraRect.height());
+        y = d->itemModDateRect.bottom();
     }
 
     if (d->albumSettings->getIconShowResolution())

@@ -52,6 +52,7 @@ public:
     bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
+    bool iconShowModDate;
     bool iconShowComments;
     bool iconShowResolution;
     bool iconShowTags;
@@ -146,6 +147,7 @@ void AlbumSettings::init()
     d->iconShowName       = false;
     d->iconShowSize       = false;
     d->iconShowDate       = true;
+    d->iconShowModDate    = true;
     d->iconShowComments   = true;
     d->iconShowResolution = false;
     d->iconShowTags       = true;
@@ -204,6 +206,8 @@ void AlbumSettings::readSettings()
 
     d->iconShowDate = config->readBoolEntry("Icon Show Date", true);
 
+    d->iconShowModDate = config->readBoolEntry("Icon Show Modification Date", true);
+
     d->iconShowComments = config->readBoolEntry("Icon Show Comments", true);
 
     d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
@@ -256,6 +260,7 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show Resolution", d->iconShowResolution);
     config->writeEntry("Icon Show Size", d->iconShowSize);
     config->writeEntry("Icon Show Date", d->iconShowDate);
+    config->writeEntry("Icon Show Modification Date", d->iconShowModDate);
     config->writeEntry("Icon Show Comments", d->iconShowComments);
     config->writeEntry("Icon Show Tags", d->iconShowTags);
     config->writeEntry("Icon Show Rating", d->iconShowRating);
@@ -491,6 +496,16 @@ void AlbumSettings::setIconShowDate(bool val)
 bool AlbumSettings::getIconShowDate() const
 {
     return d->iconShowDate;
+}
+
+void AlbumSettings::setIconShowModDate(bool val)
+{
+    d->iconShowModDate = val;
+}
+
+bool AlbumSettings::getIconShowModDate() const
+{
+    return d->iconShowModDate;
 }
 
 void AlbumSettings::setIconShowRating(bool val)

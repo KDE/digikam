@@ -116,6 +116,9 @@ public:
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 
+    void setIconShowModDate(bool val);
+    bool getIconShowModDate() const;
+
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
     

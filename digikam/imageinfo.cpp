@@ -21,18 +21,10 @@
 
 /** @file imageinfo.cpp */
 
-// C Ansi includes.
-
-extern "C"
-{
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-}
-
 // Qt includes.
 
 #include <qfile.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -111,6 +103,17 @@ size_t ImageInfo::fileSize() const
 QDateTime ImageInfo::dateTime() const
 {
     return m_datetime;
+}
+
+QDateTime ImageInfo::modDateTime() const
+{
+    if (!m_modDatetime.isValid())
+    {
+        QFileInfo fileInfo(filePath());
+        m_modDatetime = fileInfo.lastModified();
+    }
+    
+    return m_modDatetime;
 }
 
 QSize ImageInfo::dimensions() const
@@ -296,9 +299,9 @@ void ImageInfo::refresh()
 {
     m_datetime = m_man->albumDB()->getItemDate(m_ID);
 
-    struct stat stbuf;
-    stat(QFile::encodeName(filePath()), &stbuf);
-    m_size = stbuf.st_size;
+    QFileInfo fileInfo(filePath());
+    m_size = fileInfo.size();
+    m_modDatetime = fileInfo.lastModified();
 }
 
 }  // namespace Digikam

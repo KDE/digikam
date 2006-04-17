@@ -88,6 +88,7 @@ public:
     QRect    itemRect() const;
     QRect    itemRatingRect() const;
     QRect    itemDateRect() const;
+    QRect    itemModDateRect() const;
     QRect    itemPixmapRect() const;
     QRect    itemNameRect() const;
     QRect    itemCommentsRect() const;

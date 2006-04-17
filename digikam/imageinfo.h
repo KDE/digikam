@@ -105,6 +105,11 @@ public:
     QDateTime dateTime() const;
 
     /**
+     * @return the modification datetime of the image
+     */
+    QDateTime modDateTime() const;
+
+    /**
      * @return the filesize of the image
      */
     size_t    fileSize() const;
@@ -247,6 +252,7 @@ private:
     int                   m_albumID;
     QString               m_name;
     QDateTime             m_datetime;
+    mutable QDateTime     m_modDatetime;
     size_t                m_size;
     QSize                 m_dims;
     void*                 m_viewitem;
