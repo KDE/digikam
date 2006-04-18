@@ -56,7 +56,7 @@ public:
     
 public:
 
-    ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent=0, bool progress=false, 
+    ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent=0,
                       int separateViewMode=SeparateViewAll);
     ~ImagePannelWidget();
     

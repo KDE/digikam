@@ -145,7 +145,7 @@ QRect ImagePanIconWidget::getRegionSelection(void)
 
 void ImagePanIconWidget::setCenterSelection(void)
 {
-    setRegionSelection(QRect::QRect( 
+    setRegionSelection(QRect( 
              (int)(((float)d->zoomedOrgWidth / 2.0)  - ((float)d->regionSelection.width() / 2.0)),
              (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
              d->regionSelection.width(),

@@ -275,7 +275,7 @@ void Canvas::drawHistogramPixmapBusy()
     font.setPointSize(12);
     
     p.fillRect(QRect(0, 0, wWidth, wHeight), QBrush(qRgba(0xff, 0xff, 0xff, 127)));
-    p.setPen(QPen::QPen(qRgba(0, 0, 0, 127), 1, Qt::SolidLine));
+    p.setPen(QPen(qRgba(0, 0, 0, 127), 1, Qt::SolidLine));
     p.setFont(font);
     p.drawText(QRect(0, 0, wWidth, wHeight), 
                AlignCenter | SingleLine | WordBreak,
@@ -347,7 +347,7 @@ void Canvas::drawHistogramPixmap()
                 break;
         }
 
-        p.setPen(QPen::QPen(hiscolor, 1, Qt::SolidLine));
+        p.setPen(QPen(hiscolor, 1, Qt::SolidLine));
         p.drawLine(x, wHeight, x, wHeight - y);                 
     }
 

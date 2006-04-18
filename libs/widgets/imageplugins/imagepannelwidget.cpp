@@ -107,7 +107,7 @@ public:
 };
     
 ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent,
-                                     bool progress, int separateViewMode)
+                                     int separateViewMode)
                  : QHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePannelWidgetPriv;

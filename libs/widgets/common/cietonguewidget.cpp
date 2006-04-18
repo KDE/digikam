@@ -665,8 +665,8 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     if ( !isEnabled() )
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(),  palette().disabled().background());
-        d->painter.setPen(QPen::QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
+        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
         d->painter.end();
         bitBlt(this, 0, 0, &d->pixmap);

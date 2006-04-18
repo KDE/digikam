@@ -524,10 +524,10 @@ QPoint ImageCurves::getCurvePoint(int channel, int point)
     if ( d->curves &&
          channel>=0 && channel<5 && 
          point>=0 && point<=17 )
-       return(QPoint::QPoint(d->curves->points[channel][point][0],
-                             d->curves->points[channel][point][1]) );
+       return(QPoint(d->curves->points[channel][point][0],
+                     d->curves->points[channel][point][1]) );
     
-    return QPoint::QPoint(-1, -1);
+    return QPoint(-1, -1);
 }
 
 int ImageCurves::getCurvePointX(int channel, int point)

@@ -130,9 +130,8 @@ CtrlPanelDlg::CtrlPanelDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    m_imagePreviewWidget = new ImagePannelWidget(240, 160,
-                               name + QString(" Tool Dialog"),
-                               plainPage(), d->progressBar, separateViewMode);
+    m_imagePreviewWidget = new ImagePannelWidget(240, 160, name + QString(" Tool Dialog"),
+                               plainPage(), separateViewMode);
     topLayout->addWidget(m_imagePreviewWidget);
 
     // -------------------------------------------------------------

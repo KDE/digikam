@@ -236,7 +236,7 @@ int ImageSelectionWidget::getMinHeightRange(void)
 
 void ImageSelectionWidget::resetSelection(void)
 {
-    d->regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
+    d->regionSelection.moveTopLeft(QPoint(0, 0));
     d->regionSelection.setWidth((int)(d->iface->originalWidth()/2.0));
     d->regionSelection.setHeight((int)(d->iface->originalHeight()/2.0));
     realToLocalRegion();
@@ -263,7 +263,7 @@ void ImageSelectionWidget::setCenterSelection(int centerType)
           break;
 
        case CenterImage:
-          d->regionSelection.moveTopLeft(QPoint::QPoint(0, 0));
+          d->regionSelection.moveTopLeft(QPoint(0, 0));
           break;
     }
 
