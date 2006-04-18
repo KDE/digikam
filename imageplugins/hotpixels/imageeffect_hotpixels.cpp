@@ -202,7 +202,7 @@ void ImageEffect_HotPixels::prepareEffect()
         
         if ( area.contains( hp.rect ) )
         {
-           hp.rect.moveTopLeft(QPoint::QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
+           hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
            hotPixelsRegion.append(hp);
         }
     }

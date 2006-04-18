@@ -222,15 +222,15 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         // We modify only global luminosity of the grain.
         if (sixteenBit)
         {
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(32768, 32768));
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(65535, 0));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint(0,   0));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint(32768, 32768));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint(65535, 0));
         }
         else
         {
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint::QPoint(0,   0));
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint::QPoint(128, 128));
-            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint::QPoint(255, 0));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 0,  QPoint(0,   0));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 8,  QPoint(128, 128));
+            grainCurves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, 16, QPoint(255, 0));
         }
 
         // Calculate curves and lut to apply on grain.

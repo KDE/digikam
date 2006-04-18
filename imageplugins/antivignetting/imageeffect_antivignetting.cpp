@@ -248,7 +248,7 @@ void ImageEffect_AntiVignetting::prepareEffect()
     AntiVignetting maskPreview(&preview, 0L, d, p, r, 0, 0, false);
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
-    pt.setPen( QPen::QPen(Qt::black, 1) ); 
+    pt.setPen( QPen(Qt::black, 1) ); 
     pt.drawRect( 0, 0, pix.width(), pix.height() );
     pt.end();
     m_maskPreviewLabel->setPixmap( pix );

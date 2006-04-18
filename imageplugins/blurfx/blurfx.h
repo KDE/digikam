@@ -77,12 +77,12 @@ private:  // BlurFX filter methods.
 
     // Backported from ImageProcessing version 2
     void zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                  int X, int Y, int Distance, QRect pArea=QRect::QRect());
+                  int X, int Y, int Distance, QRect pArea=QRect());
     void radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                    int X, int Y, int Distance, QRect pArea=QRect::QRect());
+                    int X, int Y, int Distance, QRect pArea=QRect());
     void focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                    int X, int Y, int BlurRadius, int BlendRadius,
-                   bool bInversed=false, QRect pArea=QRect::QRect());
+                   bool bInversed=false, QRect pArea=QRect());
     void farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance);
     void motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance, double Angle=0.0);
     void smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strenght);

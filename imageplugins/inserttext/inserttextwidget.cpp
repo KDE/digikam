@@ -425,7 +425,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     QPixmap pixmap = textNotDrawn.convertToPixmap();
     // paint on pixmap
     QPainter p(&pixmap);
-    p.setPen( QPen::QPen(textColor, 1) ) ;
+    p.setPen( QPen(textColor, 1) ) ;
     p.setFont( font );
     p.save();
 
@@ -464,7 +464,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
 
     if (borderMode == BORDER_NORMAL)      // Decorative border using text color.
     {
-        p.setPen( QPen::QPen(textColor, borderWidth, Qt::SolidLine,
+        p.setPen( QPen(textColor, borderWidth, Qt::SolidLine,
                   Qt::SquareCap, Qt::RoundJoin) ) ;
         p.drawRect(textAreaDrawRect);
     }

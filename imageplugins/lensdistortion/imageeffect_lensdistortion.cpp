@@ -184,8 +184,8 @@ ImageEffect_LensDistortion::ImageEffect_LensDistortion(QWidget* parent, QString 
     memset(preview.bits(), 255, preview.numBytes());
     QPixmap pix (preview);
     QPainter pt(&pix);
-    pt.setPen( QPen::QPen(Qt::black, 1) ); 
-    pt.fillRect( 0, 0, pix.width(), pix.height(), QBrush::QBrush(Qt::black, Qt::CrossPattern) );
+    pt.setPen( QPen(Qt::black, 1) ); 
+    pt.fillRect( 0, 0, pix.width(), pix.height(), QBrush(Qt::black, Qt::CrossPattern) );
     pt.drawRect( 0, 0, pix.width(), pix.height() );
     pt.end();
     QImage preview2(pix.convertToImage());

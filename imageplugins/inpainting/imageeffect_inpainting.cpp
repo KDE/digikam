@@ -485,7 +485,7 @@ void ImageEffect_InPainting_Dialog::slotOk()
     QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
     inPaintingMask.fill(Qt::black);
     QPainter p(&inPaintingMask);
-    p.fillRect( selectionRect, QBrush::QBrush(Qt::white) );
+    p.fillRect( selectionRect, QBrush(Qt::white) );
     p.end();
 
     int x1 = (int)(selectionRect.left()   - 2*m_timeStepInput->value());
