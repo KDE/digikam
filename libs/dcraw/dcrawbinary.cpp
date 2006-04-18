@@ -96,7 +96,7 @@ bool DcrawBinary::checkSystem()
             return false;
     }
 
-    // Return true even if m_available is false,
+    // Veturn true even if m_available is false,
     // return value indicates whether the user wants to abort or continue
     return true;
 }
@@ -111,5 +111,5 @@ bool DcrawBinary::isAvailable()
     return m_available;
 }
 
-}
+}  // namespace Digikam
 
