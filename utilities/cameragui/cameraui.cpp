@@ -225,7 +225,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     grid->addMultiCellWidget(OnFlyBox, 2, 2, 0, 1);
     grid->setRowStretch(3, 10);
 
-    d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Advanced Settings"));
+    d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
     
     // -------------------------------------------------------------------------
     
