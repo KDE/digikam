@@ -175,6 +175,27 @@ int ImlibInterface::fileFormat(const QString& filePath)
 {
     if ( filePath == QString::null )
         return NONE_IMAGE;
+
+    // In first we trying to check the file extension. This is mandatory because
+    // some tiff files are detected like RAW files by dcraw::parse method.
+
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists())
+    {
+        kdDebug() << k_funcinfo << "Failed to open file" << endl;
+        return NONE_IMAGE;
+    }
+    
+    QString ext = fileInfo.extension().upper();
+
+    if (ext == QString("JPEG") || ext == QString("JPG"))
+        return JPEG_IMAGE;
+    else if (ext == QString("PNG"))
+        return PNG_IMAGE;
+    else if (ext == QString("TIFF") || ext == QString("TIF"))
+        return TIFF_IMAGE;
+
+    // In second, we trying to parse file header.
         
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
     
