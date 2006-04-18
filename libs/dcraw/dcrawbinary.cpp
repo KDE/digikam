@@ -111,5 +111,5 @@ bool DcrawBinary::isAvailable()
     return m_available;
 }
 
-}
+}  // namespace Digikam
 

@@ -21,14 +21,22 @@
 #ifndef DCRAWBINARY_H
 #define DCRAWBINARY_H
 
+// Qt includes.
+
 #include <qstring.h>
+
+// Digikam Includes.
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DcrawBinary
+class DIGIKAM_EXPORT DcrawBinary
 {
+
 public:
+
     static DcrawBinary *instance();
     static void cleanUp();
 
@@ -36,19 +44,17 @@ public:
 
     const char *path();
     bool isAvailable();
+
 private:
+
     DcrawBinary();
     ~DcrawBinary();
+
     static DcrawBinary *m_instance;
 
     bool m_available;
 };
 
+} // namespace Digikam
 
-
-
-
-
-}
-
-#endif
+#endif  // DCRAWBINARY_H
