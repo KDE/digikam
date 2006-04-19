@@ -35,6 +35,7 @@
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdir.h>
 #include <qwmatrix.h>
 #include <qregexp.h>
@@ -337,17 +338,22 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     if (regenerate)
     {
-        // Try JPEG loading : JPEG files without using Exif Thumb.
-        if ( !loadJPEG(img, url.path()))
+        // In first we trying to load image using the file extension. This is mandatory because
+        // some tiff files are detected like RAW files by dcraw::parse method.
+        if ( !loadByExtension(img, url.path()) )
         {
-            // Try to load with dcraw : RAW files.
-            if (!loadDCRAW(img, url.path()))
+            // Try JPEG loading : JPEG files without using Exif Thumb.
+            if ( !loadJPEG(img, url.path()) )
             {
-                // Try to load with DImg : TIFF, PNG, etc.
-                if (!loadDImg(img, url.path()))
+                // Try to load with dcraw : RAW files.
+                if (!loadDCRAW(img, url.path()) )
                 {
-                    // Try to load with KDE thumbcreators : video files and others stuff.
-                    loadKDEThumbCreator(img, url.path());
+                    // Try to load with DImg : TIFF, PNG, etc.
+                    if (!loadDImg(img, url.path()) )
+                    {
+                        // Try to load with KDE thumbcreators : video files and others stuff.
+                        loadKDEThumbCreator(img, url.path());
+                    }
                 }
             }
         }
@@ -425,6 +431,24 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     data(imgData);
     finished();
+}
+
+bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString& path)
+{
+    QFileInfo fileInfo(path);
+    if (!fileInfo.exists())
+        return false;
+    
+    QString ext = fileInfo.extension().upper();
+
+    if (ext == QString("JPEG") || ext == QString("JPG"))
+        return (loadJPEG(image, path));
+    else if (ext == QString("PNG"))
+        return (loadDImg(image, path));
+    else if (ext == QString("TIFF") || ext == QString("TIF"))
+        return (loadDImg(image, path));
+    
+    return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

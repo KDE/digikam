@@ -44,6 +44,7 @@ public:
 
 private:
 
+    bool loadByExtension(QImage& image, const QString& path);
     bool loadJPEG(QImage& image, const QString& path);
     bool loadDImg(QImage& image, const QString& path);
     bool loadKDEThumbCreator(QImage& image, const QString& path);
