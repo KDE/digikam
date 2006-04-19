@@ -21,9 +21,9 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
 
-Note : svn2cl need xstlproc program. Please install it before.
+Note : svn2cl need xstlproc program. Please install it before. (check libxstl-proc package).
 
-6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog.
+6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scriptly' entries in log.
 
 7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
 
