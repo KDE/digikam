@@ -148,20 +148,19 @@ void CameraIconView::slotDownloadNameChanged()
     }
     
     viewport()->setUpdatesEnabled(false);
+
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* viewItem =
-            static_cast<CameraIconViewItem*>(item);
+        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
 
         QString downloadName;
+
         if (!useDefault)
-            downloadName = getTemplatedName( nameTemplate,
-                                             viewItem->itemInfo(),
+            downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(),
                                              m_groupItem->index(viewItem) );
         else
-            downloadName = getCasedName( m_renamer->changeCase(),
-                                         viewItem->itemInfo() );
+            downloadName = getCasedName( m_renamer->changeCase(), viewItem->itemInfo() );
 
         viewItem->setDownloadName( downloadName );
     }
@@ -169,11 +168,10 @@ void CameraIconView::slotDownloadNameChanged()
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
+    slotSelectionChanged();
 }
 
-QString CameraIconView::getTemplatedName(const QString& templ,
-                                         const GPItemInfo* itemInfo,
-                                         int position)
+QString CameraIconView::getTemplatedName(const QString& templ, const GPItemInfo* itemInfo, int position)
 {
     if (templ.isEmpty())
         return QString::null;

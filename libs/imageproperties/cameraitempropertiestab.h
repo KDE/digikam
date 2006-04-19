@@ -24,7 +24,7 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qcstring.h>
+#include <qstring.h>
 
 // KDE includes.
 
@@ -49,7 +49,8 @@ public:
     CameraItemPropertiesTab(QWidget* parent, bool navBar=true);
     ~CameraItemPropertiesTab();
 
-    void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0);
+    void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0,
+                        const QString &newFileName=QString::null);
 
 signals:
     

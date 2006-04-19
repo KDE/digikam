@@ -63,20 +63,23 @@ protected:
 private:
 
     void calcRect();
-    
-    GPItemInfo* m_itemInfo;
-    QString     m_downloadName;
-    QPixmap     m_pixmap;
 
-    QRect       m_pixRect;
-    QRect       m_textRect;
-    QRect       m_extraRect;
+private:
+
+    GPItemInfo        *m_itemInfo;
+    QString            m_downloadName;
+    QPixmap            m_pixmap;
+
+    QRect              m_pixRect;
+    QRect              m_textRect;
+    QRect              m_extraRect;
     
-    static QPixmap*    m_newEmblem;
-    static const char* new_xpm[];
-    
+    static QPixmap    *m_newEmblem;
+    static const char *new_xpm[];
+
     friend class CameraUI;
     friend class CameraIconView;
+    
 };
 
 }  // namespace Digikam

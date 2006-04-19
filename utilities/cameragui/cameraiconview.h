@@ -59,24 +59,6 @@ public:
 
     virtual QRect itemRect() const;
     
-protected:
-
-    void startDrag();
-    
-private:
-
-    QString getTemplatedName(const QString& templ, 
-                             const GPItemInfo* itemInfo,
-                             int position);
-
-    QString getCasedName(const RenameCustomizer::Case ccase,
-                         const GPItemInfo* itemInfo);
-
-    QDict<CameraIconViewItem> m_itemDict;
-    RenameCustomizer*         m_renamer;
-    CameraUI*                 m_ui;
-    IconGroupItem*            m_groupItem;
-
 signals:
 
     void signalSelected(CameraIconViewItem*, bool);
@@ -98,6 +80,22 @@ private slots:
 
     void slotContextMenu(IconItem* item, const QPoint& pos);
     void slotDoubleClicked(IconItem* item);
+
+protected:
+
+    void startDrag();
+    
+private:
+
+    QString getTemplatedName(const QString& templ, const GPItemInfo* itemInfo, int position);
+    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
+
+private:
+
+    QDict<CameraIconViewItem> m_itemDict;
+    RenameCustomizer*         m_renamer;
+    CameraUI*                 m_ui;
+    IconGroupItem*            m_groupItem;
 };    
 
 }  // namespace Digikam

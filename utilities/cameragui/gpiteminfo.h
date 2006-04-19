@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-09-18
- * Description : 
+ * Description : camera item info container
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,12 +23,9 @@
 #ifndef GPITEMINFO_H
 #define GPITEMINFO_H
 
-// C Ansi includes.
+// C++ includes.
 
-extern "C"
-{
-#include <time.h>
-}
+#include <ctime>
 
 // Qt includes.
 
@@ -42,16 +41,18 @@ class GPItemInfo
 {
 public:
     
-    QString name;
-    QString folder;
-    time_t  mtime;
-    QString mime;
     long    size;
     int     width;
     int     height;
     int     downloaded;
     int     readPermissions;
     int     writePermissions;
+
+    QString name;
+    QString folder;
+    QString mime;
+
+    time_t  mtime;
 };
 
 QDataStream& operator<<( QDataStream &, const GPItemInfo & );

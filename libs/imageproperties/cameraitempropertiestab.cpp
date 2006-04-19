@@ -35,6 +35,7 @@
 #include <kdialogbase.h>
 #include <kfileitem.h>
 #include <kdebug.h>
+#include <kseparator.h>
 #include <ksqueezedtextlabel.h>
 
 // Local includes.
@@ -53,7 +54,7 @@ public:
     CameraItemPropertiesTabPriv()
     {
         navigateBar            = 0;
-        labelFileName          = 0;
+        labelNewFileName       = 0;
         labelFolder            = 0;
         labelFileIsReadable    = 0;
         labelFileIsWritable    = 0;
@@ -65,7 +66,7 @@ public:
         labelAlreadyDownloaded = 0;
     }
 
-    KSqueezedTextLabel *labelFileName;
+    KSqueezedTextLabel *labelNewFileName;
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileIsReadable;
     KSqueezedTextLabel *labelFileIsWritable;
@@ -83,24 +84,24 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
                        : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CameraItemPropertiesTabPriv;
-    QGridLayout *topLayout = new QGridLayout(this, 13, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(this, 14, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     d->navigateBar = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
 
-    QLabel *title      = new QLabel(i18n("Camera File Properties:"), this);
-    QLabel *fileName   = new QLabel(i18n("<b>Name</b>:"), this);
-    QLabel *folder     = new QLabel(i18n("<b>Folder</b>:"), this);
-    QLabel *isReadable = new QLabel(i18n("<b>Readable</b>:"), this);
-    QLabel *isWritable = new QLabel(i18n("<b>Writable</b>:"), this);
-    QLabel *date       = new QLabel(i18n("<b>Date</b>:"), this);
-    QLabel *size       = new QLabel(i18n("<b>Size</b>:"), this);
-    QLabel *mime       = new QLabel(i18n("<b>Mime</b>:"), this);
-    QLabel *width      = new QLabel(i18n("<b>Width</b>:"), this);
-    QLabel *height     = new QLabel(i18n("<b>Height</b>:"), this);
-    QLabel *downloaded = new QLabel(i18n("<b>Downloaded</b>:"), this);
+    QLabel *title       = new QLabel(i18n("<i>Camera File Properties:</i>"), this);
+    QLabel *folder      = new QLabel(i18n("<b>Folder</b>:"), this);
+    QLabel *isReadable  = new QLabel(i18n("<b>Readable</b>:"), this);
+    QLabel *isWritable  = new QLabel(i18n("<b>Writable</b>:"), this);
+    QLabel *date        = new QLabel(i18n("<b>Date</b>:"), this);
+    QLabel *size        = new QLabel(i18n("<b>Size</b>:"), this);
+    QLabel *mime        = new QLabel(i18n("<b>Mime</b>:"), this);
+    QLabel *width       = new QLabel(i18n("<b>Width</b>:"), this);
+    QLabel *height      = new QLabel(i18n("<b>Height</b>:"), this);
+    QLabel *downloaded  = new QLabel(i18n("<b>Downloaded</b>:"), this);
+    KSeparator *line    = new KSeparator (Horizontal, this);
+    QLabel *newFileName = new QLabel(i18n("<b>New Name</b>:"), this);
                             
-    d->labelFileName          = new KSqueezedTextLabel(0, this);
     d->labelFolder            = new KSqueezedTextLabel(0, this);
     d->labelFileIsReadable    = new KSqueezedTextLabel(0, this);
     d->labelFileIsWritable    = new KSqueezedTextLabel(0, this);
@@ -110,31 +111,33 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->labelImageWidth        = new KSqueezedTextLabel(0, this);
     d->labelImageHeight       = new KSqueezedTextLabel(0, this);
     d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
+    d->labelNewFileName       = new KSqueezedTextLabel(0, this);
 
     topLayout->setRowSpacing( 0, KDialog::spacingHint() );    
     topLayout->addMultiCellWidget(title, 1, 1, 0, 2);
     topLayout->setRowStretch(2, 0);
-    topLayout->addMultiCellWidget(fileName, 3, 3, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileName, 3, 3, 1, 2);
-    topLayout->addMultiCellWidget(folder, 4, 4, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFolder, 4, 4, 1, 2);
-    topLayout->addMultiCellWidget(isReadable, 5, 5, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileIsReadable, 5, 5, 1, 2);
-    topLayout->addMultiCellWidget(isWritable, 6, 6, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileIsWritable, 6, 6, 1, 2);
-    topLayout->addMultiCellWidget(date, 7, 7, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileDate, 7, 7, 1, 2);
-    topLayout->addMultiCellWidget(size, 8, 8, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileSize, 8, 8, 1, 2);
-    topLayout->addMultiCellWidget(mime, 9, 9, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileMime, 9, 9, 1, 2);
-    topLayout->addMultiCellWidget(width, 10, 10, 0, 0);
-    topLayout->addMultiCellWidget(d->labelImageWidth, 10, 10, 1, 2);
-    topLayout->addMultiCellWidget(height, 11, 11, 0, 0);
-    topLayout->addMultiCellWidget(d->labelImageHeight, 11, 11, 1, 2);
-    topLayout->addMultiCellWidget(downloaded, 12, 12, 0, 0);
-    topLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 12, 12, 1, 2);
-    topLayout->setRowStretch(13, 10);
+    topLayout->addMultiCellWidget(folder, 3, 3, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFolder, 3, 3, 1, 2);
+    topLayout->addMultiCellWidget(isReadable, 4, 4, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFileIsReadable, 4, 4, 1, 2);
+    topLayout->addMultiCellWidget(isWritable, 5, 5, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFileIsWritable, 5, 5, 1, 2);
+    topLayout->addMultiCellWidget(date, 6, 6, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFileDate, 6, 6, 1, 2);
+    topLayout->addMultiCellWidget(size, 7, 7, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFileSize, 7, 7, 1, 2);
+    topLayout->addMultiCellWidget(mime, 8, 8, 0, 0);
+    topLayout->addMultiCellWidget(d->labelFileMime, 8, 8, 1, 2);
+    topLayout->addMultiCellWidget(width, 9, 9, 0, 0);
+    topLayout->addMultiCellWidget(d->labelImageWidth, 9, 9, 1, 2);
+    topLayout->addMultiCellWidget(height, 10, 10, 0, 0);
+    topLayout->addMultiCellWidget(d->labelImageHeight, 10, 10, 1, 2);
+    topLayout->addMultiCellWidget(downloaded, 11, 11, 0, 0);
+    topLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 11, 11, 1, 2);
+    topLayout->addMultiCellWidget(line, 12, 12, 0, 2);
+    topLayout->addMultiCellWidget(newFileName, 13, 13, 0, 0);
+    topLayout->addMultiCellWidget(d->labelNewFileName, 13, 13, 1, 2);
+    topLayout->setRowStretch(14, 10);
             
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -154,12 +157,13 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int itemType)
+void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int itemType, 
+                                             const QString &newFileName)
 {
     if (!itemInfo)
     {
         d->navigateBar->setFileName();
-        d->labelFileName->setText(QString::null);
+        d->labelNewFileName->setText(QString::null);
         d->labelFolder->setText(QString::null);
         d->labelFileIsReadable->setText(QString::null);
         d->labelFileIsWritable->setText(QString::null);
@@ -181,7 +185,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     d->navigateBar->setFileName(itemInfo->name);
     d->navigateBar->setButtonsState(itemType);
 
-    d->labelFileName->setText(itemInfo->name);
+    d->labelNewFileName->setText(newFileName);
     d->labelFolder->setText(itemInfo->folder);
     
     if (itemInfo->readPermissions < 0)

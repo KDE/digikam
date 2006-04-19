@@ -1,5 +1,6 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2004-09-16
  * Description : Camera interface dialog
  * 
@@ -321,6 +322,9 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
 
+    connect(d->view, SIGNAL(signalDownloadFileNamesChanged()),
+            this, SLOT(slotDownloadFileNamesChanged()));
+
     // -------------------------------------------------------------------------
     
     connect(d->rightSidebar, SIGNAL(signalFirstItem()),
@@ -607,11 +611,7 @@ void CameraUI::slotDownload(bool onlySelected)
                      .arg(KGlobal::locale()->calendar()->day(date.date()));
     }
 
-
-    album = AlbumSelectDialog::selectAlbum(this,
-                                           (PAlbum*)album,
-                                           header,
-                                           newDirName,
+    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
                                            d->autoAlbumCheck->isChecked());
 
     if (!album)
@@ -732,7 +732,8 @@ void CameraUI::slotDeleteSelected()
                                                deleteList,
                                                i18n("Warning"),
                                                i18n("Delete"))
-        ==  KMessageBox::Continue) {
+        ==  KMessageBox::Continue) 
+    {
 
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();

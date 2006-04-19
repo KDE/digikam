@@ -1,6 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-16
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-16
  * Description : Camera interface dialog
  * 
  * Copyright 2004-2005 by Renchi Raju
@@ -69,10 +70,8 @@ private:
     void readSettings();
     void saveSettings();
     void dialogClosed();
-    bool createAutoAlbum(const KURL& parentURL,
-                         const QString& name,
-                         const QDate& date,
-                         QString& errMsg);
+    bool createAutoAlbum(const KURL& parentURL, const QString& name,
+                         const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
 
 private slots:
@@ -96,7 +95,7 @@ private slots:
     void slotDeleteAll();
 
     void slotFileView(CameraIconViewItem* item);
-    
+
     void slotDownloaded(const QString&, const QString&);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&);
