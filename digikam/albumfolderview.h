@@ -57,37 +57,37 @@ public:
     void albumNew();
     void albumDelete();
     void albumEdit();
-    
-    void setAlbumThumbnail(PAlbum *album);    
-    
+
+    void setAlbumThumbnail(PAlbum *album);
+
 private slots:
 
-    void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& thumbnail);
-    void slotThumbnailLost(const KURL &url);    
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
+    void slotThumbnailLost(Album *album);
     void slotSelectionChanged();
-    
+
     void slotAlbumAdded(Album *);
     void slotAlbumDeleted(Album *album);
     void slotAlbumsCleared();
     void slotAlbumIconChanged(Album* album);
     void slotAlbumRenamed(Album *album);
-                            
+
     void slotContextMenu(QListViewItem*, const QPoint&, int);
-    
+
     void slotDIOResult(KIO::Job* job);
-    
+
 protected:
-        
+
     void contentsDropEvent(QDropEvent *e);
     QDragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
-    
+
     void selectItem(int id);
-   
+
 private:
 
     void albumNew(AlbumFolderViewItem *item);
-    void albumEdit(AlbumFolderViewItem *item);    
+    void albumEdit(AlbumFolderViewItem *item);
     void albumDelete(AlbumFolderViewItem *item);
 
     AlbumFolderViewItem* findParent(PAlbum* album, bool& failed);
@@ -97,9 +97,9 @@ private:
 
     void reparentItem(AlbumFolderViewItem* folderItem);
     void clearEmptyGroupItems();
-    
+
     AlbumFolderViewPriv   *d;
-    
+
 signals:
     void signalAlbumModified();
 };

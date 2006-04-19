@@ -54,8 +54,8 @@ protected:
     void contentsDropEvent(QDropEvent *e);
     QDragObject* dragObject();
     bool acceptDrop(const QDropEvent *e) const;
-    
-    void selectItem(int id);    
+
+    void selectItem(int id);
 
 private slots:
 
@@ -68,6 +68,9 @@ private slots:
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     void slotABCContextMenu();
+    void slotGotThumbnailFromIcon(Album *album,
+                                  const QPixmap& thumbnail);
+    void slotThumbnailLost(Album *album);
 
 private:
 
@@ -76,6 +79,7 @@ private:
                 const QString& _icon=QString() );
     void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
+    void setTagThumbnail(TAlbum *album);
 
     TagFolderViewPriv   *d;
 };

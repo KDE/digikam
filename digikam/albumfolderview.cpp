@@ -55,6 +55,7 @@
 #include "folderitem.h"
 #include "dio.h"
 #include "dragobjects.h"
+#include "albumthumbnailloader.h"
 
 // X11 C Ansi includes.
 
@@ -213,6 +214,12 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
 
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+    connect(loader, SIGNAL(signalFailed(Album *)),
+            SLOT(slotThumbnailLost(Album *)));
+
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
@@ -246,23 +253,17 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
         return;
     }
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     AlbumFolderViewItem *item;
     if (!parent)
     {
         // root album
         item = new AlbumFolderViewItem(this, palbum);
         palbum->setExtraData(this, item);
-        item->setPixmap(0, iconLoader->loadIcon("folder_red", KIcon::NoGroup,
-                        32, KIcon::DefaultState, 0, true));
     }
     else
     {
         item = new AlbumFolderViewItem(parent, palbum);
         palbum->setExtraData(this, item);
-
-        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                        32, KIcon::DefaultState, 0, true));
     }
 
     setAlbumThumbnail(palbum);
@@ -325,51 +326,18 @@ void AlbumFolderView::setAlbumThumbnail(PAlbum *album)
     if(!item)
         return;
 
-    if(!album->icon().isEmpty())
-    {
-        if(!d->iconThumbJob)
-        {
-            d->iconThumbJob = new ThumbnailJob(album->iconKURL(),
-                                               (int)ThumbnailSize::Tiny,
-                                               true,
-                                               AlbumSettings::instance()->getExifRotate());
-            connect(d->iconThumbJob,
-                    SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                    this,
-                    SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
-            connect(d->iconThumbJob,
-                    SIGNAL(signalFailed(const KURL&)),
-                    SLOT(slotThumbnailLost(const KURL&)));
-        }
-        else
-        {
-            d->iconThumbJob->addItem(album->iconKURL());
-        }
-    }
-    else
-    {
-        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-        if(album->isRoot())
-        {
-            item->setPixmap(0, iconLoader->loadIcon("folder_image", KIcon::NoGroup,
-                                                    32, KIcon::DefaultState,
-                                                    0, true));
-        }
-        else
-        {
-            item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup,
-                            32, KIcon::DefaultState,
-                            0, true));
-        }
-    }
+    // Either, getThumbnail returns true and loads an icon asynchronously.
+    // Then, for the time being, we set the standard icon.
+    // Or, no icon is associated with the album, then we set the standard icon anyway.
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    item->setPixmap(0, loader->getStandardAlbumIcon(album));
+    loader->getAlbumThumbnail(album);
 }
 
-void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
+void AlbumFolderView::slotGotThumbnailFromIcon(Album *album,
                                                const QPixmap& thumbnail)
 {
-    PAlbum* album = d->albumMan->findPAlbum(url.directory());
-
-    if(!album)
+    if(!album || album->type() != Album::PHYSICAL)
         return;
 
     AlbumFolderViewItem* item = (AlbumFolderViewItem*)album->extraData(this);
@@ -380,20 +348,9 @@ void AlbumFolderView::slotGotThumbnailFromIcon(const KURL& url,
     item->setPixmap(0, thumbnail);
 }
 
-void AlbumFolderView::slotThumbnailLost(const KURL &url)
+void AlbumFolderView::slotThumbnailLost(Album *)
 {
-    PAlbum *album = AlbumManager::instance()->findPAlbum(url.directory());
-    if(!album)
-        return;
-
-    AlbumFolderViewItem *item = (AlbumFolderViewItem*)album->extraData(this);
-
-    if(item)
-    {
-        KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-        item->setPixmap(0, iconLoader->loadIcon("folder", KIcon::NoGroup, 32,
-                                                KIcon::DefaultState, 0, true));
-    }
+    // we already set the standard icon before loading
 }
 
 void AlbumFolderView::slotAlbumIconChanged(Album* album)
@@ -401,10 +358,7 @@ void AlbumFolderView::slotAlbumIconChanged(Album* album)
     if(!album || album->type() != Album::PHYSICAL)
         return;
 
-    AlbumFolderViewItem *item = (AlbumFolderViewItem*)album->extraData(this);
-
-    if(item)
-        setAlbumThumbnail((PAlbum*)album);
+    setAlbumThumbnail((PAlbum*)album);
 }
 
 void AlbumFolderView::slotSelectionChanged()

@@ -50,6 +50,7 @@
 #include "imageattributeswatch.h"
 #include "tagcreatedlg.h"
 #include "tagfilterview.h"
+#include "albumthumbnailloader.h"
 
 // X11 includes.
 
@@ -60,31 +61,6 @@ extern "C"
 
 namespace Digikam
 {
-
-static QPixmap getBlendedIcon(TAlbum* album)
-{
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-
-    QPixmap baseIcon(iconLoader->loadIcon("tag",
-                                          KIcon::NoGroup,
-                                          32,
-                                          KIcon::DefaultState,
-                                          0, true));
-
-    if(!album)
-        return baseIcon;
-
-    QPixmap pix = SyncJob::getTagThumbnail(album->icon(), 20);
-
-    if (!pix.isNull())
-    {
-        QPainter p(&baseIcon);
-        p.drawPixmap(6, 9, pix, 0, 0, -1, -1);
-        p.end();
-    }
-
-    return baseIcon;
-}
 
 class TagFilterViewItem : public FolderCheckListItem
 {
@@ -180,7 +156,7 @@ TagFilterView::TagFilterView(QWidget* parent)
     viewport()->setAcceptDrops(true);
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, getBlendedIcon(0));
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             SLOT(slotTagAdded(Album*)));
@@ -188,10 +164,18 @@ TagFilterView::TagFilterView(QWidget* parent)
             SLOT(slotTagDeleted(Album*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             SLOT(slotTagRenamed(Album*)));
-    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
-            SLOT(slotTagMoved(TAlbum*, TAlbum*)));
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             SLOT(slotClear()));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
+            SLOT(slotAlbumIconChanged(Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+            SLOT(slotTagMoved(TAlbum*, TAlbum*)));
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+    connect(loader, SIGNAL(signalFailed(Album *)),
+            SLOT(slotThumbnailLost(Album *)));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
@@ -226,14 +210,8 @@ QDragObject* TagFilterView::dragObject()
         ++it;
     }
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    QPixmap icon(iconLoader->loadIcon("tag", KIcon::NoGroup,
-                                      32,
-                                      KIcon::DefaultState,
-                                      0, true));
-
     TagListDrag *drag = new TagListDrag(dragTagIDs, this);
-    drag->setPixmap(icon);
+    drag->setPixmap(AlbumThumbnailLoader::instance()->getStandardTagIcon());
     return drag;
 }
 
@@ -341,7 +319,6 @@ void TagFilterView::slotTagAdded(Album* album)
     if (tag->parent()->isRoot())
     {
         TagFilterViewItem* item = new TagFilterViewItem(this, tag);
-        item->setPixmap(0, getBlendedIcon(tag));
     }
     else
     {
@@ -355,8 +332,9 @@ void TagFilterView::slotTagAdded(Album* album)
         }
 
         TagFilterViewItem* item = new TagFilterViewItem(parent, tag);
-        item->setPixmap(0, getBlendedIcon(tag));
     }
+
+    setTagThumbnail(tag);
 }
 
 void TagFilterView::slotTagRenamed(Album* album)
@@ -430,12 +408,67 @@ void TagFilterView::slotTagDeleted(Album* album)
     delete item;
 }
 
+void TagFilterView::setTagThumbnail(TAlbum *album)
+{
+    if(!album)
+        return;
+
+    TagFilterViewItem* item = (TagFilterViewItem*) album->extraData(this);
+
+    if(!item)
+        return;
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    QPixmap icon;
+    if (!loader->getTagThumbnail(album, icon))
+    {
+        if (icon.isNull())
+        {
+            item->setPixmap(0, loader->getStandardTagIcon(album));
+        }
+        else
+        {
+            QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), icon);
+            item->setPixmap(0, blendedIcon);
+        }
+    }
+}
+
+void TagFilterView::slotGotThumbnailFromIcon(Album *album,
+                                             const QPixmap& thumbnail)
+{
+    if(!album || album->type() != Album::TAG)
+        return;
+
+    TagFilterViewItem* item = (TagFilterViewItem*)album->extraData(this);
+
+    if(!item)
+        return;
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    QPixmap blendedIcon = loader->blendIcons(loader->getStandardTagIcon(), thumbnail);
+    item->setPixmap(0, blendedIcon);
+}
+
+void TagFilterView::slotThumbnailLost(Album *)
+{
+    // we already set the standard icon before loading
+}
+
+void TagFilterView::slotAlbumIconChanged(Album* album)
+{
+    if(!album || album->type() != Album::TAG)
+        return;
+
+    setTagThumbnail((TAlbum *)album);
+}
+
 void TagFilterView::slotClear()
 {
     clear();
-    
+
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
-    notTaggedItem->setPixmap(0, getBlendedIcon(0));
+    notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 }
 
 void TagFilterView::slotTimeOut()
@@ -564,7 +597,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
         if (!man->updateTAlbumIcon(tag, icon, 0, errMsg))
             KMessageBox::error(0, errMsg);
         else
-            item->setPixmap(0, getBlendedIcon(tag));
+            setTagThumbnail(tag);
     }
 }
 

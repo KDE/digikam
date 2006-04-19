@@ -67,6 +67,7 @@
 #include "ratingwidget.h"
 #include "imagedescedittab.h"
 #include "imageattributeswatch.h"
+#include "albumthumbnailloader.h"
 
 namespace Digikam
 {
@@ -269,6 +270,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+
+    connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+
+    connect(loader, SIGNAL(signalFailed(Album *)),
+            SLOT(slotThumbnailLost(Album *)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -695,8 +704,8 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
     if (viewItem)
     {
         viewItem->setOpen(true);
-        viewItem->setPixmap(0, tagThumbnail(tag));
         tag->setExtraData(this, viewItem);
+        setTagThumbnail(tag);
     }
 
 }
@@ -718,17 +727,7 @@ void ImageDescEditTab::slotAlbumIconChanged(Album* a)
     if (!a || a->isRoot() || a->type() != Album::TAG)
         return;
 
-    TAlbum* album = (TAlbum*)a;
-
-    QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
-    if (!viewItem)
-    {
-        kdWarning() << "Failed to find view item for Tag "
-                    << album->title() << endl;
-        return;
-    }
-
-    viewItem->setPixmap(0, tagThumbnail(album));
+    setTagThumbnail((TAlbum *)a);
 }
 
 void ImageDescEditTab::slotAlbumRenamed(Album* a)
@@ -747,6 +746,50 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     }
 
     viewItem->setText(0, album->title());
+}
+
+void ImageDescEditTab::setTagThumbnail(TAlbum *album)
+{
+    if(!album)
+        return;
+
+    QCheckListItem* item = (QCheckListItem*) album->extraData(this);
+
+    if(!item)
+        return;
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    QPixmap icon;
+    if (!loader->getTagThumbnail(album, icon))
+    {
+        if (icon.isNull())
+        {
+            item->setPixmap(0, loader->getStandardTagIcon(album, 20));
+        }
+        else
+        {
+            item->setPixmap(0, icon);
+        }
+    }
+}
+
+void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album,
+                                             const QPixmap& thumbnail)
+{
+    if(!album || album->type() != Album::TAG)
+        return;
+
+    QCheckListItem* item = (QCheckListItem*)album->extraData(this);
+
+    if(!item)
+        return;
+
+    item->setPixmap(0, thumbnail);
+}
+
+void ImageDescEditTab::slotThumbnailLost(Album *)
+{
+    // we already set the standard icon before loading
 }
 
 void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
@@ -780,21 +823,6 @@ void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 {
     if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
         updateDate();
-}
-
-QPixmap ImageDescEditTab::tagThumbnail(TAlbum* album) const
-{
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-
-    QPixmap pix;
-
-    if (!album->isRoot())
-        pix = SyncJob::getTagThumbnail(album->icon(), 20);
-    else
-        pix = iconLoader->loadIcon("tag-folder", KIcon::NoGroup, 20,
-                                   KIcon::DefaultState, 0, true);
-
-    return pix;
 }
 
 void ImageDescEditTab::slotRecentTags()

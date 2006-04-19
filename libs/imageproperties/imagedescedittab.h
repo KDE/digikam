@@ -96,7 +96,7 @@ private:
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 
-    QPixmap tagThumbnail(TAlbum* album) const;
+    void setTagThumbnail(TAlbum *album);
 
 private slots:
 
@@ -109,6 +109,10 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
+
+    void slotGotThumbnailFromIcon(Album *album,
+                                  const QPixmap& thumbnail);
+    void slotThumbnailLost(Album *album);
 
     void slotImageTagsChanged(Q_LLONG imageId);
     void slotImagesChanged(int albumId);
