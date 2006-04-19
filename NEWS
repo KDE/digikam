@@ -1,57 +1,65 @@
-digiKam 0.9.0 :
----------------
+----------------------------------------------------------------------------------------------------
+digiKam 0.9.0 NEW FEATURES:
 
-NEW FEATURES:
+General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
+General       : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
+General       : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
+General       : New API in digiKam core named DMetadata to manage image metadata.
+General       : Ported all image filter algorithms to new DImg API. Support of 16 bits images.
+General       : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, 
+                and GPS locator.
+General       : New ICC profiles profile viewer based on LCMS.
+General       : New powerfull widget to display CIE color space used by ICC profiles.
+General       : New implementation to load/save images file using a separate thread.
+General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif 
+                and/or IPTC metadata tags.
+General       : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags 
+                and Caption Iptc tags.
 
-General : Sidebars are used at all to display metadata, comments & tags, and file properties.
-General : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
-General : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
-General : New API in digiKam core named DMetadata to manage image metadata.
-General : Ported all image filter algorithms to new DImg API. Support of 16 bits images.
-General : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, and GPS locator.
-General : New ICC profiles profile viewer based on LCMS.
-General : New powerfull widget to display CIE color space used by ICC profiles.
-General : New implementation to load/save images file using a separate thread.
-General : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif and/or IPTC metadata tags.
-General : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
-
-Image Editor : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
-Image Editor : Complete rewrite of image editor/showfoto gui implementation. Implementation is now common 
-               and is more easy to maintain!
-Image Editor : Add a progress bar to Image editor/showfoto about IO image files access.
-Image Editor : Support of ICC color profiles management using LCMS into Image editor/showfoto.
-Image Editor : digiKam setup is now available from Image Editor menu.
+Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
+Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
+                is now common and is more easy to maintain!
+Image Editor  : Add a progress bar to Image editor/showfoto about IO image files access.
+Image Editor  : Support of ICC color profiles management using LCMS into Image editor/showfoto.
+Image Editor  : digiKam setup is now available from Image Editor menu.
 
 Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Plugins : New powerfull Black & White converter tool using curves adjustements.
 Image Plugins : New plugin to experiment ICC profiles to perform color corrections into images.
 Image Plugins : New preview rendering modes in all color correction image plugins dialogs.
 Image Plugins : Redesign/polishing of all image plugins dialogs. Histogram are available at all 
-                when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam core now.
+                when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam 
+                core now.
 Image Plugins : New zooming capabilities in image plugins dialogs.
 Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
 Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
 
-Setup : Advanced settings to load RAW files in Image Editor using external dcraw instance.
-Setup : Setup implementation are now common between Showfoto and digiKam.
-Setup : new Identity setup page to set default strings informations about Photographer and copyright used 
-        when IPTC tags are updated.
+Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
+Setup         : Setup implementation are now common between Showfoto and digiKam.
+Setup         : new Identity setup page to set default strings informations about Photographer and 
+                copyright used when IPTC tags are updated.
 
-CameraGUI : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
+CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
+                on the fly.
 
-Showfoto : image properties sidebar support
-Showfoto : all images from a folder can be loaded at the same time.
-Showfoto : Add 16 bits/color/pixel support (DImg API).
-Showfoto : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the 
-           right to make a consistant GUI with digiKam main interface.
-Showfoto : Thumbbar can be used to the bottom in horizontal mode.
-Showfoto : New Exif Auto-rotate option like in digiKam ImageEditor.
-Showfoto : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
+Showfoto      : image properties sidebar support
+Showfoto      : all images from a folder can be loaded at the same time.
+Showfoto      : Add 16 bits/color/pixel support (DImg API).
+Showfoto      : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the 
+                right to make a consistant GUI with digiKam main interface.
+Showfoto      : Thumbbar can be used to the bottom in horizontal mode.
+Showfoto      : New Exif Auto-rotate option like in digiKam ImageEditor.
+Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
 
 ...
 
-BUGFIX from B.K.O:
+----------------------------------------------------------------------------------------------------
+BUGFIX from B.K.O (http://bugs.kde.org):
 
+==> 87823  (displaying images with ICC color profile when possible)
+==> 91811  (find pictures by meta tag info, date)
+==> 91812  (viewer/editor for IPTC meta data)
+==> 96459  (EXIF for RAW camera images)
 ==> 116248 (Ask user which plugins should be enabled on first startup )
 ==> 115441 (resize EXIF-rotated images doesn't work)
 ==> 115460 (opening and closing right pane with tag filter also changes width of left pane and vv )
@@ -60,7 +68,7 @@ BUGFIX from B.K.O:
 ==> 115764 (Modify EXIF creation date)
 ==> 121487 ("Tip of the day" text gets cut off)
 ==> 120052 (redraw problem with whatthis info of an image show and start scrolling with the mouse)
-==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursur keys )
+==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursor keys )
 ==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
 ==> 121905 (albums not displayed correctly and digikam crashes with St9bad_alloc)
 ==> 113997 (option to store tags in image)
@@ -69,8 +77,6 @@ BUGFIX from B.K.O:
 ==> 121306 (Add copyright/license during download)
 ==> 111560 (Be able to locate photos on a map)
 ==> 122747 (Will not build with GCC 4.1)
-==> 91811  (find pictures by meta tag info, date)
-==> 87823  (displaying images with ICC color profile when possible)
 ==> 103176 (16bit/channel framework for digikam)
 ==> 109096 (provide quick access to image comment)
 ==> 109817 (feature request for image properties dialog in image editor)
@@ -80,5 +86,38 @@ BUGFIX from B.K.O:
 ==> 113915 (Tags are lost after "Save As..."ing)
 ==> 103245 (Image Effects are inaccessible from image editor)
 ==> 125589 (saving user preferences not possible)
+==> 103201 (easy transport of albums, including tags, comments, etc.)
+==> 119234 (Window views not updated when tag name changed in "Tag Filters")
+==> 103255 (wish: *add* (not edit) EXIF headers like date, comment etc)
+==> 121800 (can't setup camera correctly)
+==> 121784 (accessing the camera in mass storage mode just lists jpegs and no other filetypes)
+==> 121371 (Missing display of EXIF infos in "Simple view")
+==> 123646 (rating image with a keyboard shortcut)
+==> 119946 (thumbnails not correctly rotated according to exif information)
+==> 106103 (Should support adding GPS EXIF header to images)
+==> 110598 (synchronize digikam comments to existing embedded comments)
+==> 118501 (exifs lost when modifying the images)
+==> 122264 (Exif data fail to show up in recent SVN)
+==> 103489 (sort and re-order EXIF information dialogs)
+==> 105670 (option to print EXIF data with images)
+==> 109319 (Full EXIF info - exiftags style)
+==> 120963 (optional album date change)
+==> 121370 (Can't save images sometimes after some modifications)
+==> 121646 (Digikam on PPC has problem identifying JPEG and tries to use dcraw with them)
+==> 120479 (Search problem for not tagged or commented images)
+==> 120775 (Search doesn't find pictures without rating)
+==> 112063 (When viewing image in fullscreen there is an ugly frame at the border of the screen)
+==> 120736 (many imageplugins going busy for ever when not using rubber to change a value)
+==> 116154 (Show progress bar while saving large files)
+==> 120521 (Untranslatable message in tagfilterview.cpp)
+==> 119742 (wish list -include move to trash in right click menu)
+==> 119201 (Sometimes DigiKam fails to show newly downloaded photos)
+==> 117401 (digikam's 'my albums' and 'my tags' does no longer remember it's state when restarted)
+==> 116520 (Slideshow should work for search results as well)
+==> 119073 (wish list rescan option)
+==> 118543 (enable-nfs-hack no longer works)
+==> 113807 (Is it possible to have the tags of the contextual menus "Assign Tag" and "Remove Tag" sorted ?)
+==> 116343 ("Not Tagged" has disappeared from the Tags Filter view when changing album library path)
+==> 117225 (digikam requires at least libpng >= 1.2.7)
 
-...
+----------------------------------------------------------------------------------------------------
