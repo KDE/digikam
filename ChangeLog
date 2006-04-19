@@ -1,5 +1,77 @@
-v0.8.2-beta1   		9-Apr-2006
+v0.8.2-beta1   		19-Apr-2006
 ----------------------------------------------------------------------------
+
+2006-04-18 09:51 +0000 [r530990-530992]  cgilles
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digikam from
+	  stable : image editor imlib2 interface: to detect image file
+	  format, we parse file extension in first, and in second, we parse
+	  file header. This way is mandatory because some TIFF files are
+	  detected like RAW files by dcraw::parse method. Please, update
+	  svn and give me a feedback (:=)))... CCMAIL:
+	  digikam-devel@kde.org, frank@birnstiel.org, dudasg@freemail.hu
+
+	* digikam/libs/dcraw/dcrawbinary.cpp,
+	  digikam/libs/dcraw/dcrawbinary.h: digikam from stable : always
+	  use visibility class declaration in digikam/libs to prevent
+	  broken compilation with this mode CCMAIL: marcel.wiesweg@gmx.de
+
+2006-04-14 19:53 +0000 [r529912]  mwiesweg
+
+	* digikam/digikam/albumiconview.cpp, digikam/digikam/main.cpp,
+	  digikam/digikam/digikamapp.cpp, digikam/showfoto/main.cpp,
+	  digikam/libs/dcraw/dcrawbinary.cpp (added),
+	  digikam/libs/dcraw/Makefile.am,
+	  digikam/utilities/imageeditor/imlibinterface.cpp,
+	  digikam/libs/dcraw/dcrawbinary.h (added): digikam stable branch:
+	  Backport dcraw autodetection from trunk CCMAIL:
+	  digikam-devel@kde.org
+
+2006-04-12 09:36 +0000 [r528980]  cgilles
+
+	* digikam/utilities/cameragui/renamecustomizer.cpp: digikam from
+	  stable : cameragui : rename customizer widget : renaming image
+	  file names with more command line readable strings format CCBUGS
+	  : 124939
+
+2006-04-11 07:13 +0000 [r528472]  cgilles
+
+	* digikam/utilities/cameragui/cameracontroller.cpp: Fix valgrind
+	  warnings : use uninitialized value
+
+2006-04-07 07:24 +0000 [r527172]  cgilles
+
+	* digikam/kioslave/digikamthumbnail.cpp: digikam from stable:
+	  backport Marcel patch from trunk : Allow reading JPEG files in
+	  CMYK color spaces The image data will be converted to RGB in the
+	  most simple way as Qt does it. (For full colorspace independence,
+	  use Krita.) This commit fix thumbnail ioslave only, not image
+	  editor that use imlib2 for that. CCMAIL: digikam-devel@kde.org
+
+2006-04-07 06:45 +0000 [r527168]  cgilles
+
+	* digikam/kioslave/digikamthumbnail.cpp: digikam from stable :
+	  process exif auto-rotation before to save thumbnail file in
+	  ~/.thumbnails. This way is homogenous with konqueror. CCMAIL:
+	  digikam-devel@kde.org CCBUGS: 123742
+
+2006-04-06 00:11 +0000 [r526933]  ach
+
+	* digikam/PACKAGING: digikam stable: PACKAGING: NEWS files needs to
+	  be merged too
+
+2006-04-06 00:06 +0000 [r526930]  ach
+
+	* digikam/PACKAGING, digikam/AUTHORS: digikam stable: o PACKAGING:
+	  add not about sync from stable of release_ and changelog for
+	  tarballs from trunk o AUTHOR: fix typo and missing \n
+
+2006-04-05 23:44 +0000 [r526927]  ach
+
+	* digikam/release_digikam_cl.sh (added), digikam/PACKAGING,
+	  digikam/ChangeLog: digikam stable: o add script to generate new
+	  ChangeLog entries o update PACKAGING instructions accordingly o
+	  add 0.8.2-beta1 entries to ChangeLog
 
 2006-04-05 21:24 +0000 [r526895]  ach
 
