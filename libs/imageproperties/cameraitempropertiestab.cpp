@@ -61,8 +61,7 @@ public:
         labelFileDate          = 0;
         labelFileSize          = 0;
         labelFileMime          = 0;
-        labelImageWidth        = 0;
-        labelImageHeight       = 0;
+        labelImageDimensions   = 0;
         labelAlreadyDownloaded = 0;
     }
 
@@ -73,8 +72,7 @@ public:
     KSqueezedTextLabel *labelFileDate;
     KSqueezedTextLabel *labelFileSize;
     KSqueezedTextLabel *labelFileMime;
-    KSqueezedTextLabel *labelImageWidth;
-    KSqueezedTextLabel *labelImageHeight;
+    KSqueezedTextLabel *labelImageDimensions;
     KSqueezedTextLabel *labelAlreadyDownloaded;
     
     NavigateBarWidget  *navigateBar;
@@ -84,23 +82,23 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
                        : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CameraItemPropertiesTabPriv;
-    QGridLayout *topLayout = new QGridLayout(this, 14, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *topLayout = new QGridLayout(this, 14, 1, KDialog::marginHint(), KDialog::spacingHint());
 
     d->navigateBar = new NavigateBarWidget(this, navBar);
-    topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
+    topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 1);
 
-    QLabel *title       = new QLabel(i18n("<i>Camera File Properties:</i>"), this);
+    QLabel *title       = new QLabel(i18n("<u><i>Camera File Properties:</i></u>"), this);
     QLabel *folder      = new QLabel(i18n("<b>Folder</b>:"), this);
     QLabel *isReadable  = new QLabel(i18n("<b>Readable</b>:"), this);
     QLabel *isWritable  = new QLabel(i18n("<b>Writable</b>:"), this);
     QLabel *date        = new QLabel(i18n("<b>Date</b>:"), this);
     QLabel *size        = new QLabel(i18n("<b>Size</b>:"), this);
     QLabel *mime        = new QLabel(i18n("<b>Mime</b>:"), this);
-    QLabel *width       = new QLabel(i18n("<b>Width</b>:"), this);
-    QLabel *height      = new QLabel(i18n("<b>Height</b>:"), this);
-    QLabel *downloaded  = new QLabel(i18n("<b>Downloaded</b>:"), this);
+    QLabel *dimensions  = new QLabel(i18n("<b>Dimensions</b>:"), this);
     KSeparator *line    = new KSeparator (Horizontal, this);
+    QLabel *title2      = new QLabel(i18n("<u><i>Download Status:</i></u>"), this);
     QLabel *newFileName = new QLabel(i18n("<b>New Name</b>:"), this);
+    QLabel *downloaded  = new QLabel(i18n("<b>Downloaded</b>:"), this);
                             
     d->labelFolder            = new KSqueezedTextLabel(0, this);
     d->labelFileIsReadable    = new KSqueezedTextLabel(0, this);
@@ -108,36 +106,36 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     d->labelFileDate          = new KSqueezedTextLabel(0, this);
     d->labelFileSize          = new KSqueezedTextLabel(0, this);
     d->labelFileMime          = new KSqueezedTextLabel(0, this);
-    d->labelImageWidth        = new KSqueezedTextLabel(0, this);
-    d->labelImageHeight       = new KSqueezedTextLabel(0, this);
-    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
+    d->labelImageDimensions   = new KSqueezedTextLabel(0, this);
     d->labelNewFileName       = new KSqueezedTextLabel(0, this);
+    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, this);
 
     topLayout->setRowSpacing( 0, KDialog::spacingHint() );    
-    topLayout->addMultiCellWidget(title, 1, 1, 0, 2);
+    topLayout->addMultiCellWidget(title, 1, 1, 0, 1);
     topLayout->setRowStretch(2, 0);
     topLayout->addMultiCellWidget(folder, 3, 3, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFolder, 3, 3, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFolder, 3, 3, 1, 1);
     topLayout->addMultiCellWidget(isReadable, 4, 4, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileIsReadable, 4, 4, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFileIsReadable, 4, 4, 1, 1);
     topLayout->addMultiCellWidget(isWritable, 5, 5, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileIsWritable, 5, 5, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFileIsWritable, 5, 5, 1, 1);
     topLayout->addMultiCellWidget(date, 6, 6, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileDate, 6, 6, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFileDate, 6, 6, 1, 1);
     topLayout->addMultiCellWidget(size, 7, 7, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileSize, 7, 7, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFileSize, 7, 7, 1, 1);
     topLayout->addMultiCellWidget(mime, 8, 8, 0, 0);
-    topLayout->addMultiCellWidget(d->labelFileMime, 8, 8, 1, 2);
-    topLayout->addMultiCellWidget(width, 9, 9, 0, 0);
-    topLayout->addMultiCellWidget(d->labelImageWidth, 9, 9, 1, 2);
-    topLayout->addMultiCellWidget(height, 10, 10, 0, 0);
-    topLayout->addMultiCellWidget(d->labelImageHeight, 10, 10, 1, 2);
-    topLayout->addMultiCellWidget(downloaded, 11, 11, 0, 0);
-    topLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 11, 11, 1, 2);
-    topLayout->addMultiCellWidget(line, 12, 12, 0, 2);
-    topLayout->addMultiCellWidget(newFileName, 13, 13, 0, 0);
-    topLayout->addMultiCellWidget(d->labelNewFileName, 13, 13, 1, 2);
+    topLayout->addMultiCellWidget(d->labelFileMime, 8, 8, 1, 1);
+    topLayout->addMultiCellWidget(dimensions, 9, 9, 0, 0);
+    topLayout->addMultiCellWidget(d->labelImageDimensions, 9, 9, 1, 1);
+
+    topLayout->addMultiCellWidget(line, 10, 10, 0, 1);
+    topLayout->addMultiCellWidget(title2, 11, 11, 0, 1);
+    topLayout->addMultiCellWidget(newFileName, 12, 12, 0, 0);
+    topLayout->addMultiCellWidget(d->labelNewFileName, 12, 12, 1, 1);
+    topLayout->addMultiCellWidget(downloaded, 13, 13, 0, 0);
+    topLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 13, 13, 1, 1);
     topLayout->setRowStretch(14, 10);
+    topLayout->setColStretch(1, 10);
             
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -170,8 +168,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
         d->labelFileDate->setText(QString::null);
         d->labelFileSize->setText(QString::null);
         d->labelFileMime->setText(QString::null);
-        d->labelImageWidth->setText(QString::null);
-        d->labelImageHeight->setText(QString::null);
+        d->labelImageDimensions->setText(QString::null);
         d->labelAlreadyDownloaded->setText(QString::null);
         setEnabled(false);
         return;
@@ -215,11 +212,12 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     
     d->labelFileMime->setText(itemInfo->mime);
 
-    str = (itemInfo->width <= 0) ? i18n("Unknown") : QString::number(itemInfo->width);
-    d->labelImageWidth->setText(str);
-    
-    str = (itemInfo->height <= 0) ? i18n("Unknown") : QString::number(itemInfo->height);
-    d->labelImageHeight->setText(str);
+    QString mpixels;
+    QSize dims(itemInfo->width, itemInfo->height);
+    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+          .arg(dims.width()).arg(dims.height()).arg(mpixels);
+    d->labelImageDimensions->setText(str);
     
     if (itemInfo->downloaded < 0)
         str = i18n("Unknown");

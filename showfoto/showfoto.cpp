@@ -508,11 +508,12 @@ void ShowFoto::slotChangeBCG()
 
 void ShowFoto::slotChanged()
 {
-    m_resLabel->setText(QString::number(m_canvas->imageWidth())  +
-                        QString("x") +
-                        QString::number(m_canvas->imageHeight()) +
-                        QString(" ") +
-                        i18n("pixels"));
+    QString mpixels;
+    QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
+    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+    QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+                  .arg(dims.width()).arg(dims.height()).arg(mpixels);
+    m_resLabel->setText(str);
 
     if (m_currentItem)
     {
