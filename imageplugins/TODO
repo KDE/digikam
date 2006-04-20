@@ -1,55 +1,15 @@
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-* 16 bits/color/pixels support : Any Image plugins must be udapted. Current port status is listed below :
-
-   > Already done plugins:
-
-   - Adjust Curves    : Done.
-   - Adjust Levels    : Done.
-   - Anti Vignetting  : Done.
-   - Blowup           : Done.
-   - Channel Mixer    : Done.
-   - Free Rotation    : Done.
-   - Inpainting       : Done.
-   - Refocus          : Done.
-   - Restoration      : Done.
-   - Shear Tool       : Done.
-   - Solarize         : Done.
-   - White Balance    : Done.
-   - Add Border       : Done.
-   - Oil Paint        : Done.
-   - Unsharp          : Done.
-   - Texture          : Done.
-   - Film Grain       : Done.
-   - Infrared         : Done.
-   - Rain Drops       : Done.
-   - Charcoal         : Done.
-   - Lens Distortion  : Done.
-   - Noise Reduction  : Done.
-   - Hot Pixels       : Done.
-   - Blur FX          : Done.
-   - Distortion FX    : Done.
-   - Emboss           : Done.
-   - Superimpose      : Done.
-   - Insert Text      : Done.
-   - Perspective      : Done.
-
-   > Some pending bugs
-
-   - Perspective      : - Check why antialiasing filter don't give any effects.
-                        - Improve settings widget.
    - Superimpose      : - Fix dirselect widget.
                         - Fix zooming.
 
 
-Nota: 
-
-- For all pending plugins, we need to use new standard dialogs from digikam core instead common dialog from DigikamImagePlugins.  
-
+------------------------------------------------------------------------------------
 
 * New features (Later than 0.9.0 release) :
 
+   - Perspective      : - Check why antialiasing filter don't give any effects.
    - Emboss           : The algorithms must render embossed image in color, not in B&W (like krita).
    - Add Border       : Add capability to preserve original image aspect ratio.
    - Hot Pixels       : Add manual hot pixel selection. Need to implement pixel selection on
