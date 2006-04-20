@@ -1,29 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//    DIGIKAMTHUMBNAIL.CPP
-//
-//    Copyright (C) 2003-2004 Renchi Raju <renchi at pooh.tam.uiuc.edu>
-//                            Gilles CAULIER <caulier dot gilles at free.fr>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-//////////////////////////////////////////////////////////////////////////////
+/* ============================================================
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2003-01-15
+ * Description : digiKam KIO slave to get image thumbnails.
+ *
+ * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006      by Gilles Caulier
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #define XMD_H
-
-#include <digikam_export.h>
 
 // Qt Includes.
 
@@ -32,6 +29,7 @@
 #include <qimage.h>
 #include <qdatastream.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdir.h>
 #include <qwmatrix.h>
 #include <qregexp.h>
@@ -80,6 +78,7 @@ extern "C"
 
 #include "dcraw_parse.h"
 #include "digikamthumbnail.h"
+#include "digikam_export.h"
 
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
@@ -342,20 +341,25 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     if (regenerate)
     {
-        // Try JPEG loading...
-        if ( !loadJPEG(img, url.path()) )
+        // In first we trying to load image using the file extension. This is mandatory because
+        // some tiff files are detected like RAW files by dcraw::parse method.
+        if ( !loadByExtension(img, url.path()) )
         {
-            // Try to load with imlib2
-            if ( !loadImlib2(img, url.path()) )
+            // Try JPEG loading...
+            if ( !loadJPEG(img, url.path()) )
             {
-                // Try to load with QT/KDELib
-                if (!img.load(url.path()))
+                // Try to load with dcraw : RAW files.
+                if ( !loadDCRAW(img, url.path()) )
                 {
-                    // Try to load with KDE thumbcreators
-                    if (!loadKDEThumbCreator(img, url.path()))
+                    // Try to load with imlib2 : TIFF, PNG, etc.
+                    if ( !loadImlib2(img, url.path()) )
                     {
-                        // Try to load with dcraw
-                        loadDCRAW( img, url.path() );
+                        // Try to load with QT/KDELib
+                        if ( !img.load(url.path()) )
+                        {
+                            // Try to load with KDE thumbcreators : video files and others stuff.
+                            loadKDEThumbCreator(img, url.path());
+                        }
                     }
                 }
             }
@@ -436,6 +440,23 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     finished();
 }
 
+bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString& path)
+{
+    QFileInfo fileInfo(path);
+    if (!fileInfo.exists())
+        return false;
+    
+    QString ext = fileInfo.extension().upper();
+
+    if (ext == QString("JPEG") || ext == QString("JPG"))
+        return (loadJPEG(image, path));
+    else if (ext == QString("PNG"))
+        return (image.load(path));
+    else if (ext == QString("TIFF") || ext == QString("TIF"))
+        return (image.load(path));
+    
+    return false;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // JPEG Extraction
