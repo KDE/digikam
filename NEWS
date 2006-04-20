@@ -1,1 +1,42 @@
-See 'ChangeLog' file
+-------------------------------------------------------------------------
+0.8.2-beta1
+
+New features:
+
+	o display JPEG that use CMYK color space
+
+	o Rating image using keyboard shortcuts CTRL+0/1/2/3/4/5 from
+	  main interface (#123646)
+
+	o Buttons to set the album date to oldest, yougest of the
+	  images in the album (#120963)
+
+Bugs fixed:
+
+	o #123742: preview-pictures seem to be handled differently by
+	  Digikam and Konqueror
+
+	o #121905: albums not displayed corectly and digikam crashes
+	  with St9bad_alloc
+
+	o #120053: digikam: whatthis info not closed when albumview is
+	  scrolled up or down with cursur keys
+
+	o #120052: digikam: redraw problem with whatthis info of an
+	  image show and starts scrolling with the mouse
+
+	o #119946: thumbnails not correctly rotated according to exif
+	  information
+
+	o #116248: Ask user which plugins should be enabled on first
+	  startup (all plugins are enabled by default first startup)
+
+	o #115460: opening and closing right pane with tag filter also
+	  changes width of left pane and vv
+
+	o #121646: Digikam on PPC has problem identifying JPEG and tries
+	  to use dcraw with them
+
+	o #120479: Search problem for not tagged or commented images
+	  #120775: Search doesn't find pictures without rating
+
