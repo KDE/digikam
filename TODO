@@ -45,6 +45,7 @@
 B.K.O files to fix :
 
 ==> 117115  (CameraGUI: Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
+==> 121367  (Add properties tab to digiKam and (especially) IE)
 ==> 115423  (Main Interface: thumbnails view jumps to top when new photos are added)
 ==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120241  (Main Interface: utf8 display and edit)
