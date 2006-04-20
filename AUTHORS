@@ -1,8 +1,7 @@
 DEVELOPERS :
 
 Gilles Caulier <caulier dot gilles at free.fr>                        : Coordinator, lead developer, French translations.
-Joern Ahrens <kde at jokele.de>                                       : Developer, digiKam webpage maintainer.
-Tom Albers <tomalbers at kde.nl>                                      : Developer, digiKam webpage maintainer.
+Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                     : Developer.
 
 CURRENT CONTRIBUTORS :
 
@@ -13,6 +12,8 @@ Oliver Dörr <oliver at doerr-privat dot de>                           : Beta tes
 
 OLD CONTRIBUTORS :
 
+Joern Ahrens <kde at jokele.de>                                       : Developer, digiKam webpage maintainer.
+Tom Albers <tomalbers at kde.nl>                                      : Developer, digiKam webpage maintainer.
 Renchi Raju <renchi.raju at kdemail.net>                              : 0.1.0 to 0.8.0 : main coordinator and lead developer.
 Ralf Holzer <kde at ralfhoelzer.com>                                  : Developer (0.7.x).
 Todd Shoemaker <todd at theshoemakers.net>                            : Developer (0.6.x).

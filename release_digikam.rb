@@ -162,6 +162,7 @@ Dir.chdir( "#{name}" )
 `/bin/mv -f README ..`
 `/bin/mv -f TODO ..`
 `/bin/mv -f HACKING ..`
+`/bin/mv -f NEWS ..`
 Dir.chdir( ".." )
 
 
