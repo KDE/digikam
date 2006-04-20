@@ -13,6 +13,21 @@
                dcop digikam-<pid> camera cameraAutodetect # dialog open with error; closing
                                                        the dialog ==> CRASH
 
+	o Testing 3 plug cases (camera is here gphoto _and_ usm)
+		1) digikam is not running and camera is pluged in
+			-> media action dialog pops up and digikam should
+			   be in the list. 
+		2) digikam is already running when camera is plug in
+			-> as 1) but already instance should be used
+			(uniconize, switchToDesktop and bringToFront applied
+			if necessary
+		3) digikam is started/activated after action dialog was closed and
+		   camera is already connected
+			-> camera menu allows to 
+				select the 'dynamicly added camera menu item
+				to start download dialog
+		  		ditto for unmounting in usm case 
+
 * Image Properties SideBar:
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
