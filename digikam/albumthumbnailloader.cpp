@@ -49,14 +49,17 @@ class AlbumThumbnailLoaderPrivate
 public:
     AlbumThumbnailLoaderPrivate()
     {
-        tagIconSize  = 20;
-        iconThumbJob = 0;
+        tagIconSize        = 20;
+        iconAlbumThumbJob  = 0;
+        iconTagThumbJob    = 0;
         //cache        = new QCache<QPixmap>(101, 211);
     }
 
     int                     tagIconSize;
 
-    ThumbnailJob           *iconThumbJob;
+    ThumbnailJob           *iconTagThumbJob;
+
+    ThumbnailJob           *iconAlbumThumbJob;
 
     UrlAlbumMap             urlAlbumMap;
 
@@ -84,8 +87,11 @@ AlbumThumbnailLoader::AlbumThumbnailLoader()
 
 AlbumThumbnailLoader::~AlbumThumbnailLoader()
 {
-    if (d->iconThumbJob)
-        d->iconThumbJob->kill();
+    if (d->iconTagThumbJob)
+        d->iconTagThumbJob->kill();
+
+    if (d->iconAlbumThumbJob)
+        d->iconAlbumThumbJob->kill();
     //delete d->cache;
 
     delete d;
@@ -145,8 +151,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
         {
             KURL iconKURL;
             iconKURL.setPath(album->icon());
-            addURL(iconKURL);
-            addUrlAlbumPair(album, iconKURL);
+            addURL(album, iconKURL);
             icon = QPixmap();
             return true;
         }
@@ -167,8 +172,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
 {
     if(!album->icon().isEmpty())
     {
-        addURL(album->iconKURL());
-        addUrlAlbumPair(album, album->iconKURL());
+        addURL(album, album->iconKURL());
     }
     else
     {
@@ -178,7 +182,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum *album)
     return true;
 }
 
-void AlbumThumbnailLoader::addURL(const KURL &url)
+void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
 {
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().path());
@@ -186,31 +190,65 @@ void AlbumThumbnailLoader::addURL(const KURL &url)
     return pix;
     */
 
-    if(!d->iconThumbJob)
+    // Check if the URL has already been added (ThumbnailJob will _not_ check this)
+    UrlAlbumMap::iterator it = d->urlAlbumMap.find(url);
+
+    if (it == d->urlAlbumMap.end())
     {
-        d->iconThumbJob = new ThumbnailJob(url,
-                                           (int)ThumbnailSize::Tiny,
-                                           true,
-                                           AlbumSettings::instance()->getExifRotate());
-        connect(d->iconThumbJob,
-                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
-        connect(d->iconThumbJob,
-                SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotThumbnailLost(const KURL&)));
+        // use two IOslaves so that tag and album thumbnails are loaded
+        // in parallel and not first album, then tag thumbnails
+        if (album->type() == Album::TAG)
+        {
+            if(!d->iconTagThumbJob)
+            {
+                d->iconTagThumbJob = new ThumbnailJob(url,
+                        (int)ThumbnailSize::Tiny,
+                        true,
+                        AlbumSettings::instance()->getExifRotate());
+                connect(d->iconTagThumbJob,
+                        SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
+                connect(d->iconTagThumbJob,
+                        SIGNAL(signalFailed(const KURL&)),
+                        SLOT(slotThumbnailLost(const KURL&)));
+            }
+            else
+            {
+                d->iconTagThumbJob->addItem(url);
+            }
+        }
+        else
+        {
+            if(!d->iconAlbumThumbJob)
+            {
+                d->iconAlbumThumbJob = new ThumbnailJob(url,
+                        (int)ThumbnailSize::Tiny,
+                        true,
+                        AlbumSettings::instance()->getExifRotate());
+                connect(d->iconAlbumThumbJob,
+                        SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                        SLOT(slotGotThumbnailFromIcon(const KURL&, const QPixmap&)));
+                connect(d->iconAlbumThumbJob,
+                        SIGNAL(signalFailed(const KURL&)),
+                        SLOT(slotThumbnailLost(const KURL&)));
+            }
+            else
+            {
+                d->iconAlbumThumbJob->addItem(url);
+            }
+        }
+
+        // insert new entry to map, add album globalID
+        QValueList<int> &list = d->urlAlbumMap[url];
+        list.remove(album->globalID());
+        list.push_back(album->globalID());
     }
     else
     {
-        d->iconThumbJob->addItem(url);
+        // only add album global ID to list which is already inserted in map
+        (*it).remove(album->globalID());
+        (*it).push_back(album->globalID());
     }
-}
-
-void AlbumThumbnailLoader::addUrlAlbumPair(Album *album, const KURL &url)
-{
-    // add album to list of albums for which this icon url has been requested
-    QValueList<int> &list = d->urlAlbumMap[url];
-    list.remove(album->globalID());
-    list.push_back(album->globalID());
 }
 
 /*
@@ -234,7 +272,6 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixm
     // We need to find all albums for which the given url has been requested,
     // and emit a signal for each album.
 
-    //kdDebug() << "Got URL " << url << endl;
     UrlAlbumMap::iterator it = d->urlAlbumMap.find(url);
 
     if (it != d->urlAlbumMap.end())
@@ -325,4 +362,7 @@ QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon
 }
 
 } // namespace Digikam
+
+#include "albumthumbnailloader.moc"
+
 

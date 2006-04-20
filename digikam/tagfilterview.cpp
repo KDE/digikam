@@ -318,7 +318,7 @@ void TagFilterView::slotTagAdded(Album* album)
 
     if (tag->parent()->isRoot())
     {
-        TagFilterViewItem* item = new TagFilterViewItem(this, tag);
+        new TagFilterViewItem(this, tag);
     }
     else
     {
@@ -331,7 +331,7 @@ void TagFilterView::slotTagAdded(Album* album)
             return;
         }
 
-        TagFilterViewItem* item = new TagFilterViewItem(parent, tag);
+        new TagFilterViewItem(parent, tag);
     }
 
     setTagThumbnail(tag);

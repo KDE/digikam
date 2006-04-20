@@ -118,10 +118,9 @@ private:
     AlbumThumbnailLoaderPrivate *d;
     static AlbumThumbnailLoader *m_instance;
 
-    void addURL(const KURL &url);
+    void addURL(Album *album, const KURL &url);
     QPixmap loadIcon(const QString &name, int size = 32);
     QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
-    void addUrlAlbumPair(Album *album, const KURL &url);
 
 };
 
