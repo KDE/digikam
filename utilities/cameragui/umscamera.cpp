@@ -5,7 +5,7 @@
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -138,9 +138,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder,
     return true;
 }
 
-bool UMSCamera::getThumbnail(const QString& folder,
-                             const QString& itemName,
-                             QImage& thumbnail)
+bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
     m_cancel = false;
 
@@ -173,7 +171,19 @@ bool UMSCamera::getThumbnail(const QString& folder,
            return true;
     }   
 
-    // In 3rd we trying to get thumbnail from RAW files using dcraw parse utility.
+    // In 3rd, if file image type is TIFF, load thumb using KDELib API before to use dcraw::parse method 
+    // to prevent broken 16 bits TIFF thumb.
+
+    if (fi.extension().upper() == QString("TIFF") ||
+        fi.extension().upper() == QString("TIF"))
+    {
+        thumbnail.load(folder + "/" + itemName);
+    
+        if (!thumbnail.isNull())
+            return true;
+    }
+
+    // In 4th we trying to get thumbnail from RAW files using dcraw parse utility.
 
     KTempFile thumbFile(QString::null, "camerarawthumb");
     thumbFile.setAutoDelete(true);
