@@ -1345,30 +1345,54 @@ void kio_digikamalbums::renameImage(int oldAlbumID, const QString& oldName,
 void kio_digikamalbums::copyImage(int srcAlbumID, const QString& srcName,
                                   int dstAlbumID, const QString& dstName)
 {
+    // check for src == dest
+    if (srcAlbumID == dstAlbumID && srcName == dstName)
+    {
+        error( KIO::ERR_FILE_ALREADY_EXIST, dstName );
+        return;
+    }
+
+    // find id of src image
+    QStringList values;
+    m_sqlDB.execSql( QString("SELECT id FROM Images "
+                             "WHERE dirid=%1 AND name='%2';")
+                     .arg(QString::number(srcAlbumID), escapeString(srcName)),
+                     &values);
+
+    if (values.isEmpty())
+    {
+        error(KIO::ERR_UNKNOWN, i18n("Source image %1 not found in database")
+                .arg(srcName));
+        return;
+    }
+
+    int srcId = values[0].toInt();
+
     // first delete any stale entries for the destination file
     m_sqlDB.execSql( QString("DELETE FROM Images "
                              "WHERE dirid=%1 AND name='%2';")
-                     .arg(dstAlbumID)
-                     .arg(escapeString(dstName)) );
+                     .arg(QString::number(dstAlbumID), escapeString(dstName)) );
 
-    // now copy the metadata over
+    // copy entry in Images table
     m_sqlDB.execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
                              "SELECT %1, '%2', caption, datetime FROM Images "
-                             "WHERE dirid=%3 AND name='%4';")
-                     .arg(QString::number(dstAlbumID),
-                          escapeString(dstName),
-                          QString::number(srcAlbumID),
-                          escapeString(srcName)) );
+                             "WHERE id=%3;")
+                     .arg(QString::number(dstAlbumID), escapeString(dstName),
+                          QString::number(srcId)) );
 
+    int dstId = m_sqlDB.lastInsertedRow();
+
+    // copy tags
     m_sqlDB.execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
-                             "SELECT A.id, B.tagid FROM Images AS A, ImageTags AS B "
-                             "WHERE A.dirid = %1 AND A.name = '%2' AND"
-                             "      B.imageid = (SELECT id FROM Images "
-                             "                   WHERE dirid=%3 AND name='%4')")
-                     .arg(QString::number(dstAlbumID),
-                          escapeString(dstName),
-                          QString::number(srcAlbumID),
-                          escapeString(srcName)) );
+                             "SELECT %1, tagid FROM ImageTags "
+                             "WHERE imageid=%2;")
+                     .arg(QString::number(dstId), QString::number(srcId)) );
+
+    // copy properties (rating)
+    m_sqlDB.execSql( QString("INSERT INTO ImageProperties (imageid, property, value) "
+                             "SELECT %1, property, value FROM ImageProperties "
+                             "WHERE imageid=%2;")
+                     .arg(QString::number(dstId), QString::number(srcId)) );
 }
 
 void kio_digikamalbums::scanAlbum(const QString& url)
