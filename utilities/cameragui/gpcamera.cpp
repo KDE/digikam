@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-21
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2003-01-21
  * Description : Gphoto2 camera interface
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +37,7 @@ extern "C"
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qimage.h>
+#include <qpixmap.h>
 #include <qdom.h>
 #include <qfile.h>
 
@@ -427,11 +430,14 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
         itemInfo.readPermissions  = -1;
         itemInfo.writePermissions = -1;
         
-        if (info.file.fields & GP_FILE_INFO_MTIME)
-            itemInfo.mtime = info.file.mtime;
-        
+        /* The mime type returned by Gphoto2 is dummy with all RAW files.
         if (info.file.fields & GP_FILE_INFO_TYPE)
-            itemInfo.mime = info.file.type;
+            itemInfo.mime = info.file.type;*/
+
+        itemInfo.mime = mimeType(itemInfo.name.section('.', -1).lower());
+
+        if (info.file.fields & GP_FILE_INFO_MTIME)
+            itemInfo.mtime = info.file.mtime;      
 
         if (info.file.fields & GP_FILE_INFO_SIZE)
             itemInfo.size = info.file.size;
@@ -497,6 +503,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
         gp_file_unref(cfile);
         delete status;
         status = 0;
+
         return false;
     }
 

@@ -60,11 +60,9 @@ const char* CameraIconViewItem::new_xpm[] =
 
 QPixmap* CameraIconViewItem::m_newEmblem = 0;
 
-CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent,
-                                       const GPItemInfo& itemInfo,
-                                       const QPixmap& pix,
-                                       const QString& downloadName)
-    : IconItem(parent)
+CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
+                                       const QPixmap& pix, const QString& downloadName)
+                  : IconItem(parent)
 {
     m_itemInfo     = new GPItemInfo(itemInfo);
     m_downloadName = downloadName;
@@ -120,8 +118,7 @@ void CameraIconViewItem::paintItem()
         p.fillRect(0, m_textRect.y(), pix.width(),
                    m_textRect.height(), cg.button() );
         p.setPen( cg.text() );
-    }
-    
+    }    
 
     p.drawText(m_textRect, Qt::WordBreak|Qt::BreakAnywhere|
                Qt::AlignHCenter|Qt::AlignTop, m_itemInfo->name);
@@ -247,15 +244,14 @@ void CameraIconViewItem::calcRect()
 
 QRect CameraIconViewItem::clickToOpenRect()
 {
-    QRect  r(rect());
+    QRect r(rect());
     
     if (m_pixmap.isNull())
     {
-        QRect  pixRect(m_pixRect);
+        QRect pixRect(m_pixRect);
         pixRect.moveBy(r.x(), r.y());
         return pixRect;
     }
-
 
     QRect pixRect(m_pixRect.x() + (m_pixRect.width() - m_pixmap.width())/2,
                   m_pixRect.y() + (m_pixRect.height() - m_pixmap.height())/2,

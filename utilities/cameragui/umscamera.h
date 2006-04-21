@@ -1,8 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-12-21
- * Description : USB Mass Storage Implementation of abstract
- * type DKCamera
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-12-21
+ * Description : USB Mass Storage camera interface
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2005-2006 by Gilles Caulier
@@ -17,6 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ * 
  * ============================================================ */
 
 #ifndef UMSCAMERA_H
@@ -39,43 +40,28 @@ class UMSCamera : public DKCamera
 {
 public:
 
-    UMSCamera(const QString& model,
-              const QString& port,
-              const QString& path);
+    UMSCamera(const QString& model, const QString& port, const QString& path);
     ~UMSCamera();
 
     bool doConnect();
     void cancel();
 
-    void getAllFolders(const QString& folder,
-                       QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder,
-                          GPItemInfoList& infoList);
-    bool getThumbnail(const QString& folder,
-                      const QString& itemName,
-                      QImage& thumbnail);
-    bool getExif(const QString& folder,
-                 const QString& itemName,
-                 char **edata, int& esize);
+    void getAllFolders(const QString& folder, QStringList& subFolderList);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList);
+    bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
+    bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 
-    bool downloadItem(const QString& folder,
-                      const QString& itemName,
-                      const QString& saveFile);
-    bool deleteItem(const QString& folder,
-                    const QString& itemName);
-    bool uploadItem(const QString& folder,
-                    const QString& itemName,
-                    const QString& localFile);
+    bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
+    bool deleteItem(const QString& folder, const QString& itemName);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile);
 
 private:
 
-    void    listFolders(const QString& folder,
-                        QStringList& subFolderList);
-    QString mimeType(const QString& fileext) const;
+    void listFolders(const QString& folder, QStringList& subFolderList);
 
 private :
 
-    UMSCameraPriv* d;
+    bool m_cancel;
 
 };
 

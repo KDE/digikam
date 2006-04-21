@@ -1,6 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-18
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-18
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
@@ -87,17 +88,18 @@ void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 void CameraIconView::addItem(const GPItemInfo& info)
 {
     KMimeType::Ptr mime;
-    mime = KMimeType::mimeType( info.mime );
-    QPixmap pix = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
 
+    // Just to have a generic image thumb from desktop with KDE < 3.5.0
+    mime = KMimeType::mimeType( info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime );
+
+    QPixmap pix = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
     QString downloadName;
 
     if (m_renamer)
     {
         if (!m_renamer->useDefault())
         {
-            downloadName = getTemplatedName( m_renamer->nameTemplate(), &info,
-                                             m_itemDict.count() );
+            downloadName = getTemplatedName( m_renamer->nameTemplate(), &info, m_itemDict.count() );
         }
         else
         {
@@ -105,8 +107,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
         }
     }
 
-    CameraIconViewItem* item = new CameraIconViewItem(m_groupItem, info,
-                                                      pix, downloadName);
+    CameraIconViewItem* item = new CameraIconViewItem(m_groupItem, info, pix, downloadName);
     m_itemDict.insert(info.folder+info.name, item);
 }
 
@@ -125,13 +126,13 @@ CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QStrin
     return m_itemDict.find(folder+file);
 }
 
-void CameraIconView::setThumbnail(const QString& folder, const QString& filename,
-                                  const QPixmap& pixmap)
+void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
     CameraIconViewItem* item = m_itemDict.find(folder+filename);
     if (!item)
         return;
 
+    QPixmap pixmap(image);
     item->setPixmap(pixmap);
     item->repaint();
 }

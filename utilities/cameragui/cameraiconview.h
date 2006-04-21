@@ -1,6 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-18
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-18
  * Description : 
  * 
  * Copyright 2004-2005 by Renchi Raju
@@ -52,8 +53,7 @@ public:
     
     void addItem(const GPItemInfo& itemInfo);
     void removeItem(const QString& folder, const QString& file);
-    void setThumbnail(const QString& folder, const QString& filename,
-                      const QPixmap& pixmap);
+    void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
 
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 

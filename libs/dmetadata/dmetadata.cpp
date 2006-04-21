@@ -315,6 +315,41 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
     return thumbnail;
 }
 
+QSize DMetadata::getImageDimensions()
+{
+    if (m_exifMetadata.isEmpty())
+        return QSize();
+
+    try
+    {    
+        long width=-1, height=-1;
+        Exiv2::ExifData exifData;
+        exifData.load((const Exiv2::byte*)m_exifMetadata.data(), m_exifMetadata.size());
+        Exiv2::ExifKey key("Exif.Image.ImageWidth");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+        
+        if (it != exifData.end())
+            width = it->toLong();
+
+        Exiv2::ExifKey key2("Exif.Image.ImageLength");
+        Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+        
+        if (it2 != exifData.end())
+            height = it2->toLong();
+        
+        if (width != -1 && height != -1)
+            return QSize(width, height);
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse image dimensions tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return QSize();
+}
+
 DMetadata::ImageOrientation DMetadata::getImageOrientation()
 {
     if (m_exifMetadata.isEmpty())

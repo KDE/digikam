@@ -83,6 +83,7 @@ public:
     void setIptc(Exiv2::DataBuf const data);
 
     QImage           getExifThumbnail(bool fixOrientation) const;
+    QSize            getImageDimensions();
     ImageOrientation getImageOrientation();
     QDateTime        getImageDateTime() const;
     QString          getImageComment() const;

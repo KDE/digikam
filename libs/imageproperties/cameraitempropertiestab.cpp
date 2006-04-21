@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kfileitem.h>
+#include <kmimetype.h>
 #include <kdebug.h>
 #include <kseparator.h>
 #include <ksqueezedtextlabel.h>
@@ -210,7 +211,8 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
                          .arg(KGlobal::locale()->formatNumber(itemInfo->size, 0));
     d->labelFileSize->setText(str);
     
-    d->labelFileMime->setText(itemInfo->mime);
+    d->labelFileMime->setText( (itemInfo->mime == QString("image/x-raw")) ? 
+                               i18n("RAW Image") : KMimeType::mimeType(itemInfo->mime)->comment() );
 
     QString mpixels;
     QSize dims(itemInfo->width, itemInfo->height);

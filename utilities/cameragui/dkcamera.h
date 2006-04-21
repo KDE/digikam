@@ -1,7 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-12-21
- * Copyright 2004 by Renchi Raju
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-12-21
+ * Description : abstract camera interface class
+ * 
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -13,6 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ * 
  * ============================================================ */
 
 #ifndef DKCAMERA_H
@@ -36,37 +41,35 @@ class DKCamera
 {
 public:
 
-    DKCamera(const QString& model,
-           const QString& port,
-           const QString& path);
+    DKCamera(const QString& model, const QString& port, const QString& path);
     virtual ~DKCamera();
 
     virtual bool doConnect() = 0;
     virtual void cancel()  = 0;
 
-    virtual void getAllFolders(const QString& folder,
-                               QStringList& subFolderList) = 0;
-    virtual bool getItemsInfoList(const QString& folder,
-                                  GPItemInfoList& infoList) = 0;
-    virtual bool getThumbnail(const QString& folder,
-                              const QString& itemName,
-                              QImage& thumbnail) = 0;
-    virtual bool getExif(const QString& folder,
-                         const QString& itemName,
-                         char **edata, int& esize) = 0;
+    virtual void getAllFolders(const QString& folder, QStringList& subFolderList) = 0;
+    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList) = 0;
+    virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
+    virtual bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize) = 0;
 
-    virtual bool downloadItem(const QString& folder,
-                              const QString& itemName,
-                              const QString& saveFile) = 0;
-    virtual bool deleteItem(const QString& folder,
-                            const QString& itemName) = 0;
-    virtual bool uploadItem(const QString& folder,
-                            const QString& itemName,
-                            const QString& localFile) = 0;
+    virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
+    virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
+    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile) = 0;
 
     QString model() const;
     QString port()  const;
     QString path()  const;
+
+protected:
+
+    QString mimeType(const QString& fileext) const;
+
+protected:
+
+    QString m_imageFilter;
+    QString m_movieFilter;
+    QString m_audioFilter;
+    QString m_rawFilter;
 
 private:
 

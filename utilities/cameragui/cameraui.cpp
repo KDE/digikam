@@ -322,9 +322,6 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
 
-    connect(d->view, SIGNAL(signalDownloadFileNamesChanged()),
-            this, SLOT(slotDownloadFileNamesChanged()));
-
     // -------------------------------------------------------------------------
     
     connect(d->rightSidebar, SIGNAL(signalFirstItem()),
