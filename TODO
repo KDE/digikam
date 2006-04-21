@@ -38,8 +38,6 @@
    - remove embeddedText private metadata.
    - finalize TIFF loader and PNG loader
 
-* AlbumDB::copyItem needs to copy the Properties table entries as well.
-
 * ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)
 
 B.K.O files to fix :

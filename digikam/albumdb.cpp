@@ -1180,35 +1180,43 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
     if (srcAlbumID == dstAlbumID && srcName == dstName)
         return -1;
 
+    // find id of src image
+    QStringList values;
+    execSql( QString("SELECT id FROM Images "
+                     "WHERE dirid=%1 AND name='%2';")
+             .arg(QString::number(srcAlbumID), escapeString(srcName)),
+             &values);
+
+    if (values.isEmpty())
+        return -1;
+
+    int srcId = values[0].toInt();
+
     // first delete any stale database entries if any
     deleteItem(dstAlbumID, dstName);
 
+    // copy entry in Images table
     execSql( QString("INSERT INTO Images (dirid, name, caption, datetime) "
                      "SELECT %1, '%2', caption, datetime FROM Images "
-                     "WHERE dirid=%3 AND name='%4';")
+                     "WHERE id=%3;")
              .arg(QString::number(dstAlbumID), escapeString(dstName),
-                  QString::number(srcAlbumID), escapeString(srcName)) );
+                  QString::number(srcId)) );
 
-    int id = sqlite3_last_insert_rowid(m_db);
+    int dstId = sqlite3_last_insert_rowid(m_db);
 
-    // I think this can be done much easier:
-    /*
-    execSql( QString("INSERT INTO ImageTags (imageid, tagid) \n"
-                     "SELECT %1, tagid FROM ImageTags \n"
-                     "WHERE imageid=%2 ;)
-              .arg(QString::number(id), QString::number(id)) );
-    */
+    // copy tags
+    execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
+                     "SELECT %1, tagid FROM ImageTags "
+                     "WHERE imageid=%2;")
+             .arg(QString::number(dstId), QString::number(srcId)) );
 
-    execSql( QString("INSERT INTO ImageTags (imageid, tagid) \n"
-                     "SELECT DISTINCT I.id, T.tagid FROM Images AS I, ImageTags AS T WHERE \n"
-                     "     I.id=(SELECT Images.id FROM Images WHERE \n"
-                     "           dirid=%1 AND name='%2') \n"
-                     "AND  T.tagid IN (SELECT tagid FROM ImageTags WHERE \n"
-                     "                   imageid=(SELECT id FROM Images WHERE \n"
-                     "                             dirid=%3 AND name='%4'));")
-             .arg(QString::number(dstAlbumID), escapeString(dstName), 
-                  QString::number(srcAlbumID), escapeString(srcName)) );
-    return id;
+    // copy properties (rating)
+    execSql( QString("INSERT INTO ImageProperties (imageid, property, value) "
+                     "SELECT %1, property, value FROM ImageProperties "
+                     "WHERE imageid=%2;")
+             .arg(QString::number(dstId), QString::number(srcId)) );
+
+    return dstId;
 }
 
 Q_LLONG AlbumDB::lastInsertedRow()
