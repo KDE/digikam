@@ -53,6 +53,7 @@ private:
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
+    void restoreSettings();
 
 private slots:
 

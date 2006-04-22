@@ -575,7 +575,10 @@ void SetupICC::slotToggledWidgets(bool t)
     d->infoProofProfiles->setEnabled(t);
 
     if (t)
-        fillCombos(d->defaultPathKU->url(), true);
+    {
+//         fillCombos(d->defaultPathKU->url(), true);
+        restoreSettings();
+    }
     else
         d->mainDialog->enableButtonOK(true);
 }
@@ -610,6 +613,37 @@ void SetupICC::profileInfo(const QString& profile)
 
     ICCProfileInfoDlg infoDlg(this, profile);
     infoDlg.exec();
+}
+
+void SetupICC::restoreSettings()
+{
+    KConfig* config = kapp->config();
+
+    config->setGroup("Color Management");
+
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath",
+                             QString::null));
+//     d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM",
+//                                          false));
+    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent",
+                                                              0));
+    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+
+    if (config->readBoolEntry("BehaviourICC"))
+        d->defaultApplyICC->setChecked(true);
+    else
+        d->defaultAskICC->setChecked(true);
+
+//     slotToggledWidgets(d->enableColorManagement->isChecked());
+    fillCombos(d->defaultPathKU->url(), false);
+
+    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile",
+                                                           0));
+    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile",
+                                                               0));
+    d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
+    d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
 }
 
 }  // namespace Digikam
