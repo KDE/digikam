@@ -54,12 +54,12 @@ DMetaLoader::DMetaLoader(DMetadata* metadata)
     m_hasIptc  = false;
 }
 
-QByteArray& DMetaLoader::exifMetadata()
+Exiv2::ExifData& DMetaLoader::exifMetadata()
 {
     return m_metadata->m_exifMetadata;
 }
 
-QByteArray& DMetaLoader::iptcMetadata()
+Exiv2::IptcData& DMetaLoader::iptcMetadata()
 {
     return m_metadata->m_iptcMetadata;
 }
@@ -77,22 +77,16 @@ bool DMetaLoader::loadWithExiv2(const QString& filePath)
 
         // Exif metadata ----------------------------------
         
-        Exiv2::ExifData &exifData = image->exifData();
-        Exiv2::DataBuf const c1(exifData.copy());
-        exifMetadata() = QByteArray(c1.size_);
-        memcpy(exifMetadata().data(), c1.pData_, c1.size_);
+        exifMetadata() = image->exifData();
 
-        if (!exifMetadata().isEmpty())
+        if (!exifMetadata().empty())
             m_hasExif = true;
 
         // Iptc metadata ----------------------------------
         
-        Exiv2::IptcData &iptcData = image->iptcData();
-        Exiv2::DataBuf const c2(iptcData.copy());
-        iptcMetadata() = QByteArray(c2.size_);
-        memcpy(iptcMetadata().data(), c2.pData_, c2.size_);
+        iptcMetadata() = image->iptcData();
         
-        if (!iptcMetadata().isEmpty())
+        if (!iptcMetadata().empty())
             m_hasIptc = true;
     
         return true;
@@ -121,26 +115,16 @@ bool DMetaLoader::saveWithExiv2(const QString& filePath)
 
         // Exif metadata ----------------------------------
         
-        if (!exifMetadata().isEmpty())
+        if (!exifMetadata().empty())
         {
-            Exiv2::ExifData exifData;
-
-            if (exifData.load((Exiv2::byte*)exifMetadata().data(), exifMetadata().size()))
-                kdDebug() << "Cannot parse EXIF metadata to save using Exiv2" << endl;
-            else
-                image->setExifData(exifData);
+            image->setExifData(exifMetadata());
         }
 
         // Iptc metadata ----------------------------------
         
-        if (!iptcMetadata().isEmpty())
+        if (!iptcMetadata().empty())
         {
-            Exiv2::IptcData iptcData;
-
-            if (iptcData.load((Exiv2::byte*)iptcMetadata().data(), iptcMetadata().size()))
-                kdDebug() << "Cannot parse IPTC metadata to save using Exiv2" << endl;
-            else
-                image->setIptcData(iptcData);
+            image->setIptcData(iptcMetadata());
         }
     
         image->writeMetadata();

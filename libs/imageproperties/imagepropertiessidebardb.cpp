@@ -39,6 +39,7 @@
 #include "dimg.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
+#include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagedescedittab.h"
@@ -54,10 +55,10 @@ public:
 
     ImagePropertiesSideBarDBPriv()
     {
-        currentView       = 0;
-        currentItem       = 0;
-        currentInfo       = 0;
-        desceditTab       = 0;
+        currentView         = 0;
+        currentItem         = 0;
+        currentInfo         = 0;
+        desceditTab         = 0;
         dirtyDesceditTab    = false;
         currentItemPosition = NavigateBarWidget::ItemCurrent;
     }
@@ -72,8 +73,7 @@ public:
 
     ImageDescEditTab *desceditTab;
 
-    NavigateBarWidget::CurrentItemPosition
-                      currentItemPosition;
+    NavigateBarWidget::CurrentItemPosition currentItemPosition;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -86,6 +86,18 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments && Tags"));
 
     // ----------------------------------------------------------
+
+    connect(m_propertiesTab, SIGNAL(signalFirstItem()),
+            this, SIGNAL(signalFirstItem()));
+                    
+    connect(m_propertiesTab, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+    
+    connect(m_propertiesTab, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(m_propertiesTab, SIGNAL(signalLastItem()),
+            this, SIGNAL(signalLastItem()));
     
     connect(m_metadataTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -136,7 +148,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view,
                                            AlbumIconItem* item, QRect *rect, DImg *img)
 {
     bool hasPrevious = view->firstItem() != item;
-    bool hasNext = view->lastItem() != item;
+    bool hasNext     = view->lastItem() != item;
     itemChanged(url, rect, img, view, item, item->imageInfo(), hasPrevious, hasNext);
 }
 
@@ -159,16 +171,16 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     if (!url.isValid())
         return;
 
-    m_currentURL        = url;
-    m_currentRect       = rect;
-    m_image             = img;
-    m_dirtyMetadataTab  = false;
-    m_dirtyColorTab     = false;
-    d->dirtyDesceditTab = false;
-
-    d->currentView      = view;
-    d->currentItem      = item;
-    d->currentInfo      = info;
+    m_currentURL         = url;
+    m_currentRect        = rect;
+    m_image              = img;
+    m_dirtyPropertiesTab = false;
+    m_dirtyMetadataTab   = false;
+    m_dirtyColorTab      = false;
+    d->dirtyDesceditTab  = false;
+    d->currentView       = view;
+    d->currentItem       = item;
+    d->currentInfo       = info;
 
     if (!hasPrevious)
         d->currentItemPosition = NavigateBarWidget::ItemFirst;
@@ -201,7 +213,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     // launched from camera GUI.
     if (!d->currentInfo)
     {
-        if (tab == m_metadataTab && !m_dirtyMetadataTab)
+        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
+        {
+            m_propertiesTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_dirtyPropertiesTab = true;
+        }
+        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
                 m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
@@ -226,7 +243,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     }
     else    // Data from database available...
     {
-        if (tab == m_metadataTab && !m_dirtyMetadataTab)
+        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
+        {
+            m_propertiesTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_dirtyPropertiesTab = true;
+        }
+        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
                 m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(),

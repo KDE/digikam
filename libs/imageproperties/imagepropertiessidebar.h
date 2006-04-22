@@ -39,6 +39,7 @@ namespace Digikam
 {
 
 class DImg;
+class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
@@ -67,6 +68,7 @@ protected slots:
 
 protected:
 
+    bool                        m_dirtyPropertiesTab;
     bool                        m_dirtyMetadataTab;
     bool                        m_dirtyColorTab;
  
@@ -76,6 +78,7 @@ protected:
  
     DImg                       *m_image;
      
+    ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;
         

@@ -31,10 +31,12 @@
 
 #include <exiv2/types.hpp>
 #include <exiv2/iptc.hpp>
+#include <exiv2/exif.hpp>
 
 // Local includes.
 
 #include "dimg.h"
+#include "photoinfocontainer.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -73,8 +75,8 @@ public:
     bool save(const QString& filePath, DImg::FORMAT ff);
 
     /** Metadata manipulation methods */
-    QByteArray       getExif() const;
-    QByteArray       getIptc() const;
+    QByteArray getExif() const;
+    QByteArray getIptc() const;
 
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);
@@ -94,23 +96,25 @@ public:
     bool setImageDateTime(const QDateTime& dateTime);
     bool setImageComment(const QString& comment);
     bool setImageRating(int rating);
-    bool setImageKeywords(const QStringList& oldKeywords, 
-                          const QStringList& newKeywords);
+    bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords);
     bool setImagePhotographerId(const QString& author, const QString& authorTitle);
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright);
+
+    PhotoInfoContainer getPhotographInformations() const;
 
 private:
 
     DImg::FORMAT fileFormat(const QString& filePath);
-    bool setImageProgramId(Exiv2::IptcData& iptcData);
+    bool         setImageProgramId();
+    QString      getExifTagValue(const char * exifTagName) const;
 
 private:
 
-    QString      m_filePath;
-    DImg::FORMAT m_fileFormat;
+    QString         m_filePath;
+    DImg::FORMAT    m_fileFormat;
 
-    QByteArray   m_exifMetadata;
-    QByteArray   m_iptcMetadata;
+    Exiv2::ExifData m_exifMetadata;
+    Exiv2::IptcData m_iptcMetadata;
 
     friend class DMetaLoader;
 };

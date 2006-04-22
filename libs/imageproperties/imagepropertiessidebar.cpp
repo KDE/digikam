@@ -37,6 +37,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiessidebar.h"
@@ -45,19 +46,23 @@ namespace Digikam
 {
 
 ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name, 
-                                               QSplitter *splitter, Side side, bool mimimizedDefault, bool navBar)
+                                               QSplitter *splitter, Side side, 
+                                               bool mimimizedDefault, bool navBar)
                       : Sidebar(parent, name, side, mimimizedDefault)
 {
-    m_image            = 0;
-    m_currentRect      = 0;
-    m_dirtyMetadataTab = false;
-    m_dirtyColorTab    = false;
+    m_image              = 0;
+    m_currentRect        = 0;
+    m_dirtyPropertiesTab = false;
+    m_dirtyMetadataTab   = false;
+    m_dirtyColorTab      = false;
     
-    m_metadataTab  = new ImagePropertiesMetaDataTab(parent, navBar);
-    m_colorTab     = new ImagePropertiesColorsTab(parent, 0, navBar);
+    m_propertiesTab = new ImagePropertiesTab(parent, navBar);
+    m_metadataTab   = new ImagePropertiesMetaDataTab(parent, navBar);
+    m_colorTab      = new ImagePropertiesColorsTab(parent, 0, navBar);
     
     setSplitter(splitter);
          
+    appendTab(m_propertiesTab, SmallIcon("info"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("blend"), i18n("Colors"));
     
@@ -74,11 +79,12 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     if (!url.isValid())
         return;
     
-    m_currentURL       = url;
-    m_currentRect      = rect;
-    m_image            = img;
-    m_dirtyMetadataTab = false;
-    m_dirtyColorTab    = false;
+    m_currentURL         = url;
+    m_currentRect        = rect;
+    m_image              = img;
+    m_dirtyPropertiesTab = false;
+    m_dirtyMetadataTab   = false;
+    m_dirtyColorTab      = false;
     
     slotChangedTab( getActiveTab() );    
 }
@@ -86,10 +92,12 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
 void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
     m_currentURL = KURL();
+    m_propertiesTab->setCurrentURL();
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
-    m_dirtyMetadataTab  = false;
-    m_dirtyColorTab = false;
+    m_dirtyPropertiesTab = false;
+    m_dirtyMetadataTab   = false;
+    m_dirtyColorTab      = false;
 }
 
 void ImagePropertiesSideBar::slotImageSelectionChanged(QRect *rect)
@@ -109,7 +117,12 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     
     setCursor(KCursor::waitCursor());
     
-    if (tab == m_metadataTab && !m_dirtyMetadataTab)
+    if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
+    {
+       m_propertiesTab->setCurrentURL(m_currentURL);
+       m_dirtyPropertiesTab = true;
+    }
+    else if (tab == m_metadataTab && !m_dirtyMetadataTab)
     {
        m_metadataTab->setCurrentURL(m_currentURL);
        m_dirtyMetadataTab = true;
@@ -120,7 +133,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
        m_dirtyColorTab = true;
     }
     
-    setCursor( KCursor::arrowCursor() );
+    unsetCursor();
 }
 
 }  // NameSpace Digikam

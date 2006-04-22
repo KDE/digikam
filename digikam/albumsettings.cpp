@@ -196,7 +196,7 @@ void AlbumSettings::readSettings()
                               
     d->thumbnailSize = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
 
-    d->showToolTips = config->readBoolEntry("Show ToolTips", true);
+    d->showToolTips = config->readBoolEntry("Show ToolTips", false);
     
     d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
 

@@ -89,11 +89,10 @@ bool PNGMetaLoader::load(const QString& filePath)
                     if (!data)
                         continue;
                     // We removing standard Exif header
-                    exifMetadata() = QByteArray(length-6);
-                    memcpy(exifMetadata().data(), data+6, length-6);
+                    exifMetadata().load((const Exiv2::byte*)data+6, length-6);
                     delete [] data;
                     
-                    if (!exifMetadata().isEmpty())
+                    if (!exifMetadata().empty())
                         m_hasExif = true;
                 }
                 
@@ -103,11 +102,10 @@ bool PNGMetaLoader::load(const QString& filePath)
                     uchar *data = readRawProfile(s.ascii(), &length);
                     if (!data)
                         continue;
-                    iptcMetadata() = QByteArray(length);
-                    memcpy(iptcMetadata().data(), data, length);
+                    iptcMetadata().load((const Exiv2::byte*)data, length);
                     delete [] data;
 
-                    if (!iptcMetadata().isEmpty())
+                    if (!iptcMetadata().empty())
                         m_hasIptc = true;
                 }
             }
@@ -181,11 +179,9 @@ bool PNGMetaLoader::load(const QString& filePath)
                         iptcData[pngKey.ascii()] = std::string(txtValue.ascii());
                     }
     
-                Exiv2::DataBuf const c2(iptcData.copy());
-                iptcMetadata() = QByteArray(c2.size_);
-                memcpy(iptcMetadata().data(), c2.pData_, c2.size_);
+                iptcMetadata() = iptcData;
         
-                if (!iptcMetadata().isEmpty())
+                if (!iptcMetadata().empty())
                     m_hasIptc = true;
                 }
             }

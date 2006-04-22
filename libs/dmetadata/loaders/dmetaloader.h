@@ -25,6 +25,11 @@
 
 #include <qstring.h>
 
+// Exiv2 includes.
+
+#include <exiv2/iptc.hpp>
+#include <exiv2/exif.hpp>
+
 // Local includes.
 
 #include "digikam_export.h"
@@ -55,8 +60,8 @@ protected:
     bool loadWithExiv2(const QString& filePath);
     bool saveWithExiv2(const QString& filePath);
     
-    QByteArray& exifMetadata();
-    QByteArray& iptcMetadata();
+    Exiv2::ExifData& exifMetadata();
+    Exiv2::IptcData& iptcMetadata();
     
 protected:
 

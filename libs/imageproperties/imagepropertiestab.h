@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2004-11-17
- * Description : A tab to display metadata image informations
+ * Date  : 2006-04-19
+ * Description : A tab to display general image informations
  *
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,13 +18,13 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESMETADATATAB_H
-#define IMAGEPROPERTIESMETADATATAB_H
+#ifndef IMAGEPROPERTIESTAB_H
+#define IMAGEPROPERTIESTAB_H
 
 // Qt includes.
 
 #include <qwidget.h>
-#include <qcstring.h>
+#include <qstring.h>
 
 // KDE includes.
 
@@ -37,21 +37,18 @@
 namespace Digikam
 {
 
-class ImagePropertiesMetadataTabPriv;
+class ImagePropertiesTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesTab : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesMetaDataTab(QWidget* parent, bool navBar=true);
-    ~ImagePropertiesMetaDataTab();
+    ImagePropertiesTab(QWidget* parent, bool navBar=true);
+    ~ImagePropertiesTab();
 
     void setCurrentURL(const KURL& url=KURL(), int itemType=0);
-    void setCurrentData(const QByteArray& exifData=QByteArray(), 
-                        const QByteArray& iptcData=QByteArray(), 
-                        const QString& filename=QString::null, int itemType=0);
 
 signals:
     
@@ -62,9 +59,9 @@ signals:
         
 private:
 
-    ImagePropertiesMetadataTabPriv* d;
+    ImagePropertiesTabPriv* d;
 };
 
 }  // NameSpace Digikam
 
-#endif /* IMAGEPROPERTIESMETADATATAB_H */
+#endif /* IMAGEPROPERTIESTAB_H */
