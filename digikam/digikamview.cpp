@@ -653,11 +653,16 @@ void DigikamView::slotAlbumImportFolder()
 
 void DigikamView::slot_albumHighlight()
 {
+    // TODO:
+    // Don't know what this is supposed to do.
+    // Perhaps some flashing or other eye kandy
+    /*
     Album *album = mAlbumMan->currentAlbum();
     if (!album || !album->type() == Album::PHYSICAL)
         return;
 
     mFolderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
+    */
 }
 
 void DigikamView::slot_imageCopyResult(KIO::Job* job)
