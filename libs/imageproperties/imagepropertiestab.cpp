@@ -293,7 +293,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
 
     // -- Photograph informations ------------------------------------------
 
-    QString unavialable(i18n("<i>unavialable</i>"));
+    QString unavialable(i18n("<i>unavailable</i>"));
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
 
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavialable : photoInfo.make);
