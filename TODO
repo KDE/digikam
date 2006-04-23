@@ -38,6 +38,11 @@
    - remove embeddedText private metadata.
    - finalize TIFF loader and PNG loader
 
+* Showfoto: 
+
+   - hide toolbar in fullscreen option don't work.
+   - with thumbbar in horizontal direction, tooltip don't work.
+
 * ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)
 
 B.K.O files to fix :
