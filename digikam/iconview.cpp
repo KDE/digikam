@@ -63,6 +63,7 @@ public:
         lastGroup      = 0;
         currItem       = 0;
         anchorItem     = 0;
+        firstVisibleItem = 0;
         clearing       = false;
         spacing        = 10;
 
@@ -99,6 +100,7 @@ public:
     IconItem*          toolTipItem;
     IconItem*          currItem;
     IconItem*          anchorItem;
+    IconItem*          firstVisibleItem; // store position for slotUpdate
     
     IconGroupItem*     firstGroup;
     IconGroupItem*     lastGroup;
@@ -393,6 +395,7 @@ void IconView::insertGroup(IconGroupItem* group)
         d->lastGroup         = group;
     }
 
+    d->firstVisibleItem = findFirstVisibleItem();
     d->updateTimer->start(0, true);
 }
 
@@ -401,21 +404,28 @@ void IconView::takeGroup(IconGroupItem* group)
     if (!group)
         return;
 
-    if (group == d->firstGroup) 
+    // this is only to find an alternative visible item if all visible items
+    // are removed
+    IconGroupItem *alternativeVisibleGroup = 0;
+    d->firstVisibleItem = 0;
+
+    if (group == d->firstGroup)
     {
         d->firstGroup = d->firstGroup->m_next;
         if (d->firstGroup)
             d->firstGroup->m_prev = 0;
         else
             d->firstGroup = d->lastGroup = 0;
+        alternativeVisibleGroup = d->firstGroup;
     }
     else if (group == d->lastGroup) 
     {
         d->lastGroup = d->lastGroup->m_prev;
         if ( d->lastGroup )
-	    d->lastGroup->m_next = 0;
+            d->lastGroup->m_next = 0;
         else
             d->firstGroup = d->lastGroup = 0;
+        alternativeVisibleGroup = d->lastGroup->m_prev;
     }
     else 
     {
@@ -426,11 +436,22 @@ void IconView::takeGroup(IconGroupItem* group)
                 i->m_prev->m_next = i->m_next;
             if ( i->m_next )
                 i->m_next->m_prev = i->m_prev;
+
+            if (i->m_prev)
+                alternativeVisibleGroup = i->m_prev;
+            else
+                alternativeVisibleGroup = i->m_next;
         }
     }
 
     if (!d->clearing)
     {
+        d->firstVisibleItem = findFirstVisibleItem();
+        if (!d->firstVisibleItem && alternativeVisibleGroup)
+        {
+            // find an alternative visible item
+            d->firstVisibleItem = alternativeVisibleGroup->lastItem();
+        }
         d->updateTimer->start(0, true);
     }
 }
@@ -440,6 +461,7 @@ void IconView::insertItem(IconItem* item)
     if (!item)
         return;
 
+    d->firstVisibleItem = findFirstVisibleItem();
     d->updateTimer->start(0, true);
 }
 
@@ -478,13 +500,17 @@ void IconView::takeItem(IconItem* item)
     
     if (!d->clearing)
     {
+        d->firstVisibleItem = findFirstVisibleItem();
+        if (d->firstVisibleItem == item)
+            d->firstVisibleItem = d->currItem;
         d->updateTimer->start(0, true);
     }
 }
 
 void IconView::triggerUpdate()
 {
-    d->updateTimer->start(0, true);    
+    d->firstVisibleItem = findFirstVisibleItem();
+    d->updateTimer->start(0, true);
 }
 
 void IconView::sort()
@@ -534,7 +560,14 @@ void IconView::sort()
     }
     
     delete [] groups;
+}
 
+void IconView::slotUpdate()
+{
+    sort();
+    rearrangeItems();
+
+    // ensure there is a current item
     if (!d->currItem)
     {
         // set the currItem to first item
@@ -546,14 +579,20 @@ void IconView::sort()
     if (d->currItem)
     {
         d->currItem->setSelected(true, true);
+    }
+
+    // set first visible item if they where stored before update was triggered
+    if (d->firstVisibleItem)
+    {
+        ensureItemVisible(d->firstVisibleItem);
+        // reset to 0
+        d->firstVisibleItem = 0;
+    }
+    else
+    {
         ensureItemVisible(d->currItem);
     }
-}
 
-void IconView::slotUpdate()
-{
-    sort();
-    rearrangeItems();
     viewport()->update();
 }
 
@@ -1526,13 +1565,13 @@ void IconView::keyPressEvent(QKeyEvent* e)
             {
                 QRect r( 0, d->currItem->y() + visibleHeight(),
                         contentsWidth(), visibleHeight() );
-                IconItem *ni = findFirstVisibleItem(r);
+                IconItem *ni = findFirstVisibleItem(r, false);
     
                 if (!ni) 
                 {
                     r = QRect( 0, d->currItem->y() + itemRect().height(),
                               contentsWidth(), contentsHeight() );
-                    ni = findLastVisibleItem( r );
+                    ni = findLastVisibleItem(r, false);
                 }
     
                 if (ni) 
@@ -1567,12 +1606,12 @@ void IconView::keyPressEvent(QKeyEvent* e)
                 QRect r(0, d->currItem->y() - visibleHeight(),
                         contentsWidth(), visibleHeight() );
     
-                IconItem *ni = findFirstVisibleItem(r);
+                IconItem *ni = findFirstVisibleItem(r, false);
     
                 if (!ni) 
                 {
                     r = QRect( 0, 0, contentsWidth(), d->currItem->y() );
-                    ni = findFirstVisibleItem( r );
+                    ni = findFirstVisibleItem(r, false);
                 }
     
                 if (ni) 
@@ -1657,7 +1696,19 @@ void IconView::ensureItemVisible(IconItem *item)
     }
 }
 
-IconItem* IconView::findFirstVisibleItem(const QRect& r) const
+IconItem* IconView::findFirstVisibleItem(bool useThumbnailRect) const
+{
+    QRect r(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+    return findFirstVisibleItem(r, useThumbnailRect);
+}
+
+IconItem* IconView::findLastVisibleItem(bool useThumbnailRect) const
+{
+    QRect r(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+    return findLastVisibleItem(r, useThumbnailRect);
+}
+
+IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) const
 {
     IconViewPriv::ItemContainer *c = d->firstContainer;
     bool alreadyIntersected = false;
@@ -1671,8 +1722,10 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r) const
                  it != c->items.end(); ++it)
             {
                 IconItem *item = *it;
-                
-                if ( r.intersects( item->rect() ) )
+
+                // if useThumbnailRect, we only check for the clickToOpenRect, which is the thumbnail,
+                // otherwise, we take the whole item rect
+                if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) )
                 {
                     if ( !i )
                     {
@@ -1701,22 +1754,22 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r) const
     return i;
 }
 
-IconItem* IconView::findLastVisibleItem(const QRect& r) const
+IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) const
 {
     IconViewPriv::ItemContainer *c = d->firstContainer;
     IconItem *i = 0;
     bool alreadyIntersected = false;
     for ( ; c; c = c->next ) 
     {
-        if ( c->rect.intersects( r ) ) 
+        if ( c->rect.intersects( r ) )
         {
             alreadyIntersected = true;
             for (QValueList<IconItem*>::iterator it = c->items.begin();
                  it != c->items.end(); ++it)
             {
                 IconItem *item = *it;
-                
-                if ( r.intersects( item->rect() ) ) 
+
+                if ( r.intersects( useThumbnailRect ? item->clickToOpenRect() : item->rect() ) ) 
                 {
                     if ( !i ) 
                     {

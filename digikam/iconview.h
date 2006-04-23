@@ -77,8 +77,10 @@ public:
     void takeItem(IconItem* item);
 
     void ensureItemVisible(IconItem *item);
-    IconItem* findFirstVisibleItem(const QRect& r) const;
-    IconItem* findLastVisibleItem(const QRect& r) const;
+    IconItem* findFirstVisibleItem(const QRect& r, bool useThumbnailRect = true) const;
+    IconItem* findLastVisibleItem(const QRect& r, bool useThumbnailRect = true) const;
+    IconItem* findFirstVisibleItem(bool useThumbnailRect = true) const;
+    IconItem* findLastVisibleItem(bool useThumbnailRect = true) const;
     
     virtual QRect itemRect() const;
     virtual QRect bannerRect() const;
