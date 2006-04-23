@@ -294,7 +294,6 @@ bool ImlibInterface::load(const QString& filename, bool *isReadOnly)
         }    
         
         case JPEG_IMAGE:
-        case TIFF_IMAGE:
         case PNG_IMAGE:
         {
             // Try to load image using imlib2.
