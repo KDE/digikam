@@ -340,12 +340,18 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
         d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);        
     else 
-        d->labelPhotoExposureMode->setText(i18n("%1 (%2)").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram));
+    {
+        str = i18n("%1 (%2)").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+        d->labelPhotoExposureMode->setText(str);
+    }
 
     if (photoInfo.focalLenght35mm.isEmpty())
         d->labelPhotoFocalLenght->setText(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
     else 
-        d->labelPhotoFocalLenght->setText(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
+    {
+        str = i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm);
+        d->labelPhotoFocalLenght->setText(str);
+    }
 
     d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
     d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
