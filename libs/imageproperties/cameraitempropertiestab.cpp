@@ -55,7 +55,6 @@ public:
     CameraItemPropertiesTabPriv()
     {
         navigateBar            = 0;
-        labelNewFileName       = 0;
         labelFolder            = 0;
         labelFileIsReadable    = 0;
         labelFileIsWritable    = 0;
@@ -63,6 +62,7 @@ public:
         labelFileSize          = 0;
         labelImageMime         = 0;
         labelImageDimensions   = 0;
+        labelNewFileName       = 0;
         labelAlreadyDownloaded = 0;
     }
 
@@ -202,19 +202,20 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
         return;
     }
     
-    QString str;
-    QDateTime date;
-
     setEnabled(true);
-
+    
+    QString str;
+    QString unknow(i18n("<i>unknow</i>"));
+    
     d->navigateBar->setFileName(itemInfo->name);
     d->navigateBar->setButtonsState(itemType);
-
-    d->labelNewFileName->setText(newFileName);
+    
+    // -- Camera file system informations ------------------------------------------
+    
     d->labelFolder->setText(itemInfo->folder);
     
     if (itemInfo->readPermissions < 0)
-        str = i18n("Unknown");
+        str = unknow;
     else if (itemInfo->readPermissions == 0)
         str = i18n("No");
     else
@@ -223,7 +224,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     d->labelFileIsReadable->setText(str);
     
     if (itemInfo->writePermissions < 0)
-        str = i18n("Unknown");
+        str = unknow;
     else if (itemInfo->writePermissions == 0)
         str = i18n("No");
     else
@@ -231,6 +232,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     
     d->labelFileIsWritable->setText(str);
     
+    QDateTime date;
     date.setTime_t(itemInfo->mtime);
     d->labelFileDate->setText(KGlobal::locale()->formatDateTime(date, true, true));
     
@@ -238,18 +240,24 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
                          .arg(KGlobal::locale()->formatNumber(itemInfo->size, 0));
     d->labelFileSize->setText(str);
     
+    // -- Image Properties --------------------------------------------------
+    
     d->labelImageMime->setText( (itemInfo->mime == QString("image/x-raw")) ? 
                                i18n("RAW Image") : KMimeType::mimeType(itemInfo->mime)->comment() );
 
     QString mpixels;
     QSize dims(itemInfo->width, itemInfo->height);
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
-    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+    str = (!dims.isValid()) ? unknow : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     d->labelImageDimensions->setText(str);
     
+    // -- Download informations ------------------------------------------
+
+    d->labelNewFileName->setText(newFileName);
+    
     if (itemInfo->downloaded < 0)
-        str = i18n("Unknown");
+        str = unknow;
     else if (itemInfo->downloaded == 0)
         str = i18n("No");
     else

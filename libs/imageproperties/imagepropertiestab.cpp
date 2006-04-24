@@ -255,19 +255,20 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         return;
     }
 
-    // -- File system informations ------------------------------------------
+    setEnabled(true);
 
     QString str;
-
-    setEnabled(true);
+    QString unavailable(i18n("<i>unavailable</i>"));
+    
+    KFileItem *fi = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+    QFileInfo fileInfo(url.path());
 
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
 
-    d->labelFolder->setText(url.directory());
+    // -- File system informations ------------------------------------------
 
-    KFileItem *fi = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-    QFileInfo fileInfo(url.path());
+    d->labelFolder->setText(url.directory());
     
     QDateTime modifiedDate  = fileInfo.lastModified();
     str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
@@ -280,7 +281,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     d->labelFileOwner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
     d->labelFilePermissions->setText( fi->permissionsString() );
     
-    // -- Image Properties ------------------------------------------
+    // -- Image Properties --------------------------------------------------
     
     DMetadata metaData(url.path());
 
@@ -316,7 +317,6 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
 
     // -- Photograph informations ------------------------------------------
 
-    QString unavailable(i18n("<i>unavailable</i>"));
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
 
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
