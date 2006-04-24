@@ -260,7 +260,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
     
-    KFileItem *fi = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
     QFileInfo fileInfo(url.path());
 
     d->navigateBar->setFileName(url.filename());
@@ -270,16 +270,16 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
 
     d->labelFolder->setText(url.directory());
     
-    QDateTime modifiedDate  = fileInfo.lastModified();
+    QDateTime modifiedDate = fileInfo.lastModified();
     str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
     d->labelFileModifiedDate->setText(str);
 
-    str = i18n("%1 (%2)").arg(KIO::convertSize(fi->size()))
-                         .arg(KGlobal::locale()->formatNumber(fi->size(), 0));
+    str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
+                         .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
     d->labelFileSize->setText(str);
 
-    d->labelFileOwner->setText( i18n("%1 - %2").arg(fi->user()).arg(fi->group()) );
-    d->labelFilePermissions->setText( fi->permissionsString() );
+    d->labelFileOwner->setText( i18n("%1 - %2").arg(fi.user()).arg(fi.group()) );
+    d->labelFilePermissions->setText( fi.permissionsString() );
     
     // -- Image Properties --------------------------------------------------
     
@@ -295,9 +295,9 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     }
     else
     {
-        d->labelImageMime->setText(fi->mimeComment());
+        d->labelImageMime->setText(fi.mimeComment());
 
-        KFileMetaInfo meta = fi->metaInfo();
+        KFileMetaInfo meta = fi.metaInfo();
         if (meta.isValid())
         {
             if (meta.containsGroup("Jpeg EXIF Data"))
