@@ -56,6 +56,7 @@
 #include <kstatusbar.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
+#include <kwin.h>
 
 // Local includes.
 
@@ -269,16 +270,22 @@ void ImageWindow::applySettings()
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                           const QString& caption, bool allowSaving, AlbumIconView* view)
 {
+    // if window is iconified, show it
+    if (isMinimized())
+    {
+        KWin::deIconifyWindow(winId());
+    }
+
     if (!promptUserSave(m_urlCurrent))
         return;
-    
+
     setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
     m_view        = view;
     m_urlList     = urlList;
     m_urlCurrent  = urlCurrent;
     m_allowSaving = allowSaving;
-    
+
     m_saveAction->setEnabled(false);
     m_revertAction->setEnabled(false);
     m_undoAction->setEnabled(false);
