@@ -41,6 +41,7 @@ Dir.chdir( folder )
 Dir.chdir( egmodule )
 `svn up #{name}`
 `svn up -N doc`
+`export LC_ALL=en_US.UTF-8; svn info #{name} | egrep '^Last Changed (Rev|Date):' > RELEASE.rev`
 
 if ( docs != "no")
     for dg in addDocs
