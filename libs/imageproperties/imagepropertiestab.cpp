@@ -262,7 +262,8 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
     QFileInfo fileInfo(url.path());
-
+    DMetadata metaData(url.path());
+    
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
 
@@ -283,8 +284,6 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     
     // -- Image Properties --------------------------------------------------
     
-    DMetadata metaData(url.path());
-
     QSize   dims;
     QString rawFilesExt(raw_file_extentions);
 
