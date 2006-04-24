@@ -119,5 +119,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 113807 (Is it possible to have the tags of the contextual menus "Assign Tag" and "Remove Tag" sorted ?)
 ==> 116343 ("Not Tagged" has disappeared from the Tags Filter view when changing album library path)
 ==> 117225 (digikam requires at least libpng >= 1.2.7)
+==> 115423 (thumbnails view jumps to top when new photos are added)
+==> 125732 (ICC settings get reset when disabled and re-enabled)
 
 ----------------------------------------------------------------------------------------------------

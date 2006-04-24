@@ -49,8 +49,8 @@ B.K.O files to fix :
 
 ==> 117115  (CameraGUI: Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
 ==> 93569   (CameraGUI: easier connection to USB disc cameras)
+==> 125696  (CameraGUI: digikam does not connect to USB camera with libgphoto-2.1.99)
 ==> 121367  (Add properties tab to digiKam and (especially) IE)
-==> 115423  (Main Interface: thumbnails view jumps to top when new photos are added)
 ==> 114241  (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120241  (Main Interface: utf8 display and edit)
 ==> 118501  (Image Editor:   Exif lost when modifying the images)
