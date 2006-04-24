@@ -30,8 +30,6 @@
 // Exiv2 includes.
 
 #include <exiv2/types.hpp>
-#include <exiv2/iptc.hpp>
-#include <exiv2/exif.hpp>
 
 // Local includes.
 
@@ -41,6 +39,8 @@
 
 namespace Digikam
 {
+
+class DMetadataPriv;
 
 class DIGIKAM_EXPORT DMetadata
 {
@@ -62,8 +62,8 @@ public:
 
 public:
 
-    DMetadata()  {};
-    ~DMetadata() {};
+    DMetadata();
+    ~DMetadata();
     
     /** Load Metadata from image file */
     DMetadata(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
@@ -110,12 +110,8 @@ private:
 
 private:
 
-    QString         m_filePath;
-    DImg::FORMAT    m_fileFormat;
-
-    Exiv2::ExifData m_exifMetadata;
-    Exiv2::IptcData m_iptcMetadata;
-
+    DMetadataPriv *d;
+    
     friend class DMetaLoader;
 };
 

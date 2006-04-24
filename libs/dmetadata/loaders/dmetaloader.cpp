@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "dmetadataprivate.h"
 #include "dmetadata.h"
 #include "dmetaloader.h"
 
@@ -56,12 +57,12 @@ DMetaLoader::DMetaLoader(DMetadata* metadata)
 
 Exiv2::ExifData& DMetaLoader::exifMetadata()
 {
-    return m_metadata->m_exifMetadata;
+    return m_metadata->d->exifMetadata;
 }
 
 Exiv2::IptcData& DMetaLoader::iptcMetadata()
 {
-    return m_metadata->m_iptcMetadata;
+    return m_metadata->d->iptcMetadata;
 }
 
 bool DMetaLoader::loadWithExiv2(const QString& filePath)

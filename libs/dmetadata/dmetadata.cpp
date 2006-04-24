@@ -48,24 +48,36 @@
 #include "pngmetaloader.h"
 #include "tiffmetaloader.h"
 #include "rawmetaloader.h"
+#include "dmetadataprivate.h"
 #include "dmetadata.h"
 
 namespace Digikam
 {
 
+DMetadata::DMetadata()
+{
+    d = new DMetadataPriv;
+}
+
 DMetadata::DMetadata(const QString& filePath, DImg::FORMAT ff)
 {
+    d = new DMetadataPriv;
     load(filePath, ff);
+}
+
+DMetadata::~DMetadata()
+{
+    delete d;
 }
 
 bool DMetadata::applyChanges()
 {
-    return save(m_filePath, m_fileFormat);
+    return save(d->filePath, d->fileFormat);
 }
 
 QByteArray DMetadata::getExif() const
 {
-    Exiv2::ExifData exif(m_exifMetadata);
+    Exiv2::ExifData exif(d->exifMetadata);
     Exiv2::DataBuf const c2(exif.copy());
     QByteArray data(c2.size_);
     memcpy(data.data(), c2.pData_, c2.size_);
@@ -74,7 +86,7 @@ QByteArray DMetadata::getExif() const
 
 QByteArray DMetadata::getIptc() const
 {
-    Exiv2::IptcData iptc(m_iptcMetadata);
+    Exiv2::IptcData iptc(d->iptcMetadata);
     Exiv2::DataBuf const c2(iptc.copy());
     QByteArray data(c2.size_);
     memcpy(data.data(), c2.pData_, c2.size_);
@@ -85,7 +97,7 @@ void DMetadata::setExif(const QByteArray& data)
 {
     try
     {    
-        m_exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
+        d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
     }
     catch( Exiv2::Error &e )
     {
@@ -99,7 +111,7 @@ void DMetadata::setExif(Exiv2::DataBuf const data)
 {
     try
     {    
-        m_exifMetadata.load(data.pData_, data.size_);
+        d->exifMetadata.load(data.pData_, data.size_);
     }
     catch( Exiv2::Error &e )
     {
@@ -113,7 +125,7 @@ void DMetadata::setIptc(const QByteArray& data)
 {
     try
     {    
-        m_iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
+        d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
     }
     catch( Exiv2::Error &e )
     {
@@ -127,7 +139,7 @@ void DMetadata::setIptc(Exiv2::DataBuf const data)
 {
     try
     {    
-        m_iptcMetadata.load(data.pData_, data.size_);
+        d->iptcMetadata.load(data.pData_, data.size_);
     }
     catch( Exiv2::Error &e )
     {
@@ -144,10 +156,10 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
     if (format == DImg::NONE)
         format = fileFormat(filePath);
 
-    m_fileFormat = format;
-    m_filePath   = filePath;
+    d->fileFormat = format;
+    d->filePath   = filePath;
 
-    switch (m_fileFormat)
+    switch (d->fileFormat)
     {
         case(DImg::JPEG):
         {
@@ -280,12 +292,12 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
     
-    if (m_exifMetadata.empty())
+    if (d->exifMetadata.empty())
        return thumbnail;
     
     try
     {    
-        Exiv2::DataBuf const c1(m_exifMetadata.copyThumbnail());
+        Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
         thumbnail.loadFromData(c1.pData_, c1.size_);
         
         if (!thumbnail.isNull())
@@ -293,7 +305,7 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
             if (fixOrientation)
             {
                 Exiv2::ExifKey key("Exif.Image.Orientation");
-                Exiv2::ExifData exifData(m_exifMetadata);
+                Exiv2::ExifData exifData(d->exifMetadata);
                 Exiv2::ExifData::iterator it = exifData.findKey(key);
                 if (it != exifData.end())
                 {
@@ -357,14 +369,14 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
 
 QSize DMetadata::getImageDimensions()
 {
-    if (m_exifMetadata.empty())
+    if (d->exifMetadata.empty())
         return QSize();
 
     try
     {    
         long width=-1, height=-1;
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
-        Exiv2::ExifData exifData(m_exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(key);
        
         if (it != exifData.end())
@@ -391,13 +403,13 @@ QSize DMetadata::getImageDimensions()
 
 DMetadata::ImageOrientation DMetadata::getImageOrientation()
 {
-    if (m_exifMetadata.empty())
+    if (d->exifMetadata.empty())
        return ORIENTATION_UNSPECIFIED;
 
     try
     {    
         Exiv2::ExifKey key("Exif.Image.Orientation");
-        Exiv2::ExifData exifData(m_exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(key);
         
         if (it != exifData.end())
@@ -419,7 +431,7 @@ DMetadata::ImageOrientation DMetadata::getImageOrientation()
 
 bool DMetadata::setImageOrientation(ImageOrientation orientation)
 {
-    if (m_exifMetadata.empty())
+    if (d->exifMetadata.empty())
        return false;
 
     try
@@ -430,7 +442,7 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
             return false;
         }
         
-        m_exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
+        d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
         kdDebug() << "Exif orientation tag set to: " << orientation << endl;
         return true;
     }
@@ -450,12 +462,12 @@ QDateTime DMetadata::getImageDateTime() const
     {    
         // In first, trying to get Date & time from Exif tags.
         
-        if (!m_exifMetadata.empty())
+        if (!d->exifMetadata.empty())
         {        
             // Try standard Exif date time entry.
     
             Exiv2::ExifKey key("Exif.Image.DateTime");
-            Exiv2::ExifData exifData(m_exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it = exifData.findKey(key);
             
             if (it != exifData.end())
@@ -504,12 +516,12 @@ QDateTime DMetadata::getImageDateTime() const
         
         // In second, trying to get Date & time from Iptc tags.
             
-        if (!m_iptcMetadata.empty())
+        if (!d->iptcMetadata.empty())
         {        
             // Try creation Iptc date time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
-            Exiv2::IptcData iptcData(m_iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
                         
             if (it != iptcData.end())
@@ -578,21 +590,21 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime)
 {
     try
     {    
-        kdDebug() << m_filePath << " ==> Date&Time: " << dateTime.toString(Qt::ISODate) << endl;
+        kdDebug() << d->filePath << " ==> Date&Time: " << dateTime.toString(Qt::ISODate) << endl;
         
         // In first we write date & time into Exif.
                 
         const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
-        m_exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
+        d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
         
         // In Second we write date & time into Iptc.
 
         setImageProgramId();
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
-        m_iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
+        d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
-        m_iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+        d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
         
         return true;
     }
@@ -610,11 +622,11 @@ QString DMetadata::getImageComment() const
 {
     try
     {    
-        if (m_filePath.isEmpty())
+        if (d->filePath.isEmpty())
             return QString();
             
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(m_filePath)));
+                                      (QFile::encodeName(d->filePath)));
         
         // In first we trying to get image comments, outside of Exif and IPTC.
                                               
@@ -626,10 +638,10 @@ QString DMetadata::getImageComment() const
            
         // In second, we trying to get Exif comments   
                 
-        if (!m_exifMetadata.empty())
+        if (!d->exifMetadata.empty())
         {
             Exiv2::ExifKey key("Exif.Photo.UserComment");
-            Exiv2::ExifData exifData(m_exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it = exifData.findKey(key);
             
             if (it != exifData.end())
@@ -643,10 +655,10 @@ QString DMetadata::getImageComment() const
         
         // In third, we trying to get IPTC comments   
                 
-        if (!m_iptcMetadata.empty())
+        if (!d->iptcMetadata.empty())
         {
             Exiv2::IptcKey key("Iptc.Application2.Caption");
-            Exiv2::IptcData iptcData(m_iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(key);
             
             if (it != iptcData.end())
@@ -676,10 +688,10 @@ bool DMetadata::setImageComment(const QString& comment)
         if (comment.isEmpty())
             return false;
 
-        kdDebug() << m_filePath << " ==> Comment: " << comment << endl;
+        kdDebug() << d->filePath << " ==> Comment: " << comment << endl;
             
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(m_filePath)));
+                                      (QFile::encodeName(d->filePath)));
         
         // In first we write comments outside of Exif and IPTC if possible.
                                               
@@ -690,7 +702,7 @@ bool DMetadata::setImageComment(const QString& comment)
 
         // In Second we write comments into Exif.
                 
-        m_exifMetadata["Exif.Photo.UserComment"] = comment.latin1();
+        d->exifMetadata["Exif.Photo.UserComment"] = comment.latin1();
         
         // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
 
@@ -698,7 +710,7 @@ bool DMetadata::setImageComment(const QString& comment)
 
         QString commentIptc = comment;
         commentIptc.truncate(2000);
-        m_iptcMetadata["Iptc.Application2.Caption"] = commentIptc.latin1();
+        d->iptcMetadata["Iptc.Application2.Caption"] = commentIptc.latin1();
     
         return true;
     }
@@ -732,13 +744,13 @@ int DMetadata::getImageRating() const
 {
     try
     {    
-        if (m_filePath.isEmpty())
+        if (d->filePath.isEmpty())
             return -1;
             
-        if (!m_iptcMetadata.empty())
+        if (!d->iptcMetadata.empty())
         {
             Exiv2::IptcKey key("Iptc.Application2.Urgency");
-            Exiv2::IptcData iptcData(m_iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(key);
             
             if (it != iptcData.end())
@@ -784,7 +796,7 @@ bool DMetadata::setImageRating(int rating)
             return false;
         }
 
-        kdDebug() << m_filePath << " ==> Rating: " << rating << endl;
+        kdDebug() << d->filePath << " ==> Rating: " << rating << endl;
             
         setImageProgramId();
         QString urgencyTag;
@@ -811,7 +823,7 @@ bool DMetadata::setImageRating(int rating)
                 break;
         }
         
-        m_iptcMetadata["Iptc.Application2.Urgency"] = urgencyTag.ascii();
+        d->iptcMetadata["Iptc.Application2.Urgency"] = urgencyTag.ascii();
 
         return true;
     }
@@ -830,10 +842,10 @@ QStringList DMetadata::getImageKeywords() const
 {
     try
     {    
-        if (!m_iptcMetadata.empty())
+        if (!d->iptcMetadata.empty())
         {
             QStringList keywords;          
-            Exiv2::IptcData iptcData(m_iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata);
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
@@ -867,11 +879,11 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         QStringList newkeys = newKeywords;
         
         setImageProgramId();
-        kdDebug() << m_filePath << " ==> Keywords: " << newkeys << endl;
+        kdDebug() << d->filePath << " ==> Keywords: " << newkeys << endl;
         
         // Remove all old keywords.
         Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
-        Exiv2::IptcData iptcData(m_iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata);
 
         while(true)
         {
@@ -898,7 +910,7 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
             iptcData.add(iptcTag, val.get());        
         }
 
-        m_iptcMetadata = iptcData;
+        d->iptcMetadata = iptcData;
 
         return true;
     }
@@ -921,14 +933,14 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
         // Byline IPTC tag is limited to 32 char.
         QString Byline = author;
         Byline.truncate(32);
-        kdDebug() << m_filePath << " ==> Author: " << Byline << endl;
-        m_iptcMetadata["Iptc.Application2.Byline"] = Byline.latin1();
+        kdDebug() << d->filePath << " ==> Author: " << Byline << endl;
+        d->iptcMetadata["Iptc.Application2.Byline"] = Byline.latin1();
         
         // BylineTitle IPTC tag is limited to 32 char.
         QString BylineTitle = authorTitle;
         BylineTitle.truncate(32);
-        kdDebug() << m_filePath << " ==> Author Title: " << BylineTitle << endl;
-        m_iptcMetadata["Iptc.Application2.BylineTitle"] = BylineTitle.latin1();
+        kdDebug() << d->filePath << " ==> Author Title: " << BylineTitle << endl;
+        d->iptcMetadata["Iptc.Application2.BylineTitle"] = BylineTitle.latin1();
 
         return true;
     }
@@ -951,20 +963,20 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
         // Credit IPTC tag is limited to 32 char.
         QString Credit = credit;
         Credit.truncate(32);
-        kdDebug() << m_filePath << " ==> Credit: " << Credit << endl;
-        m_iptcMetadata["Iptc.Application2.Credit"] = Credit.latin1();
+        kdDebug() << d->filePath << " ==> Credit: " << Credit << endl;
+        d->iptcMetadata["Iptc.Application2.Credit"] = Credit.latin1();
 
         // Source IPTC tag is limited to 32 char.
         QString Source = source;
         Source.truncate(32);
-        kdDebug() << m_filePath << " ==> Source: " << Source << endl;
-        m_iptcMetadata["Iptc.Application2.Source"] = Source.latin1();
+        kdDebug() << d->filePath << " ==> Source: " << Source << endl;
+        d->iptcMetadata["Iptc.Application2.Source"] = Source.latin1();
 
         // Copyright IPTC tag is limited to 128 char.
         QString Copyright = copyright;
         Copyright.truncate(128);
-        kdDebug() << m_filePath << " ==> Copyright: " << Copyright << endl;
-        m_iptcMetadata["Iptc.Application2.Copyright"] = Copyright.latin1();
+        kdDebug() << d->filePath << " ==> Copyright: " << Copyright << endl;
+        d->iptcMetadata["Iptc.Application2.Copyright"] = Copyright.latin1();
 
         return true;
     }
@@ -982,8 +994,8 @@ bool DMetadata::setImageProgramId()
 {
     try
     {    
-        m_iptcMetadata["Iptc.Application2.Program"] = "digiKam";
-        m_iptcMetadata["Iptc.Application2.ProgramVersion"] = digikam_version;
+        d->iptcMetadata["Iptc.Application2.Program"] = "digiKam";
+        d->iptcMetadata["Iptc.Application2.ProgramVersion"] = digikam_version;
         return true;
     }
     catch( Exiv2::Error &e )
@@ -1000,7 +1012,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 {
     try
     {    
-        if (!m_exifMetadata.empty())
+        if (!d->exifMetadata.empty())
         {
             PhotoInfoContainer photoInfo;
             photoInfo.dateTime = getImageDateTime();
@@ -1046,7 +1058,7 @@ QString DMetadata::getExifTagValue(const char* exifTagName) const
     try
     {    
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(m_exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
