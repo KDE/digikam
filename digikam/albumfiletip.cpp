@@ -421,7 +421,7 @@ void AlbumFileTip::updateText()
     
     tip += metaStr;
 
-    // -- Digikam properties  ------------------------------------------
+    // -- digiKam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
 
