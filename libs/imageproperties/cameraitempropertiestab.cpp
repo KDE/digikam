@@ -99,7 +99,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     
     KSeparator *line          = new KSeparator (Horizontal, this);
     QLabel *title2            = new QLabel(i18n("<u><i>Image Properties:</i></u>"), this);    
-    QLabel *mime              = new QLabel(i18n("<b>Mime</b>:"), this);
+    QLabel *mime              = new QLabel(i18n("<b>Type</b>:"), this);
     QLabel *dimensions        = new QLabel(i18n("<b>Dimensions</b>:"), this);
     
     KSeparator *line2         = new KSeparator (Horizontal, this);
