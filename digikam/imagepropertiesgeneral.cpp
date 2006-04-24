@@ -18,8 +18,12 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+ 
 #include <qlayout.h>
 #include <qlabel.h>
+
+// KDE includes.
 
 #include <ksqueezedtextlabel.h>
 #include <kseparator.h>
@@ -30,6 +34,9 @@
 #include <kfilemetainfo.h>
 #include <kglobal.h>
 
+// Local includes.
+
+#include "album.h"
 #include "albumsettings.h"
 #include "imageinfo.h"
 #include "thumbnailjob.h"
@@ -112,7 +119,7 @@ ImagePropertiesGeneral::ImagePropertiesGeneral(QWidget* page)
 
     // -- Setup digiKam infos -----------------------------------
     
-    gridLay = new QGridLayout(3, 3);
+    gridLay = new QGridLayout(3, 2);
     vlay->addLayout( gridLay );
     
     label       = new QLabel( i18n("Album:"), page);
@@ -133,6 +140,12 @@ ImagePropertiesGeneral::ImagePropertiesGeneral(QWidget* page)
     gridLay->addMultiCellWidget( label, 2, 2, 0, 0 );
     gridLay->addMultiCellWidget( m_filetags, 2, 2, 1, 2  );
 
+    label        = new QLabel( i18n("Rating:"), page);
+    m_filerating = new KSqueezedTextLabel(page);
+    label->setBuddy( m_filerating );
+    gridLay->addMultiCellWidget( label, 3, 3, 0, 0 );
+    gridLay->addMultiCellWidget( m_filerating, 3, 3, 1, 2  );
+    
     // -----------------------------------------------------------
     
     vlay->addStretch(1);
@@ -179,6 +192,7 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
     m_filealbum->clear();
     m_filecomments->clear();
     m_filetags->clear();
+    m_filerating->clear();
 
     // -- File system information ---------------------------------------------------
     
@@ -219,9 +233,15 @@ void ImagePropertiesGeneral::setCurrentItem(const ImageInfo* info)
 
     // -- digiKam metadata ---------------------------------------------------
 
-    m_filealbum->setText( info->filePath().section( '/', -2, -2 ) );    
+    PAlbum* album = info->album();
+    if (album)
+        m_filealbum->setText( album->url().remove(0, 1) );
+    
     m_filecomments->setText( info->caption() );
-    m_filetags->setText( info->tagPaths().join("\n") );        
+    m_filetags->setText( info->tagPaths().join(", ") );        
+    QString str;
+    str.fill( '*', info->rating() );
+    m_filerating->setText( str );
 }
 
 void ImagePropertiesGeneral::slotGotThumbnail(const KURL&, const QPixmap& pix)

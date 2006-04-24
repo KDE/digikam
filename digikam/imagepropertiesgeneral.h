@@ -49,9 +49,6 @@ private slots:
 private:
     
     QLabel                       *m_thumbLabel;
-    QLabel                       *m_albumLabel;
-    QLabel                       *m_commentsLabel;
-    QLabel                       *m_tagsLabel;
     
     KSqueezedTextLabel           *m_filename;
     KSqueezedTextLabel           *m_filetype;
@@ -63,6 +60,7 @@ private:
     KSqueezedTextLabel           *m_filealbum;
     KSqueezedTextLabel           *m_filecomments;
     KSqueezedTextLabel           *m_filetags;
+    KSqueezedTextLabel           *m_filerating;
     
     QGuardedPtr<ThumbnailJob>     m_thumbJob;
 };

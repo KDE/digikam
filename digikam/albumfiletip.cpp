@@ -313,27 +313,28 @@ void AlbumFileTip::updateText()
            .arg(KGlobal::locale()->formatNumber(info->fileSize(), 0))
            + cellEnd;
 
-    // Digikam properties  ------------------------------------------
+    // digiKam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
 
     PAlbum* album = info->album();
     if (album)
-    {
-        tip += cellBeg + i18n("Album:") + cellMid +
-               album->url().remove(0,1) + cellEnd;
-    }
+        tip += cellBeg + i18n("Album:") + cellMid + album->url().remove(0, 1) + cellEnd;
 
-    tip += cellSpecBeg + i18n("Comments:") + cellSpecMid +
-           breakString( info->caption() ) + cellSpecEnd;
+    tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString( info->caption() ) + cellSpecEnd;
 
     QStringList tagPaths = info->tagPaths();
+    
     for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-    {
-        (*it).remove(0,1);
-    }
-    tip += cellBeg + i18n("Tags:") + cellMid +
-           tagPaths.join(",<br>") + cellEnd;
+        (*it).remove(0, 1);
+    
+    QString str;
+    str = tagPaths.join(", ");
+    if (str.length() > 50) str = str.left(47) + "...";
+    tip += cellBeg + i18n("Tags:") + cellMid + str + cellEnd;
+    
+    str.fill( '*', info->rating() );
+    tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;           
 
     // Meta Info ----------------------------------------------------
 
