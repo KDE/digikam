@@ -39,11 +39,14 @@ public:
     QString   make;
     QString   model;
     QString   exposureTime;
+    QString   exposureMode;
+    QString   exposureProgram;
     QString   aperture;
     QString   focalLenght;
     QString   focalLenght35mm;
     QString   sensitivity;
     QString   flash;
+    QString   whiteBalance;
 
     QDateTime dateTime;
 };

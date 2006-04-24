@@ -65,9 +65,11 @@ public:
         labelPhotoDateTime     = 0;
         labelPhotoAperture     = 0;
         labelPhotoExposureTime = 0;
+        labelPhotoExposureMode = 0;
         labelPhotoFocalLenght  = 0;
         labelPhotoSensitivity  = 0;
         labelPhotoFlash        = 0;
+        labelPhotoWhiteBalance = 0;
     }
 
     KSqueezedTextLabel *labelFolder;
@@ -84,9 +86,11 @@ public:
     KSqueezedTextLabel *labelPhotoDateTime;
     KSqueezedTextLabel *labelPhotoAperture;
     KSqueezedTextLabel *labelPhotoExposureTime;
+    KSqueezedTextLabel *labelPhotoExposureMode;
     KSqueezedTextLabel *labelPhotoFocalLenght;
     KSqueezedTextLabel *labelPhotoSensitivity;
     KSqueezedTextLabel *labelPhotoFlash;
+    KSqueezedTextLabel *labelPhotoWhiteBalance;
     
     NavigateBarWidget  *navigateBar;
 };
@@ -95,7 +99,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
                   : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePropertiesTabPriv;
-    QGridLayout *topLayout = new QGridLayout(this, 25, 1, KDialog::marginHint(), 0);
+    QGridLayout *topLayout = new QGridLayout(this, 27, 1, KDialog::marginHint(), 0);
 
     d->navigateBar = new NavigateBarWidget(this, navBar);
     topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 1);
@@ -119,9 +123,11 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QLabel *photoDate         = new QLabel(i18n("<b>Created</b>:"), this);
     QLabel *aperture          = new QLabel(i18n("<b>Aperture</b>:"), this);
     QLabel *exposureTime      = new QLabel(i18n("<b>Exposure</b>:"), this);
+    QLabel *exposureMode      = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), this);
     QLabel *focalLenght       = new QLabel(i18n("<b>Focal</b>:"), this);
     QLabel *sensitivity       = new QLabel(i18n("<b>Sensitivity</b>:"), this);
     QLabel *flash             = new QLabel(i18n("<b>Flash</b>:"), this);
+    QLabel *whiteBalance      = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), this);
 
     d->labelFolder            = new KSqueezedTextLabel(0, this);
     d->labelFileModifiedDate  = new KSqueezedTextLabel(0, this);
@@ -137,9 +143,11 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     d->labelPhotoDateTime     = new KSqueezedTextLabel(0, this);
     d->labelPhotoAperture     = new KSqueezedTextLabel(0, this);
     d->labelPhotoExposureTime = new KSqueezedTextLabel(0, this);
+    d->labelPhotoExposureMode = new KSqueezedTextLabel(0, this);
     d->labelPhotoFocalLenght  = new KSqueezedTextLabel(0, this);
     d->labelPhotoSensitivity  = new KSqueezedTextLabel(0, this);
     d->labelPhotoFlash        = new KSqueezedTextLabel(0, this);
+    d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, this);
 
     topLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 0, 1);
@@ -184,14 +192,17 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     topLayout->addMultiCellWidget(d->labelPhotoAperture, 20, 20, 1, 1);
     topLayout->addMultiCellWidget(exposureTime, 21, 21, 0, 0);
     topLayout->addMultiCellWidget(d->labelPhotoExposureTime, 21, 21, 1, 1);
-    topLayout->addMultiCellWidget(focalLenght, 22, 22, 0, 0);
-    topLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 22, 22, 1, 1);
-    topLayout->addMultiCellWidget(sensitivity, 23, 23, 0, 0);
-    topLayout->addMultiCellWidget(d->labelPhotoSensitivity, 23, 23, 1, 1);
-    topLayout->addMultiCellWidget(flash, 24, 24, 0, 0);
-    topLayout->addMultiCellWidget(d->labelPhotoFlash, 24, 24, 1, 1);
-
-    topLayout->setRowStretch(25, 10);
+    topLayout->addMultiCellWidget(exposureMode, 22, 22, 0, 0);
+    topLayout->addMultiCellWidget(d->labelPhotoExposureMode, 22, 22, 1, 1);
+    topLayout->addMultiCellWidget(focalLenght, 23, 23, 0, 0);
+    topLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 23, 23, 1, 1);
+    topLayout->addMultiCellWidget(sensitivity, 24, 24, 0, 0);
+    topLayout->addMultiCellWidget(d->labelPhotoSensitivity, 24, 24, 1, 1);
+    topLayout->addMultiCellWidget(flash, 25, 25, 0, 0);
+    topLayout->addMultiCellWidget(d->labelPhotoFlash, 25, 25, 1, 1);
+    topLayout->addMultiCellWidget(whiteBalance, 26, 26, 0, 0);
+    topLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
+    topLayout->setRowStretch(27, 10);
     topLayout->setColStretch(1, 10);
             
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
@@ -232,10 +243,12 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         d->labelPhotoDateTime->setText(QString::null);
         d->labelPhotoAperture->setText(QString::null);
         d->labelPhotoExposureTime->setText(QString::null);
+        d->labelPhotoExposureMode->setText(QString::null);
         d->labelPhotoFocalLenght->setText(QString::null);
         d->labelPhotoSensitivity->setText(QString::null);
         d->labelPhotoFlash->setText(QString::null);
-
+        d->labelPhotoWhiteBalance->setText(QString::null);
+        
         setEnabled(false);
         return;
     }
@@ -301,11 +314,11 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
 
     // -- Photograph informations ------------------------------------------
 
-    QString unavialable(i18n("<i>unavailable</i>"));
+    QString unavailable(i18n("<i>unavailable</i>"));
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
 
-    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavialable : photoInfo.make);
-    d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavialable : photoInfo.model);
+    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+    d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
     if (photoInfo.dateTime.isValid())
     {
@@ -313,20 +326,28 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         d->labelPhotoDateTime->setText(str);
     }
     else
-        d->labelPhotoDateTime->setText(unavialable);
+        d->labelPhotoDateTime->setText(unavailable);
 
-    d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavialable : photoInfo.aperture);
-    d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavialable : photoInfo.exposureTime);
+    d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
+    d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
+    
+    if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(unavailable);
+    else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(photoInfo.exposureMode);        
+    else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);        
+    else 
+        d->labelPhotoExposureMode->setText(i18n("%1 (%2)").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram));
 
     if (photoInfo.focalLenght35mm.isEmpty())
-        d->labelPhotoFocalLenght->setText(photoInfo.focalLenght.isEmpty() ? 
-                                          unavialable : photoInfo.focalLenght);
+        d->labelPhotoFocalLenght->setText(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
     else 
-        d->labelPhotoFocalLenght->setText(i18n("%1 (35mm: %2)")
-                                          .arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
+        d->labelPhotoFocalLenght->setText(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
 
-    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavialable : photoInfo.sensitivity);
-    d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavialable : photoInfo.flash);
+    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : photoInfo.sensitivity);
+    d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
+    d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
     
 }  // NameSpace Digikam

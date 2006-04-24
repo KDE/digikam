@@ -1014,7 +1014,10 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
             photoInfo.exposureTime = getExifTagValue("Exif.Photo.ExposureTime");
             if (photoInfo.exposureTime.isEmpty())
                 photoInfo.exposureTime = getExifTagValue("Exif.Photo.ShutterSpeedValue");
-            
+
+            photoInfo.exposureMode    = getExifTagValue("Exif.Photo.ExposureMode");
+            photoInfo.exposureProgram = getExifTagValue("Exif.Photo.ExposureProgram");
+                            
             photoInfo.focalLenght     = getExifTagValue("Exif.Photo.FocalLength");
             photoInfo.focalLenght35mm = getExifTagValue("Exif.Photo.FocalLengthIn35mmFilm");
 
@@ -1023,6 +1026,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
                 photoInfo.sensitivity = getExifTagValue("Exif.Photo.ExposureIndex");
 
             photoInfo.flash = getExifTagValue("Exif.Photo.Flash");
+            photoInfo.whiteBalance = getExifTagValue("Exif.Photo.WhiteBalance");
 
             return photoInfo;
         }

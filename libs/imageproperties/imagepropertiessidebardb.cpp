@@ -245,7 +245,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
-            m_propertiesTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_propertiesTab->setCurrentURL(m_currentURL, d->currentItemPosition);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
