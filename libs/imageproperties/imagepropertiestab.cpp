@@ -151,6 +151,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     topLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 0, 1);
+                            
     topLayout->addMultiCellWidget(title, 1, 1, 0, 1);
     topLayout->addMultiCellWidget(folder, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(d->labelFolder, 2, 2, 1, 1);
@@ -202,6 +203,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     topLayout->addMultiCellWidget(d->labelPhotoFlash, 25, 25, 1, 1);
     topLayout->addMultiCellWidget(whiteBalance, 26, 26, 0, 0);
     topLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 26, 26, 1, 1);
+    
     topLayout->setRowStretch(27, 10);
     topLayout->setColStretch(1, 10);
             

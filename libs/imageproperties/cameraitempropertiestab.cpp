@@ -104,7 +104,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     
     KSeparator *line2         = new KSeparator (Horizontal, this);
     QLabel *title3            = new QLabel(i18n("<u><i>Download Status:</i></u>"), this);
-    QLabel *newFileName       = new QLabel(i18n("<b>New Name</b>:"), this);
+    QLabel *newFileName       = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), this);
     QLabel *downloaded        = new QLabel(i18n("<b>Downloaded</b>:"), this);
                             
     d->labelFolder            = new KSqueezedTextLabel(0, this);
@@ -121,6 +121,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     topLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                             QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 0, 1);
+                            
     topLayout->addMultiCellWidget(title, 1, 1, 0, 1);
     topLayout->addMultiCellWidget(folder, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(d->labelFolder, 2, 2, 1, 1);
@@ -156,6 +157,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     topLayout->addMultiCellWidget(d->labelNewFileName, 17, 17, 1, 1);
     topLayout->addMultiCellWidget(downloaded, 18, 18, 0, 0);
     topLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 18, 18, 1, 1);
+    
     topLayout->setRowStretch(19, 10);
     topLayout->setColStretch(1, 10);
             
