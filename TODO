@@ -56,7 +56,6 @@ B.K.O files to fix :
 ==> 118501  (Image Editor:   Exif lost when modifying the images)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
-==> 122374  (Image Editor:   ignores read-only permission during saving)
 ==> 121242  (Showfoto:       mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 
 LATER 0.9.0 TODO LIST

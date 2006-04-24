@@ -1283,6 +1283,9 @@ void EditorWindow::startingSave(const KURL& url)
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return;
 
+    if (!checkPermissions(url))
+        return;
+
     m_savingContext->srcURL         = url;
     m_savingContext->destinationURL = m_savingContext->srcURL;
     m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
@@ -1403,6 +1406,11 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
         if (result != KMessageBox::Yes)
             return false;
+
+        // There will be two message boxes if the file is not writable.
+        // This may be controversial, and it may be changed, but it was a deliberate decision.
+        if (!checkPermissions(newURL))
+            return false;
     }
 
     // Now do the actual saving -----------------------------------------------------
@@ -1417,6 +1425,34 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     return true;
 }
+
+bool EditorWindow::checkPermissions(const KURL& url)
+{
+    //TODO: Check that the permissions can actually be changed
+    //      if write permissions are not available.
+
+    QFileInfo fi(url.path());
+
+    if (fi.exists() && !fi.isWritable())
+    {
+       int result =
+
+            KMessageBox::warningYesNo( this, i18n("You do not have write permissions "
+                                                  "for the file named \"%1\". "
+                                                  "Are you sure you want "
+                                                  "to overwrite it?")
+                                       .arg(url.filename()),
+                                       i18n("Overwrite File?"),
+                                       i18n("Overwrite"),
+                                       KStdGuiItem::cancel() );
+
+        if (result != KMessageBox::Yes)
+            return false;
+    }
+
+    return true;
+}
+
 
 }  // namespace Digikam
 

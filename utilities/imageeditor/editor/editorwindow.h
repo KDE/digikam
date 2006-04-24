@@ -127,8 +127,9 @@ protected:
     bool promptUserSave(const KURL& url);
     void startingSave(const KURL& url);
     bool startingSaveAs(const KURL& url);
-    
-    virtual void finishSaving(bool success);    
+    bool checkPermissions(const KURL& url);
+
+    virtual void finishSaving(bool success);
 
     virtual void readSettings()               { readStandardSettings(); };
     virtual void saveSettings()               { saveStandardSettings(); };

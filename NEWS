@@ -122,5 +122,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 115423 (thumbnails view jumps to top when new photos are added)
 ==> 125732 (ICC settings get reset when disabled and re-enabled)
 ==> 119741 (Image Editor: restore image editor if already open)
+==> 122374 (Image Editor: ignores read-only permission during saving)
 
 ----------------------------------------------------------------------------------------------------
