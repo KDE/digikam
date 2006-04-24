@@ -1,12 +1,14 @@
 /* ============================================================
- * Date  : 2004-08-19
- * Description :
- *
- * Adapted from kfiletip (konqueror - konq_iconviewwidget.cc)
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-08-19
+ * Description : Album item file tip adapted from kfiletip 
+ *               (konqueror - konq_iconviewwidget.cc)
  *
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2000, 2001, 2002 David Faure <david@mandrakesoft.com>
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Renchi Raju 
+ * Copyright (C) 2006 by Gilles Caulier 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +28,7 @@
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qpixmap.h>
 #include <qdatetime.h>
 #include <qstylesheet.h>
 #include <qpainter.h>
@@ -52,25 +55,47 @@
 namespace Digikam
 {
 
-AlbumFileTip::AlbumFileTip(AlbumIconView* view)
-            : QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
-                     WStyle_StaysOnTop | WX11BypassWM )
+class AlbumFileTipPriv
 {
-    m_view     = view;
-    m_iconItem = 0;
-    m_corner   = 0;
+public:
+
+    AlbumFileTipPriv()
+    {
+        corner   = 0;
+        label    = 0;
+        view     = 0;
+        iconItem = 0;
+    }
+
+    int            corner;
+    
+    QLabel        *label;
+    
+    QPixmap        corners[4];
+    
+    AlbumIconView *view;
+    
+    AlbumIconItem *iconItem;
+};    
+
+AlbumFileTip::AlbumFileTip(AlbumIconView* view)
+            : QFrame(0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
+                     WStyle_StaysOnTop | WX11BypassWM)
+{
+    d = new AlbumFileTipPriv;    
+    d->view = view;
     hide();
 
     setPalette( QToolTip::palette() );
     setFrameStyle( QFrame::Plain | QFrame::Box );
     setLineWidth( 1 );
 
-    m_label = new QLabel(this);
-    m_label->setMargin(0);
-    m_label->setAlignment(Qt::AlignAuto | Qt::AlignVCenter);
+    d->label = new QLabel(this);
+    d->label->setMargin(0);
+    d->label->setAlignment(Qt::AlignAuto | Qt::AlignVCenter);
 
     QVBoxLayout *layout = new QVBoxLayout(this, 10, 0);
-    layout->addWidget(m_label);
+    layout->addWidget(d->label);
     layout->setResizeMode(QLayout::Fixed);
 
     renderArrows();
@@ -78,13 +103,14 @@ AlbumFileTip::AlbumFileTip(AlbumIconView* view)
 
 AlbumFileTip::~AlbumFileTip()
 {
+    delete d;
 }
 
 void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
 {
-    m_iconItem = iconItem;
+    d->iconItem = iconItem;
 
-    if (!m_iconItem)
+    if (!d->iconItem)
         hide();
     else
     {
@@ -97,21 +123,21 @@ void AlbumFileTip::setIconItem(AlbumIconItem* iconItem)
 
 void AlbumFileTip::reposition()
 {
-    if (!m_iconItem)
+    if (!d->iconItem)
         return;
 
-    QRect rect = m_iconItem->rect();
-    rect.moveTopLeft(m_view->contentsToViewport(rect.topLeft()));
-    rect.moveTopLeft(m_view->viewport()->mapToGlobal(rect.topLeft()));
+    QRect rect = d->iconItem->rect();
+    rect.moveTopLeft(d->view->contentsToViewport(rect.topLeft()));
+    rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
 
     QPoint pos = rect.center();
-    // m_corner:
+    // d->corner:
     // 0: upperleft
     // 1: upperright
     // 2: lowerleft
     // 3: lowerright
 
-    m_corner = 0;
+    d->corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
 
 #if KDE_IS_VERSION(3,2,0)
@@ -126,10 +152,10 @@ void AlbumFileTip::reposition()
         // to the left
         if (pos.x() - width() < 0) {
             pos.setX(0);
-            m_corner = 4;
+            d->corner = 4;
         } else {
             pos.setX( pos.x() - width() );
-            m_corner = 1;
+            d->corner = 1;
         }
     }
     // should the tooltip be shown above or below the ivi ?
@@ -137,7 +163,7 @@ void AlbumFileTip::reposition()
     {
         // above
         pos.setY( rect.top() - height() - 5);
-        m_corner += 2;
+        d->corner += 2;
     }
     else
     {
@@ -145,94 +171,84 @@ void AlbumFileTip::reposition()
     }
 
     move( pos );
-
 }
 
 void AlbumFileTip::renderArrows()
 {
     int w = 10;
 
-    {
-        // left top arrow
-        QPixmap& pix = m_corners[0];
-        pix.resize(w,w);
-        pix.fill(colorGroup().background());
+    // -- left top arrow -------------------------------------
+    
+    QPixmap& pix0 = d->corners[0];
+    pix0.resize(w, w);
+    pix0.fill(colorGroup().background());
 
-        QPainter p(&pix);
-        p.setPen(QPen(Qt::black, 1));
+    QPainter p0(&pix0);
+    p0.setPen(QPen(Qt::black, 1));
 
-        for (int j=0; j<w; j++)
-        {
-            p.drawLine(0,j,w-j-1,j);
-        }
-        p.end();
-    }
+    for (int j=0; j<w; j++)
+        p0.drawLine(0, j, w-j-1, j);
+    
+    p0.end();
+        
+    // -- right top arrow ------------------------------------
+    
+    QPixmap& pix1 = d->corners[1];
+    pix1.resize(w, w);
+    pix1.fill(colorGroup().background());
 
-    {
-        // right top arrow
-        QPixmap& pix = m_corners[1];
-        pix.resize(w,w);
-        pix.fill(colorGroup().background());
+    QPainter p1(&pix1);
+    p1.setPen(QPen(Qt::black, 1));
 
-        QPainter p(&pix);
-        p.setPen(QPen(Qt::black, 1));
+    for (int j=0; j<w; j++)
+        p1.drawLine(j, j, w-1, j);
 
-        for (int j=0; j<w; j++)
-        {
-            p.drawLine(j,j,w-1,j);
-        }
+    p1.end();
+    
+    // -- left bottom arrow ----------------------------------
+        
+    QPixmap& pix2 = d->corners[2];
+    pix2.resize(w, w);
+    pix2.fill(colorGroup().background());
 
-        p.end();
-    }
+    QPainter p2(&pix2);
+    p2.setPen(QPen(Qt::black, 1));
 
-    {
-        // left bottom arrow
-        QPixmap& pix = m_corners[2];
-        pix.resize(w,w);
-        pix.fill(colorGroup().background());
+    for (int j=0; j<w; j++)
+        p2.drawLine(0, j, j, j);
+    
+    p2.end();
+        
+    // -- right bottom arrow ---------------------------------
+        
+    QPixmap& pix3 = d->corners[3];
+    pix3.resize(w, w);
+    pix3.fill(colorGroup().background());
 
-        QPainter p(&pix);
-        p.setPen(QPen(Qt::black, 1));
+    QPainter p3(&pix3);
+    p3.setPen(QPen(Qt::black, 1));
 
-        for (int j=0; j<w; j++)
-        {
-            p.drawLine(0,j,j,j);
-        }
-        p.end();
-    }
+    for (int j=0; j<w; j++)
+        p3.drawLine(w-j-1, j, w-1, j);
 
-    {
-        // right bottom arrow
-        QPixmap& pix = m_corners[3];
-        pix.resize(w,w);
-        pix.fill(colorGroup().background());
-
-        QPainter p(&pix);
-        p.setPen(QPen(Qt::black, 1));
-
-        for (int j=0; j<w; j++)
-        {
-            p.drawLine(w-j-1,j,w-1,j);
-        }
-
-        p.end();
-    }
+    p3.end();    
 }
 
 bool AlbumFileTip::event(QEvent *e)
 {
     switch ( e->type() )
     {
-    case QEvent::Leave:
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::FocusIn:
-    case QEvent::FocusOut:
-    case QEvent::Wheel:
-        hide();
-    default:
-        break;
+      case QEvent::Leave:
+      case QEvent::MouseButtonPress:
+      case QEvent::MouseButtonRelease:
+      case QEvent::FocusIn:
+      case QEvent::FocusOut:
+      case QEvent::Wheel:
+          hide();
+      default:
+          break;
     }
+    
     return QFrame::event(e);
 }
 
@@ -244,15 +260,15 @@ void AlbumFileTip::resizeEvent(QResizeEvent* e)
 
 void AlbumFileTip::drawContents(QPainter *p)
 {
-    if (m_corner >= 4)
+    if (d->corner >= 4)
     {
         QFrame::drawContents( p );
         return;
     }
 
-    QPixmap &pix = m_corners[m_corner];
+    QPixmap &pix = d->corners[d->corner];
 
-    switch ( m_corner )
+    switch ( d->corner )
     {
         case 0:
             p->drawPixmap( 3, 3, pix );
@@ -270,7 +286,6 @@ void AlbumFileTip::drawContents(QPainter *p)
 
     QFrame::drawContents( p );
 }
-
 
 void AlbumFileTip::updateText()
 {
@@ -292,9 +307,9 @@ void AlbumFileTip::updateText()
 
     tip = "<table cellspacing=0 cellpadding=0>";
 
-    const ImageInfo* info = m_iconItem->imageInfo();
+    const ImageInfo* info = d->iconItem->imageInfo();
 
-    // File properties ----------------------------------------------
+    // -- File properties ----------------------------------------------
 
     tip += headBeg + i18n("File Properties") + headEnd;
 
@@ -315,7 +330,7 @@ void AlbumFileTip::updateText()
            .arg(KGlobal::locale()->formatNumber(info->fileSize(), 0))
            + cellEnd;
 
-    // Digikam properties  ------------------------------------------
+    // -- Digikam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
 
@@ -337,7 +352,7 @@ void AlbumFileTip::updateText()
     tip += cellBeg + i18n("Tags:") + cellMid +
            tagPaths.join(",<br>") + cellEnd;
 
-    // Meta Info ----------------------------------------------------
+    // -- Meta Info ----------------------------------------------------
 
     QString metaStr;
     KFileMetaInfo metainfo(info->kurl().path());
@@ -364,7 +379,6 @@ void AlbumFileTip::updateText()
                                ":" + cellMid +
                                QStyleSheet::escape( s ) + cellEnd;
                 }
-
             }
         }
     }
@@ -377,8 +391,7 @@ void AlbumFileTip::updateText()
 
     tip += "</table>";
 
-
-    m_label->setText(tip);
+    d->label->setText(tip);
 }
 
 QString AlbumFileTip::breakString(const QString& input)
