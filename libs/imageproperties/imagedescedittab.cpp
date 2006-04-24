@@ -417,7 +417,7 @@ void ImageDescEditTab::applyAllChanges()
         if (AlbumSettings::instance()->getSaveIptcTags())
         {
             // Store Image Tags like Iptc keywords tag.
-            metadata.setImageKeywords(oldKeywords, d->currInfo->tagNames());
+            metadata.setImageKeywords(oldKeywords, d->currInfo->tagPaths());
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())
