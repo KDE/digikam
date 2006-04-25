@@ -1,10 +1,8 @@
 /* ============================================================
- * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date   : 2003-02-01
- * Description : dialog displayed at the first digiKam run
+ * Author: Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date  : 2006-04-25
+ * Description : a widget to use in first run dialog
  *
- * Copyright 2003-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -12,7 +10,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,46 +18,49 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMFIRSTRUN_H
-#define DIGIKAMFIRSTRUN_H
+#ifndef DIGIKAMFIRSTFIRSTRUNWIDGET_H
+#define DIGIKAMFIRSTFIRSTRUNWIDGET_H
 
-// KDE includes.
+// Qt includes.
 
-#include <kdialogbase.h>
+#include <qwidget.h>
 
 // Local includes.
 
 #include "digikam_export.h"
 
-class KConfig;
+class QLabel;
+
 class KURLRequester;
 
-namespace Digikam
+namespace Digikam 
 {
 
-class FirstRunWidget;
-
-class DIGIKAM_EXPORT DigikamFirstRun : public KDialogBase
+class DIGIKAM_EXPORT FirstRunWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+    
+    FirstRunWidget( QWidget* parent = 0 );
+    ~FirstRunWidget();
 
-    DigikamFirstRun( KConfig* config, QWidget* parent = 0, const char* name = 0,
-                     bool modal = true, WFlags fl = WDestructiveClose );
-    ~DigikamFirstRun();
-
+public:
+    
+    QLabel        *m_pixLabel;
+    KURLRequester *m_path;
+    
 protected slots:
     
-    void slotOk();
-
+    virtual void languageChange();
+    
 private:
 
-    KConfig        *m_config;
-    FirstRunWidget *m_ui;
+    QLabel *m_textLabel1;
+    QLabel *m_textLabel2;
     
 };
 
 }  // namespace Digikam
 
-#endif // DIGIKAMFIRSTRUN_H
+#endif // DIGIKAMFIRSTFIRSTRUNWIDGET_H

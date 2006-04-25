@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2003-02-01
- * Description :
+ * Date   : 2003-02-01
+ * Description : dialog displayed at the first digiKam run
  *
- * Copyright 2003-2004 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,32 +62,31 @@ extern "C"
 
 #include "digikamfirstrun.h"
 #include "version.h"
-#include "firstrunUI.h"
+#include "firstrun.h"
 
 namespace Digikam
 {
 
 using namespace std;
 
-DigikamFirstRun::DigikamFirstRun( KConfig* config,
-                                  QWidget* parent,
-                                  const char* name, bool modal,
-                                  WFlags fl )
-    : KDialogBase( parent, name, modal, i18n( "Album Library Path" ), Help|Ok|Cancel, Ok, true )
+DigikamFirstRun::DigikamFirstRun( KConfig* config, QWidget* parent,
+                                  const char* name, bool modal, WFlags fl )
+               : KDialogBase( parent, name, modal, i18n( "Album Library Path" ), Help|Ok|Cancel, Ok, true )
 
 {
     setHelp("firstrundialog.anchor", "digikam");
     setWFlags(fl);
-    config_ = config;
-    ui = new DigikamFirstFirstRunWidget(this);
-    setMainWidget(ui);
-    ui->path->setURL(QDir::homeDirPath() + i18n("This is a path name so you should "
-                     "include the slash in the translation","/Pictures"));
-    ui->path->setMode(KFile::Directory | KFile::LocalOnly);
+    
+    m_config = config;
+    m_ui     = new FirstRunWidget(this);
+    setMainWidget(m_ui);
+    m_ui->m_path->setURL(QDir::homeDirPath() + i18n("This is a path name so you should "
+                       "include the slash in the translation","/Pictures"));
+    m_ui->m_path->setMode(KFile::Directory | KFile::LocalOnly);
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
-    ui->pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
-    ui->setMinimumSize(450, ui->sizeHint().height());
+    m_ui->m_pixLabel->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));
+    m_ui->setMinimumSize(450, m_ui->sizeHint().height());
 }
 
 DigikamFirstRun::~DigikamFirstRun()
@@ -95,7 +95,8 @@ DigikamFirstRun::~DigikamFirstRun()
 
 void DigikamFirstRun::slotOk()
 {
-    QString albumLibraryFolder = ui->path->url();
+    QString albumLibraryFolder = m_ui->m_path->url();
+    
     if (albumLibraryFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
@@ -115,13 +116,14 @@ void DigikamFirstRun::slotOk()
     }
 
     QDir targetPath(albumLibraryFolder);
+    
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
                                    i18n("<qt>The folder you selected does not exist: "
 
                                         "<p><b>%1</b></p>"
-                                        "Would you like Digikam to make it for you now?</qt>")
+                                        "Would you like digiKam to make it for you now?</qt>")
                                         .arg(albumLibraryFolder),
                                    i18n("Create Folder?"));
 
@@ -142,6 +144,7 @@ void DigikamFirstRun::slotOk()
     }
 
     QFileInfo path(albumLibraryFolder);
+    
     if (!path.isWritable()) 
     {
         KMessageBox::information(this, i18n("No write access for this path.\n"
@@ -149,12 +152,12 @@ void DigikamFirstRun::slotOk()
         return;
     }
 
-    config_->setGroup("General Settings");
-    config_->writeEntry("Version", digikam_version);
+    m_config->setGroup("General Settings");
+    m_config->writeEntry("Version", digikam_version);
 
-    config_->setGroup("Album Settings");
-    config_->writePathEntry("Album Path", albumLibraryFolder);
-    config_->sync();
+    m_config->setGroup("Album Settings");
+    m_config->writePathEntry("Album Path", albumLibraryFolder);
+    m_config->sync();
 
     KDialogBase::accept();
 

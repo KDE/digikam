@@ -27,7 +27,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
        
 lib_LTLIBRARIES = libdigikam.la
 
-libdigikam_la_SOURCES = firstrunUI.ui albummanager.cpp album.cpp \
+libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
 			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
 			albumlister.cpp dragobjects.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
