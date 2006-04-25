@@ -121,7 +121,9 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 117225 (digikam requires at least libpng >= 1.2.7)
 ==> 115423 (thumbnails view jumps to top when new photos are added)
 ==> 125732 (ICC settings get reset when disabled and re-enabled)
-==> 119741 (Image Editor: restore image editor if already open)
-==> 122374 (Image Editor: ignores read-only permission during saving)
+==> 119741 (Restore image editor if already open)
+==> 122374 (Ignores read-only permission during saving)
+==> 121367 (Add properties tab to digiKam and (especially) IE)
+
 
 ----------------------------------------------------------------------------------------------------
