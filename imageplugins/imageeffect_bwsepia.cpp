@@ -267,10 +267,11 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    m_bwTools->setFocus();
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(4, 10);
     setUserAreaWidget(gboxSettings);
-
+    
     // -------------------------------------------------------------
 
     KConfig* config = kapp->config();
@@ -278,7 +279,6 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_tab->setCurrentPage(config->readNumEntry("Settings Tab", ToneTab));
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
-
 
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotDefault()));

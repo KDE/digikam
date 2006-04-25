@@ -181,13 +181,13 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                           "everything in between.</p>").arg(previewEffectPic("stretchcontrast")));
     m_correctionTools->insert(strechContrast, StretchContrastCorrection);
 
-    gridSettings->addMultiCellWidget(m_correctionTools, 3, 3, 0, 4);
-    
-    gridSettings->setRowStretch(4, 10);
-    setUserAreaWidget(gboxSettings);
-
     // -------------------------------------------------------------
     
+    m_correctionTools->setFocus();
+    gridSettings->addMultiCellWidget(m_correctionTools, 3, 3, 0, 4);
+    gridSettings->setRowStretch(4, 10);
+    setUserAreaWidget(gboxSettings);
+   
     // Reset all parameters to the default values.
     QTimer::singleShot(0, this, SLOT(slotDefault()));
     
