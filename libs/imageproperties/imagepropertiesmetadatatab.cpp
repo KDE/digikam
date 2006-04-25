@@ -100,7 +100,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     // Exif tab area -----------------------------------------------------
 
     d->exifWidget = new ExifWidget(d->tab);
-    d->tab->insertTab(d->exifWidget, i18n("Exif"), ImagePropertiesMetadataTabPriv::EXIF);
+    d->tab->insertTab(d->exifWidget, i18n("EXIF"), ImagePropertiesMetadataTabPriv::EXIF);
 
     // Makernote tab area -----------------------------------------------------
 
@@ -110,7 +110,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     // IPTC tab area ---------------------------------------
     
     d->iptcWidget = new IptcWidget(d->tab);
-    d->tab->insertTab(d->iptcWidget, i18n("Iptc"), ImagePropertiesMetadataTabPriv::IPTC);
+    d->tab->insertTab(d->iptcWidget, i18n("IPTC"), ImagePropertiesMetadataTabPriv::IPTC);
 
     // GPS tab area ---------------------------------------
     
