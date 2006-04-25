@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#define MAXSTRINGLEN 30 
+ 
 // Qt includes.
  
 #include <qtooltip.h>
@@ -366,61 +368,64 @@ void AlbumFileTip::updateText()
     // -- Photograph Info ----------------------------------------------------
     // NOTA: If something is changed here, please updated imageproperties section too.
     
-    tip += headBeg + i18n("Photograph Properties") + headEnd;
-    
-    QString            metaStr;
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
-
-    str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                            .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("Make/Model:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
     
-    if (photoInfo.dateTime.isValid())
+    if (!photoInfo.isEmpty())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
-        if (str.length() > 50) str = str.left(47) + "...";
-        metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+        QString metaStr;
+        tip += headBeg + i18n("Photograph Properties") + headEnd;
+        
+        str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
+                                .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("Make/Model:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+        
+        if (photoInfo.dateTime.isValid())
+        {
+            str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+            if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+            metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+        }
+        else
+            metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( unavailable ) + cellEnd;
+    
+        str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
+        
+        if (photoInfo.focalLenght35mm.isEmpty())
+            str += QString(" / %1").arg(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
+        else 
+            str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
+        
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            
+        str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
+                                .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+    
+        if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            str = unavailable;
+        else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            str = photoInfo.exposureMode;        
+        else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+            str = photoInfo.exposureProgram;        
+        else 
+            str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("Mode/Program:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            
+        str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("Flash:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+        
+        str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
+        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+        metaStr += cellBeg + i18n("White Balance:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+        
+        tip += metaStr;
     }
-    else
-        metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( unavailable ) + cellEnd;
-
-    str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
-    
-    if (photoInfo.focalLenght35mm.isEmpty())
-        str += QString(" / %1").arg(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
-    else 
-        str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
-    
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
         
-    str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
-                            .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-
-    if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-        str = unavailable;
-    else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-        str = photoInfo.exposureMode;        
-    else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
-        str = photoInfo.exposureProgram;        
-    else 
-        str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("Mode/Program:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-        
-    str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("Flash:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-    
-    str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
-    if (str.length() > 50) str = str.left(47) + "...";
-    metaStr += cellBeg + i18n("White Balance:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-    
-    tip += metaStr;
-
     // -- digiKam properties  ------------------------------------------
 
     tip += headBeg + i18n("digiKam Properties") + headEnd;
@@ -437,7 +442,7 @@ void AlbumFileTip::updateText()
         (*it).remove(0, 1);
     
     str = tagPaths.join(", ");
-    if (str.length() > 50) str = str.left(47) + "...";
+    if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
     tip += cellBeg + i18n("Tags:") + cellMid + str + cellEnd;
 
     str.fill( '*', info->rating() );
@@ -451,7 +456,7 @@ QString AlbumFileTip::breakString(const QString& input)
 {
     QString str = input.simplifyWhiteSpace();
     str = QStyleSheet::escape(str);
-    uint maxLen = 30;
+    uint maxLen = MAXSTRINGLEN;
 
     if (str.length() <= maxLen)
         return str;
