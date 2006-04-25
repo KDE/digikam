@@ -411,7 +411,7 @@ void ImageEffect_InPainting_Dialog::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
     {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       m_parent->unsetCursor();
     }
 
     done(Cancel);
@@ -432,7 +432,7 @@ void ImageEffect_InPainting_Dialog::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
     {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       m_parent->unsetCursor();
     }
 
     e->accept();
@@ -550,7 +550,7 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
     
                     iface.putOriginalImage(i18n("InPainting"), m_originalImage.bits());
     
-                    m_parent->setCursor( KCursor::arrowCursor() );
+                    m_parent->unsetCursor();
                     accept();
                     break;
                 }

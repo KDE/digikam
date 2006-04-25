@@ -428,7 +428,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     delete histogram;
     delete [] data;
     
-    parentWidget()->setCursor( KCursor::arrowCursor()  );
+    parentWidget()->unsetCursor();
     slotEffect();  
 }
 

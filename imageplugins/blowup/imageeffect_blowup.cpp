@@ -361,7 +361,7 @@ void ImageEffect_BlowUp::slotCancel()
     if (m_currentRenderingMode != NoneRendering)
     {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       m_parent->unsetCursor();
     }
 
     done(Cancel);
@@ -382,7 +382,7 @@ void ImageEffect_BlowUp::closeEvent(QCloseEvent *e)
     if (m_currentRenderingMode != NoneRendering)
     {
        m_cimgInterface->stopComputation();
-       m_parent->setCursor( KCursor::arrowCursor() );
+       m_parent->unsetCursor();
     }
 
     e->accept();
@@ -465,7 +465,7 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
 
                     iface.putOriginalImage(i18n("BlowUp"), resizedImage.bits(),
                                            resizedImage.width(), resizedImage.height());
-                    m_parent->setCursor( KCursor::arrowCursor() );
+                    m_parent->unsetCursor();
                     accept();
                     break;
                 }
