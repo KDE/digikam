@@ -149,42 +149,40 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 {
     d = new ImageDescEditTabPriv;
     
-    QGridLayout *topLayout = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
-
-    d->navigateBar  = new NavigateBarWidget(this, navBar);
-    topLayout->addMultiCellWidget(d->navigateBar, 0, 0, 0, 2);
+    QVBoxLayout *vLayout        = new QVBoxLayout(this);
+    d->navigateBar              = new NavigateBarWidget(this, navBar);
+    QWidget *settingsArea       = new QWidget(this);
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
     
     // Comments view ---------------------------------------------------
     
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), this);
+    QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), settingsArea);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
-    topLayout->addMultiCellWidget(commentsBox, 1, 1, 0, 2);
+    settingsLayout->addMultiCellWidget(commentsBox, 1, 1, 0, 2);
 
     // Date and Time view ---------------------------------------------------
     
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), this);
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), settingsArea);
     d->dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
-    topLayout->addMultiCellWidget(dateTimeBox, 2, 2, 0, 2);
+    settingsLayout->addMultiCellWidget(dateTimeBox, 2, 2, 0, 2);
 
     // Rating view --------------------------------------------------
 
-    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), this);
+    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), settingsArea);
     ratingBox->layout()->setAlignment(Qt::AlignCenter);
     d->ratingWidget = new RatingWidget(ratingBox);
-    topLayout->addMultiCellWidget(ratingBox, 3, 3, 0, 2);
+    settingsLayout->addMultiCellWidget(ratingBox, 3, 3, 0, 2);
         
     // Tags view ---------------------------------------------------
 
-    QGroupBox* tagsBox = new QGroupBox(i18n("Tags"), this);
+    QGroupBox* tagsBox = new QGroupBox(i18n("Tags"), settingsArea);
     QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsBox);
     d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
-                                                                  KIcon::Toolbar,
-                                                                  KIcon::SizeSmall));
+    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase", KIcon::Toolbar, KIcon::SizeSmall));
 
     QLabel* tagsSearchTextBtn = new QLabel(i18n("Search:"), tagsBox);
     d->tagsSearchEdit = new KLineEdit(tagsBox);
@@ -201,12 +199,17 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     tagsBoxLayout->addWidget(d->recentTagsBtn);
 
-    topLayout->addMultiCellWidget(tagsBox, 4, 4, 0, 2);
+    settingsLayout->addMultiCellWidget(tagsBox, 4, 4, 0, 2);
 
     d->tagsView->addColumn(i18n( "Tags" ));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
     d->tagsView->setResizeMode(QListView::LastColumn);
+
+    // --------------------------------------------------
+    
+    vLayout->addWidget(d->navigateBar);
+    vLayout->addWidget(settingsArea);    
 
     // --------------------------------------------------
     
@@ -252,7 +255,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
-
     d->commentsEdit->setFocus();
 
     // Connect to album manager -----------------------------
