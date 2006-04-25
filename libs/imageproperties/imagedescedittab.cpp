@@ -369,7 +369,9 @@ void ImageDescEditTab::applyAllChanges()
     if (!d->currInfo)
         return;
 
-    QStringList oldKeywords = d->currInfo->tagNames();
+    QStringList oldKeywords = d->currInfo->tagPaths();
+    for (QStringList::iterator it = oldKeywords.begin(); it != oldKeywords.end(); ++it)
+        (*it).remove(0, 1);
 
     // we are now changing attributes ourselves
     d->ignoreImageAttributesWatch = true;
