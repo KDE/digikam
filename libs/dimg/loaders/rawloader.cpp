@@ -240,6 +240,8 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
     imageSetAttribute("format", "RAW");
     imageData()   = data;
     
+    readMetadata(filePath, DImg::RAW);
+    
     return true;
 }
 
@@ -416,7 +418,9 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     imageHeight() = height;
     imageSetAttribute("format", "RAW");
     imageData() = (uchar *)data;
-        
+
+    readMetadata(filePath, DImg::RAW);
+                
     return true;
 }
 

@@ -22,12 +22,6 @@
 // JPEG_COM
 #define M_COM    0xFE
 
-// JPEG_APP0+1  ==> EXIF marker
-#define M_EXIF   0xE1
-
-// JPEG_APP0+13 ==> IPTC marker
-#define M_IPTC   0xED
-
 #define XMD_H 
 
 // This line must be commented to prevent any latency time
@@ -155,8 +149,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_stdio_src(&cinfo, file);
 
     jpeg_save_markers(&cinfo, M_COM,  0xFFFF);
-    jpeg_save_markers(&cinfo, M_EXIF, 0xFFFF);
-    jpeg_save_markers(&cinfo, M_IPTC, 0xFFFF);
 
     // Recording ICC profile marker (from iccjpeg.c)
     setup_read_icc_profile(&cinfo);
@@ -399,7 +391,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     delete [] data;
 
     // -------------------------------------------------------------------
-    // Get meta-data markers contents.
+    // Get meta-data JFIF comments section
+    // TODO : moving this part in DMetadata using Exiv2
 
     QMap<int, QByteArray>& metaData = imageMetaData();
     metaData.clear();
@@ -418,7 +411,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                       << " DATA==" << ba 
 #endif
                       << endl;
-            metaData.insert(DImg::JPG_COM, ba);
+            metaData.insert(DImg::COM, ba);
         }
 
         marker = marker->next;
@@ -519,6 +512,30 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         observer->progressInfo(m_image, 0.1);
 
     // -------------------------------------------------------------------
+    // Set meta-data JFIF comments section
+    // TODO : moving this part in DMetadata using Exiv2
+    
+    typedef QMap<int, QByteArray> MetaDataMap;
+    MetaDataMap map = imageMetaData();
+    
+    for (MetaDataMap::iterator it = map.begin(); it != map.end(); ++it)
+    {
+        QByteArray ba = it.data();
+        
+        switch (it.key())
+        {
+            case(DImg::COM):
+            {
+#ifdef ENABLE_DEBUG_MESSAGES    
+                kdDebug() << "Writing JPEG metadata: COM:" << " DATA=" << ba << endl;
+#endif
+                jpeg_write_marker(&cinfo, M_COM, (const JOCTET*)ba.data(), ba.size());
+                break;
+            }
+        }
+    }
+            
+    // -------------------------------------------------------------------
     // Write ICC profil.
     
     QByteArray profile_rawdata = imageICCProfil();
@@ -534,8 +551,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write Image data.
     
-    uchar* line   = new uchar[w*3];
-    uchar* dstPtr = 0;
+    uchar* line       = new uchar[w*3];
+    uchar* dstPtr     = 0;
     uint   checkPoint = 0;
 
     if (!imageSixteenBit())     // 8 bits image.
@@ -619,7 +636,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
     fclose(file);
+    
     imageSetAttribute("savedformat", "JPEG");
+    
     saveMetadata(filePath);
     
     return true;

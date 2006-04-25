@@ -575,12 +575,12 @@ QByteArray DImg::getICCProfil() const
 
 QByteArray DImg::getExif() const
 {
-    return metadata(JPG_EXIF);
+    return metadata(EXIF);
 }
 
 QByteArray DImg::getIptc() const
 {
-    return metadata(JPG_IPTC);
+    return metadata(IPTC);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const

@@ -641,17 +641,17 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
         switch (it.key())
         {
-            case(DImg::JPG_COM):
+            case(DImg::COM):
             {
                 writeRawProfile(png_ptr, info_ptr, "jcom", ba.data(), (png_uint_32) ba.size());
                 break;
             }
-            case(DImg::JPG_EXIF):
+            case(DImg::EXIF):
             {
                 writeRawProfile(png_ptr, info_ptr, "exif", ba.data(), (png_uint_32) ba.size());
                 break;
             }
-            case(DImg::JPG_IPTC):
+            case(DImg::IPTC):
             {
                 writeRawProfile(png_ptr, info_ptr, "iptc", ba.data(), (png_uint_32) ba.size());
                 break;
@@ -753,6 +753,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "PNG");
 
+    // Here there is no writeMetadata() call until Exiv2 will support PNG file format.
+    
     return true;
 }
 

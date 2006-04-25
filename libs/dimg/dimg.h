@@ -65,10 +65,11 @@ public:
 
     enum METADATA
     {
-        JPG_EXIF,
-        JPG_IPTC,
-        JPG_COM,
-        TIF_TAG_ARTIST,
+        COM,                      // JFIF comments section.
+        EXIF,                     // EXIF metadata.
+        IPTC,                     // IPTC metadata.
+        XMP,                      // XMP metadata. No yet supported by Exiv2. For the future.        
+        TIF_TAG_ARTIST,           // Remove this tiff text tags when Exiv2 will support TIF in R/W.
         TIF_TAG_COPYRIGHT,
         TIF_TAG_DATETIME,
         TIF_TAG_DOCUMENTNAME,

@@ -134,9 +134,9 @@ void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT ff)
     // Even if byte array is null, if there is a key in the map, it will
     // be interpreted as "There was data, so write it again to the file".
     if (!metaDataFromFile.getExif().isNull())
-        imageMetadata.insert(DImg::JPG_EXIF, metaDataFromFile.getExif());
+        imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExif());
     if (!metaDataFromFile.getIptc().isNull())
-        imageMetadata.insert(DImg::JPG_IPTC, metaDataFromFile.getIptc());
+        imageMetadata.insert(DImg::IPTC, metaDataFromFile.getIptc());
 }
 
 void DImgLoader::saveMetadata(const QString& filePath)
