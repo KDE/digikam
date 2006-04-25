@@ -93,7 +93,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
         
-    QLabel *title               = new QLabel(i18n("<u><i>Camera File Properties</i></u>"), settingsArea);
+    QLabel *title               = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), settingsArea);
     QLabel *folder              = new QLabel(i18n("<b>Folder</b>:"), settingsArea);
     QLabel *date                = new QLabel(i18n("<b>Date</b>:"), settingsArea);
     QLabel *size                = new QLabel(i18n("<b>Size</b>:"), settingsArea);
@@ -101,12 +101,12 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     QLabel *isWritable          = new QLabel(i18n("<b>Writable</b>:"), settingsArea);
     
     KSeparator *line            = new KSeparator (Horizontal, settingsArea);
-    QLabel *title2              = new QLabel(i18n("<u><i>Image Properties</i></u>"), settingsArea);    
+    QLabel *title2              = new QLabel(i18n("<big><b>Image Properties</b></big>"), settingsArea);    
     QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), settingsArea);
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
     
     KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
-    QLabel *title3              = new QLabel(i18n("<u><i>Download Status</i></u>"), settingsArea);
+    QLabel *title3              = new QLabel(i18n("<big><b>Download Status</b></big>"), settingsArea);
     QLabel *newFileName         = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), settingsArea);
     QLabel *downloaded          = new QLabel(i18n("<b>Downloaded</b>:"), settingsArea);
                             
@@ -273,7 +273,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     
     // -- Download informations ------------------------------------------
 
-    d->labelNewFileName->setText(newFileName);
+    d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
     
     if (itemInfo->downloaded < 0)
         str = unknow;

@@ -130,7 +130,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
     
-    QLabel *title               = new QLabel(i18n("<u><i>File Properties</i></u>"), settingsArea);
+    QLabel *title               = new QLabel(i18n("<big><b>File Properties</b></big>"), settingsArea);
     QLabel *folder              = new QLabel(i18n("<b>Folder</b>:"), settingsArea);
     QLabel *modifiedDate        = new QLabel(i18n("<b>Modified</b>:"), settingsArea);
     QLabel *size                = new QLabel(i18n("<b>Size</b>:"), settingsArea);
@@ -138,12 +138,12 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QLabel *permissions         = new QLabel(i18n("<b>Permissions</b>:"), settingsArea);
 
     KSeparator *line            = new KSeparator (Horizontal, settingsArea);
-    QLabel *title2              = new QLabel(i18n("<u><i>Image Properties</i></u>"), settingsArea);
+    QLabel *title2              = new QLabel(i18n("<big><b>Image Properties</b></big>"), settingsArea);
     QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), settingsArea);
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
 
     KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
-    d->title3                   = new QLabel(i18n("<u><i>Photograph Properties</i></u>"), settingsArea);
+    d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), settingsArea);
     d->make                     = new QLabel(i18n("<b>Make</b>:"), settingsArea);
     d->model                    = new QLabel(i18n("<b>Model</b>:"), settingsArea);
     d->photoDate                = new QLabel(i18n("<b>Created</b>:"), settingsArea);
