@@ -882,23 +882,23 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         kdDebug() << d->filePath << " ==> Keywords: " << newkeys << endl;
         
         // Remove all old keywords.
-        Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
         Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.begin();
 
-        while(true)
+        while(it != iptcData.end())
         {
-            Exiv2::IptcData::iterator it = iptcData.findKey(iptcTag);
-            if (it == iptcData.end())
-                break;
-
             QString key = QString::fromLocal8Bit(it->key().c_str());
             QString val(it->toString().c_str());
             
-            if (oldKeywords.contains(val))
-                iptcData.erase(it);
-        }
+            if (key == QString("Iptc.Application2.Keywords") && oldKeywords.contains(val))
+                it = iptcData.erase(it);
+            else 
+                ++it;
+        };
 
         // Add new keywords. Note that Keywords IPTC tag is limited to 64 char but can be redondant.
+
+        Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
 
         for (QStringList::iterator it = newkeys.begin(); it != newkeys.end(); ++it)
         {
