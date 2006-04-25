@@ -89,11 +89,11 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
     QWidget *settingsArea       = new QWidget(this);
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 18, 1, KDialog::marginHint(), 0);
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 21, 1, KDialog::marginHint(), 0);
 
     // --------------------------------------------------
         
-    QLabel *title               = new QLabel(i18n("<u><i>Camera File Properties:</i></u>"), settingsArea);
+    QLabel *title               = new QLabel(i18n("<u><i>Camera File Properties</i></u>"), settingsArea);
     QLabel *folder              = new QLabel(i18n("<b>Folder</b>:"), settingsArea);
     QLabel *date                = new QLabel(i18n("<b>Date</b>:"), settingsArea);
     QLabel *size                = new QLabel(i18n("<b>Size</b>:"), settingsArea);
@@ -101,12 +101,12 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     QLabel *isWritable          = new QLabel(i18n("<b>Writable</b>:"), settingsArea);
     
     KSeparator *line            = new KSeparator (Horizontal, settingsArea);
-    QLabel *title2              = new QLabel(i18n("<u><i>Image Properties:</i></u>"), settingsArea);    
+    QLabel *title2              = new QLabel(i18n("<u><i>Image Properties</i></u>"), settingsArea);    
     QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), settingsArea);
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
     
     KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
-    QLabel *title3              = new QLabel(i18n("<u><i>Download Status:</i></u>"), settingsArea);
+    QLabel *title3              = new QLabel(i18n("<u><i>Download Status</i></u>"), settingsArea);
     QLabel *newFileName         = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), settingsArea);
     QLabel *downloaded          = new QLabel(i18n("<b>Downloaded</b>:"), settingsArea);
                             
@@ -121,46 +121,56 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     
     d->labelNewFileName         = new KSqueezedTextLabel(0, settingsArea);
     d->labelAlreadyDownloaded   = new KSqueezedTextLabel(0, settingsArea);
+        
+    title->setAlignment(Qt::AlignCenter);
+    title2->setAlignment(Qt::AlignCenter);
+    title3->setAlignment(Qt::AlignCenter);
 
     // --------------------------------------------------
                             
     settingsLayout->addMultiCellWidget(title, 0, 0, 0, 1);
-    settingsLayout->addMultiCellWidget(folder, 1, 1, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFolder, 1, 1, 1, 1);
-    settingsLayout->addMultiCellWidget(date, 2, 2, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileDate, 2, 2, 1, 1);
-    settingsLayout->addMultiCellWidget(size, 3, 3, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileSize, 3, 3, 1, 1);
-    settingsLayout->addMultiCellWidget(isReadable, 4, 4, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileIsReadable, 4, 4, 1, 1);
-    settingsLayout->addMultiCellWidget(isWritable, 5, 5, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelFileIsWritable, 5, 5, 1, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);    
+    settingsLayout->addMultiCellWidget(folder, 2, 2, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelFolder, 2, 2, 1, 1);
+    settingsLayout->addMultiCellWidget(date, 3, 3, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelFileDate, 3, 3, 1, 1);
+    settingsLayout->addMultiCellWidget(size, 4, 4, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelFileSize, 4, 4, 1, 1);
+    settingsLayout->addMultiCellWidget(isReadable, 5, 5, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelFileIsReadable, 5, 5, 1, 1);
+    settingsLayout->addMultiCellWidget(isWritable, 6, 6, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelFileIsWritable, 6, 6, 1, 1);
 
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 6, 6, 0, 1);    
-    settingsLayout->addMultiCellWidget(line, 7, 7, 0, 1);
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 7, 7, 0, 1);    
+    settingsLayout->addMultiCellWidget(line, 8, 8, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 8, 8, 0, 1);    
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 9, 9, 0, 1);    
 
-    settingsLayout->addMultiCellWidget(title2, 9, 9, 0, 1);                                
-    settingsLayout->addMultiCellWidget(mime, 10, 10, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageMime, 10, 10, 1, 1);
-    settingsLayout->addMultiCellWidget(dimensions, 11, 11, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 11, 11, 1, 1);
+    settingsLayout->addMultiCellWidget(title2, 10, 10, 0, 1);    
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 11, 11, 0, 1);                             
+    settingsLayout->addMultiCellWidget(mime, 12, 12, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageMime, 12, 12, 1, 1);
+    settingsLayout->addMultiCellWidget(dimensions, 13, 13, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 13, 13, 1, 1);
 
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 12, 12, 0, 1);
-    settingsLayout->addMultiCellWidget(line2, 13, 13, 0, 1);
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
+    settingsLayout->addMultiCellWidget(line2, 15, 15, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);  
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);  
     
-    settingsLayout->addMultiCellWidget(title3, 15, 15, 0, 1);
-    settingsLayout->addMultiCellWidget(newFileName, 16, 16, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelNewFileName, 16, 16, 1, 1);
-    settingsLayout->addMultiCellWidget(downloaded, 17, 17, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 17, 17, 1, 1);
+    settingsLayout->addMultiCellWidget(title3, 17, 17, 0, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);      
+    settingsLayout->addMultiCellWidget(newFileName, 19, 19, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelNewFileName, 19, 19, 1, 1);
+    settingsLayout->addMultiCellWidget(downloaded, 20, 20, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 20, 20, 1, 1);
     
-    settingsLayout->setRowStretch(18, 10);
+    settingsLayout->setRowStretch(21, 10);
     settingsLayout->setColStretch(1, 10);
     
     // --------------------------------------------------
