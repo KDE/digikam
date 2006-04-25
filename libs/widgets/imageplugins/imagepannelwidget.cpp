@@ -431,7 +431,7 @@ void ImagePannelWidget::setPreviewImageWaitCursor(bool enable)
     if ( enable )
        d->imageRegionWidget->setCursor( KCursor::waitCursor() );
     else 
-       d->imageRegionWidget->setCursor( KCursor::arrowCursor() );
+       d->imageRegionWidget->unsetCursor();
 }
 
 QRect ImagePannelWidget::getOriginalImageRegion(void)

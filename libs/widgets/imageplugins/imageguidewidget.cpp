@@ -565,7 +565,7 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
     }
     else
     {
-        setCursor( KCursor::arrowCursor() );
+        unsetCursor();
     }
 }
 

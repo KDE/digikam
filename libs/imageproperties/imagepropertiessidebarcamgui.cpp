@@ -191,7 +191,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
        d->dirtyMetadataTab = true;
     }
     
-    setCursor( KCursor::arrowCursor() );
+    unsetCursor();;
 }
 
 }  // NameSpace Digikam

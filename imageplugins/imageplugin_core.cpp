@@ -203,7 +203,7 @@ void ImagePlugin_Core::slotInvert()
     iface.putOriginalImage(i18n("Invert"), data);
     delete data;
 
-    parentWidget()->setCursor( KCursor::arrowCursor() );
+    parentWidget()->unsetCursor();
 }
 
 void ImagePlugin_Core::slotBW()
@@ -248,7 +248,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
     
     parentWidget()->setCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(32);
-    parentWidget()->setCursor( KCursor::arrowCursor() );
+    parentWidget()->unsetCursor();
 }
 
 void ImagePlugin_Core::slotConvertTo16Bits()
@@ -263,7 +263,7 @@ void ImagePlugin_Core::slotConvertTo16Bits()
     
     parentWidget()->setCursor( KCursor::waitCursor() );
     iface.convertOriginalColorDepth(64);
-    parentWidget()->setCursor( KCursor::arrowCursor() );
+    parentWidget()->unsetCursor();
 }
 
 #include "imageplugin_core.moc"

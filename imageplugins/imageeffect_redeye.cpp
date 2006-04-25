@@ -222,7 +222,7 @@ void ImageEffect_RedEye::removeRedEye(QWidget* parent)
     selection.bitBlend_RGBA2RGB(newSelection, 0, 0, w, h);
 
     iface.putImageSelection(i18n("Red Eyes Correction"), selection.bits());
-    parent->setCursor( KCursor::arrowCursor() );
+    parent->unsetCursor();
 }
 
 // -------------------------------------------------------------

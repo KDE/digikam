@@ -471,7 +471,7 @@ void ImageRegionWidget::contentsMousePressEvent ( QMouseEvent * e )
 void ImageRegionWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
 {
     d->movingInProgress = false;
-    setCursor( KCursor::arrowCursor() ); 
+    unsetCursor(); 
     backupPixmapRegion();
     emit contentsMovedEvent(true);
 }
