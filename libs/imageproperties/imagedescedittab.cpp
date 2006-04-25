@@ -416,8 +416,12 @@ void ImageDescEditTab::applyAllChanges()
 
         if (AlbumSettings::instance()->getSaveIptcTags())
         {
-            // Store Image Tags like Iptc keywords tag.
-            metadata.setImageKeywords(oldKeywords, d->currInfo->tagPaths());
+            // Store Image Tag paths like Iptc keywords tag.
+            QStringList tagPaths = d->currInfo->tagPaths();
+            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+                (*it).remove(0, 1);
+    
+            metadata.setImageKeywords(oldKeywords, tagPaths);
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())
