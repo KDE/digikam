@@ -53,6 +53,17 @@ public:
     ImagePropertiesTabPriv()
     {
         navigateBar            = 0;
+        title3                 = 0;
+        make                   = 0;         
+        model                  = 0;        
+        photoDate              = 0;    
+        aperture               = 0;     
+        focalLenght            = 0;  
+        exposureTime           = 0; 
+        sensitivity            = 0;  
+        exposureMode           = 0;
+        flash                  = 0;       
+        whiteBalance           = 0;
         labelFolder            = 0;
         labelFileModifiedDate  = 0;
         labelFileSize          = 0;
@@ -72,6 +83,18 @@ public:
         labelPhotoWhiteBalance = 0;
     }
 
+    QLabel             *title3;
+    QLabel             *make;         
+    QLabel             *model;        
+    QLabel             *photoDate;    
+    QLabel             *aperture;     
+    QLabel             *focalLenght;  
+    QLabel             *exposureTime; 
+    QLabel             *sensitivity;  
+    QLabel             *exposureMode;
+    QLabel             *flash;       
+    QLabel             *whiteBalance;
+    
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileModifiedDate;
     KSqueezedTextLabel *labelFileSize;
@@ -120,17 +143,17 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
 
     KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
-    QLabel *title3              = new QLabel(i18n("<u><i>Photograph Properties</i></u>"), settingsArea);
-    QLabel *make                = new QLabel(i18n("<b>Make</b>:"), settingsArea);
-    QLabel *model               = new QLabel(i18n("<b>Model</b>:"), settingsArea);
-    QLabel *photoDate           = new QLabel(i18n("<b>Created</b>:"), settingsArea);
-    QLabel *aperture            = new QLabel(i18n("<b>Aperture</b>:"), settingsArea);
-    QLabel *focalLenght         = new QLabel(i18n("<b>Focal</b>:"), settingsArea);
-    QLabel *exposureTime        = new QLabel(i18n("<b>Exposure</b>:"), settingsArea);
-    QLabel *sensitivity         = new QLabel(i18n("<b>Sensitivity</b>:"), settingsArea);
-    QLabel *exposureMode        = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), settingsArea);
-    QLabel *flash               = new QLabel(i18n("<b>Flash</b>:"), settingsArea);
-    QLabel *whiteBalance        = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), settingsArea);
+    d->title3                   = new QLabel(i18n("<u><i>Photograph Properties</i></u>"), settingsArea);
+    d->make                     = new QLabel(i18n("<b>Make</b>:"), settingsArea);
+    d->model                    = new QLabel(i18n("<b>Model</b>:"), settingsArea);
+    d->photoDate                = new QLabel(i18n("<b>Created</b>:"), settingsArea);
+    d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), settingsArea);
+    d->focalLenght              = new QLabel(i18n("<b>Focal</b>:"), settingsArea);
+    d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), settingsArea);
+    d->sensitivity              = new QLabel(i18n("<b>Sensitivity</b>:"), settingsArea);
+    d->exposureMode             = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), settingsArea);
+    d->flash                    = new QLabel(i18n("<b>Flash</b>:"), settingsArea);
+    d->whiteBalance             = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), settingsArea);
 
     d->labelFolder              = new KSqueezedTextLabel(0, settingsArea);
     d->labelFileModifiedDate    = new KSqueezedTextLabel(0, settingsArea);
@@ -154,7 +177,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     title->setAlignment(Qt::AlignCenter);
     title2->setAlignment(Qt::AlignCenter);
-    title3->setAlignment(Qt::AlignCenter);
+    d->title3->setAlignment(Qt::AlignCenter);
     
     // --------------------------------------------------
     
@@ -192,28 +215,28 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                  QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);  
 
-    settingsLayout->addMultiCellWidget(title3, 17, 17, 0, 1);
+    settingsLayout->addMultiCellWidget(d->title3, 17, 17, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                  QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);  
-    settingsLayout->addMultiCellWidget(make, 19, 19, 0, 0);
+    settingsLayout->addMultiCellWidget(d->make, 19, 19, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoMake, 19, 19, 1, 1);
-    settingsLayout->addMultiCellWidget(model, 20, 20, 0, 0);
+    settingsLayout->addMultiCellWidget(d->model, 20, 20, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoModel, 20, 20, 1, 1);
-    settingsLayout->addMultiCellWidget(photoDate, 21, 21, 0, 0);
+    settingsLayout->addMultiCellWidget(d->photoDate, 21, 21, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 21, 21, 1, 1);
-    settingsLayout->addMultiCellWidget(aperture, 22, 22, 0, 0);
+    settingsLayout->addMultiCellWidget(d->aperture, 22, 22, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 22, 22, 1, 1);
-    settingsLayout->addMultiCellWidget(focalLenght, 23, 23, 0, 0);
+    settingsLayout->addMultiCellWidget(d->focalLenght, 23, 23, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 23, 23, 1, 1);
-    settingsLayout->addMultiCellWidget(exposureTime, 24, 24, 0, 0);
+    settingsLayout->addMultiCellWidget(d->exposureTime, 24, 24, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 24, 24, 1, 1);
-    settingsLayout->addMultiCellWidget(sensitivity, 25, 25, 0, 0);
+    settingsLayout->addMultiCellWidget(d->sensitivity, 25, 25, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 25, 25, 1, 1);
-    settingsLayout->addMultiCellWidget(exposureMode, 26, 26, 0, 0);
+    settingsLayout->addMultiCellWidget(d->exposureMode, 26, 26, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 26, 26, 1, 1);
-    settingsLayout->addMultiCellWidget(flash, 27, 27, 0, 0);
+    settingsLayout->addMultiCellWidget(d->flash, 27, 27, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 27, 27, 1, 1);
-    settingsLayout->addMultiCellWidget(whiteBalance, 28, 28, 0, 0);
+    settingsLayout->addMultiCellWidget(d->whiteBalance, 28, 28, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 28, 28, 1, 1);
     
     settingsLayout->setRowStretch(29, 10);
@@ -337,7 +360,57 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     // NOTA: If something is changed here, please updated albumfiletip section too.
     
     PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+    
+    if (photoInfo.isEmpty())
+    {
+        d->title3->hide();
+        d->make->hide();
+        d->model->hide();
+        d->photoDate->hide();
+        d->aperture->hide();
+        d->focalLenght->hide();
+        d->exposureTime->hide();
+        d->sensitivity->hide();
+        d->exposureMode->hide();
+        d->flash->hide();
+        d->whiteBalance->hide();
+        d->labelPhotoMake->hide();
+        d->labelPhotoModel->hide();
+        d->labelPhotoDateTime->hide();
+        d->labelPhotoAperture->hide();
+        d->labelPhotoFocalLenght->hide();
+        d->labelPhotoExposureTime->hide();
+        d->labelPhotoSensitivity->hide();
+        d->labelPhotoExposureMode->hide();
+        d->labelPhotoFlash->hide();
+        d->labelPhotoWhiteBalance->hide();
+    }
+    else
+    {
+        d->title3->show();
+        d->make->show();
+        d->model->show();
+        d->photoDate->show();
+        d->aperture->show();
+        d->focalLenght->show();
+        d->exposureTime->show();
+        d->sensitivity->show();
+        d->exposureMode->show();
+        d->flash->show();
+        d->whiteBalance->show();
+        d->labelPhotoMake->show();
+        d->labelPhotoModel->show();
+        d->labelPhotoDateTime->show();
+        d->labelPhotoAperture->show();
+        d->labelPhotoFocalLenght->show();
+        d->labelPhotoExposureTime->show();
+        d->labelPhotoSensitivity->show();
+        d->labelPhotoExposureMode->show();
+        d->labelPhotoFlash->show();
+        d->labelPhotoWhiteBalance->show();
+    }
 
+    
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 

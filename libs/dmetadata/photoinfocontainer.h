@@ -34,8 +34,27 @@ class PhotoInfoContainer
 
 public:
 
-    PhotoInfoContainer(){}
-
+    PhotoInfoContainer(){};
+    
+    bool isEmpty()
+    {
+        if ( make.isEmpty()            && 
+             model.isEmpty()           && 
+             exposureTime.isEmpty()    && 
+             exposureMode.isEmpty()    && 
+             exposureProgram.isEmpty() && 
+             aperture.isEmpty()        && 
+             focalLenght.isEmpty()     && 
+             focalLenght35mm.isEmpty() && 
+             sensitivity.isEmpty()     && 
+             flash.isEmpty()           && 
+             whiteBalance.isEmpty()    && 
+             !dateTime.isValid() )
+            return true;
+        else
+            return false;
+    };
+    
     QString   make;
     QString   model;
     QString   exposureTime;
