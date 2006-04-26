@@ -61,7 +61,7 @@ bool exifRotate(const QString& file)
     KExifData exifData;
     if (!exifData.readFromFile(file))
     {
-        // no exif data. return.
+        kdDebug() << "No exif data found into " << file << endl;
         return true;
     }
 
