@@ -19,9 +19,6 @@
  *
  * ============================================================ */
 
-// JPEG_COM
-#define M_COM    0xFE
-
 #define XMD_H 
 
 // This line must be commented to prevent any latency time
@@ -147,8 +144,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, file);
-
-//    jpeg_save_markers(&cinfo, M_COM,  0xFFFF);
 
     // Recording ICC profile marker (from iccjpeg.c)
     setup_read_icc_profile(&cinfo);
@@ -391,33 +386,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     delete [] data;
 
     // -------------------------------------------------------------------
-    // Get meta-data JFIF comments section
-    // TODO : moving this part in DMetadata using Exiv2
-
-  /*  QMap<int, QByteArray>& metaData = imageMetaData();
-    metaData.clear();
-
-    jpeg_saved_marker_ptr marker = cinfo.marker_list;
-
-    while (marker)
-    {
-        QByteArray ba(marker->data_length);
-        memcpy(ba.data(), marker->data, marker->data_length);
-
-        if (marker->marker == M_COM)
-        {
-            kdDebug() << "Reading JPEG metadata: COM (size=" << ba.size() << ")"
-#ifdef ENABLE_DEBUG_MESSAGES    
-                      << " DATA==" << ba 
-#endif
-                      << endl;
-            metaData.insert(DImg::COM, ba);
-        }
-
-        marker = marker->next;
-    }
-*/
-    // -------------------------------------------------------------------
     // Read image ICC profile
 
     JOCTET *profile_data=NULL;
@@ -511,30 +479,6 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (observer)
         observer->progressInfo(m_image, 0.1);
 
-    // -------------------------------------------------------------------
-    // Set meta-data JFIF comments section
-    // TODO : moving this part in DMetadata using Exiv2
-    
-/*    typedef QMap<int, QByteArray> MetaDataMap;
-    MetaDataMap map = imageMetaData();
-    
-    for (MetaDataMap::iterator it = map.begin(); it != map.end(); ++it)
-    {
-        QByteArray ba = it.data();
-        
-        switch (it.key())
-        {
-            case(DImg::COM):
-            {
-#ifdef ENABLE_DEBUG_MESSAGES    
-                kdDebug() << "Writing JPEG metadata: COM:" << " DATA=" << ba << endl;
-#endif
-                jpeg_write_marker(&cinfo, M_COM, (const JOCTET*)ba.data(), ba.size());
-                break;
-            }
-        }
-    }
-*/            
     // -------------------------------------------------------------------
     // Write ICC profil.
     
