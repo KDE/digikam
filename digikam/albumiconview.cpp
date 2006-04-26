@@ -1690,17 +1690,24 @@ void AlbumIconView::slotAssignTag(int tagID)
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
             ImageInfo* info          = albumItem->imageInfo();
-            QStringList oldKeywords  = info->tagNames();
+            QStringList oldKeywords  = info->tagPaths();
+            for (QStringList::iterator it = oldKeywords.begin(); it != oldKeywords.end(); ++it)
+                (*it).remove(0, 1);
+
             info->setTag(tagID);
 
             // Store Image Tags like Iptc keywords tag.
         
             if (AlbumSettings::instance())
             {
-                if (AlbumSettings::instance()->getSaveIptcRating())
+                if (AlbumSettings::instance()->getSaveIptcTags())
                 {
+                    QStringList tagPaths = info->tagPaths();
+                    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+                        (*it).remove(0, 1);
+
                     DMetadata metadata(info->filePath());
-                    metadata.setImageKeywords(oldKeywords, info->tagNames());
+                    metadata.setImageKeywords(oldKeywords, tagPaths);
                     metadata.applyChanges();
                 }
             }
@@ -1718,17 +1725,24 @@ void AlbumIconView::slotRemoveTag(int tagID)
         {
             AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
             ImageInfo* info          = albumItem->imageInfo();
-            QStringList oldKeywords  = info->tagNames();
+            QStringList oldKeywords  = info->tagPaths();
+            for (QStringList::iterator it = oldKeywords.begin(); it != oldKeywords.end(); ++it)
+                (*it).remove(0, 1);
+
             info->removeTag(tagID);
 
             // Update Image Tags like Iptc keywords tags.
 
             if (AlbumSettings::instance())
             {
-                if (AlbumSettings::instance()->getSaveIptcRating())
+                if (AlbumSettings::instance()->getSaveIptcTags())
                 {
+                    QStringList tagPaths = info->tagPaths();
+                    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+                        (*it).remove(0, 1);
+
                     DMetadata metadata(info->filePath());
-                    metadata.setImageKeywords(oldKeywords, info->tagNames());
+                    metadata.setImageKeywords(oldKeywords, tagPaths);
                     metadata.applyChanges();
                 }
             }
