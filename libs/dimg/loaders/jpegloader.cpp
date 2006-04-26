@@ -148,7 +148,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, file);
 
-    jpeg_save_markers(&cinfo, M_COM,  0xFFFF);
+//    jpeg_save_markers(&cinfo, M_COM,  0xFFFF);
 
     // Recording ICC profile marker (from iccjpeg.c)
     setup_read_icc_profile(&cinfo);
@@ -394,7 +394,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Get meta-data JFIF comments section
     // TODO : moving this part in DMetadata using Exiv2
 
-    QMap<int, QByteArray>& metaData = imageMetaData();
+  /*  QMap<int, QByteArray>& metaData = imageMetaData();
     metaData.clear();
 
     jpeg_saved_marker_ptr marker = cinfo.marker_list;
@@ -416,7 +416,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         marker = marker->next;
     }
-
+*/
     // -------------------------------------------------------------------
     // Read image ICC profile
 
@@ -515,7 +515,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Set meta-data JFIF comments section
     // TODO : moving this part in DMetadata using Exiv2
     
-    typedef QMap<int, QByteArray> MetaDataMap;
+/*    typedef QMap<int, QByteArray> MetaDataMap;
     MetaDataMap map = imageMetaData();
     
     for (MetaDataMap::iterator it = map.begin(); it != map.end(); ++it)
@@ -534,7 +534,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             }
         }
     }
-            
+*/            
     // -------------------------------------------------------------------
     // Write ICC profil.
     

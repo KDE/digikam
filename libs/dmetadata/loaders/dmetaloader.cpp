@@ -50,9 +50,10 @@ namespace Digikam
 
 DMetaLoader::DMetaLoader(DMetadata* metadata)
 {
-    m_metadata = metadata;
-    m_hasExif  = false;
-    m_hasIptc  = false;
+    m_metadata    = metadata;
+    m_hasExif     = false;
+    m_hasIptc     = false;
+    m_hasComments = false;
 }
 
 Exiv2::ExifData& DMetaLoader::exifMetadata()
@@ -65,6 +66,11 @@ Exiv2::IptcData& DMetaLoader::iptcMetadata()
     return m_metadata->d->iptcMetadata;
 }
 
+std::string& DMetaLoader::imageComments()
+{
+    return m_metadata->d->imageComments;
+}
+
 bool DMetaLoader::loadWithExiv2(const QString& filePath)
 {
     try
@@ -75,6 +81,13 @@ bool DMetaLoader::loadWithExiv2(const QString& filePath)
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
         image->readMetadata();
+
+        // Image comments ---------------------------------
+
+        imageComments() = image->comment();
+
+        if (!imageComments().empty())
+            m_hasComments = true;
 
         // Exif metadata ----------------------------------
         
@@ -111,8 +124,12 @@ bool DMetaLoader::saveWithExiv2(const QString& filePath)
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
         
-        // To prevent lost other metadata like image comments for ex.
-        image->readMetadata(); 
+        // Image Comments ---------------------------------
+        
+        if (!imageComments().empty())
+        {
+            image->setComment(imageComments());
+        }
 
         // Exif metadata ----------------------------------
         

@@ -75,9 +75,11 @@ public:
     bool save(const QString& filePath, DImg::FORMAT ff);
 
     /** Metadata manipulation methods */
+    QByteArray getComments() const;
     QByteArray getExif() const;
     QByteArray getIptc() const;
 
+    void setComments(const QByteArray& data);
     void setExif(const QByteArray& data);
     void setIptc(const QByteArray& data);
     

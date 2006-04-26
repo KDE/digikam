@@ -204,6 +204,7 @@ public:
     bool       isReadOnly() const;
 
     /** Metadata manipulation methods */
+    QByteArray getComments() const;
     QByteArray getExif() const;
     QByteArray getIptc() const;
     QByteArray metadata(METADATA key) const;

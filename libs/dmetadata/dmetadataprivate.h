@@ -21,6 +21,10 @@
 #ifndef DMETADATAPRIVATE_H
 #define DMETADATAPRIVATE_H
 
+// C++ includes.
+
+#include <string>
+
 // QT includes.
 
 #include <qstring.h>
@@ -48,8 +52,10 @@ public:
     }
 
     QString         filePath;
-    
+
     DImg::FORMAT    fileFormat;
+
+    std::string     imageComments;  
 
     Exiv2::ExifData exifMetadata;
     Exiv2::IptcData iptcMetadata;

@@ -75,6 +75,13 @@ bool DMetadata::applyChanges()
     return save(d->filePath, d->fileFormat);
 }
 
+QByteArray DMetadata::getComments() const
+{
+    QByteArray data(d->imageComments.size());
+    memcpy(data.data(), d->imageComments.c_str(), d->imageComments.size());
+    return data;
+}
+
 QByteArray DMetadata::getExif() const
 {
     Exiv2::ExifData exif(d->exifMetadata);
@@ -91,6 +98,12 @@ QByteArray DMetadata::getIptc() const
     QByteArray data(c2.size_);
     memcpy(data.data(), c2.pData_, c2.size_);
     return data;
+}
+
+void DMetadata::setComments(const QByteArray& data)
+{
+    const std::string str(data.data());
+    d->imageComments = str;
 }
     
 void DMetadata::setExif(const QByteArray& data)
@@ -622,19 +635,12 @@ QString DMetadata::getImageComment() const
 {
     try
     {    
-        if (d->filePath.isEmpty())
-            return QString();
-            
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(d->filePath)));
-        
         // In first we trying to get image comments, outside of Exif and IPTC.
-                                              
-        image->readMetadata();
-        QString comment(image->comment().c_str());
+
+        QString comments(d->imageComments.c_str());
         
-        if (!comment.isEmpty())
-           return comment;
+        if (!comments.isEmpty())
+           return comments;
            
         // In second, we trying to get Exif comments   
                 
@@ -689,16 +695,11 @@ bool DMetadata::setImageComment(const QString& comment)
             return false;
 
         kdDebug() << d->filePath << " ==> Comment: " << comment << endl;
-            
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(d->filePath)));
-        
-        // In first we write comments outside of Exif and IPTC if possible.
-                                              
-        image->readMetadata();
-        const std::string &str(comment.latin1());
-        image->setComment(str);
-        image->writeMetadata();
+
+        // In first we trying to set image comments, outside of Exif and IPTC.
+
+        const std::string str(comment.latin1());
+        d->imageComments = str;
 
         // In Second we write comments into Exif.
                 

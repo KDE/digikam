@@ -21,6 +21,10 @@
 #ifndef DMETALOADER_H
 #define DMETALOADER_H
 
+// C++ includes.
+
+#include <string>
+
 // Qt includes.
 
 #include <qstring.h>
@@ -49,9 +53,10 @@ public:
     virtual bool load(const QString& filePath) = 0;
     virtual bool save(const QString& filePath) = 0;
     
-    virtual bool hasExif()    const { return m_hasExif; };
-    virtual bool hasIptc()    const { return m_hasIptc; };
-    virtual bool isReadOnly() const = 0;
+    virtual bool hasExif()     const { return m_hasExif;     };
+    virtual bool hasIptc()     const { return m_hasIptc;     };
+    virtual bool hasComments() const { return m_hasComments; };
+    virtual bool isReadOnly()  const = 0;
 
 protected:
 
@@ -63,10 +68,13 @@ protected:
     Exiv2::ExifData& exifMetadata();
     Exiv2::IptcData& iptcMetadata();
     
+    std::string& imageComments();
+
 protected:
 
     bool       m_hasExif;
     bool       m_hasIptc;
+    bool       m_hasComments;
 
     DMetadata *m_metadata;
 

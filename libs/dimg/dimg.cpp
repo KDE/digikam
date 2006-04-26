@@ -573,6 +573,11 @@ QByteArray DImg::getICCProfil() const
     return m_priv->ICCProfil;
 }
 
+QByteArray DImg::getComments() const
+{
+    return metadata(COM);
+}
+
 QByteArray DImg::getExif() const
 {
     return metadata(EXIF);
