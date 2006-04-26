@@ -72,7 +72,7 @@ bool exifRotate(const QString& file)
     DMetadata exifData;
     if (!exifData.load(file))
     {
-        // no exif data. return.
+        kdDebug() << "No exif data found into " << file << endl;
         return true;
     }
 
