@@ -154,10 +154,13 @@ void AlbumFileTip::reposition()
     if (rect.center().x() + width() > desk.right())
     {
         // to the left
-        if (pos.x() - width() < 0) {
+        if (pos.x() - width() < 0) 
+        {
             pos.setX(0);
             d->corner = 4;
-        } else {
+        } 
+        else 
+        {
             pos.setX( pos.x() - width() );
             d->corner = 1;
         }
@@ -298,7 +301,7 @@ void AlbumFileTip::updateText()
 
     QString headBeg("<tr bgcolor=\"orange\"><td colspan=2>"
                     "<nobr><font size=-2 color=\"black\"><i>");
-    QString headEnd("</i></font></nobr></td></nobr</tr>");
+    QString headEnd("</i></font></nobr></td></tr>");
 
     QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
     QString cellMid("</font></nobr></td>"
