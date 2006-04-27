@@ -61,9 +61,13 @@ bool exifRotate(const QString& file)
     KExifData exifData;
     if (!exifData.readFromFile(file))
     {
-        kdDebug() << "No exif data found into " << file << endl;
+	kdDebug() << "No exif data found into " << file << endl;
         return true;
     }
+    // start debug:
+    QFile foo(file);
+    kdDebug() << file << " = " << foo.size() << " bytes, orient =" << exifData.getImageOrientation() << endl;
+	
 
     JCOPY_OPTION copyoption = JCOPYOPT_ALL;
     jpeg_transform_info transformoption;

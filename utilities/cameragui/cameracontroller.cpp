@@ -324,10 +324,13 @@ void CameraThread::run()
             {
                 if (autoRotate)
                 {
+		    kdDebug() << "Autorotate   : " << file << " \tusing " << tempURL.path() << endl;
                     sendInfo(i18n("EXIF rotating file %1...")
                              .arg(file));
                     Digikam::exifRotate(tempURL.path());
-                }
+                } else {
+		    kdDebug() << "No Autorotate: " << file << endl;
+		}
 
                 // move the file to the destination file
                 if (rename(QFile::encodeName(tempURL.path()),
