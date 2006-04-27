@@ -269,14 +269,13 @@ void AlbumFileTip::drawContents(QPainter *p)
     QFrame::drawContents( p );
 }
 
-
 void AlbumFileTip::updateText()
 {
     QString tip;
 
     QString headBeg("<tr bgcolor=\"orange\"><td colspan=2>"
                     "<nobr><font size=-2 color=\"black\"><i>");
-    QString headEnd("</i></font></nobr></td></nobr</tr>");
+    QString headEnd("</i></font></nobr></td></tr>");
 
     QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
     QString cellMid("</font></nobr></td>"
