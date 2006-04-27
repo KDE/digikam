@@ -308,40 +308,36 @@ void CameraThread::run()
             QString dest       = cmd->map["dest"].asString();
             bool    autoRotate = cmd->map["autoRotate"].asBool();
 
-            sendInfo(i18n("Downloading file %1...")
-                     .arg(file));
+            sendInfo(i18n("Downloading file %1...").arg(file));
 
             // download to a temp file
             KURL tempURL(dest);
             tempURL = tempURL.upURL();
-            tempURL.addPath( QString(".digikam-camera-%1")
-                             .arg(getpid()));
+            tempURL.addPath( QString(".digikam-camera-%1").arg(getpid()));
 
-            bool result = d->camera->downloadItem(folder, file,
-                                                  tempURL.path());
+            bool result = d->camera->downloadItem(folder, file, tempURL.path());
 
             if (result)
             {
                 if (autoRotate)
                 {
-		    kdDebug() << "Autorotate   : " << file << " \tusing " << tempURL.path() << endl;
-                    sendInfo(i18n("EXIF rotating file %1...")
-                             .arg(file));
+                    kdDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
+                    sendInfo(i18n("EXIF rotating file %1...").arg(file));
                     Digikam::exifRotate(tempURL.path());
-                } else {
+                }
+                else 
+                {
 		    kdDebug() << "No Autorotate: " << file << endl;
 		}
 
                 // move the file to the destination file
-                if (rename(QFile::encodeName(tempURL.path()),
-                           QFile::encodeName(dest)) != 0)
+                if (rename(QFile::encodeName(tempURL.path()), QFile::encodeName(dest)) != 0)
                 {
                     // rename failed. delete the temp file
                     unlink(QFile::encodeName(tempURL.path()));
                     result = false;
                 }
             }
-
             
             if (result)
             {
