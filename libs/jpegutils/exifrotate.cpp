@@ -215,6 +215,7 @@ bool exifRotate(const QString& file)
             fclose(output_file);
         
             // reset the orientation of the temp file to normal
+            kdDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
             exifData.load(temp);
             exifData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
             exifData.applyChanges();
