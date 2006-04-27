@@ -343,6 +343,7 @@ void CameraThread::run()
                 {
                     if (autoRotate)
                     {
+                        kdDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("EXIF rotating file %1...").arg(file));
                         exifRotate(tempURL.path());
                     }
