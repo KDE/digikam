@@ -78,7 +78,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
 
-    about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developper"),
+    about->addAuthor("Peter Heckert", I18N_NOOP("Noise Reduction algorithm. Developer"),
                      "peter dot heckert at arcor dot de");
                      
     setAboutData(about);
@@ -118,9 +118,8 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
                      "and the spin control for fine adjustment. This controls edge detection sensitivity. "
                      "This value should be set so that edges and details are clearly visible "
-                     "and noise is smoothed out. This value is not bound to any intensity value, it is "
-                     "bound to the second derivative of intensity values. Simply adjust it and watch the " 
-                     "preview. Adjustment must be made carefully, because the gap between \"noisy\", "
+                     "and noise is smoothed out."
+                     "Adjustment must be made carefully, because the gap between \"noisy\", "
                      "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
                      "the focus of a camera."));
 
@@ -137,12 +136,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QWhatsThis::add( m_textureInput, i18n("<p><b>Texture</b>: this control set the texture accuracy. "
                 "This value can be used, to get more or less texture accuracy. When decreased, "
                 "then noise and texture are blurred out, when increased then texture is "
-                "amplified, but also noise will increase. It has almost no effect to image edges, "
-                "opposed to filter <b>Edge</b>, which would blur edges, when increased. "
-                "If <b>Edge</b> is adjusted in away so that edges are sharp, and there "
-                "is still too much area noise, then texture detail could be used to reduce noise "
-                "without blurring edges. Another way would be to decrease <b>Radius</b> and to increase "
-                "<b>Edge</b>."));
+                "amplified, but also noise will increase. It has almost no effect to image edges."));
 
     gridSettings->addMultiCellWidget(label4, 2, 2, 0, 0);
     gridSettings->addMultiCellWidget(m_textureInput, 2, 2, 1, 1);
@@ -151,34 +145,34 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
 
     QLabel *label7 = new QLabel(i18n("Sharpness:"), firstPage);  // Filter setting "Lookahead".
     
-    m_lookaheadInput = new KDoubleNumInput(firstPage);
-    m_lookaheadInput->setPrecision(1);
-    m_lookaheadInput->setRange(0.5, 10.0, 0.5, true);
-    QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Sharpness</b>: this control set the sharpness level. "
-                "This value defines the pixel distance in which the filter looks ahead for luminance "
-                "variations. When this value is increased, then spikenoise is erased. "
-                "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
-                "When this value is to high, then the adaptive filter cannot longer accurately track "
-                "image details, and noise can reappear or blur can occur."));
-    
+    m_sharpnessInput = new KDoubleNumInput(firstPage);
+    m_sharpnessInput->setPrecision(2);
+    m_sharpnessInput->setRange(0.0, 1.0, 0.1, true);
+    QWhatsThis::add( m_sharpnessInput, i18n("<p><b>Sharpness</b>: "
+            "This value improves the frequency response for the filter. "
+            "When it is too strong then not all noise can be removed, or spike noise may appear. "
+            "Set it near to maximum, if you want to remove very weak noise or JPEG-artifacts, "
+            "without loosing detail."));
+       
     gridSettings->addMultiCellWidget(label7, 3, 3, 0, 0);
-    gridSettings->addMultiCellWidget(m_lookaheadInput, 3, 3, 1, 1);
+    gridSettings->addMultiCellWidget(m_sharpnessInput, 3, 3, 1, 1);
 
     // -------------------------------------------------------------
 
-    QLabel *label5 = new QLabel(i18n("Edge:"), firstPage);     // Filter setting "Sharp".
+    QLabel *label5 = new QLabel(i18n("Edge Lookahead:"), firstPage);     // Filter setting "Sharp".
     
-    m_sharpnessInput = new KDoubleNumInput(firstPage);
-    m_sharpnessInput->setPrecision(2);
-    m_sharpnessInput->setRange(0.0, 2.0, 0.01, true);
-    QWhatsThis::add( m_sharpnessInput, i18n("<p><b>Edge</b>: this control set the edge accuracy for sharpness. "
-                "This value improves the frequency response for the filter. "
-                "When it is too strong then not all noise can be removed, or spike noise may appear. "
-                "Set it near to maximum, if you want to remove weak noise or JPEG-artifacts, "
-                "without loosing detail."));
+    m_lookaheadInput = new KDoubleNumInput(firstPage);
+    m_lookaheadInput->setPrecision(2);
+    m_lookaheadInput->setRange(0.0, 20.0, 0.01, true);
+    QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
+           "This value defines the pixel distance in which the filter looks ahead for Edges. "
+            "When this value is increased, then spikenoise is erased. "
+            "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
+            "When this value is to high, then the adaptive filter cannot longer accurately track "
+            "image details, and noise can reappear or blur can occur."));
 
     gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
-    gridSettings->addMultiCellWidget(m_sharpnessInput, 4, 4, 1, 1);
+    gridSettings->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
 
     // -------------------------------------------------------------
 
@@ -187,13 +181,9 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     m_phaseInput = new KDoubleNumInput(firstPage);
     m_phaseInput->setPrecision(1);
     m_phaseInput->setRange(0.5, 20.0, 0.5, true);
-    QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: this control set the phase shift for edges. "
-                "This value can be used to erodes singular spikes and it has a smooth effect to edges, "
-                "and sharpens edges by erosion, so noise at edges is eroded. The effect is dependant "
-                "from <b>Sharpness</b>, <b>Damping</b>, and <b>Edges</b>. Set it to minimum, "
-                "if you want to remove weak noise or JPEG-artifacts. When this value is increased, "
-                "then also increasing <b>Damping</b> is often useful. This setting can provides "
-                "sharpening and antialiasing effect to edges when spike noise is corrected."));
+    QWhatsThis::add( m_phaseInput, i18n("<p><b>Erosion</b>: "
+                "Use this to increase edge noise erosion and spike noise erosion. "
+                "(noise is removed by erosion)"));
     
     gridSettings->addMultiCellWidget(label10, 5, 5, 0, 0);
     gridSettings->addMultiCellWidget(m_phaseInput, 5, 5, 1, 1);
@@ -240,7 +230,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_gammaInput = new KDoubleNumInput(secondPage);
     m_gammaInput->setPrecision(1);
-    m_gammaInput->setRange(1.0, 5.0, 0.1, true);
+    m_gammaInput->setRange(0.3, 3.0, 0.1, true);
     QWhatsThis::add( m_gammaInput, i18n("<p><b>Gamma</b>: this control set the gamma tolerance of image. This value "
                 "can be used to increase the tolerance values for darker areas (which commonly "
                 "are more noisy). This results in more blur for shadow areas."));
@@ -332,14 +322,14 @@ void ImageEffect_NoiseReduction::resetValues()
     m_dampingInput->setEnabled(true);
     m_phaseInput->setEnabled(true);
                     
-    m_radiusInput->setValue(1.0);
+    m_radiusInput->setValue(5.0);
     m_lumToleranceInput->setValue(1.0);
     m_thresholdInput->setValue(0.08);
     m_textureInput->setValue(0.0);
     m_sharpnessInput->setValue(0.25);
     m_csmoothInput->setValue(1.0);
     m_lookaheadInput->setValue(2.0);
-    m_gammaInput->setValue(1.0);
+    m_gammaInput->setValue(1.4);
     m_dampingInput->setValue(5.0);
     m_phaseInput->setValue(1.0);
     
