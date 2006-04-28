@@ -253,7 +253,7 @@ void NoiseReduction::filterImage(void)
             dpix[1] = green2 + dl;
             dpix[0] =  blue2 + dl;
             
-            for (v = 0 ; !m_cancel && (v < bytes) ; v++)
+            for (v = 0 ; !m_cancel && (v < 3) ; v++)
             {
                 float value  = spix[v];
                 float fvalue = dpix[v];
