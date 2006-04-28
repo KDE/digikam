@@ -1408,13 +1408,13 @@ void RAWMetaLoader::mrw_dump_camera_settings_0114( off_t pos , uint32_t size  )
     uint32_t i ; 
     uint32_t nb = size/2 ;
   
-  //  printf("<CameraSetting0114> with %d entries at TFF offset %d\n", (int)nb , (int)pos) ;
+    // printf("<CameraSetting0114> with %d entries at TFF offset %d\n", (int)nb , (int)pos) ;
     
     for (i=0;i<nb;i++) 
     {
-      uint16_t v = mrw_get_16_tiff(pos+i*2)  ;
+        uint16_t v = mrw_get_16_tiff(pos+i*2)  ;
       
-  //    printf("  CS ") ;
+        // printf("  CS ") ;
       
       switch(i)
       {
@@ -1511,81 +1511,96 @@ void RAWMetaLoader::mrw_parse_ttf_block( off_t pos , uint32_t sz )
     if ( c1 == 'M' &&  c2 == 'M' ) 
     {
         kdDebug() << "Found MSB TIFF Header" << endl;
-      tiff_msb = 1;
-    } else if ( c1 == 'L' &&  c2 == 'L' ) {
-      /* should not happen in MRW but ... */
+        tiff_msb = 1;
+    } 
+    else if ( c1 == 'L' &&  c2 == 'L' ) 
+    {
+        /* should not happen in MRW but ... */
         kdDebug() << "Found LSB TIFF Header" << endl;
-      tiff_msb = 0;
-    } else {
+        tiff_msb = 0;
+    }   
+    else 
+    {
         kdDebug() << "Illegal header in TTF block" << endl;
     }
   
     magic = mrw_get_16_tiff(2) ; 
   
-    if ( magic != 42 ) {
+    if ( magic != 42 ) 
+    {
         kdDebug() << "Illegal magic number in TTF header" << endl;
     }
     
     /* Tiff offset of the 1st directory */
     dir = mrw_get_32_tiff(4) ; 
   
-    do {
-    uint16_t nb ;
-    nb = mrw_get_16_tiff(dir) ;
+    do 
+    {
+        uint16_t nb ;
+        nb = mrw_get_16_tiff(dir) ;
         kdDebug() << "<IFD> with " << nb << " entries at offset " << dir << endl;
   
-    for ( i=0;i<nb;i++) {
-      off_t    tag_pos   = dir+2+i*12 ;
-      mrw_dump_ttf_tag( tag_pos )  ;
-    }
+        for ( i=0;i<nb;i++) 
+        {
+            off_t    tag_pos   = dir+2+i*12 ;
+            mrw_dump_ttf_tag( tag_pos );
+        }
   
-    /* Tiff offset of the next directory */
-    dir = mrw_get_32_tiff(dir+2+12*nb) ; 
+        /* Tiff offset of the next directory */
+        dir = mrw_get_32_tiff(dir+2+12*nb) ; 
   
-    } while (dir != 0) ;
+    } 
+    while (dir != 0);
   
     if ( exif_start != 0 )
-      {
+    {
         uint16_t nb ;
         nb = mrw_get_16_tiff(exif_start) ;
         kdDebug() << "<EXIF> with " << nb << " entries at offset " << exif_start << endl;
         
-        for ( i=0;i<nb;i++) {
-      off_t    tag_pos   = exif_start+2+i*12 ;
-      mrw_dump_exif_tag( tag_pos )  ;
+        for ( i=0;i<nb;i++) 
+        {
+            off_t    tag_pos   = exif_start+2+i*12 ;
+            mrw_dump_exif_tag( tag_pos )  ;
         }  
-      }
+    }
   
     if ( maker_note != 0 )
-      {
+    {
         uint16_t nb ;
         nb = mrw_get_16_tiff(maker_note) ;
         kdDebug() << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << endl;
         
-        for ( i=0;i<nb;i++) {
-      off_t    tag_pos   = maker_note+2+i*12 ;
-      mrw_dump_maker_note_tag( tag_pos )  ;
+        for ( i=0;i<nb;i++) 
+        {
+            off_t    tag_pos   = maker_note+2+i*12 ;
+            mrw_dump_maker_note_tag( tag_pos )  ;
         }  
-      }
-  
-    if ( camera_settings_pos_1 != 0 ) {
-      mrw_dump_camera_settings_32bit( camera_settings_pos_1 , camera_settings_size_1 , 1 )  ;
     }
   
-    if ( camera_settings_pos_2 != 0 ) {
-      mrw_dump_camera_settings_32bit( camera_settings_pos_2 , camera_settings_size_2 , 2 )  ;
+    if ( camera_settings_pos_1 != 0 ) 
+    {
+      mrw_dump_camera_settings_32bit( camera_settings_pos_1 , camera_settings_size_1 , 1 );
     }
   
-    if ( camera_settings_pos_3 != 0 ) {
-      mrw_dump_camera_settings_32bit( camera_settings_pos_3 , camera_settings_size_3 , 3 )  ;
+    if ( camera_settings_pos_2 != 0 ) 
+    {
+      mrw_dump_camera_settings_32bit( camera_settings_pos_2 , camera_settings_size_2 , 2 );
     }
   
-    if ( camera_settings_pos_4 != 0 ) {
-      mrw_dump_camera_settings_4( camera_settings_pos_4 , camera_settings_size_4  )  ;
+    if ( camera_settings_pos_3 != 0 ) 
+    {
+      mrw_dump_camera_settings_32bit( camera_settings_pos_3 , camera_settings_size_3 , 3 );
+    }
+  
+    if ( camera_settings_pos_4 != 0 ) 
+    {
+      mrw_dump_camera_settings_4( camera_settings_pos_4 , camera_settings_size_4 );
     }
       
-    if ( camera_settings_pos_0114 != 0 ) {
-      mrw_dump_camera_settings_0114( camera_settings_pos_0114 , camera_settings_size_0114   )  ;
+    if ( camera_settings_pos_0114 != 0 ) 
+    {
+      mrw_dump_camera_settings_0114( camera_settings_pos_0114 , camera_settings_size_0114 );
     }
 }
 
@@ -1598,16 +1613,16 @@ bool RAWMetaLoader::mrw_parse_mrm_block()
     *   - 32bit MSB : the size of the MRM body in bytes
     */
   
-    char     c1 = mrw_get_8(pos+0) ; 
-    char     c2 = mrw_get_8(pos+1) ; 
-    char     c3 = mrw_get_8(pos+2) ; 
-    char     c4 = mrw_get_8(pos+3) ; 
-    uint32_t sz = mrw_get_32_m(pos+4) ;    
+    char     c1 = mrw_get_8(pos+0); 
+    char     c2 = mrw_get_8(pos+1); 
+    char     c3 = mrw_get_8(pos+2); 
+    char     c4 = mrw_get_8(pos+3); 
+    uint32_t sz = mrw_get_32_m(pos+4);    
   
     if ( c1!='\0' || c2!='M' ||  c3!='R' ||  c4!='M' ) 
-      {
-          kdDebug() << "MRM block not found" << endl;
-      }
+    {
+        kdDebug() << "MRM block not found" << endl;
+    }
   
     /* The image data start immediately after the MRM block */ 
     image_start = pos + 8 + sz ; 
