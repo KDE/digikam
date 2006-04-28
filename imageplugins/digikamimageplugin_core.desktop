@@ -2,7 +2,7 @@
 Name=ImagePlugin_Core
 Name[el]=ΠρόσθετοΕικόνας_Πυρήνας
 Name[it]=PluginImmagini_Nocciolo
-Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ចម្បង
+Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ស្នូល
 Name[nl]=Afbeeldingsplugin_Kern
 Name[sr]=Језгро прикључака
 Name[sr@Latn]=Jezgro priključaka
@@ -20,7 +20,7 @@ Comment[et]=DigiKami peamine pildiplugin
 Comment[eu]=digiKam-en irudi-pluginen nukleoa
 Comment[it]=Plugin delle immagini centrale di digiKam
 Comment[ja]=digiKam コア画像プラグイン
-Comment[km]=កម្មវិធី​ជំនួយ​រូបភាព​ចម្បង​សម្រាប់ digiKam
+Comment[km]=កម្មវិធី​ជំនួយ​រូបភាព​ស្នូល​សម្រាប់ digiKam
 Comment[nl]=digiKam kernafbeeldingsplugin
 Comment[pa]=ਡਿਜ਼ੀਕੈਮ ਕੋਰ ਚਿੱਤਰ ਪਲੱਗਿੰਨ
 Comment[pl]=Podstawowa wtyczka graficzna digiKama

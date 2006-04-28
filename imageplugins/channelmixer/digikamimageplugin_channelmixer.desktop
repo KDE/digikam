@@ -2,7 +2,7 @@
 Name=ImagePlugin_ChannelMixer
 Name[el]=ΠρόσθετοΕικόνας_ΑνάμειξηΚαναλιών
 Name[it]=PluginImmagini_MixerDeiCanali
-Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_កម្មវិធី​លាយ​ឆានែល
+Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ឧបករណ៍​លាយ​ឆានែល
 Name[ms]=ImagePlugin_PengadunSaluran
 Name[nl]=Afbeeldingsplugin_KanaalMixer
 Name[pt_BR]=Plug-in de mixer de canais
@@ -25,7 +25,7 @@ Comment[eu]=Irudiaren kolore-kanalak nahasteko digiKam plugina
 Comment[fr]=Module externe pour mixer les canaux des couleurs d'une image
 Comment[it]=Plugin di mixer dei canali dei colori per digiKam
 Comment[ja]=digiKam カラーチャンネルミキサープラグイン
-Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ឲ្យ​មាន​កម្មវិធី​លាយ​ឆានែល​ពណ៌​របស់​រូបភាព
+Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ឲ្យ​មាន​ឧបករណ៍​លាយ​ឆានែល​ពណ៌​របស់​រូបភាព
 Comment[ms]=Plugin Warna Imej Pengadun Saluran untuk digiKam
 Comment[nl]=digiKam-plugin voor kanaalmixer
 Comment[pa]=ਡਿਜ਼ੀਕੈਮ ਲਈ ਚਿੱਤਰ ਰੰਗ ਚੈਨਲ ਮਿਕਸਰ ਪਲੱਗਿੰਨ
