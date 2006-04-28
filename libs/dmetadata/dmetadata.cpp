@@ -102,7 +102,8 @@ QByteArray DMetadata::getIptc() const
 
 void DMetadata::setComments(const QByteArray& data)
 {
-    const std::string str(data.data());
+    QString string(data);
+    const std::string str(string.utf8());
     d->imageComments = str;
 }
     
