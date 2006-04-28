@@ -163,13 +163,13 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     
     m_lookaheadInput = new KDoubleNumInput(firstPage);
     m_lookaheadInput->setPrecision(2);
-    m_lookaheadInput->setRange(0.0, 20.0, 0.01, true);
+    m_lookaheadInput->setRange(0.01, 20.0, 0.01, true);
     QWhatsThis::add( m_lookaheadInput, i18n("<p><b>Edge</b>: "
            "This value defines the pixel distance in which the filter looks ahead for Edges. "
-            "When this value is increased, then spikenoise is erased. "
-            "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
-            "When this value is to high, then the adaptive filter cannot longer accurately track "
-            "image details, and noise can reappear or blur can occur."));
+           "When this value is increased, then spikenoise is erased. "
+           "You can eventually readjust filter <b>Edge</b>, when you changed this setting. "
+           "When this value is to high, then the adaptive filter cannot longer accurately track "
+           "image details, and noise can reappear or blur can occur."));
 
     gridSettings->addMultiCellWidget(label5, 4, 4, 0, 0);
     gridSettings->addMultiCellWidget(m_lookaheadInput, 4, 4, 1, 1);
