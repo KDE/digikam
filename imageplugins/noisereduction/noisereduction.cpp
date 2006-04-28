@@ -149,7 +149,7 @@ void NoiseReduction::filterImage(void)
             memcpy(src + n*bytes, destPR + (col + width*n)*bytes, bytes);
                 
         for (int n = 0 ; n < height ; n++)
-            memcpy(dest + n*bytes, destPR + (col + width*n)*bytes, bytes);
+            memcpy(dest + n*bytes, srcPR + (col + width*n)*bytes, bytes);
         
         blur_line (data+w, data2+w, buffer+w, rbuf+w, tbuf+w, src, dest, height);
         
