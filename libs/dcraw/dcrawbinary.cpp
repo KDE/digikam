@@ -77,15 +77,13 @@ bool DcrawBinary::checkSystem()
                            kapp->activeWindow(),
                            i18n("<qt><p>Unable to find the dcraw executable:<br> "
                                 "This program is required by %1 to support raw file formats. "
-                                "You can run %2 without this, but you will not be able "
+                                "You can run %1 without this, but you will not be able "
                                 "to view or edit any images in raw file formats. "
                                 "Please install dcraw as a package from your distributor "
-                                "or <a href=\"%3\">download the source</a>.</p>"
-                                "<p>Do you want to continue starting %3?</p></qt>")
+                                "or <a href=\"%2\">download the source</a>.</p>"
+                                "<p>Do you want to continue starting %1?</p></qt>")
                                 .arg(appName)
-                                .arg(appName)
-                                .arg("http://www.cybercom.net/~dcoffin/dcraw/")
-                                .arg(appName),
+                                .arg("http://www.cybercom.net/~dcoffin/dcraw/"),
                            QString::null,
                            KStdGuiItem::cont(),
                            QString::fromLatin1("dcrawdetection"),
