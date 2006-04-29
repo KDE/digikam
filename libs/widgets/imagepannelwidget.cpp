@@ -308,7 +308,7 @@ void ImagePannelWidget::slotOriginalImageRegionChanged(bool target)
 void ImagePannelWidget::updateSelectionInfo(QRect rect)
 {
     QToolTip::add( m_imagePanIconWidget, 
-                   i18n("Top left: (%1, %2)<br>Bottom right: (%3, %4)")
+                   i18n("<nobr>Top left: (%1,%2)</nobr><br><nobr>Bottom right: (%3,%4)</nobr>")
                         .arg(rect.left()).arg(rect.top())
                         .arg(rect.right()).arg(rect.bottom()));
 }
