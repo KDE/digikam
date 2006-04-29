@@ -9,7 +9,7 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.8.2-beta1"
+version    = "0.8.2-beta1+svn534957"
 docs       = "no"
 
 svnbase    = "https://ach@svn.kde.org/home/kde"
