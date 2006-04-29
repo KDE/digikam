@@ -3,7 +3,8 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 noinst_LTLIBRARIES = libdmetadataloader.la
 
-libdmetadataloader_la_SOURCES = dmetaloader.cpp jpegmetaloader.cpp pngmetaloader.cpp tiffmetaloader.cpp rawmetaloader.cpp
+libdmetadataloader_la_SOURCES = dmetaloader.cpp jpegmetaloader.cpp pngmetaloader.cpp tiffmetaloader.cpp \
+	                        rawmetaloader.cpp mrwparser.cpp 
 
 libdmetadataloader_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIBJPEG) $(LIB_TIFF) $(LIB_PNG)
 
