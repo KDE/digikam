@@ -25,14 +25,11 @@
 // C++ includes.
 
 #include <cmath>
+#include <cstdio>
 
 // Qt includes.
 
-#include <qfile.h>
-
-// KDE includes.
-
-#include <kdebug.h>
+#include <qstring.h>
 
 // Exiv2 includes.
 
@@ -67,6 +64,7 @@ MRWParser::MRWParser()
     warn_counter              = 0; 
     exif_start                = 0; 
     maker_note                = 0; 
+    printim_start             = 0;
     camera_settings_pos_1     = 0; 
     camera_settings_size_1    = 0; 
     camera_settings_pos_2     = 0;
@@ -83,9 +81,10 @@ MRWParser::~MRWParser()
 {
 }
 
-bool MRWParser::parseMRW(const QString& filePath) 
+bool MRWParser::parseMRW(const char *fname) 
 {
-    load_file( QFile::encodeName(filePath));
+    if (!load_file(fname))
+       return false;
     
     prd.valid = 0; 
     
@@ -106,7 +105,7 @@ Exiv2::ExifData MRWParser::getExif()
     
 // Load the file into memory
 
-void MRWParser::load_file(const char *fname) 
+bool MRWParser::load_file(const char *fname) 
 {
     FILE *f;
     size_t sz;
@@ -117,8 +116,8 @@ void MRWParser::load_file(const char *fname)
     
     if (f==NULL) 
     {
-        kdDebug() << "Failed to open file " << fname << endl;
-        return;
+        std::cerr << "Failed to open file " << fname << "\n";
+        return false;
     }
     
     fseek(f , 0 , SEEK_END);
@@ -130,20 +129,24 @@ void MRWParser::load_file(const char *fname)
     
     rawdata = new uchar[rawsize]; 
     
-    kdDebug() << "SIZE: "<< fname << " : " << rawsize << endl;
+    std::cerr << "SIZE: "<< fname << " : " << rawsize << "\n";
     
     if ( !rawdata ) 
     {
-        kdDebug() << "Failed to allocate " << rawsize << " bytes" << endl;
+        std::cerr << "Failed to allocate " << rawsize << " bytes" << "\n";
+        return false;
     }
     
     sz = fread(rawdata, 1, rawsize, f);
     
     if (sz!=rawsize) 
     {
-        kdDebug() << "Failed to load " << rawsize << " bytes from file " 
-                  << fname << ". Only read " << sz << endl;
+        std::cerr << "Failed to load " << rawsize << " bytes from file " 
+                  << fname << ". Only read " << sz << "\n";
+        return false;
     }  
+
+    return true;
 }
 
 // Check that it is valid to access count bytes at offset pos
@@ -153,8 +156,8 @@ void MRWParser::check_valid(off_t pos, int count)
     if (count>=0) return; 
     if ( pos<0 || pos+count>rawsize ) 
     {
-        kdDebug() << "Trying to access " << pos << " bytes at offset #" 
-                  << count << endl;
+        std::cerr << "Trying to access " << pos << " bytes at offset #" 
+                  << count << "\n";
     }
 }
 
@@ -168,8 +171,7 @@ int16_t MRWParser::get_16_l(off_t pos)
 {
     check_valid(pos, 2) ; 
     return (int16_t) ( (((uint8_t)rawdata[pos+0]) << 0) + 
-                        (((uint8_t)rawdata[pos+1]) << 8) 
-                        ) ; 
+                        (((uint8_t)rawdata[pos+1]) << 8) ); 
 }
 
 int32_t MRWParser::get_32_l(off_t pos) 
@@ -178,16 +180,14 @@ int32_t MRWParser::get_32_l(off_t pos)
     return (int32_t) ( (((uint8_t)rawdata[pos+0]) <<  0) + 
                         (((uint8_t)rawdata[pos+1]) <<  8) + 
                         (((uint8_t)rawdata[pos+2]) << 16) + 
-                        (((uint8_t)rawdata[pos+3]) << 24) 
-                        ) ;
+                        (((uint8_t)rawdata[pos+3]) << 24) );
 }
 
 int16_t MRWParser::get_16_m(off_t pos) 
 {
     check_valid(pos, 2) ; 
     return (int16_t) ( (((uint8_t)rawdata[pos+1]) << 0) + 
-                        (((uint8_t)rawdata[pos+0]) << 8) 
-                        ) ; 
+                        (((uint8_t)rawdata[pos+0]) << 8) ); 
 }
 
 int32_t MRWParser::get_32_m(off_t pos) 
@@ -196,8 +196,7 @@ int32_t MRWParser::get_32_m(off_t pos)
     return (int32_t) ( (((uint8_t)rawdata[pos+3]) <<  0) + 
                         (((uint8_t)rawdata[pos+2]) <<  8) + 
                         (((uint8_t)rawdata[pos+1]) << 16) + 
-                        (((uint8_t)rawdata[pos+0]) << 24) 
-                        ) ;
+                        (((uint8_t)rawdata[pos+0]) << 24) );
 }
 
 void MRWParser::parse_wbg_block( off_t pos , uint32_t sz )
@@ -206,29 +205,27 @@ void MRWParser::parse_wbg_block( off_t pos , uint32_t sz )
     uint16_t Coef[4]; 
   
     if ( sz != 12 ) 
-    {
-        kdDebug() << "Illegal size " << sz << " for WBG block. Should be 24" << endl;
-    }
+        std::cerr << "Illegal size " << sz << " for WBG block. Should be 24" << "\n";
     
-    Norm[0] = get_8(pos + 0) ;
-    Norm[1] = get_8(pos + 1) ;
-    Norm[2] = get_8(pos + 2) ;
-    Norm[3] = get_8(pos + 3) ;
+    Norm[0] = get_8(pos + 0);
+    Norm[1] = get_8(pos + 1);
+    Norm[2] = get_8(pos + 2);
+    Norm[3] = get_8(pos + 3);
   
-    Coef[0] = get_16_m(pos +  4) ;
-    Coef[1] = get_16_m(pos +  6) ;
-    Coef[2] = get_16_m(pos +  8) ;
-    Coef[3] = get_16_m(pos + 10) ;
+    Coef[0] = get_16_m(pos +  4);
+    Coef[1] = get_16_m(pos +  6);
+    Coef[2] = get_16_m(pos +  8);
+    Coef[3] = get_16_m(pos + 10);
 }
 
 void MRWParser::parse_rif_block( off_t pos , uint32_t sz )
 {
-    off_t at ;
-    uint8_t u8 ;
-    float iso ; 
-    const char *zone_matching ;
-    const char *color_mode ;
-    const char *prg_mode ;
+    off_t       at;
+    uint8_t     u8;
+    float       iso; 
+    const char *zone_matching;
+    const char *color_mode;
+    const char *prg_mode;
     
     #define REQSIZE(x) if ( sz < x ) return ;   
     
@@ -357,9 +354,7 @@ void MRWParser::parse_prd_block( off_t pos , uint32_t sz )
     int i ;
     
     if ( sz != 24 ) 
-    {
-        kdDebug() << "Illegal size " << sz << " for PRD block. Should be 24" << endl;
-    }
+        std::cerr << "Illegal size " << sz << " for PRD block. Should be 24" << "\n";
     
     /* Field  offset  size   description
     * 
@@ -416,8 +411,8 @@ void MRWParser::check_valid_tiff(off_t pos, int count)
     if (count>=0) return; 
     if ( pos<0 || pos+count>tiff_size ) 
     {
-        kdDebug() << "Trying to access " << pos << " bytes at offset #" 
-                  << count << " in TTF block" << endl;
+        std::cerr << "Trying to access " << pos << " bytes at offset #" 
+                  << count << " in TTF block" << "\n";
     }
 }
 
@@ -596,16 +591,14 @@ QByteArray MRWParser::get_ttf_tag_value(off_t pos)
             break ; 
         case TIFF_TYPE_DOUBLE:
             break ; 
-        default:
-            break ; 
     } 
+
+    return QByteArray();
 }
 
 void MRWParser::dump_ttf_tag(off_t pos) 
 {
     uint16_t id    = get_16_tiff(pos+0); 
-    uint16_t type  = get_16_tiff(pos+2);
-    uint32_t count = get_32_tiff(pos+4);
     
     switch(id) 
     {
@@ -724,7 +717,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
         }
         case 0xc4a5: /*  PrintIM */
         {
-            uint32_t printim_start = get_32_tiff(pos+8); 
+            printim_start = get_32_tiff(pos+8); 
             break;
         }
         default:
@@ -737,8 +730,6 @@ void MRWParser::dump_ttf_tag(off_t pos)
 void MRWParser::dump_exif_tag(off_t pos) 
 {
     uint16_t id    = get_16_tiff(pos+0); 
-    uint16_t type  = get_16_tiff(pos+2) ;
-    uint32_t count = get_32_tiff(pos+4) ;
 
     switch(id) 
     {
@@ -1042,8 +1033,6 @@ void MRWParser::dump_exif_tag(off_t pos)
 void MRWParser::dump_maker_note_tag(off_t pos) 
 {
     uint16_t id    = get_16_tiff(pos+0); 
-    uint16_t type  = get_16_tiff(pos+2) ;
-    uint32_t count = get_32_tiff(pos+4) ;
 
     switch(id) 
     {
@@ -1240,8 +1229,8 @@ void MRWParser::dump_camera_settings_32bit( off_t pos , uint32_t size ,int mode 
   
     for (i=0;i<nb;i++) 
     {
-        uint32_t v = get_32_tiff(pos+i*4)  ;
-        // printf("=== 0x%04lx = %08lx\n" ,(unsigned long) i , (unsigned long)  v) ;
+        /*uint32_t v = get_32_tiff(pos+i*4);
+        printf("=== 0x%04lx = %08lx\n" ,(unsigned long) i , (unsigned long)  v);*/
     }
 }
 
@@ -1254,8 +1243,8 @@ void MRWParser::dump_camera_settings_16bit( off_t pos , uint32_t size ,int mode 
   
     for (i=0;i<nb;i++) 
     {
-        uint16_t v = get_16_tiff(pos+i*2)  ;
-        // printf("=== 0x%04lx = %04lx\n" ,(unsigned long) i , (unsigned long)  v) ;
+        /*uint16_t v = get_16_tiff(pos+i*2);
+        printf("=== 0x%04lx = %04lx\n" ,(unsigned long) i , (unsigned long)  v)*/;
     }
 }
 
@@ -1472,35 +1461,31 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
     tiff_size = sz ;
   
     if ( sz < 8 ) 
-    {
-        kdDebug() << "Illegal size " << sz << " for TTF block. Should be 8" << endl;
-    }
+        std::cerr << "Illegal size " << sz << " for TTF block. Should be 8" << "\n";
     
     c1 = get_8_tiff(0) ; 
     c2 = get_8_tiff(1) ; 
   
     if ( c1 == 'M' &&  c2 == 'M' ) 
     {
-        kdDebug() << "Found MSB TIFF Header" << endl;
+        std::cerr << "Found MSB TIFF Header" << "\n";
         tiff_msb = 1;
     } 
     else if ( c1 == 'L' &&  c2 == 'L' ) 
     {
         /* should not happen in MRW but ... */
-        kdDebug() << "Found LSB TIFF Header" << endl;
+        std::cerr << "Found LSB TIFF Header" << "\n";
         tiff_msb = 0;
     }   
     else 
     {
-        kdDebug() << "Illegal header in TTF block" << endl;
+        std::cerr << "Illegal header in TTF block" << "\n";
     }
   
     magic = get_16_tiff(2) ; 
   
     if ( magic != 42 ) 
-    {
-        kdDebug() << "Illegal magic number in TTF header" << endl;
-    }
+        std::cerr << "Illegal magic number in TTF header" << "\n";
     
     /* Tiff offset of the 1st directory */
     dir = get_32_tiff(4) ; 
@@ -1509,7 +1494,7 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
     {
         uint16_t nb ;
         nb = get_16_tiff(dir) ;
-        kdDebug() << "<IFD> with " << nb << " entries at offset " << dir << endl;
+        std::cerr << "<IFD> with " << nb << " entries at offset " << dir << "\n";
   
         for ( i=0;i<nb;i++) 
         {
@@ -1527,7 +1512,7 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
     {
         uint16_t nb ;
         nb = get_16_tiff(exif_start) ;
-        kdDebug() << "<EXIF> with " << nb << " entries at offset " << exif_start << endl;
+        std::cerr << "<EXIF> with " << nb << " entries at offset " << exif_start << "\n";
         
         for ( i=0;i<nb;i++) 
         {
@@ -1540,7 +1525,7 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
     {
         uint16_t nb ;
         nb = get_16_tiff(maker_note) ;
-        kdDebug() << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << endl;
+        std::cerr << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << "\n";
         
         for ( i=0;i<nb;i++) 
         {
@@ -1591,9 +1576,7 @@ bool MRWParser::parse_mrm_block()
     uint32_t sz = get_32_m(pos+4);    
   
     if ( c1!='\0' || c2!='M' ||  c3!='R' ||  c4!='M' ) 
-    {
-        kdDebug() << "MRM block not found" << endl;
-    }
+        std::cerr << "MRM block not found" << "\n";
   
     /* The image data start immediately after the MRM block */ 
     image_start = pos + 8 + sz ; 

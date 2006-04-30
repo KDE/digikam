@@ -18,6 +18,10 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qfile.h>
+
 // Local includes.
 
 #include "mrwparser.h"
@@ -44,7 +48,7 @@ bool RAWMetaLoader::load(const QString& filePath)
     // Try to parse MRW RAW file
     
     MRWParser mrwparser;
-    if (mrwparser.parseMRW(filePath))
+    if (mrwparser.parseMRW(QFile::encodeName(filePath)))
     {
         exifMetadata() = mrwparser.getExif();
         return true;

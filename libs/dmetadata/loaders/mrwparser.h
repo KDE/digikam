@@ -28,10 +28,6 @@ extern "C"
 #include <stdint.h> 
 }
 
-// Qt includes.
-
-#include <qstring.h>
-
 // Exiv2 includes.
 
 #include <exiv2/exif.hpp>
@@ -51,7 +47,7 @@ public:
     MRWParser();
     ~MRWParser();
 
-    bool parseMRW(const QString& filePath);
+    bool parseMRW(const char *fname);
 
     Exiv2::ExifData getExif();
 
@@ -141,7 +137,8 @@ private:
     
     uint32_t    exif_start;                /* start of EXIF related to tiff_base */
     uint32_t    maker_note;                /* start of MakerNote */
-    
+    uint32_t    printim_start;
+
     uint32_t    camera_settings_pos_1;     /* start of CameraSettings model 1 */
     uint32_t    camera_settings_size_1;    /* size of CameraSettings model 1 */
     
@@ -163,7 +160,7 @@ private:
     
 private: 
     
-    void    load_file(const char *fname);
+    bool    load_file(const char *fname);
     void    check_valid(off_t pos, int count);
     
     char    get_8(off_t pos);
