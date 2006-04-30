@@ -406,11 +406,14 @@ void AlbumManager::scanPAlbums()
         if (info.url.isEmpty() || info.url == "/")
             continue;
 
-        // Get its parent
-        KURL u = info.url;
+        // Despite its name info.url is a QString.
+        // setPath takes care for escaping characters that are valid for files but not for URLs ('#')
+        KURL u;
+        u.setPath(info.url);
         QString name = u.fileName();
+        // Get its parent
         QString purl = u.upURL().path(-1);
-        
+
         PAlbum* parent = d->pAlbumDict.find(purl);
         if (!parent)
         {
