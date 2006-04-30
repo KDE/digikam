@@ -124,6 +124,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 119741 (Restore image editor if already open)
 ==> 122374 (Ignores read-only permission during saving)
 ==> 121367 (Add properties tab to digiKam and (especially) IE)
-
+==> 125926 (Directories with a '#' in their name are not properly detected when created outside digikam)
 
 ----------------------------------------------------------------------------------------------------

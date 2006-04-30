@@ -1,18 +1,6 @@
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-0.8.* + 0.9.0:
---------------
-
-Please fix, so we can get 0.8.2-final out as soon as possible and forget the 0.8
-branch:
-
-1) Bug 125926: digikam: directories with a '#' in their name are not properly detected when created outside digikam or ... 
-
-2) Several reports on ml about loss of exif info on (auto)rotate 
-
--------------------------------------------------
-
 * Media support
        o Make media menu, cmdline option and dcop call itentical:
                + usbdisk camera: dcop call should magicly umount as cmdline
