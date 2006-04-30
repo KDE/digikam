@@ -124,7 +124,7 @@ private:
     const char *rawfile ; 
     
     off_t       rawsize ;                  /* Size of the raw file */
-    uchar      *rawdata ;                  /* The raw file data (exactly rawsize bytes) */
+    char       *rawdata ;                  /* The raw file data (exactly rawsize bytes) */
     
     off_t       image_start ;              /* The position in the raw file where the image data starts */
     
@@ -178,7 +178,7 @@ private:
     int16_t get_16_tiff(off_t pos);
     int32_t get_32_tiff(off_t pos);
 
-    QByteArray get_ttf_tag_value(off_t pos);
+    Exiv2::DataBuf get_ttf_tag_value(off_t pos);
     
     void    dump_ttf_tag(off_t pos);
     void    dump_exif_tag(off_t pos);
