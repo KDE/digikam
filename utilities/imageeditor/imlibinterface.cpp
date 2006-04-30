@@ -1200,7 +1200,10 @@ bool ImlibInterface::saveAction(const QString& saveFile, int JPEGcompression,
     // file saved. now preserve the permissions
     if (d->filePermissions != 0)
     {
-        ::chmod(QFile::encodeName(saveFile), d->filePermissions);
+        // Add the user write permission.
+        // There is a problem with lost Exif info on read only files,
+        // and there won't be sophisticated handling for this in the 0.8 branch any more.
+        ::chmod(QFile::encodeName(saveFile), d->filePermissions | S_IWRITE);
     }
 
     return true;
