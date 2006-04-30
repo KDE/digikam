@@ -18,6 +18,11 @@
  *
  * ============================================================ */
 
+// C includes
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
 // Qt includes.
 
 #include <qlabel.h>
@@ -1173,11 +1178,8 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
+        if (!moveFile())
         {
-            KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                               i18n("Error Saving File"));
             finishSaving(false);
             return;
         }
@@ -1228,11 +1230,8 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
-        if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()),
-              QFile::encodeName(m_savingContext->destinationURL.path())) != 0)
+        if (!moveFile())
         {
-            KMessageBox::error(this, i18n("Failed to save to new file"),
-                               i18n("Error Saving File"));
             finishSaving(false);
             return;
         }
@@ -1288,6 +1287,7 @@ void EditorWindow::startingSave(const KURL& url)
 
     m_savingContext->srcURL         = url;
     m_savingContext->destinationURL = m_savingContext->srcURL;
+    m_savingContext->destinationExisted = true;
     m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
     m_savingContext->saveTempFile   = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
@@ -1452,6 +1452,42 @@ bool EditorWindow::checkPermissions(const KURL& url)
 
     return true;
 }
+
+bool EditorWindow::moveFile()
+{
+    QCString dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
+
+    // store old permissions
+    mode_t filePermissions = S_IREAD | S_IWRITE;
+    if (m_savingContext->destinationExisted)
+    {
+        struct stat stbuf;
+        if (::stat(dstFileName, &stbuf) == 0)
+        {
+            filePermissions = stbuf.st_mode;
+        }
+    }
+
+    // rename tmp file to dest
+    if (::rename(QFile::encodeName(m_savingContext->saveTempFile->name()), dstFileName) != 0)
+    {
+        KMessageBox::error(this, i18n("Failed to overwrite original file"),
+                           i18n("Error Saving File"));
+        return false;
+    }
+
+    // restore permissions
+    if (m_savingContext->destinationExisted)
+    {
+        if (::chmod(dstFileName, filePermissions) != 0)
+        {
+            kdWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
+        }
+    }
+
+    return true;
+}
+
 
 
 }  // namespace Digikam

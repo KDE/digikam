@@ -128,6 +128,7 @@ protected:
     void startingSave(const KURL& url);
     bool startingSaveAs(const KURL& url);
     bool checkPermissions(const KURL& url);
+    bool moveFile();
 
     virtual void finishSaving(bool success);
 
