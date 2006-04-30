@@ -50,7 +50,6 @@ public:
 
 private:
     
-    uchar* readRawProfile(png_textp text, png_uint_32 *length, int ii);
     void   writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
                            char *profile_data, png_uint_32 length);
 

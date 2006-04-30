@@ -648,7 +648,25 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             }
             case(DImg::EXIF):
             {
-                writeRawProfile(png_ptr, info_ptr, "exif", ba.data(), (png_uint_32) ba.size());
+                const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+                QByteArray profile; 
+
+                // If bytes array do not start with ImageMagick header, Exif metadata have been created from 
+                // scratch using Exiv2. In this case, we need to add Exif header from start.
+                if (memcmp(ba.data(), "exif", 4) != 0 && 
+                    memcmp(ba.data(), "iptc", 4) != 0 &&
+                    memcmp(ba.data(), "profile", 7) != 0)
+                {
+                    profile = QByteArray(ba.size() + sizeof(ExifHeader));
+                    memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
+                    memcpy(profile.data()+sizeof(ExifHeader), ba.data(), ba.size());
+                }
+                else
+                {
+                    profile = ba;
+                }
+
+                writeRawProfile(png_ptr, info_ptr, "exif", profile.data(), (png_uint_32) profile.size());
                 break;
             }
             case(DImg::IPTC):
@@ -768,85 +786,6 @@ bool PNGLoader::sixteenBit() const
     return m_sixteenBit;    
 }
 
-uchar* PNGLoader::readRawProfile(png_textp text, png_uint_32 *length, int ii)
-{
-    uchar          *info = 0;
-    
-    register long   i;
-    
-    register uchar *dp;
-    
-    register        png_charp sp;
-    
-    png_uint_32     nibbles;
-    
-    unsigned char unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
-                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
-                              0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
-                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
-                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,10,11,12,
-                              13,14,15};
-    
-    sp = text[ii].text+1;
-    
-    // Look for newline 
-
-    while (*sp != '\n')
-        sp++;
-    
-    // Look for length 
-
-    while (*sp == '\0' || *sp == ' ' || *sp == '\n')
-        sp++;
-    
-    *length = (png_uint_32) atol(sp);
-    
-    while (*sp != ' ' && *sp != '\n')
-        sp++;
-    
-    // Allocate space 
-    
-    if (*length == 0)
-    {
-        kdDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
-        return (false);
-    }
-    
-    info = new uchar[*length];
-    
-    if (!info)
-    {
-        kdDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
-        return (false);
-    }
-    
-    // Copy profile, skipping white space and column 1 "=" signs 
-
-    dp      = info;
-    nibbles = *length * 2;
-    
-    for (i = 0; i < (long) nibbles; i++)
-    {
-        while (*sp < '0' || (*sp > '9' && *sp < 'a') || *sp > 'f')
-        {
-            if (*sp == '\0')
-            {
-                kdDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
-                return (false);
-            }
-            
-            sp++;
-        }
-    
-        if (i%2 == 0)
-            *dp = (uchar) (16*unhex[(int) *sp++]);
-        else
-            (*dp++) += unhex[(int) *sp++];
-    }
-    
-    return info;
-}
-
 void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *profile_type, 
                                 char *profile_data, png_uint_32 length)
 {
@@ -859,8 +798,8 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     png_charp      dp;
     
     png_uint_32    allocated_length, description_length;
-    
-    uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
+    const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
     
     kdDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length << endl;
     
@@ -868,7 +807,7 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
     description_length = strlen((const char *) profile_type);
     allocated_length   = (png_uint_32) (length*2 + (length >> 5) + 20 + description_length);
     
-    text[0].text   = (png_charp) png_malloc(ping,allocated_length);
+    text[0].text   = (png_charp) png_malloc(ping, allocated_length);
     text[0].key    = (png_charp) png_malloc(ping, (png_uint_32) 80);
     text[0].key[0] = '\0';
     
