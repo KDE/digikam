@@ -118,7 +118,7 @@ ImageEffect_NoiseReduction::ImageEffect_NoiseReduction(QWidget* parent, QString 
     QWhatsThis::add( m_thresholdInput, i18n("<p><b>Threshold</b>: use the slider for coarse adjustment, "
                      "and the spin control for fine adjustment. This controls edge detection sensitivity. "
                      "This value should be set so that edges and details are clearly visible "
-                     "and noise is smoothed out."
+                     "and noise is smoothed out. "
                      "Adjustment must be made carefully, because the gap between \"noisy\", "
                      "\"smooth\", and \"blur\" is very small. Adjust it as carefully as you would adjust "
                      "the focus of a camera."));
