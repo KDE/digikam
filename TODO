@@ -43,7 +43,6 @@
 * Showfoto: 
 
    - hide toolbar in fullscreen option don't work.
-   - with thumbbar in horizontal direction, tooltip don't work.
    - if no image is loaded, selection in canvas is possible.
 
 * ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)

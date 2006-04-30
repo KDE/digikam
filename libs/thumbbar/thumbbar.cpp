@@ -646,9 +646,18 @@ ThumbBarItem* ThumbBarItem::prev() const
 
 QRect ThumbBarItem::rect() const
 {
-    return QRect(0, m_pos,
-                 m_view->visibleWidth(),
-                 m_view->d->tileSize + 2*m_view->d->margin);
+    if (m_view->d->orientation == ThumbBarView::Vertical)
+    {
+        return QRect(0, m_pos,
+                     m_view->visibleWidth(),
+                     m_view->d->tileSize + 2*m_view->d->margin);
+    }
+    else
+    {
+        return QRect(m_pos, 0,
+                     m_view->d->tileSize + 2*m_view->d->margin,
+                     m_view->visibleHeight());
+    }
 }
 
 void ThumbBarItem::repaint()
