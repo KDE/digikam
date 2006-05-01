@@ -71,6 +71,9 @@ public:
         labelFilePermissions   = 0;
         labelImageMime         = 0;
         labelImageDimensions   = 0;
+        labelImageCompression  = 0;
+        labelImageBitDepth     = 0;
+        labelImageColorMode    = 0;
         labelPhotoMake         = 0;
         labelPhotoModel        = 0;
         labelPhotoDateTime     = 0;
@@ -103,7 +106,10 @@ public:
     
     KSqueezedTextLabel *labelImageMime;
     KSqueezedTextLabel *labelImageDimensions;
-    
+    KSqueezedTextLabel *labelImageCompression;
+    KSqueezedTextLabel *labelImageBitDepth;
+    KSqueezedTextLabel *labelImageColorMode;
+
     KSqueezedTextLabel *labelPhotoMake;
     KSqueezedTextLabel *labelPhotoModel;
     KSqueezedTextLabel *labelPhotoDateTime;
@@ -126,7 +132,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
     QWidget *settingsArea       = new QWidget(this);
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 29, 1, KDialog::marginHint(), 0);
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 32, 1, KDialog::marginHint(), 0);
 
     // --------------------------------------------------
     
@@ -141,6 +147,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     QLabel *title2              = new QLabel(i18n("<big><b>Image Properties</b></big>"), settingsArea);
     QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), settingsArea);
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
+    QLabel *compression         = new QLabel(i18n("<b>Compression</b>:"), settingsArea);
+    QLabel *bitDepth            = new QLabel(i18n("<nobr><b>Bits Depth</b></nobr>:"), settingsArea);
+    QLabel *colorMode           = new QLabel(i18n("<nobr><b>Color Mode</b></nobr>:"), settingsArea);
 
     KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
     d->title3                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), settingsArea);
@@ -163,6 +172,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     d->labelImageMime           = new KSqueezedTextLabel(0, settingsArea);
     d->labelImageDimensions     = new KSqueezedTextLabel(0, settingsArea);
+    d->labelImageCompression    = new KSqueezedTextLabel(0, settingsArea);
+    d->labelImageBitDepth       = new KSqueezedTextLabel(0, settingsArea);
+    d->labelImageColorMode      = new KSqueezedTextLabel(0, settingsArea);
 
     d->labelPhotoMake           = new KSqueezedTextLabel(0, settingsArea);
     d->labelPhotoModel          = new KSqueezedTextLabel(0, settingsArea);
@@ -208,38 +220,44 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCellWidget(d->labelImageMime, 12, 12, 1, 1);
     settingsLayout->addMultiCellWidget(dimensions, 13, 13, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelImageDimensions, 13, 13, 1, 1);
-    
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
-    settingsLayout->addMultiCellWidget(line2, 15, 15, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);  
+    settingsLayout->addMultiCellWidget(compression, 14, 14, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageCompression, 14, 14, 1, 1);
+    settingsLayout->addMultiCellWidget(bitDepth, 15, 15, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageBitDepth, 15, 15, 1, 1);
+    settingsLayout->addMultiCellWidget(colorMode, 16, 16, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageColorMode, 16, 16, 1, 1);
 
-    settingsLayout->addMultiCellWidget(d->title3, 17, 17, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);  
-    settingsLayout->addMultiCellWidget(d->make, 19, 19, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoMake, 19, 19, 1, 1);
-    settingsLayout->addMultiCellWidget(d->model, 20, 20, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoModel, 20, 20, 1, 1);
-    settingsLayout->addMultiCellWidget(d->photoDate, 21, 21, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 21, 21, 1, 1);
-    settingsLayout->addMultiCellWidget(d->aperture, 22, 22, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 22, 22, 1, 1);
-    settingsLayout->addMultiCellWidget(d->focalLenght, 23, 23, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 23, 23, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureTime, 24, 24, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 24, 24, 1, 1);
-    settingsLayout->addMultiCellWidget(d->sensitivity, 25, 25, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 25, 25, 1, 1);
-    settingsLayout->addMultiCellWidget(d->exposureMode, 26, 26, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 26, 26, 1, 1);
-    settingsLayout->addMultiCellWidget(d->flash, 27, 27, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 27, 27, 1, 1);
-    settingsLayout->addMultiCellWidget(d->whiteBalance, 28, 28, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 28, 28, 1, 1);
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 17, 17, 0, 1);
+    settingsLayout->addMultiCellWidget(line2, 18, 18, 0, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 19, 19, 0, 1);  
+
+    settingsLayout->addMultiCellWidget(d->title3, 20, 20, 0, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 21, 21, 0, 1);  
+    settingsLayout->addMultiCellWidget(d->make, 22, 22, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoMake, 22, 22, 1, 1);
+    settingsLayout->addMultiCellWidget(d->model, 23, 23, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoModel, 23, 23, 1, 1);
+    settingsLayout->addMultiCellWidget(d->photoDate, 24, 24, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 24, 24, 1, 1);
+    settingsLayout->addMultiCellWidget(d->aperture, 25, 25, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 25, 25, 1, 1);
+    settingsLayout->addMultiCellWidget(d->focalLenght, 26, 26, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 26, 26, 1, 1);
+    settingsLayout->addMultiCellWidget(d->exposureTime, 27, 27, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 27, 27, 1, 1);
+    settingsLayout->addMultiCellWidget(d->sensitivity, 28, 28, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 28, 28, 1, 1);
+    settingsLayout->addMultiCellWidget(d->exposureMode, 29, 29, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 29, 29, 1, 1);
+    settingsLayout->addMultiCellWidget(d->flash, 30, 30, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 30, 30, 1, 1);
+    settingsLayout->addMultiCellWidget(d->whiteBalance, 31, 31, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 31, 31, 1, 1);
     
-    settingsLayout->setRowStretch(29, 10);
+    settingsLayout->setRowStretch(32, 10);
     settingsLayout->setColStretch(1, 10);
     
     // --------------------------------------------------
@@ -281,6 +299,9 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         
         d->labelImageMime->setText(QString::null);
         d->labelImageDimensions->setText(QString::null);
+        d->labelImageCompression->setText(QString::null);
+        d->labelImageBitDepth->setText(QString::null);
+        d->labelImageColorMode->setText(QString::null);
         
         d->labelPhotoMake->setText(QString::null);
         d->labelPhotoModel->setText(QString::null);
@@ -327,11 +348,14 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     // -- Image Properties --------------------------------------------------
     
     QSize   dims;
+    QString compression, bitDepth, colorMode;
     QString rawFilesExt(raw_file_extentions);
 
     if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
     {
         d->labelImageMime->setText(i18n("RAW Image"));
+        compression = i18n("None");
+        bitDepth = "48";
         dims = metaData.getImageDimensions();
     }
     else
@@ -341,12 +365,40 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         KFileMetaInfo meta = fi.metaInfo();
         if (meta.isValid())
         {
-            if (meta.containsGroup("Jpeg EXIF Data"))
-                dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-            else if (meta.containsGroup("General"))
-                dims = meta.group("General").item("Dimensions").value().toSize();
-            else if (meta.containsGroup("Technical"))
-                dims = meta.group("Technical").item("Dimensions").value().toSize();
+            if (meta.containsGroup("Jpeg EXIF Data"))     // JPEG image ?
+            {
+                dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+
+                QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
+                quality.isEmpty() ? compression = i18n("JPEG quality Unknown") :
+                                    compression = i18n("JPEG quality %1").arg(quality);
+                bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
+                colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
+            }
+            
+            if (meta.containsGroup("General"))
+            {
+                if (dims.isEmpty() ) 
+                    dims = meta.group("General").item("Dimensions").value().toSize();
+                if (compression.isEmpty()) 
+                    compression =  meta.group("General").item("Compression").value().toString();
+                if (bitDepth.isEmpty()) 
+                    bitDepth = meta.group("General").item("BitDepth").value().toString();
+                if (colorMode.isEmpty()) 
+                    colorMode = meta.group("General").item("ColorMode").value().toString();
+            }
+            
+            if (meta.containsGroup("Technical"))
+            {
+                if (dims.isEmpty()) 
+                    dims = meta.group("Technical").item("Dimensions").value().toSize();
+                if (compression.isEmpty()) 
+                    compression = meta.group("Technical").item("Compression").value().toString();
+                if (bitDepth.isEmpty()) 
+                    bitDepth = meta.group("Technical").item("BitDepth").value().toString();
+                if (colorMode.isEmpty()) 
+                    colorMode =  meta.group("Technical").item("ColorMode").value().toString();
+            }
         }
     }
 
@@ -355,6 +407,9 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     d->labelImageDimensions->setText(str);
+    d->labelImageCompression->setText(compression.isEmpty() ? unavailable : compression);
+    d->labelImageBitDepth->setText(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp").arg(bitDepth));
+    d->labelImageColorMode->setText(colorMode.isEmpty() ? unavailable : colorMode);
 
     // -- Photograph informations ------------------------------------------
     // NOTA: If something is changed here, please updated albumfiletip section too.
@@ -409,7 +464,6 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         d->labelPhotoFlash->show();
         d->labelPhotoWhiteBalance->show();
     }
-
     
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
