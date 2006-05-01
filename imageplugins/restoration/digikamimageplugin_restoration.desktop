@@ -2,6 +2,7 @@
 Name=ImagePlugin_Restoration
 Name[da]=Plugin for billedrestaurering
 Name[el]=ΠρόσθετοΕικόνας_Αποκατάσταση
+Name[hr]=Obnavljanje
 Name[it]=PluginImmagini_Restauro
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ស្ដារ
 Name[ms]=ImagePlugin_Restorasi
@@ -23,6 +24,7 @@ Comment[es]=Plugin de digiKam para restaurar una fotografía
 Comment[et]=DigiKami foto restaureerimimise plugin
 Comment[eu]=Argazki bat zaharberritzeko digiKam plugina
 Comment[fr]=Module externe pour restaurer une image
+Comment[hr]=digiKam dodatak za obnavljanje fotografije
 Comment[it]=Plugin di digiKam per restaurare una fotografia
 Comment[ja]=digiKam 写真復元プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ស្ដារ​រូបថត

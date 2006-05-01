@@ -2,6 +2,7 @@
 Name=ImagePlugin_ShearTool
 Name[da]=Billedplugin_Forskydningsværktøj
 Name[el]=ΠρόσθετοΕικόνας_ΕργαλείοΣτρέβλωσης
+Name[hr]=Smicanje
 Name[it]=PluginImmagini_DistorsioneCurvilinea
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ឧបករណ៍​កាត់
 Name[ms]=ImagePlugin_PerkakasanMemotong
@@ -23,6 +24,7 @@ Comment[es]=Plugin para digiKam con una herramienta de corte
 Comment[et]=DigiKami pildinihkeplugin
 Comment[eu]=Ebakitzeko tresnaren digiKam plugina
 Comment[fr]=Module externe pour cisailler une image
+Comment[hr]=digiKam dodatak za smicanje
 Comment[it]=Plugin per lo strumento di distorsione curvilinea per digiKam
 Comment[ja]=digiKam 剪断変形プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ឲ្យ​មាន​ឧបករណ៍​កាត់

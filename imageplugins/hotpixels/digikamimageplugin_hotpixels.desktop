@@ -2,6 +2,7 @@
 Name=ImagePlugin_HotPixels
 Name[el]=ΠρόσθετοΕικόνας_ΈντοναΕικονοστοιχεία
 Name[es]=ImagePlugin_Solarize
+Name[hr]=Vrući pikseli
 Name[it]=PluginImmagini_PixelBruciati
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ភីកសែល​ងាប់
 Name[nl]=Afbeeldingsplugin_HotPixels
@@ -20,6 +21,7 @@ Comment[es]=Plugin  para digiKam para suprimir los puntos producidos por los pix
 Comment[et]=DigiKami kuumade pikslite korrigeerimise plugin
 Comment[eu]=Pixel beroen zuzenketarako digiKam plugina
 Comment[fr]=Module externe pour supprimer les points produits par les pixels chauds/collés/morts d'un capteur CCD
+Comment[hr]=digiKam dodatak za ispravljanje vrućih piksela
 Comment[it]=Plugin di correzione dei pixel bruciati per digiKam
 Comment[ja]=digiKam ホットピクセル除去プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ Digikam សម្រាប់​កែខៃ​ភីកសែល​ងាប់

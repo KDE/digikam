@@ -2,6 +2,7 @@
 Name=ImagePlugin_FilmGrain
 Name[da]=Billedplugin_Filmkorn
 Name[el]=ΠρόσθετοΕικόνας_ΚόκκοςΦιλμ
+Name[hr]=Zrnatost
 Name[it]=PluginImmagini_GranaPellicola
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_គ្រាប់ៗ
 Name[nl]=Afbeeldingsplugin_filmkorrel
@@ -23,6 +24,7 @@ Comment[es]=Plugin de efecto de grano de película para digiKam
 Comment[et]=DigiKami teralisuse pildiefektiplugin
 Comment[eu]=Filme efekturako digiKam plugina
 Comment[fr]=Module externe pour ajouter un effet de grain de film dans une image
+Comment[hr]=digiKam dodatak za efekt zrnatosti filma
 Comment[it]=Plugin per l'effetto di grana della pellicola delle immagini per digiKam
 Comment[ja]=digiKam フィルム粒子効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ឲ្យ​មាន​បែបផែន​រូបភាព​គ្រាប់ៗ

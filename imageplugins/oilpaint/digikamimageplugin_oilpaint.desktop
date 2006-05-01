@@ -2,6 +2,7 @@
 Name=ImagePlugin_OilPaint
 Name[da]=Billedplugin_Oliemaling
 Name[el]=ΠρόσθετοΕικόνας_Ελαιογραφίας
+Name[hr]=Uljana slika
 Name[it]=PluginImmagini_PitturaAOlio
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_គំនូរ​​ពណ៌​ប្រេង
 Name[ms]=ImagePlugin_CatMinyak
@@ -23,6 +24,7 @@ Comment[es]=Plugin de efecto de imagen pintada al óleo para digiKam
 Comment[et]=DigiKami õlimaali pildiefektiplugin
 Comment[eu]=Olio margoketaren efekturako digiKam plugina
 Comment[fr]=Module externe pour ajouter un effet de peinture à l'huile dans une image
+Comment[hr]=digiKam dodatak za efekt uljane slike
 Comment[it]=Plugin per l'effetto di pittura a olio delle immagini per digiKam
 Comment[ja]=digiKam 油絵効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ឲ្យ​មាន​បែបផែន​គំនូរ​ពណ៌​ប្រេង

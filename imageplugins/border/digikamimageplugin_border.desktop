@@ -2,6 +2,7 @@
 Name=ImagePlugin_Border
 Name[da]=Billedplugin_Indramning
 Name[el]=ΠρόσθετοΕικόνας_Περίγραμμα
+Name[hr]=Obrub
 Name[it]=PluginImmagini_Bordo
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ស៊ុម
 Name[ms]=ImagePlugin_Sempadan
@@ -22,6 +23,7 @@ Comment[es]=Plugin para añadir borde a las imágenes para digiKam
 Comment[et]=DigiKami pildile raami lisamise plugin
 Comment[eu]=Irudiei ertza gehitzeko digiKam plugina
 Comment[fr]=Module externe pour ajouter une bordure à une image
+Comment[hr]=digiKam dodatak za dodavanje obruba
 Comment[it]=Plugin per l'aggiunta di bordi a un'immagire per digiKam
 Comment[ja]=digikam 画像に縁取りを付けるプラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​បន្ថែម​ស៊ុម​ឲ្យ​​រូបភាព

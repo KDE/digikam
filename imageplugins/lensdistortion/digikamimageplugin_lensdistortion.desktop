@@ -2,6 +2,7 @@
 Name=ImagePlugin_LensDistortion
 Name[da]=Billedplugin_Linseforvrængning
 Name[el]=ΠρόσθετοΕικόνας_ΠαραμόρφωσηΦακών
+Name[hr]=Izobličena leća
 Name[it]=PluginImmagini_DistorsioneLenticolare
 Name[ms]=ImagePlugin_HerotanLensa
 Name[nl]=Afbeeldingsplugin_Lensafwijking
@@ -21,6 +22,7 @@ Comment[es]=Plugin de corrección de distorsión esférica para digiKam
 Comment[et]=DigiKami sfäärilise aberratsiooni korrigeerimise plugin
 Comment[eu]=Aberrazio esferikoa zuzentzeko digiKam plugina
 Comment[fr]=Module externe pour réduire les aberrations sphériques causées par un objectif
+Comment[hr]=digiKam dodatak za ispravljanje kružne aberacije
 Comment[it]=Plugin di correzione dell'aberrazione sferica delle immagini per digiKam
 Comment[ja]=digiKam 球面収差補正プラグイン
 Comment[ms]=Plugin imej herotan bersfera  untuk digiKam

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_ChannelMixer
 Name[el]=ΠρόσθετοΕικόνας_ΑνάμειξηΚαναλιών
+Name[hr]=Miješanje kanala
 Name[it]=PluginImmagini_MixerDeiCanali
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ឧបករណ៍​លាយ​ឆានែល
 Name[ms]=ImagePlugin_PengadunSaluran
@@ -23,6 +24,7 @@ Comment[es]=Plugin de mezcla de los canales de color de las imágenes para digiK
 Comment[et]=DigiKami pildi värvikanalite mikseri plugin
 Comment[eu]=Irudiaren kolore-kanalak nahasteko digiKam plugina
 Comment[fr]=Module externe pour mixer les canaux des couleurs d'une image
+Comment[hr]=digiKam dodatak za miješanje kanala boja
 Comment[it]=Plugin di mixer dei canali dei colori per digiKam
 Comment[ja]=digiKam カラーチャンネルミキサープラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ឲ្យ​មាន​ឧបករណ៍​លាយ​ឆានែល​ពណ៌​របស់​រូបភាព

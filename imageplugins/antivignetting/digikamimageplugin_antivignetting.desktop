@@ -2,6 +2,7 @@
 Name=ImagePlugin_AntiVignetting
 Name[da]=Billedplugin_Anti-vignettering
 Name[el]=ΠρόσθετοΕικόνας_Αντισκίασης
+Name[hr]=Uklanjanje vinjeta
 Name[it]=PluginImmagini_Antivignettatura
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_​ប្រឆាំង​​ការ​បន្ថយ​កម្រិត​ពន្លឺ
 Name[nl]=Afbeeldingsplugin_AntiVignetting
@@ -21,6 +22,7 @@ Comment[es]=Plugin de efecto de anti-viñeta para digiKam
 Comment[et]=DigiKami pildi vinjeti kohendamise plugin
 Comment[eu]=Anti-binetatze efektuaren digiKam plugina
 Comment[fr]=Module externe pour corriger le vignettage d'une image
+Comment[hr]=digiKam dodatak za efekt protiv vinjeta
 Comment[it]=Plugin per l'effetto delle immagini di antivignettatura per digiKam
 Comment[ja]=digiKam 口径食補正プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ឲ្យ​មាន​បែបផែន​រូបភាព​ដែល​ប្រឆាំង​នឹង​ការ​បន្ថយ​កម្រិត​ពន្លឺ

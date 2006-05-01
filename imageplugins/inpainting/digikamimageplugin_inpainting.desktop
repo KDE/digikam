@@ -2,6 +2,7 @@
 Name=ImagePlugin_InPainting
 Name[da]=Plugin for indfyldning
 Name[el]=ΠρόσθετοΕικόνας_Αποζωγραφισμός
+Name[hr]=Bojanje
 Name[it]=PluginImmagini_Reintegrazione
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_គូរពីក្នុង
 Name[ms]=ImagePlugin_DalamPengecatan
@@ -22,6 +23,7 @@ Comment[es]=Plugin de digiKam para restaurar una foto
 Comment[et]=DigiKami foto objektide kaotamise plugin
 Comment[eu]=Argazkiak berrukitzeko digiKam plugina
 Comment[fr]=Module externe pour gommer une partie non désirée (InPainting) d'une image
+Comment[hr]=digiKam dodatak za bojanje u fotografiji
 Comment[it]=Plugin di digiKam per reintegrare una fotografia
 Comment[ja]=digiKam 写真修復プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​​គូរ​នៅ​ខាង​ក្នុង​រូបថត

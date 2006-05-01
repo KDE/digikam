@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_Refocus
 Name[el]=ΠρόσθετοΕικόνας_Επανεστίαση
+Name[hr]=Izmjena fokusa
 Name[it]=PluginImmagini_RimettiAFuoco
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ផ្ដោត​ឡើង​វិញ
 Name[ms]=ImagePlugin_UlangFokus
@@ -22,6 +23,7 @@ Comment[es]=Plugin de digiKam para refocalizar una imagen
 Comment[et]=DigiKami pildi fookuse muutmise plugin
 Comment[eu]=Irudi bat birfokatzeko digiKam plugina
 Comment[fr]=Module externe pour rendre une image nette (Refocus)
+Comment[hr]=digiKam dodatak za izmjenu fokusa slike
 Comment[it]=Plugin di digiKam per rimettere a fuoco un'immagine
 Comment[ja]=digiKam リフォーカス補正プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ផ្ដោត​ចំ​រូបភាព​ឡើង​វិញ

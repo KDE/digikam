@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=showFoto
+Name[hr]=prikaži
 Name[pa]=ਫੋਟੋਵੇਖਾਓ
 Name[sv]=Showfoto
 GenericName=Image Viewer
@@ -14,6 +15,7 @@ GenericName[es]=Visualizador de imágenes
 GenericName[et]=Pildinäitaja
 GenericName[eu]=Irudi-ikustailea
 GenericName[ga]=Amharcán Íomhánna
+GenericName[hr]=Preglednik slika
 GenericName[it]=Visualizzatore di immagini
 GenericName[ja]=画像ビューア
 GenericName[km]=កម្មវិធី​មើល​រូបភាព
@@ -38,6 +40,7 @@ Comment[el]=digiKam προβολέας εικόνων
 Comment[es]=digiKam visualizador de fotos
 Comment[et]=DigiKami fotode näitaja
 Comment[eu]=digiKam-en argazkien ikustailea
+Comment[hr]=digiKam preglednik fotografija
 Comment[it]=Visualizzatore di foto digiKam
 Comment[ja]=digiKam フォトビューア
 Comment[km]=កម្មវិធី​មើល​រូបថត​របស់ digiKam

@@ -2,6 +2,7 @@
 Name=ImagePlugin_AdjustLevels
 Name[da]=Billedplugin_Niveaujustering
 Name[el]=ΠρόσθετοΕικόνας_ΠροσαρμογήΕπιπέδων
+Name[hr]=Podešavanje razina
 Name[it]=PluginImmagini_RegolaLivelli
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_លៃតម្រូវ​កម្រិត
 Name[ms]=ImagePlugin_UbahsuaiTahap
@@ -24,6 +25,7 @@ Comment[es]=Plugin para ajustar los niveles del histograma de la imagen para dig
 Comment[et]=DigiKami pildi histogrammi tasemete kohendamise plugin
 Comment[eu]=Irudien histogramen mailak doitzeko digiKam-en plugina
 Comment[fr]=Module externe pour ajuster les niveaux des couleurs d'une image
+Comment[hr]=digiKam dodatak za histogramsko podešavanje razina
 Comment[it]=Plugin di regolazione dei livelli degli istogrammi delle immagini per digiKam
 Comment[ja]=digiKam レベル補正プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ឲ្យ​អាច​លៃតម្រូវ​កម្រិត​​អ៊ីស្តូក្រាម​របស់​រូបភាព ។

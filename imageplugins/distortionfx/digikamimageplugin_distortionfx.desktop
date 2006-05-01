@@ -2,6 +2,7 @@
 Name=ImagePlugin_DistortionFX
 Name[da]=Plugin for forvrængningseffekt
 Name[el]=ΠρόσθετοΕικόνας_ΕφέΠαραμόρφωσης
+Name[hr]=Izobličenje
 Name[it]=PluginImmagini_EffettiDiDistorsione
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_DistortionFX
 Name[ms]=ImagePlugin_FXHerotan
@@ -22,6 +23,7 @@ Comment[es]=Plugin de efectos especiales de distorsión para digiKam
 Comment[et]=DigiKami spetsiaalsete moonutusefektide plugin
 Comment[eu]=Distortsio efektu berezientzako digiKam plugina
 Comment[fr]=Module externe pour ajouter un effet de déformation dans une image
+Comment[hr]=digiKam dodatak za efekt izobličavanja
 Comment[it]=Plugin degli effetti speciali di distorsione per digiKam
 Comment[ja]=digiKam 歪め特殊効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ធ្វើ​ឲ្យ​មាន​បែបផែន​ពិសេស​សម្រាប់​បង្ខូច​ទ្រង់ទ្រាយ

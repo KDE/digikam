@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_BlowUp
 Name[el]=ΠρόσθετοΕικόνας_Αστάθεια
+Name[hr]=Uvećanje
 Name[it]=PluginImmagini_Espansione
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_បំផ្ទុះ
 Name[ms]=ImagePlugin_Meletup
@@ -22,6 +23,7 @@ Comment[es]=Plugin de digiKam para ampliar una fotografía
 Comment[et]=DigiKami foto suurendamise plugin
 Comment[eu]=Argazki bat handitzeko digiKam-en plugina
 Comment[fr]=Module externe pour agrandir une image
+Comment[hr]=digiKam dodatak za uvećanje fotografija
 Comment[it]=Plugin di digiKam per espandere una fotografia
 Comment[ja]=digiKam 写真引き伸ばしプラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​បំផ្ទុះ​រូបថត

@@ -2,6 +2,7 @@
 Name=ImagePlugin_SuperImpose
 Name[da]=Billedplugin_Indkopiering
 Name[el]=ΠρόσθετοΕικόνας_Υπερέκθεση
+Name[hr]=Presvlačenje
 Name[it]=PluginImmagini_Sovrapposizione
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_ដាក់​ពី​លើ
 Name[nl]=Afbeeldingsplugin_SjabloonToevoegen
@@ -22,6 +23,7 @@ Comment[es]=Plugin de superposición de plantillas para digiKam
 Comment[et]=DigiKami pildile malli lisamise plugin
 Comment[eu]=Txantiloien gainezarketarako digiKam plugina
 Comment[fr]=Module externe pour superposer un modèle sur une image
+Comment[hr]=digiKam dodatak za prevlačenje predloška
 Comment[it]=Plugin di sovrapposizione di modelli per digiKam
 Comment[ja]=digiKam 重ね合わせテンプレートプラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ឲ្យ​មាន​ពុម្ព​សម្រាប់​ដាក់​ពី​លើ

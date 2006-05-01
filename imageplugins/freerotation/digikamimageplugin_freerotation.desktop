@@ -2,6 +2,7 @@
 Name=ImagePlugin_FreeRotation
 Name[da]=Billedplugin_Fri rotation
 Name[el]=ΠρόσθετοΕικόνας_ΕλεύθερηΠεριστροφή
+Name[hr]=Slobodno obrtanje
 Name[it]=PluginImmagini_RotazioneLibera
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_បង្វិល​តាម​ចិត្ត
 Name[ms]=ImagePlugin_PutaranBebas
@@ -23,6 +24,7 @@ Comment[es]=Plugin de rotación libre para digiKam
 Comment[et]=DigiKami pildi vaba pööramise plugin
 Comment[eu]=Biraketa librerako digiKam plugina
 Comment[fr]=Module externe pour effectuer une rotation libre d'une image
+Comment[hr]=digiKam dodatak za slobodno obrtanje
 Comment[it]=Plugin per la rotazione libera per digiKam
 Comment[ja]=digiKam 自由回転プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​បង្វិល​រូបភាព​តាម​ចិត្ត

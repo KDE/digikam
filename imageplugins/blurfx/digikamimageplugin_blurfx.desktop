@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ImagePlugin_BlurFX
 Name[el]=ΠρόσθετοΕικόνας_ΕφέΘολώματος
+Name[hr]=Zamućenje
 Name[it]=PluginImmagini_EffettiDiSfocatura
 Name[km]=កម្មវិធី​ជំនួយ​រូបភាព_BlurFX
 Name[ms]=ImagePlugin_FXKabur
@@ -21,6 +22,7 @@ Comment[es]=Plugin de efectos especiales de desenfoque para digiKam
 Comment[et]=DigiKami spetsiaalsete hägustamisefektide plugin
 Comment[eu]=Lausotzeko efektu berezien digiKam plugina
 Comment[fr]=Module externe pour ajouter un effet de flou dans une image
+Comment[hr]=digiKam dodatak za efekt zamućenja
 Comment[it]=Plugin degli effetti speciali di sfocatura per digiKam
 Comment[ja]=digiKam ぼかし特殊効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​ធ្វើ​ឲ្យ​មាន​បែបផែន​ព្រិល​ពិសេស
