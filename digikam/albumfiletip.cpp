@@ -303,14 +303,14 @@ void AlbumFileTip::updateText()
                     "<nobr><font size=-2 color=\"black\"><i>");
     QString headEnd("</i></font></nobr></td></tr>");
 
-    QString cellBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellBeg("<tr><td><nobr><font size=-2 color=\"black\">");
     QString cellMid("</font></nobr></td>"
-                    "<td><nobr><font size=-1 color=\"black\">");
+                    "<td><nobr><font size=-2 color=\"black\">");
     QString cellEnd("</font></nobr></td></tr>");
 
-    QString cellSpecBeg("<tr><td><nobr><font size=-1 color=\"black\">");
+    QString cellSpecBeg("<tr><td><nobr><font size=-2 color=\"black\">");
     QString cellSpecMid("</font></nobr></td>"
-                        "<td><nobr><font size=-1 color=\"steelblue\"><i>");
+                        "<td><nobr><font size=-2 color=\"steelblue\"><i>");
     QString cellSpecEnd("</i></font></nobr></td></tr>");
 
     tip = "<table cellspacing=0 cellpadding=0>";
