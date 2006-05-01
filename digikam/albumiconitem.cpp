@@ -1,11 +1,11 @@
 /* ============================================================
- * File  : albumiconitem.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-25
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date  : 2003-04-25
+ * Description : implementation to render album icon item.
  * 
- * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpalette.h>
+#include <qstring.h>
 #include <qpen.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
@@ -52,6 +53,26 @@
 namespace Digikam
 {
 
+class AlbumIconItemPriv
+{
+public:
+
+    AlbumIconItemPriv()
+    {
+        dirty = true;
+        info  = 0;
+        view  = 0;
+    }
+
+    bool           dirty;
+
+    QRect          tightPixmapRect;
+
+    ImageInfo     *info;
+
+    AlbumIconView *view;
+};
+
 static void dateToString(const QDateTime& datetime, QString& str)
 {
     str = KGlobal::locale()->formatDateTime(datetime, true, false);
@@ -63,7 +84,9 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
     fullText.replace("\n"," ");
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
-    if (textWidth > width) {
+    
+    if (textWidth > width) 
+    {
         // start with the dots only
         QString squeezedText = "...";
         int squeezedWidth = fm.width(squeezedText);
@@ -74,28 +97,36 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
         squeezedText = fullText.left(letters) + "...";
         squeezedWidth = fm.width(squeezedText);
 
-        if (squeezedWidth < width) {
+        if (squeezedWidth < width) 
+        {
             // we estimated too short
             // add letters while text < label
-            do {
+            do 
+            {
                 letters++;
                 squeezedText = fullText.left(letters) + "..."; 
                 squeezedWidth = fm.width(squeezedText);
-            } while (squeezedWidth < width);
+            }
+            while (squeezedWidth < width);
+
             letters--;
             squeezedText = fullText.left(letters) + "..."; 
-        } else if (squeezedWidth > width) {
+        }
+        else if (squeezedWidth > width) 
+        {
             // we estimated too long
             // remove letters while text > label
-            do {
+            do 
+            {
                 letters--;
                 squeezedText = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
-            } while (letters && squeezedWidth > width);
+            }
+            while (letters && squeezedWidth > width);
         }
 
-
-        if (letters >= 5) {
+        if (letters >= 5) 
+        {
             return squeezedText;
         }
     }
@@ -106,67 +137,72 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
 AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
              : IconItem(parent)
 {
-    view_        = (AlbumIconView*) parent->iconView();
-    info_        = info;
-    dirty_       = true;
+    d = new AlbumIconItemPriv;
+    d->view = (AlbumIconView*) parent->iconView();
+    d->info = info;
 }
-
 
 AlbumIconItem::~AlbumIconItem()
 {
+    delete d;
+}
+
+bool AlbumIconItem::isDirty()
+{
+    return d->dirty;
 }
 
 ImageInfo* AlbumIconItem::imageInfo() const
 {
-    return info_;
+    return d->info;
 }
 
 int AlbumIconItem::compare(IconItem *item)
 {
-    const AlbumSettings *settings = view_->settings();
+    const AlbumSettings *settings = d->view->settings();
     AlbumIconItem *iconItem = static_cast<AlbumIconItem*>(item);
     
     switch (settings->getImageSortOrder())
     {
-    case(AlbumSettings::ByIName):
-    {
-        return info_->name().localeAwareCompare(iconItem->info_->name());
-    }
-    case(AlbumSettings::ByIPath):
-    {
-        return info_->kurl().path().compare(iconItem->info_->kurl().path());
-    }
-    case(AlbumSettings::ByIDate):
-    {
-        if (info_->dateTime() < iconItem->info_->dateTime())
-            return -1;
-        else if (info_->dateTime() > iconItem->info_->dateTime())
-            return 1;
-        else
-            return 0;
-    }
-    case(AlbumSettings::ByISize):
-    {
-        int mysize(info_->fileSize());
-        int hissize(iconItem->info_->fileSize());
-        if (mysize < hissize)
-            return -1;
-        else if (mysize > hissize)
-            return 1;
-        else
-            return 0;
-    }
-    case(AlbumSettings::ByIRating):
-    {
-        int myrating(info_->rating());
-        int hisrating(iconItem->info_->rating());
-        if (myrating < hisrating)
-            return 1;
-        else if (myrating > hisrating)
-            return -1;
-        else
-            return 0;
-    }
+        case(AlbumSettings::ByIName):
+        {
+            return d->info->name().localeAwareCompare(iconItem->d->info->name());
+        }
+        case(AlbumSettings::ByIPath):
+        {
+            return d->info->kurl().path().compare(iconItem->d->info->kurl().path());
+        }
+        case(AlbumSettings::ByIDate):
+        {
+            if (d->info->dateTime() < iconItem->d->info->dateTime())
+                return -1;
+            else if (d->info->dateTime() > iconItem->d->info->dateTime())
+                return 1;
+            else
+                return 0;
+        }
+        case(AlbumSettings::ByISize):
+        {
+            int mysize(d->info->fileSize());
+            int hissize(iconItem->d->info->fileSize());
+            if (mysize < hissize)
+                return -1;
+            else if (mysize > hissize)
+                return 1;
+            else
+                return 0;
+        }
+        case(AlbumSettings::ByIRating):
+        {
+            int myrating(d->info->rating());
+            int hisrating(iconItem->d->info->rating());
+            if (myrating < hisrating)
+                return 1;
+            else if (myrating > hisrating)
+                return -1;
+            else
+                return 0;
+        }
     }
 
     return 0;
@@ -174,10 +210,10 @@ int AlbumIconItem::compare(IconItem *item)
 
 QRect AlbumIconItem::clickToOpenRect()
 {
-    if (tightPixmapRect_.isNull())
+    if (d->tightPixmapRect.isNull())
         return rect();
     
-    QRect pixmapRect = tightPixmapRect_;
+    QRect pixmapRect = d->tightPixmapRect;
     QRect r          = rect();
 
     pixmapRect.moveBy(r.x(), r.y());
@@ -188,12 +224,12 @@ void AlbumIconItem::paintItem()
 {
     QPixmap pix;
     QRect   r;
-    const AlbumSettings *settings = view_->settings();
+    const AlbumSettings *settings = d->view->settings();
     
     if (isSelected())
-        pix = *(view_->itemBaseSelPixmap());
+        pix = *(d->view->itemBaseSelPixmap());
     else
-        pix = *(view_->itemBaseRegPixmap());
+        pix = *(d->view->itemBaseRegPixmap());
 
     ThemeEngine* te = ThemeEngine::instance();
     
@@ -201,62 +237,61 @@ void AlbumIconItem::paintItem()
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
 
-    dirty_ = true;
+    d->dirty = true;
     
-    QPixmap *thumbnail = view_->pixmapManager()->find(info_->kurl());
+    QPixmap *thumbnail = d->view->pixmapManager()->find(d->info->kurl());
     if (thumbnail)
     {
-        r = view_->itemPixmapRect();
+        r = d->view->itemPixmapRect();
         p.drawPixmap(r.x() + (r.width()-thumbnail->width())/2,
                      r.y() + (r.height()-thumbnail->height())/2,
                      *thumbnail);
-        tightPixmapRect_.setRect(r.x() + (r.width()-thumbnail->width())/2,
+        d->tightPixmapRect.setRect(r.x() + (r.width()-thumbnail->width())/2,
                                  r.y() + (r.height()-thumbnail->height())/2,
                                  thumbnail->width(), thumbnail->height());
-        dirty_ = false;
+        d->dirty = false;
     }
 
     if (settings->getIconShowRating())
     {
-        r = view_->itemRatingRect();
-        QPixmap ratingPixmap = view_->ratingPixmap();
+        r = d->view->itemRatingRect();
+        QPixmap ratingPixmap = d->view->ratingPixmap();
 
-        int rating = info_->rating();
+        int rating = d->info->rating();
         
         int x, w;
         x = r.x() + (r.width() - rating * ratingPixmap.width())/2;
         w = rating * ratingPixmap.width();
         
         p.drawTiledPixmap(x, r.y(), w, r.height(), ratingPixmap);
-    }
-    
+    }    
     
     if (settings->getIconShowName())
     {
-        r = view_->itemNameRect();
-        p.setFont(view_->itemFontReg());
+        r = d->view->itemNameRect();
+        p.setFont(d->view->itemFontReg());
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(),
-                                                    info_->name()));
+                                                    d->info->name()));
     }
 
-    p.setFont(view_->itemFontCom());
+    p.setFont(d->view->itemFontCom());
     
     if (settings->getIconShowComments())
     {
-        QString comments = info_->caption();
+        QString comments = d->info->caption();
         
-        r = view_->itemCommentsRect();
+        r = d->view->itemCommentsRect();
         p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), comments));
     }
 
-    p.setFont(view_->itemFontXtra());
+    p.setFont(d->view->itemFontXtra());
 
     if (settings->getIconShowDate())
     {
-        QDateTime date(info_->dateTime());
+        QDateTime date(d->info->dateTime());
 
-        r = view_->itemDateRect();    
-        p.setFont(view_->itemFontXtra());
+        r = d->view->itemDateRect();    
+        p.setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
         str = i18n("created : %1").arg(str);
@@ -265,10 +300,10 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowModDate())
     {
-        QDateTime date(info_->modDateTime());
+        QDateTime date(d->info->modDateTime());
 
-        r = view_->itemModDateRect();    
-        p.setFont(view_->itemFontXtra());
+        r = d->view->itemModDateRect();    
+        p.setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
         str = i18n("modified : %1").arg(str);
@@ -277,39 +312,39 @@ void AlbumIconItem::paintItem()
     
     if (settings->getIconShowResolution())
     {
-        QSize dims = info_->dimensions();
+        QSize dims = d->info->dimensions();
         if (dims.isValid())
         {
-            QString resolution = QString("%1x%2 %3")
-                                 .arg(dims.width())
-                                 .arg(dims.height())
-                                 .arg(i18n("pixels"));
-            r = view_->itemResolutionRect();    
+            QString mpixels, resolution;
+            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+            resolution = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+                         .arg(dims.width()).arg(dims.height()).arg(mpixels);
+            r = d->view->itemResolutionRect();    
             p.drawText(r, Qt::AlignCenter, squeezedText(&p, r.width(), resolution));
         }
     }
 
     if (settings->getIconShowSize())
     {
-        r = view_->itemSizeRect();    
+        r = d->view->itemSizeRect();    
         p.drawText(r, Qt::AlignCenter,
                    squeezedText(&p, r.width(),
-                                KIO::convertSize(info_->fileSize())));
+                                KIO::convertSize(d->info->fileSize())));
     }
 
-    p.setFont(view_->itemFontCom());
+    p.setFont(d->view->itemFontCom());
     p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
 
     if (settings->getIconShowTags())
     {
-        QString tags = info_->tagNames().join(", ");
+        QString tags = d->info->tagNames().join(", ");
         
-        r = view_->itemTagRect();    
+        r = d->view->itemTagRect();    
         p.drawText(r, Qt::AlignCenter, 
                    squeezedText(&p, r.width(), tags));
     }
 
-    if (this == view_->currentItem())
+    if (this == d->view->currentItem())
     {
         p.setPen(QPen(isSelected() ? te->textSelColor() : te->textRegColor(),
                       0, Qt::DotLine));
@@ -319,16 +354,16 @@ void AlbumIconItem::paintItem()
     p.end();
     
     r = rect();
-    r = QRect(view_->contentsToViewport(QPoint(r.x(), r.y())),
+    r = QRect(d->view->contentsToViewport(QPoint(r.x(), r.y())),
               QSize(r.width(), r.height()));
 
-    bitBlt(view_->viewport(), r.x(), r.y(), &pix,
+    bitBlt(d->view->viewport(), r.x(), r.y(), &pix,
            0, 0, r.width(), r.height());
 }
 
 QRect AlbumIconItem::thumbnailRect() const
 {
-    QRect pixmapRect = view_->itemPixmapRect();
+    QRect pixmapRect = d->view->itemPixmapRect();
     QRect r          = rect();
 
     pixmapRect.moveBy(r.x(), r.y());
@@ -336,4 +371,3 @@ QRect AlbumIconItem::thumbnailRect() const
 }
 
 }  // namespace Digikam
-

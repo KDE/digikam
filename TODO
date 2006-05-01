@@ -28,6 +28,11 @@
 				to start download dialog
 		  		ditto for unmounting in usm case 
 
+Main Interface : 
+
+    - ImageInfo class must handle properly image dimension like in image properties sidebar tab. 
+      (Set on Album Icon item dimensions on setup must give the same result than image properties)
+
 * Image Properties SideBar:
 
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
@@ -39,13 +44,12 @@
      informations in metadata bytes array (COM, EXIF, IPTC).
    - If an image have been saved to another file format, notify Image properties sidebar to reload 
      informations from DImg instance of new image.   
+   - ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)
 
 * Showfoto: 
 
    - hide toolbar in fullscreen option don't work.
    - if no image is loaded, selection in canvas is possible.
-
-* ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)
 
 B.K.O files to fix :
 

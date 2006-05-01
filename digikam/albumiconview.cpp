@@ -1656,7 +1656,7 @@ AlbumIconItem* AlbumIconView::nextItemToThumbnail() const
     AlbumIconItem* item      = firstItem;
     while (item)
     {
-        if (item->dirty_)
+        if (item->isDirty())
             return item;
         if (item == lastItem)
             break;

@@ -1,11 +1,11 @@
 /* ============================================================
- * File  : albumiconitem.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-25
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date  : 2003-04-25
+ * Description : implementation to render album icon item.
  * 
- * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
+ * Copyright 2003-2005 by Renchi Raju and Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,29 +25,21 @@
 
 // Qt includes.
 
-#include <qstring.h>
 #include <qrect.h>
-#include <qpixmap.h>
 
 // Local includes.
 
 #include "iconitem.h"
-
-class QPainter;
-class QPixmap;
-class QImage;
-class QColorGroup;
 
 namespace Digikam
 {
 
 class ImageInfo;
 class AlbumIconView;
+class AlbumIconItemPriv;
 
 class AlbumIconItem : public IconItem
 {
-
-    friend class AlbumIconView;
 
 public:
 
@@ -58,6 +50,8 @@ public:
 
     QRect thumbnailRect() const;
 
+    bool isDirty();
+
     virtual int compare(IconItem *item);
     virtual QRect clickToOpenRect();
     
@@ -67,10 +61,7 @@ protected:
 
 private:
 
-    ImageInfo           *info_;
-    AlbumIconView       *view_;
-    bool                 dirty_;
-    QRect                tightPixmapRect_;
+    AlbumIconItemPriv *d;
 };
 
 }  // namespace Digikam
