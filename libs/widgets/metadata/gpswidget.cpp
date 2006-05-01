@@ -147,6 +147,7 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     d->detailsCombo->insertItem(QString("Map Quest"), MapQuest);
     d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
     d->detailsCombo->insertItem(QString("Msn Maps"), MsnMaps);
+    d->detailsCombo->insertItem(QString("Multi Map"), MultiMap);
     
     box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
     box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 1, 1 );
@@ -225,7 +226,19 @@ void GPSWidget::slotGPSDetails(void)
             url.append("&name=HERE");            
             url.append("&alts1=7");            
             break;
-        }        
+        }
+
+        case MultiMap:
+        {
+            url.append("http://www.multimap.com/map/browse.cgi?");
+            url.append("lat=");
+            url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+            url.append("&lon=");
+            url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+            url.append("&scale=10000");            
+            url.append("&icon=x");            
+            break;
+        }
     }
     
     KApplication::kApplication()->invokeBrowser(url);
