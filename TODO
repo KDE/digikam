@@ -48,8 +48,9 @@ Main Interface :
 
 * Showfoto: 
 
-   - hide toolbar in fullscreen option don't work.
    - if no image is loaded, selection in canvas is possible.
+   - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using 
+     Exif tags are toggle on to save when SlideShow is complete.
 
 B.K.O files to fix :
 

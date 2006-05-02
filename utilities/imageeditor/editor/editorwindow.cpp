@@ -830,7 +830,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
 void EditorWindow::slotToggleFullScreen()
 {
-    if (m_fullScreen)
+    if (m_fullScreen) // out of fullscreen
     {
         m_canvas->setBackgroundColor(d->bgColor);
 
@@ -877,7 +877,7 @@ void EditorWindow::slotToggleFullScreen()
         toggleGUI2FullScreen();
         m_fullScreen = false;
     }
-    else
+    else  // go to fullscreen
     {
         m_canvas->setBackgroundColor(QColor(Qt::black));
         
@@ -900,7 +900,9 @@ void EditorWindow::slotToggleFullScreen()
                 hideToolBars();
             }
             else
-            {    
+            {   
+                showToolBars();
+
                 if ( !m_fullScreenAction->isPlugged(toolBar) )
                 {
                     m_fullScreenAction->plug(toolBar);

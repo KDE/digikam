@@ -460,8 +460,6 @@ void ShowFoto::toggleGUI2FullScreen()
         {
             if (m_fullScreenHideThumbBar)
                 m_bar->hide();
-            else
-                m_fullScreenAction->plug(m_bar);
         }
     }
 }
