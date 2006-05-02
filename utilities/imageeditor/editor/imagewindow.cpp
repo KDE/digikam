@@ -139,10 +139,6 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
     
-    // This is just a bloody workaround until we have found the problem
-    // which leads the imagewindow to open in a wrong size
-    resize(640, 480);
-
     m_rightSidebar->loadViewState();
     m_rightSidebar->populateTags();
 }
