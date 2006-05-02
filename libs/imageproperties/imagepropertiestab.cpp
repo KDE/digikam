@@ -370,7 +370,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
                 dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
 
                 QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
-                quality.isEmpty() ? compression = i18n("JPEG quality Unknown") :
+                quality.isEmpty() ? compression = unavailable :
                                     compression = i18n("JPEG quality %1").arg(quality);
                 bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
                 colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
