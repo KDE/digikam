@@ -35,6 +35,7 @@
 
 // Local includes.
 
+#include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
@@ -144,7 +145,13 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KURL&
     d->dirtyCameraItemTab = false;
     d->cameraView         = view;
     d->cameraItem         = item;
-    
+
+    if (d->exifData.isEmpty())
+    {
+        DMetadata metaData(d->currentURL.path());
+        d->exifData = metaData.getExif();
+    }
+
     slotChangedTab( getActiveTab() );    
 }
 
@@ -177,21 +184,20 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
              
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
-        d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType, d->cameraItem->getDownloadName());
+        d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType, 
+                                         d->cameraItem->getDownloadName(), d->exifData);
+        
         d->dirtyCameraItemTab = true;
     }
     else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
-        if (d->exifData)
-            d->metadataTab->setCurrentData(d->exifData, QByteArray(), 
-                                           d->itemInfo->name, currentItemType);
-        else
-            d->metadataTab->setCurrentURL(d->currentURL, currentItemType);
-
-       d->dirtyMetadataTab = true;
+        d->metadataTab->setCurrentData(d->exifData, QByteArray(), 
+                                       d->itemInfo->name, currentItemType);
+ 
+        d->dirtyMetadataTab = true;
     }
     
-    unsetCursor();;
+    unsetCursor();
 }
 
 }  // NameSpace Digikam

@@ -50,7 +50,8 @@ public:
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0,
-                        const QString &newFileName=QString::null);
+                        const QString &newFileName=QString::null,
+                        const QByteArray& exifData=QByteArray());
 
 signals:
     

@@ -41,6 +41,7 @@
 
 // Local includes.
 
+#include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "navigatebarwidget.h"
 #include "cameraitempropertiestab.h"
@@ -55,6 +56,17 @@ public:
     CameraItemPropertiesTabPriv()
     {
         navigateBar            = 0;
+        title2                 = 0;
+        make                   = 0;         
+        model                  = 0;        
+        photoDate              = 0;    
+        aperture               = 0;     
+        focalLenght            = 0;  
+        exposureTime           = 0; 
+        sensitivity            = 0;  
+        exposureMode           = 0;
+        flash                  = 0;       
+        whiteBalance           = 0;
         labelFolder            = 0;
         labelFileIsReadable    = 0;
         labelFileIsWritable    = 0;
@@ -64,19 +76,50 @@ public:
         labelImageDimensions   = 0;
         labelNewFileName       = 0;
         labelAlreadyDownloaded = 0;
+        labelPhotoMake         = 0;
+        labelPhotoModel        = 0;
+        labelPhotoDateTime     = 0;
+        labelPhotoAperture     = 0;
+        labelPhotoFocalLenght  = 0;
+        labelPhotoExposureTime = 0;
+        labelPhotoSensitivity  = 0;
+        labelPhotoExposureMode = 0;
+        labelPhotoFlash        = 0;
+        labelPhotoWhiteBalance = 0;
     }
+
+    QLabel             *title2;
+    QLabel             *make;         
+    QLabel             *model;        
+    QLabel             *photoDate;    
+    QLabel             *aperture;     
+    QLabel             *focalLenght;  
+    QLabel             *exposureTime; 
+    QLabel             *sensitivity;  
+    QLabel             *exposureMode;
+    QLabel             *flash;       
+    QLabel             *whiteBalance;
 
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileIsReadable;
     KSqueezedTextLabel *labelFileIsWritable;
     KSqueezedTextLabel *labelFileDate;
-    KSqueezedTextLabel *labelFileSize;
-    
+    KSqueezedTextLabel *labelFileSize;    
     KSqueezedTextLabel *labelImageMime;
-    KSqueezedTextLabel *labelImageDimensions;
-    
+    KSqueezedTextLabel *labelImageDimensions;    
     KSqueezedTextLabel *labelNewFileName;
     KSqueezedTextLabel *labelAlreadyDownloaded;
+
+    KSqueezedTextLabel *labelPhotoMake;
+    KSqueezedTextLabel *labelPhotoModel;
+    KSqueezedTextLabel *labelPhotoDateTime;
+    KSqueezedTextLabel *labelPhotoAperture;
+    KSqueezedTextLabel *labelPhotoFocalLenght;
+    KSqueezedTextLabel *labelPhotoExposureTime;
+    KSqueezedTextLabel *labelPhotoSensitivity;
+    KSqueezedTextLabel *labelPhotoExposureMode;
+    KSqueezedTextLabel *labelPhotoFlash;
+    KSqueezedTextLabel *labelPhotoWhiteBalance;
     
     NavigateBarWidget  *navigateBar;
 };
@@ -89,7 +132,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
     QWidget *settingsArea       = new QWidget(this);
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 21, 1, KDialog::marginHint(), 0);
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 26, 1, KDialog::marginHint(), 0);
 
     // --------------------------------------------------
         
@@ -99,32 +142,47 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     QLabel *size                = new QLabel(i18n("<b>Size</b>:"), settingsArea);
     QLabel *isReadable          = new QLabel(i18n("<b>Readable</b>:"), settingsArea);
     QLabel *isWritable          = new QLabel(i18n("<b>Writable</b>:"), settingsArea);
-    
-    KSeparator *line            = new KSeparator (Horizontal, settingsArea);
-    QLabel *title2              = new QLabel(i18n("<big><b>Image Properties</b></big>"), settingsArea);    
     QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), settingsArea);
     QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), settingsArea);
-    
-    KSeparator *line2           = new KSeparator (Horizontal, settingsArea);
-    QLabel *title3              = new QLabel(i18n("<big><b>Download Status</b></big>"), settingsArea);
     QLabel *newFileName         = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), settingsArea);
     QLabel *downloaded          = new QLabel(i18n("<b>Downloaded</b>:"), settingsArea);
+
+    KSeparator *line            = new KSeparator (Horizontal, settingsArea);
+    d->title2                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), settingsArea);
+    d->make                     = new QLabel(i18n("<b>Make</b>:"), settingsArea);
+    d->model                    = new QLabel(i18n("<b>Model</b>:"), settingsArea);
+    d->photoDate                = new QLabel(i18n("<b>Created</b>:"), settingsArea);
+    d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), settingsArea);
+    d->focalLenght              = new QLabel(i18n("<b>Focal</b>:"), settingsArea);
+    d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), settingsArea);
+    d->sensitivity              = new QLabel(i18n("<b>Sensitivity</b>:"), settingsArea);
+    d->exposureMode             = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), settingsArea);
+    d->flash                    = new QLabel(i18n("<b>Flash</b>:"), settingsArea);
+    d->whiteBalance             = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), settingsArea);   
                             
     d->labelFolder              = new KSqueezedTextLabel(0, settingsArea);
     d->labelFileDate            = new KSqueezedTextLabel(0, settingsArea);
     d->labelFileSize            = new KSqueezedTextLabel(0, settingsArea);
     d->labelFileIsReadable      = new KSqueezedTextLabel(0, settingsArea);
     d->labelFileIsWritable      = new KSqueezedTextLabel(0, settingsArea);
-    
     d->labelImageMime           = new KSqueezedTextLabel(0, settingsArea);
     d->labelImageDimensions     = new KSqueezedTextLabel(0, settingsArea);
-    
     d->labelNewFileName         = new KSqueezedTextLabel(0, settingsArea);
     d->labelAlreadyDownloaded   = new KSqueezedTextLabel(0, settingsArea);
+
+    d->labelPhotoMake           = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoModel          = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoDateTime       = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoAperture       = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoFocalLenght    = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoExposureTime   = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoSensitivity    = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoExposureMode   = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoFlash          = new KSqueezedTextLabel(0, settingsArea);
+    d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, settingsArea);
         
     title->setAlignment(Qt::AlignCenter);
-    title2->setAlignment(Qt::AlignCenter);
-    title3->setAlignment(Qt::AlignCenter);
+    d->title2->setAlignment(Qt::AlignCenter);
 
     // --------------------------------------------------
                             
@@ -141,36 +199,45 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
     settingsLayout->addMultiCellWidget(d->labelFileIsReadable, 5, 5, 1, 1);
     settingsLayout->addMultiCellWidget(isWritable, 6, 6, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFileIsWritable, 6, 6, 1, 1);
-
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 7, 7, 0, 1);    
-    settingsLayout->addMultiCellWidget(line, 8, 8, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 9, 9, 0, 1);    
-
-    settingsLayout->addMultiCellWidget(title2, 10, 10, 0, 1);    
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 11, 11, 0, 1);                             
-    settingsLayout->addMultiCellWidget(mime, 12, 12, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageMime, 12, 12, 1, 1);
-    settingsLayout->addMultiCellWidget(dimensions, 13, 13, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 13, 13, 1, 1);
-
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 14, 14, 0, 1);
-    settingsLayout->addMultiCellWidget(line2, 15, 15, 0, 1);
-    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 16, 16, 0, 1);  
+    settingsLayout->addMultiCellWidget(mime, 7, 7, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageMime, 7, 7, 1, 1);
+    settingsLayout->addMultiCellWidget(dimensions, 8, 8, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelImageDimensions, 8, 8, 1, 1);
+    settingsLayout->addMultiCellWidget(newFileName, 9, 9, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelNewFileName, 9, 9, 1, 1);
+    settingsLayout->addMultiCellWidget(downloaded, 10, 10, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 10, 10, 1, 1);
     
-    settingsLayout->addMultiCellWidget(title3, 17, 17, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
-                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 18, 18, 0, 1);      
-    settingsLayout->addMultiCellWidget(newFileName, 19, 19, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelNewFileName, 19, 19, 1, 1);
-    settingsLayout->addMultiCellWidget(downloaded, 20, 20, 0, 0);
-    settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 20, 20, 1, 1);
-    
-    settingsLayout->setRowStretch(21, 10);
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 11, 11, 0, 1);    
+    settingsLayout->addMultiCellWidget(line, 12, 12, 0, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 13, 13, 0, 1);    
+
+    settingsLayout->addMultiCellWidget(d->title2, 14, 14, 0, 1);
+    settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                                 QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 15, 15, 0, 1);  
+    settingsLayout->addMultiCellWidget(d->make, 16, 16, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoMake, 16, 16, 1, 1);
+    settingsLayout->addMultiCellWidget(d->model, 17, 17, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoModel, 17, 17, 1, 1);
+    settingsLayout->addMultiCellWidget(d->photoDate, 18, 18, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoDateTime, 18, 18, 1, 1);
+    settingsLayout->addMultiCellWidget(d->aperture, 19, 19, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoAperture, 19, 19, 1, 1);
+    settingsLayout->addMultiCellWidget(d->focalLenght, 20, 20, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoFocalLenght, 20, 20, 1, 1);
+    settingsLayout->addMultiCellWidget(d->exposureTime, 21, 21, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoExposureTime, 21, 21, 1, 1);
+    settingsLayout->addMultiCellWidget(d->sensitivity, 22, 22, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoSensitivity, 22, 22, 1, 1);
+    settingsLayout->addMultiCellWidget(d->exposureMode, 23, 23, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoExposureMode, 23, 23, 1, 1);
+    settingsLayout->addMultiCellWidget(d->flash, 24, 24, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoFlash, 24, 24, 1, 1);
+    settingsLayout->addMultiCellWidget(d->whiteBalance, 25, 25, 0, 0);
+    settingsLayout->addMultiCellWidget(d->labelPhotoWhiteBalance, 25, 25, 1, 1);           
+    settingsLayout->setRowStretch(26, 10);
     settingsLayout->setColStretch(1, 10);
     
     // --------------------------------------------------
@@ -199,7 +266,7 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
 }
 
 void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int itemType, 
-                                             const QString &newFileName)
+                                             const QString &newFileName, const QByteArray& exifData)
 {
     if (!itemInfo)
     {
@@ -209,14 +276,23 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
         d->labelFileIsReadable->setText(QString::null);
         d->labelFileIsWritable->setText(QString::null);
         d->labelFileDate->setText(QString::null);
-        d->labelFileSize->setText(QString::null);
-        
+        d->labelFileSize->setText(QString::null);        
         d->labelImageMime->setText(QString::null);
-        d->labelImageDimensions->setText(QString::null);
-        
+        d->labelImageDimensions->setText(QString::null);        
         d->labelNewFileName->setText(QString::null);
         d->labelAlreadyDownloaded->setText(QString::null);
         
+        d->labelPhotoMake->setText(QString::null);
+        d->labelPhotoModel->setText(QString::null);
+        d->labelPhotoDateTime->setText(QString::null);
+        d->labelPhotoAperture->setText(QString::null);
+        d->labelPhotoFocalLenght->setText(QString::null);
+        d->labelPhotoExposureTime->setText(QString::null);
+        d->labelPhotoSensitivity->setText(QString::null);
+        d->labelPhotoExposureMode->setText(QString::null);
+        d->labelPhotoFlash->setText(QString::null);
+        d->labelPhotoWhiteBalance->setText(QString::null);
+
         setEnabled(false);
         return;
     }
@@ -283,6 +359,102 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
         str = i18n("Yes");
     
     d->labelAlreadyDownloaded->setText(str);
+
+    // -- Photograph informations ------------------------------------------
+    // NOTA: If something is changed here, please updated albumfiletip section too.
+
+    QString unavailable(i18n("<i>unavailable</i>"));
+    DMetadata metaData;
+    metaData.setExif(exifData);
+    PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+    
+    if (photoInfo.isEmpty())
+    {
+        d->title2->hide();
+        d->make->hide();
+        d->model->hide();
+        d->photoDate->hide();
+        d->aperture->hide();
+        d->focalLenght->hide();
+        d->exposureTime->hide();
+        d->sensitivity->hide();
+        d->exposureMode->hide();
+        d->flash->hide();
+        d->whiteBalance->hide();
+        d->labelPhotoMake->hide();
+        d->labelPhotoModel->hide();
+        d->labelPhotoDateTime->hide();
+        d->labelPhotoAperture->hide();
+        d->labelPhotoFocalLenght->hide();
+        d->labelPhotoExposureTime->hide();
+        d->labelPhotoSensitivity->hide();
+        d->labelPhotoExposureMode->hide();
+        d->labelPhotoFlash->hide();
+        d->labelPhotoWhiteBalance->hide();
+    }
+    else
+    {
+        d->title2->show();
+        d->make->show();
+        d->model->show();
+        d->photoDate->show();
+        d->aperture->show();
+        d->focalLenght->show();
+        d->exposureTime->show();
+        d->sensitivity->show();
+        d->exposureMode->show();
+        d->flash->show();
+        d->whiteBalance->show();
+        d->labelPhotoMake->show();
+        d->labelPhotoModel->show();
+        d->labelPhotoDateTime->show();
+        d->labelPhotoAperture->show();
+        d->labelPhotoFocalLenght->show();
+        d->labelPhotoExposureTime->show();
+        d->labelPhotoSensitivity->show();
+        d->labelPhotoExposureMode->show();
+        d->labelPhotoFlash->show();
+        d->labelPhotoWhiteBalance->show();
+    }
+    
+    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+    d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+
+    if (photoInfo.dateTime.isValid())
+    {
+        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+        d->labelPhotoDateTime->setText(str);
+    }
+    else
+        d->labelPhotoDateTime->setText(unavailable);
+
+    d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
+    
+    if (photoInfo.focalLenght35mm.isEmpty())
+        d->labelPhotoFocalLenght->setText(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
+    else 
+    {
+        str = i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm);
+        d->labelPhotoFocalLenght->setText(str);
+    }
+    
+    d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
+    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+    
+    if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(unavailable);
+    else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(photoInfo.exposureMode);        
+    else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+        d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);        
+    else 
+    {
+        str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+        d->labelPhotoExposureMode->setText(str);
+    }
+
+    d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
+    d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 }
     
 }  // NameSpace Digikam
