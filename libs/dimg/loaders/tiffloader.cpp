@@ -23,7 +23,7 @@
 // This line must be commented to prevent any latency time
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
-#define ENABLE_DEBUG_MESSAGES 
+//#define ENABLE_DEBUG_MESSAGES 
 
 // C++ includes.
 
