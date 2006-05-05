@@ -30,6 +30,7 @@
 // Exiv2 includes.
 
 #include <exiv2/types.hpp>
+#include <exiv2/exif.hpp>
 
 // Local includes.
 
@@ -103,6 +104,8 @@ public:
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright);
 
     PhotoInfoContainer getPhotographInformations() const;
+
+    static QString convertCommentValue(const Exiv2::Exifdatum &comment);
 
 private:
 

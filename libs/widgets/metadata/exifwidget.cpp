@@ -155,9 +155,17 @@ bool ExifWidget::decodeMetadata()
             QString key = QString::fromLocal8Bit(md->key().c_str());
 
             // Decode the tag value with a user friendly output.
-            std::ostringstream os;
-            os << *md;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            QString tagValue;
+            if (key == "Exif.Photo.UserComment")
+            {
+                tagValue = DMetadata::convertCommentValue(*md);
+            }
+            else
+            {
+                std::ostringstream os;
+                os << *md;
+                tagValue = QString::fromLocal8Bit(os.str().c_str());
+            }
             tagValue.replace("\n", " ");
 
             // We apply a filter to get only standard Exif tags, not maker notes.

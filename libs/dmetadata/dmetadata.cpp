@@ -28,6 +28,7 @@
 // Qt includes.
 
 #include <qfile.h>
+#include <qtextcodec.h>
 #include <qwmatrix.h>
 
 // KDE includes.
@@ -635,43 +636,46 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime)
 QString DMetadata::getImageComment() const
 {
     try
-    {    
+    {
+        if (d->filePath.isEmpty())
+            return QString();
+
         // In first we trying to get image comments, outside of Exif and IPTC.
 
-        QString comments(d->imageComments.c_str());
-        
+        QString comments = QString::fromUtf8(d->imageComments.c_str());
+
         if (!comments.isEmpty())
-           return comments;
-           
-        // In second, we trying to get Exif comments   
-                
+            return comments;
+
+        // In second, we trying to get Exif comments
+
         if (!d->exifMetadata.empty())
         {
             Exiv2::ExifKey key("Exif.Photo.UserComment");
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
+
             if (it != exifData.end())
             {
-                QString ExifComment(it->toString().c_str());
-    
-                if (!ExifComment.isEmpty())
-                  return ExifComment;
+                QString exifComment = convertCommentValue(*it);
+
+                if (!exifComment.isEmpty())
+                  return exifComment;
             }
         }
-        
-        // In third, we trying to get IPTC comments   
-                
+
+        // In third, we trying to get IPTC comments
+
         if (!d->iptcMetadata.empty())
         {
             Exiv2::IptcKey key("Iptc.Application2.Caption");
             Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(key);
-            
+
             if (it != iptcData.end())
             {
-                QString IptcComment(it->toString().c_str());
-    
+                QString IptcComment = QString::fromLatin1(it->toString().c_str());
+
                 if (!IptcComment.isEmpty())
                   return IptcComment;
             }
@@ -683,15 +687,15 @@ QString DMetadata::getImageComment() const
         kdDebug() << "Cannot get Image comments using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
-    
+    }
+
     return QString();
 }
 
 bool DMetadata::setImageComment(const QString& comment)
 {
     try
-    {    
+    {
         if (comment.isEmpty())
             return false;
 
@@ -699,13 +703,21 @@ bool DMetadata::setImageComment(const QString& comment)
 
         // In first we trying to set image comments, outside of Exif and IPTC.
 
-        const std::string str(comment.latin1());
+        const std::string str(comment.utf8());
         d->imageComments = str;
 
         // In Second we write comments into Exif.
-                
-        d->exifMetadata["Exif.Photo.UserComment"] = comment.latin1();
-        
+
+        // Be aware that we are dealing with a UCS-2 string.
+        // Null termination means \0\0, strlen does not work,
+        // do not use any const-char*-only methods,
+        // pass a std::string and not a const char * to ExifDatum::operator=().
+        const unsigned short *ucs2 = comment.ucs2();
+        std::string exifComment("charset=\"Unicode\" ");
+        exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
+        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+        //d->exifMetadata["Exif.Photo.UserComment"] = comment.latin1();
+
         // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
 
         setImageProgramId();
@@ -713,7 +725,7 @@ bool DMetadata::setImageComment(const QString& comment)
         QString commentIptc = comment;
         commentIptc.truncate(2000);
         d->iptcMetadata["Iptc.Application2.Caption"] = commentIptc.latin1();
-    
+
         return true;
     }
     catch( Exiv2::Error &e )
@@ -721,10 +733,54 @@ bool DMetadata::setImageComment(const QString& comment)
         kdDebug() << "Cannot set Comment into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
-    
+    }
+
     return false;
 }
+
+QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
+{
+    std::string comment = exifDatum.toString();
+    std::string charset;
+
+    // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
+    // Before conversion to QString, we must know the charset, so we stay with std::string for a while
+    if (comment.length() > 8 && comment.substr(0, 8) == "charset=")
+    {
+        // the prepended charset specification is followed by a blank
+        std::string::size_type pos = comment.find_first_of(' ');
+        if (pos != std::string::npos)
+        {
+            // extract string between the = and the blank
+            charset = comment.substr(8, pos-8);
+            // get the rest of the string after the charset specification
+            comment = comment.substr(pos+1);
+        }
+    }
+
+    if (charset == "\"Unicode\"")
+    {
+        // QString expects a null-terminated UCS-2 string.
+        // Is it already null terminated? In any case, add termination for safety.
+        comment += "\0\0";
+        return QString::fromUcs2((unsigned short *)comment.data());
+    }
+    else if (charset == "\"Jis\"")
+    {
+        QTextCodec *codec = QTextCodec::codecForName("JIS7");
+        return codec->toUnicode(comment.c_str());
+    }
+    else if (charset == "\"Ascii\"")
+    {
+        return QString::fromLatin1(comment.c_str());
+    }
+    else
+    {
+        // or from local8bit ??
+        return QString::fromLatin1(comment.c_str());
+    }
+}
+
 
 /*
 Iptc.Application2.Urgency <==> digiKam Rating links:
