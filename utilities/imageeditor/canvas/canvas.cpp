@@ -379,7 +379,8 @@ void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
     {
         delete d->rubber;
         d->rubber = 0;
-        emit signalSelected(false);
+        if (d->im->imageValid())
+            emit signalSelected(false);
     }
 
     if (d->imageHistogram)
@@ -568,7 +569,8 @@ void Canvas::updateContentsSize()
         delete d->rubber;
         d->rubber = 0;
         d->pressedMoved = false;
-        emit signalSelected(false);
+        if (d->im->imageValid())
+            emit signalSelected(false);
     }
 
     int wZ = int(d->im->width());
@@ -819,7 +821,7 @@ void Canvas::paintHistogram(const QRect& cr)
 
 void Canvas::drawRubber()
 {
-    if (!d->rubber)
+    if (!d->rubber || !d->im->imageValid())
         return;
 
     QPainter p(viewport());
@@ -1115,7 +1117,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     {
         d->tileCache.clear();
         viewport()->setMouseTracking(true);
-        emit signalSelected(true);
+        if (d->im->imageValid())
+            emit signalSelected(true);
     }
     else
     {
@@ -1124,7 +1127,8 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         d->lbActive = false;
         d->rbActive = false;
         viewport()->setMouseTracking(false);
-        emit signalSelected(false);
+        if (d->im->imageValid())
+            emit signalSelected(false);
     }
 
     if (e->button() != Qt::LeftButton)

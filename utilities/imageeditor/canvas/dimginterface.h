@@ -86,6 +86,7 @@ public:
                          int mx, int my, int mw, int mh,
                          int antialias);
 
+    bool   imageValid();
     int    width();
     int    height();
     int    origWidth();
