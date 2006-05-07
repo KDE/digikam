@@ -823,20 +823,28 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
 
-    // GPhoto2 driver always return complete APP1 JFIF section. Exiv2 cannot 
-    // decode (yet) exif metadata from APP1. We cut 10 first bytes (APP1 header) 
+    // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot 
+    // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place 
     // to please with Exiv2...
 
     kdDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
-
-    if (!exifData.size() > 10)
+    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
+    
+    if (!exifData.isEmpty())
     {
-        QByteArray data(exifData.size()-10);
-        memcpy(data.data(), exifData.data()+10, data.size());
-        d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
+        int i = exifData.find(*exifHeader);
+        if (i != -1)
+        {
+            kdDebug() << "Exif header found at position " << i << endl;
+            i = i + sizeof(exifHeader);
+            QByteArray data(exifData.size()-i);
+            memcpy(data.data(), exifData.data()+i, data.size());
+            d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
+            return;
+        }
     }
-    else
-        d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
+
+    d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
