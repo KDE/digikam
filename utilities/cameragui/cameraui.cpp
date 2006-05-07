@@ -390,6 +390,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
 CameraUI::~CameraUI()
 {
     delete d->rightSidebar;
+    delete d->controller;
     delete d;
 }
 
@@ -460,16 +461,12 @@ void CameraUI::dialogClosed()
     d->status->setText(i18n("Disconnecting from camera, please Wait..."));
     d->progress->hide();
     
-    delete d->controller;
-    
     //---------------------------------------------------
         
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
-    
-    // Scan must be done later than controller instance is closed.
     
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
