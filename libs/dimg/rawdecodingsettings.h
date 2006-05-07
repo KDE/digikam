@@ -60,11 +60,20 @@ public:
         unclipColors            = false;
         cameraColorBalance      = true;
         automaticColorBalance   = true;
+        halfSizeColorImage      = false;
+        sixteenBitsImage        = true;
     };
     
     ~RawDecodingSettings(){};
 
 public:
+    
+    // Half-size color image decoding (twice as fast as "enableRAWQuality"). Use this option to 
+    // reduce time loading to render histogram for example, no to render an image to screen.
+    bool  halfSizeColorImage;
+
+    // If true, decode RAW file in 16 bits per color per pixel else 8 bits.
+    bool  sixteenBitsImage;
 
     // Use the color balance specified by the camera. If this can't be found, reverts to the default.
     bool  cameraColorBalance;
