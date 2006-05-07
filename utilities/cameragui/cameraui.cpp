@@ -821,9 +821,16 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
     kdDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
+
+    // GPhoto2 driver always return complete APP1 JFIF section. Exiv2 cannot 
+    // decode (yet) exif metadata from APP1. We cut 10 first bytes (APP1 header) 
+    // to please with Exiv2...
+    QByteArray data(exifData.size() - 10);
+    memcpy(data.data(), exifData.data()+10, data.size());
+
     CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
-    d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
+    d->rightSidebar->itemChanged(item->itemInfo(), url, data, d->view, item);
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
