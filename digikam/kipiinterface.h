@@ -38,7 +38,7 @@
 #include <kurl.h>
 #include <kio/job.h>
 
-// KIPI Includes.
+// libKipi Includes.
 
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
@@ -65,7 +65,7 @@ class TAlbum;
 class AlbumDB;
 class AlbumSettings;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** DigikamImageInfo: class to get/set image informations/properties in a digiKam album. */
 
 class DigikamImageInfo : public KIPI::ImageInfoShared
 {
@@ -96,21 +96,29 @@ private:
 
     PAlbum *parentAlbum();
 
+private:
+
     PAlbum *palbum_;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** DigikamImageCollection: class to get/set image collection informations/properties in a digiKam 
+    album database. */
 
 class DigikamImageCollection : public KIPI::ImageCollectionShared
 {
     
 public:
 
-    enum Type { AllItems, SelectedItems };
+    enum Type 
+    { 
+        AllItems, 
+        SelectedItems 
+    };
 
-    DigikamImageCollection( Type tp, Album *album,
-                            const QString& filter );
+public:
+
+    DigikamImageCollection( Type tp, Album *album, const QString& filter );
     ~DigikamImageCollection();
     
     virtual QString name();
@@ -130,13 +138,15 @@ private:
     KURL::List imagesFromPAlbum(PAlbum* album) const;
     KURL::List imagesFromTAlbum(TAlbum* album) const;
     
-    Type    tp_;
-    Album  *album_;
-    QString imgFilter_;
+private:
+
+    Type     tp_;
+    Album   *album_;
+    QString  imgFilter_;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** DigikamKipiInterface: class to interface digiKam with kipi library. */
 
 class DigikamKipiInterface : public KIPI::Interface
 {
