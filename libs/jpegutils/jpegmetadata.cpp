@@ -118,7 +118,7 @@ void readJPEGMetaData(const QString& filePath,
                 continue;
             }
 
-            comments = QString::fromAscii((const char*)marker->data,
+            comments = QString::fromUtf8((const char*)marker->data,
                                           marker->data_length);
         }
         else if (marker->marker == M_EXIF)
