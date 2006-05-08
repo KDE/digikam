@@ -104,7 +104,7 @@ private:
     
     QHButtonGroup                *m_scaleBG;
     
-    QButtonGroup                 *m_bwTools;
+    QListBox                     *m_bwTools;
 
     QCheckBox                    *m_overExposureIndicatorBox;
     
@@ -128,7 +128,8 @@ private:
 
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     QString previewEffectPic(QString name);
-
+    QPixmap getThumbnailForEffect(int type);
+    
 private slots:
 
     void slotDefault();    

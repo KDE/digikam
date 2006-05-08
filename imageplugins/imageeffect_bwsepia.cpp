@@ -27,7 +27,7 @@
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h> 
-#include <qradiobutton.h>
+#include <qlistbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
@@ -69,10 +69,37 @@
 namespace DigikamImagesPluginCore
 {
 
+class ListBoxWhatsThis : public QWhatsThis 
+{
+public:
+    ListBoxWhatsThis(QListBox* w) : QWhatsThis(w), m_listBox(w) {}
+    virtual QString text (const QPoint &);
+    void add(QListBoxItem*, const QString& text);
+
+protected:
+    QMap<QListBoxItem*, QString> m_itemWhatsThisMap;
+    QListBox* m_listBox;
+};
+
+QString ListBoxWhatsThis::text(const QPoint &p)
+{
+    QListBoxItem* item = m_listBox->itemAt(p);
+    if (item != 0) {
+        return m_itemWhatsThisMap[item];
+    }
+    return QString::null;
+}
+
+void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
+{
+    m_itemWhatsThisMap[item] = text;
+}
+
+
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                    : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), "convertbw", false)
+                   ,m_destinationPreviewData(0L)
 {
-    m_destinationPreviewData = 0L;
     setHelp("blackandwhitetool.anchor", "digikam");
 
     Digikam::ImageIface iface(0, 0);
@@ -155,72 +182,84 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_tab = new KTabWidget(gboxSettings);
 
-    m_bwTools = new QButtonGroup(1, Qt::Horizontal, m_tab);
-    m_bwTools->setFrameStyle(QFrame::NoFrame);
- 
-    QRadioButton *neutral = new QRadioButton(i18n("Neutral"), m_bwTools);
-    QWhatsThis::add( neutral, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
+    m_bwTools = new QListBox(m_tab);
+    m_bwTools->setColumnMode(1);
+    ListBoxWhatsThis* whatsThis = new ListBoxWhatsThis(m_bwTools);
+
+    int type = 0;
+    QPixmap pix = getThumbnailForEffect(type);
+    
+    QListBoxItem *item = new QListBoxPixmap(m_bwTools, pix, i18n("Neutral"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
                                    "<p>Simulate black and white neutral film exposure.</p>")
                                    .arg(previewEffectPic("neutralbw")));
-    m_bwTools->insert(neutral, BWNeutral);
-    
-    QRadioButton *green = new QRadioButton(i18n("Green Filter"), m_bwTools);
-    QWhatsThis::add( green, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
+
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Green Filter"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
                                  "<p>Simulate black and white film exposure using green filter. "
                                  "This provides an universal asset for all scenics, especially suited for portraits "
                                  "photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
-    m_bwTools->insert(green, BWGreenFilter);
 
-    QRadioButton *orange = new QRadioButton(i18n("Orange Filter"), m_bwTools);
-    QWhatsThis::add( orange, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Orange Filter"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
                                   "<p>Simulate black and white film exposure using orange filter. "
                                   "This will enhances landscapes, marine scenes and aerial "
                                   "photography.</p>").arg(previewEffectPic("bworange")));
-    m_bwTools->insert(orange, BWOrangeFilter);
 
-    QRadioButton *red = new QRadioButton(i18n("Red Filter"), m_bwTools);
-    QWhatsThis::add( red, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Red Filter"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
                                "<p>Simulate black and white film exposure using red filter. "
                                "Using this one creates dramatic sky effects and simulates moonlight scenes "
                                "in daytime.</p>").arg(previewEffectPic("bwred")));
-    m_bwTools->insert(red, BWRedFilter);
 
-    QRadioButton *yellow = new QRadioButton(i18n("Yellow Filter"), m_bwTools);
-    QWhatsThis::add( yellow, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Yellow Filter"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
                                   "<p>Simulate black and white film exposure using yellow filter. "
                                   "Most natural tonal correction and improves contrast. Ideal for "
                                   "landscapes.</p>").arg(previewEffectPic("bwyellow")));
-    m_bwTools->insert(yellow, BWYellowFilter);
 
-    QRadioButton *sepia = new QRadioButton(i18n("Sepia Tone"), m_bwTools);
-    QWhatsThis::add( sepia, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Sepia Tone"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
                                  "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                  "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
                                  "toner.</p>").arg(previewEffectPic("sepia")));
-    m_bwTools->insert(sepia, BWSepia);
 
-    QRadioButton *brown = new QRadioButton(i18n("Brown Tone"), m_bwTools);
-    QWhatsThis::add( brown, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Brown Tone"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
                                  "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
-    m_bwTools->insert(brown, BWBrown);
 
-    QRadioButton *cold = new QRadioButton(i18n("Cold Tone"), m_bwTools);
-    QWhatsThis::add( cold, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Cold Tone"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
-    m_bwTools->insert(cold, BWCold);    
 
-    QRadioButton *selenium = new QRadioButton(i18n("Selenium Tone"), m_bwTools);
-    QWhatsThis::add( selenium, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Selenium Tone"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
                                     "<p>This effect replicate traditional selenium chemical toning done "
                                     "in the darkroom.</p>").arg(previewEffectPic("selenium")));
-    m_bwTools->insert(selenium, BWSelenium);
 
-    QRadioButton *platinium = new QRadioButton(i18n("Platinum Tone"), m_bwTools);
-    QWhatsThis::add( platinium, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new QListBoxPixmap(m_bwTools, pix, i18n("Platinum Tone"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
                                      "<p>This effect replicate traditional platinum chemical toning done "
                                      "in the darkroom.</p>").arg(previewEffectPic("platinum")));
-    m_bwTools->insert(platinium, BWPlatinum);
     
     m_tab->insertTab(m_bwTools, i18n("Tone"), ToneTab);
 
@@ -297,7 +336,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bwTools, SIGNAL(released(int)),
+    connect(m_bwTools, SIGNAL(highlighted(int)),
             this, SLOT(slotEffect()));
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
@@ -324,8 +363,7 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     config->writeEntry("Histogram Scale", m_scaleBG->selectedId());
     config->sync();
 
-    if (m_destinationPreviewData) 
-       delete [] m_destinationPreviewData;
+    delete [] m_destinationPreviewData;
        
     delete m_histogramWidget;
     delete m_previewWidget;
@@ -390,7 +428,8 @@ void ImageEffect_BWSepia::slotDefault()
     m_bwTools->blockSignals(true);
     m_cInput->blockSignals(true);
 
-    m_bwTools->setButton( BWNeutral );
+    m_bwTools->setCurrentItem(0);
+    m_bwTools->setSelected(0, true);
     m_cInput->setValue(0.0);
     
     for (int channel = 0 ; channel < 5 ; channel++)
@@ -410,11 +449,10 @@ void ImageEffect_BWSepia::slotEffect()
     
     m_histogramWidget->stopHistogramComputation();
 
-    if (m_destinationPreviewData) 
-       delete [] m_destinationPreviewData;
+    delete [] m_destinationPreviewData;
 
     Digikam::ImageIface* iface      = m_previewWidget->imageIface();
-    uchar *m_destinationPreviewData = iface->getPreviewImage();
+    m_destinationPreviewData        = iface->getPreviewImage();
     int w                           = iface->previewWidth();
     int h                           = iface->previewHeight();
     bool a                          = iface->previewHasAlpha();
@@ -422,7 +460,7 @@ void ImageEffect_BWSepia::slotEffect()
 
     // Convert to black and white.
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTools->selectedId());
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTools->currentItem());
 
     // Calculate and apply the curve on image.
     
@@ -449,6 +487,31 @@ void ImageEffect_BWSepia::slotEffect()
     kapp->restoreOverrideCursor();
 }
 
+QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
+{
+    const int shrinkFactor = 4;
+    
+    Digikam::ImageIface* iface      = m_previewWidget->imageIface();
+    int w                           = iface->previewWidth() / shrinkFactor;
+    int h                           = iface->previewHeight() / shrinkFactor;
+    bool a                          = iface->previewHasAlpha();
+    bool sb                         = iface->previewSixteenBit();
+    
+    Digikam::ImageIface* thumbnailIface = new Digikam::ImageIface(w, h);
+    uchar *data = thumbnailIface->getPreviewImage();
+    
+    blackAndWhiteConversion(data, w, h, sb, type);
+
+    Digikam::DImg preview(w, h, sb, a, data);
+
+    QPixmap res = preview.convertToPixmap();
+    delete[] data;
+    delete thumbnailIface;
+
+    return res;
+}
+
+
 void ImageEffect_BWSepia::finalRendering()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -461,7 +524,7 @@ void ImageEffect_BWSepia::finalRendering()
     
     if (data) 
     {
-       int type = m_bwTools->selectedId();
+       int type = m_bwTools->currentItem();
 
        // Convert to black and white.
     
