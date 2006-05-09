@@ -103,37 +103,32 @@ Exiv2::ExifData MRWParser::getExif()
 
 bool MRWParser::load_file(const char *fname) 
 {
-    FILE *f;
-    size_t sz;
-    
     rawfile = fname; 
-    
-    f = fopen( fname , "rb" ); 
-    
+  
+    FILE *f = fopen( fname , "rb" ); 
+
     if (f==NULL) 
     {
         std::cerr << "Failed to open file " << fname << "\n";
         return false;
     }
     
-    fseek(f , 0 , SEEK_END);
+    fseek(f, 0, SEEK_END);
     rawsize = ftell(f);
-    fseek(f , 0 , SEEK_SET);
+    fseek(f, 0, SEEK_SET);
     
     if (rawsize > 400000) 
         rawsize = 400000;
     
     rawdata = new char[rawsize]; 
     
-    if ( !rawdata ) 
+    if (!rawdata) 
     {
         std::cerr << "Failed to allocate " << rawsize << " bytes" << "\n";
         return false;
     }
-
-    std::cerr << "SIZE: "<< fname << " : " << rawsize << "\n";
     
-    sz = fread(rawdata, 1, rawsize, f);
+    size_t sz = fread(rawdata, 1, rawsize, f);
     
     if (sz!=rawsize) 
     {
@@ -152,29 +147,26 @@ void MRWParser::check_valid(off_t pos, int count)
 {
     if (count>=0) return; 
     if ( pos<0 || pos+count>rawsize ) 
-    {
-        std::cerr << "Trying to access " << pos << " bytes at offset #" 
-                  << count << "\n";
-    }
+        std::cerr << "Trying to access " << pos << " bytes at offset #" << count << "\n";
 }
 
 char MRWParser::get_8(off_t pos) 
 {
-    check_valid(pos, 1) ; 
-    return rawdata[pos] ;
+    check_valid(pos, 1); 
+    return rawdata[pos];
 }
 
 int16_t MRWParser::get_16_l(off_t pos) 
 {
-    check_valid(pos, 2) ; 
+    check_valid(pos, 2); 
     return (int16_t) ( (((uint8_t)rawdata[pos+0]) << 0) + 
-                        (((uint8_t)rawdata[pos+1]) << 8) ); 
+                       (((uint8_t)rawdata[pos+1]) << 8) ); 
 }
 
 int32_t MRWParser::get_32_l(off_t pos) 
 {
-    check_valid(pos, 4) ; 
-    return (int32_t) ( (((uint8_t)rawdata[pos+0]) <<  0) + 
+    check_valid(pos, 4); 
+    return (int32_t) ( (((uint8_t)rawdata[pos+0]) <<   0) + 
                         (((uint8_t)rawdata[pos+1]) <<  8) + 
                         (((uint8_t)rawdata[pos+2]) << 16) + 
                         (((uint8_t)rawdata[pos+3]) << 24) );
@@ -182,15 +174,15 @@ int32_t MRWParser::get_32_l(off_t pos)
 
 int16_t MRWParser::get_16_m(off_t pos) 
 {
-    check_valid(pos, 2) ; 
+    check_valid(pos, 2); 
     return (int16_t) ( (((uint8_t)rawdata[pos+1]) << 0) + 
-                        (((uint8_t)rawdata[pos+0]) << 8) ); 
+                       (((uint8_t)rawdata[pos+0]) << 8) ); 
 }
 
 int32_t MRWParser::get_32_m(off_t pos) 
 {
-    check_valid(pos, 4) ; 
-    return (int32_t) ( (((uint8_t)rawdata[pos+3]) <<  0) + 
+    check_valid(pos, 4); 
+    return (int32_t) ( (((uint8_t)rawdata[pos+3]) <<   0) + 
                         (((uint8_t)rawdata[pos+2]) <<  8) + 
                         (((uint8_t)rawdata[pos+1]) << 16) + 
                         (((uint8_t)rawdata[pos+0]) << 24) );
@@ -226,120 +218,120 @@ void MRWParser::parse_rif_block( off_t pos , uint32_t sz )
     
     #define REQSIZE(x) if ( sz < x ) return ;   
     
-    at = 0 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 0; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.Unknown%-9d = %4d (0x%02x) \n" , (int) at, u8 , u8) ;
         
-    at = 1 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 1; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %+d\n" , "Saturation", u8 , u8, (int) (signed char)u8 ) ;
     
-    at = 2 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 2; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %+d\n" , "Contrast", u8 , u8 , (int) (signed char)u8 ) ;
     
-    at = 3 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 3; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %+d\n" , "Sharpness", u8 , u8 , (int) (signed char)u8 ) ;
     
-    at = 4 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 4; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) \n" , "WBMode", u8 , u8) ;
     
-    at = 5 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 5; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     
     switch ( u8 ) 
     {
-        case 0x00:  prg_mode = "None"           ; break ;
-        case 0x01:  prg_mode = "Portrait"       ; break ;
-        case 0x02:  prg_mode = "Text"           ; break ;
-        case 0x03:  prg_mode = "Night Portrait" ; break ;
-        case 0x04:  prg_mode = "Sunset"         ; break ;
-        case 0x05:  prg_mode = "Sports Action"  ; break ;
-        default:    prg_mode = "*UNKNOWN*"  ; break ;
+        case 0x00:  prg_mode = "None"           ; break;
+        case 0x01:  prg_mode = "Portrait"       ; break;
+        case 0x02:  prg_mode = "Text"           ; break;
+        case 0x03:  prg_mode = "Night Portrait" ; break;
+        case 0x04:  prg_mode = "Sunset"         ; break;
+        case 0x05:  prg_mode = "Sports Action"  ; break;
+        default:    prg_mode = "*UNKNOWN*"      ; break;
     }
     
     // printf("rif.%-16s = %4d (0x%02x) --> %s\n" , "ProgramMode", u8 , u8, prg_mode) ;
     
-    at = 6 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 6; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     iso = pow(2, (u8/8.0)-1)*3.125;
     // printf("rif.%-16s = %4d (0x%02x) --> %f\n" , "ISO", u8 , u8 , iso) ;
     
-    at = 7 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 7; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     
     switch ( u8 ) 
     {
-        case 0x00:  color_mode = "Normal Color"  ; break ;
-        case 0x01:  color_mode = "B&W"           ; break ;
-        case 0x02:  color_mode = "Vivid Color"   ; break ;
-        case 0x03:  color_mode = "Solarization"  ; break ;
-        case 0x04:  color_mode = "AdobeRGB"      ; break ;   
-        case 0x0d:  color_mode = "Natural sRGB"  ; break ;
-        case 0x0e:  color_mode = "Natural+ sRGB" ; break ;
-        case 0x84:  color_mode = "EmbedAdobeRGB" ; break ;
-        default:    color_mode = "*UNKNOWN*" ; break ;
+        case 0x00:  color_mode = "Normal Color"  ; break;
+        case 0x01:  color_mode = "B&W"           ; break;
+        case 0x02:  color_mode = "Vivid Color"   ; break;
+        case 0x03:  color_mode = "Solarization"  ; break;
+        case 0x04:  color_mode = "AdobeRGB"      ; break;   
+        case 0x0d:  color_mode = "Natural sRGB"  ; break;
+        case 0x0e:  color_mode = "Natural+ sRGB" ; break;
+        case 0x84:  color_mode = "EmbedAdobeRGB" ; break;
+        default:    color_mode = "*UNKNOWN*"     ; break;
     }
     
     // printf("rif.%-16s = %4d (0x%02x) --> %s\n" , "ColorMode", u8 , u8, color_mode) ;
     
     /*** A bunch of unknown fields from 8 to 55 ***/
-    at++ ; 
+    at++; 
     for (; at < 56 ; at++ ) 
     {
-        REQSIZE(at+1) ;
-        u8  = get_8(pos+at) ;
+        REQSIZE(at+1);
+        u8  = get_8(pos+at);
     // printf("rif.Unknown%-9u = %4d (0x%02x) \n" , (int) at, u8 , u8) ;
     }
     
-    at = 56 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 56; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %+d\n" , "ColorFilter", u8 , u8, (int) (signed char)u8 ) ;
     
-    at = 57 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 57; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) \n" , "BlackWhiteFilter", u8 , u8) ;
     
-    at = 58 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 58; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     
     switch ( u8 ) 
     {
-        case 0:  zone_matching = "NONE" ; break ;
-        case 1:  zone_matching = "HIGH" ; break ;
-        case 2:  zone_matching = "LOW"  ; break ;
-        default: zone_matching = "*UNKNOWN*" ;break ;
+        case 0:  zone_matching = "NONE"      ; break;
+        case 1:  zone_matching = "HIGH"      ; break;
+        case 2:  zone_matching = "LOW"       ; break;
+        default: zone_matching = "*UNKNOWN*" ; break;
     }
     
     // printf("rif.%-16s = %4d (0x%02x) --> %s\n" , "ZoneMatching", u8 , u8, zone_matching) ;
     
-    at = 59 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 59; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %+d\n" , "Hue", u8 , u8, (int) (signed char)u8 ) ;
     
-    at = 60 ; 
-    REQSIZE(at+1) ;
-    u8  = get_8(pos+at) ;
+    at = 60; 
+    REQSIZE(at+1);
+    u8  = get_8(pos+at);
     // printf("rif.%-16s = %4d (0x%02x) --> %dK\n" , "WBTemperature", u8 , u8, u8*100) ;
     
-    at++ ;
+    at++;
     for( ; at<sz; at++) 
     {
-        u8  = get_8(pos+at) ;
+        u8  = get_8(pos+at);
         // printf("rif.Unknown%-9d = %4d (0x%02x) \n" , (int)at, u8 , u8) ;
     }
   
@@ -348,7 +340,7 @@ void MRWParser::parse_rif_block( off_t pos , uint32_t sz )
 
 void MRWParser::parse_prd_block( off_t pos , uint32_t sz )
 {
-    int i ;
+    int i;
     
     if ( sz != 24 ) 
         std::cerr << "Illegal size " << sz << " for PRD block. Should be 24" << "\n";
@@ -415,13 +407,13 @@ void MRWParser::check_valid_tiff(off_t pos, int count)
 
 char MRWParser::get_8_tiff(off_t pos) 
 {
-    check_valid_tiff(pos,1) ;
+    check_valid_tiff(pos, 1) ;
     return get_8(tiff_base+pos); 
 }
 
 int16_t MRWParser::get_16_tiff(off_t pos) 
 {
-    check_valid_tiff(pos,2) ;
+    check_valid_tiff(pos, 2) ;
     if (tiff_msb) 
     {
         return get_16_m(tiff_base+pos); 
@@ -434,7 +426,7 @@ int16_t MRWParser::get_16_tiff(off_t pos)
 
 int32_t MRWParser::get_32_tiff(off_t pos) 
 {
-    check_valid_tiff(pos,2) ;
+    check_valid_tiff(pos, 2) ;
     if (tiff_msb) 
     {
         return get_32_m(tiff_base+pos); 
@@ -447,10 +439,10 @@ int32_t MRWParser::get_32_tiff(off_t pos)
 
 Exiv2::DataBuf MRWParser::get_ttf_tag_value(off_t pos) 
 {
-    int16_t  type  = get_16_tiff(pos+2) ;
-    uint32_t count = get_32_tiff(pos+4) ;
-    uint32_t i ; 
-    uint32_t sz ;
+    int16_t  type  = get_16_tiff(pos+2);
+    uint32_t count = get_32_tiff(pos+4);
+    uint32_t i; 
+    uint32_t sz;
     
     switch(type) 
     {
@@ -595,7 +587,7 @@ Exiv2::DataBuf MRWParser::get_ttf_tag_value(off_t pos)
 
 void MRWParser::dump_ttf_tag(off_t pos) 
 {
-    uint16_t id    = get_16_tiff(pos+0); 
+    uint16_t id = get_16_tiff(pos+0); 
     
     switch(id) 
     {
@@ -606,7 +598,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0101: /*  ImageLength (unsignedLong) */
         {
@@ -615,7 +607,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0103: /*  Compression (unsignedShort) */
         {
@@ -624,7 +616,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x010e: /*  ImageDescription (asciiString) */
         {
@@ -634,7 +626,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x010f: /*  Make (asciiString) */
         {
@@ -644,7 +636,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0110: /*  Model (asciiString) */
         {
@@ -654,7 +646,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0112: /*  Orientation (unsignedShort) */
         {
@@ -663,7 +655,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x011A: /*  XResolution (unsignedRational) */
         {
@@ -672,7 +664,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x011B: /*  YResolution (unsignedRational) */
         {
@@ -681,7 +673,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0128: /*  ResolutionUnit (unsignedShort) */
         {
@@ -690,7 +682,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0131: /*  Software (asciiString) */
         {
@@ -700,7 +692,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x0132: /*  DateTime (asciiString) */
         {
@@ -710,7 +702,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x8769: /*  ExifIFDPointer */
         {
@@ -731,7 +723,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
 
 void MRWParser::dump_exif_tag(off_t pos) 
 {
-    uint16_t id    = get_16_tiff(pos+0); 
+    uint16_t id = get_16_tiff(pos+0); 
 
     switch(id) 
     {
@@ -742,7 +734,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x829d: /*  FNumber (unsignedRational) */
         {
@@ -751,7 +743,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x8822: /*  ExposureProgram (unsignedShort) */
         {
@@ -760,7 +752,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x8827: /*  ISOSpeedRatings (unsignedShort) */
         {
@@ -769,7 +761,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x9000: /*  ExifVersion (undefined) */
         {
@@ -778,7 +770,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
             val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
-            break ;
+            break;
         }
         case 0x9003: /*   DateTimeOriginal (asciiString) */
         {
@@ -788,7 +780,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x9004: /*   DateTimeDigitized (asciiString) */
         {
@@ -798,7 +790,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
             val->read(string.c_str());
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x9101: /*  ComponentsConfiguration (undefined) */
         {
@@ -807,7 +799,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
             val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());       
-            break ;
+            break;
         }
         case 0x9203: /*   BrightnessValue (signedRational) */
         {
@@ -816,7 +808,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x9204: /*   ExposureBiasValue (signedRational) */
         {
@@ -825,7 +817,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0x9205: /*   MaxApertureValue (unsignedRational) */
         {
@@ -834,7 +826,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());                
-            break ;
+            break;
         }
         case 0x9207: /*  MeteringMode (unsignedShort) */
         {
@@ -843,7 +835,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
-            break ;
+            break;
         }
         case 0x9208: /*  LightSource (unsignedShort) */
         {
@@ -852,7 +844,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
-            break ;
+            break;
         }
         case 0x9209: /*   Flash (unsignedShort) */
         {
@@ -861,7 +853,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
-            break ;
+            break;
         }
         case 0x920a: /*  FocalLength (unsignedRational) */
         {
@@ -870,7 +862,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());     
-            break ;
+            break;
         }
         case 0x9214: /*   SubjectArea (unsignedShort) */
         {
@@ -879,12 +871,12 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());          
-            break ;
+            break;
         }
         case 0x927c: /*   MakerNote */
         {
             maker_note = get_32_tiff(pos+8); 
-            break ;
+            break;
         }
         case 0x9286: /*   UserComment (Comment) */
         {
@@ -893,7 +885,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::comment);
             val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());              
-            break ;
+            break;
         }
         case 0xa000: /*   FlashpixVersion (undefined) */
         {
@@ -902,7 +894,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
             val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());              
-            break ;
+            break;
         }
         case 0xa001: /*   ColorSpace (unsignedShort) */
         {
@@ -911,7 +903,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());            
-            break ;
+            break;
         }
         case 0xa002: /*   PixelXDimension (unsignedLong) */
         {
@@ -920,7 +912,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0xa003: /*   PixelYDimension (unsignedLong) */
         {
@@ -929,11 +921,11 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
-            break ;
+            break;
         }
         case 0xa005: /*   Interoperability ?? */
         {
-            break ;
+            break;
         }
         case 0xa401: /*   CustomRendered (unsignedShort) */
         {
@@ -942,7 +934,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
-            break ;
+            break;
         }
         case 0xa402: /*   ExposureMode (unsignedShort) */
         {
@@ -951,7 +943,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());          
-            break ;
+            break;
         }
         case 0xa403: /*   WhiteBalance (unsignedShort) */
         {
@@ -960,7 +952,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());   
-            break ;
+            break;
         }
         case 0xa404: /*   DigitalZoomRatio (unsignedRational) */
         {
@@ -969,7 +961,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
-            break ;
+            break;
         }
         case 0xa405: /*   FocalLengthIn35mmFilm (unsignedShort) */
         {
@@ -978,7 +970,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
-            break ;
+            break;
         }
         case 0xa406: /*   SceneCaptureType (unsignedShort) */
         {
@@ -987,7 +979,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
-            break ;
+            break;
         }
         case 0xa407: /*   GainControl (unsignedRational) */
         {
@@ -996,7 +988,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
             val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
-            break ;
+            break;
         }
         case 0xa408: /*  Contrast (unsignedShort) */
         {
@@ -1005,7 +997,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());            
-            break ;
+            break;
         }
         case 0xa409: /*   Saturation (unsignedShort) */
         {
@@ -1014,7 +1006,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
-            break ;
+            break;
         }
         case 0xa40a: /*   Sharpness (unsignedShort) */
         {
@@ -1023,7 +1015,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
             val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
-            break ;
+            break;
         }
         default:
         {
@@ -1226,12 +1218,12 @@ void MRWParser::dump_maker_note_tag(off_t pos)
 
 void MRWParser::dump_camera_settings_32bit( off_t pos , uint32_t size ,int mode )
 {
-    uint32_t i ; 
-    uint32_t nb = size/4 ;
+    uint32_t i; 
+    uint32_t nb = size/4;
   
     //printf("<CameraSetting%04x> with %d entries at TFF offset %d\n", mode, (int)nb , (int)pos) ;
   
-    for (i=0;i<nb;i++) 
+    for (i=0 ; i < nb ; i++) 
     {
         /*uint32_t v = get_32_tiff(pos+i*4);
         printf("=== 0x%04lx = %08lx\n" ,(unsigned long) i , (unsigned long)  v);*/
@@ -1240,12 +1232,12 @@ void MRWParser::dump_camera_settings_32bit( off_t pos , uint32_t size ,int mode 
 
 void MRWParser::dump_camera_settings_16bit( off_t pos , uint32_t size ,int mode )
 {
-    uint32_t i ; 
-    uint32_t nb = size/2 ;
+    uint32_t i; 
+    uint32_t nb = size/2;
   
     // printf("<CameraSetting%04x> with %d entries at TFF offset %d\n", mode, (int)nb , (int)pos) ;
   
-    for (i=0;i<nb;i++) 
+    for (i=0 ; i < nb ; i++) 
     {
         /*uint16_t v = get_16_tiff(pos+i*2);
         printf("=== 0x%04lx = %04lx\n" ,(unsigned long) i , (unsigned long)  v)*/;
@@ -1256,14 +1248,14 @@ void MRWParser::dump_camera_settings_16bit( off_t pos , uint32_t size ,int mode 
 
 void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
 {
-    uint32_t i ; 
-    uint32_t nb = size/2 ;
+    uint32_t i; 
+    uint32_t nb = size/2;
   
     // printf("<CameraSetting4> with %d entries at TFF offset %d\n", (int)nb , (int)pos) ;
     
-    for (i=0;i<nb;i++) 
+    for (i=0 ; i < nb ; i++) 
     {
-        uint16_t v = get_16_tiff(pos+i*2)  ;
+        uint16_t v = get_16_tiff(pos+i*2);
       
         // printf("  CS ") ;
       
@@ -1275,13 +1267,13 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
                 const char *x = "**unknown**"; 
                 switch(v) 
                 {
-                    case 0: x ="(P) Program" ; break ;
-                    case 1: x ="(A) Aperture Priority" ; break ;
-                    case 2: x ="(S) Shutter Priority" ; break ;
-                    case 3: x ="(M) Manual" ; break ;
-                    case 4: x ="(P/green) Auto" ; break ;
-                    case 5: x ="(Pa) Program Shift-A" ; break ;
-                    case 6: x ="(Ps) Program Shift-S" ; break ;
+                    case 0: x ="(P) Program"           ; break;
+                    case 1: x ="(A) Aperture Priority" ; break;
+                    case 2: x ="(S) Shutter Priority"  ; break;
+                    case 3: x ="(M) Manual"            ; break;
+                    case 4: x ="(P/green) Auto"        ; break;
+                    case 5: x ="(Pa) Program Shift-A"  ; break;
+                    case 6: x ="(Ps) Program Shift-S"  ; break;
                 }
                 // printf("   0x%04x : %-20s = %6u (%04x) = '%s'\n" ,(int) i , "ExposureMode" ,(unsigned)  v,(unsigned)  v , x)  ; 
             }
@@ -1329,7 +1321,7 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
               break ;
             case 0x0046: /*  CameraOrientation  */
             {
-                const char * x = "Unknown" ;
+                const char * x = "Unknown";
                 if (v == 72) x = "Horizontal"; 
                 if (v == 82) x = "CounterClockWise"; 
                 if (v == 76) x = "ClockWise"; 
@@ -1369,8 +1361,8 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
 
 void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
 {
-    uint32_t i ; 
-    uint32_t nb = size/2 ;
+    uint32_t i; 
+    uint32_t nb = size/2;
   
     // printf("<CameraSetting0114> with %d entries at TFF offset %d\n", (int)nb , (int)pos) ;
     
@@ -1388,12 +1380,12 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
               const char *x = "**unknown**"; 
               switch(v) 
               {
-                  case 0: x ="(P) Program" ; break ;
-                  case 1: x ="(A) Aperture Priority" ; break ;
-                  case 2: x ="(S) Shutter Priority" ; break ;
-                  case 3: x ="(M) Manual" ; break ;
-                  case 4: x ="(P/green) Auto" ; break ;
-                  case 4131: x ="(?) connected copying" ; break ;
+                  case 0: x ="(P) Program"              ; break;
+                  case 1: x ="(A) Aperture Priority"    ; break;
+                  case 2: x ="(S) Shutter Priority"     ; break;
+                  case 3: x ="(M) Manual"               ; break;
+                  case 4: x ="(P/green) Auto"           ; break;
+                  case 4131: x ="(?) connected copying" ; break;
               }
               //printf("   0x%04x : %-20s = %6u (%04x) = '%s'\n" ,(int) i , "ExposureMode" ,(unsigned)  v,(unsigned)  v , x)  ; 
           }
@@ -1427,7 +1419,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
             break ;
           case 0x0050: /*  CameraOrientation  */
           {
-              const char * x = "unknown" ;
+              const char * x = "unknown";
               if (v == 72) x = "Horizontal"; 
               if (v == 82) x = "CounterClockWise"; 
               if (v == 76) x = "ClockWise"; 
@@ -1455,20 +1447,20 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
 
 void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
 {
-    int i ; 
-    char     c1, c2 ; 
-    uint16_t magic ;
-    uint32_t dir ;
+    int      i; 
+    char     c1, c2; 
+    uint16_t magic;
+    uint32_t dir;
   
     
-    tiff_base = pos ;
-    tiff_size = sz ;
+    tiff_base = pos;
+    tiff_size = sz;
   
     if ( sz < 8 ) 
         std::cerr << "Illegal size " << sz << " for TTF block. Should be 8" << "\n";
     
-    c1 = get_8_tiff(0) ; 
-    c2 = get_8_tiff(1) ; 
+    c1 = get_8_tiff(0); 
+    c2 = get_8_tiff(1); 
   
     if ( c1 == 'M' &&  c2 == 'M' ) 
     {
@@ -1496,13 +1488,12 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
   
     do 
     {
-        uint16_t nb ;
-        nb = get_16_tiff(dir) ;
+        uint16_t nb = get_16_tiff(dir);
         std::cerr << "<IFD> with " << nb << " entries at offset " << dir << "\n";
   
-        for ( i=0;i<nb;i++) 
+        for (i=0 ; i < nb ; i++) 
         {
-            off_t    tag_pos   = dir+2+i*12 ;
+            off_t tag_pos = dir+2+i*12;
             dump_ttf_tag( tag_pos );
         }
   
@@ -1514,27 +1505,25 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
   
     if ( exif_start != 0 )
     {
-        uint16_t nb ;
-        nb = get_16_tiff(exif_start) ;
+        uint16_t nb = get_16_tiff(exif_start);
         std::cerr << "<EXIF> with " << nb << " entries at offset " << exif_start << "\n";
         
-        for ( i=0;i<nb;i++) 
+        for (i=0 ; i < nb ; i++) 
         {
-            off_t    tag_pos   = exif_start+2+i*12 ;
-            dump_exif_tag( tag_pos )  ;
+            off_t tag_pos = exif_start+2+i*12;
+            dump_exif_tag( tag_pos );
         }  
     }
   
     if ( maker_note != 0 )
     {
-        uint16_t nb ;
-        nb = get_16_tiff(maker_note) ;
+        uint16_t nb = get_16_tiff(maker_note);
         std::cerr << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << "\n";
         
-        for ( i=0;i<nb;i++) 
+        for (i=0 ; i < nb ; i++) 
         {
-            off_t    tag_pos   = maker_note+2+i*12 ;
-            dump_maker_note_tag( tag_pos )  ;
+            off_t tag_pos = maker_note+2+i*12;
+            dump_maker_note_tag( tag_pos );
         }  
     }
   
@@ -1583,10 +1572,10 @@ bool MRWParser::parse_mrm_block()
         std::cerr << "MRM block not found" << "\n";
   
     /* The image data start immediately after the MRM block */ 
-    image_start = pos + 8 + sz ; 
-    check_valid(image_start,0) ; 
+    image_start = pos + 8 + sz; 
+    check_valid(image_start, 0); 
   
-    pos += 8 ; 
+    pos += 8; 
   
     while ( pos < image_start ) 
     {
@@ -1599,32 +1588,32 @@ bool MRWParser::parse_mrm_block()
         *
         */
   
-        char c1     = get_8(pos+0) ; 
-        char c2     = get_8(pos+1) ; 
-        char c3     = get_8(pos+2) ; 
-        char c4     = get_8(pos+3) ; 
+        char c1 = get_8(pos+0); 
+        char c2 = get_8(pos+1); 
+        char c3 = get_8(pos+2); 
+        char c4 = get_8(pos+3); 
   
-        uint32_t sz = get_32_m(pos+4) ;  
+        uint32_t sz = get_32_m(pos+4);  
   
         if ( c1=='\0' && c2=='P' && c3=='R' && c4=='D' )
         {
             /* Picture Raw Dimensions */
-            parse_prd_block( pos+8 , sz) ;
+            parse_prd_block( pos+8 , sz);
         } 
         else if ( c1=='\0' && c2=='T' && c3=='T' && c4=='W' ) 
         {
             /* Tiff Tags 'Wonderland' */
-            parse_ttf_block( pos+8 , sz) ;
+            parse_ttf_block( pos+8 , sz);
         } 
         else if ( c1=='\0' && c2=='W' && c3=='B' && c4=='G' ) 
         {
             /* WBG = White Balance Gains */
-            parse_wbg_block( pos+8 , sz) ;
+            parse_wbg_block( pos+8 , sz);
         } 
         else if ( c1=='\0' && c2=='R' && c3=='I' && c4=='F' ) 
         {
             /* RIF = Requested Image Format */
-            parse_rif_block( pos+8 , sz) ;
+            parse_rif_block( pos+8 , sz);
         } 
         else if ( c1=='\0' && c2=='P' && c3=='A' && c4=='D' ) 
         {
@@ -1635,11 +1624,11 @@ bool MRWParser::parse_mrm_block()
             return false;
         }
           
-        pos += 8 ;
-        pos += sz ;
+        pos += 8;
+        pos += sz;
     }
  
-    return true ;  
+    return true;  
 }
 
 }  // NameSpace Digikam
