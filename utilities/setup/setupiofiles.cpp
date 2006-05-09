@@ -270,7 +270,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     QWhatsThis::add( d->TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
                                               "If you enable this option, you can reduce "
                                               "the final file size of the TIFF image.</p>"
-                                              "<p>A lossless compression format (Adobe Deflate) "
+                                              "<p>A lossless compression format (Deflate) "
                                               "is used to save the file.<p>"));
     grid2->addMultiCellWidget(d->TIFFcompression, 2, 2, 0, 1);
     grid2->setColStretch(1, 10);
