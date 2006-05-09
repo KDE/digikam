@@ -96,6 +96,32 @@ void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
 }
 
 
+class ListBoxPreviewItem : public QListBoxPixmap
+{
+public:
+    ListBoxPreviewItem(QListBox *listbox, const QPixmap &pix, const QString &text)
+        : QListBoxPixmap(listbox, pix, text) {};
+
+    virtual int height ( const QListBox * lb ) const;
+    virtual int width ( const QListBox * lb ) const;
+};
+
+int ListBoxPreviewItem::height(const QListBox *lb) const
+{
+    int height = QListBoxPixmap::height(lb);
+    return QMAX(height, pixmap()->height() + 5);
+}
+
+int ListBoxPreviewItem::width(const QListBox *lb) const
+{
+    int width = QListBoxPixmap::width(lb);
+    return QMAX(width, pixmap()->width() + 5);
+}
+
+
+
+
+
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                    : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), "convertbw", false)
                    ,m_destinationPreviewData(0L)
@@ -184,19 +210,21 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_bwTools = new QListBox(m_tab);
     m_bwTools->setColumnMode(1);
+    m_bwTools->setVariableWidth(false);
+    m_bwTools->setVariableHeight(false);
     ListBoxWhatsThis* whatsThis = new ListBoxWhatsThis(m_bwTools);
 
     int type = 0;
     QPixmap pix = getThumbnailForEffect(type);
     
-    QListBoxItem *item = new QListBoxPixmap(m_bwTools, pix, i18n("Neutral"));
+    QListBoxItem *item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Neutral"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
                                    "<p>Simulate black and white neutral film exposure.</p>")
                                    .arg(previewEffectPic("neutralbw")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Green Filter"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Green Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
                                  "<p>Simulate black and white film exposure using green filter. "
                                  "This provides an universal asset for all scenics, especially suited for portraits "
@@ -204,7 +232,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Orange Filter"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Orange Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
                                   "<p>Simulate black and white film exposure using orange filter. "
                                   "This will enhances landscapes, marine scenes and aerial "
@@ -212,7 +240,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Red Filter"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Red Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
                                "<p>Simulate black and white film exposure using red filter. "
                                "Using this one creates dramatic sky effects and simulates moonlight scenes "
@@ -220,7 +248,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Yellow Filter"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Yellow Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
                                   "<p>Simulate black and white film exposure using yellow filter. "
                                   "Most natural tonal correction and improves contrast. Ideal for "
@@ -228,7 +256,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Sepia Tone"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Sepia Tone"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
                                  "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                  "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
@@ -236,27 +264,27 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Brown Tone"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Brown Tone"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
                                  "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Cold Tone"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Cold Tone"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Selenium Tone"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Selenium Tone"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
                                     "<p>This effect replicate traditional selenium chemical toning done "
                                     "in the darkroom.</p>").arg(previewEffectPic("selenium")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new QListBoxPixmap(m_bwTools, pix, i18n("Platinum Tone"));
+    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Platinum Tone"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
                                      "<p>This effect replicate traditional platinum chemical toning done "
                                      "in the darkroom.</p>").arg(previewEffectPic("platinum")));
@@ -308,7 +336,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_bwTools->setFocus();
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
-    gridSettings->setRowStretch(4, 10);
+    gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
     
     // -------------------------------------------------------------
@@ -489,7 +517,7 @@ void ImageEffect_BWSepia::slotEffect()
 
 QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
 {
-    const int shrinkFactor = 4;
+    const int shrinkFactor = 2;
     
     Digikam::ImageIface* iface      = m_previewWidget->imageIface();
     int w                           = iface->previewWidth() / shrinkFactor;
