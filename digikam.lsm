@@ -1,10 +1,10 @@
 Begin3
 Title:          digiKam 
-Version:        0.8.2-beta1
-Entered-date:   2006-04-09
+Version:        0.8.2-rc1
+Entered-date:   2006-05-11
 Description:    KDE Photo Management
 Keywords:       Digital Camera, KDE, Graphics, Image Viewer, Image Editor, Gphoto 
-Author:         Renchi Raju <renchi at pooh.tam.uiuc.edu>, Gilles Caulier <caulier dot gilles at free.fr>, Joern Ahrens <joern dot ahrens at kdemail dot net>, Tom Albers <tomalbers at kde.nl>
+Author:         Renchi Raju <renchi at pooh.tam.uiuc.edu>, Gilles Caulier <caulier dot gilles at free.fr>, Joern Ahrens <joern dot ahrens at kdemail dot net>, Tom Albers <tomalbers at kde.nl>,  Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Primary-site:   	        
 Home-page:      http://www.digikam.org
 Original-site:  

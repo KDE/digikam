@@ -27,6 +27,7 @@ Note: docs must be set to 'no' release_digikam.rb because the documentation must
 
 4/ Look at new ChangeLog entries and add highlights to NEWS file
     (this can be used for the release announcement too)
+
 TODO:
    add a recipe/script that converts CCBUGS: <bug#> from ChangeLog.new-entries
    to #<bugno>: title of the bug.  It needs a check if bug is still closed

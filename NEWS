@@ -1,4 +1,34 @@
 -------------------------------------------------------------------------
+0.8.2-rc1
+
+New feature:
+
+	o add missing Rating info in album item file tip and image
+	  properties dialog
+
+Bugs fixed:
+
+	o fix JFIF comments section encoding extraction to respect UTF8
+	  (#120241)
+
+	o fix x-raw.desktop: removed tiff extention
+
+	o camera download: auto-rotated images lose EXIF meta data
+	  (#126326)
+
+	o fix message about missing dcraw program
+
+	o EXIF info lost when saving a modified image that was readonly
+	  (#118501)
+
+	o Hash marks ('#') in album names cause problems. 0.7.* regression
+          (#118501)
+
+	o something is broken with TIFF imlib2 loader and 16 bits
+          images. Use KDE/Qt TIFF loader instead. (#125916)
+
+
+-------------------------------------------------------------------------
 0.8.2-beta1
 
 New features:

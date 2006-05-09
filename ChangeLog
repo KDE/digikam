@@ -1,5 +1,141 @@
+v0.8.2-rc1   		11-Mai-2006
+----------------------------------------------------------------------------
+
+2006-05-08 23:15 +0000 [r538809]  cgilles
+
+	* digikam/libs/jpegutils/jpegmetadata.cpp: digikam from stable :
+	  fix JFIF comments section encoding extraction to respect UTF8
+	  CCMAIL: digikam-devel@kde.org CCBUGS: 120241
+
+2006-05-03 14:59 +0000 [r536955]  cgilles
+
+	* digikam/showfoto/mimetypes/x-raw.desktop: digikam from stable :
+	  why tiff file is a RAW file here ???
+
+2006-05-01 17:57 +0000 [r536254]  toma
+
+	* digikam/libs/dcraw/dcrawbinary.cpp: fixed
+
+2006-04-30 17:54 +0000 [r535907]  mwiesweg
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digikam stable
+	  branch: Add write permission when copying permissions of original
+	  file to temp file so that std::ofstream of temp file can open the
+	  file. BUG: 118501
+
+2006-04-30 17:10 +0000 [r535879]  mwiesweg
+
+	* digikam/digikam/albummanager.cpp: digikam stable branch: Properly
+	  create URL from filename. Backport commit 535877. BUG: 125926
+
+2006-04-29 09:37 +0000 [r535317]  ach
+
+	* digikam/version.h, digikam/release_digikam_cl.sh,
+	  digikam/release_digikam.rb: digikam stable: prepare tarball for
+	  testing
+
+2006-04-29 09:11 +0000 [r535311]  cgilles
+
+	* digikam/libs/widgets/imagepannelwidget.cpp: fix i18n
+
+2006-04-27 08:39 +0000 [r534496-534497]  cgilles
+
+	* digikam/utilities/cameragui/cameracontroller.cpp: Advanced debug
+	  infos.
+
+	* digikam/libs/jpegutils/exifrotate.cpp,
+	  digikam/libs/jpegutils/exifrotate.h: digikam from stable :
+	  ExifRotate : - Cleanup source code like in trunk branch. There
+	  are no fondamental change about exif orientation rules use to
+	  perform JPEG transformation. - Add a test to check we have a real
+	  JPEG image like in trunk. - Add indeep debug messages Tested
+	  indeep : i cannot reproduce the problem here. No Exif
+	  informations are lost after rotation CCBUGS: 126326 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-04-27 08:12 +0000 [r534478]  cgilles
+
+	* digikam/digikam/albumfiletip.cpp: fix broken QT html syntax
+
+2006-04-27 00:04 +0000 [r534392]  ach
+
+	* digikam/libs/jpegutils/exifrotate.cpp,
+	  digikam/utilities/cameragui/cameracontroller.cpp: digikam stable:
+	  more debug output CCBUGS: 126326
+
+2006-04-26 20:14 +0000 [r534302]  cgilles
+
+	* digikam/libs/jpegutils/exifrotate.cpp: just add debug messages
+
+2006-04-24 18:59 +0000 [r533419]  ach
+
+	* digikam/release_digikam.rb: digikam stable: release_digikam.rb:
+	  record svn rev used to create the tarball in RELEASE.rev
+
+2006-04-24 14:12 +0000 [r533347]  cgilles
+
+	* digikam/digikam/albumfiletip.cpp,
+	  digikam/digikam/imagepropertiesgeneral.cpp,
+	  digikam/digikam/imagepropertiesgeneral.h: digikam from stable :
+	  added miising Rating info in Album item file tip dans image
+	  properties dialog.
+
+2006-04-23 12:39 +0000 [r532959]  cgilles
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digikam from
+	  stable : something is broken with TIFF imlib2 loader with 16 bits
+	  images. We using now KDE/Qt TIFF loader instead. Of course, in
+	  stable svn branch, the image is converted to 8 bits. CCMAIL:
+	  digikam-devel@kde.org
+
+2006-04-21 11:07 +0000 [r532147]  cgilles
+
+	* digikam/utilities/cameragui/umscamera.cpp: digikam from stable :
+	  Fix broken thumbnail creation with USM camera with 16 bits TIFF
+	  images unrecognized properly by dcraw::parse method like a real
+	  tiff images. CCBUGS: 125916 CCMAIL: digikam-devel@kde.org
+
+2006-04-20 07:29 +0000 [r531782]  cgilles
+
+	* digikam/kioslave/digikamthumbnail.h,
+	  digikam/kioslave/digikamthumbnail.cpp: digikam from stable : Fix
+	  broken thumbnail creation by digiKam KIO-slave with 16 bits TIFF
+	  images unrecognized properly by dcraw::parse method like a real
+	  tiff images. CCBUGS: 125916 CCMAIL: digikam-devel@kde.org
+
+
 v0.8.2-beta1   		19-Apr-2006
 ----------------------------------------------------------------------------
+
+2006-04-20 00:54 +0000 [r531740]  ach
+
+	* digikam/AUTHORS, digikam/release_digikam.rb: digikam stable: o
+	  release_digikam.rb: move NEWS to toplevel dir: it contains now
+	  something useful o AUTHORS: move Tom and Joern to old
+	  contributors. Let me thank you for all the work you spend on
+	  digikam development. We'll miss you. In fact we do already ;)
+
+2006-04-20 00:29 +0000 [r531738]  ach
+
+	* digikam/NEWS: digikam stable: added 0.8.2-beta1 infos to NEWS
+	  file If no showstopper is found this will be 0.8.2-beta1 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-04-19 21:28 +0000 [r531702]  ach
+
+	* digikam/release_digikam_cl.sh, digikam/ChangeLog,
+	  digikam/release_digikam.rb: digikam stable: more 0.8.2-beta1
+	  preparation
+
+2006-04-18 09:51 +0000 [r530992]  cgilles
+
+	* digikam/utilities/imageeditor/imlibinterface.cpp: digikam from
+	  stable : image editor imlib2 interface: to detect image file
+	  format, we parse file extension in first, and in second, we parse
+	  file header. This way is mandatory because some TIFF files are
+	  detected like RAW files by dcraw::parse method. Please, update
+	  svn and give me a feedback (:=)))... CCMAIL:
+	  digikam-devel@kde.org, frank@birnstiel.org, dudasg@freemail.hu
 
 2006-04-18 09:51 +0000 [r530990-530992]  cgilles
 
