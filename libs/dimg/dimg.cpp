@@ -568,6 +568,11 @@ bool DImg::isReadOnly() const
     return m_priv->isReadOnly;
 }
 
+void DImg::setICCProfil(const QByteArray& profile)
+{
+    m_priv->ICCProfil = profile;
+}
+
 QByteArray DImg::getICCProfil() const
 {
     return m_priv->ICCProfil;

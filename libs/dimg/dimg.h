@@ -208,6 +208,8 @@ public:
     QByteArray getExif() const;
     QByteArray getIptc() const;
     QByteArray metadata(METADATA key) const;
+
+    void       setICCProfil(const QByteArray& profile);
     QByteArray getICCProfil() const;
 
     void       setAttribute(const QString& key, const QVariant& value);
