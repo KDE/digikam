@@ -568,6 +568,19 @@ bool DImg::isReadOnly() const
     return m_priv->isReadOnly;
 }
 
+bool DImg::setICCProfilFromFile(const QString& filePath)
+{
+    QFile file(filePath);
+    if ( !file.open(IO_ReadOnly) ) 
+        return false;
+    
+    QByteArray data(file.size());
+    QDataStream stream( &file );
+    stream.readRawBytes(data.data(), data.size());
+    setICCProfil(data);
+    return true;
+}
+
 void DImg::setICCProfil(const QByteArray& profile)
 {
     m_priv->ICCProfil = profile;

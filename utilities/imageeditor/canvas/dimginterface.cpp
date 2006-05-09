@@ -231,8 +231,10 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 // Ask or apply?
                 if (apply)
                 {
-                    trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting), QFile::encodeName(d->cmSettings->workspaceSetting));
+                    trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
+                                       QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
+                    d->image.setICCProfilFromFile(QFile::encodeName(d->cmSettings->inputSetting));
                 }
                 else
                 {
@@ -253,6 +255,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
                                            QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
+                        d->image.setICCProfilFromFile(QFile::encodeName(d->cmSettings->inputSetting));
                     }
                 }
             }
