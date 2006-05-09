@@ -399,7 +399,10 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     bool compress = compressAttr.isValid() ? compressAttr.toBool() : false;
     
     if (compress)
+    {
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+        TIFFSetField(tif, TIFFTAG_ZIPQUALITY, 9);
+    }
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
 
