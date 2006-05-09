@@ -53,7 +53,8 @@ Main Interface :
      Note: no option about auto-rotate using Exif tag is enable.
    - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
      Exif tags are toggle on to save when SlideShow is complete.
-
+   - During saving a new file, if space disk is empty, we have a crash!
+ 
 B.K.O files to fix :
 
 ==> 117115  (CameraGUI: Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
