@@ -123,6 +123,7 @@ private:
     Digikam::ImageCurves         *m_curves;
     
     Digikam::DImg                *m_originalImage;
+    Digikam::DImg                 m_thumbnailImage;
 
 private:
 

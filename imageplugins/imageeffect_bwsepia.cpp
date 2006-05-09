@@ -71,22 +71,26 @@ namespace DigikamImagesPluginCore
 
 class ListBoxWhatsThis : public QWhatsThis 
 {
+
 public:
+
     ListBoxWhatsThis(QListBox* w) : QWhatsThis(w), m_listBox(w) {}
     virtual QString text (const QPoint &);
     void add(QListBoxItem*, const QString& text);
 
 protected:
-    QMap<QListBoxItem*, QString> m_itemWhatsThisMap;
-    QListBox* m_listBox;
+
+    QMap<QListBoxItem*, QString>  m_itemWhatsThisMap;
+    QListBox                     *m_listBox;
 };
 
 QString ListBoxWhatsThis::text(const QPoint &p)
 {
     QListBoxItem* item = m_listBox->itemAt(p);
-    if (item != 0) {
+
+    if (item != 0) 
         return m_itemWhatsThisMap[item];
-    }
+
     return QString::null;
 }
 
@@ -94,7 +98,6 @@ void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
 {
     m_itemWhatsThisMap[item] = text;
 }
-
 
 class ListBoxPreviewItem : public QListBoxPixmap
 {
@@ -118,19 +121,19 @@ int ListBoxPreviewItem::width(const QListBox *lb) const
     return QMAX(width, pixmap()->width() + 5);
 }
 
-
-
-
+// -----------------------------------------------------------------------------------
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
-                   : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), "convertbw", false)
-                   ,m_destinationPreviewData(0L)
+                   : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), 
+                                           "convertbw", false),
+                     m_destinationPreviewData(0L)
 {
     setHelp("blackandwhitetool.anchor", "digikam");
 
     Digikam::ImageIface iface(0, 0);
-    m_originalImage = iface.getOriginalImg();
-    m_curves        = new Digikam::ImageCurves(m_originalImage->sixteenBit());
+    m_originalImage  = iface.getOriginalImg();
+    m_thumbnailImage = m_originalImage->smoothScale(128, 128, QSize::ScaleMin);
+    m_curves         = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     // -------------------------------------------------------------
 
@@ -399,6 +402,13 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
     delete m_curves;
 }
 
+QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
+{
+    Digikam::DImg thumb = m_thumbnailImage.copy();
+    blackAndWhiteConversion(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(), type);
+    return (thumb.convertToPixmap());
+}
+
 void ImageEffect_BWSepia::slotChannelChanged(int channel)
 {
     switch(channel)
@@ -514,31 +524,6 @@ void ImageEffect_BWSepia::slotEffect()
     
     kapp->restoreOverrideCursor();
 }
-
-QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
-{
-    const int shrinkFactor = 2;
-    
-    Digikam::ImageIface* iface      = m_previewWidget->imageIface();
-    int w                           = iface->previewWidth() / shrinkFactor;
-    int h                           = iface->previewHeight() / shrinkFactor;
-    bool a                          = iface->previewHasAlpha();
-    bool sb                         = iface->previewSixteenBit();
-    
-    Digikam::ImageIface* thumbnailIface = new Digikam::ImageIface(w, h);
-    uchar *data = thumbnailIface->getPreviewImage();
-    
-    blackAndWhiteConversion(data, w, h, sb, type);
-
-    Digikam::DImg preview(w, h, sb, a, data);
-
-    QPixmap res = preview.convertToPixmap();
-    delete[] data;
-    delete thumbnailIface;
-
-    return res;
-}
-
 
 void ImageEffect_BWSepia::finalRendering()
 {
