@@ -48,6 +48,9 @@ Main Interface :
 
 * Showfoto: 
 
+   - Open a JPG file and FileSaveAs to new file: The file is saved and after that thumbbar have loaded the 
+     new image thumbnail, showfoto said that the preview "image has been changed, do you want to save it!".
+     Note: no option about auto-rotate using Exif tag is enable.
    - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
      Exif tags are toggle on to save when SlideShow is complete.
 
