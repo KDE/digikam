@@ -126,5 +126,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 121367 (Add properties tab to digiKam and (especially) IE)
 ==> 125926 (Directories with a '#' in their name are not properly detected when created outside digikam)
 ==> 125733 (Enabling 'Always apply ICM profiles' can lead to suprising results) 
+==> 126326 (camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
+            is written to console)
 
 ----------------------------------------------------------------------------------------------------
