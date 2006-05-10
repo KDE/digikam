@@ -1,5 +1,10 @@
 METASOURCES = AUTO
 
+# --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
+# digikam: camera download: auto-rotated images loose EXIF info ...
+# So make sure nofinal is always used here!
+KDE_OPTIONS = nofinal
+
 INCLUDES = $(all_includes) \
            -I$(top_srcdir)/digikam/libs/dmetadata \
            -I$(top_srcdir)/digikam/libs/dimg \
