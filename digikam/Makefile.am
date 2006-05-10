@@ -82,10 +82,7 @@ dummy_digikam.cpp:
 
 METASOURCES = AUTO  
 
-# this is where the kdelnk file will go 
-kdelnkdir   = $(kde_appsdir)/Graphics
-kdelnk_DATA = digikam.desktop
-
+xdg_apps_DATA = digikam.desktop
 
 # Uncomment the following two lines if you add a ui.rc file for your application to make use of
 # KDE2 XML GUI builing
