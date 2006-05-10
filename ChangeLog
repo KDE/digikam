@@ -1,5 +1,17 @@
-v0.8.2-rc1   		11-Mai-2006
+v0.8.2-rc1   		10-Mai-2006
 ----------------------------------------------------------------------------
+
+2006-05-10 13:55 +0000 [r539364]  ach
+
+	* digikam/libs/jpegutils/Makefile.am: digikam stable: o disable
+	  enable final for jpegutils/. Fixes bug 126326 when --enable-final
+	  is used. Thx to Gilles for the hint.
+
+2006-05-09 22:42 +0000 [r539204]  ach
+
+	* digikam/version.h, digikam/NEWS, digikam/digikam.lsm,
+	  digikam/PACKAGING, digikam/ChangeLog, digikam/release_digikam.rb:
+	  digikam stable: prepare 0.8.2 rc1 release
 
 2006-05-08 23:15 +0000 [r538809]  cgilles
 
