@@ -209,7 +209,8 @@ public:
     QByteArray getIptc() const;
     QByteArray metadata(METADATA key) const;
 
-    bool       setICCProfilFromFile(const QString& filePath);
+    bool       getICCProfilFromFile(const QString& filePath);
+    bool       setICCProfilToFile(const QString& filePath);
     void       setICCProfil(const QByteArray& profile);
     QByteArray getICCProfil() const;
 
