@@ -44,7 +44,7 @@ Main Interface :
      informations in metadata bytes array (COM, EXIF, IPTC).
    - If an image have been saved to another file format, notify Image properties sidebar to reload 
      informations from DImg instance of new image.   
-   - ICC profiles support : polish and finalize setup dialog and screen color correction (see file in B.K.O)
+   - If "using embeded ICC profile into RAW file" dcraw option is used, disable Image Editor color management.
 
 * Showfoto: 
 
