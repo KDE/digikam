@@ -211,23 +211,29 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     m_tab = new KTabWidget(gboxSettings);
 
-    m_bwTools = new QListBox(m_tab);
-    m_bwTools->setColumnMode(1);
-    m_bwTools->setVariableWidth(false);
-    m_bwTools->setVariableHeight(false);
-    ListBoxWhatsThis* whatsThis = new ListBoxWhatsThis(m_bwTools);
+    m_bwFilters = new QListBox(m_tab);
+    m_bwFilters->setColumnMode(1);
+    m_bwFilters->setVariableWidth(false);
+    m_bwFilters->setVariableHeight(false);
+    ListBoxWhatsThis* whatsThis = new ListBoxWhatsThis(m_bwFilters);
 
-    int type = 0;
+    int type = BWNoFilter;
     QPixmap pix = getThumbnailForEffect(type);
+
+    QListBoxItem *item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("No Black & White Filter"));
+    whatsThis->add( item, i18n("<b>No Black & White Filter</b>:"
+                               "<p>Do not apply a black a filter to the image.</p>"));
     
-    QListBoxItem *item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Neutral"));
+    ++type;
+    pix = getThumbnailForEffect(type);
+    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Neutral"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
                                    "<p>Simulate black and white neutral film exposure.</p>")
                                    .arg(previewEffectPic("neutralbw")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Green Filter"));
+    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Green Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
                                  "<p>Simulate black and white film exposure using green filter. "
                                  "This provides an universal asset for all scenics, especially suited for portraits "
@@ -235,7 +241,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Orange Filter"));
+    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Orange Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
                                   "<p>Simulate black and white film exposure using orange filter. "
                                   "This will enhances landscapes, marine scenes and aerial "
@@ -243,7 +249,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Red Filter"));
+    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Red Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
                                "<p>Simulate black and white film exposure using red filter. "
                                "Using this one creates dramatic sky effects and simulates moonlight scenes "
@@ -251,48 +257,65 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Yellow Filter"));
+    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Yellow Filter"));
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
                                   "<p>Simulate black and white film exposure using yellow filter. "
                                   "Most natural tonal correction and improves contrast. Ideal for "
                                   "landscapes.</p>").arg(previewEffectPic("bwyellow")));
 
+    m_tab->insertTab(m_bwFilters, i18n("Filters"), BWFiltersTab);
+
+    // -------------------------------------------------------------
+
+    m_bwTone = new QListBox(m_tab);
+    m_bwTone->setColumnMode(1);
+    m_bwTone->setVariableWidth(false);
+    m_bwTone->setVariableHeight(false);
+    ListBoxWhatsThis* whatsThis2 = new ListBoxWhatsThis(m_bwTone);
+
+    type = BWNoTone;
+
+    pix = getThumbnailForEffect(type);
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("No Tone Filter"));
+    whatsThis2->add( item, i18n("<b>No Tone Filter</b>:"
+                                "<p>Do not apply a tone filter to the image.</p>"));
+
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Sepia Tone"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Sepia Tone"));
+    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
                                  "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                  "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
                                  "toner.</p>").arg(previewEffectPic("sepia")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Brown Tone"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Brown Tone"));
+    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
                                  "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Cold Tone"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Cold Tone"));
+    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Selenium Tone"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Selenium Tone"));
+    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
                                     "<p>This effect replicate traditional selenium chemical toning done "
                                     "in the darkroom.</p>").arg(previewEffectPic("selenium")));
 
     ++type;
     pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTools, pix, i18n("Platinum Tone"));
-    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
+    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Platinum Tone"));
+    whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
                                      "<p>This effect replicate traditional platinum chemical toning done "
                                      "in the darkroom.</p>").arg(previewEffectPic("platinum")));
     
-    m_tab->insertTab(m_bwTools, i18n("Tone"), ToneTab);
+    m_tab->insertTab(m_bwTone, i18n("Tone"), ToneTab);
 
     // -------------------------------------------------------------
     
@@ -337,7 +360,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_bwTools->setFocus();
+    m_bwFilters->setFocus();
     gridSettings->addMultiCellWidget(m_tab, 3, 3, 0, 4);
     gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
@@ -346,7 +369,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     KConfig* config = kapp->config();
     config->setGroup("Black and White Convertion Tool");
-    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", ToneTab));
+    m_tab->setCurrentPage(config->readNumEntry("Settings Tab", BWFiltersTab));
     m_channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     m_scaleBG->setButton(config->readNumEntry("Histogram Scale", Digikam::HistogramWidget::LogScaleHistogram));
 
@@ -367,7 +390,10 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bwTools, SIGNAL(highlighted(int)),
+    connect(m_bwFilters, SIGNAL(highlighted(int)),
+            this, SLOT(slotEffect()));
+
+    connect(m_bwTone, SIGNAL(highlighted(int)),
             this, SLOT(slotEffect()));
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
@@ -463,11 +489,16 @@ QString ImageEffect_BWSepia::previewEffectPic(QString name)
 
 void ImageEffect_BWSepia::slotDefault()
 {
-    m_bwTools->blockSignals(true);
+    m_bwFilters->blockSignals(true);
+    m_bwTone->blockSignals(true);
     m_cInput->blockSignals(true);
 
-    m_bwTools->setCurrentItem(0);
-    m_bwTools->setSelected(0, true);
+    m_bwFilters->setCurrentItem(0);
+    m_bwFilters->setSelected(0, true);
+
+    m_bwTone->setCurrentItem(0);
+    m_bwTone->setSelected(0, true);
+
     m_cInput->setValue(0.0);
     
     for (int channel = 0 ; channel < 5 ; channel++)
@@ -476,7 +507,8 @@ void ImageEffect_BWSepia::slotDefault()
     m_curvesWidget->reset();
     
     m_cInput->blockSignals(false);
-    m_bwTools->blockSignals(false);
+    m_bwTone->blockSignals(false);
+    m_bwFilters->blockSignals(false);
 
     slotEffect();
 }
@@ -496,9 +528,13 @@ void ImageEffect_BWSepia::slotEffect()
     bool a                          = iface->previewHasAlpha();
     bool sb                         = iface->previewSixteenBit();
 
-    // Convert to black and white.
+    // Apply black and white filter.
 
-    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTools->currentItem());
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwFilters->currentItem());
+
+    // Apply color tone filter.
+
+    blackAndWhiteConversion(m_destinationPreviewData, w, h, sb, m_bwTone->currentItem() + BWNoTone);
 
     // Calculate and apply the curve on image.
     
@@ -537,73 +573,31 @@ void ImageEffect_BWSepia::finalRendering()
     
     if (data) 
     {
-       int type = m_bwTools->currentItem();
-
-       // Convert to black and white.
+        // Apply black and white filter.
     
-       blackAndWhiteConversion(data, w, h, sb, type);
-       
-       // Calculate and apply the curve on image.
+        blackAndWhiteConversion(data, w, h, sb, m_bwFilters->currentItem());
+    
+        // Apply color tone filter.
+    
+        blackAndWhiteConversion(data, w, h, sb, m_bwTone->currentItem() + BWNoTone);
 
-       uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-       m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
-       m_curves->curvesLutProcess(data, targetData, w, h);
-       
-       // Adjust contrast.
-          
-       Digikam::DImg img(w, h, sb, a, targetData);
-       Digikam::BCGModifier cmod;
-       cmod.setContrast(m_cInput->value() + (double)(1.00));
-       cmod.applyBCG(img);
-       
-       QString name;
-       
-       switch (type)
-       {
-          case BWNeutral:
-             name = i18n("Neutral Black && White");
-          break;
+        // Calculate and apply the curve on image.
+    
+        uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel);
+        m_curves->curvesLutProcess(data, targetData, w, h);
+        
+        // Adjust contrast.
+            
+        Digikam::DImg img(w, h, sb, a, targetData);
+        Digikam::BCGModifier cmod;
+        cmod.setContrast(m_cInput->value() + (double)(1.00));
+        cmod.applyBCG(img);
 
-          case BWGreenFilter:
-             name = i18n("Black && White With Green Filter");
-          break;
+        iface->putOriginalImage(i18n("Convert to Black && White"), img.bits());
 
-          case BWOrangeFilter:
-             name = i18n("Black && White With Orange Filter");
-          break;
-
-          case BWRedFilter:
-             name = i18n("Black && White With Red Filter");
-          break;
-
-          case BWYellowFilter:
-             name = i18n("Black && White With Yellow Filter");
-          break;
-
-          case BWSepia:
-             name = i18n("Black && White Sepia");
-          break;
-
-          case BWBrown:
-             name = i18n("Black && White Brown");
-          break;
-
-          case BWCold:
-             name = i18n("Black && White Cold");
-          break;
-
-          case BWSelenium:
-             name = i18n("Black && White Selenium");
-          break;
-          
-          case BWPlatinum:
-             name = i18n("Black && White Platinum");
-          break;
-       }
-          
-       iface->putOriginalImage(name, img.bits());
-       delete [] data;
-       delete [] targetData;
+        delete [] data;
+        delete [] targetData;
     }
 
     kapp->restoreOverrideCursor();
@@ -621,6 +615,9 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
     
     switch (type)
     {
+       case BWNoFilter:
+          break;
+
        case BWNeutral:
           filter.channelMixerImage(data, w, h, sb,  // Image data.
                    true,                                            // Preserve luminosity.    
@@ -665,24 +662,27 @@ void ImageEffect_BWSepia::blackAndWhiteConversion(uchar *data, int w, int h, boo
                    0.0, 1.0,  0.0,                                  // Green channel gains (not used).
                    0.0, 0.0,  1.0);                                 // Blue channel gains (not used).
           break;
+
+       case BWNoTone:
+          break;
        
-       case BWSepia:
+       case BWSepiaTone:
           filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
           break;
        
-       case BWBrown:
+       case BWBrownTone:
           filter.changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
           break;
        
-       case BWCold:
+       case BWColdTone:
           filter.changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
           break;
        
-       case BWSelenium:
+       case BWSeleniumTone:
           filter.changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
           break;
        
-       case BWPlatinum:
+       case BWPlatinumTone:
           filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
           break;
     }

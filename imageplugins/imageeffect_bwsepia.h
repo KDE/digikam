@@ -66,16 +66,19 @@ private:
 
     enum BlackWhiteConversionType
     {
-        BWNeutral=0,
+        BWNoFilter=0,       // B&W filter to the front of lens.
+        BWNeutral,
         BWGreenFilter,
         BWOrangeFilter,
         BWRedFilter,
         BWYellowFilter,
-        BWSepia,
-        BWBrown,
-        BWCold,
-        BWSelenium,
-        BWPlatinum
+
+        BWNoTone,           // Chemical color tone filter.
+        BWSepiaTone,        
+        BWBrownTone,
+        BWColdTone,
+        BWSeleniumTone,
+        BWPlatinumTone
     };
 
     enum HistogramScale
@@ -94,7 +97,8 @@ private:
 
     enum SettingsTab
     {
-        ToneTab=0,
+        BWFiltersTab=0,
+        ToneTab,
         LuminosityTab
     };
 
@@ -104,7 +108,8 @@ private:
     
     QHButtonGroup                *m_scaleBG;
     
-    QListBox                     *m_bwTools;
+    QListBox                     *m_bwFilters;
+    QListBox                     *m_bwTone;
 
     QCheckBox                    *m_overExposureIndicatorBox;
     
