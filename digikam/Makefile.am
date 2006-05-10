@@ -87,8 +87,7 @@ rc_DATA = digikamui.rc
 dummy_digikam.cpp:
 	echo > dummy_digikam.cpp
 
-kdelnkdir   = $(kde_appsdir)/Graphics
-kdelnk_DATA = digikam.desktop
+xdg_apps_DATA = digikam.desktop
 
 include_HEADERS = digikam_export.h
 
