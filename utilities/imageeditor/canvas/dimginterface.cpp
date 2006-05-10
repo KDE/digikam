@@ -234,7 +234,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
                                        QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
-                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->inputSetting));
+                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                 }
                 else
                 {
@@ -251,11 +251,10 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     
                     if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
                     {
-                        kdDebug() << "Pressed YES" << endl;
                         trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
                                            QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
-                        d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->inputSetting));
+                        d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                     }
                 }
             }
