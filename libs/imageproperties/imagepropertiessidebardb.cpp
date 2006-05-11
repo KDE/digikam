@@ -168,20 +168,24 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
                                            AlbumIconView* view, AlbumIconItem* item,
                                            ImageInfo *info, bool hasPrevious, bool hasNext)
 {
-    if (!url.isValid())
+    // Test if url is empty and 
+    // if current item is already the same than the new item to prevent flicker effect.
+    if ( !url.isValid() || (m_currentURL == url && m_currentRect == rect && m_image == img && 
+         d->currentView == view && d->currentItem == item && d->currentInfo == info ) )
         return;
 
     m_currentURL         = url;
     m_currentRect        = rect;
     m_image              = img;
+    d->currentView       = view;
+    d->currentItem       = item;
+    d->currentInfo       = info;
+    
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     d->dirtyDesceditTab  = false;
-    d->currentView       = view;
-    d->currentItem       = item;
-    d->currentInfo       = info;
-
+    
     if (!hasPrevious)
         d->currentItemPosition = NavigateBarWidget::ItemFirst;
     else if (!hasNext)
