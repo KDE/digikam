@@ -28,6 +28,10 @@ extern "C"
 #include <stdint.h> 
 }
 
+// C++ includes.
+
+#include <string> 
+
 // Exiv2 includes.
 
 #include <exiv2/exif.hpp>
@@ -139,20 +143,17 @@ private:
     uint32_t    maker_note;                /* start of MakerNote */
     uint32_t    printim_start;
 
-    uint32_t    camera_settings_pos_1;     /* start of CameraSettings model 1 */
-    uint32_t    camera_settings_size_1;    /* size of CameraSettings model 1 */
+    uint32_t    camera_settings_pos_1;     /* start of CameraSettings position 0x0001 (D5, D7, S304, and S404)*/
+    uint32_t    camera_settings_size_1;    /* size of CameraSettings position 0x0001 */
     
-    uint32_t    camera_settings_pos_2;     /* start of CameraSettings model 2 */
-    uint32_t    camera_settings_size_2;    /* size of CameraSettings model 2 */
+    uint32_t    camera_settings_pos_3;     /* start of CameraSettings position 0x0003 (D7u, D7i, and D7hi)*/
+    uint32_t    camera_settings_size_3;    /* size of CameraSettings position 0x0003 */
     
-    uint32_t    camera_settings_pos_3;     /* start of CameraSettings model 3 */
-    uint32_t    camera_settings_size_3;    /* size of CameraSettings model 3 */
+    uint32_t    camera_settings_pos_4;     /* start of CameraSettings position 0x0004 (Maxxum 7D)*/
+    uint32_t    camera_settings_size_4;    /* size of CameraSettings position 0x0004 */
     
-    uint32_t    camera_settings_pos_4;     /* start of CameraSettings model 4 (Maxxum 7D)*/
-    uint32_t    camera_settings_size_4;    /* size of CameraSettings model 4 */
-    
-    uint32_t    camera_settings_pos_0114;  /* start of CameraSettings model 0114 (Maxxum 5D) */
-    uint32_t    camera_settings_size_0114; /* size of CameraSettings model 0114 */
+    uint32_t    camera_settings_pos_0114;  /* start of CameraSettings position 0x0114 (Maxxum 5D) */
+    uint32_t    camera_settings_size_0114; /* size of CameraSettings position 0x0114 */
     
     prd_block_t prd ;                      /* The interpreted content of the PRD block */
     
@@ -185,8 +186,9 @@ private:
     void    dump_maker_note_tag(off_t pos);
 
     void    dump_camera_settings_32bit(off_t pos, uint32_t size ,int mode );
-    void    dump_camera_settings_4(off_t pos, uint32_t size);
-    void    dump_camera_settings_0114(off_t pos, uint32_t size);
+    void    dumpCameraSettings5D(off_t pos, uint32_t size);
+    void    dumpCameraSettings7D(off_t pos, uint32_t size);
+    void    dumpCameraSettingsStd(off_t pos, uint32_t size, const std::string& csSection);
     
     void    parse_ttf_block(off_t pos, uint32_t sz);
     bool    parse_mrm_block();

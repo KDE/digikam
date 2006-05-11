@@ -64,8 +64,6 @@ MRWParser::MRWParser()
     printim_start             = 0;
     camera_settings_pos_1     = 0; 
     camera_settings_size_1    = 0; 
-    camera_settings_pos_2     = 0;
-    camera_settings_size_2    = 0;
     camera_settings_pos_3     = 0;
     camera_settings_size_3    = 0;
     camera_settings_pos_4     = 0;
@@ -226,27 +224,22 @@ void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
   
     if ( camera_settings_pos_1 != 0 ) 
     {
-      dump_camera_settings_32bit( camera_settings_pos_1 , camera_settings_size_1 , 1 );
-    }
-  
-    if ( camera_settings_pos_2 != 0 ) 
-    {
-      dump_camera_settings_32bit( camera_settings_pos_2 , camera_settings_size_2 , 2 );
+      dumpCameraSettingsStd( camera_settings_pos_1 , camera_settings_size_1, "Exif.MinoltaCsOld." );
     }
   
     if ( camera_settings_pos_3 != 0 ) 
     {
-      dump_camera_settings_32bit( camera_settings_pos_3 , camera_settings_size_3 , 3 );
+      dumpCameraSettingsStd( camera_settings_pos_3 , camera_settings_size_3, "Exif.MinoltaCsNew." );
     }
   
     if ( camera_settings_pos_4 != 0 ) 
     {
-      dump_camera_settings_4( camera_settings_pos_4 , camera_settings_size_4 );
+      dumpCameraSettings7D( camera_settings_pos_4 , camera_settings_size_4 );
     }
       
     if ( camera_settings_pos_0114 != 0 ) 
     {
-      dump_camera_settings_0114( camera_settings_pos_0114 , camera_settings_size_0114 );
+      dumpCameraSettings5D( camera_settings_pos_0114 , camera_settings_size_0114 );
     }
 }
 
@@ -1408,7 +1401,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
 
 /* The CameraSettings5D tag is used by the Dynax/Maxxum 5D */ 
 
-void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
+void MRWParser::dumpCameraSettings5D( off_t pos , uint32_t size  )
 {
     uint32_t i; 
     uint32_t nb = size/2;
@@ -1535,7 +1528,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break;
                 } 
-                case 0x0049: /*  ColorTemperature (signedShort) */
+                case 0x0049: /*  ColorTemperature (signedShort) !!! WARNING: signed value here !!! */
                 {
                     Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ColorTemperature");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
@@ -1605,7 +1598,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
 
 /* The CameraSettings7D tag is used by the Dynax/Maxxum 7D  */ 
 
-void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
+void MRWParser::dumpCameraSettings7D( off_t pos , uint32_t size  )
 {
     uint32_t i; 
     uint32_t nb = size/2;
@@ -1692,7 +1685,7 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break; 
                 }     
-                case 0x001E: /*  ExposureCompensation (signedShort) */
+                case 0x001E: /*  ExposureCompensation (signedShort) !!! WARNING: signed value here !!!*/
                 {
                     Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ExposureCompensation");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
@@ -1740,7 +1733,7 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break; 
                 }
-                case 0x003F: /*  ColorTemperature (signedShort) */
+                case 0x003F: /*  ColorTemperature (signedShort) !!! WARNING: signed value here !!! */
                 {
                     Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ColorTemperature");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
@@ -1831,6 +1824,295 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
                 default:
                     break;
             }
+        }
+        catch( Exiv2::Error &e )
+        {
+            std::cerr << "Cannot parse MRW makernote data using Exiv2 (" 
+                      << e.what() << ")\n";
+        }           
+    }
+}
+
+/* The CameraSettingsStd tags are used by the D7u, D7i, D7hi, D5, D7, S304, and S404 */ 
+
+void MRWParser::dumpCameraSettingsStd( off_t pos , uint32_t size, const std::string& csSection )
+{
+    uint32_t i; 
+    uint32_t nb = size/4;
+    
+    for (i=0 ; i < nb ; i++) 
+    {
+        try
+        { 
+            Exiv2::DataBuf data(4);
+            uint32_t v = get_32_tiff(pos+i*4);
+            memcpy(data.pData_, &v, 4);
+            std::string key;
+            
+            switch(i)
+            {
+                case 0x0001: /*  ExposureMode (unsignedLong) */
+                {
+                    key = csSection + std::string("ExposureMode");
+                    break; 
+                }
+                case 0x0002: /*  FlashMode (unsignedLong) */
+                {
+                    key = csSection + std::string("FlashMode");
+                    break; 
+                }
+                case 0x0003: /*  WhiteBalance (unsignedLong) */
+                {
+                    key = csSection + std::string("WhiteBalance");
+                    break; 
+                }
+                case 0x0004: /*  ImageSize (unsignedLong) */
+                {
+                    key = csSection + std::string("ImageSize");
+                    break; 
+                }
+                case 0x0005: /*  ImageQuality (unsignedLong) */
+                {
+                    std::string key = csSection + std::string("ImageQuality");
+                    break; 
+                }
+                case 0x0006: /*  DriveMode (unsignedLong) */
+                {
+                    key = csSection + std::string("DriveMode");
+                    break; 
+                }
+                case 0x0007: /*  MeteringMode (unsignedLong) */
+                {
+                    key = csSection + std::string("MeteringMode");
+                    break; 
+                }                                
+                case 0x0008: /*  ExposureSpeed (unsignedLong) */
+                {
+                    key = csSection + std::string("ExposureSpeed");
+                    break; 
+                }   
+                case 0x0009: /*  ExposureTime (unsignedLong) */
+                {
+                    key = csSection + std::string("ExposureTime");
+                    break; 
+                }                 
+                case 0x000A: /*  FNumber (unsignedLong) */
+                {
+                    key = csSection + std::string("FNumber");
+                    break; 
+                }
+                case 0x000B: /*  MacroMode (unsignedLong) */
+                {
+                    key = csSection + std::string("MacroMode");
+                    break; 
+                }                
+                case 0x000C: /*  DigitalZoom (unsignedLong) */
+                {
+                    key = csSection + std::string("DigitalZoom");
+                    break; 
+                }                     
+                case 0x000D: /*  ExposureCompensation (unsignedLong) */
+                {
+                    key = csSection + std::string("ExposureCompensation");
+                    break; 
+                }                        
+                case 0x000E: /*  BracketStep (unsignedLong) */
+                {
+                    key = csSection + std::string("BracketStep");
+                    break; 
+                }                   
+                case 0x0010: /*  IntervalLength (unsignedLong) */
+                {
+                    key = csSection + std::string("IntervalLength");
+                    break; 
+                } 
+                case 0x0011: /*  IntervalNumber (unsignedLong) */
+                {
+                    key = csSection + std::string("IntervalNumber");
+                    break; 
+                } 
+                case 0x0012: /*  FocalLength (unsignedLong) */
+                {
+                    key = csSection + std::string("FocalLength");
+                    break; 
+                }                
+                case 0x0013: /*  FocusDistance (unsignedLong) */
+                {
+                    key = csSection + std::string("FocusDistance");
+                    break; 
+                }                 
+                case 0x0014: /*  Flash (unsignedLong) */
+                {
+                    key = csSection + std::string("Flash");
+                    break; 
+                }                    
+                case 0x0015: /*  MinoltaDate (unsignedLong) */
+                {
+                    key = csSection + std::string("MinoltaDate");
+                    break; 
+                }                    
+                case 0x0016: /*  MinoltaTime (unsignedLong) */
+                {
+                    key = csSection + std::string("MinoltaTime");
+                    break; 
+                }                  
+                case 0x0017: /*  MaxAperture (unsignedLong) */
+                {
+                    key = csSection + std::string("MaxAperture");
+                    break; 
+                }                 
+                case 0x001A: /*  FileNumberMemory (unsignedLong) */
+                {
+                    key = csSection + std::string("FileNumberMemory");
+                    break; 
+                }                       
+                case 0x001B: /*  ImageNumber (unsignedLong) */
+                {
+                    key = csSection + std::string("ImageNumber");
+                    break; 
+                }                       
+                case 0x001C: /*  ColorBalanceRed (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorBalanceRed");
+                    break; 
+                }                  
+                case 0x001D: /*  ColorBalanceGreen (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorBalanceGreen");
+                    break; 
+                }                 
+                case 0x001E: /*  ColorBalanceBlue (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorBalanceBlue");
+                    break; 
+                }                  
+                case 0x001F: /*  Saturation (unsignedLong) */
+                {
+                    key = csSection + std::string("Saturation");
+                    break; 
+                }                  
+                case 0x0020: /*  Contrast (unsignedLong) */
+                {
+                    key = csSection + std::string("Contrast");
+                    break; 
+                }                   
+                case 0x0021: /*  Sharpness (unsignedLong) */
+                {
+                    key = csSection + std::string("Sharpness");
+                    break; 
+                }
+                case 0x0022: /*  SubjectProgram (unsignedLong) */
+                {
+                    key = csSection + std::string("SubjectProgram");
+                    break; 
+                }                
+                case 0x0023: /*  FlashExposureComp (unsignedLong) */
+                {
+                    key = csSection + std::string("FlashExposureComp");
+                    break; 
+                }                 
+                case 0x0024: /*  ISOSetting (unsignedLong) */
+                {
+                    key = csSection + std::string("ISOSetting");
+                    break; 
+                }                 
+                case 0x0025: /*  MinoltaModel (unsignedLong) */
+                {
+                    key = csSection + std::string("MinoltaModel");
+                    break; 
+                }                  
+                case 0x0026: /*  IntervalMode (unsignedLong) */
+                {
+                    key = csSection + std::string("IntervalMode");
+                    break; 
+                }                    
+                case 0x0027: /*  FolderName (unsignedLong) */
+                {
+                    key = csSection + std::string("FolderName");
+                    break; 
+                }                  
+                case 0x0028: /*  ColorMode (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorMode");
+                    break; 
+                }                  
+                case 0x0029: /*  ColorFilter (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorFilter");
+                    break; 
+                }                
+                case 0x002A: /*  BWFilter (unsignedLong) */
+                {
+                    key = csSection + std::string("BWFilter");
+                    break; 
+                }                    
+                case 0x002B: /*  InternalFlash (unsignedLong) */
+                {
+                    key = csSection + std::string("InternalFlash");
+                    break; 
+                }                    
+                case 0x002C: /*  Brightness (unsignedLong) */
+                {
+                    key = csSection + std::string("Brightness");
+                    break; 
+                }                    
+                case 0x002D: /*  SpotFocusPointX (unsignedLong) */
+                {
+                    key = csSection + std::string("SpotFocusPointX");
+                    break; 
+                }                    
+                case 0x002E: /*  SpotFocusPointY (unsignedLong) */
+                {
+                    key = csSection + std::string("SpotFocusPointY");
+                    break; 
+                }                    
+                case 0x002F: /*  WideFocusZone (unsignedLong) */
+                {
+                    key = csSection + std::string("WideFocusZone");
+                    break; 
+                }                    
+                case 0x0030: /*  FocusMode (unsignedLong) */
+                {
+                    key = csSection + std::string("FocusMode");
+                    break; 
+                }                    
+                case 0x0031: /*  FocusArea (unsignedLong) */
+                {
+                    key = csSection + std::string("FocusArea");
+                    break; 
+                }                    
+                case 0x0032: /*  DECPosition (unsignedLong) */
+                {
+                    key = csSection + std::string("DECPosition");
+                    break; 
+                }                    
+                case 0x0033: /*  ColorProfile (unsignedLong) */
+                {
+                    key = csSection + std::string("ColorProfile");
+                    break; 
+                }                 
+                case 0x0034: /*  DataImprint (unsignedLong) */
+                {
+                    key = csSection + std::string("DataImprint");
+                    break; 
+                }      
+                case 0x003F: /*  FlashMetering (unsignedLong) */
+                {
+                    key = csSection + std::string("FlashMetering");
+                    break; 
+                }                 
+                default:
+                    break;
+            }
+        
+            if (!key.empty())
+            {
+                Exiv2::ExifKey exifTag(key);
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get()); 
+            }
+        
         }
         catch( Exiv2::Error &e )
         {
