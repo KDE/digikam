@@ -49,6 +49,7 @@ Main Interface :
    - If an image have been saved to another file format, notify Image properties sidebar to reload 
      informations from DImg instance of new image.   
    - If "using embeded ICC profile into RAW file" dcraw option is used, disable Image Editor color management.
+   - Optimize Screen ICC color correction to load profiles in memory.
 
 * Showfoto: 
 
@@ -57,7 +58,7 @@ Main Interface :
      Note: no option about auto-rotate using Exif tag is enable.
    - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
      Exif tags are toggle on to save when SlideShow is complete.
-   - During saving a new file, if space disk is empty, we have a crash!
+   - During saving a new file, if space disk is full, we have a crash!
  
 B.K.O files to fix :
 
