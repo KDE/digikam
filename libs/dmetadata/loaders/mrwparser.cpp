@@ -1317,10 +1317,10 @@ void MRWParser::dump_maker_note_tag(off_t pos)
                 m_exifMetadata.add(exifTag, val.get());
                 break;
             }
-            case 0x0102: /*   ImageQuality (unsignedLong) */
+            case 0x0102: /*   Quality (unsignedLong) */
             {
                 Exiv2::DataBuf data = get_ttf_tag_value(pos);
-                Exiv2::ExifKey exifTag("Exif.Minolta.ImageQuality");
+                Exiv2::ExifKey exifTag("Exif.Minolta.Quality");
                 Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
                 val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
                 m_exifMetadata.add(exifTag, val.get());
@@ -1432,9 +1432,9 @@ void MRWParser::dumpCameraSettings5D( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break; 
                 }
-                case 0x000D: /*  ImageQuality (unsignedShort) */
+                case 0x000D: /*  Quality (unsignedShort) */
                 {
-                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageQuality");
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Quality");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
@@ -1629,9 +1629,9 @@ void MRWParser::dumpCameraSettings7D( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break; 
                 }
-                case 0x0003: /*  ImageQuality (unsignedShort) */
+                case 0x0003: /*  Quality (unsignedShort) */
                 {
-                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageQuality");
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Quality");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
@@ -1871,9 +1871,9 @@ void MRWParser::dumpCameraSettingsStd( off_t pos , uint32_t size, const std::str
                     key = csSection + std::string("ImageSize");
                     break; 
                 }
-                case 0x0005: /*  ImageQuality (unsignedLong) */
+                case 0x0005: /*  Quality (unsignedLong) */
                 {
-                    std::string key = csSection + std::string("ImageQuality");
+                    std::string key = csSection + std::string("Quality");
                     break; 
                 }
                 case 0x0006: /*  DriveMode (unsignedLong) */
