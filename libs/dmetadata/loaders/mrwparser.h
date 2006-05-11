@@ -185,7 +185,6 @@ private:
     void    dump_maker_note_tag(off_t pos);
 
     void    dump_camera_settings_32bit(off_t pos, uint32_t size ,int mode );
-    void    dump_camera_settings_16bit(off_t pos, uint32_t size ,int mode );
     void    dump_camera_settings_4(off_t pos, uint32_t size);
     void    dump_camera_settings_0114(off_t pos, uint32_t size);
     

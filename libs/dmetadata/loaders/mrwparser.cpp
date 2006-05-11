@@ -142,6 +142,192 @@ bool MRWParser::load_file(const char *fname)
     return true;
 }
 
+void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
+{
+    int      i; 
+    char     c1, c2; 
+    uint16_t magic;
+    uint32_t dir;
+  
+    
+    tiff_base = pos;
+    tiff_size = sz;
+  
+    if ( sz < 8 ) 
+        std::cerr << "Illegal size " << sz << " for TTF block. Should be 8" << "\n";
+    
+    c1 = get_8_tiff(0); 
+    c2 = get_8_tiff(1); 
+  
+    if ( c1 == 'M' &&  c2 == 'M' ) 
+    {
+        std::cerr << "Found MSB TIFF Header" << "\n";
+        tiff_msb = 1;
+    } 
+    else if ( c1 == 'L' &&  c2 == 'L' ) 
+    {
+        /* should not happen in MRW but ... */
+        std::cerr << "Found LSB TIFF Header" << "\n";
+        tiff_msb = 0;
+    }   
+    else 
+    {
+        std::cerr << "Illegal header in TTF block" << "\n";
+    }
+  
+    magic = get_16_tiff(2) ; 
+  
+    if ( magic != 42 ) 
+        std::cerr << "Illegal magic number in TTF header" << "\n";
+    
+    /* Tiff offset of the 1st directory */
+    dir = get_32_tiff(4) ; 
+  
+    do 
+    {
+        uint16_t nb = get_16_tiff(dir);
+        std::cerr << "<IFD> with " << nb << " entries at offset " << dir << "\n";
+  
+        for (i=0 ; i < nb ; i++) 
+        {
+            off_t tag_pos = dir+2+i*12;
+            dump_ttf_tag( tag_pos );
+        }
+  
+        /* Tiff offset of the next directory */
+        dir = get_32_tiff(dir+2+12*nb) ; 
+  
+    } 
+    while (dir != 0);
+  
+    if ( exif_start != 0 )
+    {
+        uint16_t nb = get_16_tiff(exif_start);
+        std::cerr << "<EXIF> with " << nb << " entries at offset " << exif_start << "\n";
+        
+        for (i=0 ; i < nb ; i++) 
+        {
+            off_t tag_pos = exif_start+2+i*12;
+            dump_exif_tag( tag_pos );
+        }  
+    }
+  
+    if ( maker_note != 0 )
+    {
+        uint16_t nb = get_16_tiff(maker_note);
+        std::cerr << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << "\n";
+        
+        for (i=0 ; i < nb ; i++) 
+        {
+            off_t tag_pos = maker_note+2+i*12;
+            dump_maker_note_tag( tag_pos );
+        }  
+    }
+  
+    if ( camera_settings_pos_1 != 0 ) 
+    {
+      dump_camera_settings_32bit( camera_settings_pos_1 , camera_settings_size_1 , 1 );
+    }
+  
+    if ( camera_settings_pos_2 != 0 ) 
+    {
+      dump_camera_settings_32bit( camera_settings_pos_2 , camera_settings_size_2 , 2 );
+    }
+  
+    if ( camera_settings_pos_3 != 0 ) 
+    {
+      dump_camera_settings_32bit( camera_settings_pos_3 , camera_settings_size_3 , 3 );
+    }
+  
+    if ( camera_settings_pos_4 != 0 ) 
+    {
+      dump_camera_settings_4( camera_settings_pos_4 , camera_settings_size_4 );
+    }
+      
+    if ( camera_settings_pos_0114 != 0 ) 
+    {
+      dump_camera_settings_0114( camera_settings_pos_0114 , camera_settings_size_0114 );
+    }
+}
+
+bool MRWParser::parse_mrm_block() 
+{
+    off_t    pos = 0 ;
+    /*
+    * The MRM block is composed of 
+    *   - 4*8bit    : the block identifier (\0 M R M)
+    *   - 32bit MSB : the size of the MRM body in bytes
+    */
+  
+    char     c1 = get_8(pos+0); 
+    char     c2 = get_8(pos+1); 
+    char     c3 = get_8(pos+2); 
+    char     c4 = get_8(pos+3); 
+    uint32_t sz = get_32_m(pos+4);    
+  
+    if ( c1!='\0' || c2!='M' ||  c3!='R' ||  c4!='M' ) 
+        std::cerr << "MRM block not found" << "\n";
+  
+    /* The image data start immediately after the MRM block */ 
+    image_start = pos + 8 + sz; 
+    check_valid(image_start, 0); 
+  
+    pos += 8; 
+  
+    while ( pos < image_start ) 
+    {
+       /* The MRM block contains a sequence of blocks .
+        * They are described using the same principle as for the MRM:
+        *
+        *   - 4*8bit    : the block identifier (\0 ? ? ?)
+        *   - 32bit MSB : the size of the block body in bytes
+        *   - ... 
+        *
+        */
+  
+        char c1 = get_8(pos+0); 
+        char c2 = get_8(pos+1); 
+        char c3 = get_8(pos+2); 
+        char c4 = get_8(pos+3); 
+  
+        uint32_t sz = get_32_m(pos+4);  
+  
+        if ( c1=='\0' && c2=='P' && c3=='R' && c4=='D' )
+        {
+            /* Picture Raw Dimensions */
+            parse_prd_block( pos+8 , sz);
+        } 
+        else if ( c1=='\0' && c2=='T' && c3=='T' && c4=='W' ) 
+        {
+            /* Tiff Tags 'Wonderland' */
+            parse_ttf_block( pos+8 , sz);
+        } 
+        else if ( c1=='\0' && c2=='W' && c3=='B' && c4=='G' ) 
+        {
+            /* WBG = White Balance Gains */
+            parse_wbg_block( pos+8 , sz);
+        } 
+        else if ( c1=='\0' && c2=='R' && c3=='I' && c4=='F' ) 
+        {
+            /* RIF = Requested Image Format */
+            parse_rif_block( pos+8 , sz);
+        } 
+        else if ( c1=='\0' && c2=='P' && c3=='A' && c4=='D' ) 
+        {
+            /* A padding block. Its only purpose is to align the next block */ 
+        } 
+        else 
+        {
+            return false;
+        }
+          
+        pos += 8;
+        pos += sz;
+    }
+ 
+    return true;  
+}
+
 // Check that it is valid to access count bytes at offset pos
 // Note: it is valid to access 0 bytes at the end of the file (e.g. check_valid(rawsize,0)) 
 void MRWParser::check_valid(off_t pos, int count)
@@ -584,14 +770,14 @@ Exiv2::DataBuf MRWParser::get_ttf_tag_value(off_t pos)
             case TIFF_TYPE_DOUBLE:
                 break ; 
         } 
-    
-        return Exiv2::DataBuf();
     }
     catch( Exiv2::Error &e )
     {
         std::cerr << "Cannot parse MRW tag data using Exiv2 (" 
                   << e.what() << ")\n";
     }                       
+    
+    return Exiv2::DataBuf();
 }
 
 void MRWParser::dump_ttf_tag(off_t pos) 
@@ -1654,218 +1840,20 @@ void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
     }
 }
 
-void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
+void MRWParser::dump_camera_settings_32bit( off_t /*pos*/ , uint32_t /*size*/ ,int /*mode*/ )
 {
-    int      i; 
-    char     c1, c2; 
-    uint16_t magic;
-    uint32_t dir;
-  
-    
-    tiff_base = pos;
-    tiff_size = sz;
-  
-    if ( sz < 8 ) 
-        std::cerr << "Illegal size " << sz << " for TTF block. Should be 8" << "\n";
-    
-    c1 = get_8_tiff(0); 
-    c2 = get_8_tiff(1); 
-  
-    if ( c1 == 'M' &&  c2 == 'M' ) 
-    {
-        std::cerr << "Found MSB TIFF Header" << "\n";
-        tiff_msb = 1;
-    } 
-    else if ( c1 == 'L' &&  c2 == 'L' ) 
-    {
-        /* should not happen in MRW but ... */
-        std::cerr << "Found LSB TIFF Header" << "\n";
-        tiff_msb = 0;
-    }   
-    else 
-    {
-        std::cerr << "Illegal header in TTF block" << "\n";
-    }
-  
-    magic = get_16_tiff(2) ; 
-  
-    if ( magic != 42 ) 
-        std::cerr << "Illegal magic number in TTF header" << "\n";
-    
-    /* Tiff offset of the 1st directory */
-    dir = get_32_tiff(4) ; 
-  
-    do 
-    {
-        uint16_t nb = get_16_tiff(dir);
-        std::cerr << "<IFD> with " << nb << " entries at offset " << dir << "\n";
-  
-        for (i=0 ; i < nb ; i++) 
-        {
-            off_t tag_pos = dir+2+i*12;
-            dump_ttf_tag( tag_pos );
-        }
-  
-        /* Tiff offset of the next directory */
-        dir = get_32_tiff(dir+2+12*nb) ; 
-  
-    } 
-    while (dir != 0);
-  
-    if ( exif_start != 0 )
-    {
-        uint16_t nb = get_16_tiff(exif_start);
-        std::cerr << "<EXIF> with " << nb << " entries at offset " << exif_start << "\n";
-        
-        for (i=0 ; i < nb ; i++) 
-        {
-            off_t tag_pos = exif_start+2+i*12;
-            dump_exif_tag( tag_pos );
-        }  
-    }
-  
-    if ( maker_note != 0 )
-    {
-        uint16_t nb = get_16_tiff(maker_note);
-        std::cerr << "<MAKERNOTE> with " << nb << " entries at offset " << maker_note << "\n";
-        
-        for (i=0 ; i < nb ; i++) 
-        {
-            off_t tag_pos = maker_note+2+i*12;
-            dump_maker_note_tag( tag_pos );
-        }  
-    }
-  
-    if ( camera_settings_pos_1 != 0 ) 
-    {
-      dump_camera_settings_32bit( camera_settings_pos_1 , camera_settings_size_1 , 1 );
-    }
-  
-    if ( camera_settings_pos_2 != 0 ) 
-    {
-      dump_camera_settings_32bit( camera_settings_pos_2 , camera_settings_size_2 , 2 );
-    }
-  
-    if ( camera_settings_pos_3 != 0 ) 
-    {
-      dump_camera_settings_32bit( camera_settings_pos_3 , camera_settings_size_3 , 3 );
-    }
-  
-    if ( camera_settings_pos_4 != 0 ) 
-    {
-      dump_camera_settings_4( camera_settings_pos_4 , camera_settings_size_4 );
-    }
-      
-    if ( camera_settings_pos_0114 != 0 ) 
-    {
-      dump_camera_settings_0114( camera_settings_pos_0114 , camera_settings_size_0114 );
-    }
-}
-
-bool MRWParser::parse_mrm_block() 
-{
-    off_t    pos = 0 ;
-    /*
-    * The MRM block is composed of 
-    *   - 4*8bit    : the block identifier (\0 M R M)
-    *   - 32bit MSB : the size of the MRM body in bytes
-    */
-  
-    char     c1 = get_8(pos+0); 
-    char     c2 = get_8(pos+1); 
-    char     c3 = get_8(pos+2); 
-    char     c4 = get_8(pos+3); 
-    uint32_t sz = get_32_m(pos+4);    
-  
-    if ( c1!='\0' || c2!='M' ||  c3!='R' ||  c4!='M' ) 
-        std::cerr << "MRM block not found" << "\n";
-  
-    /* The image data start immediately after the MRM block */ 
-    image_start = pos + 8 + sz; 
-    check_valid(image_start, 0); 
-  
-    pos += 8; 
-  
-    while ( pos < image_start ) 
-    {
-       /* The MRM block contains a sequence of blocks .
-        * They are described using the same principle as for the MRM:
-        *
-        *   - 4*8bit    : the block identifier (\0 ? ? ?)
-        *   - 32bit MSB : the size of the block body in bytes
-        *   - ... 
-        *
-        */
-  
-        char c1 = get_8(pos+0); 
-        char c2 = get_8(pos+1); 
-        char c3 = get_8(pos+2); 
-        char c4 = get_8(pos+3); 
-  
-        uint32_t sz = get_32_m(pos+4);  
-  
-        if ( c1=='\0' && c2=='P' && c3=='R' && c4=='D' )
-        {
-            /* Picture Raw Dimensions */
-            parse_prd_block( pos+8 , sz);
-        } 
-        else if ( c1=='\0' && c2=='T' && c3=='T' && c4=='W' ) 
-        {
-            /* Tiff Tags 'Wonderland' */
-            parse_ttf_block( pos+8 , sz);
-        } 
-        else if ( c1=='\0' && c2=='W' && c3=='B' && c4=='G' ) 
-        {
-            /* WBG = White Balance Gains */
-            parse_wbg_block( pos+8 , sz);
-        } 
-        else if ( c1=='\0' && c2=='R' && c3=='I' && c4=='F' ) 
-        {
-            /* RIF = Requested Image Format */
-            parse_rif_block( pos+8 , sz);
-        } 
-        else if ( c1=='\0' && c2=='P' && c3=='A' && c4=='D' ) 
-        {
-            /* A padding block. Its only purpose is to align the next block */ 
-        } 
-        else 
-        {
-            return false;
-        }
-          
-        pos += 8;
-        pos += sz;
-    }
- 
-    return true;  
-}
-
-void MRWParser::dump_camera_settings_32bit( off_t pos , uint32_t size ,int mode )
-{
+/*
     uint32_t i; 
     uint32_t nb = size/4;
   
-    //printf("<CameraSetting%04x> with %d entries at TFF offset %d\n", mode, (int)nb , (int)pos) ;
+    printf("<CameraSetting%04x> with %d entries at TFF offset %d\n", mode, (int)nb , (int)pos) ;
   
     for (i=0 ; i < nb ; i++) 
     {
-        /*uint32_t v = get_32_tiff(pos+i*4);
-        printf("=== 0x%04lx = %08lx\n" ,(unsigned long) i , (unsigned long)  v);*/
+        uint32_t v = get_32_tiff(pos+i*4);
+        printf("=== 0x%04lx = %08lx\n" ,(unsigned long) i , (unsigned long)  v);
     }
-}
-
-void MRWParser::dump_camera_settings_16bit( off_t pos , uint32_t size ,int mode )
-{
-    uint32_t i; 
-    uint32_t nb = size/2;
-  
-    // printf("<CameraSetting%04x> with %d entries at TFF offset %d\n", mode, (int)nb , (int)pos) ;
-  
-    for (i=0 ; i < nb ; i++) 
-    {
-        /*uint16_t v = get_16_tiff(pos+i*2);
-        printf("=== 0x%04lx = %04lx\n" ,(unsigned long) i , (unsigned long)  v)*/;
-    }
+*/    
 }
 
 }  // NameSpace Digikam
