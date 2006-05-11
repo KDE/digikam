@@ -26,6 +26,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <cassert>
 
 // Exiv2 includes.
 
@@ -596,7 +597,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.ImageWidth");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -605,7 +606,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.ImageLength");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -614,7 +615,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.Compression");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -653,7 +654,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.Orientation");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -662,7 +663,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.XResolution");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedRational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -671,7 +672,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.YResolution");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedRational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -680,7 +681,7 @@ void MRWParser::dump_ttf_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Image.ResolutionUnit");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -750,7 +751,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.ExposureProgram");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -759,7 +760,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.ISOSpeedRatings");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -833,7 +834,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.MeteringMode");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
             break;
         }
@@ -842,7 +843,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.LightSource");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
             break;
         }
@@ -851,7 +852,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.Flash");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
             break;
         }
@@ -869,7 +870,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.SubjectArea");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());          
             break;
         }
@@ -901,7 +902,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.ColorSpace");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());            
             break;
         }
@@ -910,7 +911,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.PixelXDimension");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -919,7 +920,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.PixelYDimension");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());        
             break;
         }
@@ -932,7 +933,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.CustomRendered");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());  
             break;
         }
@@ -941,7 +942,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.ExposureMode");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());          
             break;
         }
@@ -950,7 +951,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.WhiteBalance");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());   
             break;
         }
@@ -959,7 +960,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.DigitalZoomRatio");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedRational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
             break;
         }
@@ -968,7 +969,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.FocalLengthIn35mmFilm");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
             break;
         }
@@ -977,7 +978,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.SceneCaptureType");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());         
             break;
         }
@@ -986,7 +987,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.GainControl");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedRational);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::Rational), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedRational), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
             break;
         }
@@ -995,7 +996,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.Contrast");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());            
             break;
         }
@@ -1004,7 +1005,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.Saturation");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
             break;
         }
@@ -1013,7 +1014,7 @@ void MRWParser::dump_exif_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Photo.Sharpness");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());             
             break;
         }
@@ -1027,7 +1028,7 @@ void MRWParser::dump_exif_tag(off_t pos)
 void MRWParser::dump_maker_note_tag(off_t pos) 
 {
     uint16_t id = get_16_tiff(pos+0); 
-
+    
     switch(id) 
     {
         case 0x0000: /*   MakerNoteVersion (undefined) */
@@ -1071,7 +1072,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.CompressedImageSize");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1089,7 +1090,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailOffset");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1098,7 +1099,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailLength");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1107,7 +1108,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ColorMode");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1116,7 +1117,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ImageQuality");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1130,7 +1131,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ImageStabilization");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1139,7 +1140,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ZoneMatching");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1148,7 +1149,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.ColorTemperature");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1157,7 +1158,7 @@ void MRWParser::dump_maker_note_tag(off_t pos)
             Exiv2::DataBuf data = get_ttf_tag_value(pos);
             Exiv2::ExifKey exifTag("Exif.Minolta.LensID");
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
+            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
             m_exifMetadata.add(exifTag, val.get());
             break;
         }
@@ -1193,72 +1194,196 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
 {
     uint32_t i; 
     uint32_t nb = size/2;
-  
+    
     for (i=0 ; i < nb ; i++) 
     {
-        uint16_t v = get_16_tiff(pos+i*2)  ;
-
-        // FIXME
-      
-        switch(i)
-        {
-            case 0x000A: /*  ExposureMode (unsignedShort) */
+        try
+        { 
+            Exiv2::DataBuf data(2);
+            uint16_t v = get_16_tiff(pos+i*2)  ;
+            memcpy(data.pData_, &v, 2);
+            
+            // FIXME
+          
+            switch(i)
             {
-/*
-                Exiv2::DataBuf data = get_ttf_tag_value(pos);
-                Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ExposureMode");
-                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-                val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
-                m_exifMetadata.add(exifTag, val.get());  */
-                break ; 
+                case 0x000A: /*  ExposureMode (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ExposureMode");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ; 
+                }
+                case 0x000C: /*  ImageSize (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageSize");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ; 
+                }
+                case 0x000D: /*  ImageQuality (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageQuality");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ; 
+                }
+                case 0x000E: /*  WhiteBalance (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.WhiteBalance");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                }
+                case 0x001F: /*  Flash (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Flash");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                }      
+                case 0x0025: /*  MeteringMode (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.MeteringMode");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                }      
+                case 0x0026: /*  ISOSetting (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ISOSetting");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                }   
+                case 0x0030: /*  Sharpness (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Sharpness");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0031: /*  Contrast (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Contrast");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0032: /*  Saturation (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Saturation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0035: /*  ExposureTime (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ExposureTime");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0036: /*  FNumber (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.FNumber");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0037: /*  FreeMemoryCardImages (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.FreeMemoryCardImages");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0038: /*  ExposureRevision (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ExposureRevision");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break ;
+                } 
+                case 0x0049: /*  ColorTemperature (signedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ColorTemperature");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::signedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                } 
+                case 0x0050: /*  Rotation  (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.Rotation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                } 
+                case 0x0053: /*  ExposureCompensation  (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ExposureCompensation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                }                 
+                case 0x0054: /*  FreeMemoryCardImages (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.FreeMemoryCardImages");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                }      
+                case 0x00AE: /*  ImageNumber (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageNumber");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                }   
+                case 0x00B0: /*  NoiseReduction (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.NoiseReduction");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                }   
+                case 0x00BD: /*  ImageStabilization (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageStabilization");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break;
+                }   
+                default:
+                    break;
             }
-            case 0x000C: /*  ImageSize (unsignedShort) */
-            {
-/*                Exiv2::DataBuf data = get_ttf_tag_value(pos);
-                Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageSize");
-                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-                val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
-                m_exifMetadata.add(exifTag, val.get());  */
-                break ; 
-            }
-            case 0x000D: /*  ImageQuality (unsignedShort) */
-            {
-/*                Exiv2::DataBuf data = get_ttf_tag_value(pos);
-                Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ImageQuality");
-                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
-                val->read((const Exiv2::byte*)data.pData_, sizeof(uint32_t), Exiv2::littleEndian);
-                m_exifMetadata.add(exifTag, val.get());  */
-                break ; 
-            }
-            case 0x0025: /*  PhotometryMode */
-                break ;
-            case 0x0026: /*  ISO */
-                break ;
-            case 0x0030: /*  Sharpness */
-                break ;
-            case 0x0031: /*  Contrast */
-                break ;
-            case 0x0032: /*  Saturation */
-                break ;
-            case 0x0037: /*  MemCardSpace1 */
-                break ;
-            case 0x0038: /*  ExposureRevision */
-                break ;
-            case 0x0049: /*  WBFineControl */
-                break ;
-            case 0x0050: /*  CameraOrientation  */
-                break ;
-            case 0x0054: /*  MemCardSpace2 */
-                break ;
-            case 0x00AE: /*  PictureNumber */
-                break ;
-            case 0x00B0: /*  NoiseReduction */
-                break ;
-            case 0x00BD: /*  AntiShake */
-                break ;
-            default:
-                break;
         }
+        catch( Exiv2::Error &e )
+        {
+            std::cerr << "Cannot parse Minolta makernote using Exiv2 (" 
+                    << e.what() << ")\n";
+        }           
     }
 }
 
