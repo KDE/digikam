@@ -53,6 +53,8 @@ class CurvesWidget;
 namespace DigikamImagesPluginCore
 {
 
+class PreviewPixmapFactory;
+
 class ImageEffect_BWSepia : public Digikam::ImageDlgBase
 {
     Q_OBJECT
@@ -61,6 +63,11 @@ public:
 
     ImageEffect_BWSepia(QWidget *parent);
     ~ImageEffect_BWSepia();
+
+    friend class PreviewPixmapFactory;
+
+protected:
+    QPixmap getThumbnailForEffect(int type);
 
 private:
 
@@ -130,11 +137,12 @@ private:
     Digikam::DImg                *m_originalImage;
     Digikam::DImg                 m_thumbnailImage;
 
+    PreviewPixmapFactory         *m_previewPixmapFactory;
+    
 private:
 
     void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
     QString previewEffectPic(QString name);
-    QPixmap getThumbnailForEffect(int type);
     
 private slots:
 
@@ -144,6 +152,9 @@ private slots:
     void slotScaleChanged(int scale);
     void slotSpotColorChanged(const Digikam::DColor &color);    
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
+
+protected slots:
+    virtual void slotTimer();
 
 protected:
 

@@ -38,6 +38,7 @@
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qintdict.h>
 
 // KDE includes.
 
@@ -61,6 +62,8 @@
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "bcgmodifier.h"
+#include "listboxpreviewitem.h"
+#include "listboxwhatsthis.h"
 
 // Local includes.
 
@@ -69,64 +72,92 @@
 namespace DigikamImagesPluginCore
 {
 
-class ListBoxWhatsThis : public QWhatsThis 
-{
-
-public:
-
-    ListBoxWhatsThis(QListBox* w) : QWhatsThis(w), m_listBox(w) {}
-    virtual QString text (const QPoint &);
-    void add(QListBoxItem*, const QString& text);
-
-protected:
-
-    QMap<QListBoxItem*, QString>  m_itemWhatsThisMap;
-    QListBox                     *m_listBox;
-};
-
-QString ListBoxWhatsThis::text(const QPoint &p)
-{
-    QListBoxItem* item = m_listBox->itemAt(p);
-
-    if (item != 0) 
-        return m_itemWhatsThisMap[item];
-
-    return QString::null;
-}
-
-void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
-{
-    m_itemWhatsThisMap[item] = text;
-}
-
-class ListBoxPreviewItem : public QListBoxPixmap
+class PreviewPixmapFactory : public QObject
 {
 public:
-    ListBoxPreviewItem(QListBox *listbox, const QPixmap &pix, const QString &text)
-        : QListBoxPixmap(listbox, pix, text) {};
 
-    virtual int height ( const QListBox * lb ) const;
-    virtual int width ( const QListBox * lb ) const;
+    PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia);
+
+    void invalidate() { m_previewPixmapMap.clear(); }
+
+    const QPixmap* pixmap(int id);
+
+private:
+    QPixmap makePixmap(int id);
+
+    QIntDict<QPixmap> m_previewPixmapMap;
+    ImageEffect_BWSepia* m_bwSepia;
 };
 
-int ListBoxPreviewItem::height(const QListBox *lb) const
+PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia)
+    : QObject(bwSepia),
+      m_bwSepia(bwSepia)
 {
-    int height = QListBoxPixmap::height(lb);
-    return QMAX(height, pixmap()->height() + 5);
+    m_previewPixmapMap.setAutoDelete(true);
 }
 
-int ListBoxPreviewItem::width(const QListBox *lb) const
+const QPixmap* PreviewPixmapFactory::pixmap(int id)
 {
-    int width = QListBoxPixmap::width(lb);
-    return QMAX(width, pixmap()->width() + 5);
+    if (m_previewPixmapMap.find(id) == 0) {
+        QPixmap pix = makePixmap(id);
+        m_previewPixmapMap.insert(id, new QPixmap(pix));
+    }
+
+    QPixmap* res = m_previewPixmapMap[id];
+
+    return res;
 }
+
+QPixmap PreviewPixmapFactory::makePixmap(int id)
+{
+    return m_bwSepia->getThumbnailForEffect(id);
+}
+
+
+class ListBoxBWPreviewItem : public Digikam::ListBoxPreviewItem
+{
+public:
+
+    ListBoxBWPreviewItem(QListBox *listbox, const QString &text,
+                         PreviewPixmapFactory* factory, int id)
+        : ListBoxPreviewItem(listbox, QPixmap(), text),
+          m_previewPixmapFactory(factory),
+          m_id(id)
+    {};
+
+    virtual const QPixmap* pixmap() const;
+
+private:
+    PreviewPixmapFactory* m_previewPixmapFactory;
+    int m_id;
+};
+
+const QPixmap* ListBoxBWPreviewItem::pixmap() const
+{
+    return m_previewPixmapFactory->pixmap(m_id);
+}
+
 
 // -----------------------------------------------------------------------------------
+
 
 ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
                    : Digikam::ImageDlgBase(parent, i18n("Convert to Black & White"), 
                                            "convertbw", false),
-                     m_destinationPreviewData(0L)
+                     m_destinationPreviewData(0L),
+                     m_channelCB(0),
+                     m_scaleBG(0),
+                     m_bwFilters(0),
+                     m_bwTone(0),
+                     m_overExposureIndicatorBox(0),
+                     m_cInput(0),
+                     m_tab(0),
+                     m_previewWidget(0),
+                     m_histogramWidget(0),
+                     m_curvesWidget(0),
+                     m_curves(0),
+                     m_originalImage(0),
+                     m_previewPixmapFactory(0)
 {
     setHelp("blackandwhitetool.anchor", "digikam");
 
@@ -215,49 +246,44 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_bwFilters->setColumnMode(1);
     m_bwFilters->setVariableWidth(false);
     m_bwFilters->setVariableHeight(false);
-    ListBoxWhatsThis* whatsThis = new ListBoxWhatsThis(m_bwFilters);
+    Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_bwFilters);
+    m_previewPixmapFactory = new PreviewPixmapFactory(this);
 
     int type = BWNoFilter;
-    QPixmap pix = getThumbnailForEffect(type);
 
-    QListBoxItem *item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("No Black & White Filter"));
+    QListBoxItem *item = new ListBoxBWPreviewItem(m_bwFilters, i18n("No Black & White Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Black & White Filter</b>:"
                                "<p>Do not apply a black a filter to the image.</p>"));
     
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Neutral"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Neutral"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Neutral Black & White</b>:"
                                    "<p>Simulate black and white neutral film exposure.</p>")
                                    .arg(previewEffectPic("neutralbw")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Green Filter"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Green Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Green Filter</b>:"
                                  "<p>Simulate black and white film exposure using green filter. "
                                  "This provides an universal asset for all scenics, especially suited for portraits "
                                  "photographed against sky.</p>").arg(previewEffectPic("bwgreen")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Orange Filter"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Orange Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Orange Filter</b>:"
                                   "<p>Simulate black and white film exposure using orange filter. "
                                   "This will enhances landscapes, marine scenes and aerial "
                                   "photography.</p>").arg(previewEffectPic("bworange")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Red Filter"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Red Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Red Filter</b>:"
                                "<p>Simulate black and white film exposure using red filter. "
                                "Using this one creates dramatic sky effects and simulates moonlight scenes "
                                "in daytime.</p>").arg(previewEffectPic("bwred")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwFilters, pix, i18n("Yellow Filter"));
+    item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Yellow Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Black & White with Yellow Filter</b>:"
                                   "<p>Simulate black and white film exposure using yellow filter. "
                                   "Most natural tonal correction and improves contrast. Ideal for "
@@ -271,46 +297,40 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     m_bwTone->setColumnMode(1);
     m_bwTone->setVariableWidth(false);
     m_bwTone->setVariableHeight(false);
-    ListBoxWhatsThis* whatsThis2 = new ListBoxWhatsThis(m_bwTone);
+    Digikam::ListBoxWhatsThis* whatsThis2 = new Digikam::ListBoxWhatsThis(m_bwTone);
 
     type = BWNoTone;
 
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("No Tone Filter"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("No Tone Filter"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<b>No Tone Filter</b>:"
                                 "<p>Do not apply a tone filter to the image.</p>"));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Sepia Tone"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Sepia Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Sepia Tone</b>:"
                                  "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
                                  "the shadows-very similar to the process of bleaching a print and re-developing in a sepia "
                                  "toner.</p>").arg(previewEffectPic("sepia")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Brown Tone"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Brown Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Brown Tone</b>:"
                                  "<p>This filter is more neutral than Sepia Tone filter.</p>").arg(previewEffectPic("browntone")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Cold Tone"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Cold Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Cold Tone</b>:"
                                 "<p>Start subtle and replicate printing on a cold tone black and white "
                                 "paper such as a bromide enlarging paper.</p>").arg(previewEffectPic("coldtone")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Selenium Tone"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Selenium Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Selenium Tone</b>:"
                                     "<p>This effect replicate traditional selenium chemical toning done "
                                     "in the darkroom.</p>").arg(previewEffectPic("selenium")));
 
     ++type;
-    pix = getThumbnailForEffect(type);
-    item = new ListBoxPreviewItem(m_bwTone, pix, i18n("Platinum Tone"));
+    item = new ListBoxBWPreviewItem(m_bwTone, i18n("Platinum Tone"), m_previewPixmapFactory, type);
     whatsThis2->add( item, i18n("<img source=\"%1\"> <b>Black & White with Platinum Tone</b>:"
                                      "<p>This effect replicate traditional platinum chemical toning done "
                                      "in the darkroom.</p>").arg(previewEffectPic("platinum")));
@@ -431,7 +451,27 @@ ImageEffect_BWSepia::~ImageEffect_BWSepia()
 QPixmap ImageEffect_BWSepia::getThumbnailForEffect(int type) 
 {
     Digikam::DImg thumb = m_thumbnailImage.copy();
-    blackAndWhiteConversion(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(), type);
+    int w   = thumb.width();
+    int h   = thumb.height();
+    bool sb = thumb.sixteenBit();
+    bool a  = thumb.hasAlpha();
+
+    blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+
+    if (m_curves && m_overExposureIndicatorBox) { // in case we're called before the ctor is done
+        uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+        m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel, m_overExposureIndicatorBox->isChecked());
+        m_curves->curvesLutProcess(thumb.bits(), targetData, w, h);
+
+        Digikam::DImg preview(w, h, sb, a, targetData);
+        Digikam::BCGModifier cmod;
+        cmod.setContrast(m_cInput->value() + (double)(1.00));
+        cmod.applyBCG(preview);
+
+        thumb.putImageData(preview.bits());
+
+        delete [] targetData;
+    }
     return (thumb.convertToPixmap());
 }
 
@@ -510,6 +550,10 @@ void ImageEffect_BWSepia::slotDefault()
     m_bwTone->blockSignals(false);
     m_bwFilters->blockSignals(false);
 
+    m_previewPixmapFactory->invalidate();
+    m_bwFilters->triggerUpdate(false);
+    m_bwTone->triggerUpdate(false);
+
     slotEffect();
 }
 
@@ -559,6 +603,16 @@ void ImageEffect_BWSepia::slotEffect()
     delete [] targetData;
     
     kapp->restoreOverrideCursor();
+}
+
+void ImageEffect_BWSepia::slotTimer()
+{
+    Digikam::ImageDlgBase::slotTimer();
+    if (m_previewPixmapFactory && m_bwFilters && m_bwTone) {
+        m_previewPixmapFactory->invalidate();
+        m_bwFilters->triggerUpdate(false);
+        m_bwTone->triggerUpdate(false);
+    }
 }
 
 void ImageEffect_BWSepia::finalRendering()

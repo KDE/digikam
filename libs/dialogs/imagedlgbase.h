@@ -62,7 +62,7 @@ public:
 
 protected slots:
 
-    void slotTimer();       
+    virtual void slotTimer();       
     
 protected:
     

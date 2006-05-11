@@ -36,6 +36,7 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qlistbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
@@ -54,6 +55,8 @@
 #include "colorgradientwidget.h"
 #include "dimgimagefilters.h"
 #include "dimg.h"
+#include "listboxpreviewitem.h"
+#include "listboxwhatsthis.h"
 
 // Local includes.
 
@@ -64,8 +67,8 @@ namespace DigikamImagesPluginCore
 
 ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                           : Digikam::ImageDlgBase(parent, i18n("Auto Color Correction"), "autocorrection", false)
+                          ,m_destinationPreviewData(0L)
 {
-    m_destinationPreviewData = 0L;
     setHelp("autocolorcorrectiontool.anchor", "digikam");
     
     // -------------------------------------------------------------
@@ -77,6 +80,10 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     setPreviewAreaWidget(m_previewWidget);
     
     // -------------------------------------------------------------
+
+    Digikam::ImageIface iface(0, 0);
+    m_thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, QSize::ScaleMin);
+
     
     QWidget *gboxSettings     = new QWidget(plainPage());
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 4, 4, marginHint(), spacingHint());
@@ -142,27 +149,36 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
 
     // -------------------------------------------------------------
     
-    m_correctionTools = new QButtonGroup(1, Qt::Horizontal, i18n("Auto-Color correction tool:"), gboxSettings);
+    m_correctionTools = new QListBox(gboxSettings);
+    m_correctionTools->setColumnMode(1);
+    m_correctionTools->setVariableWidth(false);
+    m_correctionTools->setVariableHeight(false);
+    Digikam::ListBoxWhatsThis* whatsThis = new Digikam::ListBoxWhatsThis(m_correctionTools);
 
-    QRadioButton *autoLevels = new QRadioButton(i18n("Auto Levels"), m_correctionTools);
-    QWhatsThis::add( autoLevels, i18n("<img source=\"%1\"> <b>Auto Levels</b>:"
-                                     "<p>This option maximizes the tonal range in the Red, "
-                                     "Green, and Blue channels. It search the image shadow and highlight "
-                                     "limit values and adjust the Red, Green, and Blue channels "
-                                     "to a full histogram range.</p>").arg(previewEffectPic("autolevels")));
-    m_correctionTools->insert(autoLevels, AutoLevelsCorrection);
+    QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
     
-    QRadioButton *normalize = new QRadioButton(i18n("Normalize"), m_correctionTools);
-    QWhatsThis::add( normalize, i18n("<img source=\"%1\"> <b>Normalize</b>:"
-                                     "<p>This option scales brightness values across the active "
-                                     "image so that the darkest point becomes black, and the "
-                                     "brightest point becomes as bright as possible without "
-                                     "altering its hue. This is often a \"magic fix\" for "
-                                     "images that are dim or washed out.</p>").arg(previewEffectPic("normalize")));
-    m_correctionTools->insert(normalize, NormalizeCorrection);
+    QListBoxItem *item = new Digikam::ListBoxPreviewItem(pix, i18n("Auto Levels"));
+    
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Auto Levels</b>:"
+                               "<p>This option maximizes the tonal range in the Red, "
+                               "Green, and Blue channels. It search the image shadow and highlight "
+                               "limit values and adjust the Red, Green, and Blue channels "
+                               "to a full histogram range.</p>").arg(previewEffectPic("autolevels")));
+    m_correctionTools->insertItem(item, AutoLevelsCorrection);
 
-    QRadioButton *equalize = new QRadioButton(i18n("Equalize"), m_correctionTools);
-    QWhatsThis::add( equalize, i18n("<img source=\"%1\"> <b>Equalize</b>:"
+    pix = getThumbnailForEffect(NormalizeCorrection);
+    item = new Digikam::ListBoxPreviewItem(pix, i18n("Normalize"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Normalize</b>:"
+                               "<p>This option scales brightness values across the active "
+                               "image so that the darkest point becomes black, and the "
+                               "brightest point becomes as bright as possible without "
+                               "altering its hue. This is often a \"magic fix\" for "
+                               "images that are dim or washed out.</p>").arg(previewEffectPic("normalize")));
+    m_correctionTools->insertItem(item, NormalizeCorrection);
+
+    pix = getThumbnailForEffect(EqualizeCorrection);
+    item = new Digikam::ListBoxPreviewItem(pix, i18n("Equalize"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Equalize</b>:"
                                     "<p>This option adjusts the brightness of colors across the "
                                     "active image so that the histogram for the value channel "
                                     "is as nearly as possible flat, that is, so that each possible "
@@ -171,21 +187,22 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
                                     "enhancing the contrasts in an image. Other times it gives "
                                     "garbage. It is a very powerful operation, which can either work "
                                     "miracles on an image or destroy it.</p>").arg(previewEffectPic("equalize")));
-    m_correctionTools->insert(equalize, EqualizeCorrection);
+    m_correctionTools->insertItem(item, EqualizeCorrection);
 
-    QRadioButton *strechContrast = new QRadioButton(i18n("Stretch Contrast"), m_correctionTools);
-    QWhatsThis::add( strechContrast, i18n("<img source=\"%1\"> <b>Stretch Contrast</b>:"
-                                          "<p>This option enhances the contrast and brightness "
-                                          "of the RGB values of an image by stretching the lowest "
-                                          "and highest values to their fullest range, adjusting "
-                                          "everything in between.</p>").arg(previewEffectPic("stretchcontrast")));
-    m_correctionTools->insert(strechContrast, StretchContrastCorrection);
+    pix = getThumbnailForEffect(StretchContrastCorrection);
+    item = new Digikam::ListBoxPreviewItem(pix, i18n("Stretch Contrast"));
+    whatsThis->add( item, i18n("<img source=\"%1\"> <b>Stretch Contrast</b>:"
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image by stretching the lowest "
+                               "and highest values to their fullest range, adjusting "
+                               "everything in between.</p>").arg(previewEffectPic("stretchcontrast")));
+    m_correctionTools->insertItem(item, StretchContrastCorrection);
 
     // -------------------------------------------------------------
     
     m_correctionTools->setFocus();
     gridSettings->addMultiCellWidget(m_correctionTools, 3, 3, 0, 4);
-    gridSettings->setRowStretch(4, 10);
+    gridSettings->setRowStretch(3, 10);
     setUserAreaWidget(gboxSettings);
    
     // Reset all parameters to the default values.
@@ -202,7 +219,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_correctionTools, SIGNAL(released(int)),
+    connect(m_correctionTools, SIGNAL(highlighted(int)),
             this, SLOT(slotEffect()));
     
     connect(m_previewWidget, SIGNAL(signalResized()),
@@ -268,7 +285,7 @@ QString ImageEffect_AutoCorrection::previewEffectPic(QString name)
 void ImageEffect_AutoCorrection::slotDefault()
 {
     m_correctionTools->blockSignals(true);
-    m_correctionTools->setButton( AutoLevelsCorrection );
+    m_correctionTools->setCurrentItem( AutoLevelsCorrection );
     m_correctionTools->blockSignals(false);
     slotEffect();
 }
@@ -288,7 +305,7 @@ void ImageEffect_AutoCorrection::slotEffect()
     int h                           = iface->previewHeight();
     bool sb                         = iface->previewSixteenBit();
 
-    autoCorrection(m_destinationPreviewData, w, h, sb, m_correctionTools->selectedId());
+    autoCorrection(m_destinationPreviewData, w, h, sb, m_correctionTools->currentItem());
 
     iface->putPreviewImage(m_destinationPreviewData);
     m_previewWidget->updatePreview();
@@ -299,6 +316,14 @@ void ImageEffect_AutoCorrection::slotEffect()
 
     kapp->restoreOverrideCursor();
 }
+
+QPixmap ImageEffect_AutoCorrection::getThumbnailForEffect(AutoCorrectionType type)
+{
+    Digikam::DImg thumb = m_thumbnailImage.copy();
+    autoCorrection(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(), type);
+    return (thumb.convertToPixmap());
+}
+
 
 void ImageEffect_AutoCorrection::finalRendering()
 {
@@ -311,7 +336,7 @@ void ImageEffect_AutoCorrection::finalRendering()
 
     if (data)
     {
-       int type = m_correctionTools->selectedId();
+       int type = m_correctionTools->currentItem();
        autoCorrection(data, w, h, sb, type);
        QString name;
        

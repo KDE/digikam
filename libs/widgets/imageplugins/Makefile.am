@@ -3,7 +3,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libimagepluginswidgets.la
 
 libimagepluginswidgets_la_SOURCES = imageregionwidget.cpp imagepaniconwidget.cpp imageselectionwidget.cpp \
-	                            imageguidewidget.cpp imagepannelwidget.cpp imagewidget.cpp
+	                            imageguidewidget.cpp imagepannelwidget.cpp imagewidget.cpp \
+				    listboxwhatsthis.cpp listboxpreviewitem.cpp
 
 libimagepluginswidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
                  

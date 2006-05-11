@@ -31,6 +31,7 @@
 
 class QHButtonGroup;
 class QComboBox;
+class QListBox;
 class QButtonGroup;
 
 namespace Digikam
@@ -84,19 +85,22 @@ private:
     
     QHButtonGroup                *m_scaleBG;
 
-    QButtonGroup                 *m_correctionTools;
+    QListBox                     *m_correctionTools;
 
     Digikam::ImageWidget         *m_previewWidget;
 
     Digikam::ColorGradientWidget *m_hGradient;
     
     Digikam::HistogramWidget     *m_histogramWidget;    
+
+    Digikam::DImg                 m_thumbnailImage;
         
 private:
 
     void autoCorrection(uchar *data, int w, int h, bool sb, int type);
     QString previewEffectPic(QString name);
-
+    QPixmap getThumbnailForEffect(AutoCorrectionType type);
+    
 private slots:
 
     void slotDefault();    
