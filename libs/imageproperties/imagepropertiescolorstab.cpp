@@ -48,6 +48,8 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ktabwidget.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -110,6 +112,7 @@ public:
         navigateBar          = 0;
         imageLoaderThread    = 0;
         cieTongue            = 0;
+        saveProfilButton     = 0;
     }
 
     QComboBox             *channelCB;
@@ -132,8 +135,11 @@ public:
     QLabel                *labelAlphaChannel;
     QLabel                *infoHeader;
     
+    QPushButton           *saveProfilButton;
+    
     QString                currentFilePath;
-
+    QString                profileFileName;
+    
     QRect                 *selectionArea;
 
     QByteArray             embedded_profile;
@@ -356,7 +362,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // ICC Profiles tab area ---------------------------------------
     
     QWidget* iccprofilePage = new QWidget( d->tab );
-    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 9, 3, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 10, 2, KDialog::marginHint(), KDialog::spacingHint());
     
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
     iccbox->setFrameStyle (QFrame::NoFrame);
@@ -374,12 +380,16 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     new QLabel(i18n("Color Space: "), iccdetail);
     d->labelICCColorSpace  = new KSqueezedTextLabel(0, iccdetail);
 
-    d->cieTongue = new CIETongueWidget(256, 256, iccprofilePage);
-    
+    d->cieTongue           = new CIETongueWidget(256, 256, iccprofilePage);
+    d->saveProfilButton    = new QPushButton(i18n("Save as..."), iccprofilePage);
+    QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
+                                               "the image and save it to the disk like a new ICC profile file."));
+                                
     iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
     iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 2);
     iccLayout->addMultiCellWidget(d->cieTongue, 8, 8, 0, 2);
-    iccLayout->setRowStretch(9, 10);
+    iccLayout->addMultiCellWidget(d->saveProfilButton, 9, 9, 0, 0);
+    iccLayout->setRowStretch(10, 10);
 
     d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
@@ -429,6 +439,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     connect(d->maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotMaxValueChanged(int)));
 
+    connect(d->saveProfilButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveProfil()));
+                        
     // -- read config ---------------------------------------------------------
 
     KConfig* config = kapp->config();
@@ -475,6 +488,8 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     
     d->histogramWidget->stopHistogramComputation();
     
+    d->profileFileName = QString();
+    
     if (url.isEmpty())
     {
        d->navigateBar->setFileName();
@@ -490,8 +505,6 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
        return;
     }
 
-    setEnabled(true);
-    
     d->navigateBar->setFileName(url.filename());
     d->navigateBar->setButtonsState(itemType);
     d->selectionArea = selectionArea;
@@ -515,16 +528,18 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
             {
                 d->imageSelection = d->image.copy(*d->selectionArea);
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit(),
-                                              d->imageSelection.bits(), d->imageSelection.width(),
-                                              d->imageSelection.height());
+                                               d->imageSelection.bits(), d->imageSelection.width(),
+                                               d->imageSelection.height());
                 d->regionBG->show();
                 updateInformations();
+                setEnabled(true);
             }
             else 
             {
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
                 d->regionBG->hide();
                 updateInformations();
+                setEnabled(true);
             }
         }
         else 
@@ -537,6 +552,8 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
 
 void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 {
+    setEnabled(false);
+    
     // create thread on demand
     if (!d->imageLoaderThread)
     {
@@ -544,8 +561,6 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 
         connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
                 this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
-        //connect(d->imageLoaderThread, SIGNAL(signalImageStartedLoading(const QString&)),
-          //      this, SLOT(slotStartedLoading(const QString&)));
     }
 
     d->currentFilePath = url.path();
@@ -562,14 +577,15 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
 
     if ( !img.isNull() )
     {
-        d->histogramWidget->updateData(img.bits(), img.width(), img.height(),
-                                       img.sixteenBit());
+        d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+        
         // As a safety precaution, this must be changed only after updateData is called,
         // which stops computation because d->image.bits() is currently used by threaded histogram algorithm.
         d->image = img;
         d->regionBG->hide();
         updateInformations();
         getICCData();
+        setEnabled(true);
     }
     else
     {
@@ -596,7 +612,7 @@ void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
     {
         d->imageSelection = d->image.copy(*d->selectionArea);
         d->histogramWidget->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                                               d->imageSelection.height(), d->imageSelection.sixteenBit());
+                                                d->imageSelection.height(), d->imageSelection.sixteenBit());
         d->regionBG->show();
     }
     else 
@@ -793,6 +809,7 @@ void ImagePropertiesColorsTab::getICCData()
         d->labelICCIntent->setText(i18n("N.A."));
         d->labelICCColorSpace->setText(i18n("N.A."));
         d->cieTongue->setProfileData();
+        d->saveProfilButton->setEnabled(false);
     }
     else
     {
@@ -804,10 +821,11 @@ void ImagePropertiesColorsTab::getICCData()
         d->cieTongue->setProfileData(&d->embedded_profile);
         embProfile = cmsOpenProfileFromMem(d->embedded_profile.data(),
                                           (DWORD)d->embedded_profile.size());
-        d->labelICCName->setText(QString(cmsTakeProductName(embProfile)));
+        d->profileFileName = QString(cmsTakeProductName(embProfile));
+        d->labelICCName->setText(d->profileFileName);
         d->labelICCDescription->setText(QString(cmsTakeProductDesc(embProfile)));
         d->labelICCCopyright->setText(QString(cmsTakeCopyright(embProfile)));
-
+        
         switch (cmsTakeRenderingIntent(embProfile))
         {
             case 0:
@@ -856,10 +874,34 @@ void ImagePropertiesColorsTab::getICCData()
         }
 
         d->labelICCIntent->setText(intent);
-
         d->labelICCColorSpace->setText(colorSpace);
+        d->saveProfilButton->setEnabled(true);
 
         cmsCloseProfile(embProfile);
+    }
+}
+
+void ImagePropertiesColorsTab::slotSaveProfil()
+{
+    QString profileFileName = d->profileFileName.simplifyWhiteSpace().remove(' ').append(".icc");
+    
+    KFileDialog iccFileSaveDialog(KGlobalSettings::documentPath(),
+                                  QString::null,
+                                  this,
+                                  "iccProfileFileSaveDialog",
+                                  false);
+
+    iccFileSaveDialog.setOperationMode( KFileDialog::Saving );
+    iccFileSaveDialog.setMode( KFile::File );
+    iccFileSaveDialog.setSelection(profileFileName);
+    iccFileSaveDialog.setCaption( i18n("ICC color profile File to Save") );
+    iccFileSaveDialog.setFilter(QString("*.icc"));
+
+    // Check for cancel.
+    if ( iccFileSaveDialog.exec() == KFileDialog::Accepted )
+    {
+        if( !iccFileSaveDialog.selectedURL().isEmpty() )
+            d->image.setICCProfilToFile(iccFileSaveDialog.selectedURL().path());
     }
 }
 

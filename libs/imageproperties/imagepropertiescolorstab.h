@@ -86,6 +86,8 @@ private slots:
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
     void slotStartedLoading(const QString& filePath);
+    
+    void slotSaveProfil();
 
 private:
 
