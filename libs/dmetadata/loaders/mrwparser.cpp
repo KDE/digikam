@@ -1027,165 +1027,173 @@ void MRWParser::dump_exif_tag(off_t pos)
 
 void MRWParser::dump_maker_note_tag(off_t pos) 
 {
-    uint16_t id = get_16_tiff(pos+0); 
-    
-    switch(id) 
-    {
-        case 0x0000: /*   MakerNoteVersion (undefined) */
+    try
+    { 
+        uint16_t id = get_16_tiff(pos+0); 
+        
+        switch(id) 
         {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.Version");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
-            val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());  
-            break;
-        }
-        case 0x0001: /*   CameraSettingsStdOld (undefined) */
-        {
-            camera_settings_size_1 = get_32_tiff(pos+4); 
-            camera_settings_pos_1  = get_32_tiff(pos+8); 
-            break;
-        }
-        case 0x0003: /*   CameraSettingsStdNew (undefined) */
-        {
-            camera_settings_size_3 = get_32_tiff(pos+4); 
-            camera_settings_pos_3  = get_32_tiff(pos+8); 
-            break;
-        }
-        case 0x0004: /*   CameraSettings7D (undefined) */
-        {
-            camera_settings_size_4 = get_32_tiff(pos+4); 
-            camera_settings_pos_4  = get_32_tiff(pos+8); 
-            break;
-        }
-        case 0x0018: /*   ImageStabilizationData (undefined) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ImageStabilizationData");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
-            val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());  
-            break;
-        }
-        case 0x0040: /*   CompressedImageSize (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.CompressedImageSize");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0081: /*   Thumbnail (undefined) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.Thumbnail");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
-            val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0088: /*   ThumbnailOffset (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailOffset");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0089: /*   ThumbnailLength (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailLength");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0101: /*   ColorMode (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ColorMode");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0102: /*   ImageQuality (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ImageQuality");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0103: /*   MinoltaImageSize/MinoltaQuality */
-        {
-            // TODO
-            break;
-        }
-        case 0x0107: /*  ImageStabilization (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ImageStabilization");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x010a: /*   ZoneMatching (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ZoneMatching");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x010b: /*   ColorTemperature (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.ColorTemperature");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x010c: /*   LensID (unsignedLong) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.LensID");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
-            val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get());
-            break;
-        }
-        case 0x0114: /*   CameraSettings5D (undefined) */
-        {
-            camera_settings_size_0114 = get_32_tiff(pos+4); 
-            camera_settings_pos_0114  = get_32_tiff(pos+8); 
-            break;
-        }
-        case 0x0e00: /*   PIM_IFD (undefined) */
-        {
-            Exiv2::DataBuf data = get_ttf_tag_value(pos);
-            Exiv2::ExifKey exifTag("Exif.Minolta.PIM_IFD");
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
-            val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
-            m_exifMetadata.add(exifTag, val.get()); 
-            break;
-        }
-        case 0x0f00: /*   CameraSettingsZ1 (undefined) */
-        {
-            break;
-        }
-        default:
-        {
-            break;  
+            case 0x0000: /*   MakerNoteVersion (undefined) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.Version");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
+                val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());  
+                break;
+            }
+            case 0x0001: /*   CameraSettingsStdOld (undefined) */
+            {
+                camera_settings_size_1 = get_32_tiff(pos+4); 
+                camera_settings_pos_1  = get_32_tiff(pos+8); 
+                break;
+            }
+            case 0x0003: /*   CameraSettingsStdNew (undefined) */
+            {
+                camera_settings_size_3 = get_32_tiff(pos+4); 
+                camera_settings_pos_3  = get_32_tiff(pos+8); 
+                break;
+            }
+            case 0x0004: /*   CameraSettings7D (undefined) */
+            {
+                camera_settings_size_4 = get_32_tiff(pos+4); 
+                camera_settings_pos_4  = get_32_tiff(pos+8); 
+                break;
+            }
+            case 0x0018: /*   ImageStabilizationData (undefined) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ImageStabilizationData");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
+                val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());  
+                break;
+            }
+            case 0x0040: /*   CompressedImageSize (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.CompressedImageSize");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0081: /*   Thumbnail (undefined) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.Thumbnail");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
+                val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0088: /*   ThumbnailOffset (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailOffset");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0089: /*   ThumbnailLength (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ThumbnailLength");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0101: /*   ColorMode (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ColorMode");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0102: /*   ImageQuality (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ImageQuality");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0103: /*   MinoltaImageSize/MinoltaQuality */
+            {
+                // TODO
+                break;
+            }
+            case 0x0107: /*  ImageStabilization (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ImageStabilization");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x010a: /*   ZoneMatching (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ZoneMatching");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x010b: /*   ColorTemperature (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.ColorTemperature");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x010c: /*   LensID (unsignedLong) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.LensID");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedLong);
+                val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedLong), Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get());
+                break;
+            }
+            case 0x0114: /*   CameraSettings5D (undefined) */
+            {
+                camera_settings_size_0114 = get_32_tiff(pos+4); 
+                camera_settings_pos_0114  = get_32_tiff(pos+8); 
+                break;
+            }
+            case 0x0e00: /*   PIM_IFD (undefined) */
+            {
+                Exiv2::DataBuf data = get_ttf_tag_value(pos);
+                Exiv2::ExifKey exifTag("Exif.Minolta.PIM_IFD");
+                Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::undefined);
+                val->read((const Exiv2::byte*)data.pData_, data.size_, Exiv2::littleEndian);
+                m_exifMetadata.add(exifTag, val.get()); 
+                break;
+            }
+            case 0x0f00: /*   CameraSettingsZ1 (undefined) */
+            {
+                break;
+            }
+            default:
+            {
+                break;  
+            }
         }
     }
+    catch( Exiv2::Error &e )
+    {
+        std::cerr << "Cannot parse Minolta makernote using Exiv2 (" 
+                  << e.what() << ")\n";
+    }                   
 }
 
 /* The CameraSettings5D tag is used by the Dynax/Maxxum 5D */ 
@@ -1200,10 +1208,8 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
         try
         { 
             Exiv2::DataBuf data(2);
-            uint16_t v = get_16_tiff(pos+i*2)  ;
+            uint16_t v = get_16_tiff(pos+i*2);
             memcpy(data.pData_, &v, 2);
-            
-            // FIXME
           
             switch(i)
             {
@@ -1213,7 +1219,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ; 
+                    break; 
                 }
                 case 0x000C: /*  ImageSize (unsignedShort) */
                 {
@@ -1221,7 +1227,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ; 
+                    break; 
                 }
                 case 0x000D: /*  ImageQuality (unsignedShort) */
                 {
@@ -1229,7 +1235,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ; 
+                    break; 
                 }
                 case 0x000E: /*  WhiteBalance (unsignedShort) */
                 {
@@ -1237,7 +1243,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 }
                 case 0x001F: /*  Flash (unsignedShort) */
                 {
@@ -1245,7 +1251,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 }      
                 case 0x0025: /*  MeteringMode (unsignedShort) */
                 {
@@ -1253,7 +1259,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 }      
                 case 0x0026: /*  ISOSetting (unsignedShort) */
                 {
@@ -1261,7 +1267,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 }   
                 case 0x0030: /*  Sharpness (unsignedShort) */
                 {
@@ -1269,7 +1275,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0031: /*  Contrast (unsignedShort) */
                 {
@@ -1277,7 +1283,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0032: /*  Saturation (unsignedShort) */
                 {
@@ -1285,7 +1291,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0035: /*  ExposureTime (unsignedShort) */
                 {
@@ -1293,7 +1299,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0036: /*  FNumber (unsignedShort) */
                 {
@@ -1301,7 +1307,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0037: /*  FreeMemoryCardImages (unsignedShort) */
                 {
@@ -1309,7 +1315,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0038: /*  ExposureRevision (unsignedShort) */
                 {
@@ -1317,7 +1323,7 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
-                    break ;
+                    break;
                 } 
                 case 0x0049: /*  ColorTemperature (signedShort) */
                 {
@@ -1382,122 +1388,246 @@ void MRWParser::dump_camera_settings_0114( off_t pos , uint32_t size  )
         catch( Exiv2::Error &e )
         {
             std::cerr << "Cannot parse Minolta makernote using Exiv2 (" 
-                    << e.what() << ")\n";
+                      << e.what() << ")\n";
         }           
     }
 }
 
-/* The CameraSetting4 is used by the Dynax/Maxxum 7D  */ 
+/* The CameraSettings7D tag is used by the Dynax/Maxxum 7D  */ 
 
 void MRWParser::dump_camera_settings_4( off_t pos , uint32_t size  )
 {
     uint32_t i; 
     uint32_t nb = size/2;
   
-    // printf("<CameraSetting4> with %d entries at TFF offset %d\n", (int)nb , (int)pos) ;
-    
     for (i=0 ; i < nb ; i++) 
     {
-        uint16_t v = get_16_tiff(pos+i*2);
+        try
+        { 
+            Exiv2::DataBuf data(2);
+            uint16_t v = get_16_tiff(pos+i*2);
+            memcpy(data.pData_, &v, 2);
       
-        // printf("  CS ") ;
-      
-        switch(i)
-        {
-            case 0x0000: /*  ExposureMode  */
+            switch(i)
             {
-                /*  For the 7D:  */
-                const char *x = "**unknown**"; 
-                switch(v) 
+                case 0x0000: /*  ExposureMode (unsignedShort) */
                 {
-                    case 0: x ="(P) Program"           ; break;
-                    case 1: x ="(A) Aperture Priority" ; break;
-                    case 2: x ="(S) Shutter Priority"  ; break;
-                    case 3: x ="(M) Manual"            ; break;
-                    case 4: x ="(P/green) Auto"        ; break;
-                    case 5: x ="(Pa) Program Shift-A"  ; break;
-                    case 6: x ="(Ps) Program Shift-S"  ; break;
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ExposureMode");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
                 }
-                // printf("   0x%04x : %-20s = %6u (%04x) = '%s'\n" ,(int) i , "ExposureMode" ,(unsigned)  v,(unsigned)  v , x)  ; 
+                case 0x0002: /*  ImageSize (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageSize");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }
+                case 0x0003: /*  ImageQuality (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageQuality");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }
+                case 0x0004: /*  WhiteBalance (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.WhiteBalance");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                
+                case 0x000E: /*  FocusMode (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.FocusMode");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                  
+                case 0x0010: /*  AFPoints (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.AFPoints");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                    
+                case 0x0015: /*  Flash (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Flash");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                 
+                case 0x0016: /*  FlashMode (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.FlashMode");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                 
+                case 0x001C: /*  ISOSetting (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ISOSetting");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }     
+                case 0x001E: /*  ExposureCompensation (signedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ExposureCompensation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::signedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                                      
+                case 0x0025: /*  ColorSpace (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ColorSpace");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }             
+                case 0x0026: /*  Sharpness (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Sharpness");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                          
+                case 0x0027: /*  Contrast (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Contrast");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }  
+                case 0x0028: /*  Saturation (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Saturation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }  
+                case 0x002D: /*  FreeMemoryCardImages (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.FreeMemoryCardImages");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }
+                case 0x003F: /*  ColorTemperature (signedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ColorTemperature");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::signedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::signedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                              
+                case 0x0040: /*  Hue (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Hue");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                
+                case 0x0046: /*  Rotation (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.Rotation");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                  
+                case 0x0047: /*  FNumber (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.FNumber");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                  
+                case 0x0048: /*  ExposureTime (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ExposureTime");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                   
+                case 0x004A: /*  FreeMemoryCardImages (unsignedShort) : dupplicate that 0x002D tags*/
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.FreeMemoryCardImages");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                
+                case 0x005E: /*  ImageNumber (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageNumber");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                  
+                case 0x0060: /*  NoiseReduction (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.NoiseReduction");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                  
+                case 0x0062: /*  ImageNumber (unsignedShort) : dupplicate that 0x005E tags*/
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageNumber");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }   
+                case 0x0071: /*  ImageStabilization (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ImageStabilization");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                 
+                case 0x0075: /*  ZoneMatchingOn (unsignedShort) */
+                {
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ZoneMatchingOn");
+                    Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
+                    val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
+                    m_exifMetadata.add(exifTag, val.get()); 
+                    break; 
+                }                       
+                default:
+                    break;
             }
-            break ;
-            case 0x0002: /*  ImageSize */
-              /*  For the 7D: 0=3008x2000  1=2256x1496  2=1504x1000 */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "ImageSize" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0003: /*  Quality */
-              /*  For the 7D: 0=RAW  34=RAW+JPEG */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "ImageSize" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0004: /*  WbMode */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "WbMode?" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x000E: /*  FocusDial */
-              /*  For the 7D:  0=S 1= 2= 3=A 4=M */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "FocusDial" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0010: /*  FocusPosition */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "FocusPosition" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0015: /*  Flash */
-              /*  For the 7D:  0=OFF 1=ON */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "Flash" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0016: /*  FlashMode */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "FlashMode" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x001C: /*  ISO */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "ISO?" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0025: /*  ColorMode */
-              /*  On 7D:  0=NaturalsRGB 1=Naturals+RGB  4=EmbedAdobeRGB */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "ColorMode" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x003E: /*  FocusMode  */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "FocusMode" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x003F: /*  WBTemperature  */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "WBTemperature" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0040: /*  Hue  ( 8(-2) , 9(-1) , 10(0) , 11(+1) , 12(+2) ) */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "Hue" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0046: /*  CameraOrientation  */
-            {
-                const char * x = "Unknown";
-                if (v == 72) x = "Horizontal"; 
-                if (v == 82) x = "CounterClockWise"; 
-                if (v == 76) x = "ClockWise"; 
-            //	printf("   0x%04x : %-20s = %6u (%04x) = %s\n" ,(int) i , "CameraOrientation" ,(unsigned)  v,(unsigned)  v,x)  ;      
-            }
-            break ;
-            case 0x0047: /*  Aperture */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "Aperture?" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0048: /*  ShutterTime */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "ShutterTime?" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x002D: /*  MemCardSpace  (# of images that can still be stored on memory card) */
-            case 0x004A: /*  is repeated here  */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "MemCardSpace" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0060: /*  NoiseReduction */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "NoiseReduction" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0062: /*  PictureNumber */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "PictureNumber" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0071: /*  AntiShake */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "AntiShake" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            case 0x0075: /*  UseZoneMatching */
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "UseZoneMatching" ,(unsigned)  v,(unsigned)  v)  ; 
-              break ;
-            default:
-        //      printf("   0x%04x : %-20s = %6u (%04x)\n" ,(int) i , "????" ,(unsigned)  v,(unsigned)  v)  ; 
-              break;
         }
-    }  
+        catch( Exiv2::Error &e )
+        {
+            std::cerr << "Cannot parse Minolta makernote using Exiv2 (" 
+                      << e.what() << ")\n";
+        }           
+    }
 }
 
 void MRWParser::parse_ttf_block( off_t pos , uint32_t sz )
