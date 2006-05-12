@@ -420,10 +420,8 @@ void ImageWindow::slotContextMenu()
             QValueList<Q_LLONG> idList;
             idList.append(id);
 
-            assignTagsMenu = new TagsPopupMenu(idList, 1000,
-                                               TagsPopupMenu::ASSIGN);
-            removeTagsMenu = new TagsPopupMenu(idList, 2000,
-                                               TagsPopupMenu::REMOVE);
+            assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
+            removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
 
             separatorID = m_contextMenu->insertSeparator();
 
@@ -431,9 +429,10 @@ void ImageWindow::slotContextMenu()
             int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
 
             connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
-                    SLOT(slotAssignTag(int)));
+                    this, SLOT(slotAssignTag(int)));
+                    
             connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
-                    SLOT(slotRemoveTag(int)));
+                    this, SLOT(slotRemoveTag(int)));
 
             AlbumDB* db = AlbumManager::instance()->albumDB();
             if (!db->hasTags( idList ))
@@ -465,8 +464,8 @@ void ImageWindow::slotChanged()
     {
         KURL u(m_urlCurrent.directory());
 
-        QRect sel           = m_canvas->getSelectedArea();
-        DImg* img           = DImgInterface::instance()->getImg();
+        QRect sel = m_canvas->getSelectedArea();
+        DImg* img = DImgInterface::instance()->getImg();
 
         if (m_imageInfoCurrent)
         {
@@ -545,10 +544,9 @@ void ImageWindow::slotUpdateItemInfo()
 
     m_rotatedOrFlipped = false;
     
-    QString text = m_urlCurrent.filename() +
-            i18n(" (%2 of %3)")
-            .arg(QString::number(index+1))
-            .arg(QString::number(m_urlList.count()));
+    QString text = m_urlCurrent.filename() + i18n(" (%2 of %3)")
+                                             .arg(QString::number(index+1))
+                                             .arg(QString::number(m_urlList.count()));
     m_nameLabel->setText(text);
 
     if (m_urlList.count() == 1) 

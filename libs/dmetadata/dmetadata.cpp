@@ -614,13 +614,34 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime)
         
         // In Second we write date & time into Iptc.
 
-        setImageProgramId();
-
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
         d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
         d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
         
+        setImageProgramId();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+bool DMetadata::setImageDimensions(const QSize& size)
+{
+    try
+    {    
+        d->exifMetadata["Exif.Image.ImageWidth"]      = size.width();
+        d->exifMetadata["Exif.Image.ImageLength"]     = size.height();
+        d->exifMetadata["Exif.Photo.PixelXDimension"] = size.width();
+        d->exifMetadata["Exif.Photo.PixelYDimension"] = size.height();
+        
+        setImageProgramId();
         return true;
     }
     catch( Exiv2::Error &e )
@@ -720,12 +741,11 @@ bool DMetadata::setImageComment(const QString& comment)
 
         // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
 
-        setImageProgramId();
-
         QString commentIptc = comment;
         commentIptc.truncate(2000);
         d->iptcMetadata["Iptc.Application2.Caption"] = commentIptc.latin1();
 
+        setImageProgramId();
         return true;
     }
     catch( Exiv2::Error &e )

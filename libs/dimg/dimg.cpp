@@ -539,6 +539,11 @@ uint DImg::height() const
     return m_priv->height;
 }
 
+QSize DImg::size() const
+{
+    return QSize(m_priv->width, m_priv->height);
+}
+
 uchar* DImg::bits() const
 {
     return m_priv->data;
@@ -618,6 +623,21 @@ QByteArray DImg::getExif() const
 QByteArray DImg::getIptc() const
 {
     return metadata(IPTC);
+}
+
+void DImg::setComments(const QByteArray& commentsData)
+{
+    m_priv->metaData.replace(COM, commentsData);
+}
+
+void DImg::setExif(const QByteArray& exifData)
+{
+    m_priv->metaData.replace(EXIF, exifData);
+}
+
+void DImg::setIptc(const QByteArray& iptcData)
+{
+    m_priv->metaData.replace(IPTC, iptcData);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const

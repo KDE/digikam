@@ -2,7 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date  : 2003-01-15
- * Description :
+ * Description : DImg interface for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
@@ -134,11 +134,11 @@ public:
     uchar* getImageSelection();
     void   putImageSelection(const QString &caller, uchar* data);
 
-    QByteArray getEmbeddedICC();
+    QByteArray            getEmbeddedICC();
     
     ICCSettingsContainer *getICCSettings();
     
-    QString getImageFileName();
+    QString               getImageFileName();
 
 protected slots:
 

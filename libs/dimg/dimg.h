@@ -175,6 +175,7 @@ public:
     bool        isNull()         const;
     uint        width()          const;
     uint        height()         const;
+    QSize       size()           const;
     uchar*      bits()           const;
     uchar*      scanLine(uint i) const;
     bool        hasAlpha()       const;
@@ -207,6 +208,10 @@ public:
     QByteArray getComments() const;
     QByteArray getExif() const;
     QByteArray getIptc() const;
+    void       setComments(const QByteArray& commentsData);
+    void       setExif(const QByteArray& exifData);
+    void       setIptc(const QByteArray& iptcData);
+
     QByteArray metadata(METADATA key) const;
 
     bool       getICCProfilFromFile(const QString& filePath);

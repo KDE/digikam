@@ -2,7 +2,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date  : 2003-01-15
- * Description :
+ * Description : DImg interface for image editor
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
@@ -586,6 +586,12 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
 
 void DImgInterface::setModified()
 {
+    DMetadata meta;
+    meta.setExif(d->image.getExif());
+    meta.setImageDimensions(d->image.size());
+    d->image.setExif(meta.getExif());
+    // TODO: Update Exif Thumbnail here !
+    
     emit signalModified();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
