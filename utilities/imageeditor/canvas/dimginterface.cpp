@@ -209,10 +209,76 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         d->valid      = true;
         d->width      = d->origWidth;
         d->height     = d->origHeight;
-
         valRet        = true;
+
+        /* -----------------------------------------------------------------------------
+         * ICC workflow rules depending of IO file settings and ICC managment settings
+         * if a RAW image is loaded:
+         * 
+         ***************************************************************
+         * RAW ICC color   *    digiKam color   *     digiKam color    *
+         *   correction    *     management     *      management      *
+         * during decoding *       enable       *        disable       *
+         ***************************************************************
+         *                 *   digiKam ICC      *                      *
+         *    Disable      *  workflow will be  *    nothing to do     *
+         *    (NOICC)      *     only used      *                      *
+         *                 *                    *                      *
+         *                 *  [enableICC = ON]  *  [enableICC = OFF]   *
+         ***************************************************************
+         *                 *   digiKam ICC      *    If an embeded     *
+         *  Using embeded  *   workflow is      * profile is found in  *
+         *     profile     *     disable        * image, dcraw use it  *
+         *     (EMBED)     *                    * output profile=sRGB  *
+         *                 *                    *                      *
+         *                 *  [enableICC = OFF] *  [enableICC = OFF]   *
+         ***************************************************************
+         *                 *  Input and output  *                      *
+         *  Using digiKam  *   color profiles   *    nothing to do     *
+         *   ICC settings  *  from digiKam ICC  *                      *
+         *  (USERPROFILE)  *  settings will be  *                      *
+         *                 *    used by dcraw   *                      *
+         *                 *                    *                      *
+         *                 *  [enableICC = OFF] *  [enableICC = OFF]   *
+         ***************************************************************
+         *
+         * NOTE: If we trying to use the embedded ICC color profile from a RAW file we 
+         *       cannot use the digiKam ICC color management here because we don't have 
+         *       a feedback from dcraw if an embedded profile have been really found in 
+         *       the picture and applied to the image. A solution will be found to use 
+         *       libopenraw instead dcraw in the future.
+         *
+         */        
+
+        // With other format than RAW, we can using digiKam ICC color management workflow.
+        bool enableICC = true;
         
-        if (d->cmSettings->enableCMSetting)
+        if (d->image.attribute("format").toString() == QString("RAW"))
+        {
+            switch (d->iofileSettings->rawDecodingSettings.ICCColorCorrectionMode)
+            {
+                case RawDecodingSettings::NOICC:
+                {
+                    d->cmSettings->enableCMSetting ? enableICC = true : enableICC = false;  
+                    break;
+                }
+                case RawDecodingSettings::EMBED:
+                {
+                    enableICC = false;
+                    break;
+                }
+                case RawDecodingSettings::USERPROFILE:
+                {
+                    enableICC = false;
+                    break;
+                }
+            }
+            
+            if (enableICC == false)            
+                kdWarning() << "ICC workflow have been disable with this image!" << endl;
+        }    
+
+        if (d->cmSettings->enableCMSetting && enableICC)
         {
             if (d->cmSettings->askOrApplySetting)
             {

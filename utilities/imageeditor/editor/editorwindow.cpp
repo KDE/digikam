@@ -734,24 +734,6 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.cameraICCProfilePath    = m_ICCSettings->inputSetting;
     m_IOFileSettings->rawDecodingSettings.outputICCProfilePath    = m_ICCSettings->workspaceSetting;
     
-    // If ICC color management is disabled, we need to control finely ICC color corrections during RAW files decoding.
-    if (!m_ICCSettings->enableCMSetting)
-    {
-        switch (m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode)
-        {
-            case RawDecodingSettings::EMBED:
-                // Disable ouput ICC profile corrections.
-                m_IOFileSettings->rawDecodingSettings.outputICCProfilePath = QString::null;
-                break;
-            case RawDecodingSettings::USERPROFILE:
-                // Disable all.
-                m_ICCSettings->enableCMSetting = RawDecodingSettings::NOICC;
-                break;
-            default:
-                break;
-        }
-    }
-
     // -- GUI Settings -------------------------------------------------------
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
