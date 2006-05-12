@@ -1464,9 +1464,9 @@ void MRWParser::dumpCameraSettings5D( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break;
                 }      
-                case 0x0026: /*  ISOSetting (unsignedShort) */
+                case 0x0026: /*  ISOSpeed (unsignedShort) */
                 {
-                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ISOSetting");
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs5D.ISOSpeed");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
@@ -1677,9 +1677,9 @@ void MRWParser::dumpCameraSettings7D( off_t pos , uint32_t size  )
                     m_exifMetadata.add(exifTag, val.get()); 
                     break; 
                 }                 
-                case 0x001C: /*  ISOSetting (unsignedShort) */
+                case 0x001C: /*  ISOSpeed (unsignedShort) */
                 {
-                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ISOSetting");
+                    Exiv2::ExifKey exifTag("Exif.MinoltaCs7D.ISOSpeed");
                     Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::unsignedShort);
                     val->read((const Exiv2::byte*)data.pData_, sizeof(Exiv2::unsignedShort), Exiv2::littleEndian);
                     m_exifMetadata.add(exifTag, val.get()); 
@@ -2011,9 +2011,9 @@ void MRWParser::dumpCameraSettingsStd( off_t pos , uint32_t size, const std::str
                     key = csSection + std::string("FlashExposureComp");
                     break; 
                 }                 
-                case 0x0024: /*  ISOSetting (unsignedLong) */
+                case 0x0024: /*  ISOSpeed (unsignedLong) */
                 {
-                    key = csSection + std::string("ISOSetting");
+                    key = csSection + std::string("ISOSpeed");
                     break; 
                 }                 
                 case 0x0025: /*  MinoltaModel (unsignedLong) */
