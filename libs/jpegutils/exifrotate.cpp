@@ -44,6 +44,7 @@ extern "C"
 #include <qcstring.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qimage.h>
 
 // KDE includes.
 
@@ -214,12 +215,27 @@ bool exifRotate(const QString& file)
             fclose(input_file);
             fclose(output_file);
         
-            // reset the orientation of the temp file to normal
+            // -- Metadata operations ------------------------------------------------------
+
+            // Reset the Exif orientation tag of the temp image to normal
             kdDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
             exifData.load(temp);
             exifData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+
+            // Get the new image dimension of the temp image. Using a dummy QImage objet here 
+            // has a sense because the Exif dimension informations can be missing from original image.
+            // Get new dimensions with QImage will always work...
+            QImage img(temp);
+            exifData.setImageDimensions(img.size());
+
+            // Update the thumbnail.
+            QImage thumb = img.scale(160, 120, QImage::ScaleMin);
+            exifData.setExifThumbnail(thumb);
+
+            // We update all new metadata now...
             exifData.applyChanges();
         
+            // -----------------------------------------------------------------------------
             // set the file modification time of the temp file to that
             // of the original file
             struct stat st;

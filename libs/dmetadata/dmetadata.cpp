@@ -34,6 +34,7 @@
 // KDE includes.
 
 #include <kdebug.h>
+#include <ktempfile.h>
 
 // Exiv2 includes.
 
@@ -319,14 +320,14 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
         {
             if (fixOrientation)
             {
-                Exiv2::ExifKey key("Exif.Image.Orientation");
+                Exiv2::ExifKey key("Exif.Thumbnail.Orientation");
                 Exiv2::ExifData exifData(d->exifMetadata);
                 Exiv2::ExifData::iterator it = exifData.findKey(key);
                 if (it != exifData.end())
                 {
                     QWMatrix matrix;
                     long orientation = it->toLong();
-                    kdDebug() << " Exif Orientation: " << orientation << endl;
+                    kdDebug() << " Exif Thumbnail Orientation: " << orientation << endl;
                     
                     switch (orientation) 
                     {
@@ -374,12 +375,34 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif Thumbnail using Exiv2 (" 
+        kdDebug() << "Cannot get Exif Thumbnail using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
     
     return thumbnail;
+}
+
+bool DMetadata::setExifThumbnail(const QImage& thumb)
+{
+    try
+    {   
+        KTempFile thumbFile(QString::null, "DigikamDMetadataThumb");
+        thumbFile.setAutoDelete(true);
+        thumb.save(thumbFile.name(), "JPEG");
+
+        const std::string &fileName( (const char*)(QFile::encodeName(thumbFile.name())) );
+        d->exifMetadata.setJpegThumbnail( fileName );
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif Thumbnail using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
 }
 
 QSize DMetadata::getImageDimensions()

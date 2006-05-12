@@ -95,6 +95,7 @@ public:
     int              getImageRating() const;
     QStringList      getImageKeywords() const;
 
+    bool setExifThumbnail(const QImage& thumb);
     bool setImageDimensions(const QSize& size);
     bool setImageOrientation(ImageOrientation orientation);
     bool setImageDateTime(const QDateTime& dateTime);

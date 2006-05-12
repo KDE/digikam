@@ -542,6 +542,14 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
 
     d->savingFilename = fileName;
+
+    // update Exif thumbnail.
+    DMetadata meta;
+    meta.setExif(d->image.getExif());
+    QImage thumb = d->image.smoothScale(160, 120, QSize::ScaleMin).copyQImage();
+    meta.setExifThumbnail(thumb);
+    d->image.setExif(meta.getExif());
+
     d->thread->save(d->image, fileName, mimeType);
 }
 
@@ -551,9 +559,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
-    {
         kdWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
-    }
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -588,9 +594,10 @@ void DImgInterface::setModified()
 {
     DMetadata meta;
     meta.setExif(d->image.getExif());
+
+    // Update Exif Image dimensions.
     meta.setImageDimensions(d->image.size());
     d->image.setExif(meta.getExif());
-    // TODO: Update Exif Thumbnail here !
     
     emit signalModified();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
