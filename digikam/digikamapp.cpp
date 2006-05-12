@@ -1032,30 +1032,31 @@ void DigikamApp::slotCameraMediaMenu()
 
 void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
 {
-    int i=0;
-    for(KIO::UDSEntryList::ConstIterator it = list.begin();
-                  it!=list.end(); ++it)
+    int i = 0;
+
+    for(KIO::UDSEntryList::ConstIterator it = list.begin() ; it!=list.end() ; ++it)
     {
         QString name;
         QString path;
-        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++ et ) 
+
+        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++et ) 
         {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
+
             kdDebug() << ( *et ).m_str << endl;
         }
        
         if (!name.isEmpty() && !path.isEmpty())
         {
-            if (i==0)
+            if (i == 0)
                 mCameraMediaList->clear();
             
             mMediaItems[i] = path;
             
-            mCameraMediaList->insertItem( name,  this, 
-                              SLOT(slotDownloadImagesFromMedia( int )),i,0);
+            mCameraMediaList->insertItem(name, this, SLOT(slotDownloadImagesFromMedia(int)), 0, i);
             mCameraMediaList->setItemParameter(i, i);
             i++;
         }
