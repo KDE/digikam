@@ -6,6 +6,7 @@
  *               DImg framework
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
