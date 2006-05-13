@@ -190,12 +190,12 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     QHBoxLayout *hlay = new QHBoxLayout( KDialog::spacingHint());
     QLabel *labelICCCorrection = new QLabel(i18n("ICC profile correction during decoding:"), RAWfileOptionsGroup);
     d->iccColorsCorrection = new QComboBox( false, RAWfileOptionsGroup );
-    d->iccColorsCorrection->insertItem( i18n("Disabled") );
+    d->iccColorsCorrection->insertItem( i18n("Disabled (recommended)") );
     d->iccColorsCorrection->insertItem( i18n("Using embeded profile") );
     d->iccColorsCorrection->insertItem( i18n("Using digiKam ICC settings") );
     QWhatsThis::add( d->iccColorsCorrection, i18n("<p>This option toogle the right way to use ICC color profiles during "
                      "RAW files decoding.<p>"
-                     "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>.<p>"
+                     "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>. This option is hightly recommend to use the fine settings provided by digiKam.<p>"
                      "If you want to use the embeded ICC profile includes into RAW files (if exists), use "
                      "<b>Using embeded profile</b>. Warning: with this option the ICC color correction processed outside the RAW file decoding will be disable!<p>"
                      "If you want to use the ICC profiles setttings from ICC color management page, use "
