@@ -216,7 +216,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
          * if a RAW image is loaded:
          * 
          ***************************************************************
-         * RAW ICC color   *    digiKam color   *     digiKam color    *
+         *  RAW ICC color  *    digiKam color   *     digiKam color    *
          *   correction    *     management     *      management      *
          * during decoding *       enable       *        disable       *
          ***************************************************************
@@ -226,18 +226,24 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
          *                 *                    *                      *
          *                 *  [enableICC = ON]  *  [enableICC = OFF]   *
          ***************************************************************
-         *                 *   digiKam ICC      *    If an embeded     *
-         *  Using embeded  *   workflow is      * profile is found in  *
-         *     profile     *     disable        * image, dcraw use it  *
-         *     (EMBED)     *                    * output profile=sRGB  *
+         *                 *    digiKam ICC     *    If an embeded     *
+         *  Using embeded  *     workflow is    * profile is found in  *
+         *     profile     *   disable. If an   * image, dcraw use it. *
+         *                 *   embeded color    *   The output color   *
+         *                 *  is found in RAW   *   space profile is   *
+         *                 * file, dcraw use it *         sRGB         *
+         *     (EMBED)     * The output profile *                      *
+         *                 * set in digiKam ICC *                      *
+         *                 *  settings will be  *                      *
+         *                 *    used by dcraw   *                      *
          *                 *                    *                      *
          *                 *  [enableICC = OFF] *  [enableICC = OFF]   *
          ***************************************************************
-         *                 *  Input and output  *                      *
-         *  Using digiKam  *   color profiles   *    nothing to do     *
+         *                 *  Input and output  *     nothing to do    *
+         *  Using digiKam  *   color profiles   *                      *
          *   ICC settings  *  from digiKam ICC  *                      *
          *  (USERPROFILE)  *  settings will be  *                      *
-         *                 *    used by dcraw   *                      *
+         *                 *   used by dcraw    *                      *
          *                 *                    *                      *
          *                 *  [enableICC = OFF] *  [enableICC = OFF]   *
          ***************************************************************
@@ -265,17 +271,23 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 case RawDecodingSettings::EMBED:
                 {
                     enableICC = false;
+                    // The workspace profile set in digiKam workflow have been used by dcraw to decode 
+                    // RAW picture saved. We store it into DImg instance.
+                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                     break;
                 }
                 case RawDecodingSettings::USERPROFILE:
                 {
                     enableICC = false;
+                    // The workspace profile set in digiKam workflow have been used by dcraw to decode 
+                    // RAW picture saved. We store it into DImg instance.
+                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                     break;
                 }
             }
             
             if (enableICC == false)            
-                kdWarning() << "ICC workflow have been disable with this image!" << endl;
+                kdWarning() << "digiKam ICC workflow have been disable with this image!" << endl;
         }    
 
         if (d->cmSettings->enableCMSetting && enableICC)
