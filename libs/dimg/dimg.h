@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2005-06-14
- * Description : main DImg framework implementation
+ * Description : digiKam 8/16 bits image management API
  *
  * Copyright 2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier 
@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 class DImgPrivate;
-class DColorComposer;
+class IccTransform;
 
 class DIGIKAM_EXPORT DImg
 {
@@ -307,7 +307,7 @@ public:
     void       flip(FLIP direction);
 
     QPixmap    convertToPixmap();
-    QPixmap    convertToPixmap(QString inProfile, QString monitorProfile);
+    QPixmap    convertToPixmap(IccTransform* monitorICCtrans);
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,

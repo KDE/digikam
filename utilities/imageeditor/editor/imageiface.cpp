@@ -35,6 +35,7 @@
 // Local includes.
 
 #include "iccsettingscontainer.h"
+#include "icctransform.h"
 #include "dimginterface.h"
 #include "bcgmodifier.h"
 #include "imageiface.h"
@@ -324,15 +325,16 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
             p.end();
         }
         
-        QPixmap pixImage;
+        QPixmap      pixImage;
+        IccTransform monitorICCtrans;
         ICCSettingsContainer* iccSettings = DImgInterface::instance()->getICCSettings();
+        monitorICCtrans.setProfiles(iccSettings->inputSetting, iccSettings->monitorSetting);
 
         if (iccSettings)
         {
             if (iccSettings->enableCMSetting && iccSettings->managedViewSetting)
             {
-                pixImage = d->targetPreviewImage.convertToPixmap(iccSettings->inputSetting,
-                                                 iccSettings->monitorSetting);
+                pixImage = d->targetPreviewImage.convertToPixmap(&monitorICCtrans);
             }
             else
             {

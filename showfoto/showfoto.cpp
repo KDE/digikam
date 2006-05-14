@@ -433,12 +433,9 @@ void ShowFoto::slotOpenURL(const KURL& url)
     KIO::NetAccess::download(url, localFile);
 #endif
     
-    if (m_ICCSettings->enableCMSetting)
-        kdDebug() << "enableCMSetting=true" << endl;
-    else
-        kdDebug() << "enableCMSetting=false" << endl;
-        
-    m_canvas->load(localFile, m_ICCSettings, m_IOFileSettings);
+    m_canvas->load(localFile, m_IOFileSettings);
+
+    // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
 }
 
 void ShowFoto::toggleGUI2FullScreen()
@@ -639,7 +636,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
-    m_canvas->load(QString::null, 0, m_IOFileSettings);
+    m_canvas->load(QString::null, m_IOFileSettings);
     m_bar->clear(true);
     emit signalNoCurrentItem();
     m_currentItem = 0;
@@ -954,7 +951,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         emit signalNoCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
-        m_canvas->load(QString::null, 0, m_IOFileSettings);
+        m_canvas->load(QString::null, m_IOFileSettings);
         m_currentItem = 0;
     }
     else

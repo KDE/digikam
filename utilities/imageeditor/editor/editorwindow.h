@@ -44,7 +44,6 @@ namespace Digikam
 
 class Canvas;
 class ImagePluginLoader;
-class ICCSettingsContainer;
 class IOFileSettingsContainer;
 class SavingContextContainer;
 class IOFileProgressBar;
@@ -99,7 +98,6 @@ protected:
     Canvas                  *m_canvas;
     ImagePluginLoader       *m_imagePluginLoader;
     IOFileProgressBar       *m_nameLabel;
-    ICCSettingsContainer    *m_ICCSettings;
     IOFileSettingsContainer *m_IOFileSettings;
     SavingContextContainer  *m_savingContext;
     SlideShow               *m_slideShow;

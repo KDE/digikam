@@ -33,7 +33,6 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-
 // Local includes
 
 #include "icctransform.h"
@@ -47,18 +46,19 @@ public:
 
     IccTransformPriv()
     {
-        has_profile      = false;
-        do_proof_profile = false;
+        has_output_profile  = false;
+        has_embedded_profile = false;
+        do_proof_profile     = false;
     }
 
     bool       do_proof_profile;
-    bool       has_profile; 
-    
-    QString    input_profile;
-    QString    output_profile;
-    QString    proof_profile;
+    bool       has_embedded_profile; 
+    bool       has_output_profile; 
     
     QByteArray embedded_profile;
+    QByteArray input_profile;
+    QByteArray output_profile;
+    QByteArray proof_profile;
 };
 
 IccTransform::IccTransform()
@@ -70,6 +70,11 @@ IccTransform::IccTransform()
 IccTransform::~IccTransform()
 {
     delete d;
+}
+
+bool IccTransform::hasOutputProfile()
+{
+    return d->has_output_profile;
 }
 
 void IccTransform::getTransformType(bool do_proof_profile)
@@ -89,39 +94,39 @@ void IccTransform::getEmbeddedProfile(DImg image)
     if (!image.getICCProfil().isNull())
     {
         d->embedded_profile = image.getICCProfil();
-        d->has_profile = true;
-    }
-    else
-    {
-        return;
+        d->has_embedded_profile = true;
     }
 }
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile)
 {
-    d->input_profile  = input_profile;
-    d->output_profile = output_profile;
+    d->input_profile   = loadICCProfilFile(input_profile);
+    d->output_profile  = loadICCProfilFile(output_profile);
+    d->has_output_profile = true;
 }
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile, 
                                QString proof_profile)
 {
-    d->input_profile  = input_profile;
-    d->output_profile = output_profile;
-    d->proof_profile  = proof_profile;
+    d->input_profile   = loadICCProfilFile(input_profile);
+    d->output_profile  = loadICCProfilFile(output_profile);
+    d->proof_profile   = loadICCProfilFile(proof_profile);
+    d->has_output_profile = true;
 }
 
 void IccTransform::setProfiles(QString output_profile)
 {
-    d->output_profile = output_profile;
+    d->output_profile = loadICCProfilFile(output_profile);
+    d->has_output_profile = true;
 }
 
 void IccTransform::setProfiles( QString output_profile, QString proof_profile, bool forProof )
 {
     if (forProof)
     {
-        d->output_profile = output_profile;
-        d->proof_profile  = proof_profile;
+        d->output_profile  = loadICCProfilFile(output_profile);
+        d->proof_profile   = loadICCProfilFile(proof_profile);
+        d->has_output_profile = true;
     }
 }
 
@@ -158,14 +163,15 @@ void IccTransform::apply(DImg& image)
     
     kdDebug() << "intent: " << getRenderingIntent() << endl;
 
-    if (d->has_profile)
+    if (d->has_embedded_profile)
     {
         inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
                                           (DWORD)d->embedded_profile.size());
     }
     else
     {
-        inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
+        inprofile = cmsOpenProfileFromMem(d->input_profile.data(),
+                                          (DWORD)d->input_profile.size());
     }
 
     if (inprofile == NULL)
@@ -174,7 +180,8 @@ void IccTransform::apply(DImg& image)
         return;
     }
 
-    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
+    outprofile = cmsOpenProfileFromMem(d->output_profile.data(), 
+                                       (DWORD)d->output_profile.size());
 
     if (outprofile == NULL)
     {
@@ -280,7 +287,8 @@ void IccTransform::apply(DImg& image)
     }
     else
     {
-        proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(), 
+                                       (DWORD)d->proof_profile.size());
 
         if (proofprofile == NULL)
         {
@@ -367,9 +375,9 @@ void IccTransform::apply(DImg& image)
        cmsCloseProfile(proofprofile);
 }
 
-void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool useBPC, bool checkGamut, bool useBuiltin )
+void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool useBPC, 
+                          bool checkGamut, bool useBuiltin )
 {
-
     cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
     cmsHTRANSFORM transform;
     int transformFlags = 0, inputFormat = 0;
@@ -390,7 +398,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             break;
     }
 
-    kdDebug() << "icctransform.cpp/301-Intent is: " << intent << endl;
+    kdDebug() << k_funcinfo << "Intent is: " << intent << endl;
 
     if (!profile.isNull())
     {
@@ -403,7 +411,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     }
     else
     {
-        inprofile = cmsOpenProfileFromFile(QFile::encodeName( d->input_profile ), "r");
+        inprofile = cmsOpenProfileFromMem(d->input_profile.data(),
+                                          (DWORD)d->input_profile.size());
     }
 
      if (inprofile == NULL)
@@ -412,7 +421,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         return;
     }
 
-    outprofile = cmsOpenProfileFromFile(QFile::encodeName( d->output_profile ), "r");
+    outprofile = cmsOpenProfileFromMem(d->output_profile.data(),
+                                          (DWORD)d->output_profile.size());
 
     if (outprofile == NULL)
     {
@@ -472,7 +482,6 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                 intent,
                                                 transformFlags);
             }
-
         }
         else
         {
@@ -523,7 +532,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
     }
     else
     {
-        proofprofile = cmsOpenProfileFromFile(QFile::encodeName( d->proof_profile ), "r");
+        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(),
+                                          (DWORD)d->proof_profile.size());
 
         if (proofprofile == NULL)
         {
@@ -592,7 +602,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
         }
     }
 
-    kdDebug() << "icctransform.cpp/439 Transform flags are: " << transformFlags << endl;
+    kdDebug() << k_funcinfo << "Transform flags are: " << transformFlags << endl;
 
      // We need to work using temp pixel buffer to apply ICC transformations.
     uchar  transdata[image.bytesDepth()];
@@ -621,7 +631,6 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
 QString IccTransform::getProfileDescription(QString profile)
 {
-
     cmsHPROFILE _profile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
     QString _description = cmsTakeProductDesc(_profile);
     cmsCloseProfile(_profile);
@@ -631,10 +640,21 @@ QString IccTransform::getProfileDescription(QString profile)
 int IccTransform::getRenderingIntent()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("Color Management");
-
     return config->readNumEntry("RenderingIntent", 0);
+}
+
+QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
+{
+    QFile file(filePath);
+    if ( !file.open(IO_ReadOnly) ) 
+        return false;
+    
+    QByteArray data(file.size());
+    QDataStream stream( &file );
+    stream.readRawBytes(data.data(), data.size());
+    file.close();
+    return data;
 }
 
 }  // NameSpace Digikam

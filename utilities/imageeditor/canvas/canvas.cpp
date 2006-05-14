@@ -372,8 +372,7 @@ Canvas::~Canvas()
     delete d;
 }
 
-void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
-                  IOFileSettingsContainer *IOFileSettings)
+void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettings)
 {
     if (d->rubber)
     {
@@ -393,7 +392,7 @@ void Canvas::load(const QString& filename, ICCSettingsContainer *ICCSettings,
 
     d->tileCache.clear();
 
-    d->im->load( filename, ICCSettings, IOFileSettings );
+    d->im->load( filename, IOFileSettings );
     emit signalLoadingStarted(filename);
 }
 

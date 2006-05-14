@@ -46,7 +46,7 @@ public:
                bool useBuiltin=false);
     void getEmbeddedProfile(DImg image);
 
-    int getRenderingIntent();
+    int  getRenderingIntent();
     
     //Input profile from file
     void setProfiles(QString input_profile, QString output_profile);
@@ -60,7 +60,13 @@ public:
     QString getProfileDescription(QString profile);
 
     QString getEmbeddedProfileDescriptor();
+
+    bool hasOutputProfile();
     
+private:
+
+    QByteArray loadICCProfilFile(const QString& filePath);
+
 private:
 
     IccTransformPriv* d;

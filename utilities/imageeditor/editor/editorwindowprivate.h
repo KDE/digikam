@@ -35,6 +35,8 @@ class KAccel;
 namespace Digikam
 {
 
+class ICCSettingsContainer;
+
 class EditorWindowPriv
 {
 
@@ -63,39 +65,42 @@ public:
         flipVertAction         = 0;
         flipAction             = 0;
         rotateAction           = 0;
+        ICCSettings            = 0;
     }
 
     ~EditorWindowPriv()
     {
     }
 
-    bool           removeFullScreenButton;
-    bool           fullScreenHideToolBar;
-    bool           slideShowInFullScreen;
+    bool                  removeFullScreenButton;
+    bool                  fullScreenHideToolBar;
+    bool                  slideShowInFullScreen;
 
-    KAction       *imagePluginsHelpAction;
-    KAction       *filePrintAction;
-    KAction       *copyAction;
-    KAction       *resizeAction;
-    KAction       *cropAction;
-    KAction       *zoomPlusAction;
-    KAction       *zoomMinusAction;
-    KAction       *rotate90Action;
-    KAction       *rotate180Action;
-    KAction       *rotate270Action;
-    KAction       *flipHorzAction;
-    KAction       *flipVertAction;
+    QColor                bgColor;
+
+    KAction              *imagePluginsHelpAction;
+    KAction              *filePrintAction;
+    KAction              *copyAction;
+    KAction              *resizeAction;
+    KAction              *cropAction;
+    KAction              *zoomPlusAction;
+    KAction              *zoomMinusAction;
+    KAction              *rotate90Action;
+    KAction              *rotate180Action;
+    KAction              *rotate270Action;
+    KAction              *flipHorzAction;
+    KAction              *flipVertAction;
         
-    KActionMenu   *flipAction;
-    KActionMenu   *rotateAction;
+    KActionMenu          *flipAction;
+    KActionMenu          *rotateAction;
         
-    KToggleAction *zoomFitAction;
+    KToggleAction        *zoomFitAction;
     
-    KSelectAction *viewHistogramAction;
+    KSelectAction        *viewHistogramAction;
 
-    KAccel        *accelerators;
+    KAccel               *accelerators;
 
-    QColor         bgColor;
+    ICCSettingsContainer *ICCSettings;
 };
 
 }  // NameSpace Digikam

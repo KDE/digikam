@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2005-06-14
- * Description : main DImg framework implementation
+ * Description : digiKam 8/16 bits image management API
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
@@ -51,9 +51,9 @@ extern "C"
 #include "rawloader.h"
 #include "qimageloader.h"
 #include "dimgprivate.h"
-#include "dimg.h"
 #include "dcolorcomposer.h"
 #include "icctransform.h"
+#include "dimg.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -1208,34 +1208,29 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-QPixmap DImg::convertToPixmap(QString inProfile, QString monitorProfile)
+QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
 {
     if (isNull())
         return QPixmap();
 
-    if (monitorProfile.isNull())
+    if (!monitorICCtrans->hasOutputProfile())
     {
-        kdDebug() << k_funcinfo << " : monitor profile filename is null!" << endl;
+        kdDebug() << k_funcinfo << " : no monitor ICC profile available!" << endl;
         return convertToPixmap();
     }
     
     DImg img = copy();
 
-    IccTransform trans;
-
     // Without embedded profile
     if (img.getICCProfil().isNull())
     {
-        trans.setProfiles( QFile::encodeName(inProfile),
-                           QFile::encodeName(monitorProfile) );
-        trans.apply( img );
+        monitorICCtrans->apply( img );
     }
     // With embedded profile.
     else
     {
-        trans.getEmbeddedProfile( img );
-        trans.setProfiles( QFile::encodeName(monitorProfile) );
-        trans.apply( img );
+        monitorICCtrans->getEmbeddedProfile( img );
+        monitorICCtrans->apply( img );
     }
 
     return (img.convertToPixmap());

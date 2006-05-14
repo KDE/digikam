@@ -121,7 +121,7 @@ EditorWindow::EditorWindow(const char *name)
     
     // Settings containers instance.
 
-    m_ICCSettings    = new ICCSettingsContainer();
+    d->ICCSettings    = new ICCSettingsContainer();
     m_IOFileSettings = new IOFileSettingsContainer();
     m_savingContext  = new SavingContextContainer();
 }
@@ -129,7 +129,7 @@ EditorWindow::EditorWindow(const char *name)
 EditorWindow::~EditorWindow()
 {
     delete m_canvas;
-    delete m_ICCSettings;
+    delete d->ICCSettings;
     delete m_IOFileSettings;
     delete m_savingContext;
     delete m_slideShow;
@@ -695,17 +695,19 @@ void EditorWindow::applyStandardSettings()
 
     config->setGroup("Color Management");
 
-    m_ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
-    m_ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM", false);
-    m_ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC", false);
-    m_ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm",false);
-    m_ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView", false);
-    m_ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString::null);
-    m_ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
-    m_ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
-    m_ICCSettings->proofSetting       = config->readPathEntry("ProofProfileFile", QString::null);
+    d->ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
+    d->ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM", false);
+    d->ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC", false);
+    d->ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm",false);
+    d->ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView", false);
+    d->ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString::null);
+    d->ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
+    d->ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
+    d->ICCSettings->proofSetting       = config->readPathEntry("ProofProfileFile", QString::null);
         
-   // -- IO files format settings ------------------------------------------------
+    DImgInterface::instance()->setICCSettings(d->ICCSettings);
+
+    // -- IO files format settings ------------------------------------------------
  
     config->setGroup("ImageViewer Settings");
         
@@ -731,8 +733,8 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
     m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode  = config->readNumEntry("RAWICCCorrectionMode",
                                                                                          RawDecodingSettings::NOICC);
-    m_IOFileSettings->rawDecodingSettings.cameraICCProfilePath    = m_ICCSettings->inputSetting;
-    m_IOFileSettings->rawDecodingSettings.outputICCProfilePath    = m_ICCSettings->workspaceSetting;
+    m_IOFileSettings->rawDecodingSettings.cameraICCProfilePath    = d->ICCSettings->inputSetting;
+    m_IOFileSettings->rawDecodingSettings.outputICCProfilePath    = d->ICCSettings->workspaceSetting;
     
     // -- GUI Settings -------------------------------------------------------
     

@@ -120,6 +120,8 @@ public:
     IOFileSettingsContainer *iofileSettings;
 
     SharedLoadSaveThread    *thread;
+
+    IccTransform             monitorICCtrans;
 };
 
 DImgInterface* DImgInterface::instance()
@@ -165,7 +167,6 @@ DImgInterface::~DImgInterface()
 }
 
 void DImgInterface::load(const QString& filename,
-                         ICCSettingsContainer *cmSettings,
                          IOFileSettingsContainer* iofileSettings)
 {
     d->valid          = false;
@@ -182,7 +183,6 @@ void DImgInterface::load(const QString& filename,
     d->contrast       = 1.0;
     d->brightness     = 0.0;
     d->changedBCG     = false;
-    d->cmSettings     = cmSettings;
     d->iofileSettings = iofileSettings;
     
     d->cmod.reset();
@@ -191,6 +191,12 @@ void DImgInterface::load(const QString& filename,
     d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
                      SharedLoadSaveThread::AccessModeReadWrite,
                      SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+}
+
+void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
+{
+    d->cmSettings = cmSettings;
+    d->monitorICCtrans.setProfiles(d->cmSettings->inputSetting, d->cmSettings->monitorSetting);
 }
 
 void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
@@ -484,8 +490,7 @@ void DImgInterface::redo()
 void DImgInterface::restore()
 {
     d->undoMan->clear();
-
-    load(d->filename, d->cmSettings, d->iofileSettings);
+    load(d->filename, d->iofileSettings);
 }
 
 /*
@@ -706,8 +711,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
 
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
-        QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
-                                        d->cmSettings->monitorSetting));
+        QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
         bitBlt(p, dx, dy, &pix, 0, 0);
     }
     else
@@ -753,14 +757,14 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
 
                 *data = (a << 24) | (r << 16) | (g << 8) | b;
             }
+
             data++;
         }
     }
 
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
-        QPixmap pix(img.convertToPixmap(d->cmSettings->inputSetting,
-                                        d->cmSettings->monitorSetting));
+        QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
         bitBlt(p, dx, dy, &pix, 0, 0);
     }
     else

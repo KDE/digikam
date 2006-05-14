@@ -57,12 +57,9 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    void load(const QString& filename, ICCSettingsContainer *ICCSettings,
-              IOFileSettingsContainer *IOFileSettings);
+    void load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
     void preload(const QString& filename);
-    //void save(const QString& filename, IOFileSettingsContainer *IOFileSettings);
-    //void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-      //          const QString& mimeType);
+
     void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                 const QString& mimeType=0);
     void switchToLastSaved(const QString& newFilename);

@@ -57,9 +57,9 @@ public:
 
     ~DImgInterface();
 
-    void   load(const QString& filename,
-                ICCSettingsContainer *cmSettings, IOFileSettingsContainer* iofileSettings);
+    void   load(const QString& filename, IOFileSettingsContainer* iofileSettings);
                 
+    void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();

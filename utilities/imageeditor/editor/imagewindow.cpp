@@ -319,18 +319,11 @@ void ImageWindow::slotLoadCurrent()
 
     if (it != m_urlList.end())
     {
-
-        if (m_ICCSettings->enableCMSetting)
-            kdDebug() << "enableCMSetting=true" << endl;
-        else
-            kdDebug() << "enableCMSetting=false" << endl;
-        
-        m_canvas->load(m_urlCurrent.path(), m_ICCSettings, m_IOFileSettings);
+        m_canvas->load(m_urlCurrent.path(), m_IOFileSettings);
         
         ++it;
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
-
     }
 }
 
