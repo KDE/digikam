@@ -86,20 +86,48 @@ QByteArray DMetadata::getComments() const
 
 QByteArray DMetadata::getExif() const
 {
-    Exiv2::ExifData exif(d->exifMetadata);
-    Exiv2::DataBuf const c2(exif.copy());
-    QByteArray data(c2.size_);
-    memcpy(data.data(), c2.pData_, c2.size_);
-    return data;
+    try
+    {    
+        if (!d->exifMetadata.empty())
+        {                
+            Exiv2::ExifData exif(d->exifMetadata);
+            Exiv2::DataBuf const c2(exif.copy());
+            QByteArray data(c2.size_);
+            memcpy(data.data(), c2.pData_, c2.size_);
+            return data;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Exif data using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }       
+    
+    return QByteArray();
 }
 
 QByteArray DMetadata::getIptc() const
 {
-    Exiv2::IptcData iptc(d->iptcMetadata);
-    Exiv2::DataBuf const c2(iptc.copy());
-    QByteArray data(c2.size_);
-    memcpy(data.data(), c2.pData_, c2.size_);
-    return data;
+    try
+    {    
+        if (!d->iptcMetadata.empty())
+        {                
+            Exiv2::IptcData iptc(d->iptcMetadata);
+            Exiv2::DataBuf const c2(iptc.copy());
+            QByteArray data(c2.size_);
+            memcpy(data.data(), c2.pData_, c2.size_);
+            return data;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Iptc data using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }       
+    
+    return QByteArray();
 }
 
 void DMetadata::setComments(const QByteArray& data)
