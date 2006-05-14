@@ -63,7 +63,6 @@
 #include "dimg.h"
 #include "bcgmodifier.h"
 #include "listboxpreviewitem.h"
-#include "listboxwhatsthis.h"
 
 // Local includes.
 

@@ -56,7 +56,6 @@
 #include "dimgimagefilters.h"
 #include "dimg.h"
 #include "listboxpreviewitem.h"
-#include "listboxwhatsthis.h"
 
 // Local includes.
 

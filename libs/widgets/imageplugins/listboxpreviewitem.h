@@ -1,7 +1,9 @@
 /* ============================================================
- * Authors: Guillaume Laurent <glaurent@telegraph-road.org>
+ * Author: Guillaume Laurent <glaurent@telegraph-road.org>
+ * Date  : 2006-10-05
  * Description : a QListBoxItem which can display an image preview
- *               as a thumbnail
+ *               as a thumbnail and a customised qwhatsthis class 
+ *               for listbox items
  * 
  * Copyright 2006 by Guillaume Laurent
  *
@@ -24,12 +26,18 @@
  // Qt includes.
 
 #include <qlistbox.h>
+#include <qwhatsthis.h>
+
+// Local includes.
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ListBoxPreviewItem : public QListBoxPixmap
+class DIGIKAM_EXPORT ListBoxPreviewItem : public QListBoxPixmap
 {
+
 public:
     ListBoxPreviewItem(QListBox *listbox, const QPixmap &pix, const QString &text)
         : QListBoxPixmap(listbox, pix, text) {};
@@ -38,9 +46,29 @@ public:
         : QListBoxPixmap(pix, text) {};
 
     virtual int height ( const QListBox * lb ) const;
-    virtual int width ( const QListBox * lb ) const;
+    virtual int width  ( const QListBox * lb ) const;
 };
 
-}
+/**
+ * A qwhatthis class which can be pointed to a specific item
+ * in a QListBox rather than the QListBox itself
+ *
+ */
+class DIGIKAM_EXPORT ListBoxWhatsThis : public QWhatsThis 
+{
 
-#endif
+public:
+
+    ListBoxWhatsThis(QListBox* w) : QWhatsThis(w), m_listBox(w) {}
+    virtual QString text (const QPoint &);
+    void add(QListBoxItem*, const QString& text);
+
+protected:
+
+    QMap<QListBoxItem*, QString>  m_itemWhatsThisMap;
+    QListBox                     *m_listBox;
+};
+
+}  // namespace Digikam
+
+#endif  // LISTBOXPREVIEWITEM_H

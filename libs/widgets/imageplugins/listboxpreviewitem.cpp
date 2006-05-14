@@ -1,8 +1,10 @@
 /* ============================================================
- * Authors: Guillaume Laurent <glaurent@telegraph-road.org>
+ * Author: Guillaume Laurent <glaurent@telegraph-road.org>
+ * Date  : 2006-10-05
  * Description : a QListBoxItem which can display an image preview
- *               as a thumbnail
- * 
+ *               as a thumbnail and a customised qwhatsthis class 
+ *               for listbox items
+ *
  * Copyright 2006 by Guillaume Laurent
  *
  * This program is free software; you can redistribute it
@@ -41,4 +43,21 @@ int ListBoxPreviewItem::width(const QListBox *lb) const
     return QMAX(width, pixmap()->width() + 5);
 }
 
+// -------------------------------------------------------------------
+
+QString ListBoxWhatsThis::text(const QPoint &p)
+{
+    QListBoxItem* item = m_listBox->itemAt(p);
+
+    if (item != 0) 
+        return m_itemWhatsThisMap[item];
+
+    return QString::null;
 }
+
+void ListBoxWhatsThis::add(QListBoxItem* item, const QString& text)
+{
+    m_itemWhatsThisMap[item] = text;
+}
+
+} // namespace Digikam
