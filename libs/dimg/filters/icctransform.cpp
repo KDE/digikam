@@ -1,7 +1,10 @@
 /* ============================================================
- * Author: F.J. Cruz <fj.cruz@supercable.es>
- * Date  : 2005-11-18
- * Copyright 2005-2006 by F.J. Cruz
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-11-18
+ * Description : a class to apply ICC color correction to image.
+ * 
+ * Copyright 2005-2006 by F.J. Cruz and Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
