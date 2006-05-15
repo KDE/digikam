@@ -80,7 +80,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame*
     QLabel *label1 = new QLabel(i18n("Radius:"), gboxSettings);
     
     m_radiusInput = new KIntNumInput(gboxSettings, "m_radiusInput");
-    m_radiusInput->setRange(1, 10, 1, true);
+    m_radiusInput->setRange(1, 120, 1, true);
             
     QWhatsThis::add( m_radiusInput, i18n("<p>Radius value is the gaussian blur matrix radius value "
                                          "used to determines how much to blur the image.") );
@@ -93,7 +93,7 @@ ImageEffect_Unsharp::ImageEffect_Unsharp(QWidget* parent, QString title, QFrame*
     
     m_amountInput = new KDoubleNumInput(gboxSettings, "m_amountInput");
     m_amountInput->setPrecision(1);
-    m_amountInput->setRange(0.0, 3.0, 0.1, true);
+    m_amountInput->setRange(0.0, 5.0, 0.1, true);
             
     QWhatsThis::add( m_amountInput, i18n("<p>The value of the difference between the "
                      "original and the blur image that is added back into the original.") );
