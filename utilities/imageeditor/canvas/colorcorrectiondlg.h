@@ -42,8 +42,18 @@ class ColorCorrectionDlg : public KDialogBase
 public:
 
     ColorCorrectionDlg(QWidget *parent, DImg *preview, 
-                       IccTransform *iccTrans, const QString& msg);
+                       IccTransform *iccTrans, const QString& msg,
+                       bool hasEmbededProfile=false);
     ~ColorCorrectionDlg();
+    
+protected slots:
+    
+    void slotUser1();
+    void slotUser2();
+    
+private: 
+
+    IccTransform *m_iccTrans;
 
 };
 

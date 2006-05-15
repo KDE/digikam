@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : iccprofileinfodlg.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-16
  * Description : a dialog to display icc profile informations.
@@ -54,15 +53,21 @@
 namespace Digikam
 {
 
-ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath)
+ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath,
+                                     const QByteArray& profileData)
                  : KDialogBase(Plain, i18n("Color Profile Info"), Help|Ok, Ok,
                                parent, 0, true, true)
 {
     setHelp("iccprofile.anchor", "digikam");
 
     QString intent;
+    cmsHPROFILE hProfile=0;
 
-    cmsHPROFILE hProfile        = cmsOpenProfileFromFile(QFile::encodeName(profilePath), "r");
+    if (profileData.isEmpty())
+        hProfile = cmsOpenProfileFromFile(QFile::encodeName(profilePath), "r");
+    else 
+        hProfile = cmsOpenProfileFromMem(profileData.data(), (DWORD)profileData.size());
+        
     QString profileName         = QString((cmsTakeProductName(hProfile)));
     QString profileDescription  = QString((cmsTakeProductDesc(hProfile)));
     QString profileManufacturer = QString(cmsTakeCopyright(hProfile));
@@ -108,10 +113,13 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     grid->addMultiCellWidget(label7, 3, 3, 0, 0);
     grid->addMultiCellWidget(label8, 3, 3, 1, 1);
                                      
-    QLabel *label9  = new QLabel(i18n("<p><b>Path:</b>"), plainPage());
-    KSqueezedTextLabel *label10 = new KSqueezedTextLabel(profilePath, plainPage());
-    grid->addMultiCellWidget(label9, 4, 4, 0, 0);
-    grid->addMultiCellWidget(label10, 4, 4, 1, 1);
+    if (profileData.isEmpty())
+    {
+        QLabel *label9  = new QLabel(i18n("<p><b>Path:</b>"), plainPage());
+        KSqueezedTextLabel *label10 = new KSqueezedTextLabel(profilePath, plainPage());
+        grid->addMultiCellWidget(label9, 4, 4, 0, 0);
+        grid->addMultiCellWidget(label10, 4, 4, 1, 1);
+    }
                                      
     QLabel *label11  = new QLabel(i18n("<p><b>CIE diagram:</b>"), plainPage());
     CIETongueWidget *cieTongue = new CIETongueWidget(256, 256, plainPage());

@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : iccprofileinfodlg.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-16
  * Description : a dialog to display icc profile informations.
@@ -46,7 +45,7 @@ class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialogBase
 
 public:
 
-    ICCProfileInfoDlg(QWidget *parent, const QString& profilePath);
+    ICCProfileInfoDlg(QWidget *parent, const QString& profilePath, const QByteArray& profileData=QByteArray());
     ~ICCProfileInfoDlg();
 
 };

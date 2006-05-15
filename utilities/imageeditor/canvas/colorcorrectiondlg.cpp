@@ -38,19 +38,24 @@
 
 #include "dimg.h"
 #include "icctransform.h"
+#include "iccprofileinfodlg.h"
 #include "colorcorrectiondlg.h"
 
 namespace Digikam
 {
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
-                                       IccTransform *iccTrans, const QString& msg)
-                  : KDialogBase(Plain, i18n("Applying Workspace Color Profile"), Help|Ok|Cancel, Ok,
-                                parent, 0, true, true)
+                                       IccTransform *iccTrans, const QString& msg,
+                                       bool hasEmbededProfile)
+                  : KDialogBase(Plain, i18n("Applying Workspace Color Profile"), Help|User1|User2|Ok|Cancel,
+                                Ok, parent, 0, true, true)
 {
+    m_iccTrans = iccTrans;
     setHelp("iccprofile.anchor", "digikam");
-    setButtonText(Ok, i18n("Apply Profile"));
+    setButtonText(Ok, i18n("Apply"));
     setButtonText(Cancel, i18n("Do Nothing"));
+    setButtonText(User1, i18n("Workspace Profile Info..."));
+    setButtonText(User2, i18n("Image Profile Info..."));
     
     QGridLayout* grid = new QGridLayout( plainPage(), 4, 1, 0, KDialog::spacingHint());
         
@@ -62,7 +67,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     QLabel *message         = new QLabel(msg, plainPage());
     
     previewOriginal->setPixmap(preview->convertToPixmap());
-    previewTarget->setPixmap(preview->convertToPixmap(iccTrans));
+    previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
     
@@ -76,6 +81,24 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
 
 ColorCorrectionDlg::~ColorCorrectionDlg()
 {
+}
+
+void ColorCorrectionDlg::slotUser1()
+{
+    if (m_iccTrans->outputProfile().isEmpty())
+        return;
+
+    ICCProfileInfoDlg infoDlg(this, QString::null, m_iccTrans->outputProfile());
+    infoDlg.exec();
+}
+
+void ColorCorrectionDlg::slotUser2()
+{
+    if (m_iccTrans->embeddedProfile().isEmpty())
+        return;
+
+    ICCProfileInfoDlg infoDlg(this, QString::null, m_iccTrans->embeddedProfile());
+    infoDlg.exec();
 }
 
 }  // NameSpace Digikam

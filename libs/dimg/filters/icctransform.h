@@ -45,11 +45,16 @@ public:
     
     void getTransformType(bool do_proof_profile);
     void apply(DImg& image);
-    void apply(DImg& image, QByteArray& profile, int intent, bool useBPC = false, bool checkGamut = false,
-               bool useBuiltin=false);
+    void apply(DImg& image, QByteArray& profile, int intent, 
+               bool useBPC=false, bool checkGamut=false, bool useBuiltin=false);
     void getEmbeddedProfile(DImg image);
 
     int  getRenderingIntent();
+    
+    QByteArray embeddedProfile() const;
+    QByteArray inputProfile() const;
+    QByteArray outputProfile() const;
+    QByteArray proofProfile() const;
     
     //Input profile from file
     void setProfiles(QString input_profile, QString output_profile);

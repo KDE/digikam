@@ -80,6 +80,26 @@ bool IccTransform::hasOutputProfile()
     return d->has_output_profile;
 }
 
+QByteArray IccTransform::embeddedProfile() const
+{
+    return d->embedded_profile;
+}
+
+QByteArray IccTransform::inputProfile() const
+{
+    return d->input_profile;
+}
+
+QByteArray IccTransform::outputProfile() const
+{
+    return d->output_profile;
+}
+
+QByteArray IccTransform::proofProfile() const
+{
+    return d->proof_profile;
+}
+
 void IccTransform::getTransformType(bool do_proof_profile)
 {
     if (do_proof_profile)
