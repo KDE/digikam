@@ -43,7 +43,7 @@ public:
 
     ColorCorrectionDlg(QWidget *parent, DImg *preview, 
                        IccTransform *iccTrans, const QString& msg,
-                       bool hasEmbededProfile=false);
+                       const QString& file);
     ~ColorCorrectionDlg();
     
 protected slots:
@@ -52,6 +52,8 @@ protected slots:
     void slotUser2();
     
 private: 
+
+    QWidget      *m_parent;
 
     IccTransform *m_iccTrans;
 

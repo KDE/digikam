@@ -323,12 +323,10 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 }
                 else
                 {
-                    QString message = i18n("<p><b>%1</b></p>"
-                                           "<p>This image has not assigned any color profile</p>"
-                                           "<p>Do you want to convert it to your workspace color profile?</p>"
-                                           "<p>Current workspace color profile:</p>"
-                                           "<p><b>%2</b></p>")
-                                           .arg(fileName)
+                    QString message = i18n("<p>This image has not assigned any color profile. "
+                                           "Do you want to convert it to your workspace color profile?</p>"
+                                           "<p>Current workspace color profile:<br>"
+                                           "<b>%1</b></p>")
                                            .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting));
                     
                     // To repaint image in canvas before to ask about to apply ICC profile.
@@ -337,7 +335,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                     trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                       QFile::encodeName(d->cmSettings->workspaceSetting));
-                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message);
+                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message, fileName);
                     
                     if (dlg.exec() == QDialog::Accepted)
                     {
@@ -363,15 +361,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
 
-                        QString message = i18n("<p><b>%1</b></p>"
-                                               "<p>This image has assigned a color profile that does not "
-                                               "match with your default workspace color profile.</p>"
-                                               "<p>Do you want to convert it to your workspace color profile?</p>"
-                                               "<p>Current workspace color profile:</p>"
-                                               "<p><b>%2<b></p>"
-                                               "<p>Image Color Profile:</p>"
-                                               "<p><b>%3</b></p>")
-                                               .arg(fileName)
+                        QString message = i18n("<p>This image has assigned a color profile that does not "
+                                               "match with your default workspace color profile.<br>"
+                                               "Do you want to convert it to your workspace color profile?</p>"
+                                               "<p>Current workspace color profile:<br>"
+                                               "<b>%1<b></p>"
+                                               "<p>Image Color Profile:<br>"
+                                               "<b>%2</b></p>")
                                                .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting))
                                                .arg(trans.getEmbeddedProfileDescriptor());
 
@@ -380,7 +376,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     
                         DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message);
+                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message, fileName);
                     
                         if (dlg.exec() == QDialog::Accepted)
                         {

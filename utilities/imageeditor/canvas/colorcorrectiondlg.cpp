@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qstring.h>
+#include <qfileinfo.h>
 
 // KDE includes.
 
@@ -46,28 +47,33 @@ namespace Digikam
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
                                        IccTransform *iccTrans, const QString& msg,
-                                       bool hasEmbededProfile)
-                  : KDialogBase(Plain, i18n("Applying Workspace Color Profile"), Help|User1|User2|Ok|Cancel,
-                                Ok, parent, 0, true, true)
+                                       const QString& file)
+                  : KDialogBase(parent, 0, true, QString::null,
+                                Help|User1|User2|Ok|Cancel, Ok, true)
+
 {
     m_iccTrans = iccTrans;
+    m_parent   = parent;
     setHelp("iccprofile.anchor", "digikam");
-    setButtonText(Ok, i18n("Apply"));
+    setButtonText(Ok,     i18n("Apply"));
     setButtonText(Cancel, i18n("Do Nothing"));
-    setButtonText(User1, i18n("Workspace Profile Info..."));
-    setButtonText(User2, i18n("Image Profile Info..."));
+    setButtonText(User1,  i18n("Current Profile Info..."));
+    setButtonText(User2,  i18n("Embedded Profile Info..."));
+
+    QFileInfo fi(file);
+    setCaption(fi.fileName());
+    showButton(User2, !m_iccTrans->embeddedProfile().isEmpty());
     
-    if (m_iccTrans->embeddedProfile().isEmpty()) 
-        showButton(User2, false);
-    
-    QGridLayout* grid = new QGridLayout( plainPage(), 4, 1, 0, KDialog::spacingHint());
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
+    QGridLayout* grid = new QGridLayout(page, 4, 1, 0, KDialog::spacingHint());
         
-    QLabel *originalTitle   = new QLabel(i18n("Original Picture:"), plainPage());
-    QLabel *previewOriginal = new QLabel(plainPage());
-    QLabel *targetTitle     = new QLabel(i18n("Corrected Picture:"), plainPage());
-    QLabel *previewTarget   = new QLabel(plainPage());
-    QLabel *logo            = new QLabel(plainPage());
-    QLabel *message         = new QLabel(msg, plainPage());
+    QLabel *originalTitle   = new QLabel(i18n("Original Picture:"), page);
+    QLabel *previewOriginal = new QLabel(page);
+    QLabel *targetTitle     = new QLabel(i18n("Corrected Picture:"), page);
+    QLabel *previewTarget   = new QLabel(page);
+    QLabel *logo            = new QLabel(page);
+    QLabel *message         = new QLabel(msg, page);
     
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
@@ -91,7 +97,7 @@ void ColorCorrectionDlg::slotUser1()
     if (m_iccTrans->outputProfile().isEmpty())
         return;
 
-    ICCProfileInfoDlg infoDlg(this, QString::null, m_iccTrans->outputProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString::null, m_iccTrans->outputProfile());
     infoDlg.exec();
 }
 
@@ -100,7 +106,7 @@ void ColorCorrectionDlg::slotUser2()
     if (m_iccTrans->embeddedProfile().isEmpty())
         return;
 
-    ICCProfileInfoDlg infoDlg(this, QString::null, m_iccTrans->embeddedProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString::null, m_iccTrans->embeddedProfile());
     infoDlg.exec();
 }
 
