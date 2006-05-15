@@ -57,6 +57,9 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setButtonText(User1, i18n("Workspace Profile Info..."));
     setButtonText(User2, i18n("Image Profile Info..."));
     
+    if (m_iccTrans->embeddedProfile().isEmpty()) 
+        showButton(User2, false);
+    
     QGridLayout* grid = new QGridLayout( plainPage(), 4, 1, 0, KDialog::spacingHint());
         
     QLabel *originalTitle   = new QLabel(i18n("Original Picture:"), plainPage());
