@@ -243,10 +243,13 @@ void RAWLoader::customEvent(QCustomEvent *)
     startProcess();
 
     // set up timer to call continueQuery at regular intervals
-    m_queryTimer = new QTimer;
-    connect(m_queryTimer, SIGNAL(timeout()),
-            this, SLOT(slotContinueQuery()));
-    m_queryTimer->start(30);
+    if (m_running)
+    {
+        m_queryTimer = new QTimer;
+        connect(m_queryTimer, SIGNAL(timeout()),
+                this, SLOT(slotContinueQuery()));
+        m_queryTimer->start(30);
+    }
 }
 
 void RAWLoader::startProcess()
@@ -398,6 +401,8 @@ void RAWLoader::slotProcessExited(KProcess *)
     m_normalExit = m_process->normalExit();
     delete m_process;
     m_process = 0;
+    delete m_queryTimer;
+    m_queryTimer = 0;
     m_condVar.wakeAll();
 }
 
