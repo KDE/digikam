@@ -387,15 +387,36 @@ void ShowFoto::slotOpenFile()
     if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
-    QString mimetypes = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+    QString fileformats;
     
-    // Added RAW file format type mimes supported by dcraw program.
-    mimetypes.append (" image/x-raw");
+#if KDE_IS_VERSION(3,5,2)
+    //-- With KDE version >= 3.5.2, "image/x-raw" type mime exist ------------------------------
     
-    KURL::List urls =  KFileDialog::getOpenURLs(m_lastOpenedDirectory.path(),
-                                                mimetypes,
-                                                this,
-                                                i18n("Open Images"));
+    fileformats = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+#else
+    //-- with KDE version < 3.5.2, we need to add all camera RAW file formats ------------------
+    
+    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
+    
+    // All Pictures from list must been always the first entry given by KDE API
+    QString allPictures = patternList[0];
+    
+    // Add RAW file format to All Pictures" type mime and remplace current.
+    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
+    patternList.remove(patternList[0]);
+    patternList.prepend(allPictures);
+    
+    // Added RAW file formats supported by dcraw program like a type mime. 
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it 
+    // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
+    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    
+    fileformats = patternList.join("\n");
+#endif
+
+    kdDebug () << "fileformats=" << fileformats << endl;   
+    
+    KURL::List urls =  KFileDialog::getOpenURLs(m_lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
 
     if (!urls.isEmpty())
     {
