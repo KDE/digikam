@@ -22,18 +22,31 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
+// Qt includes
+
+#include <qmutex.h>
+#include <qobject.h>
+#include <qwaitcondition.h>
+
 // Local includes.
 
 #include "dimgloader.h"
 #include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
+class KProcess;
+class QCustomEvent;
+class QTimer;
+
 namespace Digikam
 {
 class DImg;
 
-class DIGIKAM_EXPORT RAWLoader : public DImgLoader
+class DIGIKAM_EXPORT RAWLoader : public QObject, public DImgLoader
 {
+
+    Q_OBJECT
+
 public:
 
     RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
@@ -51,15 +64,43 @@ private:
     bool                m_hasAlpha;
 
     RawDecodingSettings m_rawDecodingSettings;
-    
+
+    DImgLoaderObserver *m_observer;
+    QString             m_filePath;
+
+    KProcess           *m_process;
+    bool                m_running;
+    bool                m_normalExit;
+    QTimer             *m_queryTimer;
+
+    uchar              *m_data;
+    int                 m_dataPos;
+    int                 m_width;
+    int                 m_height;
+    int                 m_rgbmax;
+
+    QMutex              m_mutex;
+    QWaitCondition      m_condVar;
+
 private:
 
     // Methods to load RAW image using external dcraw instance.
 
-    bool load8bits(const QString& filePath, DImgLoaderObserver *observer);
-    bool load16bits(const QString& filePath, DImgLoaderObserver *observer);
+    //bool load8bits(const QString& filePath, DImgLoaderObserver *observer);
+    bool loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer);
+
+    virtual void customEvent(QCustomEvent *);
+    void startProcess();
+
+private slots:
+
+    void slotProcessExited(KProcess *);
+    void slotReceivedStdout(KProcess *, char *buffer, int buflen);
+    void slotReceivedStderr(KProcess *, char *buffer, int buflen);
+    void slotContinueQuery();
+
 };
-    
+
 }  // NameSpace Digikam
     
 #endif /* RAWLOADER_H */

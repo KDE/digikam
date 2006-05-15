@@ -28,6 +28,7 @@ extern "C"
 {
 #include <unistd.h>
 }
+#include <stdio.h>
 
 // C++ includes.
 
@@ -37,9 +38,11 @@ extern "C"
 
 // QT includes.
 
+#include <qapplication.h>
 #include <qfile.h>
 #include <qcstring.h>
 #include <qimage.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -59,174 +62,163 @@ namespace Digikam
 RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
+    m_sixteenBit          = true;
     m_hasAlpha            = false;
     m_rawDecodingSettings = rawDecodingSettings;
+
+    m_observer            = 0;
+    m_process             = 0;
+    m_queryTimer          = 0;
+    m_running             = false;
+    m_normalExit          = false;
+    m_data                = 0;
+    m_dataPos             = 0;
+
+    m_width               = 0;
+    m_height              = 0;
+    m_rgbmax              = 0;
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     readMetadata(filePath, DImg::RAW);
-    return ( load16bits(filePath, observer) );
+    return ( loadFromDcraw(filePath, observer) );
 }
 
-bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer)
 {
-    int  width, height, rgbmax;
-    char nl;
+    m_observer = observer;
+    m_filePath = filePath;
+    m_running = true;
 
-    QCString command;
+    // trigger startProcess
+    QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
-    // run dcraw with options:
-    // -c : write to stdout
-    // -2 : 8bit ppm output
-    // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
-    // -w : Use camera white balance, if possible  
-    // -a : Use automatic white balance
-    // -n : Don't clip colors
-    // -s : Use secondary pixels (Fuji Super CCD SR only)
-    // -q : Use simple bilinear interpolation for quick results
-    // -B : Use bilateral filter to smooth noise while preserving edges.
-    // -p : Use the input ICC profiles to define the camera's raw colorspace.
-    // -o : Use ICC profiles to define the output colorspace.
-
-    command = DcrawBinary::instance()->path();
-    command += " -c -2 ";
-    
-    if (m_rawDecodingSettings.cameraColorBalance)
-        command += "-w ";
-    
-    if (m_rawDecodingSettings.automaticColorBalance)
-        command += "-a ";
-
-    if (m_rawDecodingSettings.RGBInterpolate4Colors)
-        command += "-f ";
-
-    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
-        command += "-s ";
-
-    if (m_rawDecodingSettings.unclipColors)
-        command += "-n -b 0.25 ";    
-
-    command += "-q ";
-
-    if (m_rawDecodingSettings.enableRAWQuality)
+    int   checkpoint = 0;
+    while (m_running)
     {
-        QCString rawQuality;
-        command += rawQuality.setNum(m_rawDecodingSettings.RAWQuality);
-        command += " ";
+
+        if (m_dataPos > checkpoint)
+        {
+            int size = m_width * m_height * (m_sixteenBit ? 6 : 3);
+            checkpoint += granularity(observer, size, 0.8);
+            observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
+        }
+
+        QMutexLocker lock(&m_mutex);
+        m_condVar.wait(&m_mutex, 10);
+        //kdDebug() << "Waiting for dcraw, is running " << process.isRunning() << endl;
     }
 
-    if (m_rawDecodingSettings.enableNoiseReduction)
+    if (!m_normalExit)
     {
-        QCString NRSigmaDomain, NRSigmaRange;
-        command += "-B ";
-        command += NRSigmaDomain.setNum(m_rawDecodingSettings.NRSigmaDomain);
-        command += " ";
-        command += NRSigmaRange.setNum(m_rawDecodingSettings.NRSigmaRange);
-        command += " ";
-    }
-
-    switch (m_rawDecodingSettings.ICCColorCorrectionMode)
-    {
-        case RawDecodingSettings::EMBED:
-            command += "-p embed ";
-            break;
-            
-        case RawDecodingSettings::USERPROFILE:
-            command += "-p ";
-            command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.cameraICCProfilePath ) );
-            command += " ";
-            break;
-            
-        default:
-            break;
-    }
-    
-    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
-        !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
-    {
-        command += "-o ";
-        command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.outputICCProfilePath ) );
-        command += " ";
-    }
-    
-    command += QFile::encodeName( KProcess::quote( filePath ) );
-
-#ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << "Running dcraw command : " << command << endl;
-#endif
-
-    FILE* f = popen( command.data(), "r" );
-
-    if ( !f )
-    {
-        kdDebug() << "dcraw program unavailable." << endl;
-        return false;
-    }
-
-    if (fscanf (f, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
-    {
-        kdDebug() << "Not a raw digital camera image." << endl;
-        pclose (f);
+        delete [] m_data;
+        m_data = 0;
         return false;
     }
 
     // -------------------------------------------------------------------
     // Get image data
-    
-    uchar *data = 0;
 
-    data = new uchar[width*height*4];
-    uchar *dst = data;
-    uchar src[3];
-    int   checkpoint = 0;
-
-    for (int h = 0; h < height; h++)
+    if (m_sixteenBit)
     {
+        uchar *image = new uchar[m_width*m_height*8];
 
-        if (observer && h == checkpoint)
+        unsigned short *dst  = (unsigned short *)image;
+        uchar          *src  = m_data;
+        float fac = 65535.0 / m_rgbmax;
+        checkpoint = 0;
+
+        for (int h = 0; h < m_height; h++)
         {
-            checkpoint += granularity(observer, height);
-            if (!observer->continueQuery(m_image))
+
+            if (observer && h == checkpoint)
             {
-                delete [] data;
-                //TODO: real shutdown! pclose() waits!
-                pclose( f );
-                return false;
+                checkpoint += granularity(observer, m_height, 0.1);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] m_data;
+                    m_data = 0;
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.9 + 0.1*(((float)h)/((float)m_height)) );
             }
-            observer->progressInfo(m_image, ((float)h)/((float)height) );
+
+            for (int w = 0; w < m_width; w++)
+            {
+                // Swap byte order to preserve compatibility with PPC.
+
+                if (QImage::systemByteOrder() == QImage::BigEndian)
+                    swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
+
+                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
+                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
+                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+                dst[3] = 0xFFFF;
+
+                dst += 4;
+                src += 6;
+            }
         }
 
-        for (int w = 0; w < width; w++)
-        {
-            fread (src, 3 *sizeof(uchar), 1, f);
-
-            // Swap byte order to preserve compatibility with PPC.
-
-            if (QImage::systemByteOrder() == QImage::BigEndian)
-                swab((const char *) src, (char *) src, 3 *sizeof(uchar));
-
-            // No need to adapt RGB components accordinly with rgbmax value because dcraw
-            // always return rgbmax to 255 in 8 bits/color/pixels.
-
-            dst[0] = src[2];    // Blue
-            dst[1] = src[1];    // Green
-            dst[2] = src[0];    // Red
-            dst[3] = 0xFF;      // Alpha
-
-            dst += 4;
-        }
+        imageData() = (uchar *)image;
     }
-    
-    pclose( f );
+    else
+    {
+        uchar *image = new uchar[m_width*m_height*4];
+
+        uchar *dst = image;
+        uchar *src = m_data;
+        checkpoint = 0;
+
+        for (int h = 0; h < m_height; h++)
+        {
+
+            if (observer && h == checkpoint)
+            {
+                checkpoint += granularity(observer, m_height, 0.1);
+                if (!observer->continueQuery(m_image))
+                {
+                    delete [] m_data;
+                    m_data = 0;
+                    return false;
+                }
+                observer->progressInfo(m_image, 0.9 + 0.1*(((float)h)/((float)m_height)) );
+            }
+
+            for (int w = 0; w < m_width; w++)
+            {
+                // Swap byte order to preserve compatibility with PPC.
+
+                if (QImage::systemByteOrder() == QImage::BigEndian)
+                    swab((const char *) src, (char *) src, 3 *sizeof(uchar));
+
+                // No need to adapt RGB components accordinly with rgbmax value because dcraw
+                // always return rgbmax to 255 in 8 bits/color/pixels.
+
+                dst[0] = src[2];    // Blue
+                dst[1] = src[1];    // Green
+                dst[2] = src[0];    // Red
+                dst[3] = 0xFF;      // Alpha
+
+                dst += 4;
+                src += 3;
+            }
+        }
+
+        imageData() = image;
+    }
+
+    delete [] m_data;
+    m_data = 0;
 
     //----------------------------------------------------------
     // Get Camera and Constructor model
-    
-    char       model[256], constructor[256];
+
+    char model[256], constructor[256];
     DcrawParse rawFileParser;
-    
-    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), &constructor[0], &model[0]) == 0 )
+
+    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), constructor, model) == 0 )
     {
         imageSetCameraModel(QString(model));
         imageSetCameraConstructor(QString(constructor));
@@ -234,26 +226,53 @@ bool RAWLoader::load8bits(const QString& filePath, DImgLoaderObserver *observer)
 
     //----------------------------------------------------------
 
-    m_sixteenBit  = false;
-    imageWidth()  = width;
-    imageHeight() = height;
+    m_sixteenBit  = true;
+    imageWidth()  = m_width;
+    imageHeight() = m_height;
     imageSetAttribute("format", "RAW");
-    imageData()   = data;
-    
+
     readMetadata(filePath, DImg::RAW);
-    
+
     return true;
 }
 
-bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer)
+void RAWLoader::customEvent(QCustomEvent *)
 {
-    int	 width, height, rgbmax;
-    char nl;
+    // KProcess (because of QSocketNotifier) is not reentrant.
+    // We must only use it from the main thread.
+    startProcess();
 
-    QCString command;
+    // set up timer to call continueQuery at regular intervals
+    m_queryTimer = new QTimer;
+    connect(m_queryTimer, SIGNAL(timeout()),
+            this, SLOT(slotContinueQuery()));
+    m_queryTimer->start(30);
+}
+
+void RAWLoader::startProcess()
+{
+    if (m_observer && !m_observer->continueQuery(m_image))
+    {
+        m_running = false;
+        m_normalExit = false;
+        return;
+    }
+
+    // create KProcess and build argument list
+
+    m_process = new KProcess;
+
+    connect(m_process, SIGNAL(processExited(KProcess *)),
+             this, SLOT(slotProcessExited(KProcess *)));
+    connect(m_process, SIGNAL(receivedStdout(KProcess *, char *, int)),
+             this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
+    connect(m_process, SIGNAL(receivedStderr(KProcess *, char *, int)),
+             this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
 
     // run dcraw with options:
     // -c : write to stdout
+    // -2 : 8bit ppm output
+    //  OR
     // -4 : 16bit ppm output
     // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -a : Use automatic white balance
@@ -265,55 +284,58 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
 
-    command = DcrawBinary::instance()->path();
-    command += " -c -4 ";
-    
+    *m_process << DcrawBinary::instance()->path();
+    *m_process << "-c";
+
+    if (m_sixteenBit)
+        *m_process << "-4";
+    else
+        *m_process << "-2";
+
     if (m_rawDecodingSettings.cameraColorBalance)
-        command += "-w ";
-    
+        *m_process << "-w";
+
     if (m_rawDecodingSettings.automaticColorBalance)
-        command += "-a ";
+        *m_process << "-a";
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
-        command += "-f ";
+        *m_process << "-f";
 
     if (m_rawDecodingSettings.SuperCCDsecondarySensor)
-        command += "-s ";
-    
+        *m_process << "-s";
+
     if (m_rawDecodingSettings.unclipColors)
-        command += "-n -b 0.25 ";    
+    {
+        *m_process << "-n";
+        *m_process << "-b 0.25";
+    }
 
-    command += "-q ";
-
+    QString rawQuality = "-q";
     if (m_rawDecodingSettings.enableRAWQuality)
     {
-        QCString rawQuality;
-        command += rawQuality.setNum(m_rawDecodingSettings.RAWQuality);
-        command += " ";
+        rawQuality += " " + QString::number(m_rawDecodingSettings.RAWQuality);
     }
-    
+    *m_process << rawQuality;
+
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
         QCString NRSigmaDomain, NRSigmaRange;
-        command += "-B ";
-        command += NRSigmaDomain.setNum(m_rawDecodingSettings.NRSigmaDomain);
-        command += " ";
-        command += NRSigmaRange.setNum(m_rawDecodingSettings.NRSigmaRange);
-        command += " ";
+        *m_process << QString("-B %1 %2")
+                .arg(m_rawDecodingSettings.NRSigmaDomain)
+                .arg(m_rawDecodingSettings.NRSigmaRange);
     }
 
     switch (m_rawDecodingSettings.ICCColorCorrectionMode)
     {
         case RawDecodingSettings::EMBED:
-            command += "-p embed ";
+            *m_process << "-p embed";
             break;
-            
+
         case RawDecodingSettings::USERPROFILE:
-            command += "-p ";
-            command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.cameraICCProfilePath ) );
-            command += " ";
+            *m_process << "-p "
+                    + QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
             break;
-            
+
         default:
             break;
     }
@@ -321,112 +343,134 @@ bool RAWLoader::load16bits(const QString& filePath, DImgLoaderObserver *observer
     if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
         !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
     {
-        command += "-o ";
-        command += QFile::encodeName( KProcess::quote( m_rawDecodingSettings.outputICCProfilePath ) );
-        command += " ";
+        *m_process << "-o "
+                + QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath );
     }
-        
-    command += QFile::encodeName( KProcess::quote( filePath ) );
+
+    *m_process << QFile::encodeName( m_filePath );
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << "Running dcraw command " << command << endl;
+    kdDebug() << "Running dcraw command " << m_process->args() << endl;
 #endif
 
     // post one progress info before starting the program.
     // There may be a delay before the first data is read.
-    if (observer)
-        observer->progressInfo(m_image, 0.1);
+    if (m_observer)
+        m_observer->progressInfo(m_image, 0.05);
 
-    FILE* f = popen( command.data(), "r" );
-
-    if ( !f )
+    // actually start the process
+    if ( !m_process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
     {
-        kdDebug() << "dcraw program unavailable." << endl;
-        return false;
+        kdError() << "Failed to start dcraw" << endl;
+        delete m_process;
+        m_process = 0;
+        m_running = false;
+        m_normalExit = false;
+        return;
     }
+}
 
-    if (fscanf (f, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
+void RAWLoader::slotContinueQuery()
+{
+    // this is called from the timer
+
+    if (m_observer)
     {
-        kdDebug() << "Not a raw digital camera image." << endl;
-        pclose (f);
-        return false;
-    }
-
-    // -------------------------------------------------------------------
-    // Get image data
-    
-    unsigned short  *data = 0;
-
-    data = new unsigned short[width*height*4];
-    unsigned short *dst  = data;
-    uchar src[6];
-    float fac = 65535.0 / rgbmax;
-    int   checkpoint = 0;
-
-    for (int h = 0; h < height; h++)
-    {
-
-        if (observer && h == checkpoint)
+        if (!m_observer->continueQuery(m_image))
         {
-            checkpoint += granularity(observer, height, 0.9);
-            if (!observer->continueQuery(m_image))
-            {
-                delete [] data;
-                //TODO: real shutdown! pclose() waits!
-                pclose( f );
-                return false;
+            m_process->kill();
+            m_process->wait();
+            m_normalExit = false;
+        }
+
+        // Post progress while dcraw has not yet given any output
+        if (!m_dataPos)
+            m_observer->progressInfo(m_image, 0.1);
+    }
+}
+
+void RAWLoader::slotProcessExited(KProcess *)
+{
+    // set variables, clean up, wake up loader thread
+
+    QMutexLocker lock(&m_mutex);
+    m_running = false;
+    m_normalExit = m_process->normalExit();
+    delete m_process;
+    m_process = 0;
+    m_condVar.wakeAll();
+}
+
+void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
+{
+    if (!m_data)
+    {
+        // first data packet:
+        // Parse PPM header to find out size and allocate buffer
+
+        // PPM header is "P6 <width> <height> <maximum rgb value "
+        // where the blanks are newline characters
+
+        QString magic = QString::fromAscii(buffer, 2);
+        if (magic != "P6") {
+            kdError() << "Cannot parse header from dcraw: Magic is " << magic << endl;
+            m_process->kill();
+            return;
+        }
+
+        // Find the third newline that marks the header end in a dcraw generated ppm.
+        int i = 0;
+        int counter = 0;
+
+        while (i < buflen) {
+            if (counter == 3) break;
+            if (buffer[i] == '\n') {
+                counter++;
             }
-            observer->progressInfo(m_image, 0.1 + 0.9*(((float)h)/((float)height)) );
+            ++i;
         }
 
-        for (int w = 0; w < width; w++)
+        QStringList splitlist = QStringList::split("\n", QString::fromAscii(buffer, i));
+        //kdDebug() << "Header: " << QString::fromAscii(buffer, i) << endl;
+        QStringList sizes = QStringList::split(" ", splitlist[1]);
+        if (splitlist.size() < 3 || sizes.size() < 2)
         {
-            fread (src, 6 *sizeof(unsigned char), 1, f);
-
-            // Swap byte order to preserve compatibility with PPC.
-
-            if (QImage::systemByteOrder() == QImage::BigEndian)
-                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-
-            dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-            dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-            dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-            dst[3] = 0xFFFF;
-
-            dst += 4;
+            kdError() << "Cannot parse header from dcraw: Could not split" << endl;
+            m_process->kill();
+            return;
         }
+
+        m_width  = sizes[0].toInt();
+        m_height = sizes[1].toInt();
+        m_rgbmax = splitlist[2].toInt();
+
+#ifdef ENABLE_DEBUG_MESSAGES
+        kdDebug() << "Parsed PPM header: width " << m_width << " height " << m_height << " rgbmax " << m_rgbmax << endl;
+#endif
+
+        // cut header from data for memcpy below
+        buffer += i;
+        buflen -= i;
+
+        // allocate buffer
+        m_data    = new uchar[m_width * m_height * (m_sixteenBit ? 6 : 3)];
+        m_dataPos = 0;
     }
 
-    pclose( f );
+    // copy data to buffer
+    memcpy(m_data + m_dataPos, buffer, buflen);
+    m_dataPos += buflen;
+}
 
-    //----------------------------------------------------------
-    // Get Camera and Constructor model
-
-    char model[256], constructor[256];
-    DcrawParse rawFileParser;
-    
-    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), constructor, model) == 0 )
-    {
-        imageSetCameraModel(QString(model));
-        imageSetCameraConstructor(QString(constructor));
-    }
-
-    //----------------------------------------------------------
-
-    m_sixteenBit  = true;
-    imageWidth()  = width;
-    imageHeight() = height;
-    imageSetAttribute("format", "RAW");
-    imageData() = (uchar *)data;
-
-    readMetadata(filePath, DImg::RAW);
-                
-    return true;
+void RAWLoader::slotReceivedStderr(KProcess *, char *buffer, int buflen)
+{
+    QCString message(buffer, buflen);
+    kdDebug() << "Dcraw StdErr: " << message << endl;
 }
 
 bool RAWLoader::save(const QString&, DImgLoaderObserver *)
 {
-    return false;    
+    return false;
 }
 
 bool RAWLoader::hasAlpha() const
@@ -440,3 +484,6 @@ bool RAWLoader::sixteenBit() const
 }
 
 }  // NameSpace Digikam
+
+#include "rawloader.moc"
+
