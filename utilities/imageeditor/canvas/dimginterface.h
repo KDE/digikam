@@ -28,10 +28,6 @@
 #include <qimage.h>
 #include <qobject.h>
 
-// KDE includes.
-
-#include <klocale.h>
-
 // Locale includes.
 
 #include "dimg.h"

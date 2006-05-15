@@ -41,13 +41,14 @@
 // KDE includes.
 
 #include <kdebug.h>
-#include <kmessagebox.h>
 #include <kapplication.h>
+#include <klocale.h>
 
 // Local includes.
 
 #include "bcgmodifier.h"
 #include "icctransform.h"
+#include "colorcorrectiondlg.h"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "iccsettingscontainer.h"
@@ -333,10 +334,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     // To repaint image in canvas before to ask about to apply ICC profile.
                     emit signalImageLoaded(d->filename, valRet);
                     
-                    if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
+                    DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
+                    trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
+                                      QFile::encodeName(d->cmSettings->workspaceSetting));
+                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message);
+                    
+                    if (dlg.exec() == QDialog::Accepted)
                     {
-                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
-                                           QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
                         d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                     }
@@ -374,10 +378,14 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
     
-                        if (KMessageBox::questionYesNo(kapp->activeWindow(), message) == KMessageBox::Yes)
+                        DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
+                        trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
+                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message);
+                    
+                        if (dlg.exec() == QDialog::Accepted)
                         {
-                            trans.setProfiles( QFile::encodeName(d->cmSettings->workspaceSetting));
                             trans.apply( d->image );
+                            d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                         }
                     }
                 }
