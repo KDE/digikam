@@ -128,5 +128,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 125733 (Enabling 'Always apply ICM profiles' can lead to suprising results) 
 ==> 126326 (camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
             is written to console)
+==> 121242 (mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 
 ----------------------------------------------------------------------------------------------------
