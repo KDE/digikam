@@ -1,3 +1,9 @@
+0.8.2-rc2
+
+Bugs fixed:
+
+        o mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x (#121242)
+        
 -------------------------------------------------------------------------
 0.8.2-rc1
 
