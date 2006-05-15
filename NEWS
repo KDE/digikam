@@ -111,7 +111,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 116154 (Show progress bar while saving large files)
 ==> 120521 (Untranslatable message in tagfilterview.cpp)
 ==> 119742 (wish list -include move to trash in right click menu)
-==> 119201 (Sometimes DigiKam fails to show newly downloaded photos)
+==> 119201 (Sometimes digiKam fails to show newly downloaded photos)
 ==> 117401 (digikam's 'my albums' and 'my tags' does no longer remember it's state when restarted)
 ==> 116520 (Slideshow should work for search results as well)
 ==> 119073 (wish list rescan option)
@@ -129,5 +129,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 126326 (camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
             is written to console)
 ==> 121242 (mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
+==> 127374 (unsharp mask: max. radius way too small)
 
 ----------------------------------------------------------------------------------------------------
