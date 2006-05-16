@@ -259,7 +259,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
     inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
     
-    QPushButton *inProfilesInfo = new QPushButton(i18n("Info"), inProfileBG);
+    QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfileBG);
 
     firstPageLayout->addWidget(inProfileBG);
     firstPageLayout->addStretch();
@@ -289,7 +289,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
     spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
-    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info"), spaceProfileBG);
+    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfileBG);
 
     secondPageLayout->addWidget(spaceProfileBG);
     secondPageLayout->addStretch();
@@ -319,7 +319,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
-    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info"), proofProfileBG);
+    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfileBG);
 
     thirdPageLayout->addWidget(proofProfileBG);
     thirdPageLayout->addStretch();
@@ -349,7 +349,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_iccDisplayPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccDisplayPreviewWidget);
 
-    QPushButton *displayProfilesInfo = new QPushButton(i18n("Info"), displayProfileBG);
+    QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfileBG);
 
     fourthPageLayout->addWidget(displayProfileBG);
     fourthPageLayout->addStretch();
