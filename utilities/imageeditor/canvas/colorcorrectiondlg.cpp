@@ -63,7 +63,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setCaption(fi.fileName());
     
     QWidget *page     = new QWidget(this);
-    QGridLayout* grid = new QGridLayout(page, 3, 1, 0, KDialog::spacingHint());
+    QGridLayout* grid = new QGridLayout(page, 3, 2, 0, KDialog::spacingHint());
         
     QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);
     QLabel *previewOriginal       = new QLabel(page);
@@ -129,7 +129,9 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     vlay->addLayout(hlay2);
     vlay->addStretch();
     
-    grid->addMultiCellLayout(vlay, 0, 3, 1, 1);
+    grid->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                       QSizePolicy::Minimum, QSizePolicy::Expanding), 0, 3, 1, 1);
+    grid->addMultiCellLayout(vlay, 0, 3, 2, 2);
     
     setMainWidget(page);
     
