@@ -73,10 +73,10 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     QLabel *message               = new QLabel(page);
     QLabel *currentProfileTitle   = new QLabel(i18n("Current workspace color profile:"), page);
     QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getOutpoutProfileDescriptor()), page);
-    QPushButton *currentProfInfo  = new QPushButton("Info", page);
+    QPushButton *currentProfInfo  = new QPushButton(i18n("Info..."), page);
     QLabel *embeddedProfileTitle  = new QLabel(i18n("Embedded color profile:"), page);
     QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
-    QPushButton *embeddedProfInfo = new QPushButton("Info", page);
+    QPushButton *embeddedProfInfo = new QPushButton(i18n("Info..."), page);
     KSeparator *line              = new KSeparator (Horizontal, page);
     
     if (m_iccTrans->embeddedProfile().isEmpty())

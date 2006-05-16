@@ -198,7 +198,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select an apropiate one for edition purpose.</p>"
                      "<p>These color profiles are device independents.</p>"));
-    d->infoWorkProfiles = new QPushButton("Info", profiles);
+    d->infoWorkProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected workspace profile.</p>"));
 
@@ -213,7 +213,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
                                                 "You need to toogle on <b>Use color managed view</b> option from "
                                                 "the Advanced Settings pannel to use this profile.</p>"));
-    d->infoMonitorProfiles = new QPushButton("Info", profiles);
+    d->infoMonitorProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected monitor profile.</p>"));
 
@@ -227,7 +227,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
-    d->infoInProfiles = new QPushButton("Info", profiles);
+    d->infoInProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected input profile.</p>"));
 
@@ -242,7 +242,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
                      "be able to preview how an image will be rendered in an output device.</p>"));
-    d->infoProofProfiles = new QPushButton("Info", profiles);
+    d->infoProofProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected soft proof profile.</p>"));
 
