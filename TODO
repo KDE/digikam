@@ -59,7 +59,6 @@ B.K.O files to fix :
 ==> 125696  (CameraGUI: digikam does not connect to USB camera with libgphoto-2.1.99)
 ==> 114211  (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120241  (Main Interface: utf8 display and edit)
-==> 118501  (Image Editor:   Exif lost when modifying the images)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
 
