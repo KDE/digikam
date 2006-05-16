@@ -42,8 +42,6 @@ Main Interface :
 
    - If Comments & tags informations have been changed, notify DImg instance of current image to set
      informations in metadata bytes array (COM, EXIF, IPTC).
-   - If an image have been saved to another file format, notify Image properties sidebar to reload 
-     informations from DImg instance of new image.   
 
 * Showfoto: 
 
