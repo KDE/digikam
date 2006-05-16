@@ -542,7 +542,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    kdDebug() << "DateTime (Exif standard): " << dateTime << endl;
+                    // kdDebug() << "DateTime (Exif standard): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -558,7 +558,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    kdDebug() << "DateTime (Exif original): " << dateTime << endl;
+                    // kdDebug() << "DateTime (Exif original): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -574,7 +574,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    kdDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
+                    // kdDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -607,7 +607,7 @@ QDateTime DMetadata::getImageDateTime() const
                     
                     if (dateTime.isValid())
                     {
-                        kdDebug() << "Date (IPTC created): " << dateTime << endl;
+                        // kdDebug() << "Date (IPTC created): " << dateTime << endl;
                         return dateTime;
                     }                    
                 }
@@ -635,7 +635,7 @@ QDateTime DMetadata::getImageDateTime() const
                     
                     if (dateTime.isValid())
                     {
-                        kdDebug() << "Date (IPTC digitalized): " << dateTime << endl;
+                        // kdDebug() << "Date (IPTC digitalized): " << dateTime << endl;
                         return dateTime;
                     }                    
                 }
@@ -811,47 +811,57 @@ bool DMetadata::setImageComment(const QString& comment)
 
 QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 {
-    std::string comment = exifDatum.toString();
-    std::string charset;
-
-    // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
-    // Before conversion to QString, we must know the charset, so we stay with std::string for a while
-    if (comment.length() > 8 && comment.substr(0, 8) == "charset=")
+    try
     {
-        // the prepended charset specification is followed by a blank
-        std::string::size_type pos = comment.find_first_of(' ');
-        if (pos != std::string::npos)
+        std::string comment = exifDatum.toString();
+        std::string charset;
+    
+        // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
+        // Before conversion to QString, we must know the charset, so we stay with std::string for a while
+        if (comment.length() > 8 && comment.substr(0, 8) == "charset=")
         {
-            // extract string between the = and the blank
-            charset = comment.substr(8, pos-8);
-            // get the rest of the string after the charset specification
-            comment = comment.substr(pos+1);
+            // the prepended charset specification is followed by a blank
+            std::string::size_type pos = comment.find_first_of(' ');
+            if (pos != std::string::npos)
+            {
+                // extract string between the = and the blank
+                charset = comment.substr(8, pos-8);
+                // get the rest of the string after the charset specification
+                comment = comment.substr(pos+1);
+            }
+        }
+    
+        if (charset == "\"Unicode\"")
+        {
+            // QString expects a null-terminated UCS-2 string.
+            // Is it already null terminated? In any case, add termination for safety.
+            comment += "\0\0";
+            return QString::fromUcs2((unsigned short *)comment.data());
+        }
+        else if (charset == "\"Jis\"")
+        {
+            QTextCodec *codec = QTextCodec::codecForName("JIS7");
+            return codec->toUnicode(comment.c_str());
+        }
+        else if (charset == "\"Ascii\"")
+        {
+            return QString::fromLatin1(comment.c_str());
+        }
+        else
+        {
+            // or from local8bit ??
+            return QString::fromLatin1(comment.c_str());
         }
     }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot convert Comment using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
 
-    if (charset == "\"Unicode\"")
-    {
-        // QString expects a null-terminated UCS-2 string.
-        // Is it already null terminated? In any case, add termination for safety.
-        comment += "\0\0";
-        return QString::fromUcs2((unsigned short *)comment.data());
-    }
-    else if (charset == "\"Jis\"")
-    {
-        QTextCodec *codec = QTextCodec::codecForName("JIS7");
-        return codec->toUnicode(comment.c_str());
-    }
-    else if (charset == "\"Ascii\"")
-    {
-        return QString::fromLatin1(comment.c_str());
-    }
-    else
-    {
-        // or from local8bit ??
-        return QString::fromLatin1(comment.c_str());
-    }
+    return QString();
 }
-
 
 /*
 Iptc.Application2.Urgency <==> digiKam Rating links:
