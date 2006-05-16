@@ -81,7 +81,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
-        message->setText(i18n("<p>This image has not assigned any color profile.</p>"
+        message->setText(i18n("<p>This picture has not assigned any color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
                               
         line->hide();
@@ -91,7 +91,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     }
     else
     {
-        message->setText(i18n("<p>This image has assigned a color profile that does not "
+        message->setText(i18n("<p>This picture has assigned a color profile that does not "
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }
