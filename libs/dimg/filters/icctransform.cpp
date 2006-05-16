@@ -155,6 +155,7 @@ void IccTransform::setProfiles( QString output_profile, QString proof_profile, b
 
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
+    if (d->embedded_profile.isEmpty()) return QString();
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(), (DWORD)d->embedded_profile.size());
     QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
@@ -163,6 +164,7 @@ QString IccTransform::getEmbeddedProfileDescriptor()
 
 QString IccTransform::getInputProfileDescriptor()
 {
+    if (d->input_profile.isEmpty()) return QString();
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->input_profile.data(), (DWORD)d->input_profile.size());
     QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
@@ -171,6 +173,7 @@ QString IccTransform::getInputProfileDescriptor()
     
 QString IccTransform::getOutpoutProfileDescriptor()
 {
+    if (d->output_profile.isEmpty()) return QString();
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->output_profile.data(), (DWORD)d->output_profile.size());
     QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
@@ -179,6 +182,7 @@ QString IccTransform::getOutpoutProfileDescriptor()
 
 QString IccTransform::getProofProfileDescriptor()
 {
+    if (d->proof_profile.isEmpty()) return QString();
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->proof_profile.data(), (DWORD)d->proof_profile.size());
     QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
