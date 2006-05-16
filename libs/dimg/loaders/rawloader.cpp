@@ -1,10 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- * Date  : 2005-11-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Date   : 2005-11-01
  * Description : A digital camera RAW files loader for DImg 
  *               framework using dcraw program.
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +29,6 @@ extern "C"
 {
 #include <unistd.h>
 }
-#include <stdio.h>
 
 // C++ includes.
 
