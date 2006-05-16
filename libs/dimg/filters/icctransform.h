@@ -68,6 +68,9 @@ public:
     QString getProfileDescription(QString profile);
 
     QString getEmbeddedProfileDescriptor();
+    QString getInputProfileDescriptor();
+    QString getOutpoutProfileDescriptor();
+    QString getProofProfileDescriptor();
 
     bool hasOutputProfile();
     

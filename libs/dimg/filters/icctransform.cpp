@@ -116,30 +116,30 @@ void IccTransform::getEmbeddedProfile(DImg image)
 {
     if (!image.getICCProfil().isNull())
     {
-        d->embedded_profile = image.getICCProfil();
+        d->embedded_profile     = image.getICCProfil();
         d->has_embedded_profile = true;
     }
 }
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile)
 {
-    d->input_profile   = loadICCProfilFile(input_profile);
-    d->output_profile  = loadICCProfilFile(output_profile);
+    d->input_profile      = loadICCProfilFile(input_profile);
+    d->output_profile     = loadICCProfilFile(output_profile);
     d->has_output_profile = true;
 }
 
 void IccTransform::setProfiles(QString input_profile, QString output_profile, 
                                QString proof_profile)
 {
-    d->input_profile   = loadICCProfilFile(input_profile);
-    d->output_profile  = loadICCProfilFile(output_profile);
-    d->proof_profile   = loadICCProfilFile(proof_profile);
+    d->input_profile      = loadICCProfilFile(input_profile);
+    d->output_profile     = loadICCProfilFile(output_profile);
+    d->proof_profile      = loadICCProfilFile(proof_profile);
     d->has_output_profile = true;
 }
 
 void IccTransform::setProfiles(QString output_profile)
 {
-    d->output_profile = loadICCProfilFile(output_profile);
+    d->output_profile     = loadICCProfilFile(output_profile);
     d->has_output_profile = true;
 }
 
@@ -147,8 +147,8 @@ void IccTransform::setProfiles( QString output_profile, QString proof_profile, b
 {
     if (forProof)
     {
-        d->output_profile  = loadICCProfilFile(output_profile);
-        d->proof_profile   = loadICCProfilFile(proof_profile);
+        d->output_profile     = loadICCProfilFile(output_profile);
+        d->proof_profile      = loadICCProfilFile(proof_profile);
         d->has_output_profile = true;
     }
 }
@@ -156,7 +156,31 @@ void IccTransform::setProfiles( QString output_profile, QString proof_profile, b
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
     cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(), (DWORD)d->embedded_profile.size());
-    QString embeddedProfileDescriptor =QString(cmsTakeProductDesc(tmpProfile));
+    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
+    cmsCloseProfile(tmpProfile);
+    return embeddedProfileDescriptor;
+}
+
+QString IccTransform::getInputProfileDescriptor()
+{
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->input_profile.data(), (DWORD)d->input_profile.size());
+    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
+    cmsCloseProfile(tmpProfile);
+    return embeddedProfileDescriptor;
+}
+    
+QString IccTransform::getOutpoutProfileDescriptor()
+{
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->output_profile.data(), (DWORD)d->output_profile.size());
+    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
+    cmsCloseProfile(tmpProfile);
+    return embeddedProfileDescriptor;
+}
+
+QString IccTransform::getProofProfileDescriptor()
+{
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->proof_profile.data(), (DWORD)d->proof_profile.size());
+    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
     return embeddedProfileDescriptor;
 }
