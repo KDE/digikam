@@ -267,22 +267,27 @@ void RAWLoader::startProcess()
 
     connect(m_process, SIGNAL(processExited(KProcess *)),
              this, SLOT(slotProcessExited(KProcess *)));
+             
     connect(m_process, SIGNAL(receivedStdout(KProcess *, char *, int)),
              this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
+             
     connect(m_process, SIGNAL(receivedStderr(KProcess *, char *, int)),
              this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
 
     // run dcraw with options:
     // -c : write to stdout
+    //
     // -2 : 8bit ppm output
     //  OR
     // -4 : 16bit ppm output
+    //
     // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
     // -n : Don't clip colors
     // -s : Use secondary pixels (Fuji Super CCD SR only)
-    // -q : Use simple bilinear interpolation for quick results
+    // -q : Use simple bilinear interpolation for quick results. Warning: this option require arguments 
+    //      depending dcraw version (look below)
     // -B : Use bilateral filter to smooth noise while preserving edges.
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
@@ -313,10 +318,17 @@ void RAWLoader::startProcess()
         *m_process << "-b 0.25";
     }
 
+    // Since dcraw 0.8, the command line compatibility have been broken.
+    // To use Quality settings, we will use :
+    // '-q' alone (dcraw < 8.0)
+    // '-q value' (dcraw >= 8.0)
+    // In fact, m_rawDecodingSettings.enableRAWQuality is used to preserve compatibility.
+    
     QString rawQuality = "-q";
+        
     if (m_rawDecodingSettings.enableRAWQuality)
     {
-        rawQuality += " " + QString::number(m_rawDecodingSettings.RAWQuality);
+        rawQuality.append(QString(" %1").arg(QString::number(m_rawDecodingSettings.RAWQuality)));
     }
     *m_process << rawQuality;
 
@@ -335,8 +347,7 @@ void RAWLoader::startProcess()
             break;
 
         case RawDecodingSettings::USERPROFILE:
-            *m_process << "-p "
-                    + QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
+            *m_process << QString("-p %1").arg(QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath ));
             break;
 
         default:
@@ -346,8 +357,7 @@ void RAWLoader::startProcess()
     if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
         !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
     {
-        *m_process << "-o "
-                + QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath );
+        *m_process << QString("-o %1").arg(QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath ));
     }
 
     *m_process << QFile::encodeName( m_filePath );
@@ -427,9 +437,11 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         int i = 0;
         int counter = 0;
 
-        while (i < buflen) {
+        while (i < buflen) 
+        {
             if (counter == 3) break;
-            if (buffer[i] == '\n') {
+            if (buffer[i] == '\n') 
+            {
                 counter++;
             }
             ++i;
