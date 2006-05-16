@@ -38,18 +38,18 @@ class DImg;
 
 class ColorCorrectionDlg : public KDialogBase
 {
+    Q_OBJECT
 
 public:
 
     ColorCorrectionDlg(QWidget *parent, DImg *preview, 
-                       IccTransform *iccTrans, const QString& msg,
-                       const QString& file);
+                       IccTransform *iccTrans, const QString& file);
     ~ColorCorrectionDlg();
     
-protected slots:
+private slots:
     
-    void slotUser1();
-    void slotUser2();
+    void slotCurrentProfInfo();
+    void slotEmbeddedProfInfo();
     
 private: 
 

@@ -27,6 +27,7 @@
 #include <qframe.h>
 #include <qstring.h>
 #include <qfileinfo.h>
+#include <qpushbutton.h>
 
 // KDE includes.
 
@@ -34,6 +35,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kseparator.h>
 
 // Local includes.
 
@@ -46,10 +48,9 @@ namespace Digikam
 {
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
-                                       IccTransform *iccTrans, const QString& msg,
-                                       const QString& file)
-                  : KDialogBase(parent, 0, true, QString::null,
-                                Help|User1|User2|Ok|Cancel, Ok, true)
+                                       IccTransform *iccTrans, const QString& file)
+                  : KDialogBase(parent, "", true, QString::null,
+                                Help|Ok|Cancel, Ok, true)
 
 {
     m_iccTrans = iccTrans;
@@ -57,23 +58,43 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Ok,     i18n("Apply"));
     setButtonText(Cancel, i18n("Do Nothing"));
-    setButtonText(User1,  i18n("Current Profile Info..."));
-    setButtonText(User2,  i18n("Embedded Profile Info..."));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());
-    showButton(User2, !m_iccTrans->embeddedProfile().isEmpty());
     
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout* grid = new QGridLayout(page, 4, 1, 0, KDialog::spacingHint());
+    QWidget *page     = new QWidget(this);
+    QGridLayout* grid = new QGridLayout(page, 3, 1, 0, KDialog::spacingHint());
         
-    QLabel *originalTitle   = new QLabel(i18n("Original Picture:"), page);
-    QLabel *previewOriginal = new QLabel(page);
-    QLabel *targetTitle     = new QLabel(i18n("Corrected Picture:"), page);
-    QLabel *previewTarget   = new QLabel(page);
-    QLabel *logo            = new QLabel(page);
-    QLabel *message         = new QLabel(msg, page);
+    QLabel *originalTitle         = new QLabel(i18n("Original Picture:"), page);
+    QLabel *previewOriginal       = new QLabel(page);
+    QLabel *targetTitle           = new QLabel(i18n("Corrected Picture:"), page);
+    QLabel *previewTarget         = new QLabel(page);
+    QLabel *logo                  = new QLabel(page);
+    QLabel *message               = new QLabel(page);
+    QLabel *currentProfileTitle   = new QLabel(i18n("Current workspace color profile:"), page);
+    QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getOutpoutProfileDescriptor()), page);
+    QPushButton *currentProfInfo  = new QPushButton("Info", page);
+    QLabel *embeddedProfileTitle  = new QLabel(i18n("Embedded color profile:"), page);
+    QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>").arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
+    QPushButton *embeddedProfInfo = new QPushButton("Info", page);
+    KSeparator *line              = new KSeparator (Horizontal, page);
+    
+    if (m_iccTrans->embeddedProfile().isEmpty())
+    {
+        message->setText(i18n("<p>This image has not assigned any color profile.</p>"
+                              "<p>Do you want to convert it to your workspace color profile?</p>"));
+                              
+        line->hide();
+        embeddedProfileTitle->hide();
+        embeddedProfileDesc->hide();
+        embeddedProfInfo->hide();
+    }
+    else
+    {
+        message->setText(i18n("<p>This image has assigned a color profile that does not "
+                              "match with your default workspace color profile.</p>"
+                              "<p>Do you want to convert it to your workspace color profile?</p>"));
+    }
     
     previewOriginal->setPixmap(preview->convertToPixmap());
     previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
@@ -81,18 +102,51 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
     
     grid->addMultiCellWidget(originalTitle, 0, 0, 0, 0);
-    grid->addMultiCellWidget(previewOriginal, 1, 2, 0, 0);
-    grid->addMultiCellWidget(targetTitle, 3, 3, 0, 0);
-    grid->addMultiCellWidget(previewTarget, 4, 4, 0, 0);
-    grid->addMultiCellWidget(logo, 1, 1, 1, 1);
-    grid->addMultiCellWidget(message, 2, 4, 1, 1);
+    grid->addMultiCellWidget(previewOriginal, 1, 1, 0, 0);
+    grid->addMultiCellWidget(targetTitle, 2, 2, 0, 0);
+    grid->addMultiCellWidget(previewTarget, 3, 3, 0, 0);
+    
+    QVBoxLayout *vlay = new QVBoxLayout( KDialog::spacingHint() );
+    vlay->addWidget(logo);
+    vlay->addWidget(message);
+    
+    vlay->addWidget(new KSeparator (Horizontal, page));
+    vlay->addWidget(currentProfileTitle);
+    vlay->addWidget(currentProfileDesc);
+    
+    QHBoxLayout *hlay1 = new QHBoxLayout( KDialog::spacingHint() );
+    hlay1->addWidget(currentProfInfo);
+    hlay1->addStretch();
+    vlay->addLayout(hlay1);
+    
+    vlay->addWidget(line);
+    vlay->addWidget(embeddedProfileTitle);
+    vlay->addWidget(embeddedProfileDesc);    
+    
+    QHBoxLayout *hlay2 = new QHBoxLayout( KDialog::spacingHint() );
+    hlay2->addWidget(embeddedProfInfo);
+    hlay2->addStretch();
+    vlay->addLayout(hlay2);
+    vlay->addStretch();
+    
+    grid->addMultiCellLayout(vlay, 0, 3, 1, 1);
+    
+    setMainWidget(page);
+    
+    // --------------------------------------------------------------------
+    
+    connect(currentProfInfo, SIGNAL(clicked()),
+            this, SLOT(slotCurrentProfInfo()) );
+    
+    connect(embeddedProfInfo, SIGNAL(clicked()),
+            this, SLOT(slotEmbeddedProfInfo()) );
 }
 
 ColorCorrectionDlg::~ColorCorrectionDlg()
 {
 }
 
-void ColorCorrectionDlg::slotUser1()
+void ColorCorrectionDlg::slotCurrentProfInfo()
 {
     if (m_iccTrans->outputProfile().isEmpty())
         return;
@@ -101,7 +155,7 @@ void ColorCorrectionDlg::slotUser1()
     infoDlg.exec();
 }
 
-void ColorCorrectionDlg::slotUser2()
+void ColorCorrectionDlg::slotEmbeddedProfInfo()
 {
     if (m_iccTrans->embeddedProfile().isEmpty())
         return;
@@ -112,3 +166,4 @@ void ColorCorrectionDlg::slotUser2()
 
 }  // NameSpace Digikam
 
+#include "colorcorrectiondlg.moc"

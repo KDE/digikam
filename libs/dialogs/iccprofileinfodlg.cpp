@@ -91,8 +91,7 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
             break;
     }
 
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
+    QWidget *page     = new QWidget(this);
     QGridLayout* grid = new QGridLayout(page, 6, 1);
         
     QLabel *label1 = new QLabel(i18n("<p><b>Name:</b>"), page);
@@ -130,6 +129,7 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
     grid->addMultiCellWidget(cieTongue, 6, 6, 1, 1);
 
     cmsCloseProfile(hProfile);
+    setMainWidget(page);
 }
 
 ICCProfileInfoDlg::~ICCProfileInfoDlg()

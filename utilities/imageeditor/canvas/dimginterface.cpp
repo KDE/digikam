@@ -42,7 +42,6 @@
 
 #include <kdebug.h>
 #include <kapplication.h>
-#include <klocale.h>
 
 // Local includes.
 
@@ -257,9 +256,9 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
          *
          * NOTE: If we trying to use the embedded ICC color profile from a RAW file we 
          *       cannot use the digiKam ICC color management here because we don't have 
-         *       a feedback from dcraw if an embedded profile have been really found in 
-         *       the picture and applied to the image. A solution will be found to use 
-         *       libopenraw instead dcraw in the future.
+         *       yet a feedback from dcraw DImg loader if an embedded profile have been 
+         *       really found in the picture and applied to the image. A solution will 
+         *       be found to use KProcess in DImg::RawLoader implementation.
          *
          */        
 
@@ -323,19 +322,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 }
                 else
                 {
-                    QString message = i18n("<p>This image has not assigned any color profile. "
-                                           "Do you want to convert it to your workspace color profile?</p>"
-                                           "<p>Current workspace color profile:<br>"
-                                           "<b>%1</b></p>")
-                                           .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting));
-                    
                     // To repaint image in canvas before to ask about to apply ICC profile.
                     emit signalImageLoaded(d->filename, valRet);
                     
                     DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                     trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                       QFile::encodeName(d->cmSettings->workspaceSetting));
-                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message, fileName);
+                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, fileName);
                     
                     if (dlg.exec() == QDialog::Accepted)
                     {
@@ -361,22 +354,12 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     {
                         kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
 
-                        QString message = i18n("<p>This image has assigned a color profile that does not "
-                                               "match with your default workspace color profile.<br>"
-                                               "Do you want to convert it to your workspace color profile?</p>"
-                                               "<p>Current workspace color profile:<br>"
-                                               "<b>%1<b></p>"
-                                               "<p>Image Color Profile:<br>"
-                                               "<b>%2</b></p>")
-                                               .arg(trans.getProfileDescription(d->cmSettings->workspaceSetting))
-                                               .arg(trans.getEmbeddedProfileDescriptor());
-
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
     
                         DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, message, fileName);
+                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, fileName);
                     
                         if (dlg.exec() == QDialog::Accepted)
                         {
