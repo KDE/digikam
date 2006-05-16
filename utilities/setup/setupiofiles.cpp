@@ -141,7 +141,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     grid1->addMultiCellWidget(d->SuperCCDsecondarySensor, 4, 4, 0, 1);
     
     d->enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
-    QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images.<p>"));
+    QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images using a setting value.<p>"
+                                               "Enable this option if you use dcraw version >= 0.8.0 in your system.<p>"));
     grid1->addMultiCellWidget(d->enableRAWQuality, 5, 5, 0, 1);
     
     d->RAWquality = new KIntNumInput(0, RAWfileOptionsGroup);
@@ -164,7 +165,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "This filter isn't adapted if your RAW picture have been taken using hight "
                      "sensitivity (over 1600 ISO). Its recommended to use the noise reduction filter "
                      "from image editor instead.<p>"
-                     "This filter can take a while. Do not use if your computer is slow.<p>"));
+                     "This filter can take a while. Do not use if your computer is slow.<p>"
+                     "This option require dcraw version >= 0.8.0.<p>"));
     grid1->addMultiCellWidget(d->enableNoiseReduction, 7, 7, 0, 1);
 
     d->NRSigmaDomain = new KDoubleNumInput(RAWfileOptionsGroup);
@@ -195,11 +197,14 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->iccColorsCorrection->insertItem( i18n("Using digiKam ICC settings") );
     QWhatsThis::add( d->iccColorsCorrection, i18n("<p>This option toogle the right way to use ICC color profiles during "
                      "RAW files decoding.<p>"
-                     "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>. This option is <u>hightly recommended</u> to use the fine settings provided by digiKam color management workflow.<p>"
+                     "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>. "
+                     "This option is <u>hightly recommended</u> to use the fine settings provided by digiKam color management workflow.<p>"
                      "If you want to use the embeded ICC profile includes into RAW files (if exists), use "
-                     "<b>Using embeded profile</b>. Warning: with this option the ICC color correction processed outside the RAW file decoding will be disable!<p>"
+                     "<b>Using embeded profile</b>. Warning: with this option the ICC color correction processed outside "
+                     "the RAW file decoding will be disable! This option require dcraw version >= 0.8.0.<p>"
                      "If you want to use the ICC profiles setttings from ICC color management page, use "
-                     "<b>Using digiKam ICC Settings</b>. You need to enable and set the right ICC color management for that.<p>"));
+                     "<b>Using digiKam ICC Settings</b>. You need to enable and set the right ICC color "
+                     "management for that. This option require dcraw version >= 0.8.0.<p>"));
     hlay->addWidget(labelICCCorrection);
     hlay->addWidget(d->iccColorsCorrection);
     grid1->addMultiCellLayout(hlay, 10, 10, 0, 1);
