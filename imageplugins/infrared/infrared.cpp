@@ -353,7 +353,9 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
 
     delete [] pGrainBits;
     delete [] pMaskBits;
-    delete [] pOverlayBits;
+    
+    if (Grain)
+        delete [] pOverlayBits;
 }
 
 }  // NameSpace DigikamInfraredImagesPlugin
