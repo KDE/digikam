@@ -315,39 +315,45 @@ void RAWLoader::startProcess()
     if (m_rawDecodingSettings.unclipColors)
     {
         *m_process << "-n";
-        *m_process << "-b 0.25";
+        *m_process << "-b";
+        *m_process << "0.25";
     }
 
-    // Since dcraw 0.8, the command line compatibility have been broken.
-    // To use Quality settings, we will use :
+    // -- Quality option ---------------------------------------------
+    //
+    // Since dcraw 0.8, the command line compatibility have been broken about Quality option.
+    // To handle Quality settings, we will use :
     // '-q' alone (dcraw < 8.0)
     // '-q value' (dcraw >= 8.0)
     // In fact, m_rawDecodingSettings.enableRAWQuality is used to preserve compatibility.
     
-    QString rawQuality = "-q";
-        
+    *m_process << "-q";
+    
     if (m_rawDecodingSettings.enableRAWQuality)
-    {
-        rawQuality.append(QString(" %1").arg(QString::number(m_rawDecodingSettings.RAWQuality)));
-    }
-    *m_process << rawQuality;
+        *m_process << QString::number(m_rawDecodingSettings.RAWQuality);
+
+    // -- Noise Reduction option -------------------------------------
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
-        QCString NRSigmaDomain, NRSigmaRange;
-        *m_process << QString("-B %1 %2")
-                .arg(m_rawDecodingSettings.NRSigmaDomain)
-                .arg(m_rawDecodingSettings.NRSigmaRange);
+        *m_process << "-B";
+        
+        *m_process << QString::number(m_rawDecodingSettings.NRSigmaDomain);
+        *m_process << QString::number(m_rawDecodingSettings.NRSigmaRange);
     }
+
+    // -- Color Profile options --------------------------------------
 
     switch (m_rawDecodingSettings.ICCColorCorrectionMode)
     {
         case RawDecodingSettings::EMBED:
-            *m_process << "-p embed";
+            *m_process << "-p";
+            *m_process << "embed";
             break;
 
         case RawDecodingSettings::USERPROFILE:
-            *m_process << QString("-p %1").arg(QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath ));
+            *m_process << "-p";
+            *m_process << QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
             break;
 
         default:
@@ -357,9 +363,12 @@ void RAWLoader::startProcess()
     if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
         !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
     {
-        *m_process << QString("-o %1").arg(QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath ));
+        *m_process << "-o";
+        *m_process << QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath );
     }
 
+    // -----------------------------------------------------------------
+    
     *m_process << QFile::encodeName( m_filePath );
 
 #ifdef ENABLE_DEBUG_MESSAGES
