@@ -363,7 +363,7 @@ void AlbumFileTip::updateText()
     tip += cellBeg + i18n("Type:") + cellMid + str + cellEnd;
     
     QString mpixels;
-    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;

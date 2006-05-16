@@ -1153,7 +1153,6 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             finishSaving(false);
             return;
         }
-
         
         if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
         {
@@ -1182,6 +1181,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         finishSaving(true);
 
         saveIsComplete();
+        
+        // take all action necessary to update information and reenable sidebar
+        slotChanged();
     }
     else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
     {
@@ -1229,6 +1231,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         finishSaving(true);
         saveAsIsComplete();
+        
+        // take all action necessary to update information and reenable sidebar
+        slotChanged();
     }
 }
 
@@ -1249,9 +1254,6 @@ void EditorWindow::finishSaving(bool success)
     // Enable actions as appropriate after saving
     toggleActions(true);
     unsetCursor();
-
-    // take all action necessary to update information and reenable sidebar
-    slotChanged();
 
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
 

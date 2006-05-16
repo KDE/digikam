@@ -316,7 +316,7 @@ void AlbumIconItem::paintItem()
         if (dims.isValid())
         {
             QString mpixels, resolution;
-            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
             resolution = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
                          .arg(dims.width()).arg(dims.height()).arg(mpixels);
             r = d->view->itemResolutionRect();    

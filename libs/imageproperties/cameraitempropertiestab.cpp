@@ -342,7 +342,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
 
     QString mpixels;
     QSize dims(itemInfo->width, itemInfo->height);
-    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 1);
+    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? unknow : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     d->labelImageDimensions->setText(str);
