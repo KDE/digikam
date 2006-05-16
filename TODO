@@ -54,7 +54,6 @@ Main Interface :
  
 B.K.O files to fix :
 
-==> 117115  (CameraGUI: Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
 ==> 93569   (CameraGUI: easier connection to USB disc cameras)
 ==> 125696  (CameraGUI: digikam does not connect to USB camera with libgphoto-2.1.99)
 ==> 114211  (Main Interface: image comments encoding unreadable after moving an album)
