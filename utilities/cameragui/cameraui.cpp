@@ -70,10 +70,11 @@ extern "C"
 #include "cameraui.h"
 #include "scanlib.h"
 
-CameraUI::CameraUI(QWidget* parent, const QString& title,
+CameraUI::CameraUI(QWidget* /*parent*/, const QString& title,
                    const QString& model, const QString& port,
                    const QString& path)
-    : QDialog(parent, 0, false, WDestructiveClose)    
+    : QDialog(0, // B.K.O # 116485: no parent for this modal dialog.
+              0, false, WDestructiveClose)    
 {
     // -- setup view -----------------------------------------
 
