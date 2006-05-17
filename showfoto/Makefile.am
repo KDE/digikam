@@ -1,4 +1,4 @@
-SUBDIRS = pics mimetypes
+SUBDIRS = pics 
 
 METASOURCES = AUTO  
 
