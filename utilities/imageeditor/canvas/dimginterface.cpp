@@ -320,10 +320,12 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 // Ask or apply?
                 if (apply)
                 {
+                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                     trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
                                        QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                    if (d->parent) d->parent->unsetCursor();
                 }
                 else
                 {
@@ -351,9 +353,11 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 
                 if (apply)
                 {
+                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                     trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                     trans.apply( d->image );
-                }
+                    if (d->parent) d->parent->unsetCursor();
+               }
                 else
                 {
                     if (trans.getEmbeddedProfileDescriptor()
