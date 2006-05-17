@@ -1146,9 +1146,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to \n\"%2\".")
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\"!")
                                 .arg(m_savingContext->destinationURL.filename())
-                                .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+                                .arg(m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
             return;
@@ -1182,7 +1182,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         saveIsComplete();
         
-        // take all action necessary to update information and reenable sidebar
+        // Take all actions necessary to update informations and re-enable sidebar
         slotChanged();
     }
     else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
@@ -1194,9 +1194,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\"!")
                                 .arg(m_savingContext->destinationURL.filename())
-                                .arg(m_savingContext->destinationURL.path().section('/', -2, -2)));
+                                .arg(m_savingContext->destinationURL.path()));
             }
             finishSaving(false);
             return;
@@ -1232,7 +1232,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         finishSaving(true);
         saveAsIsComplete();
         
-        // take all action necessary to update information and reenable sidebar
+        // Take all actions necessary to update informations and re-enable sidebar
         slotChanged();
     }
 }
@@ -1273,13 +1273,14 @@ void EditorWindow::startingSave(const KURL& url)
     if (!checkPermissions(url))
         return;
 
-    m_savingContext->srcURL         = url;
-    m_savingContext->destinationURL = m_savingContext->srcURL;
+    m_savingContext->srcURL             = url;
+    m_savingContext->destinationURL     = m_savingContext->srcURL;
     m_savingContext->destinationExisted = true;
-    m_savingContext->savingState    = SavingContextContainer::SavingStateSave;
-    m_savingContext->saveTempFile   = new KTempFile(m_savingContext->srcURL.directory(false), QString::null);
+    m_savingContext->abortingSaving     = false;
+    m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
+    m_savingContext->saveTempFile       = new KTempFile(m_savingContext->srcURL.directory(false),
+                                                        QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
-    m_savingContext->abortingSaving = false;
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings);
 }
