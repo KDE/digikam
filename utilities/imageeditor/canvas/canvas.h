@@ -57,17 +57,17 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    void load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
-    void preload(const QString& filename);
+    void  load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    void  preload(const QString& filename);
 
-    void saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                const QString& mimeType=0);
-    void switchToLastSaved(const QString& newFilename);
-    void abortSaving();
-    void setModified();
-    void clearUndoHistory();
-    void setUndoHistoryOrigin();
-    DImg currentImage();
+    void  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+                 const QString& mimeType=0);
+    void  switchToLastSaved(const QString& newFilename);
+    void  abortSaving();
+    void  setModified();
+    void  clearUndoHistory();
+    void  setUndoHistoryOrigin();
+    DImg  currentImage();
 
     bool  maxZoom();
     bool  minZoom();
@@ -83,22 +83,22 @@ public:
 
     void  setBackgroundColor(const QColor& color);
 
-    void setExifOrient(bool exifOrient);
+    void  setExifOrient(bool exifOrient);
 
-    void increaseGamma();
-    void decreaseGamma();
-    void increaseBrightness();
-    void decreaseBrightness();
-    void increaseContrast();
-    void decreaseContrast();
+    void  increaseGamma();
+    void  decreaseGamma();
+    void  increaseBrightness();
+    void  decreaseBrightness();
+    void  increaseContrast();
+    void  decreaseContrast();
 
-    void getUndoHistory(QStringList &titles);
-    void getRedoHistory(QStringList &titles);
+    void  getUndoHistory(QStringList &titles);
+    void  getRedoHistory(QStringList &titles);
 
-    void setHistogramPosition(const QPoint& pos);
-    bool getHistogramPosition(QPoint& pos);
+    void  setHistogramPosition(const QPoint& pos);
+    bool  getHistogramPosition(QPoint& pos);
 
-    int  setHistogramType(int t);
+    int   setHistogramType(int t);
 
 protected:
     

@@ -29,11 +29,11 @@
 
 // Qt includes.
 
+#include <qwidget.h>
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qcolor.h>
-#include <qapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qvariant.h>
@@ -41,7 +41,7 @@
 // KDE includes.
 
 #include <kdebug.h>
-#include <kapplication.h>
+#include <kcursor.h>
 
 // Local includes.
 
@@ -68,6 +68,7 @@ public:
 
     DImgInterfacePrivate()
     {
+        parent           = 0;
         undoMan          = 0;
         cmSettings       = 0;
         iofileSettings   = 0;
@@ -106,6 +107,9 @@ public:
 
     double                   zoom;
     
+    // Used by ICC color profile dialog.
+    QWidget                 *parent;
+
     QString                  filename;
     QString                  savingFilename;
 
@@ -142,7 +146,7 @@ DImgInterface::DImgInterface()
     m_instance = this;
     
     d = new DImgInterfacePrivate;
-    
+
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
@@ -166,8 +170,8 @@ DImgInterface::~DImgInterface()
     m_instance = 0;
 }
 
-void DImgInterface::load(const QString& filename,
-                         IOFileSettingsContainer* iofileSettings)
+void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings,
+                         QWidget *parent)
 {
     d->valid          = false;
     d->filename       = filename;
@@ -184,7 +188,8 @@ void DImgInterface::load(const QString& filename,
     d->brightness     = 0.0;
     d->changedBCG     = false;
     d->iofileSettings = iofileSettings;
-    
+    d->parent         = parent;
+
     d->cmod.reset();
     d->undoMan->clear();
 
@@ -328,12 +333,14 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                     trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
                                       QFile::encodeName(d->cmSettings->workspaceSetting));
-                    ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, fileName);
+                    ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
                     
                     if (dlg.exec() == QDialog::Accepted)
                     {
+                        if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                         trans.apply( d->image );
                         d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                        if (d->parent) d->parent->unsetCursor();
                     }
                 }
             }
@@ -359,12 +366,14 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     
                         DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
                         trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                        ColorCorrectionDlg dlg(kapp->activeWindow(), &preview, &trans, fileName);
+                        ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
                     
                         if (dlg.exec() == QDialog::Accepted)
                         {
+                            if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                             trans.apply( d->image );
                             d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                            if (d->parent) d->parent->unsetCursor();
                         }
                     }
                 }

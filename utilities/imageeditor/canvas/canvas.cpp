@@ -76,6 +76,13 @@ public:
     {
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
         tileCache.setAutoDelete(true);
+
+        parent          = 0;
+        im              = 0;
+        rubber          = 0;
+        paintTimer      = 0;
+        histogramPixmap = 0;
+        imageHistogram  = 0;
     }
 
     bool               autoZoom;
@@ -106,6 +113,8 @@ public:
     QPixmap            qcheck;
 
     QColor             bgColor;
+
+    QWidget           *parent;
     
     DImgInterface     *im;
 
@@ -150,6 +159,7 @@ Canvas::Canvas(QWidget *parent)
     d = new CanvasPrivate;
 
     d->im         = DImgInterface::instance();
+    d->parent     = parent;
     d->zoom       = 1.0;
     d->autoZoom   = false;
     d->fullScreen = false;
@@ -393,7 +403,7 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 
     d->tileCache.clear();
 
-    d->im->load( filename, IOFileSettings );
+    d->im->load( filename, IOFileSettings, d->parent );
     emit signalLoadingStarted(filename);
 }
 
