@@ -1,6 +1,8 @@
 0.8.2-rc2
 
 Bugs fixed:
+        
+        o Mimimize button missing on "Compaq Flash Reader" camera window (#116485)
 
         o mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x (#121242)
         
