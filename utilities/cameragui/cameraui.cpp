@@ -153,12 +153,13 @@ public:
     ImagePropertiesSideBarCamGui *rightSidebar;
 };    
 
-CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
+CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path)
         : KDialogBase(Plain, cameraTitle,
                       Help|User1|User2|User3|Close, Close,
-                      parent, 0, false, true,
+                      0, // B.K.O # 116485: no parent for this modal dialog.
+                      0, false, true,
                       i18n("D&elete"),
                       i18n("&Download"),
                       i18n("&Select"))
