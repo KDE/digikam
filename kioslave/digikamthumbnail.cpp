@@ -21,6 +21,7 @@
  * ============================================================ */
 
 #define XMD_H
+#define PNG_BYTES_TO_CHECK 4
 
 // C++ includes.
 
@@ -58,6 +59,7 @@
 #include <kprocess.h>
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
+#include <kfilemetainfo.h>
 
 // Local includes
 
@@ -84,71 +86,81 @@ extern "C"
 using namespace KIO;
 using namespace Digikam;
 
-static void exifRotate(const QString& filePath, QImage& thumb)
+// TODO : check if it's necessary to have a static method here!
+void exifRotate(const QString& filePath, QImage& thumb)
 {
-    // Rotate thumbnail based on EXIF rotate tag
+    // Check if the file is an JPEG image
+    KFileMetaInfo metaInfo(filePath, "image/jpeg", KFileMetaInfo::Fastest);
 
-    QWMatrix matrix;
-    DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-    
-    bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
-                    orientation != DMetadata::ORIENTATION_UNSPECIFIED);
-
-    switch (orientation) 
+    if (metaInfo.isValid())
     {
-       case DMetadata::ORIENTATION_NORMAL:
-       case DMetadata::ORIENTATION_UNSPECIFIED:
-          break;
-
-       case DMetadata::ORIENTATION_HFLIP:
-          matrix.scale(-1,1);
-          break;
-
-       case DMetadata::ORIENTATION_ROT_180:
-          matrix.rotate(180);
-          break;
-
-       case DMetadata::ORIENTATION_VFLIP:
-          matrix.scale(1,-1);
-          break;
-
-       case DMetadata::ORIENTATION_ROT_90_HFLIP:
-          matrix.scale(-1,1);
-          matrix.rotate(90);
-          break;
-
-       case DMetadata::ORIENTATION_ROT_90:
-          matrix.rotate(90);
-          break;
-
-       case DMetadata::ORIENTATION_ROT_90_VFLIP:
-          matrix.scale(1,-1);
-          matrix.rotate(90);
-          break;
-
-       case DMetadata::ORIENTATION_ROT_270:
-          matrix.rotate(270);
-          break;
+        if (metaInfo.mimeType() == "image/jpeg" &&
+            metaInfo.containsGroup("Jpeg EXIF Data"))
+        {   
+            // Rotate thumbnail from JPEG files based on EXIF rotate tag
+        
+            QWMatrix matrix;
+            DMetadata metadata(filePath);
+            DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+            
+            bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
+                            orientation != DMetadata::ORIENTATION_UNSPECIFIED);
+        
+            switch (orientation) 
+            {
+                case DMetadata::ORIENTATION_NORMAL:
+                case DMetadata::ORIENTATION_UNSPECIFIED:
+                    break;
+            
+                case DMetadata::ORIENTATION_HFLIP:
+                    matrix.scale(-1,1);
+                    break;
+            
+                case DMetadata::ORIENTATION_ROT_180:
+                    matrix.rotate(180);
+                    break;
+            
+                case DMetadata::ORIENTATION_VFLIP:
+                    matrix.scale(1,-1);
+                    break;
+            
+                case DMetadata::ORIENTATION_ROT_90_HFLIP:
+                    matrix.scale(-1,1);
+                    matrix.rotate(90);
+                    break;
+            
+                case DMetadata::ORIENTATION_ROT_90:
+                    matrix.rotate(90);
+                    break;
+            
+                case DMetadata::ORIENTATION_ROT_90_VFLIP:
+                    matrix.scale(1,-1);
+                    matrix.rotate(90);
+                    break;
+            
+                case DMetadata::ORIENTATION_ROT_270:
+                    matrix.rotate(270);
+                    break;
+            }
+        
+            //transform accordingly
+            if ( doXform )
+                thumb = thumb.xForm( matrix );
+        }
     }
-
-    //transform accordingly
-    if ( doXform )
-       thumb = thumb.xForm( matrix );
 }
 
-#define PNG_BYTES_TO_CHECK 4
-
+// TODO : check if it's necessary to have a static method here!
 static QImage loadPNG(const QString& path)
 {
-    png_uint_32         w32, h32;
-    int                 w, h;
-    bool                has_alpha;
-    bool                has_grey;
-    FILE               *f;
-    png_structp         png_ptr = NULL;
-    png_infop           info_ptr = NULL;
-    int                 bit_depth, color_type, interlace_type;
+    png_uint_32  w32, h32;
+    int          w, h;
+    bool         has_alpha;
+    bool         has_grey;
+    FILE        *f;
+    png_structp  png_ptr = NULL;
+    png_infop    info_ptr = NULL;
+    int          bit_depth, color_type, interlace_type;
 
     has_alpha = 0;
     has_grey  = 0;
@@ -159,7 +171,7 @@ static QImage loadPNG(const QString& path)
     if (!f)
         return qimage;
 
-    unsigned char       buf[PNG_BYTES_TO_CHECK];
+    unsigned char buf[PNG_BYTES_TO_CHECK];
 
     fread(buf, 1, PNG_BYTES_TO_CHECK, f);
     if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
@@ -217,8 +229,8 @@ static QImage loadPNG(const QString& path)
     if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY)
         has_grey = 1;
 
-    unsigned char     **lines;
-    int                 i;
+    unsigned char **lines;
+    int             i;
 
     if (has_alpha)
         png_set_expand(png_ptr);
@@ -451,8 +463,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// JPEG Extraction
+// -- JPEG Extraction ---------------------------------------------------------------------
 
 struct myjpeg_error_mgr : public jpeg_error_mgr
 {
@@ -604,8 +615,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Load using DImg
+// -- Load using DImg ---------------------------------------------------------------------
 
 bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 {
@@ -635,8 +645,7 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Load using Dcraw
+// -- Load using Dcraw ---------------------------------------------------------------------
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
@@ -708,6 +717,8 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     image.loadFromData( imgData );
     return true;
 }
+
+// -- Load using KDE API ---------------------------------------------------------------------
 
 bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QString& path)
 {
@@ -791,8 +802,7 @@ void kio_digikamthumbnailProtocol::createThumbnailDirs()
     KStandardDirs::makeDir(bigThumbPath_, 0700);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// KIO slave registration
+// -- KIO slave registration ---------------------------------------------------------------------
 
 extern "C"
 {
