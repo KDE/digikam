@@ -28,6 +28,7 @@
 
 // Qt Includes.
  
+#include <qtimer.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
@@ -83,6 +84,8 @@ public:
 
     ImagePropertiesColorsTabPriv()
     {
+        blinkFlag            = false;
+        blinkTimer           = 0;
         imageLoaderThread    = 0;
         tab                  = 0;
         channelCB            = 0;
@@ -100,7 +103,7 @@ public:
         labelPercentileValue = 0;
         labelColorDepth      = 0;
         labelAlphaChannel    = 0;
-        infoHeader           = 0;
+        labelICCInfoHeader   = 0;
         selectionArea        = 0;
         labelICCName         = 0;
         labelICCDescription  = 0;
@@ -115,6 +118,8 @@ public:
         saveProfilButton     = 0;
     }
 
+    bool                   blinkFlag;
+    
     QComboBox             *channelCB;
     QComboBox             *colorsCB;
     QComboBox             *renderingCB;
@@ -133,7 +138,7 @@ public:
     QLabel                *labelPercentileValue;
     QLabel                *labelColorDepth;
     QLabel                *labelAlphaChannel;
-    QLabel                *infoHeader;
+    QLabel                *labelICCInfoHeader;
     
     QPushButton           *saveProfilButton;
     
@@ -143,6 +148,8 @@ public:
     QRect                 *selectionArea;
 
     QByteArray             embedded_profile;
+    
+    QTimer                *blinkTimer;    
     
     KTabWidget            *tab;        
 
@@ -367,7 +374,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
     iccbox->setFrameStyle (QFrame::NoFrame);
 
-    d->infoHeader          = new QLabel(0, iccbox);
+    d->labelICCInfoHeader  = new QLabel("<font></font>", iccbox);
     QGroupBox *iccdetail   = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
     new QLabel(i18n("Name: "), iccdetail);
     d->labelICCName        = new KSqueezedTextLabel(0, iccdetail);
@@ -393,7 +400,12 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
+    d->blinkTimer = new QTimer( this );
+
     // -------------------------------------------------------------
+
+    connect( d->blinkTimer, SIGNAL(timeout()),
+             this, SLOT(slotBlinkTimerDone()) );
 
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -484,23 +496,30 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                        DImg *img, int itemType)
 {
     // This is necessary to stop computation because d->image.bits() is currently used by
-    // threaded histogram algorithm.
-    
+    // threaded histogram algorithm.    
     d->histogramWidget->stopHistogramComputation();
     
+    d->navigateBar->setFileName();
     d->profileFileName = QString();
+    d->cieTongue->setProfileData();
     
+    // Clear informations.
+    d->labelMeanValue->clear();
+    d->labelPixelsValue->clear();
+    d->labelStdDevValue->clear();
+    d->labelCountValue->clear();
+    d->labelMedianValue->clear();
+    d->labelPercentileValue->clear();
+    d->labelColorDepth->clear();
+    d->labelAlphaChannel->clear();
+    d->labelICCName->clear();
+    d->labelICCDescription->clear();
+    d->labelICCCopyright->clear();
+    d->labelICCIntent->clear();
+    d->labelICCColorSpace->clear();
+        
     if (url.isEmpty())
     {
-       d->navigateBar->setFileName();
-       d->labelMeanValue->clear();
-       d->labelPixelsValue->clear();
-       d->labelStdDevValue->clear();
-       d->labelCountValue->clear();
-       d->labelMedianValue->clear();
-       d->labelPercentileValue->clear();
-       d->labelColorDepth->clear();
-       d->labelAlphaChannel->clear();
        setEnabled(false);
        return;
     }
@@ -528,15 +547,16 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
             if (d->selectionArea)
             {
                 d->imageSelection = d->image.copy(*d->selectionArea);
-                d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit(),
-                                               d->imageSelection.bits(), d->imageSelection.width(),
-                                               d->imageSelection.height());
+                d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(),
+                                               d->image.sixteenBit(), d->imageSelection.bits(),
+                                               d->imageSelection.width(), d->imageSelection.height());
                 d->regionBG->show();
                 updateInformations();
             }
             else 
             {
-                d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
+                d->histogramWidget->updateData(d->image.bits(), d->image.width(), 
+                                               d->image.height(), d->image.sixteenBit());
                 d->regionBG->hide();
                 updateInformations();
             }
@@ -563,7 +583,11 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     d->currentFilePath = url.path();
     d->imageLoaderThread->load(d->currentFilePath, SharedLoadSaveThread::AccessModeRead,
                                SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    slotStartedLoading(d->currentFilePath);
+    
+    d->histogramWidget->setDataLoading();
+    
+    // Toogle ICC header to busy during loading.
+    d->blinkTimer->start(200);
 }
 
 void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& filePath, const DImg& img)
@@ -572,6 +596,8 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
     if ( filePath != d->currentFilePath )
         return;
 
+    d->blinkTimer->stop();
+    
     if ( !img.isNull() )
     {
         d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
@@ -588,12 +614,6 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
         d->histogramWidget->setLoadingFailed();
         slotHistogramComputationFailed();
     }
-}
-
-void ImagePropertiesColorsTab::slotStartedLoading(const QString& filePath)
-{
-    if ( filePath == d->currentFilePath )
-        d->histogramWidget->setDataLoading();
 }
 
 void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
@@ -797,7 +817,7 @@ void ImagePropertiesColorsTab::getICCData()
 {
     if (d->image.getICCProfil().isNull())
     {
-        d->infoHeader->setText(i18n("No embedded ICC profile available."));
+        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("No embedded ICC profile available.")));
 
         d->labelICCName->setText(i18n("N.A."));
         d->labelICCDescription->setText(i18n("N.A."));
@@ -811,8 +831,8 @@ void ImagePropertiesColorsTab::getICCData()
     {
         cmsHPROFILE embProfile=0;
         QString intent, colorSpace;
-        d->infoHeader->setText(i18n("Embedded color profile info:"));
-        
+        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("Embedded color profile info:")));
+
         d->embedded_profile = d->image.getICCProfil();
         d->cieTongue->setProfileData(&d->embedded_profile);
         embProfile = cmsOpenProfileFromMem(d->embedded_profile.data(),
@@ -899,6 +919,17 @@ void ImagePropertiesColorsTab::slotSaveProfil()
         if( !iccFileSaveDialog.selectedURL().isEmpty() )
             d->image.setICCProfilToFile(iccFileSaveDialog.selectedURL().path());
     }
+}
+
+void ImagePropertiesColorsTab::slotBlinkTimerDone(void)
+{
+    if (d->blinkFlag)
+        d->labelICCInfoHeader->setText("<font color=\"red\">Loading in progress...</font>");
+    else
+        d->labelICCInfoHeader->setText("<font color=\"darkred\">Loading in progress...</font>");
+     
+    d->blinkFlag = !d->blinkFlag;
+    d->blinkTimer->start( 200 );
 }
 
 }  // NameSpace Digikam

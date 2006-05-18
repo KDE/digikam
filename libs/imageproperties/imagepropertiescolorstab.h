@@ -85,27 +85,27 @@ private slots:
     void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
-    void slotStartedLoading(const QString& filePath);
     
     void slotSaveProfil();
+    void slotBlinkTimerDone(void);
 
 private:
 
     enum ColorChannel
     {
-    LuminosityChannel=0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel,
-    AlphaChannel,
-    ColorChannels
+        LuminosityChannel=0,
+        RedChannel,
+        GreenChannel,
+        BlueChannel,
+        AlphaChannel,
+        ColorChannels
     };
     
     enum AllColorsColorType
     {
-    AllColorsRed=0,
-    AllColorsGreen,
-    AllColorsBlue
+        AllColorsRed=0,
+        AllColorsGreen,
+        AllColorsBlue
     };
 
     ImagePropertiesColorsTabPriv* d;
