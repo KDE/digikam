@@ -131,5 +131,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 121242 (mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
 ==> 127374 (unsharp mask: max. radius way too small)
 ==> 116485 (Mimimize button missing on "Compaq Flash Reader" camera window)
+==> 127577 (raw display too dark and not rotated)
 
 ----------------------------------------------------------------------------------------------------
