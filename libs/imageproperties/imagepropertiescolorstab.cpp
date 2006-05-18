@@ -509,7 +509,8 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     d->navigateBar->setButtonsState(itemType);
     d->selectionArea = selectionArea;
     d->image.reset();
-                
+    setEnabled(true);                
+    
     if (!img)
     {
         loadImageFromUrl(url);
@@ -532,14 +533,12 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                                d->imageSelection.height());
                 d->regionBG->show();
                 updateInformations();
-                setEnabled(true);
             }
             else 
             {
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(), d->image.sixteenBit());
                 d->regionBG->hide();
                 updateInformations();
-                setEnabled(true);
             }
         }
         else 
@@ -552,8 +551,6 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
 
 void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 {
-    setEnabled(false);
-    
     // create thread on demand
     if (!d->imageLoaderThread)
     {
@@ -585,7 +582,6 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
         d->regionBG->hide();
         updateInformations();
         getICCData();
-        setEnabled(true);
     }
     else
     {
