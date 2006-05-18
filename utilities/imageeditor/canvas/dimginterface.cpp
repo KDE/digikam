@@ -390,7 +390,9 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         valRet = false;
     }
 
-    if (d->exifOrient)
+    // Raw file are already rotated properlly by dcraw. Only rotate JPEG file.
+    // TODO support TIFF/EP file here like JPEG.
+    if (d->exifOrient && d->image.attribute("format").toString() == QString("JPEG"))
         exifRotate(d->filename);
     
     emit signalImageLoaded(d->filename, valRet);
