@@ -924,9 +924,9 @@ void ImagePropertiesColorsTab::slotSaveProfil()
 void ImagePropertiesColorsTab::slotBlinkTimerDone(void)
 {
     if (d->blinkFlag)
-        d->labelICCInfoHeader->setText("<font color=\"red\">Loading in progress...</font>");
+        d->labelICCInfoHeader->setText("<font color=\"green\">Loading image...</font>");
     else
-        d->labelICCInfoHeader->setText("<font color=\"darkred\">Loading in progress...</font>");
+        d->labelICCInfoHeader->setText("<font color=\"darkgreen\">Loading image...</font>");
      
     d->blinkFlag = !d->blinkFlag;
     d->blinkTimer->start( 200 );
