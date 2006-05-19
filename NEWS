@@ -132,5 +132,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 116485 (Mimimize button missing on "Compaq Flash Reader" camera window)
 ==> 127577 (raw display too dark and not rotated)
 ==> 127634 (Communication between digikam and its kioslaves broken if size_t != off_t)
+==> 126335 (Autoration of photos may confuse user because of changes made he is not aware of)
+
 
 ----------------------------------------------------------------------------------------------------
