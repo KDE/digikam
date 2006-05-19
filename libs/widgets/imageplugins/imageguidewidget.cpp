@@ -63,31 +63,31 @@ public:
         renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
     }
 
-    bool                 sixteenBit;
-    bool                 focus;
-    bool                 spotVisible;
-    bool                 onMouseMovePreviewToogled;
+    bool        sixteenBit;
+    bool        focus;
+    bool        spotVisible;
+    bool        onMouseMovePreviewToogled;
     
-    int                  width;
-    int                  height;
-    int                  timerID;
-    int                  guideMode;
-    int                  guideSize;
-    int                  flicker;
-    int                  renderingPreviewMode;
+    int         width;
+    int         height;
+    int         timerID;
+    int         guideMode;
+    int         guideSize;
+    int         flicker;
+    int         renderingPreviewMode;
 
     // Current spot position in preview coordinates.
-    QPoint               spot;
+    QPoint      spot;
     
-    QRect                rect;
+    QRect       rect;
     
-    QColor               guideColor;
+    QColor      guideColor;
         
-    QPixmap             *pixmap;
+    QPixmap    *pixmap;
     
-    ImageIface          *iface;
+    ImageIface *iface;
     
-    DImg                 preview;
+    DImg        preview;
 };
 
 ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
@@ -102,10 +102,6 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->guideSize   = guideSize;
     
     setBackgroundMode(Qt::NoBackground);
-
-    // FIXME : remove it (just for testing CF B.K.O #120309)
-    //setPaletteBackgroundColor ( Qt::red );
-    
     setMinimumSize(w, h);
     setMouseTracking(true);
 
@@ -145,7 +141,7 @@ ImageIface* ImageGuideWidget::imageIface()
 
 void ImageGuideWidget::resetSpotPosition(void)
 {
-    d->spot.setX( d->width / 2 );
+    d->spot.setX( d->width  / 2 );
     d->spot.setY( d->height / 2 );
     updatePreview();
 }
@@ -219,7 +215,7 @@ void ImageGuideWidget::updatePixmap( void )
     d->pixmap->fill(colorGroup().background());
 
     if (d->renderingPreviewMode == PreviewOriginalImage ||
-    (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == false ))
+        (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == false ))
     {
         p.drawPixmap(d->rect, d->preview.convertToPixmap());
 
@@ -249,7 +245,8 @@ void ImageGuideWidget::updatePixmap( void )
             p.drawText(textRect, Qt::AlignCenter, text);
         }
     }
-    else if (d->renderingPreviewMode == PreviewBothImagesVert || d->renderingPreviewMode == PreviewBothImagesVertCont)
+    else if (d->renderingPreviewMode == PreviewBothImagesVert || 
+             d->renderingPreviewMode == PreviewBothImagesVertCont)
     {
         if (d->renderingPreviewMode == PreviewBothImagesVert)
         {
@@ -282,14 +279,14 @@ void ImageGuideWidget::updatePixmap( void )
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x()+d->rect.width()/2-1,
-                d->rect.y(),
-                d->rect.x()+d->rect.width()/2-1,
-                d->rect.y()+d->rect.height());
+                   d->rect.y(),
+                   d->rect.x()+d->rect.width()/2-1,
+                   d->rect.y()+d->rect.height());
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
         p.drawLine(d->rect.x()+d->rect.width()/2-1,
-                d->rect.y(),
-                d->rect.x()+d->rect.width()/2-1,
-                d->rect.y()+d->rect.height());
+                   d->rect.y(),
+                   d->rect.x()+d->rect.width()/2-1,
+                   d->rect.y()+d->rect.height());
 
         p.setPen(QPen(Qt::red, 1)) ;
 
@@ -311,7 +308,7 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawText(textRect, Qt::AlignCenter, text);
     }
     else if (d->renderingPreviewMode == PreviewBothImagesHorz ||
-                d->renderingPreviewMode == PreviewBothImagesHorzCont)
+             d->renderingPreviewMode == PreviewBothImagesHorzCont)
     {
         if (d->renderingPreviewMode == PreviewBothImagesHorz)
         {
@@ -343,14 +340,14 @@ void ImageGuideWidget::updatePixmap( void )
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x(),
-                d->rect.y()+d->rect.height()/2-1,
-                d->rect.width(),
-                d->rect.y()+d->rect.height()/2-1);
+                   d->rect.y()+d->rect.height()/2-1,
+                   d->rect.x()+d->rect.width(),
+                   d->rect.y()+d->rect.height()/2-1);
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
         p.drawLine(d->rect.x(),
-                d->rect.y()+d->rect.height()/2-1,
-                d->rect.width(),
-                d->rect.y()+d->rect.height()/2-1);
+                   d->rect.y()+d->rect.height()/2-1,
+                   d->rect.x()+d->rect.width(),
+                   d->rect.y()+d->rect.height()/2-1);
 
         p.setPen(QPen(Qt::red, 1)) ;
 
@@ -502,7 +499,8 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
             if (d->spot.x() > d->rect.width()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, QPoint(d->spot.x() - d->rect.width()/2, d->spot.y()));
+                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x() - d->rect.width()/2,
+                                                   d->spot.y()));
             }
             else
             {
@@ -528,7 +526,8 @@ void ImageGuideWidget::mouseReleaseEvent ( QMouseEvent *e )
             if (d->spot.y() > d->rect.height()/2)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, QPoint(d->spot.x(), d->spot.y() - d->rect.height()/2 ));
+                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(), 
+                                                   d->spot.y() - d->rect.height()/2 ));
             }
             else
             {
