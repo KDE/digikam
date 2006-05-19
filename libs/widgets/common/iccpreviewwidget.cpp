@@ -75,39 +75,38 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
 {
     d = new ICCPreviewWidgetPriv;
 
-    QGridLayout* grid = new QGridLayout(this, 12, KDialog::marginHint());
+    QBoxLayout* vlay = new QVBoxLayout(this);
         
     QLabel *label1 = new QLabel(i18n("Name:"), this);
     d->name        = new KSqueezedTextLabel(QString::null, this);
-    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
-    grid->addMultiCellWidget(d->name, 1, 1, 0, 0);
-        
+    vlay->addWidget(label1);
+    vlay->addWidget(d->name);
+      
     QLabel *label2 = new QLabel(i18n("Description:"), this);
     d->description = new KSqueezedTextLabel(QString::null, this);
-    grid->addMultiCellWidget(label2, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->description, 3, 3, 0, 0);
+    vlay->addWidget(label2);
+    vlay->addWidget(d->description);
         
     QLabel *label3 = new QLabel(i18n("Color space:"), this);
     d->colorSpace  = new KSqueezedTextLabel(QString::null, this);
-    grid->addMultiCellWidget(label3, 4, 4, 0, 0);
-    grid->addMultiCellWidget(d->colorSpace, 5, 5, 0, 0);
+    vlay->addWidget(label3);
+    vlay->addWidget(d->colorSpace);
 
     QLabel *label4 = new QLabel(i18n("Device class:"), this);
     d->deviceClass = new KSqueezedTextLabel(QString::null, this);
-    grid->addMultiCellWidget(label4, 6, 6, 0, 0);
-    grid->addMultiCellWidget(d->deviceClass, 7, 7, 0, 0);
+    vlay->addWidget(label4);
+    vlay->addWidget(d->deviceClass);
     
     QLabel *label5     = new QLabel(i18n("Rendering intent:"), this);
     d->renderingIntent = new KSqueezedTextLabel(QString::null, this);
-    grid->addMultiCellWidget(label5, 8, 8, 0, 0);
-    grid->addMultiCellWidget(d->renderingIntent, 9, 9, 0, 0);
+    vlay->addWidget(label5);
+    vlay->addWidget(d->renderingIntent);
 
     QLabel *label6 = new QLabel(i18n("CIE diagram:"), this);
     d->cieTongue   = new CIETongueWidget(256, 256, this);
-    grid->addMultiCellWidget(label6, 10, 10, 0, 0);
-    grid->addMultiCellWidget(d->cieTongue, 11, 11, 0, 0);
-
-    grid->setRowStretch(12, 10);
+    vlay->addWidget(label6);
+    vlay->addWidget(d->cieTongue);
+    vlay->addStretch();
 }
 
 ICCPreviewWidget::~ICCPreviewWidget()
