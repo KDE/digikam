@@ -116,7 +116,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the graph."));
+                                     "if it is used, all values (small and large) will be visible on the "
+                                     "graph."));
 
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
@@ -145,11 +146,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     // -------------------------------------------------------------
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
-    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram drawing of the "
+    QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
+                                             "drawing of the "
                                              "selected image channel. This one is re-computed at any "
                                              "settings changes."));
     
-    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, gboxSettings );
+    m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
+                                                    gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 2);
@@ -181,12 +184,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_tabsWidgets = new KTabWidget(gboxSettings);
-    QWidget *generalOptions = new QWidget(m_tabsWidgets);
-    QWidget *inProfiles = new QWidget(m_tabsWidgets);
-    QWidget *proofProfiles = new QWidget(m_tabsWidgets);
+    m_tabsWidgets            = new KTabWidget(gboxSettings);
+    QWidget *generalOptions  = new QWidget(m_tabsWidgets);
+    QWidget *inProfiles      = new QWidget(m_tabsWidgets);
+    QWidget *proofProfiles   = new QWidget(m_tabsWidgets);
     QWidget *displayProfiles = new QWidget(m_tabsWidgets);
-    QWidget *spaceProfiles = new QWidget(m_tabsWidgets);
+    QWidget *spaceProfiles   = new QWidget(m_tabsWidgets);
 
     m_tabsWidgets->addTab(generalOptions, i18n("General"));
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
@@ -267,7 +270,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- End First Page ------------------------------------
 
     m_tabsWidgets->addTab(spaceProfiles, i18n("Workspace"));
-    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color Profiles.</p>"));
+    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
+                                        "Profiles.</p>"));
 
     //---------- Second Page Setup ---------------------------------
 
@@ -327,7 +331,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- End Third Page -----------------------------------
 
     m_tabsWidgets->addTab(displayProfiles, i18n("Display"));
-    QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color Profiles.</p>"));
+    QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
+                    "Profiles.</p>"));
 
     //---------- Fourth Page Setup ----------------------------------
 
@@ -444,14 +449,13 @@ void ImageEffect_ICCProof::slotScaleChanged( int scale )
 
 void ImageEffect_ICCProof::slotDefault()
 {
-     kdDebug() << "Doing default" << endl;
+    kdDebug() << "Doing default" << endl;
     slotEffect();
 }
 
 void ImageEffect_ICCProof::slotEffect()
 {
     kapp->setOverrideCursor( KCursor::waitCursor() );
-
 
     m_histogramWidget->stopHistogramComputation();
 
@@ -490,17 +494,17 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::finalRendering()
 {
-    /// @todo implement me
+    //  TODO : implement me
     if (!m_doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( KCursor::waitCursor() );
         Digikam::ImageIface* iface = m_previewWidget->imageIface();
         
-        uchar *data                = iface->getOriginalImage();
-        int w                      = iface->originalWidth();
-        int h                      = iface->originalHeight();
-        bool a                     = iface->originalHasAlpha();
-        bool sb                    = iface->originalSixteenBit();
+        uchar *data = iface->getOriginalImage();
+        int w       = iface->originalWidth();
+        int h       = iface->originalHeight();
+        bool a      = iface->originalHasAlpha();
+        bool sb     = iface->originalSixteenBit();
 
         if (data)
         {
@@ -528,7 +532,8 @@ void ImageEffect_ICCProof::finalRendering()
                 tmpInPath = m_inProfilesCB->url();
             }
 
-            if (tmpInPath.isNull() && !m_useEmbeddedProfile->isChecked() && !m_useSRGBDefaultProfile->isChecked())
+            if (tmpInPath.isNull() && !m_useEmbeddedProfile->isChecked() &&    
+                !m_useSRGBDefaultProfile->isChecked())
             {
                 KMessageBox::information(this, "Profile error");
                 kdDebug() << "here" << endl;
@@ -589,12 +594,14 @@ void ImageEffect_ICCProof::finalRendering()
             
             if (m_useEmbeddedProfile->isChecked())
             {
-                transform.apply(img, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+                transform.apply(img, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(),
+                                m_checkGamutBox->isChecked(), useBuiltinProfile());
             }
             else
             {
                 QByteArray fakeProfile = QByteArray();
-                transform.apply(img, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+                transform.apply(img, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(),
+                                m_checkGamutBox->isChecked(), useBuiltinProfile());
             }
             
             iface->putOriginalImage("Color Management", img.bits());
@@ -607,8 +614,8 @@ void ImageEffect_ICCProof::finalRendering()
 
 void ImageEffect_ICCProof::slotTry()
 {
-    /// @todo "embed profile" option is not implemented -- Paco Cruz
-    /// @todo use of Display profile is not implemented -- Paco Cruz
+    // TODO "embed profile" option is not implemented -- Paco Cruz
+    // TODO use of Display profile is not implemented -- Paco Cruz
     
     kapp->setOverrideCursor(KCursor::waitCursor());
 
@@ -621,15 +628,15 @@ void ImageEffect_ICCProof::slotTry()
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-    m_destinationPreviewData   = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool a                     = iface->previewHasAlpha();
-    bool sb                    = iface->previewSixteenBit();
+    m_destinationPreviewData = iface->getPreviewImage();
+    int w                    = iface->previewWidth();
+    int h                    = iface->previewHeight();
+    bool a                   = iface->previewHasAlpha();
+    bool sb                  = iface->previewSixteenBit();
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
 
-    QString tmpInPath = QString::null;
+    QString tmpInPath    = QString::null;
     QString tmpProofPath = QString::null;
     QString tmpSpacePath = QString::null;
 
@@ -707,12 +714,12 @@ void ImageEffect_ICCProof::slotTry()
     if ( proofCondition || spaceCondition )
     {
         kapp->restoreOverrideCursor();
-        QString error = i18n("<p>Your settings are not correct</p>\
-                        <p>To apply a color transform, you need at least two ICC profiles:</p> \
-                        <ul><li>An \"Input\" profile.</li>\
-                        <li>A \"Workspace\" profile.</li></ul>\
-                        <p>If you want to do a \"soft-proof\" transform, in adition to these profiles\
-                        you need a \"Proof\" one.</p>");
+        QString error = i18n("<p>Your settings are not correct</p>"
+                        "<p>To apply a color transform, you need at least two ICC profiles:</p>"
+                        "<ul><li>An \"Input\" profile.</li>"
+                        "<li>A \"Workspace\" profile.</li></ul>"
+                        "<p>If you want to do a \"soft-proof\" transform, in adition to these profiles "
+                        "you need a \"Proof\" one.</p>");
         KMessageBox::information(this, error);
         enableButtonOK(false);
     }
@@ -720,12 +727,14 @@ void ImageEffect_ICCProof::slotTry()
     {
         if (m_useEmbeddedProfile->isChecked())
         {
-            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentItem(), useBPC(),
+                            m_checkGamutBox->isChecked(), useBuiltinProfile());
         }
         else
         {
             QByteArray fakeProfile = QByteArray();
-            transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(), m_checkGamutBox->isChecked(), useBuiltinProfile());
+            transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(),
+                            m_checkGamutBox->isChecked(), useBuiltinProfile());
         }
         
         iface->putPreviewImage(preview.bits());
@@ -754,10 +763,14 @@ void ImageEffect_ICCProof::readSettings()
     }
     else
     {
-        inPath = config->readPathEntry("InProfileFile");
-        spacePath = config->readPathEntry("WorkProfileFile");
+        inPath      = config->readPathEntry("InProfileFile");
+        spacePath   = config->readPathEntry("WorkProfileFile");
         displayPath = config->readPathEntry("MonitorProfileFile");
-        proofPath = config->readPathEntry("ProofProfileFile");
+        proofPath   = config->readPathEntry("ProofProfileFile");
+        m_displayProfileCB->setURL(config->readPathEntry("DefaultPath")); 
+        m_inProfilesCB->setURL(config->readPathEntry("DefaultPath")); 
+        m_proofProfileCB->setURL(config->readPathEntry("DefaultPath")); 
+        m_spaceProfileCB->setURL(config->readPathEntry("DefaultPath")); 
     }
 }
 
@@ -780,8 +793,9 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
     else if(useBuiltinProfile())
     {
-        QString message = QString(i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>"));
-        message.append(QString(i18n("<p>This profile is built on the fly, so there is not relevant information about it.</p>")));
+        QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
+        message.append(i18n("<p>This profile is built on the fly, so there is not relevant information "
+                            "about it.</p>"));
         KMessageBox::information(this, message);
     }
     else if (useDefaultInProfile())
@@ -859,13 +873,11 @@ void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
         return;
     }
     QString intent;
-    cmsHPROFILE selectedProfile;
-    selectedProfile = cmsOpenProfileFromMem(profile.data(), (DWORD)profile.size());
-
-    QString  profileName = QString((cmsTakeProductName(selectedProfile)));
-    QString profileDescription = QString((cmsTakeProductDesc(selectedProfile)));
+    cmsHPROFILE selectedProfile = cmsOpenProfileFromMem(profile.data(), (DWORD)profile.size());
+    QString profileName         = QString((cmsTakeProductName(selectedProfile)));
+    QString profileDescription  = QString((cmsTakeProductDesc(selectedProfile)));
     QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
-    int profileIntent = cmsTakeRenderingIntent(selectedProfile);
+    int profileIntent           = cmsTakeRenderingIntent(selectedProfile);
     
     //"Decode" profile rendering intent
     switch (profileIntent)
@@ -884,15 +896,15 @@ void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
             break;
     }
 
-    QString message = QString(i18n("<p><b>Name:</b> "));
+    QString message = i18n("<p><b>Name:</b> ");
     message.append(profileName);
-    message.append(QString(i18n("</p><p><b>Description:</b>  ")));
+    message.append(i18n("</p><p><b>Description:</b>  "));
     message.append(profileDescription);
-    message.append(QString(i18n("</p><p><b>Copyright:</b>  ")));
+    message.append(i18n("</p><p><b>Copyright:</b>  "));
     message.append(profileManufacturer);
-    message.append(QString(i18n("</p><p><b>Rendering Intent:</b>  ")));
+    message.append(i18n("</p><p><b>Rendering Intent:</b>  "));
     message.append(intent);
-    message.append(QString(i18n("</p><p><b>Path:</b> Embedded profile</p>")));
+    message.append(i18n("</p><p><b>Path:</b> Embedded profile</p>"));
     KMessageBox::information(this, message);
 }
 
@@ -900,7 +912,7 @@ void ImageEffect_ICCProof::slotCMDisabledWarning()
 {
     if (!cmEnabled)
     {
-        QString message = QString(i18n("<p>You don't have enabled Color Management in Digikam preferences.</p>"));
+        QString message = i18n("<p>You don't have enabled Color Management in Digikam preferences.</p>");
         message.append( i18n("<p>\"Use default profile\" options will be disabled now.</p>"));
         KMessageBox::information(this, message);
         slotToggledWidgets(false);

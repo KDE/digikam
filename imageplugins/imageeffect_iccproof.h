@@ -138,28 +138,28 @@ private:
 
 private:
 
-    void                            readSettings();
-    void                            getICCInfo(const QString&);
-    void                            getICCInfo(QByteArray&);
+    void readSettings();
+    void getICCInfo(const QString&);
+    void getICCInfo(QByteArray&);
 
-    bool                            useBPC();
-    bool                            doProof();
-    bool                            checkGamut();
-    bool                            embedProfile();
+    bool useBPC();
+    bool doProof();
+    bool checkGamut();
+    bool embedProfile();
 
-    bool                            useEmbeddedProfile();
-    bool                            useBuiltinProfile();
-    bool                            useDefaultInProfile();
-    bool                            useSelectedInProfile();
+    bool useEmbeddedProfile();
+    bool useBuiltinProfile();
+    bool useDefaultInProfile();
+    bool useSelectedInProfile();
 
-    bool                            useDefaultSpaceProfile();
-    bool                            useSelectedSpaceProfile();
+    bool useDefaultSpaceProfile();
+    bool useSelectedSpaceProfile();
 
-    bool                            useDefaultDisplayProfile();
-    bool                            useSelectedDisplayProfile();
+    bool useDefaultDisplayProfile();
+    bool useSelectedDisplayProfile();
 
-    bool                            useDefaultProofProfile();
-    bool                            useSelectedProofProfile();
+    bool useDefaultProofProfile();
+    bool useSelectedProofProfile();
 
 private slots:
 
