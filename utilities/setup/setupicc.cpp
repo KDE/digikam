@@ -418,6 +418,10 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->monitorProfilesKC->clear();
     d->workProfilesKC->clear();
     d->proofProfilesKC->clear();
+    d->inICCPath.clear();
+    d->workICCPath.clear();
+    d->proofICCPath.clear();
+    d->monitorICCPath.clear();
     QDir dir(path);
 
     if (path.isEmpty() || !dir.exists() || !dir.isReadable())
