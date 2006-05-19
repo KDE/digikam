@@ -39,26 +39,26 @@ namespace Digikam
 
 int GPIface::autoDetect(QString& model, QString& port)
 {
-    CameraList *camList;
+    CameraList          *camList;
     CameraAbilitiesList *abilList;
-    GPPortInfoList *infoList;
-    const char *camModel_, *camPort_;
-    GPContext *context;
+    GPPortInfoList      *infoList;
+    const char          *camModel_, *camPort_;
+    GPContext           *context;
 
     context = gp_context_new ();
     gp_list_new (&camList);
     
-    gp_abilities_list_new (&abilList);
-    gp_abilities_list_load (abilList, context);
-    gp_port_info_list_new (&infoList);
-    gp_port_info_list_load (infoList);
-    gp_abilities_list_detect (abilList, infoList, camList, context);
-    gp_abilities_list_free (abilList);
-    gp_port_info_list_free (infoList);
+    gp_abilities_list_new(&abilList);
+    gp_abilities_list_load(abilList, context);
+    gp_port_info_list_new(&infoList);
+    gp_port_info_list_load(infoList);
+    gp_abilities_list_detect(abilList, infoList, camList, context);
+    gp_abilities_list_free(abilList);
+    gp_port_info_list_free(infoList);
 
     gp_context_unref( context );
 
-    int count = gp_list_count (camList);
+    int count = gp_list_count(camList);
 
     if (count<=0) 
     {
@@ -71,15 +71,15 @@ int GPIface::autoDetect(QString& model, QString& port)
     
     for (int i = 0; i < count; i++)
     {
-        if (gp_list_get_name  (camList, i, &camModel_) != GP_OK)
+        if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
         {
-            gp_list_free (camList);
+            gp_list_free(camList);
             return -1;
         }
 
-        if (gp_list_get_value (camList, i, &camPort_) != GP_OK)
+        if (gp_list_get_value(camList, i, &camPort_) != GP_OK)
         {
-            gp_list_free (camList);
+            gp_list_free(camList);
             return -1;
         }
 
@@ -87,12 +87,12 @@ int GPIface::autoDetect(QString& model, QString& port)
         {
             model = QString::fromLatin1(camModel_);
             port  = QString::fromLatin1(camPort_);
-            gp_list_free (camList);
+            gp_list_free(camList);
             return 0;
         }
     }
 
-    gp_list_free (camList);
+    gp_list_free(camList);
 
     return -1;
 }
@@ -103,10 +103,10 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     count = 0;
 
     CameraAbilitiesList *abilList;
-    CameraAbilities abil;
-    GPContext *context;
+    CameraAbilities      abil;
+    GPContext           *context;
 
-    context = gp_context_new ();
+    context = gp_context_new();
  
     gp_abilities_list_new( &abilList );
     gp_abilities_list_load( abilList, context );
@@ -120,7 +120,7 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     }
     else 
     {
-        for (int i=0; i<count; i++) 
+        for (int i = 0 ; i < count ; i++) 
         {
             const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
@@ -136,7 +136,7 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
 void GPIface::getSupportedPorts(QStringList& plist)
 {
     GPPortInfoList *list;
-    GPPortInfo info;
+    GPPortInfo      info;
 
     plist.clear();
 
@@ -145,7 +145,7 @@ void GPIface::getSupportedPorts(QStringList& plist)
 
     int numPorts = gp_port_info_list_count( list );
 
-    for (int i = 0; i < numPorts; i++) 
+    for (int i = 0 ; i < numPorts ; i++) 
     {
         gp_port_info_list_get_info( list, i, &info );
         plist.append( info.path );
@@ -159,17 +159,17 @@ void GPIface::getCameraSupportedPorts(const QString& model, QStringList& plist)
     int i = 0;
     plist.clear();
 
-    CameraAbilities abilities;
+    CameraAbilities      abilities;
     CameraAbilitiesList *abilList;
-    GPContext *context;
+    GPContext           *context;
 
-    context = gp_context_new ();
+    context = gp_context_new();
 
-    gp_abilities_list_new (&abilList);
-    gp_abilities_list_load (abilList, context);
-    i = gp_abilities_list_lookup_model (abilList, model.local8Bit().data());
-    gp_abilities_list_get_abilities (abilList, i, &abilities);
-    gp_abilities_list_free (abilList);
+    gp_abilities_list_new(&abilList);
+    gp_abilities_list_load(abilList, context);
+    i = gp_abilities_list_lookup_model(abilList, model.local8Bit().data());
+    gp_abilities_list_get_abilities(abilList, i, &abilities);
+    gp_abilities_list_free(abilList);
 
     if (abilities.port & GP_PORT_SERIAL)
         plist.append("serial");
