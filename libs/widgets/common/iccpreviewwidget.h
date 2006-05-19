@@ -53,10 +53,6 @@ public slots:
     virtual void showPreview(const KURL &url);
     virtual void clearPreview();
 
-protected:
-
-    virtual void virtual_hook(int id, void* data);
-
 private:
 
     void getICCData(const KURL &url);
