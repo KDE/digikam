@@ -108,7 +108,7 @@ SetupEditor::SetupEditor(QWidget* parent )
     QVGroupBox *ExifGroupOptions = new QVGroupBox(i18n("EXIF Actions"), parent);
     
     d->exifRotateBox = new QCheckBox(ExifGroupOptions);
-    d->exifRotateBox->setText(i18n("&Rotate images/thumbs according to orientation tag"));
+    d->exifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
   
     d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));

@@ -89,8 +89,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QGroupBox *ExifGroup = new QGroupBox(1, Qt::Horizontal, i18n("EXIF Actions"), parent);
   
     d->ExifRotateBox = new QCheckBox(ExifGroup);
-    d->ExifRotateBox->setText(i18n("&Rotate images/thumbs according to orientation tag"));
-  
+    d->ExifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
+    
     d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
     d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
     
