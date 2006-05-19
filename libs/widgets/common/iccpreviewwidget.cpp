@@ -1,8 +1,8 @@
 /* ============================================================
  * Author: Francisco J. Cruz <fj.cruz@supercable.es>
  * Date  : 2006-01-12
- * Description :a widget to display ICC profiles metada in file
- * dialog preview.
+ * Description : a widget to display ICC profiles descriptions
+ *               in file dialog preview.
  * 
  * Copyright 2006 by Francisco J. Cruz
  *
