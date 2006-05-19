@@ -215,7 +215,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             device = i18n("Named color");
             break;
         default:
-            device = i18n("Unknow");
+            device = i18n("Unknown");
             break;
     }
 
@@ -237,7 +237,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             intent = i18n("Absolute Colorimetric");
             break;
         default:
-            intent = i18n("Unknow");
+            intent = i18n("Unknown");
             break;
     }
     
