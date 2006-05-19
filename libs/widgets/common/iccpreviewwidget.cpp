@@ -145,7 +145,8 @@ void ICCPreviewWidget::clearPreview()
 void ICCPreviewWidget::getICCData( const KURL &url)
 {
     cmsHPROFILE tmpProfile=0;
-    QString space, device, intent;
+    QString     space, device, intent;
+    
     if (!url.hasPath())
         return;
     
@@ -213,6 +214,9 @@ void ICCPreviewWidget::getICCData( const KURL &url)
         case icSigNamedColorClass:
             device = i18n("Named color");
             break;
+        default:
+            device = i18n("Unknow");
+            break;
     }
 
     d->deviceClass->setText(QString("<b>%1</b>").arg(device));
@@ -231,6 +235,9 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             break;
         case 3:
             intent = i18n("Absolute Colorimetric");
+            break;
+        default:
+            intent = i18n("Unknow");
             break;
     }
     
