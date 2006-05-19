@@ -66,7 +66,7 @@ SetupExif::SetupExif(QWidget* parent )
    layout->addWidget(iconSaveExifBox_);
 
    iconExifRotateBox_ = new QCheckBox(this);
-   iconExifRotateBox_->setText(i18n("&Rotate images and thumbnails according to EXIF tag"));
+   iconExifRotateBox_->setText(i18n("Show images/thumbs &rotated according to EXIF orientation tag"));
    layout->addWidget(iconExifRotateBox_);
 
    iconExifSetOrientationBox_ = new QCheckBox(this);
