@@ -323,7 +323,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     int     albumID;
     QString name;
     QString date;
-    size_t  size;
+    off_t   size;
     QSize   dims;
 
     ImageInfoList newItemsList;
