@@ -90,6 +90,11 @@ public:
         Caller is an i18n'ed string that will be shown as the undo/redo action name.
     */
     void   putOriginalImage(const QString &caller, uchar* data, int w=-1, int h=-1);
+    
+    /** Embed the Color Profile we have used in ICC plugin when this option is 
+        selected
+    */
+    void setEmbeddedICCToOriginalImage(QString profilePath);
 
     /** Replace the data of the current original image selection with the given data.
         The characteristics of the data must match the characteristics of the current
