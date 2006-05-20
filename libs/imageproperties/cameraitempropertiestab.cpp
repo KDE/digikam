@@ -300,7 +300,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     setEnabled(true);
     
     QString str;
-    QString unknow(i18n("<i>unknow</i>"));
+    QString unknown(i18n("<i>unknown</i>"));
     
     d->navigateBar->setFileName(itemInfo->name);
     d->navigateBar->setButtonsState(itemType);
@@ -310,7 +310,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     d->labelFolder->setText(itemInfo->folder);
     
     if (itemInfo->readPermissions < 0)
-        str = unknow;
+        str = unknown;
     else if (itemInfo->readPermissions == 0)
         str = i18n("No");
     else
@@ -319,7 +319,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     d->labelFileIsReadable->setText(str);
     
     if (itemInfo->writePermissions < 0)
-        str = unknow;
+        str = unknown;
     else if (itemInfo->writePermissions == 0)
         str = i18n("No");
     else
@@ -343,7 +343,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     QString mpixels;
     QSize dims(itemInfo->width, itemInfo->height);
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    str = (!dims.isValid()) ? unknow : i18n("%1x%2 (%3Mpx)")
+    str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);
     d->labelImageDimensions->setText(str);
     
@@ -352,7 +352,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
     
     if (itemInfo->downloaded < 0)
-        str = unknow;
+        str = unknown;
     else if (itemInfo->downloaded == 0)
         str = i18n("No");
     else
