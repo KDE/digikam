@@ -229,6 +229,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                           " the colors that are out of the printer gamut<p>"));
 
     QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
+    m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Embed profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embedd"
                                              " into the image the selected color profile.</p>"));
@@ -636,7 +637,6 @@ void ImageEffect_ICCProof::finalRendering()
 
 void ImageEffect_ICCProof::slotTry()
 {
-    // TODO "embed profile" option is not implemented -- Paco Cruz
     // TODO use of Display profile is not implemented -- Paco Cruz
     
     kapp->setOverrideCursor(KCursor::waitCursor());
