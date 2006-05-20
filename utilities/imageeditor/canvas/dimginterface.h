@@ -129,6 +129,8 @@ public:
     
     uchar* getImageSelection();
     void   putImageSelection(const QString &caller, uchar* data);
+    
+    void setEmbeddedICCToOriginalImage( QString profilePath);
 
     QByteArray            getEmbeddedICC();
     
