@@ -510,7 +510,7 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::finalRendering()
 {
-    //  TODO : implement me
+
     if (!m_doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -618,6 +618,12 @@ void ImageEffect_ICCProof::finalRendering()
                 QByteArray fakeProfile = QByteArray();
                 transform.apply(img, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(),
                                 m_checkGamutBox->isChecked(), useBuiltinProfile());
+            }
+            
+            if (m_embeddProfileBox->isChecked())
+            {
+                iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
+                kdDebug() << "ImageEffect_ICCProof::finalRendering() - 626" << QFile::encodeName(tmpSpacePath) << endl;
             }
             
             iface->putOriginalImage("Color Management", img.bits());
