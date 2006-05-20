@@ -180,9 +180,17 @@ QMap<QString,QVariant> DigikamImageInfo::attributes()
 {
     QMap<QString,QVariant> res;
 
-    // TODO ! This will used for the futures tags digiKam features.
-
+    PAlbum* p = parentAlbum();
+    if (p)
+    {
+        AlbumDB* db = AlbumManager::instance()->albumDB();
+        Q_LLONG imageId=db->getImageId(p->id(),_url.filename());
+		QStringList tags=db->getItemTagNames(imageId);//imageID
+		QStringList::iterator it=tags.begin();
+    	res["tags"]=tags;
+	}
     return res;
+
 }
 
 void DigikamImageInfo::clearAttributes()
