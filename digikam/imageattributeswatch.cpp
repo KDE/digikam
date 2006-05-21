@@ -70,6 +70,11 @@ void ImageAttributesWatch::imageCaptionChanged(Q_LLONG imageId)
     emit signalImageCaptionChanged(imageId);
 }
 
+void ImageAttributesWatch::fileMetadataChanged(const KURL &url)
+{
+    emit signalFileMetadataChanged(url);
+}
+
 } // namespace Digikam
 
 #include "imageattributeswatch.moc"

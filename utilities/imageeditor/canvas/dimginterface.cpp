@@ -622,6 +622,20 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
+void DImgInterface::readMetadataFromFile(const QString &file)
+{
+    DMetadata meta(file);
+
+    //TODO: code is essentially the same as DImgLoader::readMetadata,
+    //      put both in a common place.
+    if (!meta.getComments().isNull())
+        d->image.setComments(meta.getComments());
+    if (!meta.getExif().isNull())
+        d->image.setExif(meta.getExif());
+    if (!meta.getIptc().isNull())
+        d->image.setIptc(meta.getIptc());
+}
+
 void DImgInterface::clearUndoManager()
 {
     d->undoMan->clear();

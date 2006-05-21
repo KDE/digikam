@@ -38,10 +38,10 @@ Main Interface :
    - Added signal/slots control between IE and main interface about "comments & tags" tab.
      Comments & tags set from main must be updated in IE and vise-versa.
      
-* Image Editor : 
+* Image Editor :
 
-   - If Comments & tags informations have been changed, notify DImg instance of current image to set
-     informations in metadata bytes array (COM, EXIF, IPTC).
+   - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged
+     (ImageAttributesWatch is libdigikam, the metadatatab is used by showfoto - create subclass ImagePropertiesMetadataTabDB?)
 
 * Showfoto: 
 

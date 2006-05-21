@@ -475,6 +475,12 @@ void Canvas::setModified()
     d->im->setModified();
 }
 
+void Canvas::readMetadataFromFile(const QString &file)
+{
+    d->im->readMetadataFromFile(file);
+}
+
+
 void Canvas::clearUndoHistory()
 {
     d->im->clearUndoManager();

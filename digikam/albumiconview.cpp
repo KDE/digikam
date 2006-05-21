@@ -1349,7 +1349,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
         kdDebug() << "Setting Exif Orientation tag to " << orientation << endl;
-        
+
         DMetadata metadata((*it).path());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
@@ -1359,6 +1359,10 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
             KMessageBox::sorry(0, i18n("Failed to correct Exif orientation for file %1.")
                                .arg((*it).filename()));
             return;
+        }
+        else
+        {
+            ImageAttributesWatch::instance()->fileMetadataChanged((*it));
         }
     }
 
@@ -1709,6 +1713,7 @@ void AlbumIconView::slotAssignTag(int tagID)
                     DMetadata metadata(info->filePath());
                     metadata.setImageKeywords(oldKeywords, tagPaths);
                     metadata.applyChanges();
+                    ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
         }
@@ -1744,6 +1749,7 @@ void AlbumIconView::slotRemoveTag(int tagID)
                     DMetadata metadata(info->filePath());
                     metadata.setImageKeywords(oldKeywords, tagPaths);
                     metadata.applyChanges();
+                    ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
         }
@@ -1777,6 +1783,7 @@ void AlbumIconView::slotAssignRating(int rating)
                     DMetadata metadata(info->filePath());
                     metadata.setImageRating(rating);
                     metadata.applyChanges();
+                    ImageAttributesWatch::instance()->fileMetadataChanged(info->kurl());
                 }
             }
         }

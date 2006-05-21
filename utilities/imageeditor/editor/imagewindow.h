@@ -137,6 +137,8 @@ private slots:
     
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+
+    void slotFileMetadataChanged(const KURL &url);
 };
 
 }  // namespace Digikam

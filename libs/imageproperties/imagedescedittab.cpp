@@ -444,6 +444,7 @@ void ImageDescEditTab::applyAllChanges()
         }
 
         metadata.applyChanges();
+        ImageAttributesWatch::instance()->fileMetadataChanged(d->currInfo->kurl());
     }
 
     d->modified = false;

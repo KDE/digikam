@@ -86,6 +86,7 @@
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "imagewindow.h"
+#include "imageattributeswatch.h"
 
 namespace Digikam
 {
@@ -183,6 +184,11 @@ void ImageWindow::setupConnections()
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             m_rightSidebar, SLOT(slotNoCurrentItem()));
+
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
+            this, SLOT(slotFileMetadataChanged(const KURL &)));
 }
 
 void ImageWindow::setupUserArea()
@@ -785,6 +791,14 @@ void ImageWindow::slotDeleteCurrentItem()
                              i18n("No Image in Current Album"));
 
     close();
+}
+
+void ImageWindow::slotFileMetadataChanged(const KURL &url)
+{
+    if (url == m_urlCurrent)
+    {
+        m_canvas->readMetadataFromFile(url.path());
+    }
 }
 
 }  // namespace Digikam

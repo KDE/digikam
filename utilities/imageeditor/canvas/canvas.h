@@ -65,6 +65,7 @@ public:
     void  switchToLastSaved(const QString& newFilename);
     void  abortSaving();
     void  setModified();
+    void  readMetadataFromFile(const QString &file);
     void  clearUndoHistory();
     void  setUndoHistoryOrigin();
     DImg  currentImage();

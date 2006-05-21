@@ -22,7 +22,13 @@
 #ifndef IMAGEATTRIBUTESWATCH_H
 #define IMAGEATTRIBUTESWATCH_H
 
+// Qt includes
+
 #include <qobject.h>
+
+// KDE includes
+
+#include <kurl.h>
 
 namespace Digikam
 {
@@ -43,6 +49,8 @@ public:
     void imageRatingChanged(Q_LLONG imageId);
     void imageDateChanged(Q_LLONG imageId);
     void imageCaptionChanged(Q_LLONG imageId);
+
+    void fileMetadataChanged(const KURL &url);
 
 signals:
 
@@ -66,6 +74,14 @@ signals:
     void signalImageRatingChanged(Q_LLONG imageId);
     void signalImageDateChanged(Q_LLONG imageId);
     void signalImageCaptionChanged(Q_LLONG imageId);
+
+    /**
+        Indicates that the metadata if the given file
+        has been changed (a write operation on the file on disk).
+        Usually, the database is updated accordingly, so then this
+        signal is sent in combination with one or more of the above signals.
+    */
+    void signalFileMetadataChanged(const KURL &url);
 
 protected:
 

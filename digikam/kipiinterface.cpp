@@ -135,6 +135,7 @@ void DigikamImageInfo::setDescription( const QString& description )
             DMetadata metadata(_url.path());
             metadata.setImageComment(description);
             metadata.applyChanges();
+            ImageAttributesWatch::instance()->fileMetadataChanged(_url);
         }
     }
 }
