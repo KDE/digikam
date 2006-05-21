@@ -33,7 +33,9 @@
 
 // KDE includes.
 
+#include <kapplication.h>
 #include <kdebug.h>
+#include <kstringhandler.h>
 #include <ktempfile.h>
 
 // Exiv2 includes.
@@ -714,7 +716,7 @@ QString DMetadata::getImageComment() const
 
         // In first we trying to get image comments, outside of Exif and IPTC.
 
-        QString comments = QString::fromUtf8(d->imageComments.c_str());
+        QString comments = detectEncodingAndDecode(d->imageComments);
 
         if (!comments.isEmpty())
             return comments;
@@ -780,17 +782,31 @@ bool DMetadata::setImageComment(const QString& comment)
 
         // In Second we write comments into Exif.
 
-        // Be aware that we are dealing with a UCS-2 string.
-        // Null termination means \0\0, strlen does not work,
-        // do not use any const-char*-only methods,
-        // pass a std::string and not a const char * to ExifDatum::operator=().
-        const unsigned short *ucs2 = comment.ucs2();
-        std::string exifComment("charset=\"Unicode\" ");
-        exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
-        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
-        //d->exifMetadata["Exif.Photo.UserComment"] = comment.latin1();
+        // Write as Unicode only when necessary.
+        QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
+        if (latin1Codec->canEncode(comment))
+        {
+            // write as ASCII
+            std::string exifComment("charset=\"Ascii\" ");
+            exifComment += comment.latin1();
+            d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+        }
+        else
+        {
+            // write as Unicode (UCS-2)
 
-        // In Third we write comments into Iptc. Note that Caption IPTC tag is limited to 2000 char.
+            // Be aware that we are dealing with a UCS-2 string.
+            // Null termination means \0\0, strlen does not work,
+            // do not use any const-char*-only methods,
+            // pass a std::string and not a const char * to ExifDatum::operator=().
+            const unsigned short *ucs2 = comment.ucs2();
+            std::string exifComment("charset=\"Unicode\" ");
+            exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
+            d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+        }
+
+        // In Third we write comments into Iptc.
+        // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
         QString commentIptc = comment;
         commentIptc.truncate(2000);
@@ -815,7 +831,7 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     {
         std::string comment = exifDatum.toString();
         std::string charset;
-    
+
         // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
         // Before conversion to QString, we must know the charset, so we stay with std::string for a while
         if (comment.length() > 8 && comment.substr(0, 8) == "charset=")
@@ -830,7 +846,7 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
                 comment = comment.substr(pos+1);
             }
         }
-    
+
         if (charset == "\"Unicode\"")
         {
             // QString expects a null-terminated UCS-2 string.
@@ -849,8 +865,7 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
         }
         else
         {
-            // or from local8bit ??
-            return QString::fromLatin1(comment.c_str());
+            return detectEncodingAndDecode(comment);
         }
     }
     catch( Exiv2::Error &e )
@@ -862,6 +877,51 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 
     return QString();
 }
+
+QString DMetadata::detectEncodingAndDecode(const std::string &value)
+{
+    // For charset autodetection, we could use sophisticated code
+    // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
+    // but that is probably too much.
+    // We check for UTF8, Local encoding and ASCII.
+
+    if (value.empty())
+        return QString();
+
+#if KDE_IS_VERSION(3,2,0)
+    if (KStringHandler::isUtf8(value.c_str()))
+    {
+        return QString::fromUtf8(value.c_str());
+    }
+#else
+    // anyone who is still running KDE 3.0 or 3.1 is missing so many features
+    // that he will have to accept this missing feature.
+    return QString::fromUtf8(value.c_str());
+#endif
+
+    // Utf8 has a pretty unique byte pattern.
+    // Thats not true for ASCII, it is not possible
+    // to reliably autodetect different ISO-8859 charsets.
+    // We try if QTextCodec can decide here, otherwise we use Latin1.
+    // Or use local8Bit as default?
+
+    // load QTextCodecs
+    QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
+    //QTextCodec *utf8Codec   = QTextCodec::codecForName("utf8");
+    QTextCodec *localCodec  = QTextCodec::codecForLocale();
+
+    // make heuristic match
+    int latin1Score = latin1Codec->heuristicContentMatch(value.c_str(), value.length());
+    int localScore  = localCodec->heuristicContentMatch(value.c_str(), value.length());
+
+    // convert string:
+    // Use whatever has the larger score, local or ASCII
+    if (localScore >= 0 && localScore >= latin1Score)
+        return localCodec->toUnicode(value.c_str(), value.length());
+    else
+        return QString::fromLatin1(value.c_str());
+}
+
 
 /*
 Iptc.Application2.Urgency <==> digiKam Rating links:

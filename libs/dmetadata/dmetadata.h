@@ -21,6 +21,8 @@
 #ifndef DMETADATA_H
 #define DMETADATA_H
 
+#include <string>
+
 // QT includes.
 
 #include <qcstring.h>
@@ -108,6 +110,7 @@ public:
     PhotoInfoContainer getPhotographInformations() const;
 
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
+    static QString detectEncodingAndDecode(const std::string &value);
 
 private:
 
