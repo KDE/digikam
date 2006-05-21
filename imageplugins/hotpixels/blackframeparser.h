@@ -47,7 +47,6 @@
 // Local includes.
 
 #include "hotpixel.h"
-#include "blackframeparser.h"
 
 namespace DigikamHotPixelsImagesPlugin
 {
