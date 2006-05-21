@@ -56,6 +56,7 @@ extern "C"
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "dmetadata.h"
+#include "imageattributeswatch.h"
 #include "kipiinterface.h"
 
 namespace Digikam
@@ -123,7 +124,9 @@ void DigikamImageInfo::setDescription( const QString& description )
     if ( p  )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemCaption(p->id(), _url.fileName(), description);
+        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
+        db->setItemCaption(imageId, description);
+        ImageAttributesWatch::instance()->imageCaptionChanged(imageId);
 
         AlbumSettings *settings = AlbumSettings::instance();
         if (settings->getSaveComments())
@@ -162,7 +165,9 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     if ( p )
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        db->setItemDate(p->id(), _url.fileName(), time);
+        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
+        db->setItemDate(imageId, time);
+        ImageAttributesWatch::instance()->imageDateChanged(imageId);
         AlbumManager::instance()->refreshItemHandler( _url );
     }
 }
@@ -184,13 +189,12 @@ QMap<QString,QVariant> DigikamImageInfo::attributes()
     if (p)
     {
         AlbumDB* db = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId=db->getImageId(p->id(),_url.filename());
-		QStringList tags=db->getItemTagNames(imageId);//imageID
-		QStringList::iterator it=tags.begin();
-    	res["tags"]=tags;
-	}
+        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
+        QStringList tags = db->getItemTagNames(imageId); // imageID
+        QStringList::iterator it = tags.begin();
+        res["tags"] = tags;
+    }
     return res;
-
 }
 
 void DigikamImageInfo::clearAttributes()
