@@ -59,7 +59,7 @@ public:
      * Constructor
      */
     AlbumDB();
-    
+
     /**
      * Destructor
      */
@@ -77,7 +77,7 @@ public:
      * @return a list of albums and their attributes
      */
     AlbumInfo::List scanAlbums();
-    
+
     /**
      * Returns all tags and their attributes in the database
      * @return a list of tags and their attributes
@@ -89,7 +89,7 @@ public:
      * @return a list of searches from the database
      */
     SearchInfo::List scanSearches();
-    
+
     /**
      * Add a new album to the database with the given attributes
      * @param url        url of the album
@@ -100,7 +100,7 @@ public:
      */
     int addAlbum(const QString& url, const QString& caption,
                  const QDate& date, const QString& collection);
-    
+
     /**
      * Set a new url for the album. This will not affect the url
      * of the subalbums.
@@ -129,7 +129,7 @@ public:
      * @param date     the date for the album
      */
     void setAlbumDate(int albumID, const QDate& date);
-    
+
     /**
      * Set the icon for the album.
      * @param albumID the id of the album
@@ -142,7 +142,7 @@ public:
      * @param albumID the id of the album
      */
     QString getAlbumIcon(int albumID);
-    
+
     /**
      * Deletes an album from the database. This will not delete the
      * subalbums of the album.
@@ -162,7 +162,7 @@ public:
      */
     int addTag(int parentTagID, const QString& name,
                const QString& iconKDE, Q_LLONG iconID);
-    
+
     /**
      * Set a new name for the tag. 
      * @param tagID the id of the tag
@@ -187,7 +187,7 @@ public:
      * which can be loaded by kiconloader or an absolute filepath to the file
      */
     QString getTagIcon(int tagID);
-    
+
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
      * the tag
@@ -195,7 +195,7 @@ public:
      * @param newParentTagID the new parentid for the tag
      */
     void setTagParentID(int tagID, int newParentTagID);
-    
+
     /**
      * Deletes a tag from the database. This will not delete the
      * subtags of the tag.
@@ -218,13 +218,13 @@ public:
      * @param url        url of the search
      */
     void updateSearch(int searchID, const QString& name, const KURL& url);
-    
+
     /**
      * Delete a search from the database.
      * @param searchID the id of the search
      */
     void deleteSearch(int searchID);
-    
+
     void beginTransaction();
     void commitTransaction();
 
@@ -264,7 +264,7 @@ public:
                     const QDateTime& datetime,
                     const QString& comment,
                     int rating);
-    
+
     /**
      * Update the date of a item to supplied date
      * @param imageID The ID of the item
@@ -284,7 +284,7 @@ public:
      */
     bool setItemDate(int albumID, const QString& name,
                      const QDateTime& datetime);
-    
+
     /**
      * Set the caption for the item
      * @param imageID the id of the item
@@ -299,7 +299,7 @@ public:
      * @param caption the caption for the item
      */
     void setItemCaption(int albumID, const QString& name, const QString& caption);
-    
+
     /**
      * Add a tag for the item
      * @param imageID the ID of the item
@@ -320,7 +320,7 @@ public:
      * @return the list of recently assigned tags
      */
     IntList getRecentlyAssignedTags() const;
-    
+
     /**
      * Get the caption for the item
      * @param imageID the id  of the item
@@ -335,7 +335,7 @@ public:
      * @return the caption for the item
      */
     QString getItemCaption(int albumID, const QString& name);
-    
+
     /**
      * Get the datetime for the item
      * @param imageID the ID of the item
@@ -350,16 +350,16 @@ public:
      * @return the datetime for the item
      */
     QDateTime getItemDate(int albumID, const QString& name);
- 
-	/**
+
+    /**
      * Get the imageId of the item
      * @param albumId the albumID of the item
-	 * @param name the name of the item
+     * @param name the name of the item
      * @return the ImageId for the item
      */
-	Q_LLONG getImageId(int albumID, const QString& name);
+    Q_LLONG getImageId(int albumID, const QString& name);
 
-	
+
     /**
      * Get a list of names of all the tags for the item
      * @param imageID the ID of the item
@@ -381,7 +381,7 @@ public:
      * @return true if at least one of the items has a tag
      */
     bool hasTags(const LLongList& imageIDList);
-    
+
     /**
      * Given a set of items (identified by their IDs),
      * get a list of ID of all common tags
@@ -399,7 +399,7 @@ public:
 
     void setItemRating(Q_LLONG imageID, int rating);
     int  getItemRating(Q_LLONG imageID);
-    
+
     /**
      * Remove all tags for the item
      * @param imageID the ID of the item
@@ -412,7 +412,7 @@ public:
      * @param file The filename of the file to delete.
      */
     void deleteItem(int albumID, const QString& file);
-    
+
     /**
      * This can be used to find out the albumID for a given
      * folder. If it does not exist, it will be created and the
@@ -421,7 +421,7 @@ public:
      * @return It returns the albumID for that folder.
      */
     int  getOrCreateAlbumId(const QString& folder);
-    
+
     /**
      * Returns all items for a given albumid. This is used to
      * verify if all items on disk are consistent with the database
@@ -438,7 +438,7 @@ public:
      * absolute path of the items
      */
     QStringList getItemURLsInAlbum(int albumID);
-    
+
     /**
      * Returns all items in the database without a date. This is used
      * in the scanlib class which tries to find out the date of the 
@@ -470,7 +470,7 @@ public:
      * @return the date.
      */
     QDate getAlbumLowestDate(int albumID);
-    
+
     /**
      * Returns the highest/newest date of all images for that album.
      * @param albumID the id of the album to calculate
@@ -526,7 +526,7 @@ public:
      * @return the last inserted row in one the db table.
      */
     Q_LLONG lastInsertedRow();
-    
+
 private:
 
     /**

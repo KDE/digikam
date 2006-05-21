@@ -745,8 +745,7 @@ QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
 
 Q_LLONG AlbumDB::getImageId(int albumID, const QString& name)
 {
-    
-	QStringList values;
+    QStringList values;
 
     execSql( QString("SELECT id FROM Images "
                      "WHERE dirid=%1 AND name='%2';")
@@ -758,7 +757,6 @@ Q_LLONG AlbumDB::getImageId(int albumID, const QString& name)
         return -1;
     else
         return (values[0]).toLongLong();
-
 }
 
 QStringList AlbumDB::getItemTagNames(Q_LLONG imageID)
