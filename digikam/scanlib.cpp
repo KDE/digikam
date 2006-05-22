@@ -47,7 +47,7 @@ extern "C"
 
 // Local includes.
 
-#include "jpegmetadata.h"
+#include "dmetadata.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "scanlib.h"
@@ -383,12 +383,28 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     QString   comment;
     QDateTime datetime;
     int       rating;
-    
+
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
-    
-    readJPEGMetaData(filePath, comment, datetime, rating);
-    
+
+    Digikam::DMetadata metadata(filePath);
+
+    // Trying to get comments from image :
+    // In first, from standard JPEG comments, or
+    // In second, from EXIF comments tag, or
+    // In third, from IPTC comments tag.
+
+    comment = metadata.getImageComment();
+
+    // Trying to get date and time from image :
+    // In first, from EXIF date & time tags, or
+    // In second, from IPTC date & time tags.
+
+    datetime = metadata.getImageDateTime();
+
+    // Trying to get image rating from IPTC Urgency tag.
+    rating = metadata.getImageRating();
+
     if ( !datetime.isValid() )
     {
         QFileInfo info( filePath );
@@ -403,15 +419,19 @@ void ScanLib::updateItemDate(const QString& albumURL,
                              const QString& filename,
                              int albumID)
 {
-    QString   comment;
     QDateTime datetime;
-    int       rating;
-    
+
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
-    
-    readJPEGMetaData(filePath, comment, datetime, rating);
-    
+
+    Digikam::DMetadata metadata(filePath);
+
+    // Trying to get date and time from image :
+    // In first, from EXIF date & time tags, or
+    // In second, from IPTC date & time tags.
+
+    datetime = metadata.getImageDateTime();
+
     if ( !datetime.isValid() )
     {
         QFileInfo info( filePath );

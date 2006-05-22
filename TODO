@@ -28,11 +28,6 @@
 				to start download dialog
 		  		ditto for unmounting in usm case 
 
-Main Interface : 
-
-    - ImageInfo class must handle properly image dimension like in image properties sidebar tab. 
-      (Set on Album Icon item dimensions on setup must give the same result than image properties)
-
 * Image Properties SideBar:
 
    - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged

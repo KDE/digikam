@@ -38,6 +38,7 @@
 #include <klargefile.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qdatastream.h>
 #include <qregexp.h>
 #include <qdir.h>
@@ -56,7 +57,8 @@ extern "C"
 #include <utime.h>
 }
 
-#include <jpegmetadata.h>
+#include <dmetadata.h>
+#include <rawfiles.h>
 
 #include "sqlitedb.h"
 #include "digikamalbums.h"
@@ -181,23 +183,34 @@ void kio_digikamalbums::special(const QByteArray& data)
         dims = QSize();
         if (getDimensions)
         {
-            KFileMetaInfo metaInfo(base + name);
-            if (metaInfo.isValid())
+            QString rawFilesExt(raw_file_extentions);
+
+            QFileInfo fileInfo(base + name);
+            if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
             {
-                if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                Digikam::DMetadata metaData(base + name);
+                dims = metaData.getImageDimensions();
+            }
+            else
+            {
+                KFileMetaInfo metaInfo(base + name);
+                if (metaInfo.isValid())
                 {
-                    dims = metaInfo.group("Jpeg EXIF Data").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("General"))
-                {
-                    dims = metaInfo.group("General").
-                           item("Dimensions").value().toSize();
-                }
-                else if (metaInfo.containsGroup("Technical"))
-                {
-                    dims = metaInfo.group("Technical").
-                           item("Dimensions").value().toSize();
+                    if (metaInfo.containsGroup("Jpeg EXIF Data"))
+                    {
+                        dims = metaInfo.group("Jpeg EXIF Data").
+                            item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("General"))
+                    {
+                        dims = metaInfo.group("General").
+                            item("Dimensions").value().toSize();
+                    }
+                    else if (metaInfo.containsGroup("Technical"))
+                    {
+                        dims = metaInfo.group("Technical").
+                            item("Dimensions").value().toSize();
+                    }
                 }
             }
         }
@@ -1285,16 +1298,32 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
 {
     QString   comment;
     QDateTime datetime;
-    int       rating;
-    
-    Digikam::readJPEGMetaData(filePath, comment, datetime, rating);
+    int       rating = 0;
+
+    Digikam::DMetadata metadata(filePath);
+
+    // Trying to get comments from image :
+    // In first, from standard JPEG comments, or
+    // In second, from EXIF comments tag, or
+    // In third, from IPTC comments tag.
+
+    comment = metadata.getImageComment();
+
+    // Trying to get date and time from image :
+    // In first, from EXIF date & time tags, or
+    // In second, from IPTC date & time tags.
+
+    datetime = metadata.getImageDateTime();
+
+    // Trying to get image rating from IPTC Urgency tag.
+    rating = metadata.getImageRating();
 
     if (!datetime.isValid())
     {
         QFileInfo info(filePath);
         datetime = info.lastModified();
     }
-       
+
     m_sqlDB.execSql(QString("REPLACE INTO Images "
                             "(dirid, name, datetime, caption) "
                             "VALUES(%1, '%2', '%3', '%4')")
@@ -1304,7 +1333,7 @@ void kio_digikamalbums::addImage(int albumID, const QString& filePath)
                          escapeString(comment)));
 
     Q_LLONG imageID = m_sqlDB.lastInsertedRow();
-    
+
     if (imageID != -1 && rating != -1)
     {
         m_sqlDB.execSql(QString("REPLACE INTO ImageProperties "
