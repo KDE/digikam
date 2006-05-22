@@ -116,17 +116,17 @@ ICCPreviewWidget::~ICCPreviewWidget()
 
 void ICCPreviewWidget::showPreview( const KURL &url)
 {
+    clearPreview();
+    
     if (url.isLocalFile())
     {
-        kdDebug() << "Is Local file" << endl;
+        kdDebug() << url << "Is a local file" << endl;
         d->currentURL = url;
         getICCData(d->currentURL);
     }
     else
     {
-        kdDebug() << "Not Local file" << endl;
-        clearPreview();
-        return;
+        kdDebug() << url << "Not a local file" << endl;
     }
 }
 
@@ -152,8 +152,11 @@ void ICCPreviewWidget::getICCData( const KURL &url)
     if (!QFileInfo::QFileInfo(url.path()).isFile())
         return;
     
+    cmsErrorAction(LCMS_ERROR_SHOW);    
     tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(url.path()), "r");
-    
+    if (!tmpProfile)
+        return;
+
     d->name->setText(QString("<b>%1</b>").arg(QString(cmsTakeProductName(tmpProfile))));
     d->description->setText(QString("<b>%1</b>").arg(QString(cmsTakeProductDesc(tmpProfile))));
 
