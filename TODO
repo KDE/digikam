@@ -35,11 +35,6 @@ Main Interface :
 
 * Image Properties SideBar:
 
-   - Added signal/slots control between IE and main interface about "comments & tags" tab.
-     Comments & tags set from main must be updated in IE and vise-versa.
-     
-* Image Editor :
-
    - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged
      (ImageAttributesWatch is libdigikam, the metadatatab is used by showfoto - create subclass ImagePropertiesMetadataTabDB?)
 
@@ -55,8 +50,6 @@ B.K.O files to fix :
 
 ==> 93569   (CameraGUI: easier connection to USB disc cameras)
 ==> 125696  (CameraGUI: digikam does not connect to USB camera with libgphoto-2.1.99)
-==> 114211  (Main Interface: image comments encoding unreadable after moving an album)
-==> 120241  (Main Interface: utf8 display and edit)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
 
