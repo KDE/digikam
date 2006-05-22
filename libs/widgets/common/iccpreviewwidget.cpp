@@ -26,8 +26,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
+#include <qgroupbox.h>
 #include <qdir.h>
 
 // KDE includes
@@ -75,38 +74,42 @@ ICCPreviewWidget::ICCPreviewWidget(QWidget *parent)
 {
     d = new ICCPreviewWidgetPriv;
 
-    QBoxLayout* vlay = new QVBoxLayout(this);
-        
-    QLabel *label1 = new QLabel(i18n("Name:"), this);
-    d->name        = new KSqueezedTextLabel(QString::null, this);
-    vlay->addWidget(label1);
-    vlay->addWidget(d->name);
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QGroupBox *box    = new QGroupBox(0, Qt::Horizontal, QString::null, this);
+    QGridLayout* grid = new QGridLayout(box->layout(), 7, 1);
+
+    QLabel *label1 = new QLabel(i18n("Name:"), box);
+    d->name        = new KSqueezedTextLabel(QString::null, box);
+    grid->addMultiCellWidget(label1, 0, 0, 0, 0);
+    grid->addMultiCellWidget(d->name, 0, 0, 1, 1);
       
-    QLabel *label2 = new QLabel(i18n("Description:"), this);
-    d->description = new KSqueezedTextLabel(QString::null, this);
-    vlay->addWidget(label2);
-    vlay->addWidget(d->description);
+    QLabel *label2 = new QLabel(i18n("Description:"), box);
+    d->description = new KSqueezedTextLabel(QString::null, box);
+    grid->addMultiCellWidget(label2, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->description, 1, 1, 1, 1);
         
-    QLabel *label3 = new QLabel(i18n("Color space:"), this);
-    d->colorSpace  = new KSqueezedTextLabel(QString::null, this);
-    vlay->addWidget(label3);
-    vlay->addWidget(d->colorSpace);
+    QLabel *label3 = new QLabel(i18n("Color space:"), box);
+    d->colorSpace  = new KSqueezedTextLabel(QString::null, box);
+    grid->addMultiCellWidget(label3, 2, 2, 0, 0);
+    grid->addMultiCellWidget(d->colorSpace, 2, 2, 1, 1);
 
-    QLabel *label4 = new QLabel(i18n("Device class:"), this);
-    d->deviceClass = new KSqueezedTextLabel(QString::null, this);
-    vlay->addWidget(label4);
-    vlay->addWidget(d->deviceClass);
+    QLabel *label4 = new QLabel(i18n("Device class:"), box);
+    d->deviceClass = new KSqueezedTextLabel(QString::null, box);
+    grid->addMultiCellWidget(label4, 3, 3, 0, 0);
+    grid->addMultiCellWidget(d->deviceClass, 3, 3, 1, 1);
     
-    QLabel *label5     = new QLabel(i18n("Rendering intent:"), this);
-    d->renderingIntent = new KSqueezedTextLabel(QString::null, this);
-    vlay->addWidget(label5);
-    vlay->addWidget(d->renderingIntent);
+    QLabel *label5     = new QLabel(i18n("Rendering intent:"), box);
+    d->renderingIntent = new KSqueezedTextLabel(QString::null, box);
+    grid->addMultiCellWidget(label5, 4, 4, 0, 0);
+    grid->addMultiCellWidget(d->renderingIntent, 4, 4, 1, 1);
 
-    QLabel *label6 = new QLabel(i18n("CIE diagram:"), this);
-    d->cieTongue   = new CIETongueWidget(256, 256, this);
-    vlay->addWidget(label6);
-    vlay->addWidget(d->cieTongue);
-    vlay->addStretch();
+    QLabel *label6 = new QLabel(i18n("CIE diagram:"), box);
+    d->cieTongue   = new CIETongueWidget(256, 256, box);
+    grid->addMultiCellWidget(label6, 5, 5, 0, 1);
+    grid->addMultiCellWidget(d->cieTongue, 6, 6, 0, 1);
+    grid->setRowStretch(7, 10);
+
+    vlay->addWidget(box);
 }
 
 ICCPreviewWidget::~ICCPreviewWidget()
@@ -157,8 +160,8 @@ void ICCPreviewWidget::getICCData( const KURL &url)
     if (!tmpProfile)
         return;
 
-    d->name->setText(QString("<b>%1</b>").arg(QString(cmsTakeProductName(tmpProfile))));
-    d->description->setText(QString("<b>%1</b>").arg(QString(cmsTakeProductDesc(tmpProfile))));
+    d->name->setText(QString(cmsTakeProductName(tmpProfile)));
+    d->description->setText(QString(cmsTakeProductDesc(tmpProfile)));
 
     switch (cmsGetColorSpace(tmpProfile))
     {
@@ -191,7 +194,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             break;
     }
 
-    d->colorSpace->setText(QString("<b>%1</b>").arg(space));
+    d->colorSpace->setText(space);
 
     switch ((int)cmsGetDeviceClass(tmpProfile))
     {
@@ -221,7 +224,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             break;
     }
 
-    d->deviceClass->setText(QString("<b>%1</b>").arg(device));
+    d->deviceClass->setText(device);
 
     //"Decode" profile rendering intent
     switch (cmsTakeRenderingIntent(tmpProfile))
@@ -243,7 +246,7 @@ void ICCPreviewWidget::getICCData( const KURL &url)
             break;
     }
     
-    d->renderingIntent->setText(QString("<b>%1</b>").arg(intent));
+    d->renderingIntent->setText(intent);
 
     d->cieTongue->setProfileHandler(tmpProfile);
     
