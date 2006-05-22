@@ -852,7 +852,7 @@ void ShowFoto::finishSaving(bool success)
 void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
-    //m_bar->invalidateThumb(m_currentItem);
+    m_bar->invalidateThumb(m_currentItem);
     //slotOpenURL(m_currentItem->url());
 }
 
@@ -865,13 +865,14 @@ void ShowFoto::saveAsIsComplete()
     Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
     m_bar->invalidateThumb(foundItem);
 
-    // a signal will call slotUpdateItemChanged
     if (!foundItem)
         foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
 
+    // shortcut slotOpenURL
+    m_bar->blockSignals(true);
     m_bar->setSelected(foundItem);
-    //QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
-    //slotOpenURL(m_currentItem->url());
+    m_bar->blockSignals(false);
+    m_currentItem = foundItem;
 }
 
 bool ShowFoto::save()
