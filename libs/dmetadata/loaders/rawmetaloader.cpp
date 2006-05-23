@@ -24,7 +24,6 @@
 
 // Local includes.
 
-#include "mrwparser.h"
 #include "rawmetaloader.h"
 
 namespace Digikam
@@ -42,28 +41,19 @@ RAWMetaLoader::~RAWMetaLoader()
 bool RAWMetaLoader::load(const QString& filePath)
 {
     // In first we trying to use Exiv2 library
+    // Exiv2 0.10 support : DNG, CRW, CR2, NEF, PEF, MRW, SR2
     if (loadWithExiv2(filePath))
         return true;
 
-    // Try to parse MRW RAW file
-    
-    MRWParser mrwparser;
-    if (mrwparser.parseMRW(QFile::encodeName(filePath)))
-    {
-        exifMetadata() = mrwparser.getExif();
-        return true;
-    }
-        
+    // TODO new experimental RAW parser can be added here.
     return false;
 }
 
 bool RAWMetaLoader::save(const QString& filePath)
 {
-    // In first we trying to use Exiv2 library
     if (saveWithExiv2(filePath))
         return true;
         
-    // TODO
     return false;
 }
 
