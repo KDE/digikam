@@ -120,13 +120,13 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // -------------------------------------------------------------------
     // Get image data
 
-    if (m_sixteenBit)
+    if (m_sixteenBit)        // 16 bits image
     {
         uchar *image = new uchar[m_width*m_height*8];
 
         unsigned short *dst  = (unsigned short *)image;
         uchar          *src  = m_data;
-        float fac = 65535.0 / m_rgbmax;
+        float fac  = 65535.0 / m_rgbmax;
         checkpoint = 0;
 
         for (int h = 0; h < m_height; h++)
@@ -161,9 +161,10 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
             }
         }
 
-        imageData() = (uchar *)image;
+        imageData()  = (uchar *)image;
+        m_sixteenBit = true;
     }
-    else
+    else        // 8 bits image
     {
         uchar *image = new uchar[m_width*m_height*4];
 
@@ -206,7 +207,8 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
             }
         }
 
-        imageData() = image;
+        imageData()  = image;
+        m_sixteenBit = false;
     }
 
     delete [] m_data;
@@ -226,7 +228,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 
     //----------------------------------------------------------
 
-    m_sixteenBit  = true;
     imageWidth()  = m_width;
     imageHeight() = m_height;
     imageSetAttribute("format", "RAW");
@@ -266,13 +267,13 @@ void RAWLoader::startProcess()
     m_process = new KProcess;
 
     connect(m_process, SIGNAL(processExited(KProcess *)),
-             this, SLOT(slotProcessExited(KProcess *)));
+            this, SLOT(slotProcessExited(KProcess *)));
              
     connect(m_process, SIGNAL(receivedStdout(KProcess *, char *, int)),
-             this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
+            this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
              
     connect(m_process, SIGNAL(receivedStderr(KProcess *, char *, int)),
-             this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
+            this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
 
     // run dcraw with options:
     // -c : write to stdout
@@ -291,14 +292,18 @@ void RAWLoader::startProcess()
     // -B : Use bilateral filter to smooth noise while preserving edges.
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
+    // -h : Output a half-size color image. Twice as fast as -q 0.
 
     *m_process << DcrawBinary::instance()->path();
     *m_process << "-c";
 
-    if (m_sixteenBit)
+    if (m_rawDecodingSettings.sixteenBitsImage)
         *m_process << "-4";
     else
         *m_process << "-2";
+
+    if (m_rawDecodingSettings.halfSizeColorImage)
+        *m_process << "-h";
 
     if (m_rawDecodingSettings.cameraColorBalance)
         *m_process << "-w";
@@ -321,16 +326,16 @@ void RAWLoader::startProcess()
 
     // -- Quality option ---------------------------------------------
     //
-    // Since dcraw 0.8, the command line compatibility have been broken about Quality option.
-    // To handle Quality settings, we will use :
+    // Since dcraw 0.8, the command line compatibility have been broken about Quality option:
     // '-q' alone (dcraw < 8.0)
-    // '-q value' (dcraw >= 8.0)
-    // In fact, m_rawDecodingSettings.enableRAWQuality is used to preserve compatibility.
-    
-    *m_process << "-q";
-    
+    // '-q numerical value' (dcraw >= 8.0)
+    // For that, the current implementation is only compatible with dcraw >= 8.0.
+        
     if (m_rawDecodingSettings.enableRAWQuality)
+    {
+        *m_process << "-q";
         *m_process << QString::number(m_rawDecodingSettings.RAWQuality);
+    }
 
     // -- Noise Reduction option -------------------------------------
 
