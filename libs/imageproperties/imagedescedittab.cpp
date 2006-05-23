@@ -152,7 +152,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
     QWidget *settingsArea       = new QWidget(this);
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
     
     // Comments view ---------------------------------------------------
     
@@ -160,20 +160,17 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
-    settingsLayout->addMultiCellWidget(commentsBox, 1, 1, 0, 2);
 
     // Date and Time view ---------------------------------------------------
     
     QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), settingsArea);
     d->dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
-    settingsLayout->addMultiCellWidget(dateTimeBox, 2, 2, 0, 2);
 
     // Rating view --------------------------------------------------
 
     QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), settingsArea);
     ratingBox->layout()->setAlignment(Qt::AlignCenter);
     d->ratingWidget = new RatingWidget(ratingBox);
-    settingsLayout->addMultiCellWidget(ratingBox, 3, 3, 0, 2);
         
     // Tags view ---------------------------------------------------
 
@@ -199,8 +196,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
     tagsBoxLayout->addWidget(d->recentTagsBtn);
 
-    settingsLayout->addMultiCellWidget(tagsBox, 4, 4, 0, 2);
-
     d->tagsView->addColumn(i18n( "Tags" ));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
@@ -208,6 +203,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     // --------------------------------------------------
     
+    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
+    settingsLayout->addMultiCellWidget(dateTimeBox, 1, 1, 0, 1);
+    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
+    settingsLayout->addMultiCellWidget(tagsBox, 3, 3, 0, 1);
+    settingsLayout->setRowStretch(3, 10);
+
     vLayout->addWidget(d->navigateBar);
     vLayout->addWidget(settingsArea);    
 
