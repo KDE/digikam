@@ -136,6 +136,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 127759 (no scroll bar in color management/select profile)
 ==> 114211 (Main Interface: image comments encoding unreadable after moving an album)
 ==> 120241 (Main Interface: utf8 display and edit)
-==> 127905 (New: wish: make comment field resizable)
+==> 127905 (wish: make comment field resizable)
+==> 127946 (Typo: the word Toogle should be Toggle)
 
 ----------------------------------------------------------------------------------------------------
