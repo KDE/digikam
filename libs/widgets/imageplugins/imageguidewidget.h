@@ -62,7 +62,7 @@ public:
         PreviewBothImagesHorzCont,  // Horizontal with original and target in contiguous.
         PreviewBothImagesVertCont,  // Vertical with original and target in contiguous.
         PreviewTargetImage,         // Target image only.
-        PreviewToogleOnMouseOver,   // Original image if mouse is over image area, else target image.
+        PreviewToggleOnMouseOver,   // Original image if mouse is over image area, else target image.
         NoPreviewMode               // Target image only without information displayed.
     };
 

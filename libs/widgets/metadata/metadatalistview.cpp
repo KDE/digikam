@@ -136,7 +136,7 @@ void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStrin
         {
             ifDItemName = currentIfDName;
 
-            // Check if the current IfD have any items. If no remove it before to toogle to the next IfD.
+            // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
             if ( subItems == 0 && parentifDItem)
                 delete parentifDItem;
 

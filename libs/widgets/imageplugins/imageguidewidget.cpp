@@ -59,14 +59,14 @@ public:
         flicker                   = 0;
         timerID                   = 0;
         focus                     = false;
-        onMouseMovePreviewToogled = false;
+        onMouseMovePreviewToggled = false;
         renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
     }
 
     bool        sixteenBit;
     bool        focus;
     bool        spotVisible;
-    bool        onMouseMovePreviewToogled;
+    bool        onMouseMovePreviewToggled;
     
     int         width;
     int         height;
@@ -215,7 +215,7 @@ void ImageGuideWidget::updatePixmap( void )
     d->pixmap->fill(colorGroup().background());
 
     if (d->renderingPreviewMode == PreviewOriginalImage ||
-        (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == false ))
+        (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
     {
         p.drawPixmap(d->rect, d->preview.convertToPixmap());
 
@@ -228,13 +228,13 @@ void ImageGuideWidget::updatePixmap( void )
         p.drawText(textRect, Qt::AlignCenter, text);
     }
     else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode ||
-            (d->renderingPreviewMode == PreviewToogleOnMouseOver && d->onMouseMovePreviewToogled == true ))
+            (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
                         d->rect.width(), d->rect.height());
 
         if (d->renderingPreviewMode == PreviewTargetImage ||
-            d->renderingPreviewMode == PreviewToogleOnMouseOver)
+            d->renderingPreviewMode == PreviewToggleOnMouseOver)
         {
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -570,9 +570,9 @@ void ImageGuideWidget::mouseMoveEvent ( QMouseEvent * e )
 
 void ImageGuideWidget::enterEvent( QEvent * )
 {
-    if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
+    if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
     {
-        d->onMouseMovePreviewToogled = false;
+        d->onMouseMovePreviewToggled = false;
         updatePixmap();
         repaint(false);
     }
@@ -580,9 +580,9 @@ void ImageGuideWidget::enterEvent( QEvent * )
 
 void ImageGuideWidget::leaveEvent( QEvent * )
 {
-    if ( !d->focus && d->renderingPreviewMode == PreviewToogleOnMouseOver )
+    if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
     {
-        d->onMouseMovePreviewToogled = true;
+        d->onMouseMovePreviewToggled = true;
         updatePixmap();
         repaint(false);
     }

@@ -135,13 +135,13 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     QWhatsThis::add( previewtargetButton, i18n( "<p>If you enable this option, you will see "
                                                 "the target image." ) );
 
-    QPushButton *previewToogleMouseOverButton = new QPushButton( d->previewButtons );
-    d->previewButtons->insert(previewToogleMouseOverButton, ImageGuideWidget::PreviewToogleOnMouseOver);
-    KGlobal::dirs()->addResourceType("tooglemouseover", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("tooglemouseover", "tooglemouseover.png");
-    previewToogleMouseOverButton->setPixmap( QPixmap( directory + "tooglemouseover.png" ) );
-    previewToogleMouseOverButton->setToggleButton(true);
-    QWhatsThis::add( previewToogleMouseOverButton, i18n( "<p>If you enable this option, you will see "
+    QPushButton *previewToggleMouseOverButton = new QPushButton( d->previewButtons );
+    d->previewButtons->insert(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
+    KGlobal::dirs()->addResourceType("togglemouseover", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("togglemouseover", "togglemouseover.png");
+    previewToggleMouseOverButton->setPixmap( QPixmap( directory + "togglemouseover.png" ) );
+    previewToggleMouseOverButton->setToggleButton(true);
+    QWhatsThis::add( previewToggleMouseOverButton, i18n( "<p>If you enable this option, you will see "
                                                          "the original image when the mouse is over image area, "
                                                          "else the target image." ) );
 

@@ -586,7 +586,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     
     d->histogramWidget->setDataLoading();
     
-    // Toogle ICC header to busy during loading.
+    // Toggle ICC header to busy during loading.
     d->blinkTimer->start(200);
 }
 

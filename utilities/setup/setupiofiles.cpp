@@ -195,7 +195,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->iccColorsCorrection->insertItem( i18n("Disabled (recommended)") );
     d->iccColorsCorrection->insertItem( i18n("Using embeded profile") );
     d->iccColorsCorrection->insertItem( i18n("Using digiKam ICC settings") );
-    QWhatsThis::add( d->iccColorsCorrection, i18n("<p>This option toogle the right way to use ICC color profiles during "
+    QWhatsThis::add( d->iccColorsCorrection, i18n("<p>This option toggle the right way to use ICC color profiles during "
                      "RAW files decoding.<p>"
                      "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>. "
                      "This option is <u>hightly recommended</u> to use the fine settings provided by digiKam color management workflow.<p>"

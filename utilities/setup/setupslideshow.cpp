@@ -78,7 +78,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     QWhatsThis::add( d->loopMode, i18n("<p>Slideshow running in loop with all current images."));
     
     d->fullScreenMode = new QCheckBox(i18n("Fullscreen mode"), parent);
-    QWhatsThis::add( d->fullScreenMode, i18n("<p>Toogle in fullScreen mode during Slideshow."));
+    QWhatsThis::add( d->fullScreenMode, i18n("<p>Toggle in fullScreen mode during Slideshow."));
     
     layout->addWidget( d->delayInput );
     layout->addWidget( d->startWithCurrent );

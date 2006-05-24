@@ -102,23 +102,23 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
-    QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Toogle on this option to store image tags "
+    QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Toggle on this option to store image tags "
                                               "into IPTC <i>Keywords</i> tag."));
   
     d->saveRatingIptcBox = new QCheckBox(IptcGroup);
     d->saveRatingIptcBox->setText(i18n("&Save image rating as \"Urgency\" tag"));
-    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toogle on this option to store image rating "
+    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toggle on this option to store image rating "
                                                 "into IPTC <i>Urgency</i> tag."));
 
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
-    QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Toogle on this option to store default "
+    QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Toggle on this option to store default "
                                                         "photographer identity into IPTC tags. You can set these "
                                                         "informations into Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Toogle on this option to store default "
+    QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Toggle on this option to store default "
                                                  "credit and copyright identity into IPTC tags. "
                                                  "You can set these informations into Identity setup page."));
                                                            
@@ -130,12 +130,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
-    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Toogle on this option to store image comments "
+    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Toggle on this option to store image comments "
                                               "into JFIF section, Exif tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image time stamp as tags"));
-    QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Toogle on this option to store image date and time "
+    QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Toggle on this option to store image date and time "
                                               "into Exif and IPTC tags."));
     
     mainLayout->addWidget(commonGroup);
