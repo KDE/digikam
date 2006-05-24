@@ -420,11 +420,27 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, imageBitsDepth());
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tif, 0));
 
-    if (observer)
-        observer->progressInfo(m_image, 0.1);
+    // -------------------------------------------------------------------
+    // Write meta-data Tags contents.
+        
+    for (int t = DImg::TIF_TAG_ARTIST; t <= DImg::TIF_TAG_TARGETPRINTER; t++) 
+        setTiffTextTag(tif, t);
+    
+    // -------------------------------------------------------------------
+    // Write ICC profil.
+    
+    QByteArray profile_rawdata = imageICCProfil();
+    
+    if (!profile_rawdata.isEmpty())
+    {
+        TIFFSetField (tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
+    }    
 
     // -------------------------------------------------------------------
     // Write image data
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
     
     uint8  *buf=0;
     uchar  *pixel;
@@ -536,26 +552,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     _TIFFfree(buf);
-    
-    // -------------------------------------------------------------------
-    // Write meta-data Tags contents.
-        
-    for (int t = DImg::TIF_TAG_ARTIST; t <= DImg::TIF_TAG_TARGETPRINTER; t++) 
-        setTiffTextTag(tif, t);
+    TIFFClose(tif);
 
     // -------------------------------------------------------------------
-    // Write ICC profil.
-    
-    QByteArray profile_rawdata = imageICCProfil();
-    
-    if (profile_rawdata.data() != 0)
-    {
-        TIFFSetField (tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
-    }    
-    
-    // -------------------------------------------------------------------
-        
-    TIFFClose(tif);
 
     if (observer)
         observer->progressInfo(m_image, 1.0);

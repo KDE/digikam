@@ -484,7 +484,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     QByteArray profile_rawdata = imageICCProfil();
     
-    if (profile_rawdata.data() != 0)
+    if (!profile_rawdata.isEmpty())
     {
         write_icc_profile (&cinfo, (JOCTET *)profile_rawdata.data(), profile_rawdata.size());
     }    

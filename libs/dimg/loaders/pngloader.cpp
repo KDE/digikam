@@ -592,7 +592,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     QByteArray profile_rawdata = imageICCProfil();
     
-    if (profile_rawdata.data() != 0)
+    if (!profile_rawdata.isEmpty())
     {
         png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, profile_rawdata.data(), profile_rawdata.size());
     }    
