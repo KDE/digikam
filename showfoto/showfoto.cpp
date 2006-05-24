@@ -1230,7 +1230,7 @@ void ShowFoto::toggleActions(bool val, bool slideShow)
     }
     else
     {
-       // if slideshow mode then toogle file open actions.
+       // if slideshow mode then toggle file open actions.
        m_fileOpenAction->setEnabled(val);
        m_openFilesInFolderAction->setEnabled(val);
     }
