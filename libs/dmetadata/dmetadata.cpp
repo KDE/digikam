@@ -1193,6 +1193,10 @@ bool DMetadata::setImageProgramId()
 {
     try
     {    
+        QString software("digiKam-");
+        software.append(digikam_version);
+        d->exifMetadata["Exif.Image.Software"] = software.ascii();
+
         d->iptcMetadata["Iptc.Application2.Program"] = "digiKam";
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = digikam_version;
         return true;
