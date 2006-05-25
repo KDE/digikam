@@ -41,6 +41,8 @@
 * General: 
 
    - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have been deleted. There is no test at startup to check this point.
+   - In DImg API, to be homogenous, move ICCProfile QByteArray into 
+     QMap<int, QByteArray> metaData. 
 
 
 
@@ -56,7 +58,7 @@ LATER 0.9.0 TODO LIST
 
 * Improving metadata support:
    - Better embbeded thumbnail support, especially for TIFF/EP (Exiv2)
-   - Add DNG file format (create a neew DImgLoader).
+   - Add DNG file format (create a new DImgLoader).
    - Improved PNG Metadata file format support (Exiv2).
 
 * CameraGui: 
