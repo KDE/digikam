@@ -74,6 +74,7 @@ public:
 
     unsigned char*          data;
     
+    // TODO : move this byte array into QMap<int, QByteArray> metaData.
     QByteArray              ICCProfil;
     
     /** Save informations about camera witch taking the picture. */

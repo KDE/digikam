@@ -65,22 +65,10 @@ public:
 
     enum METADATA
     {
-        COM,                      // JFIF comments section.
-        EXIF,                     // EXIF metadata.
-        IPTC,                     // IPTC metadata.
-        XMP,                      // XMP metadata. No yet supported by Exiv2. For the future.        
-        TIF_TAG_ARTIST,           // Remove this tiff text tags when Exiv2 will support TIF in R/W.
-        TIF_TAG_COPYRIGHT,
-        TIF_TAG_DATETIME,
-        TIF_TAG_DOCUMENTNAME,
-        TIF_TAG_HOSTCOMPUTER,
-        TIF_TAG_IMAGEDESCRIPTION,
-        TIF_TAG_INKNAMES,
-        TIF_TAG_MAKE,
-        TIF_TAG_MODEL,
-        TIF_TAG_PAGENAME,
-        TIF_TAG_SOFTWARE,
-        TIF_TAG_TARGETPRINTER
+        COM,    // JFIF comments section.
+        EXIF,   // EXIF metadata.
+        IPTC,   // IPTC metadata.
+        XMP     // XMP metadata. No yet supported by Exiv2. For the future.        
     };
 
     enum ANGLE

@@ -38,7 +38,9 @@ extern "C"
 
 namespace Digikam
 {
+
 class DImg;
+class DMetadata;
 
 class DIGIKAM_EXPORT TIFFLoader : public DImgLoader
 {
@@ -60,9 +62,9 @@ private:
     
 private:
 
-    void getTiffTextTag(TIFF* tif, int tag);
-    void setTiffTextTag(TIFF* tif, int tag);
-    
+    void tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, DMetadata *metaData, const char* exifTagName);
+    void tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, DMetadata *metaData, const char* exifTagName);
+
     static void dimg_tiff_warning(const char* module, const char* fmt, va_list ap);
     static void dimg_tiff_error(const char* module, const char* fmt, va_list ap);
 

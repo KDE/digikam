@@ -41,6 +41,7 @@
 
 #include "version.h"
 #include "dimg.h"
+#include "dmetadata.h"
 #include "tiffloader.h"
 
 namespace Digikam
@@ -50,16 +51,12 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* fmt, va_list ap)
 {
-#ifdef ENABLE_DEBUG_MESSAGES    
     kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
-#endif
 }
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* fmt, va_list ap)
 {
-#ifdef ENABLE_DEBUG_MESSAGES    
     kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
-#endif
 }
 
 TIFFLoader::TIFFLoader(DImg* image)
@@ -137,11 +134,24 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     else
         m_sixteenBit = false;
 
-    if (observer)
-        observer->progressInfo(m_image, 0.1);
+    // -------------------------------------------------------------------
+    // Read image ICC profile
+    
+    uchar  *profile_data=NULL;
+    uint32  profile_size;
+    
+    if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
+    {
+        QByteArray profile_rawdata = imageICCProfil();
+        profile_rawdata.resize(profile_size);
+        memcpy(profile_rawdata.data(), profile_data, profile_size);
+    }
 
     // -------------------------------------------------------------------
     // Get image data.
+
+    if (observer)
+        observer->progressInfo(m_image, 0.1);
     
     uchar* data   = 0;
     
@@ -245,7 +255,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
         {
             kdDebug() << k_funcinfo << "Failed to set up RGBA reading of image, filename "
-                    << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
+                      << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
             delete [] data;
             delete [] strip;
             TIFFClose(tif);
@@ -319,27 +329,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     // -------------------------------------------------------------------
-    // Read image ICC profile
-    
-    uchar  *profile_data=NULL;
-    uint32  profile_size;
-    
-    if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
-    {
-        QByteArray profile_rawdata = imageICCProfil();
-        profile_rawdata.resize(profile_size);
-        memcpy(profile_rawdata.data(), profile_data, profile_size);
-    }
-
-    // -------------------------------------------------------------------
-    // Get text meta-data contents.
-    
-    imageMetaData().clear();
-    
-    for (int t = DImg::TIF_TAG_ARTIST; t <= DImg::TIF_TAG_TARGETPRINTER; t++) 
-        getTiffTextTag(tif, t);
-    
-    // -------------------------------------------------------------------
     
     TIFFClose(tif);
 
@@ -387,11 +376,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Set image properties
     
-    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  w);
-    TIFFSetField(tif, TIFFTAG_IMAGELENGTH, h);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,     w);
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH,    h);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,    PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_PLANARCONFIG,   PLANARCONFIG_CONTIG);
+    TIFFSetField(tif, TIFFTAG_ORIENTATION,    ORIENTATION_TOPLEFT);
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
  
     // Image must be compressed using deflate algorithm ?
@@ -400,8 +389,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     if (compress)
     {
-        TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
-        TIFFSetField(tif, TIFFTAG_ZIPQUALITY, 9);
+        TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
+        TIFFSetField(tif, TIFFTAG_ZIPQUALITY,  9);
     }
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
@@ -410,7 +399,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (imageHasAlpha())
     {
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, EXTRASAMPLE_ASSOCALPHA);
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    EXTRASAMPLE_ASSOCALPHA);
     }
     else
     {
@@ -418,14 +407,212 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, imageBitsDepth());
-    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tif, 0));
+    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,  TIFFDefaultStripSize(tif, 0));
 
     // -------------------------------------------------------------------
-    // Write meta-data Tags contents.
+    // Write meta-data Tags contents. 
+    // TODO : - this code will be removed when Exiv2 will support TIFF in writting mode
         
-    for (int t = DImg::TIF_TAG_ARTIST; t <= DImg::TIF_TAG_TARGETPRINTER; t++) 
-        setTiffTextTag(tif, t);
-    
+    DMetadata metaData;
+    metaData.setExif(m_image->getExif());
+
+    // Standard IPTC tag (available with libtiff 3.6.1)    
+
+    QByteArray ba = m_image->getIptc();
+    if (!ba.isEmpty()) 
+    {
+        TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint16)ba.size(), (char *)ba.data());
+    }
+
+    // Standard XMP tag (available with libtiff 3.6.1)    
+
+    tiffSetExifAsciiTag(tif, TIFFTAG_XMLPACKET,               &metaData, "Exif.Image.XMLPacket");
+
+    // Standard Exif Ascii tags (available with libtiff 3.6.1)    
+
+    tiffSetExifAsciiTag(tif, TIFFTAG_DOCUMENTNAME,            &metaData, "Exif.Image.DocumentName");
+    tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        &metaData, "Exif.Image.ImageDescription");
+    tiffSetExifAsciiTag(tif, TIFFTAG_MAKE,                    &metaData, "Exif.Image.Make");
+    tiffSetExifAsciiTag(tif, TIFFTAG_MODEL,                   &metaData, "Exif.Image.Model");
+    tiffSetExifAsciiTag(tif, TIFFTAG_SOFTWARE,                &metaData, "Exif.Image.Software");
+    tiffSetExifAsciiTag(tif, TIFFTAG_DATETIME,                &metaData, "Exif.Image.DateTime");
+    tiffSetExifAsciiTag(tif, TIFFTAG_ARTIST,                  &metaData, "Exif.Image.Artist");
+    tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               &metaData, "Exif.Image.Copyright");
+
+    // Standard Exif.Photo tags (available with libtiff 3.8.2).  
+
+#if defined(EXIFTAG_EXPOSURETIME)
+    tiffSetExifDataTag(tif, EXIFTAG_EXPOSURETIME,             &metaData, "Exif.Photo.ExposureTime");
+#endif  
+#if defined(EXIFTAG_FNUMBER)
+    tiffSetExifDataTag(tif, EXIFTAG_FNUMBER,                  &metaData, "Exif.Photo.FNumber");
+#endif  
+#if defined(EXIFTAG_EXPOSUREPROGRAM)
+    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREPROGRAM,          &metaData, "Exif.Photo.ExposureProgram");
+#endif  
+#if defined(EXIFTAG_SPECTRALSENSITIVITY)
+    tiffSetExifAsciiTag(tif, EXIFTAG_SPECTRALSENSITIVITY,     &metaData, "Exif.Photo.SpectralSensitivity");
+#endif
+#if defined(EXIFTAG_ISOSPEEDRATINGS)
+    tiffSetExifDataTag(tif, EXIFTAG_ISOSPEEDRATINGS,          &metaData, "Exif.Photo.ISOSpeedRatings");
+#endif  
+#if defined(EXIFTAG_OECF)
+    tiffSetExifDataTag(tif, EXIFTAG_OECF,                     &metaData, "Exif.Photo.OECF");
+#endif  
+#if defined(EXIFTAG_EXIFVERSION)
+    tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
+#endif  
+#if defined(EXIFTAG_EXIFVERSION)
+    tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
+#endif  
+#if defined(EXIFTAG_DATETIMEORIGINAL)
+    tiffSetExifAsciiTag(tif, EXIFTAG_DATETIMEORIGINAL,        &metaData, "Exif.Photo.DateTimeOriginal");
+#endif
+#if defined(EXIFTAG_DATETIMEDIGITIZED)
+    tiffSetExifAsciiTag(tif, EXIFTAG_DATETIMEDIGITIZED,       &metaData, "Exif.Photo.DateTimeDigitized");
+#endif
+#if defined(EXIFTAG_COMPONENTSCONFIGURATION)
+    tiffSetExifDataTag(tif, EXIFTAG_COMPONENTSCONFIGURATION,  &metaData, "Exif.Photo.ComponentsConfiguration");
+#endif  
+#if defined(EXIFTAG_COMPRESSEDBITSPERPIXEL)
+    tiffSetExifDataTag(tif, EXIFTAG_COMPRESSEDBITSPERPIXEL,   &metaData, "Exif.Photo.CompressedBitsPerPixel");
+#endif  
+#if defined(EXIFTAG_SHUTTERSPEEDVALUE)
+    tiffSetExifDataTag(tif, EXIFTAG_SHUTTERSPEEDVALUE,        &metaData, "Exif.Photo.ShutterSpeedValue");
+#endif  
+#if defined(EXIFTAG_APERTUREVALUE)
+    tiffSetExifDataTag(tif, EXIFTAG_APERTUREVALUE,            &metaData, "Exif.Photo.ApertureValue");
+#endif
+#if defined(EXIFTAG_BRIGHTNESSVALUE)
+    tiffSetExifDataTag(tif, EXIFTAG_BRIGHTNESSVALUE,          &metaData, "Exif.Photo.BrightnessValue");
+#endif
+#if defined(EXIFTAG_EXPOSUREBIASVALUE)
+    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREBIASVALUE,        &metaData, "Exif.Photo.ExposureBiasValue");
+#endif
+#if defined(EXIFTAG_MAXAPERTUREVALUE)
+    tiffSetExifDataTag(tif, EXIFTAG_MAXAPERTUREVALUE,         &metaData, "Exif.Photo.MaxApertureValue");
+#endif
+#if defined(EXIFTAG_SUBJECTDISTANCE)
+    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTDISTANCE,          &metaData, "Exif.Photo.SubjectDistance");
+#endif
+#if defined(EXIFTAG_METERINGMODE)
+    tiffSetExifDataTag(tif, EXIFTAG_METERINGMODE,             &metaData, "Exif.Photo.MeteringMode");
+#endif
+#if defined(EXIFTAG_LIGHTSOURCE)
+    tiffSetExifDataTag(tif, EXIFTAG_LIGHTSOURCE,              &metaData, "Exif.Photo.LightSource");
+#endif
+#if defined(EXIFTAG_FLASH)
+    tiffSetExifDataTag(tif, EXIFTAG_FLASH,                    &metaData, "Exif.Photo.Flash");
+#endif
+#if defined(EXIFTAG_FOCALLENGTH)
+    tiffSetExifDataTag(tif, EXIFTAG_FOCALLENGTH,              &metaData, "Exif.Photo.FocalLength");
+#endif
+#if defined(EXIFTAG_SUBJECTAREA)
+    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTAREA,              &metaData, "Exif.Photo.SubjectArea");
+#endif
+#if defined(EXIFTAG_MAKERNOTE)
+    tiffSetExifDataTag(tif, EXIFTAG_MAKERNOTE,                &metaData, "Exif.Photo.MakerNote");
+#endif
+#if defined(EXIFTAG_USERCOMMENT)   
+    tiffSetExifDataTag(tif, EXIFTAG_USERCOMMENT,              &metaData, "Exif.Photo.UserComment");
+#endif
+#if defined(EXIFTAG_SUBSECTIME)
+    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIME,              &metaData, "Exif.Photo.SubSecTime");
+#endif
+#if defined(EXIFTAG_SUBSECTIMEORIGINAL)
+    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIMEORIGINAL,      &metaData, "Exif.Photo.SubSecTimeOriginal");
+#endif
+#if defined(EXIFTAG_SUBSECTIMEDIGITIZED)
+    tiffSetExifAsciiTag(tif, EXIFTAG_SUBSECTIMEDIGITIZED,     &metaData, "Exif.Photo.SubSecTimeDigitized");
+#endif
+#if defined(EXIFTAG_FLASHPIXVERSION)
+    tiffSetExifDataTag(tif, EXIFTAG_FLASHPIXVERSION,          &metaData, "Exif.Photo.FlashpixVersion");
+#endif
+#if defined(EXIFTAG_COLORSPACE)
+    tiffSetExifDataTag(tif, EXIFTAG_COLORSPACE,               &metaData, "Exif.Photo.ColorSpace");
+#endif
+#if defined(EXIFTAG_PIXELXDIMENSION)
+    tiffSetExifDataTag(tif, EXIFTAG_PIXELXDIMENSION,          &metaData, "Exif.Photo.PixelXDimension");
+#endif
+#if defined(EXIFTAG_PIXELYDIMENSION)
+    tiffSetExifDataTag(tif, EXIFTAG_PIXELYDIMENSION,          &metaData, "Exif.Photo.PixelYDimension");
+#endif
+#if defined(EXIFTAG_RELATEDSOUNDFILE)
+    tiffSetExifAsciiTag(tif, EXIFTAG_RELATEDSOUNDFILE,        &metaData, "Exif.Photo.RelatedSoundFile");
+#endif
+#if defined(EXIFTAG_FLASHENERGY)
+    tiffSetExifDataTag(tif, EXIFTAG_FLASHENERGY,              &metaData, "Exif.Photo.FlashEnergy");
+#endif
+#if defined(EXIFTAG_SPATIALFREQUENCYRESPONSE)
+    tiffSetExifDataTag(tif, EXIFTAG_SPATIALFREQUENCYRESPONSE, &metaData, "Exif.Photo.SpatialFrequencyResponse");
+#endif
+#if defined(EXIFTAG_FOCALPLANEXRESOLUTION)
+    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANEXRESOLUTION,    &metaData, "Exif.Photo.FocalPlaneXResolution");
+#endif
+#if defined(EXIFTAG_FOCALPLANEYRESOLUTION)
+    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANEYRESOLUTION,    &metaData, "Exif.Photo.FocalPlaneYResolution");
+#endif
+#if defined(EXIFTAG_FOCALPLANERESOLUTIONUNIT)
+    tiffSetExifDataTag(tif, EXIFTAG_FOCALPLANERESOLUTIONUNIT, &metaData, "Exif.Photo.FocalPlaneResolutionUnit");
+#endif
+#if defined(EXIFTAG_SUBJECTLOCATION)
+    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTLOCATION,          &metaData, "Exif.Photo.SubjectLocation");
+#endif
+#if defined(EXIFTAG_EXPOSUREINDEX)
+    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREINDEX,            &metaData, "Exif.Photo.ExposureIndex");
+#endif
+#if defined(EXIFTAG_SENSINGMETHOD)
+    tiffSetExifDataTag(tif, EXIFTAG_SENSINGMETHOD,            &metaData, "Exif.Photo.SensingMethod");
+#endif
+#if defined(EXIFTAG_FILESOURCE)
+    tiffSetExifDataTag(tif, EXIFTAG_FILESOURCE,               &metaData, "Exif.Photo.FileSource");
+#endif
+#if defined(EXIFTAG_SCENETYPE)
+    tiffSetExifDataTag(tif, EXIFTAG_SCENETYPE,                &metaData, "Exif.Photo.SceneType");
+#endif
+#if defined(EXIFTAG_CFAPATTERN)
+    tiffSetExifDataTag(tif, EXIFTAG_CFAPATTERN,               &metaData, "Exif.Photo.CFAPattern");
+#endif
+#if defined(EXIFTAG_CUSTOMRENDERED)
+    tiffSetExifDataTag(tif, EXIFTAG_CUSTOMRENDERED,           &metaData, "Exif.Photo.CustomRendered");
+#endif
+#if defined(EXIFTAG_EXPOSUREMODE)
+    tiffSetExifDataTag(tif, EXIFTAG_EXPOSUREMODE,             &metaData, "Exif.Photo.ExposureMode");
+#endif
+#if defined(EXIFTAG_WHITEBALANCE)
+    tiffSetExifDataTag(tif, EXIFTAG_WHITEBALANCE,             &metaData, "Exif.Photo.WhiteBalance");
+#endif
+#if defined(EXIFTAG_DIGITALZOOMRATIO)
+    tiffSetExifDataTag(tif, EXIFTAG_DIGITALZOOMRATIO,         &metaData, "Exif.Photo.DigitalZoomRatio");
+#endif
+#if defined(EXIFTAG_FOCALLENGTHIN35MMFILM)
+    tiffSetExifDataTag(tif, EXIFTAG_FOCALLENGTHIN35MMFILM,    &metaData, "Exif.Photo.FocalLengthIn35mmFilm");
+#endif
+#if defined(EXIFTAG_SCENECAPTURETYPE)
+    tiffSetExifDataTag(tif, EXIFTAG_SCENECAPTURETYPE,         &metaData, "Exif.Photo.SceneCaptureType");
+#endif
+#if defined(EXIFTAG_GAINCONTROL)
+    tiffSetExifDataTag(tif, EXIFTAG_GAINCONTROL,              &metaData, "Exif.Photo.GainControl");
+#endif
+#if defined(EXIFTAG_CONTRAST)
+    tiffSetExifDataTag(tif, EXIFTAG_CONTRAST,                 &metaData, "Exif.Photo.Contrast");
+#endif
+#if defined(EXIFTAG_SATURATION)
+    tiffSetExifDataTag(tif, EXIFTAG_SATURATION,               &metaData, "Exif.Photo.Saturation");
+#endif
+#if defined(EXIFTAG_SHARPNESS)
+    tiffSetExifDataTag(tif, EXIFTAG_SHARPNESS,                &metaData, "Exif.Photo.Sharpness");
+#endif 
+#if defined(EXIFTAG_DEVICESETTINGDESCRIPTION)
+    tiffSetExifDataTag(tif, EXIFTAG_DEVICESETTINGDESCRIPTION, &metaData, "Exif.Photo.DeviceSettingDescription");
+#endif 
+#if defined(EXIFTAG_SUBJECTDISTANCERANGE)
+    tiffSetExifDataTag(tif, EXIFTAG_SUBJECTDISTANCERANGE,     &metaData, "Exif.Photo.SubjectDistanceRange");
+#endif 
+#if defined(EXIFTAG_IMAGEUNIQUEID)
+    tiffSetExifAsciiTag(tif, EXIFTAG_IMAGEUNIQUEID,           &metaData, "Exif.Photo.ImageUniqueID");
+#endif
+
     // -------------------------------------------------------------------
     // Write ICC profil.
     
@@ -433,7 +620,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     if (!profile_rawdata.isEmpty())
     {
-        TIFFSetField (tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
+        TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
     }    
 
     // -------------------------------------------------------------------
@@ -561,7 +748,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "TIFF");
         
-    saveMetadata(filePath);
+    // TODO : enable this line when Exiv2 will support TIFF in writting mode.
+    //saveMetadata(filePath);
     
     return true;
 }
@@ -576,160 +764,24 @@ bool TIFFLoader::sixteenBit() const
     return m_sixteenBit;    
 }
 
-void TIFFLoader::getTiffTextTag(TIFF* tif, int tag)
+void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag, 
+                                     DMetadata *metaData, const char* exifTagName)
 {
-    imageMetaData().clear();
-    char   *text;
-    ttag_t  tiffTag;
-    
-    switch (tag)
+    QByteArray tag = metaData->getExifTagData(exifTagName);
+    if (!tag.isEmpty()) 
     {
-        case DImg::TIF_TAG_ARTIST:
-            tiffTag = TIFFTAG_ARTIST;
-            break;
-        case DImg::TIF_TAG_COPYRIGHT:
-            tiffTag = TIFFTAG_COPYRIGHT;
-            break;
-        case DImg::TIF_TAG_DATETIME:
-            tiffTag = TIFFTAG_DATETIME;
-            break;
-        case DImg::TIF_TAG_DOCUMENTNAME:
-            tiffTag = TIFFTAG_DOCUMENTNAME;
-            break;
-        case DImg::TIF_TAG_HOSTCOMPUTER:
-            tiffTag = TIFFTAG_HOSTCOMPUTER;
-            break;
-        case DImg::TIF_TAG_IMAGEDESCRIPTION:
-            tiffTag = TIFFTAG_IMAGEDESCRIPTION;
-            break;
-        case DImg::TIF_TAG_INKNAMES:
-            tiffTag = TIFFTAG_INKNAMES;
-            break;
-        case DImg::TIF_TAG_MAKE:
-            tiffTag = TIFFTAG_MAKE;
-            break;
-        case DImg::TIF_TAG_MODEL:
-            tiffTag = TIFFTAG_MODEL;
-            break;
-        case DImg::TIF_TAG_PAGENAME:
-            tiffTag = TIFFTAG_PAGENAME;
-            break;
-        case DImg::TIF_TAG_SOFTWARE:
-            tiffTag = TIFFTAG_SOFTWARE;
-            break;
-        case DImg::TIF_TAG_TARGETPRINTER:
-            tiffTag = TIFFTAG_TARGETPRINTER;
-            break;
-        default:
-            return;
-    }
-
-    if (tiffTag == TIFFTAG_INKNAMES)
-    {
-        uint16 count;
-        if (TIFFGetField(tif, tiffTag, &text) == 1 && TIFFGetField(tif, TIFFTAG_NUMBEROFINKS, &count) == 1)
-        {
-            //INKNAMES is concatenated from NUMBEROFINKS null-terminated strings. Count total length, including nulls.
-            int length = 0;
-            char *str  = text;
-            for (int i=0; i<count; i++)
-            {
-                int len = strlen(text)+1;
-                length += len;
-                str += len;
-            }
-            QByteArray ba(length);
-            memcpy(ba.data(), text, length);
-            imageMetaData().insert(tag, ba);
-        }
-    }
-    else
-    {
-        if (TIFFGetField(tif, tiffTag, &text) == 1)
-        {
-            // include the terminating \0
-            int textlength = strlen(text)+1;
-            QByteArray ba(textlength);
-            memcpy(ba.data(), text, textlength);
-            imageMetaData().insert(tag, ba);
-
-            if (tiffTag == TIFFTAG_MODEL)
-                imageSetCameraModel(QString(text));
-
-            if (tiffTag == TIFFTAG_MAKE)
-                imageSetCameraConstructor(QString(text));
-        }
+        QCString str(tag.data(), tag.size());
+        TIFFSetField(tif, tiffTag, (const char*)str);
     }
 }
 
-void TIFFLoader::setTiffTextTag(TIFF* tif, int tag)
+void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag, 
+                                    DMetadata *metaData, const char* exifTagName)
 {
-    ttag_t  tiffTag;
-    
-    switch (tag)
+    QByteArray tag = metaData->getExifTagData(exifTagName);
+    if (!tag.isEmpty()) 
     {
-        case DImg::TIF_TAG_ARTIST:
-            tiffTag = TIFFTAG_ARTIST;
-            break;
-        case DImg::TIF_TAG_COPYRIGHT:
-            tiffTag = TIFFTAG_COPYRIGHT;
-            break;
-        case DImg::TIF_TAG_DATETIME:
-            tiffTag = TIFFTAG_DATETIME;
-            break;
-        case DImg::TIF_TAG_DOCUMENTNAME:
-            tiffTag = TIFFTAG_DOCUMENTNAME;
-            break;
-        case DImg::TIF_TAG_HOSTCOMPUTER:
-            tiffTag = TIFFTAG_HOSTCOMPUTER;
-            break;
-        case DImg::TIF_TAG_IMAGEDESCRIPTION:
-            tiffTag = TIFFTAG_IMAGEDESCRIPTION;
-            break;
-        case DImg::TIF_TAG_INKNAMES:
-            tiffTag = TIFFTAG_INKNAMES;
-            break;
-        case DImg::TIF_TAG_MAKE:
-            tiffTag = TIFFTAG_MAKE;
-            break;
-        case DImg::TIF_TAG_MODEL:
-            tiffTag = TIFFTAG_MODEL;
-            break;
-        case DImg::TIF_TAG_PAGENAME:
-            tiffTag = TIFFTAG_PAGENAME;
-            break;
-        case DImg::TIF_TAG_SOFTWARE:
-            tiffTag = TIFFTAG_SOFTWARE;
-            break;
-        case DImg::TIF_TAG_TARGETPRINTER:
-            tiffTag = TIFFTAG_TARGETPRINTER;
-            break;
-        default:
-            return;
-    }
-
-    typedef QMap<int, QByteArray> MetaDataMap;
-    MetaDataMap map = imageMetaData();
-
-    if (tiffTag == TIFFTAG_SOFTWARE)
-    {
-        QString software("digiKam ");
-        software.append(digikam_version);
-        TIFFSetField (tif, tiffTag, software.ascii());
-        return;
-    }
-    else if (map.contains(tag))
-    {
-        if (tiffTag == TIFFTAG_INKNAMES)
-        {
-            QByteArray ba = map[tag];
-            TIFFSetField (tif, tiffTag, (uint16)ba.size(), (char *)ba.data());
-        }
-        else
-        {
-            QByteArray ba = map[tag];
-            TIFFSetField (tif, tiffTag, (char *)ba.data());
-        }
+        TIFFSetField (tif, tiffTag, (uint16)tag.size(), (char *)tag.data());
     }
 }
 
