@@ -1279,4 +1279,29 @@ QString DMetadata::getExifTagValue(const char* exifTagName) const
     return QString();
 }
 
+QByteArray DMetadata::getExifTagData(const char* exifTagName) const
+{
+    try
+    {    
+        Exiv2::ExifKey exifKey(exifTagName);
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        if (it != exifData.end())
+        {
+            QByteArray data((*it).size());
+            (*it).copy((Exiv2::byte*)data.data(), exifData.byteOrder());
+            return data;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot find Exif key '"
+                  << exifTagName << "' into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+
+    return QByteArray();
+}
+
 }  // NameSpace Digikam
