@@ -567,6 +567,9 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     meta.setExif(d->image.getExif());
     QImage thumb = d->image.smoothScale(160, 120, QSize::ScaleMin).copyQImage();
     meta.setExifThumbnail(thumb);
+
+    // Update Exif Image dimensions.
+    meta.setImageDimensions(d->image.size());
     d->image.setExif(meta.getExif());
 
     d->thread->save(d->image, fileName, mimeType);
@@ -611,13 +614,6 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
 
 void DImgInterface::setModified()
 {
-    DMetadata meta;
-    meta.setExif(d->image.getExif());
-
-    // Update Exif Image dimensions.
-    meta.setImageDimensions(d->image.size());
-    d->image.setExif(meta.getExif());
-    
     emit signalModified();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
