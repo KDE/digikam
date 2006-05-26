@@ -267,7 +267,7 @@ void AlbumFolderView::slotAlbumDeleted(Album *album)
     if(!palbum)
         return;
 
-    if(!palbum->icon().isEmpty() && !d->iconThumbJob)
+    if(!palbum->icon().isEmpty() && d->iconThumbJob)
         d->iconThumbJob->removeItem(palbum->icon());
 
     AlbumFolderViewItem* item = (AlbumFolderViewItem*) palbum->extraData(this);
