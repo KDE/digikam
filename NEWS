@@ -2,6 +2,8 @@
 
 Bugs fixed:
 
+	o Crash when moving an album to another album (#128069)
+	
         o Autoration of photos may confuse user because of changes made he is not aware of (#126335)
         
         o Communication between digikam and its kioslaves broken if size_t != off_t (#127634)
