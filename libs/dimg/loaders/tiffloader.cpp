@@ -423,12 +423,12 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QByteArray ba = m_image->getIptc();
     if (!ba.isEmpty()) 
     {
-        TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint16)ba.size(), (char *)ba.data());
+        TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar *)ba.data());
     }
 
     // Standard XMP tag (available with libtiff 3.6.1)    
 
-    tiffSetExifAsciiTag(tif, TIFFTAG_XMLPACKET,               &metaData, "Exif.Image.XMLPacket");
+    tiffSetExifDataTag(tif, TIFFTAG_XMLPACKET,                &metaData, "Exif.Image.XMLPacket");
 
     // Standard Exif Ascii tags (available with libtiff 3.6.1)    
 
