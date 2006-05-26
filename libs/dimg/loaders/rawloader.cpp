@@ -232,8 +232,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     imageHeight() = m_height;
     imageSetAttribute("format", "RAW");
 
-    readMetadata(filePath, DImg::RAW);
-
     return true;
 }
 

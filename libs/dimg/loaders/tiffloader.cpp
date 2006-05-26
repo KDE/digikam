@@ -68,6 +68,8 @@ TIFFLoader::TIFFLoader(DImg* image)
 
 bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
+    readMetadata(filePath, DImg::TIFF);
+
     // -------------------------------------------------------------------
     // TIFF error handling. If an errors/warnings occurs during reading, 
     // libtiff will call these methods
@@ -137,14 +139,16 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Read image ICC profile
     
+    QMap<int, QByteArray>& metaData = imageMetaData();
+
     uchar  *profile_data=NULL;
     uint32  profile_size;
     
     if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
     {
-        QByteArray profile_rawdata = imageICCProfil();
-        profile_rawdata.resize(profile_size);
+        QByteArray profile_rawdata(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
+        metaData.insert(DImg::ICC, profile_rawdata);
     }
 
     // -------------------------------------------------------------------
@@ -337,10 +341,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     imageWidth()  = w;
     imageHeight() = h;
-    imageSetAttribute("format", "TIFF");
     imageData()   = data;
-
-    readMetadata(filePath, DImg::TIFF);
+    imageSetAttribute("format", "TIFF");
     
     return true;
 }
@@ -616,7 +618,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profil.
     
-    QByteArray profile_rawdata = imageICCProfil();
+    QByteArray profile_rawdata = m_image->getICCProfil();
     
     if (!profile_rawdata.isEmpty())
     {

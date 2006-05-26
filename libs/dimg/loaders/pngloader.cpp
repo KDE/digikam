@@ -72,6 +72,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     png_structp  png_ptr  = NULL;
     png_infop    info_ptr = NULL;
     
+    readMetadata(filePath, DImg::PNG);
+
     // -------------------------------------------------------------------
     // Open the file
     
@@ -391,6 +393,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Read image ICC profile
     
+    QMap<int, QByteArray>& metaData = imageMetaData();
+
     png_charp   profile_name, profile_data=NULL;
     png_uint_32 profile_size;
     int         compression_type;
@@ -399,16 +403,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     if (profile_data != NULL) 
     {
-        QByteArray profile_rawdata = imageICCProfil();
-        profile_rawdata.resize(profile_size);
+        QByteArray profile_rawdata(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
+        metaData.insert(DImg::ICC, profile_rawdata);
     }
     
     // -------------------------------------------------------------------
-    // Get embbeded text data and metadata.
-    
-    QMap<int, QByteArray>& metaData = imageMetaData();
-    metaData.clear();
+    // Get embbeded text data.
 
     png_text* text_ptr;
     int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
@@ -466,11 +467,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     imageWidth()  = width;
     imageHeight() = height;
+    imageData()   = data;
     imageSetAttribute("format", "PNG");
-    imageData() = data;
-        
-    readMetadata(filePath, DImg::PNG);
-    
+   
     return true;
 }
 
@@ -590,7 +589,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profil.
     
-    QByteArray profile_rawdata = imageICCProfil();
+    QByteArray profile_rawdata = m_image->getICCProfil();
     
     if (!profile_rawdata.isEmpty())
     {

@@ -67,8 +67,6 @@ protected:
     int                     imageBitsDepth();
     int                     imageBytesDepth();
     
-    QByteArray&             imageICCProfil();
-    
     QMap<int, QByteArray>&  imageMetaData();
     QVariant                imageGetAttribute(const QString& key);
     void                    imageSetAttribute(const QString& key, const QVariant& value);

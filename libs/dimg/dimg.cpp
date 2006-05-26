@@ -218,13 +218,12 @@ void DImg::resetMetaData()
     m_priv->embeddedText.clear();
     m_priv->cameraModel       = QString();
     m_priv->cameraConstructor = QString();
-    m_priv->ICCProfil         = QByteArray();
     m_priv->metaData.clear();
 }
 
 uchar *DImg::stripImageData()
 {
-    uchar *data = m_priv->data;
+    uchar *data  = m_priv->data;
     m_priv->data = 0;
     m_priv->null = true;
     return data;
@@ -240,7 +239,6 @@ void DImg::copyMetaData(const DImgPrivate *src)
 
     // since qbytearrays are explicity shared, we need to make sure that they are
     // detached from any shared references
-    m_priv->ICCProfil         = src->ICCProfil.copy();
 
     for (QMap<int, QByteArray>::const_iterator it = src->metaData.begin();
          it != src->metaData.end(); ++it)
@@ -264,17 +262,17 @@ int DImg::allocateData()
 
 void DImg::setImageDimension(uint width, uint height)
 {
-    m_priv->width             = width;
-    m_priv->height            = height;
+    m_priv->width  = width;
+    m_priv->height = height;
 }
 
 void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha)
 {
-    m_priv->null              = null;
-    m_priv->width             = width;
-    m_priv->height            = height;
-    m_priv->alpha             = alpha;
-    m_priv->sixteenBit        = sixteenBit;
+    m_priv->null       = null;
+    m_priv->width      = width;
+    m_priv->height     = height;
+    m_priv->alpha      = alpha;
+    m_priv->sixteenBit = sixteenBit;
 }
 
 
@@ -600,16 +598,6 @@ bool DImg::setICCProfilToFile(const QString& filePath)
     return true;
 }
 
-void DImg::setICCProfil(const QByteArray& profile)
-{
-    m_priv->ICCProfil = profile;
-}
-
-QByteArray DImg::getICCProfil() const
-{
-    return m_priv->ICCProfil;
-}
-
 QByteArray DImg::getComments() const
 {
     return metadata(COM);
@@ -625,6 +613,11 @@ QByteArray DImg::getIptc() const
     return metadata(IPTC);
 }
 
+QByteArray DImg::getICCProfil() const
+{
+    return metadata(ICC);
+}
+
 void DImg::setComments(const QByteArray& commentsData)
 {
     m_priv->metaData.replace(COM, commentsData);
@@ -638,6 +631,11 @@ void DImg::setExif(const QByteArray& exifData)
 void DImg::setIptc(const QByteArray& iptcData)
 {
     m_priv->metaData.replace(IPTC, iptcData);
+}
+
+void DImg::setICCProfil(const QByteArray& profile)
+{
+    m_priv->metaData.replace(ICC, profile);
 }
 
 QByteArray DImg::metadata(DImg::METADATA key) const

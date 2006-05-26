@@ -65,10 +65,10 @@ public:
 
     enum METADATA
     {
-        COM,    // JFIF comments section.
-        EXIF,   // EXIF metadata.
-        IPTC,   // IPTC metadata.
-        XMP     // XMP metadata. No yet supported by Exiv2. For the future.        
+        COM,    // JFIF comments section data.
+        EXIF,   // EXIF meta-data.
+        IPTC,   // IPTC meta-data.
+        ICC     // ICC color profile.        
     };
 
     enum ANGLE
@@ -193,19 +193,19 @@ public:
     bool       isReadOnly() const;
 
     /** Metadata manipulation methods */
-    QByteArray getComments() const;
-    QByteArray getExif() const;
-    QByteArray getIptc() const;
+    QByteArray getComments()  const;
+    QByteArray getExif()      const;
+    QByteArray getIptc()      const;
+    QByteArray getICCProfil() const;
     void       setComments(const QByteArray& commentsData);
     void       setExif(const QByteArray& exifData);
     void       setIptc(const QByteArray& iptcData);
+    void       setICCProfil(const QByteArray& profile);
 
     QByteArray metadata(METADATA key) const;
 
     bool       getICCProfilFromFile(const QString& filePath);
     bool       setICCProfilToFile(const QString& filePath);
-    void       setICCProfil(const QByteArray& profile);
-    QByteArray getICCProfil() const;
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key) const;

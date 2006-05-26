@@ -109,11 +109,6 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
     m_image->setEmbeddedText(key, text);
 }
 
-QByteArray& DImgLoader::imageICCProfil()
-{
-    return m_image->m_priv->ICCProfil;
-}
-
 void DImgLoader::imageSetCameraModel(const QString& model)
 {
     m_image->setCameraModel(model);
