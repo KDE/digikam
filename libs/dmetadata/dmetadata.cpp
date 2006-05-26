@@ -497,15 +497,64 @@ DMetadata::ImageOrientation DMetadata::getImageOrientation()
        return ORIENTATION_UNSPECIFIED;
 
     try
-    {    
-        Exiv2::ExifKey key("Exif.Image.Orientation");
+    {   
         Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifData::iterator it = exifData.findKey(key);
+        Exiv2::ExifData::iterator it;
+        long orientation;
+        ImageOrientation imageOrient = ORIENTATION_NORMAL;
+
+        // Because some camera set a wrong standard exif orientation tag, 
+        // We need to check makernote tags in first!
+
+        // -- Minolta Cameras ----------------------------------
+
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        it = exifData.findKey(minoltaKey1);
         
         if (it != exifData.end())
         {
-            long orientation = it->toLong();
-            kdDebug() << " Exif Orientation: " << orientation << endl;
+            orientation = it->toLong();
+            kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+            switch(orientation)
+            {
+                case 76:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 82:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
+            }
+            return imageOrient;
+        }
+
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+        it = exifData.findKey(minoltaKey2);
+        
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+            switch(orientation)
+            {
+                case 76:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 82:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
+            }
+            return imageOrient;
+        }
+
+        // -- Standard Exif tag --------------------------------
+
+        Exiv2::ExifKey keyStd("Exif.Image.Orientation");
+        it = exifData.findKey(keyStd);
+        
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            kdDebug() << "Exif Orientation: " << orientation << endl;
             return (ImageOrientation)orientation;
         }
     }
