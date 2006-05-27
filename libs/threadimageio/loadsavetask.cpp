@@ -117,7 +117,7 @@ void SharedLoadingTask::execute()
     {
         LoadingCache::CacheLock lock(cache);
         DImg *cachedImg;
-        if ( (cachedImg = cache->retrieveImage(m_loadingDescription.filePath)) )
+        if ( (cachedImg = cache->retrieveImage(m_loadingDescription.cacheKey())) )
         {
             // image is found in image cache, loading is successfull
             //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " found in image cache" << endl;
@@ -127,7 +127,7 @@ void SharedLoadingTask::execute()
             QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
             return;
         }
-        else if ( (usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.filePath)) )
+        else if ( (usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.cacheKey())) )
         {
             // Other process is right now loading this image.
             // Add this task to the list of listeners and
@@ -166,7 +166,7 @@ void SharedLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
         if (!img.isNull())
-            isCached = cache->putImage(m_loadingDescription.filePath, new DImg(img));
+            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(img));
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }

@@ -34,20 +34,29 @@ class DIGIKAM_EXPORT LoadingDescription
 {
 public:
 
+    /*
+        Use this for files that are not raw files.
+        Stores only the filePath.
+    */
     LoadingDescription(const QString &filePath)
         : filePath(filePath)
         {
             rawDecodingSettings = RawDecodingSettings();
         };
-        
+
+    /*
+        For raw files:
+        Stores filePath and RawDecodingSettings
+    */
     LoadingDescription(const QString &filePath, RawDecodingSettings settings)
         : filePath(filePath), rawDecodingSettings(settings)
         {};
-        
+
     QString             filePath;
     RawDecodingSettings rawDecodingSettings;
 
-    bool operator==(const LoadingDescription &other);
+    QString cacheKey() const;
+    bool operator==(const LoadingDescription &other) const;
 };
 
 }   // namespace Digikam

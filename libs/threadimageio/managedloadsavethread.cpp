@@ -27,7 +27,6 @@
 // Local includes.
 
 #include "managedloadsavethread.h"
-#include "loadingcache.h"
 #include "loadsavetask.h"
 
 namespace Digikam

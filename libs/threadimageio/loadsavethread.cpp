@@ -28,13 +28,24 @@
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
-#include "loadingcache.h"
 #include "loadsavetask.h"
 
 namespace Digikam
 {
 
-bool LoadingDescription::operator==(const LoadingDescription &other)
+QString LoadingDescription::cacheKey() const
+{
+    // Here we have the knowledge which LoadingDescriptions / RawFileDecodingSettings
+    // must be cached separately.
+    // When the Raw loading settings are changed in setup, the cache is cleaned,
+    // so we do not need to store check for every option here.
+    if (rawDecodingSettings.halfSizeColorImage)
+        return filePath + "-halfSizeColorImage";
+    else
+        return filePath;
+}
+
+bool LoadingDescription::operator==(const LoadingDescription &other) const
 {
     return filePath == other.filePath &&
             rawDecodingSettings.cameraColorBalance    == other.rawDecodingSettings.cameraColorBalance &&

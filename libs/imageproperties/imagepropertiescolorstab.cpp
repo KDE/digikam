@@ -581,11 +581,26 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     }
 
     d->currentFilePath = url.path();
-    d->imageLoaderThread->load(d->currentFilePath, SharedLoadSaveThread::AccessModeRead,
-                               SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    
+
+    if (DImg::fileFormat(d->currentFilePath) == DImg::RAW)
+    {
+        // use raw settings optimized for speed
+
+        RawDecodingSettings rawDecodingSettings = RawDecodingSettings();
+        rawDecodingSettings.optimizeTimeLoading();
+
+        d->imageLoaderThread->load(LoadingDescription(d->currentFilePath, rawDecodingSettings),
+                                   SharedLoadSaveThread::AccessModeRead,
+                                   SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    }
+    else
+    {
+        d->imageLoaderThread->load(d->currentFilePath, SharedLoadSaveThread::AccessModeRead,
+                                   SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    }
+
     d->histogramWidget->setDataLoading();
-    
+
     // Toggle ICC header to busy during loading.
     d->blinkTimer->start(200);
 }

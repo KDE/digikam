@@ -84,6 +84,9 @@ public:
         VERTICAL
     };
 
+    /** Identify file format */
+    static FORMAT fileFormat(const QString& filePath);
+
     /** Create null image */
     DImg();
 
@@ -319,7 +322,6 @@ private:
 
 private:
 
-    FORMAT     fileFormat(const QString& filePath);
     void       copyMetaData(const DImgPrivate *src);
     void       copyImageData(const DImgPrivate *src);
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
