@@ -216,8 +216,6 @@ void DImg::resetMetaData()
 {
     m_priv->attributes.clear();
     m_priv->embeddedText.clear();
-    m_priv->cameraModel       = QString();
-    m_priv->cameraConstructor = QString();
     m_priv->metaData.clear();
 }
 
@@ -231,11 +229,9 @@ uchar *DImg::stripImageData()
 
 void DImg::copyMetaData(const DImgPrivate *src)
 {
-    m_priv->isReadOnly        = src->isReadOnly;
-    m_priv->attributes        = src->attributes;
-    m_priv->embeddedText      = src->embeddedText;
-    m_priv->cameraModel       = src->cameraModel;
-    m_priv->cameraConstructor = src->cameraConstructor;
+    m_priv->isReadOnly   = src->isReadOnly;
+    m_priv->attributes   = src->attributes;
+    m_priv->embeddedText = src->embeddedText;
 
     // since qbytearrays are explicity shared, we need to make sure that they are
     // detached from any shared references
@@ -696,26 +692,6 @@ QString DImg::embeddedText(const QString& key) const
         return m_priv->embeddedText[key];
 
     return QString();
-}
-
-void DImg::setCameraModel(QString model)
-{
-    m_priv->cameraModel = model;
-}
-
-QString DImg::cameraModel() const
-{
-    return ( m_priv->cameraModel );
-}
-
-void DImg::setCameraConstructor(QString constructor)
-{
-    m_priv->cameraConstructor = constructor;
-}
-
-QString DImg::cameraConstructor() const
-{
-    return ( m_priv->cameraConstructor );
 }
 
 DColor DImg::getPixelColor(uint x, uint y) const

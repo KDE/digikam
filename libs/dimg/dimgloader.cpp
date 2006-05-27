@@ -109,16 +109,6 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
     m_image->setEmbeddedText(key, text);
 }
 
-void DImgLoader::imageSetCameraModel(const QString& model)
-{
-    m_image->setCameraModel(model);
-}
-
-void DImgLoader::imageSetCameraConstructor(const QString& constructor)
-{
-    m_image->setCameraConstructor(constructor);
-}
-
 void DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT ff)
 {
     QMap<int, QByteArray>& imageMetadata = imageMetaData();

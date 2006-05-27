@@ -80,7 +80,7 @@ public:
     /** Metadata manipulation methods */
     QByteArray getComments() const;
     QByteArray getExif() const;
-    QByteArray getIptc() const;
+    QByteArray getIptc(bool addIrbHeader=false) const;
 
     void setComments(const QByteArray& data);
     void setExif(const QByteArray& data);

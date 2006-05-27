@@ -75,9 +75,6 @@ protected:
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 
-    void                    imageSetCameraModel(const QString& model);
-    void                    imageSetCameraConstructor(const QString& constructor);
-
     virtual void            readMetadata(const QString& filePath, DImg::FORMAT ff);
     virtual void            saveMetadata(const QString& filePath);
     virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);

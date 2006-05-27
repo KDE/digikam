@@ -41,6 +41,7 @@
 // Exiv2 includes.
 
 #include <exiv2/image.hpp>
+#include <exiv2/jpgimage.hpp>
 #include <exiv2/datasets.hpp>
 #include <exiv2/tags.hpp>
 
@@ -91,7 +92,13 @@ QByteArray DMetadata::getExif() const
     try
     {    
         if (!d->exifMetadata.empty())
-        {                
+        {
+/*            const Exiv2::ExifData& exif = d->exifMetadata;
+            Exiv2::DataBuf c2 = exif.copy();
+            QByteArray data(c2.size_);
+            memcpy(data.data(), c2.pData_, c2.size_);
+            return data;*/
+
             Exiv2::ExifData exif(d->exifMetadata);
             Exiv2::DataBuf const c2(exif.copy());
             QByteArray data(c2.size_);
@@ -109,14 +116,20 @@ QByteArray DMetadata::getExif() const
     return QByteArray();
 }
 
-QByteArray DMetadata::getIptc() const
+QByteArray DMetadata::getIptc(bool addIrbHeader) const
 {
     try
     {    
         if (!d->iptcMetadata.empty())
         {                
-            Exiv2::IptcData iptc(d->iptcMetadata);
-            Exiv2::DataBuf const c2(iptc.copy());
+            const Exiv2::IptcData& iptc = d->iptcMetadata;
+            Exiv2::DataBuf c2;
+
+            if (addIrbHeader) 
+                c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
+            else 
+                c2 = iptc.copy();
+
             QByteArray data(c2.size_);
             memcpy(data.data(), c2.pData_, c2.size_);
             return data;

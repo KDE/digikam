@@ -18,12 +18,21 @@
  *
  * ============================================================ */
 
+// C++ includes.
+
+#include <cassert>
+
 // Qt includes.
 
 #include <qfile.h>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes.
 
+#include "dcraw_parse.h"
 #include "rawmetaloader.h"
 
 namespace Digikam
@@ -45,7 +54,26 @@ bool RAWMetaLoader::load(const QString& filePath)
     if (loadWithExiv2(filePath))
         return true;
 
-    // TODO new experimental RAW parser can be added here.
+    // Get Make and Model info usin dcraw::parse method
+    char camera[256], constructor[256];
+    DcrawParse rawFileParser;
+    
+    if ( rawFileParser.getCameraModel(QFile::encodeName(filePath), constructor, camera) == 0 )
+    {
+        try
+        {    
+            QString make(constructor);
+            QString model(camera);
+            exifMetadata()["Exif.Image.Make"]  = make.latin1();
+            exifMetadata()["Exif.Image.Model"] = model.latin1();
+            return true;
+        }
+        catch( Exiv2::Error &e )
+        {
+            kdDebug() << "Exiv2 Exception (" << e.code() << ")" << endl;
+        }   
+    }
+
     return false;
 }
 

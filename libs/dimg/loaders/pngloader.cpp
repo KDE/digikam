@@ -443,16 +443,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
             
 #ifdef ENABLE_DEBUG_MESSAGES    
-            kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key << " text=" << text_ptr[i].text << endl;
+            kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key 
+                      << " text=" << text_ptr[i].text << endl;
 #endif
-    
-            QString key(text_ptr[i].key);
-    
-            if (key == "Model")
-                imageSetCameraModel(key);
-    
-            if (key == "Make")
-               imageSetCameraConstructor(key);
         }
     }
     

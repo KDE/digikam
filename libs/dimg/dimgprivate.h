@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date    : 2005-06-15
+ * Date   : 2005-06-15
  * Description : DImg private data class
  *
  * Copyright 2005 by Renchi Raju and Gilles Caulier
@@ -51,8 +51,6 @@ public:
         alpha             = false;
         sixteenBit        = false;
         isReadOnly        = false;
-        cameraModel       = QString::null;
-        cameraConstructor = QString::null;
     }
 
     ~DImgPrivate()
@@ -67,16 +65,12 @@ public:
     
     unsigned int            width;
     unsigned int            height;
+
+    unsigned char          *data;
     
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
-
-    unsigned char*          data;
-    
-    /** Save informations about camera witch taking the picture. */
-    QString                 cameraModel;
-    QString                 cameraConstructor;
 
 };
 

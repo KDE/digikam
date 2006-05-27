@@ -417,10 +417,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
+    metaData.setIptc(m_image->getIptc());
 
     // Standard IPTC tag (available with libtiff 3.6.1)    
 
-    QByteArray ba = m_image->getIptc();
+    QByteArray ba = metaData.getIptc(true);
     if (!ba.isEmpty()) 
     {
         TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar *)ba.data());
