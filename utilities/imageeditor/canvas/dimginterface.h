@@ -131,10 +131,12 @@ public:
     uchar* getImageSelection();
     void   putImageSelection(const QString &caller, uchar* data);
     
-    void setEmbeddedICCToOriginalImage( QString profilePath);
+    void   setEmbeddedICCToOriginalImage( QString profilePath);
 
     QByteArray            getEmbeddedICC();
-    
+    QByteArray            getExif();
+    QByteArray            getIptc();    
+
     ICCSettingsContainer *getICCSettings();
     
     QString               getImageFileName();

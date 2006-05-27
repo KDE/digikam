@@ -320,6 +320,16 @@ QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
     return DImgInterface::instance()->getEmbeddedICC();
 }
 
+QByteArray ImageIface::getExifFromOriginalImage()
+{
+    return DImgInterface::instance()->getExif();
+}
+
+QByteArray ImageIface::getIptcFromOriginalImage()
+{
+    return DImgInterface::instance()->getIptc();
+}
+
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
 {
     if ( !d->targetPreviewImage.isNull() )

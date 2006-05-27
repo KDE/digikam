@@ -94,7 +94,7 @@ public:
     /** Embed the Color Profile we have used in ICC plugin when this option is 
         selected
     */
-    void setEmbeddedICCToOriginalImage(QString profilePath);
+    void   setEmbeddedICCToOriginalImage(QString profilePath);
 
     /** Replace the data of the current original image selection with the given data.
         The characteristics of the data must match the characteristics of the current
@@ -128,7 +128,11 @@ public:
     int  originalHeight();
     bool originalSixteenBit();
     bool originalHasAlpha();
+    
+    /** Original image metadata.*/
     QByteArray getEmbeddedICCFromOriginalImage();
+    QByteArray getExifFromOriginalImage();
+    QByteArray getIptcFromOriginalImage();
 
     /** Standard methods to get/set preview informations.*/
     int  previewWidth();
