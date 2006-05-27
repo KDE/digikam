@@ -93,6 +93,8 @@ QByteArray DMetadata::getExif() const
     {    
         if (!d->exifMetadata.empty())
         {
+
+// FIXME : why this code cannot be compiled ?
 /*            const Exiv2::ExifData& exif = d->exifMetadata;
             Exiv2::DataBuf c2 = exif.copy();
             QByteArray data(c2.size_);
@@ -125,9 +127,10 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
             const Exiv2::IptcData& iptc = d->iptcMetadata;
             Exiv2::DataBuf c2;
 
-            if (addIrbHeader) 
+// FIXME : add exiv2 version rules here
+/*            if (addIrbHeader) 
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
-            else 
+            else */
                 c2 = iptc.copy();
 
             QByteArray data(c2.size_);
