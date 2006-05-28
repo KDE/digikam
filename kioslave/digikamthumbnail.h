@@ -27,11 +27,12 @@
 
 #include <kio/slavebase.h>
 
-class KURL;
 class QCString;
 class QString;
 class QImage;
 class QApplication;
+
+class KURL;
 
 class kio_digikamthumbnailProtocol : public KIO::SlaveBase
 {
@@ -44,12 +45,14 @@ public:
 
 private:
 
-    bool loadByExtension(QImage& image, const QString& path);
-    bool loadJPEG(QImage& image, const QString& path);
-    bool loadImlib2(QImage& image, const QString& path);
-    bool loadKDEThumbCreator(QImage& image, const QString& path);
-    bool loadDCRAW(QImage& image,  const QString& path);
-    void createThumbnailDirs();
+    bool   loadByExtension(QImage& image, const QString& path);
+    bool   loadJPEG(QImage& image, const QString& path);
+    void   exifRotate(const QString& filePath, QImage& thumb);
+    QImage loadPNG(const QString& path);
+    bool   loadImlib2(QImage& image, const QString& path);
+    bool   loadKDEThumbCreator(QImage& image, const QString& path);
+    bool   loadDCRAW(QImage& image,  const QString& path);
+    void   createThumbnailDirs();
 
 private:
 
@@ -60,12 +63,14 @@ private:
     int           new_width_;
     int           new_height_;
 
+    int           argc_;
+    char        **argv_;
+
     QString       smallThumbPath_;
     QString       bigThumbPath_;
 
     QApplication *app_;
-    int           argc_;
-    char**        argv_;
+
 };
 
 #endif  // _digikamthumbnail_H_
