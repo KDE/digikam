@@ -94,15 +94,8 @@ QByteArray DMetadata::getExif() const
         if (!d->exifMetadata.empty())
         {
 
-// FIXME : why this code cannot be compiled ?
-/*            const Exiv2::ExifData& exif = d->exifMetadata;
+            Exiv2::ExifData& exif = d->exifMetadata;
             Exiv2::DataBuf c2 = exif.copy();
-            QByteArray data(c2.size_);
-            memcpy(data.data(), c2.pData_, c2.size_);
-            return data;*/
-
-            Exiv2::ExifData exif(d->exifMetadata);
-            Exiv2::DataBuf const c2(exif.copy());
             QByteArray data(c2.size_);
             memcpy(data.data(), c2.pData_, c2.size_);
             return data;
