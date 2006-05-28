@@ -36,6 +36,7 @@ class KURL;
 
 class kio_digikamthumbnailProtocol : public KIO::SlaveBase
 {
+
 public:
 
     kio_digikamthumbnailProtocol(int argc, char** argv);
@@ -44,12 +45,14 @@ public:
 
 private:
 
-    bool loadByExtension(QImage& image, const QString& path);
-    bool loadJPEG(QImage& image, const QString& path);
-    bool loadDImg(QImage& image, const QString& path);
-    bool loadKDEThumbCreator(QImage& image, const QString& path);
-    bool loadDCRAW(QImage& image,  const QString& path);
-    void createThumbnailDirs();
+    bool   loadByExtension(QImage& image, const QString& path);
+    bool   loadJPEG(QImage& image, const QString& path);
+    void   exifRotate(const QString& filePath, QImage& thumb);
+    QImage loadPNG(const QString& path);
+    bool   loadDImg(QImage& image, const QString& path);
+    bool   loadKDEThumbCreator(QImage& image, const QString& path);
+    bool   loadDCRAW(QImage& image,  const QString& path);
+    void   createThumbnailDirs();
 
 private:
     
@@ -61,7 +64,7 @@ private:
     int           new_height_;
 
     int           argc_;
-    char**        argv_;
+    char        **argv_;
 
     QString       smallThumbPath_;
     QString       bigThumbPath_;
