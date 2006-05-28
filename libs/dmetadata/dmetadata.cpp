@@ -117,7 +117,7 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
     {    
         if (!d->iptcMetadata.empty())
         {                
-            const Exiv2::IptcData& iptc = d->iptcMetadata;
+            Exiv2::IptcData& iptc = d->iptcMetadata;
             Exiv2::DataBuf c2;
 
 // FIXME : add exiv2 version rules here
