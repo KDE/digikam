@@ -7,6 +7,12 @@
  * Copyright 2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
  *
+ * Specifications & references:
+ * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
+ * - TIFF/EP   : http://www.map.tu.chiba-u.ac.jp/IEC/100/TA2/recdoc/N4378.pdf
+ * - TIFF/Tags : http://www.awaresystems.be/imaging/tiff/tifftags.html
+ * - DNG       : http://www.adobe.com/products/dng/pdfs/dng_spec.pdf
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -627,7 +633,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }    
 
     // -------------------------------------------------------------------
-    // Write image data
+    // Write full image data in tiff directory IFD0
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
@@ -644,7 +650,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!buf)
     {
-        kdDebug() << k_funcinfo << "Cannot allocate memory buffer." << endl;
+        kdDebug() << k_funcinfo << "Cannot allocate memory buffer for main image." << endl;
         TIFFClose(tif);
         return false;
     }
@@ -734,7 +740,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            kdDebug() << k_funcinfo << "Cannot write to target file." << endl;
+            kdDebug() << k_funcinfo << "Cannot write main image to target file." << endl;
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -742,6 +748,59 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     _TIFFfree(buf);
+    TIFFWriteDirectory(tif);
+
+    // -------------------------------------------------------------------
+    // Write thumbnail in tiff directory IFD1
+
+    QImage thumb = m_image->smoothScale(160, 120, QSize::ScaleMin).copyQImage();
+
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      thumb.width());
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     thumb.height());
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,     PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_PLANARCONFIG,    PLANARCONFIG_CONTIG);
+    TIFFSetField(tif, TIFFTAG_ORIENTATION,     ORIENTATION_TOPLEFT);
+    TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT,  RESUNIT_NONE);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION,     COMPRESSION_NONE);
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE,   8);
+    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,    TIFFDefaultStripSize(tif, 0));
+
+    uchar *pixelThumb;
+    uchar *dataThumb = thumb.bits();
+    uint8 *bufThumb  = (uint8 *) _TIFFmalloc(TIFFScanlineSize(tif));
+
+    if (!bufThumb)
+    {
+        kdDebug() << k_funcinfo << "Cannot allocate memory buffer for thumbnail." << endl;
+        TIFFClose(tif);
+        return false;
+    }
+
+    for (y = 0 ; y < uint32(thumb.height()) ; y++)
+    {
+        i = 0;
+        
+        for (x = 0 ; x < uint32(thumb.width()) ; x++)
+        {
+            pixelThumb = &dataThumb[((y * thumb.width()) + x) * 4];
+            
+            // This might be endian dependent 
+            bufThumb[i++] = (uint8)pixelThumb[2];
+            bufThumb[i++] = (uint8)pixelThumb[1];
+            bufThumb[i++] = (uint8)pixelThumb[0];
+        }
+
+        if (!TIFFWriteScanline(tif, bufThumb, y, 0))
+        {
+            kdDebug() << k_funcinfo << "Cannot write thumbnail to target file." << endl;
+            _TIFFfree(bufThumb);
+            TIFFClose(tif);
+            return false;
+        }
+    }
+
+    _TIFFfree(bufThumb);
     TIFFClose(tif);
 
     // -------------------------------------------------------------------
