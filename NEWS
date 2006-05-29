@@ -140,5 +140,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 ==> 127946 (Typo: the word Toogle should be Toggle)
 ==> 117115 (Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
 ==> 128069 (crash when moving an album to another album)
+==> 125779 (use deflate compression for tiffs)
 
 ----------------------------------------------------------------------------------------------------
