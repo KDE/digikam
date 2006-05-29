@@ -399,6 +399,10 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
         TIFFSetField(tif, TIFFTAG_ZIPQUALITY,  9);
+        // NOTE : this tag values aren't defined in libtiff 3.6.1. '2' is PREDICTOR_HORIZONTAL.
+        //        This value is used to optimize Deflate compression ratio. See this url for more details:
+        //        http://www.awaresystems.be/imaging/tiff/tifftags/predictor.html
+        TIFFSetField(tif, TIFFTAG_PREDICTOR,   2); 
     }
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
