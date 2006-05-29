@@ -22,6 +22,7 @@ Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Im
 Image Editor  : Add a progress bar to Image editor/showfoto about IO image files access.
 Image Editor  : Support of ICC color profiles management using LCMS into Image editor/showfoto.
 Image Editor  : digiKam setup is now available from Image Editor menu.
+Image Editor  : TIFF and JPEG Exif thumbnail are recomputed at saving pictures.
 
 Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Plugins : New powerfull Black & White converter tool using curves adjustements.
@@ -41,6 +42,8 @@ Setup         : new Identity setup page to set default strings informations abou
 
 CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
                 on the fly.
+                JPEG Exif thumbnail are recomputed during Exif Auto-rotation.
+
 
 Showfoto      : image properties sidebar support
 Showfoto      : all images from a folder can be loaded at the same time.
