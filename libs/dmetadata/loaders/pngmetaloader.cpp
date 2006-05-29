@@ -88,8 +88,22 @@ bool PNGMetaLoader::load(const QString& filePath)
                     uchar *data = readRawProfile(s.ascii(), &length);
                     if (!data)
                         continue;
-                    // We removing standard Exif header
-                    exifMetadata().load((const Exiv2::byte*)data+6, length-6);
+                    
+                    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
+                    QByteArray exifData(length);
+                    memcpy(exifData.data(), data, length);
+                    
+                    if (!exifData.isEmpty())
+                    {                    
+                        int i = exifData.find(*exifHeader);
+                        if (i != -1)
+                        {
+                            kdDebug() << filePath << " : Exif header found at position " << i << endl;
+                            i = i + sizeof(exifHeader);
+                            exifMetadata().load((const Exiv2::byte*)data+i, exifData.size()-i);
+                        }
+                    }
+                    
                     delete [] data;
                     
                     if (!exifMetadata().empty())
