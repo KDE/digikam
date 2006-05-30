@@ -59,90 +59,91 @@ Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like i
 ----------------------------------------------------------------------------------------------------
 BUGFIX from B.K.O (http://bugs.kde.org):
 
-==> 87823  (displaying images with ICC color profile when possible)
-==> 91811  (find pictures by meta tag info, date)
-==> 91812  (viewer/editor for IPTC meta data)
-==> 96459  (EXIF for RAW camera images)
-==> 116248 (Ask user which plugins should be enabled on first startup )
-==> 115441 (resize EXIF-rotated images doesn't work)
-==> 115460 (opening and closing right pane with tag filter also changes width of left pane and vv )
-==> 124688 (Digikam loading time is big because of : WARNING: Failed to find parent for Tag)
-==> 109253 (Digikam does not store comments in image EXIF tags)
-==> 115764 (Modify EXIF creation date)
-==> 121487 ("Tip of the day" text gets cut off)
-==> 120052 (redraw problem with whatthis info of an image show and start scrolling with the mouse)
-==> 120053 (whatthis info not closed when albumview is scrolled up or down with cursor keys )
-==> 123522 (Minolta's RAW files (mrw) aren't show in the view window)
-==> 121905 (albums not displayed correctly and digikam crashes with St9bad_alloc)
-==> 113997 (option to store tags in image)
-==> 123742 (preview-pictures seem to be handled differently by digiKam and Konqueror)
-==> 121308 (Mass storage and PTP usability)
-==> 121306 (Add copyright/license during download)
-==> 111560 (Be able to locate photos on a map)
-==> 122747 (Will not build with GCC 4.1)
-==> 103176 (16bit/channel framework for digikam)
-==> 109096 (provide quick access to image comment)
-==> 109817 (feature request for image properties dialog in image editor)
-==> 109992 (Preview in comments editor resizeable)
-==> 113103 (Show digikam comments into digikam image editor)
-==> 124939 (Improve import picture nomenclature)
-==> 113915 (Tags are lost after "Save As..."ing)
-==> 103245 (Image Effects are inaccessible from image editor)
-==> 125589 (saving user preferences not possible)
-==> 103201 (easy transport of albums, including tags, comments, etc.)
-==> 119234 (Window views not updated when tag name changed in "Tag Filters")
-==> 103255 (wish: *add* (not edit) EXIF headers like date, comment etc)
-==> 121800 (can't setup camera correctly)
-==> 121784 (accessing the camera in mass storage mode just lists jpegs and no other filetypes)
-==> 121371 (Missing display of EXIF infos in "Simple view")
-==> 123646 (rating image with a keyboard shortcut)
-==> 119946 (thumbnails not correctly rotated according to exif information)
-==> 106103 (Should support adding GPS EXIF header to images)
-==> 110598 (synchronize digikam comments to existing embedded comments)
-==> 118501 (exifs lost when modifying the images)
-==> 122264 (Exif data fail to show up in recent SVN)
-==> 103489 (sort and re-order EXIF information dialogs)
-==> 105670 (option to print EXIF data with images)
-==> 109319 (Full EXIF info - exiftags style)
-==> 120963 (optional album date change)
-==> 121370 (Can't save images sometimes after some modifications)
-==> 121646 (Digikam on PPC has problem identifying JPEG and tries to use dcraw with them)
-==> 120479 (Search problem for not tagged or commented images)
-==> 120775 (Search doesn't find pictures without rating)
-==> 112063 (When viewing image in fullscreen there is an ugly frame at the border of the screen)
-==> 120736 (many imageplugins going busy for ever when not using rubber to change a value)
-==> 116154 (Show progress bar while saving large files)
-==> 120521 (Untranslatable message in tagfilterview.cpp)
-==> 119742 (wish list -include move to trash in right click menu)
-==> 119201 (Sometimes digiKam fails to show newly downloaded photos)
-==> 117401 (digikam's 'my albums' and 'my tags' does no longer remember it's state when restarted)
-==> 116520 (Slideshow should work for search results as well)
-==> 119073 (wish list rescan option)
-==> 118543 (enable-nfs-hack no longer works)
-==> 113807 (Is it possible to have the tags of the contextual menus "Assign Tag" and "Remove Tag" sorted ?)
-==> 116343 ("Not Tagged" has disappeared from the Tags Filter view when changing album library path)
-==> 117225 (digikam requires at least libpng >= 1.2.7)
-==> 115423 (thumbnails view jumps to top when new photos are added)
-==> 125732 (ICC settings get reset when disabled and re-enabled)
-==> 119741 (Restore image editor if already open)
-==> 122374 (Ignores read-only permission during saving)
-==> 121367 (Add properties tab to digiKam and (especially) IE)
-==> 125926 (Directories with a '#' in their name are not properly detected when created outside digikam)
-==> 125733 (Enabling 'Always apply ICM profiles' can lead to suprising results) 
-==> 126326 (camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console)
-==> 121242 (mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x)
-==> 127374 (unsharp mask: max. radius way too small)
-==> 116485 (Mimimize button missing on "Compaq Flash Reader" camera window)
-==> 127577 (raw display too dark and not rotated)
-==> 127634 (Communication between digikam and its kioslaves broken if size_t != off_t)
-==> 126335 (Autoration of photos may confuse user because of changes made he is not aware of)
-==> 127759 (no scroll bar in color management/select profile)
-==> 114211 (Main Interface: image comments encoding unreadable after moving an album)
-==> 120241 (Main Interface: utf8 display and edit)
-==> 127905 (wish: make comment field resizable)
-==> 127946 (Typo: the word Toogle should be Toggle)
-==> 117115 (Automatically rotate/flip using camera-provided information (EXIF) modifies image contents)
-==> 128069 (crash when moving an album to another album)
-==> 125779 (use deflate compression for tiffs)
+001 ==> 87823  : displaying images with ICC color profile when possible
+002 ==> 91811  : find pictures by meta tag info, date
+003 ==> 91812  : viewer/editor for IPTC meta data
+004 ==> 96459  : EXIF for RAW camera images
+005 ==> 116248 : Ask user which plugins should be enabled on first startup 
+006 ==> 115441 : resize EXIF-rotated images doesn't work
+007 ==> 115460 : opening and closing right pane with tag filter also changes width of left pane and vv 
+008 ==> 124688 : Digikam loading time is big because of : WARNING: Failed to find parent for Tag
+009 ==> 109253 : Digikam does not store comments in image EXIF tags
+010 ==> 115764 : Modify EXIF creation date
+011 ==> 121487 : "Tip of the day" text gets cut off
+012 ==> 120052 : redraw problem with whatthis info of an image show and start scrolling with the mouse
+013 ==> 120053 : whatthis info not closed when albumview is scrolled up or down with cursor keys 
+014 ==> 123522 : Minolta's RAW files (mrw) aren't show in the view window
+015 ==> 121905 : albums not displayed correctly and digikam crashes with St9bad_alloc
+016 ==> 113997 : option to store tags in image
+017 ==> 123742 : preview-pictures seem to be handled differently by digiKam and Konqueror
+018 ==> 121308 : Mass storage and PTP usability
+019 ==> 121306 : Add copyright/license during download
+020 ==> 111560 : Be able to locate photos on a map
+021 ==> 122747 : Will not build with GCC 4.1
+022 ==> 103176 : 16bit/channel framework for digikam
+023 ==> 109096 : provide quick access to image comment
+024 ==> 109817 : feature request for image properties dialog in image editor
+025 ==> 109992 : Preview in comments editor resizeable
+026 ==> 113103 : Show digikam comments into digikam image editor
+027 ==> 124939 : Improve import picture nomenclature
+028 ==> 113915 : Tags are lost after "Save As..."ing
+029 ==> 103245 : Image Effects are inaccessible from image editor
+030 ==> 125589 : saving user preferences not possible
+031 ==> 103201 : easy transport of albums, including tags, comments, etc.
+032 ==> 119234 : Window views not updated when tag name changed in "Tag Filters"
+033 ==> 103255 : wish: *add* (not edit) EXIF headers like date, comment etc
+034 ==> 121800 : can't setup camera correctly
+035 ==> 121784 : accessing the camera in mass storage mode just lists jpegs and no other filetypes
+036 ==> 121371 : Missing display of EXIF infos in "Simple view"
+037 ==> 123646 : rating image with a keyboard shortcut
+038 ==> 119946 : thumbnails not correctly rotated according to exif information
+039 ==> 106103 : Should support adding GPS EXIF header to images
+040 ==> 110598 : synchronize digikam comments to existing embedded comments
+041 ==> 118501 : Exifs lost when modifying the images
+042 ==> 122264 : Exif data fail to show up in recent SVN
+043 ==> 103489 : sort and re-order EXIF information dialogs
+044 ==> 105670 : option to print EXIF data with images
+045 ==> 109319 : Full EXIF info - exiftags style
+046 ==> 120963 : optional album date change
+047 ==> 121370 : Can't save images sometimes after some modifications
+048 ==> 121646 : digiKam on PPC has problem identifying JPEG and tries to use dcraw with them
+049 ==> 120479 : Search problem for not tagged or commented images
+050 ==> 120775 : Search doesn't find pictures without rating
+051 ==> 112063 : When viewing image in fullscreen there is an ugly frame at the border of the screen
+052 ==> 120736 : many imageplugins going busy for ever when not using rubber to change a value
+053 ==> 116154 : Show progress bar while saving large files
+054 ==> 120521 : Untranslatable message in tagfilterview.cpp
+055 ==> 119742 : wish list -include move to trash in right click menu
+056 ==> 119201 : Sometimes digiKam fails to show newly downloaded photos
+057 ==> 117401 : digikam's 'my albums' and 'my tags' does no longer remember it's state when restarted
+058 ==> 116520 : Slideshow should work for search results as well
+059 ==> 119073 : wish list rescan option
+060 ==> 118543 : enable-nfs-hack no longer works
+061 ==> 113807 : Is it possible to have the tags of the contextual menus "Assign Tag" and "Remove Tag" sorted ?
+062 ==> 116343 : "Not Tagged" has disappeared from the Tags Filter view when changing album library path
+063 ==> 117225 : digikam requires at least libpng >= 1.2.7
+064 ==> 115423 : thumbnails view jumps to top when new photos are added
+065 ==> 125732 : ICC settings get reset when disabled and re-enabled
+066 ==> 119741 : Restore image editor if already open
+067 ==> 122374 : Ignores read-only permission during saving
+068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor
+069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam
+070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results 
+071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console
+072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x
+073 ==> 127374 : unsharp mask: max. radius way too small
+074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window
+075 ==> 127577 : raw display too dark and not rotated
+076 ==> 127634 : Communication between digikam and its kioslaves broken if size_t != off_t
+077 ==> 126335 : Autoration of photos may confuse user because of changes made he is not aware of
+078 ==> 127759 : no scroll bar in color management/select profile
+079 ==> 114211 : Main Interface: image comments encoding unreadable after moving an album
+080 ==> 120241 : Main Interface: utf8 display and edit
+081 ==> 127905 : wish: make comment field resizable
+082 ==> 127946 : Typo: the word Toogle should be Toggle
+083 ==> 117115 : Automatically rotate/flip using camera-provided information (EXIF) modifies image contents
+084 ==> 128069 : crash when moving an album to another album
+085 ==> 125779 : use deflate compression for tiffs
+086 ==> 127972 : digikam does not *add* EXIF:DateTimeOriginal when modifying date
 
 ----------------------------------------------------------------------------------------------------
