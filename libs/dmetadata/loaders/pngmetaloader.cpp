@@ -86,41 +86,42 @@ bool PNGMetaLoader::load(const QString& filePath)
                 {
                     uint length = s.length();
                     uchar *data = readRawProfile(s.ascii(), &length);
-                    if (!data)
-                        continue;
-                    
-                    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
-                    QByteArray exifData(length);
-                    memcpy(exifData.data(), data, length);
-                    
-                    if (!exifData.isEmpty())
-                    {                    
-                        int i = exifData.find(*exifHeader);
-                        if (i != -1)
-                        {
-                            kdDebug() << filePath << " : Exif header found at position " << i << endl;
-                            i = i + sizeof(exifHeader);
-                            exifMetadata().load((const Exiv2::byte*)data+i, exifData.size()-i);
+                    if (data)
+                    {
+                        char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
+                        QByteArray exifData(length);
+                        memcpy(exifData.data(), data, length);
+                        
+                        if (!exifData.isEmpty())
+                        {                    
+                            int i = exifData.find(*exifHeader);
+                            if (i != -1)
+                            {
+                                kdDebug() << filePath << " : Exif header found at position " << i << endl;
+                                i = i + sizeof(exifHeader);
+                                exifMetadata().load((const Exiv2::byte*)data+i, exifData.size()-i);
+                            }
                         }
+                        
+                        delete [] data;
+                        
+                        if (!exifMetadata().empty())
+                            m_hasExif = true;
                     }
-                    
-                    delete [] data;
-                    
-                    if (!exifMetadata().empty())
-                        m_hasExif = true;
                 }
                 
                 if ( k == "Raw profile type iptc" )
                 {
                     uint length = s.length();
                     uchar *data = readRawProfile(s.ascii(), &length);
-                    if (!data)
-                        continue;
-                    iptcMetadata().load((const Exiv2::byte*)data, length);
-                    delete [] data;
-
-                    if (!iptcMetadata().empty())
-                        m_hasIptc = true;
+                    if (data)
+                    {
+                        iptcMetadata().load((const Exiv2::byte*)data, length);
+                        delete [] data;
+    
+                        if (!iptcMetadata().empty())
+                            m_hasIptc = true;
+                    }
                 }
             }
         }
@@ -152,52 +153,104 @@ bool PNGMetaLoader::load(const QString& filePath)
     
         try
         {
-            if (!m_hasIptc)
+            if (!m_hasExif)
             {
-                QString pngKey("Iptc.");
-                Exiv2::IptcData iptcData;
+                Exiv2::ExifData exifData;
     
+                // Embedded Text tags.
+                
                 for (QStringList::iterator it = keys.begin() ; it!=keys.end() ; ++it)
                 {
+                    QString exifKey("Exif.");
                     KFileMetaInfoItem item = metainfo.item( *it );
+                    
                     if ( item.isValid() )
                     {
                         QString value = item.key();
-                        int maxCharSize;
         
-                        // Standard embbeded text layout:
-                        if      (value == "Title")         { pngKey.append("Application2.Subject");             maxCharSize = 236;  }
-                        else if (value == "Author")        { pngKey.append("Application2.Headline");            maxCharSize = 256;  }
-                        else if (value == "Description")   { pngKey.append("Application2.Caption");             maxCharSize = 2000; }
-                        else if (value == "Copyright")     { pngKey.append("Application2.Copyright");           maxCharSize = 128;  }
-                        else if (value == "Creation Time") { pngKey.append("Application2.TimeCreated");         maxCharSize = 11;   }
-                        else if (value == "Software")      { pngKey.append("Application2.Program");             maxCharSize = 32;   }
-                        else if (value == "Disclaimer")    { pngKey.append("Application2.Credit");              maxCharSize = 32;   }
-                        else if (value == "Warning")       { pngKey.append("Application2.SpecialInstructions"); maxCharSize = 256;  }
-                        else if (value == "Source")        { pngKey.append("Application2.Byline");              maxCharSize = 32;   }
-                        else if (value == "Comment")       { pngKey.append("Application2.Keywords");            maxCharSize = 64;   }
+                        // Standard Exif tags:
+                        if      (value == "Author")        { exifKey.append("Image.Artist");           }
+                        else if (value == "Description")   { exifKey.append("Image.ImageDescription"); }
+                        else if (value == "Copyright")     { exifKey.append("Image.Copyright");        }
+                        else if (value == "Creation Time") { exifKey.append("Image.DateTime");         }
+                        else if (value == "Software")      { exifKey.append("Image.Software");         }
+                        else if (value == "Source")        { exifKey.append("Image.Model");            }
+                        else if (value == "Make")          { exifKey.append("Image.Make");             }
+                        else if (value == "Title")         { exifKey.append("Image.DocumentName");     }
+                        else if (value == "Comment")       { exifKey.append("Photo.UserComment");      }
+
+                        // Advanced Exif tags rules:
+                        
+                        else if (value == "Disclaimer" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.Copyright")) == exifData.end()))
+                                { exifKey.append("Image.Copyright"); }
+
+                        else if (value == "Warning" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.DocumentName")) == exifData.end()))
+                                { exifKey.append("Image.DocumentName"); }
+
+                        else if (value == "Artist" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.Artist")) == exifData.end()))
+                                { exifKey.append("Image.Artist"); }
+
+                        else if (value == "Document" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.DocumentName")) == exifData.end()))
+                                { exifKey.append("Image.DocumentName"); }
+
+                        else if (value == "Label" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.ImageDescription")) == exifData.end()))
+                                { exifKey.append("Image.ImageDescription"); }
+                        
+                        else if (value == "Model" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.Model")) == exifData.end()))
+                                { exifKey.append("Image.Model"); }
+
+                        else if (value == "URL" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.DocumentName")) == exifData.end()))
+                                { exifKey.append("Image.DocumentName"); }
+
+                        else if (value == "TimeStamp" &&
+                            (exifData.findKey(Exiv2::ExifKey("Exif.Image.DateTime")) == exifData.end()))
+                                { exifKey.append("Image.DateTime"); }
         
-                        // Non-standard embbeded text layout:
-                        else if (value == "Artist")        { pngKey.append("Application2.BylineTitle");         maxCharSize = 32;   }
-                        else if (value == "Document")      { pngKey.append("Application2.ObjectName");          maxCharSize = 64;   }
-                        else if (value == "Label")         { pngKey.append("Application2.FixtureId");           maxCharSize = 32;   }
-                        else if (value == "Make")          { pngKey.append("Application2.Source");              maxCharSize = 32;   }
-                        else if (value == "Model")         { pngKey.append("Application2.Writer");              maxCharSize = 32;   }
-                        else if (value == "TimeStamp")     { pngKey.append("Application2.DateCreated");         maxCharSize = 8;    }
-                        else if (value == "URL")           { pngKey.append("Application2.EditStatus");          maxCharSize = 64;   }
-                        else continue;
-        
-                        QString txtValue = item.string();
-                        txtValue.truncate(maxCharSize);
-                        kdDebug() << pngKey << "=" << txtValue << endl;
-                        iptcData[pngKey.ascii()] = std::string(txtValue.ascii());
+                        if (exifKey != "Exif.")
+                        {
+                            QString txtValue = item.string();
+                            kdDebug() << exifKey << "=" << txtValue << endl;
+                            exifData[exifKey.ascii()] = std::string(txtValue.ascii());
+                        }
                     }
-    
-                iptcMetadata() = iptcData;
-        
-                if (!iptcMetadata().empty())
-                    m_hasIptc = true;
                 }
+                 
+                // Image technical informations.
+                   
+                for (QStringList::iterator it = keys.begin() ; it!=keys.end() ; ++it)
+                {
+                    KFileMetaInfoItem item = metainfo.item( *it );
+                    
+                    if ( item.isValid() )
+                    {
+                        if (item.key() == "Dimensions")
+                        {
+                            exifData["Exif.Image.ImageWidth"]      = item.value().toSize().width();
+                            exifData["Exif.Image.ImageLength"]     = item.value().toSize().height();
+                            exifData["Exif.Photo.PixelXDimension"] = item.value().toSize().width();
+                            exifData["Exif.Photo.PixelYDimension"] = item.value().toSize().height();
+                        }
+                        
+                        if (item.key() == "BitDepth")
+                            exifData["Exif.Image.BitsPerSample"] = item.value().toInt();
+                            
+                            
+                        // KfileMetaInfo return a string about ColorMode and Compression values. 
+                        // We cannot translate these tags to Exif.
+                    }
+                }
+                                
+                exifMetadata() = exifData;
+                        
+                if (!exifMetadata().empty())
+                    m_hasExif = true;
             }
         }
         catch( Exiv2::Error &e )
@@ -220,15 +273,10 @@ bool PNGMetaLoader::save(const QString& /*filePath*/)
 uchar* PNGMetaLoader::readRawProfile(const char* text, uint *length)
 {
     uchar          *info = 0;
-
     register long   i;
-
     register uchar *dp;
-
     const char     *sp;
-
     uint            nibbles;
-
     unsigned char   unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
                                 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
                                 0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
