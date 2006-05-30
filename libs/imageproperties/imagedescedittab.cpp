@@ -410,7 +410,7 @@ void ImageDescEditTab::applyAllChanges()
         if (AlbumSettings::instance()->getSaveDateTime())
         {
             // Store Image Date & Time as Exif and Iptc tags.
-            metadata.setImageDateTime(d->dateTimeEdit->dateTime());
+            metadata.setImageDateTime(d->dateTimeEdit->dateTime(), false);
         }
 
         if (AlbumSettings::instance()->getSaveIptcRating())

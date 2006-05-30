@@ -101,7 +101,7 @@ public:
     bool setExifThumbnail(const QImage& thumb);
     bool setImageDimensions(const QSize& size);
     bool setImageOrientation(ImageOrientation orientation);
-    bool setImageDateTime(const QDateTime& dateTime);
+    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false);
     bool setImageComment(const QString& comment);
     bool setImageRating(int rating);
     bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords);

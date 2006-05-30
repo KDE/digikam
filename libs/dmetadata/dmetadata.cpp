@@ -734,7 +734,7 @@ QDateTime DMetadata::getImageDateTime() const
     return QDateTime();
 }
 
-bool DMetadata::setImageDateTime(const QDateTime& dateTime)
+bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized)
 {
     try
     {    
@@ -746,17 +746,21 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime)
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
-        d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
         d->exifMetadata["Exif.Photo.DateTimeOriginal"]  = exifdatetime;
+        if(setDateTimeDigitized)
+            d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
         
         // In Second we write date & time into Iptc.
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
-        d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
-        d->iptcMetadata["Iptc.Application2.DateCreated"]      = iptcdate;
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
-        d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+        d->iptcMetadata["Iptc.Application2.DateCreated"] = iptcdate;
         d->iptcMetadata["Iptc.Application2.TimeCreated"]      = iptctime;
+        if(setDateTimeDigitized)
+        {
+            d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
+            d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+        }
         
         setImageProgramId();
         return true;

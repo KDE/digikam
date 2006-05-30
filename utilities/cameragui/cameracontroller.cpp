@@ -354,7 +354,7 @@ void CameraThread::run()
                         DMetadata metadata(tempURL.path());
                         
                         if (fixDateTime)
-                            metadata.setImageDateTime(newDateTime);
+                            metadata.setImageDateTime(newDateTime, true);
                         
                         if (setPhotographerId)
                             metadata.setImagePhotographerId(author, authorTitle);

@@ -202,11 +202,11 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip image"), exifBox);
     d->autoAlbumCheck   = new QCheckBox(i18n("Date-based sub-albums"), exifBox);
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
-                                              "rotated or fliped images using EXIF informations "
-                                              "provided by camera"));
+                                              "rotated or flipped images using EXIF information "
+                                              "provided by camera."));
     QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
                                              "into automatically created date-based sub-albums "
-                                             "of destination album"));
+                                             "of destination album."));
 
     QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations"), d->advBox);
     d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), OnFlyBox);
@@ -216,11 +216,12 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default photographer identity "
                                                 "into IPTC tags using main digiKam metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit and copyrigth informations "
+    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit and copyright information "
                                          "into IPTC tags using main digiKam metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
                                                "tags to the right values if your camera don't set "
-                                               "properlly these tags when pictures are taken."));
+                                               "properly these tags when pictures are taken. The values will"
+                                               "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
                                                
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
     grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
