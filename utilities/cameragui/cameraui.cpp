@@ -237,10 +237,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
         
     // -------------------------------------------------------------------------
 
-    d->cancelBtn     = new QToolButton(plainPage());
-    QIconSet iconSet = kapp->iconLoader()->loadIconSet("stop", KIcon::Toolbar, 22);
-    d->cancelBtn->setText(i18n("Cancel"));
-    d->cancelBtn->setIconSet(iconSet);
+    d->cancelBtn = new QToolButton(plainPage());
+    d->cancelBtn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    d->cancelBtn->setPixmap( SmallIcon( "cancel" ) );
     d->cancelBtn->setEnabled(false);
     
     d->status   = new KSqueezedTextLabel(plainPage());
@@ -249,9 +248,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->progress->hide();
 
     QFrame *frame = new QFrame(plainPage());
+    frame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QHBoxLayout* layout = new QHBoxLayout( frame );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setMargin( 2 );  // To make sure the frame gets displayed
     layout->setSpacing( 0 );
 
     KURLLabel *pixmapLogo = new KURLLabel( frame );
