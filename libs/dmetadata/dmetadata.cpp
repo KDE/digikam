@@ -738,19 +738,25 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime)
 {
     try
     {    
-        kdDebug() << d->filePath << " ==> Date&Time: " << dateTime.toString(Qt::ISODate) << endl;
-        
         // In first we write date & time into Exif.
-                
+        
+        // DateTimeDigitized is set by slide scanners etc. when a picture is digitized.
+        // DateTimeOriginal specifies the date/time when the picture was taken.
+        // For digital cameras, these dates should be both set, and identical.
+        // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
+
         const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
         d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
+        d->exifMetadata["Exif.Photo.DateTimeOriginal"]  = exifdatetime;
         
         // In Second we write date & time into Iptc.
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
         d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
+        d->iptcMetadata["Iptc.Application2.DateCreated"]      = iptcdate;
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
         d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+        d->iptcMetadata["Iptc.Application2.TimeCreated"]      = iptctime;
         
         setImageProgramId();
         return true;
