@@ -42,13 +42,17 @@
 
    - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have been deleted. There is no test at startup to check this point.
 
+* ImageEditor:
+
+   - SavingAs record the temp image file created in database. At the next session of digikam, the file is identifed like removed from collection!
 
 B.K.O files to fix :
 
-==> 93569   (CameraGUI: easier connection to USB disc cameras)
-==> 125696  (CameraGUI: digikam does not connect to USB camera with libgphoto-2.1.99)
+==> 93569   (CameraGUI:      easier connection to USB disc cameras)
+==> 125696  (CameraGUI:      digikam does not connect to USB camera with libgphoto-2.1.99)
 ==> 116148  (Image Editor:   auto-scrolling when selecting large area)
 ==> 111446  (Image Editor:   bad behaviour when out of disk space)
+
 
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
