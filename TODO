@@ -33,8 +33,6 @@
 ==> 127846 : CameraGUI      : digiKam crash when 2nd gphoto camera dialog is closed
 ==> 93569  : CameraGUI      : easier connection to USB disc cameras
 ==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
-==> 127697 : CameraGui      : the camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File
-                              Mime Types/ Image Files.
 
 ==> 116148 : Image Editor   : auto-scrolling when selecting large area
 ==> 111446 : Image Editor   : bad behaviour when out of disk space

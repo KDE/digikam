@@ -145,5 +145,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 084 ==> 128069 : crash when moving an album to another album
 085 ==> 125779 : use deflate compression for tiffs
 086 ==> 127972 : digikam does not *add* EXIF:DateTimeOriginal when modifying date
+087 ==> 127697 : camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File Mime Types/ Image Files.
 
 ----------------------------------------------------------------------------------------------------
