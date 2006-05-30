@@ -715,14 +715,13 @@ void CameraUI::addFileExtension(const QString& ext)
     if (!settings)
         return;
 
-    if (settings->getImageFileFilter().contains(ext) ||
-        settings->getMovieFileFilter().contains(ext) ||
-        settings->getAudioFileFilter().contains(ext) ||
-        settings->getRawFileFilter().contains(ext))
+    if (settings->getImageFileFilter().upper().contains(ext.upper()) ||
+        settings->getMovieFileFilter().upper().contains(ext.upper()) ||
+        settings->getAudioFileFilter().upper().contains(ext.upper()) ||
+        settings->getRawFileFilter().upper().contains(ext.upper()))
         return;
 
-    settings->setImageFileFilter(settings->getImageFileFilter() +
-                                 QString(" *.") + ext);
+    settings->setImageFileFilter(settings->getImageFileFilter() + QString(" *.") + ext);
     emit signalAlbumSettingsChanged();
 }
 
