@@ -38,9 +38,10 @@
    - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
      Exif tags are toggle on to save when SlideShow is complete.
 
-* General: 
+* ICC workflow: 
 
    - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have been deleted. There is no test at startup to check this point.
+   - When editor ask to user if we need to process ICC workspace profile to an image if there is no embedded profile, add the capability to save current workspace in image without processed color correction. All JPEG image for example are already corrected in sRGB without embedding a profile.
 
 * ImageEditor:
 
@@ -48,10 +49,11 @@
 
 B.K.O files to fix :
 
-==> 93569   (CameraGUI:      easier connection to USB disc cameras)
-==> 125696  (CameraGUI:      digikam does not connect to USB camera with libgphoto-2.1.99)
-==> 116148  (Image Editor:   auto-scrolling when selecting large area)
-==> 111446  (Image Editor:   bad behaviour when out of disk space)
+==> 93569  : CameraGUI   : easier connection to USB disc cameras
+==> 125696 : CameraGUI   : digiKam does not connect to USB camera with libgphoto-2.1.99
+==> 116148 : Image Editor: auto-scrolling when selecting large area
+==> 111446 : Image Editor: bad behaviour when out of disk space
+==> 124989 : Setup       : Problems with ICC profile type recognition
 
 
 LATER 0.9.0 TODO LIST
