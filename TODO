@@ -1,7 +1,62 @@
+------------------------------------------------------------------------------------
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-* Media support
+* Image Properties SideBar:
+
+   - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged
+     (ImageAttributesWatch is libdigikam, the metadatatab is used by showfoto - create subclass
+      ImagePropertiesMetadataTabDB?)
+
+* Showfoto: 
+
+   - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
+     Exif tags are toggle on to save when SlideShow is complete.
+
+* ICC workflow: 
+
+   - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have 
+     been deleted. There is no test at startup to check this point.
+   - When editor ask to user if we need to process ICC workspace profile to an image if there is no embedded
+     profile, add the capability to save current workspace in image without processed color correction. All 
+     JPEG image for example are already corrected in sRGB without embedding a profile.
+   - ICC image plugin: check the ICC profiles type for each sections (Monitor/Workspace/Input/Proof) when 
+     user choose profile file manually.
+
+* ImageEditor:
+
+   - SavingAs record the temp image file created in database. At the next session of digikam, the file is identifed like removed from collection!
+
+* B.K.O files to fix :
+
+==> 126112 : CameraGUI      : Do not open new window when camera is connected
+==> 127846 : CameraGUI      : digiKam crash when 2nd gphoto camera dialog is closed
+==> 93569  : CameraGUI      : easier connection to USB disc cameras
+==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
+==> 127697 : CameraGui      : the camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File
+                              Mime Types/ Image Files.
+
+==> 116148 : Image Editor   : auto-scrolling when selecting large area
+==> 111446 : Image Editor   : bad behaviour when out of disk space
+==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor
+==> 113915 : Image Editor   : Tags are lost after "Save As..."ing.
+
+==> 124989 : Setup          : Problems with ICC profile type recognition
+==> 125735 : Setup          : Can't disable individual Monitor/Workspace/Input/Proof profile
+
+==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
+==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
+==> 126874 : Main interface : digiKam does not support <shift+del>
+==> 126199 : Main interface : Nikon D70 comments in jpegs are all shown as "charset="Ascii"
+==> 127182 : Main interface : Crash when scanning jpeg images     
+==> 113797 : Main interface : Little thumbnail refresh problem    
+==> 121804 : Main interface : Image overwritten with blank file when importing into same folder
+==> 124199 : Main interface : digikam crashed when I right-clicked in the (empty) "My Albums" view
+==> 128101 : Main interface : crash when selecting "Comments&Tags" tab, after selecting "Search" tab, 
+                              with no search results selected
+
+* Media support:
+
        o Make media menu, cmdline option and dcop call itentical:
                + usbdisk camera: dcop call should magicly umount as cmdline
                  option and Media menu
@@ -13,49 +68,23 @@
                dcop digikam-<pid> camera cameraAutodetect # dialog open with error; closing
                                                        the dialog ==> CRASH
 
-	o Testing 3 plug cases (camera is here gphoto _and_ usm)
-		1) digikam is not running and camera is pluged in
-			-> media action dialog pops up and digikam should
-			   be in the list. 
-		2) digikam is already running when camera is plug in
-			-> as 1) but already instance should be used
-			(uniconize, switchToDesktop and bringToFront applied
-			if necessary
-		3) digikam is started/activated after action dialog was closed and
-		   camera is already connected
-			-> camera menu allows to 
-				select the 'dynamicly added camera menu item
-				to start download dialog
-		  		ditto for unmounting in usm case 
-
-* Image Properties SideBar:
-
-   - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged
-     (ImageAttributesWatch is libdigikam, the metadatatab is used by showfoto - create subclass ImagePropertiesMetadataTabDB?)
-
-* Showfoto: 
-
-   - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
-     Exif tags are toggle on to save when SlideShow is complete.
-
-* ICC workflow: 
-
-   - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have been deleted. There is no test at startup to check this point.
-   - When editor ask to user if we need to process ICC workspace profile to an image if there is no embedded profile, add the capability to save current workspace in image without processed color correction. All JPEG image for example are already corrected in sRGB without embedding a profile.
-
-* ImageEditor:
-
-   - SavingAs record the temp image file created in database. At the next session of digikam, the file is identifed like removed from collection!
-
-B.K.O files to fix :
-
-==> 93569  : CameraGUI   : easier connection to USB disc cameras
-==> 125696 : CameraGUI   : digiKam does not connect to USB camera with libgphoto-2.1.99
-==> 116148 : Image Editor: auto-scrolling when selecting large area
-==> 111446 : Image Editor: bad behaviour when out of disk space
-==> 124989 : Setup       : Problems with ICC profile type recognition
+    o Testing 3 plug cases (camera is here gphoto _and_ usm)
+        1) digikam is not running and camera is pluged in
+            -> media action dialog pops up and digikam should
+               be in the list. 
+        2) digikam is already running when camera is plug in
+            -> as 1) but already instance should be used
+            (uniconize, switchToDesktop and bringToFront applied
+            if necessary
+        3) digikam is started/activated after action dialog was closed and
+           camera is already connected
+            -> camera menu allows to 
+                select the 'dynamicly added camera menu item
+                to start download dialog
+                ditto for unmounting in usm case 
 
 
+------------------------------------------------------------------------------------
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
