@@ -83,7 +83,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, navBar);
    
-    appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments && Tags"));
+    appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments/Tags"));
 
     // ----------------------------------------------------------
 
