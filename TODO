@@ -26,6 +26,13 @@
 * ImageEditor:
 
    - SavingAs record the temp image file created in database. At the next session of digikam, the file is identifed like removed from collection!
+   - Polish keyboard focus in sidebar when navigate between album pictures.
+
+* Main Interface:
+
+   - Finalize IPTC keywords tags parsing to create new digiKam tags in database when new images are imported.
+
+
 
 * B.K.O files to fix :
 
