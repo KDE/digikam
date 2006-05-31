@@ -37,6 +37,7 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qradiobutton.h>
+#include <qfile.h>
 
 // KDE includes.
 
@@ -789,10 +790,20 @@ void ImageEffect_ICCProof::readSettings()
         spacePath   = config->readPathEntry("WorkProfileFile");
         displayPath = config->readPathEntry("MonitorProfileFile");
         proofPath   = config->readPathEntry("ProofProfileFile");
-        m_displayProfileCB->setURL(config->readPathEntry("DefaultPath")); 
-        m_inProfilesCB->setURL(config->readPathEntry("DefaultPath")); 
-        m_proofProfileCB->setURL(config->readPathEntry("DefaultPath")); 
-        m_spaceProfileCB->setURL(config->readPathEntry("DefaultPath")); 
+        if (QFile::exists(config->readPathEntry("DefulatPath")))
+        {
+            m_displayProfileCB->setURL(config->readPathEntry("DefaultPath")); 
+            m_inProfilesCB->setURL(config->readPathEntry("DefaultPath")); 
+            m_proofProfileCB->setURL(config->readPathEntry("DefaultPath")); 
+            m_spaceProfileCB->setURL(config->readPathEntry("DefaultPath"));
+        }
+        else
+        {
+            QString message = i18n("ICC profiles path seems to be invalid.You'll not be able to use \"Default profile\"\
+                                    options.  \nPlease solve it in digiKam setup.");
+            slotToggledWidgets( false );
+            KMessageBox::information(this, message);
+        }
     }
 }
 
