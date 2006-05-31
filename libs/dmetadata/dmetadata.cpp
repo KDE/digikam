@@ -120,10 +120,19 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
             Exiv2::IptcData& iptc = d->iptcMetadata;
             Exiv2::DataBuf c2;
 
-// FIXME : add exiv2 version rules here
-/*            if (addIrbHeader) 
-                c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
-            else */
+            if (addIrbHeader) 
+            {
+#ifdef EXIV2_CHECK_VERSION 
+                if (EXIV2_CHECK_VERSION(0,10,0))
+                    c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
+                else
+                {
+                    kdDebug() << "Exiv2 version is to old. Cannot add Irb header to IPTC metadata" << endl;
+                    return QByteArray();
+                }
+#endif
+            }
+            else 
                 c2 = iptc.copy();
 
             QByteArray data(c2.size_);
