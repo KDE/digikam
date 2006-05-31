@@ -156,14 +156,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     // Comments view ---------------------------------------------------
     
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("Comments"), settingsArea);
+    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), settingsArea);
     d->commentsEdit = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
     // Date and Time view ---------------------------------------------------
     
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("Date && Time"), settingsArea);
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), settingsArea);
     d->dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
 
     // Rating view --------------------------------------------------
@@ -174,7 +174,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
         
     // Tags view ---------------------------------------------------
 
-    QGroupBox* tagsBox = new QGroupBox(i18n("Tags"), settingsArea);
+    QGroupBox* tagsBox = new QGroupBox(i18n("&Tags"), settingsArea);
     QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsBox);
