@@ -42,6 +42,7 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
+#include <kmessagebox.h>
 
 // Local includes.
 
@@ -303,75 +304,42 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
 
         if (d->cmSettings->enableCMSetting && enableICC)
         {
-            if (d->cmSettings->askOrApplySetting)
+            if (QFile::exists(d->cmSettings->workspaceSetting) && QFile::exists(d->cmSettings->inputSetting))
             {
-                apply = true;
-            }
-            else
-            {
-                apply = false;
-            }
-    
-            IccTransform trans;
-    
-            // First possibility: image has no embedded profile
-            if(d->image.getICCProfil().isNull())
-            {
-                // Ask or apply?
-                if (apply)
+                if (d->cmSettings->askOrApplySetting)
                 {
-                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                    trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
-                                       QFile::encodeName(d->cmSettings->workspaceSetting));
-                    trans.apply( d->image );
-                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
-                    if (d->parent) d->parent->unsetCursor();
+                    apply = true;
                 }
                 else
                 {
-                    // To repaint image in canvas before to ask about to apply ICC profile.
-                    emit signalImageLoaded(d->filename, valRet);
-                    
-                    DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
-                    trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
-                                      QFile::encodeName(d->cmSettings->workspaceSetting));
-                    ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
-                    
-                    if (dlg.exec() == QDialog::Accepted)
+                    apply = false;
+                }
+    
+                IccTransform trans;
+    
+                // First possibility: image has no embedded profile
+                if(d->image.getICCProfil().isNull())
+                {
+                    // Ask or apply?
+                    if (apply)
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
+                                        QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
                         d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                         if (d->parent) d->parent->unsetCursor();
                     }
-                }
-            }
-            // Second possibility: image has an embedded profile
-            else
-            {
-                trans.getEmbeddedProfile( d->image );
-                
-                if (apply)
-                {
-                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                    trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                    trans.apply( d->image );
-                    if (d->parent) d->parent->unsetCursor();
-               }
-                else
-                {
-                    if (trans.getEmbeddedProfileDescriptor()
-                        != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
+                    else
                     {
-                        kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
-
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
     
                         DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
-                        trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
+                        trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
+                                        QFile::encodeName(d->cmSettings->workspaceSetting));
                         ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
-                    
+    
                         if (dlg.exec() == QDialog::Accepted)
                         {
                             if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
@@ -381,6 +349,48 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         }
                     }
                 }
+                // Second possibility: image has an embedded profile
+                else
+                {
+                    trans.getEmbeddedProfile( d->image );
+    
+                    if (apply)
+                    {
+                        if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                        trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
+                        trans.apply( d->image );
+                        if (d->parent) d->parent->unsetCursor();
+                }
+                    else
+                    {
+                        if (trans.getEmbeddedProfileDescriptor()
+                            != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
+                        {
+                            kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+    
+                            // To repaint image in canvas before to ask about to apply ICC profile.
+                            emit signalImageLoaded(d->filename, valRet);
+    
+                            DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
+                            trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
+                            ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
+    
+                            if (dlg.exec() == QDialog::Accepted)
+                            {
+                                if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                                trans.apply( d->image );
+                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                if (d->parent) d->parent->unsetCursor();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                QString message = i18n("ICC profiles path seems to be invalid. No transform will be done.\n \
+                                        Please solve it in digiKam setup.");
+                KMessageBox::information(d->parent, message);
             }
         }
     }
