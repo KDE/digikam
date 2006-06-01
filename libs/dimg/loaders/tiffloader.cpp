@@ -461,7 +461,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QString soft = metaData.getExifTagValue("Exif.Image.Software");
     QString libtiffver(TIFFLIB_VERSION_STR);
     libtiffver.replace('\n', ' ');
-    soft.append(QString(" (%1)").arg(libtiffver));
+    soft.append(QString(" ( %1 )").arg(libtiffver));
     TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.ascii());
     
     // Standard Exif.Photo tags (available with libtiff 3.8.2).  
