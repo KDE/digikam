@@ -15,8 +15,6 @@
 
 * ICC workflow: 
 
-   - Something is broken in ICC workflow if ICC profile repository set in digiKam configuration have 
-     been deleted. There is no test at startup to check this point.
    - When editor ask to user if we need to process ICC workspace profile to an image if there is no embedded
      profile, add the capability to save current workspace in image without processed color correction. All 
      JPEG image for example are already corrected in sRGB without embedding a profile.
