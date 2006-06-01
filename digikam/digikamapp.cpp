@@ -30,6 +30,7 @@
 #include <qkeysequence.h>
 #include <qsignalmapper.h>
 #include <qtimer.h>
+#include <qdir.h>
 
 // KDE includes.
 
@@ -96,6 +97,7 @@ DigikamApp::DigikamApp()
 
     mFullScreen = false;
     mView = 0;
+    mValidIccPath = true;
 
     mSplash = 0;
     if(m_config->readBoolEntry("Show Splash", true) &&
@@ -127,6 +129,15 @@ DigikamApp::DigikamApp()
     updateDeleteTrashMenu();
 
     applyMainWindowSettings(m_config);
+
+    m_config->setGroup("Color Management");
+    QDir tmpPath(m_config->readPathEntry("DefaultPath", QString::null));
+    if (!tmpPath.exists())
+    {
+        mValidIccPath = false;
+    }
+
+    kdDebug() << "digikampp: " << tmpPath.dirName() << endl;
 
     // Actual file scanning is done in main() - is this necessary here?
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
@@ -187,6 +198,25 @@ void DigikamApp::show()
         mSplash = 0;
     }
     KMainWindow::show();
+    if(!mValidIccPath)
+    {
+        QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
+                               "<p>If you want to set it now, select \"Yes\", otherwise "
+                               "select \"No\". In this case, \"Color Management\" feature "
+                               "will be disabled until you solve this issue</p></qt>");
+        int answer = KMessageBox::warningYesNo(this, message);
+        if (answer == KMessageBox::Yes)
+        {
+            Setup setup(this, 0, Setup::IccProfiles);
+            if (setup.exec() != QDialog::Accepted)
+            return;
+        }
+        else
+        {
+            m_config->setGroup("Color Management");
+            m_config->writeEntry("EnableCM", false);
+        }
+    }
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()

@@ -114,6 +114,8 @@ protected slots:
 private:
 
     bool                   mFullScreen;
+
+    bool                   mValidIccPath;
     
     // KIPI plugins support
     QPtrList<KAction>      m_kipiFileActionsExport;
