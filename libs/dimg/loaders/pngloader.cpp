@@ -610,9 +610,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
     }
 
-    // Update 'Software' text tag to 'digiKam'.
+    // Update 'Software' text tag.
     QString software("digiKam ");
     software.append(digikam_version);
+    QString libpngver(PNG_HEADER_VERSION_STRING);
+    libpngver.replace('\n', ' ');
+    software.append(QString(" (%1)").arg(libpngver));
     png_text text;
     text.key  = "Software";
     text.text = (char *)software.ascii();
