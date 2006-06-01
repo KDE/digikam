@@ -31,6 +31,13 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES 
 
+// C ansi includes.
+
+extern "C" 
+{
+#include <tiffvers.h>
+}
+
 // C++ includes.
 
 #include <cstdio>
@@ -447,11 +454,16 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     tiffSetExifAsciiTag(tif, TIFFTAG_IMAGEDESCRIPTION,        &metaData, "Exif.Image.ImageDescription");
     tiffSetExifAsciiTag(tif, TIFFTAG_MAKE,                    &metaData, "Exif.Image.Make");
     tiffSetExifAsciiTag(tif, TIFFTAG_MODEL,                   &metaData, "Exif.Image.Model");
-    tiffSetExifAsciiTag(tif, TIFFTAG_SOFTWARE,                &metaData, "Exif.Image.Software");
     tiffSetExifAsciiTag(tif, TIFFTAG_DATETIME,                &metaData, "Exif.Image.DateTime");
     tiffSetExifAsciiTag(tif, TIFFTAG_ARTIST,                  &metaData, "Exif.Image.Artist");
     tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               &metaData, "Exif.Image.Copyright");
 
+    QString soft = metaData.getExifTagValue("Exif.Image.Software");
+    QString libtiffver(TIFFLIB_VERSION_STR);
+    libtiffver.replace('\n', ' ');
+    soft.append(QString(" (%1)").arg(libtiffver));
+    TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.ascii());
+    
     // Standard Exif.Photo tags (available with libtiff 3.8.2).  
 
 #if defined(EXIFTAG_EXPOSURETIME)
