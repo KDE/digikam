@@ -260,13 +260,14 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     pixmapLogo->setURL("http://www.digikam.org");
     pixmapLogo->setScaledContents( false );
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
+    pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
     layout->addWidget( pixmapLogo );
     KGlobal::dirs()->addResourceType("digikamlogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("digikamlogo", "digikamlogo.png");
     pixmapLogo->setPixmap( QPixmap( directory + "digikamlogo.png" ) );
     
-    d->anim = new AnimWidget(frame);
+    d->anim = new AnimWidget(frame, pixmapLogo->height());
     layout->addWidget( d->anim );
 
     viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
