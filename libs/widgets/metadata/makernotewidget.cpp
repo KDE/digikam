@@ -87,6 +87,7 @@ static const char* MakerNoteHumanList[] =
      "LensType",
      "LensRange",
      "Macro",
+     "MacroFocus",
      "MeteringMode",
      "NoiseReduction",
      "OwnerName",
