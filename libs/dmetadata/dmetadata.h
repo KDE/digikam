@@ -89,7 +89,9 @@ public:
     void setExif(Exiv2::DataBuf const data);
     void setIptc(Exiv2::DataBuf const data);
 
+    QString          getExifTagValue(const char * exifTagName) const;
     QByteArray       getExifTagData(const char* exifTagName) const;
+    
     QImage           getExifThumbnail(bool fixOrientation) const;
     QSize            getImageDimensions();
     ImageOrientation getImageOrientation();
@@ -117,7 +119,6 @@ private:
 
     DImg::FORMAT fileFormat(const QString& filePath);
     bool         setImageProgramId();
-    QString      getExifTagValue(const char * exifTagName) const;
 
 private:
 
