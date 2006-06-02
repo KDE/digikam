@@ -15,9 +15,9 @@
 
 * ICC workflow: 
 
-   - When editor ask to user if we need to process ICC workspace profile to an image if there is no embedded
-     profile, add the capability to save current workspace in image without processed color correction. All 
-     JPEG image for example are already corrected in sRGB without embedding a profile.
+   - Using Exif ColorSpace tag to check if an image have been already transformed when an embedded ICC workspace 
+     profile is not available. Embed the right color workspace if possible in this case using standard icc 
+     workspace profile files available with digiKam
    - ICC image plugin: check the ICC profiles type for each sections (Monitor/Workspace/Input/Proof) when 
      user choose profile file manually.
 
