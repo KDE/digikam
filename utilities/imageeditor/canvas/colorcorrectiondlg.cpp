@@ -50,7 +50,7 @@ namespace Digikam
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview, 
                                        IccTransform *iccTrans, const QString& file)
                   : KDialogBase(parent, "", true, QString::null,
-                                Help|Ok|Cancel, Ok, true)
+                                Help|Ok|Apply|Cancel, Ok, true)
 
 {
     m_iccTrans = iccTrans;
@@ -58,6 +58,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Ok,     i18n("Apply"));
     setButtonText(Cancel, i18n("Do Nothing"));
+    setButtonText(Apply,  i18n("Embed only"));
 
     QFileInfo fi(file);
     setCaption(fi.fileName());
@@ -142,6 +143,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     connect(embeddedProfInfo, SIGNAL(clicked()),
             this, SLOT(slotEmbeddedProfInfo()) );
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApplyClicked()));
 }
 
 ColorCorrectionDlg::~ColorCorrectionDlg()
@@ -164,6 +166,12 @@ void ColorCorrectionDlg::slotEmbeddedProfInfo()
 
     ICCProfileInfoDlg infoDlg(m_parent, QString::null, m_iccTrans->embeddedProfile());
     infoDlg.exec();
+}
+
+void ColorCorrectionDlg::slotApplyClicked()
+{
+     kdDebug() << "colorcorrectiondlg: Apply pressed" << endl;
+    done(-1);
 }
 
 }  // NameSpace Digikam

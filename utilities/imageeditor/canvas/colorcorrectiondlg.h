@@ -50,6 +50,7 @@ private slots:
     
     void slotCurrentProfInfo();
     void slotEmbeddedProfInfo();
+    void slotApplyClicked();
     
 private: 
 

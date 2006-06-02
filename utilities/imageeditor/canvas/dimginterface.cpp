@@ -340,12 +340,34 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                                         QFile::encodeName(d->cmSettings->workspaceSetting));
                         ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
     
-                        if (dlg.exec() == QDialog::Accepted)
+//                         if (dlg.exec() == QDialog::Accepted)
+//                         {
+//                             if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+//                             trans.apply( d->image );
+//                             d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+//                             if (d->parent) d->parent->unsetCursor();
+//                         }
+//                         else if (dlg.exec() == -1)
+//                         {
+// //                             if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+// //                             d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+// //                             if (d->parent) d->parent->unsetCursor();
+//                                kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+//                         }
+                        switch (dlg.exec())
                         {
-                            if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                            trans.apply( d->image );
-                            d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
-                            if (d->parent) d->parent->unsetCursor();
+                            case QDialog::Accepted:
+                                if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                                trans.apply( d->image );
+                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                if (d->parent) d->parent->unsetCursor();
+                            break;
+                            case -1:
+                                if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                if (d->parent) d->parent->unsetCursor();
+                                kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                            break;
                         }
                     }
                 }
@@ -375,12 +397,34 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                             trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                             ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
     
-                            if (dlg.exec() == QDialog::Accepted)
+//                             if (dlg.exec() == QDialog::Accepted)
+//                             {
+//                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+//                                 trans.apply( d->image );
+//                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+//                                 if (d->parent) d->parent->unsetCursor();
+//                             }
+//                             else if (dlg.exec()== -1)
+//                             {
+// //                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+// //                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+// //                                 if (d->parent) d->parent->unsetCursor();
+//                                 kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+//                             }
+                            switch (dlg.exec())
                             {
+                                case QDialog::Accepted:
                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                                 trans.apply( d->image );
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent) d->parent->unsetCursor();
+                                break;
+                                case -1:
+                                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                    if (d->parent) d->parent->unsetCursor();
+                                    kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                                break;
                             }
                         }
                     }
