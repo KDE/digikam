@@ -78,7 +78,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->authorEdit, 0, 0, 1, 1);
     QWhatsThis::add( d->authorEdit, i18n("<p>Set here the photographer name. This field is limited "
-                                         "to 32 ASCII charactors."));
+                                         "to 32 ASCII characters."));
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
@@ -87,7 +87,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
     QWhatsThis::add( d->authorTitleEdit, i18n("<p>Set here the photographer title. This field is limited "
-                                              "to 32 ASCII charactors."));
+                                              "to 32 ASCII characters."));
         
     // --------------------------------------------------------
 
@@ -102,7 +102,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
     QWhatsThis::add( d->creditEdit, i18n("<p>Set here the default provider identification of the picture, "
                                          "not necessarily the owner/creator. This field is limited "
-                                         "to 32 ASCII charactors."));
+                                         "to 32 ASCII characters."));
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit = new KLineEdit(creditsGroup);
@@ -113,7 +113,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QWhatsThis::add( d->sourceEdit, i18n("<p>Set here the default original owner indentification of the intellectual "
                                          "content of the picture. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
-                                         "to 32 ASCII charactors."));
+                                         "to 32 ASCII characters."));
 
     QLabel *label5 = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
@@ -122,7 +122,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
     QWhatsThis::add( d->copyrightEdit, i18n("<p>Set here the default copyright notice of the pictures. This field is limited "
-                                            "to 128 ASCII charactors."));
+                                            "to 128 ASCII characters."));
                                          
     // --------------------------------------------------------
     
