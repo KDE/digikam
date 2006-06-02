@@ -252,7 +252,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     QListBoxItem *item = new ListBoxBWPreviewItem(m_bwFilters, i18n("No Black & White Filter"), m_previewPixmapFactory, type);
     whatsThis->add( item, i18n("<b>No Black & White Filter</b>:"
-                               "<p>Do not apply a black a filter to the image.</p>"));
+                               "<p>Do not apply a black and white filter to the image.</p>"));
     
     ++type;
     item = new ListBoxBWPreviewItem(m_bwFilters, i18n("Neutral"), m_previewPixmapFactory, type);
