@@ -453,6 +453,70 @@ bool DMetadata::setExifThumbnail(const QImage& thumb)
     return false;
 }
 
+DMetadata::ImageColorWorkSpace DMetadata::getImageColorWorkSpace()
+{
+    if (d->exifMetadata.empty())
+        return WORKSPACE_UNSPECIFIED;
+
+    try
+    {    
+        // Try to get Exif.Image tags
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifKey key("Exif.Photo.ColorSpace");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+       
+        if (it != exifData.end())
+        {
+            switch (it->toLong())
+            {
+                case 1:
+                    return WORKSPACE_SRGB;
+                    break;
+                case 2:
+                    return WORKSPACE_ADOBERGB;
+                    break;
+                case 65535:
+                    return WORKSPACE_UNCALIBRATED;
+                    break;
+                default:
+                    return WORKSPACE_UNSPECIFIED;
+                    break;
+            }
+        }
+        
+        // TODO : add here Makernote parsing if necessary.
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot parse image color workspace tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return WORKSPACE_UNSPECIFIED;    
+}
+
+bool DMetadata::setImageColorWorkSpace(ImageColorWorkSpace workspace)
+{
+    if (d->exifMetadata.empty())
+       return false;
+
+    try
+    {    
+        d->exifMetadata["Exif.Photo.ColorSpace"] = (uint16_t)workspace;
+        kdDebug() << "Exif color workspace tag set to: " << workspace << endl;
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif color workspace tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
 QSize DMetadata::getImageDimensions()
 {
     if (d->exifMetadata.empty())
@@ -507,6 +571,28 @@ QSize DMetadata::getImageDimensions()
     }        
     
     return QSize();
+}
+
+bool DMetadata::setImageDimensions(const QSize& size)
+{
+    try
+    {    
+        d->exifMetadata["Exif.Image.ImageWidth"]      = size.width();
+        d->exifMetadata["Exif.Image.ImageLength"]     = size.height();
+        d->exifMetadata["Exif.Photo.PixelXDimension"] = size.width();
+        d->exifMetadata["Exif.Photo.PixelYDimension"] = size.height();
+        
+        setImageProgramId();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
 }
 
 DMetadata::ImageOrientation DMetadata::getImageOrientation()
@@ -770,28 +856,6 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
             d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
             d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
         }
-        
-        setImageProgramId();
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
-    }        
-    
-    return false;
-}
-
-bool DMetadata::setImageDimensions(const QSize& size)
-{
-    try
-    {    
-        d->exifMetadata["Exif.Image.ImageWidth"]      = size.width();
-        d->exifMetadata["Exif.Image.ImageLength"]     = size.height();
-        d->exifMetadata["Exif.Photo.PixelXDimension"] = size.width();
-        d->exifMetadata["Exif.Photo.PixelYDimension"] = size.height();
         
         setImageProgramId();
         return true;

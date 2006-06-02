@@ -63,6 +63,16 @@ public:
         ORIENTATION_ROT_270      = 8
     };
 
+    // Exif color workspace values.
+    // TODO : add MakerNote workspace values
+    enum ImageColorWorkSpace
+    {
+        WORKSPACE_UNSPECIFIED  = 0,    
+        WORKSPACE_SRGB         = 1,    
+        WORKSPACE_ADOBERGB     = 2,    
+        WORKSPACE_UNCALIBRATED = 65535 
+    };
+
 public:
 
     DMetadata();
@@ -89,18 +99,20 @@ public:
     void setExif(Exiv2::DataBuf const data);
     void setIptc(Exiv2::DataBuf const data);
 
-    QString          getExifTagValue(const char * exifTagName) const;
-    QByteArray       getExifTagData(const char* exifTagName) const;
+    QString             getExifTagValue(const char * exifTagName) const;
+    QByteArray          getExifTagData(const char* exifTagName) const;
     
-    QImage           getExifThumbnail(bool fixOrientation) const;
-    QSize            getImageDimensions();
-    ImageOrientation getImageOrientation();
-    QDateTime        getImageDateTime() const;
-    QString          getImageComment() const;
-    int              getImageRating() const;
-    QStringList      getImageKeywords() const;
+    QImage              getExifThumbnail(bool fixOrientation) const;
+    ImageColorWorkSpace getImageColorWorkSpace();
+    QSize               getImageDimensions();
+    ImageOrientation    getImageOrientation();
+    QDateTime           getImageDateTime() const;
+    QString             getImageComment() const;
+    int                 getImageRating() const;
+    QStringList         getImageKeywords() const;
 
     bool setExifThumbnail(const QImage& thumb);
+    bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
     bool setImageDimensions(const QSize& size);
     bool setImageOrientation(ImageOrientation orientation);
     bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false);
