@@ -51,9 +51,9 @@ class SetupIOFilesPriv
 {
 public:
 
+
     SetupIOFilesPriv()
     {
-        labelQuality            = 0;
         labelNRSigmaDomain      = 0;
         labelNRSigmaRange       = 0;
         labelJPEGcompression    = 0;
@@ -76,13 +76,13 @@ public:
         TIFFcompression         = 0;
     }
 
-    QLabel          *labelQuality;
     QLabel          *labelNRSigmaDomain;
     QLabel          *labelNRSigmaRange;
     QLabel          *labelJPEGcompression;
     QLabel          *labelPNGcompression;
 
     QComboBox       *iccColorsCorrection;
+    QComboBox       *RAWquality;
     
     QCheckBox       *SuperCCDsecondarySensor;    
     QCheckBox       *unclipColors;
@@ -93,7 +93,6 @@ public:
     QCheckBox       *RGBInterpolate4Colors;
     QCheckBox       *TIFFcompression;
 
-    KIntNumInput    *RAWquality;
     KIntNumInput    *JPEGcompression;
     KIntNumInput    *PNGcompression;
 
@@ -143,18 +142,31 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
     QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images using a setting value.<p>"
                                                "Enable this option if you use dcraw version >= 0.8.0 in your system.<p>"));
-    grid1->addMultiCellWidget(d->enableRAWQuality, 5, 5, 0, 1);
-    
-    d->RAWquality = new KIntNumInput(0, RAWfileOptionsGroup);
-    d->RAWquality->setRange(0, 3, 1);
-    d->labelQuality = new QLabel( i18n("Quality:"), RAWfileOptionsGroup);
-    QWhatsThis::add( d->RAWquality, i18n("<p>The decoding quality value for RAW images:<p>"
-                                         "<b>0</b>: medium quality (default - for slow computer)<p>"
-                                         "<b>1</b>: good quality<p>"
-                                         "<b>2</b>: high quality<p>"
-                                         "<b>3</b>: very high quality (for speed computer)<p>"));
-    grid1->addMultiCellWidget(d->labelQuality, 6, 6, 0, 0);
-    grid1->addMultiCellWidget(d->RAWquality, 6, 6, 1, 1);
+    grid1->addMultiCellWidget(d->enableRAWQuality, 5, 5, 0, 0);
+
+    d->RAWquality = new QComboBox( false, RAWfileOptionsGroup );
+    d->RAWquality->insertItem( i18n("Bilinear interpolation") );
+    d->RAWquality->insertItem( i18n("VNG interpolation") );
+    d->RAWquality->insertItem( i18n("AHD interpolation") );
+    QWhatsThis::add( d->RAWquality, i18n("<p>Select here the demosaicing RAW images decoding interpolation "
+                     "method. A demosaicing algorithm is a digital image process used to interpolate a "
+                     "complete image from the partial raw data received from the color-filtered image "
+                     "sensor internal to many digital cameras in form of a matrix of colored pixels. "
+                     "Also known as CFA interpolation or color reconstruction, another common spelling "
+                     "is demosaicking. There are 3 methods to demosaicing RAW images:<p>"
+                     "<b>Bilinear</b>: use high-speed but low-quality bilinear "
+                     "interpolation (default - for slow computer). In this method, "
+                     "the red value of a non-red pixel is computed as the average of "
+                     "the adjacent red pixels, and similar for blue and green.<p>"
+                     "<b>VNG</b>: use Variable Number of Gradients interpolation. "
+                     "This method computes gradients near the pixel of interest and uses "
+                     "the lower gradients (representing smoother and more similar parts "
+                     "of the image) to make an estimate.<p>"
+                     "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
+                     "This method selects the direction of interpolation so as to "
+                     "maximize a homogeneity metric, thus typically minimizing color "
+                     "artifacts.<p>"));
+    grid1->addMultiCellWidget(d->RAWquality, 5, 5, 1, 1);
 
     d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction during decoding (warning: slow)"),
                                             RAWfileOptionsGroup);
@@ -167,7 +179,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "from image editor instead.<p>"
                      "This filter can take a while. Do not use if your computer is slow.<p>"
                      "This option require dcraw version >= 0.8.0.<p>"));
-    grid1->addMultiCellWidget(d->enableNoiseReduction, 7, 7, 0, 1);
+    grid1->addMultiCellWidget(d->enableNoiseReduction, 6, 6, 0, 1);
 
     d->NRSigmaDomain = new KDoubleNumInput(RAWfileOptionsGroup);
     d->NRSigmaDomain->setValue(2.0);
@@ -176,8 +188,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->labelNRSigmaDomain = new QLabel(i18n("Sigma domain:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaDomain, i18n("<p>The noise reduction Sigma Domain in units of pixels. "
                                             "The default value is 2.0.<p>"));
-    grid1->addMultiCellWidget(d->labelNRSigmaDomain, 8, 8, 0, 0);
-    grid1->addMultiCellWidget(d->NRSigmaDomain, 8, 8, 1, 1);
+    grid1->addMultiCellWidget(d->labelNRSigmaDomain, 7, 7, 0, 0);
+    grid1->addMultiCellWidget(d->NRSigmaDomain, 7, 7, 1, 1);
 
     d->NRSigmaRange = new KDoubleNumInput(RAWfileOptionsGroup);
     d->NRSigmaRange->setValue(4.0);
@@ -186,8 +198,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->labelNRSigmaRange = new QLabel(i18n("Sigma range:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaRange, i18n("<p>The noise reduction Sigma Range in units of "
                                            "CIELab colorspace. The default value is 4.0.<p>"));
-    grid1->addMultiCellWidget(d->labelNRSigmaRange, 9, 9, 0, 0);
-    grid1->addMultiCellWidget(d->NRSigmaRange, 9, 9, 1, 1);
+    grid1->addMultiCellWidget(d->labelNRSigmaRange, 8, 8, 0, 0);
+    grid1->addMultiCellWidget(d->NRSigmaRange, 8, 8, 1, 1);
     
     QHBoxLayout *hlay = new QHBoxLayout( KDialog::spacingHint());
     QLabel *labelICCCorrection = new QLabel(i18n("ICC profile correction during decoding:"), RAWfileOptionsGroup);
@@ -207,7 +219,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "management for that. This option require dcraw version >= 0.8.0.<p>"));
     hlay->addWidget(labelICCCorrection);
     hlay->addWidget(d->iccColorsCorrection);
-    grid1->addMultiCellLayout(hlay, 10, 10, 0, 1);
+    grid1->addMultiCellLayout(hlay, 9, 9, 0, 1);
                                                
     grid1->setColStretch(1, 10);
     layout->addWidget(RAWfileOptionsGroup);
@@ -216,9 +228,6 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     
     connect(d->enableRAWQuality, SIGNAL(toggled(bool)),
             d->RAWquality, SLOT(setEnabled(bool)));
-
-    connect(d->enableRAWQuality, SIGNAL(toggled(bool)),
-            d->labelQuality, SLOT(setEnabled(bool)));
 
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             d->NRSigmaDomain, SLOT(setEnabled(bool)));
@@ -297,7 +306,11 @@ void SetupIOFiles::applySettings()
 
     config->setGroup("ImageViewer Settings");
     config->writeEntry("EnableRAWQuality", d->enableRAWQuality->isChecked());
-    config->writeEntry("RAWQuality", d->RAWquality->value());
+
+    // Translation combobox item to dcraw quality value. See dcraw man page for details.
+    config->writeEntry("RAWQuality", (d->RAWquality->currentItem() > 0 ? 
+                                      d->RAWquality->currentItem()+1 : d->RAWquality->currentItem()));
+
     config->writeEntry("EnableNoiseReduction", d->enableNoiseReduction->isChecked());
     config->writeEntry("NRSigmaDomain", d->NRSigmaDomain->value());
     config->writeEntry("NRSigmaRange", d->NRSigmaRange->value());
@@ -319,7 +332,11 @@ void SetupIOFiles::readSettings()
     config->setGroup("ImageViewer Settings");
     
     d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", true));
-    d->RAWquality->setValue( config->readNumEntry("RAWQuality", 0) );
+
+    // Translation dcraw quality value to combobox item. See dcraw man page for details.
+    int q = config->readNumEntry("RAWQuality", 0);
+    d->RAWquality->setCurrentItem( (q > 1) ? q-1 : q );
+
     d->enableNoiseReduction->setChecked(config->readBoolEntry("EnableNoiseReduction", false));
     d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 2.0) );
     d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
@@ -335,7 +352,6 @@ void SetupIOFiles::readSettings()
     d->TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
     
     d->RAWquality->setEnabled(d->enableRAWQuality->isChecked());
-    d->labelQuality->setEnabled(d->enableRAWQuality->isChecked());
     d->NRSigmaDomain->setEnabled(d->enableNoiseReduction->isChecked());
     d->labelNRSigmaDomain->setEnabled(d->enableNoiseReduction->isChecked());
     d->NRSigmaRange->setEnabled(d->enableNoiseReduction->isChecked());
