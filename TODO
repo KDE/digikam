@@ -42,7 +42,6 @@
 ==> 116148 : Image Editor   : auto-scrolling when selecting large area
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
 ==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor
-==> 113915 : Image Editor   : Tags are lost after "Save As..."ing.
 
 ==> 124989 : Setup          : Problems with ICC profile type recognition
 ==> 125735 : Setup          : Can't disable individual Monitor/Workspace/Input/Proof profile
