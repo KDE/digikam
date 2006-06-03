@@ -173,3 +173,38 @@ Just to give a taste of what i can do with emacs (and kdesdk):
 * go to corresponding definition/declaration with one keystroke
 * tab completion of variable/function names already declared.
 
+========================================================================
+GDB Backtrace 
+========================================================================
+
+If you found a context to carsh digiKam, you can provide a backtrace using GDB debuger.
+digiKam need to be compiled with all debug info else the backtrace will not suitable.
+There is a .configure option for that :
+
+# make -f Makefile.cvs
+# ./configure --enable-debug=full
+# make
+# su
+# make install.
+
+To make a backtrace with GDB use folowing command:
+
+# gdb digikam
+> run
+> ...
+> _crash here_
+> ...
+> bt
+> _the backtrace is here_
+> quit
+
+Post this backtrace at the right place (B.K.O or devel ML) for investiguations by developpers.
+
+========================================================================
+Memory leak 
+========================================================================
+
+To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
+Try this command line to use with valgrind :
+
+valgrind --tool=memcheck --leak-check=full --error-limit=no digikam
