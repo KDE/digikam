@@ -12,6 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=Digikam tags kioslave
+Description[bn]=ডিজিক্যাম ট্যাগ কে-আই-ও-স্লেভ
 Description[cs]=Digikam tagy kioslave
 Description[da]=Digikam mærker-kioslave
 Description[de]=digiKam Ein/Ausgabe-Modul für Stichworte

@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=showFoto
+Name[bn]=ছবি প্রদর্শক
 Name[hr]=prikaži
 Name[pa]=ਫੋਟੋਵੇਖਾਓ
 Name[sv]=Showfoto
 GenericName=Image Viewer
+GenericName[bn]=ছবি প্রদর্শক
 GenericName[br]=Gweler ar skeudennoù
 GenericName[cs]=Prohlížeč obrázků
 GenericName[cy]=Gwelydd Delwedd
@@ -32,6 +34,7 @@ GenericName[sv]=Bildvisare
 GenericName[tr]=Resim Göstericisi
 GenericName[uk]=Переглядач зображень
 Comment=digiKam photo viewer
+Comment[bn]=ডিজিক্যাম ছবি প্রদর্শক
 Comment[br]=Gweler foto digiKam
 Comment[cs]=Prohlížeč fotografií digiKam
 Comment[da]=Digikam Foto-fremviser
