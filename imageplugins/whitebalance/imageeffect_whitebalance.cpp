@@ -649,7 +649,7 @@ void ImageEffect_WhiteBalance::slotEffect()
     m_dark        = m_darkInput->value();
     m_black       = m_blackInput->value();
     m_exposition  = m_exposureInput->value();
-    m_gamma       = m_gammaInput->value();
+    m_gamma       = 2.0-m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
     m_overExp     = m_overExposureIndicatorBox->isChecked();
@@ -687,7 +687,7 @@ void ImageEffect_WhiteBalance::finalRendering()
     m_dark        = m_darkInput->value();
     m_black       = m_blackInput->value();
     m_exposition  = m_exposureInput->value();
-    m_gamma       = m_gammaInput->value();
+    m_gamma       = 2.0-m_gammaInput->value();
     m_saturation  = m_saturationInput->value();
     m_green       = m_greenInput->value();
     m_overExp     = false;
