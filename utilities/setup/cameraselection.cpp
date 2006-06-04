@@ -161,7 +161,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
-                                          "option is only require if you use an <b>Usb Mass Storage</b> "
+                                          "option is only required if you use an <b>Usb Mass Storage</b> "
                                           "camera.</p>"));
     
     // --------------------------------------------------------------
