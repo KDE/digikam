@@ -146,7 +146,8 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 085 ==> 125779 : use deflate compression for tiffs
 086 ==> 127972 : digikam does not *add* EXIF:DateTimeOriginal when modifying date
 087 ==> 127697 : camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File Mime Types/ Image Files.
-088 ==> 128373 : "Makernote - Simple" should show ISO
+088 ==> 128373 : "Makernote - Simple" should show ISO.
 089 ==> 113915 : Tags are lost after "Save As..."ing.
+090 ==> 128283 : thumbnail generation fails with raw images.
 
 ----------------------------------------------------------------------------------------------------

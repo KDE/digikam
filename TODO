@@ -46,7 +46,6 @@
 ==> 124989 : Setup          : Problems with ICC profile type recognition
 ==> 125735 : Setup          : Can't disable individual Monitor/Workspace/Input/Proof profile
 
-==> 128283 : Main interface : thumbnail generation fails with raw images
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
 ==> 126874 : Main interface : digiKam does not support <shift+del>
