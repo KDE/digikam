@@ -64,7 +64,6 @@
 
 // Local includes
 
-#include "dcraw_parse.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "digikamthumbnail.h"
@@ -651,34 +650,12 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
-    // first try with Dave Coffin's "parse" utility
-
-    kdDebug() << k_funcinfo << "Parsing file: " << path << endl;
-
-    KTempFile thumbFile(QString::null, "rawthumb");
-    thumbFile.setAutoDelete(true);
-    Digikam::DcrawParse rawFileParser;
-
-    if (thumbFile.status() == 0)
-    {
-        if (rawFileParser.getThumbnail(QFile::encodeName(path),
-                                       QFile::encodeName(thumbFile.name())) == 0)
-        {
-            image.load(thumbFile.name());
-            if (!image.isNull())
-                return true;
-        }
-    }
-
-    QCString command;
-
-    // run dcraw with options:
+    // Try to extract embedded thumbnail using dcraw with options:
     // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
-    // -2 : 8bit ppm output
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
-    command  = "dcraw -c -h -2 -w -a ";
+    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
+    // Note : this code require at least dcraw version 8.21
+
+    QCString command  = "dcraw -c -e ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
@@ -692,6 +669,48 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     char       buffer[MAX_IPC_SIZE];
     QFile      file;
     Q_LONG     len;
+
+    file.open( IO_ReadOnly,  f );
+
+    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    {
+        if ( len == -1 )
+        {
+            file.close();
+            return false;
+        }
+        else
+        {
+            int oldSize = imgData.size();
+            imgData.resize( imgData.size() + len );
+            memcpy(imgData.data()+oldSize, buffer, len);
+        }
+    }
+
+    file.close();
+    pclose( f );
+
+    if ( !imgData.isEmpty() )
+    {
+        if (image.loadFromData( imgData ))
+            return true;
+    }
+    
+    // In second, try to use simple RAW extraction method
+    // -c : write to stdout
+    // -h : Half-size color image (3x faster than -q)
+    // -2 : 8bit ppm output
+    // -a : Use automatic white balance
+    // -w : Use camera white balance, if possible
+
+    command  = "dcraw -c -h -2 -w -a ";
+    command += QFile::encodeName( KProcess::quote( path ) );
+    kdDebug() << "Running dcraw command " << command << endl;
+
+    f = popen( command.data(), "r" );
+
+    if ( !f )
+        return false;
 
     file.open( IO_ReadOnly,  f );
 

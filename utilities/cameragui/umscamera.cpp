@@ -41,7 +41,7 @@ extern "C"
 
 // KDE includes.
 
-#include <ktempfile.h>
+#include <kprocess.h>
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 
@@ -49,7 +49,6 @@ extern "C"
 
 #include "dimg.h"
 #include "dmetadata.h"
-#include "dcraw_parse.h"
 #include "umscamera.h"
 
 namespace Digikam
@@ -192,21 +191,50 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         }
     }
 
-    // In 4th we trying to get thumbnail from RAW files using dcraw parse utility.
+    // In 4th, try to extract embedded thumbnail using dcraw with options:
+    // -c : write to stdout
+    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
+    // Note : this code require at least dcraw version 8.21
 
-    KTempFile thumbFile(QString::null, "camerarawthumb");
-    thumbFile.setAutoDelete(true);
-    DcrawParse rawFileParser;
-  
-    if (thumbFile.status() == 0)
+    QCString command  = "dcraw -c -e ";
+    command += QFile::encodeName( KProcess::quote( folder + "/" + itemName ) );
+    kdDebug() << "Running dcraw command " << command << endl;
+
+    FILE* f = popen( command.data(), "r" );
+
+    if ( !f )
+        return false;
+
+    QByteArray imgData;
+    const int  MAX_IPC_SIZE = (1024*32);
+    char       buffer[MAX_IPC_SIZE];
+    QFile      file;
+    Q_LONG     len;
+
+    file.open( IO_ReadOnly,  f );
+
+    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
     {
-        if (rawFileParser.getThumbnail(QFile::encodeName(folder + "/" + itemName),
-                                       QFile::encodeName(thumbFile.name())) == 0)
+        if ( len == -1 )
         {
-            thumbnail.load(thumbFile.name());
-            if (!thumbnail.isNull())
-                return true;
+            file.close();
+            return false;
         }
+        else
+        {
+            int oldSize = imgData.size();
+            imgData.resize( imgData.size() + len );
+            memcpy(imgData.data()+oldSize, buffer, len);
+        }
+    }
+
+    file.close();
+    pclose( f );
+
+    if ( !imgData.isEmpty() )
+    {
+        if (thumbnail.loadFromData( imgData ))
+            return true;
     }
 
     // Finaly, we trying to get thumbnail using DImg API.
