@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at free.fr>
  * Date  : 2005-12-20
- * Description :
+ * Description : Raw Photo Parser
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * Original Raw Photo Parser source code come form parse.c
  * Revision: 1.53 - Date: 2005/11/04 06:38:24 
@@ -56,6 +56,7 @@ namespace Digikam
 DcrawParse::DcrawParse()
 {
     order = 0;
+    ifp   = 0;
 }
     
 DcrawParse::~DcrawParse()
@@ -1142,11 +1143,15 @@ int DcrawParse::getCameraModel(const char* infile, char* cameraConstructor, char
 {
     char head[32], *cp;
     unsigned hlen, fsize, toff, tlen;
-
-    ifp = fopen (infile,"rb");
-
     make[0] = model[0] = model2[0] = is_dng = 0;
     thumb_head[0] = thumb_offset = thumb_length = thumb_layers = 0;
+
+    ifp = fopen (infile,"rb");
+    if (!ifp) {
+      perror (infile);
+      return 1;
+    }
+
     order = get2();
     hlen = get4();
     fseek (ifp, 0, SEEK_SET);
@@ -1210,12 +1215,16 @@ int DcrawParse::getThumbnail(const char* infile, const char* outfile)
 {
   char head[32], *thumb, *rgb, *cp;
   unsigned hlen, fsize, toff, tlen, lsize, i;
+  make[0] = model[0] = model2[0] = is_dng = 0;
+  thumb_head[0] = thumb_offset = thumb_length = thumb_layers = 0;
   FILE *tfp;
 
   ifp = fopen (infile,"rb");
+  if (!ifp) {
+    perror (infile);
+    return 1;
+  }
 
-  make[0] = model[0] = model2[0] = is_dng = 0;
-  thumb_head[0] = thumb_offset = thumb_length = thumb_layers = 0;
   order = get2();
   hlen = get4();
   fseek (ifp, 0, SEEK_SET);
