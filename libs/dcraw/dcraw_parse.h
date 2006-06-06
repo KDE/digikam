@@ -1,9 +1,9 @@
 /* ============================================================
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-12-20
- * Description :
+ * Description : Raw Photo Parser
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,6 @@ private:
 
     FILE  *ifp;
     short  order;
-    char  *fname;
     char   make[128], model[128], model2[128], thumb_head[128];
     int    width, height, offset, length, bps, is_dng;
     int    thumb_offset, thumb_length, thumb_layers;
