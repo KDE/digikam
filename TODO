@@ -34,7 +34,6 @@
 
 * B.K.O files to fix :
 
-==> 126112 : CameraGUI      : Do not open new window when camera is connected
 ==> 127846 : CameraGUI      : digiKam crash when 2nd gphoto camera dialog is closed
 ==> 93569  : CameraGUI      : easier connection to USB disc cameras
 ==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
