@@ -2,6 +2,8 @@
 
 Bugs fixed:
 
+    o Thumbnail generation fails with raw images (#128283)
+
     o Camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File 
       Mime Types/ Image Files (#127697)
         
