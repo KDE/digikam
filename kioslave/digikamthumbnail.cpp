@@ -79,14 +79,15 @@ extern "C"
 #include <png.h>
 }
 
-// Local includes
-
-#include "dcraw_parse.h"
-#include "digikamthumbnail.h"
-#include "digikam_export.h"
+// Imlib2 includes.
 
 #define X_DISPLAY_MISSING 1
 #include <Imlib2.h>
+
+// Local includes
+
+#include "digikamthumbnail.h"
+#include "digikam_export.h"
 
 using namespace KIO;
 
@@ -265,8 +266,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// JPEG Extraction
+// -- JPEG Extraction ---------------------------------------------------------------------
 
 struct myjpeg_error_mgr : public jpeg_error_mgr
 {
@@ -618,8 +618,7 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
     return qimage;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Load using Imlib2 API
+// -- Load using Imlib2 API ---------------------------------------------------------------
 
 bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path)
 {
@@ -658,54 +657,74 @@ bool kio_digikamthumbnailProtocol::loadImlib2(QImage& image, const QString& path
     return true;
 }
 
+// -- Load using Dcraw ---------------------------------------------------------------------
+
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
-    // Trying to get embedded thumbnail from RAW file using dcraw parse utility.
-
-    kdDebug() << k_funcinfo << "Parsing file: " << path << endl;
-
-    KTempFile thumbFile(QString::null, "rawthumb");
-    thumbFile.setAutoDelete(true);
-    Digikam::DcrawParse rawFileParser;
-    
-    if (thumbFile.status() == 0)
-    {
-        if (rawFileParser.getThumbnail(QFile::encodeName(path),
-                                       QFile::encodeName(thumbFile.name())) == 0)
-        {
-            image.load(thumbFile.name());
-            if (!image.isNull())
-                return true;
-        }
-    }
-
-    // Else using dcraw instance to compute thumbnail.
-    
-    QCString command;
-
-    // run dcraw with options:
+    // Try to extract embedded thumbnail using dcraw with options:
     // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
-    // -2 : 8bit ppm output
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
-    command  = "dcraw -c -h -2 -w -a ";
+    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
+    // Note : this code require at least dcraw version 8.21
+
+    QCString command  = "dcraw -c -e ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
     FILE* f = popen( command.data(), "r" );
 
+    if ( !f )
+        return false;
+
     QByteArray imgData;
+    const int  MAX_IPC_SIZE = (1024*32);
+    char       buffer[MAX_IPC_SIZE];
+    QFile      file;
+    Q_LONG     len;
+
+    file.open( IO_ReadOnly,  f );
+
+    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    {
+        if ( len == -1 )
+        {
+            file.close();
+            return false;
+        }
+        else
+        {
+            int oldSize = imgData.size();
+            imgData.resize( imgData.size() + len );
+            memcpy(imgData.data()+oldSize, buffer, len);
+        }
+    }
+
+    file.close();
+    pclose( f );
+
+    if ( !imgData.isEmpty() )
+    {
+        if (image.loadFromData( imgData ))
+            return true;
+    }
+    
+    // In second, try to use simple RAW extraction method
+    // -c : write to stdout
+    // -h : Half-size color image (3x faster than -q)
+    // -2 : 8bit ppm output
+    // -a : Use automatic white balance
+    // -w : Use camera white balance, if possible
+
+    command  = "dcraw -c -h -2 -w -a ";
+    command += QFile::encodeName( KProcess::quote( path ) );
+    kdDebug() << "Running dcraw command " << command << endl;
+
+    f = popen( command.data(), "r" );
 
     if ( !f )
         return false;
 
-    const int MAX_IPC_SIZE = (1024*32);
-    char buffer[MAX_IPC_SIZE];
-
-    QFile file;
     file.open( IO_ReadOnly,  f );
-    Q_LONG len;
+
     while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
     {
         if ( len == -1 )
@@ -731,8 +750,9 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     return true;
 }
 
-bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image,
-                                                       const QString& path)
+// -- Load using KDE API ---------------------------------------------------------------------
+
+bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QString& path)
 {
     // this sucks royally. some of the thumbcreators need an instance of
     // app running so that they can use pixmap. till they get their 
