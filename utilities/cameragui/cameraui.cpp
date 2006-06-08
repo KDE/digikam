@@ -113,6 +113,7 @@ public:
         dateTimeEdit      = 0;
         setPhotographerId = 0;
         setCredits        = 0;
+        closed= false;
     }
 
     bool                          busy;
@@ -151,7 +152,11 @@ public:
     AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
-};    
+
+    bool                          closed;
+
+    QStringList                   currentlyDeleting;
+};
 
 CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                    const QString& model, const QString& port,
@@ -440,27 +445,56 @@ bool CameraUI::isBusy() const
     return d->busy;
 }
 
+bool CameraUI::isClosed() const
+{
+    return d->closed;
+}
+
 void CameraUI::slotCancelButton()
 {
     d->status->setText(i18n("Cancelling current operation, please wait..."));
     d->progress->hide();
     QTimer::singleShot(0, d->controller, SLOT(slotCancel()));
+    d->currentlyDeleting.clear();
 }
 
 void CameraUI::closeEvent(QCloseEvent* e)
 {
-    dialogClosed();
-    e->accept();
+    if (dialogClosed())
+        e->accept();
+    else
+        e->ignore();
 }
 
 void CameraUI::slotClose()
 {
-    dialogClosed();
-    reject();
+    if (dialogClosed())
+        reject();
 }
 
-void CameraUI::dialogClosed()
+bool CameraUI::dialogClosed()
 {
+    if (d->closed)
+        return true;
+
+    if (isBusy())
+    {
+        if (KMessageBox::questionYesNo(this,
+                                       i18n("Do you want to close the dialog "
+                                            "and cancel the current operation?"))
+            == KMessageBox::No)
+            return false;
+
+        d->controller->slotCancel();
+        // will be read in slotBusy later and deleteLater will be called
+        d->closed = true;
+    }
+    else
+    {
+        deleteLater();
+        d->closed = true;
+    }
+
     d->status->setText(i18n("Disconnecting from camera, please Wait..."));
     d->progress->hide();
     
@@ -485,6 +519,8 @@ void CameraUI::dialogClosed()
         emit signalLastDestination(d->lastDestURL);
     
     saveSettings();
+
+    return true;
 }
 
 void CameraUI::slotBusy(bool val)
@@ -502,6 +538,10 @@ void CameraUI::slotBusy(bool val)
         d->anim->stop();
         d->status->setText(i18n("Ready"));
         d->progress->hide();
+
+        // like WDestructiveClose, but after camera controller operation has safely finished
+        if (d->closed)
+            deleteLater();
     }
     else
     {
@@ -544,6 +584,9 @@ void CameraUI::slotConnected(bool val)
 
 void CameraUI::slotFolderList(const QStringList& folderList)
 {
+    if (d->closed)
+        return;
+
     for (QStringList::const_iterator it = folderList.begin();
          it != folderList.end(); ++it)
     {
@@ -553,6 +596,9 @@ void CameraUI::slotFolderList(const QStringList& folderList)
 
 void CameraUI::slotFileList(const GPItemInfoList& fileList)
 {
+    if (d->closed)
+        return;
+
     for (GPItemInfoList::const_iterator it = fileList.begin();
          it != fileList.end(); ++it)
     {
@@ -737,6 +783,9 @@ void CameraUI::slotDeleteSelected()
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
+            // the currentlyDeleting list is used to prevent loading items which
+            // will immenently be deleted into the sidebar and wasting time
+            d->currentlyDeleting.append(*itFolder + *itFile);
         }
     }
 }
@@ -779,6 +828,7 @@ void CameraUI::slotDeleteAll()
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
+            d->currentlyDeleting.append(*itFolder + *itFile);
         }
     }
 }
@@ -792,6 +842,9 @@ void CameraUI::slotFileView(CameraIconViewItem* item)
 void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 {
     CameraIconViewItem* item = d->view->findItem(folder, file);
+
+    if (!item)
+        return;
 
     // We will trying to load exif data from THM file (thumbnail) if exist,
     // especially provided by recent USM camera.
@@ -821,6 +874,10 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 void CameraUI::slotExifFromData(const QByteArray& exifData)
 {
     CameraIconViewItem* item = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
+
+    if (!item)
+        return;
+
     KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
 
     // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot 
@@ -854,9 +911,18 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
 
     if (selected)
     {
-        KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
-        d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
-        d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
+        // if selected item is in the list of item which will be deleted, set no current item
+        if (d->currentlyDeleting.find(item->itemInfo()->folder + item->itemInfo()->name)
+             == d->currentlyDeleting.end())
+        {
+            KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
+            d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
+            d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
+        }
+        else
+        {
+            d->rightSidebar->slotNoCurrentItem();
+        }
     }
     else
         d->rightSidebar->slotNoCurrentItem();
@@ -886,6 +952,8 @@ void CameraUI::slotSkipped(const QString&, const QString&)
 void CameraUI::slotDeleted(const QString& folder, const QString& file)
 {
     d->view->removeItem(folder, file);
+    // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
+    d->currentlyDeleting.remove(folder + file);
 }
 
 bool CameraUI::createAutoAlbum(const KURL& parentURL,

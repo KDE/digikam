@@ -55,6 +55,7 @@ public:
     ~CameraUI();
 
     bool isBusy() const;
+    bool isClosed() const;
     
 signals:
     
@@ -69,7 +70,7 @@ private:
 
     void readSettings();
     void saveSettings();
-    void dialogClosed();
+    bool dialogClosed();
     bool createAutoAlbum(const KURL& parentURL, const QString& name,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);

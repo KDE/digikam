@@ -46,6 +46,7 @@ extern "C"
 #include <qdatastream.h>
 #include <qfile.h>
 #include <qtimer.h>
+#include <qregexp.h>
 
 // KDE includes.
 
@@ -243,7 +244,8 @@ void CameraThread::run()
                 sendInfo(i18n("Listing files in %1...").arg(folder));
     
                 GPItemInfoList itemsList;
-                if (!d->camera->getItemsInfoList(folder, itemsList))
+                // setting getImageDimensions to false is a huge speedup for UMSCamera
+                if (!d->camera->getItemsInfoList(folder, itemsList, false))
                 {
                     sendError(i18n("Failed to list files in %1").arg(folder));
                 }
@@ -514,12 +516,38 @@ CameraController::CameraController(QWidget* parent, const QString& model,
     d->overwriteAll  = false;
     d->skipAll       = false;
     d->downloadTotal = 0;
+    d->camera        = 0;
 
-    if (model.lower() == "directory browse")
-        d->camera = new UMSCamera(model, port, path);
-    else
-        d->camera = new GPCamera(model, port, path);
-        
+    // URL parsing (c) Stephan Kulow
+    if (path.startsWith("camera:/"))
+    {
+        KURL url(path);
+        kdDebug() << "path " << path << " " << url <<  " " << url.host() << endl;
+        QString xport = url.host();
+        if (xport.startsWith("usb:"))
+        {
+            kdDebug() << "xport " << xport << endl;
+            QRegExp x = QRegExp("(usb:[0-9,]*)");
+
+            if (x.search(xport) != -1) {
+                QString usbport = x.cap(1);
+                kdDebug() << "USB " << xport << " " << usbport << endl;
+                // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
+                //   model = xmodel;
+                d->camera = new GPCamera(url.user(), "usb:", "/");
+                // }
+            }
+        }
+    }
+
+    if (!d->camera)
+    {
+        if (model.lower() == "directory browse")
+            d->camera = new UMSCamera(model, port, path);
+        else
+            d->camera = new GPCamera(model, port, path);
+    }
+
     d->thread = new CameraThread(this);
     d->timer  = new QTimer();
 

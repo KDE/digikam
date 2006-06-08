@@ -88,6 +88,8 @@ public:
     QRect contentsRectToViewport(const QRect& r) const;
 
     void setEnableToolTips(bool val);
+
+    void setDelayedUpdate(bool delayed);
     
 protected:
 
@@ -120,6 +122,8 @@ private:
     void itemClickedToOpen(IconItem* item);
 
     bool anchorIsBehind() const;
+
+    void startUpdateTimer();
     
 signals:
 

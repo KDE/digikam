@@ -26,6 +26,7 @@
 // Qt includes.
 
 #include <qdict.h>
+#include <qrect.h>
 
 // Local includes.
 
@@ -84,6 +85,7 @@ private slots:
 protected:
 
     void startDrag();
+    void updateItemRectsPixmap();
     
 private:
 
@@ -96,7 +98,8 @@ private:
     RenameCustomizer*         m_renamer;
     CameraUI*                 m_ui;
     IconGroupItem*            m_groupItem;
-};    
+    QRect                     m_itemRect;
+};
 
 }  // namespace Digikam
 

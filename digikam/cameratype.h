@@ -24,17 +24,20 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qguardedptr.h>
 
 class KAction;
 
 namespace Digikam
 {
 
+class CameraUI;
+
 class CameraType
 {
 public:
 
-    
+
     CameraType();
     CameraType(const QString& title,
                const QString& model,
@@ -45,7 +48,7 @@ public:
 
     CameraType(const CameraType& ctype);
     CameraType& operator=(const CameraType& type);
-    
+
 
     void setTitle(const QString& title);
     void setModel(const QString& model);
@@ -53,16 +56,18 @@ public:
     void setPath(const QString& path);
     void setAction(KAction *action);
     void setValid(bool valid);
-    
+    void setCurrentCameraUI(CameraUI *cameraui);
+
     QString title() const;
     QString model() const;
     QString port()  const;
     QString path()  const;
-    KAction* action();
-    bool valid();
+    KAction* action() const;
+    bool valid() const;
+    CameraUI *currentCameraUI() const;
 
 private:
-    
+
     QString title_;
     QString model_;
     QString port_;
@@ -70,6 +75,8 @@ private:
 
     KAction *action_;
     bool     valid_;
+
+    QGuardedPtr<CameraUI> currentCameraUI_;
 };
 
 }  // namespace Digikam

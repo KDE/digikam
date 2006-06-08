@@ -377,7 +377,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     return true;
 }
 
-bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
+bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bool /*getImageDimensions*/)
 {
     CameraList *clist;
     const char *cname;

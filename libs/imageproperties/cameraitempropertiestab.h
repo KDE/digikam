@@ -51,7 +51,8 @@ public:
 
     void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0,
                         const QString &newFileName=QString::null,
-                        const QByteArray& exifData=QByteArray());
+                        const QByteArray& exifData=QByteArray(),
+                        const KURL &currentURL = KURL());
 
 signals:
     

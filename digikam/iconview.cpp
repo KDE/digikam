@@ -78,6 +78,7 @@ public:
         toolTipItem    = 0;
         toolTipTimer   = 0;
         updateTimer    = 0;
+        updateTimerInterval = 0;
     }
     
     bool               clearing;
@@ -104,6 +105,8 @@ public:
     
     IconGroupItem*     firstGroup;
     IconGroupItem*     lastGroup;
+
+    int                updateTimerInterval;
     
     struct ItemContainer 
     {
@@ -396,7 +399,7 @@ void IconView::insertGroup(IconGroupItem* group)
     }
 
     d->firstVisibleItem = findFirstVisibleItem();
-    d->updateTimer->start(0, true);
+    startUpdateTimer();
 }
 
 void IconView::takeGroup(IconGroupItem* group)
@@ -452,7 +455,7 @@ void IconView::takeGroup(IconGroupItem* group)
             // find an alternative visible item
             d->firstVisibleItem = alternativeVisibleGroup->lastItem();
         }
-        d->updateTimer->start(0, true);
+        startUpdateTimer();
     }
 }
 
@@ -462,7 +465,7 @@ void IconView::insertItem(IconItem* item)
         return;
 
     d->firstVisibleItem = findFirstVisibleItem();
-    d->updateTimer->start(0, true);
+    startUpdateTimer();
 }
 
 void IconView::takeItem(IconItem* item)
@@ -503,14 +506,32 @@ void IconView::takeItem(IconItem* item)
         d->firstVisibleItem = findFirstVisibleItem();
         if (d->firstVisibleItem == item)
             d->firstVisibleItem = d->currItem;
-        d->updateTimer->start(0, true);
+        startUpdateTimer();
     }
 }
 
 void IconView::triggerUpdate()
 {
     d->firstVisibleItem = findFirstVisibleItem();
-    d->updateTimer->start(0, true);
+    startUpdateTimer();
+}
+
+void IconView::setDelayedUpdate(bool delayed)
+{
+    // if it is known that e.g. several items will be added or deleted in the next time,
+    // but not from the same event queue thread stack location, it may be desirable to delay
+    // the updateTimer a bit
+    if (delayed)
+        d->updateTimerInterval = 50;
+    else
+        d->updateTimerInterval = 0;
+}
+
+void IconView::startUpdateTimer()
+{
+    // We want to reduce the number of updates, but not remove all updates
+    if (!d->updateTimer->isActive())
+        d->updateTimer->start(d->updateTimerInterval, true);
 }
 
 void IconView::sort()

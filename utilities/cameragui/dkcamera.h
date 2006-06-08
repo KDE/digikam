@@ -48,7 +48,9 @@ public:
     virtual void cancel()  = 0;
 
     virtual void getAllFolders(const QString& folder, QStringList& subFolderList) = 0;
-    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList) = 0;
+    /// If getImageDimensions is false, the camera shall set width and height to -1
+    /// if the values are not immediately available
+    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true) = 0;
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize) = 0;
 

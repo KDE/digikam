@@ -38,6 +38,7 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes.
 
@@ -68,6 +69,8 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
             
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
+
+    updateItemRectsPixmap();
 }
 
 CameraIconView::~CameraIconView()
@@ -116,9 +119,11 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
     CameraIconViewItem* item = m_itemDict.find(folder+file);
     if (!item)
         return;
+    m_itemDict.remove(folder+file);
 
+    setDelayedUpdate(true);
     delete item;
-    triggerUpdate();
+    setDelayedUpdate(false);
 }
 
 CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
@@ -338,11 +343,11 @@ void CameraIconView::startDrag()
 
 QRect CameraIconView::itemRect() const
 {
-    if (!firstItem())
-        return QRect();
+    return m_itemRect;
+}
 
-    CameraIconViewItem* item = static_cast<CameraIconViewItem*>(firstItem());
-
+void CameraIconView::updateItemRectsPixmap()
+{
     const int thumbSize = 128;
 
     QRect pixRect;
@@ -351,31 +356,26 @@ QRect CameraIconView::itemRect() const
 
     pixRect.setWidth(thumbSize);
     pixRect.setHeight(thumbSize);
-    
+
     QFontMetrics fm(font());
     QRect r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                    Qt::AlignHCenter | Qt::AlignTop |
-                                    Qt::WordBreak | Qt::BreakAnywhere,
-                                    item->itemInfo()->name));
+                                    Qt::AlignHCenter | Qt::AlignTop,
+                                    "XXXXXXXXX"));
     textRect.setWidth(r.width());
     textRect.setHeight(r.height());
 
-    if (!item->getDownloadName().isEmpty())
+    QFont fn(font());
+    if (fn.pointSize() > 0)
     {
-        QFont fn(font());
-        if (fn.pointSize() > 0)
-        {
-            fn.setPointSize(QMAX(fn.pointSize()-2, 6));
-        }
-
-        fm = QFontMetrics(fn);
-        r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                  Qt::AlignHCenter | Qt::WordBreak |
-                                  Qt::BreakAnywhere | Qt::AlignTop,
-                                  item->getDownloadName()));
-        extraRect.setWidth(r.width());
-        extraRect.setHeight(r.height());
+        fn.setPointSize(QMAX(fn.pointSize()-2, 6));
     }
+
+    fm = QFontMetrics(fn);
+    r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+                              Qt::AlignHCenter | Qt::AlignTop,
+                              "XXXXXXXXX"));
+    extraRect.setWidth(r.width());
+    extraRect.setHeight(r.height());
 
     r = QRect();
     r.setWidth(QMAX(QMAX(pixRect.width(), textRect.width()),
@@ -384,7 +384,7 @@ QRect CameraIconView::itemRect() const
                 textRect.height() +
                 extraRect.height() + 4);
 
-    return r;
+    m_itemRect = r;
 }
 
 }  // namespace Digikam

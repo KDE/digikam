@@ -47,7 +47,7 @@ public:
     void cancel();
 
     void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true);
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 

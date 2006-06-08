@@ -83,7 +83,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
     listFolders(folder, subFolderList);
 }
 
-bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList)
+bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions)
 {
     m_cancel = false;
     infoList.clear();
@@ -107,24 +107,27 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         if (!mime.isEmpty())
         {
             GPItemInfo info;
-            QSize   dims;
-        
-            if (mime == QString("image/x-raw"))
+            QSize   dims(-1, -1);
+
+            if (getImageDimensions)
             {
-                DMetadata metaData(fi->filePath());
-                dims = metaData.getImageDimensions();
-            }
-            else
-            {
-                KFileMetaInfo meta(fi->filePath());
-                if (meta.isValid())
+                if (mime == QString("image/x-raw"))
                 {
-                    if (meta.containsGroup("Jpeg EXIF Data"))
-                        dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("General"))
-                        dims = meta.group("General").item("Dimensions").value().toSize();
-                    else if (meta.containsGroup("Technical"))
-                        dims = meta.group("Technical").item("Dimensions").value().toSize();
+                    DMetadata metaData(fi->filePath());
+                    dims = metaData.getImageDimensions();
+                }
+                else
+                {
+                    KFileMetaInfo meta(fi->filePath());
+                    if (meta.isValid())
+                    {
+                        if (meta.containsGroup("Jpeg EXIF Data"))
+                            dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                        else if (meta.containsGroup("General"))
+                            dims = meta.group("General").item("Dimensions").value().toSize();
+                        else if (meta.containsGroup("Technical"))
+                            dims = meta.group("Technical").item("Dimensions").value().toSize();
+                    }
                 }
             }
     

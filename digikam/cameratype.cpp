@@ -98,7 +98,17 @@ void CameraType::setPath(const QString& path)
 
 void CameraType::setAction(KAction *action)
 {
-    action_ = action;    
+    action_ = action;
+}
+
+void CameraType::setValid(bool valid)
+{
+    valid_ = valid;
+}
+
+void CameraType::setCurrentCameraUI(CameraUI *cameraui)
+{
+    currentCameraUI_ = cameraui;
 }
 
 QString CameraType::title() const
@@ -121,19 +131,20 @@ QString CameraType::path() const
     return path_;
 }
 
-KAction* CameraType::action()
+KAction* CameraType::action() const
 {
-    return action_;    
+    return action_;
 }
 
-bool CameraType::valid()
+bool CameraType::valid() const
 {
     return valid_;
 }
 
-void CameraType::setValid(bool valid)
+CameraUI *CameraType::currentCameraUI() const
 {
-    valid_ = valid;    
+    return currentCameraUI_;
 }
+
 
 }  // namespace Digikam

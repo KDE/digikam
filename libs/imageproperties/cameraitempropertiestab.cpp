@@ -266,7 +266,8 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
 }
 
 void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int itemType, 
-                                             const QString &newFileName, const QByteArray& exifData)
+                                             const QString &newFileName, const QByteArray& exifData,
+                                             const KURL &currentURL)
 {
     if (!itemInfo)
     {
@@ -341,7 +342,34 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
                                i18n("RAW Image") : KMimeType::mimeType(itemInfo->mime)->comment() );
 
     QString mpixels;
-    QSize dims(itemInfo->width, itemInfo->height);
+    QSize dims;
+    if (itemInfo->width == -1 && itemInfo->height == -1 && !currentURL.isEmpty())
+    {
+        // delayed loading to list faster from UMSCamera
+        if (itemInfo->mime == QString("image/x-raw"))
+        {
+            DMetadata metaData(currentURL.path());
+            dims = metaData.getImageDimensions();
+        }
+        else
+        {
+            KFileMetaInfo meta(currentURL.path());
+            if (meta.isValid())
+            {
+                if (meta.containsGroup("Jpeg EXIF Data"))
+                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("General"))
+                    dims = meta.group("General").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("Technical"))
+                    dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }
+        }
+    }
+    else
+    {
+        // if available (GPCamera), take dimensions directly from itemInfo
+        dims = QSize(itemInfo->width, itemInfo->height);
+    }
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)")
           .arg(dims.width()).arg(dims.height()).arg(mpixels);

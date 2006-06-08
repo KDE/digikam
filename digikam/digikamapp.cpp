@@ -50,6 +50,8 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
+#include <kwin.h>
+#include <dcopref.h>
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -158,9 +160,9 @@ DigikamApp::DigikamApp()
 
     mDcopIface = new DCOPIface(this, "camera");
     connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), 
-            this, SLOT(slotCameraAutoDetect()));
+            this, SLOT(slotDcopCameraAutoDetect()));
     connect(mDcopIface, SIGNAL(signalDownloadImages( const QString & )),
-            this, SLOT(slotDownloadImages(const QString &)));
+            this, SLOT(slotDcopDownloadImages(const QString &)));
 }
 
 DigikamApp::~DigikamApp()
@@ -245,21 +247,25 @@ const QPtrList<KAction> DigikamApp::menuImportActions()
 
 void DigikamApp::autoDetect()
 {
-    // Auto-detect camera if requested so
+    // Called from main if command line option is set
+
     if(mSplash)
         mSplash->message(i18n("Auto-detect camera"), AlignLeft, white);
+
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
 
 void DigikamApp::downloadFrom(const QString &cameraGuiPath)
 {
+    // Called from main if command line option is set
+
     if (!cameraGuiPath.isNull())
     {
         mCameraGuiPath = cameraGuiPath;
-        
+
         if(mSplash)
             mSplash->message(i18n("Opening Download Dialog"), AlignLeft, white);
-        
+
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
 }
@@ -933,7 +939,37 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
     if( !url.isLocalFile() )
     {
 #if KDE_IS_VERSION(3,4,91)
-        return KIO::NetAccess::mostLocalURL( url, 0 ).path();
+        // Support for system:/ and media:/ (c) Stephan Kulow
+        KURL mlu = KIO::NetAccess::mostLocalURL( url, 0 );
+        if (mlu.isLocalFile())
+            return mlu.path();
+
+        kdWarning() << folder << " mlu " << mlu << endl;
+
+        QString path = mlu.path();
+
+        if ( mlu.protocol() == "system" && path.startsWith("/media") )
+            path = path.mid(7);
+        else if (mlu.protocol() == "media")
+            path = path.mid(1);
+        else
+            return folder; // nothing to see - go on
+
+        kdDebug() << "parsed import path is: " << path << endl;
+        DCOPRef ref("kded", "mediamanager");
+        DCOPReply reply = ref.call("properties", path);
+        if (reply.isValid()) {
+            QStringList slreply;
+            reply.get(slreply);
+            if ((slreply.count()>=9) && !slreply[9].isEmpty())
+                return slreply[9];
+            else
+                return slreply[6];
+        } else {
+            kdWarning() << "dcop call failed\n";
+        }
+
+        return path;
 #else
 #ifndef UDS_LOCAL_PATH
 #define UDS_LOCAL_PATH (72 | KIO::UDS_STRING)
@@ -952,15 +988,39 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         }
 #endif
     }
-    
+
     return url.path();
- }
+}
+
+void DigikamApp::slotDcopDownloadImages( const QString& folder )
+{
+    if (!folder.isNull())
+    {
+        // activate window when called by media menu and DCOP
+        if (isMinimized())
+            KWin::deIconifyWindow(winId());
+        KWin::activateWindow(winId());
+
+        slotDownloadImages(folder);
+    }
+}
+
+void DigikamApp::slotDcopCameraAutoDetect()
+{
+    // activate window when called by media menu and DCOP
+    if (isMinimized())
+        KWin::deIconifyWindow(winId());
+    KWin::activateWindow(winId());
+
+    slotCameraAutoDetect();
+}
 
 void DigikamApp::slotDownloadImages( const QString& folder)
 {
     if (!folder.isNull())
     {
         mCameraGuiPath = folder;
+
         QTimer::singleShot(0, this, SLOT(slotDownloadImages()));
     }
 }
@@ -968,21 +1028,21 @@ void DigikamApp::slotDownloadImages( const QString& folder)
 void DigikamApp::slotDownloadImages()
 {
     if (mCameraGuiPath.isNull())
-            return;
-    
+        return;
+
     // Fetch the contents of the device. This is needed to make sure that the
     // media:/device gets mounted.
     KIO::ListJob *job = KIO::listDir(KURL(mCameraGuiPath), false, false);
     KIO::NetAccess::synchronousRun(job,0);
 
-    QString cameraGuiPath = convertToLocalUrl(mCameraGuiPath);
-    kdDebug() << "IN: " << mCameraGuiPath << " OUT: " << cameraGuiPath << endl;
+    QString localUrl = convertToLocalUrl(mCameraGuiPath);
+    kdDebug() << "slotDownloadImages: convertToLocalUrl " << mCameraGuiPath << " to " << localUrl << endl;
 
-    if (cameraGuiPath.isNull())
+    if (localUrl.isNull())
         return;
 
     bool alreadyThere = false;
-    
+
     for (uint i = 0 ; i != actionCollection()->count() ; i++)
     {
         if (actionCollection()->action(i)->name() == mCameraGuiPath)
@@ -992,7 +1052,7 @@ void DigikamApp::slotDownloadImages()
     if (!alreadyThere)
     {
         KAction *cAction  = new KAction(
-                 i18n("Browse %1").arg(mCameraGuiPath),
+                 i18n("Browse %1").arg(KURL(mCameraGuiPath).prettyURL()),
                  "kipi",
                  0,
                  this,
@@ -1001,18 +1061,20 @@ void DigikamApp::slotDownloadImages()
                  mCameraGuiPath.latin1() );
 
         mCameraMenuAction->insert(cAction, 0);
-     }
-          
-    CameraUI* cgui = new CameraUI(this, 
-                         i18n("Images found in %1").arg(mCameraGuiPath),
-                         "directory browse","Fixed", mCameraGuiPath);
+    }
+
+    // the CameraUI will delete itself when it has finished
+    CameraUI* cgui = new CameraUI(this,
+                                  i18n("Images found in %1").arg(mCameraGuiPath),
+                                  "directory browse","Fixed", localUrl);
     cgui->show();
-    
+
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
-    
+
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
             SLOT(slotSetupChanged()));
+
 }
 
 void DigikamApp::slotCameraConnect()
@@ -1021,15 +1083,30 @@ void DigikamApp::slotCameraConnect()
 
     if (ctype)
     {
-        CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
-                             ctype->port(), ctype->path());
-        cgui->show();
-        
-        connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
-                mView, SLOT(slotSelectAlbum(const KURL&)));
-        
-        connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-                SLOT(slotSetupChanged()));
+        // check not to open two dialogs for the same camera
+        if (ctype->currentCameraUI() && !ctype->currentCameraUI()->isClosed())
+        {
+            // show and raise dialog
+            if (ctype->currentCameraUI()->isMinimized())
+                KWin::deIconifyWindow(ctype->currentCameraUI()->winId());
+            KWin::activateWindow(ctype->currentCameraUI()->winId());
+        }
+        else
+        {
+            // the CameraUI will delete itself when it has finished
+            CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+                                          ctype->port(), ctype->path());
+
+            ctype->setCurrentCameraUI(cgui);
+
+            cgui->show();
+
+            connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
+                    mView, SLOT(slotSelectAlbum(const KURL&)));
+
+            connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
+                    SLOT(slotSetupChanged()));
+        }
     }
 }
 
@@ -1076,16 +1153,17 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
 
-            kdDebug() << ( *et ).m_str << endl;
+            //kdDebug() << ( *et ).m_str << endl;
         }
-       
+
         if (!name.isEmpty() && !path.isEmpty())
         {
+            //kdDebug() << "slotCameraMediaMenuEntries: Adding " << name << ", path " << path << endl;
             if (i == 0)
                 mCameraMediaList->clear();
-            
+
             mMediaItems[i] = path;
-            
+
             mCameraMediaList->insertItem(name, this, SLOT(slotDownloadImagesFromMedia(int)), 0, i);
             mCameraMediaList->setItemParameter(i, i);
             i++;

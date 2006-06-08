@@ -60,7 +60,7 @@ public:
     void getAllFolders(const QString& folder, QStringList& subFolderList);
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& items);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& items, bool getImageDimensions = true);
 
     bool getThumbnail(const QString& folder, const QString& itemName,
                       QImage& thumbnail);
