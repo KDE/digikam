@@ -1,1 +1,1 @@
-SUBDIRS = profiles themes 
+SUBDIRS = profiles themes icons pics 
