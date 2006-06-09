@@ -260,19 +260,19 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     layout->setMargin( 2 );  // To make sure the frame gets displayed
     layout->setSpacing( 0 );
 
-    KURLLabel *pixmapLogo = new KURLLabel( frame );
-    pixmapLogo->setText(QString::null);
-    pixmapLogo->setURL("http://www.digikam.org");
+    KURLLabel *pixmapLogo = new KURLLabel( "http://www.digikam.org", QString::null, frame );
+    pixmapLogo->setMargin(0);
     pixmapLogo->setScaledContents( false );
     pixmapLogo->setPaletteBackgroundColor( QColor(201, 208, 255) );
     pixmapLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     QToolTip::add(pixmapLogo, i18n("Visit digiKam project website"));
-    layout->addWidget( pixmapLogo );
     KGlobal::dirs()->addResourceType("digikamlogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("digikamlogo", "digikamlogo.png");
     pixmapLogo->setPixmap( QPixmap( directory + "digikamlogo.png" ) );
     
     d->anim = new AnimWidget(frame, pixmapLogo->height());
+    
+    layout->addWidget( pixmapLogo );
     layout->addWidget( d->anim );
 
     viewBoxLayout->addMultiCellWidget(d->cancelBtn, 2, 2, 0, 0);
