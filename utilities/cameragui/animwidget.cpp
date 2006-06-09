@@ -1,10 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-21
- * Description : 
+ * Description : an animated busy widget 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -33,77 +34,96 @@
 namespace Digikam
 {
 
-AnimWidget::AnimWidget(QWidget* parent, int size )
-    : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
+class AnimWidgetPriv
 {
+public:
+
+    AnimWidgetPriv()
+    {
+        timer = 0;
+        pix   = 0;
+        pos   = 0;
+    }
+
+    int      pos;
+    int      size;
+    
+    QTimer  *timer;
+    
+    QPixmap *pix;    
+};
+
+
+AnimWidget::AnimWidget(QWidget* parent, int size)
+          : QWidget(parent, 0, WResizeNoErase|WRepaintNoErase)
+{
+    d = new AnimWidgetPriv;
     setBackgroundMode(Qt::NoBackground);
     
-    m_size = size;
-    m_pos  = 0;
-    m_pix  = new QPixmap(m_size,m_size);
-    setFixedSize(m_size, m_size);
+    d->size = size;
+    d->pix  = new QPixmap(d->size,d->size);
+    setFixedSize(d->size, d->size);
 
-    m_timer = new QTimer();
+    d->timer = new QTimer();
     
-    connect(m_timer, SIGNAL(timeout()),
+    connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout()));
 }
 
 AnimWidget::~AnimWidget()
 {
-    delete m_timer;
-    delete m_pix;
+    delete d;
 }
 
 void AnimWidget::start()
 {
-    m_pos  = 0;
-    m_timer->start(100);
+    d->pos = 0;
+    d->timer->start(100);
 }
 
 void AnimWidget::stop()
 {
-    m_pos  = 0;
-    m_timer->stop();
+    d->pos  = 0;
+    d->timer->stop();
     repaint();
 }
 
 void AnimWidget::paintEvent(QPaintEvent*)
 {
-    m_pix->fill(QColor(201, 208, 255));
-    QPainter p(m_pix);
+    d->pix->fill(QColor(201, 208, 255));
+    QPainter p(d->pix);
 
-    p.translate(m_size/2, m_size/2);
+    p.translate(d->size/2, d->size/2);
 
-    if (m_timer->isActive())
+    if (d->timer->isActive())
     {
         p.setPen(QPen(colorGroup().text()));
-        p.rotate( m_pos );
+        p.rotate( d->pos );
     }
     else
     {
         p.setPen(QPen(colorGroup().dark()));
     }
             
-    for ( int i=0; i<12; i++ )
+    for ( int i=0 ; i<12 ; i++ )
     {
-        p.drawLine(m_size/2-4,0,m_size/2-2,0);
+        p.drawLine(d->size/2-4,0,d->size/2-2,0);
         p.rotate(30);
     }
     
     p.end();
-    bitBlt(this, 0, 0, m_pix);
+    bitBlt(this, 0, 0, d->pix);
 }
 
 void AnimWidget::slotTimeout()
 {
-    m_pos = (m_pos + 10) % 360;
+    d->pos = (d->pos + 10) % 360;
     repaint();    
 }
 
 bool AnimWidget::running() const
 {
-    return m_timer->isActive();    
+    return d->timer->isActive();    
 }
 
 }  // namespace Digikam
