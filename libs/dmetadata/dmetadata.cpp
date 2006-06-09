@@ -321,13 +321,13 @@ DImg::FORMAT DMetadata::fileFormat(const QString& filePath)
     }
     
     fclose(f);
-    
+
     DcrawParse rawFileParser;
-    uchar jpegID[2]    = { 0xFF, 0xD8 };   
+    uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };
-    uchar pngID[8]     = {'\211', 'P', 'N', 'G', '\r', '\n', '\032', '\n'};
-    
+    uchar pngID[8]     = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+
     if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
     {
         return DImg::JPEG;
