@@ -843,7 +843,7 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
         // For digital cameras, these dates should be both set, and identical.
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
-        const std::string &exifdatetime(dateTime.toString(Qt::ISODate).ascii());
+        const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).ascii());
         d->exifMetadata["Exif.Photo.DateTimeOriginal"]  = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
