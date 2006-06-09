@@ -191,10 +191,13 @@ void* ImageInfo::getViewItem() const
 
 void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
-    AlbumDB* db  = m_man->albumDB();
-    db->setItemDate(m_ID, dateTime);
-    m_datetime = dateTime;
-    ImageAttributesWatch::instance()->imageDateChanged(m_ID);
+    if (dateTime.isValid())
+    {
+        AlbumDB* db  = m_man->albumDB();
+        db->setItemDate(m_ID, dateTime);
+        m_datetime = dateTime;
+        ImageAttributesWatch::instance()->imageDateChanged(m_ID);
+    }
 }
 
 void ImageInfo::setCaption(const QString& caption)
