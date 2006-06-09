@@ -2,21 +2,23 @@
 
 Bugs fixed:
 
+    o digikam "Mount and Download" Problems (#124952)
+
     o Thumbnail generation fails with raw images (#128283)
 
     o Camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File 
       Mime Types/ Image Files (#127697)
-        
+
     o Crash when moving an album to another album (#128069)
-         
+
     o Autoration of photos may confuse user because of changes made he is not aware of (#126335)
-        
+
     o Communication between digikam and its kioslaves broken if size_t != off_t (#127634)
-        
+
     o Mimimize button missing on "Compaq Flash Reader" camera window (#116485)
 
     o mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x (#121242)
-        
+
 -------------------------------------------------------------------------
 0.8.2-rc1
 
