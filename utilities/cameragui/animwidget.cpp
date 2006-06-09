@@ -61,7 +61,7 @@ AnimWidget::AnimWidget(QWidget* parent, int size)
     setBackgroundMode(Qt::NoBackground);
     
     d->size = size;
-    d->pix  = new QPixmap(d->size,d->size);
+    d->pix  = new QPixmap(d->size, d->size);
     setFixedSize(d->size, d->size);
 
     d->timer = new QTimer();
@@ -83,7 +83,7 @@ void AnimWidget::start()
 
 void AnimWidget::stop()
 {
-    d->pos  = 0;
+    d->pos = 0;
     d->timer->stop();
     repaint();
 }
@@ -107,7 +107,7 @@ void AnimWidget::paintEvent(QPaintEvent*)
             
     for ( int i=0 ; i<12 ; i++ )
     {
-        p.drawLine(d->size/2-4,0,d->size/2-2,0);
+        p.drawLine(d->size/2-4, 0, d->size/2-2, 0);
         p.rotate(30);
     }
     
