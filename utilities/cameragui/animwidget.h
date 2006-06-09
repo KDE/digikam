@@ -1,10 +1,11 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2004-09-21
- * Description : 
+ * Description : an animated busy widget 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -25,11 +26,10 @@
 
 #include <qwidget.h>
 
-class QTimer;
-class QPixmap;
-
 namespace Digikam
 {
+
+class AnimWidgetPriv;
 
 class AnimWidget : public QWidget
 {
@@ -54,10 +54,7 @@ private slots:
     
 private:
 
-    QTimer*  m_timer;
-    QPixmap* m_pix;
-    int      m_pos;
-    int      m_size;
+    AnimWidgetPriv* d;
 };
 
 }  // namespace Digikam
