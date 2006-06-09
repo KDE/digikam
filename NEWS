@@ -149,9 +149,9 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 088 ==> 128373 : "Makernote - Simple" should show ISO.
 089 ==> 113915 : Tags are lost after "Save As..."ing.
 090 ==> 128283 : thumbnail generation fails with raw images.
-091 ==> 126112 : Do not open new window when camera is connected
-092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed
-093 ==> 93569  : easier connection to USB disc cameras
-
+091 ==> 126112 : Do not open new window when camera is connected.
+092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed.
+093 ==> 93569  : easier connection to USB disc cameras.
+094 ==> 124952 : digikam "Mount and Download" Problems.
 
 ----------------------------------------------------------------------------------------------------
