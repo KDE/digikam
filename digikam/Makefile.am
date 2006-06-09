@@ -1,5 +1,4 @@
 KDE_OPTIONS = nofinal
-SUBDIRS = pics icons 
 METASOURCES = AUTO  
 
 INCLUDES = -I$(top_srcdir)/digikam/sqlite \
