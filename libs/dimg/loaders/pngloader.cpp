@@ -935,12 +935,12 @@ long PNGLoader::formatString(char *string, const size_t length, const char *form
 
 long PNGLoader::formatStringList(char *string, const size_t length, const char *format, va_list operands)
 {
-  int n = vsnprintf(string, length, format, operands);
-
-  if (n < 0)
-    string[length-1] = '\0';
-
-  return((long) n);
+    int n = vsnprintf(string, length, format, operands);
+    
+    if (n < 0)
+        string[length-1] = '\0';
+    
+    return((long) n);
 }
 
 }  // NameSpace Digikam
