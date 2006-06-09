@@ -831,6 +831,9 @@ QDateTime DMetadata::getImageDateTime() const
 
 bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized)
 {
+    if(!dateTime.isValid())
+        return false;
+    
     try
     {    
         // In first we write date & time into Exif.
