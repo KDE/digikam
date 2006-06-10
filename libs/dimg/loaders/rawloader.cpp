@@ -61,7 +61,6 @@ namespace Digikam
 RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
-    m_sixteenBit          = true;
     m_hasAlpha            = false;
     m_rawDecodingSettings = rawDecodingSettings;
 
@@ -88,18 +87,19 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 {
     m_observer = observer;
     m_filePath = filePath;
-    m_running = true;
+    m_running  = true;
 
-    // trigger startProcess
+    // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
-    int   checkpoint = 0;
+    int checkpoint = 0;
     while (m_running)
     {
 
         if (m_dataPos > checkpoint)
         {
-            int size = m_width * m_height * (m_sixteenBit ? 6 : 3);
+            int size = m_width * m_height * 
+                       (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += granularity(observer, size, 0.8);
             observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
         }
@@ -119,14 +119,14 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // -------------------------------------------------------------------
     // Get image data
 
-    if (m_sixteenBit)        // 16 bits image
+    if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
         uchar *image = new uchar[m_width*m_height*8];
 
         unsigned short *dst  = (unsigned short *)image;
         uchar          *src  = m_data;
-        float fac  = 65535.0 / m_rgbmax;
-        checkpoint = 0;
+        float fac            = 65535.0 / m_rgbmax;
+        checkpoint           = 0;
 
         for (int h = 0; h < m_height; h++)
         {
@@ -160,16 +160,15 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
             }
         }
 
-        imageData()  = (uchar *)image;
+        imageData() = (uchar *)image;
         m_sixteenBit = true;
     }
     else        // 8 bits image
     {
         uchar *image = new uchar[m_width*m_height*4];
-
-        uchar *dst = image;
-        uchar *src = m_data;
-        checkpoint = 0;
+        uchar *dst   = image;
+        uchar *src   = m_data;
+        checkpoint   = 0;
 
         for (int h = 0; h < m_height; h++)
         {
@@ -242,7 +241,7 @@ void RAWLoader::startProcess()
 {
     if (m_observer && !m_observer->continueQuery(m_image))
     {
-        m_running = false;
+        m_running    = false;
         m_normalExit = false;
         return;
     }
@@ -375,8 +374,8 @@ void RAWLoader::startProcess()
     {
         kdError() << "Failed to start dcraw" << endl;
         delete m_process;
-        m_process = 0;
-        m_running = false;
+        m_process    = 0;
+        m_running    = false;
         m_normalExit = false;
         return;
     }
@@ -433,7 +432,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         }
 
         // Find the third newline that marks the header end in a dcraw generated ppm.
-        int i = 0;
+        int i       = 0;
         int counter = 0;
 
         while (i < buflen) 
@@ -461,7 +460,8 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         m_rgbmax = splitlist[2].toInt();
 
 #ifdef ENABLE_DEBUG_MESSAGES
-        kdDebug() << "Parsed PPM header: width " << m_width << " height " << m_height << " rgbmax " << m_rgbmax << endl;
+        kdDebug() << "Parsed PPM header: width " << m_width << " height " 
+                  << m_height << " rgbmax " << m_rgbmax << endl;
 #endif
 
         // cut header from data for memcpy below
@@ -469,7 +469,8 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         buflen -= i;
 
         // allocate buffer
-        m_data    = new uchar[m_width * m_height * (m_sixteenBit ? 6 : 3)];
+        m_data    = new uchar[m_width * m_height * 
+                    (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
         m_dataPos = 0;
     }
 

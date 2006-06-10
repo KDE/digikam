@@ -18,10 +18,13 @@
  *
  * ============================================================ */
 
-// C includes
+// C Ansi includes.
 
+extern "C"
+{
 #include <sys/types.h>
 #include <sys/stat.h>
+}
 
 // Qt includes.
 
@@ -721,6 +724,7 @@ void EditorWindow::applyStandardSettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
+    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", true);
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);

@@ -59,6 +59,7 @@ public:
         labelJPEGcompression    = 0;
         labelPNGcompression     = 0;
 
+        sixteenBitsImage        = 0;
         enableRAWQuality        = 0;
         RAWquality              = 0;
         cameraColorBalance      = 0;
@@ -84,6 +85,7 @@ public:
     QComboBox       *iccColorsCorrection;
     QComboBox       *RAWquality;
     
+    QCheckBox       *sixteenBitsImage;    
     QCheckBox       *SuperCCDsecondarySensor;    
     QCheckBox       *unclipColors;
     QCheckBox       *cameraColorBalance;
@@ -110,39 +112,47 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     
     QGroupBox *RAWfileOptionsGroup = new QGroupBox(0, Qt::Vertical, i18n("RAW Image Decoding Options"), parent);
 
-    QGridLayout* grid1 = new QGridLayout( RAWfileOptionsGroup->layout(), 9, 1, KDialog::spacingHint());
+    QGridLayout* grid1 = new QGridLayout( RAWfileOptionsGroup->layout(), 10, 1, KDialog::spacingHint());
+
+    d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), RAWfileOptionsGroup);
+    QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enable, all RAW files will be decoded to 16-bit "
+                                               "color depth using a linear gamma curve.<p>"
+                                               "If disable, all RAW files will be decoded to 8-bit "
+                                               "color depth with a BT.709 gamma curve and a 99th-percentile "
+                                               "white point. This mode is more faster than 16-bit decoding."));
+    grid1->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 1);
     
     d->RGBInterpolate4Colors = new QCheckBox(i18n("Interpolate RGB as four colors"), RAWfileOptionsGroup);
     QWhatsThis::add( d->RGBInterpolate4Colors, i18n("<p>Interpolate RGB as four colors. This blurs the image "
                                                     "a little, but it eliminates false 2x2 mesh patterns.<p>"));
-    grid1->addMultiCellWidget(d->RGBInterpolate4Colors, 0, 0, 0, 1);
+    grid1->addMultiCellWidget(d->RGBInterpolate4Colors, 1, 1, 0, 1);
 
     d->automaticColorBalance = new QCheckBox(i18n("Automatic color balance"), RAWfileOptionsGroup);
     QWhatsThis::add( d->automaticColorBalance, i18n("<p>Automatic color balance. The default is to use a "
                                                     "fixed color balance based on a white card photographed "
                                                     "in sunlight.<p>"));
-    grid1->addMultiCellWidget(d->automaticColorBalance, 1, 1, 0, 1);
+    grid1->addMultiCellWidget(d->automaticColorBalance, 2, 2, 0, 1);
     
     d->cameraColorBalance = new QCheckBox(i18n("Camera color balance"), RAWfileOptionsGroup);
     QWhatsThis::add( d->cameraColorBalance, i18n("<p>Use the color balance specified by the camera. "
                                                  "If this can't be found, reverts to the default.<p>"));
-    grid1->addMultiCellWidget(d->cameraColorBalance, 2, 2, 0, 1);
+    grid1->addMultiCellWidget(d->cameraColorBalance, 3, 3, 0, 1);
 
     d->unclipColors = new QCheckBox(i18n("Unclip colors"), RAWfileOptionsGroup);
     QWhatsThis::add( d->unclipColors, i18n("<p>Enabled this option to leave the image color "
                      "completely unclipped else all colors will be cliped to prevent pink highlights.<p>"));
-    grid1->addMultiCellWidget(d->unclipColors, 3, 3, 0, 1);
+    grid1->addMultiCellWidget(d->unclipColors, 4, 4, 0, 1);
 
     d->SuperCCDsecondarySensor = new QCheckBox(i18n("Using Super CCD secondary sensors (Fuji cameras only)"), RAWfileOptionsGroup);
     QWhatsThis::add( d->SuperCCDsecondarySensor, i18n("<p>For Fuji Super CCD SR cameras, use the "
                      "secondary sensors, in effect underexposing the image by four stops to reveal "
                      "detail in the highlights. For all other camera types this option is ignored.<p>"));
-    grid1->addMultiCellWidget(d->SuperCCDsecondarySensor, 4, 4, 0, 1);
+    grid1->addMultiCellWidget(d->SuperCCDsecondarySensor, 5, 5, 0, 1);
     
     d->enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
     QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images using a setting value.<p>"
                                                "Enable this option if you use dcraw version >= 0.8.0 in your system.<p>"));
-    grid1->addMultiCellWidget(d->enableRAWQuality, 5, 5, 0, 0);
+    grid1->addMultiCellWidget(d->enableRAWQuality, 6, 6, 0, 0);
 
     d->RAWquality = new QComboBox( false, RAWfileOptionsGroup );
     d->RAWquality->insertItem( i18n("Bilinear interpolation") );
@@ -166,7 +176,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "This method selects the direction of interpolation so as to "
                      "maximize a homogeneity metric, thus typically minimizing color "
                      "artifacts.<p>"));
-    grid1->addMultiCellWidget(d->RAWquality, 5, 5, 1, 1);
+    grid1->addMultiCellWidget(d->RAWquality, 6, 6, 1, 1);
 
     d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction during decoding (warning: slow)"),
                                             RAWfileOptionsGroup);
@@ -179,7 +189,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "from image editor instead.<p>"
                      "This filter can take a while. Do not use if your computer is slow.<p>"
                      "This option require dcraw version >= 0.8.0.<p>"));
-    grid1->addMultiCellWidget(d->enableNoiseReduction, 6, 6, 0, 1);
+    grid1->addMultiCellWidget(d->enableNoiseReduction, 7, 7, 0, 1);
 
     d->NRSigmaDomain = new KDoubleNumInput(RAWfileOptionsGroup);
     d->NRSigmaDomain->setValue(2.0);
@@ -188,8 +198,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->labelNRSigmaDomain = new QLabel(i18n("Sigma domain:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaDomain, i18n("<p>The noise reduction Sigma Domain in units of pixels. "
                                             "The default value is 2.0.<p>"));
-    grid1->addMultiCellWidget(d->labelNRSigmaDomain, 7, 7, 0, 0);
-    grid1->addMultiCellWidget(d->NRSigmaDomain, 7, 7, 1, 1);
+    grid1->addMultiCellWidget(d->labelNRSigmaDomain, 8, 8, 0, 0);
+    grid1->addMultiCellWidget(d->NRSigmaDomain, 8, 8, 1, 1);
 
     d->NRSigmaRange = new KDoubleNumInput(RAWfileOptionsGroup);
     d->NRSigmaRange->setValue(4.0);
@@ -198,8 +208,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->labelNRSigmaRange = new QLabel(i18n("Sigma range:"), RAWfileOptionsGroup);
     QWhatsThis::add( d->NRSigmaRange, i18n("<p>The noise reduction Sigma Range in units of "
                                            "CIELab colorspace. The default value is 4.0.<p>"));
-    grid1->addMultiCellWidget(d->labelNRSigmaRange, 8, 8, 0, 0);
-    grid1->addMultiCellWidget(d->NRSigmaRange, 8, 8, 1, 1);
+    grid1->addMultiCellWidget(d->labelNRSigmaRange, 9, 9, 0, 0);
+    grid1->addMultiCellWidget(d->NRSigmaRange, 9, 9, 1, 1);
     
     QHBoxLayout *hlay = new QHBoxLayout( KDialog::spacingHint());
     QLabel *labelICCCorrection = new QLabel(i18n("ICC profile correction during decoding:"), RAWfileOptionsGroup);
@@ -219,9 +229,9 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "management for that. This option require dcraw version >= 0.8.0.<p>"));
     hlay->addWidget(labelICCCorrection);
     hlay->addWidget(d->iccColorsCorrection);
-    grid1->addMultiCellLayout(hlay, 9, 9, 0, 1);
+    grid1->addMultiCellLayout(hlay, 10, 10, 0, 1);
                                                
-    grid1->setColStretch(1, 10);
+    grid1->setColStretch(1, 11);
     layout->addWidget(RAWfileOptionsGroup);
 
     // --------------------------------------------------------
@@ -311,6 +321,7 @@ void SetupIOFiles::applySettings()
     config->writeEntry("RAWQuality", (d->RAWquality->currentItem() > 0 ? 
                                       d->RAWquality->currentItem()+1 : d->RAWquality->currentItem()));
 
+    config->writeEntry("SixteenBitsImage", d->sixteenBitsImage->isChecked());
     config->writeEntry("EnableNoiseReduction", d->enableNoiseReduction->isChecked());
     config->writeEntry("NRSigmaDomain", d->NRSigmaDomain->value());
     config->writeEntry("NRSigmaRange", d->NRSigmaRange->value());
@@ -337,6 +348,7 @@ void SetupIOFiles::readSettings()
     int q = config->readNumEntry("RAWQuality", 0);
     d->RAWquality->setCurrentItem( (q > 1) ? q-1 : q );
 
+    d->sixteenBitsImage->setChecked(config->readBoolEntry("SixteenBitsImage", false));
     d->enableNoiseReduction->setChecked(config->readBoolEntry("EnableNoiseReduction", false));
     d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 2.0) );
     d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
