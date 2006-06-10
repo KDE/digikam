@@ -61,6 +61,7 @@ namespace Digikam
 RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
+    m_sixteenBit          = rawDecodingSettings.sixteenBitsImage;
     m_hasAlpha            = false;
     m_rawDecodingSettings = rawDecodingSettings;
 
@@ -161,7 +162,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
         }
 
         imageData() = (uchar *)image;
-        m_sixteenBit = true;
     }
     else        // 8 bits image
     {
@@ -206,7 +206,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
         }
 
         imageData()  = image;
-        m_sixteenBit = false;
     }
 
     delete [] m_data;
