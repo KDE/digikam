@@ -60,11 +60,19 @@ PNGMetaLoader::PNGMetaLoader(DMetadata* metadata)
 
 bool PNGMetaLoader::load(const QString& filePath)
 {
+    // In first we trying to use Exiv2 library
+    // Exiv2 0.11 will support PNG
+    if (loadWithExiv2(filePath))
+        return true;
+
     KFileMetaInfo metainfo(filePath);
 
     if (metainfo.isValid() && !metainfo.isEmpty() )
     {
         QStringList keys = metainfo.preferredKeys();
+
+        // ***********************************************************
+        // TODO : removing this part when Exiv2 0.11 will be released.
 
         // -------------------------------------------------------------------
         // Get embbeded text data and metadata.
@@ -125,11 +133,11 @@ bool PNGMetaLoader::load(const QString& filePath)
                 }
             }
         }
-    
+        // ***********************************************************
+
         // In SECOND, we check all others embedded text.
-    
+        //
         // Standard Embedded text includes in PNG :
-    
         // Title            Short (one line) title or caption for image
         // Author           Name of image's creator
         // Description      Description of image (possibly long)
