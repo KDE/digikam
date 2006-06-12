@@ -84,9 +84,9 @@ public:
 
     QComboBox       *iccColorsCorrection;
     QComboBox       *RAWquality;
-    
-    QCheckBox       *sixteenBitsImage;    
-    QCheckBox       *SuperCCDsecondarySensor;    
+
+    QCheckBox       *sixteenBitsImage;
+    QCheckBox       *SuperCCDsecondarySensor;
     QCheckBox       *unclipColors;
     QCheckBox       *cameraColorBalance;
     QCheckBox       *automaticColorBalance;
@@ -107,16 +107,18 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 {
     d = new SetupIOFilesPriv;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
-    
+
     // --------------------------------------------------------
-    
+
     QGroupBox *RAWfileOptionsGroup = new QGroupBox(0, Qt::Vertical, i18n("RAW Image Decoding Options"), parent);
 
     QGridLayout* grid1 = new QGridLayout( RAWfileOptionsGroup->layout(), 10, 1, KDialog::spacingHint());
 
     d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), RAWfileOptionsGroup);
     QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enable, all RAW files will be decoded to 16-bit "
-                                               "color depth using a linear gamma curve.<p>"
+                                               "color depth using a linear gamma curve. To prevent black "
+                                               "picture rendering on editor, it's recommended to use "
+                                               "Color Management in this mode.<p>"
                                                "If disable, all RAW files will be decoded to 8-bit "
                                                "color depth with a BT.709 gamma curve and a 99th-percentile "
                                                "white point. This mode is more faster than 16-bit decoding."));
