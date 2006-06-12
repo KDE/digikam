@@ -1358,7 +1358,7 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
 bool DMetadata::setImageProgramId()
 {
     try
-    {    
+    {
         QString software("digiKam-");
         software.append(digikam_version);
         d->exifMetadata["Exif.Image.Software"] = software.ascii();
@@ -1372,8 +1372,8 @@ bool DMetadata::setImageProgramId()
         kdDebug() << "Cannot set Program identity into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1425,7 +1425,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
 QString DMetadata::getExifTagString(const char* exifTagName) const
 {
     try
-    {    
+    {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
@@ -1444,15 +1444,33 @@ QString DMetadata::getExifTagString(const char* exifTagName) const
                   << exifTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
+    }
 
     return QString();
 }
 
+bool DMetadata::setExifTagString(const char * exifTagName, const QString& value)
+{
+    try
+    {
+        d->exifMetadata[exifTagName] = value.ascii();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif tag string into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return false;
+}
+
+
 QByteArray DMetadata::getExifTagData(const char* exifTagName) const
 {
     try
-    {    
+    {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
@@ -1469,7 +1487,7 @@ QByteArray DMetadata::getExifTagData(const char* exifTagName) const
                   << exifTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
+    }
 
     return QByteArray();
 }
