@@ -441,7 +441,7 @@ void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettin
 }
 
 void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings,
-                   const QString& mimeType)
+                    const QString& mimeType)
 {
     d->im->saveAs(filename, IOFileSettings, mimeType);
     emit signalSavingStarted(filename);
@@ -449,9 +449,9 @@ void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSetti
 */
 
 void Canvas::saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                    const QString& mimeType)
+                    bool setExifOrientationTag, const QString& mimeType)
 {
-    d->im->saveAs(filename, IOFileSettings, mimeType);
+    d->im->saveAs(filename, IOFileSettings, setExifOrientationTag, mimeType);
     emit signalSavingStarted(filename);
 }
 

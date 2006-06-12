@@ -572,8 +572,8 @@ void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSet
 }
 */
 
-void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings, 
-                           const QString& givenMimeType)
+void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings,
+                           bool setExifOrientationTag, const QString& givenMimeType)
 {
     // No need to toggle off undo, redo or save action during saving using 
     // signalUndoStateChanged(), this is will done by GUI implementation directly.
@@ -589,7 +589,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // Try hard to find a mimetype.
     QString mimeType = givenMimeType;
-    
+
     // This is possibly empty
     if (mimeType.isEmpty())
     {
@@ -627,6 +627,10 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // Update Exif Document Name tag with the original file name.
     meta.setExifTagString("Exif.Image.DocumentName", getImageFileName());
+
+    // Update Exif Orientation tag if necessary.
+    if( setExifOrientationTag )
+        meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // Store new Exif data into image.
     d->image.setExif(meta.getExif());

@@ -74,7 +74,6 @@ extern "C"
 // Local includes.
 
 #include "canvas.h"
-#include "dmetadata.h"
 #include "dimginterface.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -1157,14 +1156,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             finishSaving(false);
             return;
         }
-        
-        if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
-        {
-            DMetadata metadata(m_savingContext->saveTempFile->name());
-            metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-            metadata.applyChanges();
-        }
-        
+
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
@@ -1208,18 +1200,6 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write exif if both src and destination are jpeg files
 
-        if ( (QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPEG" ||
-              QString(QImageIO::imageFormat(m_savingContext->srcURL.path())).upper() == "JPG") &&
-             (m_savingContext->format.upper() == "JPEG" || m_savingContext->format.upper() == "JPG") )
-        {
-            if( m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()) )
-            {
-               DMetadata metadata(m_savingContext->saveTempFile->name());
-               metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-               metadata.applyChanges();
-            }
-        }
-        
         kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
@@ -1235,7 +1215,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         finishSaving(true);
         saveAsIsComplete();
-        
+
         // Take all actions necessary to update informations and re-enable sidebar
         slotChanged();
     }
@@ -1244,7 +1224,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 void EditorWindow::finishSaving(bool success)
 {
     m_savingContext->synchronousSavingResult = success;
-    
+
     if (m_savingContext->saveTempFile)
     {
         delete m_savingContext->saveTempFile;
@@ -1286,7 +1266,8 @@ void EditorWindow::startingSave(const KURL& url)
                                                         QString::null);
     m_savingContext->saveTempFile->setAutoDelete(true);
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings);
+    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
+                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
 }
 
 bool EditorWindow::startingSaveAs(const KURL& url)
@@ -1414,7 +1395,9 @@ bool EditorWindow::startingSaveAs(const KURL& url)
     m_savingContext->saveTempFile->setAutoDelete(true);
     m_savingContext->abortingSaving = false;
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings, m_savingContext->format.lower());
+    m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
+                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
+                     m_savingContext->format.lower());
 
     return true;
 }

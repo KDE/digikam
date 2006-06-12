@@ -54,16 +54,16 @@ public:
     ~DImgInterface();
 
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings, QWidget *parent=0);
-                
+
     void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExifOrient(bool exifOrient);
     void   undo();
     void   redo();
     void   restore();
-    
+
     void   saveAs(const QString& file, IOFileSettingsContainer *iofileSettings,
-                  const QString& mimeType=0);
-                  
+                  bool setExifOrientationTag, const QString& mimeType=QString::null);
+
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
     void   setModified();
@@ -116,21 +116,21 @@ public:
     void   setBCG(double brightness, double contrast, double gamma);
 
     void   convertDepth(int depth);
-    
+
     void   getUndoHistory(QStringList &titles);
     void   getRedoHistory(QStringList &titles);
 
     DImg*  getImg();
     uchar* getImage();
-    
+
     void   putImage(uchar* data, int w, int h);
     void   putImage(uchar* data, int w, int h, bool sixteenBit);
     void   putImage(const QString &caller, uchar* data, int w, int h);
     void   putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit);
-    
+
     uchar* getImageSelection();
     void   putImageSelection(const QString &caller, uchar* data);
-    
+
     void   setEmbeddedICCToOriginalImage( QString profilePath);
 
     QByteArray            getEmbeddedICC();
@@ -138,7 +138,7 @@ public:
     QByteArray            getIptc();    
 
     ICCSettingsContainer *getICCSettings();
-    
+
     QString               getImageFileName();
 
 protected slots:

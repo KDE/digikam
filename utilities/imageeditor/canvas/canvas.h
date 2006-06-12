@@ -51,7 +51,7 @@ class IOFileSettingsContainer;
 class Canvas : public QScrollView
 {
     Q_OBJECT
-    
+
 public:
 
     Canvas(QWidget *parent=0);
@@ -61,7 +61,7 @@ public:
     void  preload(const QString& filename);
 
     void  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                 const QString& mimeType=0);
+                 bool setExifOrientationTag, const QString& mimeType=QString::null);
     void  switchToLastSaved(const QString& newFilename);
     void  abortSaving();
     void  setModified();
