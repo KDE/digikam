@@ -1380,34 +1380,34 @@ bool DMetadata::setImageProgramId()
 PhotoInfoContainer DMetadata::getPhotographInformations() const
 {
     try
-    {    
+    {
         if (!d->exifMetadata.empty())
         {
             PhotoInfoContainer photoInfo;
             photoInfo.dateTime = getImageDateTime();
-            photoInfo.make     = getExifTagValue("Exif.Image.Make");
-            photoInfo.model    = getExifTagValue("Exif.Image.Model");
+            photoInfo.make     = getExifTagString("Exif.Image.Make");
+            photoInfo.model    = getExifTagString("Exif.Image.Model");
 
-            photoInfo.aperture = getExifTagValue("Exif.Photo.FNumber");
+            photoInfo.aperture = getExifTagString("Exif.Photo.FNumber");
             if (photoInfo.aperture.isEmpty())
-                photoInfo.aperture = getExifTagValue("Exif.Photo.ApertureValue");
+                photoInfo.aperture = getExifTagString("Exif.Photo.ApertureValue");
 
-            photoInfo.exposureTime = getExifTagValue("Exif.Photo.ExposureTime");
+            photoInfo.exposureTime = getExifTagString("Exif.Photo.ExposureTime");
             if (photoInfo.exposureTime.isEmpty())
-                photoInfo.exposureTime = getExifTagValue("Exif.Photo.ShutterSpeedValue");
+                photoInfo.exposureTime = getExifTagString("Exif.Photo.ShutterSpeedValue");
 
-            photoInfo.exposureMode    = getExifTagValue("Exif.Photo.ExposureMode");
-            photoInfo.exposureProgram = getExifTagValue("Exif.Photo.ExposureProgram");
-                            
-            photoInfo.focalLenght     = getExifTagValue("Exif.Photo.FocalLength");
-            photoInfo.focalLenght35mm = getExifTagValue("Exif.Photo.FocalLengthIn35mmFilm");
+            photoInfo.exposureMode    = getExifTagString("Exif.Photo.ExposureMode");
+            photoInfo.exposureProgram = getExifTagString("Exif.Photo.ExposureProgram");
 
-            photoInfo.sensitivity = getExifTagValue("Exif.Photo.ISOSpeedRatings");
+            photoInfo.focalLenght     = getExifTagString("Exif.Photo.FocalLength");
+            photoInfo.focalLenght35mm = getExifTagString("Exif.Photo.FocalLengthIn35mmFilm");
+
+            photoInfo.sensitivity = getExifTagString("Exif.Photo.ISOSpeedRatings");
             if (photoInfo.sensitivity.isEmpty())
-                photoInfo.sensitivity = getExifTagValue("Exif.Photo.ExposureIndex");
+                photoInfo.sensitivity = getExifTagString("Exif.Photo.ExposureIndex");
 
-            photoInfo.flash = getExifTagValue("Exif.Photo.Flash");
-            photoInfo.whiteBalance = getExifTagValue("Exif.Photo.WhiteBalance");
+            photoInfo.flash = getExifTagString("Exif.Photo.Flash");
+            photoInfo.whiteBalance = getExifTagString("Exif.Photo.WhiteBalance");
 
             return photoInfo;
         }
@@ -1417,12 +1417,12 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
         kdDebug() << "Cannot get Photograph informations into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
+    }
 
     return PhotoInfoContainer();
 }
 
-QString DMetadata::getExifTagValue(const char* exifTagName) const
+QString DMetadata::getExifTagString(const char* exifTagName) const
 {
     try
     {    

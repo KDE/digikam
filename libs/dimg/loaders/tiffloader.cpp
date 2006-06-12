@@ -458,7 +458,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     tiffSetExifAsciiTag(tif, TIFFTAG_ARTIST,                  &metaData, "Exif.Image.Artist");
     tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               &metaData, "Exif.Image.Copyright");
 
-    QString soft = metaData.getExifTagValue("Exif.Image.Software");
+    QString soft = metaData.getExifTagString("Exif.Image.Software");
     QString libtiffver(TIFFLIB_VERSION_STR);
     libtiffver.replace('\n', ' ');
     soft.append(QString(" ( %1 )").arg(libtiffver));

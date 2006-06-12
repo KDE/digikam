@@ -99,7 +99,7 @@ public:
     void setExif(Exiv2::DataBuf const data);
     void setIptc(Exiv2::DataBuf const data);
 
-    QString             getExifTagValue(const char * exifTagName) const;
+    QString             getExifTagString(const char * exifTagName) const;
     QByteArray          getExifTagData(const char* exifTagName) const;
     
     QImage              getExifThumbnail(bool fixOrientation) const;
