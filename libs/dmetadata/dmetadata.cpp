@@ -899,7 +899,8 @@ QString DMetadata::getImageComment() const
             {
                 QString exifComment = convertCommentValue(*it);
 
-                if (!exifComment.isEmpty())
+                // some cameras fill the UserComment with whitespace
+                if (!exifComment.isEmpty() && !exifComment.stripWhiteSpace().isEmpty())
                   return exifComment;
             }
         }
@@ -916,7 +917,7 @@ QString DMetadata::getImageComment() const
             {
                 QString IptcComment = QString::fromLatin1(it->toString().c_str());
 
-                if (!IptcComment.isEmpty())
+                if (!IptcComment.isEmpty() && !IptcComment.stripWhiteSpace().isEmpty())
                   return IptcComment;
             }
         }
