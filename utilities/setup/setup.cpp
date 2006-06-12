@@ -70,7 +70,7 @@ public:
         page_plugins     = 0;
         page_camera      = 0;
         page_misc        = 0;
-        
+
         generalPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
@@ -157,8 +157,8 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_slideshow = addPage(i18n("Slide Show"), i18n("Image Editor Slide Show Settings"),
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new SetupSlideShow(d->page_slideshow);
-    
-    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Image Editor Color Profiles Management"),
+
+    d->page_icc = addPage(i18n("Color Management"), i18n("Image Editor Color Management"),
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new SetupICC(d->page_icc, this);
 
