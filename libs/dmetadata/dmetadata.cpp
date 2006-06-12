@@ -995,8 +995,28 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 {
     try
     {
-        std::string comment = exifDatum.toString();
+        std::string comment;
         std::string charset;
+#ifdef EXIV2_CHECK_VERSION
+        if (EXIV2_CHECK_VERSION(0,11,0))
+        {
+            comment = exifDatum.toString();
+        }
+        else
+        {
+            // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
+            const Exiv2::Value &value = exifDatum.value();
+            Exiv2::byte *data = new Exiv2::byte[value.size()];
+            value.copy(data, Exiv2::invalidByteOrder);
+            Exiv2::CommentValue commentValue;
+            // this read method is hidden in CommentValue
+            static_cast<Exiv2::Value &>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
+            comment = commentValue.toString();
+            delete [] data;
+        }
+#else
+        comment = exifDatum.toString();
+#endif
 
         // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
         // Before conversion to QString, we must know the charset, so we stay with std::string for a while
