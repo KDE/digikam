@@ -624,6 +624,11 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // Update Exif Image dimensions.
     meta.setImageDimensions(d->image.size());
+
+    // Update Exif Document Name tag with the original file name.
+    meta.setExifTagString("Exif.Image.DocumentName", getImageFileName());
+
+    // Store new Exif data into image.
     d->image.setExif(meta.getExif());
 
     d->thread->save(d->image, fileName, mimeType);
