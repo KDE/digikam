@@ -44,8 +44,8 @@ MdKeyListViewItem::MdKeyListViewItem(KListView *parent, const QString& key)
     
     // Standard Exif key descriptions.
     if      (key == "Iop")       m_decryptedKey = i18n("Interoperability");
-    else if (key == "Image")     m_decryptedKey = i18n("Image Informations");
-    else if (key == "Photo")     m_decryptedKey = i18n("Photograph Informations");
+    else if (key == "Image")     m_decryptedKey = i18n("Image Information");
+    else if (key == "Photo")     m_decryptedKey = i18n("Photograph Information");
     else if (key == "GPSInfo")   m_decryptedKey = i18n("Global Positioning System");
     else if (key == "Thumbnail") m_decryptedKey = i18n("Embedded Thumbnail");
     
