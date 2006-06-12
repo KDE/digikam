@@ -979,7 +979,7 @@ bool EditorWindow::promptUserSave(const KURL& url)
     if (m_saveAction->isEnabled())
     {
         int result = KMessageBox::warningYesNoCancel(this,
-                                  i18n("The image '%1\' has been modified.\n"
+                                  i18n("The image '%1' has been modified.\n"
                                        "Do you want to save it?")
                                        .arg(url.filename()),
                                   QString::null,
