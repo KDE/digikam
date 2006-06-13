@@ -70,6 +70,7 @@ public:
     void   readMetadataFromFile(const QString &file);
     void   clearUndoManager();
     void   setUndoManagerOrigin();
+    void   updateUndoState();
 
     void   zoom(double val);
 

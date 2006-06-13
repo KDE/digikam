@@ -708,6 +708,11 @@ void DImgInterface::setUndoManagerOrigin()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
+void DImgInterface::updateUndoState()
+{
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
+
 bool DImgInterface::imageValid()
 {
     return !d->image.isNull();

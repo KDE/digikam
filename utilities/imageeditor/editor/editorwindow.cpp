@@ -798,10 +798,24 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filePrintAction->setEnabled(val);
     d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
-    m_saveAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
-    m_undoAction->setEnabled(val);
-    m_redoAction->setEnabled(val);
+
+    // these actions are special: They are turned off if val is false,
+    // but if val is true, they may be turned on or off.
+    if (val)
+    {
+        // Trigger sending of signalUndoStateChanged
+        // Note that for saving and loading, this is not necessary
+        // because the signal will be sent later anyway.
+        // This is necessary when called from toggleActions2Slideshow
+        m_canvas->updateUndoState();
+    }
+    else
+    {
+        m_saveAction->setEnabled(val);
+        m_undoAction->setEnabled(val);
+        m_redoAction->setEnabled(val);
+    }
 
     QPtrList<ImagePlugin> pluginList = m_imagePluginLoader->pluginList();
     
@@ -1262,8 +1276,9 @@ void EditorWindow::startingSave(const KURL& url)
     m_savingContext->destinationExisted = true;
     m_savingContext->abortingSaving     = false;
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
+    // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile       = new KTempFile(m_savingContext->srcURL.directory(false),
-                                                        QString::null);
+                                                        "digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoDelete(true);
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
@@ -1389,7 +1404,8 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     // Now do the actual saving -----------------------------------------------------
 
-    m_savingContext->saveTempFile   = new KTempFile(newURL.directory(false), QString::null);
+    // use magic file extension which tells the digikamalbums ioslave to ignore the file
+    m_savingContext->saveTempFile   = new KTempFile(newURL.directory(false), "digikamtempfile.tmp");
     m_savingContext->destinationURL = newURL;
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->saveTempFile->setAutoDelete(true);

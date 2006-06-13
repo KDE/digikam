@@ -68,6 +68,7 @@ public:
     void  readMetadataFromFile(const QString &file);
     void  clearUndoHistory();
     void  setUndoHistoryOrigin();
+    void  updateUndoState();
     DImg  currentImage();
 
     bool  maxZoom();

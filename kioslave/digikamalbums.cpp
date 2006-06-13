@@ -915,7 +915,7 @@ void kio_digikamalbums::listDir( const KURL& url )
     listEntry(entry, false);
     while ((fi = it.current()) != 0)
     {
-        if (fi->fileName() != "." && fi->fileName() != "..")
+        if (fi->fileName() != "." && fi->fileName() != ".." || fi->extension(true) == "digikamtempfile.tmp")
         {
             createUDSEntry(fi->absFilePath(), entry);
             listEntry(entry, false);
@@ -1465,7 +1465,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
         {
             ++it;
             
-            if (fi->fileName() == "." || fi->fileName() == "..")
+            if (fi->fileName() == "." || fi->fileName() == ".." || fi->extension(true) == "digikamtempfile.tmp")
             {
                 continue;
             }

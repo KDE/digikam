@@ -491,6 +491,11 @@ void Canvas::setUndoHistoryOrigin()
     d->im->setUndoManagerOrigin();
 }
 
+void Canvas::updateUndoState()
+{
+    d->im->updateUndoState();
+}
+
 DImg Canvas::currentImage()
 {
     return DImg(*d->im->getImg());
