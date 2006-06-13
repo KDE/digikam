@@ -350,7 +350,7 @@ void SetupIOFiles::readSettings()
     int q = config->readNumEntry("RAWQuality", 0);
     d->RAWquality->setCurrentItem( (q > 1) ? q-1 : q );
 
-    d->sixteenBitsImage->setChecked(config->readBoolEntry("SixteenBitsImage", false));
+    d->sixteenBitsImage->setChecked(config->readBoolEntry("SixteenBitsImage", true));
     d->enableNoiseReduction->setChecked(config->readBoolEntry("EnableNoiseReduction", false));
     d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 2.0) );
     d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
