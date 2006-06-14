@@ -35,7 +35,6 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kapplication.h>
