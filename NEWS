@@ -153,5 +153,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed.
 093 ==> 93569  : easier connection to USB disc cameras.
 094 ==> 124952 : digikam "Mount and Download" Problems.
+095 ==> 129134 : typo in missing files warning dialog "loose" should be "lose"
 
 ----------------------------------------------------------------------------------------------------
