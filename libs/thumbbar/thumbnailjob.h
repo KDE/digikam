@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-10-14
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-10-14
+ * Description : digiKam KIO thumbnails generator interface
+ *
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright      2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,16 +57,12 @@ public:
 
     bool setNextItemToLoad(const KURL& url);
     void removeItem(const KURL& url);
-    
+
 signals:
 
     void signalThumbnail(const KURL& url, const QPixmap& pix);
     void signalCompleted();
     void signalFailed(const KURL& url);
-
-private:
-
-    ThumbnailJobPriv *d;
 
 private:
 
@@ -76,6 +74,10 @@ protected slots:
 
     void slotResult(KIO::Job *job);
     void slotThumbData(KIO::Job *job, const QByteArray &data);
+
+private:
+
+    ThumbnailJobPriv *d;
 };
 
 }  // namespace Digikam

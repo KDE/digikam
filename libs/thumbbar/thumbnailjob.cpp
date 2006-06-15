@@ -1,25 +1,27 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-10-14
- * Description : 
- * 
- * Copyright 2003 by Renchi Raju
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-10-14
+ * Description : digiKam KIO thumbnails generator interface
+ *
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright      2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
- 
+
 extern "C"
 {
 #include <sys/types.h>
@@ -28,9 +30,9 @@ extern "C"
 #include <fcntl.h>
 #include <unistd.h>
 }
- 
-// QT includes. 
- 
+
+// QT includes.
+
 #include <qstring.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -56,46 +58,47 @@ class ThumbnailJobPriv
 {
 public:
 
-    KURL::List    urlList;
-    int           size;
-    bool          highlight;
-    bool          exifRotate;
+    bool        highlight;
+    bool        exifRotate;
+    bool        running;
 
-    KURL          curr_url;
-    KURL          next_url;
-    bool          running;
+    int         size;
 
     // Shared memory segment Id. The segment is allocated to a size
     // of extent x extent x 4 (32 bit image) on first need.
-    int           shmid;
+    int         shmid;
+
     // And the data area
-    uchar        *shmaddr;
+    uchar      *shmaddr;
+
+    KURL        curr_url;
+    KURL        next_url;
+    KURL::List  urlList;
 };
 
 ThumbnailJob::ThumbnailJob(const KURL& url, int size,
                            bool highlight, bool exifRotate)
-    : KIO::Job(false)
+            : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
     d->urlList.append(url);
+
     d->size       = size;
     d->highlight  = highlight;
     d->exifRotate = exifRotate;
-
-    d->curr_url = d->urlList.first();
-    d->next_url = d->curr_url;
-    d->running  = false;
-    
-    d->shmid   = -1;
-    d->shmaddr = 0;
+    d->curr_url   = d->urlList.first();
+    d->next_url   = d->curr_url;
+    d->running    = false;
+    d->shmid      = -1;
+    d->shmaddr    = 0;
 
     processNext();
 }
 
 ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
                            bool highlight, bool exifRotate)
-    : KIO::Job(false)
+            : KIO::Job(false)
 {
     d = new ThumbnailJobPriv;
 
@@ -104,22 +107,22 @@ ThumbnailJob::ThumbnailJob(const KURL::List& urlList, int size,
     d->highlight  = highlight;
     d->running    = false;
     d->exifRotate = exifRotate;
-
-    d->curr_url = d->urlList.first();
-    d->next_url = d->curr_url;
-    
-    d->shmid = -1;
-    d->shmaddr = 0;
+    d->curr_url   = d->urlList.first();
+    d->next_url   = d->curr_url;
+    d->shmid      = -1;
+    d->shmaddr    = 0;
 
     processNext();
 }
 
 ThumbnailJob::~ThumbnailJob()
 {
-    if (d->shmaddr) {
+    if (d->shmaddr)
+    {
         shmdt((char*)d->shmaddr);
         shmctl(d->shmid, IPC_RMID, 0);
     }
+
     delete d;
 }
 
@@ -192,14 +195,14 @@ void ThumbnailJob::processNext()
     KIO::TransferJob *job = KIO::get(url, false, false);
     job->addMetaData("size", QString::number(d->size));
     createShmSeg();
-    
+
     if (d->shmid != -1)
         job->addMetaData("shmid", QString::number(d->shmid));
-    
+
     // Rotate thumbnail accordindly with Exif rotation tag if necessary.
     if (d->exifRotate)
         job->addMetaData("exif", "yes");
-        
+
     connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
             this, SLOT(slotThumbData(KIO::Job *, const QByteArray &)));
 
@@ -211,7 +214,7 @@ void ThumbnailJob::slotResult(KIO::Job *job)
 {
     subjobs.remove(job);
     Q_ASSERT( subjobs.isEmpty() );
-    
+
     if (job->error())
     {
         emit signalFailed(d->curr_url);
@@ -225,12 +228,13 @@ void ThumbnailJob::createShmSeg()
 {
     if (d->shmid == -1)
     {
-        if (d->shmaddr) {
+        if (d->shmaddr) 
+        {
             shmdt((char*)d->shmaddr);
             shmctl(d->shmid, IPC_RMID, 0);
         }
-        d->shmid = shmget(IPC_PRIVATE, 256 * 256 * 4,
-                          IPC_CREAT|0600);
+
+        d->shmid = shmget(IPC_PRIVATE, 256 * 256 * 4, IPC_CREAT|0600);
         if (d->shmid != -1)
         {
             d->shmaddr = static_cast<uchar *>(shmat(d->shmid, 0, SHM_RDONLY));
@@ -260,11 +264,13 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         thumb = QImage(d->shmaddr, width, height, depth,
                        0, 0, QImage::IgnoreEndian);
     }
-    else {
+    else
+    {
         stream >> thumb;
     }
 
-    if (thumb.isNull()) {
+    if (thumb.isNull()) 
+    {
         kdWarning() << k_funcinfo << "thumbnail is null" << endl;
         emit signalFailed(d->curr_url);
         return;
