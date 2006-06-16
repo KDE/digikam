@@ -356,10 +356,13 @@ void ShowFoto::saveSettings()
 void ShowFoto::applySettings()
 {
     applyStandardSettings();
-    
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    
+
+    m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
+    m_canvas->setBackgroundColor(m_bgColor);
+
     // Current image deleted go to trash ?
     m_deleteItem2Trash = config->readBoolEntry("DeleteItem2Trash", true);
     if (m_deleteItem2Trash)
