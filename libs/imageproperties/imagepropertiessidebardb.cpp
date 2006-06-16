@@ -20,8 +20,9 @@
  * ============================================================ */
 
 // Qt includes. 
- 
+
 #include <qrect.h>
+#include <qcolor.h>
 #include <qsplitter.h>
 
 // KDE includes.
@@ -37,6 +38,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "themeengine.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
 #include "imagepropertiestab.h"
@@ -82,29 +84,31 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 {
     d = new ImagePropertiesSideBarDBPriv;
     d->desceditTab = new ImageDescEditTab(parent, navBar);
-   
+
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Comments/Tags"));
+
+    slotThemeChanged();
 
     // ----------------------------------------------------------
 
     connect(m_propertiesTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-                    
+
     connect(m_propertiesTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(m_propertiesTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
     connect(m_propertiesTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-    
+
     connect(m_metadataTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-                    
+
     connect(m_metadataTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(m_metadataTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -113,30 +117,33 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     connect(m_colorTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-                    
+
     connect(m_colorTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(m_colorTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
     connect(m_colorTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-                            
+
     connect(d->desceditTab, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-                    
+
     connect(d->desceditTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(d->desceditTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
     connect(d->desceditTab, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-            
+
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
@@ -310,6 +317,13 @@ void ImagePropertiesSideBarDB::slotAssignRatingFourStar()
 void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 {
     d->desceditTab->assignRating(5);
+}
+
+void ImagePropertiesSideBarDB::slotThemeChanged()
+{
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
+    m_propertiesTab->colorChanged(backgroundColor, foregroundColor);
 }
 
 }  // NameSpace Digikam

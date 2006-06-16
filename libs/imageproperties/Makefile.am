@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libimagepropertiesshowfoto.la libimagepropertiesdigikam.la \
-	             libimagepropertiescamgui.la
+	                 libimagepropertiescamgui.la
 
 # Image Properties SideBar for Camera GUI.
 
@@ -14,8 +14,8 @@ libimagepropertiescamgui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # Image Properties SideBar for Showfoto (without digiKam database support).
 
 libimagepropertiesshowfoto_la_SOURCES = imagepropertiessidebar.cpp navigatebarwidget.cpp \
-	                                imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp \
-					imagepropertiestab.cpp 
+	                                    imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp \
+	                                    imagepropertiestab.cpp 
 
 libimagepropertiesshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	                                   $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
@@ -35,6 +35,7 @@ libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/histogram \
 	       -I$(top_srcdir)/digikam/libs/dcraw \
+	       -I$(top_srcdir)/digikam/libs/themeengine \
 	       -I$(top_srcdir)/digikam/libs/dmetadata \
 	       -I$(top_srcdir)/digikam/libs/widgets/common \
 	       -I$(top_srcdir)/digikam/libs/widgets/metadata \

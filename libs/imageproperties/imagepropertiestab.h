@@ -25,6 +25,7 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+#include <qcolor.h>
 
 // KDE includes.
 
@@ -49,14 +50,15 @@ public:
     ~ImagePropertiesTab();
 
     void setCurrentURL(const KURL& url=KURL(), int itemType=0);
+    void colorChanged(const QColor& back, const QColor& fore);
 
 signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void); 
-        
+
+    void signalFirstItem(void);
+    void signalPrevItem(void);
+    void signalNextItem(void);
+    void signalLastItem(void);
+
 private:
 
     ImagePropertiesTabPriv* d;

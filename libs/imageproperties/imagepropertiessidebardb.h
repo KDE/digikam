@@ -86,13 +86,17 @@ public slots:
 private slots:
 
     void slotChangedTab(QWidget* tab);
+    void slotThemeChanged();
+
+private:
+
+    void itemChanged(const KURL& url, QRect *rect, DImg *img,
+                     AlbumIconView* view, AlbumIconItem* item,
+                     ImageInfo *info, bool hasPrevious, bool hasNext);
 
 private:
 
     ImagePropertiesSideBarDBPriv* d;
-    void itemChanged(const KURL& url, QRect *rect, DImg *img,
-                     AlbumIconView* view, AlbumIconItem* item,
-                     ImageInfo *info, bool hasPrevious, bool hasNext);
 
 };
 
