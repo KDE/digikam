@@ -26,6 +26,7 @@
 #include <qpixmap.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
+#include <qframe.h>
 
 // KDE includes.
 
@@ -125,7 +126,7 @@ public:
     QLabel             *flash;
     QLabel             *whiteBalance;
 
-    QWidget            *settingsArea;
+    QFrame             *settingsArea;
 
     KSqueezedTextLabel *labelFolder;
     KSqueezedTextLabel *labelFileModifiedDate;
@@ -160,7 +161,10 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
-    d->settingsArea             = new QWidget(this);
+    d->settingsArea             = new QFrame(this);
+    d->settingsArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->settingsArea->setMargin(0);
+    d->settingsArea->setLineWidth(1);
     QGridLayout *settingsLayout = new QGridLayout(d->settingsArea, 32, 1, KDialog::marginHint(), 0);
 
     // --------------------------------------------------
