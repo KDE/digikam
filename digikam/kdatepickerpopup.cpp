@@ -1,23 +1,26 @@
-/*
-  This file is part of libkdepim.
+/* ============================================================
+ * Authors: bram Schoenmakers <bramschoenmakers@kde.nl>
+ *          Mikolaj Machowski <mikmach@wp.pl>
+ * Date   : 2004-04-21
+ * Description : a menu widget to pick a date.
+ *               this widget come from libkdepim.
+ *
+ * Copyright (c) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
+ *           (c) 2006 Mikolaj Machowski <mikmach@wp.pl>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
-  Copyright (c) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor, 
-  Boston, MA  02110-1301  USA
-*/
 
 // Qt includes.
 
@@ -35,118 +38,119 @@
 namespace Digikam
 {
 
-KDatePickerPopup::KDatePickerPopup( int items, const QDate &date, QWidget *parent,
-                                    const char *name )
-  : QPopupMenu( parent, name )
+KDatePickerPopup::KDatePickerPopup(int items, const QDate &date, QWidget *parent,
+                                    const char *name)
+                : QPopupMenu( parent, name )
 {
-  mItems = items;
+    mItems      = items;
+    mDatePicker = new KDatePicker( this );
+    mDatePicker->setCloseButton( false );
 
-  mDatePicker = new KDatePicker( this );
-  mDatePicker->setCloseButton( false );
+    connect( mDatePicker, SIGNAL( dateEntered( QDate ) ),
+               this, SLOT( slotDateChanged( QDate ) ) );
 
-  connect( mDatePicker, SIGNAL( dateEntered( QDate ) ),
-           SLOT( slotDateChanged( QDate ) ) );
-  connect( mDatePicker, SIGNAL( dateSelected( QDate ) ),
-           SLOT( slotDateChanged( QDate ) ) );
+    connect( mDatePicker, SIGNAL( dateSelected( QDate ) ),
+               this, SLOT( slotDateChanged( QDate ) ) );
 
-  mDatePicker->setDate( date );
-
-  buildMenu();
+    mDatePicker->setDate( date );
+    buildMenu();
 }
 
 void KDatePickerPopup::buildMenu()
 {
-  if ( isVisible() ) return;
-  clear();
+    if ( isVisible() ) return;
+    clear();
 
-  if ( mItems & DatePicker ) {
-    insertItem( mDatePicker );
+    if ( mItems & DatePicker ) 
+    {
+        insertItem( mDatePicker );
 
-    if ( ( mItems & NoDate ) || ( mItems & Words ) )
-      insertSeparator();
-  }
+        if ( ( mItems & NoDate ) || ( mItems & Words ) )
+        insertSeparator();
+    }
 
-  if ( mItems & Words ) {
-    insertItem( i18n("&Today"), this, SLOT( slotToday() ) );
-    insertItem( i18n("To&morrow"), this, SLOT( slotTomorrow() ) );
-    insertItem( i18n("&Friday"), this, SLOT( slotFriday() ) );
-    insertItem( i18n("&Sunday"), this, SLOT( slotSunday() ) );
-    insertItem( i18n("Next &Week"), this, SLOT( slotNextWeek() ) );
-    insertItem( i18n("Next M&onth"), this, SLOT( slotNextMonth() ) );
+    if ( mItems & Words ) 
+    {
+        insertItem( i18n("&Today"),       this, SLOT( slotToday() ) );
+        insertItem( i18n("Y&esterday"),   this, SLOT( slotYesterday() ) );
+        insertItem( i18n("Last &Monday"), this, SLOT( slotPrevMonday() ) );
+        insertItem( i18n("Last &Friday"), this, SLOT( slotPrevFriday() ) );
+        insertItem( i18n("Last &Week"),   this, SLOT( slotPrevWeek() ) );
+        insertItem( i18n("Last M&onth"),  this, SLOT( slotPrevMonth() ) );
+
+        if ( mItems & NoDate )
+        insertSeparator();
+    }
 
     if ( mItems & NoDate )
-      insertSeparator();
-  }
-
-  if ( mItems & NoDate )
-    insertItem( i18n("No Date"), this, SLOT( slotNoDate() ) );
+        insertItem( i18n("No Date"), this, SLOT( slotNoDate() ) );
 }
 
 KDatePicker *KDatePickerPopup::datePicker() const
 {
-  return mDatePicker;
+    return mDatePicker;
 }
 
 void KDatePickerPopup::setDate( const QDate &date )
 {
-  mDatePicker->setDate( date );
+    mDatePicker->setDate( date );
 }
 
 #if 0
 void KDatePickerPopup::setItems( int items )
 {
-  mItems = items;
-  buildMenu();
+    mItems = items;
+    buildMenu();
 }
 #endif
 
 void KDatePickerPopup::slotDateChanged( QDate date )
 {
-  emit dateChanged( date );
-  hide();
+    emit dateChanged( date );
+    hide();
 }
 
 void KDatePickerPopup::slotToday()
 {
-  emit dateChanged( QDate::currentDate() );
+    emit dateChanged( QDate::currentDate() );
 }
 
-void KDatePickerPopup::slotTomorrow()
+void KDatePickerPopup::slotYesterday()
 {
-  emit dateChanged( QDate::currentDate().addDays( 1 ) );
+    emit dateChanged( QDate::currentDate().addDays( -1 ) );
 }
 
-void KDatePickerPopup::slotFriday()
+void KDatePickerPopup::slotPrevFriday()
 {
-  QDate date = QDate::currentDate();
-  int day = date.dayOfWeek();
-  if ( day < 6 )
-    date = date.addDays( 5 - day );
-  else
-    date = date.addDays( 5 - day + 7 );
+    QDate date = QDate::currentDate();
+    int day = date.dayOfWeek();
+    if ( day < 6 )
+        date = date.addDays( 5 - 7 - day );
+    else
+        date = date.addDays( 5 - day );
 
-  emit dateChanged( date );
+    emit dateChanged( date );
 }
 
-void KDatePickerPopup::slotSunday()
+void KDatePickerPopup::slotPrevMonday()
 {
-  QDate date = QDate::currentDate();
-  emit dateChanged( date.addDays( 7 - date.dayOfWeek() ) );
+    QDate date = QDate::currentDate();
+    emit dateChanged( date.addDays( 1 - date.dayOfWeek() ) );
 }
 
 void KDatePickerPopup::slotNoDate()
 {
-  emit dateChanged( QDate() );
+    emit dateChanged( QDate() );
 }
 
-void KDatePickerPopup::slotNextWeek()
+void KDatePickerPopup::slotPrevWeek()
 {
-  emit dateChanged( QDate::currentDate().addDays( 7 ) );
+    emit dateChanged( QDate::currentDate().addDays( -7 ) );
 }
 
-void KDatePickerPopup::slotNextMonth()
+void KDatePickerPopup::slotPrevMonth()
 {
-  emit dateChanged( QDate::currentDate().addMonths( 1 ) );
+    emit dateChanged( QDate::currentDate().addMonths( -1 ) );
 }
 
 }  // namespace Digikam
