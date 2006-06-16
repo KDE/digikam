@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qcolor.h>
 #include <qstring.h>
 #include <qrect.h>
 
@@ -61,7 +62,7 @@ public:
 
     virtual void applySettings(){};
     virtual void setup(bool iccSetupPage=false)=0;
-    
+
 signals:
 
     void signalSelectionChanged( QRect* );
@@ -72,9 +73,11 @@ protected:
     bool                     m_fullScreen;
     bool                     m_rotatedOrFlipped;
     bool                     m_setExifOrientationTag;
-   
+
     QLabel                  *m_zoomLabel;
     QLabel                  *m_resLabel;
+
+    QColor                   m_bgColor;
 
     QSplitter               *m_splitter;
 
@@ -109,7 +112,7 @@ protected:
     void applyStandardSettings();
 
     void setupStandardConnections();
-    void setupStandardActions();    
+    void setupStandardActions();
     void setupStandardAccelerators();
     void setupStatusBar();
     void toggleStandardActions(bool val);
@@ -150,7 +153,7 @@ protected slots:
 
     void slotSave();
     void slotSaveAs() { saveAs(); };
-    
+
     void slotImagePluginsHelp();
     void slotEditKeys();
     void slotResize();
@@ -164,7 +167,7 @@ protected slots:
     void slotToggleSlideShow();
     void slotToggleFullScreen();
     void slotEscapePressed();
-        
+
     void slotToggleAutoZoom();
     void slotZoomChanged(float zoom);
     void slotViewHistogram();
@@ -172,7 +175,7 @@ protected slots:
 
     void slotLoadingProgress(const QString& filePath, float progress);
     void slotSavingProgress(const QString& filePath, float progress);
-    
+
     void slotNameLabelCancelButtonPressed();
 
     virtual void slotLoadingStarted(const QString& filename);
@@ -204,7 +207,7 @@ private:
     void showToolBars();
 
 private:
-    
+
     EditorWindowPriv *d;
 
 };

@@ -749,9 +749,6 @@ void EditorWindow::applyStandardSettings()
     
     d->fullScreenHideToolBar = config->readBoolEntry("FullScreen Hide ToolBar", false);
 
-    d->bgColor = QColor(Qt::black);
-    m_canvas->setBackgroundColor(config->readColorEntry("BackgroundColor", &d->bgColor));
-      
     // -- Slideshow Settings -------------------------------------------------
     
     d->slideShowInFullScreen = config->readBoolEntry("SlideShowFullScreen", true);
@@ -833,7 +830,7 @@ void EditorWindow::slotToggleFullScreen()
 {
     if (m_fullScreen) // out of fullscreen
     {
-        m_canvas->setBackgroundColor(d->bgColor);
+        m_canvas->setBackgroundColor(m_bgColor);
 
 #if QT_VERSION >= 0x030300
         setWindowState( windowState() & ~WindowFullScreen );

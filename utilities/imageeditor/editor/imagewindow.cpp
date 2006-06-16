@@ -62,6 +62,7 @@
 
 #include "canvas.h"
 #include "dimginterface.h"
+#include "themeengine.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imageplugin.h"
@@ -139,7 +140,7 @@ ImageWindow::ImageWindow()
     setAutoSaveSettings("ImageViewer Settings");
 
     //-------------------------------------------------------------
-    
+
     m_rightSidebar->loadViewState();
     m_rightSidebar->populateTags();
 }
@@ -151,7 +152,7 @@ ImageWindow::~ImageWindow()
     unLoadImagePlugins();
 
     // No need to delete m_imagePluginLoader instance here, it will be done by main interface.
-    
+
     delete m_rightSidebar;
 }
 
@@ -172,10 +173,10 @@ void ImageWindow::setupConnections()
     setupStandardConnections();
 
     // To toogle properly keyboards shortcuts from comments & tags side bar tab.
-    
+
     connect(m_rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotForward()));
-                
+
     connect(m_rightSidebar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
@@ -189,24 +190,27 @@ void ImageWindow::setupConnections()
 
     connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
             this, SLOT(slotFileMetadataChanged(const KURL &)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 void ImageWindow::setupUserArea()
 {
     QWidget* widget  = new QWidget(this);
     QHBoxLayout *lay = new QHBoxLayout(widget);
-    
+
     m_splitter       = new QSplitter(widget);
     m_canvas         = new Canvas(m_splitter);
-    
+
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     m_canvas->setSizePolicy(rightSzPolicy);
-        
+
     m_rightSidebar   = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
                                                     Sidebar::Right, true, false);
     lay->addWidget(m_splitter);
     lay->addWidget(m_rightSidebar);
-    
+
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
     m_splitter->setFrameShape( QFrame::NoFrame );
@@ -249,9 +253,16 @@ void ImageWindow::setupActions()
 void ImageWindow::applySettings()
 {
     applyStandardSettings();
-    
+
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
+
+    if (!config->readBoolEntry("UseThemeBackgroundColor", true))
+        m_bgColor = config->readColorEntry("BackgroundColor", &Qt::black);
+    else
+        m_bgColor = ThemeEngine::instance()->baseColor();
+
+    m_canvas->setBackgroundColor(m_bgColor);
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings->getUseTrash())
@@ -326,7 +337,7 @@ void ImageWindow::slotLoadCurrent()
     if (it != m_urlList.end())
     {
         m_canvas->load(m_urlCurrent.path(), m_IOFileSettings);
-        
+
         ++it;
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
@@ -429,7 +440,7 @@ void ImageWindow::slotContextMenu()
 
             connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotAssignTag(int)));
-                    
+
             connect(removeTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotRemoveTag(int)));
 
@@ -490,7 +501,7 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
         m_saveAction->setEnabled(canSave);
 
     if (!moreUndo)
-        m_rotatedOrFlipped = false;        
+        m_rotatedOrFlipped = false;
 }
 
 void ImageWindow::slotAssignTag(int tagID)
@@ -773,7 +784,7 @@ void ImageWindow::slotDeleteCurrentItem()
         }
         else if (m_urlCurrent != m_urlList.first())
         {
-            // Try to get the previous image in the current Album...
+            // Try to get the previous image in the current Album.
 
             KURL urlPrev = *(--it);
             m_urlCurrent = urlPrev;
@@ -799,6 +810,11 @@ void ImageWindow::slotFileMetadataChanged(const KURL &url)
     {
         m_canvas->readMetadataFromFile(url.path());
     }
+}
+
+void ImageWindow::slotThemeChanged()
+{
+    m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 }  // namespace Digikam

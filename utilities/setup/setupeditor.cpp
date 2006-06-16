@@ -51,12 +51,17 @@ public:
 
     SetupEditorPriv()
     {
-        hideToolBar     = 0;
-        backgroundColor = 0;
+        hideToolBar          = 0;
+        themebackgroundColor = 0;
+        backgroundColor      = 0;
+        colorBox             = 0;
     }
 
+    QHBox        *colorBox;
+
     QCheckBox    *hideToolBar;
-    
+    QCheckBox    *themebackgroundColor;
+
     KColorButton *backgroundColor;
 };
 
@@ -65,32 +70,41 @@ SetupEditor::SetupEditor(QWidget* parent )
 {
     d = new SetupEditorPriv;
     QVBoxLayout *layout = new QVBoxLayout( parent );
-    
+
     // --------------------------------------------------------
-    
+
     QVGroupBox *interfaceOptionsGroup = new QVGroupBox(i18n("Interface Options"),
-                                                        parent);
-    
-    QHBox* colorBox = new QHBox(interfaceOptionsGroup);
-    
+                                                       parent);
+
+    d->themebackgroundColor = new QCheckBox(i18n("&Use theme background color"),
+                                            interfaceOptionsGroup);
+
+    QWhatsThis::add( d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
+                                              "color into image editor area") );
+
+    d->colorBox = new QHBox(interfaceOptionsGroup);
+
     QLabel *backgroundColorlabel = new QLabel( i18n("&Background color:"),
-                                                colorBox );
-    
-    d->backgroundColor = new KColorButton(colorBox);
+                                               d->colorBox );
+
+    d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    QWhatsThis::add( d->backgroundColor, i18n("<p>Select here the background color to use "
-                                                "for image editor area.") );
+    QWhatsThis::add( d->backgroundColor, i18n("<p>Customize here the background color to use "
+                                              "into image editor area.") );
     backgroundColorlabel->setBuddy( d->backgroundColor );
-    
+
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
-                                    interfaceOptionsGroup);
-    
+                                   interfaceOptionsGroup);
+
     layout->addWidget(interfaceOptionsGroup);
-    
+
     // --------------------------------------------------------
-    
+
+    connect(d->themebackgroundColor, SIGNAL(toggled(bool)),
+            this, SLOT(slotThemeBackgroundColor(bool)));
+
     layout->addStretch();
-    
+
     readSettings();
 }
 
@@ -99,11 +113,17 @@ SetupEditor::~SetupEditor()
     delete d;
 }
 
+void SetupEditor::slotThemeBackgroundColor(bool e)
+{
+    d->colorBox->setEnabled(!e);
+}
+
 void SetupEditor::applySettings()
 {
     KConfig* config = kapp->config();
 
     config->setGroup("ImageViewer Settings");
+    config->writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
     config->writeEntry("BackgroundColor", d->backgroundColor->color());
     config->writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     config->sync();
@@ -115,9 +135,10 @@ void SetupEditor::readSettings()
     QColor *Black = new QColor(Qt::black);
 
     config->setGroup("ImageViewer Settings");
+    d->themebackgroundColor->setChecked(config->readBoolEntry("UseThemeBackgroundColor", true));
     d->backgroundColor->setColor( config->readColorEntry("BackgroundColor", Black ) );
     d->hideToolBar->setChecked(config->readBoolEntry("FullScreen Hide ToolBar", false));
-    
+
     delete Black;
 }
 

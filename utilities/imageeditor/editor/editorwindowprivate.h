@@ -22,10 +22,6 @@
 #ifndef EDITORWINDOWPRIVATE_H
 #define EDITORWINDOWPRIVATE_H
 
-// Qt includes.
-
-#include <qcolor.h>
-
 class KAction;
 class KToggleAction;
 class KSelectAction;
@@ -47,7 +43,7 @@ public:
         removeFullScreenButton = false;
         fullScreenHideToolBar  = false;
         slideShowInFullScreen  = true;
-        
+
         imagePluginsHelpAction = 0;
         accelerators           = 0;
         viewHistogramAction    = 0;
@@ -76,8 +72,6 @@ public:
     bool                  fullScreenHideToolBar;
     bool                  slideShowInFullScreen;
 
-    QColor                bgColor;
-
     KAction              *imagePluginsHelpAction;
     KAction              *filePrintAction;
     KAction              *copyAction;
@@ -90,12 +84,12 @@ public:
     KAction              *rotate270Action;
     KAction              *flipHorzAction;
     KAction              *flipVertAction;
-        
+
     KActionMenu          *flipAction;
     KActionMenu          *rotateAction;
-        
+
     KToggleAction        *zoomFitAction;
-    
+
     KSelectAction        *viewHistogramAction;
 
     KAccel               *accelerators;

@@ -3,7 +3,7 @@
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-02-12
  * Description : digiKam image editor GUI
- * 
+ *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006 by Gilles Caulier
  *
@@ -12,12 +12,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef IMAGEWINDOW_H
@@ -125,20 +125,22 @@ private slots:
     void slotFirst();
     void slotLast();
     void slotFilePrint(){ printImage(m_urlCurrent); };
-        
+
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
-    
+
     void slotChanged();
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
     void slotContextMenu();
-    
+
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
     void slotFileMetadataChanged(const KURL &url);
+
+    void slotThemeChanged();
 };
 
 }  // namespace Digikam
