@@ -1513,4 +1513,24 @@ QByteArray DMetadata::getExifTagData(const char* exifTagName) const
     return QByteArray();
 }
 
+bool DMetadata::getImagePreview(QImage& image)
+{
+    try
+    {
+        // Minolta camera preview extraction.
+        if (image.loadFromData(getExifTagData("Exif.Minolta.Thumbnail")) )
+            return true;
+
+        // TODO : Added here other makernotes preview extraction
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get image preview using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return false;
+}
+
 }  // NameSpace Digikam

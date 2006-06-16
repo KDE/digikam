@@ -103,6 +103,7 @@ public:
     QByteArray          getExifTagData(const char* exifTagName) const;
     QImage              getExifThumbnail(bool fixOrientation) const;
     ImageColorWorkSpace getImageColorWorkSpace();
+    bool                getImagePreview(QImage& image);
     QSize               getImageDimensions();
     ImageOrientation    getImageOrientation();
     QDateTime           getImageDateTime() const;
