@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #include <config.h>
@@ -27,7 +27,7 @@
 #include <cstdlib>
 
 // Qt Includes.
- 
+
 #include <qtimer.h>
 #include <qlayout.h>
 #include <qspinbox.h>
@@ -78,7 +78,7 @@ public:
 
     enum MetadataTab
     {
-        HISTOGRAM,
+        HISTOGRAM=0,
         ICCPROFILE
     };
 
@@ -119,17 +119,17 @@ public:
     }
 
     bool                   blinkFlag;
-    
+
     QComboBox             *channelCB;
     QComboBox             *colorsCB;
     QComboBox             *renderingCB;
 
     QHButtonGroup         *scaleBG;
     QHButtonGroup         *regionBG;
-    
+
     QSpinBox              *minInterv;
     QSpinBox              *maxInterv;
-    
+
     QLabel                *labelMeanValue;
     QLabel                *labelPixelsValue;
     QLabel                *labelStdDevValue;
@@ -139,29 +139,29 @@ public:
     QLabel                *labelColorDepth;
     QLabel                *labelAlphaChannel;
     QLabel                *labelICCInfoHeader;
-    
+
     QPushButton           *saveProfilButton;
-    
+
     QString                currentFilePath;
     QString                profileFileName;
-    
+
     QRect                 *selectionArea;
 
     QByteArray             embedded_profile;
-    
-    QTimer                *blinkTimer;    
-    
-    KTabWidget            *tab;        
+
+    QTimer                *blinkTimer;
+
+    KTabWidget            *tab;
 
     KSqueezedTextLabel    *labelICCName;
     KSqueezedTextLabel    *labelICCDescription;
     KSqueezedTextLabel    *labelICCCopyright;
     KSqueezedTextLabel    *labelICCIntent;
     KSqueezedTextLabel    *labelICCColorSpace;
-    
+
     DImg                   image;
     DImg                   imageSelection;
-    
+
     ColorGradientWidget   *hGradient;
     HistogramWidget       *histogramWidget;
     NavigateBarWidget     *navigateBar;
@@ -173,18 +173,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                         : QWidget(parent)
 {
     d = new ImagePropertiesColorsTabPriv;
-    
+
     d->selectionArea = selectionArea;
-   
+
     QVBoxLayout *vLayout = new QVBoxLayout(this);
     d->navigateBar       = new NavigateBarWidget(this, navBar);
     d->tab               = new KTabWidget(this);
     vLayout->addWidget(d->navigateBar);
     vLayout->addSpacing(KDialog::spacingHint());
     vLayout->addWidget(d->tab);
-       
+
     // Histogram tab area -----------------------------------------------------
-       
+
     QWidget* histogramPage = new QWidget( d->tab );
     QGridLayout *topLayout = new QGridLayout(histogramPage, 8, 3, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -206,7 +206,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                                        "This channel corresponding to the transparency value and "
                                        "is supported by some image formats such as PNG or GIF.<p>"
                                        "<b>Colors</b>: drawing all color channels values at the same time."));
-    
+
     d->scaleBG = new QHButtonGroup(histogramPage);
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
@@ -216,7 +216,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
     d->scaleBG->insert(linHistoButton, HistogramWidget::LinScaleHistogram);
@@ -224,15 +224,15 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
     linHistoButton->setToggleButton(true);
-    
+
     QPushButton *logHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
     d->scaleBG->insert(logHistoButton, HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
-    
+    logHistoButton->setToggleButton(true);
+
     QLabel *label10 = new QLabel(i18n("Colors:"), histogramPage);
     label10->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     d->colorsCB = new QComboBox( false, histogramPage );
@@ -244,7 +244,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                                       "<b>Red</b>: drawing the red image channel on the foreground.<p>"
                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
-                                       
+
     d->regionBG = new QHButtonGroup(histogramPage);
     d->regionBG->setExclusive(true);
     d->regionBG->setFrameShape(QFrame::NoFrame);
@@ -254,7 +254,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                                       "<b>Full Image</b>: drawing histogram using the full image.<p>"
                                       "<b>Selection</b>: drawing histogram using the current image "
                                       "selection."));
-    
+
     QPushButton *fullImageButton = new QPushButton( d->regionBG );
     QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
     d->regionBG->insert(fullImageButton, HistogramWidget::FullImageHistogram);
@@ -262,7 +262,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     directory = KGlobal::dirs()->findResourceDir("image-full", "image-full.png");
     fullImageButton->setPixmap( QPixmap( directory + "image-full.png" ) );
     fullImageButton->setToggleButton(true);
-    
+
     QPushButton *SelectionImageButton = new QPushButton( d->regionBG );
     QToolTip::add( SelectionImageButton, i18n( "<p>Selection" ) );
     d->regionBG->insert(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
@@ -270,7 +270,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
     SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
     SelectionImageButton->setToggleButton(true);       
-                                                                        
+
     topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
     topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
     topLayout->addMultiCellWidget(d->scaleBG, 1, 1, 2, 2);
@@ -278,13 +278,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
     topLayout->addMultiCellWidget(d->regionBG, 2, 2, 2, 2);
     topLayout->setColStretch(3, 10);
-    
+
     // -------------------------------------------------------------
-    
+
     d->histogramWidget = new HistogramWidget(256, 140, histogramPage);
     QWhatsThis::add( d->histogramWidget, i18n("<p>This is the histogram drawing of the "
                                              "selected image channel"));
-        
+
     d->hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histogramPage );
     d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
     topLayout->addMultiCellWidget(d->histogramWidget, 3, 3, 0, 3);
@@ -307,24 +307,24 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     hlay2->addWidget(d->minInterv);
     hlay2->addWidget(d->maxInterv);
     topLayout->addMultiCellLayout(hlay2, 5, 5, 0, 3);
-    
+
     // -------------------------------------------------------------
-    
+
     QGroupBox *gbox = new QGroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
     QWhatsThis::add( gbox, i18n("<p>Here you can see the statistic results calculated with the "
                                 "selected histogram part. These values are available for all "
                                 "channels."));
-                                
+
     QLabel *label4 = new QLabel(i18n("Mean:"), gbox);
     label4->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelMeanValue = new QLabel(gbox);
     d->labelMeanValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label5 = new QLabel(i18n("Pixels:"), gbox);
     label5->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPixelsValue = new QLabel(gbox);
     d->labelPixelsValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label6 = new QLabel(i18n("Standard deviation:"), gbox);
     label6->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelStdDevValue = new QLabel(gbox);
@@ -334,17 +334,17 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     label7->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelCountValue = new QLabel(gbox);
     d->labelCountValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label8 = new QLabel(i18n("Median:"), gbox);
     label8->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelMedianValue = new QLabel(gbox);
     d->labelMedianValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     QLabel *label9 = new QLabel(i18n("Percentile:"), gbox);
     label9->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelPercentileValue = new QLabel(gbox);
     d->labelPercentileValue->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     topLayout->addMultiCellWidget(gbox, 6, 6, 0, 3);
 
     // -------------------------------------------------------------
@@ -360,17 +360,17 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     label12->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
     d->labelAlphaChannel = new QLabel(gbox2);
     d->labelAlphaChannel->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
-    
+
     topLayout->addMultiCellWidget(gbox2, 7, 7, 0, 3);
 
     topLayout->setRowStretch(8, 10);
     d->tab->insertTab(histogramPage, i18n("Histogram"), ImagePropertiesColorsTabPriv::HISTOGRAM );
 
     // ICC Profiles tab area ---------------------------------------
-    
+
     QWidget* iccprofilePage = new QWidget( d->tab );
     QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 10, 2, KDialog::marginHint(), KDialog::spacingHint());
-    
+
     QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
     iccbox->setFrameStyle (QFrame::NoFrame);
 
@@ -391,7 +391,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->saveProfilButton    = new QPushButton(i18n("Save as..."), iccprofilePage);
     QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
                                                "the image and save it to the disk like a new ICC profile file."));
-                                
+
     iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
     iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 2);
     iccLayout->addMultiCellWidget(d->cieTongue, 8, 8, 0, 2);
@@ -409,33 +409,33 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
-                    
+
     connect(d->navigateBar, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-    
+
     connect(d->navigateBar, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
     connect(d->navigateBar, SIGNAL(signalLastItem()),
             this, SIGNAL(signalLastItem()));
-                            
+
     // -------------------------------------------------------------
-                                
+
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
-    
+
     connect(d->scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
-    
+
     connect(d->colorsCB, SIGNAL(activated(int)),
-            this, SLOT(slotColorsChanged(int)));     
-                   
+            this, SLOT(slotColorsChanged(int)));
+
     connect(d->regionBG, SIGNAL(released(int)),
-            this, SLOT(slotRenderingChanged(int)));       
-             
+            this, SLOT(slotRenderingChanged(int)));
+
     connect(d->histogramWidget, SIGNAL(signalIntervalChanged( int, int )),
             this, SLOT(slotUpdateInterval(int, int)));
-       
+
     connect(d->histogramWidget, SIGNAL(signalMaximumValueChanged( int )),
             this, SLOT(slotUpdateIntervRange(int)));
 
@@ -444,7 +444,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     connect(d->histogramWidget, SIGNAL(signalHistogramComputationFailed(void)),
             this, SLOT(slotHistogramComputationFailed(void)));
-                        
+
     connect(d->minInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotMinValueChanged(int)));
 
@@ -453,7 +453,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     connect(d->saveProfilButton, SIGNAL(clicked()),
             this, SLOT(slotSaveProfil()));
-                        
+
     // -- read config ---------------------------------------------------------
 
     KConfig* config = kapp->config();
