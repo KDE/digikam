@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -26,7 +26,6 @@
 #include <qmime.h>
 #include <qheader.h>
 #include <qwhatsthis.h>
-#include <qcombobox.h>
 #include <qpainter.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
@@ -64,21 +63,21 @@ public:
 
     MetadataWidgetPriv()
     {
-        modeCombo  = 0;
-        view       = 0;
-        mainLayout = 0;
+        levelButtons = 0;
+        view         = 0;
+        mainLayout   = 0;
     }
 
     QGridLayout                 *mainLayout;
 
+    QHButtonGroup               *levelButtons;
+
     QByteArray                   metadata;
 
-    QComboBox                   *modeCombo;
-    
     QString                      fileName;
-    
+
     MetadataListView            *view;
-    
+
     MetadataWidget::MetaDataMap  metaDataMap;
 };
 
@@ -88,21 +87,25 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d = new MetadataWidgetPriv;
 
     d->mainLayout = new QGridLayout(this, 2, 4, KDialog::marginHint(), KDialog::spacingHint());
-
-    QLabel* modeLabel = new QLabel(i18n("Level of detail:"), this);
-    d->modeCombo      = new QComboBox(this);
-    d->modeCombo->insertItem(i18n("Simple"));
-    d->modeCombo->insertItem(i18n("Full"));
-    d->mainLayout->addMultiCellWidget(modeLabel, 0, 0, 0, 1);
-    d->mainLayout->addMultiCellWidget(d->modeCombo, 0, 0, 2, 2);
-
-    QWhatsThis::add( d->modeCombo, i18n("<p>Select here the information level to display<p>"
-                                        "<b>Simple</b>: display general information about the photograph "
-                                        " (default).<p>"
-                                        "<b>Full</b>: display all sections.") );
-    d->mainLayout->setColStretch(3, 10);
-
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+
+    d->levelButtons = new QHButtonGroup(this);
+    d->levelButtons->setInsideMargin( 0 );
+    d->levelButtons->setExclusive(true);
+    d->levelButtons->setFrameShape(QFrame::NoFrame);
+
+    QPushButton *simpleLevel = new QPushButton( d->levelButtons );
+    simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
+    simpleLevel->setToggleButton(true);
+    QWhatsThis::add( simpleLevel, i18n( "Toogle tags view to a simple human-readable list" ) );
+    d->levelButtons->insert(simpleLevel, SIMPLE);
+
+    QPushButton *fullLevel = new QPushButton( d->levelButtons );
+    fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
+    fullLevel->setToggleButton(true);
+    QWhatsThis::add( fullLevel, i18n( "Toogle tags view to a full list" ) );
+    d->levelButtons->insert(fullLevel, FULL);
+
     QHButtonGroup *toolButtons = new QHButtonGroup(this);
     toolButtons->setInsideMargin( 0 );
     toolButtons->setFrameShape(QFrame::NoFrame);
@@ -111,18 +114,20 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     printMetadata->setPixmap( iconLoader->loadIcon( "fileprint", (KIcon::Group)KIcon::Toolbar ) );
     QWhatsThis::add( printMetadata, i18n( "Print metadata to printer" ) );
     toolButtons->insert(printMetadata);
-    
+
     QPushButton *copy2ClipBoard = new QPushButton( toolButtons );
     copy2ClipBoard->setPixmap( iconLoader->loadIcon( "editcopy", (KIcon::Group)KIcon::Toolbar ) );
     QWhatsThis::add( copy2ClipBoard, i18n( "Copy metadata to clipboard" ) );
     toolButtons->insert(copy2ClipBoard);
 
+    d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
+    d->mainLayout->setColStretch(3, 10);
     d->mainLayout->addMultiCellWidget(toolButtons, 0, 0, 4, 4);
 
     d->view = new MetadataListView(this);
     d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
 
-    connect(d->modeCombo, SIGNAL(activated(int)),
+    connect(d->levelButtons, SIGNAL(released(int)),
             this, SLOT(slotModeChanged(int)));
 
     connect(copy2ClipBoard, SIGNAL(clicked()),
@@ -151,14 +156,14 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
         d->view->clear();
         return false;
     }
-    
+
     // Cleanup all metadata contents and try to decode current metadata.
     setMetadataMap();
     decodeMetadata();
 
     // Refresh view using decoded metadata.
     buildView();
-    
+
     return true;
 }
 
@@ -206,7 +211,7 @@ void MetadataWidget::slotCopy2Clipboard(void)
             textmetadata.append("\n\n>>> ");
             textmetadata.append(item->getMdKey());
             textmetadata.append(" <<<\n\n");
-        }            
+        }
         else
         {
             QListViewItem *item = it.current();
@@ -215,10 +220,10 @@ void MetadataWidget::slotCopy2Clipboard(void)
             textmetadata.append(item->text(1));
             textmetadata.append("\n");
         }
-        
+
         ++it;
     }
-        
+
     QApplication::clipboard()->setData(new QTextDrag(textmetadata), QClipboard::Clipboard);
 }
 
@@ -237,7 +242,7 @@ void MetadataWidget::slotPrintMetadata(void)
             textmetadata.append("<br><br><b>");
             textmetadata.append(item->getMdKey());
             textmetadata.append("</b><br><br>");
-        }            
+        }
         else
         {
             QListViewItem *item = it.current();
@@ -246,22 +251,22 @@ void MetadataWidget::slotPrintMetadata(void)
             textmetadata.append(item->text(1));
             textmetadata.append("</i><br>");
         }
-        
+
         ++it;
     }
 
     textmetadata.append("</p>");
-    
+
     KPrinter printer;
     printer.setFullPage( true );
-    
+
     if ( printer.setup( this ) )
     {
         QPainter p( &printer );
-        
+
         if ( !p.device() ) 
             return;
-            
+
         QPaintDeviceMetrics metrics(p.device());
         int dpiy = metrics.logicalDpiY();
         int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
@@ -275,8 +280,8 @@ void MetadataWidget::slotPrintMetadata(void)
                                   view.height() );
         richText.setWidth( &p, view.width() );
         int page = 1;
-                    
-        do 
+
+        do
         {
             richText.draw( &p, margin, margin, view, colorGroup() );
             view.moveBy( 0, view.height() );
@@ -284,29 +289,30 @@ void MetadataWidget::slotPrintMetadata(void)
             p.setFont( font );
             p.drawText( view.right() - p.fontMetrics().width( QString::number( page ) ),
                         view.bottom() + p.fontMetrics().ascent() + 5, QString::number( page ) );
-            
+
             if ( view.top() - margin >= richText.height() )
                 break;
-            
+
             printer.newPage();
             page++;
-        } 
+        }
         while (true);
     }
 }
 
 void MetadataWidget::setMode(int mode)
 {
-    if (d->modeCombo->currentItem() == mode)
+    if (d->levelButtons->selectedId() == mode)
         return;
 
-    d->modeCombo->setCurrentItem(mode);
+    d->levelButtons->setButton(mode);
     buildView();
 }
 
 int MetadataWidget::getMode(void)
 {
-    return d->modeCombo->currentItem();
+    int level = d->levelButtons->selectedId();
+    return level;
 }
 
 QString MetadataWidget::getCurrentItemKey() const

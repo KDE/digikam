@@ -2,7 +2,7 @@
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-02-22
  * Description : a generic widget to display metadata
- * 
+ *
  * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -10,12 +10,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef METADATAWIDGET_H
@@ -43,12 +43,12 @@ class MetadataWidgetPriv;
 class DIGIKAM_EXPORT MetadataWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
 
     enum Mode
     {
-        SIMPLE,
+        SIMPLE=0,
         FULL
     };
 
@@ -61,7 +61,7 @@ public:
 
     int     getMode(void);
     void    setMode(int mode);
-    
+
     QString getCurrentItemKey() const;
     void    setCurrentItemByKey(const QString& itemKey);
 
@@ -69,7 +69,7 @@ public:
 
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
-    
+
     virtual bool loadFromData(QString fileName, const QByteArray& data=QByteArray());
     virtual bool loadFromURL(const KURL& url)=0;
 
@@ -93,14 +93,14 @@ protected:
     void   setIfdList(const MetaDataMap &ifds, const QStringList& tagsFilter=QStringList());
     void   setIfdList(const MetaDataMap &ifds, const QStringList& keysFilter,
                       const QStringList& tagsFilter);
-        
+
     virtual bool decodeMetadata(void)=0;
     virtual void buildView(void)=0;
     virtual QString getMetadataTitle(void)=0;
 
 private:
 
-    MetadataWidgetPriv* d;    
+    MetadataWidgetPriv* d;
 };
 
 }  // namespace Digikam
