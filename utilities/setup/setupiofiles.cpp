@@ -2,7 +2,7 @@
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-01-23
  * Description : setup image editor Input Output files.
- * 
+ *
  * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -123,7 +123,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                                                "color depth with a BT.709 gamma curve and a 99th-percentile "
                                                "white point. This mode is more faster than 16-bit decoding."));
     grid1->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 1);
-    
+
     d->RGBInterpolate4Colors = new QCheckBox(i18n("Interpolate RGB as four colors"), RAWfileOptionsGroup);
     QWhatsThis::add( d->RGBInterpolate4Colors, i18n("<p>Interpolate RGB as four colors. This blurs the image "
                                                     "a little, but it eliminates false 2x2 mesh patterns.<p>"));
@@ -134,7 +134,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                                                     "fixed color balance based on a white card photographed "
                                                     "in sunlight.<p>"));
     grid1->addMultiCellWidget(d->automaticColorBalance, 2, 2, 0, 1);
-    
+
     d->cameraColorBalance = new QCheckBox(i18n("Camera color balance"), RAWfileOptionsGroup);
     QWhatsThis::add( d->cameraColorBalance, i18n("<p>Use the color balance specified by the camera. "
                                                  "If this can't be found, reverts to the default.<p>"));
@@ -150,7 +150,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                      "secondary sensors, in effect underexposing the image by four stops to reveal "
                      "detail in the highlights. For all other camera types this option is ignored.<p>"));
     grid1->addMultiCellWidget(d->SuperCCDsecondarySensor, 5, 5, 0, 1);
-    
+
     d->enableRAWQuality = new QCheckBox(i18n("Enable RAW decoding quality"), RAWfileOptionsGroup);
     QWhatsThis::add( d->enableRAWQuality, i18n("<p>Toggle quality decoding option for RAW images using a setting value.<p>"
                                                "Enable this option if you use dcraw version >= 0.8.0 in your system.<p>"));
@@ -212,7 +212,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                                            "CIELab colorspace. The default value is 4.0.<p>"));
     grid1->addMultiCellWidget(d->labelNRSigmaRange, 9, 9, 0, 0);
     grid1->addMultiCellWidget(d->NRSigmaRange, 9, 9, 1, 1);
-    
+
     QHBoxLayout *hlay = new QHBoxLayout( KDialog::spacingHint());
     QLabel *labelICCCorrection = new QLabel(i18n("ICC profile correction during decoding:"), RAWfileOptionsGroup);
     d->iccColorsCorrection = new QComboBox( false, RAWfileOptionsGroup );
@@ -232,12 +232,12 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     hlay->addWidget(labelICCCorrection);
     hlay->addWidget(d->iccColorsCorrection);
     grid1->addMultiCellLayout(hlay, 10, 10, 0, 1);
-                                               
+
     grid1->setColStretch(1, 11);
     layout->addWidget(RAWfileOptionsGroup);
 
     // --------------------------------------------------------
-    
+
     connect(d->enableRAWQuality, SIGNAL(toggled(bool)),
             d->RAWquality, SLOT(setEnabled(bool)));
 
@@ -252,17 +252,17 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             d->labelNRSigmaRange, SLOT(setEnabled(bool)));
-    
+
     // --------------------------------------------------------
 
     QGroupBox *savingOptionsGroup = new QGroupBox(0, Qt::Vertical, i18n("Saving Images Options"), parent);
 
     QGridLayout* grid2 = new QGridLayout( savingOptionsGroup->layout(), 2, 1, KDialog::spacingHint());
-    
+
     d->JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
     d->JPEGcompression->setRange(1, 100, 1, true );
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), savingOptionsGroup);
-    
+
     QWhatsThis::add( d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
                                                 "<b>1</b>: low quality (high compression and small "
                                                 "file size)<p>"
@@ -274,11 +274,11 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                                                 "compression format.</b>"));
     grid2->addMultiCellWidget(d->labelJPEGcompression, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->JPEGcompression, 0, 0, 1, 1);
-    
+
     d->PNGcompression = new KIntNumInput(1, savingOptionsGroup);
     d->PNGcompression->setRange(1, 9, 1, true );
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), savingOptionsGroup);
-    
+
     QWhatsThis::add( d->PNGcompression, i18n("<p>The compression value for PNG images:<p>"
                                              "<b>1</b>: low compression (large file size but "
                                              "short compression duration - default)<p>"
@@ -289,10 +289,10 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
                                              "compression format.</b>"));
     grid2->addMultiCellWidget(d->labelPNGcompression, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->PNGcompression, 1, 1, 1, 1);
-    
+
     d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"),
                                        savingOptionsGroup);
-    
+
     QWhatsThis::add( d->TIFFcompression, i18n("<p>Toggle compression for TIFF images.<p>"
                                               "If you enable this option, you can reduce "
                                               "the final file size of the TIFF image.</p>"
@@ -303,7 +303,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     layout->addWidget(savingOptionsGroup);
     layout->addStretch();
-    
+
     readSettings();
 }
 
@@ -343,14 +343,14 @@ void SetupIOFiles::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
-    
+
     d->enableRAWQuality->setChecked(config->readBoolEntry("EnableRAWQuality", true));
 
     // Translation dcraw quality value to combobox item. See dcraw man page for details.
     int q = config->readNumEntry("RAWQuality", 0);
     d->RAWquality->setCurrentItem( (q > 1) ? q-1 : q );
 
-    d->sixteenBitsImage->setChecked(config->readBoolEntry("SixteenBitsImage", true));
+    d->sixteenBitsImage->setChecked(config->readBoolEntry("SixteenBitsImage", false));
     d->enableNoiseReduction->setChecked(config->readBoolEntry("EnableNoiseReduction", false));
     d->NRSigmaDomain->setValue( config->readDoubleNumEntry("NRSigmaDomain", 2.0) );
     d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
@@ -364,7 +364,7 @@ void SetupIOFiles::readSettings()
     d->JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     d->PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );
     d->TIFFcompression->setChecked(config->readBoolEntry("TIFFCompression", false));
-    
+
     d->RAWquality->setEnabled(d->enableRAWQuality->isChecked());
     d->NRSigmaDomain->setEnabled(d->enableNoiseReduction->isChecked());
     d->labelNRSigmaDomain->setEnabled(d->enableNoiseReduction->isChecked());
