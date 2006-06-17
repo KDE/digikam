@@ -388,6 +388,20 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->labelICCColorSpace  = new KSqueezedTextLabel(0, iccdetail);
 
     d->cieTongue           = new CIETongueWidget(256, 256, iccprofilePage);
+    QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
+                                        "A CIE diagram is a representation of all of the colors "
+                                        "that a person with normal vision can see. This is represented "
+                                        "by the colored sail shaped area. In addition you will see a "
+                                        "triangle that is superimposed on the diagram outlined in white. "
+                                        "This triangle represents that outer boundries of the color space "
+                                        "of the device that is characterized by the profile being inspected. "
+                                        "This is called the device gamut.<p>"
+                                        "In addition there are black dots and yellow lines on the diagram. "
+                                        "Each black dot represents one of the measurement points that was "
+                                        "used to create this profile. The yellow line represents the "
+                                        "amount that each point is corrected by the profile and the "
+                                        "direction of the correction."));
+
     d->saveProfilButton    = new QPushButton(i18n("Save as..."), iccprofilePage);
     QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
                                                "the image and save it to the disk like a new ICC profile file."));
