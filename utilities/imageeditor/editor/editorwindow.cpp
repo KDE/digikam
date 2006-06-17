@@ -375,7 +375,7 @@ void EditorWindow::setupStandardActions()
                                     0, Key_7, m_canvas, SLOT(slotRotate270()),
                                     actionCollection(),
                                     "rotate_270");
-                                    
+
     d->rotateAction->insert(d->rotate90Action);
     d->rotateAction->insert(d->rotate180Action);
     d->rotateAction->insert(d->rotate270Action);
@@ -394,14 +394,14 @@ void EditorWindow::setupStandardActions()
                                            actionCollection(), "editorwindow_imagepluginshelp");
 
     // -- Init SlideShow instance -------------------------------------------------
-    
+
     m_slideShow = new SlideShow(m_firstAction, m_forwardAction);
 }
 
 void EditorWindow::setupStandardAccelerators()
 {
     d->accelerators = new KAccel(this);
-    
+
     d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen"),
                     i18n("Exit out of the fullscreen mode"),
                     Key_Escape, this, SLOT(slotEscapePressed()),
@@ -437,7 +437,7 @@ void EditorWindow::setupStandardAccelerators()
                     Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
                     false, true);
 }
-    
+
 void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new IOFileProgressBar(statusBar());
@@ -494,7 +494,7 @@ void EditorWindow::slotEditKeys()
 {
     KKeyDialog dialog(true, this);
     dialog.insert( actionCollection(), i18n( "General" ) );
-    
+
     QPtrList<ImagePlugin> pluginList = ImagePluginLoader::instance()->pluginList();
 
     for (ImagePlugin* plugin = pluginList.first();
@@ -505,7 +505,7 @@ void EditorWindow::slotEditKeys()
             dialog.insert( plugin->actionCollection(), plugin->name() );
         }
     }
-    
+
     dialog.configure();
 }
 
@@ -515,7 +515,7 @@ void EditorWindow::slotResize()
     int height = m_canvas->imageHeight();
 
     ImageResizeDlg dlg(this, &width, &height);
-    
+
     if (dlg.exec() == QDialog::Accepted &&
         (width != m_canvas->imageWidth() ||
          height != m_canvas->imageHeight()))
@@ -527,15 +527,15 @@ void EditorWindow::slotAboutToShowUndoMenu()
     m_undoAction->popupMenu()->clear();
     QStringList titles;
     m_canvas->getUndoHistory(titles);
-    
+
     if(!titles.isEmpty())
     {
         int id = 1;
-        QStringList::Iterator iter = titles.begin();        
+        QStringList::Iterator iter = titles.begin();
         for(; iter != titles.end(); ++iter,++id)
         {
             m_undoAction->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -544,7 +544,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
     m_redoAction->popupMenu()->clear();
     QStringList titles;
     m_canvas->getRedoHistory(titles);
-    
+
     if(!titles.isEmpty())
     {
         int id = 1;
@@ -552,7 +552,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
         for(; iter != titles.end(); ++iter,++id)
         {
             m_redoAction->popupMenu()->insertItem(*iter, id);
-        }        
+        }
     }
 }
 
@@ -658,13 +658,13 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KConfig* config = kapp->config();
-    config->setGroup("ImageViewer Settings");    
+    config->setGroup("ImageViewer Settings");
 
     // Blended Histogram settings.
     QRect histogramRect = config->readRectEntry("Histogram Rectangle");
     if (!histogramRect.isNull())
         m_canvas->setHistogramPosition(histogramRect.topLeft());
-    
+
     int histogramType = config->readNumEntry("HistogramType", 0);
     histogramType = (histogramType < 0 || histogramType > 5) ? 0 : histogramType;
     d->viewHistogramAction->setCurrentItem(histogramType);
@@ -686,7 +686,7 @@ void EditorWindow::readStandardSettings()
         d->zoomFitAction->activate();
         d->zoomPlusAction->setEnabled(false);
         d->zoomMinusAction->setEnabled(false);
-    }    
+    }
 }
 
 void EditorWindow::applyStandardSettings()
@@ -706,13 +706,13 @@ void EditorWindow::applyStandardSettings()
     d->ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
     d->ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
     d->ICCSettings->proofSetting       = config->readPathEntry("ProofProfileFile", QString::null);
-        
+
     DImgInterface::instance()->setICCSettings(d->ICCSettings);
 
     // -- IO files format settings ------------------------------------------------
- 
+
     config->setGroup("ImageViewer Settings");
-        
+
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
                                                + 25.0 - (75.0/99.0));
@@ -723,7 +723,7 @@ void EditorWindow::applyStandardSettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
-    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", true);
+    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
