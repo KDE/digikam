@@ -2,8 +2,8 @@
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2006-01-10
  * Description : a widget to display CIE tongue from
- * an ICC profile.
- * 
+ *               an ICC profile.
+ *
  * Copyright 2006 by Gilles Caulier
  *
  * Any source code are inspired from lprof project and
@@ -51,14 +51,14 @@ namespace Digikam
     // 780 nm.  This table is used in conjunction with  Planck's  law  for
     // the  energy spectrum of a black body at a given temperature to plot
     // the black body curve on the CIE chart. 
-    
+
     // The following table gives the  spectral  chromaticity  co-ordinates
     // x(\lambda) and y(\lambda) for wavelengths in 5 nanometre increments
     // from 380 nm through  780  nm.   These  co-ordinates  represent  the
     // position in the CIE x-y space of pure spectral colours of the given
     // wavelength, and  thus  define  the  outline  of  the  CIE  "tongue"
     // diagram.
-    
+
     static const double spectral_chromaticity[81][3] =
     {
         { 0.1741, 0.0050 },               // 380 nm 
@@ -160,14 +160,14 @@ public:
     }
 
     bool            profileDataAvailable;
-    
+
     double          gridside;
-    
+
     int             xBias;
     int             yBias;
     int             pxcols;
     int             pxrows;
-    
+
     QPainter        painter;
     QPixmap         pixmap;
 
@@ -185,7 +185,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMon
 {
     d = new CIETongueWidgetPriv;
     setMinimumSize(w, h);
-    
+
     if (hMonitor)
         d->hMonitorProfile = hMonitor;
     else
@@ -204,7 +204,7 @@ CIETongueWidget::~CIETongueWidget()
 
     if (d->Measurement.Allowed)
         free(d->Measurement.Allowed);
-        
+
     cmsDeleteTransform(d->hXFORM);
     cmsCloseProfile(d->hXYZProfile);
     cmsCloseProfile(d->hMonitorProfile);
@@ -222,7 +222,7 @@ bool CIETongueWidget::setProfileData(QByteArray *profileData)
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
                                                     (DWORD)profileData->size());
-    
+
         setProfile(hProfile);
         cmsCloseProfile(hProfile);
     }
@@ -230,7 +230,7 @@ bool CIETongueWidget::setProfileData(QByteArray *profileData)
     {
         d->profileDataAvailable = false;
     }
-    
+
     repaint(false);
     return (d->profileDataAvailable);
 }
@@ -240,7 +240,7 @@ bool CIETongueWidget::setProfileFromFile(const KURL& file)
     if (!file.isEmpty() && file.isValid())
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
-    
+
         setProfile(hProfile);
         cmsCloseProfile(hProfile);
     }
@@ -248,7 +248,7 @@ bool CIETongueWidget::setProfileFromFile(const KURL& file)
     {
         d->profileDataAvailable = false;
     }
-    
+
     repaint(false);
     return (d->profileDataAvailable);
 }
@@ -263,7 +263,7 @@ bool CIETongueWidget::setProfileHandler(cmsHPROFILE hProfile)
     {
         d->profileDataAvailable = false;
     }
-    
+
     repaint(false);
     return (d->profileDataAvailable);
 }
@@ -325,7 +325,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     }
 
     // Get target data stored in profile
-    
+
     ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
     char*  CharTarget;
     size_t CharTargetSize;
@@ -381,7 +381,7 @@ QRgb CIETongueWidget::ColorByCoord(double x, double y)
 }
 
 void CIETongueWidget::OutlineTongue()
-{   
+{
     int lx = 0, ly = 0;
     int fx=0, fy=0;
 
@@ -390,11 +390,11 @@ void CIETongueWidget::OutlineTongue()
         int ix = (x - 380) / 5;
 
         cmsCIExyY p = {spectral_chromaticity[ix][0], 
-                       spectral_chromaticity[ix][1], 1};    
+                       spectral_chromaticity[ix][1], 1};
 
         int icx, icy;
         MapPoint(icx, icy, &p);
-    
+
         if (x > 380)
         {
             BiasedLine(lx, ly, icx, icy);
@@ -422,7 +422,7 @@ void CIETongueWidget::FillTongue()
     for (int y = 0; y < d->pxrows; y++)
     {
         int xe = 0;
-                
+
         // Find horizontal extents of tongue on this line. 
 
         for (x = 0; x < d->pxcols; x++)
@@ -436,7 +436,7 @@ void CIETongueWidget::FillTongue()
                         break;
                     }
                 }
-                
+
                 break;
             }
         }
@@ -459,9 +459,9 @@ void CIETongueWidget::DrawTongueAxis()
     QFont font;
     font.setPointSize(6);
     d->painter.setFont(font);
-    
+
     d->painter.setPen(qRgb(255, 255, 255));
-    
+
     BiasedLine(0, 0,          0,          d->pxrows - 1);
     BiasedLine(0, d->pxrows-1, d->pxcols-1, d->pxrows - 1);
 
@@ -471,10 +471,10 @@ void CIETongueWidget::DrawTongueAxis()
         int xstart = (y * (d->pxcols - 1)) / 10;
         int ystart = (y * (d->pxrows - 1)) / 10;
 
-        s.sprintf("0.%d", y);     
+        s.sprintf("0.%d", y);
         BiasedLine(xstart, d->pxrows - Grids(1), xstart,   d->pxrows - Grids(4));
         BiasedText(xstart - Grids(11), d->pxrows + Grids(15), s);
-        
+
         s.sprintf("0.%d", 10 - y);
         BiasedLine(0, ystart, Grids(3), ystart);    
         BiasedText(Grids(-25), ystart + Grids(5), s);
@@ -482,9 +482,9 @@ void CIETongueWidget::DrawTongueAxis()
 }
 
 void CIETongueWidget::DrawTongueGrid()
-{       
+{
     d->painter.setPen(qRgb(80, 80, 80));
-    
+
     for (int y = 1; y <= 9; y += 1)
     {
         int xstart =  (y * (d->pxcols - 1)) / 10;
@@ -500,12 +500,12 @@ void CIETongueWidget::DrawLabels()
     QFont font;
     font.setPointSize(5);
     d->painter.setFont(font);
-    
+
     for (int x = 450; x <= 650; x += (x > 470 && x < 600) ? 5 : 10)
     {
         QString wl;
         int bx = 0, by = 0, tx, ty;
-        
+
         if (x < 520)
         {
             bx = Grids(-22);
@@ -525,7 +525,7 @@ void CIETongueWidget::DrawLabels()
 
         cmsCIExyY p = {spectral_chromaticity[ix][0],
                        spectral_chromaticity[ix][1], 1};
-        
+
         int icx, icy;
         MapPoint(icx, icy, &p);
 
@@ -537,7 +537,7 @@ void CIETongueWidget::DrawLabels()
 
         QRgb Color = ColorByCoord(icx, icy);
         d->painter.setPen(Color);
-        
+
         wl.sprintf("%d", x);
         BiasedText(icx+bx, icy+by, wl);
     }
@@ -570,7 +570,7 @@ void CIETongueWidget::DrawPatches(void)
             {
                 if (p->XYZ.Y < 0.03)
                    continue;
-                
+
                 if (p->XYZProof.Y < 0.03)
                    continue;
 
@@ -636,7 +636,7 @@ void CIETongueWidget::Sweep_sRGB(void)
             {
                 RGB[0] = r; RGB[1] = g; RGB[2] = b;
                 cmsDoTransform(xform, RGB, XYZ, 1);
-                cmsXYZEncoded2Float(&xyz, XYZ);                     
+                cmsXYZEncoded2Float(&xyz, XYZ);
                 cmsXYZ2xyY(&xyY, &xyz);
                 MapPoint(x1, y1, &xyY);
                 d->painter.drawPoint(x1 + d->xBias, y1);
@@ -654,7 +654,7 @@ void CIETongueWidget::DrawWhitePoint(void)
     cmsCIExyY Whitem_pntxyY;
     cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
     DrawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
-}       
+}
 
 void CIETongueWidget::paintEvent( QPaintEvent * )
 {
@@ -675,7 +675,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     d->pixmap.fill(Qt::black);
     d->painter.begin(&d->pixmap);
-    
+
     int pixcols = d->pixmap.width();
     int pixrows = d->pixmap.height();
 
@@ -684,7 +684,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     d->yBias = Grids(20);
     d->pxcols = pixcols - d->xBias;
     d->pxrows = pixrows - d->yBias;
-    
+
     d->painter.setBackgroundColor(qRgb(0, 0, 0));
     d->painter.setPen(qRgb(255, 255, 255));
 
@@ -698,21 +698,21 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     if (d->profileDataAvailable)
         DrawLabels();
-    
+
     DrawTongueGrid();
 
     if (d->profileDataAvailable)
     {
         if (d->MediaWhite.Y > 0.0)
             DrawWhitePoint();
-    
+
         if (d->Primaries.Red.Y != 0.0)
             DrawColorantTriangle();
-    
+
         if (d->Measurement.Patches && d->Measurement.Allowed)
             DrawPatches();
     }
-    
+
     d->painter.end();
 
     bitBlt(this, 0, 0, &d->pixmap);
