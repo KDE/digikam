@@ -1,22 +1,24 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2002-16-10
- * Description : 
- * 
+ * Date   : 2002-16-10
+ * Description : album view interface implementation
+ *
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Gilles Caulier
+ *
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef DIGIKAMVIEW_H
@@ -28,9 +30,6 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
-class QString;
-class QIconViewItem;
-
 class KURL;
 
 namespace KIO
@@ -40,20 +39,10 @@ class Job;
 
 namespace Digikam
 {
-class Sidebar;
-class ImagePropertiesSideBarDB;
-class DigikamApp;
-class AlbumFolderView;
-class AlbumIconView;
 class AlbumIconItem;
 class AlbumSettings;
-class AlbumManager;
 class Album;
-class AlbumHistory;
-class DateFolderView;
-class TagFolderView;
-class TagFilterView;
-class SearchFolderView;
+class DigikamViewPriv;
 
 class DigikamView : public QHBox
 {
@@ -65,34 +54,16 @@ public:
     ~DigikamView();
 
     void applySettings(const AlbumSettings* settings);
-
     void clearHistory();
     void getForwardHistory(QStringList &titles);
-    void getBackwardHistory(QStringList &titles);    
-    
-private:
+    void getBackwardHistory(QStringList &titles);
 
-    void setupConnections();
-    void loadViewState();
-    void saveViewState();
+signals:
 
-private:
-
-    int                       mInitialAlbumID;
-
-    QSplitter                *mSplitter;
-        
-    DigikamApp               *mParent;
-    AlbumIconView            *mIconView;
-    AlbumFolderView          *mFolderView;
-    AlbumManager             *mAlbumMan;
-    AlbumHistory             *mAlbumHistory;
-    Sidebar                  *mMainSidebar;
-    DateFolderView           *mDateFolderView;
-    TagFolderView            *mTagFolderView;
-    SearchFolderView         *mSearchFolderView;
-    ImagePropertiesSideBarDB *mRightSidebar;
-    TagFilterView            *mTagFilterView;
+    void signal_albumSelected(bool val);
+    void signal_tagSelected(bool val);
+    void signal_imageSelected(bool val);
+    void signal_noCurrentItem();
 
 public slots:
 
@@ -121,9 +92,11 @@ public slots:
     // Search action slots
     void slotNewQuickSearch();
     void slotNewAdvancedSearch();
-    
+
     // Image action slots
-    void slot_imageView(AlbumIconItem* iconItem=0);
+    void slot_escapePreview();
+    void slot_imagePreview(AlbumIconItem* iconItem=0);
+    void slot_imageEdit(AlbumIconItem* iconItem=0);
     void slot_imageExifOrientation(int orientation);
     void slot_imageRename(AlbumIconItem* iconItem=0);
     void slot_imageDelete();
@@ -143,30 +116,32 @@ public slots:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
+private:
+
+    void setupConnections();
+    void loadViewState();
+    void saveViewState();
+
 private slots:
 
     void slotAllAlbumsLoaded();
-    
-    void slot_imageSelected();
 
     void slot_albumsCleared();
     void slot_albumHighlight();
 
+    void slot_imageSelected();
     void slot_imageCopyResult(KIO::Job* job);
 
     void slotLeftSidebarChangedTab(QWidget* w);
 
     void slotFirstItem(void);
-    void slotPrevItem(void);    
+    void slotPrevItem(void);
     void slotNextItem(void);
     void slotLastItem(void);
 
-signals:
+private:
 
-    void signal_albumSelected(bool val);
-    void signal_tagSelected(bool val);
-    void signal_imageSelected(bool val);
-    void signal_noCurrentItem();
+    DigikamViewPriv* d;
 };
 
 }  // namespace Digikam

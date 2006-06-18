@@ -1,22 +1,23 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2002-16-10
- * Description : 
- * 
+ * Date   : 2002-16-10
+ * Description : album view interface implementation
+ *
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt Includes.
@@ -48,6 +49,7 @@
 
 #include "albummanager.h"
 #include "album.h"
+#include "albumwidgetstack.h"
 #include "albumfolderview.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
@@ -55,6 +57,7 @@
 #include "albumhistory.h"
 #include "sidebar.h"
 #include "imagepropertiessidebardb.h"
+#include "imagepreviewwidget.h"
 #include "datefolderview.h"
 #include "tagfolderview.h"
 #include "searchfolderview.h"
@@ -67,119 +70,174 @@
 namespace Digikam
 {
 
+class DigikamViewPriv
+{
+public:
+
+    DigikamViewPriv()
+    {
+        splitter         = 0;
+        parent           = 0;
+        iconView         = 0;
+        folderView       = 0;
+        albumManager     = 0;
+        albumHistory     = 0;
+        leftSideBar      = 0;
+        rightSideBar     = 0;
+        dateFolderView   = 0;
+        tagFolderView    = 0;
+        searchFolderView = 0;
+        tagFilterView    = 0;
+        albumPreviews    = 0;
+    }
+
+    int                       initialAlbumID;
+
+    QSplitter                *splitter;
+
+    DigikamApp               *parent;
+    AlbumIconView            *iconView;
+    AlbumFolderView          *folderView;
+    AlbumManager             *albumManager;
+    AlbumHistory             *albumHistory;
+    Sidebar                  *leftSideBar;
+    ImagePropertiesSideBarDB *rightSideBar;
+    DateFolderView           *dateFolderView;
+    TagFolderView            *tagFolderView;
+    SearchFolderView         *searchFolderView;
+    TagFilterView            *tagFilterView;
+    AlbumWidgetStack         *albumPreviews;
+};
+
 DigikamView::DigikamView(QWidget *parent)
            : QHBox(parent)
 {
-    mParent      = static_cast<DigikamApp *>(parent);
-    mAlbumMan    = AlbumManager::instance();
-    mMainSidebar = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
+    d = new DigikamViewPriv;
+    d->parent       = static_cast<DigikamApp *>(parent);
+    d->albumManager = AlbumManager::instance();
+    d->leftSideBar  = new Sidebar(this, "Digikam Left Sidebar", Sidebar::Left);
 
-    mSplitter    = new QSplitter(this);
-    mSplitter->setFrameStyle( QFrame::NoFrame );
-    mSplitter->setFrameShadow( QFrame::Plain );
-    mSplitter->setFrameShape( QFrame::NoFrame );
-    mSplitter->setOpaqueResize(false);
+    d->splitter = new QSplitter(this);
+    d->splitter->setFrameStyle( QFrame::NoFrame );
+    d->splitter->setFrameShadow( QFrame::Plain );
+    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setOpaqueResize(false);
 
-    mMainSidebar->setSplitter(mSplitter);
-    
-    mIconView    = new AlbumIconView(mSplitter);
+    d->leftSideBar->setSplitter(d->splitter);
+    d->albumPreviews = new AlbumWidgetStack(d->splitter);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    mIconView->setSizePolicy(rightSzPolicy);
+    d->albumPreviews->setSizePolicy(rightSzPolicy);
+    d->iconView = d->albumPreviews->albumIconView();
 
-    mRightSidebar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", mSplitter, 
-                                                 Sidebar::Right, true, true);
-    
+    d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
+                                                    Sidebar::Right, true, true);
+
     // To the left.
-    mFolderView       = new AlbumFolderView(this);
-    mDateFolderView   = new DateFolderView(this);
-    mTagFolderView    = new TagFolderView(this);
-    mSearchFolderView = new SearchFolderView(this);
-    
-    // To the right.
-    mTagFilterView    = new TagFilterView(this);    
-    
-    mMainSidebar->appendTab(mFolderView, SmallIcon("folder"), i18n("Albums"));    
-    mMainSidebar->appendTab(mDateFolderView, SmallIcon("date"), i18n("Dates"));
-    mMainSidebar->appendTab(mTagFolderView, SmallIcon("tag"), i18n("Tags"));    
-    mMainSidebar->appendTab(mSearchFolderView, SmallIcon("find"), i18n("Searches"));    
+    d->folderView       = new AlbumFolderView(this);
+    d->dateFolderView   = new DateFolderView(this);
+    d->tagFolderView    = new TagFolderView(this);
+    d->searchFolderView = new SearchFolderView(this);
+    d->leftSideBar->appendTab(d->folderView, SmallIcon("folder"), i18n("Albums"));
+    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("date"), i18n("Dates"));
+    d->leftSideBar->appendTab(d->tagFolderView, SmallIcon("tag"), i18n("Tags"));
+    d->leftSideBar->appendTab(d->searchFolderView, SmallIcon("find"), i18n("Searches"));
 
-    mRightSidebar->appendTab(mTagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
-    
+    // To the right.
+    d->tagFilterView = new TagFilterView(this);
+    d->rightSideBar->appendTab(d->tagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
+
     setupConnections();
 
-    mAlbumMan->setItemHandler(mIconView);
-
-    mAlbumHistory = new AlbumHistory();    
+    d->albumManager->setItemHandler(d->iconView);
+    d->albumHistory = new AlbumHistory();
 }
 
 DigikamView::~DigikamView()
 {
     saveViewState();
-    
-    delete mAlbumHistory;
-    mAlbumMan->setItemHandler(0);
+
+    delete d->albumHistory;
+    d->albumManager->setItemHandler(0);
+    delete d;
 }
 
 void DigikamView::applySettings(const AlbumSettings* settings)
 {
-    mIconView->applySettings(settings);
+    d->iconView->applySettings(settings);
 }
 
 void DigikamView::setupConnections()
 {
     // -- AlbumManager connections --------------------------------
 
-    connect(mAlbumMan, SIGNAL(signalAlbumCurrentChanged(Album*)),
-            this, SLOT(slot_albumSelected(Album*)));
-            
-    connect(mAlbumMan, SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slot_albumsCleared()));
-            
-    connect(mAlbumMan, SIGNAL(signalAlbumDeleted(Album*)),
-            this, SLOT(slotAlbumDeleted(Album*)));
-            
-    connect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
-            this, SLOT(slotAllAlbumsLoaded()));    
-    
-    connect(mAlbumMan, SIGNAL(signalAlbumItemsSelected(bool) ),
-            this, SLOT(slot_imageSelected()));
+    connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
+              this, SLOT(slot_albumSelected(Album*)));
 
-    connect(mAlbumMan, SIGNAL(signalAlbumRenamed(Album*)),
-            this, SLOT(slotAlbumRenamed(Album*)));
+    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
+              this, SLOT(slot_albumsCleared()));
+
+    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
+              this, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
+              this, SLOT(slotAllAlbumsLoaded()));
+
+    connect(d->albumManager, SIGNAL(signalAlbumItemsSelected(bool) ),
+              this, SLOT(slot_imageSelected()));
+
+    connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
+              this, SLOT(slotAlbumRenamed(Album*)));
 
     // -- IconView Connections -------------------------------------
 
-    connect(mIconView, SIGNAL(signalItemsAdded()),
-            this, SLOT(slot_imageSelected()));
+    connect(d->iconView, SIGNAL(signalItemsAdded()),
+              this, SLOT(slot_imageSelected()));
 
-    connect(mIconView, SIGNAL(signalItemsAdded()),
-            this, SLOT(slot_albumHighlight()));
+    connect(d->iconView, SIGNAL(signalItemsAdded()),
+              this, SLOT(slot_albumHighlight()));
 
-    connect(mIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-            this, SIGNAL(signal_noCurrentItem()));
+    connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+              this, SIGNAL(signal_noCurrentItem()));
 
-    connect(mFolderView, SIGNAL(signalAlbumModified()),
-            mIconView, SLOT(slotAlbumModified()));
+    connect(d->folderView, SIGNAL(signalAlbumModified()),
+              d->iconView, SLOT(slotAlbumModified()));
 
     // -- Sidebar Connections -------------------------------------
 
-    connect(mMainSidebar, SIGNAL(signalChangedTab(QWidget*)),
-            this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
+    connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
+              this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
 
-    connect(mRightSidebar, SIGNAL(signalFirstItem()),
-            this, SLOT(slotFirstItem()));
-    
-    connect(mRightSidebar, SIGNAL(signalNextItem()),
-            this, SLOT(slotNextItem()));
-                
-    connect(mRightSidebar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));                
-    
-    connect(mRightSidebar, SIGNAL(signalLastItem()),
-            this, SLOT(slotLastItem()));                
+    connect(d->rightSideBar, SIGNAL(signalFirstItem()),
+              this, SLOT(slotFirstItem()));
+
+    connect(d->rightSideBar, SIGNAL(signalNextItem()),
+              this, SLOT(slotNextItem()));
+
+    connect(d->rightSideBar, SIGNAL(signalPrevItem()),
+              this, SLOT(slotPrevItem()));
+
+    connect(d->rightSideBar, SIGNAL(signalLastItem()),
+              this, SLOT(slotLastItem()));
 
     connect(this, SIGNAL(signal_noCurrentItem()),
-            mRightSidebar, SLOT(slotNoCurrentItem()));
+              d->rightSideBar, SLOT(slotNoCurrentItem()));
+
+    // -- Preview image widget Connections ------------------------
+
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(firstItem()),
+              this, SLOT(slotFirstItem()));
+
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(nextItem()),
+              this, SLOT(slotNextItem()));
+
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(prevItem()),
+              this, SLOT(slotPrevItem()));
+
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(lastItem()),
+              this, SLOT(slotLastItem()));
+
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(escapeSignal()),
+              this, SLOT(slot_escapePreview()));
 }
 
 void DigikamView::loadViewState()
@@ -188,16 +246,16 @@ void DigikamView::loadViewState()
     config->setGroup("MainWindow");
 
     if(config->hasKey("SplitterSizes"))
-        mSplitter->setSizes(config->readIntListEntry("SplitterSizes"));
-    
-    mInitialAlbumID = config->readNumEntry("InitialAlbumID", 0);
+        d->splitter->setSizes(config->readIntListEntry("SplitterSizes"));
+
+    d->initialAlbumID = config->readNumEntry("InitialAlbumID", 0);
 }
 
 void DigikamView::saveViewState()
 {
     KConfig *config = kapp->config();
     config->setGroup("MainWindow");
-    config->writeEntry("SplitterSizes", mSplitter->sizes());
+    config->writeEntry("SplitterSizes", d->splitter->sizes());
 
     Album *album = AlbumManager::instance()->currentAlbum();
     if(album)
@@ -212,52 +270,62 @@ void DigikamView::saveViewState()
 
 void DigikamView::slotFirstItem(void)
 {
-    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->firstItem());
-    mIconView->clearSelection();
-    mIconView->updateContents();
-    if (currItem) 
-       mIconView->setCurrentItem(currItem);
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->firstItem());
+    d->iconView->clearSelection();
+    d->iconView->updateContents();
+    if (currItem)
+       d->iconView->setCurrentItem(currItem);
 }
 
 void DigikamView::slotPrevItem(void)
 {
-    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->currentItem());
-    mIconView->clearSelection();
-    mIconView->updateContents();
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
-       mIconView->setCurrentItem(currItem->prevItem());
+    {
+        if (currItem->prevItem())
+        {
+            d->iconView->clearSelection();
+            d->iconView->updateContents();
+            d->iconView->setCurrentItem(currItem->prevItem());
+        }
+    }
 }
 
 void DigikamView::slotNextItem(void)
 {
-    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->currentItem());
-    mIconView->clearSelection();
-    mIconView->updateContents();
-    if (currItem) 
-       mIconView->setCurrentItem(currItem->nextItem());
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    if (currItem)
+    {
+        if (currItem->nextItem())
+        {
+            d->iconView->clearSelection();
+            d->iconView->updateContents();
+            d->iconView->setCurrentItem(currItem->nextItem());
+        }
+    }
 }
 
 void DigikamView::slotLastItem(void)
 {
-    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(mIconView->lastItem());
-    mIconView->clearSelection();
-    mIconView->updateContents();
-    if (currItem) 
-       mIconView->setCurrentItem(currItem);
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->lastItem());
+    d->iconView->clearSelection();
+    d->iconView->updateContents();
+    if (currItem)
+       d->iconView->setCurrentItem(currItem);
 }
 
 void DigikamView::slotAllAlbumsLoaded()
 {
-    disconnect(mAlbumMan, SIGNAL(signalAllAlbumsLoaded()),
-               this, SLOT(slotAllAlbumsLoaded()));
-    
+    disconnect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
+                  this, SLOT(slotAllAlbumsLoaded()));
+
     loadViewState();
-    Album *album = mAlbumMan->findAlbum(mInitialAlbumID);
-    mAlbumMan->setCurrentAlbum(album);
-    
-    mMainSidebar->loadViewState();
-    mRightSidebar->loadViewState();
-    mRightSidebar->populateTags();
+    Album *album = d->albumManager->findAlbum(d->initialAlbumID);
+    d->albumManager->setCurrentAlbum(album);
+
+    d->leftSideBar->loadViewState();
+    d->rightSideBar->loadViewState();
+    d->rightSideBar->populateTags();
 
     slot_albumSelected(album);
 }
@@ -266,60 +334,59 @@ void DigikamView::slot_sortAlbums(int order)
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
-    settings->setAlbumSortOrder(
-        (AlbumSettings::AlbumSortOrder) order);
-    mFolderView->resort();
+    settings->setAlbumSortOrder( (AlbumSettings::AlbumSortOrder) order);
+    d->folderView->resort();
 }
 
 void DigikamView::slot_newAlbum()
 {
-    mFolderView->albumNew();
+    d->folderView->albumNew();
 }
 
 void DigikamView::slot_deleteAlbum()
 {
-    mFolderView->albumDelete();
+    d->folderView->albumDelete();
 }
 
 void DigikamView::slotNewTag()
 {
-    mTagFolderView->tagNew();
+    d->tagFolderView->tagNew();
 }
 
 void DigikamView::slotDeleteTag()
 {
-    mTagFolderView->tagDelete();
+    d->tagFolderView->tagDelete();
 }
 
 void DigikamView::slotEditTag()
 {
-    mTagFolderView->tagEdit();
+    d->tagFolderView->tagEdit();
 }
 
 void DigikamView::slotNewQuickSearch()
 {
-    if (mMainSidebar->getActiveTab() != mSearchFolderView)
-        mMainSidebar->setActiveTab(mSearchFolderView);
-    mSearchFolderView->quickSearchNew();
+    if (d->leftSideBar->getActiveTab() != d->searchFolderView)
+        d->leftSideBar->setActiveTab(d->searchFolderView);
+    d->searchFolderView->quickSearchNew();
 }
 
 void DigikamView::slotNewAdvancedSearch()
 {
-    if (mMainSidebar->getActiveTab() != mSearchFolderView)
-        mMainSidebar->setActiveTab(mSearchFolderView);
-    mSearchFolderView->extendedSearchNew();
+    if (d->leftSideBar->getActiveTab() != d->searchFolderView)
+        d->leftSideBar->setActiveTab(d->searchFolderView);
+    d->searchFolderView->extendedSearchNew();
 }
 
 // ----------------------------------------------------------------
 
 void DigikamView::slotAlbumDeleted(Album *delalbum)
 {
-    mAlbumHistory->deleteAlbum(delalbum);
-    
+    d->albumHistory->deleteAlbum(delalbum);
+
     Album *album;
     QWidget *widget;
-    mAlbumHistory->getCurrentAlbum(&album, &widget);
-    
+    d->albumHistory->getCurrentAlbum(&album, &widget);
+
     if (album && widget)
     {
         QListViewItem *item;
@@ -336,11 +403,11 @@ void DigikamView::slotAlbumDeleted(Album *delalbum)
         {
             v->setSelected(item);
         }
-    
-        mMainSidebar->setActiveTab(widget);
-        
-        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
+
+        d->leftSideBar->setActiveTab(widget);
+
+        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
+        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
     }
 }
 
@@ -348,47 +415,16 @@ void DigikamView::slotAlbumRenamed(Album *album)
 {
     // display changed names
 
-    if (album == mAlbumMan->currentAlbum())
-        mIconView->updateContents();
+    if (album == d->albumManager->currentAlbum())
+        d->iconView->updateContents();
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
 {
     Album *album;
     QWidget *widget;
-    
-    mAlbumHistory->back(&album, &widget, steps);
 
-    if (album && widget)
-    {
-        QListViewItem *item;
-        item = (QListViewItem*)album->extraData(widget);
-        if(!item)
-            return;
- 
-        if (FolderView *v = dynamic_cast<FolderView*>(widget))
-        {
-            v->setSelected(item, true);
-            v->ensureItemVisible(item);            
-        } 
-        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
-        {
-            v->setSelected(item);
-        }
-        
-        mMainSidebar->setActiveTab(widget);
-        
-        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());            
-     }
-}
-
-void DigikamView::slotAlbumHistoryForward(int steps)
-{
-    Album *album;
-    QWidget *widget;
-    
-    mAlbumHistory->forward(&album, &widget, steps);
+    d->albumHistory->back(&album, &widget, steps);
 
     if (album && widget)
     {
@@ -406,29 +442,60 @@ void DigikamView::slotAlbumHistoryForward(int steps)
         {
             v->setSelected(item);
         }
-        
-        mMainSidebar->setActiveTab(widget);
-        
-        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
+
+        d->leftSideBar->setActiveTab(widget);
+
+        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
+        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
+     }
+}
+
+void DigikamView::slotAlbumHistoryForward(int steps)
+{
+    Album *album;
+    QWidget *widget;
+
+    d->albumHistory->forward(&album, &widget, steps);
+
+    if (album && widget)
+    {
+        QListViewItem *item;
+        item = (QListViewItem*)album->extraData(widget);
+        if(!item)
+            return;
+
+        if (FolderView *v = dynamic_cast<FolderView*>(widget))
+        {
+            v->setSelected(item, true);
+            v->ensureItemVisible(item);
+        }
+        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
+        {
+            v->setSelected(item);
+        }
+
+        d->leftSideBar->setActiveTab(widget);
+
+        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
+        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
     }
 }
 
 void DigikamView::clearHistory()
 {
-    mAlbumHistory->clearHistory();
-    mParent->enableAlbumBackwardHistory(false);
-    mParent->enableAlbumForwardHistory(false);
+    d->albumHistory->clearHistory();
+    d->parent->enableAlbumBackwardHistory(false);
+    d->parent->enableAlbumForwardHistory(false);
 }
 
 void DigikamView::getBackwardHistory(QStringList &titles)
 {
-    mAlbumHistory->getBackwardHistory(titles);
+    d->albumHistory->getBackwardHistory(titles);
 }
 
 void DigikamView::getForwardHistory(QStringList &titles)
 {
-    mAlbumHistory->getForwardHistory(titles);
+    d->albumHistory->getForwardHistory(titles);
 }
 
 void DigikamView::slotSelectAlbum(const KURL &)
@@ -436,15 +503,15 @@ void DigikamView::slotSelectAlbum(const KURL &)
     /* TODO
     if (url.isEmpty())
         return;
-    
-    Album *album = mAlbumMan->findPAlbum(url);
+
+    Album *album = d->albumManager->findPAlbum(url);
     if(album && album->getViewItem())
     {
         AlbumFolderItem_Deprecated *item;
         item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
         mFolderView_Deprecated->setSelected(item);
-        mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-        mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());
+        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
+        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
     }
     */
 }
@@ -454,10 +521,10 @@ void DigikamView::slotSelectAlbum(const KURL &)
 void DigikamView::slot_albumSelected(Album* album)
 {
     emit signal_noCurrentItem();
-    
+
     if (!album)
     {
-        mIconView->setAlbum(0);
+        d->iconView->setAlbum(0);
         emit signal_albumSelected(false);
         emit signal_tagSelected(false);
         return;
@@ -473,22 +540,22 @@ void DigikamView::slot_albumSelected(Album* album)
         emit signal_albumSelected(false);
         emit signal_tagSelected(true);
     }
-    
-    mAlbumHistory->addAlbum(album, mMainSidebar->getActiveTab());
-    mParent->enableAlbumBackwardHistory(!mAlbumHistory->isBackwardEmpty());
-    mParent->enableAlbumForwardHistory(!mAlbumHistory->isForwardEmpty());    
-    
-    mIconView->setAlbum(album);
+
+    d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
+    d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
+    d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());    
+
+    d->iconView->setAlbum(album);
 }
 
 void DigikamView::slot_albumOpenInKonqui()
 {
-    Album *album = mAlbumMan->currentAlbum();
+    Album *album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-       
+
     new KRun(palbum->folderPath()); // KRun will delete itself.
 }
 
@@ -496,27 +563,28 @@ void DigikamView::slot_imageSelected()
 {
     bool selected = false;
 
-    for (IconItem* item=mIconView->firstItem(); item; item=item->nextItem())
+    for (IconItem* item=d->iconView->firstItem(); item; item=item->nextItem())
     {
         if (item->isSelected())
         {
             selected = true;
-            AlbumIconItem *firstSelectedItem = mIconView->firstSelectedItem();
-            mRightSidebar->itemChanged(firstSelectedItem->imageInfo()->kurl(), mIconView, firstSelectedItem, 0, 0);
-
+            AlbumIconItem *firstSelectedItem = d->iconView->firstSelectedItem();
+            d->rightSideBar->itemChanged(firstSelectedItem->imageInfo()->kurl(),
+                                       d->iconView, firstSelectedItem, 0, 0);
+            d->albumPreviews->setPreviewItem(firstSelectedItem->imageInfo()->kurl().path());
             break;
         }
     }
 
     if (!selected)
-       emit signal_noCurrentItem();
+        emit signal_noCurrentItem();
 
     emit signal_imageSelected(selected);
 }
 
 void DigikamView::slot_albumsCleared()
 {
-    mIconView->clear();
+    d->iconView->clear();
     emit signal_albumSelected(false);
 }
 
@@ -528,7 +596,7 @@ void DigikamView::slot_thumbSizePlus()
 
     ThumbnailSize thumbSize;
 
-    switch(mIconView->thumbnailSize().size())
+    switch(d->iconView->thumbnailSize().size())
     {
         case (ThumbnailSize::Small):
         {
@@ -556,11 +624,11 @@ void DigikamView::slot_thumbSizePlus()
 
     if (thumbSize.size() == ThumbnailSize::Huge)
     {
-        mParent->enableThumbSizePlusAction(false);
+        d->parent->enableThumbSizePlusAction(false);
     }
-    mParent->enableThumbSizeMinusAction(true);
+    d->parent->enableThumbSizeMinusAction(true);
 
-    mIconView->setThumbnailSize(thumbSize);
+    d->iconView->setThumbnailSize(thumbSize);
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
@@ -571,10 +639,10 @@ void DigikamView::slot_thumbSizePlus()
 void DigikamView::slot_thumbSizeMinus()
 {
     emit signal_noCurrentItem();
-    
+
     ThumbnailSize thumbSize;
 
-    switch(mIconView->thumbnailSize().size())
+    switch(d->iconView->thumbnailSize().size())
     {
         case (ThumbnailSize::Small):
         {
@@ -602,11 +670,11 @@ void DigikamView::slot_thumbSizeMinus()
 
     if (thumbSize.size() == ThumbnailSize::Small)
     {
-        mParent->enableThumbSizeMinusAction(false);
+        d->parent->enableThumbSizeMinusAction(false);
     }
-    mParent->enableThumbSizePlusAction(true);
+    d->parent->enableThumbSizePlusAction(true);
 
-    mIconView->setThumbnailSize(thumbSize);
+    d->iconView->setThumbnailSize(thumbSize);
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
@@ -616,19 +684,18 @@ void DigikamView::slot_thumbSizeMinus()
 
 void DigikamView::slot_albumPropsEdit()
 {
-    mFolderView->albumEdit();
+    d->folderView->albumEdit();
 }
 
 void DigikamView::slot_albumAddImages()
 {
-    Album *album = mAlbumMan->currentAlbum();
+    Album *album = d->albumManager->currentAlbum();
     if (!album || album->type() != Album::PHYSICAL)
         return;
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    KFileDialog dlg(QString::null,
-                    AlbumSettings::instance()->getImageFileFilter(),
+    KFileDialog dlg(QString::null, AlbumSettings::instance()->getImageFileFilter(),
                     this, "filedialog", true);
     dlg.setOperationMode(KFileDialog::Opening );
     dlg.setCaption(i18n("Add Images"));
@@ -637,7 +704,7 @@ void DigikamView::slot_albumAddImages()
     dlg.exec();          
 
     KURL::List urls = dlg.selectedURLs();
-    
+
     if (!urls.isEmpty())
     {
         KIO::Job* job = DIO::copy(urls, palbum->kurl());
@@ -648,7 +715,7 @@ void DigikamView::slot_albumAddImages()
 
 void DigikamView::slotAlbumImportFolder()
 {
-    mFolderView->albumImportFolder();
+    d->folderView->albumImportFolder();
 }
 
 void DigikamView::slot_albumHighlight()
@@ -657,11 +724,11 @@ void DigikamView::slot_albumHighlight()
     // Don't know what this is supposed to do.
     // Perhaps some flashing or other eye kandy
     /*
-    Album *album = mAlbumMan->currentAlbum();
+    Album *album = d->albumManager->currentAlbum();
     if (!album || !album->type() == Album::PHYSICAL)
         return;
 
-    mFolderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
+    d->folderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
     */
 }
 
@@ -673,13 +740,45 @@ void DigikamView::slot_imageCopyResult(KIO::Job* job)
 
 // ----------------------------------------------------------------
 
-void DigikamView::slot_imageView(AlbumIconItem *iconItem)
+void DigikamView::slot_escapePreview()
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    if (currItem)
+        slot_imagePreview(currItem);
+}
+
+void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
+{
+    if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    {
+        AlbumIconItem *item;
+
+        if (!iconItem)
+        {
+            item = d->iconView->firstSelectedItem();
+            if (!item) return;
+        }
+        else
+        {
+            item = iconItem;
+        }
+
+        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
+        d->albumPreviews->setPreviewItem( item->imageInfo()->kurl().path() );
+    }
+    else
+    {
+        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+    }
+}
+
+void DigikamView::slot_imageEdit(AlbumIconItem *iconItem)
 {
     AlbumIconItem *item;
 
     if (!iconItem)
     {
-        item = mIconView->firstSelectedItem();
+        item = d->iconView->firstSelectedItem();
         if (!item) return;
     }
     else
@@ -687,12 +786,12 @@ void DigikamView::slot_imageView(AlbumIconItem *iconItem)
         item = iconItem;
     }
 
-    mIconView->slotDisplayItem(item);
+    d->iconView->slotDisplayItem(item);
 }
 
 void DigikamView::slot_imageExifOrientation(int orientation)
 {
-    mIconView->slotSetExifOrientation(orientation);
+    d->iconView->slotSetExifOrientation(orientation);
 }
 
 void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
@@ -701,7 +800,7 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 
     if (!iconItem)
     {
-        item = mIconView->firstSelectedItem();
+        item = d->iconView->firstSelectedItem();
         if (!item) return;
     }
     else
@@ -709,27 +808,27 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
         item = iconItem;
     }
 
-    mIconView->slotRename(item);
+    d->iconView->slotRename(item);
 }
 
 void DigikamView::slot_imageDelete()
 {
-    mIconView->slotDeleteSelectedItems();
+    d->iconView->slotDeleteSelectedItems();
 }
 
 void DigikamView::slotSelectAll()
 {
-    mIconView->selectAll();
+    d->iconView->selectAll();
 }
 
 void DigikamView::slotSelectNone()
 {
-    mIconView->clearSelection();
+    d->iconView->clearSelection();
 }
 
 void DigikamView::slotSelectInvert()
 {
-    mIconView->invertSelection();
+    d->iconView->invertSelection();
 }
 
 void DigikamView::slotSortImages(int order)
@@ -738,50 +837,50 @@ void DigikamView::slotSortImages(int order)
     if (!settings)
         return;
     settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
-    mIconView->slotUpdate();
+    d->iconView->slotUpdate();
 }
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
-    mDateFolderView->setActive(w == mDateFolderView);
-    mFolderView->setActive(w == mFolderView);
-    mTagFolderView->setActive(w == mTagFolderView);
-    mSearchFolderView->setActive(w == mSearchFolderView);
+    d->dateFolderView->setActive(w == d->dateFolderView);
+    d->folderView->setActive(w == d->folderView);
+    d->tagFolderView->setActive(w == d->tagFolderView);
+    d->searchFolderView->setActive(w == d->searchFolderView);
 }
 
 void DigikamView::slotAssignRating(int rating)
 {
-    mRightSidebar->slotAssignRating(rating);
+    d->rightSideBar->slotAssignRating(rating);
 }
 
 void DigikamView::slotAssignRatingNoStar()
 {
-    mRightSidebar->slotAssignRating(0);
+    d->rightSideBar->slotAssignRating(0);
 }
 
 void DigikamView::slotAssignRatingOneStar()
 {
-    mRightSidebar->slotAssignRating(1);
+    d->rightSideBar->slotAssignRating(1);
 }
 
 void DigikamView::slotAssignRatingTwoStar()
 {
-    mRightSidebar->slotAssignRating(2);
+    d->rightSideBar->slotAssignRating(2);
 }
 
 void DigikamView::slotAssignRatingThreeStar()
 {
-    mRightSidebar->slotAssignRating(3);
+    d->rightSideBar->slotAssignRating(3);
 }
 
 void DigikamView::slotAssignRatingFourStar()
 {
-    mRightSidebar->slotAssignRating(4);
+    d->rightSideBar->slotAssignRating(4);
 }
 
 void DigikamView::slotAssignRatingFiveStar()
 {
-    mRightSidebar->slotAssignRating(5);
+    d->rightSideBar->slotAssignRating(5);
 }
 
 }  // namespace Digikam

@@ -504,7 +504,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     QPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("editimage"),
-                       i18n("View/Edit..."), 10);
+                       i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"),
                        &openWithMenu, 11);
     popmenu.insertSeparator();

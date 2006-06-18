@@ -156,6 +156,7 @@ private:
     KAction               *mEditTagAction;
     
     // Image Actions
+    KAction               *mImagePreviewAction;
     KAction               *mImageViewAction;
     KAction               *mImageSetExifOrientation1Action;
     KAction               *mImageSetExifOrientation2Action;

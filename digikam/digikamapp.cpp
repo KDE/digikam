@@ -433,15 +433,23 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    mImageViewAction = new KAction(i18n("View/Edit..."),
-                                    "editimage",
-                                    Key_F4,
-                                    mView,
-                                    SLOT(slot_imageView()),
-                                    actionCollection(),
-                                    "image_view");
-    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the currently selected "
-                                        "image."));
+    mImagePreviewAction = new KAction(i18n("View..."),
+                                      "viewimage",
+                                      Key_F3,
+                                      mView,
+                                      SLOT(slot_imagePreview()),
+                                      actionCollection(),
+                                      "image_view");
+
+    mImageViewAction = new KAction(i18n("Edit..."),
+                                   "editimage",
+                                   Key_F4,
+                                   mView,
+                                   SLOT(slot_imageEdit()),
+                                   actionCollection(),
+                                   "image_edit");
+    mImageViewAction->setWhatsThis(i18n("This option allows you to open the Image Editor with the "
+                                        "currently selected image."));
 
     mImageRenameAction = new KAction(i18n("Rename..."),
                                     "pencil",
@@ -682,6 +690,7 @@ void DigikamApp::setupActions()
     mOpenInKonquiAction->setEnabled(false);
 
     mImageViewAction->setEnabled(false);
+    mImagePreviewAction->setEnabled(false);
     mImageRenameAction->setEnabled(false);
     mImageDeleteAction->setEnabled(false);
     mImageExifOrientationActionMenu->setEnabled(false);
@@ -907,6 +916,7 @@ void DigikamApp::slot_tagSelected(bool val)
 void DigikamApp::slot_imageSelected(bool val)
 {
     mImageViewAction->setEnabled(val);
+    mImagePreviewAction->setEnabled(val);
     mImageRenameAction->setEnabled(val);
     mImageDeleteAction->setEnabled(val);
     mImageExifOrientationActionMenu->setEnabled(val);

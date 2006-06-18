@@ -31,14 +31,14 @@ libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
 			albumlister.cpp dragobjects.cpp \
 			iconview.cpp icongroupitem.cpp iconitem.cpp \
 			digikamapp.cpp digikamview.cpp \
-			albumfolderview.cpp \
+			albumfolderview.cpp albumwidgetstack.cpp \
 			albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
 			albumpropsedit.cpp albumsettings.cpp \
 			cameralist.cpp cameratype.cpp cameradragobject.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
-			imageinfo.cpp \
+			imageinfo.cpp imagepreviewwidget.cpp \
 			datefolderview.cpp pixmapmanager.cpp \
 			tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
 			searchfolderview.cpp dio.cpp \
