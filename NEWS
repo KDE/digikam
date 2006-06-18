@@ -15,6 +15,7 @@ General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now
                 and/or IPTC metadata tags.
 General       : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags 
                 and Caption Iptc tags.
+General       : New fast preview pictures mode embedded into main interface.
 
 Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
 Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
@@ -153,6 +154,9 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed.
 093 ==> 93569  : easier connection to USB disc cameras.
 094 ==> 124952 : digikam "Mount and Download" Problems.
-095 ==> 129134 : typo in missing files warning dialog "loose" should be "lose"
+095 ==> 129134 : typo in missing files warning dialog "loose" should be "lose".
+096 ==> 128914 : differientiating view and edit / call for a integrated viewer.
+097 ==> 128669 : Use embedded thumbnail for viewing RAW files.
+098 ==> 127991 : digikam image editor and raws (nef).
 
 ----------------------------------------------------------------------------------------------------
