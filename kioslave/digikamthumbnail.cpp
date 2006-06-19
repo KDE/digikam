@@ -65,6 +65,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "rawfiles.h"
 #include "dmetadata.h"
 #include "digikamthumbnail.h"
 #include "digikam_export.h"
@@ -650,25 +651,33 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 
 bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
 {
+    FILE       *f;
+    QByteArray  imgData;
+    const int   MAX_IPC_SIZE = (1024*32);
+    char        buffer[MAX_IPC_SIZE];
+    QFile       file;
+    Q_LONG      len;
+    QCString    command;
+    
+    QFileInfo fileInfo(path);
+    QString rawFilesExt(raw_file_extentions);
+
+    if (!fileInfo.exists() || !rawFilesExt.upper().contains( fileInfo.extension().upper() ))
+        return false;
+
     // Try to extract embedded thumbnail using dcraw with options:
     // -c : write to stdout
     // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
-    // Note : this code require at least dcraw version 8.21
+    // Note : this code require at least dcraw version 8.x
 
-    QCString command  = "dcraw -c -e ";
+    command  = "dcraw -c -e ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
-    FILE* f = popen( command.data(), "r" );
+    f = popen( command.data(), "r" );
 
     if ( !f )
         return false;
-
-    QByteArray imgData;
-    const int  MAX_IPC_SIZE = (1024*32);
-    char       buffer[MAX_IPC_SIZE];
-    QFile      file;
-    Q_LONG     len;
 
     file.open( IO_ReadOnly,  f );
 
