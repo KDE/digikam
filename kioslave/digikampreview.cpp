@@ -18,6 +18,11 @@
  *
  * ============================================================ */
 
+// C++ includes.
+
+#include <cstdlib>
+#include <cstdio>
+
 // Qt Includes.
 
 #include <qstring.h>
