@@ -70,6 +70,7 @@ signals:
 private slots:
     
     void slotThemeChanged();
+    void slotToogleButtons(bool);
 
 private:
 

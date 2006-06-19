@@ -117,6 +117,8 @@ void ImagePreviewWidget::setImagePath( const QString& path )
 
     connect(d->previewJob, SIGNAL(signalFailed(const KURL&)),
             this, SLOT(slotFailedImagePreview(const KURL&)));   
+
+    emit previewUnderProgress(true);
 }
 
 void ImagePreviewWidget::slotPreviewBlinkTimerDone()
@@ -136,6 +138,7 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
     updatePixmap();
     repaint(false);
     kapp->restoreOverrideCursor();
+    emit previewUnderProgress(false);
 }
 
 void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
@@ -147,6 +150,7 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
     updatePixmap();
     repaint(false);
     kapp->restoreOverrideCursor();
+    emit previewUnderProgress(false);
 }
 
 void ImagePreviewWidget::updatePixmap( void )

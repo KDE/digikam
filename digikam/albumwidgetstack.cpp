@@ -51,7 +51,12 @@ public:
         buttonsArea        = 0;
         previewItemWidget  = 0;
         previewAlbumWidget = 0;
+        backButton         = 0;
+        editButton         = 0;
     }
+
+    QPushButton        *backButton;
+    QPushButton        *editButton;
 
     QWidget            *buttonsArea;
     
@@ -72,15 +77,15 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     previewArea->setMargin(0);
     previewArea->setLineWidth(1);
     
-    d->previewItemWidget    = new ImagePreviewWidget(previewArea);
-    d->buttonsArea          = new QWidget(previewArea);
-    QHBoxLayout *hlay       = new QHBoxLayout(d->buttonsArea);
-    QPushButton *backButton = new QPushButton(i18n("Back to Album"), d->buttonsArea);
-    QPushButton *editButton = new QPushButton(i18n("Edit..."), d->buttonsArea);
+    d->previewItemWidget = new ImagePreviewWidget(previewArea);
+    d->buttonsArea       = new QWidget(previewArea);
+    QHBoxLayout *hlay    = new QHBoxLayout(d->buttonsArea);
+    d->backButton        = new QPushButton(i18n("Back to Album"), d->buttonsArea);
+    d->editButton        = new QPushButton(i18n("Edit..."), d->buttonsArea);
     hlay->addStretch(1);
-    hlay->addWidget(backButton);
+    hlay->addWidget(d->backButton);
     hlay->addStretch(10);
-    hlay->addWidget(editButton);
+    hlay->addWidget(d->editButton);
     hlay->addStretch(1);
 
     addWidget(previewArea,           PreviewItemMode);
@@ -90,14 +95,17 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     
     // ----------------------------------------------------------------------
     
-    connect(backButton, SIGNAL( clicked() ),
+    connect(d->backButton, SIGNAL( clicked() ),
             this, SIGNAL( backToAlbumSignal() ) );
              
-    connect(editButton, SIGNAL( clicked() ),
+    connect(d->editButton, SIGNAL( clicked() ),
             this, SIGNAL( editImageSignal() ) );          
              
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));                
+
+    connect(d->previewItemWidget, SIGNAL( previewUnderProgress(bool) ),
+            this, SLOT( slotToogleButtons(bool) ) );          
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -138,6 +146,12 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
     raiseWidget(mode);
     visibleWidget()->setFocus();
+}
+
+void AlbumWidgetStack::slotToogleButtons(bool t)
+{
+    d->backButton->setEnabled(!t);
+    d->editButton->setEnabled(!t);
 }
 
 }  // namespace Digikam
