@@ -78,10 +78,10 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
     setBackgroundMode(Qt::NoBackground);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setFocusPolicy(QWidget::StrongFocus);
-    setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    setFrameStyle(QFrame::NoFrame);
     setMargin(0);
-    setLineWidth(1);
-
+    setLineWidth(0);
+    
     // ---------------------------------------------------------------
     
     connect(d->blinkPreviewTimer, SIGNAL(timeout()),
@@ -151,11 +151,12 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
 
 void ImagePreviewWidget::updatePixmap( void )
 {
-    QPainter p(&(d->pixmap));
     d->pixmap.fill(ThemeEngine::instance()->baseColor());
 
     if (!d->path.isEmpty())
     {
+        QPainter p(&(d->pixmap));
+
         if (!d->previewJob)
         {
             // Preview extraction is complete
@@ -184,9 +185,9 @@ void ImagePreviewWidget::updatePixmap( void )
                        Qt::AlignCenter|Qt::WordBreak, 
                        i18n("Preview extraction in progress..."));
         }
+    
+        p.end();
     }
-
-    p.end();
 }
 
 void ImagePreviewWidget::drawContents(QPainter *)

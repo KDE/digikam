@@ -19,6 +19,13 @@
  *
  * ============================================================ */
 
+// Qt includes. 
+ 
+#include <qvbox.h>
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+
 // KDE includes.
 
 #include <klocale.h>
@@ -26,6 +33,7 @@
 
 // Local includes.
 
+#include "themeengine.h"
 #include "imagepreviewwidget.h"
 #include "albumiconview.h"
 #include "albumwidgetstack.h"
@@ -40,10 +48,13 @@ public:
 
     AlbumWidgetStackPriv()
     {
+        buttonsArea        = 0;
         previewItemWidget  = 0;
         previewAlbumWidget = 0;
     }
 
+    QWidget            *buttonsArea;
+    
     ImagePreviewWidget *previewItemWidget;
 
     AlbumIconView      *previewAlbumWidget;
@@ -54,18 +65,49 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 {
     d = new AlbumWidgetStackPriv;
 
-    d->previewItemWidget  = new ImagePreviewWidget(this);
-    d->previewAlbumWidget = new AlbumIconView(this);
+    d->previewAlbumWidget   = new AlbumIconView(this);
+    
+    QVBox *previewArea      = new QVBox(this);
+    previewArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    previewArea->setMargin(0);
+    previewArea->setLineWidth(1);
+    
+    d->previewItemWidget    = new ImagePreviewWidget(previewArea);
+    d->buttonsArea          = new QWidget(previewArea);
+    QHBoxLayout *hlay       = new QHBoxLayout(d->buttonsArea);
+    QPushButton *backButton = new QPushButton(i18n("Back to Album"), d->buttonsArea);
+    QPushButton *editButton = new QPushButton(i18n("Edit..."), d->buttonsArea);
+    hlay->addStretch(1);
+    hlay->addWidget(backButton);
+    hlay->addStretch(10);
+    hlay->addWidget(editButton);
+    hlay->addStretch(1);
 
-    addWidget(d->previewItemWidget,  PreviewItemMode);
+    addWidget(previewArea,           PreviewItemMode);
     addWidget(d->previewAlbumWidget, PreviewAlbumMode);
 
     setPreviewMode(PreviewAlbumMode);
+    
+    // ----------------------------------------------------------------------
+    
+    connect(backButton, SIGNAL( clicked() ),
+            this, SIGNAL( backToAlbumSignal() ) );
+             
+    connect(editButton, SIGNAL( clicked() ),
+            this, SIGNAL( editImageSignal() ) );          
+             
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));                
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
 {
     delete d;
+}
+
+void AlbumWidgetStack::slotThemeChanged()
+{
+    d->buttonsArea->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 AlbumIconView* AlbumWidgetStack::albumIconView()

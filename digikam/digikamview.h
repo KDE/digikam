@@ -94,7 +94,6 @@ public slots:
     void slotNewAdvancedSearch();
 
     // Image action slots
-    void slot_escapePreview();
     void slot_imagePreview(AlbumIconItem* iconItem=0);
     void slot_imageEdit(AlbumIconItem* iconItem=0);
     void slot_imageExifOrientation(int orientation);
@@ -138,6 +137,9 @@ private slots:
     void slotPrevItem(void);
     void slotNextItem(void);
     void slotLastItem(void);
+
+    void slotEscapePreview();
+    void slotEditImage();
 
 private:
 

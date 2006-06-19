@@ -44,6 +44,14 @@ Q_OBJECT
 
 public:
 
+    enum AlbumWidgetStackMode
+    {
+        PreviewAlbumMode=0,
+        PreviewItemMode
+    };
+
+public:
+
     AlbumWidgetStack( QWidget *parent=0 );
     ~AlbumWidgetStack();
 
@@ -54,13 +62,14 @@ public:
     int  previewMode(void);
     void setPreviewMode(int mode);
 
-public:
+signals:
 
-    enum AlbumWidgetStackMode
-    {
-        PreviewAlbumMode=0,
-        PreviewItemMode
-    };
+    void backToAlbumSignal();    
+    void editImageSignal();
+
+private slots:
+    
+    void slotThemeChanged();
 
 private:
 

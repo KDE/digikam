@@ -171,73 +171,79 @@ void DigikamView::setupConnections()
     // -- AlbumManager connections --------------------------------
 
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
-              this, SLOT(slot_albumSelected(Album*)));
+            this, SLOT(slot_albumSelected(Album*)));
 
     connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
-              this, SLOT(slot_albumsCleared()));
+            this, SLOT(slot_albumsCleared()));
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
-              this, SLOT(slotAlbumDeleted(Album*)));
+            this, SLOT(slotAlbumDeleted(Album*)));
 
     connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
-              this, SLOT(slotAllAlbumsLoaded()));
+            this, SLOT(slotAllAlbumsLoaded()));
 
     connect(d->albumManager, SIGNAL(signalAlbumItemsSelected(bool) ),
-              this, SLOT(slot_imageSelected()));
+            this, SLOT(slot_imageSelected()));
 
     connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
-              this, SLOT(slotAlbumRenamed(Album*)));
+            this, SLOT(slotAlbumRenamed(Album*)));
 
     // -- IconView Connections -------------------------------------
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
-              this, SLOT(slot_imageSelected()));
+            this, SLOT(slot_imageSelected()));
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
-              this, SLOT(slot_albumHighlight()));
+            this, SLOT(slot_albumHighlight()));
 
     connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-              this, SIGNAL(signal_noCurrentItem()));
+            this, SIGNAL(signal_noCurrentItem()));
 
     connect(d->folderView, SIGNAL(signalAlbumModified()),
-              d->iconView, SLOT(slotAlbumModified()));
+            d->iconView, SLOT(slotAlbumModified()));
 
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
-              this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
+            this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
 
     connect(d->rightSideBar, SIGNAL(signalFirstItem()),
-              this, SLOT(slotFirstItem()));
+            this, SLOT(slotFirstItem()));
 
     connect(d->rightSideBar, SIGNAL(signalNextItem()),
-              this, SLOT(slotNextItem()));
+            this, SLOT(slotNextItem()));
 
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
-              this, SLOT(slotPrevItem()));
+            this, SLOT(slotPrevItem()));
 
     connect(d->rightSideBar, SIGNAL(signalLastItem()),
-              this, SLOT(slotLastItem()));
+            this, SLOT(slotLastItem()));
 
     connect(this, SIGNAL(signal_noCurrentItem()),
-              d->rightSideBar, SLOT(slotNoCurrentItem()));
+            d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     // -- Preview image widget Connections ------------------------
 
     connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(firstItem()),
-              this, SLOT(slotFirstItem()));
+            this, SLOT(slotFirstItem()));
 
     connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(nextItem()),
-              this, SLOT(slotNextItem()));
+            this, SLOT(slotNextItem()));
 
     connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(prevItem()),
-              this, SLOT(slotPrevItem()));
+            this, SLOT(slotPrevItem()));
 
     connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(lastItem()),
-              this, SLOT(slotLastItem()));
+            this, SLOT(slotLastItem()));
 
     connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(escapeSignal()),
-              this, SLOT(slot_escapePreview()));
+            this, SLOT(slotEscapePreview()));
+            
+    connect(d->albumPreviews, SIGNAL(backToAlbumSignal()),
+            this, SLOT(slotEscapePreview()));
+    
+    connect(d->albumPreviews, SIGNAL(editImageSignal()),
+            this, SLOT(slotEditImage()));
 }
 
 void DigikamView::loadViewState()
@@ -740,11 +746,18 @@ void DigikamView::slot_imageCopyResult(KIO::Job* job)
 
 // ----------------------------------------------------------------
 
-void DigikamView::slot_escapePreview()
+void DigikamView::slotEscapePreview()
 {
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
         slot_imagePreview(currItem);
+}
+
+void DigikamView::slotEditImage()
+{
+    AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
+    if (currItem)
+        slot_imageEdit(currItem);
 }
 
 void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
