@@ -743,11 +743,13 @@ bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
     file.close();
     pclose( f );
 
-    if ( imgData.isEmpty() )
-        return false;
-
-    image.loadFromData( imgData );
-    return true;
+    if ( !imgData.isEmpty() )
+    {
+        if (image.loadFromData( imgData ))
+            return true;
+    }
+    
+    return false;
 }
 
 // -- Load using KDE API ---------------------------------------------------------------------
