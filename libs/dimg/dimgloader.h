@@ -78,6 +78,8 @@ protected:
     virtual void            readMetadata(const QString& filePath, DImg::FORMAT ff);
     virtual void            saveMetadata(const QString& filePath);
     virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);
+
+    bool                    checkExifWorkingColorSpace();
     
 protected:
     

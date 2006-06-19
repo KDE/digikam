@@ -81,6 +81,8 @@ RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     readMetadata(filePath, DImg::RAW);
+    checkExifWorkingColorSpace();
+
     return ( loadFromDcraw(filePath, observer) );
 }
 

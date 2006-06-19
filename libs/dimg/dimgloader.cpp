@@ -19,6 +19,11 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
 // Local includes.
 
 #include "dimgprivate.h"
@@ -133,6 +138,50 @@ void DImgLoader::saveMetadata(const QString& filePath)
     metaDataToFile.setExif(m_image->getExif());
     metaDataToFile.setIptc(m_image->getIptc());
     metaDataToFile.applyChanges();
+}
+
+bool DImgLoader::checkExifWorkingColorSpace()
+{
+    DMetadata metaData;
+    metaData.setExif(m_image->getExif());
+
+    // Check if Exif data contains an ICC color profile.
+    QByteArray profile = metaData.getExifTagData("Exif.Image.InterColorProfile");
+    if (!profile.isNull())
+    {
+        kdDebug() << "Found an ICC profile in Exif metadata" << endl;       
+        m_image->setICCProfil(profile);
+        return true;
+    }
+
+    // Else check the Exif color-space tag and use a default profiles available in digiKam.
+    KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+
+    switch(metaData.getImageColorWorkSpace())
+    {
+        case DMetadata::WORKSPACE_SRGB:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+            m_image->getICCProfilFromFile(directory + "srgb.icm");
+            kdDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;       
+            return true;
+            break;
+        }
+
+        case DMetadata::WORKSPACE_ADOBERGB:
+        {
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "adobergb.icm");
+            m_image->getICCProfilFromFile(directory + "adobergb.icm");
+            kdDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
+            return true;
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return false;
 }
 
 }  // NameSpace Digikam

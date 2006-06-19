@@ -360,7 +360,6 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             }
 
             png_read_rows(png_ptr, lines+y, NULL, 1);
-
         }
     }
 
@@ -406,6 +405,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         QByteArray profile_rawdata(profile_size);
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
+    }
+    else
+    {
+        // If ICC profile is null, check Exif metadata.
+        checkExifWorkingColorSpace();
     }
     
     // -------------------------------------------------------------------

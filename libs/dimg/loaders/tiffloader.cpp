@@ -163,6 +163,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         memcpy(profile_rawdata.data(), profile_data, profile_size);
         metaData.insert(DImg::ICC, profile_rawdata);
     }
+    else
+    {
+        // If ICC profile is null, check Exif metadata.
+        checkExifWorkingColorSpace();
+    }
 
     // -------------------------------------------------------------------
     // Get image data.

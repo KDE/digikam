@@ -404,6 +404,11 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         metaData.insert(DImg::ICC, profile_rawdata);
         free (profile_data);
     }
+    else
+    {
+        // If ICC profile is null, check Exif metadata.
+        checkExifWorkingColorSpace();
+    }
 
     // -------------------------------------------------------------------
 
