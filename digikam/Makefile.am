@@ -38,7 +38,7 @@ libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
 			kipiinterface.cpp tagcreatedlg.cpp \
 			albumfiletip.cpp tagspopupmenu.cpp \
 			syncjob.cpp albumhistory.cpp scanlib.cpp \
-			imageinfo.cpp imagepreviewwidget.cpp \
+			imageinfo.cpp imagepreviewwidget.cpp imagepreviewjob.cpp \
 			datefolderview.cpp pixmapmanager.cpp \
 			tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
 			searchfolderview.cpp dio.cpp \

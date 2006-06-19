@@ -32,6 +32,8 @@
 
 class QPixmap;
 
+class KURL;
+
 namespace Digikam
 {
 
@@ -67,11 +69,15 @@ protected:
     void wheelEvent(QWheelEvent * e);
     void keyPressEvent(QKeyEvent * e);
 
+private slots:
+    
+    void slotGotImagePreview(const KURL&, const QImage& preview);
+    void slotFailedImagePreview(const KURL&);
+    void slotPreviewBlinkTimerDone();    
+    
 private:
 
-    bool loadDCRawPreview(QImage& image, const QString& path);
     void updatePixmap(void);
-    void exifRotate(const QString& filePath, QImage& thumb);
 
 private:
 
