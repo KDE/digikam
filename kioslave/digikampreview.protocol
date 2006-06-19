@@ -1,0 +1,9 @@
+[Protocol]
+exec=kio_digikampreview
+protocol=digikampreview
+input=stream
+output=stream
+reading=true
+source=false
+Description=Digikam preview kioslave
+Description[xx]=xxDigikam preview kioslavexx
