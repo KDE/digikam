@@ -1,16 +1,17 @@
 METASOURCES = AUTO  
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/jpegutils \
-           -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/libs/dcraw \
+	   -I$(top_srcdir)/digikam/digikam \
 	   $(IMLIB2_CFLAGS) $(LIBKEXIF_CFLAGS) $(all_includes) 
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
-			 kio_digikamalbums.la kio_digikamdates.la \
-			 kio_digikamsearch.la
+	                     kio_digikamalbums.la kio_digikamdates.la \
+	                     kio_digikamsearch.la
 
 protocol_DATA = digikamthumbnail.protocol digikamtags.protocol \
-		digikamalbums.protocol digikamdates.protocol \
-		digikamsearch.protocol
+	            digikamalbums.protocol digikamdates.protocol \
+	            digikamsearch.protocol
 
 protocoldir = $(kde_servicesdir)
 
@@ -23,7 +24,7 @@ kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp
 kio_digikamthumbnail_la_LIBADD = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) 
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(all_libraries) \
-	                          $(KDE_PLUGIN) $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
+	                              $(KDE_PLUGIN) $(LIB_IMLIB2) $(LIBKEXIF_LIBS)
 
 # -- digikam tags KIO --------------------------------------------------------------
 
@@ -38,7 +39,7 @@ kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGI
 kio_digikamalbums_la_SOURCES  = digikamalbums.cpp sqlitedb.cpp
 
 kio_digikamalbums_la_LIBADD = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-			      $(LIB_KIO) $(LIB_SQLITE3)
+	                          $(LIB_KIO) $(LIB_SQLITE3)
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 
