@@ -18,11 +18,6 @@
  *
  * ============================================================ */
 
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-
 // Qt includes.
 
 #include <qpainter.h>
