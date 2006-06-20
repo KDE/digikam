@@ -30,6 +30,7 @@
 
 #include <klocale.h>
 #include <kcursor.h>
+#include <kdialogbase.h>
 
 // Local includes.
 
@@ -59,7 +60,7 @@ public:
     QPushButton        *editButton;
 
     QWidget            *buttonsArea;
-    
+
     ImagePreviewWidget *previewItemWidget;
 
     AlbumIconView      *previewAlbumWidget;
@@ -71,17 +72,17 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d = new AlbumWidgetStackPriv;
 
     d->previewAlbumWidget   = new AlbumIconView(this);
-    
     QVBox *previewArea      = new QVBox(this);
     previewArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     previewArea->setMargin(0);
     previewArea->setLineWidth(1);
-    
+
     d->previewItemWidget = new ImagePreviewWidget(previewArea);
     d->buttonsArea       = new QWidget(previewArea);
     QHBoxLayout *hlay    = new QHBoxLayout(d->buttonsArea);
     d->backButton        = new QPushButton(i18n("Back to Album"), d->buttonsArea);
     d->editButton        = new QPushButton(i18n("Edit..."), d->buttonsArea);
+    hlay->setMargin(KDialogBase::marginHint());
     hlay->addStretch(1);
     hlay->addWidget(d->backButton);
     hlay->addStretch(10);
@@ -92,9 +93,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     addWidget(d->previewAlbumWidget, PreviewAlbumMode);
 
     setPreviewMode(PreviewAlbumMode);
-    
+
     // ----------------------------------------------------------------------
-    
+
     connect(d->backButton, SIGNAL( clicked() ),
             this, SIGNAL( backToAlbumSignal() ) );
              
