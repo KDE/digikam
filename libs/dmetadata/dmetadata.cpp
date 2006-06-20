@@ -844,7 +844,7 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).ascii());
-        d->exifMetadata["Exif.Photo.DateTimeOriginal"]  = exifdatetime;
+        d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
         
@@ -853,7 +853,7 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
         d->iptcMetadata["Iptc.Application2.DateCreated"] = iptcdate;
-        d->iptcMetadata["Iptc.Application2.TimeCreated"]      = iptctime;
+        d->iptcMetadata["Iptc.Application2.TimeCreated"] = iptctime;
         if(setDateTimeDigitized)
         {
             d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
@@ -1487,7 +1487,6 @@ bool DMetadata::setExifTagString(const char * exifTagName, const QString& value)
     return false;
 }
 
-
 QByteArray DMetadata::getExifTagData(const char* exifTagName) const
 {
     try
@@ -1506,6 +1505,31 @@ QByteArray DMetadata::getExifTagData(const char* exifTagName) const
     {
         kdDebug() << "Cannot find Exif key '"
                   << exifTagName << "' into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return QByteArray();
+}
+
+QByteArray DMetadata::getIptcTagData(const char *iptcTagName) const
+{
+    try
+    {
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        if (it != iptcData.end())
+        {
+            QByteArray data((*it).size());
+            (*it).copy((Exiv2::byte*)data.data(), Exiv2::bigEndian);
+            return data;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot find Iptc key '"
+                  << iptcTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }

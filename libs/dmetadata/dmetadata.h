@@ -99,9 +99,11 @@ public:
     void setExif(Exiv2::DataBuf const data);
     void setIptc(Exiv2::DataBuf const data);
 
-    QString             getExifTagString(const char * exifTagName) const;
-    QByteArray          getExifTagData(const char* exifTagName) const;
+    QString             getExifTagString(const char *exifTagName) const;
+    QByteArray          getExifTagData(const char *exifTagName) const;
     QImage              getExifThumbnail(bool fixOrientation) const;
+    QByteArray          getIptcTagData(const char *iptcTagName) const;
+
     ImageColorWorkSpace getImageColorWorkSpace();
     bool                getImagePreview(QImage& image);
     QSize               getImageDimensions();
@@ -111,7 +113,7 @@ public:
     int                 getImageRating() const;
     QStringList         getImageKeywords() const;
 
-    bool setExifTagString(const char * exifTagName, const QString& value);
+    bool setExifTagString(const char *exifTagName, const QString& value);
     bool setExifThumbnail(const QImage& thumb);
     bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
     bool setImageDimensions(const QSize& size);
