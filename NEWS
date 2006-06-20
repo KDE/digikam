@@ -158,5 +158,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 096 ==> 128914 : differientiating view and edit / call for a integrated viewer.
 097 ==> 128669 : Use embedded thumbnail for viewing RAW files.
 098 ==> 127991 : digikam image editor and raws (nef).
+099 ==> 129450 : cannot exit preview mode within empty album.
 
 ----------------------------------------------------------------------------------------------------
