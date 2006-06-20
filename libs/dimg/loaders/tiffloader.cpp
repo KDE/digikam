@@ -471,6 +471,11 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     // Standard Exif.Photo tags (available with libtiff 3.8.2).  
 
+#if defined(TIFFTAG_EXIFIFD)
+    long sub_offset=0;
+    TIFFSetField(tif, TIFFTAG_SUBIFD, 1, &sub_offset);
+#endif  
+    
 #if defined(EXIFTAG_EXPOSURETIME)
     tiffSetExifDataTag(tif, EXIFTAG_EXPOSURETIME,             &metaData, "Exif.Photo.ExposureTime");
 #endif  
@@ -488,9 +493,6 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif  
 #if defined(EXIFTAG_OECF)
     tiffSetExifDataTag(tif, EXIFTAG_OECF,                     &metaData, "Exif.Photo.OECF");
-#endif  
-#if defined(EXIFTAG_EXIFVERSION)
-    tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
 #endif  
 #if defined(EXIFTAG_EXIFVERSION)
     tiffSetExifDataTag(tif, EXIFTAG_EXIFVERSION,              &metaData, "Exif.Photo.ExifVersion");
@@ -643,6 +645,10 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     tiffSetExifAsciiTag(tif, EXIFTAG_IMAGEUNIQUEID,           &metaData, "Exif.Photo.ImageUniqueID");
 #endif
 
+#if defined(TIFFTAG_EXIFIFD)
+    TIFFSetField(tif, TIFFTAG_EXIFIFD, sub_offset);
+#endif
+    
     // -------------------------------------------------------------------
     // Write ICC profil.
     
