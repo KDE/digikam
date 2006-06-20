@@ -468,14 +468,14 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     libtiffver.replace('\n', ' ');
     soft.append(QString(" ( %1 )").arg(libtiffver));
     TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.ascii());
-    
-    // Standard Exif.Photo tags (available with libtiff 3.8.2).  
 
+    // Standard Exif.Photo tags (available with libtiff 3.8.2).  
+/*
 #if defined(TIFFTAG_EXIFIFD)
     long sub_offset=0;
     TIFFSetField(tif, TIFFTAG_SUBIFD, 1, &sub_offset);
 #endif  
-    
+
 #if defined(EXIFTAG_EXPOSURETIME)
     tiffSetExifDataTag(tif, EXIFTAG_EXPOSURETIME,             &metaData, "Exif.Photo.ExposureTime");
 #endif  
@@ -648,6 +648,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #if defined(TIFFTAG_EXIFIFD)
     TIFFSetField(tif, TIFFTAG_EXIFIFD, sub_offset);
 #endif
+*/
     
     // -------------------------------------------------------------------
     // Write ICC profil.
