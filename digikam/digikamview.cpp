@@ -769,7 +769,6 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
 {
     if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->albumPreviews->setPreviewItem();
         d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
         AlbumIconItem *item=0;
 
@@ -777,7 +776,10 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
         {
             item = d->iconView->firstSelectedItem();
             if (!item) 
+            {
+                d->albumPreviews->setPreviewItem();
                 return;
+            }
         }
         else
         {
