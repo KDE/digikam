@@ -178,9 +178,9 @@ Just to give a taste of what i can do with emacs (and kdesdk):
 GDB Backtrace 
 ========================================================================
 
-If you found a context to carsh digiKam, you can provide a backtrace using GDB debuger.
+If you found a context to crash digiKam, you can provide a backtrace using GDB debugger.
 digiKam need to be compiled with all debug info else the backtrace will not suitable.
-There is a .configure option for that :
+There is a configure option for that:
 
 # make -f Makefile.cvs
 # ./configure --enable-debug=full
@@ -188,7 +188,7 @@ There is a .configure option for that :
 # su
 # make install.
 
-To make a backtrace with GDB use folowing command:
+To make a backtrace with GDB use following command:
 
 # gdb digikam
 > run
@@ -199,7 +199,7 @@ To make a backtrace with GDB use folowing command:
 > _the backtrace is here_
 > quit
 
-Post this backtrace at the right place (B.K.O or devel ML) for investiguations by developpers.
+Post this backtrace at the right place (B.K.O or devel ML) for investigations by developers.
 
 ========================================================================
 Memory leak 
