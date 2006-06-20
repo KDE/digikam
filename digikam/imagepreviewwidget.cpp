@@ -151,14 +151,13 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
 void ImagePreviewWidget::updatePixmap( void )
 {
     d->pixmap.fill(ThemeEngine::instance()->baseColor());
+    QPainter p(&(d->pixmap));
 
     if (!d->path.isEmpty())
     {
-        QPainter p(&(d->pixmap));
-
         if (!d->previewJob)
         {
-            // Preview extraction is complete
+            // Preview extraction is complete...
             
             if (!d->preview.isNull())
             {
@@ -169,6 +168,8 @@ void ImagePreviewWidget::updatePixmap( void )
             }
             else
             {
+                // ...or failed...
+
                 p.setPen(QPen(Qt::red));
                 p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                            Qt::AlignCenter|Qt::WordBreak, 
@@ -184,9 +185,18 @@ void ImagePreviewWidget::updatePixmap( void )
                        Qt::AlignCenter|Qt::WordBreak, 
                        i18n("Preview extraction in progress..."));
         }
-    
-        p.end();
     }
+    else
+    {
+        // There is nothing to see.
+        
+        p.setPen(QPen(Qt::darkYellow));
+        p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
+                    Qt::AlignCenter|Qt::WordBreak, 
+                    i18n("No item to preview."));
+    }
+    
+    p.end();
 }
 
 void ImagePreviewWidget::drawContents(QPainter *)
