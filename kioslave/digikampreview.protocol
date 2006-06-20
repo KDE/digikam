@@ -6,4 +6,3 @@ output=stream
 reading=true
 source=false
 Description=Digikam preview kioslave
-Description[xx]=xxDigikam preview kioslavexx

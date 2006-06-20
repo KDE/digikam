@@ -18,6 +18,7 @@ Encoding=UTF-8
 
 Comment=Image histogram adjust curves plugin for digiKam
 Comment[bg]=Приставка на digiKam за настройка кривите на хистограмите на снимки
+Comment[cs]=digiKam modul pro úpravu křivek histogramu obrázku
 Comment[da]=Plugin til histogramkurvejustering i Digikam
 Comment[de]=digiKam-Modul zur Justierung der Farbkurven
 Comment[el]=Πρόσθετο προσαρμογής των καμπύλων του ιστογράμματος εικόνας για το digiKam

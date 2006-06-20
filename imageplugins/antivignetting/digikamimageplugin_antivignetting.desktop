@@ -17,6 +17,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Anti Vignetting image effect plugin for digiKam
 Comment[bg]=Приствка на digiKam за намаляване на винетирането на снимки
+Comment[cs]=digiKam modul pro opravu vinětace
 Comment[da]=Anti-vignetteringsplugin for Digikam
 Comment[de]=digiKam-Modul zur Reduzierung von Vignettierung im Bild
 Comment[el]=Πρόσθετο εφέ αντισκίασης εικόνας για το digiKam

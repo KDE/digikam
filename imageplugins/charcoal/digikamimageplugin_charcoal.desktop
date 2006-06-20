@@ -18,6 +18,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Charcoal drawing image effect plugin for digiKam
 Comment[bg]=Приставка на digiKam за наподобяване на рисуване с въглен върху снимки
+Comment[cs]=digiKam modul pro efekt kresby uhlem
 Comment[da]=Plugin til kultegningseffekt på billeder i Digikam
 Comment[de]=digiKam-Modul zum Erzeugen eines Kohlezeichnungseffektes
 Comment[el]=Πρόσθετο εφέ σχεδίασης με κάρβουνο για το digiKam
