@@ -57,7 +57,10 @@ signals:
     void lastItem();
     void firstItem();
     void escapeSignal();
-    void previewUnderProgress(bool);
+    
+    void previewStarted();
+    void previewComplete();
+    void previewFailed();
 
 public slots:
 

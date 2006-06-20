@@ -115,7 +115,7 @@ void ImagePreviewWidget::setImagePath( const QString& path )
     connect(d->previewJob, SIGNAL(signalFailed(const KURL&)),
             this, SLOT(slotFailedImagePreview(const KURL&)));   
 
-    emit previewUnderProgress(true);
+    emit previewStarted();
 }
 
 void ImagePreviewWidget::slotPreviewBlinkTimerDone()
@@ -134,7 +134,7 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
     d->pixmap     = QPixmap(contentsRect().size());
     updatePixmap();
     repaint(false);
-    emit previewUnderProgress(false);
+    emit previewComplete();
 }
 
 void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
@@ -145,7 +145,7 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
     d->pixmap     = QPixmap(contentsRect().size());
     updatePixmap();
     repaint(false);
-    emit previewUnderProgress(false);
+    emit previewFailed();
 }
 
 void ImagePreviewWidget::updatePixmap( void )

@@ -104,8 +104,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));                
 
-    connect(d->previewItemWidget, SIGNAL( previewUnderProgress(bool) ),
-            this, SLOT( slotToogleButtons(bool) ) );          
+    connect(d->previewItemWidget, SIGNAL( previewStarted() ),
+            this, SLOT( slotPreviewStarted() ) );          
+    
+    connect(d->previewItemWidget, SIGNAL( previewComplete() ),
+            this, SLOT( slotPreviewComplete() ) );          
+    
+    connect(d->previewItemWidget, SIGNAL( previewFailed() ),
+            this, SLOT( slotPreviewFailed() ) );          
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -148,10 +154,22 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     visibleWidget()->setFocus();
 }
 
-void AlbumWidgetStack::slotToogleButtons(bool t)
+void AlbumWidgetStack::slotPreviewStarted()
 {
-    d->backButton->setEnabled(!t);
-    d->editButton->setEnabled(!t);
+    d->backButton->setEnabled(false);
+    d->editButton->setEnabled(false);
+}
+
+void AlbumWidgetStack::slotPreviewComplete()
+{
+    d->backButton->setEnabled(true);
+    d->editButton->setEnabled(true);
+}
+
+void AlbumWidgetStack::slotPreviewFailed()
+{
+    d->backButton->setEnabled(true);
+    d->editButton->setEnabled(false);
 }
 
 }  // namespace Digikam

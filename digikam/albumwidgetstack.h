@@ -70,7 +70,9 @@ signals:
 private slots:
     
     void slotThemeChanged();
-    void slotToogleButtons(bool);
+    void slotPreviewStarted();
+    void slotPreviewComplete();
+    void slotPreviewFailed();
 
 private:
 
