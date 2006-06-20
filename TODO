@@ -17,10 +17,8 @@
 
    - ICC image plugin: check the ICC profiles type for each sections (Monitor/Workspace/Input/Proof) when user choose profile file manually (B.K.O #127763)
 
-
 * ImageEditor:
 
-   - SavingAs record the temp image file created in database. At the next session of digikam, the file is identifed like removed from collection!
    - Polish keyboard focus in sidebar when navigate between album pictures.
 
 * Main Interface:
