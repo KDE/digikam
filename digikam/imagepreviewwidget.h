@@ -48,7 +48,7 @@ public:
     ImagePreviewWidget(QWidget *parent=0);
     ~ImagePreviewWidget();
 
-    void setImagePath(const QString& path);
+    void setImagePath(const QString& path=QString::null);
 
 signals:
 

@@ -130,7 +130,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->iconView = d->albumPreviews->albumIconView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
-                                                    Sidebar::Right, true, true);
+                                                   Sidebar::Right, true, true);
 
     // To the left.
     d->folderView       = new AlbumFolderView(this);
@@ -323,7 +323,7 @@ void DigikamView::slotLastItem(void)
 void DigikamView::slotAllAlbumsLoaded()
 {
     disconnect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
-                  this, SLOT(slotAllAlbumsLoaded()));
+               this, SLOT(slotAllAlbumsLoaded()));
 
     loadViewState();
     Album *album = d->albumManager->findAlbum(d->initialAlbumID);
@@ -576,14 +576,17 @@ void DigikamView::slot_imageSelected()
             selected = true;
             AlbumIconItem *firstSelectedItem = d->iconView->firstSelectedItem();
             d->rightSideBar->itemChanged(firstSelectedItem->imageInfo()->kurl(),
-                                       d->iconView, firstSelectedItem, 0, 0);
+                                         d->iconView, firstSelectedItem, 0, 0);
             d->albumPreviews->setPreviewItem(firstSelectedItem->imageInfo()->kurl().path());
             break;
         }
     }
 
     if (!selected)
+    {
+        d->albumPreviews->setPreviewItem();
         emit signal_noCurrentItem();
+    }
 
     emit signal_imageSelected(selected);
 }
@@ -764,19 +767,23 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
 {
     if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        AlbumIconItem *item;
+        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
+        AlbumIconItem *item=0;
 
         if (!iconItem)
         {
             item = d->iconView->firstSelectedItem();
-            if (!item) return;
+            if (!item) 
+            {
+                d->albumPreviews->setPreviewItem();
+                return;
+            }
         }
         else
         {
             item = iconItem;
         }
 
-        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
         d->albumPreviews->setPreviewItem( item->imageInfo()->kurl().path() );
     }
     else

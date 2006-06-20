@@ -58,7 +58,7 @@ public:
     AlbumIconView* albumIconView();
     ImagePreviewWidget* imagePreviewWidget();
 
-    void setPreviewItem(const QString& path);
+    void setPreviewItem(const QString& path=QString::null);
     int  previewMode(void);
     void setPreviewMode(int mode);
 

@@ -33,8 +33,6 @@
 #include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
-#include <kfilemetainfo.h>
 
 // Local includes.
 
@@ -105,7 +103,6 @@ void ImagePreviewWidget::setImagePath( const QString& path )
 {
     if (path == d->path) return;
 
-    kapp->setOverrideCursor( KCursor::waitCursor() );
     d->path              = path;
     d->previewBlink      = false;
     d->blinkPreviewTimer->start(200);
@@ -137,7 +134,6 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
     d->pixmap     = QPixmap(contentsRect().size());
     updatePixmap();
     repaint(false);
-    kapp->restoreOverrideCursor();
     emit previewUnderProgress(false);
 }
 
@@ -149,7 +145,6 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
     d->pixmap     = QPixmap(contentsRect().size());
     updatePixmap();
     repaint(false);
-    kapp->restoreOverrideCursor();
     emit previewUnderProgress(false);
 }
 
