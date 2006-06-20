@@ -136,8 +136,17 @@ ImagePreviewWidget* AlbumWidgetStack::imagePreviewWidget()
 
 void AlbumWidgetStack::setPreviewItem(const QString& path)
 {
+    if (path.isNull())
+    {
+        d->previewItemWidget->setImagePath();
+        slotPreviewFailed();
+    }
+    
     if (previewMode() == PreviewItemMode)
+    {
+        visibleWidget()->setFocus();
         d->previewItemWidget->setImagePath(path);
+    }
 }
 
 int AlbumWidgetStack::previewMode(void)
