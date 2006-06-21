@@ -622,7 +622,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     meta.setIptc(d->image.getIptc());
 
     // Update Iptc preview.
-    QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+    QImage preview = d->image.smoothScale(640, 480, QSize::ScaleMin).copyQImage();
     meta.setImagePreview(preview);
 
     // Update Exif thumbnail.
