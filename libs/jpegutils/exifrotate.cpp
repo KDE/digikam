@@ -229,7 +229,7 @@ bool exifRotate(const QString& file)
             metaData.setImageDimensions(img.size());
 
             // Update the image preview.
-            QImage preview = img.scale(640, 480, QImage::ScaleMin);
+            QImage preview = img.scale(800, 600, QImage::ScaleMin);
             metaData.setImagePreview(preview);
 
             // Update the image thumbnail.
