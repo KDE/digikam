@@ -60,7 +60,7 @@ KDE      >= 3.x        http://www.kde.org
 gphoto2  >= 2.x        http://www.gphoto.org
 sqlite   >= 3.x        http://www.sqlite.org
 dcraw    >= 8.x        http://www.cybercom.net/~dcoffin/dcraw
-libkexif >= 0.2        http://www.digikam.org/
+libkexif >= 0.2.4      http://sourceforge.net/project/showfiles.php?group_id=149779
 libkipi  >= 0.1        http://extragear.kde.org/apps/kipi
 libtiff  >= 3.6.x      http://www.remotesensing.org/libtiff
 
