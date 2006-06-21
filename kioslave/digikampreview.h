@@ -43,6 +43,7 @@ private:
 
     void exifRotate(const QString& filePath, QImage& thumb);
     bool loadDCRAW(QImage& image, const QString& path);
+    bool loadImagePreview(QImage& image, const QString& path);
 
 };
 

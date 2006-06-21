@@ -91,11 +91,14 @@ void kio_digikampreviewProtocol::get(const KURL& url )
         return;
     }
 
-    // Try to load with dcraw : RAW files.
+    // -- Get the image preview --------------------------------
+    // In first, we trying to load with dcraw : RAW files.
     if ( !loadDCRAW(img, url.path()) )
     {
-        // Try to load with Qt/KDE.
-        img.load(url.path());
+        // Try to extract Exif/Iptc preview.
+        if ( !loadImagePreview(img, url.path()) )
+            // Try to load with Qt/KDE.
+            img.load(url.path());
     }
 
     if (img.isNull())
@@ -214,6 +217,20 @@ void kio_digikampreviewProtocol::exifRotate(const QString& filePath, QImage& thu
     }
 }
 
+// -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------
+
+bool kio_digikampreviewProtocol::loadImagePreview(QImage& image, const QString& path)
+{
+    DMetadata metadata(path);
+    if (metadata.getImagePreview(image))
+    {
+        kdDebug() << "Use Exif/Iptc preview extraction" << endl;
+        return true;
+    }
+    
+    return false;
+}
+
 // -- RAW preview extraction using Dcraw --------------------------------------------------------------
 
 bool kio_digikampreviewProtocol::loadDCRAW(QImage& image, const QString& path)
@@ -269,7 +286,10 @@ bool kio_digikampreviewProtocol::loadDCRAW(QImage& image, const QString& path)
     if ( !imgData.isEmpty() )
     {
         if (image.loadFromData( imgData ))
+        {
+            kdDebug() << "Use embedded JPEG RAW preview extraction" << endl;
             return true;
+        }
     }
     
     // In second, try to use simple RAW extraction method
@@ -311,7 +331,10 @@ bool kio_digikampreviewProtocol::loadDCRAW(QImage& image, const QString& path)
     if ( !imgData.isEmpty() )
     {
         if (image.loadFromData( imgData ))
+        {
+            kdDebug() << "Use reduced RAW preview extraction" << endl;
             return true;
+        }
     }
     
     return false;
