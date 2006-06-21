@@ -161,7 +161,8 @@ void DMetadata::setExif(const QByteArray& data)
 {
     try
     {    
-        d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
+        if (!data.isEmpty())
+            d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
     }
     catch( Exiv2::Error &e )
     {
@@ -175,7 +176,8 @@ void DMetadata::setExif(Exiv2::DataBuf const data)
 {
     try
     {    
-        d->exifMetadata.load(data.pData_, data.size_);
+        if (data.size_ != 0)
+            d->exifMetadata.load(data.pData_, data.size_);
     }
     catch( Exiv2::Error &e )
     {
@@ -189,7 +191,8 @@ void DMetadata::setIptc(const QByteArray& data)
 {
     try
     {    
-        d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
+        if (!data.isEmpty())
+            d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
     }
     catch( Exiv2::Error &e )
     {
@@ -203,7 +206,8 @@ void DMetadata::setIptc(Exiv2::DataBuf const data)
 {
     try
     {    
-        d->iptcMetadata.load(data.pData_, data.size_);
+        if (data.size_ != 0)
+            d->iptcMetadata.load(data.pData_, data.size_);
     }
     catch( Exiv2::Error &e )
     {
@@ -1537,15 +1541,53 @@ QByteArray DMetadata::getIptcTagData(const char *iptcTagName) const
     return QByteArray();
 }
 
-bool DMetadata::getImagePreview(QImage& image)
+bool DMetadata::getImagePreview(QImage& preview)
 {
     try
     {
-        // Minolta camera preview extraction.
-        if (image.loadFromData(getExifTagData("Exif.Minolta.Thumbnail")) )
+        // In first we trying to get from Iptc preview tag.
+        if (preview.loadFromData(getIptcTagData("Iptc.Application2.Preview")) )
             return true;
 
-        // TODO : Added here other makernotes preview extraction
+        // TODO : Added here Makernotes preview extraction when Exiv2 will be fixed for that.
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get image preview using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return false;
+}
+
+bool DMetadata::setImagePreview(const QImage& preview)
+{
+    try
+    {
+        KTempFile previewFile(QString::null, "DigikamDMetadataPreview");
+        previewFile.setAutoDelete(true);
+        // Very compressed preview to limit IPTC size
+        preview.save(previewFile.name(), "JPEG", 50);
+
+        QFile file(previewFile.name());
+        if ( !file.open(IO_ReadOnly) ) 
+            return false;
+        
+        QByteArray data(file.size());
+        QDataStream stream( &file );
+        stream.readRawBytes(data.data(), data.size());
+        file.close();
+        
+        Exiv2::DataValue val;
+        val.read((Exiv2::byte *)data.data(), data.size());
+        d->iptcMetadata["Iptc.Application2.Preview"] = val;
+        
+        // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
+        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
+        d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
+        
+        return true;
     }
     catch( Exiv2::Error &e )
     {

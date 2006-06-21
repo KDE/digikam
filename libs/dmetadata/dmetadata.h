@@ -105,7 +105,7 @@ public:
     QByteArray          getIptcTagData(const char *iptcTagName) const;
 
     ImageColorWorkSpace getImageColorWorkSpace();
-    bool                getImagePreview(QImage& image);
+    bool                getImagePreview(QImage& preview);
     QSize               getImageDimensions();
     ImageOrientation    getImageOrientation();
     QDateTime           getImageDateTime() const;
@@ -116,6 +116,7 @@ public:
     bool setExifTagString(const char *exifTagName, const QString& value);
     bool setExifThumbnail(const QImage& thumb);
     bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
+    bool setImagePreview(const QImage& preview);
     bool setImageDimensions(const QSize& size);
     bool setImageOrientation(ImageOrientation orientation);
     bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false);
