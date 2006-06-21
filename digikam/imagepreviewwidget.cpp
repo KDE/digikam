@@ -222,42 +222,10 @@ void ImagePreviewWidget::resizeEvent(QResizeEvent *)
 void ImagePreviewWidget::wheelEvent( QWheelEvent * e )
 {
     if (e->delta() > 0)
-        emit prevItem();
+        emit signalPrevItem();
 
     if (e->delta() < 0)
-        emit nextItem();
-}
-
-void ImagePreviewWidget::keyPressEvent( QKeyEvent * e )
-{
-    if ( e->state() == 0 )
-    {
-        switch ( e->key() )
-        {
-            case Key_PageUp:
-                emit prevItem();
-            break;
-
-            case Key_PageDown:
-                emit nextItem();
-            break;
-
-            case Key_Home:
-                emit firstItem();
-            break;
-
-            case Key_End:
-                emit lastItem();
-            break;
-
-            case Key_Escape:
-                emit escapeSignal();
-            break;
-
-            default:
-                return;
-        }
-    }
+        emit signalNextItem();
 }
 
 }  // NameSpace Digikam

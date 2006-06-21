@@ -168,6 +168,23 @@ void DigikamView::applySettings(const AlbumSettings* settings)
 
 void DigikamView::setupConnections()
 {
+    // -- DigikamApp connections ----------------------------------
+
+    connect(d->parent, SIGNAL(signalEscapePressed()),
+            this, SLOT(slotEscapePreview()));
+
+    connect(d->parent, SIGNAL(signalNextItem()),
+            this, SLOT(slotNextItem()));
+
+    connect(d->parent, SIGNAL(signalPrevItem()),
+            this, SLOT(slotPrevItem()));
+
+    connect(d->parent, SIGNAL(signalFirstItem()),
+            this, SLOT(slotFirstItem()));
+
+    connect(d->parent, SIGNAL(signalLastItem()),
+            this, SLOT(slotLastItem()));
+                        
     // -- AlbumManager connections --------------------------------
 
     connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
@@ -224,21 +241,12 @@ void DigikamView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(firstItem()),
-            this, SLOT(slotFirstItem()));
-
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(nextItem()),
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(prevItem()),
+    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
-
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(lastItem()),
-            this, SLOT(slotLastItem()));
-
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(escapeSignal()),
-            this, SLOT(slotEscapePreview()));
-            
+    
     connect(d->albumPreviews, SIGNAL(backToAlbumSignal()),
             this, SLOT(slotEscapePreview()));
     
@@ -751,6 +759,9 @@ void DigikamView::slot_imageCopyResult(KIO::Job* job)
 
 void DigikamView::slotEscapePreview()
 {
+    if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+        return;
+
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
     if (currItem)
         slot_imagePreview(currItem);

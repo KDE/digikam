@@ -52,11 +52,8 @@ public:
 
 signals:
 
-    void nextItem();
-    void prevItem();
-    void lastItem();
-    void firstItem();
-    void escapeSignal();
+    void signalNextItem();
+    void signalPrevItem();
     
     void previewStarted();
     void previewComplete();
@@ -71,7 +68,6 @@ protected:
     void drawContents(QPainter *);
     void resizeEvent(QResizeEvent *);
     void wheelEvent(QWheelEvent * e);
-    void keyPressEvent(QKeyEvent * e);
 
 private slots:
     

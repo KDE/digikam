@@ -1,12 +1,13 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Tom Albers <tomalbers@kde.nl>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2002-16-10
- * Description : 
+ * Description : main interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Tom Albers
  * Copyright      2006 by Gilles Caulier
- * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +46,7 @@
 #include "dcopiface.h"
 
 class KAction;
+class KAccel;
 class KActionMenu;
 class KToolBarPopupAction;
 class KSelectAction;
@@ -94,14 +96,13 @@ public:
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
     
-private:
+signals:
 
-    void setupView();
-    void setupActions();
-    void loadPlugins();
-    void loadCameras();
-    void populateThemes();
-    void updateDeleteTrashMenu();
+    void signalEscapePressed();
+    void signalNextItem();
+    void signalPrevItem();
+    void signalFirstItem();
+    void signalLastItem();
 
 protected:
 
@@ -110,6 +111,53 @@ protected:
 protected slots:
 
     void slotCameraMediaMenuEntries( KIO::Job *, const KIO::UDSEntryList & );
+
+private:
+
+    void setupView();
+    void setupActions();
+    void setupAccelerators();
+    void loadPlugins();
+    void loadCameras();
+    void populateThemes();
+    void updateDeleteTrashMenu();
+
+private slots:
+
+    void slot_albumSelected(bool val);
+    void slot_tagSelected(bool val);
+    void slot_imageSelected(bool val);
+    void slot_exit();
+    void slotShowTip();
+    void slotShowKipiHelp();
+    void slot_gammaAdjustment();
+
+    void slotAboutToShowForwardMenu();
+    void slotAboutToShowBackwardMenu();
+            
+    void slotSetup();
+    void slotSetupCamera();
+    void slotSetupChanged();
+
+    void slotKipiPluginPlug();
+    
+    QString convertToLocalUrl( const QString& folder );
+    void slotDownloadImages( const QString& folder );
+    void slotDownloadImages();
+    void slotCameraConnect();
+    void slotCameraMediaMenu();
+    void slotDownloadImagesFromMedia( int id );
+    void slotCameraAdded(CameraType *ctype);
+    void slotCameraRemoved(CameraType *ctype);
+    void slotCameraAutoDetect();
+    void slotDcopDownloadImages( const QString& folder );
+    void slotDcopCameraAutoDetect();
+    void slotEditKeys();
+    void slotConfToolbars();
+    void slotToggleFullScreen();
+    void slotDatabaseRescan();
+
+    void slotChangeTheme(const QString& theme);
 
 private:
 
@@ -129,6 +177,8 @@ private:
     QMap<int, QString>     mMediaItems;
 
     QString                mCameraGuiPath;
+
+    KAccel                *m_accelerators;
 
     KConfig               *m_config;    
     
@@ -206,43 +256,6 @@ private:
     static DigikamApp     *m_instance;
 
     KIPI::PluginLoader    *KipiPluginLoader_;
-
-private slots:
-
-    void slot_albumSelected(bool val);
-    void slot_tagSelected(bool val);
-    void slot_imageSelected(bool val);
-    void slot_exit();
-    void slotShowTip();
-    void slotShowKipiHelp();
-    void slot_gammaAdjustment();
-
-    void slotAboutToShowForwardMenu();
-    void slotAboutToShowBackwardMenu();
-            
-    void slotSetup();
-    void slotSetupCamera();
-    void slotSetupChanged();
-
-    void slotKipiPluginPlug();
-    
-    QString convertToLocalUrl( const QString& folder );
-    void slotDownloadImages( const QString& folder );
-    void slotDownloadImages();
-    void slotCameraConnect();
-    void slotCameraMediaMenu();
-    void slotDownloadImagesFromMedia( int id );
-    void slotCameraAdded(CameraType *ctype);
-    void slotCameraRemoved(CameraType *ctype);
-    void slotCameraAutoDetect();
-    void slotDcopDownloadImages( const QString& folder );
-    void slotDcopCameraAutoDetect();
-    void slotEditKeys();
-    void slotConfToolbars();
-    void slotToggleFullScreen();
-    void slotDatabaseRescan();
-
-    void slotChangeTheme(const QString& theme);
 };
 
 }  // namespace Digikam

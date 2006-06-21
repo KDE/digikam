@@ -1,12 +1,13 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Tom Albers <tomalbers@kde.nl>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date  : 2002-16-10
- * Description : 
+ * Description : main interface implementation
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
+ * Copyright      2006 by Tom Albers
  * Copyright      2006 by Gilles Caulier
- * Copyright (C) 2006 Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +41,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kaction.h>
+#include <kaccel.h>
 #include <kstdaction.h>
 #include <kstdaccel.h>
 #include <kkeydialog.h>
@@ -53,18 +55,14 @@
 #include <kwin.h>
 #include <dcopref.h>
 
-using KIO::Job;
-using KIO::UDSEntryList;
-using KIO::UDSEntry;
-
 // libKipi includes.
 
-#include "kipiinterface.h"
 #include <libkipi/pluginloader.h>
 #include <libkipi/plugin.h>
 
 // Local includes.
 
+#include "kipiinterface.h"
 #include "albummanager.h"
 #include "albumlister.h"
 #include "album.h"
@@ -80,13 +78,17 @@ using KIO::UDSEntry;
 #include "digikamview.h"
 #include "imagepluginloader.h"
 #include "imagewindow.h"
-#include "digikamapp.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
 #include "scanlib.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
+#include "digikamapp.h"
+
+using KIO::Job;
+using KIO::UDSEntryList;
+using KIO::UDSEntry;
 
 namespace Digikam
 {
@@ -94,13 +96,14 @@ namespace Digikam
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
-    m_instance = this;
-    m_config = kapp->config();
+    m_instance     = this;
+    m_config       = kapp->config();
+    m_accelerators = 0;
 
-    mFullScreen = false;
-    mView = 0;
+    mFullScreen   = false;
+    mView         = 0;
     mValidIccPath = true;
-
+    
     mSplash = 0;
     if(m_config->readBoolEntry("Show Splash", true) &&
        !kapp->isRestored())
@@ -127,6 +130,7 @@ DigikamApp::DigikamApp()
             this, SLOT(slotCameraRemoved(CameraType *)));
 
     setupView();
+    setupAccelerators();
     setupActions();
     updateDeleteTrashMenu();
 
@@ -199,6 +203,7 @@ void DigikamApp::show()
         delete mSplash;
         mSplash = 0;
     }
+
     KMainWindow::show();
     if(!mValidIccPath)
     {
@@ -292,6 +297,46 @@ void DigikamApp::setupView()
 
     connect(mView, SIGNAL(signal_imageSelected(bool)),
             this, SLOT(slot_imageSelected(bool)));
+}
+
+void DigikamApp::setupAccelerators()
+{
+    m_accelerators = new KAccel(this);
+
+    m_accelerators->insert("Exit Preview Mode", i18n("Exit Preview"),
+                           i18n("Exit out of the preview mode"),
+                           Key_Escape, this, SIGNAL(signalEscapePressed()),
+                           false, true);
+    
+    m_accelerators->insert("Next Image Key_Space", i18n("Next Image"),
+                           i18n("Next Image"),
+                           Key_Space, this, SIGNAL(signalNextItem()),
+                           false, true);
+
+    m_accelerators->insert("Previous Image Key_Backspace", i18n("Previous Image"),
+                           i18n("Previous Image"),
+                           Key_Backspace, this, SIGNAL(signalPrevItem()),
+                           false, true);
+
+    m_accelerators->insert("Next Image Key_Next", i18n("Next Image"),
+                           i18n("Next Image"),
+                           Key_Next, this, SIGNAL(signalNextItem()),
+                           false, true);
+
+    m_accelerators->insert("Previous Image Key_Prior", i18n("Previous Image"),
+                           i18n("Previous Image"),
+                           Key_Prior, this, SIGNAL(signalPrevItem()),
+                           false, true);
+
+    m_accelerators->insert("First Image Key_Home", i18n("First Image"),
+                           i18n("First Image"),
+                           Key_Home, this, SIGNAL(signalFirstItem()),
+                           false, true);
+
+    m_accelerators->insert("Last Image Key_End", i18n("Last Image"),
+                           i18n("Last Image"),
+                           Key_End, this, SIGNAL(signalLastItem()),
+                           false, true);
 }
 
 void DigikamApp::setupActions()
