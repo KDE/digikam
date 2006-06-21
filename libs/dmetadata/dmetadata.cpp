@@ -1567,12 +1567,16 @@ bool DMetadata::setImagePreview(const QImage& preview)
     {
         KTempFile previewFile(QString::null, "DigikamDMetadataPreview");
         previewFile.setAutoDelete(true);
-        // Very compressed preview to limit IPTC size
-        preview.save(previewFile.name(), "JPEG", 50);
+        // A little bit compressed preview jpeg image to limit IPTC size.
+        preview.save(previewFile.name(), "JPEG", 75);
 
         QFile file(previewFile.name());
         if ( !file.open(IO_ReadOnly) ) 
             return false;
+
+        kdDebug() << "(" << preview.width() << "x" << preview.height() 
+                  << ") JPEG image preview size: " << file.size() 
+                  << " bytes" << endl;
         
         QByteArray data(file.size());
         QDataStream stream( &file );
