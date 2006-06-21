@@ -6,3 +6,6 @@ output=stream
 reading=true
 source=false
 Description=Digikam preview kioslave
+Description[da]=Digikam forhåndsvisnings-kioslave
+Description[pt]='kioslave' de antevisão do digiKam
+Description[sv]=I/O-slav för Digikam förhandsgranskning
