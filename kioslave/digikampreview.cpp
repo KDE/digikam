@@ -224,7 +224,8 @@ bool kio_digikampreviewProtocol::loadImagePreview(QImage& image, const QString& 
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kdDebug() << "Use Exif/Iptc preview extraction" << endl;
+        kdDebug() << "Use Exif/Iptc preview extraction. Size of image: " 
+                  << image.width() << "x" << image.height() << endl;
         return true;
     }
     
