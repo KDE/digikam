@@ -191,7 +191,7 @@ void DigikamView::setupConnections()
             this, SLOT(slot_albumSelected(Album*)));
 
     connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slot_albumsCleared()));
+            this, SLOT(slotAlbumsCleared()));
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
@@ -200,7 +200,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotAllAlbumsLoaded()));
 
     connect(d->albumManager, SIGNAL(signalAlbumItemsSelected(bool) ),
-            this, SLOT(slot_imageSelected()));
+            this, SLOT(slotImageSelected()));
 
     connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
@@ -208,10 +208,10 @@ void DigikamView::setupConnections()
     // -- IconView Connections -------------------------------------
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
-            this, SLOT(slot_imageSelected()));
+            this, SLOT(slotImageSelected()));
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
-            this, SLOT(slot_albumHighlight()));
+            this, SLOT(slotAlbumHighlight()));
 
     connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
             this, SIGNAL(signal_noCurrentItem()));
@@ -573,7 +573,7 @@ void DigikamView::slot_albumOpenInKonqui()
     new KRun(palbum->folderPath()); // KRun will delete itself.
 }
 
-void DigikamView::slot_imageSelected()
+void DigikamView::slotImageSelected()
 {
     bool selected = false;
 
@@ -599,7 +599,7 @@ void DigikamView::slot_imageSelected()
     emit signal_imageSelected(selected);
 }
 
-void DigikamView::slot_albumsCleared()
+void DigikamView::slotAlbumsCleared()
 {
     d->iconView->clear();
     emit signal_albumSelected(false);
@@ -726,7 +726,7 @@ void DigikamView::slot_albumAddImages()
     {
         KIO::Job* job = DIO::copy(urls, palbum->kurl());
         connect(job, SIGNAL(result(KIO::Job *) ),
-                this, SLOT(slot_imageCopyResult(KIO::Job *)));
+                this, SLOT(slotImageCopyResult(KIO::Job *)));
     }
 }
 
@@ -735,7 +735,7 @@ void DigikamView::slotAlbumImportFolder()
     d->folderView->albumImportFolder();
 }
 
-void DigikamView::slot_albumHighlight()
+void DigikamView::slotAlbumHighlight()
 {
     // TODO:
     // Don't know what this is supposed to do.
@@ -749,7 +749,7 @@ void DigikamView::slot_albumHighlight()
     */
 }
 
-void DigikamView::slot_imageCopyResult(KIO::Job* job)
+void DigikamView::slotImageCopyResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);

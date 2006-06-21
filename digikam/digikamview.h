@@ -125,11 +125,11 @@ private slots:
 
     void slotAllAlbumsLoaded();
 
-    void slot_albumsCleared();
-    void slot_albumHighlight();
+    void slotAlbumsCleared();
+    void slotAlbumHighlight();
 
-    void slot_imageSelected();
-    void slot_imageCopyResult(KIO::Job* job);
+    void slotImageSelected();
+    void slotImageCopyResult(KIO::Job* job);
 
     void slotLeftSidebarChangedTab(QWidget* w);
 
