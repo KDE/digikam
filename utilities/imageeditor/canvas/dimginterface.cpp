@@ -616,10 +616,17 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     d->savingFilename = fileName;
 
-    // update Exif thumbnail.
+    // Get image Exif/Iptc data.
     DMetadata meta;
     meta.setExif(d->image.getExif());
-    QImage thumb = d->image.smoothScale(160, 120, QSize::ScaleMin).copyQImage();
+    meta.setIptc(d->image.getIptc());
+
+    // Update Iptc preview.
+    QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+    meta.setImagePreview(preview);
+
+    // Update Exif thumbnail.
+    QImage thumb = preview.smoothScale(160, 120, QImage::ScaleMin);
     meta.setExifThumbnail(thumb);
 
     // Update Exif Image dimensions.
@@ -632,8 +639,9 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if( setExifOrientationTag )
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
-    // Store new Exif data into image.
+    // Store new Exif/Iptc data into image.
     d->image.setExif(meta.getExif());
+    d->image.setIptc(meta.getIptc());
 
     d->thread->save(d->image, fileName, mimeType);
 }
