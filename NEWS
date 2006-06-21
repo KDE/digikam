@@ -155,10 +155,10 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 092 ==> 127846 : digiKam crash when 2nd gphoto camera dialog is closed.
 093 ==> 93569  : easier connection to USB disc cameras.
 094 ==> 124952 : digikam "Mount and Download" Problems.
-095 ==> 129134 : typo in missing files warning dialog "loose" should be "lose".
-096 ==> 128914 : differientiating view and edit / call for a integrated viewer.
+095 ==> 129134 : Typo in missing files warning dialog "loose" should be "lose".
+096 ==> 128914 : Differientiating view and edit / call for a integrated viewer.
 097 ==> 128669 : Use embedded thumbnail for viewing RAW files.
-098 ==> 127991 : digikam image editor and raws (nef).
-099 ==> 129450 : cannot exit preview mode within empty album.
-
+098 ==> 127991 : digiKam image editor and raws (nef).
+099 ==> 129450 : Cannot exit preview mode within empty album.
+100 ==> 129610 : Unsupported initialization of CameraList object.
 ----------------------------------------------------------------------------------------------------
