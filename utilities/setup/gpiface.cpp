@@ -18,12 +18,21 @@
  * 
  * ============================================================ */
 
+extern "C" 
+{
+#include <gphoto2.h>
+}
+
+// Qt includes.
+
 #include <qstring.h>
 #include <qstringlist.h>
 
-extern "C" {
-#include <gphoto2.h>
-}
+// KDE includes.
+
+#include <kdebug.h>
+
+// Local includes.
 
 #include "gpiface.h"
 
@@ -103,13 +112,16 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     gp_abilities_list_load( abilList, context );
 
     count = gp_abilities_list_count( abilList );
-    if ( count < 0) {
+    if ( count < 0) 
+    {
         gp_context_unref( context );
-        qWarning("failed to get list of cameras");
+        kdDebug() << "failed to get list of cameras!" << endl;
         return;
     }
-    else {
-        for (int i=0; i<count; i++) {
+    else 
+    {
+        for (int i=0; i<count; i++) 
+        {
             const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
             cname = abil.model;
