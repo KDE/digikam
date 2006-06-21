@@ -30,6 +30,10 @@ extern "C"
 #include <qstring.h>
 #include <qstringlist.h>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "gpiface.h"
@@ -115,7 +119,7 @@ void GPIface::getSupportedCameras(int& count, QStringList& clist)
     if ( count < 0) 
     {
         gp_context_unref( context );
-        qWarning("failed to get list of cameras");
+        kdDebug() << "failed to get list of cameras!" << endl;
         return;
     }
     else 
