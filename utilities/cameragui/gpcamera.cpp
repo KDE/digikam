@@ -18,18 +18,31 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C" 
+{
+#include <stdio.h>
+#include <gphoto2.h>
+}
+
+// C++ includes.
+
+#include <iostream>
+
+// Qt includes.
+
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qimage.h>
 #include <qdom.h>
 #include <qfile.h>
 
-#include <iostream>
+// KDE includes.
 
-extern "C" {
-#include <stdio.h>
-#include <gphoto2.h>
-}
+#include <kdebug.h>
+
+// Local includes.
 
 #include "gpcamera.h"
 
@@ -37,21 +50,25 @@ class GPCameraPrivate
 {
 public:
 
-    Camera *camera;
-    CameraAbilities cameraAbilities;
+    GPCameraPrivate()
+    {
+        camera = 0;
+    }
 
-    QString model;
-    QString port;
-    QString globalPath;
+    bool             cameraInitialized;
+    
+    bool             thumbnailSupport;
+    bool             deleteSupport;
+    bool             uploadSupport;
+    bool             mkDirSupport;
+    bool             delDirSupport;
+    
+    QString          model;
+    QString          port;
+    QString          globalPath;
 
-    bool cameraInitialized;
-    
-    bool thumbnailSupport;
-    bool deleteSupport;
-    bool uploadSupport;
-    bool mkDirSupport;
-    bool delDirSupport;
-    
+    Camera          *camera;
+    CameraAbilities  cameraAbilities;
 };
 
 class GPStatus
@@ -802,38 +819,42 @@ void GPCamera::getCameraSupportedPorts(const QString& model,
 
 int GPCamera::autoDetect(QString& model, QString& port)
 {
-    CameraList camList;
+    CameraList          *camList;
     CameraAbilitiesList *abilList;
-    GPPortInfoList *infoList;
-    const char *camModel_, *camPort_;
-    GPContext *context;
+    GPPortInfoList      *infoList;
+    const char          *camModel_, *camPort_;
+    GPContext           *context;
 
-    context = gp_context_new ();
+    context = gp_context_new();
+    gp_list_new(&camList);
 
-    gp_abilities_list_new (&abilList);
-    gp_abilities_list_load (abilList, context);
-    gp_port_info_list_new (&infoList);
-    gp_port_info_list_load (infoList);
-    gp_abilities_list_detect (abilList, infoList,
-                              &camList, context);
-    gp_abilities_list_free (abilList);
-    gp_port_info_list_free (infoList);
+    gp_abilities_list_new(&abilList);
+    gp_abilities_list_load(abilList, context);
+    gp_port_info_list_new(&infoList);
+    gp_port_info_list_load(infoList);
+    gp_abilities_list_detect(abilList, infoList, camList, context);
+    gp_abilities_list_free(abilList);
+    gp_port_info_list_free(infoList);
 
-    gp_context_unref( context );
+    gp_context_unref(context);
 
-    int count = gp_list_count (&camList);
+    int count = gp_list_count(camList);
 
-    if (count<=0) {
+    if (count <= 0) 
+    {
+        gp_list_free(camList);
         return -1;
     }
 
-    for (int i = 0; i < count; i++) {
-        gp_list_get_name  (&camList, i, &camModel_);
-        gp_list_get_value (&camList, i, &camPort_);
+    for (int i = 0 ; i < count ; i++) 
+    {
+        gp_list_get_name (camList, i, &camModel_);
+        gp_list_get_value(camList, i, &camPort_);
     }
 
     model = camModel_;
     port  = camPort_;
+    gp_list_free(camList);
 
     return 0;
 }
