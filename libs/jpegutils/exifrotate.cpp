@@ -82,8 +82,8 @@ bool exifRotate(const QString& file)
             QCString in  = QFile::encodeName(file);
             QCString out = QFile::encodeName(temp);
             
-            DMetadata exifData;
-            if (!exifData.load(file))
+            DMetadata metaData;
+            if (!metaData.load(file))
             {
                 kdDebug() << "ExifRotate: no Exif data found: " << file << endl;
                 return true;
@@ -98,7 +98,7 @@ bool exifRotate(const QString& file)
                 
             // we have the exif info. check the orientation
         
-            switch(exifData.getImageOrientation())
+            switch(metaData.getImageOrientation())
             {
                 case(DMetadata::ORIENTATION_UNSPECIFIED):
                 case(DMetadata::ORIENTATION_NORMAL):
@@ -219,21 +219,25 @@ bool exifRotate(const QString& file)
 
             // Reset the Exif orientation tag of the temp image to normal
             kdDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
-            exifData.load(temp);
-            exifData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-
+            metaData.load(temp);
+            metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+            QImage img(temp);
+            
             // Get the new image dimension of the temp image. Using a dummy QImage objet here 
             // has a sense because the Exif dimension informations can be missing from original image.
             // Get new dimensions with QImage will always work...
-            QImage img(temp);
-            exifData.setImageDimensions(img.size());
+            metaData.setImageDimensions(img.size());
 
-            // Update the thumbnail.
-            QImage thumb = img.scale(160, 120, QImage::ScaleMin);
-            exifData.setExifThumbnail(thumb);
+            // Update the image preview.
+            QImage preview = img.scale(640, 480, QImage::ScaleMin);
+            metaData.setImagePreview(preview);
+
+            // Update the image thumbnail.
+            QImage thumb = preview.scale(160, 120, QImage::ScaleMin);
+            metaData.setExifThumbnail(thumb);
 
             // We update all new metadata now...
-            exifData.applyChanges();
+            metaData.applyChanges();
         
             // -----------------------------------------------------------------------------
             // set the file modification time of the temp file to that
