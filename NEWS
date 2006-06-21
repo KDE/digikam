@@ -2,6 +2,8 @@
 
 Bugs fixed:
 
+    o Unsupported initialization of CameraList object (#129610)
+
     o digikam "Mount and Download" Problems (#124952)
 
     o Thumbnail generation fails with raw images (#128283)
