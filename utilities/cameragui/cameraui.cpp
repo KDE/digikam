@@ -117,7 +117,9 @@ public:
     }
 
     bool                          busy;
-
+    bool                          closed;
+    
+    QStringList                   currentlyDeleting;
     QStringList                   foldersToScan;
 
     QPopupMenu                   *downloadMenu;
@@ -152,10 +154,6 @@ public:
     AnimWidget                   *anim;
 
     ImagePropertiesSideBarCamGui *rightSidebar;
-
-    bool                          closed;
-
-    QStringList                   currentlyDeleting;
 };
 
 CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
