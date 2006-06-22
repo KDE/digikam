@@ -223,6 +223,11 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         d->height     = d->origHeight;
         valRet        = true;
 
+        // Raw file are already rotated properlly by dcraw. Only rotate JPEG file.
+        // TODO support TIFF/EP file here like JPEG.
+        if (d->exifOrient && d->image.attribute("format").toString() == QString("JPEG"))
+            exifRotate(d->filename);
+        
         /* -----------------------------------------------------------------------------
          * ICC workflow rules depending of IO file settings and ICC managment settings
          * if a RAW image is loaded:
@@ -419,11 +424,6 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         valRet = false;
     }
 
-    // Raw file are already rotated properlly by dcraw. Only rotate JPEG file.
-    // TODO support TIFF/EP file here like JPEG.
-    if (d->exifOrient && d->image.attribute("format").toString() == QString("JPEG"))
-        exifRotate(d->filename);
-    
     emit signalImageLoaded(d->filename, valRet);
     setModified();
 }
