@@ -799,7 +799,7 @@ void ImageEffect_ICCProof::readSettings()
         }
         else
         {
-            QString message = i18n("ICC profiles path seems to be invalid.You'll not be able to use \"Default profile\"\
+            QString message = i18n("ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
                                     options.  \nPlease solve it in digiKam setup.");
             slotToggledWidgets( false );
             KMessageBox::information(this, message);
