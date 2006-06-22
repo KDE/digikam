@@ -27,6 +27,7 @@
 
 #include <qwidget.h>
 #include <qmap.h>
+#include <qdir.h>
 
 class KDialogBase;
 
@@ -54,6 +55,7 @@ private:
     void disableWidgets();
     void profileInfo(const QString&);
     void restoreSettings();
+    bool parseProfilesfromDir(const QFileInfoList* files);
 
 private slots:
 

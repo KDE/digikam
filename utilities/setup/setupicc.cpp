@@ -36,7 +36,6 @@
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qstringlist.h>
-#include <qdir.h>
 #include <qmap.h>
 #include <qtooltip.h>
 
@@ -415,7 +414,6 @@ void SetupICC::fillCombos(const QString& path, bool report)
     if (!d->enableColorManagement->isChecked())
         return;
 
-    cmsHPROFILE tmpProfile=0;
     d->inProfilesKC->clear();
     d->monitorProfilesKC->clear();
     d->workProfilesKC->clear();
@@ -437,9 +435,56 @@ void SetupICC::fillCombos(const QString& path, bool report)
     }    
     d->mainDialog->enableButtonOK(true);
 
-    QDir profilesDir(QFile::encodeName(path), "*.icc;*.icm", QDir::Files);
-    const QFileInfoList* files = profilesDir.entryInfoList();
-    bool findIccFiles = false;    
+    // Look the ICC profile path repository set by user.
+    QDir userProfilesDir(QFile::encodeName(path), "*.icc;*.icm", QDir::Files);
+    const QFileInfoList* usersFiles = userProfilesDir.entryInfoList();
+    kdDebug() << "Scanning ICC profiles from user repository: " << path << endl;
+
+    if ( !parseProfilesfromDir(usersFiles) )
+    {
+        if (report)
+        {
+            QString message = i18n("<p>Sorry, there is no ICC profiles files in ");
+            message.append(path);
+            message.append(i18n("</p>"));
+            KMessageBox::sorry(this, message);
+        }
+        
+        kdDebug() << "No ICC profile files found!!!" << endl;
+        d->mainDialog->enableButtonOK(false);
+        return;
+    }
+
+    // Look the ICC color-space profile path include with digiKam dist.
+    KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+    QString digiKamProfilesPath = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+    QDir digiKamProfilesDir(QFile::encodeName(digiKamProfilesPath), "*.icc;*.icm", QDir::Files);
+    const QFileInfoList* digiKamFiles = digiKamProfilesDir.entryInfoList();
+    kdDebug() << "Scanning ICC profiles include with digiKam: " << digiKamProfilesPath << endl;
+    parseProfilesfromDir(digiKamFiles);
+
+    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
+    
+    d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
+    if (d->monitorICCPath.keys().isEmpty())
+    {
+        d->managedView->setEnabled(false);
+        d->managedView->setChecked(false);
+    }
+    else
+    {
+        d->managedView->setEnabled(true);
+    }
+    
+    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
+    
+    d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
+}
+
+bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
+{
+    cmsHPROFILE tmpProfile=0;
+    bool findIccFiles=false;
 
     if (files)
     {
@@ -524,38 +569,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
             ++it;
         }
     }
-
-    if (!findIccFiles)
-    {
-        if (report)
-        {
-            QString message = i18n("<p>Sorry, there is no ICC profiles files in ");
-            message.append(path);
-            message.append(i18n("</p>"));
-            KMessageBox::sorry(this, message);
-        }
-        
-        kdDebug() << "No ICC profile files found!!!" << endl;
-        d->mainDialog->enableButtonOK(false);
-        return;
-    }
-
-    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
     
-    d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
-    if (d->monitorICCPath.keys().isEmpty())
-    {
-        d->managedView->setEnabled(false);
-        d->managedView->setChecked(false);
-    }
-    else
-    {
-        d->managedView->setEnabled(true);
-    }
-    
-    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
-    
-    d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
+    return findIccFiles;
 }
 
 void SetupICC::slotToggledWidgets(bool t)
