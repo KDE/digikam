@@ -3,7 +3,7 @@
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2005-11-01
  * Description : A digital camera RAW files loader for DImg 
- *               framework using dcraw program.
+ *               framework using an external dcraw instance.
  *
  * Copyright 2005-2006 by Gilles Caulier and Marcel Wiesweg
  *
@@ -24,11 +24,6 @@
 // when we use threaded image loader interface for each image
 // files io. Uncomment this line only for debugging.
 #define ENABLE_DEBUG_MESSAGES
-
-extern "C"
-{
-#include <unistd.h>
-}
 
 // C++ includes.
 
@@ -62,7 +57,6 @@ RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
     m_sixteenBit          = rawDecodingSettings.sixteenBitsImage;
-    m_hasAlpha            = false;
     m_rawDecodingSettings = rawDecodingSettings;
 
     m_observer            = 0;
@@ -101,8 +95,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 
         if (m_dataPos > checkpoint)
         {
-            int size = m_width * m_height * 
-                       (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += granularity(observer, size, 0.8);
             observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
         }
@@ -426,7 +419,8 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         // where the blanks are newline characters
 
         QString magic = QString::fromAscii(buffer, 2);
-        if (magic != "P6") {
+        if (magic != "P6") 
+        {
             kdError() << "Cannot parse header from dcraw: Magic is " << magic << endl;
             m_process->kill();
             return;
@@ -470,8 +464,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         buflen -= i;
 
         // allocate buffer
-        m_data    = new uchar[m_width * m_height * 
-                    (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
+        m_data    = new uchar[m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
         m_dataPos = 0;
     }
 
@@ -488,12 +481,8 @@ void RAWLoader::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 
 bool RAWLoader::save(const QString&, DImgLoaderObserver *)
 {
+    // RAW files are always Read only.
     return false;
-}
-
-bool RAWLoader::hasAlpha() const
-{
-    return m_hasAlpha;
 }
 
 bool RAWLoader::sixteenBit() const

@@ -3,7 +3,7 @@
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2005-11-01
  * Description : A digital camera RAW files loader for DImg 
- *               framework using dcraw program.
+ *               framework using an external dcraw instance.
  * 
  * Copyright 2005-2006 by Gilles Caulier and Marcel Wiesweg
  *
@@ -35,9 +35,10 @@
 #include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
-class KProcess;
 class QCustomEvent;
 class QTimer;
+
+class KProcess;
 
 namespace Digikam
 {
@@ -55,33 +56,9 @@ public:
     bool load(const QString& filePath, DImgLoaderObserver *observer);
     bool save(const QString& filePath, DImgLoaderObserver *observer);
 
-    virtual bool hasAlpha()   const;
+    virtual bool hasAlpha()   const { return false; };
+    virtual bool isReadOnly() const { return true;  };
     virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const { return true; };
-
-private:
-
-    bool                m_sixteenBit;
-    bool                m_hasAlpha;
-
-    RawDecodingSettings m_rawDecodingSettings;
-
-    DImgLoaderObserver *m_observer;
-    QString             m_filePath;
-
-    KProcess           *m_process;
-    bool                m_running;
-    bool                m_normalExit;
-    QTimer             *m_queryTimer;
-
-    uchar              *m_data;
-    int                 m_dataPos;
-    int                 m_width;
-    int                 m_height;
-    int                 m_rgbmax;
-
-    QMutex              m_mutex;
-    QWaitCondition      m_condVar;
 
 private:
 
@@ -98,6 +75,34 @@ private slots:
     void slotReceivedStdout(KProcess *, char *buffer, int buflen);
     void slotReceivedStderr(KProcess *, char *buffer, int buflen);
     void slotContinueQuery();
+
+private:
+
+    bool                m_sixteenBit;
+    bool                m_hasAlpha;
+    bool                m_running;
+    bool                m_normalExit;
+
+    uchar              *m_data;
+    
+    int                 m_dataPos;
+    int                 m_width;
+    int                 m_height;
+    int                 m_rgbmax;
+
+    QString             m_filePath;
+
+    QMutex              m_mutex;
+    
+    QWaitCondition      m_condVar;
+    
+    QTimer             *m_queryTimer;
+
+    KProcess           *m_process;
+    
+    DImgLoaderObserver *m_observer;
+
+    RawDecodingSettings m_rawDecodingSettings;
 
 };
 
