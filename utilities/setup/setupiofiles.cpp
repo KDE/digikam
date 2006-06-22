@@ -70,7 +70,6 @@ public:
         enableNoiseReduction    = 0;
         NRSigmaDomain           = 0;
         NRSigmaRange            = 0;
-        iccColorsCorrection     = 0;
 
         JPEGcompression         = 0;
         PNGcompression          = 0;
@@ -82,7 +81,6 @@ public:
     QLabel          *labelJPEGcompression;
     QLabel          *labelPNGcompression;
 
-    QComboBox       *iccColorsCorrection;
     QComboBox       *RAWquality;
 
     QCheckBox       *sixteenBitsImage;
@@ -213,27 +211,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     grid1->addMultiCellWidget(d->labelNRSigmaRange, 9, 9, 0, 0);
     grid1->addMultiCellWidget(d->NRSigmaRange, 9, 9, 1, 1);
 
-    QHBoxLayout *hlay = new QHBoxLayout( KDialog::spacingHint());
-    QLabel *labelICCCorrection = new QLabel(i18n("ICC profile correction during decoding:"), RAWfileOptionsGroup);
-    d->iccColorsCorrection = new QComboBox( false, RAWfileOptionsGroup );
-    d->iccColorsCorrection->insertItem( i18n("Disabled (recommended)") );
-    d->iccColorsCorrection->insertItem( i18n("Using embeded profile") );
-    d->iccColorsCorrection->insertItem( i18n("Using digiKam ICC settings") );
-    QWhatsThis::add( d->iccColorsCorrection, i18n("<p>This option toggle the right way to use ICC color profiles during "
-                     "RAW files decoding.<p>"
-                     "If you want to process all the ICC color correction outside RAW file decoding, use <b>Disabled</b>. "
-                     "This option is <u>hightly recommended</u> to use the fine settings provided by digiKam color management workflow.<p>"
-                     "If you want to use the embeded ICC profile includes into RAW files (if exists), use "
-                     "<b>Using embeded profile</b>. Warning: with this option the ICC color correction processed outside "
-                     "the RAW file decoding will be disable! This option require dcraw version >= 0.8.0.<p>"
-                     "If you want to use the ICC profiles setttings from ICC color management page, use "
-                     "<b>Using digiKam ICC Settings</b>. You need to enable and set the right ICC color "
-                     "management for that. This option require dcraw version >= 0.8.0.<p>"));
-    hlay->addWidget(labelICCCorrection);
-    hlay->addWidget(d->iccColorsCorrection);
-    grid1->addMultiCellLayout(hlay, 10, 10, 0, 1);
-
-    grid1->setColStretch(1, 11);
+    grid1->setColStretch(1, 10);
     layout->addWidget(RAWfileOptionsGroup);
 
     // --------------------------------------------------------
@@ -332,7 +310,6 @@ void SetupIOFiles::applySettings()
     config->writeEntry("AutomaticColorBalance", d->automaticColorBalance->isChecked());
     config->writeEntry("CameraColorBalance", d->cameraColorBalance->isChecked());
     config->writeEntry("RGBInterpolate4Colors", d->RGBInterpolate4Colors->isChecked());
-    config->writeEntry("RAWICCCorrectionMode", d->iccColorsCorrection->currentItem());
     config->writeEntry("JPEGCompression", d->JPEGcompression->value());
     config->writeEntry("PNGCompression", d->PNGcompression->value());
     config->writeEntry("TIFFCompression", d->TIFFcompression->isChecked());
@@ -359,7 +336,6 @@ void SetupIOFiles::readSettings()
     d->cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
     d->automaticColorBalance->setChecked(config->readBoolEntry("CameraColorBalance", true));
     d->RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));
-    d->iccColorsCorrection->setCurrentItem(config->readNumEntry("RAWICCCorrectionMode", RawDecodingSettings::NOICC));
 
     d->JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
     d->PNGcompression->setValue( config->readNumEntry("PNGCompression", 9) );

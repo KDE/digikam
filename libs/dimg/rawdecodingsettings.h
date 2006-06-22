@@ -133,8 +133,7 @@ public:
     
     /** The file path to ICC output color profile (output profile). Set empty to use default 
         sRGB color space. */
-    QString outputICCProfilePath;
-    
+    QString outputICCProfilePath;    
 };
 
 }  // namespace Digikam

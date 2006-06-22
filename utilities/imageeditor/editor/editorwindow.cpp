@@ -734,10 +734,6 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
     m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
-    m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode  = config->readNumEntry("RAWICCCorrectionMode",
-                                                                                         RawDecodingSettings::NOICC);
-    m_IOFileSettings->rawDecodingSettings.cameraICCProfilePath    = d->ICCSettings->inputSetting;
-    m_IOFileSettings->rawDecodingSettings.outputICCProfilePath    = d->ICCSettings->workspaceSetting;
     
     // -- GUI Settings -------------------------------------------------------
     
