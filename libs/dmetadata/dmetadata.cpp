@@ -530,15 +530,16 @@ QSize DMetadata::getImageDimensions()
     {    
         long width=-1, height=-1;
 
-        // Try to get Exif.Image tags
+        // Try to get Exif.Photo tags
+        
         Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifKey key("Exif.Image.ImageWidth");
+        Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
        
         if (it != exifData.end())
             width = it->toLong();
 
-        Exiv2::ExifKey key2("Exif.Image.ImageLength");
+        Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
         
         if (it2 != exifData.end())
@@ -547,18 +548,18 @@ QSize DMetadata::getImageDimensions()
         if (width != -1 && height != -1)
             return QSize(width, height);
 
-        // Try to get Exif.Photo tags
-        
+        // Try to get Exif.Image tags
+                
         width=-1;
         height=-1;
 
-        Exiv2::ExifKey key3("Exif.Photo.PixelXDimension");
+        Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
        
         if (it3 != exifData.end())
             width = it3->toLong();
 
-        Exiv2::ExifKey key4("Exif.Photo.PixelYDimension");
+        Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
         
         if (it4 != exifData.end())
