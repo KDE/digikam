@@ -232,7 +232,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Embed profile"));
-    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embedd"
+    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embed"
                                              " into the image the selected color profile.</p>"));
 
     m_BPCBox = new QCheckBox(m_optionsBG);
