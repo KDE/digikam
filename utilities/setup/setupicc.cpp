@@ -211,8 +211,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfilesKC->setMaximumWidth(320);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
-                                                "You need to toogle on <b>Use color managed view</b> option from "
-                                                "the Advanced Settings pannel to use this profile.</p>"));
+                     "You need to toogle on <b>Use color managed view</b> option from "
+                     "the Advanced Settings pannel to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected monitor profile.</p>"));
@@ -265,7 +265,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     d->bpcAlgorithm = new QCheckBox(advancedSettingsBox);
     d->bpcAlgorithm->setText(i18n("Use black point compensation"));
-    QWhatsThis::add( d->bpcAlgorithm, i18n("<p><b>Black Point Compensation</b> is a way to make adjustments between the maximum "
+    QWhatsThis::add( d->bpcAlgorithm, i18n("<p><b>Black Point Compensation</b> is a way to make "
+                     "adjustments between the maximum "
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
 
@@ -384,7 +385,8 @@ void SetupICC::readSettings()
 
     config->setGroup("Color Management");
 
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));    d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
+    d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
@@ -427,7 +429,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
     if (path.isEmpty() || !dir.exists() || !dir.isReadable())
     {
         if (report)
-            KMessageBox::sorry(this, i18n("<p>You must set a correct default path for your ICC color profiles files.</p>"));
+            KMessageBox::sorry(this, i18n("<p>You must set a correct default "
+                                          "path for your ICC color profiles files.</p>"));
     
         d->mainDialog->enableButtonOK(false);
         return;
@@ -579,10 +582,7 @@ void SetupICC::slotToggledWidgets(bool t)
     d->infoProofProfiles->setEnabled(t);
 
     if (t)
-    {
-//         fillCombos(d->defaultPathKU->url(), true);
         restoreSettings();
-    }
     else
         d->mainDialog->enableButtonOK(true);
 }
@@ -622,16 +622,11 @@ void SetupICC::profileInfo(const QString& profile)
 void SetupICC::restoreSettings()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("Color Management");
 
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath",
-                             QString::null));
-//     d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM",
-//                                          false));
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent",
-                                                              0));
+    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
 
     if (config->readBoolEntry("BehaviourICC"))
@@ -639,13 +634,10 @@ void SetupICC::restoreSettings()
     else
         d->defaultAskICC->setChecked(true);
 
-//     slotToggledWidgets(d->enableColorManagement->isChecked());
     fillCombos(d->defaultPathKU->url(), false);
 
-    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile",
-                                                           0));
-    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile",
-                                                               0));
+    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
     d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
     d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
 }
