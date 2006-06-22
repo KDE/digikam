@@ -45,14 +45,22 @@ QString LoadingDescription::cacheKey() const
         return filePath;
 }
 
+QStringList LoadingDescription::lookupCacheKeys() const
+{
+    // Build a hierarchy which cache entries may be used for this LoadingDescription.
+    // Typically, the first is the best, but an actual loading operation will use a faster
+    // way and will effectively add the last entry of the list to the cache
+    QStringList keys;
+    keys.append(filePath);
+    if (rawDecodingSettings.halfSizeColorImage)
+        keys.append(filePath + "-halfSizeColorImage");
+    return keys;
+}
+
 bool LoadingDescription::operator==(const LoadingDescription &other) const
 {
     return filePath == other.filePath &&
-            rawDecodingSettings.cameraColorBalance    == other.rawDecodingSettings.cameraColorBalance &&
-            rawDecodingSettings.automaticColorBalance == other.rawDecodingSettings.automaticColorBalance &&
-            rawDecodingSettings.RGBInterpolate4Colors == other.rawDecodingSettings.RGBInterpolate4Colors &&
-            rawDecodingSettings.enableRAWQuality      == other.rawDecodingSettings.enableRAWQuality &&
-            rawDecodingSettings.RAWQuality            == other.rawDecodingSettings.RAWQuality;
+            rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage;
 }
 
 //---------------------------------------------------------------------------------------------------

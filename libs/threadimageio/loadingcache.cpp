@@ -66,15 +66,15 @@ LoadingCache::~LoadingCache()
     m_instance = 0;
 }
 
-DImg *LoadingCache::retrieveImage(const QString &filePath)
+DImg *LoadingCache::retrieveImage(const QString &cacheKey)
 {
-    return d->imageCache.find(filePath);
+    return d->imageCache.find(cacheKey);
 }
 
-bool LoadingCache::putImage(const QString &filePath, DImg *img)
+bool LoadingCache::putImage(const QString &cacheKey, DImg *img)
 {
     // use size of image as cache cost
-    if ( d->imageCache.insert(filePath, img, img->numBytes()) )
+    if ( d->imageCache.insert(cacheKey, img, img->numBytes()) )
     {
         return true;
     }
@@ -86,9 +86,9 @@ bool LoadingCache::putImage(const QString &filePath, DImg *img)
     }
 }
 
-void LoadingCache::removeImage(const QString &filePath)
+void LoadingCache::removeImage(const QString &cacheKey)
 {
-    d->imageCache.remove(filePath);
+    d->imageCache.remove(cacheKey);
 }
 
 void LoadingCache::removeImages()
@@ -104,17 +104,17 @@ bool LoadingCache::isCacheable(const DImg *img)
 
 void LoadingCache::addLoadingProcess(LoadingProcess *process)
 {
-    d->loadingDict.insert(process->filePath(), process);
+    d->loadingDict.insert(process->cacheKey(), process);
 }
 
-LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString &filePath)
+LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString &cacheKey)
 {
-    return d->loadingDict.find(filePath);
+    return d->loadingDict.find(cacheKey);
 }
 
 void LoadingCache::removeLoadingProcess(LoadingProcess *process)
 {
-    d->loadingDict.remove(process->filePath());
+    d->loadingDict.remove(process->cacheKey());
 }
 
 void LoadingCache::setCacheSize(int megabytes)

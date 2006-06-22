@@ -48,7 +48,8 @@ class LoadingProcess
 public:
 
     virtual bool completed() = 0;
-    virtual const QString &filePath() = 0;
+    virtual QString filePath() = 0;
+    virtual QString cacheKey() = 0;
     virtual void addListener(LoadingProcessListener *listener) = 0;
     virtual void removeListener(LoadingProcessListener *listener) = 0;
 
@@ -78,18 +79,18 @@ public:
 
     // Retrieves an image for the given string from the cache,
     // or 0 if no image is found.
-    DImg *retrieveImage(const QString &filePath);
+    DImg *retrieveImage(const QString &cacheKey);
     // Returns whether the given DImg fits in the cache.
     bool isCacheable(const DImg *img);
     // Put image into for given string into the cache.
     // Returns true if image has been put in the cache, false otherwise.
     // Ownership of the DImg instance is passed to the cache.
     // When it cannot be put in the cache it is deleted.
-    bool putImage(const QString &filePath, DImg *img);
-    void removeImage(const QString &filePath);
+    bool putImage(const QString &cacheKey, DImg *img);
+    void removeImage(const QString &cacheKey);
     void removeImages();
 
-    LoadingProcess *retrieveLoadingProcess(const QString &filePath);
+    LoadingProcess *retrieveLoadingProcess(const QString &cacheKey);
     void addLoadingProcess(LoadingProcess *process);
     void removeLoadingProcess(LoadingProcess *process);
 

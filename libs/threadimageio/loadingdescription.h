@@ -55,7 +55,8 @@ public:
     QString             filePath;
     RawDecodingSettings rawDecodingSettings;
 
-    QString cacheKey() const;
+    QString             cacheKey() const;
+    QStringList         lookupCacheKeys() const;
     bool operator==(const LoadingDescription &other) const;
 };
 

@@ -332,8 +332,6 @@ void ImageWindow::slotLoadCurrent()
 {
     KURL::List::iterator it = m_urlList.find(m_urlCurrent);
 
-    setViewToURL(*it);
-
     if (it != m_urlList.end())
     {
         m_canvas->load(m_urlCurrent.path(), m_IOFileSettings);
@@ -342,6 +340,11 @@ void ImageWindow::slotLoadCurrent()
         if (it != m_urlList.end())
             m_canvas->preload((*it).path());
     }
+
+    // Do this _after_ the canvas->load(), so that the main view histogram does not load
+    // a smaller version if a raw image, and after that the DImgInterface loads the full version.
+    // So first let DImgInterface create its loading task, only then any external objects.
+    setViewToURL(m_urlCurrent);
 }
 
 void ImageWindow::setViewToURL(const KURL &url)

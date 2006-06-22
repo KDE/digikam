@@ -116,45 +116,62 @@ void SharedLoadingTask::execute()
     LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
-        DImg *cachedImg;
-        if ( (cachedImg = cache->retrieveImage(m_loadingDescription.cacheKey())) )
+
+        // find possible cached images
+        DImg *cachedImg = 0;
+        QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
+        for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
+            if ( (cachedImg = cache->retrieveImage(*it)) )
+                break;
+        }
+
+        if (cachedImg)
         {
             // image is found in image cache, loading is successfull
-            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " found in image cache" << endl;
             DImg img(*cachedImg);
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
                 img = img.copy();
             QApplication::postEvent(m_thread, new LoadedEvent(m_loadingDescription.filePath, img));
             return;
         }
-        else if ( (usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.cacheKey())) )
-        {
-            // Other process is right now loading this image.
-            // Add this task to the list of listeners and
-            // attach this thread to the other thread, wait until loading
-            // has finished.
-            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " currently loading, waiting..." << endl;
-            usedProcess->addListener(this);
-            // break loop when either the loading has completed, or this task is being stopped
-            while ( !usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
-                lock.timedWait();
-            // remove listener from process
-            usedProcess->removeListener(this);
-            // wake up the process which is waiting until all listeners have removed themselves
-            lock.wakeAll();
-            //kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
-            return;
-        }
         else
         {
-            // Neither in cache, nor currently loading in different thread.
-            // Load it here and now, add this LoadingProcess to cache list.
-            //kdDebug() << "SharedLoadingTask " << this << ": " << m_loadingDescription.filePath << " neither in cache nor loading, loading it now." << endl;
-            cache->addLoadingProcess(this);
-            // Add this to the list of listeners
-            addListener(this);
-            // for use in setStatus
-            usedProcess = this;
+            // find possible running loading process
+            usedProcess = 0;
+            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
+                if ( (usedProcess = cache->retrieveLoadingProcess(*it)) )
+                {
+                    break;
+                }
+            }
+
+            if (usedProcess)
+            {
+                // Other process is right now loading this image.
+                // Add this task to the list of listeners and
+                // attach this thread to the other thread, wait until loading
+                // has finished.
+                usedProcess->addListener(this);
+                // break loop when either the loading has completed, or this task is being stopped
+                while ( !usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                    lock.timedWait();
+                // remove listener from process
+                usedProcess->removeListener(this);
+                // wake up the process which is waiting until all listeners have removed themselves
+                lock.wakeAll();
+                //kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
+                return;
+            }
+            else
+            {
+                // Neither in cache, nor currently loading in different thread.
+                // Load it here and now, add this LoadingProcess to cache list.
+                cache->addLoadingProcess(this);
+                // Add this to the list of listeners
+                addListener(this);
+                // for use in setStatus
+                usedProcess = this;
+            }
         }
     }
 
@@ -291,9 +308,14 @@ bool SharedLoadingTask::completed()
     return m_completed;
 }
 
-const QString &SharedLoadingTask::filePath()
+QString SharedLoadingTask::filePath()
 {
     return m_loadingDescription.filePath;
+}
+
+QString SharedLoadingTask::cacheKey()
+{
+    return m_loadingDescription.cacheKey();
 }
 
 void SharedLoadingTask::addListener(LoadingProcessListener *listener)

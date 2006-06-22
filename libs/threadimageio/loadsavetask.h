@@ -243,7 +243,8 @@ public:
     // LoadingProcess
 
     virtual bool completed();
-    virtual const QString &filePath();
+    virtual QString filePath();
+    virtual QString cacheKey();
     virtual void addListener(LoadingProcessListener *listener);
     virtual void removeListener(LoadingProcessListener *listener);
 
