@@ -207,16 +207,16 @@ Canvas::Canvas(QWidget *parent)
     d->histoChannelType = ImageHistogram::ValueChannel;
 
     connect(d->im, SIGNAL(signalModified()),
-            SLOT(slotModified()));
+            this, SLOT(slotModified()));
 
     connect(d->im, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
-            SIGNAL(signalUndoStateChanged(bool, bool, bool)));
+            this, SIGNAL(signalUndoStateChanged(bool, bool, bool)));
 
     connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool)),
-            SLOT(slotImageLoaded(const QString&, bool)));
+            this, SLOT(slotImageLoaded(const QString&, bool)));
 
     connect(d->im, SIGNAL(signalImageSaved(const QString&, bool)),
-            SLOT(slotImageSaved(const QString&, bool)));
+            this, SLOT(slotImageSaved(const QString&, bool)));
 
     connect(d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
             this, SIGNAL(signalLoadingProgress(const QString&, float)));
@@ -225,13 +225,13 @@ Canvas::Canvas(QWidget *parent)
             this, SIGNAL(signalSavingProgress(const QString&, float)));
             
     connect(this, SIGNAL(signalSelected(bool)),
-            SLOT(slotSelected()));
+            this, SLOT(slotSelected()));
             
     connect(d->paintTimer, SIGNAL(timeout()),
-            SLOT(slotPaintSmooth()));
+            this, SLOT(slotPaintSmooth()));
     
     connect(this, SIGNAL(contentsMoving(int, int)),
-            SLOT(slotContentsMoving(int,int)));
+            this, SLOT(slotContentsMoving(int,int)));
 
     viewport()->setMouseTracking(false);
 }
@@ -480,7 +480,6 @@ void Canvas::readMetadataFromFile(const QString &file)
     d->im->readMetadataFromFile(file);
 }
 
-
 void Canvas::clearUndoHistory()
 {
     d->im->clearUndoManager();
@@ -578,10 +577,10 @@ void Canvas::updateContentsSize()
     viewport()->setUpdatesEnabled(false);
 
     d->paintTimer->stop();
-    d->ltActive      = false;
-    d->rtActive      = false;
-    d->lbActive      = false;
-    d->rbActive      = false;
+    d->ltActive = false;
+    d->rtActive = false;
+    d->lbActive = false;
+    d->rbActive = false;
     viewport()->unsetCursor();
     viewport()->setMouseTracking(false);
 
@@ -607,8 +606,7 @@ void Canvas::updateContentsSize()
         xoffset = QMAX(xoffset, 0);
         yoffset = QMAX(yoffset, 0);
 
-        d->pixmapRect = QRect(xoffset, yoffset,
-                              wZ, hZ);
+        d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
     }
     else
     {
