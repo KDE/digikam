@@ -42,6 +42,7 @@ public:
 
     enum Page 
     {
+        LastPageUsed = -1,
         General = 0,
         Metadata,
         Identify,
@@ -57,7 +58,7 @@ public:
         Miscellaneous
     };
 
-    Setup(QWidget* parent=0, const char* name=0, Page page=General);
+    Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
     SetupPlugins    *kipiPluginsPage();

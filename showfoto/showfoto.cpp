@@ -597,7 +597,7 @@ void ShowFoto::show()
 
 void ShowFoto::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::EditorPage);
+    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
     
     if (setup.exec() != QDialog::Accepted)
         return;

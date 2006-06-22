@@ -28,6 +28,8 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 // Local includes.
 
@@ -103,12 +105,24 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
-    showPage((int) page);
+    if (page != LastPageUsed)
+        showPage((int) page);
+    else 
+    {
+        KConfig* config = kapp->config();
+        config->setGroup("General Settings");
+        showPage(config->readNumEntry("Setup Page", EditorPage));        
+    }
+    
     show();
 }
 
 Setup::~Setup()
 {
+    KConfig* config = kapp->config();
+    config->setGroup("General Settings");
+    config->writeEntry("Setup Page", activePageIndex());
+    config->sync();    
     delete d;
 }
 

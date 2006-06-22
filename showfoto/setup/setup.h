@@ -49,6 +49,7 @@ public:
 
     enum Page 
     {
+        LastPageUsed = -1,
         EditorPage=0,
         IOFilesPage,
         PluginsPage,
@@ -56,7 +57,7 @@ public:
         ICCPage
     };
     
-    Setup(QWidget* parent=0, const char* name=0, Page page=EditorPage);
+    Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
     Digikam::SetupImgPlugins *imagePluginsPage();
