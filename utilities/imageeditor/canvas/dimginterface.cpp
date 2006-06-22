@@ -210,7 +210,6 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     if (fileName != d->filename)
         return;
 
-    bool apply;
     bool valRet = false;
     d->image    = img;
 
@@ -233,22 +232,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
             if (QFile::exists(d->cmSettings->workspaceSetting) && 
                 QFile::exists(d->cmSettings->inputSetting))
             {
-                if (d->cmSettings->askOrApplySetting)
-                {
-                    apply = true;
-                }
-                else
-                {
-                    apply = false;
-                }
-    
                 IccTransform trans;
     
                 // First possibility: image has no embedded profile
                 if(d->image.getICCProfil().isNull())
                 {
                     // Ask or apply?
-                    if (apply)
+                    if (d->cmSettings->askOrApplySetting)
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                         trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
@@ -289,7 +279,8 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                 {
                     trans.getEmbeddedProfile( d->image );
     
-                    if (apply)
+                    // Ask or apply?
+                    if (d->cmSettings->askOrApplySetting)
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                         trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting), 
@@ -302,6 +293,8 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                         if (trans.getEmbeddedProfileDescriptor()
                             != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
                         {
+                            // Embedded profile and default workspace profile are different: ask to user!
+                        
                             kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
     
                             // To repaint image in canvas before to ask about to apply ICC profile.
@@ -328,13 +321,23 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                                 break;
                             }
                         }
+                        else
+                        {
+                            // Embedded profile and default workspace profile are the same : just apply it.
+                            
+                            if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                            trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting), 
+                                              QFile::encodeName(d->cmSettings->workspaceSetting));
+                            trans.apply( d->image );
+                            if (d->parent) d->parent->unsetCursor();
+                        }
                     }
                 }
             }
             else
             {
-                QString message = i18n("ICC profiles path seems to be invalid. No transform will be done.\n \
-                                        Please solve it in digiKam setup.");
+                QString message = i18n("ICC profiles path seems to be invalid. No transform will be done.<p>"
+                                       "Please solve it in digiKam setup.");
                 KMessageBox::information(d->parent, message);
             }
         }
