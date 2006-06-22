@@ -112,7 +112,7 @@ void IccTransform::getTransformType(bool do_proof_profile)
     }
 }
 
-void IccTransform::getEmbeddedProfile(DImg image)
+void IccTransform::getEmbeddedProfile(const DImg& image)
 {
     if (!image.getICCProfil().isNull())
     {

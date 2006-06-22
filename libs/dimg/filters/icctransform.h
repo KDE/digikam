@@ -47,7 +47,7 @@ public:
     void apply(DImg& image);
     void apply(DImg& image, QByteArray& profile, int intent, 
                bool useBPC=false, bool checkGamut=false, bool useBuiltin=false);
-    void getEmbeddedProfile(DImg image);
+    void getEmbeddedProfile(const DImg& image);
 
     int  getRenderingIntent();
     
