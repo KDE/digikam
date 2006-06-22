@@ -57,15 +57,15 @@ public:
     QByteArray proofProfile() const;
     
     //Input profile from file
-    void setProfiles(QString input_profile, QString output_profile);
-    void setProfiles(QString input_profile, QString output_profile, QString proof_profile);
+    void setProfiles(const QString& input_profile, const QString& output_profile);
+    void setProfiles(const QString& input_profile, const QString& output_profile, const QString& proof_profile);
     
     //Embedded input profile
-    void setProfiles(QString output_profile);
-    void setProfiles(QString output_profile, QString proof_profile, bool forProof);
+    void setProfiles(const QString& output_profile);
+    void setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof);
 
     //Profile info
-    QString getProfileDescription(QString profile);
+    QString getProfileDescription(const QString& profile);
 
     QString getEmbeddedProfileDescriptor();
     QString getInputProfileDescriptor();

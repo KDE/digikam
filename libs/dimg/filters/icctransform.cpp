@@ -121,15 +121,15 @@ void IccTransform::getEmbeddedProfile(const DImg& image)
     }
 }
 
-void IccTransform::setProfiles(QString input_profile, QString output_profile)
+void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile)
 {
     d->input_profile      = loadICCProfilFile(input_profile);
     d->output_profile     = loadICCProfilFile(output_profile);
     d->has_output_profile = true;
 }
 
-void IccTransform::setProfiles(QString input_profile, QString output_profile, 
-                               QString proof_profile)
+void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile, 
+                               const QString& proof_profile)
 {
     d->input_profile      = loadICCProfilFile(input_profile);
     d->output_profile     = loadICCProfilFile(output_profile);
@@ -137,13 +137,13 @@ void IccTransform::setProfiles(QString input_profile, QString output_profile,
     d->has_output_profile = true;
 }
 
-void IccTransform::setProfiles(QString output_profile)
+void IccTransform::setProfiles(const QString& output_profile)
 {
     d->output_profile     = loadICCProfilFile(output_profile);
     d->has_output_profile = true;
 }
 
-void IccTransform::setProfiles( QString output_profile, QString proof_profile, bool forProof )
+void IccTransform::setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof)
 {
     if (forProof)
     {
@@ -681,7 +681,7 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
        cmsCloseProfile(proofprofile);
 }
 
-QString IccTransform::getProfileDescription(QString profile)
+QString IccTransform::getProfileDescription(const QString& profile)
 {
     cmsHPROFILE _profile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
     QString _description = cmsTakeProductDesc(_profile);
