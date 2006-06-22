@@ -161,7 +161,7 @@ void ImagePreviewWidget::updatePixmap( void )
             
             if (!d->preview.isNull())
             {
-                QPixmap pix(d->preview.scale(contentsRect().size(), QImage::ScaleMin));
+                QPixmap pix(d->preview.smoothScale(contentsRect().size(), QImage::ScaleMin));
                 p.drawPixmap((contentsRect().width()-pix.width())/2,
                              (contentsRect().height()-pix.height())/2, pix,
                              0, 0, pix.width(), pix.height());
