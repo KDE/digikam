@@ -625,7 +625,7 @@ void ImageEffect_ICCProof::finalRendering()
             if (m_embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
-                kdDebug() << "ImageEffect_ICCProof::finalRendering() - 626" << QFile::encodeName(tmpSpacePath) << endl;
+                kdDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
             }
             
             iface->putOriginalImage("Color Management", img.bits());
@@ -790,7 +790,7 @@ void ImageEffect_ICCProof::readSettings()
         spacePath   = config->readPathEntry("WorkProfileFile");
         displayPath = config->readPathEntry("MonitorProfileFile");
         proofPath   = config->readPathEntry("ProofProfileFile");
-        if (QFile::exists(config->readPathEntry("DefulatPath")))
+        if (QFile::exists(config->readPathEntry("DefaultPath")))
         {
             m_displayProfileCB->setURL(config->readPathEntry("DefaultPath")); 
             m_inProfilesCB->setURL(config->readPathEntry("DefaultPath")); 
@@ -800,7 +800,7 @@ void ImageEffect_ICCProof::readSettings()
         else
         {
             QString message = i18n("ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
-                                    options.  \nPlease solve it in digiKam setup.");
+                                    options.<p>Please solve it in digiKam ICC setup.");
             slotToggledWidgets( false );
             KMessageBox::information(this, message);
         }
