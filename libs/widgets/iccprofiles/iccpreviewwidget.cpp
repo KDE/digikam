@@ -20,7 +20,6 @@
  * ============================================================ */
 
 #include <config.h>
-#include LCMS_HEADER
 
 // Qt includes
 
@@ -35,6 +34,13 @@
 #include <kdialog.h>
 #include <ksqueezedtextlabel.h>
 #include <kdebug.h>
+
+// Lcms includes.
+
+#include LCMS_HEADER
+#if LCMS_VERSION < 114
+#define cmsTakeCopyright(profile) "Unknown"
+#endif // LCMS_VERSION < 114
 
 // Local includes.
 
