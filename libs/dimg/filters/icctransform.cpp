@@ -19,10 +19,7 @@
  *
  * ============================================================ */
 
-// Littlecms library includes.
-
 #include <config.h>
-#include LCMS_HEADER
 
 // QT includes
 
@@ -35,6 +32,13 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
+
+// Lcms includes.
+
+#include LCMS_HEADER
+#if LCMS_VERSION < 114
+#define cmsTakeCopyright(profile) "Unknown"
+#endif // LCMS_VERSION < 114
 
 // Local includes
 
