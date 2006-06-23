@@ -32,10 +32,12 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qfile.h>
+#include <qtimer.h>
 
 // KDE includes.
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes.
 
@@ -156,35 +158,46 @@ public:
 
         Measurement.Patches  = 0;
         Measurement.Allowed  = 0;
+        blinkTimer           = 0;
+
         profileDataAvailable = true;
+        loadingImageMode     = false;
+        loadingImageSucess   = false;
+        blinkFlag            = false;
     }
 
-    bool            profileDataAvailable;
+    bool             profileDataAvailable;
+    bool             loadingImageMode;
+    bool             loadingImageSucess;
+    bool             blinkFlag;
 
-    double          gridside;
+    double           gridside;
 
-    int             xBias;
-    int             yBias;
-    int             pxcols;
-    int             pxrows;
+    int              xBias;
+    int              yBias;
+    int              pxcols;
+    int              pxrows;
 
-    QPainter        painter;
-    QPixmap         pixmap;
+    QPainter         painter;
+    QPixmap          pixmap;
+    QTimer          *blinkTimer;
 
-    cmsHPROFILE     hMonitorProfile;
-    cmsHPROFILE     hXYZProfile;
-    cmsHTRANSFORM   hXFORM;
-    cmsCIExyYTRIPLE Primaries;
-    cmsCIEXYZ       MediaWhite;
+    cmsHPROFILE      hMonitorProfile;
+    cmsHPROFILE      hXYZProfile;
+    cmsHTRANSFORM    hXFORM;
+    cmsCIExyYTRIPLE  Primaries;
+    cmsCIEXYZ        MediaWhite;
 
-    MEASUREMENT     Measurement;
+    MEASUREMENT      Measurement;
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMonitor)
                : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new CIETongueWidgetPriv;
+    d->blinkTimer = new QTimer( this );
     setMinimumSize(w, h);
+    cmsErrorAction(LCMS_ERROR_SHOW);    
 
     if (hMonitor)
         d->hMonitorProfile = hMonitor;
@@ -195,6 +208,9 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget *parent, cmsHPROFILE hMon
     d->hXFORM      = cmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
                                         d->hMonitorProfile, TYPE_RGB_8,
                                         INTENT_PERCEPTUAL, 0);
+
+    connect(d->blinkTimer, SIGNAL(timeout()),
+            this, SLOT(slotBlinkTimerDone()));
 }
 
 CIETongueWidget::~CIETongueWidget()
@@ -209,6 +225,22 @@ CIETongueWidget::~CIETongueWidget()
     cmsCloseProfile(d->hXYZProfile);
     cmsCloseProfile(d->hMonitorProfile);
     delete d;
+}
+
+void CIETongueWidget::loadingStarted()
+{
+    d->loadingImageMode   = true;
+    d->loadingImageSucess = false;
+    repaint(false);
+    d->blinkTimer->start(200);
+}
+
+void CIETongueWidget::loadingComplete(bool b)
+{
+    d->blinkTimer->stop();
+    d->loadingImageMode   = false;
+    d->loadingImageSucess = b;
+    repaint(false);
 }
 
 int CIETongueWidget::Grids(double val) const
@@ -662,6 +694,7 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     d->pixmap.setOptimization(QPixmap::BestOptim);
 
     // Widget is disable : drawing grayed frame.
+
     if ( !isEnabled() )
     {
         d->painter.begin(&d->pixmap);
@@ -672,6 +705,47 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
         bitBlt(this, 0, 0, &d->pixmap);
         return;
     }
+
+    // Loading image mode.
+
+    if ( d->loadingImageMode && !d->loadingImageSucess)
+    {
+        d->painter.begin(&d->pixmap);
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
+        d->painter.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+        d->painter.drawRect(0, 0, width(), height());
+
+        if (d->blinkFlag)
+            d->painter.setPen(Qt::green);
+        else 
+            d->painter.setPen(Qt::darkGreen);
+
+        d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                            i18n("Loading image..."));
+
+        d->painter.end();
+        bitBlt(this, 0, 0, &d->pixmap);
+        return;
+    }
+
+    // No profile data to show.
+
+    if (!d->profileDataAvailable)
+    {
+        d->painter.begin(&d->pixmap);
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
+        d->painter.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+        d->painter.drawRect(0, 0, width(), height());
+        d->painter.setPen(Qt::red);
+        d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
+                            i18n("No profile available..."));
+
+        d->painter.end();
+        bitBlt(this, 0, 0, &d->pixmap);
+        return;
+    }
+
+    // Draw the CIE tongue curve.
 
     d->pixmap.fill(Qt::black);
     d->painter.begin(&d->pixmap);
@@ -688,34 +762,32 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     d->painter.setBackgroundColor(qRgb(0, 0, 0));
     d->painter.setPen(qRgb(255, 255, 255));
 
-    if (d->profileDataAvailable)
-    {
-        OutlineTongue();
-        FillTongue();
-    }
+    OutlineTongue();
+    FillTongue();
 
     DrawTongueAxis();
-
-    if (d->profileDataAvailable)
-        DrawLabels();
-
+    DrawLabels();
     DrawTongueGrid();
 
-    if (d->profileDataAvailable)
-    {
-        if (d->MediaWhite.Y > 0.0)
-            DrawWhitePoint();
+    if (d->MediaWhite.Y > 0.0)
+        DrawWhitePoint();
 
-        if (d->Primaries.Red.Y != 0.0)
-            DrawColorantTriangle();
+    if (d->Primaries.Red.Y != 0.0)
+        DrawColorantTriangle();
 
-        if (d->Measurement.Patches && d->Measurement.Allowed)
-            DrawPatches();
-    }
+    if (d->Measurement.Patches && d->Measurement.Allowed)
+        DrawPatches();
 
     d->painter.end();
 
     bitBlt(this, 0, 0, &d->pixmap);
+}
+
+void CIETongueWidget::slotBlinkTimerDone(void)
+{
+    repaint(false);     
+    d->blinkFlag = !d->blinkFlag;
+    d->blinkTimer->start( 200 );
 }
 
 }  // namespace Digikam

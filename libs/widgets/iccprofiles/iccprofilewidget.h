@@ -52,6 +52,9 @@ public:
 
     QString getMetadataTitle(void);
 
+    void    setLoadingComplete(bool b);
+    void    setDataLoading();
+
 private:
 
     bool decodeMetadata(void);

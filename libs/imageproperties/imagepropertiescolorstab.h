@@ -87,7 +87,6 @@ private slots:
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
     
     void slotSaveProfil();
-    void slotBlinkTimerDone(void);
 
 private:
 

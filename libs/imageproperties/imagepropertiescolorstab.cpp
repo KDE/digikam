@@ -25,7 +25,6 @@
 
 // Qt Includes.
 
-#include <qtimer.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
@@ -76,8 +75,6 @@ public:
 
     ImagePropertiesColorsTabPriv()
     {
-        blinkFlag            = false;
-        blinkTimer           = 0;
         imageLoaderThread    = 0;
         tab                  = 0;
         channelCB            = 0;
@@ -96,10 +93,8 @@ public:
         labelColorDepth      = 0;
         labelAlphaChannel    = 0;
         selectionArea        = 0;
-        
-        labelICCInfoHeader   = 0;
+
         iccProfileWidget     = 0;
-        
         hGradient            = 0;
         histogramWidget      = 0;
         navigateBar          = 0;
@@ -127,7 +122,6 @@ public:
     QLabel                *labelPercentileValue;
     QLabel                *labelColorDepth;
     QLabel                *labelAlphaChannel;
-    QLabel                *labelICCInfoHeader;
 
     QPushButton           *saveProfilButton;
 
@@ -137,8 +131,6 @@ public:
     QRect                 *selectionArea;
 
     QByteArray             embedded_profile;
-
-    QTimer                *blinkTimer;
 
     KTabWidget            *tab;
 
@@ -352,7 +344,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // ICC Profiles tab area ---------------------------------------
 
     QWidget* iccprofilePage = new QWidget( d->tab );
-    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 3, 2);
+    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 2, 2);
    
     d->iccProfileWidget = new ICCProfileWidget(iccprofilePage);
 
@@ -360,22 +352,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
                                                "the image and save it to the disk like a new ICC profile file."));
 
-    d->labelICCInfoHeader = new QLabel("<font></font>", iccprofilePage);
-    d->labelICCInfoHeader->setAlignment(Qt::AlignCenter);
-                                               
     iccLayout->addMultiCellWidget(d->iccProfileWidget, 0, 0, 0, 2);
     iccLayout->addMultiCellWidget(d->saveProfilButton, 1, 1, 1, 1);
-    iccLayout->addMultiCellWidget(d->labelICCInfoHeader, 2, 2, 0, 2);
-    iccLayout->setRowStretch(3, 10);
+    iccLayout->setRowStretch(2, 10);
 
     d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
-    d->blinkTimer = new QTimer( this );
-
     // -------------------------------------------------------------
-
-    connect(d->blinkTimer, SIGNAL(timeout()),
-            this, SLOT(slotBlinkTimerDone()));
 
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -535,6 +518,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
         else 
         {
             d->histogramWidget->setLoadingFailed();
+            d->iccProfileWidget->setLoadingComplete(false);
             slotHistogramComputationFailed();
         }
     }
@@ -571,9 +555,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     }
 
     d->histogramWidget->setDataLoading();
-
-    // Toggle ICC header to busy during loading.
-    d->blinkTimer->start(200);
+    d->iccProfileWidget->setDataLoading();
 }
 
 void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& filePath, const DImg& img)
@@ -581,8 +563,6 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
     // Discard any leftover messages from previous, possibly aborted loads
     if ( filePath != d->currentFilePath )
         return;
-
-    d->blinkTimer->stop();
     
     if ( !img.isNull() )
     {
@@ -598,6 +578,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
     else
     {
         d->histogramWidget->setLoadingFailed();
+        d->iccProfileWidget->setLoadingComplete(false);
         slotHistogramComputationFailed();
     }
 }
@@ -801,15 +782,15 @@ void ImagePropertiesColorsTab::updateStatistiques()
 
 void ImagePropertiesColorsTab::getICCData()
 {
+    d->iccProfileWidget->setLoadingComplete(true);
+
     if (d->image.getICCProfil().isNull())
     {
-        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("No embedded ICC profile available.")));
         d->iccProfileWidget->loadFromURL(KURL());
         d->saveProfilButton->setEnabled(false);
     }
     else
     {
-        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("Embedded color profile available.")));
         d->embedded_profile = d->image.getICCProfil();
         d->iccProfileWidget->loadFromData(d->profileFileName, d->embedded_profile);
         d->saveProfilButton->setEnabled(true);
@@ -838,17 +819,6 @@ void ImagePropertiesColorsTab::slotSaveProfil()
         if( !iccFileSaveDialog.selectedURL().isEmpty() )
             d->image.setICCProfilToFile(iccFileSaveDialog.selectedURL().path());
     }
-}
-
-void ImagePropertiesColorsTab::slotBlinkTimerDone(void)
-{
-    if (d->blinkFlag)
-        d->labelICCInfoHeader->setText("<font color=\"green\">Loading image...</font>");
-    else
-        d->labelICCInfoHeader->setText("<font color=\"darkgreen\">Loading image...</font>");
-     
-    d->blinkFlag = !d->blinkFlag;
-    d->blinkTimer->start( 200 );
 }
 
 }  // NameSpace Digikam

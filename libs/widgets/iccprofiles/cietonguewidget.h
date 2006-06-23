@@ -65,6 +65,9 @@ public:
     bool setProfileFromFile(const KURL& file=KURL());
     bool setProfileHandler(cmsHPROFILE hProfile=0);
     
+    void loadingStarted();
+    void loadingComplete(bool);
+
 protected:
 
     int Grids(double val) const;
@@ -93,6 +96,10 @@ private:
     void Sweep_sRGB(void);
 
     void setProfile(cmsHPROFILE hProfile);
+
+private slots:
+
+    void slotBlinkTimerDone(void);
 
 private :
 

@@ -125,6 +125,16 @@ ICCProfileWidget::~ICCProfileWidget()
     delete d;
 }
 
+void ICCProfileWidget::setDataLoading()
+{
+    d->cieTongue->loadingStarted();
+}
+
+void ICCProfileWidget::setLoadingComplete(bool b)
+{
+    d->cieTongue->loadingComplete(b);
+}
+
 QString ICCProfileWidget::getMetadataTitle(void)
 {
     return i18n("ICC Color Profile Informations");
