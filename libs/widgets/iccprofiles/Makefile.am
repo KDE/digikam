@@ -16,4 +16,4 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/widgets/metadata \
            
 digikaminclude_HEADERS = cietonguewidget.h iccprofilewidget.h iccpreviewwidget.h 
 
-digikamincludedir = $(includedir)/digikam           
+digikamincludedir = $(includedir)/digikam
