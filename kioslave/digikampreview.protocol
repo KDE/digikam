@@ -7,5 +7,6 @@ reading=true
 source=false
 Description=Digikam preview kioslave
 Description[da]=Digikam forhåndsvisnings-kioslave
+Description[hr]=digiKam kioslave za pregledavanje
 Description[pt]='kioslave' de antevisão do digiKam
 Description[sv]=I/O-slav för Digikam förhandsgranskning
