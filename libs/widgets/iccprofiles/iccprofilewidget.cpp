@@ -188,12 +188,24 @@ bool ICCProfileWidget::decodeMetadata()
 
     MetaDataMap metaDataMap;
 
-    metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace("\n", " "));
-    metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace("\n", " "));
-    metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace("\n", " "));
-    metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace("\n", " "));
-    metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace("\n", " "));
-    metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace("\n", " "));
+    if ( !QString(cmsTakeProductName(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace("\n", " "));
+
+    if ( !QString(cmsTakeProductDesc(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace("\n", " "));
+
+    if ( !QString(cmsTakeProductInfo(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace("\n", " "));
+
+    if ( !QString(cmsTakeManufacturer(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace("\n", " "));
+
+    if ( !QString(cmsTakeModel(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace("\n", " "));
+
+    if ( !QString(cmsTakeCopyright(hProfile)).isEmpty() )
+        metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace("\n", " "));
+
     metaDataMap.insert("Icc.Header.ProfileID", QString::number((uint)*cmsTakeProfileID(hProfile)));
     
     QString colorSpace;        
@@ -224,7 +236,7 @@ bool ICCProfileWidget::decodeMetadata()
             colorSpace= i18n("CMY");
             break;
         default:
-            colorSpace = i18n("Other");
+            colorSpace = i18n("Unknown");
             break;
     }
     metaDataMap.insert("Icc.Header.ColorSpace", colorSpace);
@@ -257,7 +269,7 @@ bool ICCProfileWidget::decodeMetadata()
             connectionSpace= i18n("CMY");
             break;
         default:
-            connectionSpace = i18n("Other");
+            connectionSpace = i18n("Unknown");
             break;
     }
     metaDataMap.insert("Icc.Header.ConnectionSpace", connectionSpace);
@@ -339,7 +351,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
     return key.section('.', 2, 2);
 }
 
-QString ICCProfileWidget::getTagDescription(const QString& key)
+QString ICCProfileWidget::getTagDescription(const QString& /*key*/)
 {
     // TODO
     return QString();
