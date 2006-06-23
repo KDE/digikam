@@ -18,11 +18,8 @@
  *
  * ============================================================ */
 
-#include <config.h>
-
 // C++ include.
 
-#include <cstring>
 #include <cmath>
 #include <cstdlib>
 
@@ -60,14 +57,9 @@
 #include "colorgradientwidget.h"
 #include "navigatebarwidget.h"
 #include "sharedloadsavethread.h"
+#include "iccprofilewidget.h"
 #include "cietonguewidget.h"
 #include "imagepropertiescolorstab.h"
-
-#include LCMS_HEADER
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
-#endif // LCMS_VERSION < 114
-
 
 namespace Digikam
 {
@@ -103,18 +95,15 @@ public:
         labelPercentileValue = 0;
         labelColorDepth      = 0;
         labelAlphaChannel    = 0;
-        labelICCInfoHeader   = 0;
         selectionArea        = 0;
-        labelICCName         = 0;
-        labelICCDescription  = 0;
-        labelICCCopyright    = 0;
-        labelICCIntent       = 0;
-        labelICCColorSpace   = 0;
+        
+        labelICCInfoHeader   = 0;
+        iccProfileWidget     = 0;
+        
         hGradient            = 0;
         histogramWidget      = 0;
         navigateBar          = 0;
         imageLoaderThread    = 0;
-        cieTongue            = 0;
         saveProfilButton     = 0;
     }
 
@@ -153,20 +142,14 @@ public:
 
     KTabWidget            *tab;
 
-    KSqueezedTextLabel    *labelICCName;
-    KSqueezedTextLabel    *labelICCDescription;
-    KSqueezedTextLabel    *labelICCCopyright;
-    KSqueezedTextLabel    *labelICCIntent;
-    KSqueezedTextLabel    *labelICCColorSpace;
-
     DImg                   image;
     DImg                   imageSelection;
 
+    ICCProfileWidget      *iccProfileWidget;
     ColorGradientWidget   *hGradient;
     HistogramWidget       *histogramWidget;
     NavigateBarWidget     *navigateBar;
     SharedLoadSaveThread  *imageLoaderThread;
-    CIETongueWidget       *cieTongue;
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar)
@@ -369,48 +352,21 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // ICC Profiles tab area ---------------------------------------
 
     QWidget* iccprofilePage = new QWidget( d->tab );
-    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 10, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 3, 2);
+   
+    d->iccProfileWidget = new ICCProfileWidget(iccprofilePage);
 
-    QGroupBox *iccbox = new QGroupBox(2, Qt::Vertical, iccprofilePage);
-    iccbox->setFrameStyle (QFrame::NoFrame);
-
-    d->labelICCInfoHeader  = new QLabel("<font></font>", iccbox);
-    QGroupBox *iccdetail   = new QGroupBox(2, Qt::Horizontal, iccprofilePage);
-    new QLabel(i18n("Name: "), iccdetail);
-    d->labelICCName        = new KSqueezedTextLabel(0, iccdetail);
-    new QLabel(i18n("Description: "), iccdetail);
-    d->labelICCDescription = new KSqueezedTextLabel(0, iccdetail);
-    new QLabel(i18n("Copyright: "), iccdetail);
-    d->labelICCCopyright   = new KSqueezedTextLabel(0, iccdetail);
-    new QLabel(i18n("Rendering Intent: "), iccdetail);
-    d->labelICCIntent      = new KSqueezedTextLabel(0, iccdetail);
-    new QLabel(i18n("Color Space: "), iccdetail);
-    d->labelICCColorSpace  = new KSqueezedTextLabel(0, iccdetail);
-
-    d->cieTongue           = new CIETongueWidget(256, 256, iccprofilePage);
-    QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
-                                        "A CIE diagram is a representation of all of the colors "
-                                        "that a person with normal vision can see. This is represented "
-                                        "by the colored sail shaped area. In addition you will see a "
-                                        "triangle that is superimposed on the diagram outlined in white. "
-                                        "This triangle represents that outer boundries of the color space "
-                                        "of the device that is characterized by the profile being inspected. "
-                                        "This is called the device gamut.<p>"
-                                        "In addition there are black dots and yellow lines on the diagram. "
-                                        "Each black dot represents one of the measurement points that was "
-                                        "used to create this profile. The yellow line represents the "
-                                        "amount that each point is corrected by the profile and the "
-                                        "direction of the correction."));
-
-    d->saveProfilButton    = new QPushButton(i18n("Save as..."), iccprofilePage);
+    d->saveProfilButton = new QPushButton(i18n("Save as..."), iccprofilePage);
     QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
                                                "the image and save it to the disk like a new ICC profile file."));
 
-    iccLayout->addMultiCellWidget(iccbox, 0, 0, 0, 2);
-    iccLayout->addMultiCellWidget(iccdetail, 2, 7, 0, 2);
-    iccLayout->addMultiCellWidget(d->cieTongue, 8, 8, 0, 2);
-    iccLayout->addMultiCellWidget(d->saveProfilButton, 9, 9, 0, 0);
-    iccLayout->setRowStretch(10, 10);
+    d->labelICCInfoHeader = new QLabel("<font></font>", iccprofilePage);
+    d->labelICCInfoHeader->setAlignment(Qt::AlignCenter);
+                                               
+    iccLayout->addMultiCellWidget(d->iccProfileWidget, 0, 0, 0, 2);
+    iccLayout->addMultiCellWidget(d->saveProfilButton, 1, 1, 1, 1);
+    iccLayout->addMultiCellWidget(d->labelICCInfoHeader, 2, 2, 0, 2);
+    iccLayout->setRowStretch(3, 10);
 
     d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
@@ -418,8 +374,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     // -------------------------------------------------------------
 
-    connect( d->blinkTimer, SIGNAL(timeout()),
-             this, SLOT(slotBlinkTimerDone()) );
+    connect(d->blinkTimer, SIGNAL(timeout()),
+            this, SLOT(slotBlinkTimerDone()));
 
     connect(d->navigateBar, SIGNAL(signalFirstItem()),
             this, SIGNAL(signalFirstItem()));
@@ -474,6 +430,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     config->setGroup("Image Properties SideBar");
     d->tab->setCurrentPage(config->readNumEntry("ImagePropertiesColors Tab",
                            ImagePropertiesColorsTabPriv::HISTOGRAM));
+    d->iccProfileWidget->setMode(config->readNumEntry("ICC Level", ICCProfileWidget::SIMPLE));
+    d->iccProfileWidget->setCurrentItemByKey(config->readEntry("Current ICC Item", QString()));
+                           
     d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
@@ -493,14 +452,17 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     config->writeEntry("Histogram Scale", d->scaleBG->selectedId());
     config->writeEntry("Histogram Color", d->colorsCB->currentItem());
     config->writeEntry("Histogram Rendering", d->regionBG->selectedId());
-
+    config->writeEntry("ICC Level", d->iccProfileWidget->getMode());
+    config->writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
+    config->sync();
+    
     if (d->imageLoaderThread)
        delete d->imageLoaderThread;
     
-    if ( d->histogramWidget )
+    if (d->histogramWidget)
        delete d->histogramWidget;
     
-    if ( d->hGradient )
+    if (d->hGradient)
        delete d->hGradient;
 
     delete d;       
@@ -515,7 +477,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     
     d->navigateBar->setFileName();
     d->profileFileName = QString();
-    d->cieTongue->setProfileData();
+    d->iccProfileWidget->loadFromURL(KURL());
     
     // Clear informations.
     d->labelMeanValue->clear();
@@ -526,11 +488,6 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     d->labelPercentileValue->clear();
     d->labelColorDepth->clear();
     d->labelAlphaChannel->clear();
-    d->labelICCName->clear();
-    d->labelICCDescription->clear();
-    d->labelICCCopyright->clear();
-    d->labelICCIntent->clear();
-    d->labelICCColorSpace->clear();
         
     if (url.isEmpty())
     {
@@ -847,82 +804,15 @@ void ImagePropertiesColorsTab::getICCData()
     if (d->image.getICCProfil().isNull())
     {
         d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("No embedded ICC profile available.")));
-
-        d->labelICCName->setText(i18n("N.A."));
-        d->labelICCDescription->setText(i18n("N.A."));
-        d->labelICCCopyright->setText(i18n("N.A."));
-        d->labelICCIntent->setText(i18n("N.A."));
-        d->labelICCColorSpace->setText(i18n("N.A."));
-        d->cieTongue->setProfileData();
+        d->iccProfileWidget->loadFromURL(KURL());
         d->saveProfilButton->setEnabled(false);
     }
     else
     {
-        cmsHPROFILE embProfile=0;
-        QString intent, colorSpace;
-        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("Embedded color profile info:")));
-
+        d->labelICCInfoHeader->setText(QString("<font>%1</font>").arg(i18n("Embedded color profile available.")));
         d->embedded_profile = d->image.getICCProfil();
-        d->cieTongue->setProfileData(&d->embedded_profile);
-        embProfile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-                                          (DWORD)d->embedded_profile.size());
-        d->profileFileName = QString(cmsTakeProductName(embProfile));
-        d->labelICCName->setText(d->profileFileName);
-        d->labelICCDescription->setText(QString(cmsTakeProductDesc(embProfile)));
-        d->labelICCCopyright->setText(QString(cmsTakeCopyright(embProfile)));
-        
-        switch (cmsTakeRenderingIntent(embProfile))
-        {
-            case 0:
-                intent = i18n("Perceptual");
-                break;
-            case 1:
-                intent = i18n("Relative Colorimetric");
-                break;
-            case 2:
-                intent = i18n("Saturation");
-                break;
-            case 3:
-                intent = i18n("Absolute Colorimetric");
-                break;
-        }
-
-        switch (cmsGetColorSpace(embProfile))
-        {
-            case icSigLabData:
-                colorSpace = i18n("Lab");
-                break;
-            case icSigLuvData:
-                colorSpace = i18n("Luv");
-                break;
-            case icSigRgbData:
-                colorSpace = i18n("RGB");
-                break;
-            case icSigGrayData:
-                colorSpace = i18n("GRAY");
-                break;
-            case icSigHsvData:
-                colorSpace = i18n("HSV");
-                break;
-            case icSigHlsData:
-                colorSpace = i18n("HLS");
-                break;
-            case icSigCmykData:
-                colorSpace = i18n("CMYK");
-                break;
-            case icSigCmyData:
-                colorSpace= i18n("CMY");
-                break;
-            default:
-                colorSpace = i18n("Other");
-                break;
-        }
-
-        d->labelICCIntent->setText(intent);
-        d->labelICCColorSpace->setText(colorSpace);
+        d->iccProfileWidget->loadFromData(d->profileFileName, d->embedded_profile);
         d->saveProfilButton->setEnabled(true);
-
-        cmsCloseProfile(embProfile);
     }
 }
 
