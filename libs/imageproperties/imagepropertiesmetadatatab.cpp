@@ -162,6 +162,8 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     config->writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
     config->writeEntry("Current GPS Item", d->gpsWidget->getCurrentItemKey());
     config->writeEntry("Current Web GPS Locator", d->gpsWidget->getWebGPSLocator());
+    config->sync();
+    
     delete d;
 }
 
