@@ -516,6 +516,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                 TYPE_BGRA_16,
                                                 intent,
                                                 transformFlags);
+                if (!transform)
+                    return;
             }
             else
             {
@@ -537,6 +539,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                 TYPE_BGR_16,
                                                 intent,
                                                 transformFlags);
+                if (!transform)
+                    return;
             }
         }
         else
@@ -561,6 +565,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                 TYPE_BGRA_8,
                                                 intent,
                                                 transformFlags);
+                if (!transform)
+                    return;
             }
             else
             {
@@ -582,6 +588,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                 TYPE_BGR_8,
                                                 intent,
                                                 transformFlags);
+                 if (!transform)
+                    return;
             }
 
         }
@@ -618,6 +626,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                         intent,
                                                         intent,
                                                         transformFlags);
+                if (!transform)
+                    return;
             }
             else
             {
@@ -629,6 +639,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                         intent,
                                                         intent,
                                                         transformFlags);
+                 if (!transform)
+                    return;
             }
         }
         else
@@ -643,6 +655,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                         intent,
                                                         intent,
                                                         transformFlags);
+                if (!transform)
+                    return;
             }
             else
             {
@@ -654,6 +668,8 @@ void IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
                                                         intent,
                                                         intent,
                                                         transformFlags);
+                if (!transform)
+                    return;
             }
         }
     }
