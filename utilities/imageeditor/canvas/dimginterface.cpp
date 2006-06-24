@@ -321,16 +321,6 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                                 break;
                             }
                         }
-                        else
-                        {
-                            // Embedded profile and default workspace profile are the same : just apply it.
-                            
-                            if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                            trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting), 
-                                              QFile::encodeName(d->cmSettings->workspaceSetting));
-                            trans.apply( d->image );
-                            if (d->parent) d->parent->unsetCursor();
-                        }
                     }
                 }
             }
