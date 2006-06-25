@@ -30,11 +30,11 @@ kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_lib
 
 kio_digikampreview_la_SOURCES = digikampreview.cpp 
 
-kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(LIB_EXIV2) 
-
-kio_digikampreview_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries) \
+kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(LIB_EXIV2) \
 	                        $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
 	                        $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
+
+kio_digikampreview_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries) 
                         
 # -- digikam tags KIO --------------------------------------------------------------
 
