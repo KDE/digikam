@@ -227,23 +227,7 @@ CIETongueWidget::~CIETongueWidget()
     delete d;
 }
 
-void CIETongueWidget::loadingStarted()
-{
-    d->loadingImageMode   = true;
-    d->loadingImageSucess = false;
-    repaint(false);
-    d->blinkTimer->start(200);
-}
-
-void CIETongueWidget::loadingComplete(bool b)
-{
-    d->blinkTimer->stop();
-    d->loadingImageMode   = false;
-    d->loadingImageSucess = b;
-    repaint(false);
-}
-
-int CIETongueWidget::Grids(double val) const
+int CIETongueWidget::grids(double val) const
 {
     return (int) floor(val * d->gridside + 0.5);
 }
@@ -374,23 +358,23 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     }
 }
 
-void CIETongueWidget::MapPoint(int& icx, int& icy, LPcmsCIExyY xyY)
+void CIETongueWidget::mapPoint(int& icx, int& icy, LPcmsCIExyY xyY)
 {
     icx = (int) floor((xyY->x * (d->pxcols - 1)) + .5);
     icy = (int) floor(((d->pxrows - 1) - xyY->y * (d->pxrows - 1)) + .5);
 }
 
-void CIETongueWidget::BiasedLine(int x1, int y1, int x2, int y2)
+void CIETongueWidget::biasedLine(int x1, int y1, int x2, int y2)
 {
     d->painter.drawLine(x1 + d->xBias, y1, x2 + d->xBias, y2);
 }
 
-void CIETongueWidget::BiasedText(int x, int y, QString Txt)
+void CIETongueWidget::biasedText(int x, int y, QString Txt)
 {
     d->painter.drawText(QPoint(d->xBias + x, y), Txt);
 }
 
-QRgb CIETongueWidget::ColorByCoord(double x, double y)
+QRgb CIETongueWidget::colorByCoord(double x, double y)
 {
     // Get xyz components scaled from coordinates
 
@@ -412,7 +396,7 @@ QRgb CIETongueWidget::ColorByCoord(double x, double y)
     return qRgb(RGB[0], RGB[1], RGB[2]);
 }
 
-void CIETongueWidget::OutlineTongue()
+void CIETongueWidget::outlineTongue()
 {
     int lx = 0, ly = 0;
     int fx=0, fy=0;
@@ -425,11 +409,11 @@ void CIETongueWidget::OutlineTongue()
                        spectral_chromaticity[ix][1], 1};
 
         int icx, icy;
-        MapPoint(icx, icy, &p);
+        mapPoint(icx, icy, &p);
 
         if (x > 380)
         {
-            BiasedLine(lx, ly, icx, icy);
+            biasedLine(lx, ly, icx, icy);
         }
         else
         {
@@ -441,10 +425,10 @@ void CIETongueWidget::OutlineTongue()
         ly = icy;
      }
 
-    BiasedLine(lx, ly, fx, fy);
+    biasedLine(lx, ly, fx, fy);
 }
 
-void CIETongueWidget::FillTongue()
+void CIETongueWidget::fillTongue()
 {
 
     QImage Img = d->pixmap.convertToImage();
@@ -477,7 +461,7 @@ void CIETongueWidget::FillTongue()
         {
             for ( ; x <= xe; x++)
             {
-                QRgb Color = ColorByCoord(x, y);
+                QRgb Color = colorByCoord(x, y);
                 Img.setPixel(x + d->xBias, y, Color);
             }
         }
@@ -486,7 +470,7 @@ void CIETongueWidget::FillTongue()
     d->pixmap.convertFromImage(Img, QPixmap::AvoidDither );
 }
 
-void CIETongueWidget::DrawTongueAxis()
+void CIETongueWidget::drawTongueAxis()
 {
     QFont font;
     font.setPointSize(6);
@@ -494,8 +478,8 @@ void CIETongueWidget::DrawTongueAxis()
 
     d->painter.setPen(qRgb(255, 255, 255));
 
-    BiasedLine(0, 0,          0,          d->pxrows - 1);
-    BiasedLine(0, d->pxrows-1, d->pxcols-1, d->pxrows - 1);
+    biasedLine(0, 0,          0,          d->pxrows - 1);
+    biasedLine(0, d->pxrows-1, d->pxcols-1, d->pxrows - 1);
 
     for (int y = 1; y <= 9; y += 1)
     {
@@ -504,16 +488,16 @@ void CIETongueWidget::DrawTongueAxis()
         int ystart = (y * (d->pxrows - 1)) / 10;
 
         s.sprintf("0.%d", y);
-        BiasedLine(xstart, d->pxrows - Grids(1), xstart,   d->pxrows - Grids(4));
-        BiasedText(xstart - Grids(11), d->pxrows + Grids(15), s);
+        biasedLine(xstart, d->pxrows - grids(1), xstart,   d->pxrows - grids(4));
+        biasedText(xstart - grids(11), d->pxrows + grids(15), s);
 
         s.sprintf("0.%d", 10 - y);
-        BiasedLine(0, ystart, Grids(3), ystart);    
-        BiasedText(Grids(-25), ystart + Grids(5), s);
+        biasedLine(0, ystart, grids(3), ystart);    
+        biasedText(grids(-25), ystart + grids(5), s);
     }
 }
 
-void CIETongueWidget::DrawTongueGrid()
+void CIETongueWidget::drawTongueGrid()
 {
     d->painter.setPen(qRgb(80, 80, 80));
 
@@ -522,12 +506,12 @@ void CIETongueWidget::DrawTongueGrid()
         int xstart =  (y * (d->pxcols - 1)) / 10;
         int ystart =  (y * (d->pxrows - 1)) / 10;
 
-        BiasedLine(xstart, Grids(4), xstart,   d->pxrows - Grids(4) - 1);
-        BiasedLine(Grids(7), ystart, d->pxcols-1-Grids(7), ystart);
+        biasedLine(xstart, grids(4), xstart,   d->pxrows - grids(4) - 1);
+        biasedLine(grids(7), ystart, d->pxcols-1-grids(7), ystart);
     }
 }
 
-void CIETongueWidget::DrawLabels()
+void CIETongueWidget::drawLabels()
 {
     QFont font;
     font.setPointSize(5);
@@ -540,17 +524,17 @@ void CIETongueWidget::DrawLabels()
 
         if (x < 520)
         {
-            bx = Grids(-22);
-            by = Grids(2);
+            bx = grids(-22);
+            by = grids(2);
         }
         else if (x < 535)
         {
-            bx = Grids(-8);
-            by = Grids(-6);
+            bx = grids(-8);
+            by = grids(-6);
         }
         else
         {
-            bx = Grids(4);
+            bx = grids(4);
         }
 
         int ix = (x - 380) / 5;
@@ -559,32 +543,32 @@ void CIETongueWidget::DrawLabels()
                        spectral_chromaticity[ix][1], 1};
 
         int icx, icy;
-        MapPoint(icx, icy, &p);
+        mapPoint(icx, icy, &p);
 
-        tx = icx + ((x < 520) ? Grids(-2) : ((x >= 535) ? Grids(2) : 0));
-        ty = icy + ((x < 520) ? 0 : ((x >= 535) ? Grids(-1) : Grids(-2))); 
+        tx = icx + ((x < 520) ? grids(-2) : ((x >= 535) ? grids(2) : 0));
+        ty = icy + ((x < 520) ? 0 : ((x >= 535) ? grids(-1) : grids(-2))); 
 
         d->painter.setPen(qRgb(255, 255, 255));
-        BiasedLine(icx, icy, tx, ty);
+        biasedLine(icx, icy, tx, ty);
 
-        QRgb Color = ColorByCoord(icx, icy);
+        QRgb Color = colorByCoord(icx, icy);
         d->painter.setPen(Color);
 
         wl.sprintf("%d", x);
-        BiasedText(icx+bx, icy+by, wl);
+        biasedText(icx+bx, icy+by, wl);
     }
 }
 
-void CIETongueWidget::DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz)
+void CIETongueWidget::drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz)
 {
     int icx, icy;
 
-    MapPoint(icx, icy, xyY);
+    mapPoint(icx, icy, xyY);
     d->painter.setPen(qRgb(r, g, b));
     d->painter.drawEllipse(icx + d->xBias- sz/2, icy-sz/2, sz, sz);
 }
 
-void CIETongueWidget::DrawPatches(void)
+void CIETongueWidget::drawPatches(void)
 {
     for (int i=0; i < d->Measurement.nPatches; i++)
     {
@@ -596,7 +580,7 @@ void CIETongueWidget::DrawPatches(void)
             cmsCIExyY xyY;              
             cmsXYZ2xyY(&xyY, XYZ);
 
-            DrawSmallElipse(&xyY,  0, 0, 0, 4);
+            drawSmallElipse(&xyY,  0, 0, 0, 4);
 
             if (p->dwFlags & PATCH_HAS_XYZ_PROOF)
             {
@@ -610,39 +594,39 @@ void CIETongueWidget::DrawPatches(void)
                 cmsXYZ2xyY(&Pt, &p->XYZProof);
                 int icx1, icx2, icy1, icy2;
 
-                MapPoint(icx1, icy1, &xyY);
-                MapPoint(icx2, icy2, &Pt);
+                mapPoint(icx1, icy1, &xyY);
+                mapPoint(icx2, icy2, &Pt);
 
                 if (icx2 < 5 || icy2 < 5 || icx1 < 5 || icy1 < 5)
                     continue;
 
                 d->painter.setPen(qRgb(255, 255, 0));
-                BiasedLine(icx1, icy1, icx2, icy2);
+                biasedLine(icx1, icy1, icx2, icy2);
             }
         }
     }
 }
 
-void CIETongueWidget::DrawColorantTriangle(void)
+void CIETongueWidget::drawColorantTriangle(void)
 {
-    DrawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
-    DrawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
-    DrawSmallElipse(&(d->Primaries.Blue),  128, 128, 255, 6);
+    drawSmallElipse(&(d->Primaries.Red),   255, 128, 128, 6);
+    drawSmallElipse(&(d->Primaries.Green), 128, 255, 128, 6);
+    drawSmallElipse(&(d->Primaries.Blue),  128, 128, 255, 6);
 
     int x1, y1, x2, y2, x3, y3;
 
-    MapPoint(x1, y1, &(d->Primaries.Red));
-    MapPoint(x2, y2, &(d->Primaries.Green));
-    MapPoint(x3, y3, &(d->Primaries.Blue));
+    mapPoint(x1, y1, &(d->Primaries.Red));
+    mapPoint(x2, y2, &(d->Primaries.Green));
+    mapPoint(x3, y3, &(d->Primaries.Blue));
 
     d->painter.setPen(qRgb(255, 255, 255));
 
-    BiasedLine(x1, y1, x2, y2);
-    BiasedLine(x2, y2, x3, y3);
-    BiasedLine(x3, y3, x1, y1);
+    biasedLine(x1, y1, x2, y2);
+    biasedLine(x2, y2, x3, y3);
+    biasedLine(x3, y3, x1, y1);
 }
 
-void CIETongueWidget::Sweep_sRGB(void)
+void CIETongueWidget::sweep_sRGB(void)
 {
     int r, g, b;
     cmsHPROFILE hXYZ, hsRGB;
@@ -670,7 +654,7 @@ void CIETongueWidget::Sweep_sRGB(void)
                 cmsDoTransform(xform, RGB, XYZ, 1);
                 cmsXYZEncoded2Float(&xyz, XYZ);
                 cmsXYZ2xyY(&xyY, &xyz);
-                MapPoint(x1, y1, &xyY);
+                mapPoint(x1, y1, &xyY);
                 d->painter.drawPoint(x1 + d->xBias, y1);
             }
         }
@@ -681,11 +665,27 @@ void CIETongueWidget::Sweep_sRGB(void)
     cmsCloseProfile(hsRGB);
 }
 
-void CIETongueWidget::DrawWhitePoint(void)
+void CIETongueWidget::drawWhitePoint(void)
 {
     cmsCIExyY Whitem_pntxyY;
     cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
-    DrawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
+    drawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
+}
+
+void CIETongueWidget::loadingStarted()
+{
+    d->loadingImageMode   = true;
+    d->loadingImageSucess = false;
+    repaint(false);
+    d->blinkTimer->start(200);
+}
+
+void CIETongueWidget::loadingComplete(bool b)
+{
+    d->blinkTimer->stop();
+    d->loadingImageMode   = false;
+    d->loadingImageSucess = b;
+    repaint(false);
 }
 
 void CIETongueWidget::paintEvent( QPaintEvent * )
@@ -708,11 +708,11 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     // Loading image mode.
 
-    if ( d->loadingImageMode && !d->loadingImageSucess)
+    if (d->loadingImageMode && !d->loadingImageSucess)
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
-        d->painter.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
+        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
 
         if (d->blinkFlag)
@@ -730,11 +730,11 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
 
     // No profile data to show.
 
-    if (!d->profileDataAvailable)
+    if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
         d->painter.begin(&d->pixmap);
-        d->painter.fillRect(0, 0, size().width(), size().height(), palette().active().background());
-        d->painter.setPen(QPen(palette().active().foreground(), 1, Qt::SolidLine));
+        d->painter.fillRect(0, 0, size().width(), size().height(), palette().disabled().background());
+        d->painter.setPen(QPen(palette().disabled().foreground(), 1, Qt::SolidLine));
         d->painter.drawRect(0, 0, width(), height());
         d->painter.setPen(Qt::red);
         d->painter.drawText(0, 0, size().width(), size().height(), Qt::AlignCenter,
@@ -754,29 +754,29 @@ void CIETongueWidget::paintEvent( QPaintEvent * )
     int pixrows = d->pixmap.height();
 
     d->gridside = (QMIN(pixcols, pixrows)) / 512.0;
-    d->xBias = Grids(32);
-    d->yBias = Grids(20);
+    d->xBias = grids(32);
+    d->yBias = grids(20);
     d->pxcols = pixcols - d->xBias;
     d->pxrows = pixrows - d->yBias;
 
     d->painter.setBackgroundColor(qRgb(0, 0, 0));
     d->painter.setPen(qRgb(255, 255, 255));
 
-    OutlineTongue();
-    FillTongue();
+    outlineTongue();
+    fillTongue();
 
-    DrawTongueAxis();
-    DrawLabels();
-    DrawTongueGrid();
+    drawTongueAxis();
+    drawLabels();
+    drawTongueGrid();
 
     if (d->MediaWhite.Y > 0.0)
-        DrawWhitePoint();
+        drawWhitePoint();
 
     if (d->Primaries.Red.Y != 0.0)
-        DrawColorantTriangle();
+        drawColorantTriangle();
 
     if (d->Measurement.Patches && d->Measurement.Allowed)
-        DrawPatches();
+        drawPatches();
 
     d->painter.end();
 

@@ -70,30 +70,30 @@ public:
 
 protected:
 
-    int Grids(double val) const;
+    int  grids(double val) const;
 
-    void OutlineTongue();
-    void FillTongue();
-    void DrawTongueAxis();
-    void DrawTongueGrid();
-    void DrawLabels();
+    void outlineTongue();
+    void fillTongue();
+    void drawTongueAxis();
+    void drawTongueGrid();
+    void drawLabels();
 
-    QRgb ColorByCoord(double x, double y);  
-    void DrawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
+    QRgb colorByCoord(double x, double y);  
+    void drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
 
     void paintEvent( QPaintEvent * );
 
 private:
 
-    void DrawColorantTriangle(void);
-    void DrawWhitePoint(void);
-    void DrawPatches(void);
+    void drawColorantTriangle(void);
+    void drawWhitePoint(void);
+    void drawPatches(void);
     
-    void MapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
-    void BiasedLine(int x1, int y1, int x2, int y2);
-    void BiasedText(int x, int y, QString Txt);
+    void mapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
+    void biasedLine(int x1, int y1, int x2, int y2);
+    void biasedText(int x, int y, QString Txt);
 
-    void Sweep_sRGB(void);
+    void sweep_sRGB(void);
 
     void setProfile(cmsHPROFILE hProfile);
 
