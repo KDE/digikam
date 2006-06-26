@@ -151,8 +151,7 @@ bool ICCProfileWidget::loadFromURL(const KURL& url)
         return false;
     }
     else
-    {    
-        
+    {   
         QFile file(url.path());
         if ( !file.open(IO_ReadOnly) ) 
         {

@@ -234,6 +234,7 @@ int CIETongueWidget::grids(double val) const
 
 bool CIETongueWidget::setProfileData(QByteArray *profileData)
 {
+    
     if (profileData)
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
@@ -241,12 +242,17 @@ bool CIETongueWidget::setProfileData(QByteArray *profileData)
 
         setProfile(hProfile);
         cmsCloseProfile(hProfile);
+        d->profileDataAvailable = true;
+        d->loadingImageSucess   = true;
     }
     else
     {
         d->profileDataAvailable = false;
+        d->loadingImageSucess   = false;
     }
 
+    d->loadingImageMode = false;
+    
     repaint(false);
     return (d->profileDataAvailable);
 }
