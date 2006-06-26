@@ -25,18 +25,17 @@
 // KDE includes.
 
 #include <kpreviewwidgetbase.h>
-#include <kurl.h>
 
 // Local includes.
 
 #include "digikam_export.h"
 
-#include LCMS_HEADER
+class KURL;
 
 namespace Digikam
 {
 
-class ICCPreviewWidgetPriv;
+class ICCProfileWidget;
 
 class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
 {
@@ -51,19 +50,15 @@ public:
 public slots:
 
     virtual void showPreview(const KURL &url);
-    virtual void clearPreview();
 
 protected:
 
+    virtual void clearPreview();
     virtual void virtual_hook(int, void*){};
-
-private:
-
-    void getICCData(const KURL &url);
 
 private :
 
-    ICCPreviewWidgetPriv* d;
+    ICCProfileWidget *m_iccProfileWidget;
 
 };
 

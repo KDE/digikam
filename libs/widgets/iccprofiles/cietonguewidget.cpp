@@ -240,10 +240,18 @@ bool CIETongueWidget::setProfileData(QByteArray *profileData)
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
                                                     (DWORD)profileData->size());
 
-        setProfile(hProfile);
-        cmsCloseProfile(hProfile);
-        d->profileDataAvailable = true;
-        d->loadingImageSucess   = true;
+        if (!hProfile)
+        {
+            d->profileDataAvailable = false;
+            d->loadingImageSucess   = false;
+        }
+        else
+        {
+            setProfile(hProfile);
+            cmsCloseProfile(hProfile);
+            d->profileDataAvailable = true;
+            d->loadingImageSucess   = true;
+        }
     }
     else
     {
