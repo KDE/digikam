@@ -41,6 +41,8 @@
 #include <kdialogbase.h>
 #include <klistview.h>
 #include <klocale.h>
+#include <kfiledialog.h>
+#include <kglobalsettings.h>
 #include <kprinter.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -63,6 +65,7 @@ public:
 
     MetadataWidgetPriv()
     {
+        toolButtons  = 0;
         levelButtons = 0;
         view         = 0;
         mainLayout   = 0;
@@ -70,6 +73,7 @@ public:
 
     QGridLayout                 *mainLayout;
 
+    QHButtonGroup               *toolButtons;
     QHButtonGroup               *levelButtons;
 
     QByteArray                   metadata;
@@ -106,23 +110,28 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QWhatsThis::add( fullLevel, i18n( "Toogle tags view to a full list" ) );
     d->levelButtons->insert(fullLevel, FULL);
 
-    QHButtonGroup *toolButtons = new QHButtonGroup(this);
-    toolButtons->setInsideMargin( 0 );
-    toolButtons->setFrameShape(QFrame::NoFrame);
+    d->toolButtons = new QHButtonGroup(this);
+    d->toolButtons->setInsideMargin( 0 );
+    d->toolButtons->setFrameShape(QFrame::NoFrame);
 
-    QPushButton *printMetadata = new QPushButton( toolButtons );
+    QPushButton *saveMetadata = new QPushButton( d->toolButtons );
+    saveMetadata->setPixmap( iconLoader->loadIcon( "filesave", (KIcon::Group)KIcon::Toolbar ) );
+    QWhatsThis::add( saveMetadata, i18n( "Save meta-data to a file" ) );
+    d->toolButtons->insert(saveMetadata);
+    
+    QPushButton *printMetadata = new QPushButton( d->toolButtons );
     printMetadata->setPixmap( iconLoader->loadIcon( "fileprint", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( printMetadata, i18n( "Print metadata to printer" ) );
-    toolButtons->insert(printMetadata);
+    QWhatsThis::add( printMetadata, i18n( "Print meta-data to printer" ) );
+    d->toolButtons->insert(printMetadata);
 
-    QPushButton *copy2ClipBoard = new QPushButton( toolButtons );
+    QPushButton *copy2ClipBoard = new QPushButton( d->toolButtons );
     copy2ClipBoard->setPixmap( iconLoader->loadIcon( "editcopy", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( copy2ClipBoard, i18n( "Copy metadata to clipboard" ) );
-    toolButtons->insert(copy2ClipBoard);
+    QWhatsThis::add( copy2ClipBoard, i18n( "Copy meta-data to clipboard" ) );
+    d->toolButtons->insert(copy2ClipBoard);
 
     d->mainLayout->addMultiCellWidget(d->levelButtons, 0, 0, 0, 1);
     d->mainLayout->setColStretch(3, 10);
-    d->mainLayout->addMultiCellWidget(toolButtons, 0, 0, 4, 4);
+    d->mainLayout->addMultiCellWidget(d->toolButtons, 0, 0, 4, 4);
 
     d->view = new MetadataListView(this);
     d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
@@ -135,6 +144,9 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     connect(printMetadata, SIGNAL(clicked()),
             this, SLOT(slotPrintMetadata()));
+
+    connect(saveMetadata, SIGNAL(clicked()),
+            this, SLOT(slotSaveMetadataToFile()));                        
 }
 
 MetadataWidget::~MetadataWidget()
@@ -154,12 +166,14 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
     if (d->metadata.isEmpty())
     {
         d->view->clear();
+        d->toolButtons->setEnabled(false);
         return false;
     }
 
     // Cleanup all metadata contents and try to decode current metadata.
     setMetadataMap();
     decodeMetadata();
+    d->toolButtons->setEnabled(true);
 
     // Refresh view using decoded metadata.
     buildView();
@@ -170,6 +184,21 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
 const QByteArray& MetadataWidget::getMetadata()
 {
     return d->metadata;
+}
+
+bool MetadataWidget::storeMetadataToFile(const KURL& url)
+{
+    if( url.isEmpty() )
+        return false;
+
+    QFile file(url.path());
+    if ( !file.open(IO_WriteOnly) ) 
+        return false;
+    
+    QDataStream stream( &file );
+    stream.writeRawBytes(d->metadata.data(), d->metadata.size());
+    file.close();
+    return true;
 }
 
 void MetadataWidget::setMetadataMap(const MetaDataMap& data)
@@ -298,6 +327,27 @@ void MetadataWidget::slotPrintMetadata(void)
         }
         while (true);
     }
+}
+
+KURL MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
+{
+    KFileDialog fileSaveDialog(KGlobalSettings::documentPath(),
+                               QString::null,
+                               this,
+                               "MetadataFileSaveDialog",
+                               false);
+
+    fileSaveDialog.setOperationMode(KFileDialog::Saving);
+    fileSaveDialog.setMode(KFile::File);
+    fileSaveDialog.setSelection(d->fileName);
+    fileSaveDialog.setCaption(caption);
+    fileSaveDialog.setFilter(fileFilter);
+
+    // Check for cancel.
+    if ( fileSaveDialog.exec() == KFileDialog::Accepted )
+        return fileSaveDialog.selectedURL().path();
+    
+    return KURL();
 }
 
 void MetadataWidget::setMode(int mode)

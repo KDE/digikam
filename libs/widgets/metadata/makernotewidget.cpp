@@ -251,6 +251,12 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     }
 }
 
+void MakerNoteWidget::slotSaveMetadataToFile(void)
+{
+    KURL url = saveMetadataToFile(i18n("Exif File to Save"), QString("*.dat"));
+    storeMetadataToFile(url);
+}
+
 }  // namespace Digikam
 
 #include "makernotewidget.moc"

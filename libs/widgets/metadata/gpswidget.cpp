@@ -462,6 +462,12 @@ bool GPSWidget::decodeGPSPosition(void)
     return true;
 }
 
+void GPSWidget::slotSaveMetadataToFile(void)
+{
+    KURL url = saveMetadataToFile(i18n("Exif File to Save"), QString("*.dat"));
+    storeMetadataToFile(url);
+}
+
 }  // namespace Digikam
 
 #include "gpswidget.moc"

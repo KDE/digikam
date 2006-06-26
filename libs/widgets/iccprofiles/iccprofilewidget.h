@@ -55,6 +55,10 @@ public:
     void    setLoadingComplete(bool b);
     void    setDataLoading();
 
+protected slots:    
+    
+    virtual void slotSaveMetadataToFile(void);
+    
 private:
 
     bool decodeMetadata(void);

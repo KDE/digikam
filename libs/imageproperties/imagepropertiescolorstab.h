@@ -85,8 +85,6 @@ private slots:
     void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
-    
-    void slotSaveProfil();
 
 private:
 

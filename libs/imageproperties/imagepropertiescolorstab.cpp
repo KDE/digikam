@@ -45,8 +45,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ktabwidget.h>
-#include <kfiledialog.h>
-#include <kglobalsettings.h>
 
 // Local includes.
 
@@ -99,7 +97,6 @@ public:
         histogramWidget      = 0;
         navigateBar          = 0;
         imageLoaderThread    = 0;
-        saveProfilButton     = 0;
     }
 
     bool                   blinkFlag;
@@ -123,10 +120,7 @@ public:
     QLabel                *labelColorDepth;
     QLabel                *labelAlphaChannel;
 
-    QPushButton           *saveProfilButton;
-
     QString                currentFilePath;
-    QString                profileFileName;
 
     QRect                 *selectionArea;
 
@@ -343,20 +337,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     // ICC Profiles tab area ---------------------------------------
 
-    QWidget* iccprofilePage = new QWidget( d->tab );
-    QGridLayout *iccLayout  = new QGridLayout(iccprofilePage, 2, 2);
-   
-    d->iccProfileWidget = new ICCProfileWidget(iccprofilePage);
-
-    d->saveProfilButton = new QPushButton(i18n("Save as..."), iccprofilePage);
-    QWhatsThis::add( d->saveProfilButton, i18n("<p>Use this button to extract the ICC color profile from "
-                                               "the image and save it to the disk like a new ICC profile file."));
-
-    iccLayout->addMultiCellWidget(d->iccProfileWidget, 0, 0, 0, 2);
-    iccLayout->addMultiCellWidget(d->saveProfilButton, 1, 1, 1, 1);
-    iccLayout->setRowStretch(2, 10);
-
-    d->tab->insertTab(iccprofilePage, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
+    d->iccProfileWidget = new ICCProfileWidget(d->tab);
+    d->tab->insertTab(d->iccProfileWidget, i18n("ICC profile"), ImagePropertiesColorsTabPriv::ICCPROFILE);
 
     // -------------------------------------------------------------
 
@@ -403,9 +385,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     connect(d->maxInterv, SIGNAL(valueChanged (int)),
             this, SLOT(slotMaxValueChanged(int)));
-
-    connect(d->saveProfilButton, SIGNAL(clicked()),
-            this, SLOT(slotSaveProfil()));
 
     // -- read config ---------------------------------------------------------
 
@@ -459,7 +438,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     d->histogramWidget->stopHistogramComputation();
     
     d->navigateBar->setFileName();
-    d->profileFileName = QString();
+    d->currentFilePath = QString();
     d->iccProfileWidget->loadFromURL(KURL());
     
     // Clear informations.
@@ -787,37 +766,11 @@ void ImagePropertiesColorsTab::getICCData()
     if (d->image.getICCProfil().isNull())
     {
         d->iccProfileWidget->loadFromURL(KURL());
-        d->saveProfilButton->setEnabled(false);
     }
     else
     {
         d->embedded_profile = d->image.getICCProfil();
-        d->iccProfileWidget->loadFromData(d->profileFileName, d->embedded_profile);
-        d->saveProfilButton->setEnabled(true);
-    }
-}
-
-void ImagePropertiesColorsTab::slotSaveProfil()
-{
-    QString profileFileName = d->profileFileName.simplifyWhiteSpace().remove(' ').append(".icc");
-    
-    KFileDialog iccFileSaveDialog(KGlobalSettings::documentPath(),
-                                  QString::null,
-                                  this,
-                                  "iccProfileFileSaveDialog",
-                                  false);
-
-    iccFileSaveDialog.setOperationMode( KFileDialog::Saving );
-    iccFileSaveDialog.setMode( KFile::File );
-    iccFileSaveDialog.setSelection(profileFileName);
-    iccFileSaveDialog.setCaption( i18n("ICC color profile File to Save") );
-    iccFileSaveDialog.setFilter(QString("*.icc"));
-
-    // Check for cancel.
-    if ( iccFileSaveDialog.exec() == KFileDialog::Accepted )
-    {
-        if( !iccFileSaveDialog.selectedURL().isEmpty() )
-            d->image.setICCProfilToFile(iccFileSaveDialog.selectedURL().path());
+        d->iccProfileWidget->loadFromData(d->currentFilePath, d->embedded_profile);
     }
 }
 

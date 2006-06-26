@@ -360,6 +360,12 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
     return key.section('.', 2, 2);
 }
 
+void ICCProfileWidget::slotSaveMetadataToFile(void)
+{
+    KURL url = saveMetadataToFile(i18n("ICC color profile File to Save"), QString("*.icc"));
+    storeMetadataToFile(url);
+}
+
 QString ICCProfileWidget::getTagDescription(const QString& /*key*/)
 {
     // TODO

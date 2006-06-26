@@ -45,6 +45,10 @@ public:
 
     QString getMetadataTitle(void);
 
+protected slots:    
+    
+    virtual void slotSaveMetadataToFile(void);
+
 private:
 
     bool decodeMetadata(void);

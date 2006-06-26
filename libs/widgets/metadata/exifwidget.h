@@ -52,7 +52,11 @@ public:
     QString getTagTitle(const QString& key);
 
     QString getMetadataTitle(void);
+
+protected slots:    
     
+    virtual void slotSaveMetadataToFile(void);
+ 
 private:
 
     bool decodeMetadata(void);

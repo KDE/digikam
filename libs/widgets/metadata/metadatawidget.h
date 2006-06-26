@@ -78,7 +78,11 @@ private slots:
     void slotModeChanged(int);
     void slotCopy2Clipboard(void);
     void slotPrintMetadata(void);
-
+    
+protected slots:    
+    
+    virtual void slotSaveMetadataToFile(void)=0;
+    
 protected:
 
     void   setFileName(QString fileName);
@@ -94,6 +98,9 @@ protected:
     void   setIfdList(const MetaDataMap &ifds, const QStringList& keysFilter,
                       const QStringList& tagsFilter);
 
+    KURL   saveMetadataToFile(const QString& caption, const QString& fileFilter);
+    bool   storeMetadataToFile(const KURL& url);
+    
     virtual bool decodeMetadata(void)=0;
     virtual void buildView(void)=0;
     virtual QString getMetadataTitle(void)=0;

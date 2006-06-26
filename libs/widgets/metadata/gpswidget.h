@@ -68,6 +68,10 @@ public:
     int  getWebGPSLocator(void);
     void setWebGPSLocator(int locator);
 
+protected slots:    
+    
+    virtual void slotSaveMetadataToFile(void);
+
 private slots:
 
     void slotGPSDetails(void);
