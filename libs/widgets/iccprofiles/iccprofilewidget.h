@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT ICCProfileWidget : public MetadataWidget
     
 public:
 
-    ICCProfileWidget(QWidget* parent, const char* name=0);
+    ICCProfileWidget(QWidget* parent, const char* name=0, int w=256, int h=256);
     ~ICCProfileWidget();
 
     bool    loadFromURL(const KURL& url);

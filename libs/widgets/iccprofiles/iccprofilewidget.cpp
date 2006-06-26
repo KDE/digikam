@@ -88,7 +88,7 @@ public:
     CIETongueWidget *cieTongue;
 };
 
-ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name)
+ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int h)
                 : MetadataWidget(parent, name)
 {
     d = new ICCProfileWidgetPriv;
@@ -101,7 +101,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name)
 
     cmsErrorAction(LCMS_ERROR_SHOW);    
 
-    d->cieTongue = new CIETongueWidget(256, 256, this);
+    d->cieTongue = new CIETongueWidget(w, h, this);
     QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
                     "A CIE diagram is a representation of all of the colors "
                     "that a person with normal vision can see. This is represented "
