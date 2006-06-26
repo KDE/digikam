@@ -18,23 +18,10 @@
  *
  * ============================================================ */
 
-// Qt includes.
-
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qpushbutton.h>
-#include <qtimer.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qfile.h>
-
 // KDE includes.
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
-#include <ksqueezedtextlabel.h>
 
 // Local includes.
 
@@ -50,24 +37,16 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
                                Help|Ok, Ok, true)
 {
     setHelp("iccprofile.anchor", "digikam");
+    setCaption(profilePath);
        
-    QWidget *page     = new QWidget(this);
-    QGridLayout* grid = new QGridLayout(page, 1, 1);
-
-    QLabel *label9  = new QLabel(i18n("<p><b>File:</b>"), page);
-    KSqueezedTextLabel *label10 = new KSqueezedTextLabel(profilePath, page);
-    grid->addMultiCellWidget(label9, 0, 0, 0, 0);
-    grid->addMultiCellWidget(label10, 0, 0, 1, 1);
-            
-    ICCProfileWidget *profileWidget = new ICCProfileWidget(page);
-    grid->addMultiCellWidget(profileWidget, 1, 1, 0, 1);
+    ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 0, 340, 256);
     
     if (profileData.isEmpty())
         profileWidget->loadFromURL(KURL(profilePath));
     else
         profileWidget->loadFromData(profilePath, profileData); 
                                      
-    setMainWidget(page);
+    setMainWidget(profileWidget);
 }
 
 ICCProfileInfoDlg::~ICCProfileInfoDlg()
