@@ -761,11 +761,9 @@ void ImagePropertiesColorsTab::updateStatistiques()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    d->iccProfileWidget->setLoadingComplete(true);
-
     if (d->image.getICCProfil().isNull())
     {
-        d->iccProfileWidget->loadFromURL(KURL());
+        d->iccProfileWidget->setLoadingComplete(false);
     }
     else
     {
