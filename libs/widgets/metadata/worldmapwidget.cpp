@@ -23,6 +23,7 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qstring.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -37,43 +38,62 @@
 namespace Digikam
 {
 
-WorldMapWidget::WorldMapWidget( QWidget *parent, const char *name )
-              : QWidget( parent, name ), m_latitude( 0 ), m_longitude( 0 )
+class WorldMapWidgetPriv
 {
+
+public:
+
+    WorldMapWidgetPriv()
+    {
+        latitude  = 0;
+        longitude = 0;
+    }
+
+    double  latitude;
+    double  longitude;
+
+    QPixmap worldMap;
+};
+
+WorldMapWidget::WorldMapWidget( QWidget *parent, const char *name, int mapLenght )
+              : QWidget( parent, name )
+{
+    d = new WorldMapWidgetPriv;
     KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
     QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.png");
     QImage map(directory + "worldmap.png");
-    m_worldMap = QPixmap(map.scale(300, 150));
+    d->worldMap = QPixmap(map.scale(mapLenght, mapLenght/2));
     
     setBackgroundMode( Qt::NoBackground );
-    setFixedSize( m_worldMap.size() );
+    setFixedSize( d->worldMap.size() );
     update();
 }
 
 WorldMapWidget::~WorldMapWidget()
 {
+    delete d;
 }
 
 double WorldMapWidget::getLatitude(void)
 {
-    return m_latitude;
+    return d->latitude;
 }
 
 double WorldMapWidget::getLongitude(void)
 {
-    return m_longitude;
+    return d->longitude;
 }
 
 void WorldMapWidget::setGPSPosition(double lat, double lng)
 {
-    m_latitude  = lat;
-    m_longitude = lng;
+    d->latitude  = lat;
+    d->longitude = lng;
     repaint(false);
 }
 
 void WorldMapWidget::paintEvent( QPaintEvent* )
 {
-    QPixmap pm( m_worldMap );
+    QPixmap pm( d->worldMap );
 
     if (isEnabled())
     {
@@ -81,13 +101,13 @@ void WorldMapWidget::paintEvent( QPaintEvent* )
         p.begin( &pm, this );
     
         double latMid  = height() / 2.0;
-        double longMid = width() / 2.0;
+        double longMid = width()  / 2.0;
         
-        double latOffset  = ( m_latitude * latMid ) / 90.0;
-        double longOffset = ( m_longitude * longMid ) / 180.0;
+        double latOffset  = ( d->latitude  * latMid )  / 90.0;
+        double longOffset = ( d->longitude * longMid ) / 180.0;
     
         int xPos = (int)(longMid + longOffset);
-        int yPos = (int)(latMid - latOffset);
+        int yPos = (int)(latMid  - latOffset);
     
         p.setPen(QPen(Qt::white, 0, Qt::SolidLine));
         p.drawLine(xPos, 0, xPos, height());

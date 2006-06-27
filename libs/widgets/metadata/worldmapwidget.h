@@ -24,7 +24,6 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qpixmap.h>
 
 // Local includes
 
@@ -33,13 +32,15 @@
 namespace Digikam
 {
 
+class WorldMapWidgetPriv;
+
 class DIGIKAM_EXPORT WorldMapWidget : public QWidget
 {
 Q_OBJECT
 
 public:
 
-    WorldMapWidget( QWidget *parent, const char *name = 0 );
+    WorldMapWidget( QWidget *parent, const char *name = 0, int mapLenght=256 );
     ~WorldMapWidget();
 
     void setGPSPosition(double lat, double lng);
@@ -53,10 +54,8 @@ protected:
 
 private:
 
-    double m_latitude;
-    double m_longitude;
+    WorldMapWidgetPriv *d;
 
-    QPixmap m_worldMap;
 };
 
 }  // namespace Digikam
