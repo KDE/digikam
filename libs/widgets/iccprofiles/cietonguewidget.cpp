@@ -270,27 +270,23 @@ bool CIETongueWidget::setProfileFromFile(const KURL& file)
     {
         cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
 
-        setProfile(hProfile);
-        cmsCloseProfile(hProfile);
+        if (!hProfile)
+        {
+            d->profileDataAvailable = false;
+            d->loadingImageSucess   = false;
+        }
+        else
+        {
+            setProfile(hProfile);
+            cmsCloseProfile(hProfile);
+            d->profileDataAvailable = true;
+            d->loadingImageSucess   = true;
+        }
     }
     else
     {
         d->profileDataAvailable = false;
-    }
-
-    repaint(false);
-    return (d->profileDataAvailable);
-}
-
-bool CIETongueWidget::setProfileHandler(cmsHPROFILE hProfile)
-{
-    if (hProfile)
-    {
-        setProfile(hProfile);
-    }
-    else
-    {
-        d->profileDataAvailable = false;
+        d->loadingImageSucess   = false;
     }
 
     repaint(false);
@@ -299,14 +295,6 @@ bool CIETongueWidget::setProfileHandler(cmsHPROFILE hProfile)
 
 void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 {
-    if (!hProfile)
-    {
-        d->profileDataAvailable = false;
-        return;
-    }
-
-    d->profileDataAvailable = true;
-
     // Get the white point.
 
     ZeroMemory(&(d->MediaWhite), sizeof(cmsCIEXYZ));

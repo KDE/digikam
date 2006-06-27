@@ -244,6 +244,8 @@ bool ICCProfileWidget::decodeMetadata()
     if (iccData.isNull())
         return false;
 
+    d->cieTongue->setProfileData(iccData);
+    
     cmsHPROFILE hProfile = cmsOpenProfileFromMem(iccData.data(), (DWORD)iccData.size());
 
     if (!hProfile)
@@ -392,9 +394,7 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }    
     metaDataMap.insert("Icc.Header.RenderingIntent", intent);
-    
-    d->cieTongue->setProfileHandler(hProfile);
-    
+   
     cmsCloseProfile(hProfile);    
     
     // Update all metadata contents.

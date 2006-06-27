@@ -63,7 +63,6 @@ public:
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
     bool setProfileFromFile(const KURL& file=KURL());
-    bool setProfileHandler(cmsHPROFILE hProfile=0);
     
     void loadingStarted();
     void loadingComplete(bool);
