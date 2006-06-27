@@ -85,6 +85,7 @@ protected slots:
     
 protected:
 
+    void   enabledToolButtons(bool);
     void   setFileName(QString fileName);
     MetadataListView* view(void);
 

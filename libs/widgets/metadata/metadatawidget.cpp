@@ -159,6 +159,11 @@ MetadataListView* MetadataWidget::view(void)
     return d->view;
 }
 
+void MetadataWidget::enabledToolButtons(bool b)
+{
+    d->toolButtons->setEnabled(b);
+}
+
 bool MetadataWidget::setMetadata(const QByteArray& data)
 {
     d->metadata = data;
@@ -166,15 +171,17 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
     if (d->metadata.isEmpty())
     {
         d->view->clear();
-        d->toolButtons->setEnabled(false);
+        enabledToolButtons(false);
         return false;
     }
 
     // Cleanup all metadata contents and try to decode current metadata.
     setMetadataMap();
-    decodeMetadata();
-    d->toolButtons->setEnabled(true);
-
+    if (decodeMetadata())
+        enabledToolButtons(true);
+    else
+        enabledToolButtons(false);
+    
     // Refresh view using decoded metadata.
     buildView();
 
