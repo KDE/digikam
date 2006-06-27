@@ -231,7 +231,7 @@ bool ICCProfileWidget::loadFromURL(const KURL& url)
         else
         {
             setMetadata(iccData);
-            d->cieTongue->setProfileData(&iccData);
+            d->cieTongue->setProfileData(iccData);
         }        
     }
 

@@ -232,13 +232,12 @@ int CIETongueWidget::grids(double val) const
     return (int) floor(val * d->gridside + 0.5);
 }
 
-bool CIETongueWidget::setProfileData(QByteArray *profileData)
-{
-    
-    if (profileData)
+bool CIETongueWidget::setProfileData(const QByteArray &profileData)
+{    
+    if (!profileData.isEmpty())
     {
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData->data(),
-                                                    (DWORD)profileData->size());
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profileData.data(),
+                                                    (DWORD)profileData.size());
 
         if (!hProfile)
         {

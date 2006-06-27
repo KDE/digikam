@@ -61,7 +61,7 @@ public:
     CIETongueWidget(int w, int h, QWidget *parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongueWidget();
 
-    bool setProfileData(QByteArray *profileData=0);
+    bool setProfileData(const QByteArray& profileData=QByteArray());
     bool setProfileFromFile(const KURL& file=KURL());
     bool setProfileHandler(cmsHPROFILE hProfile=0);
     
