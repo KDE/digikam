@@ -283,8 +283,7 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                     if (d->cmSettings->askOrApplySetting)
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                        trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting), 
-                                          QFile::encodeName(d->cmSettings->workspaceSetting));
+                        trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                         trans.apply( d->image );
                         if (d->parent) d->parent->unsetCursor();
                     }
@@ -301,17 +300,16 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
                             emit signalImageLoaded(d->filename, valRet);
     
                             DImg preview = d->image.smoothScale(240, 180, QSize::ScaleMin);
-                            trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
-                                              QFile::encodeName(d->cmSettings->workspaceSetting));
+                            trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
                             ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
     
                             switch (dlg.exec())
                             {
                                 case QDialog::Accepted:
-                                if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                                trans.apply( d->image );
-                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
-                                if (d->parent) d->parent->unsetCursor();
+                                    if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
+                                    trans.apply( d->image );
+                                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                    if (d->parent) d->parent->unsetCursor();
                                 break;
                                 case -1:
                                     if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
