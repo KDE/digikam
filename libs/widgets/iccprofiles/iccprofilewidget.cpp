@@ -31,6 +31,7 @@
 #include <qfile.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
+#include <qmap.h>
 
 // KDE includes.
 
@@ -66,11 +67,33 @@ static const char* ICCHumanList[] =
      "-1"
 };
 
+// This entry list is only require for compatibilty with MetadataWidget implementation.
 static const char* ICCEntryList[] =
 {
      "Header",
      "-1"
 };
+
+class ICCTagInfo
+{
+
+public:
+
+    ICCTagInfo(){}
+        
+    ICCTagInfo(const QString& title, const QString& description)
+        : m_title(title), m_description(description){}
+
+    QString title()       const { return m_title;       }          
+    QString description() const { return m_description; }          
+    
+private:
+    
+    QString m_title;    
+    QString m_description; 
+};
+
+typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;    
 
 class ICCProfileWidgetPriv
 {
@@ -86,21 +109,51 @@ public:
     QStringList      keysFilter;
     
     CIETongueWidget *cieTongue;
-};
+    
+    ICCTagInfoMap    iccTagsDescription;
+};    
+
 
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int h)
                 : MetadataWidget(parent, name)
 {
-    d = new ICCProfileWidgetPriv;
+    cmsErrorAction(LCMS_ERROR_SHOW);    
     
+    d = new ICCProfileWidgetPriv;
+
+    // Set the translated ICC tags titles/descriptions list 
+    d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),         
+                                                          i18n("The icc profile product name"));
+    d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
+                                                          i18n("The icc profile product description"));
+    d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),  
+                                                          i18n("The additional icc profile informations"));
+    d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"), 
+                                                          i18n("The uncooked informations about icc profile manufacturer"));
+    d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"), 
+                                                          i18n("The uncooked informations about icc profile model"));
+    d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"), 
+                                                          i18n("The uncooked informations about icc profile copyright"));
+    d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"), 
+                                                          i18n("The icc profile ID number"));
+    d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"), 
+                                                          i18n("The color space used by the icc profile"));
+    d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"), 
+                                                          i18n("The connection space used by the icc profile"));
+    d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"), 
+                                                          i18n("The icc profile device class"));
+    d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"), 
+                                                          i18n("The icc profile rendering indent"));
+
+    // Set the list of keys and tags filters.
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; i++)
         d->keysFilter << ICCEntryList[i];
     
     for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; i++)
         d->tagsfilter << ICCHumanList[i];
 
-    cmsErrorAction(LCMS_ERROR_SHOW);    
-
+    // Add CIE tongue graph to the widget area
+        
     d->cieTongue = new CIETongueWidget(w, h, this);
     QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
                     "A CIE diagram is a representation of all of the colors "
@@ -186,7 +239,7 @@ bool ICCProfileWidget::decodeMetadata()
     QByteArray iccData = getMetadata();
     if (iccData.isNull())
         return false;
-        
+
     cmsHPROFILE hProfile = cmsOpenProfileFromMem(iccData.data(), (DWORD)iccData.size());
 
     if (!hProfile)
@@ -357,6 +410,10 @@ void ICCProfileWidget::buildView(void)
 
 QString ICCProfileWidget::getTagTitle(const QString& key)
 {
+    ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
+    if (it != d->iccTagsDescription.end())
+        return(it.data().title());
+    
     return key.section('.', 2, 2);
 }
 
@@ -366,10 +423,13 @@ void ICCProfileWidget::slotSaveMetadataToFile(void)
     storeMetadataToFile(url);
 }
 
-QString ICCProfileWidget::getTagDescription(const QString& /*key*/)
+QString ICCProfileWidget::getTagDescription(const QString& key)
 {
-    // TODO
-    return QString();
+    ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
+    if (it != d->iccTagsDescription.end())
+        return(it.data().description());
+    
+    return key.section('.', 2, 2);
 }
 
 }  // namespace Digikam
