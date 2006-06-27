@@ -47,7 +47,7 @@ public:
 
     ItemDrag(const KURL::List& urls, const KURL::List& kioURLs,
              const QValueList<int>& albumIDs,
-             const QValueList<int>& albumIDs,
+             const QValueList<int>& imageIDs,
              QWidget* dragSource=0, const char* name=0);
 
     static bool canDecode(const QMimeSource* e);
