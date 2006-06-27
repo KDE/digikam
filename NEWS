@@ -161,4 +161,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 098 ==> 127991 : digiKam image editor and raws (nef).
 099 ==> 129450 : Cannot exit preview mode within empty album.
 100 ==> 129610 : Unsupported initialization of CameraList object.
+101 ==> 127584 : Minimum width of sidebar too large
+
 ----------------------------------------------------------------------------------------------------
