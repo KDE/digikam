@@ -144,6 +144,10 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
                                                           i18n("The icc profile device class"));
     d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"), 
                                                           i18n("The icc profile rendering indent"));
+    d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"), 
+                                                          i18n("The icc version used to record the profile"));
+    d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"), 
+                                                          i18n("The icc profile color management flags"));
 
     // Set the list of keys and tags filters.
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; i++)
@@ -268,7 +272,9 @@ bool ICCProfileWidget::decodeMetadata()
     if ( !QString(cmsTakeCopyright(hProfile)).isEmpty() )
         metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace("\n", " "));
 
-    metaDataMap.insert("Icc.Header.ProfileID", QString::number((uint)*cmsTakeProfileID(hProfile)));
+    metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*cmsTakeProfileID(hProfile)));
+    metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
+    metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)cmsTakeHeaderFlags(hProfile)));
     
     QString colorSpace;        
     switch (cmsGetColorSpace(hProfile))
