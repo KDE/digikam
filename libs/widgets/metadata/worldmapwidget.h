@@ -52,6 +52,9 @@ public:
 private:
 
     void drawContents(QPainter *p, int x, int y, int w, int h);
+    void contentsMousePressEvent ( QMouseEvent * e );
+    void contentsMouseReleaseEvent ( QMouseEvent * e );
+    void contentsMouseMoveEvent( QMouseEvent * e );
 
 private:
 

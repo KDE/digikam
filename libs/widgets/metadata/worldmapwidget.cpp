@@ -29,6 +29,7 @@
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kcursor.h>
 #include <klocale.h>
 
 // Local includes.
@@ -52,7 +53,9 @@ public:
     
     int      xPos;
     int      yPos;
-
+    int      xMousePos;
+    int      yMousePos;
+    
     double   latitude;
     double   longitude;
 
@@ -152,6 +155,39 @@ void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
     {
         p->fillRect(x, y, w, h, palette().disabled().background());
     }
+}
+
+void WorldMapWidget::contentsMousePressEvent ( QMouseEvent * e )
+{
+    if ( e->button() == Qt::LeftButton )
+    {
+       d->xMousePos = e->x();
+       d->yMousePos = e->y();
+       setCursor( KCursor::sizeAllCursor() );    
+    }
+}
+
+void WorldMapWidget::contentsMouseReleaseEvent ( QMouseEvent *  )
+{
+    unsetCursor(); 
+}
+
+void WorldMapWidget::contentsMouseMoveEvent( QMouseEvent * e )
+{
+    if ( e->state() == Qt::LeftButton )
+    {
+       uint newxpos = e->x();
+       uint newypos = e->y();
+       
+       scrollBy (-(newxpos - d->xMousePos), -(newypos - d->yMousePos));
+       repaintContents(false);    
+       
+       d->xMousePos = newxpos - (newxpos-d->xMousePos);
+       d->yMousePos = newypos - (newypos-d->yMousePos);
+       return;
+    }
+
+    setCursor( KCursor::handCursor() );    
 }
 
 }  // namespace Digikam
