@@ -293,7 +293,6 @@ bool GPSWidget::decodeMetadata()
         if (!ret)
         {
             d->map->setEnabled(false);
-            d->map->setNoGPSPosition();
             d->detailsButton->setEnabled(false);
             d->detailsCombo->setEnabled(false);
             return false;
@@ -307,7 +306,6 @@ bool GPSWidget::decodeMetadata()
     catch (Exiv2::Error& e)
     {
         d->map->setEnabled(false);
-        d->map->setNoGPSPosition();
         d->detailsButton->setEnabled(false);
         d->detailsCombo->setEnabled(false);
         kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("

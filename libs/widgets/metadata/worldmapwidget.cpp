@@ -82,8 +82,6 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->latLonPos->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     addChild(d->latLonPos);
-    
-    setNoGPSPosition();
 }
 
 WorldMapWidget::~WorldMapWidget()
@@ -101,11 +99,14 @@ double WorldMapWidget::getLongitude(void)
     return d->longitude;
 }
 
-void WorldMapWidget::setNoGPSPosition(void)
+void WorldMapWidget::setEnabled(bool b)
 {
-    // Center the map to France (:=)))
-    setGPSPosition(47.0, 2.6);   
-    d->latLonPos->hide();
+    if (!b)
+        d->latLonPos->hide();
+    else 
+        d->latLonPos->show();        
+    
+    QScrollView::setEnabled(b);
 }
 
 void WorldMapWidget::setGPSPosition(double lat, double lng)
@@ -127,18 +128,16 @@ void WorldMapWidget::setGPSPosition(double lat, double lng)
     
     QString la, lo;
     d->latLonPos->setText(QString("(%1, %2)").arg(la.setNum(d->latitude,  'f', 2)) 
-                                            .arg(lo.setNum(d->longitude, 'f', 2)));
-    d->latLonPos->show();
+                                             .arg(lo.setNum(d->longitude, 'f', 2)));
 
     moveChild(d->latLonPos, contentsX()+10, contentsY()+10);
 }
 
 void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
-    p->drawPixmap(x, y, d->worldMap, x, y, w, h);
-        
     if (isEnabled())
     {   
+        p->drawPixmap(x, y, d->worldMap, x, y, w, h);
         p->setPen(QPen(Qt::white, 0, Qt::SolidLine));
         p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
         p->drawLine(0, d->yPos, contentsWidth(), d->yPos);
@@ -148,6 +147,10 @@ void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
         p->setPen( Qt::red );
         p->setBrush( Qt::red );
         p->drawEllipse( d->xPos-2, d->yPos-2, 4, 4 );
+    }
+    else
+    {
+        p->fillRect(x, y, w, h, palette().disabled().background());
     }
 }
 

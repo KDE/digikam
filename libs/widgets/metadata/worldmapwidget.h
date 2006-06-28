@@ -44,15 +44,15 @@ public:
     ~WorldMapWidget();
 
     void   setGPSPosition(double lat, double lng);
-    void   setNoGPSPosition(void);
-
+    
     double getLatitude(void);
     double getLongitude(void);
+    void   setEnabled(bool);
 
 private:
 
     void drawContents(QPainter *p, int x, int y, int w, int h);
-    
+
 private:
 
     WorldMapWidgetPriv *d;
