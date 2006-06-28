@@ -155,9 +155,9 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     KActiveLabel* explanation = new KActiveLabel(hbox);
     explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
-                              "technicals information about photograph. You can learn more "
+                              "technical information about photograph. You can learn more "
                               "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
-                              "<p><b>IPTC</b> is an another standard used in digital photography to store "
+                              "<p><b>IPTC</b> is another standard used in digital photography to store "
                               "embeded informations in pictures. You can learn more "
                               "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
     
