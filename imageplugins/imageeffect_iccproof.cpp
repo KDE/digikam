@@ -954,7 +954,7 @@ void ImageEffect_ICCProof::slotCMDisabledWarning()
 {
     if (!cmEnabled)
     {
-        QString message = i18n("<p>You don't have enabled Color Management in Digikam preferences.</p>");
+        QString message = i18n("<p>You don't have enabled Color Management in digiKam preferences.</p>");
         message.append( i18n("<p>\"Use default profile\" options will be disabled now.</p>"));
         KMessageBox::information(this, message);
         slotToggledWidgets(false);
