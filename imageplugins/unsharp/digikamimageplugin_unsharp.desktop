@@ -36,6 +36,7 @@ Comment[sr]=digiKam-ов прикључак за ублажавање маске
 Comment[sr@Latn]=digiKam-ov priključak za ublažavanje maske slike
 Comment[sv]=Digikam insticksprogram för bildfiltrering med oskarp mask
 Comment[tr]=digiKam için resim bulanıklaştırma filtresi eklentisi
+Comment[vi]=Bổ sung lọc ảnh mặt nạ giảm độ sắc cho digiKam
 Comment[xx]=xxUnsharp mask image filter plugin for digiKamxx
 
 X-KDE-Library=digikamimageplugin_unsharp
