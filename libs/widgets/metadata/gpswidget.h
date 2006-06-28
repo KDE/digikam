@@ -56,8 +56,6 @@ public:
     GPSWidget(QWidget* parent, const char* name=0);
     ~GPSWidget();
 
-    void    setGPSPosition(double lat, double lng);
-
     bool    loadFromURL(const KURL& url);
     
     QString getTagDescription(const QString& key);

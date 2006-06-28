@@ -34,7 +34,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
 #include <qmap.h>
 #include <qhbox.h>
 #include <qfile.h>
@@ -84,19 +83,10 @@ public:
 
     GPSWidgetPriv()
     {
-        longLabel     = 0;
-        latLabel      = 0;
         detailsButton = 0;
         detailsCombo  = 0;
         map           = 0;
-        longTitle     = 0;
-        latTitle      = 0;
     }
-
-    QLabel         *longLabel;
-    QLabel         *latLabel;
-    QLabel         *longTitle;
-    QLabel         *latTitle;
 
     QStringList     tagsfilter;
     QStringList     keysFilter;
@@ -122,17 +112,8 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     // --------------------------------------------------------
             
     QWidget *gpsInfo    = new QWidget(this);
-    QGridLayout *layout = new QGridLayout(gpsInfo, 4, 2);
-    d->map              = new WorldMapWidget(gpsInfo);
-
-    // --------------------------------------------------------
-        
-    d->latTitle  = new QLabel(i18n("Latitude:"), gpsInfo);
-    d->longTitle = new QLabel(i18n("Longitude:"), gpsInfo);
-    d->longLabel = new QLabel(gpsInfo);
-    d->latLabel  = new QLabel(gpsInfo);
-    d->longLabel->setAlignment( AlignBottom | AlignRight );
-    d->latLabel->setAlignment( AlignBottom | AlignRight );
+    QGridLayout *layout = new QGridLayout(gpsInfo, 3, 2);
+    d->map              = new WorldMapWidget(256, 256, gpsInfo);
 
     // --------------------------------------------------------
     
@@ -156,13 +137,11 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
     // --------------------------------------------------------
     
     layout->addMultiCellWidget(d->map, 0, 0, 0, 2);
-    layout->addMultiCellWidget(d->latTitle, 1, 1, 0, 0);
-    layout->addMultiCellWidget(d->latLabel, 1, 1, 1, 1);
-    layout->addMultiCellWidget(d->longTitle, 2, 2, 0, 0);
-    layout->addMultiCellWidget(d->longLabel, 2, 2, 1, 1);
-    layout->addMultiCellWidget(box2, 3, 3, 0, 0);
+    layout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
+                         QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 2);
+    layout->addMultiCellWidget(box2, 2, 2, 0, 0);
     layout->setColStretch(2, 10);
-    layout->setRowStretch(4, 10);
+    layout->setRowStretch(3, 10);
 
     // --------------------------------------------------------
     
@@ -282,10 +261,6 @@ bool GPSWidget::decodeMetadata()
         Exiv2::ExifData exifData;
         if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
         {
-            d->latTitle->setEnabled(false);
-            d->longTitle->setEnabled(false);
-            d->longLabel->setEnabled(false);
-            d->latLabel->setEnabled(false);
             d->map->setEnabled(false);
             d->detailsButton->setEnabled(false);
             d->detailsCombo->setEnabled(false);
@@ -317,21 +292,13 @@ bool GPSWidget::decodeMetadata()
         bool ret = decodeGPSPosition();
         if (!ret)
         {
-            d->latTitle->setEnabled(false);
-            d->longTitle->setEnabled(false);
-            d->longLabel->setEnabled(false);
-            d->latLabel->setEnabled(false);
             d->map->setEnabled(false);
+            d->map->setNoGPSPosition();
             d->detailsButton->setEnabled(false);
             d->detailsCombo->setEnabled(false);
-            setGPSPosition(0.0, 0.0);
             return false;
         }
 
-        d->latTitle->setEnabled(true);
-        d->longTitle->setEnabled(true);
-        d->longLabel->setEnabled(true);
-        d->latLabel->setEnabled(true);
         d->map->setEnabled(true);
         d->detailsButton->setEnabled(true);
         d->detailsCombo->setEnabled(true);
@@ -339,14 +306,10 @@ bool GPSWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        d->latTitle->setEnabled(false);
-        d->longTitle->setEnabled(false);
-        d->longLabel->setEnabled(false);
-        d->latLabel->setEnabled(false);
         d->map->setEnabled(false);
+        d->map->setNoGPSPosition();
         d->detailsButton->setEnabled(false);
         d->detailsCombo->setEnabled(false);
-        setGPSPosition(0.0, 0.0);
         kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -401,14 +364,6 @@ QString GPSWidget::getTagDescription(const QString& key)
     }
 }
 
-void GPSWidget::setGPSPosition(double lat, double lng)
-{
-    QString val;
-    d->latLabel->setText(QString("<b>%1</b>").arg(val.setNum(lat, 'f', 2)));
-    d->longLabel->setText(QString("<b>%1</b>").arg(val.setNum(lng, 'f', 2)));
-    d->map->setGPSPosition(lat, lng);
-}
-
 bool GPSWidget::decodeGPSPosition(void)
 {
     QString rational, num, den;
@@ -458,7 +413,7 @@ bool GPSWidget::decodeGPSPosition(void)
     
     if (lngRef == "W") longitude *= -1.0;
 
-    setGPSPosition(latitude, longitude);
+    d->map->setGPSPosition(latitude, longitude);
     return true;
 }
 

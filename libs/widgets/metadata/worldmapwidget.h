@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qwidget.h>
+#include <qscrollview.h>
 
 // Local includes
 
@@ -34,24 +34,25 @@ namespace Digikam
 
 class WorldMapWidgetPriv;
 
-class DIGIKAM_EXPORT WorldMapWidget : public QWidget
+class DIGIKAM_EXPORT WorldMapWidget : public QScrollView
 {
 Q_OBJECT
 
 public:
 
-    WorldMapWidget( QWidget *parent, const char *name = 0, int mapLenght=256 );
+    WorldMapWidget(int w, int h, QWidget *parent);
     ~WorldMapWidget();
 
-    void setGPSPosition(double lat, double lng);
+    void   setGPSPosition(double lat, double lng);
+    void   setNoGPSPosition(void);
 
     double getLatitude(void);
     double getLongitude(void);
 
-protected:
+private:
 
-    void paintEvent( QPaintEvent* );
-
+    void drawContents(QPainter *p, int x, int y, int w, int h);
+    
 private:
 
     WorldMapWidgetPriv *d;

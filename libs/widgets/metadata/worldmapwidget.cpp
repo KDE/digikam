@@ -20,10 +20,10 @@
 
 // Qt includes.
 
-#include <qimage.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qpixmap.h>
+#include <qlabel.h>
 
 // KDE includes.
 
@@ -47,26 +47,43 @@ public:
     {
         latitude  = 0;
         longitude = 0;
+        latLonPos = 0;
     }
+    
+    int      xPos;
+    int      yPos;
 
-    double  latitude;
-    double  longitude;
+    double   latitude;
+    double   longitude;
 
-    QPixmap worldMap;
+    QLabel  *latLonPos;
+    
+    QPixmap  worldMap;
 };
 
-WorldMapWidget::WorldMapWidget( QWidget *parent, const char *name, int mapLenght )
-              : QWidget( parent, name )
+WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
+              : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new WorldMapWidgetPriv;
-    KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.png");
-    QImage map(directory + "worldmap.png");
-    d->worldMap = QPixmap(map.scale(mapLenght, mapLenght/2));
     
-    setBackgroundMode( Qt::NoBackground );
-    setFixedSize( d->worldMap.size() );
-    update();
+    KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.jpg");
+    d->worldMap = QPixmap(directory + "worldmap.jpg");
+    
+    setVScrollBarMode(QScrollView::AlwaysOff);
+    setHScrollBarMode(QScrollView::AlwaysOff);
+    viewport()->setMouseTracking(true);
+    setMinimumWidth(w);
+    setMaximumHeight(h);
+    resizeContents(d->worldMap.width(), d->worldMap.height());
+    
+    d->latLonPos = new QLabel(viewport());
+    d->latLonPos->setMaximumHeight(fontMetrics().height());
+    d->latLonPos->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    d->latLonPos->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    addChild(d->latLonPos);
+    
+    setNoGPSPosition();
 }
 
 WorldMapWidget::~WorldMapWidget()
@@ -84,45 +101,54 @@ double WorldMapWidget::getLongitude(void)
     return d->longitude;
 }
 
+void WorldMapWidget::setNoGPSPosition(void)
+{
+    // Center the map to France (:=)))
+    setGPSPosition(47.0, 2.6);   
+    d->latLonPos->hide();
+}
+
 void WorldMapWidget::setGPSPosition(double lat, double lng)
 {
     d->latitude  = lat;
     d->longitude = lng;
-    repaint(false);
+    
+    double latMid  = contentsHeight() / 2.0;
+    double longMid = contentsWidth()  / 2.0;
+    
+    double latOffset  = ( d->latitude  * latMid )  / 90.0;
+    double longOffset = ( d->longitude * longMid ) / 180.0;
+
+    d->xPos = (int)(longMid + longOffset);
+    d->yPos = (int)(latMid  - latOffset);    
+    
+    repaintContents(false); 
+    center(d->xPos, d->yPos);
+    
+    QString la, lo;
+    d->latLonPos->setText(QString("(%1, %2)").arg(la.setNum(d->latitude,  'f', 2)) 
+                                            .arg(lo.setNum(d->longitude, 'f', 2)));
+    d->latLonPos->show();
+
+    moveChild(d->latLonPos, contentsX()+10, contentsY()+10);
 }
 
-void WorldMapWidget::paintEvent( QPaintEvent* )
+void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
-    QPixmap pm( d->worldMap );
-
-    if (isEnabled())
-    {
-        QPainter p;
-        p.begin( &pm, this );
-    
-        double latMid  = height() / 2.0;
-        double longMid = width()  / 2.0;
+    p->drawPixmap(x, y, d->worldMap, x, y, w, h);
         
-        double latOffset  = ( d->latitude  * latMid )  / 90.0;
-        double longOffset = ( d->longitude * longMid ) / 180.0;
-    
-        int xPos = (int)(longMid + longOffset);
-        int yPos = (int)(latMid  - latOffset);
-    
-        p.setPen(QPen(Qt::white, 0, Qt::SolidLine));
-        p.drawLine(xPos, 0, xPos, height());
-        p.drawLine(0, yPos, width(), yPos);
-        p.setPen(QPen(Qt::red, 0, Qt::DotLine));
-        p.drawLine(xPos, 0, xPos, height());
-        p.drawLine(0, yPos, width(), yPos);
-        p.setPen( Qt::red );
-        p.setBrush( Qt::red );
-        p.drawEllipse( xPos-2, yPos-2, 4, 4 );
-                
-        p.end();
+    if (isEnabled())
+    {   
+        p->setPen(QPen(Qt::white, 0, Qt::SolidLine));
+        p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
+        p->drawLine(0, d->yPos, contentsWidth(), d->yPos);
+        p->setPen(QPen(Qt::red, 0, Qt::DotLine));
+        p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
+        p->drawLine(0, d->yPos, contentsWidth(), d->yPos);
+        p->setPen( Qt::red );
+        p->setBrush( Qt::red );
+        p->drawEllipse( d->xPos-2, d->yPos-2, 4, 4 );
     }
-
-    bitBlt( this, 0, 0, &pm );
 }
 
 }  // namespace Digikam
