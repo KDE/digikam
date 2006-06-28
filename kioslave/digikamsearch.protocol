@@ -28,4 +28,5 @@ Description[sr@Latn]=kioslave digiKam-ovih traženja
 Description[sv]=I/O-slav för Digikams sökning
 Description[tr]=digiKam Arama kioslave
 Description[uk]=Підлеглий В/В (kioslave) пошуку для Digikam
+Description[vi]=kioslave tìm kiếm digiKam
 Class=:local

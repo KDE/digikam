@@ -38,6 +38,7 @@ Comment[sr]=digiKam-ов прикључак за убацивање текста
 Comment[sr@Latn]=digiKam-ov priključak za ubacivanje teksta u sliku
 Comment[sv]=Digikam insticksprogram för att infoga text i bilder
 Comment[tr]=digiKam için resme metin ekleme eklentisi
+Comment[vi]=Bổ sung chèn chữ vào ảnh cho digiKam
 
 X-KDE-Library=digikamimageplugin_inserttext
 author=Gilles Caulier, caulier dot gilles at free dot fr

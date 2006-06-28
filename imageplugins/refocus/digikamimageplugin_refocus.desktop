@@ -37,6 +37,7 @@ Comment[sr]=digiKam-ов прикључак за префокусирање сл
 Comment[sr@Latn]=digiKam-ov priključak za prefokusiranje slike
 Comment[sv]=Digikam insticksprogram för att fokusera om en bild
 Comment[tr]=Bir resmi yeniden odaklamak için digiKam eklentisi
+Comment[vi]=Bổ sung điều chỉnh lại tiêu điểm ảnh cho digiKam
 
 X-KDE-Library=digikamimageplugin_refocus
 author=Gilles Caulier, caulier dot gilles at free dot fr

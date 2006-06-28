@@ -39,6 +39,7 @@ Comment[sr@Latn]=Priključak za digiKam koji dodaje okvir na sliku
 Comment[sv]=Digikam insticksprogram för tillägg av kanter
 Comment[tr]=digiKam için resme çerçeve eklenme eklentisi
 Comment[uk]=Втулок додавання рамок на зображеннях для digiKam
+Comment[vi]=Bổ sung thêm viền trên ảnh cho digiKam
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at free dot fr

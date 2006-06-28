@@ -37,6 +37,7 @@ Comment[sr]=digiKam-ов прикључак за исправљање сферн
 Comment[sr@Latn]=digiKam-ov priključak za ispravljanje sfernog iskrivljenja slike
 Comment[sv]=Digikam insticksprogram för korrigering av sfärisk avvikelse i bild
 Comment[tr]=digiKam için resim küresel sapma düzeltme eklentisi
+Comment[vi]=Bổ sung sửa quang sai hình cầu ảnh cho digiKam
 
 X-KDE-Library=digikamimageplugin_lensdistortion
 author=Gilles Caulier, caulier dot gilles at free dot fr

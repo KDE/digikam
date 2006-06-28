@@ -33,6 +33,7 @@ Comment[pt_BR]=Plug-in de correção de hot pixels para o DigiKam
 Comment[sr]=digiKam-ов прикључак исправку врућих пиксела
 Comment[sr@Latn]=digiKam-ov priključak ispravku vrućih piksela
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
+Comment[vi]=Bổ sung sửa điểm ảnh nóng cho digiKam
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net
