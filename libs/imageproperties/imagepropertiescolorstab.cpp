@@ -21,7 +21,6 @@
 // C++ include.
 
 #include <cmath>
-#include <cstdlib>
 
 // Qt Includes.
 
@@ -167,24 +166,24 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->channelCB->insertItem( i18n("Alpha") );
     d->channelCB->insertItem( i18n("Colors") );
     QWhatsThis::add( d->channelCB, i18n("<p>Select here the histogram channel to display:<p>"
-                                       "<b>Luminosity</b>: drawing the image luminosity values.<p>"
-                                       "<b>Red</b>: drawing the red image channel values.<p>"
-                                       "<b>Green</b>: drawing the green image channel values.<p>"
-                                       "<b>Blue</b>: drawing the blue image channel values.<p>"
-                                       "<b>Alpha</b>: drawing the alpha image channel values. " 
-                                       "This channel corresponding to the transparency value and "
-                                       "is supported by some image formats such as PNG or GIF.<p>"
-                                       "<b>Colors</b>: drawing all color channels values at the same time."));
+                                        "<b>Luminosity</b>: drawing the image luminosity values.<p>"
+                                        "<b>Red</b>: drawing the red image channel values.<p>"
+                                        "<b>Green</b>: drawing the green image channel values.<p>"
+                                        "<b>Blue</b>: drawing the blue image channel values.<p>"
+                                        "<b>Alpha</b>: drawing the alpha image channel values. " 
+                                        "This channel corresponding to the transparency value and "
+                                        "is supported by some image formats such as PNG or TIF.<p>"
+                                        "<b>Colors</b>: drawing all color channels values at the same time."));
 
     d->scaleBG = new QHButtonGroup(histogramPage);
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
     QWhatsThis::add( d->scaleBG, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
-                                     "if it is used, all values (small and large) will be visible on the "
-                                     "graph."));
+                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
+                                      "Logarithmic scale can be used when the maximal counts are big; "
+                                      "if it is used, all values (small and large) will be visible on the "
+                                      "graph."));
 
     QPushButton *linHistoButton = new QPushButton( d->scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
@@ -210,9 +209,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->colorsCB->insertItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
     QWhatsThis::add( d->colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
-                                      "<b>Red</b>: drawing the red image channel on the foreground.<p>"
-                                      "<b>Green</b>: drawing the green image channel on the foreground.<p>"
-                                      "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
+                                       "<b>Red</b>: drawing the red image channel on the foreground.<p>"
+                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
+                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
 
     d->regionBG = new QHButtonGroup(histogramPage);
     d->regionBG->setExclusive(true);
@@ -220,9 +219,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->regionBG->setInsideMargin( 0 );
     d->regionBG->hide();
     QWhatsThis::add( d->regionBG, i18n("<p>Select here the histogram region computation:<p>"
-                                      "<b>Full Image</b>: drawing histogram using the full image.<p>"
-                                      "<b>Selection</b>: drawing histogram using the current image "
-                                      "selection."));
+                                       "<b>Full Image</b>: drawing histogram using the full image.<p>"
+                                       "<b>Selection</b>: drawing histogram using the current image "
+                                       "selection."));
 
     QPushButton *fullImageButton = new QPushButton( d->regionBG );
     QToolTip::add( fullImageButton, i18n( "<p>Full Image" ) );
@@ -238,21 +237,21 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     KGlobal::dirs()->addResourceType("image-selection", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("image-selection", "image-selection.png");
     SelectionImageButton->setPixmap( QPixmap( directory + "image-selection.png" ) );
-    SelectionImageButton->setToggleButton(true);       
+    SelectionImageButton->setToggleButton(true);
 
     topLayout->addMultiCellWidget(label1, 1, 1, 0, 0);
     topLayout->addMultiCellWidget(d->channelCB, 1, 1, 1, 1);
-    topLayout->addMultiCellWidget(d->scaleBG, 1, 1, 2, 2);
+    topLayout->addMultiCellWidget(d->scaleBG, 1, 1, 3, 3);
     topLayout->addMultiCellWidget(label10, 2, 2, 0, 0);
     topLayout->addMultiCellWidget(d->colorsCB, 2, 2, 1, 1);
-    topLayout->addMultiCellWidget(d->regionBG, 2, 2, 2, 2);
-    topLayout->setColStretch(3, 10);
+    topLayout->addMultiCellWidget(d->regionBG, 2, 2, 3, 3);
+    topLayout->setColStretch(2, 10);
 
     // -------------------------------------------------------------
 
     d->histogramWidget = new HistogramWidget(256, 140, histogramPage);
     QWhatsThis::add( d->histogramWidget, i18n("<p>This is the histogram drawing of the "
-                                             "selected image channel"));
+                                              "selected image channel"));
 
     d->hGradient = new ColorGradientWidget( ColorGradientWidget::Horizontal, 10, histogramPage );
     d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
@@ -262,15 +261,15 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // -------------------------------------------------------------
 
     QHBoxLayout *hlay2 = new QHBoxLayout(KDialog::spacingHint());
-    QLabel *label3 = new QLabel(i18n("Range:"), histogramPage);
-    label3->setAlignment ( Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel *label3     = new QLabel(i18n("Range:"), histogramPage);
+    label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->minInterv = new QSpinBox(0, 255, 1, histogramPage);
     d->minInterv->setValue(0);
-    QWhatsThis::add( d->minInterv, i18n("<p>Select here the minimal intensity "
-                                       "value of the histogram selection."));    
+    QWhatsThis::add(d->minInterv, i18n("<p>Select here the minimal intensity "
+                                       "value of the histogram selection."));
     d->maxInterv = new QSpinBox(0, 255, 1, histogramPage);
     d->maxInterv->setValue(255);
-    QWhatsThis::add( d->minInterv, i18n("<p>Select here the maximal intensity value "
+    QWhatsThis::add(d->minInterv, i18n("<p>Select here the maximal intensity value "
                                        "of the histogram selection."));
     hlay2->addWidget(label3);
     hlay2->addWidget(d->minInterv);
@@ -394,7 +393,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
                            ImagePropertiesColorsTabPriv::HISTOGRAM));
     d->iccProfileWidget->setMode(config->readNumEntry("ICC Level", ICCProfileWidget::SIMPLE));
     d->iccProfileWidget->setCurrentItemByKey(config->readEntry("Current ICC Item", QString()));
-                           
+
     d->channelCB->setCurrentItem(config->readNumEntry("Histogram Channel", 0));    // Luminosity.
     d->scaleBG->setButton(config->readNumEntry("Histogram Scale", HistogramWidget::LogScaleHistogram));
     d->colorsCB->setCurrentItem(config->readNumEntry("Histogram Color", 0));       // Red.
@@ -417,30 +416,30 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     config->writeEntry("ICC Level", d->iccProfileWidget->getMode());
     config->writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
     config->sync();
-    
+
     if (d->imageLoaderThread)
        delete d->imageLoaderThread;
-    
+
     if (d->histogramWidget)
        delete d->histogramWidget;
-    
+
     if (d->hGradient)
        delete d->hGradient;
 
-    delete d;       
+    delete d;
 }
 
 void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                        DImg *img, int itemType)
 {
     // This is necessary to stop computation because d->image.bits() is currently used by
-    // threaded histogram algorithm.    
+    // threaded histogram algorithm.
     d->histogramWidget->stopHistogramComputation();
-    
+
     d->navigateBar->setFileName();
     d->currentFilePath = QString();
     d->iccProfileWidget->loadFromURL(KURL());
-    
+
     // Clear informations.
     d->labelMeanValue->clear();
     d->labelPixelsValue->clear();
@@ -450,7 +449,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     d->labelPercentileValue->clear();
     d->labelColorDepth->clear();
     d->labelAlphaChannel->clear();
-        
+
     if (url.isEmpty())
     {
        setEnabled(false);
@@ -461,8 +460,8 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     d->navigateBar->setButtonsState(itemType);
     d->selectionArea = selectionArea;
     d->image.reset();
-    setEnabled(true);                
-    
+    setEnabled(true);
+
     if (!img)
     {
         loadImageFromUrl(url);
@@ -542,11 +541,11 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
     // Discard any leftover messages from previous, possibly aborted loads
     if ( filePath != d->currentFilePath )
         return;
-    
+
     if ( !img.isNull() )
     {
         d->histogramWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
-        
+
         // As a safety precaution, this must be changed only after updateData is called,
         // which stops computation because d->image.bits() is currently used by threaded histogram algorithm.
         d->image = img;
@@ -566,10 +565,10 @@ void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
 {
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
-    
+
     d->histogramWidget->stopHistogramComputation();
     d->selectionArea = selectionArea;
-        
+
     if (d->selectionArea)
     {
         d->imageSelection = d->image.copy(*d->selectionArea);
@@ -589,7 +588,7 @@ void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
     slotChannelChanged(d->channelCB->currentItem());
     slotScaleChanged(d->scaleBG->selectedId());
     slotColorsChanged(d->colorsCB->currentItem());
-    
+
     if (d->selectionArea)
        slotRenderingChanged(d->regionBG->selectedId());
 }
@@ -609,14 +608,14 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
         d->hGradient->setColors( QColor( "black" ), QColor( "red" ) );
         d->colorsCB->setEnabled(false);
         break;
-       
+
     case GreenChannel:
         d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "green" ) );
         d->colorsCB->setEnabled(false);
         break;
-          
-    case BlueChannel:        
+
+    case BlueChannel:
         d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "blue" ) );
         d->colorsCB->setEnabled(false);
@@ -627,20 +626,20 @@ void ImagePropertiesColorsTab::slotChannelChanged(int channel)
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(false);
         break;
-          
+
     case ColorChannels:
         d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(true);
         break;
-                              
+
     default:          // Luminosity.
         d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
         d->hGradient->setColors( QColor( "black" ), QColor( "white" ) );
         d->colorsCB->setEnabled(false);
         break;
     }
-   
+
     d->histogramWidget->repaint(false);
     updateStatistiques();
 }
@@ -658,7 +657,7 @@ void ImagePropertiesColorsTab::slotColorsChanged(int color)
     case AllColorsGreen:
         d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
         break;
-       
+
     case AllColorsBlue:
         d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
         break;
@@ -739,19 +738,19 @@ void ImagePropertiesColorsTab::updateStatistiques()
 
     if ( channel == HistogramWidget::ColorChannelsHistogram )
         channel = d->colorsCB->currentItem()+1;
-               
+
     double mean = d->histogramWidget->m_imageHistogram->getMean(channel, min, max);
     d->labelMeanValue->setText(value.setNum(mean, 'f', 1));
-    
+
     double pixels = d->histogramWidget->m_imageHistogram->getPixels();
     d->labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
-    
+
     double stddev = d->histogramWidget->m_imageHistogram->getStdDev(channel, min, max);
     d->labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
-      
+
     double counts = d->histogramWidget->m_imageHistogram->getCount(channel, min, max);
     d->labelCountValue->setText(value.setNum((float)counts, 'f', 0));
-    
+
     double median = d->histogramWidget->m_imageHistogram->getMedian(channel, min, max);
     d->labelMedianValue->setText(value.setNum(median, 'f', 1));
 
