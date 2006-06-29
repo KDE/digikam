@@ -131,7 +131,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
                                        "<b>Blue</b>: display the blue image-channel values.<p>"
                                        "<b>Alpha</b>: display the alpha image-channel values. "
                                        "This channel corresponds to the transparency value and "
-                                       "is supported by some image formats, such as PNG or GIF."));
+                                       "is supported by some image formats, such as PNG or TIF."));
 
     m_scaleBG = new QHButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
