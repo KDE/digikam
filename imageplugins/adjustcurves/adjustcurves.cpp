@@ -22,7 +22,6 @@
 // C++ includes.
 
 #include <cmath>
-#include <cstring>
 
 // Qt includes.
 
@@ -162,8 +161,8 @@ AdjustCurveDialog::AdjustCurveDialog(QWidget* parent, QString title, QFrame* ban
     m_scaleBG->setInsideMargin( 0 );
 
     QHBoxLayout* l1 = new QHBoxLayout();
-    l1->addWidget(m_scaleBG);
     l1->addStretch(10);
+    l1->addWidget(m_scaleBG);
     
     grid->addMultiCellWidget(label1, 0, 0, 1, 1);
     grid->addMultiCellWidget(m_channelCB, 0, 0, 2, 2);
