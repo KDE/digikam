@@ -45,7 +45,11 @@ int DImgLoader::granularity(DImgLoaderObserver *observer, int total, float progr
     // Progress slice is the part of 100% concerned with the current granularity
     // (E.g. in a loop only the values from 10% to 90% are used, then progressSlice is 0.8)
     // Current default is 1/20, that is progress info every 5%
-    int granularity = (int)(( total / (20 * progressSlice)) / observer->granularity());
+    int granularity=0;
+
+    if (observer)
+        granularity = (int)(( total / (20 * progressSlice)) / observer->granularity());
+
     return granularity ? granularity : 1;
 }
 
@@ -86,7 +90,7 @@ int DImgLoader::imageBytesDepth()
 
 QMap<int, QByteArray>& DImgLoader::imageMetaData()
 {
-    return m_image->m_priv->metaData;    
+    return m_image->m_priv->metaData;
 }
 
 QVariant DImgLoader::imageGetAttribute(const QString& key)
@@ -106,7 +110,7 @@ void DImgLoader::imageSetAttribute(const QString& key, const QVariant& value)
 
 QMap<QString, QString>& DImgLoader::imageEmbeddedText()
 {
-    return m_image->m_priv->embeddedText;    
+    return m_image->m_priv->embeddedText;
 }
 
 void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
@@ -149,12 +153,13 @@ bool DImgLoader::checkExifWorkingColorSpace()
     QByteArray profile = metaData.getExifTagData("Exif.Image.InterColorProfile");
     if (!profile.isNull())
     {
-        kdDebug() << "Found an ICC profile in Exif metadata" << endl;       
+        kdDebug() << "Found an ICC profile in Exif metadata" << endl;
         m_image->setICCProfil(profile);
         return true;
     }
 
-/* PENDING
+/* TODO : need to check with Paco if this techic can be used !
+
     // Else check the Exif color-space tag and use a default profiles available in digiKam.
     KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
 

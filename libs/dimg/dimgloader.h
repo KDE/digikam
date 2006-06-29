@@ -48,25 +48,25 @@ public:
 
     virtual bool load(const QString& filePath, DImgLoaderObserver *observer) = 0;
     virtual bool save(const QString& filePath, DImgLoaderObserver *observer) = 0;
-    
+
     virtual bool hasAlpha()   const = 0;
     virtual bool sixteenBit() const = 0;
     virtual bool isReadOnly() const = 0;
-    
+
 protected:
 
     DImgLoader(DImg* image);
-    
+
     unsigned char*&         imageData();
     unsigned int&           imageWidth();
     unsigned int&           imageHeight();
-    
+
     bool                    imageHasAlpha();
     bool                    imageSixteenBit();
-    
+
     int                     imageBitsDepth();
     int                     imageBytesDepth();
-    
+
     QMap<int, QByteArray>&  imageMetaData();
     QVariant                imageGetAttribute(const QString& key);
     void                    imageSetAttribute(const QString& key, const QVariant& value);
@@ -80,13 +80,13 @@ protected:
     virtual int             granularity(DImgLoaderObserver *observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();
-    
+
 protected:
-    
+
     DImg                   *m_image;
-    
+
 private:
-    
+
     DImgLoader();
 };
 
