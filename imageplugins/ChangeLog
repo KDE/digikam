@@ -1,3 +1,119 @@
+2006-06-27 07:43  binner
+
+	* trunk/extragear/graphics/digikamimageplugins/common/cimgiface/cimgiface.cpp:
+	  don't use local variable before it's set
+	  
+	  correcting to apparently intended code
+
+2006-06-03 13:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  digikam from trunk : White Balance image editor plugin : Fixed
+	  Gamma correction slider values inversed.
+
+2006-05-21 14:41  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.h:
+	  recursive include
+
+2006-05-16 08:21  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/infrared/infrared.cpp:
+	  digikam from trunk : Infrared tool
+	  
+	  Fix a crash if 'Add film grain' option is disable (wrong delete
+	  operation into DImg instance)
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de, gerhard@kulzer.net
+
+2006-05-15 16:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.cpp:
+	  digikam from trunk : unsharp mask plugin : restore old settings
+	  from 0.8.x serie. Note : this plugin use a new algorithm based
+	  on ImageMagick implementation, not gimp !!!
+	  CCBUGS: 125733
+
+2006-04-30 08:40  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp:
+	  fix i18n
+
+2006-04-28 18:45  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/noisereduction.cpp:
+	  digikam from trunk : noisereduction tool : patch from Peter
+	  Heckert about to fix a crash with a wrong color components of
+	  image to use with one pixel
+	  
+	  CCMAIL: lists@hphsite.de
+
+2006-04-28 11:53  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp:
+	  fix value
+
+2006-04-28 11:46  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp:
+	  digikam from trunk : NoiseReduction tool : patch from Peter
+	  Heckert :
+	  
+	  1./ Set default radius to 5.0.
+	  Reason: previous default value 1.0 has almost no effect for
+	  typical noise.
+	  Value 5.0 is good for medium noise in almost all cases.
+	  That does not mean, that always radius 5 is used, because radius
+	  is
+	  dynamically adapted while filtering.
+	  This means that radius /can/ grow until 5.0. The amount of
+	  growing
+	  depends from "threshold" setting.
+	  That is: /Maximum/ radius is 5.0.
+	  
+	  This value is good for the "baby.jpg" image that I almost use
+	  for testing.
+	  
+	  2./ Interchanged "Sharpness" and "Lookahead".
+	  
+	  3./ Cleaned up some "Whats this?" hints for briefness and
+	  clarity. ==> To update handbook too !!!
+	  
+	  CCMAIL: digikam-devel@kde.org, lists@hphsite.de
+
+2006-04-28 11:23  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/noisereduction.cpp:
+	  digikam from trunk : NoiseReduction tool : patch from Peter
+	  Heckert : fix vertical smear in images.
+	  This bug causes, that horizontal edge detection buffer is used
+	  as template for vertical blurring operation.
+	  
+	  CCMAIL: digikam-devel@kde.org, lists@hphsite.de
+
+2006-04-25 07:09  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/blowup/imageeffect_blowup.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/inpainting/imageeffect_inpainting.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  digikam from trunk : fix setCursor(KCursor::arrowCursor() ) to
+	  unsetCursor()
+
+2006-04-20 19:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/TODO: digikam from
+	  trunk : DigikamImagePlugins TODO update
+
+2006-04-19 09:41  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog: digikam
+	  from trunk : first update of ChangeLog file to prepare
+	  0.9.0-beta1. This is not the final beta1 update. The
+	  informations from ChangeLog have been used to update NEWS file,
+	  especially B.K.O files closed/fixed.
+
 2006-04-18 09:45  cgilles
 
 	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
