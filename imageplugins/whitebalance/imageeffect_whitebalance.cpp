@@ -78,22 +78,22 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                         : Digikam::ImageDlgBase(parent, title, "whitebalance", true, false, banner)
 {
     QString whatsThis;
-    
+
     m_clipSat = true;
     m_mr      = 1.0;
     m_mg      = 1.0;
     m_mb      = 1.0;
     m_BP      = 0;
-    
+
     Digikam::ImageIface iface(0, 0);
 
     m_WP     = iface.originalSixteenBit() ? 65536 : 256;
     m_rgbMax = iface.originalSixteenBit() ? 65536 : 256;
-    
+
     m_destinationPreviewData = 0L;
-    
+
     // About data and help button.
-    
+
     KAboutData* about = new KAboutData("digikamimageplugins",
                                        I18N_NOOP("White Color Balance Correction"), 
                                        digikamimageplugins_version,
@@ -102,17 +102,17 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                                        "(c) 2005-2006, Gilles Caulier", 
                                        0,
                                        "http://extragear.kde.org/apps/digikamimageplugins");
-    
+
     about->addAuthor("Gilles Caulier", I18N_NOOP("Author and maintainer"),
                      "caulier dot gilles at kdemail dot net");
-    
+
     about->addAuthor("Pawel T. Jochym", I18N_NOOP("White color balance correction algorithm"),
                      "jochym at ifj edu pl");
-    
+
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
-    
+
     m_previewWidget = new Digikam::ImageWidget(plainPage(),
                                                i18n("<p>You can see here the image's white-balance "
                                                     "adjustments preview. You can pick color on image to "
@@ -120,12 +120,12 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
-    
+
     QWidget *gboxSettings = new QWidget(plainPage());
     QVBoxLayout* layout2 = new QVBoxLayout( gboxSettings, marginHint(), spacingHint() );
 
     QGridLayout *grid = new QGridLayout( layout2, 2, 4, spacingHint());
-    
+
     QLabel *label1 = new QLabel(i18n("Channel:"), gboxSettings);
     label1->setAlignment ( Qt::AlignRight | Qt::AlignVCenter );
     m_channelCB = new QComboBox( false, gboxSettings );
@@ -148,7 +148,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
@@ -156,23 +156,23 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
     linHistoButton->setToggleButton(true);
-    
+
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
-    l1->addWidget(m_scaleBG);
     l1->addStretch(10);
-    
+    l1->addWidget(m_scaleBG);
+
     grid->addMultiCellLayout(l1, 0, 0, 0, 4);
-        
+
     m_histogramWidget = new Digikam::HistogramWidget(256, 140,
                                                      gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
