@@ -59,7 +59,7 @@ extern "C"
 
 // Local includes
 
-#include "rawfiles.h"
+#include "dcrawpreview.h"
 #include "dmetadata.h"
 #include "digikampreview.h"
 #include "digikam_export.h"
@@ -93,7 +93,7 @@ void kio_digikampreviewProtocol::get(const KURL& url )
 
     // -- Get the image preview --------------------------------
     // In first, we trying to load with dcraw : RAW files.
-    if ( !loadDCRAW(img, url.path()) )
+    if ( !DcrawPreview::loadDcrawPreview(img, url.path()) )
     {
         // Try to extract Exif/Iptc preview.
         if ( !loadImagePreview(img, url.path()) )
@@ -111,7 +111,7 @@ void kio_digikampreviewProtocol::get(const KURL& url )
 
     if (img.depth() != 32)
         img = img.convertDepth(32);
-        
+
     if (exif)
         exifRotate(url.path(), img);
 
@@ -163,53 +163,53 @@ void kio_digikampreviewProtocol::exifRotate(const QString& filePath, QImage& thu
     {
         if (metaInfo.mimeType() == "image/jpeg" &&
             metaInfo.containsGroup("Jpeg EXIF Data"))
-        {   
+        {
             // Rotate thumbnail from JPEG files based on EXIF rotate tag
-        
+
             QWMatrix matrix;
             DMetadata metadata(filePath);
             DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-            
+
             bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
                             orientation != DMetadata::ORIENTATION_UNSPECIFIED);
-        
+
             switch (orientation) 
             {
                 case DMetadata::ORIENTATION_NORMAL:
                 case DMetadata::ORIENTATION_UNSPECIFIED:
                     break;
-            
+
                 case DMetadata::ORIENTATION_HFLIP:
                     matrix.scale(-1, 1);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_180:
                     matrix.rotate(180);
                     break;
-            
+
                 case DMetadata::ORIENTATION_VFLIP:
                     matrix.scale(1, -1);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90_HFLIP:
                     matrix.scale(-1, 1);
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90:
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90_VFLIP:
                     matrix.scale(1, -1);
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_270:
                     matrix.rotate(270);
                     break;
             }
-        
+
             //transform accordingly
             if ( doXform )
                 thumb = thumb.xForm( matrix );
@@ -228,116 +228,7 @@ bool kio_digikampreviewProtocol::loadImagePreview(QImage& image, const QString& 
                   << image.width() << "x" << image.height() << endl;
         return true;
     }
-    
-    return false;
-}
 
-// -- RAW preview extraction using Dcraw --------------------------------------------------------------
-
-bool kio_digikampreviewProtocol::loadDCRAW(QImage& image, const QString& path)
-{
-    FILE       *f;
-    QByteArray  imgData;
-    const int   MAX_IPC_SIZE = (1024*32);
-    char        buffer[MAX_IPC_SIZE];
-    QFile       file;
-    Q_LONG      len;
-    QCString    command;
-    
-    QFileInfo fileInfo(path);
-    QString rawFilesExt(raw_file_extentions);
-
-    if (!fileInfo.exists() || !rawFilesExt.upper().contains( fileInfo.extension().upper() ))
-        return false;
-
-    // Try to extract embedded thumbnail using dcraw with options:
-    // -c : write to stdout
-    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
-    // Note : this code require at least dcraw version 8.x
-
-    command  = "dcraw -c -e ";
-    command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
-
-    f = popen( command.data(), "r" );
-
-    if ( !f )
-        return false;
-
-    file.open( IO_ReadOnly,  f );
-
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-
-    if ( !imgData.isEmpty() )
-    {
-        if (image.loadFromData( imgData ))
-        {
-            kdDebug() << "Use embedded JPEG RAW preview extraction" << endl;
-            return true;
-        }
-    }
-    
-    // In second, try to use simple RAW extraction method
-    // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
-    // -2 : 8bit ppm output
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
-
-    command  = "dcraw -c -h -2 -w -a ";
-    command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
-
-    f = popen( command.data(), "r" );
-
-    if ( !f )
-        return false;
-
-    file.open( IO_ReadOnly,  f );
-
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-
-    if ( !imgData.isEmpty() )
-    {
-        if (image.loadFromData( imgData ))
-        {
-            kdDebug() << "Use reduced RAW preview extraction" << endl;
-            return true;
-        }
-    }
-    
     return false;
 }
 

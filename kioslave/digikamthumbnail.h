@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2003-01-15
  * Description : digiKam KIO slave to get image thumbnails.
- * 
+ *
  * Copyright 2003-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2006      by Gilles Caulier
  *
@@ -12,12 +12,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef _digikamthumbnail_H_
@@ -27,7 +27,6 @@
 
 #include <kio/slavebase.h>
 
-class QCString;
 class QString;
 class QImage;
 class QApplication;
@@ -51,11 +50,10 @@ private:
     QImage loadPNG(const QString& path);
     bool   loadDImg(QImage& image, const QString& path);
     bool   loadKDEThumbCreator(QImage& image, const QString& path);
-    bool   loadDCRAW(QImage& image,  const QString& path);
     void   createThumbnailDirs();
 
 private:
-    
+
     int           cachedSize_;
 
     int           org_width_;

@@ -65,7 +65,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "rawfiles.h"
+#include "dcrawpreview.h"
 #include "dmetadata.h"
 #include "digikamthumbnail.h"
 #include "digikam_export.h"
@@ -153,7 +153,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
             if ( !loadJPEG(img, url.path()) )
             {
                 // Try to load with dcraw : RAW files.
-                if (!loadDCRAW(img, url.path()) )
+                if (!DcrawPreview::loadDcrawPreview(img, url.path()) )
                 {
                     // Try to load with DImg : TIFF, PNG, etc.
                     if (!loadDImg(img, url.path()) )
@@ -178,7 +178,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
         if (img.depth() != 32)
             img = img.convertDepth(32);
-            
+
         if (exif)
             exifRotate(url.path(), img);
 
@@ -245,7 +245,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     QFileInfo fileInfo(path);
     if (!fileInfo.exists())
         return false;
-    
+
     QString ext = fileInfo.extension().upper();
 
     if (ext == QString("JPEG") || ext == QString("JPG"))
@@ -254,7 +254,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         return (loadDImg(image, path));
     else if (ext == QString("TIFF") || ext == QString("TIF"))
         return (loadDImg(image, path));
-    
+
     return false;
 }
 
@@ -363,7 +363,7 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
     uchar** lines = img.jumpTable();
     while (cinfo.output_scanline < cinfo.output_height)
         jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
-        
+
     jpeg_finish_decompress(&cinfo);
 
     // Expand 24->32 bpp
@@ -419,53 +419,53 @@ void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& t
     {
         if (metaInfo.mimeType() == "image/jpeg" &&
             metaInfo.containsGroup("Jpeg EXIF Data"))
-        {   
+        {
             // Rotate thumbnail from JPEG files based on EXIF rotate tag
-        
+
             QWMatrix matrix;
             DMetadata metadata(filePath);
             DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-            
+
             bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
                             orientation != DMetadata::ORIENTATION_UNSPECIFIED);
-        
+
             switch (orientation) 
             {
                 case DMetadata::ORIENTATION_NORMAL:
                 case DMetadata::ORIENTATION_UNSPECIFIED:
                     break;
-            
+
                 case DMetadata::ORIENTATION_HFLIP:
                     matrix.scale(-1, 1);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_180:
                     matrix.rotate(180);
                     break;
-            
+
                 case DMetadata::ORIENTATION_VFLIP:
                     matrix.scale(1, -1);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90_HFLIP:
                     matrix.scale(-1, 1);
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90:
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_90_VFLIP:
                     matrix.scale(1, -1);
                     matrix.rotate(90);
                     break;
-            
+
                 case DMetadata::ORIENTATION_ROT_270:
                     matrix.rotate(270);
                     break;
             }
-        
+
             //transform accordingly
             if ( doXform )
                 thumb = thumb.xForm( matrix );
@@ -647,109 +647,6 @@ bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
     return true;
 }
 
-// -- Load using Dcraw ---------------------------------------------------------------------
-
-bool kio_digikamthumbnailProtocol::loadDCRAW(QImage& image, const QString& path)
-{
-    FILE       *f;
-    QByteArray  imgData;
-    const int   MAX_IPC_SIZE = (1024*32);
-    char        buffer[MAX_IPC_SIZE];
-    QFile       file;
-    Q_LONG      len;
-    QCString    command;
-    
-    QFileInfo fileInfo(path);
-    QString rawFilesExt(raw_file_extentions);
-
-    if (!fileInfo.exists() || !rawFilesExt.upper().contains( fileInfo.extension().upper() ))
-        return false;
-
-    // Try to extract embedded thumbnail using dcraw with options:
-    // -c : write to stdout
-    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
-    // Note : this code require at least dcraw version 8.x
-
-    command  = "dcraw -c -e ";
-    command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
-
-    f = popen( command.data(), "r" );
-
-    if ( !f )
-        return false;
-
-    file.open( IO_ReadOnly,  f );
-
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-
-    if ( !imgData.isEmpty() )
-    {
-        if (image.loadFromData( imgData ))
-            return true;
-    }
-    
-    // In second, try to use simple RAW extraction method
-    // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
-    // -2 : 8bit ppm output
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
-
-    command  = "dcraw -c -h -2 -w -a ";
-    command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
-
-    f = popen( command.data(), "r" );
-
-    if ( !f )
-        return false;
-
-    file.open( IO_ReadOnly,  f );
-
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-
-    if ( !imgData.isEmpty() )
-    {
-        if (image.loadFromData( imgData ))
-            return true;
-    }
-    
-    return false;
-}
-
 // -- Load using KDE API ---------------------------------------------------------------------
 
 bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QString& path)
@@ -759,7 +656,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     // code fixed, we will have to create a qapp instance.
     if (!app_)
         app_ = new QApplication(argc_, argv_);
-    
+
     QString mimeType = KMimeType::findByURL(path)->name();
     if (mimeType.isEmpty())
     {
@@ -768,9 +665,9 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
     }
 
     QString mimeTypeAlt = mimeType.replace(QRegExp("/.*"), "/*");
-    
+
     QString plugin;
-    
+
     KTrader::OfferList plugins = KTrader::self()->query("ThumbCreator");
     for (KTrader::OfferList::ConstIterator it = plugins.begin(); it != plugins.end(); ++it)
     {
@@ -783,7 +680,7 @@ bool kio_digikamthumbnailProtocol::loadKDEThumbCreator(QImage& image, const QStr
                 break;
             }
         }
-        
+
         if (!plugin.isEmpty())
             break;
     }
