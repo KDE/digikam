@@ -16,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Insert text to image plugin for digiKam
+Comment[ca]=Connector pel digiKam per inserir text en una imatge
 Comment[da]=Digikam plugin til at indsætte tekst i billeder
 Comment[de]=Ein digiKam-Modul zum Hinzufügen von Text zu einem Bild.
 Comment[el]=Πρόσθετο εισαγωγής κειμένου σε εικόνα για το digiKam

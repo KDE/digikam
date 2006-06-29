@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Free rotation plugin for digiKam
+Comment[ca]=Connector pel digiKam de gir lliure
 Comment[da]=Plugin til fri rotation af billeder til Digikam
 Comment[de]=Ein digiKam-Modul zur freien Rotation von Bildern.
 Comment[el]=Πρόσθετο ειδικών εφέ ελεύθερης περιστροφής για το digiKam

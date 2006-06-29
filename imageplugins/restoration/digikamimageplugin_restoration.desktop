@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to restore a photograph
+Comment[ca]=Connector pel digiKam per restaurar una fotografia
 Comment[da]=Digikam plugin til restaurering af et fotografi
 Comment[de]=Ein digiKam-Modul zur Restauration eines Photos.
 Comment[el]=Πρόσθετο του digiKam για αποκατάσταση μιας φωτογραφίας

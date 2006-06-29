@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Perspective tool plugin for digiKam
+Comment[ca]=Connector pel digiKam d'eina de perspectiva
 Comment[da]=Perspektivværktøjs-plugin til Digikam
 Comment[de]=Ein digiKam-Modul zum Justieren der Perspektive eines Bildes.
 Comment[el]=Πρόσθετο εργαλείο προοπτικής για το digiKam

@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Image solarize effect plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efecte de solarització
 Comment[da]=Solariseringsreffekt-plugin for Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Solarisierungseffektes.
 Comment[el]=Πρόσθετο εφέ ηλιακής έκθεσης εικόνας για το digiKam

@@ -16,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Distortion special effects plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efectes especials de distorsió
 Comment[da]=Digikam plugin for forvrængningsspecialeffekt
 Comment[de]=Ein digiKam-Modul zum Verzerren von Bildern.
 Comment[el]=Πρόσθετο ειδικών εφέ παραμόρφωσης για το digiKam

@@ -15,6 +15,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Blur special effects plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efectes especials de difuminat
 Comment[da]=Digikam plugin med specialeffekter for udviskning
 Comment[de]=Ein digiKam-Modul zum Verwackeln von Bildern.
 Comment[el]=Πρόσθετο ειδικών εφέ θολώματος για το digiKam

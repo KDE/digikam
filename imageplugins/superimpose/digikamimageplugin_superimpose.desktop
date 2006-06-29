@@ -16,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Template superimpose plugin for digiKam
+Comment[ca]=Connector pel digiKam per sobreimposar una plantilla
 Comment[da]=Plugin til skabelon-indkopiering i Digikam
 Comment[de]=Ein digiKam-Modul zum Anwenden von Schablonen auf ein Bild.
 Comment[el]=Πρόσθετο πρότυπης υπερέκθεσης για το digiKam

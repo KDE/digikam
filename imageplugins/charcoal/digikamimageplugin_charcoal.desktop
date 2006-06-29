@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Charcoal drawing image effect plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efecte d'imatge de dibuix al carbonet
 Comment[da]=Plugin til kultegningseffekt på billeder i Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Kohlezeichnungseffektes.
 Comment[el]=Πρόσθετο εφέ σχεδίασης με κάρβουνο για το digiKam

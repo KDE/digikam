@@ -16,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Add border to image plugin for digiKam
+Comment[ca]=Connector pel digiKam per afegir una vora a la imatge
 Comment[da]=Plugin til indramning af billeder i Digikam
 Comment[de]=Ein digiKam-Modul zum Hinzufügen eines Rahmens zu einem Bild.
 Comment[el]=Προσθήκη περιγράμματος σε πρόσθετο εικόνας για το digiKam

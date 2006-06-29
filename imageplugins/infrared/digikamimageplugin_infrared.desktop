@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Simulate infrared film plugin for digiKam
+Comment[ca]=Connector pel digiKam de simulació de pel·lícula d'infraroigs
 Comment[da]=Digikam plugin for at simulere infrarød film
 Comment[de]=Ein digiKam-Modul zum Simulieren von Infrarotfilm.
 Comment[el]=Πρόσθετο εξομοίωσης υπέρυθρου φιλμ για το digiKam

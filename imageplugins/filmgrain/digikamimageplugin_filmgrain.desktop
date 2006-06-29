@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Film grain image effect plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efecte d'imatge de gra de pel·lícula
 Comment[da]=Plugin til filmkorn-effekt på billeder i Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Effektes von körnigem Film.
 Comment[el]=Πρόσθετο εφέ κόκκου φιλμ για το digiKam

@@ -18,6 +18,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
+Comment[ca]=Connector pel digiKam d'ajust dels nivells de l'histograma d'imatges
 Comment[da]=Plugin til niveaujustering i Digikam
 Comment[de]=Ein digiKam-Modul zur Justierung der Bildhistogrammwerte.
 Comment[el]=Πρόσθετο προσαρμογής των επιπέδων του ιστογράμματος εικόνας για το digiKam

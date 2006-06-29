@@ -17,6 +17,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digiKam
+Comment[ca]=Connector pel digiKam d'efecte d'imatge de gotes de pluja
 Comment[da]=Plugin til regndråbeeffekt på billeder i Digikam
 Comment[de]=Ein digiKam-Modul zum Erzeugen eines Regentropfeneffektes.
 Comment[el]=Πρόσθετο εφέ πτώσης βροχής για το digiKam

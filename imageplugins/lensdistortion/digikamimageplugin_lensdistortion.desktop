@@ -16,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Spherical aberration image correction plugin for digiKam
+Comment[ca]=Connector pel digiKam per corregir l'aberració esfèrica d'una imatge
 Comment[da]=Plugin til korrigering af sfærisk afvigelse for Digikam
 Comment[de]=Ein digiKam Modul zur Reduzierung der kugelförmigen Verzerrung durch Linsen auf einem Bild.
 Comment[el]=Πρόσθετο διόρθωσης εικόνας σφαιρικής παρέκκλισης για το digiKam
