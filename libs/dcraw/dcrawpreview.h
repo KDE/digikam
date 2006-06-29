@@ -34,7 +34,7 @@ class DIGIKAM_EXPORT DcrawPreview
 {
 public:
 
-    static inline bool loadDcrawPreview(QImage& image, const QString& path);
+    static bool loadDcrawPreview(QImage& image, const QString& path);
 
 };
 
