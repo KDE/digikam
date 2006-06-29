@@ -50,7 +50,9 @@ MetadataListView::MetadataListView(QWidget* parent)
     setItemMargin(0);
     setAllColumnsShowFocus(true);
     setResizeMode(KListView::AllColumns);
-    setVScrollBarMode(QScrollView::AlwaysOn);
+    // Vertical scroll bar is always disable to give more 
+    // free space to metadata content
+    setVScrollBarMode(QScrollView::AlwaysOff);
     
     m_parent = dynamic_cast<MetadataWidget *>(parent);
     
