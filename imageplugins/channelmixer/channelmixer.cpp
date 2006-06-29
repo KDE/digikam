@@ -78,7 +78,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                   : Digikam::ImageDlgBase(parent, title, "channelmixer", true, false, banner)
 {
     m_destinationPreviewData = 0L;
-    
+
     // About data and help button.
 
     KAboutData* about = new KAboutData("digikamimageplugins",
@@ -94,13 +94,13 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                      "caulier dot gilles at kdemail dot net");
 
     setAboutData(about);
-    
+
     // -------------------------------------------------------------
 
     m_previewWidget = new Digikam::ImageWidget(plainPage(),
-                                               i18n("<p>You can see here the image's color channels' "
-                                                    "gains adjustments preview. You can pick color on image "
-                                                    "to see the color level corresponding on histogram."));
+                          i18n("<p>You can see here the image's color channels' "
+                               "gains adjustments preview. You can pick color on image "
+                               "to see the color level corresponding on histogram."));
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------
@@ -128,7 +128,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
                                      "Logarithmic scale can be used when the maximal counts are big; "
                                      "if it is used, all values (small and large) will be visible on the graph."));
-    
+
     QPushButton *linHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( linHistoButton, i18n( "<p>Linear" ) );
     m_scaleBG->insert(linHistoButton, Digikam::HistogramWidget::LinScaleHistogram);
@@ -136,21 +136,21 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
     linHistoButton->setToggleButton(true);
-    
+
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
-    l1->addWidget(m_scaleBG);
     l1->addStretch(10);
-    
+    l1->addWidget(m_scaleBG);
+
     grid->addMultiCellLayout(l1, 0, 0, 0, 4);
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
