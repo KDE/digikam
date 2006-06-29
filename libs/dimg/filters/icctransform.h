@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2005-11-18
  * Description : a class to apply ICC color correction to image.
- * 
+ *
  * Copyright 2005-2006 by F.J. Cruz and Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -11,14 +11,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef ICCTRANSFORM_H
 #define ICCTRANSFORM_H
 
@@ -39,32 +39,33 @@ class IccTransformPriv;
 class DIGIKAM_EXPORT IccTransform
 {
 public:
-    
+
     IccTransform();
     ~IccTransform();
-    
-    void getTransformType(bool do_proof_profile);
-    void apply(DImg& image);
-    void apply(DImg& image, QByteArray& profile, int intent, 
-               bool useBPC=false, bool checkGamut=false, bool useBuiltin=false);
-    void getEmbeddedProfile(const DImg& image);
 
+    bool apply(DImg& image);
+    bool apply(DImg& image, QByteArray& profile, int intent,
+               bool useBPC=false, bool checkGamut=false, bool useBuiltin=false);
+
+    void getTransformType(bool do_proof_profile);
+    void getEmbeddedProfile(const DImg& image);
     int  getRenderingIntent();
-    
+    bool hasOutputProfile();
+
     QByteArray embeddedProfile() const;
     QByteArray inputProfile() const;
     QByteArray outputProfile() const;
     QByteArray proofProfile() const;
-    
-    //Input profile from file
+
+    /** Input profile from file methods */
     void setProfiles(const QString& input_profile, const QString& output_profile);
     void setProfiles(const QString& input_profile, const QString& output_profile, const QString& proof_profile);
-    
-    //Embedded input profile
+
+    /** Embedded input profile methods */
     void setProfiles(const QString& output_profile);
     void setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof);
 
-    //Profile info
+    /** Profile info methods */
     QString getProfileDescription(const QString& profile);
 
     QString getEmbeddedProfileDescriptor();
@@ -72,8 +73,6 @@ public:
     QString getOutpoutProfileDescriptor();
     QString getProofProfileDescriptor();
 
-    bool hasOutputProfile();
-    
 private:
 
     QByteArray loadICCProfilFile(const QString& filePath);
@@ -81,7 +80,7 @@ private:
 private:
 
     IccTransformPriv* d;
-    
+
 };
 
 }  // NameSpace Digikam
