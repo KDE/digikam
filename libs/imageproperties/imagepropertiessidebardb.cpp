@@ -207,6 +207,7 @@ void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
     d->currentItem = 0;
+    d->currentInfo = 0;
     d->desceditTab->setItem();
     d->dirtyDesceditTab = false;
 }
