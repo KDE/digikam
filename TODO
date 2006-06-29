@@ -2,11 +2,25 @@
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
+* L10N fixes:
+	o informations -> information
+	o icc -> ICC
+	o ?? Credit -> Credits (need native Speaker?  There's e.g. about.addCredit() method not about.addCredits()
+
 * Image Properties SideBar:
 
    - update ImagePropertiesMetadataTab on ImageAttributesWatch's signalFileMetadataChanged
      (ImageAttributesWatch is libdigikam, the metadatatab is used by showfoto - create subclass
       ImagePropertiesMetadataTabDB?)
+
+* right hand side sidebar (allee):
+	o Select an album 
+        o click on some empty space in the thumbnail view (-> selected image changes from blue selection
+          background to dotted line (aka still has keyboard focus, right?)
+        o Now select tabs in right hand side:
+		+ Properties, metadata..: everyhing is disabled
+		+ comments/tags tab on the other hand  shows info about the image with keyboard focus
+        Shouldn't every tab show now it's info in this case? (alternatively disable comments/tags too)
 
 * Showfoto: 
 
