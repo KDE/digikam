@@ -219,8 +219,8 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
-    l1->addWidget(m_scaleBG);
     l1->addStretch(10);
+    l1->addWidget(m_scaleBG);
     
     gridSettings->addMultiCellLayout(l1, 0, 0, 0, 4);
 
