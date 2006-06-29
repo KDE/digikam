@@ -97,7 +97,8 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
         {
             int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += granularity(observer, size, 0.8);
-            observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
+            if (observer)
+                observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
         }
 
         QMutexLocker lock(&m_mutex);
