@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date   : 2004-12-21
  * Description : USB Mass Storage camera interface
- * 
+ *
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2005-2006 by Gilles Caulier
  *
@@ -12,12 +12,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -41,13 +41,13 @@ extern "C"
 
 // KDE includes.
 
-#include <kprocess.h>
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 
 // Local includes.
 
 #include "dimg.h"
+#include "dcrawpreview.h"
 #include "dmetadata.h"
 #include "umscamera.h"
 
@@ -66,7 +66,7 @@ UMSCamera::~UMSCamera()
 
 bool UMSCamera::doConnect()
 {
-    return true;    
+    return true;
 }
 
 void UMSCamera::cancel()
@@ -130,7 +130,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                     }
                 }
             }
-    
+
             info.name             = fi->fileName();
             info.folder           = folder;
             info.mime             = mime;
@@ -141,11 +141,11 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.downloaded       = -1; // TODO
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
-        
+
             infoList.append(info);
         }
     }
-    
+
     return true;
 }
 
@@ -157,10 +157,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     DMetadata metadata(QFile::encodeName(folder + "/" + itemName));
     thumbnail = metadata.getExifThumbnail(true);
-        
     if (!thumbnail.isNull())
         return true;
-    
+
     // In 2th, we trying to get thumbnail from '.thm' files if we didn't manage to get 
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
     // Using this way is always more speed than using dcraw parse utility.
@@ -177,7 +176,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     {
         if (!thumbnail.isNull())
            return true;
-    }     
+    }
 
     // In 3rd, if file image type is TIFF, load thumb using DImg befire to use dcraw::parse method 
     // to prevent broken 16 bits TIFF thumb.
@@ -186,7 +185,6 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         fi.extension().upper() == QString("TIF"))
     {
         DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
-    
         if (!dimgThumb.isNull())
         {
             thumbnail = dimgThumb.copyQImage();
@@ -194,51 +192,11 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         }
     }
 
-    // In 4th, try to extract embedded thumbnail using dcraw with options:
-    // -c : write to stdout
-    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
-    // Note : this code require at least dcraw version 8.21
+    // In 4th, try to extract embedded thumbnail using dcraw
 
-    QCString command  = "dcraw -c -e ";
-    command += QFile::encodeName( KProcess::quote( folder + "/" + itemName ) );
-    kdDebug() << "Running dcraw command " << command << endl;
-
-    FILE* f = popen( command.data(), "r" );
-
-    if ( !f )
-        return false;
-
-    QByteArray imgData;
-    const int  MAX_IPC_SIZE = (1024*32);
-    char       buffer[MAX_IPC_SIZE];
-    QFile      file;
-    Q_LONG     len;
-
-    file.open( IO_ReadOnly,  f );
-
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
-    {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-
-    if ( !imgData.isEmpty() )
-    {
-        if (thumbnail.loadFromData( imgData ))
-            return true;
-    }
+    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + "/" + itemName));
+    if (!thumbnail.isNull())
+        return true;
 
     // Finaly, we trying to get thumbnail using DImg API.
 
@@ -267,7 +225,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     QString src  = folder + "/" + itemName;
     QString dest = saveFile;
-    
+
     QFile sFile(src);
     QFile dFile(dest);
 
@@ -277,7 +235,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
                     << src << endl;
         return false;
     }
-    
+
     if ( !dFile.open(IO_WriteOnly) )
     {
         sFile.close();
@@ -327,12 +285,12 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 
     QFileInfo thmLo(folder + "/" + fi.baseName() + ".thm");          // Lowercase
 
-    if (thmLo.exists())           
+    if (thmLo.exists())
         ::unlink(QFile::encodeName(thmLo.filePath()));
 
     QFileInfo thmUp(folder + "/" + fi.baseName() + ".THM");          // Uppercase
 
-    if (thmUp.exists())           
+    if (thmUp.exists())
         ::unlink(QFile::encodeName(thmUp.filePath()));
 
     // Remove the real image.
@@ -363,13 +321,13 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
     while ((fi = it.current()) != 0 && !m_cancel)
     {
         ++it;
-        
+
         if (fi->fileName() == "." || fi->fileName() == "..")
             continue;
 
         QString subfolder = folder + QString(folder.endsWith("/") ? "" : "/") + fi->fileName();
         subFolderList.append(subfolder);
-        listFolders(subfolder, subFolderList);        
+        listFolders(subfolder, subFolderList);
     }
 }
 
