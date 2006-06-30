@@ -265,11 +265,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
+    QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 3, 2, 
+                                   KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *inProfileBG = new QButtonGroup(6, Qt::Vertical, inProfiles);
+    QButtonGroup *inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
     inProfileBG->setFrameStyle(QFrame::NoFrame);
-
+    inProfileBG->setInsideMargin(0);
+    
     m_useEmbeddedProfile = new QRadioButton(inProfileBG);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
 
@@ -283,17 +285,21 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useInSelectedProfile = new QRadioButton(inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_inProfilesCB = new KURLRequester(inProfileBG);
+    m_inProfilesCB = new KURLRequester(inProfiles);
     m_inProfilesCB->setMode(KFile::File|KFile::ExistingOnly);
     m_inProfilesCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *inProfiles_dialog = m_inProfilesCB->fileDialog();
     m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
     inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
     
-    QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfileBG);
+    QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    firstPageLayout->addWidget(inProfileBG);
-    firstPageLayout->addStretch();
+    firstPageLayout->addMultiCellWidget(inProfileBG, 0, 1, 0, 0);    
+    firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);    
+    firstPageLayout->addMultiCellWidget(m_inProfilesCB, 2, 2, 0, 2);    
+    firstPageLayout->setColStretch(1, 10);
+    firstPageLayout->setRowStretch(2, 10);
+    firstPageLayout->setRowStretch(3, 10);
 
     //---------- End "Input" Page ------------------------------------
 
@@ -303,28 +309,34 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Workspace" Page Setup ---------------------------------
 
-    QVBoxLayout *secondPageLayout = new QVBoxLayout(spaceProfiles, 0, KDialog::spacingHint());
+    QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
+                                    KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *spaceProfileBG = new QButtonGroup(4, Qt::Vertical, spaceProfiles);
+    QButtonGroup *spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
     spaceProfileBG->setFrameStyle(QFrame::NoFrame);
-
+    spaceProfileBG->setInsideMargin(0);
+    
     m_useSpaceDefaultProfile = new QRadioButton(spaceProfileBG);
     m_useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
 
     m_useSpaceSelectedProfile = new QRadioButton(spaceProfileBG);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_spaceProfileCB = new KURLRequester(spaceProfileBG);
+    m_spaceProfileCB = new KURLRequester(spaceProfiles);
     m_spaceProfileCB->setMode(KFile::File|KFile::ExistingOnly);
     m_spaceProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *spaceProfiles_dialog = m_spaceProfileCB->fileDialog();
     m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
     spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
-    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfileBG);
+    QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfiles);
 
-    secondPageLayout->addWidget(spaceProfileBG);
-    secondPageLayout->addStretch();
+    secondPageLayout->addMultiCellWidget(spaceProfileBG, 0, 1, 0, 0);    
+    secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
+    secondPageLayout->addMultiCellWidget(m_spaceProfileCB, 2, 2, 0, 2);    
+    secondPageLayout->setColStretch(1, 10);
+    secondPageLayout->setRowStretch(2, 10);
+    secondPageLayout->setRowStretch(3, 10);
 
     //---------- End "Workspace" Page -----------------------------------
 
@@ -334,10 +346,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Proofing" Page Setup ---------------------------------
 
-    QVBoxLayout *thirdPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
-
-    QButtonGroup *proofProfileBG = new QButtonGroup(4, Qt::Vertical, proofProfiles);
+    QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
+                                   KDialog::marginHint(), KDialog::spacingHint());
+                                    
+    QButtonGroup *proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
     proofProfileBG->setFrameStyle(QFrame::NoFrame);
+    proofProfileBG->setInsideMargin(0);
 
     m_useProofDefaultProfile = new QRadioButton(proofProfileBG);
     m_useProofDefaultProfile->setText(i18n("Use default proof profile"));
@@ -345,17 +359,21 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useProofSelectedProfile = new QRadioButton(proofProfileBG);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_proofProfileCB = new KURLRequester(proofProfileBG);
+    m_proofProfileCB = new KURLRequester(proofProfiles);
     m_proofProfileCB->setMode(KFile::File|KFile::ExistingOnly);
     m_proofProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *proofProfiles_dialog = m_proofProfileCB->fileDialog();
     m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
-    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfileBG);
+    QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfiles);
 
-    thirdPageLayout->addWidget(proofProfileBG);
-    thirdPageLayout->addStretch();
+    thirdPageLayout->addMultiCellWidget(proofProfileBG, 0, 1, 0, 0);    
+    thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
+    thirdPageLayout->addMultiCellWidget(m_proofProfileCB, 2, 2, 0, 2);    
+    thirdPageLayout->setColStretch(1, 10);
+    thirdPageLayout->setRowStretch(2, 10);
+    thirdPageLayout->setRowStretch(3, 10);
 
     //---------- End "Proofing" Page -----------------------------------
 
@@ -365,28 +383,34 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Display" Page Setup ----------------------------------
 
-    QVBoxLayout *fourthPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
+    QGridLayout *fourthPageLayout = new QGridLayout(displayProfiles, 3, 2, 
+                                    KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *displayProfileBG = new QButtonGroup(4, Qt::Vertical, displayProfiles);
+    QButtonGroup *displayProfileBG = new QButtonGroup(2, Qt::Vertical, displayProfiles);
     displayProfileBG->setFrameStyle(QFrame::NoFrame);
-
+    displayProfileBG->setInsideMargin(0);
+    
     m_useDisplayDefaultProfile = new QRadioButton(displayProfileBG);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
 
     m_useDisplaySelectedProfile = new QRadioButton(displayProfileBG);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
-    m_displayProfileCB = new KURLRequester(displayProfileBG);
+    m_displayProfileCB = new KURLRequester(displayProfiles);
     m_displayProfileCB->setMode(KFile::File|KFile::ExistingOnly);
     m_displayProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
     m_iccDisplayPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccDisplayPreviewWidget);
 
-    QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfileBG);
+    QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfiles);
 
-    fourthPageLayout->addWidget(displayProfileBG);
-    fourthPageLayout->addStretch();
+    fourthPageLayout->addMultiCellWidget(displayProfileBG, 0, 1, 0, 0);    
+    fourthPageLayout->addMultiCellWidget(displayProfilesInfo, 0, 0, 2, 2);    
+    fourthPageLayout->addMultiCellWidget(m_displayProfileCB, 2, 2, 0, 2);    
+    fourthPageLayout->setColStretch(1, 10);
+    fourthPageLayout->setRowStretch(2, 10);
+    fourthPageLayout->setRowStretch(3, 10);
     
     //---------- End "Display" Page ------------------------------------
 
