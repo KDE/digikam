@@ -15,6 +15,10 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Hot pixel correction plugin for digiKam
+Comment[ja]=digiKam ホットピクセル除去プラグイン
+Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
+Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
+Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net

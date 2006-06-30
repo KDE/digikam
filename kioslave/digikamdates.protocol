@@ -12,4 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam dates kioslave
+Description[ja]=digiKam 日付 kioslave
+Description[pt]='kioslave' de datas do digiKam
+Description[sv]=I/O-slav för Digikams datum
 Class=:local

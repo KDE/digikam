@@ -12,4 +12,7 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digikam tags kioslave
+Description[ja]=digiKam タグ kioslave
+Description[pt]='kioslave' de marcas do digiKam
+Description[sv]=I/O-slav för Digikams etiketter
 Class=:local
