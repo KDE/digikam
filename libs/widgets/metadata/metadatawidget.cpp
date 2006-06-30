@@ -116,7 +116,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     QPushButton *saveMetadata = new QPushButton( d->toolButtons );
     saveMetadata->setPixmap( iconLoader->loadIcon( "filesave", (KIcon::Group)KIcon::Toolbar ) );
-    QWhatsThis::add( saveMetadata, i18n( "Save meta-data to a file" ) );
+    QWhatsThis::add( saveMetadata, i18n( "Save meta-data to a binary file" ) );
     d->toolButtons->insert(saveMetadata);
     
     QPushButton *printMetadata = new QPushButton( d->toolButtons );
