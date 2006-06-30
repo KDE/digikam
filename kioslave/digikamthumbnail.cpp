@@ -246,6 +246,16 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     if (!fileInfo.exists())
         return false;
 
+    // Try to use embeded preview image from metadata.    
+    DMetadata metadata(path);
+    if (metadata.getImagePreview(image))
+    {
+        kdDebug() << "Use Exif/Iptc preview extraction. Size of image: " 
+                  << image.width() << "x" << image.height() << endl;
+        return true;
+    }
+        
+    // Else, use the right way depending of image file extension.
     QString ext = fileInfo.extension().upper();
 
     if (ext == QString("JPEG") || ext == QString("JPG"))
