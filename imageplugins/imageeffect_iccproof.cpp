@@ -220,7 +220,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_tabsWidgets->addTab(generalOptions, i18n("General"));
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
-    //---------- Zero Page Setup ----------------------------------
+    //---------- "General" Page Setup ----------------------------------
 
     QVBoxLayout *zeroPageLayout = new QVBoxLayout(generalOptions, 0, KDialog::spacingHint());
 
@@ -257,12 +257,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     zeroPageLayout->addWidget(m_optionsBG);
     zeroPageLayout->addStretch();
 
-    //---------- End Zero Page -----------------------------------
+    //---------- End "General" Page -----------------------------------
 
     m_tabsWidgets->addTab(inProfiles, i18n("Input"));
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color Profiles.</p>"));
 
-    //---------- First Page Setup ----------------------------------
+    //---------- "Input" Page Setup ----------------------------------
 
     QVBoxLayout *firstPageLayout = new QVBoxLayout(inProfiles, 0, KDialog::spacingHint());
 
@@ -294,13 +294,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     firstPageLayout->addWidget(inProfileBG);
     firstPageLayout->addStretch();
 
-    //---------- End First Page ------------------------------------
+    //---------- End "Input" Page ------------------------------------
 
     m_tabsWidgets->addTab(spaceProfiles, i18n("Workspace"));
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
                                         "Profiles.</p>"));
 
-    //---------- Second Page Setup ---------------------------------
+    //---------- "Workspace" Page Setup ---------------------------------
 
     QVBoxLayout *secondPageLayout = new QVBoxLayout(spaceProfiles, 0, KDialog::spacingHint());
 
@@ -325,12 +325,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     secondPageLayout->addWidget(spaceProfileBG);
     secondPageLayout->addStretch();
 
-    //---------- End Second Page -----------------------------------
+    //---------- End "Workspace" Page -----------------------------------
 
     m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color Profiles.</p>"));
 
-    //---------- Third Page Setup ---------------------------------
+    //---------- "Proofing" Page Setup ---------------------------------
 
     QVBoxLayout *thirdPageLayout = new QVBoxLayout(proofProfiles, 0, KDialog::spacingHint());
 
@@ -355,13 +355,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->addWidget(proofProfileBG);
     thirdPageLayout->addStretch();
 
-    //---------- End Third Page -----------------------------------
+    //---------- End "Proofing" Page -----------------------------------
 
     m_tabsWidgets->addTab(displayProfiles, i18n("Display"));
     QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
                     "Profiles.</p>"));
 
-    //---------- Fourth Page Setup ----------------------------------
+    //---------- "Display" Page Setup ----------------------------------
 
     QVBoxLayout *fourthPageLayout = new QVBoxLayout(displayProfiles, 0, KDialog::spacingHint());
 
@@ -386,7 +386,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourthPageLayout->addWidget(displayProfileBG);
     fourthPageLayout->addStretch();
     
-    //---------- End Fourth Page ------------------------------------
+    //---------- End "Display" Page ------------------------------------
 
     gridSettings->addMultiCellWidget(m_tabsWidgets, 4, 4, 0, 2);
     gridSettings->setRowStretch(6, 10);    
