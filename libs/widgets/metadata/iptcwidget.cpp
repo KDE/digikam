@@ -212,7 +212,7 @@ QString IptcWidget::getTagDescription(const QString& key)
 void IptcWidget::slotSaveMetadataToFile(void)
 {
     KURL url = saveMetadataToFile(i18n("Iptc File to Save"),
-                                  QString("*.dat"+i18n("Iptc binary Files (*.dat)")));
+                                  QString("*.dat|"+i18n("Iptc binary Files (*.dat)")));
     storeMetadataToFile(url);
 }
 
