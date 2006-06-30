@@ -55,6 +55,7 @@
 #include <kfiledialog.h>
 #include <kfile.h>
 #include <kmessagebox.h>
+#include <kglobalsettings.h>
 
 // Digikam includes.
 
@@ -811,11 +812,8 @@ void ImageEffect_ICCProof::slotTry()
 
 void ImageEffect_ICCProof::readSettings()
 {
-    KConfig* config = kapp->config();
-
-    // Plugin settings.
-    config->setGroup("Color Management Tool");
-    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));    
+    QString defaultICCPath = KGlobalSettings::documentPath();
+    KConfig* config        = kapp->config();
     
     // General settings of digiKam Color Management                            
     config->setGroup("Color Management");
@@ -833,10 +831,7 @@ void ImageEffect_ICCProof::readSettings()
         proofPath   = config->readPathEntry("ProofProfileFile");
         if (QFile::exists(config->readPathEntry("DefaultPath")))
         {
-            m_displayProfileCB->setURL(config->readPathEntry("DefaultPath")); 
-            m_inProfilesCB->setURL(config->readPathEntry("DefaultPath")); 
-            m_proofProfileCB->setURL(config->readPathEntry("DefaultPath")); 
-            m_spaceProfileCB->setURL(config->readPathEntry("DefaultPath"));
+            defaultICCPath = config->readPathEntry("DefaultPath");
         }
         else
         {
@@ -846,6 +841,14 @@ void ImageEffect_ICCProof::readSettings()
             KMessageBox::information(this, message);
         }
     }
+    
+    // Plugin settings.
+    config->setGroup("Color Management Tool");
+    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));        
+    m_displayProfileCB->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
+    m_inProfilesCB->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
+    m_proofProfileCB->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
+    m_spaceProfileCB->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
 }
 
 void ImageEffect_ICCProof::writeSettings()
@@ -853,6 +856,10 @@ void ImageEffect_ICCProof::writeSettings()
     KConfig* config = kapp->config();
     config->setGroup("Color Management Tool");
     config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
+    config->writePathEntry("DisplayProfilePath", m_displayProfileCB->url());
+    config->writePathEntry("InputProfilePath", m_inProfilesCB->url());
+    config->writePathEntry("ProofProfilePath", m_proofProfileCB->url());
+    config->writePathEntry("SpaceProfilePath", m_spaceProfileCB->url());
     config->sync();
 }
 
