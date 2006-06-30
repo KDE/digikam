@@ -75,6 +75,15 @@ private:
         GreenChannel,
         BlueChannel
     };
+    
+    enum ICCSettingsTab
+    {
+        GENERALPAGE=0,
+        INPUTPAGE,
+        WORKSPACEPAGE,
+        PROOFINGPAGE,
+        DISPLAYPAGE
+    };
 
     uchar                          *m_destinationPreviewData;
 
@@ -139,6 +148,8 @@ private:
 private:
 
     void readSettings();
+    void writeSettings();
+
     void getICCInfo(const QString&);
     void getICCInfo(QByteArray&);
 

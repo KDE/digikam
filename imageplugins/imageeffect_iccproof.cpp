@@ -217,7 +217,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWidget *displayProfiles = new QWidget(m_tabsWidgets);
     QWidget *spaceProfiles   = new QWidget(m_tabsWidgets);
 
-    m_tabsWidgets->addTab(generalOptions, i18n("General"));
+    m_tabsWidgets->insertTab(generalOptions, i18n("General"), GENERALPAGE);
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
     //---------- "General" Page Setup ----------------------------------
@@ -259,7 +259,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "General" Page -----------------------------------
 
-    m_tabsWidgets->addTab(inProfiles, i18n("Input"));
+    m_tabsWidgets->insertTab(inProfiles, i18n("Input"), INPUTPAGE);
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
@@ -303,7 +303,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Input" Page ------------------------------------
 
-    m_tabsWidgets->addTab(spaceProfiles, i18n("Workspace"));
+    m_tabsWidgets->insertTab(spaceProfiles, i18n("Workspace"), WORKSPACEPAGE);
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
                     "Profiles.</p>"));
 
@@ -340,7 +340,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Workspace" Page -----------------------------------
 
-    m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
+    m_tabsWidgets->insertTab(proofProfiles, i18n("Proofing"), PROOFINGPAGE);
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color "
                     "Profiles.</p>"));
 
@@ -377,7 +377,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Proofing" Page -----------------------------------
 
-    m_tabsWidgets->addTab(displayProfiles, i18n("Display"));
+    m_tabsWidgets->insertTab(displayProfiles, i18n("Display"), DISPLAYPAGE);
     QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
                     "Profiles.</p>"));
 
@@ -402,7 +402,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
     m_iccDisplayPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccDisplayPreviewWidget);
-
+ 
     QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfiles);
 
     fourthPageLayout->addMultiCellWidget(displayProfileBG, 0, 1, 0, 0);    
@@ -452,6 +452,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
 ImageEffect_ICCProof::~ImageEffect_ICCProof()
 {
+    writeSettings();
     m_histogramWidget->stopHistogramComputation();
 
     if (m_destinationPreviewData) 
@@ -812,6 +813,11 @@ void ImageEffect_ICCProof::readSettings()
 {
     KConfig* config = kapp->config();
 
+    // Plugin settings.
+    config->setGroup("Color Management Tool");
+    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));    
+    
+    // General settings of digiKam Color Management                            
     config->setGroup("Color Management");
 
     if (!config->readBoolEntry("EnableCM", false))
@@ -840,6 +846,14 @@ void ImageEffect_ICCProof::readSettings()
             KMessageBox::information(this, message);
         }
     }
+}
+
+void ImageEffect_ICCProof::writeSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management Tool");
+    config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
+    config->sync();
 }
 
 void ImageEffect_ICCProof::slotToggledWidgets( bool t)
