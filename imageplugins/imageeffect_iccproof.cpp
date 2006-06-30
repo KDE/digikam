@@ -52,6 +52,7 @@
 #include <ktabwidget.h>
 #include <kconfig.h>
 #include <kurlrequester.h>
+#include <kurllabel.h>
 #include <kfiledialog.h>
 #include <kfile.h>
 #include <kmessagebox.h>
@@ -88,12 +89,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 {
     m_destinationPreviewData = 0L;
 
-    cmEnabled   = true;
-    hasICC      = false;
-    inPath      = QString::null;
-    spacePath   = QString::null;
-    proofPath   = QString::null;
-    displayPath = QString::null;
+    m_cmEnabled   = true;
+    m_hasICC      = false;
+    m_inPath      = QString::null;
+    m_spacePath   = QString::null;
+    m_proofPath   = QString::null;
+    m_displayPath = QString::null;
 
     setHelp("colormanagement.anchor", "digikam");
 
@@ -218,34 +219,32 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWidget *displayProfiles = new QWidget(m_tabsWidgets);
     QWidget *spaceProfiles   = new QWidget(m_tabsWidgets);
 
+    //---------- "General" Page Setup ----------------------------------
+        
     m_tabsWidgets->insertTab(generalOptions, i18n("General"), GENERALPAGE);
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
-    //---------- "General" Page Setup ----------------------------------
-
-    QVBoxLayout *zeroPageLayout = new QVBoxLayout(generalOptions, 0, KDialog::spacingHint());
-
-    QButtonGroup *m_optionsBG = new QButtonGroup(4, Qt::Vertical, generalOptions);
-    m_optionsBG->setFrameStyle(QFrame::NoFrame);
-
-    m_doSoftProofBox = new QCheckBox(m_optionsBG);
+    QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
+                                  KDialog::marginHint(), KDialog::spacingHint());
+                                   
+    m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
     QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described"
                                            " by the \"Proofing\" profile. Useful to preview final"
                                            " result without rendering to physical medium.</p>"));
 
-    m_checkGamutBox = new QCheckBox(m_optionsBG);
+    m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
     QWhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show"
                                           " the colors that are out of the printer gamut<p>"));
 
-    QCheckBox *m_embeddProfileBox = new QCheckBox(m_optionsBG);
+    m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Embed profile"));
     QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embed"
                                              " into the image the selected color profile.</p>"));
 
-    m_BPCBox = new QCheckBox(m_optionsBG);
+    m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
     QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with relative colorimetric intent. Perceptual intent should make no "
@@ -255,35 +254,47 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    "render to darkest tone destination media can render. As a such, "
                                    "BPC is primarily targeting CMYK.</p>"));
 
-    zeroPageLayout->addWidget(m_optionsBG);
-    zeroPageLayout->addStretch();
+    KURLLabel *lcmsLogoLabel = new KURLLabel(generalOptions);
+    lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
+    lcmsLogoLabel->setText(QString::null);
+    lcmsLogoLabel->setURL("http://www.littlecms.com");
+    KGlobal::dirs()->addResourceType("lcmslogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("lcmslogo", "lcmslogo.png");
+    lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
+    QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
+                                   
+    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);    
+    zeroPageLayout->setRowStretch(3, 10);
+    zeroPageLayout->setRowStretch(4, 10);
 
-    //---------- End "General" Page -----------------------------------
+    //---------- "Input" Page Setup ----------------------------------
 
     m_tabsWidgets->insertTab(inProfiles, i18n("Input"), INPUTPAGE);
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
-    //---------- "Input" Page Setup ----------------------------------
-
     QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 3, 2, 
                                    KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
-    inProfileBG->setFrameStyle(QFrame::NoFrame);
-    inProfileBG->setInsideMargin(0);
+    m_inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
+    m_inProfileBG->setFrameStyle(QFrame::NoFrame);
+    m_inProfileBG->setInsideMargin(0);
     
-    m_useEmbeddedProfile = new QRadioButton(inProfileBG);
+    m_useEmbeddedProfile = new QRadioButton(m_inProfileBG);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
 
-    m_useSRGBDefaultProfile = new QRadioButton(inProfileBG);
+    m_useSRGBDefaultProfile = new QRadioButton(m_inProfileBG);
     m_useSRGBDefaultProfile->setText(i18n("Use builtin sRGB profile"));
     m_useSRGBDefaultProfile->setChecked(true);
 
-    m_useInDefaultProfile = new QRadioButton(inProfileBG);
+    m_useInDefaultProfile = new QRadioButton(m_inProfileBG);
     m_useInDefaultProfile->setText(i18n("Use default profile"));
 
-    m_useInSelectedProfile = new QRadioButton(inProfileBG);
+    m_useInSelectedProfile = new QRadioButton(m_inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
     
     m_inProfilesCB = new KURLRequester(inProfiles);
@@ -295,7 +306,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    firstPageLayout->addMultiCellWidget(inProfileBG, 0, 1, 0, 0);    
+    firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);    
     firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);    
     firstPageLayout->addMultiCellWidget(m_inProfilesCB, 2, 2, 0, 2);    
     firstPageLayout->setColStretch(1, 10);
@@ -313,14 +324,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
                                     KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
-    spaceProfileBG->setFrameStyle(QFrame::NoFrame);
-    spaceProfileBG->setInsideMargin(0);
+    m_spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
+    m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
+    m_spaceProfileBG->setInsideMargin(0);
     
-    m_useSpaceDefaultProfile = new QRadioButton(spaceProfileBG);
+    m_useSpaceDefaultProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
 
-    m_useSpaceSelectedProfile = new QRadioButton(spaceProfileBG);
+    m_useSpaceSelectedProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
     
     m_spaceProfileCB = new KURLRequester(spaceProfiles);
@@ -332,7 +343,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), spaceProfiles);
 
-    secondPageLayout->addMultiCellWidget(spaceProfileBG, 0, 1, 0, 0);    
+    secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);    
     secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
     secondPageLayout->addMultiCellWidget(m_spaceProfileCB, 2, 2, 0, 2);    
     secondPageLayout->setColStretch(1, 10);
@@ -350,14 +361,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
                                    KDialog::marginHint(), KDialog::spacingHint());
                                     
-    QButtonGroup *proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
-    proofProfileBG->setFrameStyle(QFrame::NoFrame);
-    proofProfileBG->setInsideMargin(0);
+    m_proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
+    m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
+    m_proofProfileBG->setInsideMargin(0);
 
-    m_useProofDefaultProfile = new QRadioButton(proofProfileBG);
+    m_useProofDefaultProfile = new QRadioButton(m_proofProfileBG);
     m_useProofDefaultProfile->setText(i18n("Use default proof profile"));
 
-    m_useProofSelectedProfile = new QRadioButton(proofProfileBG);
+    m_useProofSelectedProfile = new QRadioButton(m_proofProfileBG);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
     
     m_proofProfileCB = new KURLRequester(proofProfiles);
@@ -369,7 +380,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), proofProfiles);
 
-    thirdPageLayout->addMultiCellWidget(proofProfileBG, 0, 1, 0, 0);    
+    thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);    
     thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
     thirdPageLayout->addMultiCellWidget(m_proofProfileCB, 2, 2, 0, 2);    
     thirdPageLayout->setColStretch(1, 10);
@@ -387,14 +398,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QGridLayout *fourthPageLayout = new QGridLayout(displayProfiles, 3, 2, 
                                     KDialog::marginHint(), KDialog::spacingHint());
 
-    QButtonGroup *displayProfileBG = new QButtonGroup(2, Qt::Vertical, displayProfiles);
-    displayProfileBG->setFrameStyle(QFrame::NoFrame);
-    displayProfileBG->setInsideMargin(0);
+    m_displayProfileBG = new QButtonGroup(2, Qt::Vertical, displayProfiles);
+    m_displayProfileBG->setFrameStyle(QFrame::NoFrame);
+    m_displayProfileBG->setInsideMargin(0);
     
-    m_useDisplayDefaultProfile = new QRadioButton(displayProfileBG);
+    m_useDisplayDefaultProfile = new QRadioButton(m_displayProfileBG);
     m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
 
-    m_useDisplaySelectedProfile = new QRadioButton(displayProfileBG);
+    m_useDisplaySelectedProfile = new QRadioButton(m_displayProfileBG);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
     m_displayProfileCB = new KURLRequester(displayProfiles);
@@ -406,7 +417,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
  
     QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfiles);
 
-    fourthPageLayout->addMultiCellWidget(displayProfileBG, 0, 1, 0, 0);    
+    fourthPageLayout->addMultiCellWidget(m_displayProfileBG, 0, 1, 0, 0);    
     fourthPageLayout->addMultiCellWidget(displayProfilesInfo, 0, 0, 2, 2);    
     fourthPageLayout->addMultiCellWidget(m_displayProfileCB, 2, 2, 0, 2);    
     fourthPageLayout->setColStretch(1, 10);
@@ -421,6 +432,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
+            this, SLOT(processLCMSURL(const QString&)));
+    
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
@@ -461,6 +475,82 @@ ImageEffect_ICCProof::~ImageEffect_ICCProof()
        
     delete m_histogramWidget;
     delete m_previewWidget;
+}
+
+void ImageEffect_ICCProof::readSettings()
+{
+    QString defaultICCPath = KGlobalSettings::documentPath();
+    KConfig* config        = kapp->config();
+    
+    // General settings of digiKam Color Management                            
+    config->setGroup("Color Management");
+
+    if (!config->readBoolEntry("EnableCM", false))
+    {
+        m_cmEnabled = false;
+        slotToggledWidgets(false);
+    }
+    else
+    {
+        m_inPath      = config->readPathEntry("InProfileFile");
+        m_spacePath   = config->readPathEntry("WorkProfileFile");
+        m_displayPath = config->readPathEntry("MonitorProfileFile");
+        m_proofPath   = config->readPathEntry("ProofProfileFile");
+        if (QFile::exists(config->readPathEntry("DefaultPath")))
+        {
+            defaultICCPath = config->readPathEntry("DefaultPath");
+        }
+        else
+        {
+            QString message = i18n("ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
+                                    options.<p>Please solve it in digiKam ICC setup.");
+            slotToggledWidgets( false );
+            KMessageBox::information(this, message);
+        }
+    }
+    
+    // Plugin settings.
+    config->setGroup("Color Management Tool");
+    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));        
+    m_displayProfileCB->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
+    m_inProfilesCB->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
+    m_proofProfileCB->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
+    m_spaceProfileCB->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
+    m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    m_doSoftProofBox->setChecked(config->readBoolEntry("DoSoftProof", false));
+    m_checkGamutBox->setChecked(config->readBoolEntry("CheckGamut", false));
+    m_embeddProfileBox->setChecked(config->readBoolEntry("EmbeddProfile", true));
+    m_BPCBox->setChecked(config->readBoolEntry("BPC", true));
+    m_inProfileBG->setButton(config->readNumEntry("InputProfileMethod", 0));
+    m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
+    m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
+    m_displayProfileBG->setButton(config->readNumEntry("DisplayProfileMethod", 0));
+}
+
+void ImageEffect_ICCProof::writeSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management Tool");
+    config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
+    config->writePathEntry("DisplayProfilePath", m_displayProfileCB->url());
+    config->writePathEntry("InputProfilePath", m_inProfilesCB->url());
+    config->writePathEntry("ProofProfilePath", m_proofProfileCB->url());
+    config->writePathEntry("SpaceProfilePath", m_spaceProfileCB->url());
+    config->writeEntry("RenderingIntent", m_renderingIntentsCB->currentItem());
+    config->writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
+    config->writeEntry("CheckGamut", m_checkGamutBox->isChecked());
+    config->writeEntry("EmbeddProfile", m_embeddProfileBox->isChecked());
+    config->writeEntry("BPC", m_BPCBox->isChecked());
+    config->writeEntry("InputProfileMethod", m_inProfileBG->selectedId());
+    config->writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
+    config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
+    config->writeEntry("DisplayProfileMethod", m_displayProfileBG->selectedId());
+    config->sync();
+}
+
+void ImageEffect_ICCProof::processLCMSURL(const QString& url)
+{
+    KApplication::kApplication()->invokeBrowser(url);
 }
 
 void ImageEffect_ICCProof::slotColorSelectedFromTarget( const Digikam::DColor &color )
@@ -517,7 +607,7 @@ void ImageEffect_ICCProof::slotEffect()
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-    iface                      = m_previewWidget->imageIface();
+    Digikam::ImageIface *iface = m_previewWidget->imageIface();
     m_destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
@@ -531,7 +621,7 @@ void ImageEffect_ICCProof::slotEffect()
     }
     else
     {
-        hasICC = true;
+        m_hasICC = true;
         m_embeddedICC = iface->getEmbeddedICCFromOriginalImage();
     }
 
@@ -553,13 +643,13 @@ void ImageEffect_ICCProof::finalRendering()
     if (!m_doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( KCursor::waitCursor() );
-        Digikam::ImageIface* iface = m_previewWidget->imageIface();
         
-        uchar *data = iface->getOriginalImage();
-        int w       = iface->originalWidth();
-        int h       = iface->originalHeight();
-        bool a      = iface->originalHasAlpha();
-        bool sb     = iface->originalSixteenBit();
+        Digikam::ImageIface *iface = m_previewWidget->imageIface();
+        uchar *data                = iface->getOriginalImage();
+        int w                      = iface->originalWidth();
+        int h                      = iface->originalHeight();
+        bool a                     = iface->originalHasAlpha();
+        bool sb                    = iface->originalSixteenBit();
 
         if (data)
         {
@@ -580,7 +670,7 @@ void ImageEffect_ICCProof::finalRendering()
             
             if (useDefaultInProfile())
             {
-                tmpInPath = inPath;
+                tmpInPath = m_inPath;
             }
             else if (useSelectedInProfile())
             {
@@ -599,7 +689,7 @@ void ImageEffect_ICCProof::finalRendering()
         
             if (useDefaultProofProfile())
             {
-                tmpProofPath = proofPath;
+                tmpProofPath = m_proofPath;
             }
             else
             {
@@ -613,7 +703,7 @@ void ImageEffect_ICCProof::finalRendering()
         
             if (useDefaultSpaceProfile())
             {
-                tmpSpacePath = spacePath;
+                tmpSpacePath = m_spacePath;
             }
             else
             {
@@ -688,11 +778,12 @@ void ImageEffect_ICCProof::slotTry()
     if (m_destinationPreviewData) 
        delete [] m_destinationPreviewData;
 
-    m_destinationPreviewData = iface->getPreviewImage();
-    int w                    = iface->previewWidth();
-    int h                    = iface->previewHeight();
-    bool a                   = iface->previewHasAlpha();
-    bool sb                  = iface->previewSixteenBit();
+    Digikam::ImageIface *iface = m_previewWidget->imageIface();
+    m_destinationPreviewData   = iface->getPreviewImage();
+    int w                      = iface->previewWidth();
+    int h                      = iface->previewHeight();
+    bool a                     = iface->previewHasAlpha();
+    bool sb                    = iface->previewSixteenBit();
 
     Digikam::DImg preview(w, h, sb, a, m_destinationPreviewData);
 
@@ -711,7 +802,7 @@ void ImageEffect_ICCProof::slotTry()
     
     if (useDefaultInProfile())
     {
-        tmpInPath = inPath;
+        tmpInPath = m_inPath;
     }
     else if (useSelectedInProfile())
     {
@@ -722,7 +813,7 @@ void ImageEffect_ICCProof::slotTry()
 
     if (useDefaultProofProfile())
     {
-        tmpProofPath = proofPath;
+        tmpProofPath = m_proofPath;
     }
     else
     {
@@ -736,7 +827,7 @@ void ImageEffect_ICCProof::slotTry()
 
     if (useDefaultSpaceProfile())
     {
-        tmpSpacePath = spacePath;
+        tmpSpacePath = m_spacePath;
     }
     else
     {
@@ -810,59 +901,6 @@ void ImageEffect_ICCProof::slotTry()
     }    
 }
 
-void ImageEffect_ICCProof::readSettings()
-{
-    QString defaultICCPath = KGlobalSettings::documentPath();
-    KConfig* config        = kapp->config();
-    
-    // General settings of digiKam Color Management                            
-    config->setGroup("Color Management");
-
-    if (!config->readBoolEntry("EnableCM", false))
-    {
-        cmEnabled = false;
-        slotToggledWidgets(false);
-    }
-    else
-    {
-        inPath      = config->readPathEntry("InProfileFile");
-        spacePath   = config->readPathEntry("WorkProfileFile");
-        displayPath = config->readPathEntry("MonitorProfileFile");
-        proofPath   = config->readPathEntry("ProofProfileFile");
-        if (QFile::exists(config->readPathEntry("DefaultPath")))
-        {
-            defaultICCPath = config->readPathEntry("DefaultPath");
-        }
-        else
-        {
-            QString message = i18n("ICC profiles path seems to be invalid. You'll not be able to use \"Default profile\"\
-                                    options.<p>Please solve it in digiKam ICC setup.");
-            slotToggledWidgets( false );
-            KMessageBox::information(this, message);
-        }
-    }
-    
-    // Plugin settings.
-    config->setGroup("Color Management Tool");
-    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));        
-    m_displayProfileCB->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
-    m_inProfilesCB->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
-    m_proofProfileCB->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
-    m_spaceProfileCB->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
-}
-
-void ImageEffect_ICCProof::writeSettings()
-{
-    KConfig* config = kapp->config();
-    config->setGroup("Color Management Tool");
-    config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
-    config->writePathEntry("DisplayProfilePath", m_displayProfileCB->url());
-    config->writePathEntry("InputProfilePath", m_inProfilesCB->url());
-    config->writePathEntry("ProofProfilePath", m_proofProfileCB->url());
-    config->writePathEntry("SpaceProfilePath", m_spaceProfileCB->url());
-    config->sync();
-}
-
 void ImageEffect_ICCProof::slotToggledWidgets( bool t)
 {
     m_useInDefaultProfile->setEnabled(t);
@@ -889,7 +927,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
     else if (useDefaultInProfile())
     {
-        getICCInfo(inPath);
+        getICCInfo(m_inPath);
     }
     else if (useSelectedInProfile())
     {
@@ -904,7 +942,7 @@ void ImageEffect_ICCProof::slotProofICCInfo()
 {
     if (useDefaultProofProfile())
     {
-        getICCInfo(proofPath);
+        getICCInfo(m_proofPath);
     }
     else
     {
@@ -919,7 +957,7 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
 {
     if (useDefaultSpaceProfile())
     {
-        getICCInfo(spacePath);
+        getICCInfo(m_spacePath);
     }
     else
     {
@@ -934,7 +972,7 @@ void ImageEffect_ICCProof::slotDisplayICCInfo()
 {
     if (useDefaultDisplayProfile())
     {
-        getICCInfo(displayPath);
+        getICCInfo(m_displayPath);
     }
     else
     {
@@ -999,7 +1037,7 @@ void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
 
 void ImageEffect_ICCProof::slotCMDisabledWarning()
 {
-    if (!cmEnabled)
+    if (!m_cmEnabled)
     {
         QString message = i18n("<p>You don't have enabled Color Management in digiKam preferences.</p>");
         message.append( i18n("<p>\"Use default profile\" options will be disabled now.</p>"));

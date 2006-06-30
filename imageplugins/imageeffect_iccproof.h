@@ -32,7 +32,6 @@ class QButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
 class QPushButton;
-class QCString;
 
 class KTabWidget;
 class KURLRequester;
@@ -45,7 +44,6 @@ class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
-class ImageIface;
 }
 
 namespace DigikamImagesPluginCore
@@ -85,18 +83,14 @@ private:
         DISPLAYPAGE
     };
 
+    bool                            m_cmEnabled;
+    bool                            m_hasICC;
+    
     uchar                          *m_destinationPreviewData;
-
-    KTabWidget                     *m_tabsWidgets;
 
     QComboBox                      *m_channelCB;
     QComboBox                      *m_renderingIntentsCB;
 
-    KURLRequester                  *m_displayProfileCB;
-    KURLRequester                  *m_inProfilesCB;
-    KURLRequester                  *m_proofProfileCB;
-    KURLRequester                  *m_spaceProfileCB;
-    
     QCheckBox                      *m_doSoftProofBox;
     QCheckBox                      *m_overExposureIndicatorBox;
     QCheckBox                      *m_doSofProfBox;
@@ -121,23 +115,30 @@ private:
     QButtonGroup                   *m_optionsBG;
     QVButtonGroup                  *m_profilesBG;
 
-    QString                         inPath;
-    QString                         displayPath;
-    QString                         spacePath;
-    QString                         proofPath;
+    QString                         m_inPath;
+    QString                         m_displayPath;
+    QString                         m_spacePath;
+    QString                         m_proofPath;
 
-    bool                            cmEnabled;
-    bool                            hasICC;
-
+    QButtonGroup                   *m_inProfileBG;
+    QButtonGroup                   *m_spaceProfileBG;
+    QButtonGroup                   *m_proofProfileBG;
+    QButtonGroup                   *m_displayProfileBG;
+    
     QByteArray                      m_embeddedICC;
 
+    KTabWidget                     *m_tabsWidgets;
+
+    KURLRequester                  *m_displayProfileCB;
+    KURLRequester                  *m_inProfilesCB;
+    KURLRequester                  *m_proofProfileCB;
+    KURLRequester                  *m_spaceProfileCB;
+        
     Digikam::ImageWidget           *m_previewWidget;
 
     Digikam::ColorGradientWidget   *m_hGradient;
 
     Digikam::HistogramWidget       *m_histogramWidget;
-
-    Digikam::ImageIface            *iface;
 
     Digikam::ICCPreviewWidget      *m_iccDisplayPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
@@ -177,15 +178,16 @@ private slots:
     void slotDefault();
     void slotTry();
     void slotEffect();
-    void slotChannelChanged(int channel);
-    void slotScaleChanged(int scale);
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
-    void slotToggledWidgets(bool t);
+    void slotChannelChanged(int);
+    void slotScaleChanged(int);
+    void slotColorSelectedFromTarget(const Digikam::DColor &);
+    void slotToggledWidgets(bool);
     void slotInICCInfo();
     void slotProofICCInfo();
     void slotSpaceICCInfo();
     void slotDisplayICCInfo();
     void slotCMDisabledWarning();
+    void processLCMSURL(const QString&);
 
 protected:
 
