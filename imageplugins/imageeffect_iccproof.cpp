@@ -260,7 +260,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- End "General" Page -----------------------------------
 
     m_tabsWidgets->addTab(inProfiles, i18n("Input"));
-    QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color Profiles.</p>"));
+    QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
+                    "Profiles.</p>"));
 
     //---------- "Input" Page Setup ----------------------------------
 
@@ -298,7 +299,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_tabsWidgets->addTab(spaceProfiles, i18n("Workspace"));
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
-                                        "Profiles.</p>"));
+                    "Profiles.</p>"));
 
     //---------- "Workspace" Page Setup ---------------------------------
 
@@ -328,7 +329,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     //---------- End "Workspace" Page -----------------------------------
 
     m_tabsWidgets->addTab(proofProfiles, i18n("Proofing"));
-    QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color Profiles.</p>"));
+    QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color "
+                    "Profiles.</p>"));
 
     //---------- "Proofing" Page Setup ---------------------------------
 
