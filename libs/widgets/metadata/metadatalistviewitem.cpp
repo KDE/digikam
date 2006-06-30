@@ -38,9 +38,16 @@ MetadataListViewItem::MetadataListViewItem(KListViewItem *parent, const QString&
 {
     m_key = key;
     
-    setText(0, title);
-    setText(1, value);
     setSelectable(true);
+    setText(0, title);
+ 
+    QString tagVal = value.simplifyWhiteSpace();   
+    if (tagVal.length() > 128)
+    {
+        tagVal.truncate(128);
+        tagVal.append("...");
+    }
+    setText(1, tagVal);
 }
 
 MetadataListViewItem::~MetadataListViewItem()

@@ -110,15 +110,21 @@ void MetadataListView::slotSelectionChanged(QListViewItem *item)
 
     MetadataListViewItem* viewItem = static_cast<MetadataListViewItem *>(item);
     m_selectedItemKey = viewItem->getKey();
+    QString tagValue  = viewItem->getValue().simplifyWhiteSpace();
     QString tagTitle  = m_parent->getTagTitle(m_selectedItemKey);
     QString tagDesc   = m_parent->getTagDescription(m_selectedItemKey);
+    if (tagValue.length() > 128)
+    {
+        tagValue.truncate(128);
+        tagValue.append("...");
+    }
     
-    QWhatsThis::add( this, i18n("<b>Title: </b><p>%1<p>"
-                                "<b>Value: </b><p>%2<p>"
-                                "<b>Description: </b><p>%3")
-                           .arg(tagTitle)
-                           .arg(viewItem->getValue())
-                           .arg(tagDesc) );
+    QWhatsThis::add(this, i18n("<b>Title: </b><p>%1<p>"
+                               "<b>Value: </b><p>%2<p>"
+                               "<b>Description: </b><p>%3")
+                          .arg(tagTitle)
+                          .arg(tagValue)
+                          .arg(tagDesc));
 }
 
 void MetadataListView::setIfdList(MetadataWidget::MetaDataMap ifds, const QStringList& tagsfilter)
