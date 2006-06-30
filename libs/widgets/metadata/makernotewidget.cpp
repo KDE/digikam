@@ -253,7 +253,8 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
 
 void MakerNoteWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("Exif File to Save"), QString("*.dat"));
+    KURL url = saveMetadataToFile(i18n("Exif File to Save"),
+                                  QString("*.dat"+i18n("Exif binary Files (*.dat)")));
     storeMetadataToFile(url);
 }
 
