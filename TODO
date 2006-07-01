@@ -27,10 +27,6 @@
    - In SlideShow with fullscreen mode enable, the vertically oriented image automaticily rotated using
      Exif tags are toggle on to save when SlideShow is complete.
 
-* ICC workflow: 
-
-   - ICC image plugin: check the ICC profiles type for each sections (Monitor/Workspace/Input/Proof) when user choose profile file manually (B.K.O #127763)
-
 * ImageEditor:
 
    - Polish keyboard focus in sidebar when navigate between album pictures.
