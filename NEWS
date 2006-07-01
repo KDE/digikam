@@ -162,5 +162,6 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 099 ==> 129450 : Cannot exit preview mode within empty album.
 100 ==> 129610 : Unsupported initialization of CameraList object.
 101 ==> 127584 : Minimum width of sidebar too large
+102 ==> 127763 : color management, profile selection crashes.
 
 ----------------------------------------------------------------------------------------------------
