@@ -31,8 +31,7 @@ kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_lib
 kio_digikampreview_la_SOURCES = digikampreview.cpp 
 
 kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(LIB_EXIV2) \
-	                        $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
-	                        $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
+	                        $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikampreview_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries) 
                         
@@ -50,8 +49,7 @@ kio_digikamalbums_la_SOURCES = digikamalbums.cpp sqlitedb.cpp
 
 kio_digikamalbums_la_LIBADD  = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
 	                       $(LIB_KIO) $(LIB_SQLITE3) $(LIB_EXIV2) \
-	                       $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
-	                       $(top_builddir)/digikam/libs/dcraw/libdcraw.la 
+	                       $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 
 

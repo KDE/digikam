@@ -133,7 +133,6 @@ public:
 
 private:
 
-    DImg::FORMAT fileFormat(const QString& filePath);
     bool         setImageProgramId();
 
 private:

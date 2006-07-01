@@ -222,7 +222,7 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
     DImg::FORMAT format = ff;
     
     if (format == DImg::NONE)
-        format = fileFormat(filePath);
+        format = DImg::fileFormat(filePath);
 
     d->fileFormat = format;
     d->filePath   = filePath;
@@ -299,61 +299,6 @@ bool DMetadata::save(const QString& filePath, DImg::FORMAT ff)
     }
 
     return false;
-}
-
-DImg::FORMAT DMetadata::fileFormat(const QString& filePath)
-{
-    if ( filePath == QString::null )
-        return DImg::NONE;
-
-    FILE* f = fopen(QFile::encodeName(filePath), "rb");
-    
-    if (!f)
-    {
-        kdDebug() << k_funcinfo << "Failed to open file" << endl;
-        return DImg::NONE;
-    }
-    
-    const int headerLen = 8;
-    unsigned char header[headerLen];
-    
-    if (fread(&header, 8, 1, f) != 1)
-    {
-        kdDebug() << k_funcinfo << "Failed to read header" << endl;
-        fclose(f);
-        return DImg::NONE;
-    }
-    
-    fclose(f);
-
-    DcrawParse rawFileParser;
-    uchar jpegID[2]    = { 0xFF, 0xD8 };
-    uchar tiffBigID[2] = { 0x4D, 0x4D };
-    uchar tiffLilID[2] = { 0x49, 0x49 };
-    uchar pngID[8]     = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-
-    if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
-    {
-        return DImg::JPEG;
-    }
-    else if (memcmp(&header, &pngID, 8) == 0)        // PNG file ?
-    {
-        return DImg::PNG;
-    }
-    else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
-    {
-        // RAW File test using dcraw.  
-        // Need to test it before TIFF because any RAW file 
-        // formats using TIFF header.
-        return DImg::RAW;
-    }
-    else if (memcmp(&header, &tiffBigID, 2) == 0 ||  // TIFF file ?
-             memcmp(&header, &tiffLilID, 2) == 0)
-    {
-        return DImg::TIFF;
-    }
-    
-    return DImg::NONE;
 }
 
 QImage DMetadata::getExifThumbnail(bool fixOrientation) const
