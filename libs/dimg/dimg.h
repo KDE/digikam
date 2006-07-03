@@ -35,7 +35,6 @@
 
 #include "digikam_export.h"
 #include "rawdecodingsettings.h"
-#include "dimgloaderobserver.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
 
@@ -47,6 +46,7 @@ namespace Digikam
 
 class DImgPrivate;
 class IccTransform;
+class DImgLoaderObserver;
 
 class DIGIKAM_EXPORT DImg
 {

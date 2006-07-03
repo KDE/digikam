@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "qimageloader.h"
 
 namespace Digikam

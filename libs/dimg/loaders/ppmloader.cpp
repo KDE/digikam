@@ -49,8 +49,9 @@ extern "C"
 
 // Local includes.
 
-#include "ppmloader.h"
 #include "dimg.h"
+#include "dimgloaderobserver.h"
+#include "ppmloader.h"
 
 namespace Digikam
 {

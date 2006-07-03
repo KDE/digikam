@@ -51,7 +51,7 @@ extern "C"
 #include "rawloader.h"
 #include "qimageloader.h"
 #include "dimgprivate.h"
-#include "dcolorcomposer.h"
+#include "dimgloaderobserver.h"
 #include "icctransform.h"
 #include "dimg.h"
 

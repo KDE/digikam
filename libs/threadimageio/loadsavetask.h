@@ -30,6 +30,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "loadingdescription.h"
 #include "loadingcache.h"
 

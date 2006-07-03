@@ -50,6 +50,7 @@ extern "C"
 // Local includes.
 
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "jpegloader.h"
 
 namespace Digikam

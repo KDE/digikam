@@ -47,6 +47,7 @@
 // Local includes.
 
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "dcrawbinary.h"
 #include "rawloader.h"
 

@@ -28,6 +28,7 @@
 
 #include "dimgprivate.h"
 #include "dmetadata.h"
+#include "dimgloaderobserver.h"
 #include "dimgloader.h"
 
 namespace Digikam

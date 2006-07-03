@@ -54,6 +54,7 @@ extern "C"
 
 #include "version.h"
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "dmetadata.h"
 #include "tiffloader.h"
 

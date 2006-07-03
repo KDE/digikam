@@ -51,6 +51,7 @@ extern "C"
 
 #include "version.h"
 #include "dimg.h"
+#include "dimgloaderobserver.h"
 #include "pngloader.h"
 
 namespace Digikam
