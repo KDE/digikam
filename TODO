@@ -93,6 +93,9 @@
 LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
+* Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
+  Port to QT 4.0.
+
 * Improving metadata support:
    - Better embbeded thumbnail support, especially for TIFF/EP (Exiv2)
    - Add DNG file format (create a new DImgLoader).
