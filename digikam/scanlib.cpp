@@ -335,7 +335,9 @@ void ScanLib::allFiles(const QString& directory)
     QFileInfo *fi;
 
     m_progressBar->progressBar()->advance(list->count());
-    kapp->processEvents();
+
+    // Crashes cameragui, when using store images in date folders... no idea why.
+    //    kapp->processEvents();
 
     while ( (fi = it.current()) != 0 )
     {
