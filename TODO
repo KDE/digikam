@@ -53,7 +53,6 @@
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
 ==> 126874 : Main interface : digiKam does not support <shift+del>
-==> 126199 : Main interface : Nikon D70 comments in jpegs are all shown as "charset="Ascii"
 ==> 127182 : Main interface : Crash when scanning jpeg images     
 ==> 113797 : Main interface : Little thumbnail refresh problem    
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder
