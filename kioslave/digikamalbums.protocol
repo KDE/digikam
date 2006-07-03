@@ -13,6 +13,7 @@ moving=true
 maxInstances=1
 Description=digiKam albums kioslave
 Description[br]=kioslave an albomoù evit Digikam
+Description[de]=digiKam Ein-/Ausgabemodul für digiKam Alben
 Description[el]=kioslave Άλμπουμ του digiKam
 Description[ja]=digiKam アルバム kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਐਲਬਮ kioslave

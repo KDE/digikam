@@ -7,6 +7,7 @@ reading=true
 source=false
 Description=digiKam thumbnail kioslave
 Description[br]=kioslave ar skeudennigoù evit Digikam
+Description[de]=digiKam Ein-/Ausgabemodul für digiKam Miniaturbilder
 Description[el]=kioslave εικόνων επισκόπησης του digiKam
 Description[ja]=digiKam サムネイル kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਥੰਮਨੇਲ kioslave
