@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: F.J. Cruz <fj.cruz@supercable.es>
- * Date  : 2005-12-21
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- * Description : digiKam image editor to correct an image using
- *               an ICC color profile
+ *           2006 by Gilles Caulier
+ *
+ * Description : digiKam image editor tool to correct picture 
+ *               colors using an ICC color profile
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +43,7 @@
 #include <qtooltip.h>
 #include <qradiobutton.h>
 #include <qfile.h>
+#include <qtextstream.h>
 
 // KDE includes.
 
@@ -85,7 +89,7 @@ namespace DigikamImagesPluginCore
 
 ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
-                                            "colormanagement", false, true)
+                                            "colormanagement", true, true)
 {
     m_destinationPreviewData = 0L;
 
@@ -297,10 +301,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useInSelectedProfile = new QRadioButton(m_inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_inProfilesCB = new KURLRequester(inProfiles);
-    m_inProfilesCB->setMode(KFile::File|KFile::ExistingOnly);
-    m_inProfilesCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *inProfiles_dialog = m_inProfilesCB->fileDialog();
+    m_inProfilesPath = new KURLRequester(inProfiles);
+    m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
+    m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
     m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
     inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
     
@@ -308,7 +312,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);    
     firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);    
-    firstPageLayout->addMultiCellWidget(m_inProfilesCB, 2, 2, 0, 2);    
+    firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);    
     firstPageLayout->setColStretch(1, 10);
     firstPageLayout->setRowStretch(2, 10);
     firstPageLayout->setRowStretch(3, 10);
@@ -334,10 +338,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useSpaceSelectedProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_spaceProfileCB = new KURLRequester(spaceProfiles);
-    m_spaceProfileCB->setMode(KFile::File|KFile::ExistingOnly);
-    m_spaceProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *spaceProfiles_dialog = m_spaceProfileCB->fileDialog();
+    m_spaceProfilePath = new KURLRequester(spaceProfiles);
+    m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
+    m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
     m_iccSpacePreviewWidget = new Digikam::ICCPreviewWidget(spaceProfiles_dialog);
     spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
 
@@ -345,7 +349,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     secondPageLayout->addMultiCellWidget(m_spaceProfileBG, 0, 1, 0, 0);    
     secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
-    secondPageLayout->addMultiCellWidget(m_spaceProfileCB, 2, 2, 0, 2);    
+    secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
     secondPageLayout->setColStretch(1, 10);
     secondPageLayout->setRowStretch(2, 10);
     secondPageLayout->setRowStretch(3, 10);
@@ -371,10 +375,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useProofSelectedProfile = new QRadioButton(m_proofProfileBG);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
     
-    m_proofProfileCB = new KURLRequester(proofProfiles);
-    m_proofProfileCB->setMode(KFile::File|KFile::ExistingOnly);
-    m_proofProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *proofProfiles_dialog = m_proofProfileCB->fileDialog();
+    m_proofProfilePath = new KURLRequester(proofProfiles);
+    m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
+    m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
     m_iccProofPreviewWidget = new Digikam::ICCPreviewWidget(proofProfiles_dialog);
     proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
 
@@ -382,7 +386,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     thirdPageLayout->addMultiCellWidget(m_proofProfileBG, 0, 1, 0, 0);    
     thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
-    thirdPageLayout->addMultiCellWidget(m_proofProfileCB, 2, 2, 0, 2);    
+    thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
     thirdPageLayout->setColStretch(1, 10);
     thirdPageLayout->setRowStretch(2, 10);
     thirdPageLayout->setRowStretch(3, 10);
@@ -408,10 +412,10 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_useDisplaySelectedProfile = new QRadioButton(m_displayProfileBG);
     m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
 
-    m_displayProfileCB = new KURLRequester(displayProfiles);
-    m_displayProfileCB->setMode(KFile::File|KFile::ExistingOnly);
-    m_displayProfileCB->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *displayProfiles_dialog = m_displayProfileCB->fileDialog();
+    m_displayProfilePath = new KURLRequester(displayProfiles);
+    m_displayProfilePath->setMode(KFile::File|KFile::ExistingOnly);
+    m_displayProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    KFileDialog *displayProfiles_dialog = m_displayProfilePath->fileDialog();
     m_iccDisplayPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
     displayProfiles_dialog->setPreviewWidget(m_iccDisplayPreviewWidget);
  
@@ -419,7 +423,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     fourthPageLayout->addMultiCellWidget(m_displayProfileBG, 0, 1, 0, 0);    
     fourthPageLayout->addMultiCellWidget(displayProfilesInfo, 0, 0, 2, 2);    
-    fourthPageLayout->addMultiCellWidget(m_displayProfileCB, 2, 2, 0, 2);    
+    fourthPageLayout->addMultiCellWidget(m_displayProfilePath, 2, 2, 0, 2);    
     fourthPageLayout->setColStretch(1, 10);
     fourthPageLayout->setRowStretch(2, 10);
     fourthPageLayout->setRowStretch(3, 10);
@@ -512,10 +516,10 @@ void ImageEffect_ICCProof::readSettings()
     // Plugin settings.
     config->setGroup("Color Management Tool");
     m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));        
-    m_displayProfileCB->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
-    m_inProfilesCB->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
-    m_proofProfileCB->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
-    m_spaceProfileCB->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
+    m_displayProfilePath->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
+    m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
+    m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
+    m_spaceProfilePath->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
     m_renderingIntentsCB->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     m_doSoftProofBox->setChecked(config->readBoolEntry("DoSoftProof", false));
     m_checkGamutBox->setChecked(config->readBoolEntry("CheckGamut", false));
@@ -532,10 +536,10 @@ void ImageEffect_ICCProof::writeSettings()
     KConfig* config = kapp->config();
     config->setGroup("Color Management Tool");
     config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
-    config->writePathEntry("DisplayProfilePath", m_displayProfileCB->url());
-    config->writePathEntry("InputProfilePath", m_inProfilesCB->url());
-    config->writePathEntry("ProofProfilePath", m_proofProfileCB->url());
-    config->writePathEntry("SpaceProfilePath", m_spaceProfileCB->url());
+    config->writePathEntry("DisplayProfilePath", m_displayProfilePath->url());
+    config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
+    config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
+    config->writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());
     config->writeEntry("RenderingIntent", m_renderingIntentsCB->currentItem());
     config->writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
     config->writeEntry("CheckGamut", m_checkGamutBox->isChecked());
@@ -674,7 +678,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else if (useSelectedInProfile())
             {
-                tmpInPath = m_inProfilesCB->url();
+                tmpInPath = m_inProfilesPath->url();
             }
 
             if (tmpInPath.isNull() && !m_useEmbeddedProfile->isChecked() &&    
@@ -693,7 +697,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else
             {
-                tmpProofPath = m_proofProfileCB->url();
+                tmpProofPath = m_proofProfilePath->url();
             }
 
             if (tmpProofPath.isNull())
@@ -707,7 +711,7 @@ void ImageEffect_ICCProof::finalRendering()
             }
             else
             {
-                tmpSpacePath = m_spaceProfileCB->url();
+                tmpSpacePath = m_spaceProfilePath->url();
             }
         
             //------------------------------------------
@@ -806,7 +810,7 @@ void ImageEffect_ICCProof::slotTry()
     }
     else if (useSelectedInProfile())
     {
-        tmpInPath = m_inProfilesCB->url();
+        tmpInPath = m_inProfilesPath->url();
     }
 
     //--------Proof profile ------------------
@@ -817,7 +821,7 @@ void ImageEffect_ICCProof::slotTry()
     }
     else
     {
-        tmpProofPath = m_proofProfileCB->url();
+        tmpProofPath = m_proofProfilePath->url();
     }
 
     if (m_doSoftProofBox->isChecked())
@@ -831,7 +835,7 @@ void ImageEffect_ICCProof::slotTry()
     }
     else
     {
-        tmpSpacePath = m_spaceProfileCB->url();
+        tmpSpacePath = m_spaceProfilePath->url();
     }
 
     spaceCondition = tmpSpacePath.isEmpty();
@@ -931,7 +935,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
     else if (useSelectedInProfile())
     {
-        getICCInfo(m_inProfilesCB->url());
+        getICCInfo(m_inProfilesPath->url());
     }
 }
 
@@ -946,7 +950,7 @@ void ImageEffect_ICCProof::slotProofICCInfo()
     }
     else
     {
-        getICCInfo(m_proofProfileCB->url());
+        getICCInfo(m_proofProfilePath->url());
     }
 }
 
@@ -961,7 +965,7 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
     }
     else
     {
-        getICCInfo(m_spaceProfileCB->url());
+        getICCInfo(m_spaceProfilePath->url());
     }
 }
 
@@ -976,7 +980,7 @@ void ImageEffect_ICCProof::slotDisplayICCInfo()
     }
     else
     {
-        getICCInfo(m_displayProfileCB->url());
+        getICCInfo(m_displayProfilePath->url());
     }
 }
 
@@ -1109,6 +1113,91 @@ bool ImageEffect_ICCProof::useDefaultProofProfile()
 bool ImageEffect_ICCProof::useDefaultDisplayProfile()
 {
     return m_useDisplayDefaultProfile->isChecked();
+}
+
+// Load all settings from file.
+void ImageEffect_ICCProof::slotUser3()
+{
+    KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
+                                                QString( "*" ), this,
+                                                QString( i18n("Color Management Settings File to Load")) );
+    if( loadColorManagementFile.isEmpty() )
+       return;
+
+    QFile file(loadColorManagementFile.path());
+    
+    if ( file.open(IO_ReadOnly) )   
+    {
+        QTextStream stream( &file );
+
+        if ( stream.readLine() != "# Color Management Configuration File" )
+        {
+           KMessageBox::error(this, 
+                        i18n("\"%1\" is not a Color Management settings text file.")
+                        .arg(loadColorManagementFile.fileName()));
+           file.close();            
+           return;
+        }
+        
+        blockSignals(true);
+        
+        m_renderingIntentsCB->setCurrentItem( stream.readLine().toInt() );
+        m_doSoftProofBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        m_checkGamutBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        m_embeddProfileBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        m_BPCBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        m_inProfileBG->setButton( stream.readLine().toInt() );
+        m_spaceProfileBG->setButton( stream.readLine().toInt() );
+        m_proofProfileBG->setButton( stream.readLine().toInt() );
+        m_displayProfileBG->setButton( stream.readLine().toInt() );
+        m_displayProfilePath->setURL( stream.readLine() );
+        m_inProfilesPath->setURL( stream.readLine() );
+        m_proofProfilePath->setURL( stream.readLine() );
+        m_spaceProfilePath->setURL( stream.readLine() );
+        
+        m_histogramWidget->reset();
+        blockSignals(false);
+        slotEffect();  
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot load settings from the Color Management text file."));
+
+    file.close();            
+}
+
+// Save all settings to file.
+void ImageEffect_ICCProof::slotUser2()
+{
+    KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
+                                                QString( "*" ), this,
+                                                QString( i18n("Color Management Settings File to Save")) );
+    if( saveColorManagementFile.isEmpty() )
+       return;
+
+    QFile file(saveColorManagementFile.path());
+    
+    if ( file.open(IO_WriteOnly) )   
+    {
+        QTextStream stream( &file );        
+        stream << "# Color Management Configuration File\n";    
+        stream << m_renderingIntentsCB->currentItem() << "\n";    
+        stream << m_doSoftProofBox->isChecked() << "\n";    
+        stream << m_checkGamutBox->isChecked() << "\n";    
+        stream << m_embeddProfileBox->isChecked() << "\n";    
+        stream << m_BPCBox->isChecked() << "\n";    
+        stream << m_inProfileBG->selectedId() << "\n";    
+        stream << m_spaceProfileBG->selectedId() << "\n";    
+        stream << m_proofProfileBG->selectedId() << "\n";    
+        stream << m_displayProfileBG->selectedId() << "\n";    
+        stream << m_displayProfilePath->url() << "\n";    
+        stream << m_inProfilesPath->url() << "\n";    
+        stream << m_proofProfilePath->url() << "\n";    
+        stream << m_spaceProfilePath->url() << "\n";    
+    }
+    else
+        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
+    
+    file.close();        
 }
 
 }// NameSpace DigikamImagesPluginCore

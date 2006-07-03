@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: F.J. Cruz <fj.cruz@supercable.es>
- * Date  : 2005-12-21
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-12-21
  * Copyright 2005-2006 by F.J. Cruz
- * Description : digiKam image editor to correct an image using
- *               an ICC color profile
+ *           2006 by Gilles Caulier
+ *
+ * Description : digiKam image editor tool to correct picture 
+ *               colors using an ICC color profile
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,10 +132,10 @@ private:
 
     KTabWidget                     *m_tabsWidgets;
 
-    KURLRequester                  *m_displayProfileCB;
-    KURLRequester                  *m_inProfilesCB;
-    KURLRequester                  *m_proofProfileCB;
-    KURLRequester                  *m_spaceProfileCB;
+    KURLRequester                  *m_displayProfilePath;
+    KURLRequester                  *m_inProfilesPath;
+    KURLRequester                  *m_proofProfilePath;
+    KURLRequester                  *m_spaceProfilePath;
         
     Digikam::ImageWidget           *m_previewWidget;
 
@@ -175,6 +178,8 @@ private:
 
 private slots:
 
+    void slotUser2();
+    void slotUser3();
     void slotDefault();
     void slotTry();
     void slotEffect();
