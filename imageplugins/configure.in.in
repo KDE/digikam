@@ -25,9 +25,9 @@ else
    AC_MSG_RESULT([not found])
    have_digikam_toplevel=no
    AC_MSG_CHECKING(if digiKam is installed)
-   KDE_CHECK_HEADER(digikam/imageplugin.h,  have_digikam=yes,  have_digikam=no)
+   KDE_CHECK_HEADER(digikam/dimg.h,  have_digikam=yes,  have_digikam=no)
    if test "x$have_digikam" = "xno"; then
-      AC_MSG_WARN([Can't find digiKam headers.]) 
+      AC_MSG_WARN([Can't find digiKam 0.9.0 headers!]) 
       DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
    else
       have_digikamheader=yes
