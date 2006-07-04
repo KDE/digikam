@@ -1024,6 +1024,7 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
      
      kdDebug() << k_funcinfo << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
+     setModified();
 }
 
 uchar* DImgInterface::getImageSelection()
