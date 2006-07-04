@@ -159,8 +159,6 @@ bool DImgLoader::checkExifWorkingColorSpace()
         return true;
     }
 
-/* TODO : need to check with Paco if this techic can be used !
-
     // Else check the Exif color-space tag and use a default profiles available in digiKam.
     KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
 
@@ -187,7 +185,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
         default:
             break;
     }
-*/
+
     return false;
 }
 
