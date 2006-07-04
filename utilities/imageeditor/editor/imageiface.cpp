@@ -213,7 +213,6 @@ void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int
 
 void ImageIface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
-    // @TODO Implement me: setEmbeddedICCToOriginalImage( QString profilePath)
     DImgInterface::instance()->setEmbeddedICCToOriginalImage( profilePath );
 }
 

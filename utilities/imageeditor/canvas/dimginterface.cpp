@@ -1016,7 +1016,6 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 
 void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
-    //TODO implementme: setEmbeddedICCToOriginalImage( QString profilePath);
     if (d->image.isNull())
     {
         kdWarning() << k_funcinfo << "d->image is NULL" << endl;
