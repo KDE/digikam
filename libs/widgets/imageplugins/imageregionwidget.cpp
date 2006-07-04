@@ -92,6 +92,7 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     
     setMinimumSize(wp, hp);
     viewport()->setMouseTracking(true);
+    viewport()->setBackgroundMode(Qt::NoBackground);
     slotZoomFactorChanged(1.0);
 }
 
