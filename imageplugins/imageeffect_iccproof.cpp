@@ -233,20 +233,20 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
-    QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described"
-                                           " by the \"Proofing\" profile. Useful to preview final"
-                                           " result without rendering to physical medium.</p>"));
+    QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described "
+                                           "by the \"Proofing\" profile. Useful to preview final "
+                                           "result without rendering to physical medium.</p>"));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
-    QWhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show"
-                                          " the colors that are out of the printer gamut<p>"));
+    QWhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show "
+                                          "the colors that are out of the printer gamut<p>"));
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Embed profile"));
-    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embed"
-                                             " into the image the selected color profile.</p>"));
+    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embed "
+                                             "into the image the selected work-space color profile.</p>"));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
