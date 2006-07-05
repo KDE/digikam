@@ -198,7 +198,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         for (tstrip_t st=0; st < num_of_strips; st++)
         {
-
             if (observer && st == checkpoint)
             {
                 checkpoint += granularity(observer, num_of_strips, 0.8);
@@ -260,7 +259,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 offset += bytesRead;
             }
-
         }
 
         delete [] strip;
@@ -296,7 +294,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // read strips from image: read rows_per_strip, so always start at beginning of a strip
         for (uint row = 0; row < h; row += rows_per_strip)
         {
-
             if (observer && row >= checkpoint)
             {
                 checkpoint += granularity(observer, h, 0.8);
@@ -354,7 +351,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         TIFFRGBAImageEnd(&img);
         delete [] strip;
-
     }
 
     // -------------------------------------------------------------------
@@ -456,12 +452,16 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QByteArray ba = metaData.getIptc(true);
     if (!ba.isEmpty()) 
     {
+#if defined(TIFFTAG_PHOTOSHOP)
         TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar *)ba.data());
+#endif
     }
 
     // Standard XMP tag (available with libtiff 3.6.1)    
 
+#if defined(TIFFTAG_XMLPACKET)
     tiffSetExifDataTag(tif, TIFFTAG_XMLPACKET,                &metaData, "Exif.Image.XMLPacket");
+#endif
 
     // Standard Exif Ascii tags (available with libtiff 3.6.1)    
 
@@ -667,7 +667,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     
     if (!profile_rawdata.isEmpty())
     {
+#if defined(TIFFTAG_ICCPROFILE)    
         TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar *)profile_rawdata.data());
+#endif      
     }    
 
     // -------------------------------------------------------------------
