@@ -64,7 +64,8 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     
     setMinimumSize(wp, hp);
     viewport()->setMouseTracking(true);
-    viewport()->setBackgroundMode(Qt::NoBackground);
+    // NOTE : do not use here "viewport()->setBackgroundMode(Qt::NoBackground)" because
+    // background will be not re-generated properlly with small pictures.
 
     Digikam::ImageIface iface(0, 0);
     int w = iface.originalWidth();
