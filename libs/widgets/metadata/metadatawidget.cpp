@@ -136,6 +136,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     d->view = new MetadataListView(this);
     d->mainLayout->addMultiCellWidget(d->view, 1, 1, 0, 4);
 
+    // -----------------------------------------------------------------
+    
     connect(d->levelButtons, SIGNAL(released(int)),
             this, SLOT(slotModeChanged(int)));
 
@@ -167,6 +169,9 @@ void MetadataWidget::enabledToolButtons(bool b)
 bool MetadataWidget::setMetadata(const QByteArray& data)
 {
     d->metadata = data;
+    
+    // Cleanup all metadata contents.
+    setMetadataMap();
 
     if (d->metadata.isEmpty())
     {
@@ -175,8 +180,7 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
         return false;
     }
 
-    // Cleanup all metadata contents and try to decode current metadata.
-    setMetadataMap();
+    // Try to decode current metadata.
     if (decodeMetadata())
         enabledToolButtons(true);
     else
