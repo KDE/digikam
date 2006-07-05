@@ -92,7 +92,8 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrol
     
     setMinimumSize(wp, hp);
     viewport()->setMouseTracking(true);
-    viewport()->setBackgroundMode(Qt::NoBackground);
+    // NOTE : do not use here "viewport()->setBackgroundMode(Qt::NoBackground)" because
+    // background will be not re-generated properlly with small pictures.
     slotZoomFactorChanged(1.0);
 }
 
