@@ -17,6 +17,7 @@
  * - http://artis.inrialpes.fr/Software/TiffIO/
  * - http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/tiff.c
  * - http://freeimage.cvs.sourceforge.net/freeimage/FreeImage/Source/FreeImage/PluginTIFF.cpp
+ * - http://freeimage.cvs.sourceforge.net/freeimage/FreeImage/Source/Metadata/XTIFF.cpp
  * - https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/tiff.c
  *
  * This program is free software; you can redistribute it
