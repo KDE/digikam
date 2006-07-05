@@ -13,6 +13,12 @@
  * - TIFF/Tags : http://www.awaresystems.be/imaging/tiff/tifftags.html
  * - DNG       : http://www.adobe.com/products/dng/pdfs/dng_spec.pdf
  *
+ * Others Linux Tiff Loader implementation using libtiff:
+ * - http://artis.inrialpes.fr/Software/TiffIO/
+ * - http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/tiff.c
+ * - http://freeimage.cvs.sourceforge.net/freeimage/FreeImage/Source/FreeImage/PluginTIFF.cpp
+ * - https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/tiff.c
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
