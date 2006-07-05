@@ -76,7 +76,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setVScrollBarMode(QScrollView::AlwaysOff);
     setHScrollBarMode(QScrollView::AlwaysOff);
     viewport()->setMouseTracking(true);
-    viewport()->setBackgroundMode(Qt::NoBackground);
+    viewport()->setPaletteBackgroundColor(colorGroup().background());
     setMinimumWidth(w);
     setMaximumHeight(h);
     resizeContents(d->worldMap.width(), d->worldMap.height());
