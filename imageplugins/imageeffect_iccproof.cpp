@@ -43,6 +43,7 @@
 #include <qtooltip.h>
 #include <qradiobutton.h>
 #include <qfile.h>
+#include <qtoolbox.h>
 #include <qtextstream.h>
 
 // KDE includes.
@@ -216,16 +217,16 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_tabsWidgets            = new KTabWidget(gboxSettings);
-    QWidget *generalOptions  = new QWidget(m_tabsWidgets);
-    QWidget *inProfiles      = new QWidget(m_tabsWidgets);
-    QWidget *proofProfiles   = new QWidget(m_tabsWidgets);
-    QWidget *displayProfiles = new QWidget(m_tabsWidgets);
-    QWidget *spaceProfiles   = new QWidget(m_tabsWidgets);
+    m_toolBoxWidgets         = new QToolBox(gboxSettings);
+    QWidget *generalOptions  = new QWidget(m_toolBoxWidgets);
+    QWidget *inProfiles      = new QWidget(m_toolBoxWidgets);
+    QWidget *proofProfiles   = new QWidget(m_toolBoxWidgets);
+    QWidget *displayProfiles = new QWidget(m_toolBoxWidgets);
+    QWidget *spaceProfiles   = new QWidget(m_toolBoxWidgets);
 
     //---------- "General" Page Setup ----------------------------------
         
-    m_tabsWidgets->insertTab(generalOptions, i18n("General"), GENERALPAGE);
+    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, i18n("General Settings"));
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
@@ -277,7 +278,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    m_tabsWidgets->insertTab(inProfiles, i18n("Input"), INPUTPAGE);
+    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, i18n("Input Profile"));
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
@@ -319,7 +320,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Input" Page ------------------------------------
 
-    m_tabsWidgets->insertTab(spaceProfiles, i18n("Workspace"), WORKSPACEPAGE);
+    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, i18n("Work-space Profile"));
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
                     "Profiles.</p>"));
 
@@ -356,7 +357,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Workspace" Page -----------------------------------
 
-    m_tabsWidgets->insertTab(proofProfiles, i18n("Proofing"), PROOFINGPAGE);
+    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, i18n("Proofing Profile"));
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color "
                     "Profiles.</p>"));
 
@@ -393,7 +394,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- End "Proofing" Page -----------------------------------
 
-    m_tabsWidgets->insertTab(displayProfiles, i18n("Display"), DISPLAYPAGE);
+    m_toolBoxWidgets->insertItem(DISPLAYPAGE, displayProfiles, i18n("Display Profile"));
     QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
                     "Profiles.</p>"));
 
@@ -430,7 +431,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     
     //---------- End "Display" Page ------------------------------------
 
-    gridSettings->addMultiCellWidget(m_tabsWidgets, 4, 4, 0, 2);
+    gridSettings->addMultiCellWidget(m_toolBoxWidgets, 4, 4, 0, 2);
     gridSettings->setRowStretch(6, 10);    
     setUserAreaWidget(gboxSettings);
 
@@ -500,6 +501,7 @@ void ImageEffect_ICCProof::readSettings()
         m_spacePath   = config->readPathEntry("WorkProfileFile");
         m_displayPath = config->readPathEntry("MonitorProfileFile");
         m_proofPath   = config->readPathEntry("ProofProfileFile");
+        
         if (QFile::exists(config->readPathEntry("DefaultPath")))
         {
             defaultICCPath = config->readPathEntry("DefaultPath");
@@ -515,7 +517,7 @@ void ImageEffect_ICCProof::readSettings()
     
     // Plugin settings.
     config->setGroup("Color Management Tool");
-    m_tabsWidgets->setCurrentPage(config->readNumEntry("Settings Tab", GENERALPAGE));        
+    m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));        
     m_displayProfilePath->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
     m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
@@ -535,7 +537,7 @@ void ImageEffect_ICCProof::writeSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("Color Management Tool");
-    config->writeEntry("Settings Tab", m_tabsWidgets->currentPageIndex());
+    config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
     config->writePathEntry("DisplayProfilePath", m_displayProfilePath->url());
     config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
     config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
@@ -913,9 +915,6 @@ void ImageEffect_ICCProof::slotToggledWidgets( bool t)
     m_useSpaceDefaultProfile->setEnabled(t);
 }
 
-/*!
-    \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotInICCInfo()
- */
 void ImageEffect_ICCProof::slotInICCInfo()
 {
     if (useEmbeddedProfile())
@@ -939,9 +938,6 @@ void ImageEffect_ICCProof::slotInICCInfo()
     }
 }
 
-/*!
-    \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotProofICCInfo()
- */
 void ImageEffect_ICCProof::slotProofICCInfo()
 {
     if (useDefaultProofProfile())
@@ -954,9 +950,6 @@ void ImageEffect_ICCProof::slotProofICCInfo()
     }
 }
 
-/*!
-    \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotSpaceICCInfo()
- */
 void ImageEffect_ICCProof::slotSpaceICCInfo()
 {
     if (useDefaultSpaceProfile())
@@ -969,9 +962,6 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
     }
 }
 
-/*!
-    \fn DigikamImagesPluginCore::ImageEffect_ICCProof::slotDisplayICCInfo()
- */
 void ImageEffect_ICCProof::slotDisplayICCInfo()
 {
     if (useDefaultDisplayProfile())

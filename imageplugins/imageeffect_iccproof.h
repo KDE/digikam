@@ -35,8 +35,8 @@ class QButtonGroup;
 class QHButtonGroup;
 class QRadioButton;
 class QPushButton;
+class QToolBox;
 
-class KTabWidget;
 class KURLRequester;
 
 namespace Digikam
@@ -130,7 +130,7 @@ private:
     
     QByteArray                      m_embeddedICC;
 
-    KTabWidget                     *m_tabsWidgets;
+    QToolBox                       *m_toolBoxWidgets;
 
     KURLRequester                  *m_displayProfilePath;
     KURLRequester                  *m_inProfilesPath;
