@@ -14,6 +14,7 @@ maxInstances=1
 Description=digikam tags kioslave
 Description[de]=digiKam Ein-/Ausgabemodul für digiKam Stichworte
 Description[el]=kioslave ετικετών του digiKam
+Description[et]=DigiKami siltide KIO-moodul
 Description[ja]=digiKam タグ kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਟੈਗ kioslave
 Description[pt]='kioslave' de marcas do digiKam
