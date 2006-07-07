@@ -127,25 +127,25 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 064 ==> 115423 : thumbnails view jumps to top when new photos are added
 065 ==> 125732 : ICC settings get reset when disabled and re-enabled
 066 ==> 119741 : Restore image editor if already open
-067 ==> 122374 : Ignores read-only permission during saving
-068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor
-069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam
-070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results 
-071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console
-072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x
-073 ==> 127374 : unsharp mask: max. radius way too small
-074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window
-075 ==> 127577 : raw display too dark and not rotated
-076 ==> 127634 : Communication between digikam and its kioslaves broken if size_t != off_t
-077 ==> 126335 : Autoration of photos may confuse user because of changes made he is not aware of
-078 ==> 127759 : no scroll bar in color management/select profile
-079 ==> 114211 : Main Interface: image comments encoding unreadable after moving an album
-080 ==> 120241 : Main Interface: utf8 display and edit
-081 ==> 127905 : wish: make comment field resizable
-082 ==> 127946 : Typo: the word Toogle should be Toggle
+067 ==> 122374 : Ignores read-only permission during saving.
+068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor.
+069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam.
+070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results.
+071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console.
+072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
+073 ==> 127374 : unsharp mask: max. radius way too small.
+074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window.
+075 ==> 127577 : raw display too dark and not rotated.
+076 ==> 127634 : Communication between digikam and its kioslaves broken if size_t != off_t.
+077 ==> 126335 : Autoration of photos may confuse user because of changes made he is not aware of.
+078 ==> 127759 : no scroll bar in color management/select profile.
+079 ==> 114211 : Main Interface: image comments encoding unreadable after moving an album.
+080 ==> 120241 : Main Interface: utf8 display and edit.
+081 ==> 127905 : wish: make comment field resizable.
+082 ==> 127946 : Typo: the word Toogle should be Toggle.
 083 ==> 117115 : Automatically rotate/flip using camera-provided information (EXIF) modifies image contents
-084 ==> 128069 : crash when moving an album to another album
-085 ==> 125779 : use deflate compression for tiffs
+084 ==> 128069 : crash when moving an album to another album.
+085 ==> 125779 : use deflate compression for tiffs.
 086 ==> 127972 : digikam does not *add* EXIF:DateTimeOriginal when modifying date
 087 ==> 127697 : camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File Mime Types/ Image Files.
 088 ==> 128373 : "Makernote - Simple" should show ISO.
@@ -161,8 +161,9 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 098 ==> 127991 : digiKam image editor and raws (nef).
 099 ==> 129450 : Cannot exit preview mode within empty album.
 100 ==> 129610 : Unsupported initialization of CameraList object.
-101 ==> 127584 : Minimum width of sidebar too large
+101 ==> 127584 : Minimum width of sidebar too large.
 102 ==> 127763 : color management, profile selection crashes.
-103 ==> 126199 : Nikon D70 comments in jpegs are all shown as "charset="Ascii"
+103 ==> 126199 : Nikon D70 comments in jpegs are all shown as "charset="Ascii".
+104 ==> 130381 : Automatic colorbalance and camera color balance checkboxes swapped.
 
 ----------------------------------------------------------------------------------------------------
