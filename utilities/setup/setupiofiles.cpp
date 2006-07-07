@@ -333,8 +333,8 @@ void SetupIOFiles::readSettings()
     d->NRSigmaRange->setValue( config->readDoubleNumEntry("NRSigmaRange", 4.0) );
     d->SuperCCDsecondarySensor->setChecked(config->readBoolEntry("SuperCCDsecondarySensor", false));
     d->unclipColors->setChecked(config->readBoolEntry("UnclipColors", false));
-    d->cameraColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
-    d->automaticColorBalance->setChecked(config->readBoolEntry("CameraColorBalance", true));
+    d->cameraColorBalance->setChecked(config->readBoolEntry("CameraColorBalance", true));
+    d->automaticColorBalance->setChecked(config->readBoolEntry("AutomaticColorBalance", true));
     d->RGBInterpolate4Colors->setChecked(config->readBoolEntry("RGBInterpolate4Colors", false));
 
     d->JPEGcompression->setValue( config->readNumEntry("JPEGCompression", 75) );
