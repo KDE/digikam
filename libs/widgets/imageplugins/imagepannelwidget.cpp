@@ -106,8 +106,8 @@ public:
     Sidebar            *settingsSideBar;
 };
     
-ImagePannelWidget::ImagePannelWidget(uint w, uint h, QString settingsSection, QWidget *parent,
-                                     int separateViewMode)
+ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSection, 
+                                     QWidget *parent, int separateViewMode)
                  : QHBox(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePannelWidgetPriv;
