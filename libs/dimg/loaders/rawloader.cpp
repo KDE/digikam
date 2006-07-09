@@ -344,7 +344,9 @@ void RAWLoader::startProcess()
             *m_process << QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
             break;
 
-        default:
+        default:    // No ICC color Correction : converter to RAW Color Mode.
+            *m_process << "-o";
+            *m_process << "0";
             break;
     }
 
