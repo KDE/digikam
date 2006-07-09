@@ -43,6 +43,7 @@
 
 #include <kdebug.h>
 #include <kprocess.h>
+#include <kstandarddirs.h>
 
 // Local includes.
 
@@ -124,10 +125,10 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     {
         uchar *image = new uchar[m_width*m_height*8];
 
-        unsigned short *dst  = (unsigned short *)image;
-        uchar          *src  = m_data;
-        float fac            = 65535.0 / m_rgbmax;
-        checkpoint           = 0;
+        unsigned short *dst = (unsigned short *)image;
+        uchar          *src = m_data;
+        float fac           = 65535.0 / m_rgbmax;
+        checkpoint          = 0;
 
         for (int h = 0; h < m_height; h++)
         {
@@ -238,11 +239,14 @@ void RAWLoader::customEvent(QCustomEvent *)
 
 void RAWLoader::startProcess()
 {
-    if (m_observer && !m_observer->continueQuery(m_image))
+    if (m_observer)
     {
-        m_running    = false;
-        m_normalExit = false;
-        return;
+        if (!m_observer->continueQuery(m_image))
+        {
+            m_running    = false;
+            m_normalExit = false;
+            return;
+        }
     }
 
     // create KProcess and build argument list
@@ -334,23 +338,40 @@ void RAWLoader::startProcess()
 
     switch (m_rawDecodingSettings.ICCColorCorrectionMode)
     {
-        case RawDecodingSettings::EMBED:
+        case RawDecodingSettings::EMBED_WORKSPACE:
+        {
             *m_process << "-p";
             *m_process << "embed";
             break;
+        }
 
-        case RawDecodingSettings::USERPROFILE:
+        case RawDecodingSettings::SRGB_WORKSPACE:
+        {
+            *m_process << "-o";
+            *m_process << "1";
+
+            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
+            m_image->getICCProfilFromFile(directory + "srgb.icm");
+            break;
+        }
+
+        case RawDecodingSettings::USER_PROFILES:
+        {
             *m_process << "-p";
             *m_process << QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
             break;
+        }
 
         default:    // No ICC color Correction : converter to RAW Color Mode.
+        {
             *m_process << "-o";
             *m_process << "0";
             break;
+        }
     }
 
-    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NOICC &&
+    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NO_ICC &&
         !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
     {
         *m_process << "-o";

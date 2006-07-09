@@ -35,16 +35,17 @@ class DIGIKAM_EXPORT RawDecodingSettings
 
 public:
     
-    enum INPUTICCMODE
+    enum ICCCOLORCORRECTIONMODE
     {
-        NOICC = 0,    // No color correction during Raw file decoding.
-        EMBED,        // Using embedded ICC color profile in RAW file.
-        USERPROFILE   // Using user input ICC profile file.
+        NO_ICC = 0,          // No color correction during Raw file decoding.
+        SRGB_WORKSPACE,      // Using default workspace color profile (sRGB) 
+        EMBED_WORKSPACE,     // Using embedded workspace color profile in RAW file.
+        USER_PROFILES        // Using user input and workspace profile files.
     };
 
     RawDecodingSettings()
     {
-        ICCColorCorrectionMode  = NOICC;
+        ICCColorCorrectionMode  = SRGB_WORKSPACE;
         cameraICCProfilePath    = QString::null;
         outputICCProfilePath    = QString::null;
     
@@ -68,7 +69,7 @@ public:
 
     void optimizeTimeLoading(void)
     {
-        ICCColorCorrectionMode  = NOICC;
+        ICCColorCorrectionMode  = NO_ICC;
         enableNoiseReduction    = false;
         enableRAWQuality        = false;
         RGBInterpolate4Colors   = false;

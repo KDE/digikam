@@ -693,15 +693,15 @@ void EditorWindow::applyStandardSettings()
 {
     KConfig* config = kapp->config();
 
-    // -- Settings for Color Management stuff --------------------------------
+    // -- Settings for Color Management stuff ----------------------------------------------
 
     config->setGroup("Color Management");
 
-    d->ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
     d->ICCSettings->enableCMSetting    = config->readBoolEntry("EnableCM", false);
     d->ICCSettings->askOrApplySetting  = config->readBoolEntry("BehaviourICC", false);
     d->ICCSettings->BPCSetting         = config->readBoolEntry("BPCAlgorithm",false);
     d->ICCSettings->managedViewSetting = config->readBoolEntry("ManagedView", false);
+    d->ICCSettings->renderingSetting   = config->readNumEntry("RenderingIntent");
     d->ICCSettings->inputSetting       = config->readPathEntry("InProfileFile", QString::null);
     d->ICCSettings->workspaceSetting   = config->readPathEntry("WorkProfileFile", QString::null);
     d->ICCSettings->monitorSetting     = config->readPathEntry("MonitorProfileFile", QString::null);
@@ -709,7 +709,7 @@ void EditorWindow::applyStandardSettings()
 
     DImgInterface::instance()->setICCSettings(d->ICCSettings);
 
-    // -- IO files format settings ------------------------------------------------
+    // -- JPEG, PNG, TIFF files format settings ----------------------------------------------
 
     config->setGroup("ImageViewer Settings");
 
@@ -723,6 +723,16 @@ void EditorWindow::applyStandardSettings()
 
     m_IOFileSettings->TIFFCompression  = config->readBoolEntry("TIFFCompression", false);
 
+    // -- RAW pictures decoding settings ------------------------------------------------------
+
+    // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
+    // else, sRGB color workspace will be used.
+
+    if (d->ICCSettings->enableCMSetting) 
+        m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode = RawDecodingSettings::NO_ICC;
+    else
+        m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode = RawDecodingSettings::SRGB_WORKSPACE;
+
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
@@ -735,7 +745,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
     
-    // -- GUI Settings -------------------------------------------------------
+    // -- GUI Settings -----------------------------------------------------------------------
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     if(config->hasKey("Splitter Sizes"))
