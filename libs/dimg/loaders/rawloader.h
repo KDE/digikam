@@ -53,8 +53,8 @@ public:
 
     RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer);
-    bool save(const QString& filePath, DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver *observer=0);
+    bool save(const QString& filePath, DImgLoaderObserver *observer=0);
 
     virtual bool hasAlpha()   const { return false; };
     virtual bool isReadOnly() const { return true;  };
@@ -64,7 +64,7 @@ private:
 
     // Methods to load RAW image using external dcraw instance.
 
-    bool loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer);
+    bool loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer=0);
 
     virtual void customEvent(QCustomEvent *);
     void startProcess();
