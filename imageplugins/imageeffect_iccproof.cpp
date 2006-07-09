@@ -205,7 +205,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                 "range that the output device can render are adjusted to the closest color that can be "
                 "rendered, while all other colors are left unchanged. Proof intent does not preserve "
                 "the white point.</li>"
-                "<li>Saturarion intent preserves the saturation of colors in the image at the possible "
+                "<li>Saturation intent preserves the saturation of colors in the image at the possible "
                 "expense of hue and lightness.<br>"
                 "Implementation of this intent remains somewhat problematic, and the ICC is still working "
                 "on methods to achieve the desired effects.<br>"

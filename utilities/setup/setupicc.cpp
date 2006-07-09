@@ -294,7 +294,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "<li><p><b>Relative Colorimetric intent</b> is defined such that any colors that fall outside the range that the "
                      "output device can render are adjusted to the closest color that can be rendered, while all other colors "
                      "are left unchanged. Proof intent does not preserve the white point.</p></li>"
-                     "<li><p><b>Saturarion intent</b> preserves the saturation of colors in the image at the possible expense of "
+                     "<li><p><b>Saturation intent</b> preserves the saturation of colors in the image at the possible expense of "
                      "hue and lightness.</p>"
                      "<p>Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
                      "achieve the desired effects.</p>"
