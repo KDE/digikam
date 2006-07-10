@@ -109,20 +109,27 @@ Dir.mkdir( "po" )
 
 for lang in i18nlangs
   lang.chomp!
+  src = "l10n/#{lang}"
+  `rm -rf #{src}`
+  podirname = "l10n/#{lang}/messages/extragear-#{egmodule}"
+  print "Retrieving #{podirname} ...  "
+  `svn co -q #{svnroot}/#{podirname} #{src} > /dev/null 2>&1`
+  puts( "done.\n" )
+  next unless FileTest.exists?( src )
+
   dest = "po/#{lang}"
 
   for dg in addPo
     dg.chomp!
-    pofilename = "l10n/#{lang}/messages/extragear-#{egmodule}/#{dg}.po"
-    `svn cat #{svnroot}/#{pofilename} 2> /dev/null | tee l10n/#{dg}.po`
-    next if FileTest.size( "l10n/#{dg}.po" ) == 0
+    pofilename = "#{src}/#{dg}.po"
+    next unless FileTest.exists?( pofilename )
 
     if !FileTest.exist?( dest )
       Dir.mkdir( dest )
     end
 
-    print "Copying #{lang}'s #{dg}.po over ..  "
-    `mv l10n/#{dg}.po #{dest}`
+    print "Copying #{lang}'s #{dg}.po over ...  "
+    `mv #{pofilename} #{dest}`
     puts( "done.\n" )
 
     makefile = File.new( "#{dest}/Makefile.am", File::CREAT | File::RDWR | File::TRUNC )
