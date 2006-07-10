@@ -113,7 +113,7 @@ ImageEffect_WhiteBalance::ImageEffect_WhiteBalance(QWidget* parent, QString titl
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("whitebalance Tool Dialog", plainPage(),
                                                i18n("<p>You can see here the image's white-balance "
                                                     "adjustments preview. You can pick color on image to "
                                                     "see the color level corresponding on histogram."));

@@ -80,7 +80,7 @@ ImageEffect_Solarize::ImageEffect_Solarize(QWidget* parent, QString title, QFram
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("solarizeimage Tool Dialog", plainPage(),
                           i18n("<p>This is the solarize effect preview"));
 
     setPreviewAreaWidget(m_previewWidget); 

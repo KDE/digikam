@@ -97,7 +97,7 @@ ChannelMixerDialog::ChannelMixerDialog(QWidget* parent, QString title, QFrame* b
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("channelmixer Tool Dialog", plainPage(),
                           i18n("<p>You can see here the image's color channels' "
                                "gains adjustments preview. You can pick color on image "
                                "to see the color level corresponding on histogram."));

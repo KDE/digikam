@@ -104,7 +104,7 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("adjustlevels Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image's "
                                                     "level-adjustments preview. You can pick color on image "
                                                     "to see the color level corresponding on histogram."));
