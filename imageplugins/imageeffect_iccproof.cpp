@@ -62,6 +62,7 @@
 #include <kfile.h>
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 
 // Digikam includes.
 
@@ -226,7 +227,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "General" Page Setup ----------------------------------
         
-    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, i18n("General Settings"));
+    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
+                                 SmallIconSet("misc"), i18n("General Settings"));
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
@@ -278,7 +280,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, i18n("Input Profile"));
+    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIconSet("camera"), i18n("Input Profile"));
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
@@ -318,13 +320,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     firstPageLayout->setRowStretch(2, 10);
     firstPageLayout->setRowStretch(3, 10);
 
-    //---------- End "Input" Page ------------------------------------
+    //---------- "Workspace" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, i18n("Work-space Profile"));
+    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
+                                 SmallIconSet("tablet"), i18n("Work-space Profile"));
     QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
                     "Profiles.</p>"));
-
-    //---------- "Workspace" Page Setup ---------------------------------
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
                                     KDialog::marginHint(), KDialog::spacingHint());
@@ -355,13 +356,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     secondPageLayout->setRowStretch(2, 10);
     secondPageLayout->setRowStretch(3, 10);
 
-    //---------- End "Workspace" Page -----------------------------------
+    //---------- "Proofing" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, i18n("Proofing Profile"));
+    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
+                                 SmallIconSet("printer1"), i18n("Proofing Profile"));
     QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color "
                     "Profiles.</p>"));
-
-    //---------- "Proofing" Page Setup ---------------------------------
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
                                    KDialog::marginHint(), KDialog::spacingHint());
@@ -392,13 +392,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->setRowStretch(2, 10);
     thirdPageLayout->setRowStretch(3, 10);
 
-    //---------- End "Proofing" Page -----------------------------------
+    //---------- "Display" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(DISPLAYPAGE, displayProfiles, i18n("Display Profile"));
+    m_toolBoxWidgets->insertItem(DISPLAYPAGE, displayProfiles, 
+                                 SmallIconSet("system"), i18n("Display Profile"));
     QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
                     "Profiles.</p>"));
 
-    //---------- "Display" Page Setup ----------------------------------
 
     QGridLayout *fourthPageLayout = new QGridLayout(displayProfiles, 3, 2, 
                                     KDialog::marginHint(), KDialog::spacingHint());
@@ -429,7 +429,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourthPageLayout->setRowStretch(2, 10);
     fourthPageLayout->setRowStretch(3, 10);
     
-    //---------- End "Display" Page ------------------------------------
+    // -------------------------------------------------------------
 
     gridSettings->addMultiCellWidget(m_toolBoxWidgets, 4, 4, 0, 2);
     gridSettings->setRowStretch(6, 10);    
