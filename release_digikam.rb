@@ -9,10 +9,11 @@
 
 name       = "digikam"
 egmodule   = "graphics"
-version    = "0.8.2-rc1"
+version    = "0.8.2"
 docs       = "no"
 
 svnbase    = "https://ach@svn.kde.org/home/kde"
+svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
@@ -164,6 +165,7 @@ Dir.chdir( "#{name}" )
 `/bin/mv -f TODO ..`
 `/bin/mv -f HACKING ..`
 `/bin/mv -f NEWS ..`
+`/bin/rm release_digikam*`
 Dir.chdir( ".." )
 
 
