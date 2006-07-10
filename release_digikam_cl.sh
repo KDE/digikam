@@ -11,9 +11,9 @@
 
 name="digikam"
 egmodule="graphics"
-startrev="538809"   # check existing ChangeLog file for the most recent entry
+startrev="539364"   # check existing ChangeLog file for the most recent entry
 
-svnbase="https://ach@svn.kde.org/home/kde"
+svnbase="svn+ssh://toma@svn.kde.org/home/kde"
 svnroot="branches/stable"
 adminroot="$svnbase/branches/KDE/3.5"
 
