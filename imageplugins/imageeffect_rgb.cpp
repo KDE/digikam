@@ -66,7 +66,7 @@ ImageEffect_RGB::ImageEffect_RGB(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("colorbalancetool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("colorbalance Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image "
                                                     "color-balance adjustments preview. "
                                                     "You can pick color on image "

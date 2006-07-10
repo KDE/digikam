@@ -167,7 +167,7 @@ ImageEffect_BWSepia::ImageEffect_BWSepia(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("convertbw Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the black and white conversion tool preview. "
                                                     "You can pick color on image "
                                                     "to see the color level corresponding on histogram."));

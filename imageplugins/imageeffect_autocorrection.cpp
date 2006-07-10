@@ -72,7 +72,7 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     
     // -------------------------------------------------------------
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("autocorrection Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the auto-color correction tool preview. "
                                                     "You can pick color on image "
                                                     "to see the color level corresponding on histogram."));

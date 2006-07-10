@@ -175,7 +175,8 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     d->hbox              = new QHBox(plainPage());
     d->splitter          = new QSplitter(d->hbox);
-    m_imagePreviewWidget = new ImageWidget(d->splitter, desc, prevModeOptions, guideMode, guideVisible);
+    m_imagePreviewWidget = new ImageWidget(d->name, d->splitter, desc, prevModeOptions, 
+                                           guideMode, guideVisible);
     
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );

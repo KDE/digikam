@@ -68,7 +68,7 @@ ImageEffect_BCG::ImageEffect_BCG(QWidget* parent)
     m_destinationPreviewData = 0L;
     setHelp("bcgadjusttool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("bcgadjust Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image "
                                                "brightness-contrast-gamma adjustments preview. "
                                                "You can pick color on image "

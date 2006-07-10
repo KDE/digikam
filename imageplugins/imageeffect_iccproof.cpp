@@ -103,7 +103,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     setHelp("colormanagement.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image preview after "
                                                     "convert it with a color profile</p>"));
     setPreviewAreaWidget(m_previewWidget); 

@@ -47,9 +47,9 @@ Q_OBJECT
 
 public:
 
-    ImageWidget(QWidget *parent=0, const QString& previewWhatsThis=QString::null,
-                bool prevModeOptions=true, int guideMode=ImageGuideWidget::PickColorMode, 
-                bool guideVisible=true);
+    ImageWidget(const QString& settingsSection, QWidget *parent=0, 
+                const QString& previewWhatsThis=QString::null, bool prevModeOptions=true, 
+                int guideMode=ImageGuideWidget::PickColorMode, bool guideVisible=true);
     ~ImageWidget();
 
     ImageIface* imageIface();
@@ -77,6 +77,11 @@ signals:
 private slots:
     
     void slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point);
+
+private:
+
+    void readSettings(void);
+    void writeSettings(void);
 
 private:
 

@@ -31,6 +31,7 @@
 
 #include <ksqueezedtextlabel.h>
 #include <kdialog.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -54,6 +55,8 @@ public:
         previewWidget  = 0;
     }
 
+    QString             settingsSection;
+
     QHButtonGroup      *previewButtons;
 
     KSqueezedTextLabel *spotInfoLabel;
@@ -61,11 +64,13 @@ public:
     ImageGuideWidget   *previewWidget;
 };
 
-ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis, 
-                         bool prevModeOptions, int guideMode, bool guideVisible)
+ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent, 
+                         const QString& previewWhatsThis, bool prevModeOptions, 
+                         int guideMode, bool guideVisible)
            : QWidget(parent)
 {
     d = new ImageWidgetPriv;
+    d->settingsSection = settingsSection;
 
     // -------------------------------------------------------------
     
@@ -151,8 +156,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame, 5, 0);
     d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible, 
-                                           guideMode,
-                                           Qt::red, 1, false);
+                                            guideMode, Qt::red, 1, false);
     QWhatsThis::add( d->previewWidget, previewWhatsThis);
     l->addWidget(d->previewWidget, 0);
 
@@ -189,7 +193,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
     // -------------------------------------------------------------
     
     if (prevModeOptions)
-        setRenderingPreviewMode(ImageGuideWidget::PreviewBothImagesVertCont);
+        readSettings();
     else
     {
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
@@ -200,6 +204,7 @@ ImageWidget::ImageWidget(QWidget *parent, const QString& previewWhatsThis,
 
 ImageWidget::~ImageWidget()
 {
+    writeSettings();
     delete d;
 }
 
@@ -261,6 +266,24 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
                              .arg(point.x()).arg(point.y())
                              .arg(color.red()).arg(color.green())
                              .arg(color.blue()).arg(color.alpha()) );
+}
+
+void ImageWidget::readSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->settingsSection);
+    int mode = config->readNumEntry("Separate View", ImageGuideWidget::PreviewBothImagesVertCont);
+    mode = QMAX(ImageGuideWidget::PreviewOriginalImage, mode);
+    mode = QMIN(ImageGuideWidget::NoPreviewMode, mode);
+    setRenderingPreviewMode(mode);
+}
+    
+void ImageWidget::writeSettings(void)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(d->settingsSection);
+    config->writeEntry( "Separate View", getRenderingPreviewMode() );
+    config->sync();
 }
 
 }  // namespace Digikam

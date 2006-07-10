@@ -61,12 +61,12 @@ namespace DigikamImagesPluginCore
 {
 
 ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
-               : Digikam::ImageDlgBase(parent, i18n("Hue/Saturation/Lightness"), "hdladjust", false)
+               : Digikam::ImageDlgBase(parent, i18n("Hue/Saturation/Lightness"), "hsladjust", false)
 {
     m_destinationPreviewData = 0L;
     setHelp("hsladjusttool.anchor", "digikam");
 
-    m_previewWidget = new Digikam::ImageWidget(plainPage(),
+    m_previewWidget = new Digikam::ImageWidget("hsladjust Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image "
                                                     "Hue/Saturation/Lightness adjustments preview. "
                                                     "You can pick color on image "
