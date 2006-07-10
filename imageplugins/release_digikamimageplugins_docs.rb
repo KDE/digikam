@@ -9,10 +9,11 @@
 
 name       = "digikamimageplugins"
 egmodule   = "graphics"
-version    = "doc-0.8.1"
+version    = "doc-0.8.2"
 docs       = "yes"
 
 svnbase    = "svn://anonsvn.kde.org/home/kde"
+svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
@@ -103,6 +104,7 @@ Dir.chdir( ".." ) # root folder
 `find -name ".svn" | xargs rm -rf`
 
 `/bin/mv * ..`
+`/bin/rm release_digikam*`
 Dir.chdir( ".." ) # name-version
 `rmdir #{egmodule}`
 

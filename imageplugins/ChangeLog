@@ -1,6 +1,40 @@
+v0.8.2 - 10/07/06
+----------------------------------------------------------------------------
+2006-06-28 20:52  ach
+
+	* branches/stable/extragear/graphics/digikamimageplugins/common/cimgiface/cimgiface.cpp:
+	  digikam stable: backport r555371 by Stephan Binner: don't use
+	  local variable before it's set correcting to apparently intended
+	  code
+
+2006-06-03 13:50  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  digikam from stable : White Balance image editor plugin : Fixed
+	  Gamma correction slider values inversed.
+
+2006-05-21 14:42  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/hotpixels/blackframeparser.h:
+	  recursive include
+
+2006-03-13 10:34  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp:
+	  fix whatsthis
+
+2006-03-05 16:46  cgilles
+
+	* branches/stable/extragear/graphics/digikamimageplugins/infrared/infrared.cpp:
+	  digikam from stable : Infrared fix unecessary bluring effects
+
+2006-02-09 01:20  ach
+
+	* branches/stable/extragear/graphics/digikamimageplugins/AUTHORS:
+	  digikamimageplugins: add icon artist to AUTHORS
+
 v0.8.1 - 11/02/06
 ----------------------------------------------------------------------------
-
 2006-02-05 17:50  cgilles
 
 	* branches/stable/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves_ui.rc,
