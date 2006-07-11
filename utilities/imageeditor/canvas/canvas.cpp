@@ -154,6 +154,7 @@ Canvas::Canvas(QWidget *parent)
       : QScrollView(parent)
 {
     viewport()->setBackgroundMode(Qt::NoBackground);
+    viewport()->setMouseTracking(false);
     setFrameStyle( QFrame::NoFrame );
 
     d = new CanvasPrivate;
@@ -206,6 +207,11 @@ Canvas::Canvas(QWidget *parent)
 
     d->histoChannelType = ImageHistogram::ValueChannel;
 
+    // ------------------------------------------------------------
+    
+    connect(d->im, SIGNAL(signalColorManagementTool()),
+            this, SIGNAL(signalColorManagementTool()));
+            
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
@@ -232,8 +238,6 @@ Canvas::Canvas(QWidget *parent)
     
     connect(this, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotContentsMoving(int,int)));
-
-    viewport()->setMouseTracking(false);
 }
 
 void Canvas::customEvent(QCustomEvent *event)

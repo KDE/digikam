@@ -229,8 +229,13 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         
         if (d->cmSettings->enableCMSetting)
         {
-            if (QFile::exists(d->cmSettings->workspaceSetting) && 
-                QFile::exists(d->cmSettings->inputSetting))
+            if (d->image.attribute("format").toString() == QString("RAW"))
+            {
+                // With RAW files, we load the Color Management image plugin.
+                emit signalColorManagementTool();        
+            }
+            else if (QFile::exists(d->cmSettings->workspaceSetting) && 
+                     QFile::exists(d->cmSettings->inputSetting))
             {
                 IccTransform trans;
     

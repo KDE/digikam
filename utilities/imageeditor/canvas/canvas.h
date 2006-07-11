@@ -166,6 +166,7 @@ private slots:
     
 signals:
 
+    void signalColorManagementTool();
     void signalZoomChanged(float zoom);
     void signalMaxZoom();
     void signalMinZoom();

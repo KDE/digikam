@@ -57,6 +57,8 @@ public:
     // Return true if plugin library is loaded in memory.
     // 'libraryName' is internal plugin library name not i18n.
     bool pluginLibraryIsLoaded(const QString& libraryName);
+    
+    ImagePlugin* pluginInstance(const QString& libraryName);
 
 private:
     
@@ -64,7 +66,7 @@ private:
 
 private:
 
-    static ImagePluginLoader             *m_instance;
+    static ImagePluginLoader *m_instance;
 
     ImagePluginLoaderPrivate *d;
 };

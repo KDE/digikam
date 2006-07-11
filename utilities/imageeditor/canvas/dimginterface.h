@@ -151,6 +151,8 @@ protected slots:
 
 signals:
 
+    void   signalColorManagementTool();
+    
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
 

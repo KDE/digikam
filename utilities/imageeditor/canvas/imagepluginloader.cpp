@@ -214,6 +214,24 @@ ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
     return 0;
 }
 
+ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
+{
+    KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
+    KTrader::OfferList::ConstIterator iter;
+    
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    {
+        KService::Ptr service = *iter;
+
+        if(service->library() == libraryName)
+        {
+            return ( pluginIsLoaded(service->name()) );
+        }
+    }
+    
+    return 0;
+}
+
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
     KTrader::OfferList offers = KTrader::self()->query("Digikam/ImagePlugin");
