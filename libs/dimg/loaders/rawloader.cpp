@@ -90,12 +90,18 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     m_observer = observer;
     m_filePath = filePath;
     m_running  = true;
+    m_normalExit = false;
 
     // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
     int checkpoint = 0;
-    while (m_running)
+
+    // The shuttingDown is a hack needed to prevent hanging when this KProcess-based loader
+    // is waiting for the process to finish, but the main thread is waiting
+    // for the thread to finish and no KProcess events are delivered.
+    // Remove when porting to Qt4.
+    while (m_running && !m_observer->isShuttingDown())
     {
 
         if (m_dataPos > checkpoint)

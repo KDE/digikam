@@ -223,6 +223,17 @@ bool LoadSaveThread::querySendNotifyEvent()
 }
 
 
+// This is a hack needed to prevent hanging when a KProcess-based loader (raw loader)
+// is waiting for the process to finish, but the main thread is waiting
+// for the thread to finish and no KProcess events are delivered.
+// Remove when porting to Qt4.
+bool LoadSaveThread::isShuttingDown()
+{
+    // the condition is met after d->running is set to false in the destructor
+    return running() && !d->running;
+}
+
+
 }   // namespace Digikam
 
 #include "loadsavethread.moc"

@@ -81,6 +81,8 @@ public:
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
+    bool isShuttingDown();
+
 signals:
 
     // This signal is emitted when the loading process begins.

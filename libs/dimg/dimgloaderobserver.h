@@ -48,6 +48,13 @@ public:
     // values > 1 mean higher granularity (more checks).
     virtual float granularity()
             { return 1.0; };
+
+    // This is a hack needed to prevent hanging when a KProcess-based loader (raw loader)
+    // is waiting for the process to finish, but the main thread is waiting
+    // for the thread to finish and no KProcess events are delivered.
+    // Remove when porting to Qt4.
+    virtual bool isShuttingDown()
+            { return false; }
 };
 
 }      // namespace Digikam
