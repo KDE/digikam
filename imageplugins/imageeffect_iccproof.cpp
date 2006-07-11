@@ -112,7 +112,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     // -------------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
-    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 6, 2, marginHint(), spacingHint());
+    QGridLayout *gridSettings = new QGridLayout( gboxSettings, 3, 2, marginHint(), spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Channel: "), gboxSettings);
     label1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -176,46 +176,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 2);
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 2);
 
-    //-- Build rendering intents options group -----------------------
-
-    QVButtonGroup *intentsBG = new QVButtonGroup(gboxSettings);
-    intentsBG->setTitle(i18n("Select Rendering Intent"));
-
-    m_renderingIntentsCB = new QComboBox(false, intentsBG);
-    
-    m_renderingIntentsCB->insertItem("Perceptual");
-    m_renderingIntentsCB->insertItem("Absolute Colorimetric");
-    m_renderingIntentsCB->insertItem("Relative Colorimetric");
-    m_renderingIntentsCB->insertItem("Saturation");
-
-    QWhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut "
-                "of the image to be compressed or expanded to fill the gamut of the destination device, "
-                "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
-                "In other words, if certain colors in an image fall outside of the range of colors that "
-                "the output device can render, the picture intent will cause all the colors in the image "
-                "to be adjusted so that the every color in the image falls within the range that can be "
-                "rendered and so that the relationship between colors is preserved as much as possible.<br>"
-                "This intent is most suitable for display of photographs and images, and is the default "
-                "intent.</li>"
-                "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the "
-                "output device can render are adjusted to the closest color that can be rendered, while all "
-                "other colors are left unchanged.<br>"
-                "This intent preserves the white point and is most suitable for spot colors (Pantone, "
-                "TruMatch, logo colors, ...).</li>"
-                "<li>Relative Colorimetric intent is defined such that any colors that fall outside the "
-                "range that the output device can render are adjusted to the closest color that can be "
-                "rendered, while all other colors are left unchanged. Proof intent does not preserve "
-                "the white point.</li>"
-                "<li>Saturation intent preserves the saturation of colors in the image at the possible "
-                "expense of hue and lightness.<br>"
-                "Implementation of this intent remains somewhat problematic, and the ICC is still working "
-                "on methods to achieve the desired effects.<br>"
-                "This intent is most suitable for business graphics such as charts, where it is more "
-                "important that the colors be vivid and contrast well with each other rather than a "
-                "specific color.</li></ul>"));
-
-    gridSettings->addMultiCellWidget(intentsBG, 3, 3, 0, 2);
-
     // -------------------------------------------------------------
 
     m_toolBoxWidgets         = new QToolBox(gboxSettings);
@@ -261,6 +221,38 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                    "render to darkest tone destination media can render. As a such, "
                                    "BPC is primarily targeting CMYK.</p>"));
 
+    QLabel *intent = new QLabel(i18n("Rendering Intent:"), generalOptions);
+    m_renderingIntentsCB = new QComboBox(false, generalOptions);
+    m_renderingIntentsCB->insertItem("Perceptual");
+    m_renderingIntentsCB->insertItem("Absolute Colorimetric");
+    m_renderingIntentsCB->insertItem("Relative Colorimetric");
+    m_renderingIntentsCB->insertItem("Saturation");
+    QWhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut "
+                "of the image to be compressed or expanded to fill the gamut of the destination device, "
+                "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
+                "In other words, if certain colors in an image fall outside of the range of colors that "
+                "the output device can render, the picture intent will cause all the colors in the image "
+                "to be adjusted so that the every color in the image falls within the range that can be "
+                "rendered and so that the relationship between colors is preserved as much as possible.<br>"
+                "This intent is most suitable for display of photographs and images, and is the default "
+                "intent.</li>"
+                "<li> Absolute Colorimetric intent causes any colors that fall outside the range that the "
+                "output device can render are adjusted to the closest color that can be rendered, while all "
+                "other colors are left unchanged.<br>"
+                "This intent preserves the white point and is most suitable for spot colors (Pantone, "
+                "TruMatch, logo colors, ...).</li>"
+                "<li>Relative Colorimetric intent is defined such that any colors that fall outside the "
+                "range that the output device can render are adjusted to the closest color that can be "
+                "rendered, while all other colors are left unchanged. Proof intent does not preserve "
+                "the white point.</li>"
+                "<li>Saturation intent preserves the saturation of colors in the image at the possible "
+                "expense of hue and lightness.<br>"
+                "Implementation of this intent remains somewhat problematic, and the ICC is still working "
+                "on methods to achieve the desired effects.<br>"
+                "This intent is most suitable for business graphics such as charts, where it is more "
+                "important that the colors be vivid and contrast well with each other rather than a "
+                "specific color.</li></ul>"));
+
     KURLLabel *lcmsLogoLabel = new KURLLabel(generalOptions);
     lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
     lcmsLogoLabel->setText(QString::null);
@@ -269,14 +261,15 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     directory = KGlobal::dirs()->findResourceDir("lcmslogo", "lcmslogo.png");
     lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
-                                   
+
     zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);    
     zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);    
     zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);    
     zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);    
-    zeroPageLayout->setRowStretch(3, 10);
-    zeroPageLayout->setRowStretch(4, 10);
+    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);    
+    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);    
+    zeroPageLayout->setRowStretch(5, 10);
 
     //---------- "Input" Page Setup ----------------------------------
 
@@ -317,7 +310,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);    
     firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);    
     firstPageLayout->setColStretch(1, 10);
-    firstPageLayout->setRowStretch(2, 10);
     firstPageLayout->setRowStretch(3, 10);
 
     //---------- "Workspace" Page Setup ---------------------------------
@@ -353,7 +345,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     secondPageLayout->addMultiCellWidget(spaceProfilesInfo, 0, 0, 2, 2);    
     secondPageLayout->addMultiCellWidget(m_spaceProfilePath, 2, 2, 0, 2);    
     secondPageLayout->setColStretch(1, 10);
-    secondPageLayout->setRowStretch(2, 10);
     secondPageLayout->setRowStretch(3, 10);
 
     //---------- "Proofing" Page Setup ---------------------------------
@@ -389,7 +380,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->addMultiCellWidget(proofProfilesInfo, 0, 0, 2, 2);    
     thirdPageLayout->addMultiCellWidget(m_proofProfilePath, 2, 2, 0, 2);    
     thirdPageLayout->setColStretch(1, 10);
-    thirdPageLayout->setRowStretch(2, 10);
     thirdPageLayout->setRowStretch(3, 10);
 
     //---------- "Display" Page Setup ----------------------------------
@@ -426,13 +416,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourthPageLayout->addMultiCellWidget(displayProfilesInfo, 0, 0, 2, 2);    
     fourthPageLayout->addMultiCellWidget(m_displayProfilePath, 2, 2, 0, 2);    
     fourthPageLayout->setColStretch(1, 10);
-    fourthPageLayout->setRowStretch(2, 10);
     fourthPageLayout->setRowStretch(3, 10);
     
     // -------------------------------------------------------------
 
-    gridSettings->addMultiCellWidget(m_toolBoxWidgets, 4, 4, 0, 2);
-    gridSettings->setRowStretch(6, 10);    
+    gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
