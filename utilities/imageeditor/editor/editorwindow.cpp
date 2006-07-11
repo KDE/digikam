@@ -203,10 +203,19 @@ void EditorWindow::setupStandardConnections()
     connect(d->flipVertAction, SIGNAL(activated()),
             this, SLOT(slotRotatedOrFlipped()));
 
-    // -- status bar connections --
+    // -- status bar connections --------------------------------------
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotNameLabelCancelButtonPressed()));
+
+    // -- Core plugin connections -------------------------------------
+    
+    ImagePlugin *corePlugin = m_imagePluginLoader->pluginInstance("digikamimageplugin_core");
+    if ( corePlugin )
+    {                        
+        connect(m_canvas, SIGNAL(signalColorManagementTool()),
+                corePlugin, SLOT(slotColorManagement()));    
+    }        
 }
 
 void EditorWindow::setupStandardActions()
@@ -1482,8 +1491,6 @@ bool EditorWindow::moveFile()
 
     return true;
 }
-
-
 
 }  // namespace Digikam
 
