@@ -37,13 +37,16 @@ class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Core : public Digikam::ImagePlugin
     
 public:
 
-    ImagePlugin_Core(QObject *parent, const char* name,
-                     const QStringList &args);
+    ImagePlugin_Core(QObject *parent, const char* name, const QStringList &args);
     ~ImagePlugin_Core();
 
     void setEnabledSelectionActions(bool enable);
     void setEnabledActions(bool enable);
 
+public slots:
+
+    void slotColorManagement();
+   
 private:
 
     KAction *m_redeyeAction;
@@ -74,8 +77,6 @@ private slots:
     
     void slotRedEye();
     void slotRatioCrop();
-
-    void slotColorManagement();
 
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
