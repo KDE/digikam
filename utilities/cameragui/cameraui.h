@@ -74,6 +74,7 @@ private:
     bool createAutoAlbum(const KURL& parentURL, const QString& name,
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
+    void finishDialog();
 
 private slots:
 

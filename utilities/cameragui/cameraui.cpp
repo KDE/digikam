@@ -482,43 +482,50 @@ bool CameraUI::dialogClosed()
                                             "and cancel the current operation?"))
             == KMessageBox::No)
             return false;
-
-        d->controller->slotCancel();
-        // will be read in slotBusy later and deleteLater will be called
-        d->closed = true;
-    }
-    else
-    {
-        deleteLater();
-        d->closed = true;
     }
 
     d->status->setText(i18n("Disconnecting from camera, please Wait..."));
     d->progress->hide();
-    
-    //---------------------------------------------------
-        
+
+    if (isBusy())
+    {
+        d->controller->slotCancel();
+        // will be read in slotBusy later and finishDialog
+        // will be called only when everything is finished
+        d->closed = true;
+    }
+    else
+    {
+        finishDialog();
+        d->closed = true;
+    }
+
+    return true;
+}
+
+void CameraUI::finishDialog()
+{
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
-    
+
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {
-        kdDebug() << "Scanning " << (*it) << endl;
+        //kdDebug() << "Scanning " << (*it) << endl;
         sLib.findMissingItems( (*it) );
     }
-    
-    //---------------------------------------------------
+
+    // Never call finalScan after deleteLater() - ScanLib will call processEvent(),
+    // and the delete event may be executed!
+    deleteLater();
 
     if(!d->lastDestURL.isEmpty())
         emit signalLastDestination(d->lastDestURL);
-    
-    saveSettings();
 
-    return true;
+    saveSettings();
 }
 
 void CameraUI::slotBusy(bool val)
@@ -539,16 +546,18 @@ void CameraUI::slotBusy(bool val)
 
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
-            deleteLater();
+        {
+            finishDialog();
+        }
     }
     else
     {
         if (d->busy)
             return;
-        
+
         if (!d->anim->running())
             d->anim->start();
-            
+
         d->busy = true;
         d->cancelBtn->setEnabled(true);
         d->advBox->setEnabled(false);
