@@ -19,5 +19,6 @@ Description[et]=DigiKami albumite KIO-moodul
 Description[ja]=digiKam アルバム kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਐਲਬਮ kioslave
 Description[pt]='kioslave' de álbuns do digiKam
+Description[ru]=Digikam kioslave - альбомы
 Description[sv]=I/O-slav för Digikams album
 Class=:local

@@ -18,5 +18,6 @@ Description[et]=DigiKami siltide KIO-moodul
 Description[ja]=digiKam タグ kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਟੈਗ kioslave
 Description[pt]='kioslave' de marcas do digiKam
+Description[ru]=Digikam kioslave - метки
 Description[sv]=I/O-slav för Digikams etiketter
 Class=:local

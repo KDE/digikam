@@ -12,5 +12,6 @@ Description[et]=DigiKami otsimise KIO-moodul
 Description[ja]=digiKam 検索 kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਖੋਜ kioslave
 Description[pt]='kioslave' de procura do digiKam
+Description[ru]=Digikam kioslave - поиск
 Description[sv]=I/O-slav för Digikams sökning
 Class=:local

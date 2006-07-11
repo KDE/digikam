@@ -18,5 +18,6 @@ Description[et]=DigiKami kuupäevade KIO-moodul
 Description[ja]=digiKam 日付 kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਮਿਤੀ kioslave
 Description[pt]='kioslave' de datas do digiKam
+Description[ru]=Digikam kioslave - даты
 Description[sv]=I/O-slav för Digikams datum
 Class=:local
