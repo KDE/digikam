@@ -47,6 +47,7 @@
 #include "imagedescedittab.h"
 #include "navigatebarwidget.h"
 #include "imagepropertiessidebardb.h"
+#include "imageattributeswatch.h"
 
 namespace Digikam
 {
@@ -144,6 +145,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    ImageAttributesWatch *watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &url)),
+            this, SLOT(slotFileMetadataChanged(const KURL &url)));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
@@ -280,6 +286,19 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     }
 
     unsetCursor();
+}
+
+void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KURL &url)
+{
+    if (url == m_currentURL)
+    {
+        if (getActiveTab() == m_metadataTab)
+        {
+            // reuse code form slotChangedTab
+            m_dirtyMetadataTab = false;
+            slotChangedTab( getActiveTab() );
+        }
+    }
 }
 
 void ImagePropertiesSideBarDB::slotAssignRating(int rating)

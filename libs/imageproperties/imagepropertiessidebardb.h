@@ -87,6 +87,7 @@ private slots:
 
     void slotChangedTab(QWidget* tab);
     void slotThemeChanged();
+    void slotFileMetadataChanged(const KURL &url);
 
 private:
 
