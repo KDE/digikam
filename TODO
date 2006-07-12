@@ -31,12 +31,9 @@
 ==> 93569  : CameraGUI      : easier connection to USB disc cameras
 ==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
 
-==> 116148 : Image Editor   : auto-scrolling when selecting large area
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
 ==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor
-
-==> 124989 : Setup          : Problems with ICC profile type recognition
-==> 125735 : Setup          : Can't disable individual Monitor/Workspace/Input/Proof profile
+==> 130525 : Image Editor   : Saving large (>5M) jpg's result in corrupt file
 
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
