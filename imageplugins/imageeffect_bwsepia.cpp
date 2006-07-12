@@ -54,10 +54,10 @@
 
 #include "imageiface.h"
 #include "imagehistogram.h"
-#include "imagecurves.h"
 #include "dimgimagefilters.h"
 #include "imagewidget.h"
 #include "histogramwidget.h"
+#include "imagecurves.h"
 #include "curveswidget.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
@@ -82,22 +82,23 @@ public:
     const QPixmap* pixmap(int id);
 
 private:
+
     QPixmap makePixmap(int id);
 
-    QIntDict<QPixmap> m_previewPixmapMap;
-    ImageEffect_BWSepia* m_bwSepia;
+    QIntDict<QPixmap>    m_previewPixmapMap;
+    ImageEffect_BWSepia *m_bwSepia;
 };
 
 PreviewPixmapFactory::PreviewPixmapFactory(ImageEffect_BWSepia* bwSepia)
-    : QObject(bwSepia),
-      m_bwSepia(bwSepia)
+                    : QObject(bwSepia), m_bwSepia(bwSepia)
 {
     m_previewPixmapMap.setAutoDelete(true);
 }
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)
 {
-    if (m_previewPixmapMap.find(id) == 0) {
+    if (m_previewPixmapMap.find(id) == 0) 
+    {
         QPixmap pix = makePixmap(id);
         m_previewPixmapMap.insert(id, new QPixmap(pix));
     }
@@ -115,6 +116,7 @@ QPixmap PreviewPixmapFactory::makePixmap(int id)
 
 class ListBoxBWPreviewItem : public Digikam::ListBoxPreviewItem
 {
+
 public:
 
     ListBoxBWPreviewItem(QListBox *listbox, const QString &text,
@@ -127,8 +129,9 @@ public:
     virtual const QPixmap* pixmap() const;
 
 private:
+
+    int                   m_id;
     PreviewPixmapFactory* m_previewPixmapFactory;
-    int m_id;
 };
 
 const QPixmap* ListBoxBWPreviewItem::pixmap() const

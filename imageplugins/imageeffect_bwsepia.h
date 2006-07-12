@@ -66,9 +66,6 @@ public:
 
     friend class PreviewPixmapFactory;
 
-protected:
-    QPixmap getThumbnailForEffect(int type);
-
 private:
 
     enum BlackWhiteConversionType
@@ -153,7 +150,12 @@ private slots:
     void slotSpotColorChanged(const Digikam::DColor &color);    
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
 
+protected:
+
+    QPixmap getThumbnailForEffect(int type);
+
 protected slots:
+
     virtual void slotTimer();
 
 protected:
