@@ -165,5 +165,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 102 ==> 127763 : color management, profile selection crashes.
 103 ==> 126199 : Nikon D70 comments in jpegs are all shown as "charset="Ascii".
 104 ==> 130381 : Automatic colorbalance and camera color balance checkboxes swapped.
+105 ==> 117248 : Opening default app when camera inserted return KIOExec error.
+106 ==> 
 
 ----------------------------------------------------------------------------------------------------
