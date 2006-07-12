@@ -148,8 +148,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &url)),
-            this, SLOT(slotFileMetadataChanged(const KURL &url)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KURL &)),
+            this, SLOT(slotFileMetadataChanged(const KURL &)));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
