@@ -13,7 +13,7 @@ version    = "doc-0.8.2"
 docs       = "yes"
 
 svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
-svnroot    = "#{svnbase}/trunk"
+svnroot    = "#{svnbase}/branches/stable"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
 addDocs    = ["showfoto"]
