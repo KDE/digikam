@@ -32,7 +32,7 @@ ENV["UNSERMAKE"] = "no"
 puts "Fetching #{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
-`rm -rf folder.tar.bz2 2> /dev/null`
+`rm -rf #{folder}.tar.bz2 2> /dev/null`
 
 Dir.mkdir( folder )
 Dir.chdir( folder )
@@ -114,6 +114,10 @@ puts "\n"
 `find | xargs touch`
 
 puts "\n"
+puts "Remove dummy extragear README..  "
+`rm -f README`
+puts "done.\n"
+
 puts "Generating Makefiles..  "
 `make -f Makefile.cvs`
 puts "done.\n"
