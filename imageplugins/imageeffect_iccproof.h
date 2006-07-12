@@ -38,6 +38,7 @@ class QPushButton;
 class QToolBox;
 
 class KURLRequester;
+class KDoubleNumInput;
 
 namespace Digikam
 {
@@ -47,6 +48,8 @@ class HistogramWidget;
 class ColorGradientWidget;
 class DColor;
 class ICCPreviewWidget;
+class ImageCurves;
+class CurvesWidget;
 }
 
 namespace DigikamImagesPluginCore
@@ -83,7 +86,8 @@ private:
         INPUTPAGE,
         WORKSPACEPAGE,
         PROOFINGPAGE,
-        DISPLAYPAGE
+        DISPLAYPAGE,
+        LIGHTNESSPAGE
     };
 
     bool                            m_cmEnabled;
@@ -132,11 +136,19 @@ private:
 
     QToolBox                       *m_toolBoxWidgets;
 
+    KDoubleNumInput                *m_cInput;
+
     KURLRequester                  *m_displayProfilePath;
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_proofProfilePath;
     KURLRequester                  *m_spaceProfilePath;
         
+    Digikam::DImg                  *m_originalImage;
+
+    Digikam::CurvesWidget          *m_curvesWidget;
+
+    Digikam::ImageCurves           *m_curves;
+
     Digikam::ImageWidget           *m_previewWidget;
 
     Digikam::ColorGradientWidget   *m_hGradient;
@@ -182,9 +194,9 @@ private slots:
     void slotUser3();
     void slotDefault();
     void slotTry();
-    void slotEffect();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
+    void slotSpotColorChanged(const Digikam::DColor &);    
     void slotColorSelectedFromTarget(const Digikam::DColor &);
     void slotToggledWidgets(bool);
     void slotInICCInfo();
