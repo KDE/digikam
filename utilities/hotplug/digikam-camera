@@ -5,7 +5,7 @@ action="$1"; shift;
 case "$action" in
 detect)
 	cmdoption=--detect-camera
-	dcopcall=cameraAutoDetect
+	dcopcall=detectCamera
 	;;
 storage)
 	cmdoption=--download-from

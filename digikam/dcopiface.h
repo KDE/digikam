@@ -78,7 +78,7 @@ k_dcop:
      * This method can be called via DCOP to auto-detect attached camera and show DigiKam camera dialog
      * For example, a hotplug script can call it when a USB camera is attached to the computer 
      */
-    ASYNC cameraAutoDetect();
+    ASYNC detectCamera();
 
     /**
      * This method can be called via DCOP to auto-detect attached camera and 

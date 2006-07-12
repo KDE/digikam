@@ -34,7 +34,7 @@ DCOPIface::~DCOPIface()
 {
 }
 
-void DCOPIface::cameraAutoDetect()
+void DCOPIface::detectCamera()
 {
     emit signalCameraAutoDetect();
 }

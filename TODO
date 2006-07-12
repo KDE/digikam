@@ -47,10 +47,6 @@
 
 * Media support:
 
-    o Make media menu, cmdline option and dcop call itentical:
-               + usbdisk camera: dcop call should magicly umount as cmdline
-                 option and Media menu
-
     o Testing 3 plug cases with GPhoto camera
         1) digikam is not running and camera is pluged in
             -> media action dialog pops up and digikam should
