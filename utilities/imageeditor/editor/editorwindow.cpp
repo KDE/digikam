@@ -1290,7 +1290,7 @@ void EditorWindow::startingSave(const KURL& url)
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile       = new KTempFile(m_savingContext->srcURL.directory(false),
-                                                        "digikamtempfile.tmp");
+                                                        ".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoDelete(true);
 
     m_canvas->saveAs(m_savingContext->saveTempFile->name(), m_IOFileSettings,
