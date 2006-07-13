@@ -97,7 +97,7 @@ namespace DigikamImagesPluginCore
 
 ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                     : Digikam::ImageDlgBase(parent,i18n("Color Management"), 
-                                            "colormanagement", true, true)
+                                            "colormanagement", true, false)
 {
     m_destinationPreviewData = 0;
     m_cmEnabled              = true;
@@ -485,8 +485,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_scaleBG, SIGNAL(released(int)),
             this, SLOT(slotScaleChanged(int)));
 
+    connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
+            this, SLOT(slotTimer()));
+    
+    connect(m_cInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));
+                     
+    connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));                       
+    
     connect(m_previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotTry()));    
+            this, SLOT(slotEffect()));
             
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
@@ -676,19 +685,21 @@ void ImageEffect_ICCProof::slotDefault()
 {
     m_cInput->blockSignals(true);
     m_cInput->setValue(0.0);
-    m_curves->curvesChannelReset(Digikam::ImageHistogram::ValueChannel);
+
+    for (int i = 0 ; i < 5 ; i++)
+       m_curves->curvesChannelReset(i);
+
     m_curvesWidget->reset();
     m_cInput->blockSignals(false);
-    slotTry();
+    slotEffect();
 }
-void ImageEffect_ICCProof::slotTry()
+
+void ImageEffect_ICCProof::slotEffect()
 {
-    // TODO use of Display profile is not implemented -- Paco Cruz
+    // TODO: Display profile transformation is not yet implemented -- Paco Cruz
     
     kapp->setOverrideCursor(KCursor::waitCursor());
-
     enableButtonOK(true);
-
     m_histogramWidget->stopHistogramComputation();
 
     Digikam::IccTransform transform;
@@ -712,11 +723,7 @@ void ImageEffect_ICCProof::slotTry()
     bool proofCondition = false;
     bool spaceCondition = false;
     
-    ///////////////////////////////////////
-    // Get parameters for transformation //
-    ///////////////////////////////////////
-    
-    //---------Input profile ------------------
+    //-- Input profile parameters ------------------
     
     if (useDefaultInProfile())
     {
@@ -727,7 +734,7 @@ void ImageEffect_ICCProof::slotTry()
         tmpInPath = m_inProfilesPath->url();
     }
 
-    //--------Proof profile ------------------
+    //-- Proof profile parameters ------------------
 
     if (useDefaultProofProfile())
     {
@@ -741,7 +748,7 @@ void ImageEffect_ICCProof::slotTry()
     if (m_doSoftProofBox->isChecked())
         proofCondition = tmpProofPath.isEmpty();
 
-    //-------Workspace profile--------------
+    //-- Workspace profile parameters --------------
 
     if (useDefaultSpaceProfile())
     {
@@ -754,7 +761,7 @@ void ImageEffect_ICCProof::slotTry()
 
     spaceCondition = tmpSpacePath.isEmpty();
 
-    //------------------------------------------
+    //-- Perform the color transformations ------------------
 
     transform.getTransformType(m_doSoftProofBox->isChecked());
 
@@ -806,14 +813,14 @@ void ImageEffect_ICCProof::slotTry()
                             m_checkGamutBox->isChecked(), useBuiltinProfile());
         }
         
-        // Calculate and apply the curve on image.
+        //-- Calculate and apply the curve on image after transformation -------------
         
         Digikam::DImg preview2(w, h, sb, a, 0, false);
         m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel,
                                  m_overExposureIndicatorBox->isChecked());
         m_curves->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
     
-        // Adjust contrast.
+        //-- Adjust contrast ---------------------------------------------------------
         
         Digikam::BCGModifier cmod;
         cmod.setContrast(m_cInput->value() + (double)(1.00));
@@ -822,7 +829,7 @@ void ImageEffect_ICCProof::slotTry()
         iface->putPreviewImage(preview2.bits());
         m_previewWidget->updatePreview();
 
-        // Update histogram.
+        //-- Update histogram --------------------------------------------------------
     
         memcpy(m_destinationPreviewData, preview2.bits(), preview2.numBytes());
         m_histogramWidget->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
@@ -832,6 +839,8 @@ void ImageEffect_ICCProof::slotTry()
 
 void ImageEffect_ICCProof::finalRendering()
 {
+    // TODO: Display profile transformation is not yet implemented -- Paco Cruz
+    // TODO: Do soft Proof transformation is missing -- G.Caulier
 
     if (!m_doSoftProofBox->isChecked())
     {
@@ -855,11 +864,7 @@ void ImageEffect_ICCProof::finalRendering()
             QString tmpSpacePath;
             bool proofCondition;
             
-            ///////////////////////////////////////
-            // Get parameters for transformation //
-            ///////////////////////////////////////
-            
-            //---------Input profile ------------------
+            //-- Input profile parameters ------------------
             
             if (useDefaultInProfile())
             {
@@ -877,7 +882,7 @@ void ImageEffect_ICCProof::finalRendering()
                 return;
             }
                 
-            //--------Proof profile ------------------
+            //-- Proof profile parameters ------------------
         
             if (useDefaultProofProfile())
             {
@@ -891,7 +896,7 @@ void ImageEffect_ICCProof::finalRendering()
             if (tmpProofPath.isNull())
                 proofCondition = false;
         
-            //-------Workspace profile--------------
+            //-- Workspace profile parameters --------------
         
             if (useDefaultSpaceProfile())
             {
@@ -902,7 +907,7 @@ void ImageEffect_ICCProof::finalRendering()
                 tmpSpacePath = m_spaceProfilePath->url();
             }
         
-            //------------------------------------------
+            //-- Perform the color transformations ------------------
         
             transform.getTransformType(m_doSoftProofBox->isChecked());
         
@@ -940,21 +945,23 @@ void ImageEffect_ICCProof::finalRendering()
                 transform.apply(img, fakeProfile, m_renderingIntentsCB->currentItem(), useBPC(),
                                 m_checkGamutBox->isChecked(), useBuiltinProfile());
             }
-            
+    
+            //-- Embed the workspace profile if necessary --------------------------------
+   
             if (m_embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
                 kdDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
             }
 
-            // Calculate and apply the curve on image.
+            //-- Calculate and apply the curve on image after transformation -------------
         
             Digikam::DImg img2(w, h, sb, a, 0, false);
             m_curves->curvesLutSetup(Digikam::ImageHistogram::AlphaChannel,
                                      m_overExposureIndicatorBox->isChecked());
             m_curves->curvesLutProcess(img.bits(), img2.bits(), w, h);
         
-            // Adjust contrast.
+            //-- Adjust contrast ---------------------------------------------------------
             
             Digikam::BCGModifier cmod;
             cmod.setContrast(m_cInput->value() + (double)(1.00));
@@ -966,6 +973,7 @@ void ImageEffect_ICCProof::finalRendering()
 
         kapp->restoreOverrideCursor();
     }
+
     accept();
 }
 
@@ -1208,25 +1216,35 @@ void ImageEffect_ICCProof::slotUser3()
         m_spaceProfilePath->setURL( stream.readLine() );
         m_cInput->setValue( stream.readLine().toDouble() );
 
-        m_curves->curvesChannelReset(Digikam::ImageHistogram::ValueChannel);
+        for (int i = 0 ; i < 5 ; i++)
+            m_curves->curvesChannelReset(i);
+
+        m_curvesWidget->reset();
+
         for (int j = 0 ; j < 17 ; j++)
         {
             QPoint disable(-1, -1);
             QPoint p;
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
+    
             if (m_originalImage->sixteenBit() && p != disable)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
             }
+    
             m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
         }
-        m_curvesWidget->repaint(false);
-    
-        m_histogramWidget->reset();
+
         blockSignals(false);
-        slotTry();  
+
+        for (int i = 0 ; i < 5 ; i++)
+           m_curves->curvesCalculateCurve(i);
+
+        m_curvesWidget->repaint(false);
+        m_histogramWidget->reset();
+        slotEffect();  
     }
     else
         KMessageBox::error(this, i18n("Cannot load settings from the Color Management text file."));
@@ -1277,11 +1295,11 @@ void ImageEffect_ICCProof::slotUser2()
         }
     }
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the White Color Balance text file."));
+        KMessageBox::error(this, i18n("Cannot save settings to the Color Management text file."));
     
     file.close();        
 }
 
-}// NameSpace DigikamImagesPluginCore
+} // NameSpace DigikamImagesPluginCore
 
 #include "imageeffect_iccproof.moc"

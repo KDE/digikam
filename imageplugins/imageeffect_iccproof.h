@@ -193,7 +193,7 @@ private slots:
     void slotUser2();
     void slotUser3();
     void slotDefault();
-    void slotTry();
+    void slotEffect();
     void slotChannelChanged(int);
     void slotScaleChanged(int);
     void slotSpotColorChanged(const Digikam::DColor &);    
