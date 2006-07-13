@@ -40,9 +40,10 @@ public:
     {
         enableCMSetting    = false;  // IMPORTANT: by default, ICC color management must be disable.
 
-        askOrApplySetting  = false;
-        BPCSetting         = false;
-        managedViewSetting = false;
+        askOrApplySetting       = false;
+        BPCSetting              = false;
+        managedViewSetting      = false;
+        CMInRawLoadingSetting   = false;
 
         renderingSetting   = 0;
 
@@ -63,6 +64,7 @@ public:
     bool    askOrApplySetting;
     bool    BPCSetting;
     bool    managedViewSetting;
+    bool    CMInRawLoadingSetting;
 
     int     renderingSetting;
 
