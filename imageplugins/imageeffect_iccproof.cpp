@@ -592,10 +592,10 @@ void ImageEffect_ICCProof::readSettings()
 
     for (int j = 0 ; j < 17 ; j++)
     {
-        QPoint disable(-1, -1);
+        QPoint disable(-1, 0);
         QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
 
-        if (m_originalImage->sixteenBit() && p != disable)
+        if (m_originalImage->sixteenBit() && p.x() != -1)
         {
             p.setX(p.x()*255);
             p.setY(p.y()*255);
@@ -634,11 +634,13 @@ void ImageEffect_ICCProof::writeSettings()
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint p = m_curves->getCurvePoint(Digikam::ImageHistogram::ValueChannel, j);
-        if (m_originalImage->sixteenBit())
+
+        if (m_originalImage->sixteenBit() && p.x() != -1)
         {
             p.setX(p.x()/255);
             p.setY(p.y()/255);
         }
+
         config->writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
     }
 
