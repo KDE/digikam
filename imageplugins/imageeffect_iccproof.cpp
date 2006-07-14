@@ -584,18 +584,31 @@ void ImageEffect_ICCProof::readSettings()
     m_displayProfileBG->setButton(config->readNumEntry("DisplayProfileMethod", 0));
     m_cInput->setValue(config->readDoubleNumEntry("ContrastAjustment", 0.0));
 
+    for (int i = 0 ; i < 5 ; i++)
+        m_curves->curvesChannelReset(i);
+
+    m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
+    m_curvesWidget->reset();
+
     for (int j = 0 ; j < 17 ; j++)
     {
         QPoint disable(-1, -1);
         QPoint p = config->readPointEntry(QString("CurveAjustmentPoint%1").arg(j), &disable);
+
         if (m_originalImage->sixteenBit() && p != disable)
         {
             p.setX(p.x()*255);
             p.setY(p.y()*255);
         }
+
         m_curves->setCurvePoint(Digikam::ImageHistogram::ValueChannel, j, p);
-        m_curvesWidget->repaint(false);
     }
+
+    for (int i = 0 ; i < 5 ; i++)
+        m_curves->curvesCalculateCurve(i);
+
+    m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
+    m_curvesWidget->curveTypeChanged();
 }
 
 void ImageEffect_ICCProof::writeSettings()
@@ -787,6 +800,7 @@ void ImageEffect_ICCProof::slotEffect()
             transform.setProfiles( tmpInPath, tmpSpacePath );
         }
     }
+
     if ( proofCondition || spaceCondition )
     {
         kapp->restoreOverrideCursor();
@@ -840,7 +854,6 @@ void ImageEffect_ICCProof::slotEffect()
 void ImageEffect_ICCProof::finalRendering()
 {
     // TODO: Display profile transformation is not yet implemented -- Paco Cruz
-    // TODO: Do soft Proof transformation is missing -- G.Caulier
 
     if (!m_doSoftProofBox->isChecked())
     {
@@ -1070,7 +1083,8 @@ void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
     QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
     int profileIntent           = cmsTakeRenderingIntent(selectedProfile);
     
-    //"Decode" profile rendering intent
+    // -- "Decode" profile rendering intent ---------------------------------
+
     switch (profileIntent)
     {
         case 0:
@@ -1175,7 +1189,8 @@ bool ImageEffect_ICCProof::useDefaultDisplayProfile()
     return m_useDisplayDefaultProfile->isChecked();
 }
 
-// Load all settings from file.
+//-- Load all settings from file --------------------------------------
+
 void ImageEffect_ICCProof::slotUser3()
 {
     KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
@@ -1219,6 +1234,7 @@ void ImageEffect_ICCProof::slotUser3()
         for (int i = 0 ; i < 5 ; i++)
             m_curves->curvesChannelReset(i);
 
+        m_curves->setCurveType(m_curvesWidget->m_channelType, Digikam::ImageCurves::CURVE_SMOOTH);
         m_curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; j++)
@@ -1242,7 +1258,9 @@ void ImageEffect_ICCProof::slotUser3()
         for (int i = 0 ; i < 5 ; i++)
            m_curves->curvesCalculateCurve(i);
 
-        m_curvesWidget->repaint(false);
+        m_curvesWidget->m_channelType = Digikam::CurvesWidget::ValueHistogram;
+        m_curvesWidget->curveTypeChanged();
+
         m_histogramWidget->reset();
         slotEffect();  
     }
@@ -1252,7 +1270,8 @@ void ImageEffect_ICCProof::slotUser3()
     file.close();            
 }
 
-// Save all settings to file.
+//-- Save all settings to file ---------------------------------------
+
 void ImageEffect_ICCProof::slotUser2()
 {
     KURL saveColorManagementFile = KFileDialog::getSaveURL(KGlobalSettings::documentPath(),
