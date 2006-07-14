@@ -118,7 +118,7 @@ CurvesWidget::CurvesWidget(int w, int h,
     m_scaleType     = LogScaleHistogram;
    
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
+    setPaletteBackgroundColor(colorGroup().background());
     setMinimumSize(w, h);
     
     d->blinkTimer = new QTimer( this );
