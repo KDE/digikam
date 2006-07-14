@@ -490,9 +490,53 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     
     connect(m_cInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-                     
+
+    connect(m_renderingIntentsCB, SIGNAL(activated(int)),
+            this, SLOT(slotEffect()));
+
+    //-- Check box options connections -------------------------------------------
+
+    connect(m_doSoftProofBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));      
+    
+    connect(m_checkGamutBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));      
+    
+    connect(m_BPCBox, SIGNAL(toggled (bool)),
+            this, SLOT(slotEffect()));      
+    
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
-            this, SLOT(slotEffect()));                       
+            this, SLOT(slotEffect()));      
+
+    //-- Button Group icc profile options connections ----------------------------
+
+    connect(m_inProfileBG, SIGNAL(released (int)),
+            this, SLOT(slotEffect())); 
+
+    connect(m_spaceProfileBG, SIGNAL(released (int)),
+            this, SLOT(slotEffect())); 
+
+    connect(m_proofProfileBG, SIGNAL(released (int)),
+            this, SLOT(slotEffect())); 
+
+    connect(m_displayProfileBG, SIGNAL(released (int)),
+            this, SLOT(slotEffect()));      
+
+    //-- url requester icc profile connections -----------------------------------
+
+    connect(m_inProfilesPath, SIGNAL(urlSelected(const QString&)),
+            this, SLOT(slotEffect()));      
+
+    connect(m_spaceProfilePath, SIGNAL(urlSelected(const QString&)),
+            this, SLOT(slotEffect()));      
+
+    connect(m_proofProfilePath, SIGNAL(urlSelected(const QString&)),
+            this, SLOT(slotEffect()));      
+
+    connect(m_displayProfilePath, SIGNAL(urlSelected(const QString&)),
+            this, SLOT(slotEffect()));      
+
+    //-- Image preview widget connections ----------------------------
     
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -502,6 +546,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+
+    //-- ICC profile preview connections -----------------------------
 
     connect(inProfilesInfo, SIGNAL(clicked()),
             this, SLOT(slotInICCInfo()));

@@ -99,11 +99,10 @@ private:
     QComboBox                      *m_renderingIntentsCB;
 
     QCheckBox                      *m_doSoftProofBox;
-    QCheckBox                      *m_overExposureIndicatorBox;
-    QCheckBox                      *m_doSofProfBox;
     QCheckBox                      *m_checkGamutBox;
-    QCheckBox                      *m_BPCBox;
     QCheckBox                      *m_embeddProfileBox;
+    QCheckBox                      *m_BPCBox;
+    QCheckBox                      *m_overExposureIndicatorBox;
 
     QRadioButton                   *m_useEmbeddedProfile;
     QRadioButton                   *m_useInDefaultProfile;
@@ -116,21 +115,20 @@ private:
     QRadioButton                   *m_useSpaceSelectedProfile;
     QRadioButton                   *m_useSRGBDefaultProfile;
 
-    QHButtonGroup                  *m_scaleBG;
-
-    QVButtonGroup                  *m_renderingIntentBG;
-    QButtonGroup                   *m_optionsBG;
-    QVButtonGroup                  *m_profilesBG;
-
     QString                         m_inPath;
     QString                         m_displayPath;
     QString                         m_spacePath;
     QString                         m_proofPath;
 
+    QButtonGroup                   *m_optionsBG;
     QButtonGroup                   *m_inProfileBG;
     QButtonGroup                   *m_spaceProfileBG;
     QButtonGroup                   *m_proofProfileBG;
     QButtonGroup                   *m_displayProfileBG;
+
+    QHButtonGroup                  *m_scaleBG;
+    QVButtonGroup                  *m_renderingIntentBG;
+    QVButtonGroup                  *m_profilesBG;
     
     QByteArray                      m_embeddedICC;
 
@@ -138,10 +136,10 @@ private:
 
     KDoubleNumInput                *m_cInput;
 
-    KURLRequester                  *m_displayProfilePath;
     KURLRequester                  *m_inProfilesPath;
-    KURLRequester                  *m_proofProfilePath;
     KURLRequester                  *m_spaceProfilePath;
+    KURLRequester                  *m_proofProfilePath;
+    KURLRequester                  *m_displayProfilePath;
         
     Digikam::DImg                  *m_originalImage;
 
@@ -155,11 +153,10 @@ private:
 
     Digikam::HistogramWidget       *m_histogramWidget;
 
-    Digikam::ICCPreviewWidget      *m_iccDisplayPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
-    Digikam::ICCPreviewWidget      *m_iccOutPreviewWidget;
-    Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
+    Digikam::ICCPreviewWidget      *m_iccDisplayPreviewWidget;
 
 private:
 
