@@ -6,6 +6,7 @@ output=stream
 reading=true
 source=false
 Description=digiKam preview kioslave
+Description[da]=Digikam forhåndsvisnings-kioslave
 Description[de]=digiKam Ein-/Ausgabemodul für digiKam-Vorschaubilder
 Description[el]=kioslave προεπισκόπησης του digiKam
 Description[et]=DigiKami eelvaatluse KIO-moodul
