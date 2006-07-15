@@ -93,11 +93,13 @@ public:
         infoMonitorProfiles   = 0;
         infoInProfiles        = 0;
         infoProofProfiles     = 0;
+        cmToolInRawLoading    = 0;
      }
 
     QCheckBox     *enableColorManagement;
     QCheckBox     *bpcAlgorithm;
     QCheckBox     *managedView;
+    QCheckBox     *cmToolInRawLoading;
     
     QRadioButton  *defaultApplyICC;
     QRadioButton  *defaultAskICC;
@@ -149,8 +151,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-    QButtonGroup *behaviour = new QButtonGroup(2, Qt::Vertical, i18n("Behaviour"), colorPolicy);
-    
+    QButtonGroup *behaviour = new QButtonGroup(i18n("Behaviour"), colorPolicy);
+    behaviour->setColumnLayout(2, Qt::Vertical);
+
     d->defaultApplyICC = new QRadioButton(behaviour);
     d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
     QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, digiKam applies the "
@@ -163,7 +166,16 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "before it applies the Workspace default color profile to an image which has not "
                      "embedded profile or, if the image has an embbeded profile, this is not the same "
                      "that the workspace one.</p>"));
-    
+
+    d->cmToolInRawLoading = new QCheckBox(behaviour);
+    d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
+    QWhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to lauch the color "
+                     "management image plugin when a RAW file is loaded in editor."));
+
+    QHBoxLayout* boxLayout = new QHBoxLayout( behaviour->layout() );
+    boxLayout->addSpacing( 15 );
+    boxLayout->addWidget( d->cmToolInRawLoading );
+        
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
     grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(behaviour, 1, 1, 0, 2);
@@ -192,7 +204,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), profiles);
     d->workProfilesKC    = new KComboBox(false, profiles);
-    d->workProfilesKC->setMaximumWidth(320);
+    d->workProfilesKC->setMaximumWidth(350);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select an apropiate one for edition purpose.</p>"
@@ -207,7 +219,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *monitorProfiles = new QLabel(i18n("Monitor:"), profiles);
     d->monitorProfilesKC    = new KComboBox(false, profiles);
-    d->monitorProfilesKC->setMaximumWidth(320);
+    d->monitorProfilesKC->setMaximumWidth(350);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
                      "You need to toogle on <b>Use color managed view</b> option from "
@@ -222,7 +234,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *inProfiles = new QLabel(i18n("Input:"), profiles);
     d->inProfilesKC    = new KComboBox(false, profiles);
-    d->inProfilesKC->setMaximumWidth(320);
+    d->inProfilesKC->setMaximumWidth(350);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
@@ -236,7 +248,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), profiles);
     d->proofProfilesKC    = new KComboBox(false, profiles);
-    d->proofProfilesKC->setMaximumWidth(320);
+    d->proofProfilesKC->setMaximumWidth(350);
     proofProfiles->setBuddy(d->proofProfilesKC);
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
@@ -329,6 +341,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     connect(d->defaultPathKU, SIGNAL(urlSelected(const QString&)),
             this, SLOT(slotFillCombos(const QString&)));
 
+    connect(d->defaultAskICC, SIGNAL(toggled(bool)),
+            d->cmToolInRawLoading, SLOT(setEnabled(bool)));
+
     // --------------------------------------------------------
 
     adjustSize();
@@ -359,6 +374,7 @@ void SetupICC::applySettings()
     else
         config->writeEntry("BehaviourICC", false);
 
+    config->writeEntry("CMInRawLoading", d->cmToolInRawLoading->isChecked());
     config->writePathEntry("DefaultPath", d->defaultPathKU->url());
     config->writeEntry("WorkSpaceProfile", d->workProfilesKC->currentItem());
     config->writeEntry("MonitorProfile", d->monitorProfilesKC->currentItem());
@@ -381,7 +397,6 @@ void SetupICC::applySettings()
 void SetupICC::readSettings()
 {
     KConfig* config = kapp->config();
-
     config->setGroup("Color Management");
 
     d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
@@ -395,7 +410,34 @@ void SetupICC::readSettings()
     else
         d->defaultAskICC->setChecked(true);
 
+    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", false));
+
     slotToggledWidgets(d->enableColorManagement->isChecked());
+    fillCombos(d->defaultPathKU->url(), false);
+
+    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
+    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
+    d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
+    d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
+}
+
+void SetupICC::restoreSettings()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management");
+
+    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
+    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
+    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
+    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
+
+    if (config->readBoolEntry("BehaviourICC"))
+        d->defaultApplyICC->setChecked(true);
+    else
+        d->defaultAskICC->setChecked(true);
+ 
+    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", false));
+
     fillCombos(d->defaultPathKU->url(), false);
 
     d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
@@ -576,12 +618,12 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
 void SetupICC::slotToggledWidgets(bool t)
 { 
     d->bpcAlgorithm->setEnabled(t);
-
+    
     d->managedView->setEnabled(t);
  
     d->defaultApplyICC->setEnabled(t); 
     d->defaultAskICC->setEnabled(t);
-    d->defaultApplyICC->setChecked(t);
+    d->cmToolInRawLoading->setEnabled(t);
     
     d->defaultPathKU->setEnabled(t);
     
@@ -632,29 +674,6 @@ void SetupICC::profileInfo(const QString& profile)
 
     ICCProfileInfoDlg infoDlg(this, profile);
     infoDlg.exec();
-}
-
-void SetupICC::restoreSettings()
-{
-    KConfig* config = kapp->config();
-    config->setGroup("Color Management");
-
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
-    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-
-    if (config->readBoolEntry("BehaviourICC"))
-        d->defaultApplyICC->setChecked(true);
-    else
-        d->defaultAskICC->setChecked(true);
-
-    fillCombos(d->defaultPathKU->url(), false);
-
-    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
-    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
-    d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
-    d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
 }
 
 }  // namespace Digikam
