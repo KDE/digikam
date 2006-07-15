@@ -34,6 +34,8 @@
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
 ==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor
 ==> 130525 : Image Editor   : Saving large (>5M) jpg's result in corrupt file
+==> 130798 : Image Editor   : Editor saves some jpeg's 30% smaller than original,
+                              even with jpeg compression option set at 100.
 
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
@@ -72,13 +74,13 @@ LATER 0.9.0 TODO LIST
 
 * Improving metadata support:
    - Better embbeded thumbnail support, especially for TIFF/EP (Exiv2)
-   - Add DNG file format (create a new DImgLoader).
+   - Add DNG file format (implmente RAWLoader::save() method for that).
    - Improved PNG Metadata file format support (Exiv2).
 
 * CameraGui: 
 
    - Image conversion on the fly tool included in camera interface
-   - New option to embedded an ICC workspace profile to JPEG, TIFF, and PNG
+   - New option to embedded an ICC workspace profile to JPEG, TIFF, and PNG.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
