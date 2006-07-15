@@ -484,6 +484,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
+    kdDebug() << "Using LibJPEG quality compression value: " << quality << endl;
+
     if (observer)
         observer->progressInfo(m_image, 0.1);
 
