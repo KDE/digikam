@@ -86,7 +86,6 @@ private:
         INPUTPAGE,
         WORKSPACEPAGE,
         PROOFINGPAGE,
-        DISPLAYPAGE,
         LIGHTNESSPAGE
     };
 
@@ -109,14 +108,11 @@ private:
     QRadioButton                   *m_useInSelectedProfile;
     QRadioButton                   *m_useProofDefaultProfile;
     QRadioButton                   *m_useProofSelectedProfile;
-    QRadioButton                   *m_useDisplayDefaultProfile;
-    QRadioButton                   *m_useDisplaySelectedProfile;
     QRadioButton                   *m_useSpaceDefaultProfile;
     QRadioButton                   *m_useSpaceSelectedProfile;
     QRadioButton                   *m_useSRGBDefaultProfile;
 
     QString                         m_inPath;
-    QString                         m_displayPath;
     QString                         m_spacePath;
     QString                         m_proofPath;
 
@@ -124,7 +120,6 @@ private:
     QButtonGroup                   *m_inProfileBG;
     QButtonGroup                   *m_spaceProfileBG;
     QButtonGroup                   *m_proofProfileBG;
-    QButtonGroup                   *m_displayProfileBG;
 
     QHButtonGroup                  *m_scaleBG;
     QVButtonGroup                  *m_renderingIntentBG;
@@ -139,7 +134,6 @@ private:
     KURLRequester                  *m_inProfilesPath;
     KURLRequester                  *m_spaceProfilePath;
     KURLRequester                  *m_proofProfilePath;
-    KURLRequester                  *m_displayProfilePath;
         
     Digikam::DImg                  *m_originalImage;
 
@@ -156,7 +150,6 @@ private:
     Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
     Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
-    Digikam::ICCPreviewWidget      *m_iccDisplayPreviewWidget;
 
 private:
 
@@ -179,9 +172,6 @@ private:
     bool useDefaultSpaceProfile();
     bool useSelectedSpaceProfile();
 
-    bool useDefaultDisplayProfile();
-    bool useSelectedDisplayProfile();
-
     bool useDefaultProofProfile();
     bool useSelectedProofProfile();
 
@@ -199,7 +189,6 @@ private slots:
     void slotInICCInfo();
     void slotProofICCInfo();
     void slotSpaceICCInfo();
-    void slotDisplayICCInfo();
     void slotCMDisabledWarning();
     void processLCMSURL(const QString&);
 

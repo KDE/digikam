@@ -105,7 +105,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_inPath                 = QString::null;
     m_spacePath              = QString::null;
     m_proofPath              = QString::null;
-    m_displayPath            = QString::null;
 
     setHelp("colormanagement.anchor", "digikam");
 
@@ -192,7 +191,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWidget *inProfiles      = new QWidget(m_toolBoxWidgets);
     QWidget *spaceProfiles   = new QWidget(m_toolBoxWidgets);
     QWidget *proofProfiles   = new QWidget(m_toolBoxWidgets);
-    QWidget *displayProfiles = new QWidget(m_toolBoxWidgets);
     QWidget *lightnessadjust = new QWidget(m_toolBoxWidgets);
 
     //---------- "General" Page Setup ----------------------------------
@@ -392,48 +390,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->setColStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
 
-    //---------- "Display" Page Setup ----------------------------------
-
-    m_toolBoxWidgets->insertItem(DISPLAYPAGE, displayProfiles, 
-                                 SmallIconSet("system"), i18n("Display Profile"));
-    QWhatsThis::add(displayProfiles, i18n("<p>Set here all parameters relevant of Display Color "
-                    "Profiles.</p>"));
-
-    QGridLayout *fourthPageLayout = new QGridLayout(displayProfiles, 3, 2, 
-                                    KDialog::marginHint(), KDialog::spacingHint());
-
-    m_displayProfileBG = new QButtonGroup(2, Qt::Vertical, displayProfiles);
-    m_displayProfileBG->setFrameStyle(QFrame::NoFrame);
-    m_displayProfileBG->setInsideMargin(0);
-    
-    m_useDisplayDefaultProfile = new QRadioButton(m_displayProfileBG);
-    m_useDisplayDefaultProfile->setText(i18n("Use default display profile"));
-
-    m_useDisplaySelectedProfile = new QRadioButton(m_displayProfileBG);
-    m_useDisplaySelectedProfile->setText(i18n("Use selected profile"));
-
-    m_displayProfilePath = new KURLRequester(displayProfiles);
-    m_displayProfilePath->setMode(KFile::File|KFile::ExistingOnly);
-    m_displayProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-    KFileDialog *displayProfiles_dialog = m_displayProfilePath->fileDialog();
-    m_iccDisplayPreviewWidget = new Digikam::ICCPreviewWidget(displayProfiles_dialog);
-    displayProfiles_dialog->setPreviewWidget(m_iccDisplayPreviewWidget);
- 
-    QPushButton *displayProfilesInfo = new QPushButton(i18n("Info..."), displayProfiles);
-
-    fourthPageLayout->addMultiCellWidget(m_displayProfileBG, 0, 1, 0, 0);    
-    fourthPageLayout->addMultiCellWidget(displayProfilesInfo, 0, 0, 2, 2);    
-    fourthPageLayout->addMultiCellWidget(m_displayProfilePath, 2, 2, 0, 2);    
-    fourthPageLayout->setColStretch(1, 10);
-    fourthPageLayout->setRowStretch(3, 10);
-
     //---------- "Lightness" Page Setup ----------------------------------
     
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustements of target image.</p>"));
 
-    QGridLayout *fivePageLayout = new QGridLayout( lightnessadjust, 4, 1, marginHint(), spacingHint());
+    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 4, 1, marginHint(), spacingHint());
 
     Digikam::ColorGradientWidget* vGradient = new Digikam::ColorGradientWidget(
                                                   Digikam::ColorGradientWidget::Vertical,
@@ -462,12 +425,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                       "from the target image preview will be over-colored. "
                                                       "This will not have an effect on the final rendering."));
 
-    fivePageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
-    fivePageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
-    fivePageLayout->addMultiCellWidget(hGradient, 1, 1, 1, 1);
-    fivePageLayout->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
-    fivePageLayout->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
-    fivePageLayout->setRowStretch(4, 10);
+    fourPageLayout->addMultiCellWidget(vGradient, 0, 0, 0, 0);
+    fourPageLayout->addMultiCellWidget(m_curvesWidget, 0, 0, 1, 1);
+    fourPageLayout->addMultiCellWidget(hGradient, 1, 1, 1, 1);
+    fourPageLayout->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
+    fourPageLayout->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
+    fourPageLayout->setRowStretch(4, 10);
     
     // -------------------------------------------------------------
 
@@ -519,9 +482,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_proofProfileBG, SIGNAL(released (int)),
             this, SLOT(slotEffect())); 
 
-    connect(m_displayProfileBG, SIGNAL(released (int)),
-            this, SLOT(slotEffect()));      
-
     //-- url requester icc profile connections -----------------------------------
 
     connect(m_inProfilesPath, SIGNAL(urlSelected(const QString&)),
@@ -531,9 +491,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
             this, SLOT(slotEffect()));      
 
     connect(m_proofProfilePath, SIGNAL(urlSelected(const QString&)),
-            this, SLOT(slotEffect()));      
-
-    connect(m_displayProfilePath, SIGNAL(urlSelected(const QString&)),
             this, SLOT(slotEffect()));      
 
     //-- Image preview widget connections ----------------------------
@@ -557,9 +514,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(proofProfilesInfo, SIGNAL(clicked()),
             this, SLOT(slotProofICCInfo()));
-
-    connect(displayProfilesInfo, SIGNAL(clicked()),
-            this, SLOT(slotDisplayICCInfo()));
 
     // -------------------------------------------------------------
 
@@ -596,7 +550,6 @@ void ImageEffect_ICCProof::readSettings()
     {
         m_inPath      = config->readPathEntry("InProfileFile");
         m_spacePath   = config->readPathEntry("WorkProfileFile");
-        m_displayPath = config->readPathEntry("MonitorProfileFile");
         m_proofPath   = config->readPathEntry("ProofProfileFile");
         
         if (QFile::exists(config->readPathEntry("DefaultPath")))
@@ -615,7 +568,6 @@ void ImageEffect_ICCProof::readSettings()
     // Plugin settings.
     config->setGroup("Color Management Tool");
     m_toolBoxWidgets->setCurrentIndex(config->readNumEntry("Settings Tab", GENERALPAGE));        
-    m_displayProfilePath->setURL(config->readPathEntry("DisplayProfilePath", defaultICCPath)); 
     m_inProfilesPath->setURL(config->readPathEntry("InputProfilePath", defaultICCPath)); 
     m_proofProfilePath->setURL(config->readPathEntry("ProofProfilePath", defaultICCPath)); 
     m_spaceProfilePath->setURL(config->readPathEntry("SpaceProfilePath", defaultICCPath));
@@ -627,7 +579,6 @@ void ImageEffect_ICCProof::readSettings()
     m_inProfileBG->setButton(config->readNumEntry("InputProfileMethod", 0));
     m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
     m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
-    m_displayProfileBG->setButton(config->readNumEntry("DisplayProfileMethod", 0));
     m_cInput->setValue(config->readDoubleNumEntry("ContrastAjustment", 0.0));
 
     for (int i = 0 ; i < 5 ; i++)
@@ -662,7 +613,6 @@ void ImageEffect_ICCProof::writeSettings()
     KConfig* config = kapp->config();
     config->setGroup("Color Management Tool");
     config->writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
-    config->writePathEntry("DisplayProfilePath", m_displayProfilePath->url());
     config->writePathEntry("InputProfilePath", m_inProfilesPath->url());
     config->writePathEntry("ProofProfilePath", m_proofProfilePath->url());
     config->writePathEntry("SpaceProfilePath", m_spaceProfilePath->url());
@@ -674,7 +624,6 @@ void ImageEffect_ICCProof::writeSettings()
     config->writeEntry("InputProfileMethod", m_inProfileBG->selectedId());
     config->writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
     config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
-    config->writeEntry("DisplayProfileMethod", m_displayProfileBG->selectedId());
     config->writeEntry("ContrastAjustment", m_cInput->value());
 
     for (int j = 0 ; j < 17 ; j++)
@@ -757,8 +706,6 @@ void ImageEffect_ICCProof::slotDefault()
 
 void ImageEffect_ICCProof::slotEffect()
 {
-    // TODO: Display profile transformation is not yet implemented -- Paco Cruz
-    
     kapp->setOverrideCursor(KCursor::waitCursor());
     enableButtonOK(true);
     m_histogramWidget->stopHistogramComputation();
@@ -901,8 +848,6 @@ void ImageEffect_ICCProof::slotEffect()
 
 void ImageEffect_ICCProof::finalRendering()
 {
-    // TODO: Display profile transformation is not yet implemented -- Paco Cruz
-
     if (!m_doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( KCursor::waitCursor() );
@@ -1041,7 +986,6 @@ void ImageEffect_ICCProof::slotToggledWidgets( bool t)
 {
     m_useInDefaultProfile->setEnabled(t);
     m_useProofDefaultProfile->setEnabled(t);
-    m_useDisplayDefaultProfile->setEnabled(t);
     m_useSpaceDefaultProfile->setEnabled(t);
 }
 
@@ -1089,18 +1033,6 @@ void ImageEffect_ICCProof::slotSpaceICCInfo()
     else
     {
         getICCInfo(m_spaceProfilePath->url());
-    }
-}
-
-void ImageEffect_ICCProof::slotDisplayICCInfo()
-{
-    if (useDefaultDisplayProfile())
-    {
-        getICCInfo(m_displayPath);
-    }
-    else
-    {
-        getICCInfo(m_displayProfilePath->url());
     }
 }
 
@@ -1230,13 +1162,6 @@ bool ImageEffect_ICCProof::useDefaultProofProfile()
     return m_useProofDefaultProfile->isChecked();
 }
 
-//-- Display Tab ---------------------------
-
-bool ImageEffect_ICCProof::useDefaultDisplayProfile()
-{
-    return m_useDisplayDefaultProfile->isChecked();
-}
-
 //-- Load all settings from file --------------------------------------
 
 void ImageEffect_ICCProof::slotUser3()
@@ -1272,8 +1197,6 @@ void ImageEffect_ICCProof::slotUser3()
         m_inProfileBG->setButton( stream.readLine().toInt() );
         m_spaceProfileBG->setButton( stream.readLine().toInt() );
         m_proofProfileBG->setButton( stream.readLine().toInt() );
-        m_displayProfileBG->setButton( stream.readLine().toInt() );
-        m_displayProfilePath->setURL( stream.readLine() );
         m_inProfilesPath->setURL( stream.readLine() );
         m_proofProfilePath->setURL( stream.readLine() );
         m_spaceProfilePath->setURL( stream.readLine() );
@@ -1342,8 +1265,6 @@ void ImageEffect_ICCProof::slotUser2()
         stream << m_inProfileBG->selectedId() << "\n";    
         stream << m_spaceProfileBG->selectedId() << "\n";    
         stream << m_proofProfileBG->selectedId() << "\n";    
-        stream << m_displayProfileBG->selectedId() << "\n";    
-        stream << m_displayProfilePath->url() << "\n";    
         stream << m_inProfilesPath->url() << "\n";    
         stream << m_proofProfilePath->url() << "\n";    
         stream << m_spaceProfilePath->url() << "\n";    
