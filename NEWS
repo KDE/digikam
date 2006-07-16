@@ -171,6 +171,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 107 ==> 130798 : Editor saves some jpeg's 30% smaller than original,
                  even with jpeg compression option set at 100.
 108 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
-109 ==> 
+109 ==> 130920 : ICC, profiles, metadata, abbreviations
+110 ==> 
 
 ----------------------------------------------------------------------------------------------------
