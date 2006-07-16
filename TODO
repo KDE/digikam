@@ -33,7 +33,6 @@
 
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
 ==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor
-==> 130525 : Image Editor   : Saving large (>5M) jpg's result in corrupt file
 
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam
