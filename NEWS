@@ -131,7 +131,8 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor.
 069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam.
 070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results.
-071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console.
+071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
+                 is written to console.
 072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
 073 ==> 127374 : unsharp mask: max. radius way too small.
 074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window.
@@ -167,6 +168,8 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 104 ==> 130381 : Automatic colorbalance and camera color balance checkboxes swapped.
 105 ==> 117248 : Opening default app when camera inserted return KIOExec error.
 106 ==> 130883 : Overexposure indicator in color management is saved as part of the picture
-107 ==> 
+107 ==> 130798 : Editor saves some jpeg's 30% smaller than original,
+                 even with jpeg compression option set at 100.
+108 ==> 
 
 ----------------------------------------------------------------------------------------------------

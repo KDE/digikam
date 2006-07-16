@@ -724,8 +724,8 @@ void EditorWindow::applyStandardSettings()
     config->setGroup("ImageViewer Settings");
 
     // JPEG quality slider settings : 0 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression  = (int)((75.0/99.0)*(float)config->readNumEntry("JPEGCompression", 75)
-                                               + 25.0 - (75.0/99.0));
+    m_IOFileSettings->JPEGCompression  = (int)((75.0/100.0)*(float)config->readNumEntry("JPEGCompression", 75)
+                                               + 26.0 - (75.0/100.0));
 
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
     m_IOFileSettings->PNGCompression   = (int)(((1.0-100.0)/8.0)*(float)config->readNumEntry("PNGCompression", 1)
