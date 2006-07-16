@@ -157,7 +157,7 @@ private:
     void writeSettings();
 
     void getICCInfo(const QString&);
-    void getICCInfo(QByteArray&);
+    void getICCInfo(const QByteArray&);
 
     bool useBPC();
     bool doProof();

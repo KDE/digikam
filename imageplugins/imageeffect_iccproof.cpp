@@ -102,14 +102,12 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_destinationPreviewData = 0;
     m_cmEnabled              = true;
     m_hasICC                 = false;
-    m_inPath                 = QString::null;
-    m_spacePath              = QString::null;
-    m_proofPath              = QString::null;
 
     setHelp("colormanagement.anchor", "digikam");
 
     Digikam::ImageIface iface(0, 0);
     m_originalImage = iface.getOriginalImg();
+    m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
     m_curves        = new Digikam::ImageCurves(m_originalImage->sixteenBit());
 
     m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
@@ -1048,7 +1046,7 @@ void ImageEffect_ICCProof::getICCInfo(const QString& profile)
     infoDlg.exec();
 }
 
-void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
+void ImageEffect_ICCProof::getICCInfo(const QByteArray& profile)
 {
     if (profile.isNull())
     {
@@ -1056,41 +1054,8 @@ void ImageEffect_ICCProof::getICCInfo(QByteArray& profile)
         return;
     }
 
-    QString intent;
-    cmsHPROFILE selectedProfile = cmsOpenProfileFromMem(profile.data(), (DWORD)profile.size());
-    QString profileName         = QString((cmsTakeProductName(selectedProfile)));
-    QString profileDescription  = QString((cmsTakeProductDesc(selectedProfile)));
-    QString profileManufacturer = QString(cmsTakeCopyright(selectedProfile));
-    int profileIntent           = cmsTakeRenderingIntent(selectedProfile);
-    
-    // -- "Decode" profile rendering intent ---------------------------------
-
-    switch (profileIntent)
-    {
-        case 0:
-            intent = i18n("Perceptual");
-            break;
-        case 1:
-            intent = i18n("Relative Colorimetric");
-            break;
-        case 2:
-            intent = i18n("Saturation");
-            break;
-        case 3:
-            intent = i18n("Absolute Colorimetric");
-            break;
-    }
-
-    QString message = i18n("<p><b>Name:</b> ");
-    message.append(profileName);
-    message.append(i18n("</p><p><b>Description:</b>  "));
-    message.append(profileDescription);
-    message.append(i18n("</p><p><b>Copyright:</b>  "));
-    message.append(profileManufacturer);
-    message.append(i18n("</p><p><b>Rendering Intent:</b>  "));
-    message.append(intent);
-    message.append(i18n("</p><p><b>Path:</b> Embedded profile</p>"));
-    KMessageBox::information(this, message);
+    Digikam::ICCProfileInfoDlg infoDlg(this, QString::null, profile);
+    infoDlg.exec();
 }
 
 void ImageEffect_ICCProof::slotCMDisabledWarning()
