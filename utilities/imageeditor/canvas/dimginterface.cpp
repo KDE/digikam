@@ -514,8 +514,19 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     meta.setIptc(d->image.getIptc());
 
     // Update Iptc preview.
-    QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
-    meta.setImagePreview(preview);
+
+    // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
+    // bigger than 64K duing of image preview tag size, the target JPEG image will be
+    // broken. Note that IPTC image preview tag is limited to 256K!!!
+    // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
+    // will be found into Exiv2.
+    // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
+
+    if ( !mimeType.upper() == QString("JPG") || !mimeType.upper() == QString("JPEG") ) 
+    {
+        QImage preview = d->image.smoothScale(800, 600, QSize::ScaleMin).copyQImage();
+        meta.setImagePreview(preview);
+    }
 
     // Update Exif thumbnail.
     QImage thumb = preview.smoothScale(160, 120, QImage::ScaleMin);
