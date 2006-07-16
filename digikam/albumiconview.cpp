@@ -450,25 +450,28 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 
 void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
 {
-    if(d->currentAlbum->isRoot() ||
+    if (!d->currentAlbum)
+        return;
+
+    if (d->currentAlbum->isRoot() ||
          (   d->currentAlbum->type() != Album::PHYSICAL
           && d->currentAlbum->type() != Album::TAG))
     {
         return;
     }
-            
+
     QPopupMenu popmenu(this);
     KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    
+
     if(!data || !QUriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }
-    
+
     paste->plug(&popmenu);
     popmenu.exec(pos);
-    delete paste;    
+    delete paste;
 }
 
 void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
