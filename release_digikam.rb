@@ -12,6 +12,8 @@ egmodule   = "graphics"
 version    = "0.9.0-beta1"
 docs       = "no"
 
+svnbase    = "https://ach@svn.kde.org/home/kde"
+svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
 svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
@@ -32,7 +34,7 @@ ENV["UNSERMAKE"] = "no"
 puts "Fetching #{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
-`rm -rf folder.tar.bz2 2> /dev/null`
+`rm -rf #{folder}.tar.bz2 2> /dev/null`
 
 Dir.mkdir( folder )
 Dir.chdir( folder )
@@ -41,6 +43,7 @@ Dir.chdir( folder )
 Dir.chdir( egmodule )
 `svn up #{name}`
 `svn up -N doc`
+`export LC_ALL=en_US.UTF-8; svn info #{name} | egrep '^Last Changed (Rev|Date):' > RELEASE.rev`
 
 if ( docs != "no")
     for dg in addDocs
@@ -162,6 +165,8 @@ Dir.chdir( "#{name}" )
 `/bin/mv -f README ..`
 `/bin/mv -f TODO ..`
 `/bin/mv -f HACKING ..`
+`/bin/mv -f NEWS ..`
+`/bin/rm release_digikam*`
 Dir.chdir( ".." )
 
 
@@ -180,7 +185,8 @@ puts "\n"
 puts "Compressing..  "
 Dir.chdir( ".." ) # root folder
 `tar -jcf #{folder}.tar.bz2 #{folder}`
-`rm -rf #{folder}`
+
+#`rm -rf #{folder}`
 puts "done.\n"
 
 

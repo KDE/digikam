@@ -12,6 +12,7 @@ egmodule   = "graphics"
 version    = "doc-0.9.0-beta1"
 docs       = "yes"
 
+svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
 svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
@@ -32,7 +33,7 @@ ENV["UNSERMAKE"] = "no"
 puts "Fetching #{egmodule}/#{name}..."
 # Remove old folder, if exists
 `rm -rf #{folder} 2> /dev/null`
-`rm -rf folder.tar.bz2 2> /dev/null`
+`rm -rf #{folder}.tar.bz2 2> /dev/null`
 
 Dir.mkdir( folder )
 Dir.chdir( folder )
@@ -114,6 +115,10 @@ puts "\n"
 `find | xargs touch`
 
 puts "\n"
+puts "Remove dummy extragear README..  "
+`rm -f README`
+puts "done.\n"
+
 puts "Generating Makefiles..  "
 `make -f Makefile.cvs`
 puts "done.\n"
