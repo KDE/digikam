@@ -1,3 +1,907 @@
+2006-07-17 16:01  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: remove B.K.O # 93569
+
+2006-07-17 09:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/Makefile.am:
+	  fix tab
+
+2006-07-17 09:56  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management tool do not use lcms API
+	  itself. code polishing
+
+2006-07-17 09:51  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.cpp:
+	  fix compilation warning with gcc 4.1
+
+2006-07-17 09:46  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/Makefile.am,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/Makefile.am,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.h:
+	  digikam from trunk: Color management tool : add camera
+	  Make/Model informations to Input profile settings area to help
+	  user with the input ICC profile file selection.
+	  CCMAIL: digikam-devel@kde.org
+
+2006-07-16 21:34  mwiesweg
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-16 21:30  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: Add
+	  a null pointer check.
+	  I cannot reproduce the crash, but it is ok to add a null pointer
+	  check here.
+	  
+	  BuG: 124199
+
+2006-07-16 16:20  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-16 16:19  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp:
+	  digikam from trunk : fix "Iptc" to "IPTC" i18n
+	  
+	  BUG: 130920
+
+2006-07-16 16:00  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : Color Management tool bug fix :
+	  
+	  - The embedded icc profile from original image is never
+	  initialized in plugin and cannot be used...
+	  
+	  - Using common icc profile info dialog to reduce duplicate
+	  source code.
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-07-16 10:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-16 09:15  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+	  compile
+
+2006-07-16 09:14  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+	  compile
+
+2006-07-16 09:12  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+	  digikam from trunk : disabled temporally the IPTC preview tag
+	  recoring in JPEG target file duing an uncompatibility between
+	  the IPTC preview tag size (256K max) and the JPEG segment size
+	  used to store IPTC byte array (64K).
+	  
+	  A solution need to be found in Exiv2 to prevent this problem!
+	  
+	  CCMAIL: digikam-devel@kde.org, ahuggel@gmx.net
+	  CCBUGS: 130525
+
+2006-07-16 08:19  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : Color Management tool : accordinly with
+	  Paco, removing obsolet Display icc transform
+
+2006-07-16 07:20  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digiKam from trunk: fix libjpeg quality value used to save a
+	  new file if setup jpeg compression ratio is 100.
+	  BUG: 130798
+
+2006-07-16 07:02  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digiKam from trunk : Color Management image plugin : fix over
+	  exposure rule with final rendering
+	  
+	  BUG: 130883
+
+2006-07-15 21:44  fjcruz
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+	  New CM setting: if this option is enabled, CM plugin is launched
+	  when a RAW image is loaded in IE.
+	  
+	  
+	  CCMAIL: digikam-devel@kde.org, caulier.gilles@kdemail.net
+
+2006-07-15 20:56  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  I missed another "."
+
+2006-07-15 20:10  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-15 19:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/jpegloader.cpp:
+	  digikam from trunk : add libJPEG quality compression value
+	  debug message.
+	  
+	  CCBUGS: 130798
+
+2006-07-14 19:44  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : Color Management tool : Added more widgets
+	  connections about to render preview image if an option is changed
+
+2006-07-14 18:33  cgilles
+
+	* trunk/extragear/graphics/digikam/data/profiles/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/profiles/prophoto.icm: add
+	  Kodak pro photo icc color space profile from www.scarse.org
+	  (under GPL)
+
+2006-07-14 17:30  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/curveswidget.cpp:
+	  no need a background flash with black color
+
+2006-07-14 17:01  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management tool : fix curves points
+	  restoration between plugin instance if color bit depth is
+	  different (8<->16 || 16<->8).
+
+2006-07-14 16:32  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management tool : fix curves points
+	  restoration between plugin instance.
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-07-13 08:05  fjcruz
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/iccsettingscontainer.h:
+	  New Color Management setting: if this new option is enabled, CM
+	  plugin is launched when a RAW image is opened in IE
+	  
+	  
+	  CCMAIL: caulier.gilles@kdemail.net , Digikam-devel@kde.org
+
+2006-07-13 08:05  fjcruz
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  New Color Management setting: if this new option is enabled, CM
+	  plugin is launched when a RAW image is opened in IE
+	  
+	  
+	  CCMAIL: caulier.gilles@kdemail.net , Digikam-devel@kde.org
+
+2006-07-13 05:47  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : Color Management tool : remove 'Try'
+	  button. Render preview on the fly
+	  
+	  Paco : 'Do soft proofing' and 'Display profile transform'
+	  options are not yet implemented. Are you planed to do it later
+	  than 0.9.0 ? To remember it, please just tag TODO file about
+	  these points...
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-07-12 21:44  fjcruz
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  Gilles's patch: a new contrast and curve widget have been added
+	  to Color Management plugin.
+	  
+	  
+	  CCMAIL: digikam-devel@kde.org, caulier.gilles@kdemail.net
+
+2006-07-12 20:57  mwiesweg
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  KTempFile extension must include the ".", QFileInfo extension
+	  will not include the first "."
+
+2006-07-12 20:54  mwiesweg
+
+	* trunk/extragear/graphics/digikam/TODO,
+	  trunk/extragear/graphics/digikam/digikam/dcopiface.cpp,
+	  trunk/extragear/graphics/digikam/digikam/dcopiface.h,
+	  trunk/extragear/graphics/digikam/utilities/hotplug/digikam-camera:
+	  Rename cameraAutoDetect to detectCamera to make DCOP call and
+	  commandline (--detect-camera) identical.
+	  As to umounting USM cameras, we dont explicitly mount so we
+	  don't explicitly umount, I think apps
+	  don't need to do this.
+
+2006-07-12 14:06  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: updated TODO list.
+	  
+	  Marcel, this bug is very important to fix before beta1 :
+	  
+	  http://bugs.kde.org/show_bug.cgi?id=130525
+	  
+	  I'm very confuse about the comments into B.K.O. Why we have this
+	  problem now ? I have tested indeep the JPEGLoader::save() method
+	  in the past...
+	  
+	  After to have suspected a problem in DMetadata/Exiv2, i suspect
+	  now a problem with the libjpeg implementation. Perhaps the
+	  record of the icc profile isn't at the right place for example
+	  (i have already this problem with libtiff in the past).
+	  
+	  Your viewpoint will be very appreciate (:=)))
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2006-07-12 13:56  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp:
+	  fix stupid mistake
+
+2006-07-12 13:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-12 10:32  mwiesweg
+
+	* trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-12 10:32  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.h:
+	  Connect ImagePropertiesSidebarDB to ImageAttributesWatch's
+	  signalFileMetadataChanged and reload
+	  metadata tab if metadata of current url is changed.
+
+2006-07-12 07:09  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.h:
+	  polish
+
+2006-07-11 21:41  fjcruz
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  Gilles's patch about RAW loading.
+	  
+	  
+	  CCMAIL: digikam-devel@kde.org, caulier.gilles@kdemail.net
+
+2006-07-11 21:39  fjcruz
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.h:
+	  Gilles's patch about RAW loading.
+	  
+	  
+	  CCMAIL: digikam-devel@kde.org, caulier.gilles@kdemail.net
+
+2006-07-11 21:37  fjcruz
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageplugin_core.h:
+	  Gilles's patch about RAW loading.
+	  
+	  
+	  CCMAIL: digikam-devel@kde.org, caulier.gilles@kdemail.net
+
+2006-07-11 13:47  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/dimg/dimgloaderobserver.h,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.h,
+	  
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.h:
+	  Add a hack to prevent a deadlock at application shutdown when
+	  the app is closed
+	  while a raw image is being loaded in the histogram side bar.
+	  
+	  The KProcess-based raw loader is waiting for the dcraw process
+	  to finish,
+	  but the main thread is wait()ing for the thread to finish,
+	  and no KProcess events are delivered.
+	  This hack can be removed when we port to Qt4 and use the
+	  synchronous QProcess.
+
+2006-07-11 13:38  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management tool : optimize layout
+	  and spacing
+
+2006-07-11 13:18  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam/scanlib.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+	  Rearrange shutdown of CameraUI:
+	  - call deleteLater only after the ScanLib call
+	  - un-comment the kapp->processEvents line in ScanLib to allow
+	  testing
+	  if the crash is now fixed
+	  
+	  This needs testing because I could not reliably reproduce the
+	  crash before
+	  and thus I cannot be sure that this actually fixes anything.
+
+2006-07-10 13:06  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  Color Management tool decorative icons set.
+
+2006-07-10 11:48  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bcg.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_hsl.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_rgb.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dialogs/imageguidedlg.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.h:
+	  digikam from trunk : BUGFIX : All color correction image
+	  plugins from digikam core will remember the 'separate view' mode
+	  at next instance.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-07-09 21:30  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+	  fix typo
+
+2006-07-09 14:23  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/rawdecodingsettings.h,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : BUGFIX : use the default color space used
+	  by dcraw (sRGB) if digiKam CM is not enable.
+	  
+	  CCMAIL: digikam-devel@kde.org, fj.cruz@supercable.es
+
+2006-07-09 10:35  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+	  digikam from trunk : BUGFIX : The default output color space
+	  used by dcraw is sRGB ! This commit set the output to RawMode.
+	  The color correction will be performed by digiKam itself else we
+	  will have both workspace color correction : one by dcraw, one by
+	  digiKam.
+	  
+	  This way require than digikam color management enable!
+	  
+	  TODO : use the default color space used by dcraw only if digiKam
+	  CM is not enable.
+	  
+	  CCMAIL: digikam-devel@kde.org, fj.cruz@supercable.es
+
+2006-07-09 08:22  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.h:
+	  force observer to null by default
+
+2006-07-08 13:50  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.h:
+	  optimize constructor
+
+2006-07-07 06:58  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-07 06:57  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupiofiles.cpp:
+	  Fix swaped dcraw color balance settings
+	  BUG: 130381
+
+2006-07-06 21:20  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/README,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcraw.c,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcraw_decode.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcraw_decode.h:
+	  remove old implementations
+
+2006-07-06 14:56  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : Color Management image plugin use QToolBox
+	  instead KTabWidget to optimize space used by setting widgets in
+	  dialog. Paco, we will certainly add more options in this tool in
+	  the future...
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-07-06 07:59  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/Makefile.am: fix
+	  tab
+
+2006-07-05 14:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/worldmapwidget.cpp:
+	  set the right background color on WorldMap widget
+
+2006-07-05 14:53  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp:
+	  set the right background color when we use small pictures
+
+2006-07-05 14:23  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+	  add url to a tiff extension implementation
+
+2006-07-05 13:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp:
+	  do not set "no background" to the content widget else
+	  background will not be re-generated properly with small pictures
+
+2006-07-05 12:15  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+	  digikam from trunk : bugfix : clear all metadata contents
+	  properly in all metadata view before to update when a new
+	  picture is selected in main interface.
+	  
+	  Note : with the old implementation, the bug can be reproduce
+	  like this : after to have selected a picture with metadata, if
+	  you select a new picture without metadata, nothing will be
+	  displayed. But if you change the level of details, the preview
+	  picture metadata will be displayed !
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-07-05 12:01  cgilles
+
+	* trunk/extragear/graphics/digikam/README: update
+
+2006-07-05 11:35  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+	  compile with all libtiff version
+
+2006-07-05 09:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+	  update comments
+
+2006-07-05 07:57  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+	  add external url to tiff loader like example
+
+2006-07-04 19:08  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imageregionwidget.cpp:
+	  no need a background with this widget
+
+2006-07-04 18:59  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/worldmapwidget.cpp:
+	  digikam from trunk : no need a flash when WorldMap widget is
+	  visible
+
+2006-07-04 14:35  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp:
+	  do not filter all parameter, else editor cannot dispatch image
+	  changes to side bar
+
+2006-07-04 14:30  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+	  if a new color profile is embeded to and image dispatch change
+	  to gui
+
+2006-07-04 14:19  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/dimgloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+	  digikam from trunk : if a JPEG/PNG/TIFF picture (not RAW) have
+	  no embedded color profile, embed sRGB or AdobeRGB color
+	  workspace profile provided by digiKam if "Exif.Image.ColorSpace"
+	  tag is set.
+	  
+	  Paco, give my your view point about this rules. Look in
+	  DimgLoadder::checkExifWorkingColorSpace() method for details
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-07-04 13:40  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imageiface.cpp:
+	  cleanup
+
+2006-07-04 13:33  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  fix i18n
+
+2006-07-03 20:04  toma
+
+	* trunk/extragear/graphics/digikam/digikam/scanlib.cpp: Gilles,
+	  this seems to cause the crash. It appears when you close the
+	  cameragui, and you just downloaded images to folders with are
+	  automatically created based on the date. No idea why....
+
+2006-07-03 13:48  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: update : later 0.9.0, we
+	  will port digiKam to CMake before to port it to Qt 4.0.
+	  
+	  Achim, this is can be a future non-developper task for you. Look
+	  the notice about Scribus port at http://lwn.net/Articles/188693
+	  
+	  CCMAIL: ach@mpe.mpg.de
+
+2006-07-03 13:26  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimg.h,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimgloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/jpegloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/pngloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/ppmloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/qimageloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.h:
+	  digikam from trunk :
+	  
+	  - do not export DImageLoaderObserver class. Optimize compilation.
+	  - export dcolorcomposer, dcolorblend, and rawdecodingsettings
+	  class to prevent broken compilation if DigikamImagePlugins is
+	  compiled without digiKam core
+
+2006-07-03 10:30  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/TODO: Update
+
+2006-07-03 06:15  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : ICC color plugin : and another one little
+	  improvement : added buttons to Load/Save settings from a text
+	  file, like White Balance, Adjust Curves, Adjust Levels, and
+	  Channel Mixer tools.
+	  
+	  CCMAIL: digikam-devel@kde.org, fj.cruz@supercable.es
+
+2006-07-01 08:19  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+	  trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+	  digikam from trunk : code simplification : DMetadata use now the
+	  static DImg::fileFormat() method. This remove duplicate
+	  implementations
+
+2006-07-01 07:40  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-01 07:39  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-06-30 14:42  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp:
+	  digikam from trunk : thumbnail KIO-slave use now the IPTC
+	  preview image to render thumbs on album view (if exist of
+	  course).
+	  
+	  This way is very fast. If you take a large RAW file and convert
+	  it to a new png in 16 bits color depth, an IPTC preview tag will
+	  be created. This one will be used instead the whole image !
+	  
+	  For example : I take a MRW RAW file from my Dynax 5D (3000x2000
+	  pixels), and i convert it to a new 16 bits PNG file using
+	  editor. The size of the target PNG file is around 27Mb. If i
+	  take the whole image, thumb rendering thumb take 3-5 seconds on
+	  my Laptop PIII-650Mhz. Using IPTC preview tag instead, it take
+	  300-500 mili-seconds !
+	  
+	  Note : IPTC preview tag embed a 800x600 JPEG image... This tag
+	  is always created when a new image is saved in digiKam editor
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-06-30 11:15  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : ICC color plugin :
+	  
+	  - Code polishing : indent, class members start with m_, variable
+	  local -> members if necessary. It more easy to maintain.
+	  - optimize memory using : no need to store an imageIface
+	  instance.
+	  - Layout settings widgets optimizations (positions, spaces,
+	  margins : using GridLayout is always better and more simple to
+	  organize).
+	  - All Settings are now saved in config file and restored at next
+	  session.
+	  - Add Lcms logo/url link (just fun).
+	  
+	  Paco : to have tested your plugin indeep with a large list of
+	  icc profile files, this tool is excelent !
+	  
+	  CCMAIL: digikam-devel@kde.org, fj.cruz@supercable.es
+
+2006-06-30 07:31  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : now ICC color plugin remember the last icc
+	  profile files settings.
+
+2006-06-30 07:01  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.h:
+	  digikam from trunk : now ICC color plugin remember the last
+	  settings page used.
+
+2006-06-30 06:42  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : ICC plugin : optimize layout setting page
+
+2006-06-30 06:09  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  fix indent
+
+2006-06-30 06:07  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  fix comments
+
+2006-06-30 06:00  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp:
+	  fix filter form
+
+2006-06-30 05:58  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp:
+	  fix i18n
+
+2006-06-30 05:50  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp:
+	  fix i18n
+
+2006-06-30 05:49  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistview.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistviewitem.cpp:
+	  digikam from trunk : if a metadata tag lenght is higher than
+	  128 char, troncate it to prevent very big tooltips/whatsthis size
+
+2006-06-29 19:34  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp:
+	  digikam from trunk : forget to set to null d->currentInfo
+	  instance if no selected current item
+
+2006-06-29 17:34  ach
+
+	* trunk/extragear/graphics/digikam/data,
+	  trunk/extragear/graphics/digikam/data/profiles,
+	  trunk/extragear/graphics/digikam/libs/widgets/iccprofiles:
+	  digikam trunk: svn:ignore Makefile Makefile.in
+
+2006-06-29 17:23  ach
+
+	* trunk/extragear/graphics/digikam/TODO: digikam trunk: TODO: add
+	  l10n buglets and rhs sidebar inconsitency
+
+2006-06-29 14:52  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatalistview.cpp:
+	  digikam from trunk : always disable the vertical bar of
+	  metadata listview to give the maximum free space for metadata
+	  contents.
+
+2006-06-29 14:33  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.h:
+	  compile
+
+2006-06-29 14:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+	  Using common dcraw preview method
+
+2006-06-29 13:37  cgilles
+
+	* trunk/extragear/graphics/digikam/kioslave/digikampreview.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikampreview.h,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.h:
+	  digikam from trunk: code simplification : using common dcraw
+	  preview extraction
+
+2006-06-29 12:17  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp,
+	  trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.h: new
+	  common method to extract RAW preview
+
+2006-06-29 11:44  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/dimgloader.cpp,
+	  trunk/extragear/graphics/digikam/libs/dimg/dimgloader.h: digikam
+	  from trunk : BUGFIX : fix a crash with DImg::ImageLoader if used
+	  into cameragui during RAW picture thumbs rendering.
+
+2006-06-29 11:43  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+	  digikam from trunk : BUGFIX : fix a crash with
+	  DImg::ImageLoader if used into cameragui during RAW picture
+	  thumbs rendering.
+	  
+	  Since DImage::RawLoader use an observer to get loading progress
+	  info, we need to check if the observer instance isn't null !
+	  
+	  Tom, please try again to use camera gui with your Fuji RAW files
+	  (without updating your dcraw version witch unsupport -e option),
+	  and give me a feedback.
+	  
+	  Note that in this case, the RAW thumb extraction will be very
+	  slow. To fix this specific point, i need to upadte umscamera.cpp
+	  implementation (in fact, i have forget a part in this code). I
+	  will fix it by a new commit after your feedback.
+	  
+	  CCMAIL: tomalbers@kde.nl
+
+2006-06-29 10:46  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bcg.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_bwsepia.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_hsl.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/imageplugins/imageeffect_rgb.cpp:
+	  fix spacer position
+
+2006-06-29 10:38  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+	  add spacer
+
+2006-06-29 08:11  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/filters/icctransform.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/dimg/filters/icctransform.h:
+	  digikam from trunk : DImg::IccTransform::apply() methods return
+	  a boolean value now.
+	  We have a feedback if an LCMS color transformation instance
+	  creation have been failed.
+	  Add more debug report in the console.
+	  
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-06-29 07:17  cgilles
+
+	* trunk/extragear/graphics/digikam/ChangeLog: Update changelog file
+
 2006-06-28 18:35  ach
 
 	* trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp:
