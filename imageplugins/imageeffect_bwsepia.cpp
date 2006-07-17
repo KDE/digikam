@@ -121,10 +121,11 @@ public:
 
     ListBoxBWPreviewItem(QListBox *listbox, const QString &text,
                          PreviewPixmapFactory* factory, int id)
-        : ListBoxPreviewItem(listbox, QPixmap(), text),
-          m_previewPixmapFactory(factory),
-          m_id(id)
-    {};
+        : ListBoxPreviewItem(listbox, QPixmap(), text)
+    {
+          m_previewPixmapFactory = factory;
+          m_id                   = id;
+    };
 
     virtual const QPixmap* pixmap() const;
 
