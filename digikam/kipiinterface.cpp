@@ -606,7 +606,7 @@ int DigikamKipiInterface::features() const
     return KIPI::ImagesHasComments          | KIPI::AcceptNewImages        |
            KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable    |
 	   KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory     |
-	   KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview;
+	   KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview | KIPI::HostSupportsTags ;
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
