@@ -28,7 +28,6 @@
 
 * B.K.O files to fix :
 
-==> 93569  : CameraGUI      : easier connection to USB disc cameras
 ==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
 
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
