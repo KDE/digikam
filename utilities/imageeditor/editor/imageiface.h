@@ -26,6 +26,7 @@
 // Qt includes.
 
 #include <qglobal.h>
+#include <qstring.h>
 
 // KDE includes.
 
@@ -35,6 +36,7 @@
 
 #include "dimg.h"
 #include "dcolor.h"
+#include "photoinfocontainer.h"
 #include "digikam_export.h"
 
 #define MAX3(a, b, c) (QMAX(QMAX(a,b),b))
@@ -42,7 +44,6 @@
 #define ROUND(x) ((int) ((x) + 0.5))
 
 class QPaintDevice;
-class QString;
 
 namespace Digikam
 {
@@ -90,7 +91,7 @@ public:
         Caller is an i18n'ed string that will be shown as the undo/redo action name.
     */
     void   putOriginalImage(const QString &caller, uchar* data, int w=-1, int h=-1);
-    
+
     /** Embed the Color Profile we have used in ICC plugin when this option is 
         selected
     */
@@ -128,11 +129,14 @@ public:
     int  originalHeight();
     bool originalSixteenBit();
     bool originalHasAlpha();
-    
+
     /** Original image metadata.*/
     QByteArray getEmbeddedICCFromOriginalImage();
     QByteArray getExifFromOriginalImage();
     QByteArray getIptcFromOriginalImage();
+
+    /** Get photograph informations from original image.*/ 
+    PhotoInfoContainer getPhotographInformations() const;
 
     /** Standard methods to get/set preview informations.*/
     int  previewWidth();

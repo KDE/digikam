@@ -22,14 +22,12 @@
  * ============================================================ */
 
 #include <config.h>
- 
+
 // Qt includes.
- 
+
 #include <qcolor.h>
 #include <qgroupbox.h>
-#include <qhgroupbox.h>
 #include <qhbox.h>
-#include <qvgroupbox.h>
 #include <qhbuttongroup.h>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
@@ -64,6 +62,7 @@
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
+#include <ksqueezedtextlabel.h>
 
 // Digikam includes.
 
@@ -114,7 +113,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                i18n("<p>Here you can see the image preview after "
                                                     "convert it with a color profile</p>"));
     setPreviewAreaWidget(m_previewWidget); 
-    
+
     // -------------------------------------------------------------------
 
     QWidget *gboxSettings = new QWidget(plainPage());
@@ -150,21 +149,21 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QString directory = KGlobal::dirs()->findResourceDir("histogram-lin", "histogram-lin.png");
     linHistoButton->setPixmap( QPixmap( directory + "histogram-lin.png" ) );
     linHistoButton->setToggleButton(true);
-    
+
     QPushButton *logHistoButton = new QPushButton( m_scaleBG );
     QToolTip::add( logHistoButton, i18n( "<p>Logarithmic" ) );
     m_scaleBG->insert(logHistoButton, Digikam::HistogramWidget::LogScaleHistogram);
     KGlobal::dirs()->addResourceType("histogram-log", KGlobal::dirs()->kde_default("data") + "digikam/data");
     directory = KGlobal::dirs()->findResourceDir("histogram-log", "histogram-log.png");
     logHistoButton->setPixmap( QPixmap( directory + "histogram-log.png" ) );
-    logHistoButton->setToggleButton(true);       
+    logHistoButton->setToggleButton(true);
 
     QHBoxLayout* l1 = new QHBoxLayout();
     l1->addWidget(label1);
     l1->addWidget(m_channelCB);
     l1->addStretch(10);
     l1->addWidget(m_scaleBG);
-    
+
     gridSettings->addMultiCellLayout(l1, 0, 0, 0, 2);
 
     // -------------------------------------------------------------
@@ -174,11 +173,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                              "drawing of the "
                                              "selected image channel. This one is re-computed at any "
                                              "settings changes."));
-    
+
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
                                                     gboxSettings );
     m_hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     gridSettings->addMultiCellWidget(m_histogramWidget, 1, 1, 0, 2);
     gridSettings->addMultiCellWidget(m_hGradient, 2, 2, 0, 2);
 
@@ -192,14 +191,14 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWidget *lightnessadjust = new QWidget(m_toolBoxWidgets);
 
     //---------- "General" Page Setup ----------------------------------
-        
+
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
                                  SmallIconSet("misc"), i18n("General Settings"));
     QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
                                   KDialog::marginHint(), KDialog::spacingHint());
-                                   
+
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
     QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described "
@@ -268,13 +267,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);    
-    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);    
-    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);    
+    zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_checkGamutBox, 1, 1, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_embeddProfileBox, 2, 2, 0, 0);
+    zeroPageLayout->addMultiCellWidget(lcmsLogoLabel, 0, 2, 1, 1);
+    zeroPageLayout->addMultiCellWidget(m_BPCBox, 3, 3, 0, 0);
+    zeroPageLayout->addMultiCellWidget(intent, 4, 4, 0, 0);
+    zeroPageLayout->addMultiCellWidget(m_renderingIntentsCB, 4, 4, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
 
     //---------- "Input" Page Setup ----------------------------------
@@ -283,13 +282,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add(inProfiles, i18n("<p>Set here all parameters relevant of Input Color "
                     "Profiles.</p>"));
 
-    QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 3, 2, 
+    QGridLayout *firstPageLayout = new QGridLayout(inProfiles, 4, 2,
                                    KDialog::marginHint(), KDialog::spacingHint());
 
     m_inProfileBG = new QButtonGroup(4, Qt::Vertical, inProfiles);
     m_inProfileBG->setFrameStyle(QFrame::NoFrame);
     m_inProfileBG->setInsideMargin(0);
-    
+
     m_useEmbeddedProfile = new QRadioButton(m_inProfileBG);
     m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
 
@@ -302,21 +301,30 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_useInSelectedProfile = new QRadioButton(m_inProfileBG);
     m_useInSelectedProfile->setText(i18n("Use selected profile"));
-    
+
     m_inProfilesPath = new KURLRequester(inProfiles);
     m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
     m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
     KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
     m_iccInPreviewWidget = new Digikam::ICCPreviewWidget(inProfiles_dialog);
     inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
-    
+
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);    
-    firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);    
-    firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);    
+    QGroupBox *pictureInfo = new QGroupBox(2, Qt::Horizontal, i18n("Picture Informations"), inProfiles);
+    new QLabel(i18n("Make:"), pictureInfo);
+    KSqueezedTextLabel *make  = new KSqueezedTextLabel(0, pictureInfo);
+    new QLabel(i18n("Model:"), pictureInfo);
+    KSqueezedTextLabel *model = new KSqueezedTextLabel(0, pictureInfo);
+    make->setText(iface.getPhotographInformations().make);
+    model->setText(iface.getPhotographInformations().model);
+
+    firstPageLayout->addMultiCellWidget(m_inProfileBG, 0, 1, 0, 0);
+    firstPageLayout->addMultiCellWidget(inProfilesInfo, 0, 0, 2, 2);
+    firstPageLayout->addMultiCellWidget(m_inProfilesPath, 2, 2, 0, 2);
+    firstPageLayout->addMultiCellWidget(pictureInfo, 3, 3, 0, 2);
     firstPageLayout->setColStretch(1, 10);
-    firstPageLayout->setRowStretch(3, 10);
+    firstPageLayout->setRowStretch(4, 10);
 
     //---------- "Workspace" Page Setup ---------------------------------
 
@@ -331,13 +339,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_spaceProfileBG = new QButtonGroup(2, Qt::Vertical, spaceProfiles);
     m_spaceProfileBG->setFrameStyle(QFrame::NoFrame);
     m_spaceProfileBG->setInsideMargin(0);
-    
+
     m_useSpaceDefaultProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
 
     m_useSpaceSelectedProfile = new QRadioButton(m_spaceProfileBG);
     m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
-    
+
     m_spaceProfilePath = new KURLRequester(spaceProfiles);
     m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
@@ -362,7 +370,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
                                    KDialog::marginHint(), KDialog::spacingHint());
-                                    
+
     m_proofProfileBG = new QButtonGroup(2, Qt::Vertical, proofProfiles);
     m_proofProfileBG->setFrameStyle(QFrame::NoFrame);
     m_proofProfileBG->setInsideMargin(0);
@@ -372,7 +380,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_useProofSelectedProfile = new QRadioButton(m_proofProfileBG);
     m_useProofSelectedProfile->setText(i18n("Use selected profile"));
-    
+
     m_proofProfilePath = new KURLRequester(proofProfiles);
     m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
     m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
@@ -389,7 +397,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     thirdPageLayout->setRowStretch(3, 10);
 
     //---------- "Lightness" Page Setup ----------------------------------
-    
+
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
     QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustements of target image.</p>"));
@@ -400,7 +408,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                   Digikam::ColorGradientWidget::Vertical,
                                                   10, lightnessadjust );
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-    
+
     m_curvesWidget = new Digikam::CurvesWidget(256, 140, m_originalImage->bits(), m_originalImage->width(),
                                                m_originalImage->height(), m_originalImage->sixteenBit(),
                                                m_curves, lightnessadjust);
@@ -410,7 +418,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
                                                   Digikam::ColorGradientWidget::Horizontal,
                                                   10, lightnessadjust );
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
-    
+
     m_cInput = new KDoubleNumInput(lightnessadjust);
     m_cInput->setLabel(i18n("Contrast:"), AlignLeft | AlignVCenter);
     m_cInput->setPrecision(2);
@@ -429,7 +437,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     fourPageLayout->addMultiCellWidget(m_cInput, 2, 2, 0, 1);
     fourPageLayout->addMultiCellWidget(m_overExposureIndicatorBox, 3, 3, 0, 1);
     fourPageLayout->setRowStretch(4, 10);
-    
+
     // -------------------------------------------------------------
 
     gridSettings->addMultiCellWidget(m_toolBoxWidgets, 3, 3, 0, 2);
@@ -439,7 +447,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processLCMSURL(const QString&)));
-    
+
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
@@ -448,7 +456,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-    
+
     connect(m_cInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
@@ -459,13 +467,13 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(m_doSoftProofBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
-    
+
     connect(m_checkGamutBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
-    
+
     connect(m_BPCBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
-    
+
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
 

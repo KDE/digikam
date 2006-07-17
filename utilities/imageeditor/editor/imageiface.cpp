@@ -38,6 +38,7 @@
 #include "icctransform.h"
 #include "dimginterface.h"
 #include "bcgmodifier.h"
+#include "dmetadata.h"
 #include "imageiface.h"
 
 namespace Digikam
@@ -327,6 +328,14 @@ QByteArray ImageIface::getExifFromOriginalImage()
 QByteArray ImageIface::getIptcFromOriginalImage()
 {
     return DImgInterface::instance()->getIptc();
+}
+
+PhotoInfoContainer ImageIface::getPhotographInformations() const
+{
+    DMetadata meta;
+    meta.setExif(DImgInterface::instance()->getExif());
+    meta.setIptc(DImgInterface::instance()->getIptc());
+    return meta.getPhotographInformations();
 }
 
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
