@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- * Date  : 2005-01-01
- * Description : 
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-01-01
+ * Description : a combo box with a width not depending of text 
+ *               content size
  * 
  * Copyright 2005 by Tom Albers
+ *           2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +33,7 @@
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qtooltip.h>
+#include <qmap.h>
 
 // Local includes.
 
@@ -37,46 +41,43 @@
 
 namespace Digikam
 {
-
-SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* name )
-    : QToolTip( parent )
+class SqueezedComboBoxPriv
 {
-    m_originalWidget = name;
-}
+public:
 
-void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
-{
-    QListBox* listBox = m_originalWidget->listBox();
-    if (!listBox)
-        return;
-
-    QListBoxItem* selectedItem = listBox->itemAt( pos );
-    if (selectedItem)
+    SqueezedComboBoxPriv()
     {
-        QRect positionToolTip = listBox->itemRect( selectedItem );
-        QString toolTipText = m_originalWidget->itemHighlighted();
-        if (!toolTipText.isNull())
-            tip(positionToolTip, toolTipText);
+        timer   = 0;
+        tooltip = 0;
     }
-}
+
+    QMap<int, QString>   originalItems;
+    
+    QTimer              *timer;
+    
+    SqueezedComboBoxTip *tooltip;
+};
 
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
-    : QComboBox( parent, name )
+                : QComboBox( parent, name )
 {
+    d = new SqueezedComboBoxPriv;
+    d->timer   = new QTimer(this);
+    d->tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this );
     setMinimumWidth(100);
-    m_timer = new QTimer(this);
-    m_tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this );
 
-    connect(m_timer, SIGNAL(timeout()),
-            SLOT(slotTimeOut()));
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotTimeOut()));
+            
     connect(this, SIGNAL(activated( int )),
-            SLOT(slotUpdateToolTip( int )));
+            this, SLOT(slotUpdateToolTip( int )));
 }
 
 SqueezedComboBox::~SqueezedComboBox()
 {
-    delete m_tooltip;
-    delete m_timer;
+    delete d->tooltip;
+    delete d->timer;
+    delete d;
 }
 
 QSize SqueezedComboBox::sizeHint() const
@@ -88,13 +89,12 @@ QSize SqueezedComboBox::sizeHint() const
     int maxH = QMAX( fm.lineSpacing(), 14 ) + 2;
 
     return style().sizeFromContents(QStyle::CT_ComboBox, this,
-    QSize(maxW, maxH)).
-            expandedTo(QApplication::globalStrut());
+    QSize(maxW, maxH)).expandedTo(QApplication::globalStrut());
 }
 
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
 {
-    m_originalItems[index] = newItem;
+    d->originalItems[index] = newItem;
     insertItem( squeezeText(newItem), index );
 
     // if this is the first item, set the tooltip.
@@ -102,15 +102,15 @@ void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
         slotUpdateToolTip(0);
 }
 
-void SqueezedComboBox::resizeEvent ( QResizeEvent * )
+void SqueezedComboBox::resizeEvent( QResizeEvent * )
 {
-    m_timer->start(200, true);
+    d->timer->start(200, true);
 }
 
 void SqueezedComboBox::slotTimeOut()
 {
     QMapIterator<int,QString> it;
-    for (it = m_originalItems.begin() ; it != m_originalItems.end();
+    for (it = d->originalItems.begin() ; it != d->originalItems.end();
          ++it)
     {
         changeItem( squeezeText( it.data() ), it.key() );
@@ -144,13 +144,37 @@ QString SqueezedComboBox::squeezeText( const QString& original)
 void SqueezedComboBox::slotUpdateToolTip( int index )
 {
     QToolTip::remove(this);
-    QToolTip::add(this, m_originalItems[index]);
+    QToolTip::add(this, d->originalItems[index]);
 }
 
 QString SqueezedComboBox::itemHighlighted()
 {
     int curItem = listBox()->currentItem();
-    return m_originalItems[curItem];
+    return d->originalItems[curItem];
+}
+
+// ------------------------------------------------------------------------
+
+SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* name )
+                   : QToolTip( parent )
+{
+    m_originalWidget = name;
+}
+
+void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
+{
+    QListBox* listBox = m_originalWidget->listBox();
+    if (!listBox)
+        return;
+
+    QListBoxItem* selectedItem = listBox->itemAt( pos );
+    if (selectedItem)
+    {
+        QRect positionToolTip = listBox->itemRect( selectedItem );
+        QString toolTipText = m_originalWidget->itemHighlighted();
+        if (!toolTipText.isNull())
+            tip(positionToolTip, toolTipText);
+    }
 }
 
 }  // namespace Digikam

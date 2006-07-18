@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- * Date  : 2005-01-01
- * Description : 
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2005-01-01
+ * Description : a combo box with a width not depending of text 
+ *               content size
  * 
  * Copyright 2005 by Tom Albers
+ *           2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +26,6 @@
 #ifndef SQUEEZEDCOMBOBOX_H
 #define SQUEEZEDCOMBOBOX_H
 
-class QTimer;
-
 // Qt includes.
 
 #include <qcombobox.h>
@@ -33,44 +34,8 @@ class QTimer;
 namespace Digikam
 {
 
-class SqueezedComboBox;
-
-/** @class SqueezedComboBoxTip
- * This class shows a tooltip for a SqueezedComboBox
- * the tooltip will contain the full text and helps
- * the user find the correct entry. It is automatically
- * activated when starting a SqueezedComboBox. This is
- * inherited from QToolTip
- * 
- * @author Tom Albers
- */
-class SqueezedComboBoxTip : public QToolTip
-{
-public:
-    /**
-     * Constructor. An example call (as done in
-     * SqueezedComboBox::SqueezedComboBox):
-     * @code
-     * t = new SqueezedComboBoxTip( this->listBox()->viewport(), this );
-     * @endcode
-     * 
-     * @param parent parent widget (viewport)
-     * @param name parent widget
-     */
-    SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
-
-protected:
-    /**
-     * Reimplemented version from QToolTip which shows the
-     * tooltip when needed.
-     * @param  pos the point where the mouse currently is
-     */
-    void maybeTip( const QPoint& pos );
-
-private:
-    SqueezedComboBox*        m_originalWidget;
-};
-
+class SqueezedComboBoxPriv;
+ 
 /** @class SqueezedComboBox
  *
  * This widget is a QComboBox, but then a little bit
@@ -87,6 +52,7 @@ class SqueezedComboBox : public QComboBox
     Q_OBJECT
 
 public:
+
     /**
      * Constructor
      * @param parent parent widget
@@ -122,16 +88,58 @@ public:
     virtual QSize sizeHint() const;
 
 private slots:
+
     void slotTimeOut();
     void slotUpdateToolTip( int index );
 
 private:
-    void resizeEvent ( QResizeEvent * );
+
+    void resizeEvent( QResizeEvent * );
     QString squeezeText( const QString& original);
 
-    QMap<int,QString>   m_originalItems;
-    QTimer*             m_timer;
-    SqueezedComboBoxTip*      m_tooltip;
+private:
+
+    SqueezedComboBoxPriv *d;
+};
+
+// ----------------------------------------------------------------
+
+/** @class SqueezedComboBoxTip
+ * This class shows a tooltip for a SqueezedComboBox
+ * the tooltip will contain the full text and helps
+ * the user find the correct entry. It is automatically
+ * activated when starting a SqueezedComboBox. This is
+ * inherited from QToolTip
+ * 
+ * @author Tom Albers
+ */
+class SqueezedComboBoxTip : public QToolTip
+{
+
+public:
+    /**
+     * Constructor. An example call (as done in
+     * SqueezedComboBox::SqueezedComboBox):
+     * @code
+     * t = new SqueezedComboBoxTip( this->listBox()->viewport(), this );
+     * @endcode
+     * 
+     * @param parent parent widget (viewport)
+     * @param name parent widget
+     */
+    SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
+
+protected:
+    /**
+     * Reimplemented version from QToolTip which shows the
+     * tooltip when needed.
+     * @param  pos the point where the mouse currently is
+     */
+    void maybeTip( const QPoint& pos );
+
+private:
+    
+    SqueezedComboBox *m_originalWidget;
 };
 
 }  // namespace Digikam
