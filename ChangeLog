@@ -1,3 +1,158 @@
+v0.9.0-beta1   			18-Jul-2006
+----------------------------------------------------------------------------
+
+2006-07-18 17:06  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog: Merge changes from
+	  stable
+
+2006-07-18 13:40  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagepannelwidget.cpp:
+	  digikam from trunk : bug fix : in image pannel widget, the zoom
+	  button options must be disable during image plugins computation
+
+2006-07-18 13:35  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+	  trunk/extragear/graphics/digikam/utilities/setup/setupicc.h:
+	  digikam from trunk : toogle on/off monitor profile settings
+	  depending of managedview option
+
+2006-07-18 13:23  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+	  digikam from trunk : add decorative icon to setup icc
+
+2006-07-18 12:20  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.h:
+	  using internal d private class
+
+2006-07-18 12:07  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/digikam/squeezedcombobox.h,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/Makefile.am,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp,
+	  
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.h,
+	  trunk/extragear/graphics/digikam/utilities/setup/Makefile.am:
+	  digikam from trunk : moving squeezed combo box widget to
+	  libs/widgets/common to share between digikam and showfoto. This
+	  is mandatory since setup icc use it.
+
+2006-07-18 11:54  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+	  digikam froam trunk : fix icc dialog layout
+
+2006-07-18 11:25  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+	  digikam from trunk : Setup icc use digiKam Squeeze Combo Box
+	  widget
+
+2006-07-18 11:03  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.h:
+	  polish
+
+2006-07-18 10:58  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.cpp,
+	  
+	  trunk/extragear/graphics/digikam/digikam/searchadvanceddialog.h:
+	  digikam from trunk : advanced search dialog :
+	  
+	  - Using KLineEdit instead QLineEdit. More KDE like.
+	  - Using internal d private class.
+	  - Add separate line on the bottom
+
+2006-07-18 10:38  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/searchquickdialog.cpp,
+	  trunk/extragear/graphics/digikam/digikam/searchquickdialog.h:
+	  digikam from trunk : quick search dialog :
+	  
+	  - Fix dialog layout rule. Using a grid is better and more simple
+	  to understand.
+	  - Using KLineEdit instead QLineEdit. More KDE like.
+	  - Using internal d private class.
+	  - Set a minimum Icon View size.
+
+2006-07-18 07:34  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-18 07:24  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/jpegutils/exifrotate.cpp:
+	  digikam from trunk : missing to disable temporally IPTC preview
+	  record during download from camera to prevent broken JPEG image
+	  if autorotation is used.
+	  
+	  Marcel, we need to unforget to fix this part too when a right
+	  solution will be found.
+	  
+	  CCBUGS: 130525
+
+2006-07-18 06:55  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-18 06:54  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumpropsedit.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumpropsedit.h:
+	  digikam from trunk : Album properties dialog :
+	  
+	  - Using KLineEdit instead QLineEdit. More KDE like.
+	  - Fix KTextEdit widget properties about comments editing: size,
+	  wordwrap, and check-spelling.
+	  - Added internal d private class to store private members.
+	  
+	  BUG: 127826
+
+2006-07-18 06:18  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+	  disable temporally this new libkipi feature for 0.9.0-beta1,
+	  else digiKam will cannot be compiled by users.
+	  
+	  CCMAIL: vardhman@gmail.com, marcel.wiesweg@gmx.de
+
+2006-07-17 21:28  mwiesweg
+
+	* trunk/extragear/graphics/digikam/release_digikam.rb,
+	  trunk/extragear/graphics/digikam/release_digikam_docs.rb: Merge
+	  release* scripts from stable
+
+2006-07-17 19:51  jaiva
+
+	* trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp: Tags
+	  export support added, features() updated to have
+	  KIPI::HostSupportsTags
+
+2006-07-17 17:28  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog: Preparing 0.9.0-beta1
+
+2006-07-17 17:09  mwiesweg
+
+	* trunk/extragear/graphics/digikam/digikam.lsm,
+	  trunk/extragear/graphics/digikam/release_digikam.rb,
+	  trunk/extragear/graphics/digikam/release_digikam_docs.rb,
+	  trunk/extragear/graphics/digikam/version.h: - Preparing
+	  0.9.0-beta1
+	  - Sync digikam.lsm authors list with main.cpp
+
 2006-07-17 16:01  cgilles
 
 	* trunk/extragear/graphics/digikam/TODO: remove B.K.O # 93569
@@ -19239,11 +19394,6 @@ v0.8.1   		18-01-2006
 	    system. Thanks to Albert Astals Cid for the idea how to do 
 	  this.
 	  CCMAIL: aacid@kde.org
-
-2006-01-05 06:23  scripty
-
-	* branches/stable/extragear/graphics/digikam/showfoto/mimetypes/x-raw.desktop:
-	   SVN_SILENT made messages (.desktop file)
 
 2006-01-04 23:24  toma
 
