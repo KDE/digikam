@@ -1,7 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-19
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-05-19
+ * Description : a dialog to perform simple search in albums
+ *
  * Copyright 2005 by Renchi Raju
+ *           2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,21 +27,18 @@
 
 // Qt includes.
 
-#include <qcstring.h>
+#include <qstring.h>
 
 // KDE includes.
 
 #include <kdialogbase.h>
-
-class QLineEdit;
-class QTimer;
 
 class KURL;
 
 namespace Digikam
 {
 
-class SearchResultsView;
+class SearchQuickDialogPriv;
 
 /** @class SearchQuickDialog
  * 
@@ -66,18 +67,17 @@ protected:
 
     void hideEvent(QHideEvent* e);
     
-private:
-
-    QLineEdit*           m_searchEdit;
-    QLineEdit*           m_nameEdit;
-    SearchResultsView*   m_resultsView;
-    QTimer*              m_timer;
-    KURL&                m_url;
-    
 private slots:
 
     void slotTimeOut();
     void slotSearchChanged(const QString&);
+
+private:
+
+    KURL&                  m_url;
+    
+    SearchQuickDialogPriv* d;
+
 };
 
 }  // namespace Digikam
