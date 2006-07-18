@@ -326,11 +326,12 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     layout->addWidget(advancedSettingsBox);
     layout->addStretch();
-
-    readSettings();
     
     // --------------------------------------------------------
     
+    connect(d->managedView, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggleManagedView(bool)));
+                    
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processLCMSURL(const QString&)));
 
@@ -358,6 +359,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     // --------------------------------------------------------
 
     adjustSize();
+    readSettings();
 }
 
 SetupICC::~SetupICC()
@@ -424,6 +426,7 @@ void SetupICC::readSettings()
     d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", false));
 
     slotToggledWidgets(d->enableColorManagement->isChecked());
+    slotToggleManagedView(d->managedView->isChecked());
     fillCombos(d->defaultPathKU->url(), false);
 
     d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
@@ -687,6 +690,12 @@ void SetupICC::profileInfo(const QString& profile)
     infoDlg.exec();
 }
 
+void SetupICC::slotToggleManagedView(bool b)
+{
+    d->monitorProfilesKC->setEnabled(b);
+    d->infoMonitorProfiles->setEnabled(b);
+}
+            
 }  // namespace Digikam
 
 #include "setupicc.moc"

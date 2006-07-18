@@ -59,8 +59,9 @@ private:
 
 private slots:
 
-    void processLCMSURL(const QString& url);
-    void slotToggledWidgets(bool t);
+    void processLCMSURL(const QString&);
+    void slotToggledWidgets(bool);
+    void slotToggleManagedView(bool);
     void slotFillCombos(const QString&);
     void slotClickedIn();
     void slotClickedWork();
