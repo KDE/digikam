@@ -153,31 +153,32 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
-    QButtonGroup *behaviour = new QButtonGroup(i18n("Behaviour"), colorPolicy);
-    behaviour->setColumnLayout(2, Qt::Vertical);
+    QVGroupBox *behaviour = new QVGroupBox(i18n("Behaviour"), colorPolicy);
+    QButtonGroup *behaviourOptions = new QButtonGroup(2, Qt::Vertical, behaviour);
+    behaviourOptions->setFrameStyle( QFrame::NoFrame );
+    behaviourOptions->setInsideMargin(0); 
 
-    d->defaultApplyICC = new QRadioButton(behaviour);
+    d->defaultApplyICC = new QRadioButton(behaviourOptions);
     d->defaultApplyICC->setText(i18n("Apply when open an image in Image Editor"));
     QWhatsThis::add( d->defaultApplyICC, i18n("<p>If this option is selected, digiKam applies the "
                      "Workspace default color profile to an image without asking when this has not "
                      "embedded profile or the embedded profile is not the same that the workspace one.</p>"));
     
-    d->defaultAskICC = new QRadioButton(behaviour);
+    d->defaultAskICC = new QRadioButton(behaviourOptions);
     d->defaultAskICC->setText(i18n("Ask when open an image in Image Editor"));
     QWhatsThis::add( d->defaultAskICC, i18n("<p>If this option is selected, digiKam asks to the user "
                      "before it applies the Workspace default color profile to an image which has not "
                      "embedded profile or, if the image has an embbeded profile, this is not the same "
                      "that the workspace one.</p>"));
 
-    d->cmToolInRawLoading = new QCheckBox(behaviour);
+    QHBox *hbox = new QHBox(behaviour);
+    QLabel *space = new QLabel(hbox);
+    space->setFixedWidth(15);
+    d->cmToolInRawLoading = new QCheckBox(hbox);
     d->cmToolInRawLoading->setText(i18n("Launch Color Management plugin with RAW files"));
     QWhatsThis::add( d->cmToolInRawLoading, i18n("Enable this option if you want to lauch the color "
                      "management image plugin when a RAW file is loaded in editor."));
 
-    QHBoxLayout* boxLayout = new QHBoxLayout( behaviour->layout() );
-    boxLayout->addSpacing( 15 );
-    boxLayout->addWidget( d->cmToolInRawLoading );
-        
     grid->addMultiCellWidget(d->enableColorManagement, 0, 0, 0, 0);
     grid->addMultiCellWidget(lcmsLogoLabel, 0, 0, 2, 2);
     grid->addMultiCellWidget(behaviour, 1, 1, 0, 2);
@@ -206,8 +207,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), profiles);
     d->workProfilesKC    = new SqueezedComboBox(profiles);
-    d->workProfilesKC->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum );
-//    d->workProfilesKC->setMaximumWidth(350);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select an apropiate one for edition purpose.</p>"
@@ -222,7 +221,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *monitorProfiles = new QLabel(i18n("Monitor:"), profiles);
     d->monitorProfilesKC    = new SqueezedComboBox(profiles);
-//    d->monitorProfilesKC->setMaximumWidth(350);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
                      "You need to toogle on <b>Use color managed view</b> option from "
@@ -237,7 +235,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *inProfiles = new QLabel(i18n("Input:"), profiles);
     d->inProfilesKC    = new SqueezedComboBox(profiles);
-//    d->inProfilesKC->setMaximumWidth(350);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
@@ -251,7 +248,6 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), profiles);
     d->proofProfilesKC    = new SqueezedComboBox(profiles);
-//    d->proofProfilesKC->setMaximumWidth(350);
     proofProfiles->setBuddy(d->proofProfilesKC);
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
@@ -284,11 +280,11 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "black levels of digital files and the black capabilities of various "
                      "digital devices.</p>"));
 
-    QHBox *hbox = new QHBox(advancedSettingsBox);
-    QLabel *lablel = new QLabel(hbox);
+    QHBox *hbox2 = new QHBox(advancedSettingsBox);
+    QLabel *lablel = new QLabel(hbox2);
     lablel->setText(i18n("Rendering Intents:"));
 
-    d->renderingIntentKC = new KComboBox(false, hbox);
+    d->renderingIntentKC = new KComboBox(false, hbox2);
     d->renderingIntentKC->insertItem("Perceptual");
     d->renderingIntentKC->insertItem("Relative Colorimetric");
     d->renderingIntentKC->insertItem("Saturation");
