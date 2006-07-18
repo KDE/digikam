@@ -171,7 +171,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
                      "embedded profile or, if the image has an embbeded profile, this is not the same "
                      "that the workspace one.</p>"));
 
-    QHBox *hbox = new QHBox(behaviour);
+    QHBox *hbox   = new QHBox(behaviour);
     QLabel *space = new QLabel(hbox);
     space->setFixedWidth(15);
     d->cmToolInRawLoading = new QCheckBox(hbox);
@@ -202,9 +202,11 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     // --------------------------------------------------------
     
     QGroupBox *profiles = new QGroupBox(0, Qt::Horizontal, i18n("ICC Profiles Settings"), parent);
-    QGridLayout* grid2  = new QGridLayout( profiles->layout(), 3, 2, KDialog::spacingHint());
-    grid2->setColStretch(1, 10);
+    QGridLayout* grid2  = new QGridLayout( profiles->layout(), 3, 3, KDialog::spacingHint());
+    grid2->setColStretch(2, 10);
 
+    QLabel *workIcon     = new QLabel(profiles);
+    workIcon->setPixmap(SmallIcon("tablet"));
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), profiles);
     d->workProfilesKC    = new SqueezedComboBox(profiles);
     workProfiles->setBuddy(d->workProfilesKC);
@@ -215,10 +217,13 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->infoWorkProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected workspace profile.</p>"));
 
-    grid2->addMultiCellWidget(workProfiles, 0, 0, 0, 0);
-    grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 1, 1);
-    grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 2, 2);
+    grid2->addMultiCellWidget(workIcon, 0, 0, 0, 0);
+    grid2->addMultiCellWidget(workProfiles, 0, 0, 1, 1);
+    grid2->addMultiCellWidget(d->workProfilesKC, 0, 0, 2, 2);
+    grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 3, 3);
 
+    QLabel *monitorIcon     = new QLabel(profiles);
+    monitorIcon->setPixmap(SmallIcon("tv"));
     QLabel *monitorProfiles = new QLabel(i18n("Monitor:"), profiles);
     d->monitorProfilesKC    = new SqueezedComboBox(profiles);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
@@ -228,11 +233,14 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected monitor profile.</p>"));
+    
+    grid2->addMultiCellWidget(monitorIcon, 1, 1, 0, 0);
+    grid2->addMultiCellWidget(monitorProfiles, 1, 1, 1, 1);
+    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 2, 2);
+    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 3, 3);
 
-    grid2->addMultiCellWidget(monitorProfiles, 1, 1, 0, 0);
-    grid2->addMultiCellWidget(d->monitorProfilesKC, 1, 1, 1, 1);
-    grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 2, 2);
-
+    QLabel *inIcon     = new QLabel(profiles);
+    inIcon->setPixmap(SmallIcon("camera"));
     QLabel *inProfiles = new QLabel(i18n("Input:"), profiles);
     d->inProfilesKC    = new SqueezedComboBox(profiles);
     inProfiles->setBuddy(d->inProfilesKC);
@@ -241,11 +249,14 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoInProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoInProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected input profile.</p>"));
+    
+    grid2->addMultiCellWidget(inIcon, 2, 2, 0, 0);
+    grid2->addMultiCellWidget(inProfiles, 2, 2, 1, 1);
+    grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 2, 2);
+    grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 3, 3);
 
-    grid2->addMultiCellWidget(inProfiles, 2, 2, 0, 0);
-    grid2->addMultiCellWidget(d->inProfilesKC, 2, 2, 1, 1);
-    grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 2, 2);
-
+    QLabel *proofIcon     = new QLabel(profiles);
+    proofIcon->setPixmap(SmallIcon("printer1"));
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), profiles);
     d->proofProfilesKC    = new SqueezedComboBox(profiles);
     proofProfiles->setBuddy(d->proofProfilesKC);
@@ -255,10 +266,11 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->infoProofProfiles = new QPushButton(i18n("Info..."), profiles);
     QWhatsThis::add( d->infoProofProfiles, i18n("<p>You can use this button to get more detailled "
                      "information about the selected soft proof profile.</p>"));
-
-    grid2->addMultiCellWidget(proofProfiles, 3, 3, 0, 0);
-    grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 1, 1);
-    grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 2, 2);
+    
+    grid2->addMultiCellWidget(proofIcon, 3, 3, 0, 0);
+    grid2->addMultiCellWidget(proofProfiles, 3, 3, 1, 1);
+    grid2->addMultiCellWidget(d->proofProfilesKC, 3, 3, 2, 2);
+    grid2->addMultiCellWidget(d->infoProofProfiles, 3, 3, 3, 3);
 
     layout->addWidget(profiles);
 
