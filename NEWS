@@ -173,7 +173,8 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 108 ==> 130525 : Saving large (>5M) jpg's result in corrupt file.
 109 ==> 130920 : ICC, profiles, metadata, abbreviations
 110 ==> 124199 : Main interface : digikam crashed when I right-clicked in the (empty) "My Albums" view
-111 ==>
+111 ==> 127826 : Album comment with no wordwrap
+112 ==> 
 
 
 ----------------------------------------------------------------------------------------------------
