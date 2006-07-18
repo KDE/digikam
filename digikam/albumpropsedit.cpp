@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-03-09
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Tom Albers <tomalbers@kde.nl>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-03-09
+ * Description : Album properties dialog.
  *
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2004 by Renchi Raju
  * Copyright 2005 by Tom Albers
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +32,6 @@
 #include <qfileinfo.h>
 #include <qdatetime.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qlistview.h>
 #include <qframe.h>
 #include <qheader.h>
@@ -40,6 +42,7 @@
 
 #include <kdatepicker.h>
 #include <ktextedit.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kmessagebox.h>
@@ -63,13 +66,41 @@
 namespace Digikam
 {
 
+
+class AlbumPropsEditPriv
+{
+public:
+
+    AlbumPropsEditPriv()
+    {
+        titleEdit          = 0;
+        collectionCombo    = 0;
+        commentsEdit       = 0;
+        datePicker         = 0;
+        album              = 0;
+    }
+
+    QStringList     albumCollections;
+
+    QComboBox      *collectionCombo;
+
+    KLineEdit      *titleEdit;
+
+    KTextEdit      *commentsEdit;
+
+    KDatePicker    *datePicker;
+
+    PAlbum         *album;
+};
+
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
               : KDialogBase( Plain, create ? i18n("New Album") : i18n("Edit Album"),
                              Help|Ok|Cancel, Ok,
                              0, 0, true, true )
 {
+    d = new AlbumPropsEditPriv;
+    d->album = album;
     setHelp("albumpropsedit.anchor", "digikam");
-    album_ = album;
 
     QGridLayout *topLayout = new QGridLayout( plainPage(), 2, 6,
                                               0, spacingHint() );
@@ -77,12 +108,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QLabel *topLabel = new QLabel( plainPage() );
     if (create)
     {
-        topLabel->setText( i18n( "<qt><b>Create new Album in </b>%1</qt>")
+        topLabel->setText( i18n( "<qt><b>Create new Album in \"<i>%1</i>\"</b></qt>")
                            .arg(album->title()));
     }
     else
     {
-        topLabel->setText( i18n( "<qt><b><i>%1</i> Album Properties</b></qt>")
+        topLabel->setText( i18n( "<qt><b>\"<i>%1</i>\" Album Properties</b></qt>")
                            .arg(album->title()));
     }
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
@@ -101,92 +132,90 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     titleLabel->setText( i18n( "&Title:" ) );
     topLayout->addWidget( titleLabel, 2, 0 );
 
-    titleEdit_ = new QLineEdit( plainPage( ) );
-    topLayout->addWidget( titleEdit_, 2, 1 );
-    titleLabel->setBuddy( titleEdit_ );
+    d->titleEdit = new KLineEdit( plainPage( ) );
+    topLayout->addWidget( d->titleEdit, 2, 1 );
+    titleLabel->setBuddy( d->titleEdit );
 
     QLabel *collectionLabel = new QLabel( plainPage( ) );
     collectionLabel->setText( i18n( "Co&llection:" ) );
     topLayout->addWidget( collectionLabel, 3, 0 );
 
-    collectionCombo_ = new QComboBox( plainPage( ) );
-    collectionCombo_->setEditable(true);
-    topLayout->addWidget( collectionCombo_, 3, 1 );
-    collectionLabel->setBuddy( collectionCombo_ );
+    d->collectionCombo = new QComboBox( plainPage( ) );
+    d->collectionCombo->setEditable(true);
+    topLayout->addWidget( d->collectionCombo, 3, 1 );
+    collectionLabel->setBuddy( d->collectionCombo );
 
     QLabel *commentsLabel = new QLabel( plainPage( ) );
     commentsLabel->setText( i18n( "Co&mments:" ) );
     topLayout->addWidget( commentsLabel, 4, 0, Qt::AlignAuto|Qt::AlignTop );
 
-    commentsEdit_ = new KTextEdit( plainPage( ) );
-    topLayout->addWidget( commentsEdit_, 4, 1 );
-    commentsLabel->setBuddy( commentsEdit_ );
-    commentsEdit_->setMaximumHeight(int(commentsEdit_->fontMetrics().height() * 2.5));
+    d->commentsEdit = new KTextEdit( plainPage( ) );
+    topLayout->addWidget( d->commentsEdit, 4, 1 );
+    commentsLabel->setBuddy( d->commentsEdit );
+    d->commentsEdit->setCheckSpellingEnabled(true);
+    d->commentsEdit->setWordWrap(QTextEdit::WidgetWidth);
+    d->commentsEdit->setWrapPolicy(QTextEdit::AtWhiteSpace);
 
     QLabel *dateLabel = new QLabel( plainPage( ) );
     dateLabel->setText( i18n( "Album &date:" ) );
     topLayout->addWidget( dateLabel, 5, 0, Qt::AlignAuto|Qt::AlignTop );
 
-    datePicker_ = new KDatePicker( plainPage( ) );
-    topLayout->addWidget( datePicker_, 5, 1 );
-    dateLabel->setBuddy( datePicker_ );
+    d->datePicker = new KDatePicker( plainPage( ) );
+    topLayout->addWidget( d->datePicker, 5, 1 );
+    dateLabel->setBuddy( d->datePicker );
 
     QHBox *buttonRow = new QHBox( plainPage( ) );
     QPushButton *dateLowButton = new QPushButton( 
             i18n("Button to select the date of the oldest image", 
-                 "&Oldest" ), 
-            buttonRow );
+                 "&Oldest" ), buttonRow );
     QPushButton *dateAvgButton = new QPushButton( 
             i18n("This is a button which calculates the average date",
-                 "&Average" ), 
-            buttonRow );
+                 "&Average" ), buttonRow );
     QPushButton *dateHighButton = new QPushButton( 
             i18n("Button to select the date of the newest image", 
-                 "Newest" ), 
-    buttonRow );
-    
-    
+                 "Newest" ), buttonRow );
+        
     topLayout->addWidget( buttonRow, 6, 1);
 
-    setTabOrder(titleEdit_, collectionCombo_);
-    setTabOrder(collectionCombo_, commentsEdit_);
-    setTabOrder(commentsEdit_, datePicker_);
-    commentsEdit_->setTabChangesFocus(true);
-    titleEdit_->selectAll();
-    titleEdit_->setFocus();
+    setTabOrder(d->titleEdit, d->collectionCombo);
+    setTabOrder(d->collectionCombo, d->commentsEdit);
+    setTabOrder(d->commentsEdit, d->datePicker);
+    d->commentsEdit->setTabChangesFocus(true);
+    d->titleEdit->selectAll();
+    d->titleEdit->setFocus();
 
     // Initialize ---------------------------------------------
 
     AlbumSettings *settings = AlbumSettings::instance();
     if (settings)
     {
-        collectionCombo_->insertItem( QString::null );
+        d->collectionCombo->insertItem( QString::null );
         QStringList collections = settings->getAlbumCollectionNames();
-        collectionCombo_->insertStringList( collections );
+        d->collectionCombo->insertStringList( collections );
         int collectionIndex = collections.findIndex( album->collection() );
         
         if ( collectionIndex != -1 )
         {
             // + 1 because of the empty item
-            collectionCombo_->setCurrentItem(collectionIndex + 1);
+            d->collectionCombo->setCurrentItem(collectionIndex + 1);
         }
     }
 
     if (create)
     {
-        titleEdit_->setText( i18n("New Album") );
-        datePicker_->setDate( QDate::currentDate() );
+        d->titleEdit->setText( i18n("New Album") );
+        d->datePicker->setDate( QDate::currentDate() );
     }
     else
     {
-        titleEdit_->setText( album->title() );
-        commentsEdit_->setText( album->caption() );
-        datePicker_->setDate( album->date() );
+        d->titleEdit->setText( album->title() );
+        d->commentsEdit->setText( album->caption() );
+        d->datePicker->setDate( album->date() );
     }
 
     // -- slots connections -------------------------------------------
 
-    connect(titleEdit_, SIGNAL(textChanged(const QString&)),
+    connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
             
     connect(dateLowButton, SIGNAL( clicked() ),
@@ -203,26 +232,27 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
 AlbumPropsEdit::~AlbumPropsEdit()
 {
+    delete d;
 }
 
 QString AlbumPropsEdit::title() const
 {
-    return titleEdit_->text();
+    return d->titleEdit->text();
 }
 
 QString AlbumPropsEdit::comments() const
 {
-    return commentsEdit_->text();
+    return d->commentsEdit->text();
 }
 
 QDate AlbumPropsEdit::date() const
 {
-    return datePicker_->date();
+    return d->datePicker->date();
 }
 
 QString AlbumPropsEdit::collection() const
 {
-    QString name = collectionCombo_->currentText();
+    QString name = d->collectionCombo->currentText();
 
     if (name.isEmpty())
     {
@@ -241,7 +271,7 @@ QStringList AlbumPropsEdit::albumCollections() const
         collections = settings->getAlbumCollectionNames();
     }
 
-    QString currentCollection = collectionCombo_->currentText();
+    QString currentCollection = d->collectionCombo->currentText();
     if ( collections.findIndex( currentCollection ) == -1 )
     {
         collections.append(currentCollection);
@@ -298,11 +328,11 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
     setCursor( KCursor::waitCursor() );
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumLowestDate( album_->id() );
+    QDate avDate = db->getAlbumLowestDate( d->album->id() );
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )
-        datePicker_->setDate( avDate );
+        d->datePicker->setDate( avDate );
 }
 
 void AlbumPropsEdit::slotDateHighButtonClicked()
@@ -310,11 +340,11 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
     setCursor( KCursor::waitCursor() );
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumHighestDate( album_->id() );
+    QDate avDate = db->getAlbumHighestDate( d->album->id() );
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )
-        datePicker_->setDate( avDate );
+        d->datePicker->setDate( avDate );
 }
 
 void AlbumPropsEdit::slotDateAverageButtonClicked()
@@ -322,11 +352,11 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     setCursor( KCursor::waitCursor() );
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    QDate avDate = db->getAlbumAverageDate( album_->id() );
+    QDate avDate = db->getAlbumAverageDate( d->album->id() );
     setCursor( KCursor::arrowCursor() );
 
     if ( avDate.isValid() )
-        datePicker_->setDate( avDate );
+        d->datePicker->setDate( avDate );
     else
         KMessageBox::error( plainPage( ),
                             i18n( "Could not calculate an average."),

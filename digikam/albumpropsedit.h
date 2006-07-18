@@ -1,9 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-03-09
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Tom Albers <tomalbers@kde.nl>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-03-09
+ * Description : Album properties dialog.
  *
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2004 by Renchi Raju
+ * Copyright 2005 by Tom Albers
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,18 +35,10 @@
 
 #include <kdialogbase.h>
 
-class QComboBox;
-class QLineEdit;
-class QCheckBox;
-class QCheckListItem;
-
-class KTextEdit;
-class KDatePicker;
-
 namespace Digikam
 {
 
-class PAlbum;
+class AlbumPropsEditPriv;
 
 class AlbumPropsEdit : public KDialogBase
 {
@@ -73,25 +69,17 @@ public:
                           QString& collection,
                           QStringList& albumCollections);
 
-private:
-
-    PAlbum         *album_;
-    QStringList     albumCollections_;
-
-    QLineEdit      *titleEdit_;
-    KTextEdit      *commentsEdit_;
-
-    KDatePicker    *datePicker_;
-
-    QComboBox      *collectionCombo_;
-    QCheckListItem *rootCollectionItem_;
-
 private slots:
 
-   void slotTitleChanged(const QString& newtitle);
-   void slotDateLowButtonClicked();
-   void slotDateAverageButtonClicked();
-   void slotDateHighButtonClicked();
+    void slotTitleChanged(const QString& newtitle);
+    void slotDateLowButtonClicked();
+    void slotDateAverageButtonClicked();
+    void slotDateHighButtonClicked();
+
+private:
+
+    AlbumPropsEditPriv* d;
+    
 };
 
 }  // namespace Digikam
