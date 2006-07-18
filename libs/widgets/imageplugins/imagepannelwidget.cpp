@@ -408,6 +408,7 @@ void ImagePannelWidget::setEnable(bool b)
     d->imageRegionWidget->setEnabled(b);
     d->imagePanIconWidget->setEnabled(b);
     d->separateView->setEnabled(b);
+    d->zoomButtons->setEnabled(b);
 }
 
 void ImagePannelWidget::setProgress(int val)
