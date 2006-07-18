@@ -46,7 +46,7 @@ libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
 			searchquickdialog.cpp searchadvanceddialog.cpp \
 			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
 			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
-			upgradedb_sqlite2tosqlite3.cpp squeezedcombobox.cpp \
+			upgradedb_sqlite2tosqlite3.cpp \
 			ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
 			albumthumbnailloader.cpp \
 			dcopiface.cpp dcopiface.skel
