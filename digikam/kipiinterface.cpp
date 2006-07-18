@@ -603,10 +603,13 @@ void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 
 int DigikamKipiInterface::features() const
 {
-    return KIPI::ImagesHasComments          | KIPI::AcceptNewImages        |
-           KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable    |
-	   KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory     |
-	   KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview | KIPI::HostSupportsTags ;
+    return KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
+           KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
+	       KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
+	       KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview;
+           // FIXME (Gilles - 07/18/2006) : this require the current libkipi source code from svn.
+           // re-enable it when the new libkipi release will be available.
+           /*| KIPI::HostSupportsTags;*/
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
