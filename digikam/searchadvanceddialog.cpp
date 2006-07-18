@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-01-01
- * Description : 
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-01
+ * Description : a dialog to perform advanced search in albums
  * 
  * Copyright 2005 by Tom Albers and Renchi Raju
+ *           2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -231,10 +233,11 @@ void SearchAdvancedDialog::slotAddRule()
     SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
     d->baseList.append(rule);
 
-    connect( rule, SIGNAL( signalBaseItemToggled() ) ,
-             SLOT( slotChangeButtonStates() ) );
+    connect( rule, SIGNAL( signalBaseItemToggled() ),
+             this, SLOT( slotChangeButtonStates() ) );
+
     connect( rule, SIGNAL( signalPropertyChanged() ),
-             SLOT(slotPropertyChanged()));
+             this, SLOT(slotPropertyChanged()));
 
     slotChangeButtonStates();
     slotPropertyChanged();
@@ -349,7 +352,7 @@ void SearchAdvancedDialog::slotGroupRules()
         d->rulesBox->layout()->add((*it)->widget());
     }
 
-    connect( group, SIGNAL( signalBaseItemToggled() ) ,
+    connect( group, SIGNAL( signalBaseItemToggled() ),
              this, SLOT( slotChangeButtonStates() ) );
 
     slotChangeButtonStates();
@@ -543,12 +546,14 @@ void SearchAdvancedDialog::slotChangeButtonStates()
     {
         d->delButton->setEnabled(false);
         d->groupButton->setEnabled(false);
-    } else if ( counter == 1)
+    } 
+    else if ( counter == 1)
     {
         if (d->baseList.count() > 1)
             d->delButton->setEnabled(true);
         d->groupButton->setEnabled(false);
-    } else if ( counter > 1 )
+    }
+    else if ( counter > 1 )
     {
         d->delButton->setEnabled(true);
         d->groupButton->setEnabled(true);
@@ -596,10 +601,11 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
             SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
             rule->setValues( rulesMap[num] );
 
-            connect( rule, SIGNAL( signalBaseItemToggled() ) ,
-                     SLOT( slotChangeButtonStates() ) );
+            connect( rule, SIGNAL( signalBaseItemToggled() ),
+                     this, SLOT( slotChangeButtonStates() ) );
+
             connect( rule, SIGNAL( signalPropertyChanged() ),
-                     SLOT(slotPropertyChanged()));
+                     this, SLOT(slotPropertyChanged()));
 
             if (groupingActive)
                 group->addRule(rule);
@@ -618,8 +624,10 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         {
             group = new SearchAdvancedGroup(d->rulesBox);
             d->baseList.append(group);
-            connect( group, SIGNAL( signalBaseItemToggled() ) ,
+
+            connect( group, SIGNAL( signalBaseItemToggled() ),
                      this, SLOT( slotChangeButtonStates() ) );
+
             groupingActive = true;
         }
         else if (*it == ")")

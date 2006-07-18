@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-01-01
- * Description : 
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-01
+ * Description : a dialog to perform advanced search in albums
  * 
  * Copyright 2005 by Tom Albers and Renchi Raju
+ *           2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,6 +21,7 @@
  * 
  * ============================================================ */
 
+
 /** @file searchadvanceddialog.h */
 
 #ifndef SEARCHADVANCEDDIALOG_H
@@ -28,11 +31,7 @@
 
 #include <kdialogbase.h>
 
-class QVGroupBox;
-class QPushButton;
-class QComboBox;
-class QLineEdit;
-class QTimer;
+class KURL;
 
 namespace Digikam
 {
@@ -44,6 +43,7 @@ class SearchAdvancedDialogPriv;
  * This is the dialog for the advanced search
  * @author Tom Albers
  * @author Renchi Raju
+ * @author Gilles Caulier
  * 
  */
 class SearchAdvancedDialog : public KDialogBase
@@ -78,7 +78,7 @@ private slots:
 
 private:
 
-    KURL&              m_url;
+    KURL&                     m_url;
 
     SearchAdvancedDialogPriv* d;
 };
