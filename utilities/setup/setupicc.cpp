@@ -65,6 +65,7 @@
 
 // Local includes.
 
+#include "squeezedcombobox.h"
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"
 #include "setupicc.h"
@@ -96,34 +97,35 @@ public:
         cmToolInRawLoading    = 0;
      }
 
-    QCheckBox     *enableColorManagement;
-    QCheckBox     *bpcAlgorithm;
-    QCheckBox     *managedView;
-    QCheckBox     *cmToolInRawLoading;
+    QCheckBox              *enableColorManagement;
+    QCheckBox              *bpcAlgorithm;
+    QCheckBox              *managedView;
+    QCheckBox              *cmToolInRawLoading;
     
-    QRadioButton  *defaultApplyICC;
-    QRadioButton  *defaultAskICC;
+    QRadioButton           *defaultApplyICC;
+    QRadioButton           *defaultAskICC;
 
-    QPushButton   *infoWorkProfiles;
-    QPushButton   *infoMonitorProfiles;
-    QPushButton   *infoInProfiles;
-    QPushButton   *infoProofProfiles;
-    
-    KURLRequester *defaultPathKU;
+    QPushButton            *infoWorkProfiles;
+    QPushButton            *infoMonitorProfiles;
+    QPushButton            *infoInProfiles;
+    QPushButton            *infoProofProfiles;
 
-    KComboBox     *inProfilesKC;
-    KComboBox     *workProfilesKC;
-    KComboBox     *proofProfilesKC;
-    KComboBox     *monitorProfilesKC;
-    KComboBox     *renderingIntentKC;
-
-    KDialogBase   *mainDialog;
-   
     // Maps to store profile descriptions and profile file path
-    QMap<QString, QString> inICCPath;
-    QMap<QString, QString> workICCPath;
-    QMap<QString, QString> proofICCPath;
-    QMap<QString, QString> monitorICCPath;
+    QMap<QString, QString>  inICCPath;
+    QMap<QString, QString>  workICCPath;
+    QMap<QString, QString>  proofICCPath;
+    QMap<QString, QString>  monitorICCPath;
+    
+    KURLRequester          *defaultPathKU;
+
+    KComboBox              *renderingIntentKC;
+
+    KDialogBase            *mainDialog;
+
+    SqueezedComboBox       *inProfilesKC;
+    SqueezedComboBox       *workProfilesKC;
+    SqueezedComboBox       *proofProfilesKC;
+    SqueezedComboBox       *monitorProfilesKC;
 };
 
 SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
@@ -203,8 +205,9 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     grid2->setColStretch(1, 10);
 
     QLabel *workProfiles = new QLabel(i18n("Workspace:"), profiles);
-    d->workProfilesKC    = new KComboBox(false, profiles);
-    d->workProfilesKC->setMaximumWidth(350);
+    d->workProfilesKC    = new SqueezedComboBox(profiles);
+    d->workProfilesKC->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum );
+//    d->workProfilesKC->setMaximumWidth(350);
     workProfiles->setBuddy(d->workProfilesKC);
     QWhatsThis::add( d->workProfilesKC, i18n("<p>All the images will be converted to the color "
                      "space of this profile, so you must select an apropiate one for edition purpose.</p>"
@@ -218,8 +221,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     grid2->addMultiCellWidget(d->infoWorkProfiles, 0, 0, 2, 2);
 
     QLabel *monitorProfiles = new QLabel(i18n("Monitor:"), profiles);
-    d->monitorProfilesKC    = new KComboBox(false, profiles);
-    d->monitorProfilesKC->setMaximumWidth(350);
+    d->monitorProfilesKC    = new SqueezedComboBox(profiles);
+//    d->monitorProfilesKC->setMaximumWidth(350);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
                      "You need to toogle on <b>Use color managed view</b> option from "
@@ -233,8 +236,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     grid2->addMultiCellWidget(d->infoMonitorProfiles, 1, 1, 2, 2);
 
     QLabel *inProfiles = new QLabel(i18n("Input:"), profiles);
-    d->inProfilesKC    = new KComboBox(false, profiles);
-    d->inProfilesKC->setMaximumWidth(350);
+    d->inProfilesKC    = new SqueezedComboBox(profiles);
+//    d->inProfilesKC->setMaximumWidth(350);
     inProfiles->setBuddy(d->inProfilesKC);
     QWhatsThis::add( d->inProfilesKC, i18n("<p>You must select the profile for your input device "
                      "(usually, your camera, scanner...)</p>"));
@@ -247,8 +250,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     grid2->addMultiCellWidget(d->infoInProfiles, 2, 2, 2, 2);
 
     QLabel *proofProfiles = new QLabel(i18n("Soft proof:"), profiles);
-    d->proofProfilesKC    = new KComboBox(false, profiles);
-    d->proofProfilesKC->setMaximumWidth(350);
+    d->proofProfilesKC    = new SqueezedComboBox(profiles);
+//    d->proofProfilesKC->setMaximumWidth(350);
     proofProfiles->setBuddy(d->proofProfilesKC);
     QWhatsThis::add( d->proofProfilesKC, i18n("<p>You must select the profile for your ouput device "
                      "(usually, your printer). This profile will be used to do a soft proof, so you will "
