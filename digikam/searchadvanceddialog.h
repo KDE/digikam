@@ -37,8 +37,7 @@ class QTimer;
 namespace Digikam
 {
 
-class SearchAdvancedBase;
-class SearchResultsView;
+class SearchAdvancedDialogPriv;
 
 /** @class SearchAdvancedDialog
  * 
@@ -52,6 +51,7 @@ class SearchAdvancedDialog : public KDialogBase
     Q_OBJECT
     
 public:
+
     /**
      * Constructor
      * @param parent parent window
@@ -65,6 +65,7 @@ public:
     ~SearchAdvancedDialog();
 
 private slots:
+
     void fillWidgets(const KURL& url);
     void slotAddRule();
     void slotDelRules();
@@ -76,17 +77,10 @@ private slots:
     void slotOk();
 
 private:
-    QVGroupBox*        m_rulesBox;
-    QPushButton*       m_addButton;
-    QPushButton*       m_delButton;
-    QPushButton*       m_groupButton;
-    QPushButton*       m_ungroupButton;
-    QComboBox*         m_optionsCombo;
-    QLineEdit*         m_title;
-    QValueList<SearchAdvancedBase*>  m_baseList;
-    SearchResultsView* m_resultsView;
-    QTimer*            m_timer;
+
     KURL&              m_url;
+
+    SearchAdvancedDialogPriv* d;
 };
 
 }  // namespace Digikam

@@ -29,7 +29,6 @@
 #include <qcombobox.h>
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
-#include <qlineedit.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qwhatsthis.h>
@@ -39,6 +38,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 // Local includes.
 
@@ -49,10 +49,47 @@
 namespace Digikam
 {
 
-SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
-    : KDialogBase(parent, 0, true, i18n("Advanced Search"),
-                  Help|Ok|Cancel), m_url(url)
+class SearchAdvancedDialogPriv
 {
+public:
+
+    SearchAdvancedDialogPriv()
+    {
+        timer         = 0;
+        title         = 0;
+        optionsCombo  = 0;
+        resultsView   = 0;
+        ungroupButton = 0;
+        groupButton   = 0;
+        delButton     = 0;
+        addButton     = 0;
+        rulesBox      = 0;
+    }
+
+    QVGroupBox                      *rulesBox;
+
+    QPushButton                     *addButton;
+    QPushButton                     *delButton;
+    QPushButton                     *groupButton;
+    QPushButton                     *ungroupButton;
+
+    QComboBox                       *optionsCombo;
+
+    QValueList<SearchAdvancedBase*>  baseList;
+
+    QTimer                          *timer;
+
+    KLineEdit                       *title;
+
+    SearchResultsView               *resultsView;
+};
+
+SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
+                    : KDialogBase(parent, 0, true, i18n("Advanced Search"),
+                                  Help|Ok|Cancel, Ok, true), m_url(url)
+{
+    d = new SearchAdvancedDialogPriv;
+    d->timer = new QTimer(this);
     setHelp("advancedsearchtool.anchor", "digikam");
 
     QWidget *page = new QWidget( this );
@@ -64,22 +101,22 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QHBoxLayout* hbox = new QHBoxLayout( page );
     hbox->setSpacing( spacingHint() );
     QVBoxLayout* leftSide = new QVBoxLayout( hbox );
-    m_resultsView   = new SearchResultsView( page );
-    m_resultsView->setMinimumSize( QSize(200, 200) );
-    m_resultsView->setMaximumWidth(  130*2 + m_resultsView->spacing()*3 + 20 );
-    QWhatsThis::add( m_resultsView, i18n("<p>Here you can see the items found in album "
+    d->resultsView   = new SearchResultsView( page );
+    d->resultsView->setMinimumSize( QSize(200, 200) );
+    d->resultsView->setMaximumWidth(  130*2 + d->resultsView->spacing()*3 + 20 );
+    QWhatsThis::add( d->resultsView, i18n("<p>Here you can see the items found in album "
                                          "library using the current search settings."));
-    hbox->addWidget( m_resultsView );
+    hbox->addWidget( d->resultsView );
 
     // Box for all the rules
-    m_rulesBox = new QVGroupBox( i18n("Search Rules"), page);
-    QWhatsThis::add( m_rulesBox, i18n("<p>Here you can see the search rules list used to process items "
+    d->rulesBox = new QVGroupBox( i18n("Search Rules"), page);
+    QWhatsThis::add( d->rulesBox, i18n("<p>Here you can see the search rules list used to process items "
                                       "searching in album library."));
-    m_rulesBox->layout()->setSpacing( spacingHint() );
-    m_rulesBox->layout()->setMargin( 5 );
-    m_rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    m_rulesBox->layout()->setAlignment( Qt::AlignTop );
-    leftSide->addWidget( m_rulesBox );
+    d->rulesBox->layout()->setSpacing( spacingHint() );
+    d->rulesBox->layout()->setMargin( 5 );
+    d->rulesBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    d->rulesBox->layout()->setAlignment( Qt::AlignTop );
+    leftSide->addWidget( d->rulesBox );
 
     // Push the rulesbox to top and the buttons down.
     leftSide->addStretch(10);
@@ -88,40 +125,42 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     QGroupBox* groupbox = 0;
     groupbox            = new QGroupBox( i18n("Add/Delete Option"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents, to adding/removing an option."));
+    QWhatsThis::add( groupbox, i18n("<p>You can control here the search rules list contents, "
+                                    "to adding/removing an option."));
                                          
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
-    m_optionsCombo      = new QComboBox( groupbox );
-    m_optionsCombo->insertItem(i18n("As Well As"), 0);
-    m_optionsCombo->insertItem(i18n("Or"), 1);
-    m_optionsCombo->setEnabled(false);
-    m_addButton         = new QPushButton(i18n("&Add"), groupbox);
-    m_delButton         = new QPushButton(i18n("&Del"), groupbox);
+    d->optionsCombo = new QComboBox( groupbox );
+    d->optionsCombo->insertItem(i18n("As Well As"), 0);
+    d->optionsCombo->insertItem(i18n("Or"), 1);
+    d->optionsCombo->setEnabled(false);
+    d->addButton    = new QPushButton(i18n("&Add"), groupbox);
+    d->delButton    = new QPushButton(i18n("&Del"), groupbox);
 
     QHBoxLayout* box = 0;
     box = new QHBoxLayout( groupbox->layout() );
-    box->addWidget( m_optionsCombo );
-    box->addWidget( m_addButton );
+    box->addWidget( d->optionsCombo );
+    box->addWidget( d->addButton );
     box->addStretch( 10 );
-    box->addWidget( m_delButton );
+    box->addWidget( d->delButton );
     leftSide->addWidget( groupbox );
 
     // Box for the group/ungroup
     groupbox            = new QGroupBox( i18n("Group/Ungroup Options"),
                                          page, "groupbox" );
-    QWhatsThis::add( groupbox, i18n("<p>You can group together or ungroup any search options from the Search Rules list."));   
+    QWhatsThis::add( groupbox, i18n("<p>You can group together or ungroup any search options "
+                                    "from the Search Rules list."));   
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     groupbox->layout()->setMargin( KDialog::marginHint() );
-    m_groupButton       = new QPushButton(i18n("&Group"), groupbox);
-    m_ungroupButton     = new QPushButton(i18n("&Ungroup"), groupbox);
+    d->groupButton       = new QPushButton(i18n("&Group"), groupbox);
+    d->ungroupButton     = new QPushButton(i18n("&Ungroup"), groupbox);
 
     box = new QHBoxLayout( groupbox->layout() );
-    box->addWidget( m_groupButton );
+    box->addWidget( d->groupButton );
     box->addStretch( 10 );
-    box->addWidget( m_ungroupButton );
+    box->addWidget( d->ungroupButton );
     leftSide->addWidget( groupbox );
 
     // box for saving the search.
@@ -129,63 +168,68 @@ SearchAdvancedDialog::SearchAdvancedDialog(QWidget* parent, KURL& url)
     groupbox->setColumnLayout(0, Qt::Vertical );
     groupbox->layout()->setSpacing( KDialog::spacingHint() );
     QLabel* label = new QLabel(i18n("&Save search as:"), groupbox);
-    m_title = new QLineEdit(groupbox, "searchTitle");
-    QWhatsThis::add( m_title, i18n("<p>Enter here the name used to save the current search in \"My Searches\" view"));
+    d->title = new KLineEdit(groupbox, "searchTitle");
+    QWhatsThis::add( d->title, i18n("<p>Enter here the name used to save the current search in "
+                                   "\"My Searches\" view"));
     groupbox->setFrameStyle( QFrame::NoFrame );
 
     box = new QHBoxLayout( groupbox->layout() );
     box->addWidget( label );
-    box->addWidget( m_title );
-    label->setBuddy(m_title);
+    box->addWidget( d->title );
+    label->setBuddy(d->title);
     leftSide->addWidget( groupbox );
-
-    m_timer = new QTimer(this);
 
     if ( url.isEmpty() )
     {
-        m_title->setText(i18n("Last Search"));
+        d->title->setText(i18n("Last Search"));
         slotAddRule();
     }
     else
     {
-        m_title->setText(url.queryItem("name"));
+        d->title->setText(url.queryItem("name"));
         fillWidgets( url );
     }
 
     slotChangeButtonStates();
-    m_timer->start(0, true);
+    d->timer->start(0, true);
 
-    connect(m_addButton, SIGNAL(clicked()),
-            SLOT(slotAddRule()));
-    connect(m_delButton, SIGNAL(clicked()),
-            SLOT(slotDelRules()));
-    connect(m_groupButton, SIGNAL(clicked()),
-            SLOT(slotGroupRules()));
-    connect(m_ungroupButton, SIGNAL(clicked()),
-            SLOT(slotUnGroupRules()));
-    connect(m_timer, SIGNAL(timeout()),
-            SLOT(slotTimeOut()));
-    connect(m_title, SIGNAL ( textChanged(const QString&) ),
-            SLOT(slotChangeButtonStates() ));
+    connect(d->addButton, SIGNAL(clicked()),
+            this, SLOT(slotAddRule()));
+
+    connect(d->delButton, SIGNAL(clicked()),
+            this, SLOT(slotDelRules()));
+
+    connect(d->groupButton, SIGNAL(clicked()),
+            this, SLOT(slotGroupRules()));
+
+    connect(d->ungroupButton, SIGNAL(clicked()),
+            this, SLOT(slotUnGroupRules()));
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotTimeOut()));
+
+    connect(d->title, SIGNAL ( textChanged(const QString&) ),
+            this, SLOT(slotChangeButtonStates() ));
 }
 
 SearchAdvancedDialog::~SearchAdvancedDialog()
 {
     saveDialogSize("AdvancedSearch Dialog");
-    delete m_timer;
+    delete d->timer;
+    delete d;
 }
 
 void SearchAdvancedDialog::slotAddRule()
 {
     SearchAdvancedBase::Option type = SearchAdvancedBase::NONE;
-    if ( !m_baseList.isEmpty() )
-        if (m_optionsCombo->currentItem() == 0 )
+    if ( !d->baseList.isEmpty() )
+        if (d->optionsCombo->currentItem() == 0 )
             type = SearchAdvancedBase::AND;
         else
             type = SearchAdvancedBase::OR;
 
-    SearchAdvancedRule* rule = new SearchAdvancedRule( m_rulesBox, type );
-    m_baseList.append(rule);
+    SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
+    d->baseList.append(rule);
 
     connect( rule, SIGNAL( signalBaseItemToggled() ) ,
              SLOT( slotChangeButtonStates() ) );
@@ -198,15 +242,15 @@ void SearchAdvancedDialog::slotAddRule()
 
 void SearchAdvancedDialog::slotDelRules()
 {
-    if (m_baseList.isEmpty())
+    if (d->baseList.isEmpty())
         return;
 
     typedef QValueList<SearchAdvancedBase*> BaseList;
 
     BaseList itemsToRemove;
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
         SearchAdvancedBase* base = *it;
         if (base->isChecked())
@@ -219,19 +263,19 @@ void SearchAdvancedDialog::slotDelRules()
          it != itemsToRemove.end(); ++it)
     {
         SearchAdvancedBase* base = (SearchAdvancedBase*) *it;
-        m_baseList.remove(base);
+        d->baseList.remove(base);
         delete base;
     }
 
-    BaseList::iterator it = m_baseList.begin();
-    if (it != m_baseList.end())
+    BaseList::iterator it = d->baseList.begin();
+    if (it != d->baseList.end())
         (*it)->removeOption();
 
     slotChangeButtonStates();
     slotPropertyChanged();
-    if (m_baseList.isEmpty()) {
-        m_optionsCombo->setEnabled(false);
-        m_addButton->setEnabled(true);
+    if (d->baseList.isEmpty()) {
+        d->optionsCombo->setEnabled(false);
+        d->addButton->setEnabled(true);
         enableButtonOK( false );
     }
 }
@@ -243,8 +287,8 @@ void SearchAdvancedDialog::slotGroupRules()
     BaseList itemsToGroup;
     BaseList groupsToUnGroupAndGroup;
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
         SearchAdvancedBase* base = *it;
         if ( base->isChecked() )
@@ -261,16 +305,16 @@ void SearchAdvancedDialog::slotGroupRules()
     {
         SearchAdvancedGroup* group = (SearchAdvancedGroup*)*it;
         BaseList::iterator itemsToGroupPos = itemsToGroup.find(group);
-        BaseList::iterator itPos = m_baseList.find(group);
+        BaseList::iterator itPos = d->baseList.find(group);
         QValueList<SearchAdvancedRule*> childRules = group->childRules();
         for (QValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
                  iter != childRules.end(); ++iter)
         {
-            m_baseList.insert(itPos, *iter);
+            d->baseList.insert(itPos, *iter);
             itemsToGroup.insert(itemsToGroupPos, *iter);
         }
         group->removeRules();
-        m_baseList.remove(group);
+        d->baseList.remove(group);
         itemsToGroup.remove(group);
         delete group;
     }
@@ -282,9 +326,9 @@ void SearchAdvancedDialog::slotGroupRules()
     BaseList::iterator it = itemsToGroup.begin();
     SearchAdvancedRule* rule = (SearchAdvancedRule*)(*it);
 
-    SearchAdvancedGroup* group = new SearchAdvancedGroup(m_rulesBox);
-    BaseList::iterator itPos = m_baseList.find(rule);
-    m_baseList.insert(itPos, group);
+    SearchAdvancedGroup* group = new SearchAdvancedGroup(d->rulesBox);
+    BaseList::iterator itPos = d->baseList.find(rule);
+    d->baseList.insert(itPos, group);
 
     for (BaseList::iterator it = itemsToGroup.begin();
          it != itemsToGroup.end(); ++it)
@@ -294,15 +338,15 @@ void SearchAdvancedDialog::slotGroupRules()
         {
             SearchAdvancedRule* rule = (SearchAdvancedRule*)base;
             group->addRule(rule);
-            m_baseList.remove(rule);
+            d->baseList.remove(rule);
         }
     }
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
-        m_rulesBox->layout()->remove((*it)->widget());
-        m_rulesBox->layout()->add((*it)->widget());
+        d->rulesBox->layout()->remove((*it)->widget());
+        d->rulesBox->layout()->add((*it)->widget());
     }
 
     connect( group, SIGNAL( signalBaseItemToggled() ) ,
@@ -319,8 +363,8 @@ void SearchAdvancedDialog::slotUnGroupRules()
 
     GroupList itemsToUnGroup;
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
         SearchAdvancedBase* base = *it;
         if (base->type() == SearchAdvancedBase::GROUP &&
@@ -340,25 +384,25 @@ void SearchAdvancedDialog::slotUnGroupRules()
         SearchAdvancedGroup *group = *it;
         QValueList<SearchAdvancedRule*> childRules = group->childRules();
 
-        BaseList::iterator itPos = m_baseList.find(group);
+        BaseList::iterator itPos = d->baseList.find(group);
 
         for (QValueList<SearchAdvancedRule*>::iterator iter = childRules.begin();
              iter != childRules.end(); ++iter)
         {
-            m_baseList.insert(itPos, *iter);
+            d->baseList.insert(itPos, *iter);
         }
 
         group->removeRules();
-        m_baseList.remove(group);
+        d->baseList.remove(group);
         delete group;
     }
 
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
-        m_rulesBox->layout()->remove((*it)->widget());
-        m_rulesBox->layout()->add((*it)->widget());
+        d->rulesBox->layout()->remove((*it)->widget());
+        d->rulesBox->layout()->add((*it)->widget());
     }
 
     slotChangeButtonStates();
@@ -367,7 +411,7 @@ void SearchAdvancedDialog::slotUnGroupRules()
 
 void SearchAdvancedDialog::slotPropertyChanged()
 {
-    m_timer->start(500, true);
+    d->timer->start(500, true);
 }
 
 void SearchAdvancedDialog::slotOk()
@@ -377,13 +421,13 @@ void SearchAdvancedDialog::slotOk()
 
     // Since it's not possible to check the state of the ok button,
     // check the state of the add button.
-    if ( m_addButton->isEnabled() )
+    if ( d->addButton->isEnabled() )
         KDialogBase::slotOk();
 }
 
 void SearchAdvancedDialog::slotTimeOut()
 {
-    if (m_baseList.isEmpty())
+    if (d->baseList.isEmpty())
         return;
 
     typedef QValueList<SearchAdvancedBase*>  BaseList;
@@ -395,8 +439,8 @@ void SearchAdvancedDialog::slotTimeOut()
     KURL url;
     url.setProtocol("digikamsearch");
 
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
         SearchAdvancedBase* base = *it;
         if (base->type() == SearchAdvancedBase::RULE)
@@ -458,19 +502,19 @@ void SearchAdvancedDialog::slotTimeOut()
     }
 
     url.setPath(grouping);
-    url.addQueryItem("name", m_title->text());
+    url.addQueryItem("name", d->title->text());
     url.addQueryItem("count", QString::number(count));
     m_url = url;
     if (!count == 0)
-        m_resultsView->openURL( url );
+        d->resultsView->openURL( url );
     kdDebug() << url << endl;
 
-    if (!m_baseList.isEmpty())
+    if (!d->baseList.isEmpty())
     {
-        if (!m_title->text().isEmpty())
+        if (!d->title->text().isEmpty())
             enableButtonOK( !emptyVal );
-        m_addButton->setEnabled( !emptyVal );
-        m_optionsCombo->setEnabled( !emptyVal );
+        d->addButton->setEnabled( !emptyVal );
+        d->optionsCombo->setEnabled( !emptyVal );
     }
 }
 
@@ -481,8 +525,8 @@ void SearchAdvancedDialog::slotChangeButtonStates()
     int counter = 0;
 
     typedef QValueList<SearchAdvancedBase*>  BaseList;
-    for (BaseList::iterator it = m_baseList.begin();
-         it != m_baseList.end(); ++it)
+    for (BaseList::iterator it = d->baseList.begin();
+         it != d->baseList.end(); ++it)
     {
         SearchAdvancedBase* base = *it;
         if (base->isChecked())
@@ -493,24 +537,24 @@ void SearchAdvancedDialog::slotChangeButtonStates()
         }
     }
 
-    m_ungroupButton->setEnabled( group );
+    d->ungroupButton->setEnabled( group );
 
     if ( counter == 0)
     {
-        m_delButton->setEnabled(false);
-        m_groupButton->setEnabled(false);
+        d->delButton->setEnabled(false);
+        d->groupButton->setEnabled(false);
     } else if ( counter == 1)
     {
-        if (m_baseList.count() > 1)
-            m_delButton->setEnabled(true);
-        m_groupButton->setEnabled(false);
+        if (d->baseList.count() > 1)
+            d->delButton->setEnabled(true);
+        d->groupButton->setEnabled(false);
     } else if ( counter > 1 )
     {
-        m_delButton->setEnabled(true);
-        m_groupButton->setEnabled(true);
+        d->delButton->setEnabled(true);
+        d->groupButton->setEnabled(true);
     }
 
-    enableButtonOK( !m_title->text().isEmpty() );
+    enableButtonOK( !d->title->text().isEmpty() );
 }
 
 void SearchAdvancedDialog::fillWidgets( const KURL& url )
@@ -549,7 +593,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         int  num = (*it).toInt(&ok);
         if (ok)
         {
-            SearchAdvancedRule* rule = new SearchAdvancedRule( m_rulesBox, type );
+            SearchAdvancedRule* rule = new SearchAdvancedRule( d->rulesBox, type );
             rule->setValues( rulesMap[num] );
 
             connect( rule, SIGNAL( signalBaseItemToggled() ) ,
@@ -560,7 +604,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
             if (groupingActive)
                 group->addRule(rule);
             else
-                m_baseList.append(rule);
+                d->baseList.append(rule);
         }
         else if (*it == "OR")
         {
@@ -572,8 +616,8 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         }
         else if (*it == "(")
         {
-            group = new SearchAdvancedGroup(m_rulesBox);
-            m_baseList.append(group);
+            group = new SearchAdvancedGroup(d->rulesBox);
+            d->baseList.append(group);
             connect( group, SIGNAL( signalBaseItemToggled() ) ,
                      this, SLOT( slotChangeButtonStates() ) );
             groupingActive = true;
