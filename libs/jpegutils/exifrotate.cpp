@@ -230,7 +230,13 @@ bool exifRotate(const QString& file)
 
             // Update the image preview.
             QImage preview = img.scale(800, 600, QImage::ScaleMin);
-            metaData.setImagePreview(preview);
+            
+            // TODO: see B.K.O #130525. The a JPEG segment is limited to 64K. If IPTC byte array 
+            // bigger than 64K duing of image preview tag size, the target JPEG image will be 
+            // broken. Note that IPTC image preview tag is limited to 256K!!! 
+            // Temp. solution to disable IPTC preview record in JPEG file until a right solution 
+            // will be found into Exiv2. 
+            // metaData.setImagePreview(preview);
 
             // Update the image thumbnail.
             QImage thumb = preview.scale(160, 120, QImage::ScaleMin);
