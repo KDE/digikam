@@ -39,8 +39,7 @@
 ==> 127182 : Main interface : Crash when scanning jpeg images     
 ==> 113797 : Main interface : Little thumbnail refresh problem    
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder
-==> 128101 : Main interface : crash when selecting "Comments&Tags" tab, after selecting "Search" tab,
-                              with no search results selected
+
 
 * Media support:
 
