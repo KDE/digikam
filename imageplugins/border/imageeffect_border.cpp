@@ -40,10 +40,6 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
