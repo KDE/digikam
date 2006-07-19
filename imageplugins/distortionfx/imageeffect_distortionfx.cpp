@@ -42,10 +42,6 @@
 #include <kstandarddirs.h>
 #include <kprogress.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
