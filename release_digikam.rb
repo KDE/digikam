@@ -185,8 +185,7 @@ puts "\n"
 puts "Compressing..  "
 Dir.chdir( ".." ) # root folder
 `tar -jcf #{folder}.tar.bz2 #{folder}`
-
-#`rm -rf #{folder}`
+`rm -rf #{folder}`
 puts "done.\n"
 
 

@@ -1,5 +1,34 @@
-v0.9.0-beta1   			18-Jul-2006
+v0.9.0-beta1 - 20/07/2006
 ----------------------------------------------------------------------------
+
+2006-07-19 06:08  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/filters/Makefile.am:
+	  add header require by DigikamImagePlugins
+
+2006-07-19 06:04  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/Makefile.am:
+	  missing header require by DigikamImagePlugins
+
+2006-07-19 05:55  cgilles
+
+	* trunk/extragear/graphics/digikam/README: update depencies
+
+2006-07-19 05:48  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/Makefile.am: Fix
+	  missing header to install require by DigikamImagePlugins
+
+2006-07-18 19:58  cgilles
+
+	* trunk/extragear/graphics/digikam/TODO: remove B.K.O # 128101 :
+	  fixed
+
+2006-07-18 17:21  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog: Update Changelog
+	  with latest commits
 
 2006-07-18 17:06  mwiesweg
 
