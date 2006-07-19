@@ -36,10 +36,6 @@
 #include <kdebug.h>
 #include <kglobal.h> 
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "superimposewidget.h"
