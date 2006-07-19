@@ -6,7 +6,7 @@
 * Description : a digiKam image plugin for fixing dots produced by
 *               hot/stuck/dead pixels from a CCD
 * 
-* Copyright 2005 by Unai Garro and Gilles Caulier
+* Copyright 2005-2006 by Unai Garro and Gilles Caulier
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -33,6 +33,10 @@
 // KDE includes.
 
 #include <kurl.h>
+
+// Digikam includes.
+
+#include <digikamheaders.h>
 
 // Local includes.
 

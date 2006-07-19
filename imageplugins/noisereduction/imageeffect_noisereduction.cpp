@@ -47,10 +47,6 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"

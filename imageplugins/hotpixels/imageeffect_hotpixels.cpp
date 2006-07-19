@@ -41,10 +41,6 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"

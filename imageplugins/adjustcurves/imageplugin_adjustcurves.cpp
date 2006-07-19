@@ -28,10 +28,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "bannerwidget.h"

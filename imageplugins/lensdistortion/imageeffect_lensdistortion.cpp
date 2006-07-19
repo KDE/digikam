@@ -52,10 +52,6 @@
 #include <knuminput.h>
 #include <kdebug.h>
 
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "version.h"
