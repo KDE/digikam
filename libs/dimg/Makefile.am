@@ -21,5 +21,5 @@ INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg/loaders \
 	                       -I$(top_srcdir)/digikam/libs/dcraw \
 	                       -I$(top_srcdir)/digikam/digikam
 
-digikaminclude_HEADERS = dimg.h dcolor.h dcolorcomposer.h dcolorblend.h rawdecodingsettings.h 
+digikaminclude_HEADERS = dimg.h dcolor.h dcolorpixelaccess.h dcolorcomposer.h dcolorblend.h rawdecodingsettings.h 
 digikamincludedir = $(includedir)/digikam
