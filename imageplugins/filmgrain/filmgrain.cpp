@@ -30,10 +30,6 @@
 
 #include <qdatetime.h> 
 
-// Digikam include
-
-#include "dcolorcomposer.h"
-
 // Local includes.
 
 #include "filmgrain.h"
