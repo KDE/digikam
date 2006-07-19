@@ -1,5 +1,225 @@
-v0.9.0-beta1 - 18/07/06
+v0.9.0-beta1 - 20/07/06
 ----------------------------------------------------------------------------
+
+2006-07-19 08:00  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/imageeffect_hotpixels.h,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/sheartool/imageeffect_sheartool.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageplugin_whitebalance.cpp:
+	  duplicate header
+
+2006-07-19 07:47  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/emboss/imageeffect_emboss.cpp:
+	  duplicate header
+
+2006-07-19 07:46  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/distortionfx/imageeffect_distortionfx.cpp:
+	  duplicate header
+
+2006-07-19 07:45  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/charcoal/imageeffect_charcoal.cpp:
+	  duplicate header
+
+2006-07-19 07:07  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/border/imageeffect_border.cpp:
+	  duplicate header
+
+2006-07-19 07:06  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/blurfx/imageeffect_blurfx.cpp:
+	  duplicate header
+
+2006-07-19 07:05  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp:
+	  duplicate header
+
+2006-07-19 07:04  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/unsharp/imageeffect_unsharp.cpp:
+	  duplicate header
+
+2006-07-19 07:03  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/texture/imageeffect_texture.cpp:
+	  duplicate header
+
+2006-07-19 07:02  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp:
+	  duplicate header
+
+2006-07-19 07:00  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/perspective/matrix.cpp:
+	  polish
+
+2006-07-19 06:55  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp:
+	  set radius default value to 1.0.
+	  Peter, 5.0 is too high with some photos, especially in 16 bits
+	  color depth (RAW file). This have been reported by many digiKam
+	  users by IRC.
+	  I toogle it to 1.0 by default.
+	  
+	  CCMAIL: peter.heckert@arcor.de
+
+2006-07-19 06:31  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/distortionfx/distortionfx.cpp:
+	  polish
+
+2006-07-19 06:23  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/lensdistortion/pixelaccess.cpp:
+	  duplicate header
+
+2006-07-19 06:21  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.cpp:
+	  duplicate header
+
+2006-07-19 06:18  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/filmgrain/filmgrain.cpp:
+	  no need this header here
+
+2006-07-19 06:13  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/configure.in.in:
+	  polish
+
+2006-07-19 05:50  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/common/include/version.h:
+	  0.9.0-beta1 update
+
+2006-07-19 05:49  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/digikamimageplugins.lsm:
+	  0.9.0-beta1 updtae
+
+2006-07-19 05:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/README: fix digiKAm
+	  version depency
+
+2006-07-17 21:21  mwiesweg
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins.rb,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_docs.rb:
+	  - Preparing beta1
+	  - Update Changelog
+	  - Merge release* scripts from stable
+	  - Merge Changelog from stable
+
+2006-07-17 09:47  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/configure.in.in:
+	  compile
+
+2006-07-10 11:49  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/solarize/imageeffect_solarize.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  digikam from trunk : BUGFIX : All color correction image
+	  plugins from DigikamImagePlugins will remember the 'separate
+	  view' mode at next instance.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-07-03 18:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/configure.in.in:
+	  digikam from trunk : checking imageplugin.h header file is not
+	  enough for DigikamImagePlugins now. We check if dimg.h is
+	  available for digiKam 0.9.0...
+
+2006-06-29 19:56  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp:
+	  digikam from trunk : GIF -> TIF
+
+2006-06-29 11:06  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp:
+	  fix spacer position
+
+2006-06-29 11:03  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/channelmixer/channelmixer.cpp:
+	  fix spacer position
+
+2006-06-29 10:59  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustlevels/adjustlevels.cpp:
+	  fix spacer position
+
+2006-06-29 10:52  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/adjustcurves/adjustcurves.cpp:
+	  fix spacer position
+
+2006-06-29 07:48  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/ChangeLog: update
+	  changelog file
+
+2006-06-28 17:02  ach
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+	  
+	  trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+	  
+	  trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+	  
+	  trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+	  trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+	  
+	  trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
+	  digikam trunk:
+	  o some (hopefully all) s/Digikam/digiKam/. Thx prokoudine!
+	  o consistent capitalisation in .protocol Description
 
 2006-06-27 07:43  binner
 
