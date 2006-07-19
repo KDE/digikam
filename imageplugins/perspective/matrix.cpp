@@ -25,7 +25,11 @@
  * 
  * ============================================================ */
 
-#include <string.h>
+// C++ includes.
+
+#include <cstring>
+
+// Local includes.
 
 #include "matrix.h"
 
