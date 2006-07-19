@@ -64,7 +64,7 @@ Depencies :
 AutoConf >= 2.5
 AutoMake >= 1.7.0
 KDE 3.x
-digiKam >= 0.8.0
+digiKam >= 0.9.0
 
 
 Installation :
