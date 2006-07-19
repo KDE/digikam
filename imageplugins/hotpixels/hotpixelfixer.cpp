@@ -278,7 +278,12 @@ void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, 
                     if (fabs (v) <= DBL_MIN)
                         component=0;
                     else if (sum_weight >= DBL_MIN)
-                        component=(int) (v/sum_weight);
+			{	
+                        	component=(int) (v/sum_weight);
+				//Clamp value
+				if (component<0) component=0;
+				if (component>maxComponent) component=maxComponent;
+			}
                     else if (v >= 0.0)
                         component=maxComponent;
                     else
