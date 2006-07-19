@@ -30,10 +30,6 @@
 #include <cmath>
 #include <cstdlib>
  
-// Digikam includes.
-
-#include <digikamheaders.h>
-
 // Local includes.
 
 #include "pixelaccess.h"
