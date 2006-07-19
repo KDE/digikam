@@ -17,5 +17,5 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dmetadata/loaders \
 	   -I$(top_srcdir)/digikam/ \
 	   $(all_includes)
 
-digikaminclude_HEADERS = dmetadata.h
+digikaminclude_HEADERS = dmetadata.h photoinfocontainer.h 
 digikamincludedir = $(includedir)/digikam
