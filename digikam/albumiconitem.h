@@ -31,6 +31,9 @@
 
 #include "iconitem.h"
 
+class QPainter;
+class QString;
+
 namespace Digikam
 {
 
@@ -51,6 +54,8 @@ public:
     QRect thumbnailRect() const;
 
     bool isDirty();
+
+    static QString squeezedText(QPainter* p, int width, const QString& text);
 
     virtual int compare(IconItem *item);
     virtual QRect clickToOpenRect();

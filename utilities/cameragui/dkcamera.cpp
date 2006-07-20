@@ -79,7 +79,11 @@ QString DKCamera::mimeType(const QString& fileext) const
     else if (ext == "tif")
         ext = "tiff";
     
-    if (m_imageFilter.contains(ext))
+    if (m_rawFilter.contains(ext))
+    {
+        return QString("image/x-raw");
+    }
+    else if (m_imageFilter.contains(ext))
     {
         return QString("image/") + ext;
     }
@@ -90,10 +94,6 @@ QString DKCamera::mimeType(const QString& fileext) const
     else if (m_audioFilter.contains(ext))
     {
         return QString("audio/") + ext;
-    }
-    else if (m_rawFilter.contains(ext))
-    {
-        return QString("image/x-raw");
     }
     else
     {

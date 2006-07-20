@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-21
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-09-21
+ * Description : camera icon view item 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -34,6 +36,7 @@ namespace Digikam
 {
 
 class GPItemInfo;
+class CameraIconViewItemPriv;
 
 class CameraIconViewItem : public IconItem
 {
@@ -48,10 +51,9 @@ public:
     
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
-    void    setDownloaded();
+    void    setDownloaded(int status);
 
-    GPItemInfo* itemInfo() const
-        { return m_itemInfo; }
+    GPItemInfo* itemInfo() const;
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();
@@ -62,23 +64,11 @@ protected:
     
 private:
 
-    void calcRect();
+    void calcRect(const QString& itemName, const QString& downloadName);
 
 private:
 
-    GPItemInfo        *m_itemInfo;
-    QString            m_downloadName;
-    QPixmap            m_pixmap;
-
-    QRect              m_pixRect;
-    QRect              m_textRect;
-    QRect              m_extraRect;
-    
-    static QPixmap    *m_newEmblem;
-    static const char *new_xpm[];
-
-    friend class CameraUI;
-    friend class CameraIconView;
+    CameraIconViewItemPriv* d;
     
 };
 

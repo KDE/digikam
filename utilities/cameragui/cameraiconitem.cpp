@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-21
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-09-21
+ * Description : camera icon view item 
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,16 +25,51 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
+// KDE includes.
+
+#include <kiconloader.h>
+
 // Local includes.
 
 #include "iconview.h"
+#include "albumiconitem.h"
 #include "gpiteminfo.h"
+#include "themeengine.h"
+#include "cameraiconview.h"
 #include "cameraiconitem.h"
 
 namespace Digikam
 {
 
-const char* CameraIconViewItem::new_xpm[] =
+class CameraIconViewItemPriv
+{
+
+public:
+
+    CameraIconViewItemPriv()
+    {
+        itemInfo            = 0;
+        pixmapNewPicture    = QPixmap(newPicture_xpm);
+        pixmapUnknowPicture = QPixmap(unknowPicture_xpm);
+    }
+
+    static const char *newPicture_xpm[];
+    static const char *unknowPicture_xpm[];
+
+    QString            downloadName;
+
+    QPixmap            pixmap;
+    QPixmap            pixmapNewPicture;
+    QPixmap            pixmapUnknowPicture;
+
+    QRect              pixRect;
+    QRect              textRect;
+    QRect              extraRect;
+
+    GPItemInfo        *itemInfo;
+};
+
+const char *CameraIconViewItemPriv::newPicture_xpm[] =
 {
     "13 13 8 1",
     "       c None",
@@ -58,100 +95,211 @@ const char* CameraIconViewItem::new_xpm[] =
     "      @      "
 };
 
-QPixmap* CameraIconViewItem::m_newEmblem = 0;
+const char *CameraIconViewItemPriv::unknowPicture_xpm[] = 
+{
+    "16 16 78 1",
+    "   g None",
+    ".  g #777777",
+    "+  g #7A7A7A",
+    "@  g #8C8C8C",
+    "#  g #787878",
+    "$  g #707070",
+    "%  g #878787",
+    "&  g #C3C3C3",
+    "*  g #EAEAEA",
+    "=  g #E4E4E4",
+    "-  g #E2E2E2",
+    ";  g #E6E6E6",
+    ">  g #CECECE",
+    ",  g #888888",
+    "'  g #6B6B6B",
+    ")  g #969696",
+    "!  g #DEDEDE",
+    "~  g #D8D8D8",
+    "{  g #FFFFFF",
+    "]  g #F2F2F2",
+    "^  g #DFDFDF",
+    "/  g #9D9D9D",
+    "(  g #686868",
+    "_  g #848484",
+    ":  g #D0D0D0",
+    "<  g #F1F1F1",
+    "[  g #F0F0F0",
+    "}  g #EBEBEB",
+    "|  g #FDFDFD",
+    "1  g #DDDDDD",
+    "2  g #D4D4D4",
+    "3  g #838383",
+    "4  g #ABABAB",
+    "5  g #C8C8C8",
+    "6  g #CCCCCC",
+    "7  g #F4F4F4",
+    "8  g #D6D6D6",
+    "9  g #E8E8E8",
+    "0  g #C4C4C4",
+    "a  g #A4A4A4",
+    "b  g #656565",
+    "c  g #B4B4B4",
+    "d  g #B9B9B9",
+    "e  g #BDBDBD",
+    "f  g #B7B7B7",
+    "g  g #898989",
+    "h  g #6D6D6D",
+    "i  g #808080",
+    "j  g #AAAAAA",
+    "k  g #A9A9A9",
+    "l  g #737373",
+    "m  g #7F7F7F",
+    "n  g #9A9A9A",
+    "o  g #D3D3D3",
+    "p  g #909090",
+    "q  g #727272",
+    "r  g #8F8F8F",
+    "s  g #8E8E8E",
+    "t  g #8D8D8D",
+    "u  g #EEEEEE",
+    "v  g #FAFAFA",
+    "w  g #929292",
+    "x  g #C5C5C5",
+    "y  g #5F5F5F",
+    "z  g #989898",
+    "A  g #CFCFCF",
+    "B  g #9C9C9C",
+    "C  g #A0A0A0",
+    "D  g #FEFEFE",
+    "E  g #ACACAC",
+    "F  g #5E5E5E",
+    "G  g #868686",
+    "H  g #AFAFAF",
+    "I  g #C1C1C1",
+    "J  g #818181",
+    "K  g #7E7E7E",
+    "L  g #7B7B7B",
+    "M  g #636363",
+    "                ",
+    "     .+@@#$     ",
+    "   .%&*=-;>,'   ",
+    "  .)!~={{]^-/(  ",
+    "  _::<{[}|{123  ",
+    " .456{7558{90ab ",
+    " +cde96df={&g,h ",
+    " ijjjjjk;{=@,,l ",
+    " mnnnnno{-pgggq ",
+    " #rprstuvwtttt' ",
+    " $tpppp6xpppp@y ",
+    "  mnnnzA~Bnnn.  ",
+    "  'taaCD{Eaa,F  ",
+    "   (GjHI0HjJF   ",
+    "     (K,,LM     ",
+    "                "
+};
 
 CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
                                        const QPixmap& pix, const QString& downloadName)
                   : IconItem(parent)
 {
-    m_itemInfo     = new GPItemInfo(itemInfo);
-    m_downloadName = downloadName;
-    m_pixmap       = pix;
-
-    calcRect();
+    d = new CameraIconViewItemPriv;
+    d->itemInfo     = new GPItemInfo(itemInfo);
+    d->downloadName = downloadName;
+    d->pixmap       = pix;
 }
 
 CameraIconViewItem::~CameraIconViewItem()
 {
-    delete m_itemInfo;
+    delete d->itemInfo;
+    delete d;
 }
 
 void CameraIconViewItem::setPixmap(const QPixmap& pixmap)
 {
-    m_pixmap = pixmap;
+    d->pixmap = pixmap;
+}
+
+GPItemInfo* CameraIconViewItem::itemInfo() const
+{
+    return d->itemInfo; 
 }
 
 void CameraIconViewItem::paintItem()
 {
-    IconView* view = iconView();
+    CameraIconView* view = (CameraIconView*)iconView();
     QColorGroup cg = view->colorGroup();
     QFont fn(view->font());
 
+    QPixmap pix;
     QRect r(rect());
 
-    QPixmap pix(r.width(), r.height());
-    pix.fill(isSelected() ? view->colorGroup().highlight() :
-             view->colorGroup().base());
+    if (isSelected())
+        pix = *(view->itemBaseSelPixmap());
+    else
+        pix = *(view->itemBaseRegPixmap());
+    
+    ThemeEngine* te = ThemeEngine::instance();
 
     QPainter p(&pix);
 
-    p.drawPixmap(m_pixRect.x() + (m_pixRect.width() - m_pixmap.width())/2,
-                 m_pixRect.y() + (m_pixRect.height() - m_pixmap.height())/2,
-                 m_pixmap);
+    QString itemName     = AlbumIconItem::squeezedText(&p, r.width()-5, d->itemInfo->name);
+    QString downloadName = AlbumIconItem::squeezedText(&p, r.width()-5, d->downloadName);
+    calcRect(itemName, downloadName);
 
-    if (isSelected())
-    {
-        QPen pen;
-        pen.setColor(cg.highlight());
-        p.setPen(pen);
-        p.drawRect(0, 0, pix.width(), pix.height());
-        p.fillRect(0, m_textRect.y(), pix.width(),
-                   m_textRect.height(), cg.highlight() );
-        p.setPen( QPen( cg.highlightedText() ) );
-    }
-    else
-    {
-        QPen pen;
-        pen.setColor(cg.button());
-        p.setPen(pen);
-        p.drawRect(0, 0, pix.width(), pix.height());
-        p.fillRect(0, m_textRect.y(), pix.width(),
-                   m_textRect.height(), cg.button() );
-        p.setPen( cg.text() );
-    }    
+    p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    p.drawText(m_textRect, Qt::WordBreak|Qt::BreakAnywhere|
-               Qt::AlignHCenter|Qt::AlignTop, m_itemInfo->name);
+    p.drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
+                 d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
+                 d->pixmap);
 
-    if (!m_downloadName.isEmpty())
+    p.drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
+
+    if (!d->downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
-        {
             fn.setPointSize(QMAX(fn.pointSize()-2, 6));
-        }
 
         p.setFont(fn);
-        if (!isSelected())
-            p.setPen(QPen("steelblue"));
-        p.drawText(m_extraRect, Qt::WordBreak|
-                   Qt::BreakAnywhere|Qt::AlignHCenter|
-                   Qt::AlignTop,m_downloadName);
+        p.setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
+        p.drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
     }
 
     if (this == iconView()->currentItem())
     {
-        p.setPen(QPen(isSelected() ? Qt::white : Qt::black,
-                      1, Qt::DotLine));
+        p.setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
         p.drawRect(0, 0, r.width(), r.height());
     }
+
+    QPixmap downloaded;
     
-    if (m_itemInfo->downloaded == 0)
+    switch (d->itemInfo->downloaded)
     {
-        int x = rect().width() - m_newEmblem->width() - 5;
-        int y = 5;
-        p.drawPixmap(x, y, *m_newEmblem);
+        case GPItemInfo::DownloadedNo:
+        {
+            downloaded = d->pixmapNewPicture;
+            break;
+        }
+        case GPItemInfo::DownloadedYes:
+        {
+            downloaded = SmallIcon( "button_ok" );
+            break;
+        }
+        case GPItemInfo::DownloadStarted:
+        {
+            downloaded = SmallIcon( "run" );
+            break;
+        }
+        case GPItemInfo::DownloadFailed:
+        {
+            downloaded = SmallIcon( "button_cancel" );
+            break;
+        }
+        case GPItemInfo::DownloadUnknow:
+        {
+            downloaded = d->pixmapUnknowPicture;
+            break;
+        }
     }
-    
+
+    int x = rect().width() - downloaded.width() - 5;
+    int y = 5;
+    p.drawPixmap(x, y, downloaded);
     p.end();
 
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
@@ -162,47 +310,42 @@ void CameraIconViewItem::paintItem()
 
 void CameraIconViewItem::setDownloadName(const QString& downloadName)
 {
-    m_downloadName = downloadName;
-    calcRect();
+    d->downloadName = downloadName;
     repaint();
 }
 
 QString CameraIconViewItem::getDownloadName() const
 {
-    return m_downloadName;
+    return d->downloadName;
 }
 
-void CameraIconViewItem::setDownloaded()
+void CameraIconViewItem::setDownloaded(int status)
 {
-    if (m_itemInfo->downloaded != 1)
-    {
-        m_itemInfo->downloaded = 1;
-        repaint();
-    }
+    d->itemInfo->downloaded = status;
+    repaint();
 }
 
-void CameraIconViewItem::calcRect()
+void CameraIconViewItem::calcRect(const QString& itemName, const QString& downloadName)
 {
     const int thumbSize = 128;
     
-    m_pixRect       = QRect(0,0,0,0);
-    m_textRect      = QRect(0,0,0,0);
-    m_extraRect     = QRect(0,0,0,0);
-    QRect itemRect  = rect();
+    d->pixRect     = QRect(0,0,0,0);
+    d->textRect    = QRect(0,0,0,0);
+    d->extraRect   = QRect(0,0,0,0);
+    QRect itemRect = rect();
     itemRect.moveTopLeft(QPoint(0,0));
 
-    m_pixRect.setWidth(thumbSize);
-    m_pixRect.setHeight(thumbSize);
+    d->pixRect.setWidth(thumbSize);
+    d->pixRect.setHeight(thumbSize);
 
     QFontMetrics fm(iconView()->font());
     QRect r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                    Qt::AlignHCenter | Qt::AlignTop |
-                                    Qt::WordBreak | Qt::BreakAnywhere,
-                                    m_itemInfo->name));
-    m_textRect.setWidth(r.width());
-    m_textRect.setHeight(r.height());
+                                    Qt::AlignHCenter | Qt::AlignTop,
+                                    itemName));
+    d->textRect.setWidth(r.width());
+    d->textRect.setHeight(r.height());
 
-    if (!m_downloadName.isEmpty())
+    if (!d->downloadName.isEmpty())
     {
         QFont fn(iconView()->font());
         if (fn.pointSize() > 0)
@@ -212,33 +355,32 @@ void CameraIconViewItem::calcRect()
 
         fm = QFontMetrics(fn);
         r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                  Qt::AlignHCenter | Qt::WordBreak |
-                                  Qt::BreakAnywhere | Qt::AlignTop,
-                                  m_downloadName));
-        m_extraRect.setWidth(r.width());
-        m_extraRect.setHeight(r.height());
+                                  Qt::AlignHCenter | Qt::WordBreak,
+                                  downloadName));
+        d->extraRect.setWidth(r.width());
+        d->extraRect.setHeight(r.height());
 
-        m_textRect.setWidth(QMAX(m_textRect.width(), m_extraRect.width()));
-        m_textRect.setHeight(m_textRect.height() + m_extraRect.height());
+        d->textRect.setWidth(QMAX(d->textRect.width(), d->extraRect.width()));
+        d->textRect.setHeight(d->textRect.height() + d->extraRect.height());
     }
     
-    int w = QMAX(m_textRect.width(), m_pixRect.width() );
-    int h = m_textRect.height() + m_pixRect.height() ;
+    int w = QMAX(d->textRect.width(), d->pixRect.width() );
+    int h = d->textRect.height() + d->pixRect.height() ;
 
     itemRect.setWidth(w+4);
     itemRect.setHeight(h+4);
 
     // Center the pix and text rect
-    m_pixRect = QRect(2, 2, m_pixRect.width(), m_pixRect.height());
-    m_textRect = QRect((itemRect.width() - m_textRect.width())/2,
-                       itemRect.height() - m_textRect.height(),
-                       m_textRect.width(), m_textRect.height());
+    d->pixRect = QRect(2, 2, d->pixRect.width(), d->pixRect.height());
+    d->textRect = QRect((itemRect.width() - d->textRect.width())/2,
+                       itemRect.height() - d->textRect.height(),
+                       d->textRect.width(), d->textRect.height());
 
-    if (!m_extraRect.isEmpty())
+    if (!d->extraRect.isEmpty())
     {
-        m_extraRect = QRect((itemRect.width() - m_extraRect.width())/2,
-                            itemRect.height() - m_extraRect.height(),
-                            m_extraRect.width(), m_extraRect.height());
+        d->extraRect = QRect((itemRect.width() - d->extraRect.width())/2,
+                            itemRect.height() - d->extraRect.height(),
+                            d->extraRect.width(), d->extraRect.height());
     }
 }
 
@@ -246,17 +388,17 @@ QRect CameraIconViewItem::clickToOpenRect()
 {
     QRect r(rect());
     
-    if (m_pixmap.isNull())
+    if (d->pixmap.isNull())
     {
-        QRect pixRect(m_pixRect);
+        QRect pixRect(d->pixRect);
         pixRect.moveBy(r.x(), r.y());
         return pixRect;
     }
 
-    QRect pixRect(m_pixRect.x() + (m_pixRect.width() - m_pixmap.width())/2,
-                  m_pixRect.y() + (m_pixRect.height() - m_pixmap.height())/2,
-                  m_pixmap.width(),
-                  m_pixmap.height());
+    QRect pixRect(d->pixRect.x() + (d->pixRect.width() - d->pixmap.width())/2,
+                  d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
+                  d->pixmap.width(),
+                  d->pixmap.height());
     pixRect.moveBy(r.x(), r.y());
     return pixRect;
 }

@@ -53,6 +53,7 @@ public:
                         const QString &newFileName=QString::null,
                         const QByteArray& exifData=QByteArray(),
                         const KURL &currentURL = KURL());
+    void colorChanged(const QColor& back, const QColor& fore);
 
 signals:
 

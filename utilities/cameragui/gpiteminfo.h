@@ -39,12 +39,24 @@ namespace Digikam
 
 class GPItemInfo
 {
+
+public:
+
+    enum DownloadStatus
+    {
+        DownloadUnknow  = -1,
+        DownloadedNo    = 0,
+        DownloadedYes   = 1,
+        DownloadFailed  = 2,
+        DownloadStarted = 3,
+    };
+
 public:
     
     long    size;
     int     width;
     int     height;
-    int     downloaded;
+    int     downloaded;           // See DownloadStatus enum.
     int     readPermissions;
     int     writePermissions;
 

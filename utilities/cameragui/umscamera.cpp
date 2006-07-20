@@ -138,7 +138,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.size             = fi->size();
             info.width            = dims.width();
             info.height           = dims.height();
-            info.downloaded       = -1; // TODO
+            info.downloaded       = GPItemInfo::DownloadUnknow;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
 
@@ -211,11 +211,11 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     return false;
 }
 
-bool UMSCamera::getExif(const QString&, const QString&, char **,int&)
+bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
     // not necessary to implement this. read it directly from the file
     // (done in camera controller)
-    kdWarning() << "exif implemented yet" << endl;
+    kdWarning() << "exif implemented yet in camera controler" << endl;
     return false;
 }
 

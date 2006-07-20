@@ -56,6 +56,16 @@ public:
 
     CameraItemPropertiesTabPriv()
     {
+        title                  = 0;
+        folder                 = 0;
+        date                   = 0;
+        size                   = 0;
+        isReadable             = 0;
+        isWritable             = 0;
+        mime                   = 0;
+        dimensions             = 0;
+        newFileName            = 0;
+        downloaded             = 0;
         navigateBar            = 0;
         settingsArea           = 0;
         title2                 = 0;
@@ -89,6 +99,17 @@ public:
         labelPhotoFlash        = 0;
         labelPhotoWhiteBalance = 0;
     }
+
+    QLabel             *title;
+    QLabel             *folder;
+    QLabel             *date;
+    QLabel             *size;
+    QLabel             *isReadable;
+    QLabel             *isWritable;
+    QLabel             *mime;
+    QLabel             *dimensions;
+    QLabel             *newFileName;
+    QLabel             *downloaded;
 
     QLabel             *title2;
     QLabel             *make;
@@ -143,76 +164,76 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    QLabel *title               = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), d->settingsArea);
-    QLabel *folder              = new QLabel(i18n("<b>Folder</b>:"), d->settingsArea);
-    QLabel *date                = new QLabel(i18n("<b>Date</b>:"), d->settingsArea);
-    QLabel *size                = new QLabel(i18n("<b>Size</b>:"), d->settingsArea);
-    QLabel *isReadable          = new QLabel(i18n("<b>Readable</b>:"), d->settingsArea);
-    QLabel *isWritable          = new QLabel(i18n("<b>Writable</b>:"), d->settingsArea);
-    QLabel *mime                = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
-    QLabel *dimensions          = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
-    QLabel *newFileName         = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), d->settingsArea);
-    QLabel *downloaded          = new QLabel(i18n("<b>Downloaded</b>:"), d->settingsArea);
+    d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), d->settingsArea);
+    d->folder                 = new QLabel(i18n("<b>Folder</b>:"), d->settingsArea);
+    d->date                   = new QLabel(i18n("<b>Date</b>:"), d->settingsArea);
+    d->size                   = new QLabel(i18n("<b>Size</b>:"), d->settingsArea);
+    d->isReadable             = new QLabel(i18n("<b>Readable</b>:"), d->settingsArea);
+    d->isWritable             = new QLabel(i18n("<b>Writable</b>:"), d->settingsArea);
+    d->mime                   = new QLabel(i18n("<b>Type</b>:"), d->settingsArea);
+    d->dimensions             = new QLabel(i18n("<b>Dimensions</b>:"), d->settingsArea);
+    d->newFileName            = new QLabel(i18n("<nobr><b>New Name</b></nobr>:"), d->settingsArea);
+    d->downloaded             = new QLabel(i18n("<b>Downloaded</b>:"), d->settingsArea);
 
-    KSeparator *line            = new KSeparator (Horizontal, d->settingsArea);
-    d->title2                   = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
-    d->make                     = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
-    d->model                    = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);
-    d->photoDate                = new QLabel(i18n("<b>Created</b>:"), d->settingsArea);
-    d->aperture                 = new QLabel(i18n("<b>Aperture</b>:"), d->settingsArea);
-    d->focalLenght              = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
-    d->exposureTime             = new QLabel(i18n("<b>Exposure</b>:"), d->settingsArea);
-    d->sensitivity              = new QLabel(i18n("<b>Sensitivity</b>:"), d->settingsArea);
-    d->exposureMode             = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), d->settingsArea);
-    d->flash                    = new QLabel(i18n("<b>Flash</b>:"), d->settingsArea);
-    d->whiteBalance             = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), d->settingsArea);
+    KSeparator *line          = new KSeparator (Horizontal, d->settingsArea);
+    d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), d->settingsArea);
+    d->make                   = new QLabel(i18n("<b>Make</b>:"), d->settingsArea);
+    d->model                  = new QLabel(i18n("<b>Model</b>:"), d->settingsArea);
+    d->photoDate              = new QLabel(i18n("<b>Created</b>:"), d->settingsArea);
+    d->aperture               = new QLabel(i18n("<b>Aperture</b>:"), d->settingsArea);
+    d->focalLenght            = new QLabel(i18n("<b>Focal</b>:"), d->settingsArea);
+    d->exposureTime           = new QLabel(i18n("<b>Exposure</b>:"), d->settingsArea);
+    d->sensitivity            = new QLabel(i18n("<b>Sensitivity</b>:"), d->settingsArea);
+    d->exposureMode           = new QLabel(i18n("<nobr><b>Mode/Program</b></nobr>:"), d->settingsArea);
+    d->flash                  = new QLabel(i18n("<b>Flash</b>:"), d->settingsArea);
+    d->whiteBalance           = new QLabel(i18n("<nobr><b>White balance</b></nobr>:"), d->settingsArea);
 
-    d->labelFolder              = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileDate            = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileSize            = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileIsReadable      = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelFileIsWritable      = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageMime           = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelImageDimensions     = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelNewFileName         = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelAlreadyDownloaded   = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFolder            = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFileDate          = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFileSize          = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFileIsReadable    = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelFileIsWritable    = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelImageMime         = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelImageDimensions   = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelNewFileName       = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelAlreadyDownloaded = new KSqueezedTextLabel(0, d->settingsArea);
 
-    d->labelPhotoMake           = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoModel          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoDateTime       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoAperture       = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFocalLenght    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureTime   = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoSensitivity    = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoExposureMode   = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoFlash          = new KSqueezedTextLabel(0, d->settingsArea);
-    d->labelPhotoWhiteBalance   = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoMake         = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoModel        = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoDateTime     = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoAperture     = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoFocalLenght  = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoExposureTime = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoSensitivity  = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoExposureMode = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoFlash        = new KSqueezedTextLabel(0, d->settingsArea);
+    d->labelPhotoWhiteBalance = new KSqueezedTextLabel(0, d->settingsArea);
 
-    title->setAlignment(Qt::AlignCenter);
+    d->title->setAlignment(Qt::AlignCenter);
     d->title2->setAlignment(Qt::AlignCenter);
 
     // --------------------------------------------------
 
-    settingsLayout->addMultiCellWidget(title, 0, 0, 0, 1);
+    settingsLayout->addMultiCellWidget(d->title, 0, 0, 0, 1);
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(), 
                                  QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(folder, 2, 2, 0, 0);
+    settingsLayout->addMultiCellWidget(d->folder, 2, 2, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFolder, 2, 2, 1, 1);
-    settingsLayout->addMultiCellWidget(date, 3, 3, 0, 0);
+    settingsLayout->addMultiCellWidget(d->date, 3, 3, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFileDate, 3, 3, 1, 1);
-    settingsLayout->addMultiCellWidget(size, 4, 4, 0, 0);
+    settingsLayout->addMultiCellWidget(d->size, 4, 4, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFileSize, 4, 4, 1, 1);
-    settingsLayout->addMultiCellWidget(isReadable, 5, 5, 0, 0);
+    settingsLayout->addMultiCellWidget(d->isReadable, 5, 5, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFileIsReadable, 5, 5, 1, 1);
-    settingsLayout->addMultiCellWidget(isWritable, 6, 6, 0, 0);
+    settingsLayout->addMultiCellWidget(d->isWritable, 6, 6, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelFileIsWritable, 6, 6, 1, 1);
-    settingsLayout->addMultiCellWidget(mime, 7, 7, 0, 0);
+    settingsLayout->addMultiCellWidget(d->mime, 7, 7, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelImageMime, 7, 7, 1, 1);
-    settingsLayout->addMultiCellWidget(dimensions, 8, 8, 0, 0);
+    settingsLayout->addMultiCellWidget(d->dimensions, 8, 8, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelImageDimensions, 8, 8, 1, 1);
-    settingsLayout->addMultiCellWidget(newFileName, 9, 9, 0, 0);
+    settingsLayout->addMultiCellWidget(d->newFileName, 9, 9, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelNewFileName, 9, 9, 1, 1);
-    settingsLayout->addMultiCellWidget(downloaded, 10, 10, 0, 0);
+    settingsLayout->addMultiCellWidget(d->downloaded, 10, 10, 0, 0);
     settingsLayout->addMultiCellWidget(d->labelAlreadyDownloaded, 10, 10, 1, 1);
 
     settingsLayout->addMultiCell(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
@@ -490,6 +511,99 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
 
     d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+}
+
+void CameraItemPropertiesTab::colorChanged(const QColor& back, const QColor& fore)
+{
+    d->settingsArea->setPaletteBackgroundColor(back);
+
+    d->title->setPaletteBackgroundColor(back);
+    d->folder->setPaletteBackgroundColor(back);
+    d->date->setPaletteBackgroundColor(back);
+    d->size->setPaletteBackgroundColor(back);
+    d->isReadable->setPaletteBackgroundColor(back);
+    d->isWritable->setPaletteBackgroundColor(back);
+    d->mime->setPaletteBackgroundColor(back);
+    d->dimensions->setPaletteBackgroundColor(back);
+    d->newFileName->setPaletteBackgroundColor(back);
+    d->downloaded->setPaletteBackgroundColor(back);
+
+    d->title2->setPaletteBackgroundColor(back);
+    d->make->setPaletteBackgroundColor(back);
+    d->model->setPaletteBackgroundColor(back);
+    d->photoDate->setPaletteBackgroundColor(back);
+    d->aperture->setPaletteBackgroundColor(back);
+    d->focalLenght->setPaletteBackgroundColor(back);
+    d->exposureTime->setPaletteBackgroundColor(back);
+    d->sensitivity->setPaletteBackgroundColor(back);
+    d->exposureMode->setPaletteBackgroundColor(back);
+    d->flash->setPaletteBackgroundColor(back);
+    d->whiteBalance->setPaletteBackgroundColor(back);
+
+    d->labelFolder->setPaletteBackgroundColor(back);
+    d->labelFileIsReadable->setPaletteBackgroundColor(back);
+    d->labelFileIsWritable->setPaletteBackgroundColor(back);
+    d->labelFileDate->setPaletteBackgroundColor(back);
+    d->labelFileSize->setPaletteBackgroundColor(back);
+    d->labelImageMime->setPaletteBackgroundColor(back);
+    d->labelImageDimensions->setPaletteBackgroundColor(back);
+    d->labelNewFileName->setPaletteBackgroundColor(back);
+    d->labelAlreadyDownloaded->setPaletteBackgroundColor(back);
+
+    d->labelPhotoMake->setPaletteBackgroundColor(back);
+    d->labelPhotoModel->setPaletteBackgroundColor(back);
+    d->labelPhotoDateTime->setPaletteBackgroundColor(back);
+    d->labelPhotoAperture->setPaletteBackgroundColor(back);
+    d->labelPhotoFocalLenght->setPaletteBackgroundColor(back);
+    d->labelPhotoExposureTime->setPaletteBackgroundColor(back);
+    d->labelPhotoSensitivity->setPaletteBackgroundColor(back);
+    d->labelPhotoExposureMode->setPaletteBackgroundColor(back);
+    d->labelPhotoFlash->setPaletteBackgroundColor(back);
+    d->labelPhotoWhiteBalance->setPaletteBackgroundColor(back);
+
+    d->title->setPaletteForegroundColor(fore);
+    d->folder->setPaletteForegroundColor(fore);
+    d->date->setPaletteForegroundColor(fore);
+    d->size->setPaletteForegroundColor(fore);
+    d->isReadable->setPaletteForegroundColor(fore);
+    d->isWritable->setPaletteForegroundColor(fore);
+    d->mime->setPaletteForegroundColor(fore);
+    d->dimensions->setPaletteForegroundColor(fore);
+    d->newFileName->setPaletteForegroundColor(fore);
+    d->downloaded->setPaletteForegroundColor(fore);
+
+    d->title2->setPaletteForegroundColor(fore);
+    d->make->setPaletteForegroundColor(fore);
+    d->model->setPaletteForegroundColor(fore);
+    d->photoDate->setPaletteForegroundColor(fore);
+    d->aperture->setPaletteForegroundColor(fore);
+    d->focalLenght->setPaletteForegroundColor(fore);
+    d->exposureTime->setPaletteForegroundColor(fore);
+    d->sensitivity->setPaletteForegroundColor(fore);
+    d->exposureMode->setPaletteForegroundColor(fore);
+    d->flash->setPaletteForegroundColor(fore);
+    d->whiteBalance->setPaletteForegroundColor(fore);
+
+    d->labelFolder->setPaletteForegroundColor(fore);
+    d->labelFileIsReadable->setPaletteForegroundColor(fore);
+    d->labelFileIsWritable->setPaletteForegroundColor(fore);
+    d->labelFileDate->setPaletteForegroundColor(fore);
+    d->labelFileSize->setPaletteForegroundColor(fore);
+    d->labelImageMime->setPaletteForegroundColor(fore);
+    d->labelImageDimensions->setPaletteForegroundColor(fore);
+    d->labelNewFileName->setPaletteForegroundColor(fore);
+    d->labelAlreadyDownloaded->setPaletteForegroundColor(fore);
+
+    d->labelPhotoMake->setPaletteForegroundColor(fore);
+    d->labelPhotoModel->setPaletteForegroundColor(fore);
+    d->labelPhotoDateTime->setPaletteForegroundColor(fore);
+    d->labelPhotoAperture->setPaletteForegroundColor(fore);
+    d->labelPhotoFocalLenght->setPaletteForegroundColor(fore);
+    d->labelPhotoExposureTime->setPaletteForegroundColor(fore);
+    d->labelPhotoSensitivity->setPaletteForegroundColor(fore);
+    d->labelPhotoExposureMode->setPaletteForegroundColor(fore);
+    d->labelPhotoFlash->setPaletteForegroundColor(fore);
+    d->labelPhotoWhiteBalance->setPaletteForegroundColor(fore);
 }
 
 }  // NameSpace Digikam

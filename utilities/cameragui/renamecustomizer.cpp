@@ -1,6 +1,7 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-19
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-19
  * Description : a options group to set renaming files
  *               operations during camera downloading
  *
@@ -298,6 +299,11 @@ void RenameCustomizer::saveSettings()
     config->writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
     config->writeEntry("Rename Prefix", d->renameCustomPrefix->text());
     config->sync();
+}
+
+void RenameCustomizer::setFocusToCustomPrefix()
+{
+    d->renameCustomPrefix->setFocus();
 }
 
 }  // namespace Digikam

@@ -371,8 +371,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->controller, SIGNAL(signalThumbnail(const QString&, const QString&, const QImage&)),
             this, SLOT(slotThumbnail(const QString&, const QString&, const QImage&)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&)),
-            this, SLOT(slotDownloaded(const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
+            this, SLOT(slotDownloaded(const QString&, const QString&, int)));
 
     connect(d->controller, SIGNAL(signalSkipped(const QString&, const QString&)),
             this, SLOT(slotSkipped(const QString&, const QString&)));
@@ -537,7 +537,11 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = false;
         d->cancelBtn->setEnabled(false);
+
         d->advBox->setEnabled(true);
+        // B.K.O #127614: The Focus need to be restored in custom prefix widget.
+        d->renameCustomizer->setFocusToCustomPrefix();
+
         enableButton(User2, true);
         enableButton(User1, true);
         d->anim->stop();
@@ -703,10 +707,10 @@ void CameraUI::slotDownload(bool onlySelected)
             continue;
 
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        folder       = iconItem->m_itemInfo->folder;
-        name         = iconItem->m_itemInfo->name;
+        folder       = iconItem->itemInfo()->folder;
+        name         = iconItem->itemInfo()->name;
         downloadName = iconItem->getDownloadName();
-        mtime        = iconItem->m_itemInfo->mtime;
+        mtime        = iconItem->itemInfo()->mtime;
         
         KURL u(url);
         
@@ -760,8 +764,8 @@ void CameraUI::slotDeleteSelected()
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
         if (iconItem->isSelected())
         {
-            QString folder = iconItem->m_itemInfo->folder;
-            QString file   = iconItem->m_itemInfo->name;
+            QString folder = iconItem->itemInfo()->folder;
+            QString file   = iconItem->itemInfo()->name;
             folders.append(folder);
             files.append(file);
             deleteList.append(folder + QString("/") + file);
@@ -807,8 +811,8 @@ void CameraUI::slotDeleteAll()
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        QString folder = iconItem->m_itemInfo->folder;
-        QString file   = iconItem->m_itemInfo->name;
+        QString folder = iconItem->itemInfo()->folder;
+        QString file   = iconItem->itemInfo()->name;
         folders.append(folder);
         files.append(file);
         deleteList.append(folder + QString("/") + file);
@@ -849,7 +853,6 @@ void CameraUI::slotFileView(CameraIconViewItem* item)
 void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
 {
     CameraIconViewItem* item = d->view->findItem(folder, file);
-
     if (!item)
         return;
 
@@ -935,23 +938,31 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
         d->rightSidebar->slotNoCurrentItem();
 }
 
-void CameraUI::slotDownloaded(const QString& folder, const QString& file)
+void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
     CameraIconViewItem* iconItem = d->view->findItem(folder, file);
     if (iconItem)
     {
-        iconItem->setDownloaded();
+        iconItem->setDownloaded(status);
+        d->view->ensureItemVisible(iconItem);
 
         if (iconItem->isSelected())
             slotItemsSelected(iconItem, true);
     }
     
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
+    if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
+    {
+        int curr = d->progress->progress();
+        d->progress->setProgress(curr+1);
+    }
 }
 
-void CameraUI::slotSkipped(const QString&, const QString&)
+void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
+    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+    if (iconItem)
+        d->view->ensureItemVisible(iconItem);
+
     int curr = d->progress->progress();
     d->progress->setProgress(curr+1);
 }
@@ -963,10 +974,8 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file)
     d->currentlyDeleting.remove(folder + file);
 }
 
-bool CameraUI::createAutoAlbum(const KURL& parentURL,
-                               const QString& name,
-                               const QDate& date,
-                               QString& errMsg)
+bool CameraUI::createAutoAlbum(const KURL& parentURL, const QString& name,
+                               const QDate& date, QString& errMsg)
 {
     KURL u(parentURL);
     u.addPath(name);

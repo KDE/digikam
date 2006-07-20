@@ -36,6 +36,7 @@
 // Local includes.
 
 #include "dmetadata.h"
+#include "themeengine.h"
 #include "gpiteminfo.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
@@ -96,6 +97,8 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
     appendTab(d->cameraItemTab, SmallIcon("info"), i18n("Properties"));
     appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
 
+    slotThemeChanged();
+
     // ----------------------------------------------------------
     
     connect(d->cameraItemTab, SIGNAL(signalFirstItem()),
@@ -124,6 +127,9 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget *parent, cons
                             
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
@@ -199,6 +205,13 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
     
     unsetCursor();
+}
+
+void ImagePropertiesSideBarCamGui::slotThemeChanged()
+{
+    QColor backgroundColor(ThemeEngine::instance()->baseColor());
+    QColor foregroundColor(ThemeEngine::instance()->textRegColor());
+    d->cameraItemTab->colorChanged(backgroundColor, foregroundColor);
 }
 
 }  // NameSpace Digikam

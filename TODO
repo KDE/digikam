@@ -29,8 +29,6 @@
 * B.K.O files to fix :
 
 ==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99
-==> 127614 : CameraGUI      : Focus steal when typing custom prefix in renaming options sidebar.
-==> 131034 : CameraGUI      : Display a mini-review of the photo currently transfered, i.e better visual feedback.
 
 ==> 111446 : Image Editor   : bad behaviour when out of disk space
 ==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor

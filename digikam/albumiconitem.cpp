@@ -78,7 +78,20 @@ static void dateToString(const QDateTime& datetime, QString& str)
     str = KGlobal::locale()->formatDateTime(datetime, true, false);
 }
 
-static QString squeezedText(QPainter* p, int width, const QString& text)
+AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
+             : IconItem(parent)
+{
+    d = new AlbumIconItemPriv;
+    d->view = (AlbumIconView*) parent->iconView();
+    d->info = info;
+}
+
+AlbumIconItem::~AlbumIconItem()
+{
+    delete d;
+}
+
+QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
 {
     QString fullText(text);
     fullText.replace("\n"," ");
@@ -132,19 +145,6 @@ static QString squeezedText(QPainter* p, int width, const QString& text)
     }
     
     return fullText;   
-}
-
-AlbumIconItem::AlbumIconItem(IconGroupItem* parent, ImageInfo* info)
-             : IconItem(parent)
-{
-    d = new AlbumIconItemPriv;
-    d->view = (AlbumIconView*) parent->iconView();
-    d->info = info;
-}
-
-AlbumIconItem::~AlbumIconItem()
-{
-    delete d;
 }
 
 bool AlbumIconItem::isDirty()

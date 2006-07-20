@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2004-09-18
- * Description : 
+ * Description : camera icon view
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
@@ -33,6 +33,8 @@
 #include "iconview.h"
 #include "renamecustomizer.h"
 
+class QPixmap;
+
 namespace Digikam
 {
 
@@ -40,6 +42,7 @@ class GPItemInfo;
 class RenameCustomizer;
 class CameraUI;
 class CameraIconViewItem;
+class CameraIconViewPriv;
 
 class CameraIconView : public IconView
 {
@@ -57,6 +60,9 @@ public:
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
 
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
+
+    QPixmap* itemBaseRegPixmap() const;
+    QPixmap* itemBaseSelPixmap() const;
 
     virtual QRect itemRect() const;
     
@@ -81,6 +87,7 @@ private slots:
 
     void slotContextMenu(IconItem* item, const QPoint& pos);
     void slotDoubleClicked(IconItem* item);
+    void slotThemeChanged();
 
 protected:
 
@@ -94,11 +101,8 @@ private:
 
 private:
 
-    QDict<CameraIconViewItem> m_itemDict;
-    RenameCustomizer*         m_renamer;
-    CameraUI*                 m_ui;
-    IconGroupItem*            m_groupItem;
-    QRect                     m_itemRect;
+    CameraIconViewPriv* d;
+
 };
 
 }  // namespace Digikam

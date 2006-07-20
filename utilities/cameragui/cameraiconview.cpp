@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2004-09-18
- * Description : 
+ * Description : camera icon view
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <qfile.h>
+#include <qtimer.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
@@ -43,6 +44,7 @@
 // Local includes.
 
 #include "cameraui.h"
+#include "themeengine.h"
 #include "gpiteminfo.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
@@ -52,15 +54,40 @@
 namespace Digikam
 {
 
-CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
-              : IconView(parent), m_renamer(0), m_ui(ui),
-                m_groupItem(new IconGroupItem(this))
+class CameraIconViewPriv
 {
+public:
+
+    CameraIconViewPriv()
+    {
+        renamer   = 0;
+        groupItem = 0;
+        cameraUI  = 0;
+    }
+
+    QDict<CameraIconViewItem>  itemDict;
+
+    QRect                      itemRect;
+
+    QPixmap                    itemRegPixmap;
+    QPixmap                    itemSelPixmap;
+
+    RenameCustomizer          *renamer;
+
+    IconGroupItem             *groupItem;
+
+    CameraUI                  *cameraUI;
+};
+
+CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
+              : IconView(parent)
+{
+    d = new CameraIconViewPriv;
+    d->cameraUI  = ui;
+    d->groupItem = new IconGroupItem(this);
     setHScrollBarMode(QScrollView::AlwaysOff);
     setMinimumSize(450, 400);
 
-    CameraIconViewItem::m_newEmblem = new QPixmap(CameraIconViewItem::new_xpm);
-    
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
             
@@ -70,21 +97,34 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     updateItemRectsPixmap();
+    slotThemeChanged();
 }
 
 CameraIconView::~CameraIconView()
 {
     clear();
-    delete CameraIconViewItem::m_newEmblem;
-    CameraIconViewItem::m_newEmblem = 0;
+    delete d;
+}
+
+QPixmap* CameraIconView::itemBaseRegPixmap() const
+{
+    return &d->itemRegPixmap;
+}
+
+QPixmap* CameraIconView::itemBaseSelPixmap() const
+{
+    return &d->itemSelPixmap;
 }
 
 void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
 {
-    m_renamer = renamer;
+    d->renamer = renamer;
     
-    connect(m_renamer, SIGNAL(signalChanged()),
+    connect(d->renamer, SIGNAL(signalChanged()),
             this, SLOT(slotDownloadNameChanged()));
 }
 
@@ -98,28 +138,28 @@ void CameraIconView::addItem(const GPItemInfo& info)
     QPixmap pix = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
     QString downloadName;
 
-    if (m_renamer)
+    if (d->renamer)
     {
-        if (!m_renamer->useDefault())
+        if (!d->renamer->useDefault())
         {
-            downloadName = getTemplatedName( m_renamer->nameTemplate(), &info, m_itemDict.count() );
+            downloadName = getTemplatedName( d->renamer->nameTemplate(), &info, d->itemDict.count() );
         }
         else
         {
-            downloadName = getCasedName( m_renamer->changeCase(), &info);
+            downloadName = getCasedName( d->renamer->changeCase(), &info);
         }
     }
 
-    CameraIconViewItem* item = new CameraIconViewItem(m_groupItem, info, pix, downloadName);
-    m_itemDict.insert(info.folder+info.name, item);
+    CameraIconViewItem* item = new CameraIconViewItem(d->groupItem, info, pix, downloadName);
+    d->itemDict.insert(info.folder+info.name, item);
 }
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)
 {
-    CameraIconViewItem* item = m_itemDict.find(folder+file);
+    CameraIconViewItem* item = d->itemDict.find(folder+file);
     if (!item)
         return;
-    m_itemDict.remove(folder+file);
+    d->itemDict.remove(folder+file);
 
     setDelayedUpdate(true);
     delete item;
@@ -128,12 +168,12 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
 
 CameraIconViewItem* CameraIconView::findItem(const QString& folder, const QString& file)
 {
-    return m_itemDict.find(folder+file);
+    return d->itemDict.find(folder+file);
 }
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    CameraIconViewItem* item = m_itemDict.find(folder+filename);
+    CameraIconViewItem* item = d->itemDict.find(folder+filename);
     if (!item)
         return;
 
@@ -147,33 +187,33 @@ void CameraIconView::slotDownloadNameChanged()
     bool useDefault = true;
     QString nameTemplate;
 
-    if (m_renamer)
+    if (d->renamer)
     {
-        useDefault   = m_renamer->useDefault();
-        nameTemplate = m_renamer->nameTemplate();
+        useDefault   = d->renamer->useDefault();
+        nameTemplate = d->renamer->nameTemplate();
     }
     
     viewport()->setUpdatesEnabled(false);
 
-    for (IconItem* item = firstItem(); item;
-         item = item->nextItem())
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
 
         QString downloadName;
 
         if (!useDefault)
-            downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(),
-                                             m_groupItem->index(viewItem) );
+            downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), 
+                                             d->groupItem->index(viewItem) );
         else
-            downloadName = getCasedName( m_renamer->changeCase(), viewItem->itemInfo() );
+            downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
         viewItem->setDownloadName( downloadName );
     }
-    
+
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
+
     slotSelectionChanged();
 }
 
@@ -256,7 +296,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
         return;
 
     // don't popup context menu if the camera is busy
-    if (m_ui->isBusy())
+    if (d->cameraUI->isBusy())
         return;
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
@@ -296,7 +336,7 @@ void CameraIconView::slotDoubleClicked(IconItem* item)
     if (!item)
         return;
     
-    if (m_ui->isBusy())
+    if (d->cameraUI->isBusy())
         return;
 
     emit signalFileView(static_cast<CameraIconViewItem*>(item));
@@ -325,9 +365,8 @@ void CameraIconView::slotSelectNew()
     for (IconItem* item = firstItem(); item;
          item = item->nextItem())
     {
-        CameraIconViewItem* viewItem =
-            static_cast<CameraIconViewItem*>(item);
-        if (viewItem->itemInfo()->downloaded == 0)
+        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+        if (viewItem->itemInfo()->downloaded == GPItemInfo::DownloadedNo)
         {
             viewItem->setSelected(true, false);
         }
@@ -343,7 +382,7 @@ void CameraIconView::startDrag()
 
 QRect CameraIconView::itemRect() const
 {
-    return m_itemRect;
+    return d->itemRect;
 }
 
 void CameraIconView::updateItemRectsPixmap()
@@ -378,13 +417,33 @@ void CameraIconView::updateItemRectsPixmap()
     extraRect.setHeight(r.height());
 
     r = QRect();
-    r.setWidth(QMAX(QMAX(pixRect.width(), textRect.width()),
-                       extraRect.width()) + 4);
-    r.setHeight(pixRect.height() +
-                textRect.height() +
-                extraRect.height() + 4);
+    r.setWidth(QMAX(QMAX(pixRect.width(), textRect.width()), extraRect.width()) + 4);
+    r.setHeight(pixRect.height() + textRect.height() + extraRect.height() + 4);
 
-    m_itemRect = r;
+    d->itemRect = r;
+
+    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(),
+                                                               d->itemRect.height());
+
+    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
+                                                               d->itemRect.height());
+
+}
+
+void CameraIconView::slotThemeChanged()
+{
+    QPalette plt(palette());
+    QColorGroup cg(plt.active());
+    cg.setColor(QColorGroup::Base, ThemeEngine::instance()->baseColor());
+    cg.setColor(QColorGroup::Text, ThemeEngine::instance()->textRegColor());
+    cg.setColor(QColorGroup::HighlightedText, ThemeEngine::instance()->textSelColor());
+    plt.setActive(cg);
+    plt.setInactive(cg);
+    setPalette(plt);
+
+    updateItemRectsPixmap();
+
+    viewport()->update();
 }
 
 }  // namespace Digikam

@@ -175,6 +175,8 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 110 ==> 124199 : digikam crashed when I right-clicked in the (empty) "My Albums" view.
 111 ==> 127826 : Album comment with no wordwrap.
 112 ==> 121691 : Problems with Downloading images from Camera.
-113 ==> 
+113 ==> 127614 : Focus steal when typing custom prefix in renaming options sidebar.
+114 ==> 131034 : Display a mini-review of the photo currently transfered, i.e better visual feedback.
+115 ==> 
 
 ----------------------------------------------------------------------------------------------------

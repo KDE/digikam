@@ -105,6 +105,7 @@ public:
         gp_busy,
         gp_listedfolders,
         gp_listedfiles,
+        gp_downloadstarted,
         gp_downloaded,
         gp_downloadFailed,
         gp_opened,
@@ -335,6 +336,13 @@ void CameraThread::run()
                 sendInfo(i18n("Downloading file %1...").arg(file));
     
                 // download to a temp file
+
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_downloadstarted);
+                event->map.insert("folder", QVariant(folder));
+                event->map.insert("file", QVariant(file));
+                event->map.insert("dest", QVariant(dest));
+                QApplication::postEvent(parent, event);
+
                 KURL tempURL(dest);
                 tempURL = tempURL.upURL();
                 tempURL.addPath( QString(".digikam-camera-%1").arg(getpid()));
@@ -693,161 +701,168 @@ void CameraController::customEvent(QCustomEvent* e)
     
     switch(event->type()-QEvent::User)
     {
-    case (CameraEvent::gp_connected) :
-    {
-        emit signalConnected(event->result);
-        break;
-    }
-    case (CameraEvent::gp_errormsg) :
-    {
-        emit signalErrorMsg(QDeepCopy<QString>(event->msg));
-        break;
-    }
-    case (CameraEvent::gp_busy) :
-    {
-        if (event->result)
-            emit signalBusy(true);
-        break;
-    }
-    case (CameraEvent::gp_infomsg) :
-    {
-        if (!d->canceled)
-            emit signalInfoMsg(QDeepCopy<QString>(event->msg));
-        break;
-    }
-    case (CameraEvent::gp_listedfolders) :
-    {
-        /* TODO: ugly hack since qt <= 3.1.2 does not define
-           QStringList with QDeepCopy as a friend. */
-        QValueList<QVariant> flist = QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
-
-        QStringList folderList;
-        QValueList<QVariant>::Iterator it;
-        for (it = flist.begin(); it != flist.end(); ++it )
+        case (CameraEvent::gp_connected) :
         {
-            folderList.append(QDeepCopy<QString>((*it).asString()));
+            emit signalConnected(event->result);
+            break;
         }
-        
-        emit signalFolderList(folderList);
-        break;
-    }
-    case (CameraEvent::gp_listedfiles) :
-    {
-        QString    folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QByteArray ba     = QDeepCopy<QByteArray>(event->map["files"].asByteArray());
-        QDataStream ds(ba, IO_ReadOnly);
-        GPItemInfoList items;
-        ds >> items;
-        emit signalFileList(items);
-        break;
-    }
-    case (CameraEvent::gp_thumbnailed) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
-        QImage  thumb  = QDeepCopy<QImage>(event->map["thumbnail"].asImage());
-        emit signalThumbnail(folder, file, thumb);
-        break;
-    }
-    case (CameraEvent::gp_exif) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
-        QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
-        emit signalExifData(ba);
-        break;
-    }
-    case (CameraEvent::gp_downloaded) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
-        emit signalDownloaded(folder, file);
-        break;
-    }
-    case (CameraEvent::gp_downloadFailed) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
- 
-        d->timer->stop();
-
-        QString msg = i18n("Failed to download file %1.").arg(file);
-        
-        if (!d->canceled)
+        case (CameraEvent::gp_errormsg) :
         {
-            if (d->cmdQueue.isEmpty())
-            {
-                KMessageBox::error(d->parent, msg);
-            }
-            else
-            {
-                msg += i18n(" Do you want to continue?");
-                int result = KMessageBox::warningContinueCancel(d->parent, msg);
-                if (result != KMessageBox::Continue)
-                    slotCancel();
-            }
+            emit signalErrorMsg(QDeepCopy<QString>(event->msg));
+            break;
         }
-
-        d->timer->start(50);
-        emit signalDownloaded(folder, file);
-        break;
-    }
-    case (CameraEvent::gp_deleted) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
-        emit signalDeleted(folder, file);
-        break;
-    }
-    case (CameraEvent::gp_deleteFailed) :
-    {
-        QString folder = QDeepCopy<QString>(event->map["folder"].asString());
-        QString file   = QDeepCopy<QString>(event->map["file"].asString());
- 
-        d->timer->stop();
-
-        QString msg = i18n("Failed to delete file %1.").arg(file);
-        
-        if (!d->canceled)
+        case (CameraEvent::gp_busy) :
         {
-            if (d->cmdQueue.isEmpty())
-            {
-                KMessageBox::error(d->parent, msg);
-            }
-            else
-            {
-                msg += i18n(" Do you want to continue?");
-                int result = KMessageBox::warningContinueCancel(d->parent, msg);
-                if (result != KMessageBox::Continue)
-                    slotCancel();
-            }
+            if (event->result)
+                emit signalBusy(true);
+            break;
         }
-
-        d->timer->start(50);
-        break;
-    }
-    case (CameraEvent::gp_opened) :
-    {
-        QString file = QDeepCopy<QString>(event->map["file"].asString());
-        QString dest = QDeepCopy<QString>(event->map["dest"].asString());
-
-        KURL url(dest);
-        KURL::List urlList;
-        urlList << url;
-
-        ImageWindow *im = ImageWindow::imagewindow();
-        im->loadURL(urlList, url, i18n("Camera \"%1\"").arg(d->camera->model()), false);
-
-        if (im->isHidden())
-            im->show();
-        else
-            im->raise();
+        case (CameraEvent::gp_infomsg) :
+        {
+            if (!d->canceled)
+                emit signalInfoMsg(QDeepCopy<QString>(event->msg));
+            break;
+        }
+        case (CameraEvent::gp_listedfolders) :
+        {
+            /* TODO: ugly hack since qt <= 3.1.2 does not define
+            QStringList with QDeepCopy as a friend. */
+            QValueList<QVariant> flist = QDeepCopy< QValueList<QVariant> >(event->map["folders"].toList());
+    
+            QStringList folderList;
+            QValueList<QVariant>::Iterator it;
+            for (it = flist.begin(); it != flist.end(); ++it )
+            {
+                folderList.append(QDeepCopy<QString>((*it).asString()));
+            }
             
-        im->setFocus();
-        break;
-    }
-    default:
-        kdWarning() << k_funcinfo << "Unknown event" << endl;
+            emit signalFolderList(folderList);
+            break;
+        }
+        case (CameraEvent::gp_listedfiles) :
+        {
+            QString    folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QByteArray ba     = QDeepCopy<QByteArray>(event->map["files"].asByteArray());
+            QDataStream ds(ba, IO_ReadOnly);
+            GPItemInfoList items;
+            ds >> items;
+            emit signalFileList(items);
+            break;
+        }
+        case (CameraEvent::gp_thumbnailed) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QImage  thumb  = QDeepCopy<QImage>(event->map["thumbnail"].asImage());
+            emit signalThumbnail(folder, file, thumb);
+            break;
+        }
+        case (CameraEvent::gp_exif) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QByteArray ba  = QDeepCopy<QByteArray>(event->map["exifData"].asByteArray());
+            emit signalExifData(ba);
+            break;
+        }
+        case (CameraEvent::gp_downloadstarted) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
+            break;
+        }
+        case (CameraEvent::gp_downloaded) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+            break;
+        }
+        case (CameraEvent::gp_downloadFailed) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+    
+            d->timer->stop();
+    
+            QString msg = i18n("Failed to download file %1.").arg(file);
+            
+            if (!d->canceled)
+            {
+                if (d->cmdQueue.isEmpty())
+                {
+                    KMessageBox::error(d->parent, msg);
+                }
+                else
+                {
+                    msg += i18n(" Do you want to continue?");
+                    int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                    if (result != KMessageBox::Continue)
+                        slotCancel();
+                }
+            }
+    
+            d->timer->start(50);
+            emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+            break;
+        }
+        case (CameraEvent::gp_deleted) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            emit signalDeleted(folder, file);
+            break;
+        }
+        case (CameraEvent::gp_deleteFailed) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+    
+            d->timer->stop();
+    
+            QString msg = i18n("Failed to delete file %1.").arg(file);
+            
+            if (!d->canceled)
+            {
+                if (d->cmdQueue.isEmpty())
+                {
+                    KMessageBox::error(d->parent, msg);
+                }
+                else
+                {
+                    msg += i18n(" Do you want to continue?");
+                    int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                    if (result != KMessageBox::Continue)
+                        slotCancel();
+                }
+            }
+    
+            d->timer->start(50);
+            break;
+        }
+        case (CameraEvent::gp_opened) :
+        {
+            QString file = QDeepCopy<QString>(event->map["file"].asString());
+            QString dest = QDeepCopy<QString>(event->map["dest"].asString());
+    
+            KURL url(dest);
+            KURL::List urlList;
+            urlList << url;
+    
+            ImageWindow *im = ImageWindow::imagewindow();
+            im->loadURL(urlList, url, i18n("Camera \"%1\"").arg(d->camera->model()), false);
+    
+            if (im->isHidden())
+                im->show();
+            else
+                im->raise();
+                
+            im->setFocus();
+            break;
+        }
+        default:
+            kdWarning() << k_funcinfo << "Unknown event" << endl;
     }
 }
 
@@ -887,7 +902,7 @@ void CameraController::slotProcessNext()
         d->timer->start(50, false);
         return;
     }
-        
+      
     if (cmd->action == CameraCommand::gp_download)
     {
         folder = QDeepCopy<QString>(cmd->map["folder"].asString());

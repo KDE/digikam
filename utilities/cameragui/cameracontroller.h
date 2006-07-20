@@ -71,7 +71,7 @@ signals:
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
     void signalFileList(const GPItemInfoList& infoList);
-    void signalDownloaded(const QString& folder, const QString& file);
+    void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file);
     void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
