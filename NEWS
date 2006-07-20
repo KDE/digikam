@@ -44,7 +44,9 @@ Setup         : new Identity setup page to set default strings informations abou
 
 CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
                 on the fly.
-                JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
+CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
+CameraGUI     : digiKam theme support.
+CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
 
 
 Showfoto      : image properties sidebar support
@@ -177,6 +179,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 112 ==> 121691 : Problems with Downloading images from Camera.
 113 ==> 127614 : Focus steal when typing custom prefix in renaming options sidebar.
 114 ==> 131034 : Display a mini-review of the photo currently transfered, i.e better visual feedback.
-115 ==> 
+115 ==> 124425 : Start index number counting on selected images instead of all images.
+116 ==> 
 
 ----------------------------------------------------------------------------------------------------
