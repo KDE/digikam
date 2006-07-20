@@ -222,9 +222,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit and copyright information "
                                          "into IPTC tags using main digiKam metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
-                                               "tags to the right values if your camera don't set "
-                                               "properly these tags when pictures are taken. The values will"
-                                               "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
+                    "tags to the right values if your camera don't set "
+                    "properly these tags when pictures are taken. The values will"
+                    "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
                                                
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
     grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
@@ -327,6 +327,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
+
+    connect(d->view, SIGNAL(signalNewSelection(bool)),
+            this, SLOT(slotNewSelection(bool)));
 
     // -------------------------------------------------------------------------
     
@@ -912,6 +915,15 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     }
 
     d->rightSidebar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
+}
+
+void CameraUI::slotNewSelection(bool hasSelection)
+{
+    if (!d->renameCustomizer->useDefault())
+    {
+        d->downloadMenu->setItemEnabled(0, hasSelection);
+        d->downloadMenu->setItemEnabled(1, !hasSelection);
+    }
 }
 
 void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)

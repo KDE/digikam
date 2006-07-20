@@ -102,6 +102,7 @@ private slots:
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&);
     
+    void slotNewSelection(bool);
     void slotItemsSelected(CameraIconViewItem* item, bool selected);
     
     void slotExifFromFile(const QString& folder, const QString& file);

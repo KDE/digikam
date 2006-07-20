@@ -89,7 +89,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     setMinimumSize(450, 400);
 
     connect(this, SIGNAL(signalSelectionChanged()),
-            this, SLOT(slotSelectionChanged()));
+            this, SLOT(slotDownloadNameChanged()));
             
     connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
             this, SLOT(slotContextMenu(IconItem*, const QPoint&)));
@@ -195,19 +195,59 @@ void CameraIconView::slotDownloadNameChanged()
     
     viewport()->setUpdatesEnabled(false);
 
+    int  index=0;
+    bool hasSelection=false;
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
-        CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+        if (item->isSelected())
+        {
+            hasSelection = true;
+            break;
+        }
+    }
 
-        QString downloadName;
+    emit signalNewSelection(hasSelection);
 
-        if (!useDefault)
-            downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), 
-                                             d->groupItem->index(viewItem) );
-        else
-            downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
+    if (hasSelection)
+    {
+        // Camera items selection.
+    
+        for (IconItem* item = firstItem(); item; item = item->nextItem())
+        {
+            QString downloadName;
+            CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+            if (viewItem->isSelected())
+            {
+                if (!useDefault)
+                    downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), index );
+                else
+                    downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
-        viewItem->setDownloadName( downloadName );
+                index++;
+            }
+            else 
+                downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
+    
+            viewItem->setDownloadName( downloadName );
+        }
+    }
+    else
+    {
+        // No camera item selection.
+    
+        for (IconItem* item = firstItem(); item; item = item->nextItem())
+        {
+            QString downloadName;
+            CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+    
+            if (!useDefault)
+                downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), 
+                                                d->groupItem->index(viewItem) );
+            else
+                downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
+    
+            viewItem->setDownloadName( downloadName );
+        }
     }
 
     rearrangeItems();

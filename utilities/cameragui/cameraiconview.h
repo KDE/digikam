@@ -73,6 +73,7 @@ signals:
 
     void signalDownload();
     void signalDelete();
+    void signalNewSelection(bool);
     
 public slots:
 
