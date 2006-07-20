@@ -28,7 +28,7 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 
 7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
 
-8/ Run release_digikam.rb script and the releas_digikam_docs.rb
+8/ Run release_digikam.rb script and the release_digikam_docs.rb
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
@@ -39,10 +39,12 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 ------------------ TAGGING ------------------
 
 Each release has to be tagged. All tags are located in svn in the directory /tags/digikam
-You can make a tag by going into your working copy of that folder and issue something _like_:
-svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/digikam digikam_0_9_0
+You can make a tag by going into your working copy of that folder and issue something like this:
 
-and the same for the digikamimageplugins. As you see translations or documentation is not tagged. 
+1/ In your local repository go to digikam root folder.
+2/ Perform the copy using 'svn cp svn cp . https://svn.kde.org/home/kde/tags/digikam/digikam_0_8_2' with digikam_x_y_z the tags name using the release numbers.
+
+Do the same for the digikamimageplugins. As you see translations or documentation is not tagged. 
 
 If anyone knows what the purpose of this tagging is, please put it here ;-)
 
