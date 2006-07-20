@@ -180,6 +180,7 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 113 ==> 127614 : Focus steal when typing custom prefix in renaming options sidebar.
 114 ==> 131034 : Display a mini-review of the photo currently transfered, i.e better visual feedback.
 115 ==> 124425 : Start index number counting on selected images instead of all images.
-116 ==> 
+116 ==> 127272 : crash when opening image in IE.
+117 ==> 
 
 ----------------------------------------------------------------------------------------------------
