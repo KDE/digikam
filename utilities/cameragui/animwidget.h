@@ -1,7 +1,8 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-21
- * Description : an animated busy widget 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-09-21
+ * Description : an animated busy widget
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
