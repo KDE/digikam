@@ -23,6 +23,7 @@ INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/libs/dimg \
 	      -I$(top_srcdir)/digikam/libs/dmetadata \
 	      -I$(top_srcdir)/digikam/libs/dcraw \
+	      -I$(top_srcdir)/digikam/ \
 	      $(GPHOTO_CFLAGS) $(all_includes)
 
 KDE_OPTIONS=nofinal

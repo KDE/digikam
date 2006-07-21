@@ -331,4 +331,19 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
     }
 }
 
+void UMSCamera::cameraSummary(QString& summary)
+{
+//TODO
+}
+
+void UMSCamera::cameraManual(QString& manual)
+{
+//TODO
+}
+
+void UMSCamera::cameraAbout(QString& about)
+{
+//TODO
+}
+
 }  // namespace Digikam

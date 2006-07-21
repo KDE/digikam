@@ -58,6 +58,10 @@ public:
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
     virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile) = 0;
 
+    virtual void cameraSummary(QString& summary) = 0;
+    virtual void cameraManual(QString& manual) = 0;
+    virtual void cameraAbout(QString& about) = 0;
+
     QString model() const;
     QString port()  const;
     QString path()  const;

@@ -82,6 +82,7 @@ public:
         gp_none = 0,
         gp_connect,
         gp_cancel,
+        gp_cameraInformations,
         gp_listfolders,
         gp_listfiles,
         gp_download,
@@ -116,6 +117,7 @@ public:
         gp_deleteFailed,
         gp_thumbnailed,
         gp_exif,
+        gp_cameraInformations,
         gp_infomsg,
         gp_errormsg
     };
@@ -219,6 +221,23 @@ void CameraThread::run()
     
                 break;
             }
+            case(CameraCommand::gp_cameraInformations):
+            {
+                sendInfo(i18n("Get camera informations..."));
+            
+                QString summary, manual, about;
+
+                d->camera->cameraSummary(summary);
+                d->camera->cameraManual(manual);
+                d->camera->cameraAbout(about);
+            
+                CameraEvent* event = new CameraEvent(CameraEvent::gp_cameraInformations);
+                event->map.insert("summary", QVariant(summary));
+                event->map.insert("manual", QVariant(manual));
+                event->map.insert("about", QVariant(about));
+                QApplication::postEvent(parent, event);
+                break;
+            }            
             case(CameraCommand::gp_listfolders):
             {
                 sendInfo(i18n("Listing folders..."));
@@ -511,7 +530,9 @@ void CameraThread::sendInfo(const QString& msg)
     QApplication::postEvent(parent, event);
 }
 
-// -- Camera Controller ------------------------------------------------------
+
+//-- Camera Controller ------------------------------------------------------
+
 
 CameraController::CameraController(QWidget* parent, const QString& model,
                                    const QString& port,
@@ -631,6 +652,14 @@ void CameraController::getExif(const QString& folder, const QString& file)
     d->cmdQueue.enqueue(cmd);
 }
 
+void CameraController::getCameraInformations()
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_cameraInformations;
+    d->cmdQueue.enqueue(cmd);
+}
+
 void CameraController::downloadPrep()
 {
     d->overwriteAll  = false;
@@ -700,6 +729,14 @@ void CameraController::customEvent(QCustomEvent* e)
         case (CameraEvent::gp_connected) :
         {
             emit signalConnected(event->result);
+            break;
+        }
+        case (CameraEvent::gp_cameraInformations) :
+        {
+            QString summary = QDeepCopy<QString>(event->map["summary"].asString());
+            QString manual  = QDeepCopy<QString>(event->map["manual"].asString());
+            QString about   = QDeepCopy<QString>(event->map["about"].asString());
+            emit signalCameraInformations(summary, manual, about);
             break;
         }
         case (CameraEvent::gp_errormsg) :

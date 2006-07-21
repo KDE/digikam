@@ -53,6 +53,7 @@ extern "C"
 
 // KDE includes.
 
+#include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kprogress.h>
 #include <kglobal.h>
@@ -70,6 +71,7 @@ extern "C"
 
 // Local includes.
 
+#include "version.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "downloadsettingscontainer.h"
@@ -80,6 +82,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "camerainfodialog.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
@@ -96,6 +99,8 @@ public:
     CameraUIPriv()
     {
         busy              = false;
+        closed            = false;
+        helpMenu          = 0;
         advBox            = 0;
         downloadMenu      = 0;
         deleteMenu        = 0;
@@ -114,7 +119,6 @@ public:
         dateTimeEdit      = 0;
         setPhotographerId = 0;
         setCredits        = 0;
-        closed= false;
     }
 
     bool                          busy;
@@ -143,6 +147,8 @@ public:
     KSqueezedTextLabel           *status;
 
     KURL                          lastDestURL;
+
+    KHelpMenu                    *helpMenu;
 
     KDateTimeEdit                *dateTimeEdit;
     
@@ -308,6 +314,24 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     actionButton(User1)->setPopup(d->deleteMenu);
 
     // -------------------------------------------------------------------------
+
+    QPushButton *helpButton = actionButton( Help );
+    
+    KAboutData *aboutData = new KAboutData( "digikam", 
+                                I18N_NOOP("digiKam"),
+                                digikam_version,        
+                                I18N_NOOP("A Photo-Management Application for KDE\nDigital camera interface"),
+                                KAboutData::License_GPL,
+                                I18N_NOOP("(c) 2002-2006, digiKam developers team"),
+                                0,
+                                "http://www.digikam.org" );
+
+    d->helpMenu = new KHelpMenu(this, aboutData, false);
+    d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Informations"), 
+                                    this, SLOT(slotInformations()), 0, -1, 0);
+    helpButton->setPopup( d->helpMenu->menu() );
+
+    // -------------------------------------------------------------------------
     
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
@@ -362,6 +386,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->controller, SIGNAL(signalErrorMsg(const QString&)),
             this, SLOT(slotErrorMsg(const QString&)));
+
+    connect(d->controller, SIGNAL(signalCameraInformations(const QString&, const QString&, const QString&)),
+            this, SLOT(slotCameraInformations(const QString&, const QString&, const QString&)));
 
     connect(d->controller, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -548,6 +575,7 @@ void CameraUI::slotBusy(bool val)
 
         enableButton(User2, true);
         enableButton(User1, true);
+        d->helpMenu->menu()->setItemEnabled(0, true);
         d->anim->stop();
         d->status->setText(i18n("Ready"));
         d->progress->hide();
@@ -569,6 +597,7 @@ void CameraUI::slotBusy(bool val)
         d->busy = true;
         d->cancelBtn->setEnabled(true);
         d->advBox->setEnabled(false);
+        d->helpMenu->menu()->setItemEnabled(0, false);
         enableButton(User2, false);
         enableButton(User1, false);
     }
@@ -628,6 +657,18 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
     d->view->setThumbnail(folder, file, thumbnail);
 }
 
+void CameraUI::slotInformations()
+{
+    if (d->busy) return;
+    d->controller->getCameraInformations();
+}
+
+void CameraUI::slotCameraInformations(const QString& summary, const QString& manual, const QString& about)
+{
+    CameraInfoDialog *infoDlg = new CameraInfoDialog(this, summary, manual, about);
+    infoDlg->show();
+}
+
 void CameraUI::slotErrorMsg(const QString& msg)
 {
     KMessageBox::error(this, msg);    
@@ -658,8 +699,7 @@ void CameraUI::slotDownload(bool onlySelected)
     IconItem* firstItem = d->view->firstItem();
     if (firstItem)
     {
-        CameraIconViewItem* iconItem =
-            static_cast<CameraIconViewItem*>(firstItem);
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(firstItem);
         
         QDateTime date;
         date.setTime_t(iconItem->itemInfo()->mtime);

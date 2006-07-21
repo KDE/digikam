@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-28
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-28
+ * Description : a dialog to display camera informations.
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,9 +23,13 @@
 #ifndef CAMERAINFODIALOG_H
 #define CAMERAINFODIALOG_H
 
-#include <kdialogbase.h>
+// Qt includes.
 
-class QString;
+#include <qstring.h>
+
+// KDE includes.
+
+#include <kdialogbase.h>
 
 namespace Digikam
 {
@@ -32,8 +38,7 @@ class CameraInfoDialog : public KDialogBase
 {
 public:
 
-    CameraInfoDialog(const QString& summary,
-                     const QString& manual,
+    CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
                      const QString& about);
     ~CameraInfoDialog();
 };

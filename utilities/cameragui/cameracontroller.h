@@ -52,6 +52,7 @@ public:
     void listFiles(const QString& folder);
     void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
+    void getCameraInformations();
 
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);
@@ -65,6 +66,7 @@ signals:
     void signalBusy(bool val);
     void signalInfoMsg(const QString& msg);
     void signalErrorMsg(const QString& msg);
+    void signalCameraInformations(const QString& summary, const QString& manual, const QString& about);
 
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);

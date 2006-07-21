@@ -85,6 +85,9 @@ private slots:
     void slotConnected(bool val);
     void slotBusy(bool val);
     void slotErrorMsg(const QString& msg);
+    void slotInformations();
+    void slotCameraInformations(const QString& summary, const QString& manual, const QString& about);
+
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);
     void slotThumbnail(const QString& folder, const QString& file,

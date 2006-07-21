@@ -55,6 +55,10 @@ public:
     bool deleteItem(const QString& folder, const QString& itemName);
     bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile);
 
+    void cameraSummary(QString& summary);
+    void cameraManual(QString& manual);
+    void cameraAbout(QString& about);
+
 private:
 
     void listFolders(const QString& folder, QStringList& subFolderList);

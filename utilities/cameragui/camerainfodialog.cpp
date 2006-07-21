@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-28
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-28
+ * Description : a dialog to display camera informations.
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +22,6 @@
 
 // Qt includes.
 
-#include <qstring.h>
 #include <qlayout.h>
 #include <qframe.h>
 #include <qtextedit.h>
@@ -28,6 +29,7 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -36,48 +38,41 @@
 namespace Digikam
 {
 
-CameraInfoDialog::CameraInfoDialog(const QString& summary,
-                                   const QString& manual,
+CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
                                    const QString& about)
-    : KDialogBase(KJanusWidget::Tabbed, i18n("Camera Information"),
-                  Ok, Ok)
+                : KDialogBase(IconList, i18n("Camera Informations"), Help|Ok, Ok, parent, 0, true, true)
 {
     resize(500, 400);
 
     // ----------------------------------------------------------
     
-    QFrame *p1 = addPage( i18n("Summary") );
+    QFrame *p1 = addPage( i18n("Summary"), i18n("Camera Summary"), BarIcon("contents2", KIcon::SizeMedium) );
     QVBoxLayout *p1layout = new QVBoxLayout( p1, 0, 6 );
 
-    QTextEdit *summaryView = new QTextEdit(summary, QString::null,
-                                           p1);
+    QTextEdit *summaryView = new QTextEdit(summary, QString::null, p1);
     summaryView->setWordWrap(QTextEdit::WidgetWidth);
     summaryView->setReadOnly(true);
     p1layout->addWidget(summaryView);
 
     // ----------------------------------------------------------
 
-    QFrame *p2 = addPage( i18n("Manual") );
+    QFrame *p2 = addPage( i18n("Manual"), i18n("Camera Manual"), BarIcon("contents", KIcon::SizeMedium) );
     QVBoxLayout *p2layout = new QVBoxLayout( p2, 0, 6 );
 
-    QTextEdit *manualView = new QTextEdit(manual, QString::null,
-                                           p2);
+    QTextEdit *manualView = new QTextEdit(manual, QString::null, p2);
     manualView->setWordWrap(QTextEdit::WidgetWidth);
     manualView->setReadOnly(true);
     p2layout->addWidget(manualView);
 
     // ----------------------------------------------------------
 
-    QFrame *p3 = addPage( i18n("About") );
+    QFrame *p3 = addPage( i18n("About"), i18n("About Driver"), BarIcon("camera", KIcon::SizeMedium) );
     QVBoxLayout *p3layout = new QVBoxLayout( p3, 0, 6 );
     
-
-    QTextEdit *aboutView = new QTextEdit(about, QString::null,
-                                         p3);
+    QTextEdit *aboutView = new QTextEdit(about, QString::null, p3);
     aboutView->setWordWrap(QTextEdit::WidgetWidth);
     aboutView->setReadOnly(true);
     p3layout->addWidget(aboutView);
-
 }
 
 CameraInfoDialog::~CameraInfoDialog()
