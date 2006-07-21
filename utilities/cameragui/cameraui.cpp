@@ -73,7 +73,6 @@ extern "C"
 
 // Local includes.
 
-#include "version.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "downloadsettingscontainer.h"
