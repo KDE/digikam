@@ -347,10 +347,10 @@ void UMSCamera::cameraManual(QString& manual)
 
 void UMSCamera::cameraAbout(QString& about)
 {
-    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface of a remoted camera disk "
-                         "mounted localy on your system.<br>"
-                         "It doesn't use a libgphoto2 driver.<br>"
-                         "To report any problems, please contact digiKam team."));
+    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface of a remote camera disk "
+                         "mounted localy on your system.<br><br>"
+                         "It doesn't use a libgphoto2 driver.<br><br>"
+                         "To report any problems with this driver, please contact digiKam team."));
 }
 
 }  // namespace Digikam
