@@ -17,6 +17,7 @@ General       : digiKam comments are now store in JPEG file to JFIF section, Exi
                 and Caption Iptc tags.
 General       : New fast preview pictures mode embedded into main interface.
 
+
 Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
 Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
                 is now common and is more easy to maintain!
@@ -25,6 +26,7 @@ Image Editor  : Support of ICC color profiles management using LCMS into Image e
 Image Editor  : digiKam setup is now available from Image Editor menu.
 Image Editor  : TIFF and JPEG Exif thumbnail are recomputed at saving pictures.
 Image Editor  : Iptc preview image are recomputed at saving pictures.
+
 
 Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Plugins : New powerfull Black & White converter tool using curves adjustements.
@@ -37,16 +39,19 @@ Image Plugins : New zooming capabilities in image plugins dialogs.
 Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
 Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
 
+
 Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
 Setup         : Setup implementation are now common between Showfoto and digiKam.
 Setup         : new Identity setup page to set default strings informations about Photographer and 
                 copyright used when IPTC tags are updated.
+
 
 CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
                 on the fly.
 CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
 CameraGUI     : digiKam theme support.
 CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
+CameraGUI     : New option to get camera manual using Gphoto2 drivers.
 
 
 Showfoto      : image properties sidebar support
