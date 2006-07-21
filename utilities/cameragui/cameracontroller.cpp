@@ -638,29 +638,24 @@ void CameraController::downloadPrep()
     d->downloadTotal = 0;
 }
 
-void CameraController::download(const QString& folder, const QString& file,
-                                const QString& dest, bool autoRotate, bool fixDateTime, 
-                                const QDateTime& newDateTime, bool setPhotographerId,
-                                const QString& author, const QString& authorTitle,
-                                bool setCredits, const QString& credit, 
-                                const QString& source, const QString& copyright)
+void CameraController::download(DownloadSettingsContainer downloadSettings)
 {
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_download;
-    cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file", QVariant(file));
-    cmd->map.insert("dest", QVariant(dest));
-    cmd->map.insert("autoRotate", QVariant(autoRotate, 0));
-    cmd->map.insert("fixDateTime", QVariant(fixDateTime, 0));
-    cmd->map.insert("newDateTime", QVariant(newDateTime));
-    cmd->map.insert("setPhotographerId", QVariant(setPhotographerId, 0));
-    cmd->map.insert("author", QVariant(author));
-    cmd->map.insert("authorTitle", QVariant(authorTitle));
-    cmd->map.insert("setCredits", QVariant(setCredits, 0));
-    cmd->map.insert("credit", QVariant(credit));
-    cmd->map.insert("source", QVariant(source));
-    cmd->map.insert("copyright", QVariant(copyright));
+    cmd->map.insert("folder", QVariant(downloadSettings.folder));
+    cmd->map.insert("file", QVariant(downloadSettings.file));
+    cmd->map.insert("dest", QVariant(downloadSettings.dest));
+    cmd->map.insert("autoRotate", QVariant(downloadSettings.autoRotate, 0));
+    cmd->map.insert("fixDateTime", QVariant(downloadSettings.fixDateTime, 0));
+    cmd->map.insert("newDateTime", QVariant(downloadSettings.newDateTime));
+    cmd->map.insert("setPhotographerId", QVariant(downloadSettings.setPhotographerId, 0));
+    cmd->map.insert("author", QVariant(downloadSettings.author));
+    cmd->map.insert("authorTitle", QVariant(downloadSettings.authorTitle));
+    cmd->map.insert("setCredits", QVariant(downloadSettings.setCredits, 0));
+    cmd->map.insert("credit", QVariant(downloadSettings.credit));
+    cmd->map.insert("source", QVariant(downloadSettings.source));
+    cmd->map.insert("copyright", QVariant(downloadSettings.copyright));
     d->cmdQueue.enqueue(cmd);
 }
 

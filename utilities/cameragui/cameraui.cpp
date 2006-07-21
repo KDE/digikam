@@ -72,6 +72,7 @@ extern "C"
 
 #include "kdatetimeedit.h"
 #include "sidebar.h"
+#include "downloadsettingscontainer.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -679,28 +680,25 @@ void CameraUI::slotDownload(bool onlySelected)
     
     d->controller->downloadPrep();
 
-    QString author, authorTitle, credit, source, copyright;
+    DownloadSettingsContainer downloadSettings;
     QString downloadName;
-    QString name;
-    QString folder;
     time_t  mtime;
     int     total = 0;
     
-    bool autoRotate        = d->autoRotateCheck->isChecked();
-    bool autoAlbum         = d->autoAlbumCheck->isChecked();
-    bool fixDateTime       = d->fixDateTimeCheck->isChecked();
-    QDateTime newDateTime  = d->dateTimeEdit->dateTime();
-    bool setPhotographerId = d->setPhotographerId->isChecked();
-    bool setCredits        = d->setCredits->isChecked();
+    downloadSettings.autoRotate        = d->autoRotateCheck->isChecked();
+    downloadSettings.fixDateTime       = d->fixDateTimeCheck->isChecked();
+    downloadSettings.newDateTime       = d->dateTimeEdit->dateTime();
+    downloadSettings.setPhotographerId = d->setPhotographerId->isChecked();
+    downloadSettings.setCredits        = d->setCredits->isChecked();
     
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
     {
-        author      = settings->getIptcAuthor();
-        authorTitle = settings->getIptcAuthorTitle();
-        credit      = settings->getIptcCredit();
-        source      = settings->getIptcSource();
-        copyright   = settings->getIptcCopyright();        
+        downloadSettings.author      = settings->getIptcAuthor();
+        downloadSettings.authorTitle = settings->getIptcAuthorTitle();
+        downloadSettings.credit      = settings->getIptcCredit();
+        downloadSettings.source      = settings->getIptcSource();
+        downloadSettings.copyright   = settings->getIptcCopyright();        
     }
     
     for (IconItem* item = d->view->firstItem(); item;
@@ -710,14 +708,14 @@ void CameraUI::slotDownload(bool onlySelected)
             continue;
 
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        folder       = iconItem->itemInfo()->folder;
-        name         = iconItem->itemInfo()->name;
-        downloadName = iconItem->getDownloadName();
-        mtime        = iconItem->itemInfo()->mtime;
+        downloadSettings.folder      = iconItem->itemInfo()->folder;
+        downloadSettings.file        = iconItem->itemInfo()->name;
+        downloadName                 = iconItem->getDownloadName();
+        mtime                        = iconItem->itemInfo()->mtime;
         
         KURL u(url);
         
-        if (autoAlbum)
+        if (d->autoAlbumCheck->isChecked())
         {
             QDateTime date;
             date.setTime_t(mtime);
@@ -731,17 +729,17 @@ void CameraUI::slotDownload(bool onlySelected)
 
             u.addPath(dirName);
             d->foldersToScan.append(u.path());
-            u.addPath(downloadName.isEmpty() ? name : downloadName);
+            u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
         }
         else
         {
             d->foldersToScan.append(u.path());
-            u.addPath(downloadName.isEmpty() ? name : downloadName);
+            u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
         }
-        
-        d->controller->download(folder, name, u.path(), autoRotate, fixDateTime, newDateTime,
-                                setPhotographerId, author, authorTitle, 
-                                setCredits, credit, source, copyright);
+
+        downloadSettings.dest = u.path();
+
+        d->controller->download(downloadSettings);
         addFileExtension(QFileInfo(u.path()).extension(false));
         total++;
     }

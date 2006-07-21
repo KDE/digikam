@@ -26,9 +26,11 @@
 // Qt includes.
 
 #include <qobject.h>
+#include <qstring.h>
 
 // Local includes.
 
+#include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"
 
 namespace Digikam
@@ -52,12 +54,7 @@ public:
     void getExif(const QString& folder, const QString& file);
 
     void downloadPrep();
-    void download(const QString& folder, const QString& file,
-                  const QString& dest, bool autoRotate, bool fixDateTime, 
-                  const QDateTime& newDateTime, bool setPhotographerId,
-                  const QString& author, const QString& authorTitle,
-                  bool setCredits, const QString& credit, 
-                  const QString& source, const QString& copyright);
+    void download(DownloadSettingsContainer downloadSettings);
 
     void deleteFile(const QString& folder, const QString& file);
 
