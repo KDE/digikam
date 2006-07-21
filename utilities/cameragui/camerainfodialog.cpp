@@ -42,6 +42,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, cons
                                    const QString& about)
                 : KDialogBase(IconList, i18n("Camera Informations"), Help|Ok, Ok, parent, 0, true, true)
 {
+    setHelp("digitalstillcamera.anchor", "digikam");
     resize(500, 400);
 
     // ----------------------------------------------------------

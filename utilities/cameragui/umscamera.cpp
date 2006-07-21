@@ -42,6 +42,7 @@ extern "C"
 // KDE includes.
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kfilemetainfo.h>
 
 // Local includes.
@@ -333,17 +334,23 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
 
 void UMSCamera::cameraSummary(QString& summary)
 {
-//TODO
+    summary = QString(i18n("<b>Mounted Camera</b> for USB/IEEE1394 mass storage cameras and "
+                           "Flash Disk card readers."));
 }
 
 void UMSCamera::cameraManual(QString& manual)
 {
-//TODO
+    manual = QString(i18n("For more informations about the <b>Mounted Camera</b> mode, "
+                          "please read the digiKam manual on <b>Supported Digital Still "
+                          "Cameras</b> section."));
 }
 
 void UMSCamera::cameraAbout(QString& about)
 {
-//TODO
+    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface of a remoted camera disk "
+                         "mounted localy on your system.<br>"
+                         "It doesn't use a libgphoto2 driver.<br>"
+                         "To report any problems, please contact digiKam team."));
 }
 
 }  // namespace Digikam

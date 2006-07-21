@@ -100,6 +100,7 @@ public:
     {
         busy              = false;
         closed            = false;
+        cameraInfoMenuId  = -1;
         helpMenu          = 0;
         advBox            = 0;
         downloadMenu      = 0;
@@ -123,6 +124,8 @@ public:
 
     bool                          busy;
     bool                          closed;
+
+    int                           cameraInfoMenuId;
     
     QStringList                   currentlyDeleting;
     QStringList                   foldersToScan;
@@ -327,7 +330,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                                 "http://www.digikam.org" );
 
     d->helpMenu = new KHelpMenu(this, aboutData, false);
-    d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Informations"), 
+    d->cameraInfoMenuId = d->helpMenu->menu()->insertItem(SmallIcon("camera"), 
+                                    i18n("Camera Informations"), 
                                     this, SLOT(slotInformations()), 0, -1, 0);
     helpButton->setPopup( d->helpMenu->menu() );
 
@@ -575,7 +579,10 @@ void CameraUI::slotBusy(bool val)
 
         enableButton(User2, true);
         enableButton(User1, true);
-        d->helpMenu->menu()->setItemEnabled(0, true);
+        
+        if (d->cameraInfoMenuId >= 0)
+            d->helpMenu->menu()->setItemEnabled(d->cameraInfoMenuId, true);
+
         d->anim->stop();
         d->status->setText(i18n("Ready"));
         d->progress->hide();
@@ -597,7 +604,10 @@ void CameraUI::slotBusy(bool val)
         d->busy = true;
         d->cancelBtn->setEnabled(true);
         d->advBox->setEnabled(false);
-        d->helpMenu->menu()->setItemEnabled(0, false);
+    
+        if (d->cameraInfoMenuId >= 0)
+            d->helpMenu->menu()->setItemEnabled(d->cameraInfoMenuId, false);
+
         enableButton(User2, false);
         enableButton(User1, false);
     }
