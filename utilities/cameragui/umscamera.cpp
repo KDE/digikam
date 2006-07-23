@@ -334,8 +334,15 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
 
 void UMSCamera::cameraSummary(QString& summary)
 {
-    summary = QString(i18n("<b>Mounted Camera</b> for USB/IEEE1394 mass storage cameras and "
-                           "Flash Disk card readers."));
+    summary = QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
+                           "Flash Disk card readers.<br><br>"));
+
+    summary.append(i18n("Model: %1<br>"
+                        "Port: %2<br>"
+                        "Path: %3<br>")
+                        .arg(model())
+                        .arg(port())
+                        .arg(path()));
 }
 
 void UMSCamera::cameraManual(QString& manual)

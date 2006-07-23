@@ -724,7 +724,24 @@ void GPCamera::cameraSummary(QString& summary)
 
     status = new GPStatus;
     gp_camera_get_summary(d->camera, &sum, status->context);
-    summary = QString(sum.text);
+    summary = i18n("Model: %1\n"
+                   "Port: %2\n"
+                   "Path: %3\n\n"
+                   "Thumbnail support: %4\n"
+                   "Delete items support: %5\n"
+                   "Upload items support: %6\n"
+                   "Directory creation support: %7\n"
+                   "Directory deletion support: %8\n\n")
+                   .arg(model())
+                   .arg(port())
+                   .arg(path())
+                   .arg(thumbnailSupport() ? i18n("yes") : i18n("no"))
+                   .arg(deleteSupport() ? i18n("yes") : i18n("no"))
+                   .arg(uploadSupport() ? i18n("yes") : i18n("no"))
+                   .arg(mkDirSupport() ? i18n("yes") : i18n("no"))
+                   .arg(delDirSupport() ? i18n("yes") : i18n("no"));
+
+    summary.append(QString(sum.text));
 
     delete status;
     status = 0;
