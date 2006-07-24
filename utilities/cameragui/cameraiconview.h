@@ -95,7 +95,6 @@ private slots:
     void slotContextMenu(IconItem* item, const QPoint& pos);
     void slotDoubleClicked(IconItem* item);
     void slotThemeChanged();
-    void slotPaste();
 
 protected:
 

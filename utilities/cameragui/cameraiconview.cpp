@@ -470,30 +470,30 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
 
 void CameraIconView::slotRightButtonClicked(const QPoint& pos)
 {
-    QPopupMenu popmenu(this);
-    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    QPopupMenu popMenu(this);
+    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
+    popMenu.insertSeparator(-1);
+    popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
-    if(!data || !QUriDrag::canDecode(data))
+    popMenu.setMouseTracking(true);
+    int id = popMenu.exec(pos);
+    switch(id) 
     {
-        paste->setEnabled(false);
+        case 10: 
+        {
+            QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+            if(!data || !QUriDrag::canDecode(data))
+                return;
+        
+            KURL::List srcURLs;
+            KURLDrag::decode(data, srcURLs);
+        
+            emit signalUpload(srcURLs);
+            break;
+        }
+        default:
+            break;
     }
-
-    paste->plug(&popmenu);
-    popmenu.exec(pos);
-    delete paste;
-}
-
-void CameraIconView::slotPaste()
-{
-    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-    if(!data || !QUriDrag::canDecode(data))
-        return;
-
-    KURL::List srcURLs;
-    KURLDrag::decode(data, srcURLs);
-
-    emit signalUpload(srcURLs);
 }
 
 QRect CameraIconView::itemRect() const
