@@ -836,7 +836,7 @@ void GPCamera::cameraAbout(QString& about)
     status = new GPStatus;
     gp_camera_get_about(d->camera, &abt, status->context);
     about = QString(abt.text);
-    about.append(i18n("\n\nTo report any problems with this driver, please contact gphoto2 team."));
+    about.append(i18n("\n\nTo report any problems with this driver, please contact gphoto2 team using this url: http://gphoto.org/bugs"));
 
     delete status;
     status = 0;
