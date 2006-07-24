@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : camerafolderitem.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-23
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-23
+ * Description : A widget to display a camera folder.
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,37 +20,40 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <kiconloader.h>
+
+// Local includes.
 
 #include "camerafolderitem.h"
 
+namespace Digikam
+{
 
-CameraFolderItem::CameraFolderItem(KListView* parent,
-                                   const QString& name)
-    : KListViewItem(parent, name)
+CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name)
+                : KListViewItem(parent, name)
 {
     setPixmap(0, SmallIcon("folder"));
     virtualFolder_ = true;
-    count_  = 0;
-    name_   = name;
+    count_         = 0;
+    name_          = name;
 }
 
-CameraFolderItem::CameraFolderItem(KListViewItem* parent,
-                                   const QString& folderName,
+CameraFolderItem::CameraFolderItem(KListViewItem* parent, const QString& folderName,
                                    const QString& folderPath)
-    : KListViewItem(parent, folderName)
+                : KListViewItem(parent, folderName)
 {
     setPixmap(0, SmallIcon("folder"));
-    folderName_ = folderName;
-    folderPath_ = folderPath;
+    folderName_    = folderName;
+    folderPath_    = folderPath;
     virtualFolder_ = false;
-    count_ = 0;
-    name_  = folderName;
+    count_         = 0;
+    name_          = folderName;
 }
 
 CameraFolderItem::~CameraFolderItem()
 {
-    
 }
 
 bool CameraFolderItem::isVirtualFolder()
@@ -67,12 +71,6 @@ QString CameraFolderItem::folderPath()
     return folderPath_;
 }
 
-// void CameraFolderItem::setCount(int count)
-// {
-    
-//     setText(folderName_ + " (" + QString::number(count) + ")");    
-// }
-
 void CameraFolderItem::changeCount(int val)
 {
     count_ += val;
@@ -89,3 +87,6 @@ int CameraFolderItem::count()
 {
     return count_;    
 }
+
+} // namespace Digikam
+

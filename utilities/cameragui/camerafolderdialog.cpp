@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& cameraFolderList,
-                                       const QString& cameraName, const QString& cameraRootPath)
+                                       const QString& cameraName)
                   : KDialogBase(Plain, i18n("%1 - Select Camera Folder").arg(cameraName),
                                 Help|Ok|Cancel, Ok,
                                 parent, 0, true, true)
@@ -56,7 +56,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& camer
     {
         QString folder(*it);
         kdDebug() << folder << endl;
-        if (folder != cameraRootPath && !folder.isEmpty())
+        if (folder != QString("/") && !folder.isEmpty())
         {
             QString root = folder.section( '/', 0, -2 );
             QString sub  = folder.section( '/', -1 );

@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : camerafolderview.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-23
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-23
+ * Description : A widget to display a list of camera folders.
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -19,16 +20,22 @@
  * 
  * ============================================================ */
 
+// KDE includes.
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
+// Local includes.
+
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 
+namespace Digikam
+{
 
 CameraFolderView::CameraFolderView(QWidget* parent)
-    : KListView(parent)
+                : KListView(parent)
 {
     addColumn(i18n("Camera Folders"));
     setFullWidth(true);
@@ -42,12 +49,10 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     rootFolder_    = 0;
 
     setupConnections();
-
 }
 
 CameraFolderView::~CameraFolderView()
 {
-    
 }
 
 void CameraFolderView::setupConnections()
@@ -58,7 +63,7 @@ void CameraFolderView::setupConnections()
 
 void CameraFolderView::addVirtualFolder(const QString& name)
 {
-    cameraName_ = name;
+    cameraName_    = name;
     virtualFolder_ = new CameraFolderItem(this, cameraName_);
     virtualFolder_->setOpen(true);
 }
@@ -76,7 +81,8 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     kdDebug() << "CameraFolderView: Adding Subfolder " << subFolder
               << " of folder " << folder << endl;
     
-    if (parentItem) {
+    if (parentItem) 
+    {
         QString path(folder);
         if (!folder.endsWith("/"))
             path += "/";
@@ -88,7 +94,8 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         item->setOpen(true);
         return item;
     }
-    else {
+    else 
+    {
         kdWarning() << "CameraFolderView: Couldn't find parent for subFolder "
                     << subFolder << " of folder " << folder << endl;
         return 0;
@@ -99,14 +106,14 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
 
     QListViewItemIterator it(this);
-    for ( ; it.current(); ++it) {
+    for ( ; it.current(); ++it) 
+    {
 
         CameraFolderItem* item =
             static_cast<CameraFolderItem*>(it.current());
 
         if (item->folderPath() == folderPath)
             return item;
-
     }
 
     return 0;
@@ -135,3 +142,7 @@ void CameraFolderView::clear()
     rootFolder_    = 0;
     emit signalCleared();
 }
+
+} // namespace Digikam
+
+#include "camerafolderview.h"

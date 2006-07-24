@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : camerafolderview.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-23
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-23
+ * Description : A widget to display a list of camera folders.
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,8 +23,16 @@
 #ifndef CAMERAFOLDERVIEW_H
 #define CAMERAFOLDERVIEW_H
 
-#include <klistview.h>
+// Qt includes.
+
 #include <qstring.h>
+
+// KDE includes.
+
+#include <klistview.h>
+
+namespace Digikam
+{
 
 class CameraFolderItem;
 
@@ -47,26 +56,28 @@ public:
     CameraFolderItem* rootFolder();
 
     virtual void clear();
-    
-private:
-
-    QString cameraName_;
-    CameraFolderItem *virtualFolder_;
-    CameraFolderItem *rootFolder_;
-
-private:
-
-    void setupConnections();
-    
-private slots:
-
-    void slotSelectionChanged(QListViewItem* item);
 
 signals:
 
     void signalFolderChanged(CameraFolderItem*);
     void signalCleared();
+    
+    
+private slots:
 
+    void slotSelectionChanged(QListViewItem* item);
+
+private:
+
+    void setupConnections();
+
+private:
+
+    QString           cameraName_;
+    CameraFolderItem *virtualFolder_;
+    CameraFolderItem *rootFolder_;
 };
+
+} // namespace Digikam
 
 #endif /* CAMERAFOLDERVIEW_H */

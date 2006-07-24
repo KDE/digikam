@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : camerafolderitem.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-23
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-23
+ * Description : A widget to display a camera folder.
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published bythe Free Software Foundation;
@@ -22,8 +23,16 @@
 #ifndef CAMERAFOLDERITEM_H
 #define CAMERAFOLDERITEM_H
 
-#include <klistview.h>
+// Qt includes.
+
 #include <qstring.h>
+
+// KDE includes.
+
+#include <klistview.h>
+
+namespace Digikam
+{
 
 class CameraFolderItem : public KListViewItem
 {
@@ -52,8 +61,8 @@ private:
     QString name_;
     bool    virtualFolder_;
     int     count_;
-
-    
 };
+
+} // namespace Digikam
 
 #endif /* CAMERAFOLDERITEM_H */
