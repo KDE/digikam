@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------
-digiKam 0.9.0 NEW FEATURES:
+digiKam/DigikamImagePlugins 0.9.0 NEW FEATURES
 
 General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
 General       : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
@@ -50,8 +50,6 @@ CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exi
                 on the fly.
 CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
 CameraGUI     : digiKam theme support.
-CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
-CameraGUI     : New option to get camera manual using Gphoto2 drivers.
 
 
 Showfoto      : image properties sidebar support
@@ -63,10 +61,17 @@ Showfoto      : Thumbbar can be used to the bottom in horizontal mode.
 Showfoto      : New Exif Auto-rotate option like in digiKam ImageEditor.
 Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
 
+*** 0.9.0-beta1 *******************************************************
+
+CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
+CameraGUI     : New option to get camera manual using Gphoto2 drivers.
+CameraGUI     : Upload item to camera option.
+
+
 ...
 
 ----------------------------------------------------------------------------------------------------
-BUGFIX from B.K.O (http://bugs.kde.org):
+digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 
 001 ==> 87823  : displaying images with ICC color profile when possible
 002 ==> 91811  : find pictures by meta tag info, date
@@ -181,11 +186,15 @@ BUGFIX from B.K.O (http://bugs.kde.org):
 109 ==> 130920 : ICC, profiles, metadata, abbreviations.
 110 ==> 124199 : digikam crashed when I right-clicked in the (empty) "My Albums" view.
 111 ==> 127826 : Album comment with no wordwrap.
+
+*** 0.9.0-beta1 *******************************************************
+
 112 ==> 121691 : Problems with Downloading images from Camera.
 113 ==> 127614 : Focus steal when typing custom prefix in renaming options sidebar.
 114 ==> 131034 : Display a mini-review of the photo currently transfered, i.e better visual feedback.
 115 ==> 124425 : Start index number counting on selected images instead of all images.
 116 ==> 127272 : crash when opening image in IE.
-117 ==> 
+117 ==> 96186  : upload to camera not possible.
+118 ==> 
 
 ----------------------------------------------------------------------------------------------------
