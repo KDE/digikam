@@ -439,6 +439,10 @@ void CameraIconView::startDrag()
 
 void CameraIconView::contentsDropEvent(QDropEvent *event)
 {
+    // don't popup context menu if the camera is busy
+    if (d->cameraUI->isBusy())
+        return;
+
     if ( (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
          || event->source() == this)
     {
@@ -470,6 +474,10 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
 
 void CameraIconView::slotRightButtonClicked(const QPoint& pos)
 {
+    // don't popup context menu if the camera is busy
+    if (d->cameraUI->isBusy())
+        return;
+
     QPopupMenu popMenu(this);
     popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
     popMenu.insertSeparator(-1);
