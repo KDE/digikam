@@ -55,8 +55,8 @@ extern "C"
 namespace Digikam
 {
 
-UMSCamera::UMSCamera(const QString& model, const QString& port, const QString& path)
-         : DKCamera(model, port, path)
+UMSCamera::UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path)
+         : DKCamera(title, model, port, path)
 {
     m_cancel = false;
 }
@@ -298,10 +298,104 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     return (::unlink(QFile::encodeName(folder + "/" + itemName)) == 0);
 }
 
-bool UMSCamera::uploadItem(const QString&, const QString&, const QString&)
+bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
+                           GPItemInfo& itemInfo, bool getImageDimensions)
 {
-    kdWarning() << "Upload not implemented yet" << endl;
-    return false;
+    m_cancel = false;
+
+    QString dest = folder + "/" + itemName;
+    QString src  = localFile;
+
+    QFile sFile(src);
+    QFile dFile(dest);
+
+    if ( !sFile.open(IO_ReadOnly) )
+    {
+        kdWarning() << "Failed to open source file for reading: "
+                    << src << endl;
+        return false;
+    }
+
+    if ( !dFile.open(IO_WriteOnly) )
+    {
+        sFile.close();
+        kdWarning() << "Failed to open dest file for writing: "
+                    << dest << endl;
+        return false;
+    }
+
+    const int MAX_IPC_SIZE = (1024*32);
+    char buffer[MAX_IPC_SIZE];
+
+    Q_LONG len;
+    while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    {
+        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
+        {
+            sFile.close();
+            dFile.close();
+            return false;
+        }
+    }
+
+    sFile.close();
+    dFile.close();
+
+    // set the file modification time of the uploaded file to that
+    // of the original file
+    struct stat st;
+    ::stat(QFile::encodeName(src), &st);
+
+    struct utimbuf ut;
+    ut.modtime = st.st_mtime;
+    ut.actime  = st.st_atime;
+
+    ::utime(QFile::encodeName(dest), &ut);
+
+    // Get new camera item informations.
+
+    QFileInfo fi(dest);
+    QString mime = mimeType(fi.extension(false).lower());
+
+    if (!mime.isEmpty())
+    {
+        QSize dims(-1, -1);
+
+        if (getImageDimensions)
+        {
+            if (mime == QString("image/x-raw"))
+            {
+                DMetadata metaData(fi.filePath());
+                dims = metaData.getImageDimensions();
+            }
+            else
+            {
+                KFileMetaInfo meta(fi.filePath());
+                if (meta.isValid())
+                {
+                    if (meta.containsGroup("Jpeg EXIF Data"))
+                        dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                    else if (meta.containsGroup("General"))
+                        dims = meta.group("General").item("Dimensions").value().toSize();
+                    else if (meta.containsGroup("Technical"))
+                        dims = meta.group("Technical").item("Dimensions").value().toSize();
+                }
+            }
+        }
+
+        itemInfo.name             = fi.fileName();
+        itemInfo.folder           = folder;
+        itemInfo.mime             = mime;
+        itemInfo.mtime            = fi.lastModified().toTime_t();
+        itemInfo.size             = fi.size();
+        itemInfo.width            = dims.width();
+        itemInfo.height           = dims.height();
+        itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+        itemInfo.readPermissions  = fi.isReadable();
+        itemInfo.writePermissions = fi.isWritable();
+    }
+
+    return true;
 }
 
 void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
@@ -337,9 +431,11 @@ void UMSCamera::cameraSummary(QString& summary)
     summary = QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
                            "Flash Disk card readers.<br><br>"));
 
-    summary.append(i18n("Model: %1<br>"
-                        "Port: %2<br>"
-                        "Path: %3<br>")
+    summary.append(i18n("Title: %1<br>"
+                        "Model: %2<br>"
+                        "Port: %3<br>"
+                        "Path: %4<br>")
+                        .arg(title())
                         .arg(model())
                         .arg(port())
                         .arg(path()));

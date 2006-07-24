@@ -42,9 +42,8 @@ class GPCamera : public DKCamera
 
 public:
 
-    GPCamera(const QString& model,
-             const QString& port,
-             const QString& path);
+    GPCamera(const QString& title, const QString& model,
+             const QString& port, const QString& path);
     ~GPCamera();
 
     bool thumbnailSupport();
@@ -77,9 +76,8 @@ public:
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
 
-    bool uploadItem(const QString& folder,
-                    const QString& itemName,
-                    const QString& localFile);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
+                    GPItemInfo& itemInfo, bool getImageDimensions=true);
 
     void cameraSummary(QString& summary);
     void cameraManual(QString& manual);

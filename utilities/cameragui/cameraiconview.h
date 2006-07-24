@@ -28,6 +28,10 @@
 #include <qdict.h>
 #include <qrect.h>
 
+// KDE includes.
+
+#include <kurl.h>
+
 // Local includes.
 
 #include "iconview.h"
@@ -71,6 +75,7 @@ signals:
     void signalSelected(CameraIconViewItem*, bool);
     void signalFileView(CameraIconViewItem*);
 
+    void signalUpload(const KURL::List&);
     void signalDownload();
     void signalDelete();
     void signalNewSelection(bool);
@@ -86,13 +91,16 @@ public slots:
 
 private slots:
 
+    void slotRightButtonClicked(const QPoint& pos);
     void slotContextMenu(IconItem* item, const QPoint& pos);
     void slotDoubleClicked(IconItem* item);
     void slotThemeChanged();
+    void slotPaste();
 
 protected:
 
     void startDrag();
+    void contentsDropEvent(QDropEvent *event);
     void updateItemRectsPixmap();
     
 private:

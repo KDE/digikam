@@ -44,7 +44,7 @@ class CameraController : public QObject
 
 public:
 
-    CameraController(QWidget* parent, const QString& mode,
+    CameraController(QWidget* parent, const QString& title, const QString& model,
                      const QString& port, const QString& path);
     ~CameraController();
 
@@ -53,9 +53,12 @@ public:
     void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
     void getCameraInformations();
+    QString getCameraPath();
+    QString getCameraTitle();
 
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);
+    void upload(const QString& srcFolder, const QString& srcFile, const QString& destFolder);
 
     void deleteFile(const QString& folder, const QString& file);
 
@@ -71,6 +74,7 @@ signals:
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
     void signalFileList(const GPItemInfoList& infoList);
+    void signalUploaded(const GPItemInfo& itemInfo);
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file);

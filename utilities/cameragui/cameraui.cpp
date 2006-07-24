@@ -83,6 +83,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
 #include "animwidget.h"
+#include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
@@ -127,6 +128,7 @@ public:
 
     QStringList                   currentlyDeleting;
     QStringList                   foldersToScan;
+    QStringList                   cameraFolderList;
 
     QPopupMenu                   *downloadMenu;
     QPopupMenu                   *deleteMenu;
@@ -338,6 +340,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->view, SIGNAL(signalFileView(CameraIconViewItem*)),
             this, SLOT(slotFileView(CameraIconViewItem*)));
 
+    connect(d->view, SIGNAL(signalUpload(const KURL::List&)),
+            this, SLOT(slotUpload(const KURL::List&)));
+
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
 
@@ -367,7 +372,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     // -- camera controller -----------------------------------------------
     
-    d->controller = new CameraController(this, model, port, path);
+    d->controller = new CameraController(this, cameraTitle, model, port, path);
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
@@ -407,6 +412,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     connect(d->controller, SIGNAL(signalExifData(const QByteArray&)),
             this, SLOT(slotExifFromData(const QByteArray&)));
+
+    connect(d->controller, SIGNAL(signalUploaded(const GPItemInfo&)),
+            this, SLOT(slotUploaded(const GPItemInfo&)));
 
     connect(d->cancelBtn, SIGNAL(clicked()),
             this, SLOT(slotCancelButton()));
@@ -624,6 +632,7 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     if (d->closed)
         return;
 
+    d->cameraFolderList = folderList;
     for (QStringList::const_iterator it = folderList.begin();
          it != folderList.end(); ++it)
     {
@@ -665,6 +674,32 @@ void CameraUI::slotCameraInformations(const QString& summary, const QString& man
 void CameraUI::slotErrorMsg(const QString& msg)
 {
     KMessageBox::error(this, msg);    
+}
+
+void CameraUI::slotUpload(const KURL::List& urls)
+{
+    if (d->busy)
+        return;
+
+    CameraFolderDialog dlg(this, d->cameraFolderList, d->controller->getCameraTitle(), d->controller->getCameraPath());
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    QString cameraFolder = dlg.selectedFolderPath();
+    for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
+    {
+        QFileInfo fileInfo((*it).path());
+        d->controller->upload(fileInfo.dirPath(), fileInfo.fileName(), cameraFolder);
+    }
+}
+
+void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
+{
+    if (d->closed)
+        return;
+
+    d->view->addItem(itemInfo);
+    d->controller->getThumbnail(itemInfo.folder, itemInfo.name);
 }
 
 void CameraUI::slotDownloadSelected()

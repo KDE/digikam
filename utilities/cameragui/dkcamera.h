@@ -41,27 +41,30 @@ class DKCamera
 {
 public:
 
-    DKCamera(const QString& model, const QString& port, const QString& path);
+    DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     virtual ~DKCamera();
 
     virtual bool doConnect() = 0;
     virtual void cancel()  = 0;
 
     virtual void getAllFolders(const QString& folder, QStringList& subFolderList) = 0;
+
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
     virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true) = 0;
+
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize) = 0;
 
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
-    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile) = 0;
-
+    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
+                            GPItemInfo& itemInfo, bool getImageDimensions=true) = 0;
     virtual void cameraSummary(QString& summary) = 0;
     virtual void cameraManual(QString& manual) = 0;
     virtual void cameraAbout(QString& about) = 0;
 
+    QString title() const;
     QString model() const;
     QString port()  const;
     QString path()  const;
@@ -79,6 +82,7 @@ protected:
 
 private:
 
+    QString m_title;
     QString m_model;
     QString m_port;
     QString m_path;

@@ -447,21 +447,30 @@ void CameraThread::run()
                 break;
             }
             case(CameraCommand::gp_upload):
-            {
-                QString folder = cmd->map["folder"].asString();
-                QString file   = cmd->map["file"].asString();
-                QString src    = cmd->map["src"].asString();
+            {                
+                QString folder = cmd->map["destFolder"].asString();
+    
+                // We will using the same source file name to create the dest file 
+                // name in camera.
+                QString file   = cmd->map["srcFile"].asString();
+                
+                // The source file path to download in camera.
+                QString src    = cmd->map["srcFolder"].asString() + "/" + cmd->map["srcFile"].asString();
     
                 sendInfo(i18n("Uploading file %1...").arg(file));
     
-                bool result = d->camera->uploadItem(folder, file, src);
+                GPItemInfo itemsInfo;
+
+                bool result = d->camera->uploadItem(folder, file, src, itemsInfo);
     
                 if (result)
                 {
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_uploaded);
-                    event->map.insert("folder", QVariant(folder));
-                    event->map.insert("file", QVariant(file));
-                    event->map.insert("src", QVariant(src));
+                    QByteArray  ba;
+                    QDataStream ds(ba, IO_WriteOnly);
+                    ds << itemsInfo;                    
+                    event->map.insert("info", QVariant(ba));
+
                     QApplication::postEvent(parent, event);
                 }
                 else
@@ -534,9 +543,8 @@ void CameraThread::sendInfo(const QString& msg)
 //-- Camera Controller ------------------------------------------------------
 
 
-CameraController::CameraController(QWidget* parent, const QString& model,
-                                   const QString& port,
-                                   const QString& path)
+CameraController::CameraController(QWidget* parent, const QString& title, const QString& model,
+                                   const QString& port, const QString& path)
                 : QObject(parent)
 {
     d = new CameraControllerPriv;	
@@ -559,12 +567,13 @@ CameraController::CameraController(QWidget* parent, const QString& model,
             kdDebug() << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
-            if (x.search(xport) != -1) {
+            if (x.search(xport) != -1) 
+            {
                 QString usbport = x.cap(1);
                 kdDebug() << "USB " << xport << " " << usbport << endl;
                 // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
                 //   model = xmodel;
-                d->camera = new GPCamera(url.user(), "usb:", "/");
+                d->camera = new GPCamera(title, url.user(), "usb:", "/");
                 // }
             }
         }
@@ -573,9 +582,9 @@ CameraController::CameraController(QWidget* parent, const QString& model,
     if (!d->camera)
     {
         if (model.lower() == "directory browse")
-            d->camera = new UMSCamera(model, port, path);
+            d->camera = new UMSCamera(title, model, port, path);
         else
-            d->camera = new GPCamera(model, port, path);
+            d->camera = new GPCamera(title, model, port, path);
     }
 
     d->thread = new CameraThread(this);
@@ -605,6 +614,16 @@ CameraController::~CameraController()
     delete d->thread;
     delete d->camera;
     delete d;
+}
+
+QString CameraController::getCameraPath()
+{
+    return d->camera->path();
+}
+
+QString CameraController::getCameraTitle()
+{
+    return d->camera->title();
 }
 
 void CameraController::slotConnect()
@@ -658,6 +677,18 @@ void CameraController::getCameraInformations()
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_cameraInformations;
     d->cmdQueue.enqueue(cmd);
+}
+
+void CameraController::upload(const QString& srcFolder, const QString& srcFile, const QString& destFolder)
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_upload;
+    cmd->map.insert("srcFolder", QVariant(srcFolder));
+    cmd->map.insert("srcFile", QVariant(srcFile));
+    cmd->map.insert("destFolder", QVariant(destFolder));
+    d->cmdQueue.enqueue(cmd);
+    kdDebug() << "Uploading '" << srcFile << "' into camera folder '" << destFolder << "'" << endl;
 }
 
 void CameraController::downloadPrep()
@@ -832,12 +863,50 @@ void CameraController::customEvent(QCustomEvent* e)
                     msg += i18n(" Do you want to continue?");
                     int result = KMessageBox::warningContinueCancel(d->parent, msg);
                     if (result != KMessageBox::Continue)
-                        slotCancel();
+                        slotCancel();  
                 }
             }
     
             d->timer->start(50);
             emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+            break;
+        }
+        case (CameraEvent::gp_uploaded) :
+        {
+            QByteArray ba  = QDeepCopy<QByteArray>(event->map["info"].asByteArray());
+            QDataStream ds(ba, IO_ReadOnly);
+            GPItemInfo itemInfo;
+            ds >> itemInfo;
+
+            emit signalUploaded(itemInfo);
+            break;
+        }
+        case (CameraEvent::gp_uploadFailed) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            QString src    = QDeepCopy<QString>(event->map["src"].asString());
+
+            d->timer->stop();
+    
+            QString msg = i18n("Failed to upload file %1.").arg(file);
+            
+            if (!d->canceled)
+            {
+                if (d->cmdQueue.isEmpty())
+                {
+                    KMessageBox::error(d->parent, msg);
+                }
+                else
+                {
+                    msg += i18n(" Do you want to continue?");
+                    int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                    if (result != KMessageBox::Continue)
+                        slotCancel();    
+                }
+            }
+    
+            d->timer->start(50);
             break;
         }
         case (CameraEvent::gp_deleted) :

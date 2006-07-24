@@ -40,7 +40,7 @@ class UMSCamera : public DKCamera
 {
 public:
 
-    UMSCamera(const QString& model, const QString& port, const QString& path);
+    UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     ~UMSCamera();
 
     bool doConnect();
@@ -53,7 +53,8 @@ public:
 
     bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
     bool deleteItem(const QString& folder, const QString& itemName);
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, 
+                    GPItemInfo& itemInfo, bool getImageDimensions=true);
 
     void cameraSummary(QString& summary);
     void cameraManual(QString& manual);

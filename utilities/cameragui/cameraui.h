@@ -86,13 +86,13 @@ private slots:
     void slotBusy(bool val);
     void slotErrorMsg(const QString& msg);
     void slotInformations();
-    void slotCameraInformations(const QString& summary, const QString& manual, const QString& about);
+    void slotCameraInformations(const QString&, const QString&, const QString&);
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);
-    void slotThumbnail(const QString& folder, const QString& file,
-                       const QImage& thumbnail);
+    void slotThumbnail(const QString&, const QString&, const QImage&);
 
+    void slotUpload(const KURL::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
     void slotDownload(bool onlySelected);
@@ -101,6 +101,7 @@ private slots:
 
     void slotFileView(CameraIconViewItem* item);
 
+    void slotUploaded(const GPItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&);

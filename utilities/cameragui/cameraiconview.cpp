@@ -33,19 +33,25 @@
 #include <qcursor.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
+#include <qdragobject.h>
+#include <qclipboard.h>
 
 // KDE includes.
 
+#include <kurldrag.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kaction.h>
+#include <kapplication.h>
 
 // Local includes.
 
 #include "cameraui.h"
 #include "themeengine.h"
 #include "gpiteminfo.h"
+#include "cameradragobject.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
 #include "renamecustomizer.h"
@@ -85,20 +91,31 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     d = new CameraIconViewPriv;
     d->cameraUI  = ui;
     d->groupItem = new IconGroupItem(this);
+
     setHScrollBarMode(QScrollView::AlwaysOff);
     setMinimumSize(450, 400);
+
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
+
+    // ----------------------------------------------------------------
 
     connect(this, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotDownloadNameChanged()));
             
     connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
             this, SLOT(slotContextMenu(IconItem*, const QPoint&)));
+
+    connect(this, SIGNAL(signalRightButtonClicked(const QPoint &)),
+            this, SLOT(slotRightButtonClicked(const QPoint &)));
             
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    // ----------------------------------------------------------------
 
     updateItemRectsPixmap();
     slotThemeChanged();
@@ -418,6 +435,65 @@ void CameraIconView::slotSelectNew()
 
 void CameraIconView::startDrag()
 {
+}
+
+void CameraIconView::contentsDropEvent(QDropEvent *event)
+{
+    if ( (!QUriDrag::canDecode(event) && !CameraDragObject::canDecode(event) )
+         || event->source() == this)
+    {
+        event->ignore();
+        return;
+    }
+
+    KURL::List srcURLs;
+    KURLDrag::decode(event, srcURLs);
+
+    QPopupMenu popMenu(this);
+    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
+    popMenu.insertSeparator(-1);
+    popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+
+    popMenu.setMouseTracking(true);
+    int id = popMenu.exec(QCursor::pos());
+    switch(id) 
+    {
+        case 10: 
+        {
+            emit signalUpload(srcURLs);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void CameraIconView::slotRightButtonClicked(const QPoint& pos)
+{
+    QPopupMenu popmenu(this);
+    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+
+    if(!data || !QUriDrag::canDecode(data))
+    {
+        paste->setEnabled(false);
+    }
+
+    paste->plug(&popmenu);
+    popmenu.exec(pos);
+    delete paste;
+}
+
+void CameraIconView::slotPaste()
+{
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+        return;
+
+    KURL::List srcURLs;
+    KURLDrag::decode(data, srcURLs);
+
+    emit signalUpload(srcURLs);
 }
 
 QRect CameraIconView::itemRect() const

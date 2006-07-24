@@ -109,8 +109,8 @@ public:
 
 bool GPStatus::cancel = false;
 
-GPCamera::GPCamera(const QString& model, const QString& port, const QString& path)
-        : DKCamera(model, port, path)
+GPCamera::GPCamera(const QString& title, const QString& model, const QString& port, const QString& path)
+        : DKCamera(title, model, port, path)
 {
     status = 0;
     
@@ -672,8 +672,8 @@ bool GPCamera::deleteAllItems(const QString& folder)
     return true;
 }
 
-bool GPCamera::uploadItem(const QString& folder, const QString& itemName,
-                          const QString& localFile)
+bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
+                          GPItemInfo& itemInfo, bool /*getImageDimensions*/)
 {
     CameraFile *cfile;
     gp_file_new(&cfile);
@@ -705,6 +705,62 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName,
         return false;
     }
 
+    // Get new camera item informations.
+
+    itemInfo.name   = itemName;
+    itemInfo.folder = folder;
+
+    CameraFileInfo info;
+    gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
+                            QFile::encodeName(itemName), &info, status->context);
+
+    itemInfo.mtime            = -1;
+    itemInfo.mime             = "";
+    itemInfo.size             = -1;
+    itemInfo.width            = -1;
+    itemInfo.height           = -1;
+    itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+    itemInfo.readPermissions  = -1;
+    itemInfo.writePermissions = -1;
+    
+    /* The mime type returned by Gphoto2 is dummy with all RAW files.
+    if (info.file.fields & GP_FILE_INFO_TYPE)
+        itemInfo.mime = info.file.type;*/
+
+    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).lower());
+
+    if (info.file.fields & GP_FILE_INFO_MTIME)
+        itemInfo.mtime = info.file.mtime;      
+
+    if (info.file.fields & GP_FILE_INFO_SIZE)
+        itemInfo.size = info.file.size;
+
+    if (info.file.fields & GP_FILE_INFO_WIDTH)
+        itemInfo.width = info.file.width;
+
+    if (info.file.fields & GP_FILE_INFO_HEIGHT)
+        itemInfo.height = info.file.height;
+
+    if (info.file.fields & GP_FILE_INFO_STATUS) 
+    {
+        if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
+            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+        else
+            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+    }
+    
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+    {
+        if (info.file.permissions & GP_FILE_PERM_READ)
+            itemInfo.readPermissions = 1;
+        else
+            itemInfo.readPermissions = 0;
+        if (info.file.permissions & GP_FILE_PERM_DELETE)
+            itemInfo.writePermissions = 1;
+        else
+            itemInfo.writePermissions = 0;
+    }
+
     gp_file_unref(cfile);
     delete status;
     status = 0;
@@ -724,14 +780,16 @@ void GPCamera::cameraSummary(QString& summary)
 
     status = new GPStatus;
     gp_camera_get_summary(d->camera, &sum, status->context);
-    summary = i18n("Model: %1\n"
-                   "Port: %2\n"
-                   "Path: %3\n\n"
-                   "Thumbnail support: %4\n"
-                   "Delete items support: %5\n"
-                   "Upload items support: %6\n"
-                   "Directory creation support: %7\n"
-                   "Directory deletion support: %8\n\n")
+    summary = i18n("Title: %1\n"
+                   "Model: %2\n"
+                   "Port: %3\n"
+                   "Path: %4\n\n"
+                   "Thumbnail support: %5\n"
+                   "Delete items support: %6\n"
+                   "Upload items support: %7\n"
+                   "Directory creation support: %8\n"
+                   "Directory deletion support: %9\n\n")
+                   .arg(title())
                    .arg(model())
                    .arg(port())
                    .arg(path())
