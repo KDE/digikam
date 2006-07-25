@@ -1,10 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_distortionfx" >
+<kpartgui version="3" name="digikamimageplugin_distortionfx" >
 
  <MenuBar>
 
   <Menu name="Filters" >
-   <text>Fi&amp;lters</text>
+   <text>Filte&amp;rs</text>
    <Action name="imageplugin_distortionfx" /> 
   </Menu>
 
