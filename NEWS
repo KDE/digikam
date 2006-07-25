@@ -1,6 +1,8 @@
 ----------------------------------------------------------------------------------------------------
 digiKam/DigikamImagePlugins 0.9.0 NEW FEATURES
 
+*** 0.9.0-beta1 *******************************************************
+
 General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
 General       : Removed imlib2 and libkexif depencies. Add Exiv2 and LCMS depencies.
 General       : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
@@ -61,7 +63,7 @@ Showfoto      : Thumbbar can be used to the bottom in horizontal mode.
 Showfoto      : New Exif Auto-rotate option like in digiKam ImageEditor.
 Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
 
-*** 0.9.0-beta1 *******************************************************
+*** 0.9.0-beta2 *******************************************************
 
 CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
 CameraGUI     : New option to get camera manual using Gphoto2 drivers.
@@ -72,6 +74,8 @@ CameraGUI     : Upload item to camera option.
 
 ----------------------------------------------------------------------------------------------------
 digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
+
+*** 0.9.0-beta1 *******************************************************
 
 001 ==> 87823  : displaying images with ICC color profile when possible
 002 ==> 91811  : find pictures by meta tag info, date
@@ -187,7 +191,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 110 ==> 124199 : digikam crashed when I right-clicked in the (empty) "My Albums" view.
 111 ==> 127826 : Album comment with no wordwrap.
 
-*** 0.9.0-beta1 *******************************************************
+*** 0.9.0-beta2 *******************************************************
 
 112 ==> 121691 : Problems with Downloading images from Camera.
 113 ==> 127614 : Focus steal when typing custom prefix in renaming options sidebar.
@@ -195,6 +199,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 115 ==> 124425 : Start index number counting on selected images instead of all images.
 116 ==> 127272 : crash when opening image in IE.
 117 ==> 96186  : upload to camera not possible.
-118 ==> 
+118 ==> 107724 : handle EXIF Information-Wizzard missing.
+119 ==> 
 
 ----------------------------------------------------------------------------------------------------
