@@ -38,13 +38,8 @@
 #include "digikam_export.h"
 
 class QFrame;
-class QTimer;
-class QGridLayout;
-class QSpinBox;
 
 class KAboutData;
-class KProgress;
-class KColorButton;
 
 namespace Digikam
 {
