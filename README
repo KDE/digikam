@@ -1,12 +1,12 @@
 DIGIKAM PROJECT
 
-Authors :
-----------------------------------------------------------------------
+-- AUTHORS -----------------------------------------------------------
+
 See AUTHORS file for details.
 
 
-About :
-----------------------------------------------------------------------
+-- ABOUT -------------------------------------------------------------
+
  digiKam is an easy to use and powerful digital photo management
  application, which makes importing, organizing and manipulating
  digital photos a "snap".  An easy to use interface is provided
@@ -23,13 +23,14 @@ About :
  import and export, etc.  The kipi-plugins package contains many
  very useful extentions.
 
- Homepage: http://www.digikam.org/
-           http://extragear.kde.org/apps/digikamimageplugins/
+ Homepages: http://www.digikam.org
+            http://extragear.kde.org/apps/digikamimageplugins
  
  digiKam is based in part on the work of the Independent JPEG Group.
 
-Contact :
------------------------------------------------------------------------
+
+-- CONTACT ------------------------------------------------------------
+
 If you have questions, comments, suggestions to make do email at :
 
 digikam-users@kde.org
@@ -39,20 +40,41 @@ If you want contribute to digiKam developments do email at :
 digikam-devel@kde.org
 
 
+-- BUG REPORTS --------------------------------------------------------
+
 IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
 system who can be contacted by the standard Kde help menu of digiKam. 
 A mail will be automaticly sent to the digikam development mailing list.
 There is no need to contact directly the digikam mailing list for a bug report 
 or a devel wish.
 
-The current digiKam bugs and devel wish reported to the Kde bugs report can be see 
-at this url :
+The current bugs and devel wish reported to the bugilla servers can be see 
+at these urls :
+
+* digiKam (KDE bugzilla):
 
 http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
+* DigikamImagePlugins (KDE bugzilla):
 
-Dependencies :
------------------------------------------------------------------------
+http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+
+* Kipi-plugins (KDE bugzilla):
+
+http://bugs.kde.org/buglist.cgi?product=kipiplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+
+Extra Bugzilla servers for shared libs used by digiKam :
+
+* GPhoto2 library (sourceforge bugzilla):
+
+http://gphoto.org/bugs
+
+* Exiv2 library (robotbattle bugzilla):
+
+http://dev.robotbattle.com/bugs/main_page.php
+
+
+-- DEPENDENCIES -------------------------------------------------------
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
@@ -66,8 +88,8 @@ liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
 
-Installation :
-------------------------------------------------------------------------
+-- INSTALLATION --------------------------------------------------------
+
 In the source directory do :
 
 1) export WANT_AUTOCONF_2_5=1
@@ -86,6 +108,3 @@ Check it with './configure --help' command line.
 
 Nota : use the '--enable-debug=full' option with the configure script for to provide
 a full informations bug report.
-
-
-
