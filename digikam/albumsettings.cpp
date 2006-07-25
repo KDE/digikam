@@ -153,7 +153,7 @@ void AlbumSettings::init()
     d->iconShowTags       = true;
     d->iconShowRating     = true;
 
-    d->exifRotate             = false;
+    d->exifRotate             = true;
     d->exifSetOrientation     = false;
 
     d->saveIptcTags           = false;
@@ -217,7 +217,7 @@ void AlbumSettings::readSettings()
     d->currentTheme = config->readEntry("Theme", i18n("Default"));
     
     config->setGroup("EXIF Settings");
-    d->exifRotate = config->readBoolEntry("EXIF Rotate", false);
+    d->exifRotate = config->readBoolEntry("EXIF Rotate", true);
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
     config->setGroup("Metadata Settings");
