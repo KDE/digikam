@@ -471,7 +471,26 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
 
     KURL::List srcURLs;
     KURLDrag::decode(event, srcURLs);
+    uploadItemPopupMenu(srcURLs);
+}
 
+void CameraIconView::slotRightButtonClicked(const QPoint&)
+{
+    // don't popup context menu if the camera is busy
+    if (d->cameraUI->isBusy())
+        return;
+
+    QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
+    if(!data || !QUriDrag::canDecode(data))
+        return;
+
+    KURL::List srcURLs;
+    KURLDrag::decode(data, srcURLs);
+    uploadItemPopupMenu(srcURLs);
+}
+
+void CameraIconView::uploadItemPopupMenu(const KURL::List& srcURLs)
+{
     QPopupMenu popMenu(this);
     popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
     popMenu.insertSeparator(-1);
@@ -483,38 +502,6 @@ void CameraIconView::contentsDropEvent(QDropEvent *event)
     {
         case 10: 
         {
-            emit signalUpload(srcURLs);
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-void CameraIconView::slotRightButtonClicked(const QPoint& pos)
-{
-    // don't popup context menu if the camera is busy
-    if (d->cameraUI->isBusy())
-        return;
-
-    QPopupMenu popMenu(this);
-    popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
-    popMenu.insertSeparator(-1);
-    popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-
-    popMenu.setMouseTracking(true);
-    int id = popMenu.exec(pos);
-    switch(id) 
-    {
-        case 10: 
-        {
-            QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-            if(!data || !QUriDrag::canDecode(data))
-                return;
-        
-            KURL::List srcURLs;
-            KURLDrag::decode(data, srcURLs);
-        
             emit signalUpload(srcURLs);
             break;
         }
