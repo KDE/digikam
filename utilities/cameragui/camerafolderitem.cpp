@@ -31,61 +31,80 @@
 namespace Digikam
 {
 
+class CameraFolderItemPriv
+{
+public:
+
+    CameraFolderItemPriv()
+    {
+        count = 0;
+    }
+
+    bool    virtualFolder;
+
+    int     count;
+
+    QString folderName;
+    QString folderPath;
+    QString name;
+};
+
 CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name)
                 : KListViewItem(parent, name)
 {
+    d = new CameraFolderItemPriv;
     setPixmap(0, SmallIcon("folder"));
-    virtualFolder_ = true;
-    count_         = 0;
-    name_          = name;
+    d->virtualFolder = true;
+    d->name          = name;
 }
 
 CameraFolderItem::CameraFolderItem(KListViewItem* parent, const QString& folderName,
                                    const QString& folderPath)
                 : KListViewItem(parent, folderName)
 {
+    d = new CameraFolderItemPriv;
     setPixmap(0, SmallIcon("folder"));
-    folderName_    = folderName;
-    folderPath_    = folderPath;
-    virtualFolder_ = false;
-    count_         = 0;
-    name_          = folderName;
+    d->folderName    = folderName;
+    d->folderPath    = folderPath;
+    d->virtualFolder = false;
+    d->name          = folderName;
 }
 
 CameraFolderItem::~CameraFolderItem()
 {
+    delete d;
 }
 
 bool CameraFolderItem::isVirtualFolder()
 {
-    return virtualFolder_;    
+    return d->virtualFolder;    
 }
 
 QString CameraFolderItem::folderName()
 {
-    return folderName_;
+    return d->folderName;
 }
 
 QString CameraFolderItem::folderPath()
 {
-    return folderPath_;
+    return d->folderPath;
 }
 
 void CameraFolderItem::changeCount(int val)
 {
-    count_ += val;
-    setText(0, name_ + " (" + QString::number(count_) + ")");    
+    d->count += val;
+    setText(0, d->name + " (" + QString::number(d->count) + ")");    
 }
 
 void CameraFolderItem::setCount(int val)
 {
-    count_ = val;    
-    setText(0, name_ + " (" + QString::number(count_) + ")");
+    d->count = val;    
+    setText(0, d->name + " (" + QString::number(d->count) + ")");
 }
 
 int CameraFolderItem::count()
 {
-    return count_;    
+    return d->count;    
 }
 
 } // namespace Digikam

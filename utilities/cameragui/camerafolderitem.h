@@ -34,15 +34,16 @@
 namespace Digikam
 {
 
+class CameraFolderItemPriv;
+
 class CameraFolderItem : public KListViewItem
 {
+
 public:
 
-    CameraFolderItem(KListView* parent,
-                     const QString& name);
+    CameraFolderItem(KListView* parent, const QString& name);
 
-    CameraFolderItem(KListViewItem* parent,
-                     const QString& folderName,
+    CameraFolderItem(KListViewItem* parent, const QString& folderName,
                      const QString& folderPath);
 
     ~CameraFolderItem();
@@ -56,11 +57,7 @@ public:
     
 private:
 
-    QString folderName_;
-    QString folderPath_;
-    QString name_;
-    bool    virtualFolder_;
-    int     count_;
+    CameraFolderItemPriv* d;
 };
 
 } // namespace Digikam
