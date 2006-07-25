@@ -200,6 +200,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 116 ==> 127272 : crash when opening image in IE.
 117 ==> 96186  : upload to camera not possible.
 118 ==> 107724 : handle EXIF Information-Wizzard missing.
-119 ==> 
+119 ==> 130996 : More control over jpeg options.
+120 ==> 
 
 ----------------------------------------------------------------------------------------------------
