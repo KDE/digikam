@@ -467,11 +467,14 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uint&              h   = imageHeight();
     unsigned char*& data   = imageData();
     
+    // Size of image.
     cinfo.image_width      = w;
     cinfo.image_height     = h;
+
+    // Color components of image in RGB.
     cinfo.input_components = 3;
     cinfo.in_color_space   = JCS_RGB;    
-    
+
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
     
@@ -481,6 +484,12 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         quality = 100;
     
     jpeg_set_defaults(&cinfo);
+
+    // B.K.O #130996: set horizontal and vertical Subsampling factor to 1 for a best 
+    // quality of color picture compression. 
+    cinfo.comp_info[0].h_samp_factor = 1;
+    cinfo.comp_info[0].v_samp_factor = 1; 
+
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
