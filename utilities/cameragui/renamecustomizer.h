@@ -60,6 +60,7 @@ public:
     bool    useDefault() const;
     QString nameTemplate() const;
     Case    changeCase() const;
+    int     startIndex() const;
 
 signals:
 
@@ -77,9 +78,8 @@ private:
 private slots:
 
     void slotRadioButtonClicked(int);
-    void slotPrefixChanged(const QString&);
-    void slotCustomOptionsChanged(const QString&);
-    void slotCaseTypeChanged(const QString&);
+    void slotRenameOptionsChanged();
+    void slotCustomOptionsActived(int);
 
 private:
     

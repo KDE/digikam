@@ -37,6 +37,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <klineedit.h>
+#include <knuminput.h>
 #include <kdialogbase.h>
 
 // Local includes.
@@ -61,6 +62,8 @@ public:
         renameCustomOptions   = 0;
         changedTimer          = 0;
         renameCustomPrefix    = 0;
+        startIndexLabel       = 0;
+        startIndexInput       = 0;
     }
 
     QRadioButton *renameDefault;
@@ -70,6 +73,7 @@ public:
     QGroupBox    *renameCustomBox;
     
     QLabel       *renameDefaultCase;
+    QLabel       *startIndexLabel;
 
     QComboBox    *renameDefaultCaseType;
 
@@ -78,6 +82,8 @@ public:
     QTimer       *changedTimer;
 
     KLineEdit    *renameCustomPrefix;
+
+    KIntNumInput *startIndexInput;
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent)
@@ -134,7 +140,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameCustomBox->setColumnLayout(0, Qt::Vertical);
 
     QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout(), 
-                                         1, 2, KDialogBase::spacingHint());
+                                                         2, 2, KDialogBase::spacingHint());
     renameCustomBoxLayout->setColSpacing( 0, 10 );
     QLabel* prefixLabel = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
@@ -152,12 +158,22 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameCustomOptions->insertItem(i18n("Date and time"), 0);
     d->renameCustomOptions->insertItem(i18n("Sequence number"), 1);
     d->renameCustomOptions->insertItem(i18n("Time stamp & number"), 2);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomOptions, 1, 1, 2, 2);
     QWhatsThis::add( d->renameCustomOptions, i18n("<p>Set here the information to add to filename:<p>"
                      "<b>Date and time</b>: add the camera provided date and time.<p>"
                      "<b>Sequence number</b>: add a sequence number.<p>"
                      "<b>Time stamp & number</b>: add both camera provided date and time and "
                      "a sequence number."));
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomOptions, 1, 1, 2, 2);
+
+    d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
+    d->startIndexInput = new KIntNumInput(d->renameCustomBox);
+    d->startIndexInput->setRange(1, 999999, 1, true);
+    d->startIndexInput->setValue(1);
+    QWhatsThis::add( d->startIndexInput, i18n("<p>Set here the start index value used to rename picture "
+                                              "files with a sequence number."));
+
+    renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 2, 2, 1, 1);
+    renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 2, 2, 2, 2);
 
     mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
 
@@ -167,13 +183,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
             this, SLOT(slotRadioButtonClicked(int)));
             
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotPrefixChanged(const QString&)));
+            this, SLOT(slotRenameOptionsChanged()));
             
-    connect(d->renameCustomOptions, SIGNAL(activated(const QString&)),
-            this, SLOT(slotCustomOptionsChanged(const QString&)));
+    connect(d->renameCustomOptions, SIGNAL(activated(int)),
+            this, SLOT(slotCustomOptionsActived(int)));
             
     connect(d->renameDefaultCaseType, SIGNAL(activated(const QString&)),
-            this, SLOT(slotCaseTypeChanged(const QString&)));
+            this, SLOT(slotRenameOptionsChanged()));
+
+    connect(d->startIndexInput, SIGNAL(valueChanged (int)),
+            this, SLOT(slotRenameOptionsChanged()));
 
     connect(d->changedTimer, SIGNAL(timeout()),
             this, SIGNAL(signalChanged()));
@@ -195,6 +214,11 @@ bool RenameCustomizer::useDefault() const
     return d->renameDefault->isChecked();
 }
 
+int RenameCustomizer::startIndex() const
+{
+    return d->startIndexInput->value();
+}
+
 QString RenameCustomizer::nameTemplate() const
 {
     if (d->renameDefault->isChecked())
@@ -205,16 +229,22 @@ QString RenameCustomizer::nameTemplate() const
 
         switch (d->renameCustomOptions->currentItem())
         {
-        case ADDDATETIME:
-            templ += "%Y%m%dT%H%M%S"; 
-            break;
-        case ADDSEQNUMB:
-            templ += "-%%04d";
-            break;
-        case ADDBOTH:
-            templ += "%Y%m%dT%H%M%S"; 
-            templ += "-%%04d";
-            break;
+            case ADDDATETIME:
+            {
+                templ += "%Y%m%dT%H%M%S"; 
+                break;
+            }
+            case ADDSEQNUMB:
+            {
+                templ += "-%%04d";
+                break;
+            }
+            case ADDBOTH:
+            {
+                templ += "%Y%m%dT%H%M%S"; 
+                templ += "-%%04d";
+                break;
+            }
         }
 
         return templ;
@@ -241,20 +271,26 @@ void RenameCustomizer::slotRadioButtonClicked(int)
 
     d->renameCustomBox->setEnabled( btn != d->renameDefault );
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
-    d->changedTimer->start(500, true);
+    slotRenameOptionsChanged();
 }
 
-void RenameCustomizer::slotPrefixChanged(const QString&)
+void RenameCustomizer::slotCustomOptionsActived(int i)
 {
-    d->changedTimer->start(500, true);
+    if (i == ADDSEQNUMB || i == ADDBOTH)
+    {
+        d->startIndexInput->setEnabled(true);
+        d->startIndexLabel->setEnabled(true);
+    }
+    else
+    {
+        d->startIndexInput->setEnabled(false);
+        d->startIndexLabel->setEnabled(false);
+    }
+    
+    slotRenameOptionsChanged();
 }
 
-void RenameCustomizer::slotCustomOptionsChanged(const QString&)
-{
-    d->changedTimer->start(500, true);
-}
-
-void RenameCustomizer::slotCaseTypeChanged(const QString&)
+void RenameCustomizer::slotRenameOptionsChanged()
 {
     d->changedTimer->start(500, true);
 }
@@ -268,6 +304,7 @@ void RenameCustomizer::readSettings()
     int option     = config->readNumEntry("Rename Add Option", ADDSEQNUMB);
     int chcaseT    = config->readNumEntry("Case Type", NONE);
     QString prefix = config->readEntry("Rename Prefix", i18n("photo"));
+    int startIndex = config->readNumEntry("Rename Start Index", 1);
 
     if (def)
     {
@@ -287,6 +324,8 @@ void RenameCustomizer::readSettings()
     d->renameDefaultCaseType->setCurrentItem(chcaseT);
     d->renameCustomPrefix->setText(prefix);
     d->renameCustomOptions->setCurrentItem(option);
+    d->startIndexInput->setValue(startIndex);
+    slotCustomOptionsActived(option);
 }
 
 void RenameCustomizer::saveSettings()
@@ -298,6 +337,7 @@ void RenameCustomizer::saveSettings()
     config->writeEntry("Rename Add Option", d->renameCustomOptions->currentItem());
     config->writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
     config->writeEntry("Rename Prefix", d->renameCustomPrefix->text());
+    config->writeEntry("Rename Start Index", d->startIndexInput->value());
     config->sync();
 }
 

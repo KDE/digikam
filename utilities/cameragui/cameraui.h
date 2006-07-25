@@ -63,8 +63,9 @@ signals:
     void signalAlbumSettingsChanged();
 
 protected:
-
+    
     void closeEvent(QCloseEvent* e);
+    void keyPressEvent(QKeyEvent *e);
     
 private:
 

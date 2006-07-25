@@ -220,18 +220,19 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
 
 void CameraIconView::slotDownloadNameChanged()
 {
-    bool useDefault = true;
+    bool    useDefault = true;
+    int     startIndex = 0;
     QString nameTemplate;
 
     if (d->renamer)
     {
         useDefault   = d->renamer->useDefault();
         nameTemplate = d->renamer->nameTemplate();
+        startIndex   = d->renamer->startIndex() -1;
     }
     
     viewport()->setUpdatesEnabled(false);
 
-    int  index=0;
     bool hasSelection=false;
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
@@ -252,14 +253,15 @@ void CameraIconView::slotDownloadNameChanged()
         {
             QString downloadName;
             CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
+
             if (viewItem->isSelected())
             {
                 if (!useDefault)
-                    downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), index );
+                    downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), startIndex );
                 else
                     downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
-                index++;
+                startIndex++;
             }
             else 
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
@@ -277,12 +279,12 @@ void CameraIconView::slotDownloadNameChanged()
             CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
     
             if (!useDefault)
-                downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), 
-                                                d->groupItem->index(viewItem) );
+                downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), startIndex );
             else
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
     
             viewItem->setDownloadName( downloadName );
+            startIndex++;
         }
     }
 
@@ -557,7 +559,6 @@ void CameraIconView::updateItemRectsPixmap()
 
     d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(),
                                                                d->itemRect.height());
-
 }
 
 void CameraIconView::slotThemeChanged()
