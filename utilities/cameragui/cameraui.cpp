@@ -70,6 +70,7 @@ extern "C"
 #include <kcalendarsystem.h>
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
+#include <kinputdialog.h>
 
 // Local includes.
 
@@ -687,10 +688,26 @@ void CameraUI::slotUpload(const KURL::List& urls)
         return;
 
     QString cameraFolder = dlg.selectedFolderPath();
+
     for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
         QFileInfo fileInfo((*it).path());
-        d->controller->upload(fileInfo.dirPath(), fileInfo.fileName(), cameraFolder);
+        if (!fileInfo.exists()) continue;
+        if (fileInfo.isDir()) continue;
+
+        bool    ok;
+        QString uploadName = fileInfo.fileName();
+
+        while (d->view->findItem(cameraFolder, uploadName)) 
+        {
+            QString msg(i18n("Camera Folder <b>%1</b> contains item <b>%2</b>\n"
+                             "Please, enter New Name")
+                             .arg(cameraFolder).arg(uploadName));
+            uploadName = KInputDialog::getText(i18n("File already exist"), msg, uploadName, &ok, this);
+            if (!ok) return;
+        }
+
+        d->controller->upload(fileInfo, uploadName, cameraFolder);
     }
 }
 
@@ -916,8 +933,7 @@ void CameraUI::slotDeleteAll()
 
 void CameraUI::slotFileView(CameraIconViewItem* item)
 {
-    d->controller->openFile(item->itemInfo()->folder,
-                           item->itemInfo()->name);
+    d->controller->openFile(item->itemInfo()->folder, item->itemInfo()->name);
 }
 
 void CameraUI::slotExifFromFile(const QString& folder, const QString& file)

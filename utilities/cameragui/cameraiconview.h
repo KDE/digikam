@@ -63,6 +63,10 @@ public:
     void removeItem(const QString& folder, const QString& file);
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
 
+    void ensureItemVisible(CameraIconViewItem *item);
+    void ensureItemVisible(const GPItemInfo& itemInfo);
+    void ensureItemVisible(const QString& folder, const QString& file);
+
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 
     QPixmap* itemBaseRegPixmap() const;

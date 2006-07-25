@@ -452,12 +452,12 @@ void CameraThread::run()
     
                 // We will using the same source file name to create the dest file 
                 // name in camera.
-                QString file   = cmd->map["srcFile"].asString();
+                QString file   = cmd->map["destFile"].asString();
                 
                 // The source file path to download in camera.
-                QString src    = cmd->map["srcFolder"].asString() + "/" + cmd->map["srcFile"].asString();
+                QString src    = cmd->map["srcFilePath"].asString();
     
-                sendInfo(i18n("Uploading file %1...").arg(file));
+                sendInfo(i18n("Uploading file %1 into camera...").arg(file));
     
                 GPItemInfo itemsInfo;
 
@@ -679,16 +679,17 @@ void CameraController::getCameraInformations()
     d->cmdQueue.enqueue(cmd);
 }
 
-void CameraController::upload(const QString& srcFolder, const QString& srcFile, const QString& destFolder)
+void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder)
 {
     d->canceled = false;
     CameraCommand *cmd = new CameraCommand;
     cmd->action = CameraCommand::gp_upload;
-    cmd->map.insert("srcFolder", QVariant(srcFolder));
-    cmd->map.insert("srcFile", QVariant(srcFile));
+    cmd->map.insert("srcFilePath", QVariant(srcFileInfo.filePath()));
+    cmd->map.insert("destFile", QVariant(destFile));
     cmd->map.insert("destFolder", QVariant(destFolder));
     d->cmdQueue.enqueue(cmd);
-    kdDebug() << "Uploading '" << srcFile << "' into camera folder '" << destFolder << "'" << endl;
+    kdDebug() << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
+                 "' (" << destFile << ")" << endl;
 }
 
 void CameraController::downloadPrep()

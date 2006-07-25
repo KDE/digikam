@@ -199,6 +199,25 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
     item->repaint();
 }
 
+void CameraIconView::ensureItemVisible(CameraIconViewItem *item)
+{
+    IconView::ensureItemVisible(item);
+}
+
+void CameraIconView::ensureItemVisible(const GPItemInfo& itemInfo)
+{
+    ensureItemVisible(itemInfo.folder, itemInfo.name);
+}
+
+void CameraIconView::ensureItemVisible(const QString& folder, const QString& file)
+{
+    CameraIconViewItem* item = d->itemDict.find(folder+file);
+    if (!item)
+        return;
+
+    ensureItemVisible(item);
+}
+
 void CameraIconView::slotDownloadNameChanged()
 {
     bool useDefault = true;

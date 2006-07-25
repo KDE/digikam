@@ -27,6 +27,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include <qfileinfo.h>
 
 // Local includes.
 
@@ -58,7 +59,7 @@ public:
 
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);
-    void upload(const QString& srcFolder, const QString& srcFile, const QString& destFolder);
+    void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);
 
     void deleteFile(const QString& folder, const QString& file);
 
