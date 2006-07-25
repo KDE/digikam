@@ -34,9 +34,26 @@
 namespace Digikam
 {
 
+class CameraFolderViewPriv
+{
+public:
+
+    CameraFolderViewPriv()
+    {
+        virtualFolder = 0;
+        rootFolder    = 0;
+    }
+
+    QString           cameraName;
+
+    CameraFolderItem *virtualFolder;
+    CameraFolderItem *rootFolder;
+};
+
 CameraFolderView::CameraFolderView(QWidget* parent)
                 : KListView(parent)
 {
+    d = new CameraFolderViewPriv;
     addColumn(i18n("Camera Folders"));
     setFullWidth(true);
     setDragEnabled(false);
@@ -44,15 +61,16 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setDropHighlighter(false);
     setAcceptDrops(true);
 
-    cameraName_ = "Camera";
-    virtualFolder_ = 0;
-    rootFolder_    = 0;
+    d->cameraName    = "Camera";
+    d->virtualFolder = 0;
+    d->rootFolder    = 0;
 
     setupConnections();
 }
 
 CameraFolderView::~CameraFolderView()
 {
+    delete d;
 }
 
 void CameraFolderView::setupConnections()
@@ -63,15 +81,15 @@ void CameraFolderView::setupConnections()
 
 void CameraFolderView::addVirtualFolder(const QString& name)
 {
-    cameraName_    = name;
-    virtualFolder_ = new CameraFolderItem(this, cameraName_);
-    virtualFolder_->setOpen(true);
+    d->cameraName    = name;
+    d->virtualFolder = new CameraFolderItem(this, d->cameraName);
+    d->virtualFolder->setOpen(true);
 }
 
 void CameraFolderView::addRootFolder(const QString& folder)
 {
-    rootFolder_ = new CameraFolderItem(virtualFolder_, folder, folder);
-    rootFolder_->setOpen(true);
+    d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder);
+    d->rootFolder->setOpen(true);
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder)
@@ -87,8 +105,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         if (!folder.endsWith("/"))
             path += "/";
         path += subFolder;
-        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder,
-                                                      path);
+        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path);
         kdDebug() << "CameraFolderView: Added ViewItem with path "
                   << item->folderPath() << endl;
         item->setOpen(true);
@@ -108,9 +125,7 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
     QListViewItemIterator it(this);
     for ( ; it.current(); ++it) 
     {
-
-        CameraFolderItem* item =
-            static_cast<CameraFolderItem*>(it.current());
+        CameraFolderItem* item = static_cast<CameraFolderItem*>(it.current());
 
         if (item->folderPath() == folderPath)
             return item;
@@ -127,19 +142,19 @@ void CameraFolderView::slotSelectionChanged(QListViewItem* item)
 
 CameraFolderItem* CameraFolderView::virtualFolder()
 {
-    return virtualFolder_;    
+    return d->virtualFolder;    
 }
 
 CameraFolderItem* CameraFolderView::rootFolder()
 {
-    return rootFolder_;
+    return d->rootFolder;
 }
 
 void CameraFolderView::clear()
 {
     KListView::clear();
-    virtualFolder_ = 0;
-    rootFolder_    = 0;
+    d->virtualFolder = 0;
+    d->rootFolder    = 0;
     emit signalCleared();
 }
 

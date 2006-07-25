@@ -35,6 +35,7 @@ namespace Digikam
 {
 
 class CameraFolderItem;
+class CameraFolderViewPriv;
 
 class CameraFolderView : public KListView
 {
@@ -47,8 +48,8 @@ public:
 
     void addVirtualFolder(const QString& name);
     void addRootFolder(const QString& folder);
-    CameraFolderItem* addFolder(const QString& folder,
-                                const QString& subFolder);
+    
+    CameraFolderItem* addFolder(const QString& folder, const QString& subFolder);
 
     CameraFolderItem* findFolder(const QString& folderPath);
 
@@ -73,9 +74,8 @@ private:
 
 private:
 
-    QString           cameraName_;
-    CameraFolderItem *virtualFolder_;
-    CameraFolderItem *rootFolder_;
+    CameraFolderViewPriv* d;
+
 };
 
 } // namespace Digikam
