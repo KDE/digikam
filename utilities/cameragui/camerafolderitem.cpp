@@ -20,10 +20,6 @@
  * 
  * ============================================================ */
 
-// KDE includes.
-
-#include <kiconloader.h>
-
 // Local includes.
 
 #include "camerafolderitem.h"
@@ -49,25 +45,25 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name)
+CameraFolderItem::CameraFolderItem(KListView* parent, const QString& name, const QPixmap& pixmap)
                 : KListViewItem(parent, name)
 {
     d = new CameraFolderItemPriv;
-    setPixmap(0, SmallIcon("folder"));
     d->virtualFolder = true;
     d->name          = name;
+    setPixmap(0, pixmap);
 }
 
 CameraFolderItem::CameraFolderItem(KListViewItem* parent, const QString& folderName,
-                                   const QString& folderPath)
+                                   const QString& folderPath, const QPixmap& pixmap)
                 : KListViewItem(parent, folderName)
 {
     d = new CameraFolderItemPriv;
-    setPixmap(0, SmallIcon("folder"));
     d->folderName    = folderName;
     d->folderPath    = folderPath;
     d->virtualFolder = false;
     d->name          = folderName;
+    setPixmap(0, pixmap);
 }
 
 CameraFolderItem::~CameraFolderItem()

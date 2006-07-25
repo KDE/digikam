@@ -79,20 +79,21 @@ void CameraFolderView::setupConnections()
             this, SLOT(slotSelectionChanged(QListViewItem*)));
 }
 
-void CameraFolderView::addVirtualFolder(const QString& name)
+void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixmap)
 {
     d->cameraName    = name;
-    d->virtualFolder = new CameraFolderItem(this, d->cameraName);
+    d->virtualFolder = new CameraFolderItem(this, d->cameraName, pixmap);
     d->virtualFolder->setOpen(true);
 }
 
-void CameraFolderView::addRootFolder(const QString& folder)
+void CameraFolderView::addRootFolder(const QString& folder, const QPixmap& pixmap)
 {
-    d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder);
+    d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setOpen(true);
 }
 
-CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder)
+CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
+                                              const QPixmap& pixmap)
 {
     CameraFolderItem *parentItem = findFolder(folder);
 
@@ -102,12 +103,16 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     if (parentItem) 
     {
         QString path(folder);
+
         if (!folder.endsWith("/"))
             path += "/";
+
         path += subFolder;
-        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path);
+        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
+        
         kdDebug() << "CameraFolderView: Added ViewItem with path "
                   << item->folderPath() << endl;
+
         item->setOpen(true);
         return item;
     }

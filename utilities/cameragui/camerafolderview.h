@@ -30,6 +30,7 @@
 // KDE includes.
 
 #include <klistview.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -46,10 +47,11 @@ public:
     CameraFolderView(QWidget* parent);
     ~CameraFolderView();
 
-    void addVirtualFolder(const QString& name);
-    void addRootFolder(const QString& folder);
+    void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("folder"));
+    void addRootFolder(const QString& folder, const QPixmap& pixmap=SmallIcon("folder"));
     
-    CameraFolderItem* addFolder(const QString& folder, const QString& subFolder);
+    CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, 
+                                const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* findFolder(const QString& folderPath);
 

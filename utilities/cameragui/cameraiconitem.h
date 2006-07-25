@@ -43,8 +43,7 @@ class CameraIconViewItem : public IconItem
 public:
 
     CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                       const QPixmap& pixmap, 
-                       const QString& downloadName=QString::null);
+                       const QPixmap& pixmap, const QString& downloadName=QString::null);
     ~CameraIconViewItem();
 
     void    setPixmap(const QPixmap& pixmap);

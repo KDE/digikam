@@ -27,6 +27,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -38,24 +39,31 @@ namespace Digikam
 {
 
 CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& cameraFolderList,
-                                       const QString& cameraName)
+                                       const QString& cameraName, const QString& rootPath)
                   : KDialogBase(Plain, i18n("%1 - Select Camera Folder").arg(cameraName),
                                 Help|Ok|Cancel, Ok,
                                 parent, 0, true, true)
 {
     setHelp("camerainterface.anchor", "digikam");
     resize(500, 400);
+    m_rootPath = rootPath;
 
     QVBoxLayout* lay = new QVBoxLayout(plainPage(), 0, spacingHint());
-    m_folderView = new CameraFolderView(plainPage());
+    m_folderView     = new CameraFolderView(plainPage());
     lay->addWidget(m_folderView);    
-    m_folderView->addVirtualFolder(cameraName);
+    m_folderView->addVirtualFolder(cameraName, SmallIcon("camera"));
 
     for (QStringList::const_iterator it = cameraFolderList.begin();
          it != cameraFolderList.end(); ++it)
     {
         QString folder(*it);
-        kdDebug() << folder << endl;
+        if (folder.startsWith(rootPath))
+            folder.remove(0, rootPath.length());
+        
+        if (!folder.startsWith("/"))
+            folder.prepend("/");
+
+        kdDebug() << "Camera folder: '" << folder << "'" << endl;
         if (folder != QString("/") && !folder.isEmpty())
         {
             QString root = folder.section( '/', 0, -2 );
@@ -76,9 +84,9 @@ QString CameraFolderDialog::selectedFolderPath()
 
     CameraFolderItem *folderItem = static_cast<CameraFolderItem *>(item);
     if (folderItem->isVirtualFolder())
-        return QString();
+        return QString(m_rootPath);
 
-    return(folderItem->folderPath());
+    return(m_rootPath + folderItem->folderPath());
 }
 
 }  // namespace Digikam
