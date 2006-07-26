@@ -44,9 +44,11 @@
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kimageio.h>
 
 // Local includes.
 
+#include "rawfiles.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumwidgetstack.h"
@@ -712,19 +714,42 @@ void DigikamView::slot_albumAddImages()
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
-    KFileDialog dlg(QString::null, AlbumSettings::instance()->getImageFileFilter(),
-                    this, "filedialog", true);
-    dlg.setOperationMode(KFileDialog::Opening );
-    dlg.setCaption(i18n("Add Images"));
-    dlg.setMode(KFile::Files);
-    dlg.okButton()->setText(i18n("&Add"));
-    dlg.exec();          
+    QString fileformats;
+    
+#if KDE_IS_VERSION(3,5,2)
+    //-- With KDE version >= 3.5.2, "image/x-raw" type mime exist ------------------------------
+    
+    fileformats = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+#else
+    //-- with KDE version < 3.5.2, we need to add all camera RAW file formats ------------------
+    
+    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
+    
+    // All Pictures from list must been always the first entry given by KDE API
+    QString allPictures = patternList[0];
+    
+    // Add RAW file format to All Pictures" type mime and remplace current.
+    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
+    patternList.remove(patternList[0]);
+    patternList.prepend(allPictures);
+    
+    // Added RAW file formats supported by dcraw program like a type mime. 
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it 
+    // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
+    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    
+    fileformats = patternList.join("\n");
+#endif
 
-    KURL::List urls = dlg.selectedURLs();
+    kdDebug () << "fileformats=" << fileformats << endl;   
+
+    KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
+                                               fileformats, this, i18n("Select Image to Add"));
 
     if (!urls.isEmpty())
     {
         KIO::Job* job = DIO::copy(urls, palbum->kurl());
+
         connect(job, SIGNAL(result(KIO::Job *) ),
                 this, SLOT(slotImageCopyResult(KIO::Job *)));
     }
