@@ -1,0 +1,114 @@
+.\"             -*-Nroff-*-
+.\"
+.TH digitaglinktree 1 "26 Jul 2006 " " " "Linux User's Manual"
+.SH NAME
+digitaglinktree \- Export tag structure of photos in digikam to the filesystem.
+.SH SYNOPSIS
+.B digitaglinktree 
+.B -r 
+.RI rootdir
+.B -l 
+.RI taglinkdir
+.B -d 
+.RI database
+.B [-f|-a|-v]
+
+.SH DESCRIPTION
+.B "digitaglinktree "
+will create a linktree for all photos in a digikam
+database that have tags set on them. Tags are used in digikam to
+create virtual folders containing images that all have one or more
+tags assigned. 
+Please note: Photos that have no tags at all assigned are silently
+ignored.
+.sp
+The program will not modify or even touch your original photos managed
+by digikam. Instead it will create new albums (i.e. folders) named by the
+tags your photos have and place symbolic links inside these folders
+to your original photos tagged by digikam. This script is very useful
+since other programs do not know about these virtual folders formed by
+photos that have identical digikam tags assigned.
+.sp
+This way you can access the collection of all images that share a
+certain tag by changing directory to the folder with the tags name
+created by this script. This allows you e.g. to run JAlbum a photo album
+software that needs to find the pictures to but into a web album in the filesystem.
+.sp
+Another benefit from using this script is that you have kind of a backup of your
+tag settings for all of your photos. The backup is simply the directory
+structure containing links to the original images that wear the tags.
+This could become important if
+forwhatever reason the digikam.db file gets corrupted or even lost.
+
+.PP
+.SH "COMMAND\-LINE OPTIONS"
+.TP
+\fB \-r \fR rootdir
+rootdir denotes the digikam base directory containing all your photos.
+.TP
+\fB \-l \fR taglinkdir
+taglinkdir denotes a directory in which the tag structure of all your photos stored in 
+rootdir will be exported by creating subdirectories for each tag and placing 
+symbolic links in these subdirectories that point to the original photo wearing
+the tags.
+.TP
+\fB \-d \fR database
+databasefile is the complete path including the filename to digikams photo
+database which usually can be found in digikams root directory. The files name 
+is usually digikam.db .
+.TP
+\fB \-a \fR
+By default the script will try to create relative symbolic links from the directory 
+taglinkdir to the photo files under rootdir. Using this option will result in 
+absolute symbolic links beeing created instead of relative ones.
+.TP
+\fB \-f \fR
+In digikam photos can have hierachical tags (tags that have subtags). In this case 
+digitaglinktree would by default add a directory for the tag and a subdirectory for 
+each of the subtags of this tag. By setting \fB \-f \fR a subtag is treated like a 
+regular tag just as its parent tag so digitaglinktree will create all subdirectories 
+for tags and subtags at the same level independent of the tag - subtag hierarchie. 
+.TP
+\fB \-v \fR
+Prints the scripts version number and exits.
+
+.SH CONFIGURATION
+.sp
+The script has to know which version of database is beeing used by digikam.The script needs this information to find the correct sqlite binary to start queries to the database.
+.sp
+
+You have to configure the script by setting the path to the sqlite binary that
+is used by the script to query the digikam database digikam.db. Since older
+digikam version use sqlite in version 2, but the latest digikam 0.80 version
+needs sqlite version 3 you have to take care to install the correct version of
+sqlite uded by the installed digikam version and to set the path to the correct
+sqlite executable in the scripts head:
+.sp
+Choose
+
+$SQLITE="/usr/bin/sqlite3"; 
+
+for digikam version 0.8x and 0.9x and 
+
+$SQLITE="/usr/bin/sqlite";  
+
+for digikam version 0.7x.
+
+.SH EXAMPLE
+.sp
+
+A call to digitaglinktree could is shown below:
+.sp
+digiTagLinktree -r /home/user/photos -l /home/user/photos/tags \
+            -d /home/user/photos/digikam.db
+.sp
+In this example digikams photo root denoted by -r is /home/user/photos where all of the photos 
+can be found that are managed by digikam. The option -l /home/user/photos/tags
+tells the script that all the subdirectories and symbolic links will be placed in 
+the directory /home/user/photos/tags (which should already exist). Because the link directory is 
+below digikams root directory in this example, you will see a new album in digikam
+after running the script that contains the exported tag structure with all the photos inside. 
+
+.SH AUTHORS
+.B digitaglinktree
+was written by Rainer Krienke <krienke@uni-koblenz.de>
