@@ -93,7 +93,8 @@ private slots:
     void slotFileList(const GPItemInfoList& fileList);
     void slotThumbnail(const QString&, const QString&, const QImage&);
 
-    void slotUpload(const KURL::List&);
+    void slotUpload();
+    void slotUploadItems(const KURL::List&);
     void slotDownloadSelected();
     void slotDownloadAll();
     void slotDownload(bool onlySelected);

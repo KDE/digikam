@@ -55,6 +55,8 @@ extern "C"
 
 // KDE includes.
 
+#include <kfiledialog.h>
+#include <kimageio.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kprogress.h>
@@ -74,6 +76,7 @@ extern "C"
 
 // Local includes.
 
+#include "rawfiles.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "downloadsettingscontainer.h"
@@ -306,6 +309,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->downloadMenu = new QPopupMenu(this);
     d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
     d->downloadMenu->insertItem(i18n("Download All"), this, SLOT(slotDownloadAll()), 0, 1);
+    selectMenu->insertSeparator();
+    d->downloadMenu->insertItem(i18n("Upload..."), this, SLOT(slotUpload()), 0, 2);
     d->downloadMenu->setItemEnabled(0, false);
     actionButton(User2)->setPopup(d->downloadMenu);
 
@@ -342,7 +347,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
             this, SLOT(slotFileView(CameraIconViewItem*)));
 
     connect(d->view, SIGNAL(signalUpload(const KURL::List&)),
-            this, SLOT(slotUpload(const KURL::List&)));
+            this, SLOT(slotUploadItems(const KURL::List&)));
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
@@ -662,7 +667,9 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
 
 void CameraUI::slotInformations()
 {
-    if (d->busy) return;
+    if (d->busy) 
+        return;
+
     d->controller->getCameraInformations();
 }
 
@@ -677,13 +684,57 @@ void CameraUI::slotErrorMsg(const QString& msg)
     KMessageBox::error(this, msg);    
 }
 
-void CameraUI::slotUpload(const KURL::List& urls)
+void CameraUI::slotUpload()
 {
     if (d->busy)
         return;
 
+    QString fileformats;
+    
+#if KDE_IS_VERSION(3,5,2)
+    //-- With KDE version >= 3.5.2, "image/x-raw" type mime exist ------------------------------
+    
+    fileformats = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
+#else
+    //-- with KDE version < 3.5.2, we need to add all camera RAW file formats ------------------
+    
+    QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
+    
+    // All Pictures from list must been always the first entry given by KDE API
+    QString allPictures = patternList[0];
+    
+    // Add RAW file format to All Pictures" type mime and remplace current.
+    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
+    patternList.remove(patternList[0]);
+    patternList.prepend(allPictures);
+    
+    // Added RAW file formats supported by dcraw program like a type mime. 
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it 
+    // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
+    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    
+    fileformats = patternList.join("\n");
+#endif
+
+    kdDebug () << "fileformats=" << fileformats << endl;   
+
+    KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
+                                               fileformats, this, i18n("Select Image to Upload"));
+    if (!urls.isEmpty())
+        slotUploadItems(urls);
+}
+
+void CameraUI::slotUploadItems(const KURL::List& urls)
+{
+    if (d->busy)
+        return;
+
+    if (urls.isEmpty())
+        return;
+
     CameraFolderDialog dlg(this, d->cameraFolderList, d->controller->getCameraTitle(),
                            d->controller->getCameraPath());
+
     if (dlg.exec() != QDialog::Accepted)
         return;
 
