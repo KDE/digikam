@@ -3,7 +3,7 @@
  * Date  : 2004-06-26
  * Description :
  *
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +23,12 @@
 extern "C"
 {
 #include <sys/time.h>
-#include <time.h>
-#include <stdio.h>
 }
+
+// C++ includes.
+
+#include <cstdio>
+#include <ctime>
 
 // Qt includes.
 
@@ -59,18 +62,30 @@ class AlbumListerPriv
 {
 public:
 
-    KIO::TransferJob*          job;
+    AlbumListerPriv()
+    {
+        filterTimer = 0;
+        job         = 0;
+        currAlbum   = 0;
+        filter      = "*";
+    }
+
+    bool                       untaggedFilter;
+
     QString                    filter;
 
-    Album*                     currAlbum;
-
+    QMap<Q_LLONG, ImageInfo*>  itemMap;
     QMap<int,bool>             dayFilter;
+
     QValueList<int>            tagFilter;
-    bool                       untaggedFilter;
-    QTimer*                    filterTimer;
+
+    QTimer                    *filterTimer;
+
+    KIO::TransferJob          *job;
 
     ImageInfoList              itemList;
-    QMap<Q_LLONG, ImageInfo*>  itemMap;
+
+    Album                     *currAlbum;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -88,15 +103,12 @@ AlbumLister::AlbumLister()
     m_instance = this;
 
     d = new AlbumListerPriv;
-    d->job       = 0;
-    d->currAlbum = 0;
-    d->filter    = "*";
     d->itemList.setAutoDelete(true);
     d->untaggedFilter = false;
-    d->filterTimer = new QTimer(this);
+    d->filterTimer    = new QTimer(this);
 
     connect(d->filterTimer, SIGNAL(timeout()),
-            SLOT(slotFilterItems()));
+            this, SLOT(slotFilterItems()));
 }
 
 AlbumLister::~AlbumLister()
@@ -133,10 +145,12 @@ void AlbumLister::openAlbum(Album *album)
     // Protocol = digikamalbums -> kio_digikamalbums
     d->job = new KIO::TransferJob(album->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
+
     connect(d->job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
+
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void AlbumLister::refresh()
@@ -168,10 +182,12 @@ void AlbumLister::refresh()
 
     d->job = new KIO::TransferJob(d->currAlbum->kurl(), KIO::CMD_SPECIAL,
                                   ba, QByteArray(), false);
+
     connect(d->job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotResult(KIO::Job*)));
+            this, SLOT(slotResult(KIO::Job*)));
+
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            SLOT(slotData(KIO::Job*, const QByteArray&)));
+            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
 }
 
 void AlbumLister::setDayFilter(const QValueList<int>& days)
@@ -188,7 +204,6 @@ void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
 {
     d->tagFilter = tags;
     d->untaggedFilter = showUnTagged;
-
     d->filterTimer->start(100, true);
 }
 
@@ -237,6 +252,7 @@ void AlbumLister::stop()
     d->currAlbum = 0;
     d->filterTimer->stop();
     emit signalClear();
+
     d->itemList.clear();
     d->itemMap.clear();
 
@@ -298,7 +314,6 @@ void AlbumLister::slotResult(KIO::Job* job)
         return;
     }
 
-
     typedef QMap<Q_LLONG, ImageInfo*> ImMap;
 
     for (ImMap::iterator it = d->itemMap.begin();
@@ -330,6 +345,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     ImageInfoList newFilteredItemsList;
 
     QDataStream ds(data, IO_ReadOnly);
+
     while (!ds.atEnd())
     {
         ds >> imageID;
@@ -352,12 +368,12 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
         }
 
         ImageInfo* info = new ImageInfo(imageID, albumID, name,
-                                        QDateTime::fromString(date,
-                                                              Qt::ISODate),
+                                        QDateTime::fromString(date, Qt::ISODate),
                                         size, dims);
 
         if (matchesFilter(info))
             newFilteredItemsList.append(info);
+
         newItemsList.append(info);
         d->itemList.append(info);
     }

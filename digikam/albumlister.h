@@ -3,7 +3,7 @@
  * Date  : 2004-06-26
  * Description : 
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,14 +78,6 @@ public:
     void setDayFilter(const QValueList<int>& days);
     void setTagFilter(const QValueList<int>& tags, bool showUnTagged=false);
     
-private:
-
-    AlbumLister();
-    bool matchesFilter(const ImageInfo* info) const;
-    
-    AlbumListerPriv    *d;
-    static AlbumLister *m_instance; 
-    
 signals:
 
     void signalNewItems(const ImageInfoList& items);
@@ -102,6 +94,18 @@ private slots:
 
     void slotResult(KIO::Job* job);
     void slotData(KIO::Job* job, const QByteArray& data);
+
+private:
+
+    AlbumLister();
+    bool matchesFilter(const ImageInfo* info) const;
+    
+private:
+
+    AlbumListerPriv    *d;
+
+    static AlbumLister *m_instance; 
+
 };
 
 }  // namespace Digikam
