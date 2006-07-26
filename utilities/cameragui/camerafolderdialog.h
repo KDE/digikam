@@ -29,13 +29,16 @@
 
 #include <kdialogbase.h>
 
-class CameraFolderView;
-
 namespace Digikam
 {
 
+class CameraFolderView;
+class CameraFolderItem;
+
 class CameraFolderDialog : public KDialogBase
 {
+    Q_OBJECT
+
 public:
 
     CameraFolderDialog(QWidget *parent, const QStringList& cameraFolderList,
@@ -43,6 +46,10 @@ public:
     ~CameraFolderDialog();
 
     QString selectedFolderPath();
+
+private slots:
+
+    void slotFolderPathSelectionChanged(CameraFolderItem* item);
 
 private:
     

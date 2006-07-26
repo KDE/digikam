@@ -45,32 +45,36 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& camer
                                 parent, 0, true, true)
 {
     setHelp("camerainterface.anchor", "digikam");
+    enableButtonOK(false);
     resize(500, 400);
     m_rootPath = rootPath;
-
+    
     QVBoxLayout* lay = new QVBoxLayout(plainPage(), 0, spacingHint());
     m_folderView     = new CameraFolderView(plainPage());
     lay->addWidget(m_folderView);    
-    m_folderView->addVirtualFolder(cameraName, SmallIcon("camera"));
+    m_folderView->addVirtualFolder(cameraName);
+    m_folderView->addRootFolder("/");
 
     for (QStringList::const_iterator it = cameraFolderList.begin();
          it != cameraFolderList.end(); ++it)
     {
         QString folder(*it);
-        if (folder.startsWith(rootPath))
+        if (folder.startsWith(rootPath) && rootPath != QString("/"))
             folder.remove(0, rootPath.length());
-        
-        if (!folder.startsWith("/"))
-            folder.prepend("/");
 
-        kdDebug() << "Camera folder: '" << folder << "'" << endl;
         if (folder != QString("/") && !folder.isEmpty())
         {
             QString root = folder.section( '/', 0, -2 );
+            if (root.isEmpty()) root = QString("/");
+
             QString sub  = folder.section( '/', -1 );
             m_folderView->addFolder(root, sub);
+            kdDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
         }
     }
+
+    connect(m_folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
+            this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
 }
 
 CameraFolderDialog::~CameraFolderDialog()
@@ -86,7 +90,26 @@ QString CameraFolderDialog::selectedFolderPath()
     if (folderItem->isVirtualFolder())
         return QString(m_rootPath);
 
+    // Case of Gphoto2 cameras. No need to duplicate root '/'.
+    if (m_rootPath == QString("/"))
+        return(folderItem->folderPath());
+
     return(m_rootPath + folderItem->folderPath());
 }
 
+void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
+{
+    if (item) 
+    {
+        enableButtonOK(true);
+        kdDebug() << "Camera folder path: " << selectedFolderPath() << endl;
+    }
+    else
+    {
+        enableButtonOK(false);
+    }
+}
+
 }  // namespace Digikam
+
+#include "camerafolderdialog.moc"

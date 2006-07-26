@@ -60,12 +60,17 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setDropVisualizer(false);
     setDropHighlighter(false);
     setAcceptDrops(true);
+    setSelectionMode(QListView::Single);
 
     d->cameraName    = "Camera";
     d->virtualFolder = 0;
     d->rootFolder    = 0;
 
-    setupConnections();
+    connect(this, SIGNAL(currentChanged(QListViewItem*)),
+            this, SLOT(slotCurrentChanged(QListViewItem*)));
+
+    connect(this, SIGNAL(clicked(QListViewItem*)),
+            this, SLOT(slotCurrentChanged(QListViewItem*)));
 }
 
 CameraFolderView::~CameraFolderView()
@@ -73,17 +78,13 @@ CameraFolderView::~CameraFolderView()
     delete d;
 }
 
-void CameraFolderView::setupConnections()
-{
-    connect(this, SIGNAL(selectionChanged(QListViewItem*)),
-            this, SLOT(slotSelectionChanged(QListViewItem*)));
-}
-
 void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixmap)
 {
     d->cameraName    = name;
     d->virtualFolder = new CameraFolderItem(this, d->cameraName, pixmap);
     d->virtualFolder->setOpen(true);
+    d->virtualFolder->setSelected(false);
+    d->virtualFolder->setSelectable(false);
 }
 
 void CameraFolderView::addRootFolder(const QString& folder, const QPixmap& pixmap)
@@ -139,10 +140,12 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
     return 0;
 }
 
-void CameraFolderView::slotSelectionChanged(QListViewItem* item)
+void CameraFolderView::slotCurrentChanged(QListViewItem* item)
 {
-    if (!item) return;
-    emit signalFolderChanged(static_cast<CameraFolderItem *>(item));
+    if (!item) 
+        emit signalFolderChanged(0);
+    else
+        emit signalFolderChanged(static_cast<CameraFolderItem *>(item));
 }
 
 CameraFolderItem* CameraFolderView::virtualFolder()

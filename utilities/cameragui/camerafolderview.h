@@ -47,7 +47,7 @@ public:
     CameraFolderView(QWidget* parent);
     ~CameraFolderView();
 
-    void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("folder"));
+    void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera"));
     void addRootFolder(const QString& folder, const QPixmap& pixmap=SmallIcon("folder"));
     
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, 
@@ -63,16 +63,11 @@ public:
 signals:
 
     void signalFolderChanged(CameraFolderItem*);
-    void signalCleared();
-    
+    void signalCleared();    
     
 private slots:
 
-    void slotSelectionChanged(QListViewItem* item);
-
-private:
-
-    void setupConnections();
+    void slotCurrentChanged(QListViewItem*);
 
 private:
 

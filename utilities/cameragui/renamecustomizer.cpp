@@ -166,9 +166,8 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomOptions, 1, 1, 2, 2);
 
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
-    d->startIndexInput = new KIntNumInput(d->renameCustomBox);
-    d->startIndexInput->setRange(1, 999999, 1, true);
-    d->startIndexInput->setValue(1);
+    d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
+    d->startIndexInput->setRange(1, 999999, 1, false);
     QWhatsThis::add( d->startIndexInput, i18n("<p>Set here the start index value used to rename picture "
                                               "files with a sequence number."));
 
