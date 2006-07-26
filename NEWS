@@ -205,6 +205,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 120 ==> 121526 : Download Images from camera.
 121 ==> 124060 : use same menu mnemonic for Filter as Krita (and Photoshop, and ...).
 122 ==> 131301 : Crash after add second image.
-123 ==>
+123 ==> 109820 : Utility script to export tag information of images into the filesystem.
+124 ==> 
 
 ----------------------------------------------------------------------------------------------------
