@@ -283,8 +283,7 @@ void GPCamera::getAllFolders(const QString& rootFolder,
     for (QStringList::iterator it = subfolders.begin();
          it != subfolders.end(); ++it)
     {
-        *it = rootFolder + QString(rootFolder.endsWith("/") ? "" : "/")
-              + (*it);
+        *it = rootFolder + QString(rootFolder.endsWith("/") ? "" : "/") + (*it);
         folderList.append(*it);
     }
 
@@ -320,7 +319,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     status = 0;
 
     int count = gp_list_count(clist);
-    for (int i=0; i<count; i++) 
+    for (int i = 0 ; i < count ; i++) 
     {
         const char* subFolder;
 
@@ -350,6 +349,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     status = new GPStatus;
     
     gp_list_new(&clist);
+
     if (gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, status->context) 
         != GP_OK) 
     {
@@ -360,8 +360,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     }
 
     int count = gp_list_count(clist);
-
-    for (int i=0; i<count; i++)
+    for (int i = 0 ; i < count ; i++)
     {
         if (gp_list_get_name(clist, i, &cname) != GP_OK)
         {
@@ -406,8 +405,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     }
 
     int count = gp_list_count(clist);
-
-    for (int i=0; i<count; i++)
+    for (int i = 0 ; i < count ; i++)
     {
         if (gp_list_get_name(clist, i, &cname) != GP_OK)
         {
@@ -639,13 +637,14 @@ bool GPCamera::deleteAllItems(const QString& folder)
 
     if (folderList.count() > 0) 
     {
-        for (unsigned int i=0; i<folderList.count(); i++) 
+        for (unsigned int i = 0 ; i < folderList.count() ; i++) 
         {
             QString subFolder(folder);
+
             if (!subFolder.endsWith("/"))
                 subFolder += "/";
-            subFolder += folderList[i];
 
+            subFolder += folderList[i];
             deleteAllItems(subFolder);
         }
     }
@@ -836,7 +835,8 @@ void GPCamera::cameraAbout(QString& about)
     status = new GPStatus;
     gp_camera_get_about(d->camera, &abt, status->context);
     about = QString(abt.text);
-    about.append(i18n("\n\nTo report any problems with this driver, please contact gphoto2 team using this url: http://gphoto.org/bugs"));
+    about.append(i18n("\n\nTo report any problems with this driver, please contact "
+                      "gphoto2 team using this url: http://gphoto.org/bugs"));
 
     delete status;
     status = 0;
@@ -868,7 +868,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     }
     else 
     {
-        for (int i=0; i<count; i++) 
+        for (int i = 0 ; i < count ; i++) 
         {
             const char *cname;
             gp_abilities_list_get_abilities( abilList, i, &abil );
@@ -893,7 +893,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
 
     int numPorts = gp_port_info_list_count( list );
 
-    for (int i = 0; i < numPorts; i++) 
+    for (int i = 0 ; i < numPorts ; i++) 
     {
         gp_port_info_list_get_info( list, i, &info );
         plist.append( info.path );
