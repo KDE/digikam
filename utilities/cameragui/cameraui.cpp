@@ -700,7 +700,7 @@ void CameraUI::slotUpload(const KURL::List& urls)
 
         while (d->view->findItem(cameraFolder, uploadName)) 
         {
-            QString msg(i18n("Camera Folder <b>%1</b> contains item <b>%2</b>\n"
+            QString msg(i18n("Camera Folder <b>%1</b> contains item <b>%2</b><br>"
                              "Please, enter New Name")
                              .arg(cameraFolder).arg(uploadName));
             uploadName = KInputDialog::getText(i18n("File already exist"), msg, uploadName, &ok, this);
