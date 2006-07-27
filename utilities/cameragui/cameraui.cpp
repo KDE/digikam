@@ -82,6 +82,7 @@ extern "C"
 // Local includes.
 
 #include "rawfiles.h"
+#include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "downloadsettingscontainer.h"
@@ -97,8 +98,8 @@ extern "C"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
-#include "cameraui.h"
 #include "scanlib.h"
+#include "cameraui.h"
 
 namespace Digikam
 {
@@ -115,6 +116,7 @@ public:
         advBox            = 0;
         downloadMenu      = 0;
         deleteMenu        = 0;
+        imageMenu         = 0;
         cancelBtn         = 0;
         splitter          = 0;
         rightSidebar      = 0;
@@ -141,7 +143,8 @@ public:
 
     QPopupMenu                   *downloadMenu;
     QPopupMenu                   *deleteMenu;
-
+    QPopupMenu                   *imageMenu;
+    
     QToolButton                  *cancelBtn;
 
     QWidget                      *advBox;
@@ -184,7 +187,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                       0, false, true,
                       i18n("D&elete"),
                       i18n("&Download"),
-                      i18n("&Select"))
+                      i18n("&Image"))
 {
     d = new CameraUIPriv;
     setHelp("camerainterface.anchor", "digikam");
@@ -301,21 +304,24 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
-    QPopupMenu* selectMenu = new QPopupMenu(this);
-    selectMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    CTRL+Key_A);
-    selectMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   CTRL+Key_U);
-    selectMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), CTRL+Key_Asterisk);
-    selectMenu->insertSeparator();
-    selectMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()));
-    actionButton(User3)->setPopup(selectMenu);    
+    d->imageMenu = new QPopupMenu(this);
+    d->imageMenu->insertItem(i18n("Select &All"),       d->view, SLOT(slotSelectAll()),    CTRL+Key_A, 0);
+    d->imageMenu->insertItem(i18n("Select N&one"),      d->view, SLOT(slotSelectNone()),   CTRL+Key_U, 1);
+    d->imageMenu->insertItem(i18n("&Invert Selection"), d->view, SLOT(slotSelectInvert()), CTRL+Key_Asterisk, 2);
+    d->imageMenu->insertSeparator();
+    d->imageMenu->insertItem(i18n("Select &New Items"), d->view, SLOT(slotSelectNew()), 0, 3);
+    d->imageMenu->insertSeparator();
+    d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
+    d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
+    actionButton(User3)->setPopup(d->imageMenu);    
 
     // -------------------------------------------------------------------------
 
     d->downloadMenu = new QPopupMenu(this);
     d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
-    d->downloadMenu->insertItem(i18n("Download All"), this, SLOT(slotDownloadAll()), 0, 1);
+    d->downloadMenu->insertItem(i18n("Download All"),      this, SLOT(slotDownloadAll()), 0, 1);
     d->downloadMenu->insertSeparator();
-    d->downloadMenu->insertItem(i18n("Upload..."), this, SLOT(slotUpload()), 0, 2);
+    d->downloadMenu->insertItem(i18n("Upload..."),         this, SLOT(slotUpload()), 0, 2);
     d->downloadMenu->setItemEnabled(0, false);
     actionButton(User2)->setPopup(d->downloadMenu);
 
@@ -323,7 +329,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     d->deleteMenu = new QPopupMenu(this);
     d->deleteMenu->insertItem(i18n("Delete Selected"), this, SLOT(slotDeleteSelected()), 0, 0);
-    d->deleteMenu->insertItem(i18n("Delete All"), this, SLOT(slotDeleteAll()), 0, 1);
+    d->deleteMenu->insertItem(i18n("Delete All"),      this, SLOT(slotDeleteAll()), 0, 1);
     d->deleteMenu->setItemEnabled(0, false);
     actionButton(User1)->setPopup(d->deleteMenu);
 
@@ -450,6 +456,8 @@ void CameraUI::readSettings()
     d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
     d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
     d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
+    d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)config->readNumEntry("ThumbnailSize", 
+                              ThumbnailSize::Large)));
     
     if(config->hasKey("Splitter Sizes"))
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
@@ -470,6 +478,7 @@ void CameraUI::saveSettings()
     config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
     config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
     config->writeEntry("SetCredits", d->setCredits->isChecked());
+    config->writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
     config->writeEntry("Splitter Sizes", d->splitter->sizes());
     config->sync();
 }
@@ -613,6 +622,84 @@ void CameraUI::slotBusy(bool val)
         enableButton(User1, false);
         d->helpMenu->menu()->setItemEnabled(CAMERA_INFO_MENU_ID, false);
     }
+}
+
+void CameraUI::slotIncreaseThumbSize()
+{
+    ThumbnailSize thumbSize;
+
+    switch(d->view->thumbnailSize().size())
+    {
+        case (ThumbnailSize::Small):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
+            break;
+        }
+        case (ThumbnailSize::Medium):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Large);
+            break;
+        }
+        case (ThumbnailSize::Large):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
+            break;
+        }
+        case (ThumbnailSize::Huge):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Huge);
+            break;
+        }
+        default:
+            return;
+    }
+
+    if (thumbSize.size() == ThumbnailSize::Huge)
+    {
+        d->imageMenu->setItemEnabled(4, false);
+    }
+    d->imageMenu->setItemEnabled(5, true);
+
+    d->view->setThumbnailSize(thumbSize);
+}
+
+void CameraUI::slotDecreaseThumbSize()
+{
+    ThumbnailSize thumbSize;
+
+    switch(d->view->thumbnailSize().size())
+    {
+        case (ThumbnailSize::Small):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Small);
+            break;
+        }
+        case (ThumbnailSize::Medium):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Small);
+            break;
+        }
+        case (ThumbnailSize::Large):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Medium);
+            break;
+        }
+        case (ThumbnailSize::Huge):
+        {
+            thumbSize = ThumbnailSize(ThumbnailSize::Large);
+            break;
+        }
+        default:
+            return;
+    }
+
+    if (thumbSize.size() == ThumbnailSize::Small)
+    {
+        d->imageMenu->setItemEnabled(5, false);
+    }
+    d->imageMenu->setItemEnabled(4, true);    
+    
+    d->view->setThumbnailSize(thumbSize);
 }
 
 void CameraUI::slotConnected(bool val)

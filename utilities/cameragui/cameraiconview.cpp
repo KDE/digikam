@@ -50,6 +50,7 @@
 
 #include "cameraui.h"
 #include "themeengine.h"
+#include "thumbnailsize.h"
 #include "gpiteminfo.h"
 #include "cameradragobject.h"
 #include "cameraiconitem.h"
@@ -69,6 +70,7 @@ public:
         renamer   = 0;
         groupItem = 0;
         cameraUI  = 0;
+        thumbSize = ThumbnailSize::Large;
     }
 
     QDict<CameraIconViewItem>  itemDict;
@@ -81,6 +83,8 @@ public:
     RenameCustomizer          *renamer;
 
     IconGroupItem             *groupItem;
+
+    ThumbnailSize              thumbSize;
 
     CameraUI                  *cameraUI;
 };
@@ -150,9 +154,9 @@ void CameraIconView::addItem(const GPItemInfo& info)
     KMimeType::Ptr mime;
 
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
-    mime = KMimeType::mimeType( info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime );
+    mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ? QString("image/tiff") : info.mime);
 
-    QPixmap pix = mime->pixmap( KIcon::Desktop, 100, KIcon::DefaultState);
+    QImage thumb(mime->pixmap(KIcon::Desktop, ThumbnailSize::Huge, KIcon::DefaultState).convertToImage());
     QString downloadName;
 
     if (d->renamer)
@@ -167,7 +171,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
         }
     }
 
-    CameraIconViewItem* item = new CameraIconViewItem(d->groupItem, info, pix, downloadName);
+    CameraIconViewItem* item = new CameraIconViewItem(d->groupItem, info, thumb, downloadName);
     d->itemDict.insert(info.folder+info.name, item);
 }
 
@@ -194,8 +198,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
     if (!item)
         return;
 
-    QPixmap pixmap(image);
-    item->setPixmap(pixmap);
+    item->setThumbnail(image);
     item->repaint();
 }
 
@@ -287,7 +290,7 @@ void CameraIconView::slotDownloadNameChanged()
             startIndex++;
         }
     }
-
+    
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -517,9 +520,24 @@ QRect CameraIconView::itemRect() const
     return d->itemRect;
 }
 
+void CameraIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
+{
+    if ( d->thumbSize != thumbSize)
+    {
+        d->thumbSize = thumbSize;
+        updateItemRectsPixmap();
+        rearrangeItems(true);
+    }
+}
+
+ThumbnailSize CameraIconView::thumbnailSize() const
+{
+    return d->thumbSize;
+}
+
 void CameraIconView::updateItemRectsPixmap()
 {
-    const int thumbSize = 128;
+    int thumbSize = d->thumbSize.size();
 
     QRect pixRect;
     QRect textRect;

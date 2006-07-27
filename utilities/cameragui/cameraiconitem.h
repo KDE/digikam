@@ -26,7 +26,7 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qpixmap.h>
+#include <qimage.h>
 
 // Local includes.
 
@@ -40,13 +40,14 @@ class CameraIconViewItemPriv;
 
 class CameraIconViewItem : public IconItem
 {
+
 public:
 
     CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                       const QPixmap& pixmap, const QString& downloadName=QString::null);
+                       const QImage& thumbnail, const QString& downloadName=QString::null);
     ~CameraIconViewItem();
 
-    void    setPixmap(const QPixmap& pixmap);
+    void    setThumbnail(const QImage& thumbnail);
     
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
@@ -67,8 +68,7 @@ private:
 
 private:
 
-    CameraIconViewItemPriv* d;
-    
+    CameraIconViewItemPriv* d;    
 };
 
 }  // namespace Digikam

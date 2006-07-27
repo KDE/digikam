@@ -42,6 +42,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class ThumbnailSize;
 class GPItemInfo;
 class RenameCustomizer;
 class CameraUI;
@@ -67,6 +68,9 @@ public:
     void ensureItemVisible(const GPItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
+    void setThumbnailSize(const ThumbnailSize& thumbSize);
+    ThumbnailSize thumbnailSize() const;
+        
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 
     QPixmap* itemBaseRegPixmap() const;
@@ -116,7 +120,6 @@ private:
 private:
 
     CameraIconViewPriv* d;
-
 };
 
 }  // namespace Digikam

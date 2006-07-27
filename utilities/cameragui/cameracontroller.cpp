@@ -60,6 +60,7 @@ extern "C"
 
 // Local includes.
 
+#include "thumbnailsize.h"
 #include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
@@ -300,7 +301,7 @@ void CameraThread::run()
     
                 if (!thumbnail.isNull())
                 {
-                    thumbnail = thumbnail.smoothScale(128, 128, QImage::ScaleMin);
+                    thumbnail = thumbnail.smoothScale(ThumbnailSize::Huge, ThumbnailSize::Huge, QImage::ScaleMin);
             
                     CameraEvent* event = new CameraEvent(CameraEvent::gp_thumbnailed);
                     event->map.insert("folder", QVariant(folder));

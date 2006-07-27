@@ -32,6 +32,7 @@
 // Local includes.
 
 #include "iconview.h"
+#include "thumbnailsize.h"
 #include "albumiconitem.h"
 #include "gpiteminfo.h"
 #include "themeengine.h"
@@ -62,6 +63,8 @@ public:
     QPixmap            pixmapNewPicture;
     QPixmap            pixmapUnknowPicture;
 
+    QImage             thumbnail;
+    
     QRect              pixRect;
     QRect              textRect;
     QRect              extraRect;
@@ -195,13 +198,13 @@ const char *CameraIconViewItemPriv::unknowPicture_xpm[] =
 };
 
 CameraIconViewItem::CameraIconViewItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                                       const QPixmap& pix, const QString& downloadName)
+                                       const QImage& thumbnail, const QString& downloadName)
                   : IconItem(parent)
 {
     d = new CameraIconViewItemPriv;
     d->itemInfo     = new GPItemInfo(itemInfo);
     d->downloadName = downloadName;
-    d->pixmap       = pix;
+    d->thumbnail    = thumbnail;
 }
 
 CameraIconViewItem::~CameraIconViewItem()
@@ -210,9 +213,9 @@ CameraIconViewItem::~CameraIconViewItem()
     delete d;
 }
 
-void CameraIconViewItem::setPixmap(const QPixmap& pixmap)
+void CameraIconViewItem::setThumbnail(const QImage& thumbnail)
 {
-    d->pixmap = pixmap;
+    d->thumbnail = thumbnail;
 }
 
 GPItemInfo* CameraIconViewItem::itemInfo() const
@@ -223,7 +226,7 @@ GPItemInfo* CameraIconViewItem::itemInfo() const
 void CameraIconViewItem::paintItem()
 {
     CameraIconView* view = (CameraIconView*)iconView();
-    QColorGroup cg = view->colorGroup();
+    QColorGroup cg       = view->colorGroup();
     QFont fn(view->font());
 
     QPixmap pix;
@@ -244,8 +247,8 @@ void CameraIconViewItem::paintItem()
 
     p.setPen(isSelected() ? te->textSelColor() : te->textRegColor());
 
-    p.drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
-                 d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
+    p.drawPixmap(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
+                 d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
                  d->pixmap);
 
     p.drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
@@ -327,13 +330,14 @@ void CameraIconViewItem::setDownloaded(int status)
 
 void CameraIconViewItem::calcRect(const QString& itemName, const QString& downloadName)
 {
-    const int thumbSize = 128;
-    
-    d->pixRect     = QRect(0,0,0,0);
-    d->textRect    = QRect(0,0,0,0);
-    d->extraRect   = QRect(0,0,0,0);
-    QRect itemRect = rect();
-    itemRect.moveTopLeft(QPoint(0,0));
+    CameraIconView* view = (CameraIconView*)iconView();
+    int thumbSize        = view->thumbnailSize().size();
+    d->pixmap            = QPixmap(d->thumbnail.smoothScale(thumbSize, thumbSize, QImage::ScaleMin));
+    d->pixRect           = QRect(0,0,0,0);
+    d->textRect          = QRect(0,0,0,0);
+    d->extraRect         = QRect(0,0,0,0);
+    QRect itemRect       = rect();
+    itemRect.moveTopLeft(QPoint(0, 0));
 
     d->pixRect.setWidth(thumbSize);
     d->pixRect.setHeight(thumbSize);
@@ -354,9 +358,9 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
         }
 
         fm = QFontMetrics(fn);
-        r = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
-                                  Qt::AlignHCenter | Qt::WordBreak,
-                                  downloadName));
+        r  = QRect(fm.boundingRect(0, 0, thumbSize, 0xFFFFFFFF,
+                                   Qt::AlignHCenter | Qt::WordBreak,
+                                   downloadName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
@@ -371,16 +375,16 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
     itemRect.setHeight(h+4);
 
     // Center the pix and text rect
-    d->pixRect = QRect(2, 2, d->pixRect.width(), d->pixRect.height());
+    d->pixRect  = QRect(2, 2, d->pixRect.width(), d->pixRect.height());
     d->textRect = QRect((itemRect.width() - d->textRect.width())/2,
-                       itemRect.height() - d->textRect.height(),
-                       d->textRect.width(), d->textRect.height());
+                        itemRect.height() - d->textRect.height(),
+                        d->textRect.width(), d->textRect.height());
 
     if (!d->extraRect.isEmpty())
     {
         d->extraRect = QRect((itemRect.width() - d->extraRect.width())/2,
-                            itemRect.height() - d->extraRect.height(),
-                            d->extraRect.width(), d->extraRect.height());
+                             itemRect.height() - d->extraRect.height(),
+                             d->extraRect.width(), d->extraRect.height());
     }
 }
 
@@ -395,10 +399,9 @@ QRect CameraIconViewItem::clickToOpenRect()
         return pixRect;
     }
 
-    QRect pixRect(d->pixRect.x() + (d->pixRect.width() - d->pixmap.width())/2,
+    QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
                   d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
-                  d->pixmap.width(),
-                  d->pixmap.height());
+                  d->pixmap.width(), d->pixmap.height());
     pixRect.moveBy(r.x(), r.y());
     return pixRect;
 }
