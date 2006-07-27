@@ -72,7 +72,12 @@ extern "C"
 #include <kcalendarsystem.h>
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
+
+#if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
 
 // Local includes.
 
@@ -742,23 +747,32 @@ void CameraUI::slotUploadItems(const KURL::List& urls)
 
     for (KURL::List::const_iterator it = urls.begin() ; it != urls.end() ; ++it)
     {
-        QFileInfo fileInfo((*it).path());
-        if (!fileInfo.exists()) continue;
-        if (fileInfo.isDir()) continue;
+        QFileInfo fi((*it).path());
+        if (!fi.exists()) continue;
+        if (fi.isDir()) continue;
 
-        bool    ok;
-        QString uploadName = fileInfo.fileName();
+        QString ext  = QString(".") + fi.extension();
+        QString name = fi.fileName();
+        name.truncate(fi.fileName().length() - ext.length());
 
-        while (d->view->findItem(cameraFolder, uploadName)) 
+        bool ok;
+
+        while (d->view->findItem(cameraFolder, name + ext)) 
         {
-            QString msg(i18n("Camera Folder <b>%1</b> contains item <b>%2</b><br>"
-                             "Please, enter New Name")
-                             .arg(cameraFolder).arg(uploadName));
-            uploadName = KInputDialog::getText(i18n("File already exist"), msg, uploadName, &ok, this);
-            if (!ok) return;
+            QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b><br>"
+                             "Please, enter New Name (without extension):")
+                             .arg(cameraFolder).arg(fi.fileName()));
+#if KDE_IS_VERSION(3,2,0)
+            name = KInputDialog::getText(i18n("File already exist"), msg, name, &ok, this);
+
+#else
+            name = KLineEditDlg::getText(i18n("File already exist"), msg, name, &ok, this);
+#endif
+            if (!ok) 
+                return;
         }
 
-        d->controller->upload(fileInfo, uploadName, cameraFolder);
+        d->controller->upload(fi, name + ext, cameraFolder);
     }
 }
 
