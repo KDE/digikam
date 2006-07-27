@@ -309,7 +309,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->downloadMenu = new QPopupMenu(this);
     d->downloadMenu->insertItem(i18n("Download Selected"), this, SLOT(slotDownloadSelected()), 0, 0);
     d->downloadMenu->insertItem(i18n("Download All"), this, SLOT(slotDownloadAll()), 0, 1);
-    selectMenu->insertSeparator();
+    d->downloadMenu->insertSeparator();
     d->downloadMenu->insertItem(i18n("Upload..."), this, SLOT(slotUpload()), 0, 2);
     d->downloadMenu->setItemEnabled(0, false);
     actionButton(User2)->setPopup(d->downloadMenu);
