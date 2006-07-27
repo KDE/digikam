@@ -851,7 +851,7 @@ void CameraController::customEvent(QCustomEvent* e)
     
             d->timer->stop();
     
-            QString msg = i18n("Failed to download file %1.").arg(file);
+            QString msg = i18n("Failed to download file \"%1\".").arg(file);
             
             if (!d->canceled)
             {
@@ -890,7 +890,7 @@ void CameraController::customEvent(QCustomEvent* e)
 
             d->timer->stop();
     
-            QString msg = i18n("Failed to upload file %1.").arg(file);
+            QString msg = i18n("Failed to upload file \"%1\".").arg(file);
             
             if (!d->canceled)
             {
@@ -924,7 +924,7 @@ void CameraController::customEvent(QCustomEvent* e)
     
             d->timer->stop();
     
-            QString msg = i18n("Failed to delete file %1.").arg(file);
+            QString msg = i18n("Failed to delete file \"%1\".").arg(file);
             
             if (!d->canceled)
             {
