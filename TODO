@@ -41,7 +41,7 @@
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
 
 ==> 113801 : Main interface : Little problem with image files extensions.
-==> 117375 : Main interface : Change file name without affecting extension.
+
 
 * Media support:
 

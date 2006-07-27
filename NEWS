@@ -206,6 +206,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 121 ==> 124060 : use same menu mnemonic for Filter as Krita (and Photoshop, and ...).
 122 ==> 131301 : Crash after add second image.
 123 ==> 109820 : Utility script to export tag information of images into the filesystem.
-124 ==> 
+124 ==> 117375 : Change file name without affecting extension.
+125 ==> 
 
 ----------------------------------------------------------------------------------------------------
