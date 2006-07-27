@@ -108,7 +108,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         if (!mime.isEmpty())
         {
             GPItemInfo info;
-            QSize   dims(-1, -1);
+            QSize dims(-1, -1);
 
             if (getImageDimensions)
             {
@@ -133,7 +133,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             }
 
             info.name             = fi->fileName();
-            info.folder           = folder;
+            info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
             info.mime             = mime;
             info.mtime            = fi->lastModified().toTime_t();
             info.size             = fi->size();
@@ -156,7 +156,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // In 1st, we trying to get thumbnail from Exif data if we are JPEG file.
 
-    DMetadata metadata(QFile::encodeName(folder + "/" + itemName));
+    DMetadata metadata(QFile::encodeName(folder + QString("/") + itemName));
     thumbnail = metadata.getExifThumbnail(true);
     if (!thumbnail.isNull())
         return true;
@@ -166,14 +166,14 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // Using this way is always more speed than using dcraw parse utility.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
 
-    QFileInfo fi(folder + "/" + itemName);
+    QFileInfo fi(folder + QString("/") + itemName);
 
-    if (thumbnail.load(folder + "/" + fi.baseName() + ".thm"))        // Lowercase
+    if (thumbnail.load(folder + QString("/") + fi.baseName() + ".thm"))        // Lowercase
     {
         if (!thumbnail.isNull())
            return true;
     }
-    else if (thumbnail.load(folder + "/" + fi.baseName() + ".THM"))   // Uppercase
+    else if (thumbnail.load(folder + QString("/") + fi.baseName() + ".THM"))   // Uppercase
     {
         if (!thumbnail.isNull())
            return true;
@@ -185,7 +185,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     if (fi.extension().upper() == QString("TIFF") ||
         fi.extension().upper() == QString("TIF"))
     {
-        DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
+        DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
         if (!dimgThumb.isNull())
         {
             thumbnail = dimgThumb.copyQImage();
@@ -195,13 +195,13 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // In 4th, try to extract embedded thumbnail using dcraw
 
-    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + "/" + itemName));
+    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
     if (!thumbnail.isNull())
         return true;
 
     // Finaly, we trying to get thumbnail using DImg API.
 
-    DImg dimgThumb(QFile::encodeName(folder + "/" + itemName));
+    DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
 
     if (!dimgThumb.isNull())
     {
@@ -224,7 +224,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 {
     m_cancel = false;
 
-    QString src  = folder + "/" + itemName;
+    QString src  = folder + QString("/") + itemName;
     QString dest = saveFile;
 
     QFile sFile(src);
@@ -282,20 +282,20 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 
     // Any camera provide THM (thumbnail) file with real image. We need to remove it also.
 
-    QFileInfo fi(folder + "/" + itemName);
+    QFileInfo fi(folder + QString("/") + itemName);
 
-    QFileInfo thmLo(folder + "/" + fi.baseName() + ".thm");          // Lowercase
+    QFileInfo thmLo(folder + QString("/") + fi.baseName() + ".thm");          // Lowercase
 
     if (thmLo.exists())
         ::unlink(QFile::encodeName(thmLo.filePath()));
 
-    QFileInfo thmUp(folder + "/" + fi.baseName() + ".THM");          // Uppercase
+    QFileInfo thmUp(folder + QString("/") + fi.baseName() + ".THM");          // Uppercase
 
     if (thmUp.exists())
         ::unlink(QFile::encodeName(thmUp.filePath()));
 
     // Remove the real image.
-    return (::unlink(QFile::encodeName(folder + "/" + itemName)) == 0);
+    return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
@@ -303,7 +303,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 {
     m_cancel = false;
 
-    QString dest = folder + "/" + itemName;
+    QString dest = folder + QString("/") + itemName;
     QString src  = localFile;
 
     QFile sFile(src);
@@ -384,7 +384,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         }
 
         itemInfo.name             = fi.fileName();
-        itemInfo.folder           = folder;
+        itemInfo.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
         itemInfo.mime             = mime;
         itemInfo.mtime            = fi.lastModified().toTime_t();
         itemInfo.size             = fi.size();
@@ -453,7 +453,8 @@ void UMSCamera::cameraAbout(QString& about)
     about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface of a remote camera disk "
                          "mounted localy on your system.<br><br>"
                          "It doesn't use a libgphoto2 driver.<br><br>"
-                         "To report any problems with this driver, please contact digiKam team using this url: http://www.digikam.org/?q=contact"));
+                         "To report any problems with this driver, please contact digiKam team using this url: "
+                         "http://www.digikam.org/?q=contact"));
 }
 
 }  // namespace Digikam
