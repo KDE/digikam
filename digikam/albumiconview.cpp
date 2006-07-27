@@ -497,18 +497,15 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     for( iter = offers.begin(); iter != offers.end(); ++iter )
     {
         ptr = *iter;
-        openWithMenu.insertItem( ptr->pixmap(KIcon::Small),
-                                 ptr->name(), index++);
+        openWithMenu.insertItem( ptr->pixmap(KIcon::Small), ptr->name(), index++);
         serviceVector.push_back(ptr);
     }
 
     // --------------------------------------------------------
 
     QPopupMenu popmenu(this);
-    popmenu.insertItem(SmallIcon("editimage"),
-                       i18n("Edit..."), 10);
-    popmenu.insertItem(i18n("Open With"),
-                       &openWithMenu, 11);
+    popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
+    popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
     popmenu.insertSeparator();
 
     if (d->currentAlbum)
@@ -521,8 +518,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     popmenu.insertSeparator();
     
-    KAction *copy = KStdAction::copy(this, SLOT(slotCopy()), 0);
-    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    KAction *copy     = KStdAction::copy(this, SLOT(slotCopy()), 0);
+    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
     if(!data || !QUriDrag::canDecode(data))
     {
@@ -627,15 +624,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    popmenu.insertItem(SmallIcon("pencil"),
-                       i18n("Rename..."), 15);
+    popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 15);
 
     if (d->albumSettings->getUseTrash())
-        popmenu.insertItem(SmallIcon("edittrash"),
-                           i18n("Move to Trash"), 16);
+        popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 16);
     else
-        popmenu.insertItem(SmallIcon("editdelete"),
-                           i18n("Delete"), 16);
+        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 16);
 
     int id = popmenu.exec(pos);
 
