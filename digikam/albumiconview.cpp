@@ -1,8 +1,8 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2002-16-10
- * Description : 
+ * Date   : 2002-16-10
+ * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  * Copyright      2006 by Gilles Caulier
@@ -254,7 +254,6 @@ AlbumIconView::AlbumIconView(QWidget* parent)
 
     connect(watch, SIGNAL(signalImageCaptionChanged(Q_LLONG)),
             this, SLOT(slotImageAttributesChanged(Q_LLONG)));
-
 }
 
 AlbumIconView::~AlbumIconView()
@@ -744,8 +743,9 @@ void AlbumIconView::slotPaste()
             KURLDrag::decode(data, srcURLs);
 
             KIO::Job* job = DIO::copy(srcURLs, destURL);
+
             connect(job, SIGNAL(result(KIO::Job*)),
-                    SLOT(slotDIOResult(KIO::Job*)));
+                    this, SLOT(slotDIOResult(KIO::Job*)));
         }
     }
 }
@@ -781,20 +781,21 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     if (!item)
         return;
 
-    QString oldName = item->imageInfo()->name();
+    QFileInfo fi(item->imageInfo()->name());
+    QString ext  = QString(".") + fi.extension();
+    QString name = fi.fileName();
+    name.truncate(fi.fileName().length() - ext.length());
 
     bool ok;
 
 #if KDE_IS_VERSION(3,2,0)
-    QString newName = KInputDialog::getText(i18n("Rename Item"),
-                                            i18n("Enter new name:"),
-                                            oldName,
-                                            &ok, this);
+    QString newName = KInputDialog::getText(i18n("Rename Item (%1)").arg(fi.fileName()), 
+                                            i18n("Enter new name (without extension):"),
+                                            name, &ok, this);
 #else
-    QString newName = KLineEditDlg::getText(i18n("Rename Item"),
-                                            i18n("Enter new name:"),
-                                            oldName,
-                                            &ok, this);
+    QString newName = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(fi.fileName()), 
+                                            i18n("Enter new name (without extension):"),
+                                            name, &ok, this);
 #endif
 
     if (!ok)
@@ -802,26 +803,13 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
 
     QString oldURL = item->imageInfo()->kurl().url();
 
-    if (!item->imageInfo()->setName(newName))
+    if (!item->imageInfo()->setName(newName + ext))
         return;
 
     d->itemDict.remove(oldURL);
     d->itemDict.insert(item->imageInfo()->kurl().url(), item);
 
     item->repaint();
-
-    // if user has inadvertently renamed a file to one with an extension
-    // not in the current list of extensions, add it to the list of
-    // extension
-
-    QFileInfo fi(newName);
-    QString newExt("*." + fi.extension());
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (settings->addImageFileExtension(newExt))
-    {
-        d->imageLister->setNameFilter(settings->getAllFileFilter());
-    }
-
     signalItemsAdded();
 }
 
@@ -871,8 +859,9 @@ void AlbumIconView::slotDeleteSelectedItems()
     }
 
     KIO::Job* job = DIO::del(urlList);
+
     connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotDIOResult(KIO::Job*)));
+            this, SLOT(slotDIOResult(KIO::Job*)));
 }
 
 void AlbumIconView::slotFilesModified()
@@ -1118,14 +1107,14 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             {
                 KIO::Job* job = DIO::move(srcURLs, destURL);
                 connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
+                        this, SLOT(slotDIOResult(KIO::Job*)));
                 break;
             }
             case 11: 
             {
                 KIO::Job* job = DIO::copy(srcURLs, destURL);
                 connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
+                        this, SLOT(slotDIOResult(KIO::Job*)));
                 break;
             }
             default:

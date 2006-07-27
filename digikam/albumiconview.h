@@ -1,8 +1,8 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date  : 2002-16-10
- * Description : 
+ * Date   : 2002-16-10
+ * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
  * Copyright      2006 by Gilles Caulier
@@ -34,13 +34,11 @@
 #include "imageinfo.h"
 #include "albumitemhandler.h"
 
-class QMouseEvent;
 class QResizeEvent;
 class QDragMoveEvent;
 class QDropEvent;
 class QPoint;
 class QString;
-class QPainter;
 class QPixmap;
 
 namespace KIO
@@ -53,10 +51,10 @@ namespace Digikam
 
 class AlbumIconItem;
 class AlbumSettings;
-class AlbumIconViewPrivate;
 class ThumbnailSize;
 class Album;
 class PixmapManager;
+class AlbumIconViewPrivate;
 
 class AlbumIconView : public IconView,
                       public AlbumItemHandler
@@ -112,7 +110,32 @@ public:
     AlbumIconItem* findItem(const QString& url) const;
     AlbumIconItem* nextItemToThumbnail() const;
     PixmapManager* pixmapManager() const;
+   
+signals:
+
+    void signalItemsAdded();
+    void signalItemDeleted(AlbumIconItem* iconItem);
+    void signalCleared();
+
+public slots:
+
+    void slotSetExifOrientation(int orientation);
+    void slotRename(AlbumIconItem* item);
+    void slotDeleteSelectedItems();
+    void slotDisplayItem(AlbumIconItem *item=0);
+    void slotAlbumModified();
+    void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
+    void slotCopy();
+    void slotPaste();
     
+    void slotAssignRating(int rating);
+    void slotAssignRatingNoStar();
+    void slotAssignRatingOneStar();
+    void slotAssignRatingTwoStar();
+    void slotAssignRatingThreeStar();
+    void slotAssignRatingFourStar();
+    void slotAssignRatingFiveStar();
+
 protected:
 
     void resizeEvent(QResizeEvent* e);
@@ -151,31 +174,6 @@ private slots:
 
     void slotImageAttributesChanged(Q_LLONG imageId);
     void slotAlbumImagesChanged(int albumId);
-
-public slots:
-
-    void slotSetExifOrientation(int orientation);
-    void slotRename(AlbumIconItem* item);
-    void slotDeleteSelectedItems();
-    void slotDisplayItem(AlbumIconItem *item=0);
-    void slotAlbumModified();
-    void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
-    void slotCopy();
-    void slotPaste();
-    
-    void slotAssignRating(int rating);
-    void slotAssignRatingNoStar();
-    void slotAssignRatingOneStar();
-    void slotAssignRatingTwoStar();
-    void slotAssignRatingThreeStar();
-    void slotAssignRatingFourStar();
-    void slotAssignRatingFiveStar();
-    
-signals:
-
-    void signalItemsAdded();
-    void signalItemDeleted(AlbumIconItem* iconItem);
-    void signalCleared();
 
 private:
     
