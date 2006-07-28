@@ -69,6 +69,7 @@ CameraGUI     : Custom prefix index depand of current images selection in the ca
 CameraGUI     : New option to show camera sumary and documentations of Gphoto2 drivers.
 CameraGUI     : Option to upload pictures to camera using copy&paste or drag&drop.
 CameraGUI     : New option to start number sequence index with a custom value.
+CameraGUI     : New option to increase/decrease the thumbnails size.
 
 
 ...
