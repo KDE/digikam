@@ -592,6 +592,7 @@ void CameraUI::slotBusy(bool val)
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
         d->renameCustomizer->setFocusToCustomPrefix();
 
+        enableButton(User3, true);
         enableButton(User2, true);
         enableButton(User1, true);
         d->helpMenu->menu()->setItemEnabled(CAMERA_INFO_MENU_ID, true);
@@ -618,6 +619,7 @@ void CameraUI::slotBusy(bool val)
         d->cancelBtn->setEnabled(true);
         d->advBox->setEnabled(false);
 
+        enableButton(User3, false);
         enableButton(User2, false);
         enableButton(User1, false);
         d->helpMenu->menu()->setItemEnabled(CAMERA_INFO_MENU_ID, false);
