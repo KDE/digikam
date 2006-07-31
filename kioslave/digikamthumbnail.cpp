@@ -422,65 +422,56 @@ bool kio_digikamthumbnailProtocol::loadJPEG(QImage& image, const QString& path)
 
 void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& thumb)
 {
-    // Check if the file is an JPEG image
-    KFileMetaInfo metaInfo(filePath, "image/jpeg", KFileMetaInfo::Fastest);
+    // Rotate thumbnail based on metadata orientation information
 
-    if (metaInfo.isValid())
+    DMetadata metadata(filePath);
+    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+
+    if (orientation == DMetadata::ORIENTATION_NORMAL ||
+        orientation == DMetadata::ORIENTATION_UNSPECIFIED)
+        return;
+
+    QWMatrix matrix;
+
+    switch (orientation)
     {
-        if (metaInfo.mimeType() == "image/jpeg" &&
-            metaInfo.containsGroup("Jpeg EXIF Data"))
-        {
-            // Rotate thumbnail from JPEG files based on EXIF rotate tag
+        case DMetadata::ORIENTATION_NORMAL:
+        case DMetadata::ORIENTATION_UNSPECIFIED:
+            break;
 
-            QWMatrix matrix;
-            DMetadata metadata(filePath);
-            DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+        case DMetadata::ORIENTATION_HFLIP:
+            matrix.scale(-1, 1);
+            break;
 
-            bool doXform = (orientation != DMetadata::ORIENTATION_NORMAL &&
-                            orientation != DMetadata::ORIENTATION_UNSPECIFIED);
+        case DMetadata::ORIENTATION_ROT_180:
+            matrix.rotate(180);
+            break;
 
-            switch (orientation) 
-            {
-                case DMetadata::ORIENTATION_NORMAL:
-                case DMetadata::ORIENTATION_UNSPECIFIED:
-                    break;
+        case DMetadata::ORIENTATION_VFLIP:
+            matrix.scale(1, -1);
+            break;
 
-                case DMetadata::ORIENTATION_HFLIP:
-                    matrix.scale(-1, 1);
-                    break;
+        case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            matrix.scale(-1, 1);
+            matrix.rotate(90);
+            break;
 
-                case DMetadata::ORIENTATION_ROT_180:
-                    matrix.rotate(180);
-                    break;
+        case DMetadata::ORIENTATION_ROT_90:
+            matrix.rotate(90);
+            break;
 
-                case DMetadata::ORIENTATION_VFLIP:
-                    matrix.scale(1, -1);
-                    break;
+        case DMetadata::ORIENTATION_ROT_90_VFLIP:
+            matrix.scale(1, -1);
+            matrix.rotate(90);
+            break;
 
-                case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                    matrix.scale(-1, 1);
-                    matrix.rotate(90);
-                    break;
-
-                case DMetadata::ORIENTATION_ROT_90:
-                    matrix.rotate(90);
-                    break;
-
-                case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                    matrix.scale(1, -1);
-                    matrix.rotate(90);
-                    break;
-
-                case DMetadata::ORIENTATION_ROT_270:
-                    matrix.rotate(270);
-                    break;
-            }
-
-            //transform accordingly
-            if ( doXform )
-                thumb = thumb.xForm( matrix );
-        }
+        case DMetadata::ORIENTATION_ROT_270:
+            matrix.rotate(270);
+            break;
     }
+
+    // transform accordingly
+    thumb = thumb.xForm( matrix );
 }
 
 QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
