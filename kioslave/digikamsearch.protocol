@@ -18,4 +18,5 @@ Description[pa]=ਡਿਜ਼ੀਕੈਮ ਖੋਜ kioslave
 Description[pt]='kioslave' de procura do digiKam
 Description[ru]=Digikam kioslave - поиск
 Description[sv]=I/O-slav för Digikams sökning
+Description[tr]=digiKam arama kioslave
 Class=:local

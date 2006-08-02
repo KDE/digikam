@@ -24,4 +24,5 @@ Description[pa]=ਡਿਜ਼ੀਕੈਮ ਟੈਗ kioslave
 Description[pt]='kioslave' de marcas do digiKam
 Description[ru]=Digikam kioslave - метки
 Description[sv]=I/O-slav för Digikams etiketter
+Description[tr]=digiKam etiketler kioslave
 Class=:local

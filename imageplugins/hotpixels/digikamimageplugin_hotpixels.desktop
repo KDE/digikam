@@ -10,6 +10,7 @@ Name[pt_BR]=Plug-in de Imagens - hotpixels
 Name[sr]=Врући пиксели
 Name[sr@Latn]=Vrući pikseli
 Name[sv]=Insticksprogram för heta bildpunkter
+Name[tr]=ResimEklentisi_Soldurma
 Name[xx]=xxImagePlugin_HotPixelsxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -28,6 +29,7 @@ Comment[pa]=ਡਿਜ਼ੀਕੈਮ ਲਈ ਹਾਟ ਪਿਕਸਲ ਸੋਧ 
 Comment[pt]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[pt_BR]=Um 'plugin' do digiKam para corrigir os pixels queimados da imagem
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
+Comment[tr]=digiKam için beyaz dengesini düzeltme eklentisi
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net

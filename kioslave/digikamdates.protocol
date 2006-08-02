@@ -24,4 +24,5 @@ Description[pa]=ਡਿਜ਼ੀਕੈਮ ਮਿਤੀ kioslave
 Description[pt]='kioslave' de datas do digiKam
 Description[ru]=Digikam kioslave - даты
 Description[sv]=I/O-slav för Digikams datum
+Description[tr]=digiKam tarihler kioslave
 Class=:local

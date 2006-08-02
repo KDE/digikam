@@ -8,6 +8,7 @@ Name[nl]=Afbeeldingsplugin_Ruisreductie
 Name[pt]=ImagePlugin_Restoration
 Name[pt_BR]=Plugin de restauração de fotos
 Name[sv]=Insticksprogram för brusreducering
+Name[tr]=ResimEklentisi_GürültüDüzeltme
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
