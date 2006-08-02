@@ -292,8 +292,9 @@ void RAWLoader::startProcess()
 
     if (m_rawDecodingSettings.sixteenBitsImage)
         *m_process << "-4";
-    else
-        *m_process << "-2";
+    // TODO: "-2" is removed in 8.27, and it was default in 8.x, x<27. Ok to remove it?
+    //else
+      //  *m_process << "-2";
 
     if (m_rawDecodingSettings.halfSizeColorImage)
         *m_process << "-h";
