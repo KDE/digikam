@@ -142,37 +142,42 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     width  = (int)w32;
     height = (int)h32;
 
-    if (bit_depth == 16)                       
+    // TODO: Endianness:
+    // You may notice that the code for little and big endian
+    // below is now identical. This was found to work by PPC users.
+    // If this proves right, all the conditional clauses can be removed.
+
+    if (bit_depth == 16)
     {
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
         kdDebug() << "PNG in 16 bits/color/pixel." << endl;
 #endif
         m_sixteenBit = true;
-        
+
         switch (color_type)
         {
-            case PNG_COLOR_TYPE_RGB :		// RGB 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_RGB :            // RGB
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
 #endif
                 m_hasAlpha = false;
-                
+
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
                 break;
 
-            case PNG_COLOR_TYPE_RGB_ALPHA :	// RGBA 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
 #endif
                 m_hasAlpha = true;
                 break;
 
-            case PNG_COLOR_TYPE_GRAY :		// Grayscale 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_GRAY :          // Grayscale
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
 #endif
                 png_set_gray_to_rgb(png_ptr);
@@ -180,21 +185,21 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
                 break;
 
             case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha 
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
 #endif
                 png_set_gray_to_rgb(png_ptr);
                 m_hasAlpha = true;
                 break;
 
-            case PNG_COLOR_TYPE_PALETTE :	// Indexed 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_PALETTE :       // Indexed
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
 #endif
                 png_set_palette_to_rgb(png_ptr);
@@ -202,13 +207,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
                 break;
 
-            default:		
-#ifdef ENABLE_DEBUG_MESSAGES    
+            default:
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << k_funcinfo << "PNG color type unknown." << endl;
 #endif
                 return false;
@@ -216,35 +221,35 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
     else
     {
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
         kdDebug() << k_funcinfo << "PNG in >=8 bits/color/pixel." << endl;
 #endif
         m_sixteenBit = false;
         png_set_packing(png_ptr);
-            
+
         switch (color_type)
-        {            
-            case PNG_COLOR_TYPE_RGB :		// RGB 
-#ifdef ENABLE_DEBUG_MESSAGES    
+        {
+            case PNG_COLOR_TYPE_RGB :           // RGB
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_RGB" << endl;
 #endif
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
                 break;
 
-            case PNG_COLOR_TYPE_RGB_ALPHA :	// RGBA 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA" << endl;
 #endif
                 m_hasAlpha = true;
                 break;
 
-            case PNG_COLOR_TYPE_GRAY :		// Grayscale 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_GRAY :          // Grayscale
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_GRAY" << endl;
 #endif
                 png_set_gray_1_2_4_to_8(png_ptr);
@@ -253,21 +258,21 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = false;
                 break;
 
-            case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + alpha 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
 #endif
                 png_set_gray_to_rgb(png_ptr);
                 m_hasAlpha = true;
                 break;
 
-            case PNG_COLOR_TYPE_PALETTE :	// Indexed 
-#ifdef ENABLE_DEBUG_MESSAGES    
+            case PNG_COLOR_TYPE_PALETTE :       // Indexed
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << "PNG in PNG_COLOR_TYPE_PALETTE" << endl;
 #endif
                 png_set_packing(png_ptr);
@@ -276,13 +281,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 if (QImage::systemByteOrder() == QImage::LittleEndian)       // Intel
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
                 else                                                         // PPC
-                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_BEFORE);
+                    png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
 
                 m_hasAlpha = true;
                 break;
 
-            default:		
-#ifdef ENABLE_DEBUG_MESSAGES    
+            default:
+#ifdef ENABLE_DEBUG_MESSAGES
                 kdDebug() << k_funcinfo << "PNG color type unknown." << endl;
 #endif
                 return false;
@@ -295,18 +300,19 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (QImage::systemByteOrder() == QImage::LittleEndian)  // Intel 
         png_set_bgr(png_ptr);
     else                                                    // PPC
-        png_set_swap_alpha(png_ptr);
+        png_set_bgr(png_ptr);
+        //png_set_swap_alpha(png_ptr);
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
 
     // -------------------------------------------------------------------
     // Get image data.
-    
+
     png_read_update_info(png_ptr, info_ptr);
 
     uchar *data  = 0;
-    
+
     if (m_sixteenBit)
         data = new uchar[width*height*8];  // 16 bits/color/pixel
     else
@@ -392,15 +398,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
     // Read image ICC profile
-    
+
     QMap<int, QByteArray>& metaData = imageMetaData();
 
     png_charp   profile_name, profile_data=NULL;
     png_uint_32 profile_size;
     int         compression_type;
-    
+
     png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &profile_size);
-    
+
     if (profile_data != NULL) 
     {
         QByteArray profile_rawdata(profile_size);
@@ -412,16 +418,16 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // If ICC profile is null, check Exif metadata.
         checkExifWorkingColorSpace();
     }
-    
+
     // -------------------------------------------------------------------
     // Get embbeded text data.
 
     png_text* text_ptr;
     int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
-    
+
     /*
     Standard Embedded text includes in PNG :
-    
+
     Title            Short (one line) title or caption for image
     Author           Name of image's creator
     Description      Description of image (possibly long)
@@ -435,8 +441,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     Extra Raw profiles tag are used by ImageMAgick and defines at this URL :
     http://search.cpan.org/src/EXIFTOOL/Image-ExifTool-5.87/html/TagNames/PNG.html#TextualData
-    */    
-        
+    */
+
     for (int i = 0; i < num_comments; i++)
     {
         // Check if we have a Raw profile embeded using ImageMagick technic.
@@ -446,16 +452,16 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             memcmp(text_ptr[i].key, "Raw profile type iptc", 21) != 0)
         {
             imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
-            
-#ifdef ENABLE_DEBUG_MESSAGES    
+
+#ifdef ENABLE_DEBUG_MESSAGES
             kdDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key 
                       << " text=" << text_ptr[i].text << endl;
 #endif
         }
     }
-    
+
     // -------------------------------------------------------------------
-    
+
     png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
     fclose(f);
@@ -467,7 +473,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageHeight() = height;
     imageData()   = data;
     imageSetAttribute("format", "PNG");
-   
+
     return true;
 }
 
@@ -607,7 +613,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             png_text text;
             text.key  = (char*)it.key().ascii();
             text.text = (char*)it.data().ascii();
-#ifdef ENABLE_DEBUG_MESSAGES    
+#ifdef ENABLE_DEBUG_MESSAGES
             kdDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text << endl;
 #endif
             text.compression = PNG_TEXT_COMPRESSION_zTXt;
