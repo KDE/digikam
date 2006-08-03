@@ -105,7 +105,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (!file)
         return false;
 
-    unsigned short header;
+    unsigned char header[2];
 
     if (fread(&header, 2, 1, file) != 1)
     {
@@ -113,7 +113,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    if (header != 0xd8ff)
+    unsigned char jpegID[] = { 0xFF, 0xD8 };
+
+    if (memcmp(header, jpegID, 2) != 0)
     {
         // not a jpeg file
         fclose(file);
