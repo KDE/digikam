@@ -208,6 +208,9 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 122 ==> 131301 : Crash after add second image.
 123 ==> 109820 : Utility script to export tag information of images into the filesystem.
 124 ==> 117375 : Change file name without affecting extension.
-125 ==> 
+125 ==> 131603 : Orientation of RAW-images (especially Canons *.cr2)
+126 ==> 131532 : Minolta exception code can break EXIF rotation
+127 ==> 131550 : digikam/showfoto can't show jpeg image under PowerPC
+128 ==> 131549 : endianess problem under Linux-PowerPC (with png images at least)
 
 ----------------------------------------------------------------------------------------------------
