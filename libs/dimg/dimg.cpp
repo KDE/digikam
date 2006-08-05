@@ -429,10 +429,10 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists())
     {
-        kdDebug() << k_funcinfo << "Failed to open file" << endl;
+        kdDebug() << k_funcinfo << "File \"" << filePath << "\" does not exist" << endl;
         return NONE;
     }
-    
+
     QString ext = fileInfo.extension().upper();
 
     if (ext == QString("JPEG") || ext == QString("JPG"))
@@ -445,19 +445,19 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     // In second, we trying to parse file header.
 
     FILE* f = fopen(QFile::encodeName(filePath), "rb");
-    
+
     if (!f)
     {
-        kdDebug() << k_funcinfo << "Failed to open file" << endl;
+        kdDebug() << k_funcinfo << "Failed to open file \"" << filePath << "\"" << endl;
         return NONE;
     }
-    
+
     const int headerLen = 8;
     unsigned char header[headerLen];
 
     if (fread(&header, 8, 1, f) != 1)
     {
-        kdDebug() << k_funcinfo << "Failed to read header" << endl;
+        kdDebug() << k_funcinfo << "Failed to read header of file \"" << filePath << "\"" << endl;
         fclose(f);
         return NONE;
     }
@@ -484,7 +484,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         int width, height, rgbmax;
         char nl;
         FILE *file = fopen(QFile::encodeName(filePath), "rb");
-        
+
         if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4) 
         {
             if (rgbmax > 255)
@@ -493,7 +493,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
                 return PPM;
             }
         }
-        
+
         pclose (file);
     }
     else if (rawFileParser.getCameraModel( QFile::encodeName(filePath), NULL, NULL) == 0)
@@ -508,7 +508,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         return TIFF;
     }
-    
+
     // In others cases, QImage will be used to try to open file.
     return QIMAGE;
 }
