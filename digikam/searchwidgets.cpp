@@ -95,6 +95,8 @@ RuleOpTable[] =
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::ALBUMS },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::TAGS },
     { I18N_NOOP("Does Not Equal"),     "NE",           SearchAdvancedRule::TAGS },
+    { I18N_NOOP("Contains"),           "LIKE",         SearchAdvancedRule::TAGS },
+    { I18N_NOOP("Does Not Contain"),   "NLIKE",        SearchAdvancedRule::TAGS },
     { I18N_NOOP("After"),              "GT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Before"),             "LT",           SearchAdvancedRule::DATE },
     { I18N_NOOP("Equals"),             "EQ",           SearchAdvancedRule::DATE },

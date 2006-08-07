@@ -471,14 +471,26 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
             query = " (Images.id IN "
                     "   (SELECT imageid FROM ImageTags "
                     "    WHERE tagid = $$@@$$)) ";
-        else 
+        else if (op == NE)
             query = " (Images.id NOT IN "
                     "   (SELECT imageid FROM ImageTags "
                     "    WHERE tagid = $$@@$$)) ";
+        else if (op == LIKE) 
+            query = " (Images.id IN "
+                    "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                    "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
+        else // op == NLIKE
+            query = " (Images.id NOT IN "
+                    "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                    "    WHERE TagsTree.pid = $$@@$$ or ImageTags.tagid = $$@@$$ )) ";
 
 //         query = " (Images.id IN "
 //                 "   (SELECT imageid FROM ImageTags "
 //                 "    WHERE tagid $$##$$ $$@@$$)) ";
+
+        query.replace("$$@@$$", QString::fromLatin1("'") + escapeString(val)
+                      + QString::fromLatin1("'"));
+
         break;
     }
     case(TAGNAME):
@@ -516,6 +528,7 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
     }
     }
 
+    if (key != TAG) {
     switch (op)
     {
     case(EQ):
@@ -559,6 +572,7 @@ QString kio_digikamsearch::subQuery(enum kio_digikamsearch::SKey key,
         query.replace("$$@@$$", QString::fromLatin1("'%") + escapeString(val)
                       + QString::fromLatin1("%'"));
         break;
+    }
     }
     }
 
