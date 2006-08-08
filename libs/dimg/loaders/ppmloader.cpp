@@ -150,11 +150,6 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             fread (src, 6 *sizeof(unsigned char), 1, file);
 
-            // Swap byte order to preserve compatibility with PPC.
-
-            if (QImage::systemByteOrder() == QImage::BigEndian)
-                swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-
             dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
             dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
             dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red

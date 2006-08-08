@@ -153,11 +153,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 
             for (int w = 0; w < m_width; w++)
             {
-                // Swap byte order to preserve compatibility with PPC.
-
-                if (QImage::systemByteOrder() == QImage::BigEndian)
-                    swab((const uchar *) src, (uchar *) src, 6*sizeof(uchar));
-
                 dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
                 dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
                 dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
@@ -194,11 +189,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 
             for (int w = 0; w < m_width; w++)
             {
-                // Swap byte order to preserve compatibility with PPC.
-
-                if (QImage::systemByteOrder() == QImage::BigEndian)
-                    swab((const char *) src, (char *) src, 3 *sizeof(uchar));
-
                 // No need to adapt RGB components accordinly with rgbmax value because dcraw
                 // always return rgbmax to 255 in 8 bits/color/pixels.
 
