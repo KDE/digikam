@@ -167,6 +167,7 @@ DImgInterface::DImgInterface()
 DImgInterface::~DImgInterface()
 {
     delete d->undoMan;
+    delete d->thread;
     delete d;
     m_instance = 0;
 }
