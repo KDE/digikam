@@ -126,6 +126,7 @@ protected:
     void loadImagePlugins();
 
     bool promptUserSave(const KURL& url);
+    bool waitForSavingToComplete();
     void startingSave(const KURL& url);
     bool startingSaveAs(const KURL& url);
     bool checkPermissions(const KURL& url);

@@ -257,7 +257,7 @@ void EditorWindow::setupStandardActions()
                                     actionCollection(), "editorwindow_print");
 
     m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
-                                     SHIFT+Key_Delete,
+                                     Key_Delete,
                                      this, SLOT(slotDeleteCurrentItem()),
                                      actionCollection(), "editorwindow_delete");
 
@@ -1025,7 +1025,7 @@ bool EditorWindow::promptUserSave(const KURL& url)
             // In this case, do not call enter_loop because exit_loop will not be called.
             if (saving)
             {
-                // Waiting asynchronous image file saving operation runing in separate thread.
+                // Waiting for asynchronous image file saving operation runing in separate thread.
                 m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
                 enter_loop();
                 m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
@@ -1047,6 +1047,25 @@ bool EditorWindow::promptUserSave(const KURL& url)
         }
     }
 
+    return true;
+}
+
+bool EditorWindow::waitForSavingToComplete()
+{
+    // avoid reentrancy - return false means we have reentered the loop already.
+    if (m_savingContext->synchronizingState == SavingContextContainer::SynchronousSaving)
+        return false;
+
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+    {
+        // Waiting for asynchronous image file saving operation runing in separate thread.
+        m_savingContext->synchronizingState = SavingContextContainer::SynchronousSaving;
+        KMessageBox::queuedMessageBox(this,
+                                      KMessageBox::Information,
+                                      i18n("Please wait while the image is being saved..."));
+        enter_loop();
+        m_savingContext->synchronizingState = SavingContextContainer::NormalSaving;
+    }
     return true;
 }
 

@@ -217,6 +217,10 @@ void ShowFoto::closeEvent(QCloseEvent* e)
     if (!e)
         return;
 
+    // wait if a save operation is currently running
+    if (!waitForSavingToComplete())
+        return;
+
     if (m_currentItem && !promptUserSave(m_currentItem->url()))
         return;
 
