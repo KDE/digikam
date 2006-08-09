@@ -161,7 +161,7 @@ QString ImageInfo::filePath() const
     }
 
     QString path = m_man->getLibraryPath();
-    path += a->url() + "/" + m_name;
+    path += a->url() + '/' + m_name;
     return path;
 }
 

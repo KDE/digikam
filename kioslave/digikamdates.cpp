@@ -216,7 +216,7 @@ void kio_digikamdates::special(const QByteArray& data)
                 if (!matchFilterList(regex, name))
                     continue;
 
-                path = m_libraryPath + purl + "/" + name;
+                path = m_libraryPath + purl + '/' + name;
                 if (::stat(QFile::encodeName(path), &stbuf) != 0)
                     continue;
 

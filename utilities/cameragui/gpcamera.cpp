@@ -642,7 +642,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
             QString subFolder(folder);
 
             if (!subFolder.endsWith("/"))
-                subFolder += "/";
+                subFolder += '/';
 
             subFolder += folderList[i];
             deleteAllItems(subFolder);

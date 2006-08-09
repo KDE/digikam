@@ -158,7 +158,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     QByteArray  ba;
     QDataStream os(ba, IO_WriteOnly);
     
-    QString base = libraryPath + url + "/";
+    QString base = libraryPath + url + '/';
     Q_LLONG id;
     QString name;
     QString date;
@@ -1440,7 +1440,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
 
     QString subURL = url;
     if (!url.endsWith("/"))
-        subURL += "/";
+        subURL += '/';
     subURL = escapeString( subURL);
 
     {
@@ -1470,7 +1470,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
                 continue;
             }
             
-            QString u = QDir::cleanDirPath(url + "/" + fi->fileName());
+            QString u = QDir::cleanDirPath(url + '/' + fi->fileName());
             
             if (currAlbumList.contains(u))
             {
@@ -1530,7 +1530,7 @@ void kio_digikamalbums::scanOneAlbum(const QString& url)
                 continue;
             }
 
-            addImage(albumID, m_libraryPath + url + "/" + fi->fileName());
+            addImage(albumID, m_libraryPath + url + '/' + fi->fileName());
         }
 
         // currItemList now contains deleted file list. remove them from db

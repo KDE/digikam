@@ -63,7 +63,7 @@ UndoCache::UndoCache()
 
     QString cacheDir;
     cacheDir = locateLocal("cache", 
-                           KGlobal::instance()->aboutData()->programName() + "/");
+                           KGlobal::instance()->aboutData()->programName() + '/');
 
     d->cachePrefix = QString("%1undocache-%2")
                              .arg(cacheDir)

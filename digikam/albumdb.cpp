@@ -296,7 +296,7 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         if (!(*it).isEmpty())
         {
-            info.icon = basePath + info.url + "/" + *it;
+            info.icon = basePath + info.url + '/' + *it;
         }
         ++it;
 
@@ -342,7 +342,7 @@ TagInfo::List AlbumDB::scanTags()
         }
         else
         {
-            info.icon = basePath + albumURL + "/" + iconName;
+            info.icon = basePath + albumURL + '/' + iconName;
         }
 
         tList.append(info);
@@ -450,7 +450,7 @@ QString AlbumDB::getAlbumIcon(int albumID)
 
     QString basePath(AlbumManager::instance()->getLibraryPath());
     basePath += url;
-    basePath += "/" + icon;
+    basePath += '/' + icon;
 
     return basePath;
 }
@@ -546,7 +546,7 @@ QString AlbumDB::getTagIcon(int tagID)
     }
     else
     {
-        icon = basePath + albumURL + "/" + iconName;
+        icon = basePath + albumURL + '/' + iconName;
     }
 
     return icon;
@@ -949,7 +949,7 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
                      "     Images.datetime == '');"),
              &values );
 
-    QString libraryPath = AlbumManager::instance()->getLibraryPath() + "/";
+    QString libraryPath = AlbumManager::instance()->getLibraryPath() + '/';
     for (QStringList::iterator it = values.begin(); it != values.end();
          ++it)
     {

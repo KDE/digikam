@@ -484,7 +484,7 @@ KURL DigikamImageCollection::uploadPath()
 
 KURL DigikamImageCollection::uploadRoot()
 {
-    return KURL(AlbumManager::instance()->getLibraryPath() + "/");
+    return KURL(AlbumManager::instance()->getLibraryPath() + '/');
 }
 
 QString DigikamImageCollection::uploadRootName()
@@ -674,9 +674,9 @@ QString DigikamKipiInterface::fileExtensions()
     // might change in the main app
 
     AlbumSettings* s = AlbumSettings::instance();
-    return (s->getImageFileFilter() + " " +
-            s->getMovieFileFilter() + " " +
-            s->getAudioFileFilter() + " " +
+    return (s->getImageFileFilter() + ' ' +
+            s->getMovieFileFilter() + ' ' +
+            s->getAudioFileFilter() + ' ' +
             s->getRawFileFilter());
 }
 

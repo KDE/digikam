@@ -263,7 +263,7 @@ void SetupGeneral::slotPathEdited(const QString& newPath)
 
     if (!newPath.startsWith("/")) 
     {
-        d->albumPathEdit->setURL(QDir::homeDirPath() + "/" + newPath);
+        d->albumPathEdit->setURL(QDir::homeDirPath() + '/' + newPath);
     }
 
     QFileInfo targetPath(newPath);

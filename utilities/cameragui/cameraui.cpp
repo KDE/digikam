@@ -1101,8 +1101,8 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
     // If no THM file is availalble, we will trying to get Exif data from real image file.
 
     QFileInfo fi(folder + QString("/") + file);
-    QFileInfo thmLo(fi.dirPath() + "/" + fi.baseName() + ".thm");          // Lowercase
-    QFileInfo thmUp(fi.dirPath() + "/" + fi.baseName() + ".THM");          // Uppercase
+    QFileInfo thmLo(fi.dirPath() + '/' + fi.baseName() + ".thm");          // Lowercase
+    QFileInfo thmUp(fi.dirPath() + '/' + fi.baseName() + ".THM");          // Uppercase
 
     if (thmLo.exists())
     {
@@ -1128,7 +1128,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     if (!item)
         return;
 
-    KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
+    KURL url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
 
     // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot 
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place 
@@ -1174,7 +1174,7 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
         if (d->currentlyDeleting.find(item->itemInfo()->folder + item->itemInfo()->name)
              == d->currentlyDeleting.end())
         {
-            KURL url(item->itemInfo()->folder + "/" + item->itemInfo()->name);
+            KURL url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
             d->rightSidebar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
             d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
         }

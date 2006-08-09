@@ -302,7 +302,7 @@ QString PAlbum::url() const
     {
         u = ((PAlbum*)parent())->url();
         if (!u.endsWith("/"))
-            u += "/";
+            u += '/';
     }
     u += title();
     return u;
@@ -370,7 +370,7 @@ QString TAlbum::url() const
     {
         u = ((TAlbum*)parent())->url();
         if (!u.endsWith("/"))
-            u += "/";
+            u += '/';
     }
     u += title();
     return u;

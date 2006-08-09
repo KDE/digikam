@@ -416,15 +416,15 @@ bool AlbumSettings::addImageFileExtension(const QString& newExt)
          QStringList::split(" ", d->rawFilefilter  ).contains(newExt) )
          return false; 
 
-    d->imageFilefilter = d->imageFilefilter + " " + newExt;
+    d->imageFilefilter = d->imageFilefilter + ' ' + newExt;
     return true;
 }
 
 QString AlbumSettings::getAllFileFilter() const
 {
-    return d->imageFilefilter + " "
-        +  d->movieFilefilter + " "
-        +  d->audioFilefilter + " "
+    return d->imageFilefilter + ' '
+        +  d->movieFilefilter + ' '
+        +  d->audioFilefilter + ' '
         +  d->rawFilefilter;
 }
 

@@ -184,7 +184,7 @@ void kio_digikamsearch::special(const QByteArray& data)
             if (!matchFilterList(regex, name))
                 continue;
 
-            path = m_libraryPath + purl + "/" + name;
+            path = m_libraryPath + purl + '/' + name;
             if (::stat(QFile::encodeName(path), &stbuf) != 0)
                 continue;
 
@@ -407,7 +407,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
                     todo.append( IMAGECAPTION );
                     todo.append( RATING );
 
-                    sqlQuery += "(";
+                    sqlQuery += '(';
                     QValueListIterator<SKey> it;
                     it = todo.begin();
                     while ( it != todo.end() )
@@ -417,7 +417,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
                         if ( it != todo.end() )
                             sqlQuery += " OR ";
                     }
-                    sqlQuery += ")";
+                    sqlQuery += ')';
                 }
             }
             else
@@ -427,7 +427,7 @@ QString kio_digikamsearch::buildQuery(const KURL& url) const
         }
         else
         {
-            sqlQuery += " " + *it + " ";
+            sqlQuery += ' ' + *it + ' ';
         }
     }
 

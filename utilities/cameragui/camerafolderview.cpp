@@ -106,7 +106,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         QString path(folder);
 
         if (!folder.endsWith("/"))
-            path += "/";
+            path += '/';
 
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);

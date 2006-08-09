@@ -450,7 +450,7 @@ void ScanLib::deleteStaleEntries()
     for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end(); ++it)
     {
         AlbumDB* dbstore = AlbumManager::instance()->albumDB();
-        QString location = " (" + dbstore->getAlbumURL((*it).second) + ")";
+        QString location = " (" + dbstore->getAlbumURL((*it).second) + ')';
 
         listToBeDeleted.append((*it).first + location);
     }

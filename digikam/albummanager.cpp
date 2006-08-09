@@ -787,7 +787,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum* parent,
     }
 
     QString path = parent->folderPath();
-    path += "/" + name;
+    path += '/' + name;
     path = QDir::cleanDirPath(path);
 
     // make the directory synchronously, so that we can add the
