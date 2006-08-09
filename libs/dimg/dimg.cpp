@@ -420,7 +420,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
 
 DImg::FORMAT DImg::fileFormat(const QString& filePath)
 {
-    if ( filePath == QString::null )
+    if ( filePath.isNull() )
         return NONE;
 
     // In first we trying to check the file extension. This is mandatory because
