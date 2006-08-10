@@ -622,7 +622,7 @@ QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
 
 bool kio_digikamthumbnailProtocol::loadDImg(QImage& image, const QString& path)
 {
-    Digikam::DImg dimg_im(QFile::encodeName(path));
+    Digikam::DImg dimg_im(path);
 
     if (dimg_im.isNull()) 
     {
