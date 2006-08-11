@@ -89,13 +89,13 @@ ImageResizeDlg::ImageResizeDlg(QWidget *parent, int *width, int *height)
     // -------------------------------------------------------------
     
     label    = new QLabel(i18n("Width:"), plainPage(), "w");
-    d->wInput = new KIntSpinBox(1, 9999, 1, *d->width, 10, plainPage());
+    d->wInput = new KIntSpinBox(1, QMAX(*d->width * 10, 9999), 1, *d->width, 10, plainPage());
     d->wInput->setName("w");
     topLayout->addWidget(label, 0, 0);
     topLayout->addWidget(d->wInput, 0, 1);
     
     label    = new QLabel(i18n("Height:"), plainPage());
-    d->hInput = new KIntSpinBox(1, 9999, 1, *d->height, 10, plainPage());
+    d->hInput = new KIntSpinBox(1, QMAX(*d->height * 10, 9999), 1, *d->height, 10, plainPage());
     d->hInput->setName("h");
     topLayout->addWidget(label, 0, 2);
     topLayout->addWidget(d->hInput, 0, 3);
