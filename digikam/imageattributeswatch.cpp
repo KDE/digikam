@@ -36,6 +36,13 @@ ImageAttributesWatch::~ImageAttributesWatch()
 void ImageAttributesWatch::cleanUp()
 {
     delete m_instance;
+    m_instance = 0;
+}
+
+void ImageAttributesWatch::shutDown()
+{
+    if (m_instance)
+        m_instance->disconnect(0, 0, 0);
 }
 
 ImageAttributesWatch *ImageAttributesWatch::instance()

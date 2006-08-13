@@ -42,6 +42,7 @@ public:
 
     static ImageAttributesWatch *instance();
     static void cleanUp();
+    static void shutDown();
 
     void imageTagsChanged(Q_LLONG imageId);
     void imagesChanged(int albumId);

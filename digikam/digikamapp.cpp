@@ -85,6 +85,7 @@
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
 #include "digikamapp.h"
+#include "albumthumbnailloader.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -171,6 +172,8 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
+    ImageAttributesWatch::shutDown();
+
     if (ImageWindow::imagewindowCreated())
         delete ImageWindow::imagewindow();
 
@@ -186,6 +189,7 @@ DigikamApp::~DigikamApp()
     ImageAttributesWatch::cleanUp();
     LoadingCacheInterface::cleanUp();
     DcrawBinary::cleanUp();
+    AlbumThumbnailLoader::cleanUp();
 
     m_instance = 0;
 }
