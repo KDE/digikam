@@ -212,5 +212,9 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 126 ==> 131532 : Minolta exception code can break EXIF rotation
 127 ==> 131550 : digikam/showfoto can't show jpeg image under PowerPC
 128 ==> 131549 : endianess problem under Linux-PowerPC (with png images at least)
+129 ==> 132011 : Add search criteria to take sub-tags into account
+130 ==> 131920 : Can't create preview folders with unicode characters in the name.
+131 ==> 132113 : Resize dialog limits image width/height to 4 digits
+132 ==> 132081 : Critical: ShowFoto silently aborts saving image when closed
 
 ----------------------------------------------------------------------------------------------------
