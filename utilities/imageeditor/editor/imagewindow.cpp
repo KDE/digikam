@@ -161,6 +161,10 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     if (!e)
         return;
 
+    // wait if a save operation is currently running
+    if (!waitForSavingToComplete())
+        return;
+
     if (!promptUserSave(m_urlCurrent))
         return;
 
