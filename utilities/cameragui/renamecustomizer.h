@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <qbuttongroup.h>
+#include <qdatetime.h>
 
 namespace Digikam
 {
@@ -58,7 +59,7 @@ public:
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
-    QString nameTemplate() const;
+    QString newName(const QDateTime &date, int index, const QString &suffix) const;
     Case    changeCase() const;
     int     startIndex() const;
 

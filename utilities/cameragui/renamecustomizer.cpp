@@ -218,35 +218,44 @@ int RenameCustomizer::startIndex() const
     return d->startIndexInput->value();
 }
 
-QString RenameCustomizer::nameTemplate() const
+QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QString &suffix) const
 {
     if (d->renameDefault->isChecked())
         return QString();
     else
     {
-        QString templ(d->renameCustomPrefix->text());
+        QString name(d->renameCustomPrefix->text());
+
+        // use the "T" as a delimiter between date and time
+        QString date = dateTime.toString("yyyyMMddThhmmss");
+
+        // it seems that QString::number does not support padding with zeros
+        QString seq;
+        seq.sprintf("-%04d", index);
 
         switch (d->renameCustomOptions->currentItem())
         {
             case ADDDATETIME:
             {
-                templ += "%Y%m%dT%H%M%S"; 
+                name += date;
                 break;
             }
             case ADDSEQNUMB:
             {
-                templ += "-%%04d";
+                name += seq;
                 break;
             }
             case ADDBOTH:
             {
-                templ += "%Y%m%dT%H%M%S"; 
-                templ += "-%%04d";
+                name += date;
+                name += seq;
                 break;
             }
         }
 
-        return templ;
+        name += suffix;
+
+        return name;
     }
 }
 

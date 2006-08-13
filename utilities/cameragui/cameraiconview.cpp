@@ -163,7 +163,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
     {
         if (!d->renamer->useDefault())
         {
-            downloadName = getTemplatedName( d->renamer->nameTemplate(), &info, d->itemDict.count() );
+            downloadName = getTemplatedName( &info, d->itemDict.count() );
         }
         else
         {
@@ -225,12 +225,10 @@ void CameraIconView::slotDownloadNameChanged()
 {
     bool    useDefault = true;
     int     startIndex = 0;
-    QString nameTemplate;
 
     if (d->renamer)
     {
         useDefault   = d->renamer->useDefault();
-        nameTemplate = d->renamer->nameTemplate();
         startIndex   = d->renamer->startIndex() -1;
     }
     
@@ -260,7 +258,7 @@ void CameraIconView::slotDownloadNameChanged()
             if (viewItem->isSelected())
             {
                 if (!useDefault)
-                    downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), startIndex );
+                    downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
                 else
                     downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
@@ -282,7 +280,7 @@ void CameraIconView::slotDownloadNameChanged()
             CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
     
             if (!useDefault)
-                downloadName = getTemplatedName( nameTemplate, viewItem->itemInfo(), startIndex );
+                downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
             else
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
     
@@ -298,34 +296,19 @@ void CameraIconView::slotDownloadNameChanged()
     slotSelectionChanged();
 }
 
-QString CameraIconView::getTemplatedName(const QString& templ, const GPItemInfo* itemInfo, int position)
+QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
 {
-    if (templ.isEmpty())
-        return QString::null;
-    
-    QString dname(templ);
-    
     QString ext = itemInfo->name;
     int pos = ext.findRev('.');
     if (pos < 0)
         ext = "";
     else
-        ext = ext.right( ext.length() - pos - 1);
+        ext = ext.right( ext.length() - pos );
 
-    struct tm* time_tm = ::localtime(&itemInfo->mtime);
-    char s[100];
-    strftime(s, 100, QFile::encodeName(dname), time_tm);
+    QDateTime mtime;
+    mtime.setTime_t(itemInfo->mtime);
 
-    dname  = s;
-    dname.replace("%s", "");
-    
-    dname.sprintf(QFile::encodeName(dname), position+1);
-    dname.replace("/","");
-
-    dname += '.';
-    dname += ext;
-    
-    return dname;
+    return d->renamer->newName(mtime, position+1, ext);
 }
 
 QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
