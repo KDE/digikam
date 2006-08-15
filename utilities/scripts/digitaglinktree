@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-$version="1.5";
+$version="1.6.1";
 # Author: Rainer Krienke, krienke@uni-koblenz.de
 #
 # Description:
@@ -32,7 +32,13 @@ $version="1.5";
 # 1.3->1.4
 # Bug fix, links with same name in one tag directory were no resolved
 # which led to "file exists" errors when trying to create the symbolic link.
-# 
+#
+# 1.4-> 1.6, 2006/08/03
+# Added an option (-A) to archive photos and tag structure in an extra directory 
+# 1.6-> 1.6.1 2006/08/15
+# Added an option (-C) for archive mode (-A). Added more information to 
+# the manual page.
+#
 
 # ---------------------------------------------------------------------------
 # LICENSE:
@@ -57,6 +63,7 @@ $version="1.5";
 
 use Getopt::Std;
 use File::Spec;
+use File::Path;
 
 # Please adapt the sqlite version to your digikam version.
 # Do not forget to also install the correct sqlite version:
@@ -65,6 +72,8 @@ use File::Spec;
 
 #$SQLITE="/usr/bin/sqlite";
 $SQLITE="/usr/bin/sqlite3";
+$archiveDirPhotos="Photos";
+$archiveDirLinks="Tags";
 
 #
 $scriptAuthor="krienke@uni-koblenz.de";	   
@@ -89,7 +98,7 @@ sub checkVersion{
     if( $? != 0 || grep(/Error:\s*file is encrypted/i, @data) != 0 ){
     	warn "Cannot open database \"$database\". Have you installed a current\n",
 	     "version of sqlite? Depending on you digikam version you have to \n",
-	     "install and use sqlite2 (for digikam 0.7x) or sqlite3 (for digikam 0.8)\n",
+	     "install and use sqlite2 (for digikam 0.7x) or sqlite3 (for digikam >= 0.8 )\n",
 	     "Please install the correct version and set the SQLITE variable in the\n",
 	     "script head accordingly \n\n";
 	exit(1);     
@@ -106,10 +115,12 @@ sub checkVersion{
 
 #
 # Get all images that have tags from digikam database
+# refPathNames will contain all photos including path having tags 
+# The key in refPathNames is the path, value is photos name
 #
 sub getTaggedImages{
-   my($refImg, $database)=@_;
-   my($i, $image, $path, $tag, $status, $id, $pid);
+   my($refImg, $database, $rootDir, $refPaths, $refPathNames)=@_;
+   my($i, $image, $path, $tag, $status, $id, $pid, $tmp);
    my($sqliteCmd, @data, $vers, @tags, %tagPath, $tagCount, $refTag);
    
    $vers=checkVersion($database); # Find out version of digikam 
@@ -175,6 +186,18 @@ sub getTaggedImages{
       foreach $i ( @data ){
       	 chomp($i);
 	 ($image, $path, $tag)=split(/\|/, $i);
+	 $refPaths->{"$rootDir$path"}=1;
+	 $refPathNames->{"$rootDir$path/$image"}=1;
+	 
+	 $tmp=$path;
+	 #warn "- $rootDir, $path, $image \n";
+	 # Enter all subpaths in $path as defined too
+	 do{
+          	$tmp=~s/\/[^\/]+$//;
+		$refPaths->{"$rootDir$tmp"}=1;
+	 } while (length($tmp)); 
+	 
+	 
 	 $refImg->{"$path/$image"}->{"path"}=$path;
 	 $refImg->{"$path/$image"}->{"image"}=$image;
 	 $refTag=$refImg->{"$path/$image"}->{"tag"};
@@ -195,10 +218,15 @@ sub getTaggedImages{
 }
 
 
+#
+# Create a directory with tag-subdirectories containing links to photos having
+# tags set. Links can be absolute or relative as well as hard or soft. 
+#
 sub createLinkTree{
     my($refImages)=shift;
-    my($photoRootDir, $linktreeRootDir, $opt_flat, $opt_absolute)=@_;
-    my( $i, $j, $cmd, $path, $image, $tag, $qpath, $qtag, $qimage, $linkName, $tmp);
+    my($photoRootDir, $linktreeRootDir, $opt_flat, $opt_absolute, $linkMode)=@_;
+    my( $i, $j, $cmd, $path, $image, $tag, $qpath, $qtag, $qimage, $linkName, 
+        $tmp, $ret, $sourceDir, $destDir);
     my($tagPath, $qtagPath, $relPath);
 
     if( -d "$linktreeRootDir" ){
@@ -209,15 +237,15 @@ sub createLinkTree{
 	}
 	
 	# rename current tree to .bak 
-	rename("$linktreeRootDir", "${linktreeRootDir}.bak" );
-	if( $? ){
+	$ret=rename("$linktreeRootDir", "${linktreeRootDir}.bak" );
+	if( !$ret ){
 	     die "Cannot rename \"$linktreeRootDir\" to \"${linktreeRootDir}.bak\"\n";
 	}
     }
 	
     # Create new to level directory to hold linktree 	
-    mkdir("$linktreeRootDir");
-    if( $? ){
+    $ret=mkdir("$linktreeRootDir");
+    if( !$ret ){
 	 die "Cannot mkdir \"$linktreeRootDir\"\n";
     }
     # Iterate over all tagged images and create links
@@ -231,15 +259,15 @@ sub createLinkTree{
 	
 	$path=$refImages->{$i}->{"path"};
 	$image=$refImages->{$i}->{"image"};
-	$qimage=quotemeta($image);
-	$qpath=quotemeta($path);
+	#$qimage=quotemeta($image);
+	#$qpath=quotemeta($path);
 
         # Handle all of the tags for the current photo
 	for( $j=0;  $j<=$#{@{$refImages->{$i}->{"tag"}}}; $j++){	
 	   $tag=$refImages->{$i}->{"tag"}->[$j];
-	   $qtag=quotemeta($tag);
+	   #$qtag=quotemeta($tag);
 	   $tagPath=$refImages->{$i}->{"tagpath"}->[$j];
-	   $qtagPath=quotemeta($tagPath);
+	   #$qtagPath=quotemeta($tagPath);
 
 	   # For tags that have subtags there is a path defined in qtagPath
 	   # describing the parentrelationship as directory path like "friends/family/brothers"
@@ -248,47 +276,185 @@ sub createLinkTree{
 	   # into the filesystem.
 	   if( !$opt_flat && length($tagPath) ){
 		   $tag=$tagPath;
-		   $qtag=$qtagPath;
+		   #$qtag=$qtagPath;
 	   }
 	   # Create subdirectories needed
 	   if( ! -d "${linktreeRootDir}/$tag" ){
-		   system("/bin/mkdir -p ${linktreeRootDir}/$qtag");
+		   $ret=mkpath("${linktreeRootDir}/$tag", 0, 0755);
 
-		   if( $? ){
-			die "Cannot mkdir -p \"${linktreeRootDir}/$tag\"\n";
+		   if( !$ret ){
+			die "Cannot mkdir \"${linktreeRootDir}/$tag\"\n";
 		   }
 	   }
 	   # Avoid conflicts for images with the same name in one tag directory
-	   $linkName=$qimage;
+	   $linkName=$image;
 	   $tmp=$image;
-	   while( -l "${linktreeRootDir}/$tag/$tmp" ){
+	   while( -r "${linktreeRootDir}/$tag/$tmp" ){
 		   $linkName="_" . $linkName;		
 		   $tmp="_" . $tmp;		
 	   }
 
 	   if(length($opt_absolute)){
 	      # Create link
-	      $cmd="/bin/ln -s ${photoRootDir}$qpath/$qimage  ${linktreeRootDir}/$qtag/$linkName";		
+	      $sourceDir="${photoRootDir}$path/$image";  
+	      $destDir="${linktreeRootDir}/$tag/$linkName";		
 	   }else{
 	      # Get relative path from absolute one
 	      # $rel=File::Spec->abs2rel( $path, $base ) ; 
 	      $relPath="";
-	      $relPath=File::Spec->abs2rel("${photoRootDir}$qpath", "${linktreeRootDir}/$qtag" ) ;
+	      $relPath=File::Spec->abs2rel("${photoRootDir}$path", "${linktreeRootDir}/$tag" ) ;
 	      if( !length($relPath)){
-	         die "Cannot create relative path from \"${linktreeRootDir}/$qtag\" to \"${photoRootDir}$qpath\" . Abort.\n";
+	         die "Cannot create relative path from \"${linktreeRootDir}/$tag\" to \"${photoRootDir}$path\" . Abort.\n";
 	      }
 	      # Create link
 	      #print "-> $relPath\n";
-	      $cmd="/bin/ln -s $relPath/$qimage  ${linktreeRootDir}/$qtag/$linkName";
+	      $sourceDir="$relPath/$image"; 
+	      $destDir="${linktreeRootDir}/$tag/$linkName";
 	   }
-
-	   #print "$cmd\n";
-	   system("$cmd");
-	   if( $? ){
-		warn "Cannot run \"$cmd\" \n";
+	   
+	   if( $linkMode eq "symbolic" ){
+	      $ret=symlink($sourceDir, $destDir);
+	      if( !$ret ){
+		  $ret="$!";
+		  warn "Warning: Failed symbolic linking \"$sourceDir\" to \"$destDir\": ",
+		       "\"$ret\"\n";
+	      }
+	   }elsif( $linkMode eq "hard" ){
+	      $ret=link($sourceDir, $destDir);
+	      if( !$ret ){
+		  $ret="$!";
+		  warn "Warning: Failed hard linking \"$sourceDir\" to \"$destDir\": ",
+		       "\"$ret\"\n";
+	      }
+	   }else{
+	      die "$0: Illegal linkMode: \"$linkMode\". Abort.\n";
 	   }
+	   
 	}# for
     }
+}
+
+
+
+#
+# Clone a directory into another directory.
+# source and destination have to exist
+# Files in $srcDir  will symbolically or hard linked
+# to the $cloneDir according to $cloneMode which can
+# be symbolic for symbolic links or hard for hardlinks
+# refPathNames contains path for all photos having tags set
+#
+sub cloneDir{
+   local($srcDir, $cloneDir, $linkMode, $cloneMode, $refPaths, $refPathNames)=@_;
+   local(@entries, $ki, $path, $name, $ret);
+
+   # Read directory entries
+   opendir( DIR, $srcDir ) || warn "Cannot read directory $srcDir \n";
+   local(@entries)=readdir(DIR);
+   closedir(DIR);
+
+   foreach $k (@entries){
+      next if( $k eq '.' );
+      next if( $k eq '..');
+      next if( $k =~ /digikam.*\.db/o );
+
+      #warn "-> $srcDir, $k, $cloneDir\n";
+      # Recurse into directories
+      if( -d "$srcDir/$k" ){
+         # if cloneMode is "minimal" then only clone directories and files
+	 # with photos that have tags set.
+	 if( $cloneMode ne "minimal" ||
+     	               defined($refPaths->{"$srcDir/$k"}) ){ 
+	     #warn "* $srcDir/$k defined \n";
+	     mkdir("$cloneDir/$k", 0755);
+  	     if( $? ){
+		die "Cannot run \"mkdir $cloneDir/$k\"\n";
+	     }
+             cloneDir("$srcDir/$k", "$cloneDir/$k", $linkMode, 
+	               $cloneMode, $refPaths, $refPathNames );
+         }		    
+      }else{
+         # if cloneMode is "minimal" then only clone directories and files
+	 # with photos that have tags set.
+	 if( $cloneMode ne "minimal" ||
+     	               defined($refPathNames->{"$srcDir/$k"}) ){ 
+	    # link files
+	    if( $linkMode eq "symbolic" ){
+               $ret=symlink( "$srcDir/$k",  "$cloneDir/$k");
+	       if( !$ret ){
+	           $ret="$!";
+		   warn "Warning: In cloning failed symbolic linking \"$srcDir/$k\" to \"$cloneDir/$k\": ",
+			"\"$ret\"\n";
+	       }
+	    }elsif( $linkMode eq "hard" ){
+	       $ret=link( "$srcDir/$k",  "$cloneDir/$k");
+	       if( !$ret ){
+	           $ret="$!";
+		   warn "Warning: In cloning failed hard linking \"$srcDir/$k\" to \"$cloneDir/$k\": ",
+			"\"$ret\"\n";
+	       }
+	    }else{
+               die "$0: Illegal cloneLinkMode: $linkMode set. Aborting.\n";
+	    }
+	 }
+      }
+   }
+}
+
+
+#
+# Manage cloning of a complete directory. If the clone directory exists
+# a .bak will be created
+# Files will be linked (hard/symbolic) according to cloneLinkMode which
+# should be "symbolic" or "hard"
+# cloneMode can "minimal" or anything else. minimal means only to clone 
+# those files and directories that have tags set. Anything else means
+# to clone the whole photo tree with all files
+#
+sub runClone{
+   my($rootDir, $cloneDir, $photoDir, $cloneMode, $cloneLinkMode, 
+      $refPaths, $refPathNames)=@_;
+   my($ret);
+   my($dev_r,$dev_A, $ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+      $atime,$mtime,$ctime,$blksize,$blocks);
+   
+    if( -d "$cloneDir" ){
+    	# Remove old backuplinktree
+	system("rm -rf ${cloneDir}.bak");
+	if( $? ){
+	     die "Cannot run \"rm -rf ${cloneDir}.bak\"\n";
+	}
+	
+	# rename current tree to .bak 
+	$ret=rename("$cloneDir", "${cloneDir}.bak" );
+	if( !$ret ){
+	     die "Cannot rename \"$cloneDir\" to \"${cloneDir}.bak\"\n";
+	}
+    }
+    $ret=mkdir("$cloneDir", 0755);
+    if( !$ret ){
+	die "Cannot run \"mkdir $cloneDir\"\n";
+    }
+    $ret=mkdir("$cloneDir/$photoDir", 0755);
+    if( !$ret ){
+	die "Cannot run \"mkdir $cloneDir/$photoDir\"\n";
+    }
+
+    # Check if root and archive dir are on same filesystem
+    ($dev_r,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+       $atime,$mtime,$ctime,$blksize,$blocks)       = stat($rootDir);
+    ($dev_A,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+       $atime,$mtime,$ctime,$blksize,$blocks)       = stat($cloneDir);
+    #
+    if( $dev_r != $dev_A ){
+	warn "Error: \"$rootDir\" and \"$cloneDir\" are not on the same filesystem. Please select ",
+	     "an archive directory on the same filesystem like digikams root directory! Abort.\n";
+	exit 1;     
+    }	   
+
+    # Create clone of all entries in $rootDir into $clonedir
+    cloneDir($rootDir, "$cloneDir/$photoDir", $cloneLinkMode, 
+             $cloneMode, $refPaths, $refPathNames);
 }
 
 
@@ -297,14 +463,20 @@ sub createLinkTree{
 #
 sub usage{
     print "$0 -r <photoroot> -l <taglinkdir> -d <digikamdatabasefile> \n",
-          "  -r <root>    path to digikams root directory containing all photos\n",
+          "  -r <rootdir> path to digikams root directory containing all photos\n",
 	  "  -l <tagdir>  path to directory where the tag directory structure with \n",
 	  "               links to the original images should be created \n",
 	  "  -d <dbfile>  full path to the digikam database file \n",
+	  "  -A <ardir>   Create selfcontained archive of photos and tags in directory\n",
+	  "               ardir. rootdir and arDir have to be on the *same* filesystem!\n",
+	  "  -C           If -A <archdir> was given this option will put hardlinks of all\n",
+	  "               photos in the \"$archiveDirPhotos\" directory not only of those with tags.\n", 
 	  "  -a           Create absolute symbolic links instead of relative ones \n",
+	  "  -H           Use hard links instead of symbolic links in linktree. \n",
 	  "  -f           If there are hierarchical tags (tags that have subtags) \n",
 	  "               create a flat tag directory hierarchy. So directories for\n",
-	  "               subtags are at the directory same level like their parent tags \n",
+	  "               subtags are at the same directory level like their parent tags\n",
+	  "  -h           Print this help \n",
 	  "  -v           Print scripts version number \n";
      	
     print "Exit.\n\n";
@@ -315,7 +487,7 @@ sub usage{
 # ------------------------------------------------------------------
 # main
 # ------------------------------------------------------------------
-$ret=getopts('har:l:d:fv');
+$ret=getopts('HhCar:l:d:A:fv');
 
 if( defined($opt_h) ){
         usage(0);
@@ -326,7 +498,8 @@ if( defined($opt_v) ){
     exit 0;    
 }
 
-usage if( !length($opt_r) || !length($opt_l) || !length($opt_d) );
+usage if( !length($opt_r) || (!length($opt_l) && ! length($opt_A)) 
+           || !length($opt_d) );
 
 $opt_f=0 if( ! length($opt_f) );
 
@@ -342,11 +515,42 @@ if( ! -f $opt_d ){
 # Remove trailing /
 $opt_r=~s/\/$//;
 $opt_l=~s/\/$//;
+#
+$rootDir=$opt_r;
+$linkDir=$opt_l;
+
+if( length($opt_C) ){
+   $cloneMode="full";     # Clone all files/dirs
+}else{
+   $cloneMode="minimal";  # Only clone dirs and files haviong tags not all files
+}
+
+if( length($opt_H) ){
+   $linkMode="hard";  # type of link from linktree to phototree
+}else{
+   $linkMode="symbolic";  # type of link from linktree to phototree
+}
 
 # Extract data needed from database
-$ret=getTaggedImages(\%images, $opt_d);
+$ret=getTaggedImages(\%images, $opt_d, $opt_r, \%paths, \%pathNames);
 
-if( !$ret ){
+# Handle Archiving photos and tag structure
+# digikams photo dir will be clone as a whole by using 
+# either soft or hard links ($cloneMode)
+if( length($opt_A) ){
+    #    
+    runClone($opt_r, $opt_A, $archiveDirPhotos, $cloneMode, "hard", \%paths, \%pathNames);
+    $rootDir="$opt_A/$archiveDirPhotos";
+    $linkDir="$opt_A/$archiveDirLinks";
+}
+
+if( !$ret && ( length($opt_l) || length($opt_A)) ){
+    # When doing hard links we always use absolute linking
+    if( $linkMode eq "hard" ){
+	warn "Will use absolute hard links for linktree in archive mode...\n" if( !length($opt_a) ); 
+        $opt_a="1";
+    }	
+
     # Create the link trees for all tagged images
-    createLinkTree(\%images, $opt_r, $opt_l, $opt_f, $opt_a);	
+    createLinkTree(\%images, $rootDir, $linkDir, $opt_f, $opt_a, $linkMode);	
 }
