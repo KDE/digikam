@@ -22,6 +22,6 @@
 #ifndef RAW_FILES_H
 #define RAW_FILES_H
 
-static const char raw_file_extentions[] = "*.bay *.bmq *.cr2 *.crw *.cs1 *.dc2 *.dcr *.dng *.erf *.fff *.hdr *.k25 *.kdc *.mdc *.mos *.mrw *.nef *.orf *.pef *.pxn *.raf *.raw *.rdc *.sr2 *.srf *.x3f";
+static const char raw_file_extentions[] = "*.bay *.bmq *.cr2 *.crw *.cs1 *.dc2 *.dcr *.dng *.erf *.fff *.hdr *.k25 *.kdc *.mdc *.mos *.mrw *.nef *.orf *.pef *.pxn *.raf *.raw *.rdc *.sr2 *.srf *.x3f *.arw";
 
 #endif // RAW_FILES_H
