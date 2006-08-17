@@ -258,7 +258,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     // Else, use the right way depending of image file extension.
     QString ext = fileInfo.extension().upper();
 
-    if (ext == QString("JPEG") || ext == QString("JPG"))
+    if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         return (loadJPEG(image, path));
     else if (ext == QString("PNG"))
         return (loadDImg(image, path));

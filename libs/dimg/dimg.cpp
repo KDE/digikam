@@ -388,7 +388,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
 
     QString frm = format.upper();
 
-    if (frm == "JPEG" || frm == "JPG")
+    if (frm == "JPEG" || frm == "JPG" || frm == "JPE" )
     {
         JPEGLoader loader(this);
         return loader.save(filePath, observer);
@@ -435,7 +435,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     QString ext = fileInfo.extension().upper();
 
-    if (ext == QString("JPEG") || ext == QString("JPG"))
+    if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         return JPEG;
     else if (ext == QString("PNG"))
         return PNG;

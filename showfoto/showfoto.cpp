@@ -689,7 +689,10 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     if ( filter.contains("*.TIFF") )
         filter.append (" *.TIF");
     if ( filter.contains("*.JPEG") )
+    {
         filter.append (" *.JPG");
+        filter.append (" *.JPE");
+    }
 
     // Added RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h

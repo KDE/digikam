@@ -1376,7 +1376,11 @@ bool EditorWindow::startingSaveAs(const KURL& url)
                 imgExtPattern.append (" ");
             }    
             imgExtPattern.append (" TIF TIFF");
-            if ( imgExtPattern.contains("JPEG") ) imgExtPattern.append (" JPG");
+            if ( imgExtPattern.contains("JPEG") ) 
+            {
+                imgExtPattern.append (" JPG");
+                imgExtPattern.append (" JPE");
+            }
     
             if ( !imgExtPattern.contains( m_savingContext->format.upper() ) )
             {

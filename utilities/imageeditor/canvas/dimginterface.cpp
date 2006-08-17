@@ -498,7 +498,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType << ")" << endl;
 
-    if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") ) 
+    if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") || 
+         mimeType.upper() == QString("JPE")) 
        d->image.setAttribute("quality", iofileSettings->JPEGCompression);
 
     if ( mimeType.upper() == QString("PNG") ) 
@@ -524,7 +525,8 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     // will be found into Exiv2.
     // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
 
-    if ( mimeType.upper() != QString("JPG") && mimeType.upper() != QString("JPEG") ) 
+    if ( mimeType.upper() != QString("JPG") && mimeType.upper() != QString("JPEG") && 
+         mimeType.upper() != QString("JPE")) 
         meta.setImagePreview(preview);
 
     // Update Exif thumbnail.

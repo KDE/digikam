@@ -130,7 +130,7 @@ void AlbumSettings::init()
     d->albumSortOrder  = AlbumSettings::ByFolder;
     d->imageSortOrder  = AlbumSettings::ByIName;
                                           
-    d->imageFilefilter = "*.png *.jpg *.jpeg *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
+    d->imageFilefilter = "*.png *.jpg *.jpeg *.jpe *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.avi *.mov *.wmf *.asf";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
     
