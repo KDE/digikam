@@ -1107,29 +1107,8 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
     if (!item)
         return;
 
-    // We will trying to load exif data from THM file (thumbnail) if exist,
-    // especially provided by recent USM camera.
-    // If no THM file is availalble, we will trying to get Exif data from real image file.
-
-    QFileInfo fi(folder + QString("/") + file);
-    QFileInfo thmLo(fi.dirPath() + '/' + fi.baseName() + ".thm");          // Lowercase
-    QFileInfo thmUp(fi.dirPath() + '/' + fi.baseName() + ".THM");          // Uppercase
-
-    if (thmLo.exists())
-    {
-        d->rightSidebar->itemChanged(item->itemInfo(), KURL(thmLo.filePath()), 
-                                     QByteArray(), d->view, item);
-    }
-    else if (thmUp.exists())
-    {
-        d->rightSidebar->itemChanged(item->itemInfo(), KURL(thmUp.filePath()), 
-                                     QByteArray(), d->view, item);
-    }
-    else
-    {
-        d->rightSidebar->itemChanged(item->itemInfo(), KURL(fi.filePath()), 
-                                     QByteArray(), d->view, item);
-    }
+    d->rightSidebar->itemChanged(item->itemInfo(), folder + QString("/") + file, 
+                                 QByteArray(), d->view, item);
 }
 
 void CameraUI::slotExifFromData(const QByteArray& exifData)
