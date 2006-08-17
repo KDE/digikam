@@ -745,6 +745,13 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (d->closed)
         return;
 
+    if (fileList.empty())
+        return;
+
+    d->progress->setProgress(0);
+    d->progress->setTotalSteps(fileList.count());
+    d->progress->show();
+
     for (GPItemInfoList::const_iterator it = fileList.begin();
          it != fileList.end(); ++it)
     {
@@ -757,6 +764,8 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
                              const QImage& thumbnail)
 {
     d->view->setThumbnail(folder, file, thumbnail);
+    int curr = d->progress->progress();
+    d->progress->setProgress(curr+1);
 }
 
 void CameraUI::slotInformations()
