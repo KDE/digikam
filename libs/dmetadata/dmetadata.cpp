@@ -643,6 +643,19 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
     if (d->exifMetadata.empty())
        return false;
 
+    // Workaround for older Exiv2 versions which do not support
+    // Minolta Makernotes and throw an error for such keys.
+    bool supportMinolta = true;
+    try
+    {
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+    }
+    catch( Exiv2::Error &e )
+    {
+        supportMinolta = false;
+    }
+
     try
     {    
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
@@ -653,6 +666,37 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
         
         d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
         kdDebug() << "Exif orientation tag set to: " << orientation << endl;
+
+        // -- Minolta Cameras ----------------------------------
+
+        if (supportMinolta)
+        {
+            uint16_t MinoltaOrientation = 72;    // Horizontal (Normal)
+            switch((uint16_t)orientation)
+            {    
+                case ORIENTATION_ROT_90:
+                        MinoltaOrientation = 76; // Rotate 90 CW
+                    break;
+        
+                case ORIENTATION_ROT_270:
+                        MinoltaOrientation = 82; // Rotate 180 CW
+                    break;
+            }
+    
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData::iterator it;
+
+            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+            it = exifData.findKey(minoltaKey1);
+            if (it != exifData.end())
+                d->exifMetadata["Exif.MinoltaCs7D.Rotation"] = MinoltaOrientation;
+        
+            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+            it = exifData.findKey(minoltaKey2);
+            if (it != exifData.end())
+                d->exifMetadata["Exif.MinoltaCs5D.Rotation"] = MinoltaOrientation;
+        }
+
         return true;
     }
     catch( Exiv2::Error &e )
