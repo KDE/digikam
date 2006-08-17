@@ -109,14 +109,13 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
         }
     }
 
-    // In second, try to use simple RAW extraction method
+    // In second, try to use simple RAW extraction method in 8 bits ppm output.
     // -c : write to stdout
     // -h : Half-size color image (3x faster than -q)
-    // -2 : 8bit ppm output
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
 
-    command  = "dcraw -c -h -2 -w -a ";
+    command  = "dcraw -c -h -w -a ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
