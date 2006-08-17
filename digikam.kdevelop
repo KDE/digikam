@@ -125,7 +125,7 @@
         <envvars/>
         <configargs>--enable-debug=full</configargs>
         <builddir></builddir>
-        <topsourcedir></topsourcedir>
+        <topsourcedir>../</topsourcedir>
         <cppflags></cppflags>
         <ldflags></ldflags>
         <ccompiler>kdevgccoptions</ccompiler>
