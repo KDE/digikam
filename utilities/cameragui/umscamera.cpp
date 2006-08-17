@@ -154,16 +154,23 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 {
     m_cancel = false;
 
-    // In 1st, we trying to get thumbnail from Exif data if we are JPEG file.
+    // JPEG files: try to get thumbnail from Exif data.
 
     DMetadata metadata(QFile::encodeName(folder + QString("/") + itemName));
     thumbnail = metadata.getExifThumbnail(true);
     if (!thumbnail.isNull())
         return true;
 
-    // In 2th, we trying to get thumbnail from '.thm' files if we didn't manage to get 
+    // RAW files : try to extract embedded thumbnail using dcraw
+
+    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+    if (!thumbnail.isNull())
+        return true;
+
+    // THM files: try to get thumbnail from '.thm' files if we didn't manage to get 
     // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files. 
-    // Using this way is always more speed than using dcraw parse utility.
+    // Using this way is always speed up than ultimate loading using DImg.
+    // Nota: the thumbnail extracted with this method can be in poor quality.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
 
     QFileInfo fi(folder + QString("/") + itemName);
@@ -179,27 +186,8 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
            return true;
     }
 
-    // In 3rd, if file image type is TIFF, load thumb using DImg befire to use dcraw::parse method 
-    // to prevent broken 16 bits TIFF thumb.
 
-    if (fi.extension().upper() == QString("TIFF") ||
-        fi.extension().upper() == QString("TIF"))
-    {
-        DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
-        if (!dimgThumb.isNull())
-        {
-            thumbnail = dimgThumb.copyQImage();
-            return true;
-        }
-    }
-
-    // In 4th, try to extract embedded thumbnail using dcraw
-
-    DcrawPreview::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
-    if (!thumbnail.isNull())
-        return true;
-
-    // Finaly, we trying to get thumbnail using DImg API.
+    // Finaly, we trying to get thumbnail using DImg API (slow).
 
     DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
 
