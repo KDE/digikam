@@ -3,11 +3,11 @@ digikam-doc
 -----------
 
  Handbook for digikam and showfoto in several languages.
- Digikam is an easy to use and powerful digital photo management
+ digiKam is an easy to use and powerful digital photo management
  application.
 
- This package contains the handbooks for digikam and showfoto from the
- digikam package. The handbooks are available for the following languages:
+ This package contains the handbooks for digiKam and Showfoto from the
+ digiKam package. The handbooks are available for the following languages:
 
     o Danish        (da)
     o German        (de)
@@ -22,8 +22,8 @@ digikam-doc
     o Brazilian [1] (pt_br)
     o Swedish       (sv)
 
- [1] only digikam handbook translation available
- [2] only showfoto handbook translation available
+ [1] only digiKam handbook translation available
+ [2] only Showfoto handbook translation available
 
  Homepage: http://www.digikam.org
 
@@ -34,7 +34,7 @@ Primary upstream author is:
   
 Copyright:
 
-	2001-2005 DigiKam developers team
+	2001-2005 digiKam developers team
 
 	2001-2002 Renchi Raju <renchi_at_pooh.tam.uiuc.edu>. 
 
