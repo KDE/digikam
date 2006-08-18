@@ -300,9 +300,12 @@ void CameraIconViewItem::paintItem()
         }
     }
 
-    int x = rect().width() - downloaded.width() - 5;
-    int y = 5;
-    p.drawPixmap(x, y, downloaded);
+    p.drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
+
+    // If camera item is locked (read only), draw a "KeyLock" icon.
+    if (d->itemInfo->writePermissions == 0) 
+        p.drawPixmap(5, 5, SmallIcon( "encrypted" ));
+
     p.end();
 
     r = QRect(view->contentsToViewport(QPoint(r.x(), r.y())),
