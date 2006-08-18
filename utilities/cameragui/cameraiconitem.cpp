@@ -269,6 +269,7 @@ void CameraIconViewItem::paintItem()
         p.drawRect(0, 0, r.width(), r.height());
     }
 
+    // Draw download status icon.
     QPixmap downloaded;
     
     switch (d->itemInfo->downloaded)
@@ -302,7 +303,7 @@ void CameraIconViewItem::paintItem()
 
     p.drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
 
-    // If camera item is locked (read only), draw a "KeyLock" icon.
+    // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0) 
         p.drawPixmap(5, 5, SmallIcon( "encrypted" ));
 
