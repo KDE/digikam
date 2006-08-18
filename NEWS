@@ -216,5 +216,6 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 130 ==> 131920 : Can't create preview folders with unicode characters in the name.
 131 ==> 132113 : Resize dialog limits image width/height to 4 digits
 132 ==> 132081 : Critical: ShowFoto silently aborts saving image when closed
+133 ==> 118535 : Add Border: use percent to designate border size.
 
 ----------------------------------------------------------------------------------------------------
