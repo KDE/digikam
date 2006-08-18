@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : border.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
@@ -68,8 +67,7 @@ public:
 public:
 
     Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString::null, int borderType=SolidBorder,
-           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
+           QString borderPath=QString::null, int borderType=SolidBorder, float borderRatio=0.1,
            Digikam::DColor solidColor = Digikam::DColor(),
            Digikam::DColor niepceBorderColor = Digikam::DColor(),
            Digikam::DColor niepceLineColor = Digikam::DColor(),
@@ -80,16 +78,16 @@ public:
 
     ~Border(){};
 
-private:  // Border filter data.
+private:  
 
-    int    m_orgWidth;
-    int    m_orgHeight;
+    int     m_orgWidth;
+    int     m_orgHeight;
     
-    int    m_borderType;
-    int    m_borderWidth1;
-    int    m_borderWidth2;
-    int    m_borderWidth3;
-    int    m_borderWidth4;
+    int     m_borderType;
+    int     m_borderMainWidth;
+    int     m_border2ndWidth;
+
+    QString m_borderPath;
     
     Digikam::DColor m_solidColor;
     Digikam::DColor m_niepceBorderColor;
@@ -99,15 +97,15 @@ private:  // Border filter data.
     Digikam::DColor m_decorativeFirstColor; 
     Digikam::DColor m_decorativeSecondColor;
     
-    QString m_borderPath;
-        
-private:  // Border filter methods.
+private:  
 
     virtual void filterImage(void);
     
     void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, const Digikam::DColor &bg, int lineWidth);
-    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, const Digikam::DColor &btmColor, int borderWidth);
+    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
+                const Digikam::DColor &bg, int lineWidth);
+    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
+               const Digikam::DColor &btmColor, int borderWidth);
     void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor, 
                  const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
 };    

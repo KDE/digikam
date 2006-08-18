@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : border.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-05-25
@@ -44,9 +43,8 @@
 namespace DigikamBorderImagesPlugin
 {
 
-Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHeight,
-               QString borderPath, int borderType, 
-               int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
+Border::Border(Digikam::DImg *image, QObject *parent, int orgWidth, int orgHeight,
+               QString borderPath, int borderType, float borderRatio,
                Digikam::DColor solidColor, 
                Digikam::DColor niepceBorderColor,
                Digikam::DColor niepceLineColor, 
@@ -54,16 +52,18 @@ Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHe
                Digikam::DColor bevelLowerRightColor, 
                Digikam::DColor decorativeFirstColor,
                Digikam::DColor decorativeSecondColor)
-      : Digikam::DImgThreadedFilter(orgImage, parent, "Border")
+      : Digikam::DImgThreadedFilter(image, parent, "Border")
 { 
-    m_orgWidth     = orgWidth;
-    m_orgHeight    = orgHeight;
-
-    m_borderType   = borderType;
-    m_borderWidth1 = borderWidth1;
-    m_borderWidth2 = borderWidth2;
-    m_borderWidth3 = borderWidth3;
-    m_borderWidth4 = borderWidth4;
+    m_orgWidth        = orgWidth;
+    m_orgHeight       = orgHeight;
+    m_borderType      = borderType;
+    m_borderPath      = borderPath;
+    int size          = (image->width() > image->height()) ? image->height() : image->width();
+    m_borderMainWidth = (int)(size * borderRatio);
+    m_border2ndWidth  = (int)(size * 0.005);
+    
+    // Clamp internal border with to 1 pixel to be visible with small image.    
+    if (m_border2ndWidth < 1) m_border2ndWidth = 1; 
     
     m_solidColor            = solidColor;
     m_niepceBorderColor     = niepceBorderColor;
@@ -73,8 +73,6 @@ Border::Border(Digikam::DImg *orgImage, QObject *parent, int orgWidth, int orgHe
     m_decorativeFirstColor  = decorativeFirstColor;
     m_decorativeSecondColor = decorativeSecondColor;
     
-    m_borderPath = borderPath;
-    
     initFilter();
 }
 
@@ -83,17 +81,17 @@ void Border::filterImage(void)
     switch (m_borderType)
     {
        case SolidBorder:
-          solid(m_orgImage, m_destImage, m_solidColor, m_borderWidth1);
+          solid(m_orgImage, m_destImage, m_solidColor, m_borderMainWidth);
           break;
        
        case NiepceBorder:
-          niepce(m_orgImage, m_destImage, m_niepceBorderColor, m_borderWidth1, 
-                 m_niepceLineColor, m_borderWidth4);
+          niepce(m_orgImage, m_destImage, m_niepceBorderColor, m_borderMainWidth, 
+                 m_niepceLineColor, m_border2ndWidth);
           break;
 
        case BeveledBorder:
           bevel(m_orgImage, m_destImage, m_bevelUpperLeftColor,
-                m_bevelLowerRightColor, m_borderWidth1);
+                m_bevelLowerRightColor, m_borderMainWidth);
           break;
 
        case PineBorder:
@@ -112,9 +110,9 @@ void Border::filterImage(void)
        case GraniteBorder:
        case RockBorder:
        case WallBorder:
-          pattern( m_orgImage, m_destImage, m_borderWidth1, 
+          pattern( m_orgImage, m_destImage, m_borderMainWidth, 
                    m_decorativeFirstColor, m_decorativeSecondColor,
-                   m_borderWidth2, m_borderWidth2 );
+                   m_border2ndWidth, m_border2ndWidth );
           break;
     }
 }

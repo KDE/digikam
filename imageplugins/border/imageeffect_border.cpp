@@ -1,5 +1,4 @@
 /* ============================================================
- * File   : imageeffect_border.cpp
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
             Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2005-01-20
@@ -51,7 +50,8 @@ namespace DigikamBorderImagesPlugin
 
 ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* banner)
                   : Digikam::ImageGuideDlg(parent, title, "border", 
-                                     false, false, false, Digikam::ImageGuideWidget::HVGuideMode, banner)
+                                           false, false, false, 
+                                           Digikam::ImageGuideWidget::HVGuideMode, banner)
 {
     // No need Abort button action.
     showButton(User1, false); 
@@ -106,19 +106,20 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     m_borderType->insertItem( i18n("Decorative Wall") );
     QWhatsThis::add( m_borderType, i18n("<p>Select here the border type to add around the image."));
     
+    QLabel *label2 = new QLabel(i18n("Width (%):"), gboxSettings);
+    m_borderRatio  = new KIntNumInput(gboxSettings);
+    m_borderRatio->setRange(1, 50, 1, true); 
+    QWhatsThis::add( m_borderRatio, i18n("<p>Set here the border width in percents of image size."));
+            
+    m_labelForeground   = new QLabel(gboxSettings);
+    m_firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ), gboxSettings );
+    m_labelBackground   = new QLabel(gboxSettings);
+    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gboxSettings );
+
     gridSettings->addMultiCellWidget(label1, 0, 0, 0, 2);
     gridSettings->addMultiCellWidget(m_borderType, 1, 1, 0, 2);
-    
-    QLabel *label2 = new QLabel(i18n("Width:"), gboxSettings);
-    m_borderWidth = new KIntNumInput(gboxSettings);
-    QWhatsThis::add( m_borderWidth, i18n("<p>Set here the border width in pixels to add around the image."));
     gridSettings->addMultiCellWidget(label2, 2, 2, 0, 2);
-    gridSettings->addMultiCellWidget(m_borderWidth, 3, 3, 0, 2);
-            
-    m_labelForeground = new QLabel(gboxSettings);
-    m_firstColorButton = new KColorButton( QColor::QColor( 192, 192, 192 ), gboxSettings );
-    m_labelBackground = new QLabel(gboxSettings);
-    m_secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), gboxSettings );
+    gridSettings->addMultiCellWidget(m_borderRatio, 3, 3, 0, 2);
     gridSettings->addMultiCellWidget(m_labelForeground, 4, 4, 0, 0);
     gridSettings->addMultiCellWidget(m_firstColorButton, 4, 4, 1, 2);
     gridSettings->addMultiCellWidget(m_labelBackground, 5, 5, 0, 0);
@@ -128,15 +129,6 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     
     // -------------------------------------------------------------
 
-    Digikam::ImageIface iface(0, 0);
-    int w = iface.originalWidth();
-    int h = iface.originalHeight();
-    
-    if (w > h) 
-       m_borderWidth->setRange(1, h/2, 1, true);       
-    else 
-       m_borderWidth->setRange(1, w/2, 1, true);
-
     readSettings();
             
     // -------------------------------------------------------------
@@ -144,7 +136,7 @@ ImageEffect_Border::ImageEffect_Border(QWidget* parent, QString title, QFrame* b
     connect(m_borderType, SIGNAL(activated(int)),
             this, SLOT(slotBorderTypeChanged(int)));
             
-    connect(m_borderWidth, SIGNAL(valueChanged(int)),
+    connect(m_borderRatio, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));            
 
     connect(m_firstColorButton, SIGNAL(changed(const QColor &)),
@@ -162,7 +154,7 @@ ImageEffect_Border::~ImageEffect_Border()
 void ImageEffect_Border::readUserSettings(void)
 {
     m_borderType->blockSignals(true);
-    m_borderWidth->blockSignals(true);
+    m_borderRatio->blockSignals(true);
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
     
@@ -170,7 +162,7 @@ void ImageEffect_Border::readUserSettings(void)
     config->setGroup("Add Border Tool Settings");
     
     m_borderType->setCurrentItem( config->readNumEntry("Border Type", Border::SolidBorder) );
-    m_borderWidth->setValue( config->readNumEntry("Border Width", 100) );
+    m_borderRatio->setValue( config->readNumEntry("Border Width", 10) );
     
     QColor *black = new QColor( 0, 0, 0 );
     QColor *white = new QColor( 255, 255, 255 );
@@ -191,7 +183,7 @@ void ImageEffect_Border::readUserSettings(void)
     delete gray2;
     
     m_borderType->blockSignals(false);
-    m_borderWidth->blockSignals(false);
+    m_borderRatio->blockSignals(false);
     m_firstColorButton->blockSignals(false);
     m_secondColorButton->blockSignals(false);
               
@@ -204,7 +196,7 @@ void ImageEffect_Border::writeUserSettings(void)
     config->setGroup("Add Border Tool Settings");
     
     config->writeEntry( "Border Type", m_borderType->currentItem() );
-    config->writeEntry( "Border Width", m_borderWidth->value() );
+    config->writeEntry( "Border Width", m_borderRatio->value() );
     
     config->writeEntry( "Solid Color", m_solidColor );
     config->writeEntry( "Niepce Border Color", m_niepceBorderColor );
@@ -220,7 +212,7 @@ void ImageEffect_Border::writeUserSettings(void)
 void ImageEffect_Border::renderingFinished()
 {
     m_borderType->setEnabled(true);
-    m_borderWidth->setEnabled(true);
+    m_borderRatio->setEnabled(true);
     m_firstColorButton->setEnabled(true);
     m_secondColorButton->setEnabled(true);
 }
@@ -228,16 +220,16 @@ void ImageEffect_Border::renderingFinished()
 void ImageEffect_Border::resetValues()
 {
     m_borderType->blockSignals(true);
-    m_borderWidth->blockSignals(true);
+    m_borderRatio->blockSignals(true);
     m_firstColorButton->blockSignals(true);
     m_secondColorButton->blockSignals(true);
         
     m_borderType->setCurrentItem(Border::SolidBorder); 
-    m_borderWidth->setValue(100);
+    m_borderRatio->setValue(10);
     m_solidColor = QColor::QColor( 0, 0, 0 );
 
     m_borderType->blockSignals(false);
-    m_borderWidth->blockSignals(false);
+    m_borderRatio->blockSignals(false);
     m_firstColorButton->blockSignals(false);
     m_secondColorButton->blockSignals(false);
     slotBorderTypeChanged(Border::SolidBorder);
@@ -331,7 +323,7 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
     m_secondColorButton->setEnabled(true);
     m_labelForeground->setEnabled(true);
     m_labelBackground->setEnabled(true);
-    m_borderWidth->setEnabled(true);
+    m_borderRatio->setEnabled(true);
           
     switch (borderType)
        {
@@ -384,30 +376,28 @@ void ImageEffect_Border::slotBorderTypeChanged(int borderType)
 void ImageEffect_Border::prepareEffect()
 {
     m_borderType->setEnabled(false);
-    m_borderWidth->setEnabled(false);
+    m_borderRatio->setEnabled(false);
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
 
     Digikam::ImageIface* iface = m_imagePreviewWidget->imageIface();
     int orgWidth  = iface->originalWidth();
     int orgHeight = iface->originalHeight();
-    int w = iface->previewWidth();
-    int h = iface->previewHeight();
+
+    int w           = iface->previewWidth();
+    int h           = iface->previewHeight();
     bool sixteenBit = iface->previewSixteenBit();
-    uchar *data = iface->getPreviewImage();
-    Digikam::DImg orgImage(w, h, sixteenBit,
-                        iface->previewHasAlpha(), data);
+    uchar *data     = iface->getPreviewImage();
+    Digikam::DImg previewImage(w, h, sixteenBit,
+                               iface->previewHasAlpha(), data);
     delete [] data;
 
     int borderType  = m_borderType->currentItem();
-    float ratio     = (float)w/(float)orgWidth;
-    int borderWidth = (int)((float)m_borderWidth->value()*ratio);
-    QString border = getBorderPath( m_borderType->currentItem() );
+    QString border  = getBorderPath( m_borderType->currentItem() );
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
-                       new Border(&orgImage, this, orgWidth, orgHeight,
-                                  border, borderType, borderWidth, 
-                                  (int)(20.0*ratio), (int)(20.0*ratio), 3,
+                       new Border(&previewImage, this, orgWidth, orgHeight,
+                                  border, borderType, m_borderRatio->value()/100.0, 
                                   Digikam::DColor(m_solidColor, sixteenBit),
                                   Digikam::DColor(m_niepceBorderColor, sixteenBit),
                                   Digikam::DColor(m_niepceLineColor, sixteenBit),
@@ -420,17 +410,17 @@ void ImageEffect_Border::prepareEffect()
 void ImageEffect_Border::prepareFinal()
 {
     m_borderType->setEnabled(false);
-    m_borderWidth->setEnabled(false);
+    m_borderRatio->setEnabled(false);
     m_firstColorButton->setEnabled(false);
     m_secondColorButton->setEnabled(false);
 
-    int borderType = m_borderType->currentItem();
-    int borderWidth = m_borderWidth->value();  
-    QString border = getBorderPath( m_borderType->currentItem() );
+    int borderType    = m_borderType->currentItem();
+    float borderRatio = m_borderRatio->value()/100.0;  
+    QString border    = getBorderPath( m_borderType->currentItem() );
 
     Digikam::ImageIface iface(0, 0);
-    int orgWidth  = iface.originalWidth();
-    int orgHeight = iface.originalHeight();
+    int orgWidth    = iface.originalWidth();
+    int orgHeight   = iface.originalHeight();
     bool sixteenBit = iface.previewSixteenBit();
 
     uchar *data = iface.getOriginalImage();
@@ -440,7 +430,7 @@ void ImageEffect_Border::prepareFinal()
 
     m_threadedFilter = dynamic_cast<Digikam::DImgThreadedFilter *>(
                        new Border(&orgImage, this, orgWidth, orgHeight,
-                                  border, borderType, borderWidth, 15, 15, 10,
+                                  border, borderType, borderRatio,
                                   Digikam::DColor(m_solidColor, sixteenBit),
                                   Digikam::DColor(m_niepceBorderColor, sixteenBit),
                                   Digikam::DColor(m_niepceLineColor, sixteenBit),

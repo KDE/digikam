@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageeffect_border.h
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
            Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date  : 2005-01-20
@@ -66,7 +65,7 @@ private:
     QColor                m_decorativeFirstColor; 
     QColor                m_decorativeSecondColor;
     
-    KIntNumInput         *m_borderWidth;
+    KIntNumInput         *m_borderRatio;
     
     KColorButton         *m_firstColorButton;
     KColorButton         *m_secondColorButton;
