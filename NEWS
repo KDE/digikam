@@ -217,5 +217,6 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 131 ==> 132113 : Resize dialog limits image width/height to 4 digits
 132 ==> 132081 : Critical: ShowFoto silently aborts saving image when closed
 133 ==> 118535 : Add Border: use percent to designate border size.
-
+134 ==> 131686 : Crash when viewing/rollover of Sony Alpha 100 raw (.arw) images.
+ 
 ----------------------------------------------------------------------------------------------------
