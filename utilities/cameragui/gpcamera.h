@@ -100,7 +100,7 @@ private:
     int  setup();
 
     GPCameraPrivate *d;
-    GPStatus        *status;
+    GPStatus        *m_status;
 };
 
 }  // namespace Digikam
