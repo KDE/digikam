@@ -71,6 +71,9 @@ CameraGUI     : Option to upload pictures to camera using copy&paste or drag&dro
 CameraGUI     : New option to start number sequence index with a custom value.
 CameraGUI     : New option to increase/decrease the thumbnails size.
 
+Image Plugins : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
+Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
+
 
 ...
 
@@ -219,6 +222,6 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 133 ==> 118535 : Add Border: use percent to designate border size.
 134 ==> 131686 : Crash when viewing/rollover of Sony Alpha 100 raw (.arw) images.
 135 ==> 132582 : Some pictures make digiKam crash (sample included).
-
+136 ==> 122693 : improvement proposals for the "add border" plugin.
  
 ----------------------------------------------------------------------------------------------------
