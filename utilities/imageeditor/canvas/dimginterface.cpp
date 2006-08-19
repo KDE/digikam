@@ -330,8 +330,10 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
             }
             else
             {
-                QString message = i18n("ICC profiles path seems to be invalid. No transform will be done.<p>"
-                                       "Please solve it in digiKam setup.");
+                QString message = i18n("ICC profiles path seems to be invalid. "
+                                       "No color transform will be done. "
+                                       "Please, check the color management "
+                                       "configuration it in digiKam setup.");
                 KMessageBox::information(d->parent, message);
             }
         }
