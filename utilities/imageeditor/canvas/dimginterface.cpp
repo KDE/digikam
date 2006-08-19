@@ -340,16 +340,19 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     }
     else
     {
-        QFileInfo fi(fileName);
-        QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
-        KMessageBox::error(d->parent, message);
-
-        kdWarning() << k_funcinfo << "Failed to load image " << fileName << endl;
         valRet = false;
     }
 
     emit signalImageLoaded(d->filename, valRet);
     setModified();
+
+    if (!valRet)
+    {
+        QFileInfo fi(fileName);
+        QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
+        KMessageBox::error(d->parent, message);
+        kdWarning() << "Failed to load image " << fi.fileName() << endl;
+    }
 }
 
 void DImgInterface::slotLoadingProgress(const QString& filePath, float progress)
