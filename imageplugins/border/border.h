@@ -87,6 +87,8 @@ private:
     int     m_borderMainWidth;
     int     m_border2ndWidth;
 
+    float   m_orgRatio;
+
     QString m_borderPath;
     
     Digikam::DColor m_solidColor;

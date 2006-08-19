@@ -27,10 +27,9 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qbrush.h>
-#include <qpen.h>
+#include <qpoint.h>
+#include <qregion.h>
+#include <qpointarray.h>
 
 // KDE includes.
 
@@ -56,6 +55,7 @@ Border::Border(Digikam::DImg *image, QObject *parent, int orgWidth, int orgHeigh
 { 
     m_orgWidth        = orgWidth;
     m_orgHeight       = orgHeight;
+    m_orgRatio        = (float)m_orgWidth / (float)m_orgHeight;
     m_borderType      = borderType;
     m_borderPath      = borderPath;
     int size          = (image->width() > image->height()) ? image->height() : image->width();
@@ -119,13 +119,24 @@ void Border::filterImage(void)
 
 void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
 {
-    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2, src.sixteenBit(), src.hasAlpha());
-    dest.fill(fg);
-    dest.bitBltImage(&src, borderWidth, borderWidth);
+    if (m_orgWidth > m_orgHeight)
+    {
+        int height = src.height() + borderWidth*2;
+        dest = Digikam::DImg((int)(height*m_orgRatio), height, src.sixteenBit(), src.hasAlpha());
+        dest.fill(fg);
+        dest.bitBltImage(&src, (dest.width()-src.width())/2, borderWidth);
+    }
+    else
+    {
+        int width = src.width() + borderWidth*2;
+        dest = Digikam::DImg(width, (int)(width/m_orgRatio), src.sixteenBit(), src.hasAlpha());
+        dest.fill(fg);
+        dest.bitBltImage(&src, borderWidth, (dest.height()-src.height())/2);
+    }
 }
 
-void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth, 
-                                const Digikam::DColor &bg, int lineWidth)
+void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, 
+                    int borderWidth, const Digikam::DColor &bg, int lineWidth)
 {
     Digikam::DImg tmp;
     solid(src, tmp, bg, lineWidth);
@@ -133,81 +144,94 @@ void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCol
 }
 
 void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor, 
-                               const Digikam::DColor &btmColor, int borderWidth)
+                   const Digikam::DColor &btmColor, int borderWidth)
 {
-    int x, y;
-    int wc;
+    int width, height;
 
-    dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2, src.sixteenBit(), src.hasAlpha());
-
-    // top
-
-    for(y=0, wc = (int)dest.width()-1; y < borderWidth; ++y, --wc)
+    if (m_orgWidth > m_orgHeight)
     {
-        for(x=0; x < wc; ++x)
-            dest.setPixelColor(x, y, topColor);
-
-        for(;x < (int)dest.width(); ++x)
-            dest.setPixelColor(x, y, btmColor);
+        height = src.height() + borderWidth*2;
+        width  = (int)(height*m_orgRatio);
+    }
+    else
+    {
+        width  = src.width() + borderWidth*2;
+        height = (int)(width/m_orgRatio);
     }
 
-    // left and right
+    dest = Digikam::DImg(width, height, src.sixteenBit(), src.hasAlpha());
+    dest.fill(topColor);
 
-    for(; y < (int)dest.height()-borderWidth; ++y)
+    QPointArray btTriangle(3);
+    btTriangle.setPoint(0, width, 0);
+    btTriangle.setPoint(1, 0, height);
+    btTriangle.setPoint(2, width, height);
+    QRegion btRegion(btTriangle);
+
+    for(int x=0 ; x < width ; x++)
     {
-       for(x=0; x < borderWidth; ++x)
-           dest.setPixelColor(x, y, topColor);
-
-       for(x = (int)dest.width()-1; x > (int)dest.width()-borderWidth-1; --x)
-           dest.setPixelColor(x, y, btmColor);
+        for(int y=0 ; y < height ; y++)
+        {
+            if (btRegion.contains(QPoint(x, y)))
+                dest.setPixelColor(x, y, btmColor);
+        }
     }
 
-    // bottom
-
-    for(wc = borderWidth; y < (int)dest.height(); ++y, --wc)
+    if (m_orgWidth > m_orgHeight)
     {
-       for(x=0; x < wc; ++x)
-           dest.setPixelColor(x, y, topColor);
-
-       for(; x < (int)dest.width(); ++x)
-           dest.setPixelColor(x, y, btmColor);
+        dest.bitBltImage(&src, (dest.width()-src.width())/2, borderWidth);
     }
-
-    dest.bitBltImage(&src, borderWidth, borderWidth);
+    else
+    {
+        dest.bitBltImage(&src, borderWidth, (dest.height()-src.height())/2);
+    }
 }
 
 void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
                      const Digikam::DColor &firstColor, const Digikam::DColor &secondColor, 
                      int firstWidth, int secondWidth)
 {
-    // Border tile.
+    // Original image with the first solid border around.
+    Digikam::DImg tmp; 
+    solid(src, tmp, firstColor, firstWidth);
+  
+    // Border tiled image using pattern with second solid border around.
+    int width, height;
 
-    int w = m_orgWidth + borderWidth*2;
-    int h = m_orgHeight + borderWidth*2;
+    if (m_orgWidth > m_orgHeight)
+    {
+        height = tmp.height() + borderWidth*2;
+        width  = (int)(height*m_orgRatio);
+    }
+    else
+    {
+        width  = tmp.width() + borderWidth*2;
+        height = (int)(width/m_orgRatio);
+    }
+
+    Digikam::DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
     kdDebug() << "Border File:" << m_borderPath << endl;
     Digikam::DImg border(m_borderPath);
     if ( border.isNull() )
         return;
+    
+    border.convertToDepthOfImage(&tmp2);
 
-    Digikam::DImg borderImg(w, h, src.sixteenBit(), src.hasAlpha());
-    border.convertToDepthOfImage(&borderImg);
+    for (int x = 0 ; x < width ; x+=border.width())
+        for (int y = 0 ; y < height ; y+=border.height())
+            tmp2.bitBltImage(&border, x, y);
+      
+    solid(tmp2, dest, secondColor, secondWidth);
 
-    for (int x = 0 ; x < w ; x+=border.width())
-        for (int y = 0 ; y < h ; y+=border.height())
-            borderImg.bitBltImage(&border, x, y);
-
-    // First line around the pattern tile.
-    Digikam::DImg tmp = borderImg.smoothScale( src.width() + borderWidth*2,
-                                                src.height() + borderWidth*2 );
-
-    solid(tmp, dest, firstColor, firstWidth);
-
-    // Second line around original image.
-    tmp.reset();
-    solid(src, tmp, secondColor, secondWidth);
-
-    // Copy original image.
-    dest.bitBltImage(&tmp, borderWidth, borderWidth);
+    // Merge both images to one.
+    if (m_orgWidth > m_orgHeight)
+    {
+        dest.bitBltImage(&tmp, (dest.width()-tmp.width())/2, borderWidth);
+    }
+    else
+    {
+        dest.bitBltImage(&tmp, borderWidth, (dest.height()-tmp.height())/2);
+    }
 }
 
 }  // NameSpace DigikamBorderImagesPlugin
