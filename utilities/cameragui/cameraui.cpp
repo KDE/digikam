@@ -1014,7 +1014,8 @@ void CameraUI::slotDeleteSelected()
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        if (iconItem->isSelected())
+        if (iconItem->isSelected() && 
+            iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
         {
             QString folder = iconItem->itemInfo()->folder;
             QString file   = iconItem->itemInfo()->name;
@@ -1063,11 +1064,14 @@ void CameraUI::slotDeleteAll()
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        QString folder = iconItem->itemInfo()->folder;
-        QString file   = iconItem->itemInfo()->name;
-        folders.append(folder);
-        files.append(file);
-        deleteList.append(folder + QString("/") + file);
+        if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+        {
+            QString folder = iconItem->itemInfo()->folder;
+            QString file   = iconItem->itemInfo()->name;
+            folders.append(folder);
+            files.append(file);
+            deleteList.append(folder + QString("/") + file);
+        }
     }
 
     if (folders.isEmpty())
