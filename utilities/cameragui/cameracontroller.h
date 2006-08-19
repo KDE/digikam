@@ -78,7 +78,7 @@ signals:
     void signalUploaded(const GPItemInfo& itemInfo);
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalSkipped(const QString& folder, const QString& file);
-    void signalDeleted(const QString& folder, const QString& file);
+    void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);

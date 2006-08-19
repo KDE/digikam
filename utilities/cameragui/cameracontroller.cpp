@@ -915,7 +915,7 @@ void CameraController::customEvent(QCustomEvent* e)
         {
             QString folder = QDeepCopy<QString>(event->map["folder"].asString());
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
-            emit signalDeleted(folder, file);
+            emit signalDeleted(folder, file, true);
             break;
         }
         case (CameraEvent::gp_deleteFailed) :
@@ -924,7 +924,8 @@ void CameraController::customEvent(QCustomEvent* e)
             QString file   = QDeepCopy<QString>(event->map["file"].asString());
     
             d->timer->stop();
-    
+            emit signalDeleted(folder, file, false);
+
             QString msg = i18n("Failed to delete file \"%1\".").arg(file);
             
             if (!d->canceled)

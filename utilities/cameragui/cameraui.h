@@ -109,7 +109,7 @@ private slots:
     void slotUploaded(const GPItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotSkipped(const QString&, const QString&);
-    void slotDeleted(const QString&, const QString&);
+    void slotDeleted(const QString&, const QString&, bool);
     
     void slotNewSelection(bool);
     void slotItemsSelected(CameraIconViewItem* item, bool selected);

@@ -421,8 +421,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     connect(d->controller, SIGNAL(signalSkipped(const QString&, const QString&)),
             this, SLOT(slotSkipped(const QString&, const QString&)));
 
-    connect(d->controller, SIGNAL(signalDeleted(const QString&, const QString&)),
-            this, SLOT(slotDeleted(const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalDeleted(const QString&, const QString&, bool)),
+            this, SLOT(slotDeleted(const QString&, const QString&, bool)));
 
     connect(d->controller, SIGNAL(signalExifFromFile(const QString&, const QString&)),
             this, SLOT(slotExifFromFile(const QString&, const QString&)));
@@ -1004,6 +1004,35 @@ void CameraUI::slotDownload(bool onlySelected)
     d->progress->show();
 }
 
+void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
+{
+    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+    if (iconItem)
+    {
+        iconItem->setDownloaded(status);
+        d->view->ensureItemVisible(iconItem);
+
+        if (iconItem->isSelected())
+            slotItemsSelected(iconItem, true);
+    }
+    
+    if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
+    {
+        int curr = d->progress->progress();
+        d->progress->setProgress(curr+1);
+    }
+}
+
+void CameraUI::slotSkipped(const QString& folder, const QString& file)
+{
+    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+    if (iconItem)
+        d->view->ensureItemVisible(iconItem);
+
+    int curr = d->progress->progress();
+    d->progress->setProgress(curr+1);
+}
+
 void CameraUI::slotDeleteSelected()
 {
     QStringList folders;
@@ -1041,9 +1070,9 @@ void CameraUI::slotDeleteSelected()
                                                i18n("Delete"))
         ==  KMessageBox::Continue) 
     {
-
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
+    
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
@@ -1051,6 +1080,10 @@ void CameraUI::slotDeleteSelected()
             // will immenently be deleted into the sidebar and wasting time
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
+
+        d->progress->setProgress(0);
+        d->progress->setTotalSteps(deleteList.count());
+        d->progress->show();
     }
 }
 
@@ -1088,16 +1121,34 @@ void CameraUI::slotDeleteAll()
                                                deleteList,
                                                i18n("Warning"),
                                                i18n("Delete"))
-        ==  KMessageBox::Continue) {
-
+        ==  KMessageBox::Continue) 
+    {
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
+    
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
+
+        d->progress->setProgress(0);
+        d->progress->setTotalSteps(deleteList.count());
+        d->progress->show();
     }
+}
+
+void CameraUI::slotDeleted(const QString& folder, const QString& file, bool status)
+{
+    if (status)
+    {
+        d->view->removeItem(folder, file);
+        // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
+        d->currentlyDeleting.remove(folder + file);
+    }
+
+    int curr = d->progress->progress();
+    d->progress->setProgress(curr+1);
 }
 
 void CameraUI::slotFileView(CameraIconViewItem* item)
@@ -1179,42 +1230,6 @@ void CameraUI::slotItemsSelected(CameraIconViewItem* item, bool selected)
     }
     else
         d->rightSidebar->slotNoCurrentItem();
-}
-
-void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
-{
-    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
-    if (iconItem)
-    {
-        iconItem->setDownloaded(status);
-        d->view->ensureItemVisible(iconItem);
-
-        if (iconItem->isSelected())
-            slotItemsSelected(iconItem, true);
-    }
-    
-    if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
-    {
-        int curr = d->progress->progress();
-        d->progress->setProgress(curr+1);
-    }
-}
-
-void CameraUI::slotSkipped(const QString& folder, const QString& file)
-{
-    CameraIconViewItem* iconItem = d->view->findItem(folder, file);
-    if (iconItem)
-        d->view->ensureItemVisible(iconItem);
-
-    int curr = d->progress->progress();
-    d->progress->setProgress(curr+1);
-}
-
-void CameraUI::slotDeleted(const QString& folder, const QString& file)
-{
-    d->view->removeItem(folder, file);
-    // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
-    d->currentlyDeleting.remove(folder + file);
 }
 
 bool CameraUI::createAutoAlbum(const KURL& parentURL, const QString& name,
