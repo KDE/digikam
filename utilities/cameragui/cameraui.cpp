@@ -732,6 +732,10 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     if (d->closed)
         return;
 
+    d->progress->setProgress(0);
+    d->progress->setTotalSteps(0);
+    d->progress->show();
+
     d->cameraFolderList = folderList;
     for (QStringList::const_iterator it = folderList.begin();
          it != folderList.end(); ++it)
@@ -755,11 +759,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         d->controller->getThumbnail((*it).folder, (*it).name);
     }
 
-    // Camera Controller will get all items thumbnails. This can be take a while with large 
-    // files list. The progress bar will be displayed for that.
-    d->progress->setProgress(0);
-    d->progress->setTotalSteps(fileList.count());
-    d->progress->show();
+    d->progress->setTotalSteps(d->progress->totalSteps() + fileList.count());
 }
 
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,
