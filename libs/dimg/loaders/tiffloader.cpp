@@ -14,6 +14,7 @@
  * - DNG       : http://www.adobe.com/products/dng/pdfs/dng_spec.pdf
  *
  * Others Linux Tiff Loader implementation using libtiff:
+ * - http://websvn.kde.org/trunk/koffice/filters/krita/tiff/kis_tiff_converter.cc
  * - http://artis.inrialpes.fr/Software/TiffIO/
  * - http://cvs.graphicsmagick.org/cgi-bin/cvsweb.cgi/GraphicsMagick/coders/tiff.c
  * - http://freeimage.cvs.sourceforge.net/freeimage/FreeImage/Source/FreeImage/PluginTIFF.cpp
