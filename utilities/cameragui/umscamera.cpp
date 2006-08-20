@@ -264,6 +264,26 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     return true;
 }
 
+bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
+{
+    QString src  = folder + QString("/") + itemName;   
+
+    if (lock)
+    {
+        // Lock the file to set read only flag
+        if (::chmod(QFile::encodeName(src), S_IREAD) == -1)
+            return false; 
+    }
+    else
+    {
+        // Unlock the file to set read/write flag
+        if (::chmod(QFile::encodeName(src), S_IREAD | S_IWRITE) == -1)
+            return false; 
+    }
+
+    return true;
+}
+
 bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 {
     m_cancel = false;

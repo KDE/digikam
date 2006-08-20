@@ -89,6 +89,7 @@ public:
         gp_download,
         gp_upload,
         gp_delete,
+        gp_lock,
         gp_thumbnail,
         gp_exif,
         gp_open
@@ -116,6 +117,8 @@ public:
         gp_uploadFailed,
         gp_deleted,
         gp_deleteFailed,
+        gp_locked,
+        gp_lockFailed,
         gp_thumbnailed,
         gp_exif,
         gp_cameraInformations,
@@ -509,6 +512,32 @@ void CameraThread::run()
                 }                
                 break;
             }
+            case(CameraCommand::gp_lock):
+            {
+                QString folder = cmd->map["folder"].asString();
+                QString file   = cmd->map["file"].asString();
+                bool    lock   = cmd->map["lock"].asBool();
+    
+                sendInfo(i18n("Toggle lock file %1...").arg(file));
+    
+                bool result = d->camera->setLockItem(folder, file, lock);
+    
+                if (result)
+                {
+                    CameraEvent* event = new CameraEvent(CameraEvent::gp_locked);
+                    event->map.insert("folder", QVariant(folder));
+                    event->map.insert("file", QVariant(file));
+                    QApplication::postEvent(parent, event);
+                }
+                else
+                {
+                    CameraEvent* event = new CameraEvent(CameraEvent::gp_lockFailed);
+                    event->map.insert("folder", QVariant(folder));
+                    event->map.insert("file", QVariant(file));
+                    QApplication::postEvent(parent, event);
+                }                
+                break;
+            }
             default:
                 kdWarning() << k_funcinfo << " unknown action specified" << endl;
         }    
@@ -731,6 +760,17 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
     d->cmdQueue.enqueue(cmd);
 }
 
+void CameraController::lockFile(const QString& folder, const QString& file, bool lock)
+{
+    d->canceled = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action = CameraCommand::gp_lock;
+    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("file", QVariant(file));
+    cmd->map.insert("lock", QVariant(lock, 0));
+    d->cmdQueue.enqueue(cmd);
+}
+
 void CameraController::openFile(const QString& folder, const QString& file)
 {
     d->canceled = false;
@@ -927,6 +967,41 @@ void CameraController::customEvent(QCustomEvent* e)
             emit signalDeleted(folder, file, false);
 
             QString msg = i18n("Failed to delete file \"%1\".").arg(file);
+            
+            if (!d->canceled)
+            {
+                if (d->cmdQueue.isEmpty())
+                {
+                    KMessageBox::error(d->parent, msg);
+                }
+                else
+                {
+                    msg += i18n(" Do you want to continue?");
+                    int result = KMessageBox::warningContinueCancel(d->parent, msg);
+                    if (result != KMessageBox::Continue)
+                        slotCancel();
+                }
+            }
+    
+            d->timer->start(50);
+            break;
+        }
+        case (CameraEvent::gp_locked) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+            emit signalLocked(folder, file, true);
+            break;
+        }
+        case (CameraEvent::gp_lockFailed) :
+        {
+            QString folder = QDeepCopy<QString>(event->map["folder"].asString());
+            QString file   = QDeepCopy<QString>(event->map["file"].asString());
+    
+            d->timer->stop();
+            emit signalLocked(folder, file, false);
+
+            QString msg = i18n("Failed to toggle lock file \"%1\".").arg(file);
             
             if (!d->canceled)
             {

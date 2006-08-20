@@ -64,6 +64,8 @@ public:
     virtual void cameraManual(QString& manual) = 0;
     virtual void cameraAbout(QString& about) = 0;
 
+    virtual bool setLockItem(const QString& folder, const QString& itemName, bool lock) = 0;
+
     QString title() const;
     QString model() const;
     QString port()  const;

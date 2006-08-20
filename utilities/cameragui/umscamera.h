@@ -51,6 +51,8 @@ public:
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 
+    bool setLockItem(const QString& folder, const QString& itemName, bool lock);
+
     bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
     bool deleteItem(const QString& folder, const QString& itemName);
     bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, 

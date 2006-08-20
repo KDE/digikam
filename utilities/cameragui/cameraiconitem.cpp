@@ -332,6 +332,16 @@ void CameraIconViewItem::setDownloaded(int status)
     repaint();
 }
 
+void CameraIconViewItem::toggleLock()
+{
+    if (d->itemInfo->writePermissions == 0) 
+        d->itemInfo->writePermissions = 1;
+    else 
+        d->itemInfo->writePermissions = 0;
+
+    repaint();
+}
+
 void CameraIconViewItem::calcRect(const QString& itemName, const QString& downloadName)
 {
     CameraIconView* view = (CameraIconView*)iconView();

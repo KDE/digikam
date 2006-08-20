@@ -103,6 +103,7 @@ private slots:
     void slotDownload(bool onlySelected);
     void slotDeleteSelected();
     void slotDeleteAll();
+    void slotLock();
 
     void slotFileView(CameraIconViewItem* item);
 
@@ -110,6 +111,7 @@ private slots:
     void slotDownloaded(const QString&, const QString&, int);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
+    void slotLocked(const QString&, const QString&, bool);
     
     void slotNewSelection(bool);
     void slotItemsSelected(CameraIconViewItem* item, bool selected);

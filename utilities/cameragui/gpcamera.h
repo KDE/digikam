@@ -60,18 +60,13 @@ public:
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
     bool getItemsInfoList(const QString& folder, GPItemInfoList& items, bool getImageDimensions = true);
+    bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
+    bool getExif(const QString& folder, const QString& itemName, char **edata, int& esize);
 
-    bool getThumbnail(const QString& folder, const QString& itemName,
-                      QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName,
-                 char **edata, int& esize);
+    bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 
-    bool downloadItem(const QString& folder,
-                      const QString& itemName,
-                      const QString& saveFile);
-
-    bool deleteItem(const QString& folder,
-                    const QString& itemName);
+    bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
+    bool deleteItem(const QString& folder, const QString& itemName);
 
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
@@ -93,11 +88,12 @@ public:
     static void getSupportedPorts(QStringList& plist);
     static void getCameraSupportedPorts(const QString& model, QStringList& plist);
     static int  autoDetect(QString& model, QString& port);
-    
 
 private:
 
     int  setup();
+
+private:
 
     GPCameraPrivate *d;
     GPStatus        *m_status;

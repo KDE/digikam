@@ -602,6 +602,61 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
     return true;
 }
 
+bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
+{
+    if (m_status) 
+    {
+        delete m_status;
+        m_status = 0;
+    }
+    
+    m_status = new GPStatus;
+
+    CameraFileInfo info;
+    if (gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
+                                QFile::encodeName(itemName), &info, m_status->context) != GP_OK) 
+    {
+        kdDebug() << "failed to get camera item properties!" << endl;
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    if (info.file.fields & GP_FILE_INFO_PERMISSIONS) 
+    {
+        if (lock)
+        {
+            // Lock the file to set read only flag
+            info.file.permissions = (CameraFilePermissions)GP_FILE_PERM_READ;
+        }
+        else
+        {
+            // Unlock the file to set read/write flag
+            info.file.permissions = (CameraFilePermissions)(GP_FILE_PERM_READ | GP_FILE_PERM_DELETE);
+        }
+    }
+    
+    // Some gphoto2 drivers need to have only the right flag at on to process properties update in camera.
+    info.file.fields    = GP_FILE_INFO_PERMISSIONS;
+    info.preview.fields = GP_FILE_INFO_NONE; 
+    info.audio.fields   = GP_FILE_INFO_NONE;
+
+    int valRet = gp_camera_file_set_info(d->camera, QFile::encodeName(folder),
+                                         QFile::encodeName(itemName), info, m_status->context);
+    if (valRet != GP_OK) 
+    {
+        kdDebug() << "failed to set camera item lock properties! (Gphoto2 error code: " 
+                  << valRet << ")" << endl;
+        delete m_status;
+        m_status = 0;
+        return false;
+    }
+
+    delete m_status;
+    m_status = 0;
+    return true;
+}
+
 bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 {
     if (m_status) 

@@ -53,6 +53,8 @@ public:
     QString getDownloadName() const;
     void    setDownloaded(int status);
 
+    void    toggleLock();
+
     GPItemInfo* itemInfo() const;
 
     // reimplemented from IconItem

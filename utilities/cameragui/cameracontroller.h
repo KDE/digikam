@@ -60,9 +60,8 @@ public:
     void downloadPrep();
     void download(DownloadSettingsContainer downloadSettings);
     void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);
-
     void deleteFile(const QString& folder, const QString& file);
-
+    void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
     
 signals:
@@ -79,6 +78,7 @@ signals:
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
+    void signalLocked(const QString& folder, const QString& file, bool status);
     void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);

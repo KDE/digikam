@@ -313,6 +313,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertSeparator();
     d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
     d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
+    d->imageMenu->insertSeparator();
+    d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotLock()), 0, 6);
     actionButton(User3)->setPopup(d->imageMenu);    
 
     // -------------------------------------------------------------------------
@@ -423,6 +425,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->controller, SIGNAL(signalDeleted(const QString&, const QString&, bool)),
             this, SLOT(slotDeleted(const QString&, const QString&, bool)));
+
+    connect(d->controller, SIGNAL(signalLocked(const QString&, const QString&, bool)),
+            this, SLOT(slotLocked(const QString&, const QString&, bool)));
 
     connect(d->controller, SIGNAL(signalExifFromFile(const QString&, const QString&)),
             this, SLOT(slotExifFromFile(const QString&, const QString&)));
@@ -1033,6 +1038,54 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     d->progress->setProgress(curr+1);
 }
 
+void CameraUI::slotLock()
+{
+    int count = 0;
+    for (IconItem* item = d->view->firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+        if (iconItem->isSelected())
+        {
+            QString folder = iconItem->itemInfo()->folder;
+            QString file   = iconItem->itemInfo()->name;
+            int writePerm  = iconItem->itemInfo()->writePermissions;
+            bool lock      = true;            
+
+            // If item is currently locked, unlock it.
+            if (writePerm == 0) 
+                lock = false;
+
+            d->controller->lockFile(folder, file, lock);
+            count++;
+        }
+    }
+
+    if (count > 0)
+    {
+        d->progress->setProgress(0);
+        d->progress->setTotalSteps(count);
+        d->progress->show();
+    }
+}
+
+void CameraUI::slotLocked(const QString& folder, const QString& file, bool status)
+{
+    if (status)
+    {
+        CameraIconViewItem* iconItem = d->view->findItem(folder, file);
+        if (iconItem)
+        {
+            iconItem->toggleLock();
+            if (iconItem->isSelected())
+                slotItemsSelected(iconItem, true);
+        }
+    }
+
+    int curr = d->progress->progress();
+    d->progress->setProgress(curr+1);
+}
+
 void CameraUI::slotDeleteSelected()
 {
     QStringList folders;
@@ -1072,6 +1125,10 @@ void CameraUI::slotDeleteSelected()
     {
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
+
+        d->progress->setProgress(0);
+        d->progress->setTotalSteps(deleteList.count());
+        d->progress->show();
     
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
@@ -1080,10 +1137,6 @@ void CameraUI::slotDeleteSelected()
             // will immenently be deleted into the sidebar and wasting time
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
-
-        d->progress->setProgress(0);
-        d->progress->setTotalSteps(deleteList.count());
-        d->progress->show();
     }
 }
 
@@ -1125,16 +1178,16 @@ void CameraUI::slotDeleteAll()
     {
         QStringList::iterator itFolder = folders.begin();
         QStringList::iterator itFile   = files.begin();
+
+        d->progress->setProgress(0);
+        d->progress->setTotalSteps(deleteList.count());
+        d->progress->show();
     
         for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
-
-        d->progress->setProgress(0);
-        d->progress->setTotalSteps(deleteList.count());
-        d->progress->show();
     }
 }
 
