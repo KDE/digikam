@@ -111,6 +111,10 @@ Dir.chdir( ".." ) # name-version
 puts "\n"
 `rm Mainpage.dox`
 
+# Move some important files to the root folder
+Dir.chdir( "#{name}" )
+`/bin/mv -f COPYING* ..`
+Dir.chdir( ".." )
 
 # Generate makefiles
 `find | xargs touch`
