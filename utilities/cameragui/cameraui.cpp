@@ -842,7 +842,7 @@ void CameraUI::slotUploadItems(const KURL::List& urls)
     if (urls.isEmpty())
         return;
 
-    CameraFolderDialog dlg(this, d->cameraFolderList, d->controller->getCameraTitle(),
+    CameraFolderDialog dlg(this, d->view, d->cameraFolderList, d->controller->getCameraTitle(),
                            d->controller->getCameraPath());
 
     if (dlg.exec() != QDialog::Accepted)

@@ -20,6 +20,7 @@
 
 // Qt includes.
 
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
 
@@ -28,9 +29,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kapplication.h>
 
 // Local includes.
 
+#include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderdialog.h"
@@ -38,22 +41,36 @@
 namespace Digikam
 {
 
-CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& cameraFolderList,
+CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraView, 
+                                       const QStringList& cameraFolderList,
                                        const QString& cameraName, const QString& rootPath)
-                  : KDialogBase(Plain, i18n("%1 - Select Camera Folder").arg(cameraName),
-                                Help|Ok|Cancel, Ok,
-                                parent, 0, true, true)
+                  : KDialogBase(parent, 0, true,
+                                i18n("%1 - Select Camera Folder").arg(cameraName), 
+                                Help|Ok|Cancel, Ok, true)
 {
     setHelp("camerainterface.anchor", "digikam");
     enableButtonOK(false);
     resize(500, 400);
     m_rootPath = rootPath;
+
+    QWidget *page     = new QWidget(this);
+    QGridLayout* grid = new QGridLayout(page, 1, 1, 0, spacingHint());
     
-    QVBoxLayout* lay = new QVBoxLayout(plainPage(), 0, spacingHint());
-    m_folderView     = new CameraFolderView(plainPage());
-    lay->addWidget(m_folderView);    
+    m_folderView    = new CameraFolderView(page);
+    QLabel *logo    = new QLabel(page);
+    QLabel *message = new QLabel(page);
+
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+    message->setText(i18n("<p>Please, choose the right camera folder "
+                          "where you want to upload the pictures.</p>"));
+
+    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellWidget(message, 1, 1, 0, 0);
+    grid->addMultiCellWidget(m_folderView, 0, 1, 1, 1);
+
     m_folderView->addVirtualFolder(cameraName);
-    m_folderView->addRootFolder("/");
+    m_folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
 
     for (QStringList::const_iterator it = cameraFolderList.begin();
          it != cameraFolderList.end(); ++it)
@@ -67,11 +84,13 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, const QStringList& camer
             QString root = folder.section( '/', 0, -2 );
             if (root.isEmpty()) root = QString("/");
 
-            QString sub  = folder.section( '/', -1 );
-            m_folderView->addFolder(root, sub);
+            QString sub = folder.section( '/', -1 );
+            m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
             kdDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
         }
     }
+
+    setMainWidget(page);
 
     connect(m_folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));

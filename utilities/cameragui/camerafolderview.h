@@ -48,9 +48,9 @@ public:
     ~CameraFolderView();
 
     void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera"));
-    void addRootFolder(const QString& folder, const QPixmap& pixmap=SmallIcon("folder"));
+    void addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap=SmallIcon("folder"));
     
-    CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, 
+    CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems, 
                                 const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* findFolder(const QString& folderPath);

@@ -87,14 +87,15 @@ void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixm
     d->virtualFolder->setSelectable(false);
 }
 
-void CameraFolderView::addRootFolder(const QString& folder, const QPixmap& pixmap)
+void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap)
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setOpen(true);
+    d->rootFolder->setCount(nbItems);
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-                                              const QPixmap& pixmap)
+                                              int nbItems, const QPixmap& pixmap)
 {
     CameraFolderItem *parentItem = findFolder(folder);
 
@@ -114,6 +115,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         kdDebug() << "CameraFolderView: Added ViewItem with path "
                   << item->folderPath() << endl;
 
+        item->setCount(nbItems);
         item->setOpen(true);
         return item;
     }
