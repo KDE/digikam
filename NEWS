@@ -66,7 +66,7 @@ Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like i
 *** 0.9.0-beta2 *******************************************************
 
 CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
-CameraGUI     : New option to show camera sumary and documentations of Gphoto2 drivers.
+CameraGUI     : New option to show camera summary and documentations of Gphoto2 drivers.
 CameraGUI     : Option to upload pictures to camera using copy&paste or drag&drop.
 CameraGUI     : New option to start number sequence index with a custom value.
 CameraGUI     : New option to increase/decrease the thumbnails size.
