@@ -937,4 +937,4 @@ jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
   }
 }
 
-}
+} // namespace Digikam

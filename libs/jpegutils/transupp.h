@@ -140,7 +140,6 @@ EXTERN(void) jcopy_markers_execute
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     JCOPY_OPTION option));
 
-}
+} // namespace DigiKam
 
-#endif
-
+#endif // TRANSUPP_H
