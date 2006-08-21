@@ -98,7 +98,7 @@ do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 blk_y += compptr->v_samp_factor) {
       buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, src_coef_arrays[ci], blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (blk_x = 0; blk_x * 2 < comp_width; blk_x++) {
 	  ptr1 = buffer[offset_y][blk_x];
@@ -150,18 +150,18 @@ do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       if (dst_blk_y < comp_height) {
 	/* Row is within the mirrorable area. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   comp_height - dst_blk_y - (JDIMENSION) compptr->v_samp_factor,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       } else {
 	/* Bottom-edge blocks will be copied verbatim. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_y,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       }
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	if (dst_blk_y < comp_height) {
@@ -215,13 +215,13 @@ do_transpose (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_x,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    src_ptr = src_buffer[offset_x][dst_blk_y + offset_y];
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
@@ -265,13 +265,13 @@ do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_x,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    src_ptr = src_buffer[offset_x][dst_blk_y + offset_y];
 	    if (dst_blk_x < comp_width) {
@@ -329,13 +329,13 @@ do_rot_270 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_x,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
 	    if (dst_blk_y < comp_height) {
@@ -392,18 +392,18 @@ do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       if (dst_blk_y < comp_height) {
 	/* Row is within the vertically mirrorable area. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   comp_height - dst_blk_y - (JDIMENSION) compptr->v_samp_factor,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       } else {
 	/* Bottom-edge rows are only mirrored horizontally. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_y,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       }
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	if (dst_blk_y < comp_height) {
@@ -496,13 +496,13 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci], dst_blk_x,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    if (dst_blk_y < comp_height) {
 	      src_ptr = src_buffer[offset_x]
@@ -609,7 +609,7 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     for (ci = 0; ci < info->num_components; ci++) {
       compptr = srcinfo->comp_info + ci;
       coef_arrays[ci] = (*srcinfo->mem->request_virt_barray)
-	((j_common_ptr) srcinfo, JPOOL_IMAGE, false,
+	((j_common_ptr) srcinfo, JPOOL_IMAGE, FALSE,
 	 (JDIMENSION) jround_up((long) compptr->width_in_blocks,
 				(long) compptr->h_samp_factor),
 	 (JDIMENSION) jround_up((long) compptr->height_in_blocks,
@@ -631,7 +631,7 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     for (ci = 0; ci < info->num_components; ci++) {
       compptr = srcinfo->comp_info + ci;
       coef_arrays[ci] = (*srcinfo->mem->request_virt_barray)
-	((j_common_ptr) srcinfo, JPOOL_IMAGE, false,
+	((j_common_ptr) srcinfo, JPOOL_IMAGE, FALSE,
 	 (JDIMENSION) jround_up((long) compptr->height_in_blocks,
 				(long) compptr->v_samp_factor),
 	 (JDIMENSION) jround_up((long) compptr->width_in_blocks,
@@ -739,7 +739,7 @@ trim_bottom_edge (j_compress_ptr dstinfo)
  */
 
 GLOBAL(jvirt_barray_ptr *)
-jtransform_adjust_parameters (j_decompress_ptr ,
+jtransform_adjust_parameters (j_decompress_ptr /*srcinfo*/,
 			      j_compress_ptr dstinfo,
 			      jvirt_barray_ptr *src_coef_arrays,
 			      jpeg_transform_info *info)
@@ -894,7 +894,7 @@ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
 
 GLOBAL(void)
 jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
-		       JCOPY_OPTION )
+		       JCOPY_OPTION /*option*/)
 {
   jpeg_saved_marker_ptr marker;
 
