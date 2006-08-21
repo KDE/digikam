@@ -119,6 +119,11 @@ puts "Remove dummy extragear README..  "
 `rm -f README`
 puts "done.\n"
 
+# Move some important files to the root folder
+Dir.chdir( "#{name}" )
+`/bin/mv -f COPYING* ..`
+Dir.chdir( ".." )
+
 puts "Generating Makefiles..  "
 `make -f Makefile.cvs`
 puts "done.\n"
