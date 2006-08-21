@@ -504,7 +504,13 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     const char        *data;
     unsigned long int  size;
 
-    gp_file_new(&cfile);
+    errorCode = gp_file_new(&cfile);
+    if (errorCode != GP_OK) 
+    {
+        kdDebug() << "Failed to init new camera file instance ! (libgphoto2 error code: " 
+                  << errorCode << ")" << endl;
+        return false;
+    }
 
     if (m_status) 
     {
@@ -525,7 +531,6 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
         gp_file_unref(cfile);
         delete m_status;
         m_status = 0;
-
         return false;
     }
 
@@ -555,7 +560,13 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
     const char        *data;
     unsigned long int  size;
     
-    gp_file_new(&cfile);
+    errorCode = gp_file_new(&cfile);
+    if (errorCode != GP_OK) 
+    {
+        kdDebug() << "Failed to init new camera file instance ! (libgphoto2 error code: " 
+                  << errorCode << ")" << endl;
+        return false;
+    }
     
     if (m_status) 
     {
@@ -605,7 +616,13 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
     int         errorCode;
     CameraFile *cfile;
 
-    gp_file_new(&cfile);
+    errorCode = gp_file_new(&cfile);
+    if (errorCode != GP_OK) 
+    {
+        kdDebug() << "Failed to init new camera file instance ! (libgphoto2 error code: " 
+                  << errorCode << ")" << endl;
+        return false;
+    }
 
     if (m_status) 
     {
@@ -785,7 +802,14 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 {
     int         errorCode;
     CameraFile *cfile;
-    gp_file_new(&cfile);
+
+    errorCode = gp_file_new(&cfile);
+    if (errorCode != GP_OK) 
+    {
+        kdDebug() << "Failed to init new camera file instance ! (libgphoto2 error code: " 
+                  << errorCode << ")" << endl;
+        return false;
+    }
 
     errorCode = gp_file_open(cfile, QFile::encodeName(localFile));
     if (errorCode != GP_OK) 
@@ -895,7 +919,6 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     gp_file_unref(cfile);
     delete m_status;
     m_status = 0;
-
     return true;
 }
 
