@@ -1091,21 +1091,37 @@ void CameraUI::slotDeleteSelected()
     QStringList folders;
     QStringList files;
     QStringList deleteList;
+    QStringList lockedList;
     
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
-        if (iconItem->isSelected() && 
-            iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+        if (iconItem->isSelected())
         {
-            QString folder = iconItem->itemInfo()->folder;
-            QString file   = iconItem->itemInfo()->name;
-            folders.append(folder);
-            files.append(file);
-            deleteList.append(folder + QString("/") + file);
+            if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+            {
+                QString folder = iconItem->itemInfo()->folder;
+                QString file   = iconItem->itemInfo()->name;
+                folders.append(folder);
+                files.append(file);
+                deleteList.append(folder + QString("/") + file);
+            }
+            else
+            {
+                lockedList.append(iconItem->itemInfo()->name);
+            }
         }
     }
+
+    // If we want to delete some locked files, just give a feedback to user.
+    if (!lockedList.isEmpty())
+    {
+        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
+                             "These items will not be deleted. If you want really to delete these items, "
+                             "please unlock it before."));        
+        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Informations"));
+    }    
 
     if (folders.isEmpty())
         return;
@@ -1145,6 +1161,7 @@ void CameraUI::slotDeleteAll()
     QStringList folders;
     QStringList files;
     QStringList deleteList;
+    QStringList lockedList;
     
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
@@ -1158,7 +1175,20 @@ void CameraUI::slotDeleteAll()
             files.append(file);
             deleteList.append(folder + QString("/") + file);
         }
+        else
+        {
+            lockedList.append(iconItem->itemInfo()->name);
+        }
     }
+
+    // If we want to delete some locked files, just give a feedback to user.
+    if (!lockedList.isEmpty())
+    {
+        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
+                             "These items will not be deleted. If you want really to delete these items, "
+                             "please unlock it before."));        
+        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Informations"));
+    }    
 
     if (folders.isEmpty())
         return;
