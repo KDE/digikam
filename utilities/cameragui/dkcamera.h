@@ -60,9 +60,9 @@ public:
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
     virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
                             GPItemInfo& itemInfo, bool getImageDimensions=true) = 0;
-    virtual void cameraSummary(QString& summary) = 0;
-    virtual void cameraManual(QString& manual) = 0;
-    virtual void cameraAbout(QString& about) = 0;
+    virtual bool cameraSummary(QString& summary) = 0;
+    virtual bool cameraManual(QString& manual) = 0;
+    virtual bool cameraAbout(QString& about) = 0;
 
     virtual bool setLockItem(const QString& folder, const QString& itemName, bool lock) = 0;
 

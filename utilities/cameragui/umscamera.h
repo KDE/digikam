@@ -58,9 +58,9 @@ public:
     bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, 
                     GPItemInfo& itemInfo, bool getImageDimensions=true);
 
-    void cameraSummary(QString& summary);
-    void cameraManual(QString& manual);
-    void cameraAbout(QString& about);
+    bool cameraSummary(QString& summary);
+    bool cameraManual(QString& manual);
+    bool cameraAbout(QString& about);
 
 private:
 
