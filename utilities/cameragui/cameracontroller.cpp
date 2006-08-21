@@ -65,7 +65,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "dmetadata.h"
-#include "exifrotate.h"
+#include "jpegutils.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
 
