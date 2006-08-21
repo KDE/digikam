@@ -12,7 +12,7 @@ INCLUDES = $(all_includes) \
 
 noinst_LTLIBRARIES = libjpegutils.la
 
-libjpegutils_la_SOURCES = exifrotate.cpp transupp.cpp
+libjpegutils_la_SOURCES = jpegutils.cpp transupp.cpp
 
 libjpegutils_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

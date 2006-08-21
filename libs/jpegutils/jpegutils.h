@@ -20,12 +20,14 @@
  * 
  * ============================================================ */
 
-#ifndef EXIFROTATE_H
-#define EXIFROTATE_H
+#ifndef JPEGUTILS_H
+#define JPEGUTILS_H
 
 namespace Digikam
 {
+
 bool exifRotate(const QString& file);
+
 }
 
-#endif /* EXIFROTATE_H */
+#endif /* JPEGUTILS_H */

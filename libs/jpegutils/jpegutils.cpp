@@ -55,6 +55,7 @@ extern "C"
 
 #include "dmetadata.h"
 #include "transupp.h"
+#include "jpegutils.h"
 
 namespace Digikam
 {
