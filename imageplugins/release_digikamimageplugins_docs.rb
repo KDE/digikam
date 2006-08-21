@@ -40,6 +40,7 @@ Dir.chdir( folder )
 
 `svn co -N #{svnroot}/extragear/#{egmodule}`
 Dir.chdir( egmodule )
+`svn up -N #{name}`
 `svn up -N doc`
 
 if ( docs != "no")
@@ -104,7 +105,6 @@ Dir.chdir( ".." ) # root folder
 `find -name ".svn" | xargs rm -rf`
 
 `/bin/mv * ..`
-`/bin/rm release_digikam*`
 Dir.chdir( ".." ) # name-version
 `rmdir #{egmodule}`
 
@@ -113,8 +113,12 @@ puts "\n"
 
 # Move some important files to the root folder
 Dir.chdir( "#{name}" )
-`/bin/mv -f COPYING* ..`
+`/bin/mv -f COPYING-DOCS ..`
+`/bin/mv -f AUTHORS ..`
+`/bin/mv -f INSTALL ..`
+`/bin/rm *`
 Dir.chdir( ".." )
+Dir.rmdir(  "#{name}" )
 
 # Generate makefiles
 `find | xargs touch`
