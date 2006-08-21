@@ -40,6 +40,7 @@ Dir.chdir( folder )
 
 `svn co -N #{svnroot}/extragear/#{egmodule}`
 Dir.chdir( egmodule )
+`svn up -N #{name}`
 `svn up -N doc`
 
 if ( docs != "no")
@@ -121,8 +122,12 @@ puts "done.\n"
 
 # Move some important files to the root folder
 Dir.chdir( "#{name}" )
-`/bin/mv -f COPYING* ..`
+`/bin/mv -f COPYING-DOCS ..`
+`/bin/mv -f AUTHORS ..`
+`/bin/mv -f INSTALL ..`
+`/bin/rm *`
 Dir.chdir( ".." )
+Dir.rmdir(  "#{name}" )
 
 puts "Generating Makefiles..  "
 `make -f Makefile.cvs`
