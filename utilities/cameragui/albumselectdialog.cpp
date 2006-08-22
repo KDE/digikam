@@ -87,25 +87,27 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     d->allowRootSelection = allowRootSelection;
     d->newAlbumString     = newAlbumString;
     
-    QVBoxLayout* lay = new QVBoxLayout(plainPage(), 0, spacingHint());
+    QGridLayout* grid = new QGridLayout(plainPage(), 2, 1, 0, spacingHint());
 
+    QLabel *logo = new QLabel(plainPage());
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
+
+    QLabel *message = new QLabel(plainPage());
     if (!header.isEmpty())
-    {
-        QLabel* head = new QLabel(header, plainPage());
-        lay->addWidget(head);
-        QFrame* hline = new QFrame(plainPage());
-        hline->setFrameStyle(QFrame::Sunken|QFrame::HLine);
-        lay->addWidget(hline);
-    }
+        message->setText(header);
 
     d->folderView = new FolderView(plainPage());
-    d->folderView->addColumn(i18n("Albums"));
+    d->folderView->addColumn(i18n("digiKam Albums"));
     d->folderView->setColumnWidthMode( 0, QListView::Maximum );
     d->folderView->setResizeMode( QListView::AllColumns );
     d->folderView->setRootIsDecorated(true);
-    lay->addWidget(d->folderView);    
 
-    KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
+    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellWidget(message, 1, 1, 0, 0);
+    grid->addMultiCellWidget(d->folderView, 0, 2, 1, 1);
+    grid->setRowStretch(2, 10);
+
     QPixmap icon = iconLoader->loadIcon("folder", KIcon::NoGroup,
                                         32, KIcon::DefaultState, 0, true);
 
@@ -151,6 +153,8 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
         }
     }
 
+    // -------------------------------------------------------------
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -166,6 +170,9 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
     connect(d->folderView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
+    // -------------------------------------------------------------
+
+    resize(500, 500);
     slotSelectionChanged();
 }
 

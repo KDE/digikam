@@ -50,11 +50,11 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 {
     setHelp("camerainterface.anchor", "digikam");
     enableButtonOK(false);
-    resize(500, 400);
+
     m_rootPath = rootPath;
 
     QWidget *page     = new QWidget(this);
-    QGridLayout* grid = new QGridLayout(page, 1, 1, 0, spacingHint());
+    QGridLayout* grid = new QGridLayout(page, 2, 1, 0, spacingHint());
     
     m_folderView    = new CameraFolderView(page);
     QLabel *logo    = new QLabel(page);
@@ -62,12 +62,13 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
     logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 128, KIcon::DefaultState, 0, true));    
-    message->setText(i18n("<p>Please, choose the right camera folder "
+    message->setText(i18n("<p>Please, select the right camera folder "
                           "where you want to upload the pictures.</p>"));
 
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
     grid->addMultiCellWidget(message, 1, 1, 0, 0);
-    grid->addMultiCellWidget(m_folderView, 0, 1, 1, 1);
+    grid->addMultiCellWidget(m_folderView, 0, 2, 1, 1);
+    grid->setRowStretch(2, 10);
 
     m_folderView->addVirtualFolder(cameraName);
     m_folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
@@ -94,6 +95,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     connect(m_folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
+
+    resize(500, 500);
 }
 
 CameraFolderDialog::~CameraFolderDialog()

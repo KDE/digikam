@@ -953,8 +953,8 @@ void CameraUI::slotDownload(bool onlySelected)
     if (album && album->type() != Album::PHYSICAL)
         album = 0;
 
-    QString header(i18n("Select Destination Album for "
-                        "Importing Camera Images"));
+    QString header(i18n("<p>Please, select the right destination album from digiKam library to "
+                        "import camera pictures.</p>"));
 
     QString newDirName;
     IconItem* firstItem = d->view->firstItem();
