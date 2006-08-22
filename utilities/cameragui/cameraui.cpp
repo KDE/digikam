@@ -242,7 +242,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
     d->dateTimeEdit      = new KDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck   = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
-    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless format"), onFlyBox);
+    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
     QHBox *hbox          = new QHBox(onFlyBox);
     d->formatLabel       = new QLabel(i18n("New image format:"), hbox);
     d->losslessFormat    = new QComboBox(hbox);

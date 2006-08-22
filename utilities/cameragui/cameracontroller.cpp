@@ -406,7 +406,7 @@ void CameraThread::run()
 
                     if (convertJpeg && isJpegImage(tempURL.path()))
                     {
-                        sendInfo(i18n("Converting %1 to lossless format...").arg(file));
+                        sendInfo(i18n("Converting %1 to lossless file format...").arg(file));
 
                         KURL tempURL2(dest);
                         tempURL2 = tempURL2.upURL();
