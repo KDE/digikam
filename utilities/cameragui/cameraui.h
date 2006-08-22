@@ -107,7 +107,7 @@ private slots:
     void slotDownload(bool onlySelected);
     void slotDeleteSelected();
     void slotDeleteAll();
-    void slotLock();
+    void slotToggleLock();
 
     void slotFileView(CameraIconViewItem* item);
 

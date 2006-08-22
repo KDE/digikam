@@ -416,6 +416,7 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     menu.insertSeparator();
     menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
     menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
+    menu.insertItem(SmallIcon("encrypted"), i18n("Toggle lock"), 3);
 
     int result = menu.exec(QCursor::pos());
 
@@ -434,6 +435,11 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
         case(2):
         {
             emit signalDelete();
+            break;
+        }
+        case(3):
+        {
+            emit signalToggleLock();
             break;
         }
         default:

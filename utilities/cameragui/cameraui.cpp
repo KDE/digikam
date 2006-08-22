@@ -331,7 +331,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->imageMenu->insertItem(i18n("Increase Thumbs"),   this,    SLOT(slotIncreaseThumbSize()), CTRL+Key_Plus, 4);
     d->imageMenu->insertItem(i18n("Decrease Thumbs"),   this,    SLOT(slotDecreaseThumbSize()), CTRL+Key_Minus, 5);
     d->imageMenu->insertSeparator();
-    d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotLock()), 0, 6);
+    d->imageMenu->insertItem(i18n("Toggle Lock"),       this,    SLOT(slotToggleLock()), 0, 6);
     actionButton(User3)->setPopup(d->imageMenu);    
 
     // -------------------------------------------------------------------------
@@ -393,6 +393,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     connect(d->view, SIGNAL(signalDelete()),
             this, SLOT(slotDeleteSelected()));
+
+    connect(d->view, SIGNAL(signalToggleLock()),
+            this, SLOT(slotToggleLock()));
 
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
@@ -1082,7 +1085,7 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     d->progress->setProgress(curr+1);
 }
 
-void CameraUI::slotLock()
+void CameraUI::slotToggleLock()
 {
     int count = 0;
     for (IconItem* item = d->view->firstItem(); item;

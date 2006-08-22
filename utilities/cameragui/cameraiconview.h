@@ -88,6 +88,7 @@ signals:
     void signalUpload(const KURL::List&);
     void signalDownload();
     void signalDelete();
+    void signalToggleLock();
     void signalNewSelection(bool);
     
 public slots:
