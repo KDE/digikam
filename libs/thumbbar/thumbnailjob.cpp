@@ -263,6 +263,12 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
         stream >> width >> height >> depth;
         thumb = QImage(d->shmaddr, width, height, depth,
                        0, 0, QImage::IgnoreEndian);
+
+        // The buffer supplied to the QImage constructor above must remain valid
+        // throughout the lifetime of the object.
+        // This is not true, the shared memory will be freed or reused.
+        // If we pass the object around, we must do a deep copy.
+        thumb = thumb.copy();
     }
     else
     {
