@@ -963,7 +963,6 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
             }
 
             blockSignals(false);
-            emit signalSelectionChanged();
         }
         else
         {
@@ -1158,7 +1157,6 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
     if (changed)
     {
-        emit signalSelectionChanged();
         paintRegion.translate(-contentsX(), -contentsY());
         viewport()->repaint(paintRegion);
     }
@@ -1201,6 +1199,7 @@ void IconView::contentsMouseReleaseEvent(QMouseEvent* e)
     {
         if (d->pressedMoved)
         {
+            emit signalSelectionChanged();
             d->pressedMoved = false;
             return;
         }
@@ -1693,7 +1692,6 @@ bool IconView::anchorIsBehind() const
 
 void IconView::startDrag()
 {
-    
 }
 
 void IconView::ensureItemVisible(IconItem *item)
