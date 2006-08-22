@@ -357,6 +357,8 @@ void CameraThread::run()
                 QString   credit            = cmd->map["credit"].asString();
                 QString   source            = cmd->map["source"].asString();
                 QString   copyright         = cmd->map["copyright"].asString();
+                bool      convertJpeg       = cmd->map["convertJpeg"].asBool();
+                QString   losslessFormat    = cmd->map["losslessFormat"].asString();
                 sendInfo(i18n("Downloading file %1...").arg(file));
     
                 // download to a temp file
@@ -369,7 +371,7 @@ void CameraThread::run()
 
                 KURL tempURL(dest);
                 tempURL = tempURL.upURL();
-                tempURL.addPath( QString(".digikam-camera-%1").arg(getpid()));
+                tempURL.addPath( QString(".digikam-camera-tmp1-%1").arg(getpid()));
     
                 bool result = d->camera->downloadItem(folder, file, tempURL.path());
     
@@ -379,7 +381,7 @@ void CameraThread::run()
                     {
                         kdDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("EXIF rotating file %1...").arg(file));
-                        exifRotate(tempURL.path());
+                        exifRotate(tempURL.path(), file);
                     }
     
                     if (fixDateTime || setPhotographerId || setCredits)
@@ -399,12 +401,45 @@ void CameraThread::run()
                         metadata.applyChanges();
                     }
                     
-                    // move the file to the destination file
-                    if (rename(QFile::encodeName(tempURL.path()), QFile::encodeName(dest)) != 0)
+                    // Convert Jpeg file to lossless format if necessary, 
+                    // and move converted image to destination.
+
+                    if (convertJpeg && isJpegImage(tempURL.path()))
                     {
-                        // rename failed. delete the temp file
+                        sendInfo(i18n("Converting %1 to lossless format...").arg(file));
+
+                        KURL tempURL2(dest);
+                        tempURL2 = tempURL2.upURL();
+                        tempURL2.addPath( QString(".digikam-camera-tmp2-%1").arg(getpid()));
+
+                        if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
+                        {
+                            // convert failed. delete the temp file
+                            unlink(QFile::encodeName(tempURL2.path()));
+                            result = false;
+                        }
+                        else
+                        {
+                            // move the file to the destination file
+                            if (rename(QFile::encodeName(tempURL2.path()), QFile::encodeName(dest)) != 0)
+                            {
+                                // rename failed. delete the temp file
+                                unlink(QFile::encodeName(tempURL2.path()));
+                                result = false;
+                            }
+                        }
+
                         unlink(QFile::encodeName(tempURL.path()));
-                        result = false;
+                    }
+                    else
+                    {
+                        // move the file to the destination file
+                        if (rename(QFile::encodeName(tempURL.path()), QFile::encodeName(dest)) != 0)
+                        {
+                            // rename failed. delete the temp file
+                            unlink(QFile::encodeName(tempURL.path()));
+                            result = false;
+                        }
                     }
                 }
     
@@ -747,6 +782,8 @@ void CameraController::download(DownloadSettingsContainer downloadSettings)
     cmd->map.insert("credit", QVariant(downloadSettings.credit));
     cmd->map.insert("source", QVariant(downloadSettings.source));
     cmd->map.insert("copyright", QVariant(downloadSettings.copyright));
+    cmd->map.insert("convertJpeg", QVariant(downloadSettings.convertJpeg, 0));
+    cmd->map.insert("losslessFormat", QVariant(downloadSettings.losslessFormat));
     d->cmdQueue.enqueue(cmd);
 }
 

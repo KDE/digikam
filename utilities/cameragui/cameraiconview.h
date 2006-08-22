@@ -118,7 +118,6 @@ private:
     QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
     void    uploadItemPopupMenu(const KURL::List& srcURLs);
 
-
 private:
 
     CameraIconViewPriv* d;

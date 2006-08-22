@@ -23,10 +23,17 @@
 #ifndef JPEGUTILS_H
 #define JPEGUTILS_H
 
+// Qt includes.
+
+#include <qstring.h>
+
 namespace Digikam
 {
 
-bool exifRotate(const QString& file);
+bool exifRotate(const QString& file, const QString& documentName);
+bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, 
+                 const QString& format=QString("PNG"));
+bool isJpegImage(const QString& file);
 
 }
 

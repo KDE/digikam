@@ -40,6 +40,7 @@ public:
         fixDateTime       = false;
         setPhotographerId = false;
         setCredits        = false;
+        convertJpeg       = false;
     };
     
     ~DownloadSettingsContainer(){};
@@ -50,6 +51,7 @@ public:
     bool      fixDateTime;
     bool      setPhotographerId;
     bool      setCredits;
+    bool      convertJpeg;
 
     QDateTime newDateTime;
 
@@ -57,6 +59,9 @@ public:
     QString   folder;
     QString   file;
     QString   dest;
+
+    // New format to convert Jpeg files.
+    QString   losslessFormat;
 
     // IPTC settings
     QString   author;

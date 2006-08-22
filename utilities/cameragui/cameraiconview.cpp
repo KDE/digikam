@@ -27,6 +27,7 @@
 // Qt includes.
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qtimer.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
@@ -241,18 +242,21 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
 
 void CameraIconView::slotDownloadNameChanged()
 {
-    bool    useDefault = true;
-    int     startIndex = 0;
+    bool useDefault = true;
+    int  startIndex = 0;
 
     if (d->renamer)
     {
-        useDefault   = d->renamer->useDefault();
-        startIndex   = d->renamer->startIndex() -1;
+        useDefault = d->renamer->useDefault();
+        startIndex = d->renamer->startIndex() -1;
     }
     
+    bool convertLossLessJpeg = d->cameraUI->convertLosslessJpegFiles();
+    QString losslessFormat   = d->cameraUI->losslessFormat();
+
     viewport()->setUpdatesEnabled(false);
 
-    bool hasSelection=false;
+    bool hasSelection = false;
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (item->isSelected())
@@ -281,10 +285,20 @@ void CameraIconView::slotDownloadNameChanged()
                     downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
                 startIndex++;
+
             }
-            else 
-                downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
     
+            if (convertLossLessJpeg && !downloadName.isEmpty())
+            {
+                QFileInfo fi(downloadName);
+                QString ext = fi.extension().upper();
+                if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+                {
+                    downloadName.truncate(downloadName.length() - ext.length());
+                    downloadName.append(losslessFormat.lower());
+                }
+            }
+
             viewItem->setDownloadName( downloadName );
         }
     }
@@ -301,6 +315,17 @@ void CameraIconView::slotDownloadNameChanged()
                 downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
             else
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
+
+            if (convertLossLessJpeg)
+            {
+                QFileInfo fi(downloadName);
+                QString ext = fi.extension().upper();
+                if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+                {
+                    downloadName.truncate(downloadName.length() - ext.length());
+                    downloadName.append(losslessFormat.lower());
+                }
+            }
     
             viewItem->setDownloadName( downloadName );
             startIndex++;
@@ -347,7 +372,10 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
             break;
         }
         default:
+        {
+            dname = itemInfo->name;
             break;
+        }
     };
 
     return dname;
@@ -355,7 +383,7 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
 
 void CameraIconView::slotSelectionChanged()
 {
-    bool selected = false;
+    bool selected               = false;
     CameraIconViewItem* camItem = 0;
     
     for (IconItem* item = firstItem(); item;
@@ -363,7 +391,7 @@ void CameraIconView::slotSelectionChanged()
     {
         if (item->isSelected())
         {
-            camItem = static_cast<CameraIconViewItem*>(item);
+            camItem  = static_cast<CameraIconViewItem*>(item);
             selected = true;
             break;
         }

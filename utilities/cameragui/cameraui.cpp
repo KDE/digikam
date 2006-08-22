@@ -39,9 +39,11 @@ extern "C"
 #include <qtoolbutton.h>
 #include <qiconview.h>
 #include <qvbox.h>
+#include <qhbox.h>
 #include <qpopupmenu.h>
 #include <qsplitter.h>
 #include <qpixmap.h>
+#include <qcombobox.h>
 #include <qframe.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
@@ -132,6 +134,9 @@ public:
         dateTimeEdit      = 0;
         setPhotographerId = 0;
         setCredits        = 0;
+        losslessFormat    = 0;
+        convertJpegCheck  = 0;
+        formatLabel       = 0;
     }
 
     bool                          busy;
@@ -154,6 +159,11 @@ public:
     QCheckBox                    *fixDateTimeCheck;
     QCheckBox                    *setPhotographerId;
     QCheckBox                    *setCredits;
+    QCheckBox                    *convertJpegCheck;
+
+    QLabel                       *formatLabel;
+
+    QComboBox                    *losslessFormat;
 
     QSplitter                    *splitter;
 
@@ -224,29 +234,36 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->view->setRenameCustomizer(d->renameCustomizer);
         
     QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Informations"), d->advBox);
-    d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip image"), exifBox);
+    d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip JPEG images"), exifBox);
     d->autoAlbumCheck   = new QCheckBox(i18n("Date-based sub-albums"), exifBox);
-    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
-                                              "rotated or flipped images using EXIF information "
-                                              "provided by camera."));
-    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
-                                             "into automatically created date-based sub-albums "
-                                             "of destination album."));
 
-    QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations"), d->advBox);
+    QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations (JPEG only)"), d->advBox);
     d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), OnFlyBox);
     d->setCredits        = new QCheckBox(i18n("Set default credit and copyright"), OnFlyBox);
     d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), OnFlyBox);
-    d->dateTimeEdit      = new KDateTimeEdit( OnFlyBox, "datepicker");
+    d->dateTimeEdit      = new KDateTimeEdit(OnFlyBox, "datepicker");
+    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless format"), OnFlyBox);
+    QHBox *hbox          = new QHBox(OnFlyBox);
+    d->formatLabel       = new QLabel(i18n("New image format:"), hbox);
+    d->losslessFormat    = new QComboBox(hbox);
+    d->losslessFormat->insertItem("PNG", 0);
     
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default photographer identity "
-                                                "into IPTC tags using main digiKam metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit and copyright information "
-                                         "into IPTC tags using main digiKam metadata settings."));
+    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
+                     "rotated or flipped images using EXIF information provided by camera."));
+    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
+                     "into automatically created date-based sub-albums of destination album."));
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default "
+                     "photographer identity into IPTC tags using main digiKam metadata settings."));
+    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit "
+                     "and copyright information into IPTC tags using main digiKam metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
-                    "tags to the right values if your camera don't set "
-                    "properly these tags when pictures are taken. The values will"
-                    "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
+                     "tags to the right values if your camera don't set "
+                     "properly these tags when pictures are taken. The values will "
+                     "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toogle on this option to convert automaticly all JPEG file "
+                     "to a lossless image format. Nota: image conversion can take a while on slow computer."));
+    QWhatsThis::add( d->losslessFormat, i18n("<p>Select here your prefered lossless image file format to "
+                     "convert JPEG files. Nota: all metadata will be preserved during conversions."));
                                                
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
     grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
@@ -345,6 +362,15 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
+    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+            d->losslessFormat, SLOT(setEnabled(bool)));
+
+    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+            d->formatLabel, SLOT(setEnabled(bool)));
+
+    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+            d->view, SLOT(slotDownloadNameChanged()));
+
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
             
@@ -461,6 +487,9 @@ void CameraUI::readSettings()
     d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
     d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
     d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
+    d->convertJpegCheck->setChecked(config->readBoolEntry("ConvertJpeg", false));
+    d->losslessFormat->setCurrentItem(config->readNumEntry("LossLessFormat", 0));   // PNG by default
+
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)config->readNumEntry("ThumbnailSize", 
                               ThumbnailSize::Large)));
     
@@ -468,7 +497,8 @@ void CameraUI::readSettings()
         d->splitter->setSizes(config->readIntListEntry("Splitter Sizes"));
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
-    
+    d->losslessFormat->setEnabled(convertLosslessJpegFiles());
+    d->formatLabel->setEnabled(convertLosslessJpegFiles());
     resize(configDialogSize("Camera Settings"));
 }
 
@@ -483,6 +513,8 @@ void CameraUI::saveSettings()
     config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
     config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
     config->writeEntry("SetCredits", d->setCredits->isChecked());
+    config->writeEntry("ConvertJpeg", convertLosslessJpegFiles());
+    config->writeEntry("LossLessFormat", d->losslessFormat->currentItem());
     config->writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
     config->writeEntry("Splitter Sizes", d->splitter->sizes());
     config->sync();
@@ -501,6 +533,16 @@ bool CameraUI::isBusy() const
 bool CameraUI::isClosed() const
 {
     return d->closed;
+}
+
+bool CameraUI::convertLosslessJpegFiles() const
+{
+    return d->convertJpegCheck->isChecked();
+}
+
+QString CameraUI::losslessFormat()
+{
+    return d->losslessFormat->currentText();
 }
 
 void CameraUI::slotCancelButton()
@@ -946,6 +988,8 @@ void CameraUI::slotDownload(bool onlySelected)
     downloadSettings.newDateTime       = d->dateTimeEdit->dateTime();
     downloadSettings.setPhotographerId = d->setPhotographerId->isChecked();
     downloadSettings.setCredits        = d->setCredits->isChecked();
+    downloadSettings.convertJpeg       = convertLosslessJpegFiles();
+    downloadSettings.losslessFormat    = losslessFormat();
     
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)
