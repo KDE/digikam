@@ -228,22 +228,22 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     // -------------------------------------------------------------------------
 
-    d->advBox           = new QWidget(d->rightSidebar);
-    QGridLayout* grid   = new QGridLayout( d->advBox, 3, 1, KDialog::marginHint());
-    d->renameCustomizer = new RenameCustomizer(d->advBox);
+    d->advBox            = new QWidget(d->rightSidebar);
+    QGridLayout* grid    = new QGridLayout( d->advBox, 3, 1, KDialog::marginHint());
+    d->renameCustomizer  = new RenameCustomizer(d->advBox);
     d->view->setRenameCustomizer(d->renameCustomizer);
         
-    QVGroupBox* exifBox = new QVGroupBox(i18n("Use Camera Informations"), d->advBox);
-    d->autoRotateCheck  = new QCheckBox(i18n("Rotate/flip JPEG images"), exifBox);
-    d->autoAlbumCheck   = new QCheckBox(i18n("Date-based sub-albums"), exifBox);
+    QVGroupBox* albumBox = new QVGroupBox(i18n("Auto-creation of Albums"), d->advBox);
+    d->autoAlbumCheck    = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
 
-    QVGroupBox* OnFlyBox = new QVGroupBox(i18n("On the Fly Operations (JPEG only)"), d->advBox);
-    d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), OnFlyBox);
-    d->setCredits        = new QCheckBox(i18n("Set default credit and copyright"), OnFlyBox);
-    d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), OnFlyBox);
-    d->dateTimeEdit      = new KDateTimeEdit(OnFlyBox, "datepicker");
-    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless format"), OnFlyBox);
-    QHBox *hbox          = new QHBox(OnFlyBox);
+    QVGroupBox* onFlyBox = new QVGroupBox(i18n("On the Fly Operations (JPEG only)"), d->advBox);
+    d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
+    d->setCredits        = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
+    d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
+    d->dateTimeEdit      = new KDateTimeEdit(onFlyBox, "datepicker");
+    d->autoRotateCheck   = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
+    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless format"), onFlyBox);
+    QHBox *hbox          = new QHBox(onFlyBox);
     d->formatLabel       = new QLabel(i18n("New image format:"), hbox);
     d->losslessFormat    = new QComboBox(hbox);
     d->losslessFormat->insertItem("PNG", 0);
@@ -266,8 +266,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "convert JPEG files. Nota: all metadata will be preserved during conversions."));
                                                
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
-    grid->addMultiCellWidget(exifBox, 1, 1, 0, 1);
-    grid->addMultiCellWidget(OnFlyBox, 2, 2, 0, 1);
+    grid->addMultiCellWidget(albumBox, 1, 1, 0, 1);
+    grid->addMultiCellWidget(onFlyBox, 2, 2, 0, 1);
     grid->setRowStretch(3, 10);
 
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
@@ -947,6 +947,8 @@ void CameraUI::slotDownloadAll()
 
 void CameraUI::slotDownload(bool onlySelected)
 {
+    // -- Get the destination album from digiKam library ---------------
+
     AlbumManager* man = AlbumManager::instance();
 
     Album* album = man->currentAlbum();
@@ -976,6 +978,8 @@ void CameraUI::slotDownload(bool onlySelected)
     if (!album)
         return;
 
+    // -- Prepare downloading of camera items ------------------------
+
     KURL url;
     url.setPath(((PAlbum*)album)->folderPath());
     
@@ -1003,6 +1007,8 @@ void CameraUI::slotDownload(bool onlySelected)
         downloadSettings.source      = settings->getIptcSource();
         downloadSettings.copyright   = settings->getIptcCopyright();        
     }
+
+    // -- Download camera items -------------------------------
     
     for (IconItem* item = d->view->firstItem(); item;
          item = item->nextItem())
@@ -1387,7 +1393,7 @@ bool CameraUI::createAutoAlbum(const KURL& parentURL, const QString& name,
     // looks like the directory does not exist, try to create it
 
     AlbumManager* aman = AlbumManager::instance();
-    PAlbum* parent =  aman->findPAlbum(parentURL);
+    PAlbum* parent     = aman->findPAlbum(parentURL);
     if (!parent)
     {
         errMsg = i18n("Failed to find Album for path '%1'")
