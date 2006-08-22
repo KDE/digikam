@@ -197,7 +197,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                       0, false, true,
                       i18n("D&elete"),
                       i18n("&Download"),
-                      i18n("&Image"))
+                      i18n("&Images"))
 {
     d = new CameraUIPriv;
     setHelp("camerainterface.anchor", "digikam");
