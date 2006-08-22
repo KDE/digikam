@@ -213,6 +213,7 @@ bool exifRotate(const QString& file, const QString& documentName)
 
         // Reset the Exif orientation tag of the temp image to normal
         kdDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
+
         metaData.load(temp);
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
         QImage img(temp);
@@ -300,7 +301,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // will be found into Exiv2.
         // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
     
-        if ( format.upper() != QString("JPG") && format.upper() != QString("JPEG") && 
+        if (format.upper() != QString("JPG") && format.upper() != QString("JPEG") && 
             format.upper() != QString("JPE")) 
             meta.setImagePreview(preview);
     
