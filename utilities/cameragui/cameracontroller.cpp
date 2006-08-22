@@ -258,7 +258,7 @@ void CameraThread::run()
                 event->map.insert("folders", QVariant(flist));
                 QApplication::postEvent(parent, event);
             
-                sendInfo(i18n("Finished listing folders..."));
+                sendInfo(i18n("Listing folders is complete..."));
     
                 break;
             }
@@ -288,7 +288,7 @@ void CameraThread::run()
                     QApplication::postEvent(parent, event);
                 }
     
-                sendInfo(i18n("Finished listing files in %1").arg(folder));
+                sendInfo(i18n("Listing files in %1 is complete").arg(folder));
                 
                 break;
             }
