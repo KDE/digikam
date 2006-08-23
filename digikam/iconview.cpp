@@ -59,25 +59,25 @@ public:
 
     IconViewPriv()
     {
-        firstGroup     = 0;
-        lastGroup      = 0;
-        currItem       = 0;
-        anchorItem     = 0;
-        firstVisibleItem = 0;
-        clearing       = false;
-        spacing        = 10;
+        firstGroup          = 0;
+        lastGroup           = 0;
+        currItem            = 0;
+        anchorItem          = 0;
+        firstVisibleItem    = 0;
+        clearing            = false;
+        spacing             = 10;
 
-        rubber         = 0;
-        dragging       = false;
-        pressedMoved   = false;
+        rubber              = 0;
+        dragging            = false;
+        pressedMoved        = false;
         
-        firstContainer = 0;
-        lastContainer  = 0;
+        firstContainer      = 0;
+        lastContainer       = 0;
 
-        showTips       = false;
-        toolTipItem    = 0;
-        toolTipTimer   = 0;
-        updateTimer    = 0;
+        showTips            = false;
+        toolTipItem         = 0;
+        toolTipTimer        = 0;
+        updateTimer         = 0;
         updateTimerInterval = 0;
     }
     
@@ -154,10 +154,10 @@ IconView::IconView(QWidget* parent, const char* name)
     d->toolTipTimer = new QTimer(this);
     
     connect(d->updateTimer, SIGNAL(timeout()),
-            SLOT(slotUpdate()));
+            this, SLOT(slotUpdate()));
             
     connect(d->toolTipTimer, SIGNAL(timeout()),
-            SLOT(slotToolTip()));
+            this, SLOT(slotToolTip()));
 
     setEnableToolTips(true);
 }
@@ -205,7 +205,7 @@ IconItem* IconView::currentItem() const
 
 void IconView::setCurrentItem(IconItem* item)
 {
-    d->currItem = item;
+    d->currItem   = item;
     d->anchorItem = d->currItem;
     
     if (d->currItem)
@@ -747,6 +747,9 @@ void IconView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
     rearrangeItems();
+
+    if (d->currItem)
+        ensureItemVisible(d->currItem);
 }
 
 void IconView::rebuildContainers()
