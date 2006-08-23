@@ -223,10 +223,12 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
         d->height     = d->origHeight;
         valRet        = true;
 
-        // Raw file are already rotated properlly by dcraw. Only rotate JPEG file.
-        // TODO support TIFF/EP file here like JPEG.
-        if (d->exifOrient && d->image.attribute("format").toString() == QString("JPEG"))
-            exifRotate(d->filename);
+        // Raw file are already rotated properlly by dcraw. Only rotate JPEG/PNG/TIFF file.
+        if (d->exifOrient && 
+	    d->image.attribute("format").toString() == QString("JPEG") &&
+	    d->image.attribute("format").toString() == QString("PNG")  &&
+	    d->image.attribute("format").toString() == QString("TIFF"))
+    	    exifRotate(d->filename);
         
         if (d->cmSettings->enableCMSetting)
         {
