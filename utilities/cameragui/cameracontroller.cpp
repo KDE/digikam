@@ -463,9 +463,9 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_open):
             {
-                QString folder     = cmd->map["folder"].asString();
-                QString file       = cmd->map["file"].asString();
-                QString dest       = cmd->map["dest"].asString();
+                QString folder = cmd->map["folder"].asString();
+                QString file   = cmd->map["file"].asString();
+                QString dest   = cmd->map["dest"].asString();
     
                 sendInfo(i18n("Retrieving file %1 from camera...").arg(file));
     
@@ -1138,7 +1138,10 @@ void CameraController::slotProcessNext()
                     break;
                 }
 
-                KIO::RenameDlg dlg(d->parent, i18n("Rename File"), file, dest,
+                // FIXME : see B.K.O #126427: with Gphoto camera, the cmaera file is not 
+                // mounted in local and connot be display like a preview in dialog.
+
+                KIO::RenameDlg dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
                                    KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
             
                 int result = dlg.exec();
