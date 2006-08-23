@@ -228,5 +228,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 136 ==> 122693 : improvement proposals for the "add border" plugin.
 137 ==> 124183 : option to convert images when importing them from the camera.
 138 ==> 128673 : Add keyboard shortcut to refresh album view or auto-refresh when pictures are renamed.
+139 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed
+140 ==> 
 
 ----------------------------------------------------------------------------------------------------
