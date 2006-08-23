@@ -76,6 +76,7 @@ CameraGUI     : New option to convert JPEG files to lossless file format during 
 Image Plugins : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
 
+General       : New option to force the refresh of Album contents.
 
 ...
 
@@ -226,5 +227,6 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 135 ==> 132582 : Some pictures make digiKam crash (sample included).
 136 ==> 122693 : improvement proposals for the "add border" plugin.
 137 ==> 124183 : option to convert images when importing them from the camera.
+138 ==> 128673 : Add keyboard shortcut to refresh album view or auto-refresh when pictures are renamed.
 
 ----------------------------------------------------------------------------------------------------
