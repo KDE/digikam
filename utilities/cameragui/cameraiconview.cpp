@@ -562,6 +562,8 @@ void CameraIconView::setThumbnailSize(const ThumbnailSize& thumbSize)
         d->thumbSize = thumbSize;
         updateItemRectsPixmap();
         rearrangeItems(true);
+        if (IconView::currentItem())
+            IconView::ensureItemVisible(IconView::currentItem());
     }
 }
 
