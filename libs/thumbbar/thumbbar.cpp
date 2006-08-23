@@ -66,6 +66,7 @@ public:
         lastItem   = 0;
         currItem   = 0;
         count      = 0;
+        thumbJob   = 0;
         itemDict.setAutoDelete(false);
     }
     
@@ -572,9 +573,10 @@ void ThumbBarView::slotFailedThumbnail(const KURL& url)
     KIO::PreviewJob* job = KIO::filePreview(url, d->tileSize, 0, 0, 70, true, false);
     
     connect(job, SIGNAL(gotPreview(const KFileItem *, const QPixmap &)),
-            SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
+            this, SLOT(slotGotPreview(const KFileItem *, const QPixmap &)));
+
     connect(job, SIGNAL(failed(const KFileItem *)),
-            SLOT(slotFailedPreview(const KFileItem *)));
+            this, SLOT(slotFailedPreview(const KFileItem *)));
 }
 
 void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
