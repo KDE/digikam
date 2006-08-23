@@ -144,7 +144,7 @@ DigikamApp::DigikamApp()
         mValidIccPath = false;
     }
 
-    kdDebug() << "digikampp: " << tmpPath.dirName() << endl;
+    kdDebug() << "ICC profiles repository is: " << tmpPath.dirName() << endl;
 
     // Actual file scanning is done in main() - is this necessary here?
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
@@ -457,6 +457,15 @@ void DigikamApp::setupActions()
                                     "album_propsEdit");
     mPropsEditAction->setWhatsThis(i18n("This option allows you to set the Album Properties information "
                                         "about the Collection."));
+
+    mRefreshAlbumAction = new KAction( i18n("Refresh"),
+                                    "rebuild",
+                                    Key_F5,
+                                    mView,
+                                    SLOT(slot_albumRefresh()),
+                                    actionCollection(),
+                                    "album_refresh");
+    mRefreshAlbumAction->setWhatsThis(i18n("This option refresh all album content."));
 
     mOpenInKonquiAction = new KAction( i18n("Open in Konqueror"),
                                     "konqueror",

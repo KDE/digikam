@@ -199,6 +199,7 @@ private:
     KAction               *mPropsEditAction;
     KAction               *mAlbumImportAction;
     KAction               *mOpenInKonquiAction;
+    KAction               *mRefreshAlbumAction;
     
     // Tag Actions
     KAction               *mNewTagAction;

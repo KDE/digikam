@@ -98,17 +98,20 @@ public:
     QSplitter                *splitter;
 
     DigikamApp               *parent;
+
     AlbumIconView            *iconView;
     AlbumFolderView          *folderView;
     AlbumManager             *albumManager;
     AlbumHistory             *albumHistory;
+    AlbumWidgetStack         *albumPreviews;
+    
     Sidebar                  *leftSideBar;
     ImagePropertiesSideBarDB *rightSideBar;
+
     DateFolderView           *dateFolderView;
     TagFolderView            *tagFolderView;
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
-    AlbumWidgetStack         *albumPreviews;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -573,6 +576,11 @@ void DigikamView::slot_albumOpenInKonqui()
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
     new KRun(palbum->folderPath()); // KRun will delete itself.
+}
+
+void DigikamView::slot_albumRefresh()
+{
+    d->iconView->refreshItems(d->iconView->allItems());
 }
 
 void DigikamView::slotImageSelected()

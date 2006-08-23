@@ -77,6 +77,7 @@ public slots:
     void slot_albumPropsEdit();
     void slot_albumAddImages();
     void slot_albumOpenInKonqui();
+    void slot_albumRefresh();
     void slotAlbumImportFolder();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
