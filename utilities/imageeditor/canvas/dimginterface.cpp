@@ -225,9 +225,9 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
 
         // Raw file are already rotated properlly by dcraw. Only rotate JPEG/PNG/TIFF file.
         if (d->exifOrient && 
-	    d->image.attribute("format").toString() == QString("JPEG") &&
-	    d->image.attribute("format").toString() == QString("PNG")  &&
-	    d->image.attribute("format").toString() == QString("TIFF"))
+	    (d->image.attribute("format").toString() == QString("JPEG") ||
+	     d->image.attribute("format").toString() == QString("PNG")  ||
+	     d->image.attribute("format").toString() == QString("TIFF")))
     	    exifRotate(d->filename);
         
         if (d->cmSettings->enableCMSetting)
