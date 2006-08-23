@@ -65,6 +65,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "rawfiles.h"
 #include "dcrawpreview.h"
 #include "dmetadata.h"
 #include "digikamthumbnail.h"
@@ -145,8 +146,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
     if (regenerate)
     {
-        // In first we trying to load image using the file extension. This is mandatory because
-        // some tiff files are detected like RAW files by dcraw::parse method.
+        // To speed-up thumb extraction, we trying to load image using the file extension.
         if ( !loadByExtension(img, url.path()) )
         {
             // Try JPEG loading : JPEG files without using Exif Thumb.
@@ -257,6 +257,7 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         
     // Else, use the right way depending of image file extension.
     QString ext = fileInfo.extension().upper();
+    QString rawFilesExt(raw_file_extentions);
 
     if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         return (loadJPEG(image, path));
@@ -264,6 +265,8 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
         return (loadDImg(image, path));
     else if (ext == QString("TIFF") || ext == QString("TIF"))
         return (loadDImg(image, path));
+    else if (rawFilesExt.upper().contains(ext))
+        return (DcrawPreview::loadDcrawPreview(image, path));
 
     return false;
 }
