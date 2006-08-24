@@ -166,10 +166,7 @@ bool MakerNoteWidget::decodeMetadata()
     {
         Exiv2::ExifData exifData;
         if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
-        {
-            kdDebug() << "Cannot parse MAKERNOTE metadata using Exiv2" << endl;
             return false;
-        }
 
         exifData.sortByKey();
         
