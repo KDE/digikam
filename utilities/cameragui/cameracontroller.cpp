@@ -1149,35 +1149,35 @@ void CameraController::slotProcessNext()
 
                 switch (result)
                 {
-                case KIO::R_CANCEL:
-                {
-                    cancel = true;
-                    break;
-                }
-                case KIO::R_SKIP:
-                {
-                    skip = true;
-                    break;
-                }
-                case KIO::R_AUTO_SKIP:
-                {
-                    d->skipAll = true;
-                    skip       = true;
-                    break;
-                }
-                case KIO::R_OVERWRITE:
-                {
-                    overwrite       = true;
-                    break;
-                }
-                case KIO::R_OVERWRITE_ALL:
-                {
-                    d->overwriteAll = true;
-                    overwrite       = true;
-                    break;
-                }
-                default:
-                    break;
+                    case KIO::R_CANCEL:
+                    {
+                        cancel = true;
+                        break;
+                    }
+                    case KIO::R_SKIP:
+                    {
+                        skip = true;
+                        break;
+                    }
+                    case KIO::R_AUTO_SKIP:
+                    {
+                        d->skipAll = true;
+                        skip       = true;
+                        break;
+                    }
+                    case KIO::R_OVERWRITE:
+                    {
+                        overwrite       = true;
+                        break;
+                    }
+                    case KIO::R_OVERWRITE_ALL:
+                    {
+                        d->overwriteAll = true;
+                        overwrite       = true;
+                        break;
+                    }
+                    default:
+                        break;
                 }
 
                 if (cancel || skip || overwrite)
