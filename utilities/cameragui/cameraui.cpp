@@ -262,7 +262,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
                      "(YYYY-MM-DD). Ex.: <i>2006-08-24</i><p>"
                      "<b>Full Text</b>: the date format is in a user-readable string. "
-                     "Ex.: <i>Thu Aug 24 2006<i><p>"
+                     "Ex.: <i>Thu Aug 24 2006</i><p>"
                      "<b>Local Settings</b>: the date format depend of KDE control pannel settings.<p>"));
 
     // -- On the Fly options ---------------------------------------------------
