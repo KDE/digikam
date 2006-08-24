@@ -91,7 +91,8 @@ public:
 
 private:
 
-    int  setup();
+    int setup();
+    static void printGphotoErrorDescription(int errorCode);
 
 private:
 
