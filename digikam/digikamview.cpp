@@ -916,37 +916,37 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 
 void DigikamView::slotAssignRating(int rating)
 {
-    d->rightSideBar->slotAssignRating(rating);
+    d->iconView->slotAssignRating(rating);
 }
 
 void DigikamView::slotAssignRatingNoStar()
 {
-    d->rightSideBar->slotAssignRating(0);
+    d->iconView->slotAssignRating(0);
 }
 
 void DigikamView::slotAssignRatingOneStar()
 {
-    d->rightSideBar->slotAssignRating(1);
+    d->iconView->slotAssignRating(1);
 }
 
 void DigikamView::slotAssignRatingTwoStar()
 {
-    d->rightSideBar->slotAssignRating(2);
+    d->iconView->slotAssignRating(2);
 }
 
 void DigikamView::slotAssignRatingThreeStar()
 {
-    d->rightSideBar->slotAssignRating(3);
+    d->iconView->slotAssignRating(3);
 }
 
 void DigikamView::slotAssignRatingFourStar()
 {
-    d->rightSideBar->slotAssignRating(4);
+    d->iconView->slotAssignRating(4);
 }
 
 void DigikamView::slotAssignRatingFiveStar()
 {
-    d->rightSideBar->slotAssignRating(5);
+    d->iconView->slotAssignRating(5);
 }
 
 }  // namespace Digikam
