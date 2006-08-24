@@ -110,6 +110,13 @@ class CameraUIPriv
 {
 public:
 
+    enum DateFormatOptions
+    {
+        IsoDateFormat=0,
+        TextDateFormat,
+        LocalDateFormat
+    };
+
     CameraUIPriv()
     {
         busy              = false;
@@ -137,6 +144,8 @@ public:
         losslessFormat    = 0;
         convertJpegCheck  = 0;
         formatLabel       = 0;
+        folderDateLabel   = 0;
+        folderDateFormat  = 0;
     }
 
     bool                          busy;
@@ -162,8 +171,10 @@ public:
     QCheckBox                    *convertJpegCheck;
 
     QLabel                       *formatLabel;
+    QLabel                       *folderDateLabel;
 
     QComboBox                    *losslessFormat;
+    QComboBox                    *folderDateFormat;
 
     QSplitter                    *splitter;
 
@@ -233,8 +244,18 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox);
     d->view->setRenameCustomizer(d->renameCustomizer);
         
+    // -- Albums Auto-creation options -----------------------------------------
+
     QVGroupBox* albumBox = new QVGroupBox(i18n("Auto-creation of Albums"), d->advBox);
     d->autoAlbumCheck    = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
+    QHBox *hbox1         = new QHBox(albumBox);
+    d->folderDateLabel   = new QLabel(i18n("Date format:"), hbox1);
+    d->folderDateFormat  = new QComboBox(hbox1);
+    d->folderDateFormat->insertItem(i18n("ISO"),             CameraUIPriv::IsoDateFormat);
+    d->folderDateFormat->insertItem(i18n("Full Text"),       CameraUIPriv::TextDateFormat);
+    d->folderDateFormat->insertItem(i18n("Local Settings"),  CameraUIPriv::LocalDateFormat);
+
+    // -- On the Fly options ---------------------------------------------------
 
     QVGroupBox* onFlyBox = new QVGroupBox(i18n("On the Fly Operations (JPEG only)"), d->advBox);
     d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
@@ -243,9 +264,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->dateTimeEdit      = new KDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck   = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
     d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    QHBox *hbox          = new QHBox(onFlyBox);
-    d->formatLabel       = new QLabel(i18n("New image format:"), hbox);
-    d->losslessFormat    = new QComboBox(hbox);
+    QHBox *hbox2         = new QHBox(onFlyBox);
+    d->formatLabel       = new QLabel(i18n("New image format:"), hbox2);
+    d->losslessFormat    = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);
     
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
@@ -362,6 +383,12 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
+    connect(d->autoAlbumCheck, SIGNAL(toggled(bool)),
+            d->folderDateFormat, SLOT(setEnabled(bool)));
+
+    connect(d->autoAlbumCheck, SIGNAL(toggled(bool)),
+            d->folderDateLabel, SLOT(setEnabled(bool)));
+
     connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
             d->losslessFormat, SLOT(setEnabled(bool)));
 
@@ -492,6 +519,7 @@ void CameraUI::readSettings()
     d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
     d->convertJpegCheck->setChecked(config->readBoolEntry("ConvertJpeg", false));
     d->losslessFormat->setCurrentItem(config->readNumEntry("LossLessFormat", 0));   // PNG by default
+    d->folderDateFormat->setCurrentItem(config->readNumEntry("FolderDateFormat", CameraUIPriv::IsoDateFormat));
 
     d->view->setThumbnailSize(ThumbnailSize((ThumbnailSize::Size)config->readNumEntry("ThumbnailSize", 
                               ThumbnailSize::Large)));
@@ -502,6 +530,9 @@ void CameraUI::readSettings()
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
     d->formatLabel->setEnabled(convertLosslessJpegFiles());
+    d->folderDateFormat->setEnabled(d->autoAlbumCheck->isChecked());
+    d->folderDateLabel->setEnabled(d->autoAlbumCheck->isChecked());
+
     resize(configDialogSize("Camera Settings"));
 }
 
@@ -520,6 +551,7 @@ void CameraUI::saveSettings()
     config->writeEntry("LossLessFormat", d->losslessFormat->currentItem());
     config->writeEntry("ThumbnailSize", d->view->thumbnailSize().size());
     config->writeEntry("Splitter Sizes", d->splitter->sizes());
+    config->writeEntry("FolderDateFormat", d->folderDateFormat->currentItem());
     config->sync();
 }
 
@@ -964,12 +996,21 @@ void CameraUI::slotDownload(bool onlySelected)
     {
         CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(firstItem);
         
-        QDateTime date;
-        date.setTime_t(iconItem->itemInfo()->mtime);
-        newDirName = QString("%1, %2, %3")
-                     .arg(KGlobal::locale()->calendar()->year(date.date()))
-                     .arg(KGlobal::locale()->calendar()->monthName(date.date()))
-                     .arg(KGlobal::locale()->calendar()->day(date.date()));
+        QDateTime dateTime;
+        dateTime.setTime_t(iconItem->itemInfo()->mtime);
+
+        switch(d->folderDateFormat->currentItem())
+        {
+            case CameraUIPriv::TextDateFormat:
+                newDirName = dateTime.date().toString(Qt::TextDate);
+                break;
+            case CameraUIPriv::LocalDateFormat:
+                newDirName = dateTime.date().toString(Qt::LocalDate);
+                break;
+            default:        // IsoDateFormat
+                newDirName = dateTime.date().toString(Qt::ISODate);
+                break;
+        }
     }
 
     album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
@@ -1026,11 +1067,25 @@ void CameraUI::slotDownload(bool onlySelected)
         
         if (d->autoAlbumCheck->isChecked())
         {
-            QDateTime date;
-            date.setTime_t(mtime);
-            QString dirName(date.toString("yyyy-MM-dd"));
+            QDateTime dateTime;
+            dateTime.setTime_t(mtime);
+            QString dirName;;
+
+            switch(d->folderDateFormat->currentItem())
+            {
+                case CameraUIPriv::TextDateFormat:
+                    dirName = dateTime.date().toString(Qt::TextDate);
+                    break;
+                case CameraUIPriv::LocalDateFormat:
+                    dirName = dateTime.date().toString(Qt::LocalDate);
+                    break;
+                default:        // IsoDateFormat
+                    dirName = dateTime.date().toString(Qt::ISODate);
+                    break;
+            }
+
             QString errMsg;
-            if (!createAutoAlbum(url, dirName, date.date(), errMsg))
+            if (!createAutoAlbum(url, dirName, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
                 return;
