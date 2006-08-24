@@ -554,7 +554,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
 void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription &loadingDescription, const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
-    if ( loadingDescription != d->currentLoadingDescription )
+    if ( !loadingDescription.equalsOrBetterThan(d->currentLoadingDescription) )
         return;
 
     if ( !img.isNull() )
