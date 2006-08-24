@@ -433,12 +433,21 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
                                        DImg *img, int itemType)
 {
+    // We might be getting duplicate events from AlbumIconView,
+    // which will cause all sorts of duplicate work.
+    // More importantly, while the loading thread can handle this pretty well,
+    // this will completely mess up the timing of progress info in the histogram widget.
+    // So filter here, before the stopHistogramComputation!
+    if (!img && url.path() == d->currentFilePath)
+        return;
+
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
     d->histogramWidget->stopHistogramComputation();
 
     d->navigateBar->setFileName();
     d->currentFilePath = QString();
+    d->currentLoadingDescription = LoadingDescription();
     d->iccProfileWidget->loadFromURL(KURL());
 
     // Clear informations.
