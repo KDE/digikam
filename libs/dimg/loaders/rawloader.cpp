@@ -34,7 +34,9 @@
 // QT includes.
 
 #include <qapplication.h>
+#include <qdatetime.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qcstring.h>
 #include <qimage.h>
 #include <qtimer.h>
@@ -95,6 +97,21 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
+
+    // The time from starting dcraw to when it first outputs something takes
+    // much longer than the time while it outputs the data and the time while
+    // we process the data.
+    // We do not have progress information for this, but it is much more promising to the user
+    // if there is progress which does not stay at a fixed value.
+    // So we make up some progress (0% - 90%), using the file size as an indicator how long it might take.
+    QTime dcrawStartTime = QTime::currentTime();
+    int fileSize = QFileInfo(m_filePath).size();
+    // This is the magic number that describes how fast the function grows
+    // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
+    // So this is a number that works well on my computer.
+    double K50 = 3000.0*fileSize;
+    int checkpointTime = 0;
+
     int checkpoint = 0;
 
     // The shuttingDown is a hack needed to prevent hanging when this KProcess-based loader
@@ -104,12 +121,31 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     while (m_running && !m_observer->isShuttingDown())
     {
 
-        if (m_dataPos > checkpoint)
+        if (m_dataPos == 0)
         {
-            int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
-            checkpoint += granularity(observer, size, 0.8);
+            int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
+            if (elapsedMsecs > checkpointTime)
+            {
+                checkpointTime += 300;
+            }
             if (observer)
-                observer->progressInfo(m_image, 0.1 + 0.8*(((float)m_dataPos)/((float)size)) );
+            {
+                // What we do here is a sigmoidal curve, it starts slowly,
+                // then grows more rapidly, slows down again and
+                // get asymptotically closer to the maximum.
+                // (this is the Hill Equation, 2.8 the Hill Coefficient, to pour some blood in this)
+                double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
+                double part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
+                observer->progressInfo(m_image, 0.9*part );
+            }
+        }
+        else if (m_dataPos > checkpoint)
+        {
+            // While receiving data, progress from 90% to 95%
+            int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            checkpoint += granularity(observer, size, 0.05);
+            if (observer)
+                observer->progressInfo(m_image, 0.9 + 0.05*(((float)m_dataPos)/((float)size)) );
         }
 
         QMutexLocker lock(&m_mutex);
@@ -148,7 +184,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
                     m_data = 0;
                     return false;
                 }
-                observer->progressInfo(m_image, 0.9 + 0.1*(((float)h)/((float)m_height)) );
+                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)m_height)) );
             }
 
             for (int w = 0; w < m_width; w++)
@@ -184,7 +220,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
                     m_data = 0;
                     return false;
                 }
-                observer->progressInfo(m_image, 0.9 + 0.1*(((float)h)/((float)m_height)) );
+                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)m_height)) );
             }
 
             for (int w = 0; w < m_width; w++)
@@ -378,11 +414,6 @@ void RAWLoader::startProcess()
     kdDebug() << "Running dcraw command " << m_process->args() << endl;
 #endif
 
-    // post one progress info before starting the program.
-    // There may be a delay before the first data is read.
-    if (m_observer)
-        m_observer->progressInfo(m_image, 0.05);
-
     // actually start the process
     if ( !m_process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
     {
@@ -407,10 +438,6 @@ void RAWLoader::slotContinueQuery()
             m_process->wait();
             m_normalExit = false;
         }
-
-        // Post progress while dcraw has not yet given any output
-        if (!m_dataPos)
-            m_observer->progressInfo(m_image, 0.1);
     }
 }
 
