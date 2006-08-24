@@ -689,12 +689,20 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
             Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
             it = exifData.findKey(minoltaKey1);
             if (it != exifData.end())
+            {
                 d->exifMetadata["Exif.MinoltaCs7D.Rotation"] = MinoltaOrientation;
+                kdDebug() << "Minolta Camera Setting 7D makernote orientation tag set to: " 
+                          << MinoltaOrientation << endl;
+            }
         
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
             it = exifData.findKey(minoltaKey2);
             if (it != exifData.end())
+            {
                 d->exifMetadata["Exif.MinoltaCs5D.Rotation"] = MinoltaOrientation;
+                kdDebug() << "Minolta Camera Setting 5D makernote orientation tag set to: " 
+                          << MinoltaOrientation << endl;
+            }
         }
 
         return true;
