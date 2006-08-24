@@ -1,0 +1,8 @@
+Changes from digikamimageplugins-doc 0.8.2 to 0.8.2-r1
+
+	o NEW ChangeLog-doc file
+	o added AUTHOR and README. 0.8.2 tarball had no
+	  copyright and license information included.
+	  Fixed with README, that contains copyright and
+          license information.
+	o added INSTALL file
