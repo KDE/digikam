@@ -1138,8 +1138,8 @@ void CameraController::slotProcessNext()
                     break;
                 }
 
-                // FIXME : see B.K.O #126427: with Gphoto camera, the cmaera file is not 
-                // mounted in local and connot be display like a preview in dialog.
+                // FIXME : see B.K.O #126427: with Gphoto camera, the camera folder is not 
+                // mounted in local and camera picture cannot be display like a preview in dialog.
 
                 KIO::RenameDlg dlg(d->parent, i18n("Rename File"), folder + QString("/") + file, dest,
                                    KIO::RenameDlg_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
