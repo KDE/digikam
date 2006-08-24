@@ -83,13 +83,12 @@ class ProgressEvent : public NotifyEvent
 {
 public:
 
-    ProgressEvent(const QString& filePath, float progress)
-        : m_filePath(filePath), m_progress(progress)
+    ProgressEvent(float progress)
+        : m_progress(progress)
         {};
 
 protected:
 
-    QString m_filePath;
     float m_progress;
 };
 
@@ -99,12 +98,16 @@ class LoadingProgressEvent : public ProgressEvent
 {
 public:
 
-    LoadingProgressEvent(const QString& filePath, float progress)
-        : ProgressEvent(filePath, progress)
+    LoadingProgressEvent(const LoadingDescription &loadingDescription, float progress)
+        : ProgressEvent(progress),
+          m_loadingDescription(loadingDescription)
         {};
 
     virtual void notify(LoadSaveThread *thread);
 
+private:
+
+    LoadingDescription m_loadingDescription;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -114,10 +117,15 @@ class SavingProgressEvent : public ProgressEvent
 public:
 
     SavingProgressEvent(const QString& filePath, float progress)
-        : ProgressEvent(filePath, progress)
+        : ProgressEvent(progress),
+          m_filePath(filePath)
         {};
 
     virtual void notify(LoadSaveThread *thread);
+
+private:
+
+    QString m_filePath;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -126,15 +134,15 @@ class StartedLoadingEvent : public NotifyEvent
 {
 public:
 
-    StartedLoadingEvent(const QString& filePath)
-        : m_filePath(filePath)
+    StartedLoadingEvent(const LoadingDescription &loadingDescription)
+        : m_loadingDescription(loadingDescription)
         {};
 
     virtual void notify(LoadSaveThread *thread);
 
 private:
 
-    QString m_filePath;
+    LoadingDescription m_loadingDescription;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -160,16 +168,35 @@ class LoadedEvent : public NotifyEvent
 {
 public:
 
-    LoadedEvent(const QString &filePath, DImg &img)
-        : m_filePath(filePath), m_img(img)
+    LoadedEvent(const LoadingDescription &loadingDescription, DImg &img)
+        : m_loadingDescription(loadingDescription), m_img(img)
         {};
 
     virtual void notify(LoadSaveThread *thread);
 
 private:
 
-    QString m_filePath;
+    LoadingDescription m_loadingDescription;
     DImg    m_img;
+};
+
+//---------------------------------------------------------------------------------------------------
+
+class MoreCompleteLoadingAvailableEvent : public NotifyEvent
+{
+public:
+
+    MoreCompleteLoadingAvailableEvent(const LoadingDescription &oldLoadingDescription,
+                                      const LoadingDescription &newLoadingDescription)
+        : m_oldDescription(oldLoadingDescription), m_newDescription(newLoadingDescription)
+        {};
+
+    virtual void notify(LoadSaveThread *thread);
+
+private:
+
+    LoadingDescription m_oldDescription;
+    LoadingDescription m_newDescription;
 };
 
 //---------------------------------------------------------------------------------------------------
@@ -234,7 +261,7 @@ public:
                       LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                       LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadingTask(thread, description, loadingTaskStatus),
-          m_accessMode(mode), m_completed(false), usedProcess(0)
+          m_accessMode(mode), m_completed(false), m_usedProcess(0)
         {}
 
     virtual void execute();
@@ -249,6 +276,7 @@ public:
     virtual QString cacheKey();
     virtual void addListener(LoadingProcessListener *listener);
     virtual void removeListener(LoadingProcessListener *listener);
+    virtual void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
 
     // LoadingProcessListener
 
@@ -260,7 +288,7 @@ private:
 
     LoadSaveThread::AccessMode m_accessMode;
     bool m_completed;
-    LoadingProcess *usedProcess;
+    LoadingProcess *m_usedProcess;
     QPtrList<LoadingProcessListener> m_listeners;
 };
 

@@ -35,6 +35,13 @@ class DIGIKAM_EXPORT LoadingDescription
 public:
 
     /*
+        An invalid LoadingDescription
+    */
+    LoadingDescription()
+    {
+    }
+
+    /*
         Use this for files that are not raw files.
         Stores only the filePath.
     */
@@ -55,9 +62,38 @@ public:
     QString             filePath;
     RawDecodingSettings rawDecodingSettings;
 
+    /*
+        Return the cache key this description shall be stored as
+    */
     QString             cacheKey() const;
+    /*
+        Return all possible cache keys, starting with the best choice,
+        for which a result may be found in the cache for this description.
+        Included in the list are better quality versions, if this description is reduced.
+    */
     QStringList         lookupCacheKeys() const;
+    /*
+        Returns whether this description describes a loading operation which
+        loads the image in a reduced version (quality, size etc.)
+    */
+    bool                isReducedVersion() const;
+
+    /*
+        Returns whether the other loading task equals this one
+    */
     bool operator==(const LoadingDescription &other) const;
+    bool operator!=(const LoadingDescription &other) const
+        { return !operator==(other); }
+    /*
+        Returns whether the other loading task equals this one
+        ignoring parameters used to specify a reduced version.
+    */
+    bool equalsIgnoreReducedVersion(const LoadingDescription &other) const;
+    /*
+        Returns whether this loading task equals the other one
+        or is superior to it, if the other one is a reduced version
+    */
+    bool equalsOrBetterThan(const LoadingDescription &other) const;
 };
 
 }   // namespace Digikam

@@ -40,6 +40,7 @@ namespace Digikam
 {
 
 class DImg;
+class LoadingDescription;
 class ImagePropertiesColorsTabPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
@@ -84,7 +85,9 @@ private slots:
     void slotUpdateInterval(int min, int max);
     void slotUpdateIntervRange(int range);
 
-    void slotLoadImageFromUrlComplete(const QString&, const DImg& img);
+    void slotLoadImageFromUrlComplete(const LoadingDescription &loadingDescription, const DImg& img);
+    void slotMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                          const LoadingDescription &newLoadingDescription);
 
 private:
 

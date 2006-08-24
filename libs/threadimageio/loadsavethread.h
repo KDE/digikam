@@ -86,14 +86,22 @@ public:
 signals:
 
     // This signal is emitted when the loading process begins.
-    void signalImageStartedLoading(const QString& filePath);
+    void signalImageStartedLoading(const LoadingDescription &loadingDescription);
     // This signal is emitted whenever new progress info is available
     // and the notification policy allows emitting the signal.
     // No progress info will be sent for preloaded images (ManagedLoadSaveThread).
-    void signalLoadingProgress(const QString& filePath, float progress);
+    void signalLoadingProgress(const LoadingDescription &loadingDescription, float progress);
     // This signal is emitted when the loading process has finished.
     // If the process failed, img is null.
-    void signalImageLoaded(const QString& filePath, const DImg& img);
+    void signalImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
+    // This signal is emitted if
+    //  - you are doing shared loading (SharedLoadSaveThread)
+    //  - you started a loading operation with a LoadingDescription for
+    //    a reduced version of the image
+    //  - another thread started a loading operation for a more complete version
+    // You may want to cancel the current operation and start with the given loadingDescription
+    void signalMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                            const LoadingDescription &newLoadingDescription);
 
     void signalImageStartedSaving(const QString& filePath);
     void signalSavingProgress(const QString& filePath, float progress);
@@ -101,14 +109,18 @@ signals:
 
 public:
 
-    void imageStartedLoading(const QString& filePath)
-            { emit signalImageStartedLoading(filePath); };
+    void imageStartedLoading(const LoadingDescription &loadingDescription)
+            { emit signalImageStartedLoading(loadingDescription); };
 
-    void loadingProgress(const QString& filePath, float progress)
-            { emit signalLoadingProgress(filePath, progress); };
+    void loadingProgress(const LoadingDescription &loadingDescription, float progress)
+            { emit signalLoadingProgress(loadingDescription, progress); };
 
-    void imageLoaded(const QString& filePath, const DImg& img)
-            { emit signalImageLoaded(filePath, img); };
+    void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
+            { emit signalImageLoaded(loadingDescription, img); };
+
+    void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                      const LoadingDescription &newLoadingDescription)
+            { emit signalMoreCompleteLoadingAvailable(oldLoadingDescription, newLoadingDescription); }
 
     void imageStartedSaving(const QString& filePath)
             { emit signalImageStartedSaving(filePath); };

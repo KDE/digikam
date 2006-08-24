@@ -41,7 +41,7 @@ namespace Digikam
 
 void LoadingProgressEvent::notify(LoadSaveThread *thread)
 {
-    thread->loadingProgress(m_filePath, m_progress);
+    thread->loadingProgress(m_loadingDescription, m_progress);
 }
 
 void SavingProgressEvent::notify(LoadSaveThread *thread)
@@ -51,7 +51,7 @@ void SavingProgressEvent::notify(LoadSaveThread *thread)
 
 void StartedLoadingEvent::notify(LoadSaveThread *thread)
 {
-    thread->imageStartedLoading(m_filePath);
+    thread->imageStartedLoading(m_loadingDescription);
 }
 
 void StartedSavingEvent::notify(LoadSaveThread *thread)
@@ -61,7 +61,12 @@ void StartedSavingEvent::notify(LoadSaveThread *thread)
 
 void LoadedEvent::notify(LoadSaveThread *thread)
 {
-    thread->imageLoaded(m_filePath, m_img);
+    thread->imageLoaded(m_loadingDescription, m_img);
+}
+
+void MoreCompleteLoadingAvailableEvent::notify(LoadSaveThread *thread)
+{
+    thread->moreCompleteLoadingAvailable(m_oldDescription, m_newDescription);
 }
 
 void SavedEvent::notify(LoadSaveThread *thread)
@@ -147,26 +152,26 @@ void SharedLoadingTask::execute()
         else
         {
             // find possible running loading process
-            usedProcess = 0;
+            m_usedProcess = 0;
             for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
-                if ( (usedProcess = cache->retrieveLoadingProcess(*it)) )
+                if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
                 {
                     break;
                 }
             }
 
-            if (usedProcess)
+            if (m_usedProcess)
             {
                 // Other process is right now loading this image.
                 // Add this task to the list of listeners and
                 // attach this thread to the other thread, wait until loading
                 // has finished.
-                usedProcess->addListener(this);
+                m_usedProcess->addListener(this);
                 // break loop when either the loading has completed, or this task is being stopped
-                while ( !usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
                     lock.timedWait();
                 // remove listener from process
-                usedProcess->removeListener(this);
+                m_usedProcess->removeListener(this);
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 //kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
@@ -180,7 +185,10 @@ void SharedLoadingTask::execute()
                 // Add this to the list of listeners
                 addListener(this);
                 // for use in setStatus
-                usedProcess = this;
+                m_usedProcess = this;
+                // Notify other processes that we are now loading this image.
+                // They might be interested - see notifyNewLoadingProcess below
+                cache->notifyNewLoadingProcess(this, m_loadingDescription);
             }
         }
     }
@@ -247,7 +255,7 @@ void SharedLoadingTask::execute()
                     copy = img;
                     usedInitialCopy = true;
                 }
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription.filePath, copy));
+                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, copy));
             }
             else
             {
@@ -263,7 +271,7 @@ void SharedLoadingTask::execute()
                         usedInitialCopy = true;
                     }
                 }
-                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription.filePath, readerCopy));
+                QApplication::postEvent(l->eventReceiver(), new LoadedEvent(m_loadingDescription, readerCopy));
             }
         }
 
@@ -287,7 +295,7 @@ void SharedLoadingTask::progressInfo(const DImg *, float progress)
         for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
         {
             if (l->querySendNotifyEvent())
-                QApplication::postEvent(l->eventReceiver(), new LoadingProgressEvent(m_loadingDescription.filePath, progress));
+                QApplication::postEvent(l->eventReceiver(), new LoadingProgressEvent(m_loadingDescription, progress));
         }
     }
 }
@@ -307,7 +315,7 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         // remove this from list of listeners - check in continueQuery() of active thread
-        usedProcess->removeListener(this);
+        m_usedProcess->removeListener(this);
         // wake all listeners - particularly this - from waiting on cache condvar
         lock.wakeAll();
     }
@@ -336,6 +344,27 @@ void SharedLoadingTask::addListener(LoadingProcessListener *listener)
 void SharedLoadingTask::removeListener(LoadingProcessListener *listener)
 {
     m_listeners.remove(listener);
+}
+
+void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
+{
+    // Ok, we are notified that another task has been started in another thread.
+    // We are of course only interested if the task loads the same file,
+    // and we are right now loading a reduced version, and the other task is loading the full version.
+    // In this case, we notify our own thread (a signal to the API user is emitted) of this.
+    // The fact that we are receiving the method call shows that this task is registered with the LoadingCache,
+    // somewhere in between the calls to addLoadingProcess(this) and removeLoadingProcess(this) above.
+    if (process != this &&
+        m_loadingDescription.isReducedVersion() &&
+        m_loadingDescription.equalsIgnoreReducedVersion(description) &&
+        !description.isReducedVersion()
+       )
+    {
+        for (LoadingProcessListener *l = m_listeners.first(); l; l = m_listeners.next())
+        {
+            QApplication::postEvent(l->eventReceiver(), new MoreCompleteLoadingAvailableEvent(m_loadingDescription, description));
+        }
+    }
 }
 
 bool SharedLoadingTask::querySendNotifyEvent()

@@ -117,6 +117,14 @@ void LoadingCache::removeLoadingProcess(LoadingProcess *process)
     d->loadingDict.remove(process->cacheKey());
 }
 
+void LoadingCache::notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description)
+{
+    for (QDictIterator<LoadingProcess> it(d->loadingDict); it.current(); ++it)
+    {
+        it.current()->notifyNewLoadingProcess(process, description);
+    }
+}
+
 void LoadingCache::setCacheSize(int megabytes)
 {
     d->imageCache.setMaxCost(megabytes * 1024 * 1024);

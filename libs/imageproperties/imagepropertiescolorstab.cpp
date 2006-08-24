@@ -120,6 +120,7 @@ public:
     QLabel                *labelAlphaChannel;
 
     QString                currentFilePath;
+    LoadingDescription     currentLoadingDescription;
 
     QRect                 *selectionArea;
 
@@ -509,37 +510,42 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KURL& url)
     {
         d->imageLoaderThread = new SharedLoadSaveThread();
 
-        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
-                this, SLOT(slotLoadImageFromUrlComplete(const QString&, const DImg&)));
+        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
+                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription &, const DImg&)));
+
+        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)),
+                this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)));
     }
 
-    d->currentFilePath = url.path();
+    LoadingDescription desc = LoadingDescription(url.path());
 
-    if (DImg::fileFormat(d->currentFilePath) == DImg::RAW)
+    if (DImg::fileFormat(desc.filePath) == DImg::RAW)
     {
         // use raw settings optimized for speed
 
         RawDecodingSettings rawDecodingSettings = RawDecodingSettings();
         rawDecodingSettings.optimizeTimeLoading();
+        desc = LoadingDescription(desc.filePath, rawDecodingSettings);
+    }
 
-        d->imageLoaderThread->load(LoadingDescription(d->currentFilePath, rawDecodingSettings),
-                                   SharedLoadSaveThread::AccessModeRead,
-                                   SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    }
-    else
-    {
-        d->imageLoaderThread->load(d->currentFilePath, SharedLoadSaveThread::AccessModeRead,
-                                   SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    }
+    if (d->currentLoadingDescription.equalsOrBetterThan(desc))
+        return;
+
+    d->currentFilePath = desc.filePath;
+    d->currentLoadingDescription = desc;
+
+    d->imageLoaderThread->load(d->currentLoadingDescription,
+                               SharedLoadSaveThread::AccessModeRead,
+                               SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 
     d->histogramWidget->setDataLoading();
     d->iccProfileWidget->setDataLoading();
 }
 
-void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& filePath, const DImg& img)
+void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription &loadingDescription, const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
-    if ( filePath != d->currentFilePath )
+    if ( loadingDescription != d->currentLoadingDescription )
         return;
 
     if ( !img.isNull() )
@@ -558,6 +564,22 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const QString& fileP
         d->histogramWidget->setLoadingFailed();
         d->iccProfileWidget->setLoadingComplete(false);
         slotHistogramComputationFailed();
+    }
+}
+
+void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
+                                                                const LoadingDescription &newLoadingDescription)
+{
+    if (oldLoadingDescription == d->currentLoadingDescription &&
+        newLoadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
+    {
+        // Yes, we do want to stop our old time-optimized loading and chain to the current, more complete loading.
+        // Even the time-optimized raw loading takes significant time, and we must avoid two dcraw instances running
+        // at a time.
+        d->currentLoadingDescription = newLoadingDescription;
+        d->imageLoaderThread->load(newLoadingDescription,
+                                   SharedLoadSaveThread::AccessModeRead,
+                                   SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     }
 }
 

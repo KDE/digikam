@@ -52,6 +52,7 @@ public:
     virtual QString cacheKey() = 0;
     virtual void addListener(LoadingProcessListener *listener) = 0;
     virtual void removeListener(LoadingProcessListener *listener) = 0;
+    virtual void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description) = 0;
 
 };
 
@@ -90,9 +91,15 @@ public:
     void removeImage(const QString &cacheKey);
     void removeImages();
 
+    // Find the loading process for given cacheKey, or 0 if not found
     LoadingProcess *retrieveLoadingProcess(const QString &cacheKey);
+    // Add a loading process to the list. Only one loading process
+    // for the same cache key is registered at a time.
     void addLoadingProcess(LoadingProcess *process);
+    // Remove loading process for given cache key
     void removeLoadingProcess(LoadingProcess *process);
+    // Notify all currently registered loading processes
+    void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
 
     void setCacheSize(int megabytes);
 

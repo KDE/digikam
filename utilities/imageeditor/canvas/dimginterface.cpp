@@ -151,14 +151,14 @@ DImgInterface::DImgInterface()
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(const QString&, const DImg&)),
-             this, SLOT(slotImageLoaded(const QString&, const DImg&)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg&)),
+             this, SLOT(slotImageLoaded(const LoadingDescription &, const DImg&)) );
              
     connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
              this, SLOT(slotImageSaved(const QString&, bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(const QString&, float)),
-             this, SLOT(slotLoadingProgress(const QString&, float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription &, float)),
+             this, SLOT(slotLoadingProgress(const LoadingDescription &, float)) );
              
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
@@ -206,8 +206,10 @@ void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
     d->monitorICCtrans.setProfiles(d->cmSettings->inputSetting, d->cmSettings->monitorSetting);
 }
 
-void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
+void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
 {
+    const QString &fileName = loadingDescription.filePath;
+
     if (fileName != d->filename)
         return;
 
@@ -357,10 +359,10 @@ void DImgInterface::slotImageLoaded(const QString& fileName, const DImg& img)
     }
 }
 
-void DImgInterface::slotLoadingProgress(const QString& filePath, float progress)
+void DImgInterface::slotLoadingProgress(const LoadingDescription &loadingDescription, float progress)
 {
-    if (filePath == d->filename)
-        emit signalLoadingProgress(filePath, progress);
+    if (loadingDescription.filePath == d->filename)
+        emit signalLoadingProgress(loadingDescription.filePath, progress);
 }
 
 bool DImgInterface::exifRotated()

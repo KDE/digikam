@@ -41,6 +41,7 @@ namespace Digikam
 
 class ICCSettingsContainer;
 class IOFileSettingsContainer;
+class LoadingDescription;
 class DImgInterfacePrivate;
 
 class DImgInterface : public QObject
@@ -144,9 +145,9 @@ public:
 
 protected slots:
 
-    void   slotImageLoaded(const QString&, const DImg& img);
+    void   slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
     void   slotImageSaved(const QString& filePath, bool success);
-    void   slotLoadingProgress(const QString& filePath, float progress);
+    void   slotLoadingProgress(const LoadingDescription &loadingDescription, float progress);
     void   slotSavingProgress(const QString& filePath, float progress);
 
 signals:

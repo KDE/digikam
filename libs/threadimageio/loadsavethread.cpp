@@ -57,10 +57,32 @@ QStringList LoadingDescription::lookupCacheKeys() const
     return keys;
 }
 
+bool LoadingDescription::isReducedVersion() const
+{
+    // currently the only way to get a reduced, speed optimized loading
+    return rawDecodingSettings.halfSizeColorImage;
+}
+
 bool LoadingDescription::operator==(const LoadingDescription &other) const
 {
+    // NOTE: If we start loading RAW files with different loading settings in parallel,
+    //       this and the next methods must be better implemented!
     return filePath == other.filePath &&
             rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage;
+}
+
+bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription &other) const
+{
+    return filePath == other.filePath;
+}
+
+bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) const
+{
+    return filePath == other.filePath &&
+            (
+             (rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage) ||
+             other.rawDecodingSettings.halfSizeColorImage
+            );
 }
 
 //---------------------------------------------------------------------------------------------------
