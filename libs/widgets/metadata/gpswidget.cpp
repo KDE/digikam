@@ -264,7 +264,6 @@ bool GPSWidget::decodeMetadata()
             d->map->setEnabled(false);
             d->detailsButton->setEnabled(false);
             d->detailsCombo->setEnabled(false);
-            kdDebug() << "Cannot parse EXIF metadata using Exiv2" << endl;
             return false;
         }
 
