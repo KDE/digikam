@@ -1167,7 +1167,7 @@ void CameraController::slotProcessNext()
                     }
                     case KIO::R_OVERWRITE:
                     {
-                        overwrite       = true;
+                        overwrite = true;
                         break;
                     }
                     case KIO::R_OVERWRITE_ALL:
