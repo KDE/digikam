@@ -72,6 +72,7 @@ CameraGUI     : New option to start number sequence index with a custom value.
 CameraGUI     : New option to increase/decrease the thumbnails size.
 CameraGUI     : New option to lock/unlock pictures from camera to prevent unwanted deletion.
 CameraGUI     : New option to convert JPEG files to lossless file format during download.
+CameraGUI     : New option to set date format of auto-created albums.
 
 Image Plugins : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
@@ -230,6 +231,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 138 ==> 128673 : Add keyboard shortcut to refresh album view or auto-refresh when pictures are renamed.
 139 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed
 140 ==> 131558 : Camera UI: renaming dialogue can't handle UTF-8 filenames
-141 ==>
+141 ==> 119075 : wish list new folder date option.
+142 ==> 128817 : configure timestamp naming format for directory names.
 
 ----------------------------------------------------------------------------------------------------
