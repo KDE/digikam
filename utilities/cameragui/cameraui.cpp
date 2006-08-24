@@ -251,9 +251,19 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QHBox *hbox1         = new QHBox(albumBox);
     d->folderDateLabel   = new QLabel(i18n("Date format:"), hbox1);
     d->folderDateFormat  = new QComboBox(hbox1);
-    d->folderDateFormat->insertItem(i18n("ISO"),             CameraUIPriv::IsoDateFormat);
-    d->folderDateFormat->insertItem(i18n("Full Text"),       CameraUIPriv::TextDateFormat);
-    d->folderDateFormat->insertItem(i18n("Local Settings"),  CameraUIPriv::LocalDateFormat);
+    d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
+    d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
+    d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
+
+    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
+                     "into automatically created date-based sub-albums of destination album."));
+    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your prefered date format used to "
+                     "create new albums. The options available are:<p>"
+                     "<b>ISO</b>: the date format is in accordance with ISO 8601 "
+                     "(YYYY-MM-DD). Ex.: <i>2006-08-24</i><p>"
+                     "<b>Full Text</b>: the date format is in a user-readable string. "
+                     "Ex.: <i>Thu Aug 24 2006<i><p>"
+                     "<b>Local Settings</b>: the date format depend of KDE control pannel settings.<p>"));
 
     // -- On the Fly options ---------------------------------------------------
 
@@ -271,8 +281,6 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
                      "rotated or flipped images using EXIF information provided by camera."));
-    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
-                     "into automatically created date-based sub-albums of destination album."));
     QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default "
                      "photographer identity into IPTC tags using main digiKam metadata settings."));
     QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit "
