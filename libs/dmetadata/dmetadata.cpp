@@ -103,6 +103,9 @@ QByteArray DMetadata::getExif() const
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
         kdDebug() << "Cannot get Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -142,6 +145,9 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
         kdDebug() << "Cannot get Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -166,7 +172,10 @@ void DMetadata::setExif(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load Exif data using Exiv2 (" 
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
+        kdDebug() << "Cannot set Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -181,7 +190,10 @@ void DMetadata::setExif(Exiv2::DataBuf const data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load Exif data using Exiv2 (" 
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
+        kdDebug() << "Cannot set Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -196,7 +208,10 @@ void DMetadata::setIptc(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load Iptc data using Exiv2 (" 
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
+        kdDebug() << "Cannot set Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -211,7 +226,10 @@ void DMetadata::setIptc(Exiv2::DataBuf const data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load Iptc data using Exiv2 (" 
+        if (!d->filePath.isEmpty())
+            kdDebug() << "From file " << d->filePath << endl;
+
+        kdDebug() << "Cannot set Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
