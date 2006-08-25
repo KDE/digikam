@@ -121,33 +121,34 @@ public:
 
     CameraUIPriv()
     {
-        busy              = false;
-        closed            = false;
-        helpMenu          = 0;
-        advBox            = 0;
-        downloadMenu      = 0;
-        deleteMenu        = 0;
-        imageMenu         = 0;
-        cancelBtn         = 0;
-        splitter          = 0;
-        rightSidebar      = 0;
-        fixDateTimeCheck  = 0;
-        autoRotateCheck   = 0;
-        autoAlbumCheck    = 0;
-        status            = 0;
-        progress          = 0;
-        controller        = 0;
-        view              = 0;
-        renameCustomizer  = 0;
-        anim              = 0;
-        dateTimeEdit      = 0;
-        setPhotographerId = 0;
-        setCredits        = 0;
-        losslessFormat    = 0;
-        convertJpegCheck  = 0;
-        formatLabel       = 0;
-        folderDateLabel   = 0;
-        folderDateFormat  = 0;
+        busy               = false;
+        closed             = false;
+        helpMenu           = 0;
+        advBox             = 0;
+        downloadMenu       = 0;
+        deleteMenu         = 0;
+        imageMenu          = 0;
+        cancelBtn          = 0;
+        splitter           = 0;
+        rightSidebar       = 0;
+        fixDateTimeCheck   = 0;
+        autoRotateCheck    = 0;
+        autoAlbumDateCheck = 0;
+        autoAlbumExtCheck  = 0;
+        status             = 0;
+        progress           = 0;
+        controller         = 0;
+        view               = 0;
+        renameCustomizer   = 0;
+        anim               = 0;
+        dateTimeEdit       = 0;
+        setPhotographerId  = 0;
+        setCredits         = 0;
+        losslessFormat     = 0;
+        convertJpegCheck   = 0;
+        formatLabel        = 0;
+        folderDateLabel    = 0;
+        folderDateFormat   = 0;
     }
 
     bool                          busy;
@@ -168,7 +169,8 @@ public:
     QWidget                      *advBox;
 
     QCheckBox                    *autoRotateCheck;
-    QCheckBox                    *autoAlbumCheck;
+    QCheckBox                    *autoAlbumDateCheck;
+    QCheckBox                    *autoAlbumExtCheck;
     QCheckBox                    *fixDateTimeCheck;
     QCheckBox                    *setPhotographerId;
     QCheckBox                    *setCredits;
@@ -254,17 +256,21 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
         
     // -- Albums Auto-creation options -----------------------------------------
 
-    QVGroupBox* albumBox = new QVGroupBox(i18n("Auto-creation of Albums"), d->advBox);
-    d->autoAlbumCheck    = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    QHBox *hbox1         = new QHBox(albumBox);
-    d->folderDateLabel   = new QLabel(i18n("Date format:"), hbox1);
-    d->folderDateFormat  = new QComboBox(hbox1);
+    QVGroupBox* albumBox  = new QVGroupBox(i18n("Auto-creation of Albums"), d->advBox);
+    d->autoAlbumExtCheck  = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
+    d->autoAlbumDateCheck = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
+    QHBox *hbox1          = new QHBox(albumBox);
+    d->folderDateLabel    = new QLabel(i18n("Date format:"), hbox1);
+    d->folderDateFormat   = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
     d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
     d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
 
-    QWhatsThis::add( d->autoAlbumCheck, i18n("<p>Toogle on this option if you want downloaded photos "
-                     "into automatically created date-based sub-albums of destination album."));
+    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toogle on this option if you want to download your pictures "
+                     "into automatically created file extension-based sub-albums of destination album. "
+                     "By this way, you can separate JPEG and RAW files from your camera."));
+    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toogle on this option if you want to download your pictures "
+                     "into automatically created file date-based sub-albums of destination album."));
     QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your prefered date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
@@ -399,10 +405,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     // -------------------------------------------------------------------------
     
-    connect(d->autoAlbumCheck, SIGNAL(toggled(bool)),
+    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
             d->folderDateFormat, SLOT(setEnabled(bool)));
 
-    connect(d->autoAlbumCheck, SIGNAL(toggled(bool)),
+    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
             d->folderDateLabel, SLOT(setEnabled(bool)));
 
     connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
@@ -529,7 +535,8 @@ void CameraUI::readSettings()
     KConfig* config = kapp->config();
     config->setGroup("Camera Settings");
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
-    d->autoAlbumCheck->setChecked(config->readBoolEntry("AutoAlbum", false));
+    d->autoAlbumDateCheck->setChecked(config->readBoolEntry("AutoAlbumDate", false));
+    d->autoAlbumExtCheck->setChecked(config->readBoolEntry("AutoAlbumExt", false));
     d->fixDateTimeCheck->setChecked(config->readBoolEntry("FixDateTime", false));
     d->setPhotographerId->setChecked(config->readBoolEntry("SetPhotographerId", false));
     d->setCredits->setChecked(config->readBoolEntry("SetCredits", false));
@@ -546,8 +553,8 @@ void CameraUI::readSettings()
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
     d->formatLabel->setEnabled(convertLosslessJpegFiles());
-    d->folderDateFormat->setEnabled(d->autoAlbumCheck->isChecked());
-    d->folderDateLabel->setEnabled(d->autoAlbumCheck->isChecked());
+    d->folderDateFormat->setEnabled(d->autoAlbumDateCheck->isChecked());
+    d->folderDateLabel->setEnabled(d->autoAlbumDateCheck->isChecked());
 
     resize(configDialogSize("Camera Settings"));
 }
@@ -559,7 +566,8 @@ void CameraUI::saveSettings()
     KConfig* config = kapp->config();
     config->setGroup("Camera Settings");
     config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
-    config->writeEntry("AutoAlbum", d->autoAlbumCheck->isChecked());
+    config->writeEntry("AutoAlbumDate", d->autoAlbumDateCheck->isChecked());
+    config->writeEntry("AutoAlbumExt", d->autoAlbumExtCheck->isChecked());
     config->writeEntry("FixDateTime", d->fixDateTimeCheck->isChecked());
     config->writeEntry("SetPhotographerId", d->setPhotographerId->isChecked());
     config->writeEntry("SetCredits", d->setCredits->isChecked());
@@ -1045,7 +1053,7 @@ void CameraUI::slotDownload(bool onlySelected)
     }
 
     album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
-                                           d->autoAlbumCheck->isChecked());
+                                           d->autoAlbumDateCheck->isChecked());
 
     if (!album)
         return;
@@ -1095,12 +1103,15 @@ void CameraUI::slotDownload(bool onlySelected)
         mtime                        = iconItem->itemInfo()->mtime;
         
         KURL u(url);
-        
-        if (d->autoAlbumCheck->isChecked())
+        QString errMsg;
+        QDateTime dateTime;
+        dateTime.setTime_t(mtime);
+                    
+        // Auto sub-albums creation based on file date.     
+
+        if (d->autoAlbumDateCheck->isChecked())
         {
-            QDateTime dateTime;
-            dateTime.setTime_t(mtime);
-            QString dirName;;
+            QString dirName;
 
             switch(d->folderDateFormat->currentItem())
             {
@@ -1115,7 +1126,6 @@ void CameraUI::slotDownload(bool onlySelected)
                     break;
             }
 
-            QString errMsg;
             if (!createAutoAlbum(url, dirName, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
@@ -1123,14 +1133,25 @@ void CameraUI::slotDownload(bool onlySelected)
             }
 
             u.addPath(dirName);
-            d->foldersToScan.append(u.path());
-            u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
         }
-        else
+
+        // Auto sub-albums creation based on File extensions to store items in separate folders.
+
+        if (d->autoAlbumExtCheck->isChecked())           
         {
-            d->foldersToScan.append(u.path());
-            u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
+            QFileInfo fi(downloadSettings.file);
+
+            if (!createAutoAlbum(u, fi.extension().upper(), dateTime.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return;
+            }
+
+            u.addPath(fi.extension().upper());
         }
+
+        d->foldersToScan.append(u.path());
+        u.addPath(downloadName.isEmpty() ? downloadSettings.file : downloadName);
 
         downloadSettings.dest = u.path();
 
