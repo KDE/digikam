@@ -78,6 +78,7 @@ Image Plugins : "Add Border" tool now respect aspect ratio of original image to 
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
 
 General       : New option to force the refresh of Album contents.
+General       : Usabilty improvements of albums/pictures deletion.
 
 ...
 
@@ -234,6 +235,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 141 ==> 119075 : wish list new folder date option.
 142 ==> 128817 : configure timestamp naming format for directory names.
 143 ==> 132660 : Shortcuts for ratings do not work as of 0.9.x beta.
-144 ==> 
+144 ==> 126874 : digikam does not support <shift+del>.
+145 ==> 
 
 ----------------------------------------------------------------------------------------------------
