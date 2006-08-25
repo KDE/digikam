@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-03
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-02-03
+ * Description : Cameras list container
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +41,11 @@
 namespace Digikam
 {
 
-CameraList* CameraList::instance_ = 0;
+CameraList* CameraList::m_instance = 0;
 
 CameraList* CameraList::instance()
 {
-    return instance_;    
+    return m_instance;    
 }
 
 class CameraListPrivate
@@ -63,17 +65,17 @@ CameraList::CameraList(QObject *parent, const QString& file)
     d->clist.setAutoDelete(true);
     d->file     = file;
     d->modified = false;
-    instance_   = this;
+    m_instance  = this;
 }
 
 CameraList::~CameraList()
 {
-    close();
+    save();
     
     d->clist.clear();
     delete d;
 
-    instance_ = 0;
+    m_instance = 0;
 }
 
 bool CameraList::load()
@@ -101,10 +103,10 @@ bool CameraList::load()
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
 
-        QString title  = e.attribute("title");
-        QString model  = e.attribute("model");
-        QString port   = e.attribute("port");
-        QString path   = e.attribute("path");
+        QString title = e.attribute("title");
+        QString model = e.attribute("model");
+        QString port  = e.attribute("port");
+        QString path  = e.attribute("path");
 
         CameraType *ctype = new CameraType(title, model, port, path);
         insertPrivate(ctype);
@@ -113,7 +115,7 @@ bool CameraList::load()
     return true;
 }
 
-bool CameraList::close()
+bool CameraList::save()
 {
     // If not modified don't save the file
     if (!d->modified)

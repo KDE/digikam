@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-02-03
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-02-03
+ * Description : Cameras list container
  * 
- * Copyright 2003 by Renchi Raju
-
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -44,30 +46,32 @@ public:
     ~CameraList();
 
     bool load();
-    bool close();
+    bool save();
+    void clear();
 
     void insert(CameraType* ctype);
     void remove(CameraType* ctype);
+
     CameraType* find(const QString& title);
     CameraType* autoDetect(bool& retry);
-    void clear();
-
     QPtrList<CameraType>* cameraList();
 
     static CameraList* instance();
-    
-private:
-
-    static CameraList* instance_;
-    CameraListPrivate *d;
-
-    void insertPrivate(CameraType* ctype);
-    void removePrivate(CameraType* ctype);
 
 signals:
 
     void signalCameraAdded(CameraType*);
     void signalCameraRemoved(CameraType*);
+
+private:
+
+    void insertPrivate(CameraType* ctype);
+    void removePrivate(CameraType* ctype);
+
+private:
+
+    static CameraList *m_instance;
+    CameraListPrivate *d;
 
 };
 
