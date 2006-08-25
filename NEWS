@@ -236,6 +236,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 142 ==> 128817 : configure timestamp naming format for directory names.
 143 ==> 132660 : Shortcuts for ratings do not work as of 0.9.x beta.
 144 ==> 126874 : digikam does not support <shift+del>.
-145 ==> 
+145 ==> 132957 : Crash using dcop action: album_forward
+146 ==>
 
 ----------------------------------------------------------------------------------------------------

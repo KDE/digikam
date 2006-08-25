@@ -268,6 +268,9 @@ void AlbumHistory::back(Album **album, QWidget **widget, unsigned int steps)
 
 void AlbumHistory::forward(Album **album, QWidget **widget, unsigned int steps)
 {
+    *album = 0;
+    *widget = 0;
+
     if(m_forwardStack->isEmpty() || steps > m_forwardStack->count())
         return;
     
