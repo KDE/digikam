@@ -46,12 +46,12 @@ public:
     SetupMiscPriv()
     {
         showSplashCheck = 0;
-        useTrashCheck   = 0;
+        showTrashDeleteDialogCheck   = 0;
         scanAtStart     = 0;
     }
 
     QCheckBox* showSplashCheck;
-    QCheckBox* useTrashCheck;
+    QCheckBox* showTrashDeleteDialogCheck;
     QCheckBox* scanAtStart;
 };
 
@@ -65,8 +65,8 @@ SetupMisc::SetupMisc(QWidget* parent)
 
    // --------------------------------------------------------
 
-   d->useTrashCheck = new QCheckBox(i18n("&Deleting items should move them to trash"), this);
-   layout->addWidget(d->useTrashCheck);
+   d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Show confirmation dialog when moving items to the &trash"), this);
+   layout->addWidget(d->showTrashDeleteDialogCheck);
 
    // --------------------------------------------------------
 
@@ -96,7 +96,7 @@ void SetupMisc::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
-    settings->setUseTrash(d->useTrashCheck->isChecked());
+    settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->saveSettings();
 }
@@ -106,7 +106,7 @@ void SetupMisc::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
-    d->useTrashCheck->setChecked(settings->getUseTrash());
+    d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->scanAtStart->setChecked(settings->getScanAtStart());
 }
 
