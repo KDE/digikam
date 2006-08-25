@@ -86,7 +86,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
     d->listView->addColumn( i18n("Path") );
-    d->listView->addColumn( "Last Access Date"/*, 0 */); // No i18n here. Hidden column with the last access date.
+    d->listView->addColumn( "Last Access Date", 0 ); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
     QWhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
