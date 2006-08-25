@@ -74,6 +74,7 @@ public:
     CameraIconViewItem* findItem(const QString& folder, const QString& file);
 
     int countItemsByFolder(QString folder);
+    int itemsDownloaded();
 
     QPixmap* itemBaseRegPixmap() const;
     QPixmap* itemBaseSelPixmap() const;

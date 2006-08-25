@@ -1134,14 +1134,14 @@ void DigikamApp::slotDownloadImages()
     // the CameraUI will delete itself when it has finished
     CameraUI* cgui = new CameraUI(this,
                                   i18n("Images found in %1").arg(mCameraGuiPath),
-                                  "directory browse","Fixed", localUrl);
+                                  "directory browse","Fixed", localUrl, QDateTime::currentDateTime());
     cgui->show();
 
     connect(cgui, SIGNAL(signalLastDestination(const KURL&)),
             mView, SLOT(slotSelectAlbum(const KURL&)));
 
     connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-            SLOT(slotSetupChanged()));
+            this, SLOT(slotSetupChanged()));
 
 }
 
@@ -1163,7 +1163,7 @@ void DigikamApp::slotCameraConnect()
         {
             // the CameraUI will delete itself when it has finished
             CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
-                                          ctype->port(), ctype->path());
+                                          ctype->port(), ctype->path(), ctype->lastAccess());
 
             ctype->setCurrentCameraUI(cgui);
 
@@ -1173,7 +1173,7 @@ void DigikamApp::slotCameraConnect()
                     mView, SLOT(slotSelectAlbum(const KURL&)));
 
             connect(cgui, SIGNAL(signalAlbumSettingsChanged()),
-                    SLOT(slotSetupChanged()));
+                    this, SLOT(slotSetupChanged()));
         }
     }
 }
@@ -1202,7 +1202,7 @@ void DigikamApp::slotCameraMediaMenu()
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
     
     connect( job, SIGNAL(entries(KIO::Job*,const KIO::UDSEntryList&)),
-             SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
+             this, SLOT(slotCameraMediaMenuEntries(KIO::Job*,const KIO::UDSEntryList&)) );
 }
 
 void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )

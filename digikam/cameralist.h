@@ -55,6 +55,8 @@ public:
     CameraType* find(const QString& title);
     CameraType* autoDetect(bool& retry);
     QPtrList<CameraType>* cameraList();
+    
+    bool changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate);
 
     static CameraList* instance();
 

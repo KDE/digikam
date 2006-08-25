@@ -274,7 +274,7 @@ void CameraIconViewItem::paintItem()
     
     switch (d->itemInfo->downloaded)
     {
-        case GPItemInfo::DownloadedNo:
+        case GPItemInfo::NewPicture:
         {
             downloaded = d->pixmapNewPicture;
             break;

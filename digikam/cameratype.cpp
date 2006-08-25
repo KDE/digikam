@@ -40,13 +40,15 @@ public:
         action = 0;
     }
 
-    QString  title;
-    QString  model;
-    QString  port;
-    QString  path;
+    QString   title;
+    QString   model;
+    QString   port;
+    QString   path;
 
-    KAction *action;
-    bool     valid;
+    QDateTime lastAccess;
+
+    KAction  *action;
+    bool      valid;
 
     QGuardedPtr<CameraUI> currentCameraUI;
 };
@@ -59,15 +61,16 @@ CameraType::CameraType()
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
-                       KAction *action)
+                       const QDateTime& lastAccess, KAction *action)
 {
     d = new CameraTypePrivate;
-    d->title  = title;
-    d->model  = model;
-    d->port   = port;
-    d->path   = path;
-    d->action = action;
-    d->valid  = true;    
+    d->title      = title;
+    d->model      = model;
+    d->port       = port;
+    d->path       = path;
+    d->action     = action;
+    d->lastAccess = lastAccess;
+    d->valid      = true;    
 }
 
 CameraType::~CameraType()
@@ -77,24 +80,26 @@ CameraType::~CameraType()
 
 CameraType::CameraType(const CameraType& ctype)
 {
-    d->title  = ctype.d->title;
-    d->model  = ctype.d->model;
-    d->port   = ctype.d->port;
-    d->path   = ctype.d->path;
-    d->action = ctype.d->action;
-    d->valid  = ctype.d->valid;
+    d->title      = ctype.d->title;
+    d->model      = ctype.d->model;
+    d->port       = ctype.d->port;
+    d->path       = ctype.d->path;
+    d->action     = ctype.d->action;
+    d->lastAccess = ctype.d->lastAccess;
+    d->valid      = ctype.d->valid;
 }
 
 CameraType& CameraType::operator=(const CameraType& ctype)
 {
     if (this != &ctype) 
     {
-        d->title  = ctype.d->title;
-        d->model  = ctype.d->model;
-        d->port   = ctype.d->port;
-        d->path   = ctype.d->path;
-        d->action = ctype.d->action;
-        d->valid  = ctype.d->valid;
+        d->title      = ctype.d->title;
+        d->model      = ctype.d->model;
+        d->port       = ctype.d->port;
+        d->path       = ctype.d->path;
+        d->action     = ctype.d->action;
+        d->lastAccess = ctype.d->lastAccess;
+        d->valid      = ctype.d->valid;
     }
     return *this;
 }
@@ -117,6 +122,11 @@ void CameraType::setPort(const QString& port)
 void CameraType::setPath(const QString& path)
 {
     d->path = path;
+}
+
+void CameraType::setLastAccess(const QDateTime& lastAccess)
+{
+    d->lastAccess = lastAccess;
 }
 
 void CameraType::setAction(KAction *action)
@@ -152,6 +162,11 @@ QString CameraType::port() const
 QString CameraType::path() const
 {
     return d->path;
+}
+
+QDateTime CameraType::lastAccess() const
+{
+    return d->lastAccess;
 }
 
 KAction* CameraType::action() const

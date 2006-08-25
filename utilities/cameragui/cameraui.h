@@ -25,6 +25,7 @@
 
 // Qt includes.
 
+#include <qdatetime.h>
 #include <qstring.h>
 #include <qimage.h>
 
@@ -51,7 +52,7 @@ public:
 
     CameraUI(QWidget* parent, const QString& cameraTitle,
              const QString& model, const QString& port,
-             const QString& path);
+             const QString& path, const QDateTime lastAccess);
     ~CameraUI();
 
     bool isBusy() const;

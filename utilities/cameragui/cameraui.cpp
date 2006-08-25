@@ -87,6 +87,7 @@ extern "C"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
+#include "scanlib.h"
 #include "downloadsettingscontainer.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
@@ -100,7 +101,8 @@ extern "C"
 #include "cameraiconview.h"
 #include "cameraiconitem.h"
 #include "cameracontroller.h"
-#include "scanlib.h"
+#include "cameralist.h"
+#include "cameratype.h"
 #include "cameraui.h"
 
 namespace Digikam
@@ -150,6 +152,8 @@ public:
 
     bool                          busy;
     bool                          closed;
+    
+    QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
     QStringList                   foldersToScan;
@@ -178,6 +182,8 @@ public:
 
     QSplitter                    *splitter;
 
+    QDateTime                     lastAccess;
+
     KProgress                    *progress;
 
     KSqueezedTextLabel           *status;
@@ -199,9 +205,9 @@ public:
     ImagePropertiesSideBarCamGui *rightSidebar;
 };
 
-CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
+CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle, 
                    const QString& model, const QString& port,
-                   const QString& path)
+                   const QString& path, const QDateTime lastAccess)
         : KDialogBase(Plain, cameraTitle,
                       Help|User1|User2|User3|Close, Close,
                       0, // B.K.O # 116485: no parent for this modal dialog.
@@ -211,6 +217,8 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                       i18n("&Images"))
 {
     d = new CameraUIPriv;
+    d->lastAccess  = lastAccess;
+    d->cameraTitle = cameraTitle;
     setHelp("camerainterface.anchor", "digikam");
 
     // -------------------------------------------------------------------------
@@ -455,7 +463,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     // -- camera controller -----------------------------------------------
     
-    d->controller = new CameraController(this, cameraTitle, model, port, path);
+    d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
@@ -645,6 +653,16 @@ bool CameraUI::dialogClosed()
 
 void CameraUI::finishDialog()
 {
+    // Look if an item have been downloaded to computer during camera gui session.
+    // If yes, update the lastAccess date property of camera in digiKam camera list.
+
+    if (d->view->itemsDownloaded() > 0)
+    {
+        CameraList* clist = CameraList::instance();
+        if (clist) 
+            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::QDateTime::currentDateTime());
+    }
+
     // When a directory is created, a watch is put on it to spot new files
     // but it can occur that the file is copied there before the watch is
     // completely setup. That is why as an extra safeguard run scanlib
@@ -845,8 +863,13 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     for (GPItemInfoList::const_iterator it = fileList.begin();
          it != fileList.end(); ++it)
     {
-        d->view->addItem(*it);
-        d->controller->getThumbnail((*it).folder, (*it).name);
+        GPItemInfo item = *it;
+
+        if (item.mtime > (time_t)d->lastAccess.toTime_t() && item.downloaded == GPItemInfo::DownloadUnknow)
+           item.downloaded = GPItemInfo::NewPicture;
+
+        d->view->addItem(item);
+        d->controller->getThumbnail(item.folder, item.name);
     }
 
     d->progress->setTotalSteps(d->progress->totalSteps() + fileList.count());

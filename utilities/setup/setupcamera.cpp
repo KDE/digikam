@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qdatetime.h>
 
 // KDE includes.
 
@@ -85,6 +86,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->listView->addColumn( i18n("Model") );
     d->listView->addColumn( i18n("Port") );
     d->listView->addColumn( i18n("Path") );
+    d->listView->addColumn( "Last Access Date"/*, 0 */); // No i18n here. Hidden column with the last access date.
     d->listView->setAllColumnsShowFocus(true);
     groupBoxLayout->addMultiCellWidget( d->listView, 0, 5, 0, 0 );
     QWhatsThis::add( d->listView, i18n("<p>Here you can see the digital camera list used by digiKam "
@@ -161,7 +163,8 @@ SetupCamera::SetupCamera( QWidget* parent )
              ctype = cl->next()) 
         {
             new KListViewItem(d->listView, ctype->title(), ctype->model(),
-                              ctype->port(), ctype->path());
+                              ctype->port(), ctype->path(), 
+                              ctype->lastAccess().toString(Qt::ISODate));
         }
     }
 }
@@ -247,7 +250,7 @@ void SetupCamera::slotAutoDetectCamera()
     if (port.startsWith("usb:"))
     port = "usb:";
     
-    if (d->listView->findItem(model,1))
+    if (d->listView->findItem(model, 1))
     {
         KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.").arg(model).arg(port));
     }
@@ -255,14 +258,16 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.")
                                  .arg(model).arg(port));
-        new KListViewItem(d->listView, model, model, port, "/");
+        new KListViewItem(d->listView, model, model, port, "/", 
+                          QDateTime::currentDateTime().toString(Qt::ISODate));
     }
 }
 
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    new KListViewItem(d->listView, title, model, port, path);
+    new KListViewItem(d->listView, title, model, port, path, 
+                      QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
@@ -289,10 +294,18 @@ void SetupCamera::applySettings()
 
         for ( ; it.current(); ++it ) 
         {
-            QListViewItem *item = it.current();
-            CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), item->text(3));
+            QListViewItem *item  = it.current();
+            QDateTime lastAccess = QDateTime::currentDateTime();
+
+            if (!item->text(4).isEmpty())
+                lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
+                            
+            CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2), 
+                                               item->text(3), lastAccess);
             clist->insert(ctype);
         }
+
+        clist->save();
     }
 }
 

@@ -482,7 +482,7 @@ void CameraIconView::slotSelectNew()
          item = item->nextItem())
     {
         CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
-        if (viewItem->itemInfo()->downloaded == GPItemInfo::DownloadedNo)
+        if (viewItem->itemInfo()->downloaded == GPItemInfo::NewPicture)
         {
             viewItem->setSelected(true, false);
         }
@@ -630,6 +630,21 @@ void CameraIconView::slotThemeChanged()
     updateItemRectsPixmap();
 
     viewport()->update();
+}
+
+int CameraIconView::itemsDownloaded()
+{
+    int downloaded = 0;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        CameraIconViewItem* iconItem = static_cast<CameraIconViewItem*>(item);
+
+        if (iconItem->itemInfo()->downloaded == GPItemInfo::DownloadedYes)
+            downloaded++;
+    }
+
+    return downloaded;
 }
 
 }  // namespace Digikam

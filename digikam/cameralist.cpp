@@ -22,6 +22,7 @@
 
 // Qt includes.
 
+#include <qdatetime.h>
 #include <qstring.h>
 #include <qfile.h>
 #include <qdom.h>
@@ -94,7 +95,6 @@ bool CameraList::load()
     QDomElement docElem = doc.documentElement();
     if (docElem.tagName()!="cameralist")
         return false;
-
     
     for (QDomNode n = docElem.firstChild();
          !n.isNull(); n = n.nextSibling()) 
@@ -103,12 +103,16 @@ bool CameraList::load()
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
 
-        QString title = e.attribute("title");
-        QString model = e.attribute("model");
-        QString port  = e.attribute("port");
-        QString path  = e.attribute("path");
+        QString title        = e.attribute("title");
+        QString model        = e.attribute("model");
+        QString port         = e.attribute("port");
+        QString path         = e.attribute("path");
+        QDateTime lastAccess = QDateTime::currentDateTime();
 
-        CameraType *ctype = new CameraType(title, model, port, path);
+        if (!e.attribute("lastaccess").isEmpty())
+            lastAccess = QDateTime::fromString(e.attribute("lastaccess"), Qt::ISODate);
+
+        CameraType *ctype = new CameraType(title, model, port, path, lastAccess);
         insertPrivate(ctype);
     }
 
@@ -122,7 +126,7 @@ bool CameraList::save()
         return true;
     
     QDomDocument doc("cameralist");
-    doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.0\" client=\"digikam\"/>"));
+    doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.1\" client=\"digikam\"/>"));
 
     QDomElement docElem=doc.documentElement();
     
@@ -134,6 +138,7 @@ bool CameraList::save()
        elem.setAttribute("model", ctype->model());
        elem.setAttribute("port", ctype->port());
        elem.setAttribute("path", ctype->path());
+       elem.setAttribute("lastaccess", ctype->lastAccess().toString(Qt::ISODate));
        docElem.appendChild(elem);
     }
 
@@ -147,6 +152,20 @@ bool CameraList::save()
     cfile.close();
 
     return true;    
+}
+
+bool CameraList::changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate)
+{
+    CameraType* cam = find(cameraTitle);
+    if (cam)
+    {                
+        cam->setLastAccess(newDate);
+        d->modified = true;    
+        save();
+        return true;
+    }
+
+    return false;
 }
 
 void CameraList::insert(CameraType* ctype)
@@ -232,7 +251,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     if (port.startsWith("usb:"))
         port = "usb:";
 
-    CameraType* ctype = new CameraType(model, model, port, "/");
+    CameraType* ctype = new CameraType(model, model, port, "/", QDateTime::currentDateTime());
     insert(ctype);
 
     return ctype;

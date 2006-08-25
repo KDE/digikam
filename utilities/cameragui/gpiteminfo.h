@@ -49,6 +49,7 @@ public:
         DownloadedYes   = 1,
         DownloadFailed  = 2,
         DownloadStarted = 3,
+        NewPicture      = 4
     };
 
 public:
