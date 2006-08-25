@@ -1139,7 +1139,9 @@ void CameraUI::slotDownload(bool onlySelected)
 
         if (d->autoAlbumExtCheck->isChecked())           
         {
-            QFileInfo fi(downloadSettings.file);
+            // We use the target file name to compute sub-albums name based to take a care about 
+            // convertion on the fly option.
+            QFileInfo fi(downloadName);
 
             if (!createAutoAlbum(u, fi.extension().upper(), dateTime.date(), errMsg))
             {
