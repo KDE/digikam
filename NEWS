@@ -73,6 +73,7 @@ CameraGUI     : New option to increase/decrease the thumbnails size.
 CameraGUI     : New option to lock/unlock pictures from camera to prevent unwanted deletion.
 CameraGUI     : New option to convert JPEG files to lossless file format during download.
 CameraGUI     : New option to set date format of auto-created albums.
+CameraGUI     : New option to auto-create files extension-based sub-albums.
 
 Image Plugins : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
@@ -237,6 +238,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 143 ==> 132660 : Shortcuts for ratings do not work as of 0.9.x beta.
 144 ==> 126874 : digikam does not support <shift+del>.
 145 ==> 132957 : Crash using dcop action: album_forward
-146 ==>
+146 ==> 130547 : automatically download RAW-images into separate folder below the JPG-images.
+147 ==> 
 
 ----------------------------------------------------------------------------------------------------
