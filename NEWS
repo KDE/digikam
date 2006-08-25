@@ -233,5 +233,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 140 ==> 131558 : Camera UI: renaming dialogue can't handle UTF-8 filenames
 141 ==> 119075 : wish list new folder date option.
 142 ==> 128817 : configure timestamp naming format for directory names.
+143 ==> 132660 : Shortcuts for ratings do not work as of 0.9.x beta.
+144 ==> 
 
 ----------------------------------------------------------------------------------------------------
