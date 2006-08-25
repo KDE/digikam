@@ -113,6 +113,7 @@ extern "C"
 #include "albumdb.h"
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
+#include "deletedialog.h"
 
 namespace Digikam
 {
@@ -458,19 +459,19 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     {
         return;
     }
-
+            
     QPopupMenu popmenu(this);
     KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
-
+    
     if(!data || !QUriDrag::canDecode(data))
     {
         paste->setEnabled(false);
     }
-
+    
     paste->plug(&popmenu);
     popmenu.exec(pos);
-    delete paste;
+    delete paste;    
 }
 
 void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
@@ -626,10 +627,8 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 15);
 
-    if (d->albumSettings->getUseTrash())
-        popmenu.insertItem(SmallIcon("edittrash"), i18n("Move to Trash"), 16);
-    else
-        popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 16);
+    popmenu.insertItem(SmallIcon("edittrash"),
+                       i18n("Move to Trash", "Move %n Files to Trash" , selectedImageIDs.count() ), 16);
 
     int id = popmenu.exec(pos);
 
@@ -807,12 +806,12 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
     signalItemsAdded();
 }
 
-void AlbumIconView::slotDeleteSelectedItems()
+void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 {
     KURL::List  urlList;
     QStringList nameList;
     KURL url;
-    
+
     for (IconItem *it = firstItem(); it; it=it->nextItem())
     {
         if (it->isSelected()) 
@@ -827,32 +826,41 @@ void AlbumIconView::slotDeleteSelectedItems()
     if (urlList.count() <= 0)
         return;
 
-    QString warnMsg;
+    DeleteDialog dialog(this);
 
-    if (d->albumSettings->getUseTrash())
-    {
-        warnMsg = i18n("About to move this image to trash. Are you sure?",
-                       "About to move these %n images to trash. Are you sure?",
-                       nameList.count());
-    }
-    else
-    {
-        warnMsg = i18n("About to delete this image. Are you sure?",
-                       "About to delete these %n images. Are you sure?",
-                       nameList.count());
-    }
-
-    if (KMessageBox::warningContinueCancelList(this,
-                                               warnMsg,
-                                               nameList,
-                                               d->albumSettings->getUseTrash() ? i18n("Trash Image") : i18n("Delete Image"),
-                                               d->albumSettings->getUseTrash() ? KGuiItem(i18n("Trash"),"edittrash") : KGuiItem(i18n("Delete"),"editdelete"))
-        !=  KMessageBox::Continue)
-    {
+    if (!dialog.confirmDeleteList(urlList,
+                                  DeleteDialogMode::Files,
+                                  deletePermanently ?
+                                  DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
         return;
+
+    bool useTrash = !dialog.shouldDelete();
+
+    KIO::Job* job = DIO::del(urlList, useTrash);
+    connect(job, SIGNAL(result(KIO::Job*)),
+            SLOT(slotDIOResult(KIO::Job*)));
+}
+
+void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
+{
+    // This method deletes the selected items directly, without confirmation.
+    // It is not used in the default setup.
+
+    KURL::List  urlList;
+
+    for (IconItem *it = firstItem(); it; it=it->nextItem())
+    {
+        if (it->isSelected())
+        {
+            AlbumIconItem *iconItem = static_cast<AlbumIconItem *>(it);
+            urlList.append(iconItem->imageInfo()->kurl());
+        }
     }
 
-    KIO::Job* job = DIO::del(urlList);
+    if (urlList.count() <= 0)
+        return;
+
+    KIO::Job* job = DIO::del(urlList, useTrash);
 
     connect(job, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotDIOResult(KIO::Job*)));

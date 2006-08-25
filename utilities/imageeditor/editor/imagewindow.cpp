@@ -88,6 +88,7 @@
 #include "savingcontextcontainer.h"
 #include "imagewindow.h"
 #include "imageattributeswatch.h"
+#include "deletedialog.h"
 
 namespace Digikam
 {
@@ -247,6 +248,35 @@ void ImageWindow::setupActions()
                           m_rightSidebar, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
+    // -- Special Delete actions ---------------------------------------------------------------
+
+    // Pop up dialog to ask user whether to permanently delete
+    m_fileDeletePermanentlyAction = new KAction(i18n("Delete File Permanently"),
+            "editdelete",
+            SHIFT+Key_Delete,
+            this,
+            SLOT(slotDeleteCurrentItemPermanently()),
+            actionCollection(),
+            "image_delete_permanently");
+
+    // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
+    // Power users may add them.
+    m_fileDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
+            "editdelete",
+            0,
+            this,
+            SLOT(slotDeleteCurrentItemPermanentlyDirectly()),
+            actionCollection(),
+            "image_delete_permanently_directly");
+
+    m_fileTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
+            "edittrash",
+            0,
+            this,
+            SLOT(slotTrashCurrentItemDirectly()),
+            actionCollection(),
+            "image_trash_directly");
+
     // ---------------------------------------------------------------------------------
 
     createGUI("digikamimagewindowui.rc", false);
@@ -269,17 +299,6 @@ void ImageWindow::applySettings()
     m_canvas->setBackgroundColor(m_bgColor);
 
     AlbumSettings *settings = AlbumSettings::instance();
-    if (settings->getUseTrash())
-    {
-        m_fileDeleteAction->setIcon("edittrash");
-        m_fileDeleteAction->setText(i18n("Move to Trash"));
-    }
-    else
-    {
-        m_fileDeleteAction->setIcon("editdelete");
-        m_fileDeleteAction->setText(i18n("Delete File"));
-    }
-
     m_canvas->setExifOrient(settings->getExifRotate());
     m_setExifOrientationTag = settings->getExifSetOrientation();
 }
@@ -743,29 +762,60 @@ bool ImageWindow::saveAs()
 
 void ImageWindow::slotDeleteCurrentItem()
 {
-    KURL u(m_urlCurrent.directory());
+    deleteCurrentItem(true, false);
+}
+
+void ImageWindow::slotDeleteCurrentItemPermanently()
+{
+    deleteCurrentItem(true, true);
+}
+
+void ImageWindow::slotDeleteCurrentItemPermanentlyDirectly()
+{
+    deleteCurrentItem(false, true);
+}
+
+void ImageWindow::slotTrashCurrentItemDirectly()
+{
+    deleteCurrentItem(false, false);
+}
+
+void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
+{
+    // This function implements all four of the above slots.
+    // The meaning of permanently differs depending on the value of ask
+
+    KURL u;
+    u.setPath(m_urlCurrent.directory());
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
         return;
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    bool useTrash;
 
-    if (!settings->getUseTrash())
+    if (ask)
     {
-        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
-                        .arg(m_urlCurrent.filename()));
-        if (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               i18n("Delete"))
-            !=  KMessageBox::Continue)
-        {
+        bool preselectDeletePermanently = permanently;
+
+        DeleteDialog dialog(this);
+
+        KURL::List urlList;
+        urlList.append(m_urlCurrent);
+        if (!dialog.confirmDeleteList(urlList,
+             DeleteDialogMode::Files,
+             preselectDeletePermanently ?
+                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
             return;
-        }
+
+        useTrash = !dialog.shouldDelete();
+    }
+    else
+    {
+        useTrash = !permanently;
     }
 
-    if (!SyncJob::userDelete(m_urlCurrent))
+    if (!SyncJob::del(m_urlCurrent, useTrash))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
@@ -805,7 +855,7 @@ void ImageWindow::slotDeleteCurrentItem()
 
     KMessageBox::information(this,
                              i18n("There is no image to show in the current album.\n"
-                                  "The image editor will be closed."),
+                                     "The image editor will be closed."),
                              i18n("No Image in Current Album"));
 
     close();

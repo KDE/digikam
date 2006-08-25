@@ -52,17 +52,8 @@ class SyncJob : public QObject
 
 public:
 
-    /* this will either trash or delete the urls depending
-       on the user settings */
-    static bool userDelete(const KURL::List& urls);
-
-    /* this will delete the urls. use only userDelete unless
-       there is a specific need for this */
-    static bool del(const KURL::List& urls);
-    
-    /* moves the urls to trash. use only userDelete unless
-       there is a specific need for this */
-    static bool trash(const KURL::List& urls);
+    /* this will delete the urls. */
+    static bool del(const KURL::List& urls, bool useTrash);
 
     /* remove this when we move dependency upto kde 3.2 */
     static bool file_move(const KURL &src, const KURL &dest);

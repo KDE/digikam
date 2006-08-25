@@ -34,9 +34,9 @@ namespace DIO
     
     KIO::Job* move(const KURL::List& srcList, const KURL& dest);
     
-    KIO::Job* del(const KURL& src);
+    KIO::Job* del(const KURL& src, bool useTrash = true);
     
-    KIO::Job* del(const KURL::List& srcList);
+    KIO::Job* del(const KURL::List& srcList, bool useTrash = true);
     
     bool      renameFile(const KURL& src, const KURL& dest);
     

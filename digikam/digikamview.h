@@ -100,6 +100,9 @@ public slots:
     void slot_imageExifOrientation(int orientation);
     void slot_imageRename(AlbumIconItem* iconItem=0);
     void slot_imageDelete();
+    void slot_imageDeletePermanently();
+    void slot_imageDeletePermanentlyDirectly();
+    void slot_imageTrashDirectly();
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();

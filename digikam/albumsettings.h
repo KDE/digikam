@@ -170,6 +170,9 @@ public:
     void    setUseTrash(bool val);
     bool    getUseTrash() const;
 
+    void    setShowTrashDeleteDialog(bool val);
+    bool    getShowTrashDeleteDialog() const;
+
     static AlbumSettings *instance();
 
 private:

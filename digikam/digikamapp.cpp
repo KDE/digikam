@@ -133,7 +133,6 @@ DigikamApp::DigikamApp()
     setupView();
     setupAccelerators();
     setupActions();
-    updateDeleteTrashMenu();
 
     applyMainWindowSettings(m_config);
 
@@ -519,13 +518,41 @@ void DigikamApp::setupActions()
     mImageRenameAction->setWhatsThis(i18n("This option allows you to rename the filename of the currently selected "
                                           "image."));
 
-    mImageDeleteAction = new KAction(i18n("Delete"),
-                                    "editdelete",
-                                    SHIFT+Key_Delete,
-                                    mView,
-                                    SLOT(slot_imageDelete()),
-                                    actionCollection(),
-                                    "image_delete");
+    // Pop up dialog to ask user whether to move to trash
+    mImageDeleteAction            = new KAction(i18n("Delete"),
+                                                "edittrash",
+                                                Key_Delete,
+                                                mView,
+                                                SLOT(slot_imageDelete()),
+                                                actionCollection(),
+                                                "image_delete");
+
+    // Pop up dialog to ask user whether to permanently delete
+    mImageDeletePermanentlyAction = new KAction(i18n("Delete Permanently"),
+                                                "editdelete",
+                                                SHIFT+Key_Delete,
+                                                mView,
+                                                SLOT(slot_imageDeletePermanently()),
+                                                actionCollection(),
+                                                "image_delete_permanently");
+
+    // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
+    // Power users may add them.
+    mImageDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
+                                                        "editdelete",
+                                                        0,
+                                                        mView,
+                                                        SLOT(slot_imageDeletePermanentlyDirectly()),
+                                                        actionCollection(),
+                                                        "image_delete_permanently_directly");
+
+    mImageTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
+                                                        "edittrash",
+                                                        0,
+                                                        mView,
+                                                        SLOT(slot_imageTrashDirectly()),
+                                                        actionCollection(),
+                                                        "image_trash_directly");
 
     mImageSortAction = new KSelectAction(i18n("&Sort Images"),
                                     0,
@@ -1315,13 +1342,12 @@ void DigikamApp::slotSetupChanged()
 
     if(mAlbumSettings->getAlbumLibraryPath() != mAlbumManager->getLibraryPath())
         mView->clearHistory();
-    
+
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
     mAlbumManager->startScan();
 
     mView->applySettings(mAlbumSettings);
-    updateDeleteTrashMenu();
-    
+
     if (ImageWindow::imagewindowCreated())
         ImageWindow::imagewindow()->applySettings();
 
@@ -1548,24 +1574,6 @@ void DigikamApp::slotChangeTheme(const QString& theme)
 {
     mAlbumSettings->setCurrentTheme(theme);
     ThemeEngine::instance()->slotChangeTheme(theme);
-}
-
-void DigikamApp::updateDeleteTrashMenu()
-{
-    if (mAlbumSettings->getUseTrash())
-    {
-        mDeleteAction->setText(i18n("Move Album to Trash"));
-        mDeleteAction->setIcon("edittrash");
-        mImageDeleteAction->setText(i18n("Move to Trash"));
-        mImageDeleteAction->setIcon("edittrash");
-    }
-    else
-    {
-        mDeleteAction->setText(i18n("Delete Album"));
-        mDeleteAction->setIcon("editdelete");
-        mImageDeleteAction->setText(i18n("Delete"));
-        mImageDeleteAction->setIcon("editdelete");
-    }
 }
 
 void DigikamApp::slotDatabaseRescan()

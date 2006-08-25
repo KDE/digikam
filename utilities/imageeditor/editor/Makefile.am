@@ -17,6 +17,7 @@ libshowfoto_la_LIBADD = $(top_builddir)/digikam/utilities/imageeditor/tools/libd
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/libs/widgets/common \
+	      -I$(top_srcdir)/digikam/libs/dialogs \
 	      -I$(top_srcdir)/digikam/libs/dimg \
 	      -I$(top_srcdir)/digikam/libs/themeengine \
 	      -I$(top_srcdir)/digikam/libs/dmetadata \

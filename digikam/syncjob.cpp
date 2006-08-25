@@ -54,24 +54,14 @@ namespace Digikam
 QString* SyncJob::lastErrorMsg_  = 0;
 int      SyncJob::lastErrorCode_ = 0;
 
-bool SyncJob::userDelete(const KURL::List& urls)
+bool SyncJob::del(const KURL::List& urls, bool useTrash)
 {
-    if (AlbumSettings::instance()->getUseTrash())
-        return trash(urls);
+    SyncJob sj;
+
+    if (useTrash)
+        return sj.trashPriv(urls);
     else
-        return del(urls);
-}
-
-bool SyncJob::del(const KURL::List& urls)
-{
-    SyncJob sj;
-    return sj.delPriv(urls);
-}
-
-bool SyncJob::trash(const KURL::List& urls)
-{
-    SyncJob sj;
-    return sj.trashPriv(urls);
+        return sj.delPriv(urls);
 }
 
 bool SyncJob::file_move(const KURL &src, const KURL &dest)

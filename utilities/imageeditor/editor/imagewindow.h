@@ -91,6 +91,11 @@ private:
     KAction                  *m_4Star;
     KAction                  *m_5Star;
 
+    // Delete actions
+    KAction                  *m_fileDeletePermanentlyAction;
+    KAction                  *m_fileDeletePermanentlyDirectlyAction;
+    KAction                  *m_fileTrashDirectlyAction;
+
     AlbumIconView            *m_view;
     ImageInfoList             m_imageInfoList;
     ImageInfo                *m_imageInfoCurrent;
@@ -115,6 +120,7 @@ private:
     void saveIsComplete();
     void saveAsIsComplete(); 
     void setViewToURL(const KURL &url);
+    void deleteCurrentItem(bool ask, bool permanently);
 
     ImageWindow();
 
@@ -128,6 +134,9 @@ private slots:
 
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
+    void slotDeleteCurrentItemPermanently();
+    void slotDeleteCurrentItemPermanentlyDirectly();
+    void slotTrashCurrentItemDirectly();
 
     void slotChanged();
     void slotUndoStateChanged(bool, bool, bool);

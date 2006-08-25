@@ -89,11 +89,11 @@ KIO::Job* move(const KURL::List& srcList, const KURL& dest)
     return job;
 }
 
-KIO::Job* del(const KURL& src)
+KIO::Job* del(const KURL& src, bool useTrash)
 {
     KIO::Job* job = 0;
     
-    if (Digikam::AlbumSettings::instance()->getUseTrash())
+    if (useTrash)
     {
         KURL dest("trash:/");
 
@@ -113,11 +113,11 @@ KIO::Job* del(const KURL& src)
     return job;
 }
 
-KIO::Job* del(const KURL::List& srcList)
+KIO::Job* del(const KURL::List& srcList, bool useTrash)
 {
     KIO::Job* job = 0;
-    
-    if (Digikam::AlbumSettings::instance()->getUseTrash())
+
+    if (useTrash)
     {
         KURL dest("trash:/");
 

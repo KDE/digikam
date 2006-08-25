@@ -56,6 +56,7 @@
 #include "dio.h"
 #include "dragobjects.h"
 #include "albumthumbnailloader.h"
+#include "deletedialog.h"
 
 // X11 C Ansi includes.
 
@@ -596,67 +597,43 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
     if(!album || album->isRoot())
         return;
 
-    // find number of subalbums
-    int children = 0;
-    AlbumIterator it(album);
-    while(it.current())
-    {
-        children++;
-        ++it;
-    }
+    // find subalbums
+    KURL::List childrenList;
+    addAlbumChildrenToList(childrenList, album);
 
-    int result = KMessageBox::No;
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (children)
-    {
-        if(settings->getUseTrash())
-        {
-            result = KMessageBox::warningYesNo(this,
-                        i18n("Album '%1' has one subalbum. "
-                             "Moving this to trash will also move the "
-                             "subalbum to trash. "
-                             "Are you sure you want to continue?",
-                             "Album '%1' has %n subalbums. "
-                             "Moving this to trash will also move the "
-                             "subalbums to trash. "
-                             "Are you sure you want to continue?",
-                             children)
-                             .arg(album->title()));
-        }
-        else
-        {
-            result = KMessageBox::warningYesNo(this,
-                        i18n("Album '%1' has one subalbum. "
-                             "Deleting this will also delete "
-                             "the subalbum. "
-                             "Are you sure you want to continue?",
-                             "Album '%1' has %n subalbums. "
-                             "Deleting this will also delete "
-                             "the subalbums. "
-                             "Are you sure you want to continue?",
-                             children)
-                             .arg(album->title()));
-        }
-    }
-    else
-    {
-        result = KMessageBox::warningYesNo(this, settings->getUseTrash() ?
-                i18n("Move album '%1' to trash?").arg(album->title()) :
-                i18n("Delete album '%1' from disk?").arg(album->title()),
-                settings->getUseTrash() ? i18n("Trash Album") : i18n("Delete Album"),
-                settings->getUseTrash() ? KGuiItem(i18n("Trash"),"edittrash") : KGuiItem(i18n("Delete"),"editdelete") );
-    }
+    DeleteDialog dialog(this);
 
-    if(result == KMessageBox::Yes)
+    // All subalbums will be presented in the list as well
+    if (!dialog.confirmDeleteList(childrenList,
+                                  childrenList.size() == 1 ?
+                                  DeleteDialogMode::Albums : DeleteDialogMode::Subalbums,
+                                  DeleteDialogMode::UserPreference))
+        return;
+
+    bool useTrash = !dialog.shouldDelete();
+
+    // Currently trash kioslave can handle only full paths.
+    // pass full folder path to the trashing job
+    KURL u;
+    u.setProtocol("file");
+    u.setPath(album->folderPath());
+    KIO::Job* job = DIO::del(u, useTrash);
+    connect(job, SIGNAL(result(KIO::Job *)),
+            this, SLOT(slotDIOResult(KIO::Job *)));
+}
+
+void AlbumFolderView::addAlbumChildrenToList(KURL::List &list, Album *album)
+{
+    // simple recursive helper function
+    if (album)
     {
-        // TODO: currently trash kioslave can handle only full paths.
-        // pass full folder path to the trashing job
-        KURL u;
-        u.setProtocol("file");
-        u.setPath(album->folderPath());
-        KIO::Job* job = DIO::del(u);
-        connect(job, SIGNAL(result(KIO::Job *)),
-                this, SLOT(slotDIOResult(KIO::Job *)));
+        list.append(album->kurl());
+        AlbumIterator it(album);
+        while(it.current())
+        {
+            addAlbumChildrenToList(list, *it);
+            ++it;
+        }
     }
 }
 

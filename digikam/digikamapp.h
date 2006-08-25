@@ -120,7 +120,6 @@ private:
     void loadPlugins();
     void loadCameras();
     void populateThemes();
-    void updateDeleteTrashMenu();
 
 private slots:
 
@@ -191,6 +190,9 @@ private:
     // Album Actions
     KAction               *mNewAction;
     KAction               *mDeleteAction;
+    KAction               *mImageDeletePermanentlyAction;
+    KAction               *mImageDeletePermanentlyDirectlyAction;
+    KAction               *mImageTrashDirectlyAction;
     KSelectAction         *mAlbumSortAction;
     KToolBarPopupAction   *mBackwardActionMenu;
     KToolBarPopupAction   *mForwardActionMenu;

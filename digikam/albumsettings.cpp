@@ -47,6 +47,7 @@ public:
     bool showToolTips;
     bool showSplash;
     bool useTrash;
+    bool showTrashDeleteDialog;
     bool scanAtStart;
     
     bool iconShowName;
@@ -143,6 +144,7 @@ void AlbumSettings::init()
     d->showToolTips       = true;
     d->showSplash         = true;
     d->useTrash           = true;
+    d->showTrashDeleteDialog = true;
     
     d->iconShowName       = false;
     d->iconShowSize       = false;
@@ -238,6 +240,7 @@ void AlbumSettings::readSettings()
     config->setGroup("General Settings");
     d->showSplash  = config->readBoolEntry("Show Splash", true);
     d->useTrash    = config->readBoolEntry("Use Trash", true);
+    d->showTrashDeleteDialog = config->readBoolEntry("Show Trash Delete Dialog", true);
     d->scanAtStart = config->readBoolEntry("Scan At Start", true);
 }
 
@@ -288,6 +291,7 @@ void AlbumSettings::saveSettings()
     config->setGroup("General Settings");
     config->writeEntry("Show Splash", d->showSplash);
     config->writeEntry("Use Trash", d->useTrash);
+    config->writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
     config->writeEntry("Scan At Start", d->scanAtStart);
     
     config->sync();
@@ -676,6 +680,16 @@ void AlbumSettings::setUseTrash(bool val)
 bool AlbumSettings::getUseTrash() const
 {
     return d->useTrash;
+}
+
+void AlbumSettings::setShowTrashDeleteDialog(bool val)
+{
+    d->showTrashDeleteDialog = val;
+}
+
+bool AlbumSettings::getShowTrashDeleteDialog() const
+{
+    return d->showTrashDeleteDialog;
 }
 
 }  // namespace Digikam

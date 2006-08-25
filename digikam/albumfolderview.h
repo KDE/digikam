@@ -90,6 +90,8 @@ private:
     void albumEdit(AlbumFolderViewItem *item);
     void albumDelete(AlbumFolderViewItem *item);
 
+    void addAlbumChildrenToList(KURL::List &list, Album *album);
+
     AlbumFolderViewItem* findParent(PAlbum* album, bool& failed);
     AlbumFolderViewItem* findParentByFolder(PAlbum* album, bool& failed);
     AlbumFolderViewItem* findParentByCollection(PAlbum* album, bool& failed);

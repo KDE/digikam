@@ -110,7 +110,7 @@ public:
     AlbumIconItem* findItem(const QString& url) const;
     AlbumIconItem* nextItemToThumbnail() const;
     PixmapManager* pixmapManager() const;
-   
+
 signals:
 
     void signalItemsAdded();
@@ -121,13 +121,14 @@ public slots:
 
     void slotSetExifOrientation(int orientation);
     void slotRename(AlbumIconItem* item);
-    void slotDeleteSelectedItems();
+    void slotDeleteSelectedItems(bool deletePermanently = false);
+    void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotAlbumModified();
     void slotSetAlbumThumbnail(AlbumIconItem *iconItem);
     void slotCopy();
     void slotPaste();
-    
+
     void slotAssignRating(int rating);
     void slotAssignRatingNoStar();
     void slotAssignRatingOneStar();
@@ -146,7 +147,7 @@ protected:
     void contentsDropEvent(QDropEvent *e);
 
     bool acceptToolTip(IconItem *item, const QPoint &mousePos);
-    
+
 private slots:
 
     void slotImageListerNewItems(const ImageInfoList& itemList);
@@ -176,14 +177,14 @@ private slots:
     void slotAlbumImagesChanged(int albumId);
 
 private:
-    
+
     void updateBannerRectPixmap();
     void updateItemRectsPixmap();
-        
+
 private:
 
     AlbumIconViewPrivate *d;
-    
+
 };
 
 }  // namespace Digikam

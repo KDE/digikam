@@ -256,7 +256,7 @@ void EditorWindow::setupStandardActions()
                                     this, SLOT(slotFilePrint()),
                                     actionCollection(), "editorwindow_print");
 
-    m_fileDeleteAction = new KAction(i18n("Delete File"), "editdelete",
+    m_fileDeleteAction = new KAction(i18n("Move to Trash"), "edittrash",
                                      Key_Delete,
                                      this, SLOT(slotDeleteCurrentItem()),
                                      actionCollection(), "editorwindow_delete");

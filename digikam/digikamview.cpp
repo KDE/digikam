@@ -879,7 +879,22 @@ void DigikamView::slot_imageRename(AlbumIconItem *iconItem)
 
 void DigikamView::slot_imageDelete()
 {
-    d->iconView->slotDeleteSelectedItems();
+    d->iconView->slotDeleteSelectedItems(false);
+}
+
+void DigikamView::slot_imageDeletePermanently()
+{
+    d->iconView->slotDeleteSelectedItems(true);
+}
+
+void DigikamView::slot_imageDeletePermanentlyDirectly()
+{
+    d->iconView->slotDeleteSelectedItemsDirectly(false);
+}
+
+void DigikamView::slot_imageTrashDirectly()
+{
+    d->iconView->slotDeleteSelectedItemsDirectly(true);
 }
 
 void DigikamView::slotSelectAll()

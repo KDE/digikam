@@ -3,7 +3,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdialog.la
 
 libdialog_la_SOURCES = ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp \
-	                   iccprofileinfodlg.cpp 
+	                   iccprofileinfodlg.cpp deletedialogbase.ui deletedialog.cpp
 
 libdialog_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
