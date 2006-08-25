@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-29
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-29
+ * Description : Camera settings container.
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +34,7 @@ namespace Digikam
 {
 
 class CameraUI;
+class CameraTypePrivate;
 
 class CameraType
 {
@@ -39,16 +42,13 @@ public:
 
 
     CameraType();
-    CameraType(const QString& title,
-               const QString& model,
-               const QString& port,
-               const QString& path,
+    CameraType(const QString& title, const QString& model,
+               const QString& port, const QString& path,
                KAction* action=0);
     ~CameraType();
 
     CameraType(const CameraType& ctype);
     CameraType& operator=(const CameraType& type);
-
 
     void setTitle(const QString& title);
     void setModel(const QString& model);
@@ -68,15 +68,8 @@ public:
 
 private:
 
-    QString title_;
-    QString model_;
-    QString port_;
-    QString path_;
+    CameraTypePrivate *d;
 
-    KAction *action_;
-    bool     valid_;
-
-    QGuardedPtr<CameraUI> currentCameraUI_;
 };
 
 }  // namespace Digikam

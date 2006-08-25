@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2003-01-29
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2003-01-29
+ * Description : Camera settings container.
  * 
- * Copyright 2003 by Renchi Raju
+ * Copyright 2003-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,122 +31,142 @@
 namespace Digikam
 {
 
+class CameraTypePrivate
+{
+public:
+
+    CameraTypePrivate()
+    {
+        action = 0;
+    }
+
+    QString  title;
+    QString  model;
+    QString  port;
+    QString  path;
+
+    KAction *action;
+    bool     valid;
+
+    QGuardedPtr<CameraUI> currentCameraUI;
+};
+
 CameraType::CameraType()
 {
-    action_ = 0;
-    valid_  = false;    
+    d = new CameraTypePrivate;
+    d->valid  = false;    
 }
 
-CameraType::CameraType(const QString& title,
-                       const QString& model,
-                       const QString& port,
-                       const QString& path,
+CameraType::CameraType(const QString& title, const QString& model,
+                       const QString& port, const QString& path,
                        KAction *action)
 {
-    title_ = title;
-    model_ = model;
-    port_  = port;
-    path_  = path;
-    action_ = action;
-    valid_  = true;    
+    d = new CameraTypePrivate;
+    d->title  = title;
+    d->model  = model;
+    d->port   = port;
+    d->path   = path;
+    d->action = action;
+    d->valid  = true;    
 }
 
 CameraType::~CameraType()
 {
+    delete d;
 }
 
 CameraType::CameraType(const CameraType& ctype)
 {
-    title_ = ctype.title_;
-    model_ = ctype.model_;
-    port_  = ctype.port_;
-    path_  = ctype.path_;
-    action_ = ctype.action_;
-    valid_  = ctype.valid_;
+    d->title  = ctype.d->title;
+    d->model  = ctype.d->model;
+    d->port   = ctype.d->port;
+    d->path   = ctype.d->path;
+    d->action = ctype.d->action;
+    d->valid  = ctype.d->valid;
 }
 
 CameraType& CameraType::operator=(const CameraType& ctype)
 {
-    if (this != &ctype) {
-        title_ = ctype.title_;
-        model_ = ctype.model_;
-        port_  = ctype.port_;
-        path_  = ctype.path_;
-        action_ = ctype.action_;
-        valid_  = ctype.valid_;
+    if (this != &ctype) 
+    {
+        d->title  = ctype.d->title;
+        d->model  = ctype.d->model;
+        d->port   = ctype.d->port;
+        d->path   = ctype.d->path;
+        d->action = ctype.d->action;
+        d->valid  = ctype.d->valid;
     }
     return *this;
 }
 
 void CameraType::setTitle(const QString& title)
 {
-    title_ = title;
+    d->title = title;
 }
 
 void CameraType::setModel(const QString& model)
 {
-    model_ = model;
+    d->model = model;
 }
 
 void CameraType::setPort(const QString& port)
 {
-    port_  = port;
+    d->port = port;
 }
 
 void CameraType::setPath(const QString& path)
 {
-    path_  = path;
+    d->path = path;
 }
 
 void CameraType::setAction(KAction *action)
 {
-    action_ = action;
+    d->action = action;
 }
 
 void CameraType::setValid(bool valid)
 {
-    valid_ = valid;
+    d->valid = valid;
 }
 
 void CameraType::setCurrentCameraUI(CameraUI *cameraui)
 {
-    currentCameraUI_ = cameraui;
+    d->currentCameraUI = cameraui;
 }
 
 QString CameraType::title() const
 {
-    return title_;
+    return d->title;
 }
 
 QString CameraType::model() const
 {
-    return model_;
+    return d->model;
 }
 
 QString CameraType::port() const
 {
-    return port_;
+    return d->port;
 }
 
 QString CameraType::path() const
 {
-    return path_;
+    return d->path;
 }
 
 KAction* CameraType::action() const
 {
-    return action_;
+    return d->action;
 }
 
 bool CameraType::valid() const
 {
-    return valid_;
+    return d->valid;
 }
 
 CameraUI *CameraType::currentCameraUI() const
 {
-    return currentCameraUI_;
+    return d->currentCameraUI;
 }
-
 
 }  // namespace Digikam
