@@ -1135,21 +1135,27 @@ void CameraUI::slotDownload(bool onlySelected)
             u.addPath(dirName);
         }
 
-        // Auto sub-albums creation based on File extensions to store items in separate folders.
+        // Auto sub-albums creation based on file extensions.
 
         if (d->autoAlbumExtCheck->isChecked())           
         {
-            // We use the target file name to compute sub-albums name based to take a care about 
+            // We use the target file name to compute sub-albums name to take a care about 
             // convertion on the fly option.
             QFileInfo fi(downloadName);
 
-            if (!createAutoAlbum(u, fi.extension().upper(), dateTime.date(), errMsg))
+            QString subAlbum = fi.extension().upper();
+	    if (fi.extension().upper() == QString("JPEG") || fi.extension().upper() == QString("JPE")) 
+                subAlbum = QString("JPG");
+            if (fi.extension().upper() == QString("TIFF")) 
+                subAlbum = QString("TIF");
+
+            if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))
             {
                 KMessageBox::error(this, errMsg);
                 return;
             }
 
-            u.addPath(fi.extension().upper());
+            u.addPath(subAlbum);
         }
 
         d->foldersToScan.append(u.path());
