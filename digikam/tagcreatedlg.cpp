@@ -34,6 +34,7 @@
 #include <kicondialog.h>
 #include <kapplication.h>
 #include <kdeversion.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -62,15 +63,23 @@ public:
 };
 
 TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
-            : KDialogBase( Plain, i18n("Create New Tag"), Help|Ok|Cancel, Ok,
+            : KDialogBase( Plain, i18n("New Tag"), Help|Ok|Cancel, Ok,
                            parent, 0, true, true )
 {
     d = new TagCreateDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
-    QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
+
+    QGridLayout* grid = new QGridLayout(plainPage(), 1, 1, 0, spacingHint());
+    QLabel *logo = new QLabel(plainPage());
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
+
+    QVBoxLayout *topLayout = new QVBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(album->prettyURL()));
+    QString tagName  = album->prettyURL();
+    if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
+    topLabel->setText( i18n("<qt><b>Create New Tag in <i>\"%1\"</i></b></qt>").arg(tagName));
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -108,12 +117,20 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
                                           QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
+    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
+    grid->setRowStretch(1, 10);
+
+    // --------------------------------------------------------
+
     connect(d->iconButton, SIGNAL(clicked()),
             this, SLOT(slotIconChange()));
 
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
     
+    // --------------------------------------------------------
+
     // by default assign the icon of the parent (if not root)
     // to this new tag
     if (!album->isRoot())
@@ -202,10 +219,19 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
           : KDialogBase(Plain, i18n("Edit Tag"), Ok|Cancel, Ok, parent, 0, true, true )
 {
     d = new TagEditDlgPriv;
-    QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
+    setHelp("tagscreation.anchor", "digikam");
+
+    QGridLayout* grid = new QGridLayout(plainPage(), 1, 1, 0, spacingHint());
+    QLabel *logo = new QLabel(plainPage());
+    KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
+    logo->setPixmap(iconLoader->loadIcon("digikam", KIcon::NoGroup, 96, KIcon::DefaultState, 0, true));    
+
+    QVBoxLayout *topLayout = new QVBoxLayout(spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>").arg(album->prettyURL()) );
+    QString tagName  = album->prettyURL();
+    if (tagName.endsWith("/")) tagName.truncate(tagName.length()-1);
+    topLabel->setText( i18n("<qt><b>Tag <i>\"%1\"</i> Properties </b></qt>").arg(tagName));
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -244,11 +270,19 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
                                           QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
+    grid->addMultiCellWidget(logo, 0, 0, 0, 0);
+    grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
+    grid->setRowStretch(1, 10);
+
+    // --------------------------------------------------------
+
     connect(d->iconButton, SIGNAL(clicked()),
             this, SLOT(slotIconChange()));
 
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
+
+    // --------------------------------------------------------
 
     d->icon = album->icon();
     d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
