@@ -225,7 +225,13 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
         d->height     = d->origHeight;
         valRet        = true;
 
-        // Raw file are already rotated properlly by dcraw. Only rotate JPEG/PNG/TIFF file.
+        // Raw files are already rotated properlly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed 
+        // flag as well.
+
+        if (d->image.attribute("format").toString() == QString("RAW"))
+            d->rotatedOrFlipped = true;
+    
         if (d->exifOrient && 
 	    (d->image.attribute("format").toString() == QString("JPEG") ||
 	     d->image.attribute("format").toString() == QString("PNG")  ||
