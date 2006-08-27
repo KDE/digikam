@@ -450,7 +450,7 @@ void TagFolderView::tagNew( TagFolderViewItem *item,
 
     if (title.isNull())
     {
-        if(!TagCreateDlg::tagCreate(parent, title, icon))
+        if(!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
             return;
     }
 
@@ -483,7 +483,7 @@ void TagFolderView::tagEdit(TagFolderViewItem *item)
         return;
 
     QString title, icon;
-    if(!TagEditDlg::tagEdit(tag, title, icon))
+    if(!TagEditDlg::tagEdit(kapp->activeWindow(), tag, title, icon))
     {
         return;
     }

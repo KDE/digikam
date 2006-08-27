@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-01
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-01
+ * Description : dialog to edit and create digiKam Tags
+ * 
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
- * Copyright 2004 by Renchi Raju
-
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -24,10 +26,10 @@
 #include <qlabel.h>
 #include <qframe.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 
 // KDE includes.
 
+#include <klineedit.h>
 #include <klocale.h>
 #include <kicondialog.h>
 #include <kapplication.h>
@@ -42,15 +44,33 @@
 namespace Digikam
 {
 
-TagCreateDlg::TagCreateDlg(TAlbum* parent)
-    : KDialogBase( Plain, i18n("Create New Tag"), Help|Ok|Cancel, Ok,
-                   0, 0, true, true )
+class TagCreateDlgPriv
 {
+public:
+
+    TagCreateDlgPriv()
+    {
+        titleEdit  = 0;
+        iconButton = 0;
+    }
+
+    KLineEdit   *titleEdit;
+
+    QString      icon;
+
+    QPushButton *iconButton;
+};
+
+TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
+            : KDialogBase( Plain, i18n("Create New Tag"), Help|Ok|Cancel, Ok,
+                           parent, 0, true, true )
+{
+    d = new TagCreateDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(parent->prettyURL()) );
+    topLabel->setText( i18n("<qt><b>Create New Tag in <i>%1</i></b></qt>").arg(album->prettyURL()));
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -69,64 +89,63 @@ TagCreateDlg::TagCreateDlg(TAlbum* parent)
     titleLabel->setText(i18n("&Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
-    m_titleEdit = new QLineEdit(plainPage());
-    titleLabel->setBuddy(m_titleEdit);
-    gl->addWidget(m_titleEdit, 0, 1);
+    d->titleEdit = new KLineEdit(plainPage());
+    titleLabel->setBuddy(d->titleEdit);
+    gl->addWidget(d->titleEdit, 0, 1);
 
-    setFocusProxy(m_titleEdit);
+    setFocusProxy(d->titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
     iconTextLabel->setText(i18n("&Icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
-    m_iconButton = new QPushButton(plainPage());
-    m_iconButton->setFixedSize(40, 40);
-    iconTextLabel->setBuddy(m_iconButton);
-    gl->addWidget(m_iconButton, 1, 1);
+    d->iconButton = new QPushButton(plainPage());
+    d->iconButton->setFixedSize(40, 40);
+    iconTextLabel->setBuddy(d->iconButton);
+    gl->addWidget(d->iconButton, 1, 1);
 
     QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
-    connect(m_iconButton, SIGNAL(clicked()),
-            SLOT(slotIconChange()));
-    connect(m_titleEdit, SIGNAL(textChanged(const QString&)),
-            SLOT(slotTitleChanged(const QString&)));
+    connect(d->iconButton, SIGNAL(clicked()),
+            this, SLOT(slotIconChange()));
+
+    connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTitleChanged(const QString&)));
     
     // by default assign the icon of the parent (if not root)
     // to this new tag
-    if (!parent->isRoot())
+    if (!album->isRoot())
     {
-        m_icon = parent->icon();
-        m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
+        d->icon = album->icon();
+        d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
     }
 
-    enableButtonOK(!m_titleEdit->text().isEmpty());
+    enableButtonOK(!d->titleEdit->text().isEmpty());
     adjustSize();
 }
 
 TagCreateDlg::~TagCreateDlg()
 {
-
+    delete d;
 }
 
 QString TagCreateDlg::title() const
 {
-    return m_titleEdit->text();
+    return d->titleEdit->text();
 }
-
 
 QString TagCreateDlg::icon() const
 {
-    return m_icon;
+    return d->icon;
 }
 
 void TagCreateDlg::slotIconChange()
 {
 #if KDE_IS_VERSION(3,3,0)
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false,
-              true, true);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, true, true);
     QString icon = dlg.openDialog();
 #else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
@@ -134,43 +153,59 @@ void TagCreateDlg::slotIconChange()
         return;
 #endif
 
-    if (icon.isEmpty() || m_icon == icon)
+    if (icon.isEmpty() || d->icon == icon)
         return;
 
-    m_icon = icon;
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
+    d->icon = icon;
+    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 }
-
 
 void TagCreateDlg::slotTitleChanged(const QString& newtitle)
 {
     enableButtonOK(!newtitle.isEmpty());
 }
 
-bool TagCreateDlg::tagCreate(TAlbum* parent, QString& title,
-                             QString& icon)
+bool TagCreateDlg::tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagCreateDlg dlg(parent);
+    TagCreateDlg dlg(parent, album);
 
-    bool ok = dlg.exec() == QDialog::Accepted;
+    bool valRet = dlg.exec();
+    if (valRet == QDialog::Accepted)
+    {
+        title = dlg.title();
+        icon  = dlg.icon();
+    }
 
-    title    = dlg.title();
-    icon     = dlg.icon();
-
-    return ok;
+    return valRet;
 }
 
 // -------------------------------------------------------------------------------------
 
-TagEditDlg::TagEditDlg(TAlbum* album)
-    : KDialogBase( Plain, i18n("Edit Tag"), Ok|Cancel, Ok,
-                   0, 0, true, true )
+class TagEditDlgPriv
 {
+public:
+
+    TagEditDlgPriv()
+    {
+        titleEdit  = 0;
+        iconButton = 0;
+    }
+
+    KLineEdit   *titleEdit;
+
+    QString      icon;
+
+    QPushButton *iconButton;
+};
+
+TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
+          : KDialogBase(Plain, i18n("Edit Tag"), Ok|Cancel, Ok, parent, 0, true, true )
+{
+    d = new TagEditDlgPriv;
     QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
 
     QLabel *topLabel = new QLabel(plainPage());
-    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>")
-                       .arg(album->prettyURL()) );
+    topLabel->setText( i18n("<qt><b><i>%1</i> Properties</b></qt>").arg(album->prettyURL()) );
     topLabel->setAlignment(Qt::AlignAuto | Qt::AlignVCenter | Qt::SingleLine);
     topLayout->addWidget(topLabel);
 
@@ -189,59 +224,59 @@ TagEditDlg::TagEditDlg(TAlbum* album)
     titleLabel->setText(i18n("&Title:"));
     gl->addWidget(titleLabel, 0, 0);
 
-    m_titleEdit = new QLineEdit(plainPage());
-    m_titleEdit->setText(album->title());
-    titleLabel->setBuddy(m_titleEdit);
-    gl->addWidget(m_titleEdit, 0, 1);
+    d->titleEdit = new KLineEdit(plainPage());
+    d->titleEdit->setText(album->title());
+    titleLabel->setBuddy(d->titleEdit);
+    gl->addWidget(d->titleEdit, 0, 1);
 
-    setFocusProxy(m_titleEdit);
+    setFocusProxy(d->titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
     iconTextLabel->setText(i18n("&Icon:"));
     gl->addWidget(iconTextLabel, 1, 0);
 
-    m_iconButton = new QPushButton(plainPage());
-    m_iconButton->setFixedSize(40, 40);
-    iconTextLabel->setBuddy(m_iconButton);
-    gl->addWidget(m_iconButton, 1, 1);
+    d->iconButton = new QPushButton(plainPage());
+    d->iconButton->setFixedSize(40, 40);
+    iconTextLabel->setBuddy(d->iconButton);
+    gl->addWidget(d->iconButton, 1, 1);
 
     QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding);
     gl->addItem(spacer, 2, 1);
 
-    connect(m_iconButton, SIGNAL(clicked()),
-            SLOT(slotIconChange()));
-    connect(m_titleEdit, SIGNAL(textChanged(const QString&)),
-            SLOT(slotTitleChanged(const QString&)));
+    connect(d->iconButton, SIGNAL(clicked()),
+            this, SLOT(slotIconChange()));
 
-    m_icon = album->icon();
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
+    connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotTitleChanged(const QString&)));
 
-    enableButtonOK(!m_titleEdit->text().isEmpty());
+    d->icon = album->icon();
+    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+
+    enableButtonOK(!d->titleEdit->text().isEmpty());
     adjustSize();
 }
 
 TagEditDlg::~TagEditDlg()
 {
-
+    delete d;
 }
 
 QString TagEditDlg::title() const
 {
-    return m_titleEdit->text();
+    return d->titleEdit->text();
 }
 
 QString TagEditDlg::icon() const
 {
-    return m_icon;
+    return d->icon;
 }
 
 void TagEditDlg::slotIconChange()
 {
 #if KDE_IS_VERSION(3,3,0)
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false,
-              true, true);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, true, true);
     QString icon = dlg.openDialog();
 #else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
@@ -249,11 +284,11 @@ void TagEditDlg::slotIconChange()
         return;
 #endif
     
-    if (icon.isEmpty() || icon == m_icon)
+    if (icon.isEmpty() || icon == d->icon)
         return;
 
-    m_icon = icon;
-    m_iconButton->setIconSet(SyncJob::getTagThumbnail(m_icon, 20));
+    d->icon = icon;
+    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 }
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
@@ -261,17 +296,18 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     enableButtonOK(!newtitle.isEmpty());
 }
 
-bool TagEditDlg::tagEdit(TAlbum* album, QString& title,
-                         QString& icon)
+bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagEditDlg dlg(album);
+    TagEditDlg dlg(parent, album);
 
-    bool ok = (dlg.exec() == QDialog::Accepted);
+    bool valRet = dlg.exec();
+    if (valRet == QDialog::Accepted)
+    {
+        title = dlg.title();
+        icon  = dlg.icon();
+    }
 
-    title    = dlg.title();
-    icon     = dlg.icon();
-
-    return ok;
+    return valRet;
 }
 
 }  // namespace Digikam

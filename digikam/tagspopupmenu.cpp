@@ -316,7 +316,7 @@ void TagsPopupMenu::slotActivated(int id)
         }
 
         QString title, icon;
-        if (!TagCreateDlg::tagCreate(parent, title, icon))
+        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
             return;
 
         QString errMsg;

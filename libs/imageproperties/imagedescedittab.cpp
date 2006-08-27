@@ -598,7 +598,7 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum)
     QString title, icon;
     AlbumManager *albumMan_ = AlbumManager::instance();
 
-    if (!TagCreateDlg::tagCreate(parAlbum, title, icon))
+    if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
         return;
 
     QString errMsg;
@@ -658,9 +658,8 @@ void ImageDescEditTab::tagEdit(TAlbum* album)
     QString title;
     QString icon;
 
-    if (!TagEditDlg::tagEdit(album, title, icon))
+    if (!TagEditDlg::tagEdit(kapp->activeWindow(), album, title, icon))
         return;
-
 
     AlbumManager *albumMan = AlbumManager::instance();
     if (album->title() != title)

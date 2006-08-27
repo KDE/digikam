@@ -1,10 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-07-01
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-07-01
+ * Description : dialog to edit and create digiKam Tags
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -32,9 +34,13 @@
 class QComboBox;
 class QLineEdit;
 class QPushButton;
+class QWidget;
 
 namespace Digikam
 {
+
+class TagCreateDlgPriv;
+class TagEditDlgPriv;
 
 class TagCreateDlg : public KDialogBase
 {
@@ -42,14 +48,13 @@ class TagCreateDlg : public KDialogBase
 
 public:
 
-    TagCreateDlg(TAlbum* parent);
+    TagCreateDlg(QWidget *parent, TAlbum* album);
     ~TagCreateDlg();
 
     QString title() const;
     QString icon() const;
 
-    static bool tagCreate(TAlbum* parent, QString& title,
-                          QString& icon);
+    static bool tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon);
 
 private slots:
 
@@ -58,10 +63,10 @@ private slots:
     
 private:
 
-    QLineEdit*    m_titleEdit;
-    QString       m_icon;
-    QPushButton*  m_iconButton;
+    TagCreateDlgPriv *d;
 };
+
+// -------------------------------------------------------------------------------------
 
 class TagEditDlg : public KDialogBase
 {
@@ -69,14 +74,13 @@ class TagEditDlg : public KDialogBase
 
 public:
 
-    TagEditDlg(TAlbum* album);
+    TagEditDlg(QWidget *parent, TAlbum* album);
     ~TagEditDlg();
 
     QString title() const;
     QString icon() const;
 
-    static bool tagEdit(TAlbum* album, QString& title,
-                        QString& icon);
+    static bool tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon);
 
 private slots:
 
@@ -85,9 +89,7 @@ private slots:
     
 private:
 
-    QLineEdit*    m_titleEdit;
-    QString       m_icon;
-    QPushButton*  m_iconButton;
+    TagEditDlgPriv *d;
 };
 
 }  // namespace Digikam

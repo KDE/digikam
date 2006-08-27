@@ -542,7 +542,7 @@ void TagFilterView::tagNew(TagFilterViewItem* item)
 
     QString title;
     QString icon;
-    if (!TagCreateDlg::tagCreate(parent, title, icon))
+    if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
         return;
 
     QString errMsg;
@@ -575,7 +575,7 @@ void TagFilterView::tagEdit(TagFilterViewItem* item)
         return;
 
     QString title, icon;
-    if (!TagEditDlg::tagEdit(tag, title, icon))
+    if (!TagEditDlg::tagEdit(kapp->activeWindow(), tag, title, icon))
     {
         return;
     }
