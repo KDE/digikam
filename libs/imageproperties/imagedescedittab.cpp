@@ -610,8 +610,7 @@ void ImageDescEditTab::tagNew(TAlbum* parAlbum)
     }
     else
     {
-        TAlbumCheckListItem* viewItem =
-            (TAlbumCheckListItem*)album->extraData(this);
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
         if (viewItem)
         {
             viewItem->setOn(true);
@@ -717,7 +716,6 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
         tag->setExtraData(this, viewItem);
         setTagThumbnail(tag);
     }
-
 }
 
 void ImageDescEditTab::slotAlbumDeleted(Album* a)
