@@ -305,7 +305,10 @@ void CtrlPanelDlg::slotEffect()
     m_imagePreviewWidget->setProgress(0);
 
     if (m_threadedFilter)
+    {
        delete m_threadedFilter;
+       m_threadedFilter = 0;
+    }
 
     prepareEffect();
 }
@@ -329,7 +332,10 @@ void CtrlPanelDlg::slotOk()
     m_imagePreviewWidget->setProgress(0);
 
     if (m_threadedFilter)
+    {
        delete m_threadedFilter;
+       m_threadedFilter = 0;
+    }
 
     prepareFinal();
 }

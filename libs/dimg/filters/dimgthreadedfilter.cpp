@@ -107,7 +107,7 @@ void DImgThreadedFilter::stopComputation(void)
     {
         m_slave->m_cancel = true;
         // do not wait on slave, it is not running in its own separate thread!
-        m_slave->cleanupFilter();
+        //m_slave->cleanupFilter();
     }
     wait();
     cleanupFilter();
