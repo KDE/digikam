@@ -239,6 +239,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 144 ==> 126874 : digikam does not support <shift+del>.
 145 ==> 132957 : Crash using dcop action: album_forward
 146 ==> 130547 : automatically download RAW-images into separate folder below the JPG-images.
-147 ==> 
+147 ==> 128296 : Icon selector for tags wont let user select 'other icons'.
+148 ==> 
 
 ----------------------------------------------------------------------------------------------------
