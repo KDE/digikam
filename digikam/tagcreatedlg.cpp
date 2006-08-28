@@ -162,7 +162,7 @@ void TagCreateDlg::slotIconChange()
 {
 #if KDE_IS_VERSION(3,3,0)
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, true, true);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
 #else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
@@ -310,7 +310,7 @@ void TagEditDlg::slotIconChange()
 {
 #if KDE_IS_VERSION(3,3,0)
     KIconDialog dlg(this);
-    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, true, true);
+    dlg.setup(KIcon::NoGroup, KIcon::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
 #else
     QString icon = KIconDialog::getIcon(KIcon::NoGroup, KIcon::Application, false, 20);
