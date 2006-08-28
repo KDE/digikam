@@ -109,25 +109,23 @@ public:
 
     ImageDescEditTabPriv()
     {
-        modified           = false;
+        modified                   = false;
         ignoreImageAttributesWatch = false;
-        recentTagsBtn      = 0;
-        tagsSearchClearBtn = 0;
-        commentsEdit       = 0;
-        tagsSearchEdit     = 0;
-        dateTimeEdit       = 0;
-        currInfo           = 0;
-        tagsView           = 0;
-        ratingWidget       = 0;
-        navigateBar        = 0;
+        recentTagsBtn              = 0;
+        tagsSearchClearBtn         = 0;
+        commentsEdit               = 0;
+        tagsSearchEdit             = 0;
+        dateTimeEdit               = 0;
+        currInfo                   = 0;
+        tagsView                   = 0;
+        ratingWidget               = 0;
+        navigateBar                = 0;
     }
 
     bool               modified;
-
     bool               ignoreImageAttributesWatch;
 
     QToolButton       *recentTagsBtn;
-
     QToolButton       *tagsSearchClearBtn;
 
     KTextEdit         *commentsEdit;
