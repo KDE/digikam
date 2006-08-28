@@ -287,8 +287,7 @@ void CtrlPanelDlg::slotTimer()
 void CtrlPanelDlg::slotEffect()
 {
     // Computation already in process.
-    if (d->currentRenderingMode == CtrlPanelDlgPriv::PreviewRendering ||
-        d->currentRenderingMode == CtrlPanelDlgPriv::FinalRendering)
+    if (d->currentRenderingMode != CtrlPanelDlgPriv::NoneRendering)
         return;
 
     d->currentRenderingMode = CtrlPanelDlgPriv::PreviewRendering;
