@@ -91,6 +91,7 @@ private:
     void updateComments();
     void updateRating();
     void updateDate();
+    void updateRecentTags();
 
     void tagNew(TAlbum* parAlbum);
     void tagEdit(TAlbum* album);
@@ -102,7 +103,6 @@ private slots:
 
     void slotModified();
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
-    void slotRecentTags();
     void slotTagsSearchChanged();
 
     void slotAlbumAdded(Album* a);
@@ -110,8 +110,7 @@ private slots:
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
 
-    void slotGotThumbnailFromIcon(Album *album,
-                                  const QPixmap& thumbnail);
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
 
     void slotImageTagsChanged(Q_LLONG imageId);
@@ -119,6 +118,8 @@ private slots:
     void slotImageRatingChanged(Q_LLONG imageId);
     void slotImageDateChanged(Q_LLONG imageId);
     void slotImageCaptionChanged(Q_LLONG imageId);
+
+    void slotRecentTagsMenuActivated(int);
 
 private:
 

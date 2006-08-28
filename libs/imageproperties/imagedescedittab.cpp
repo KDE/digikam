@@ -37,6 +37,7 @@
 #include <qcursor.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
+#include <qiconset.h>
 
 // KDE includes.
 
@@ -125,7 +126,7 @@ public:
 
     bool               ignoreImageAttributesWatch;
 
-    QPushButton       *recentTagsBtn;
+    QToolButton       *recentTagsBtn;
 
     QToolButton       *tagsSearchClearBtn;
 
@@ -157,14 +158,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     // Comments view ---------------------------------------------------
     
     QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), settingsArea);
-    d->commentsEdit = new KTextEdit(commentsBox);
+    d->commentsEdit         = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
     // Date and Time view ---------------------------------------------------
     
     QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), settingsArea);
-    d->dateTimeEdit = new KDateTimeEdit( dateTimeBox, "datepicker");
+    d->dateTimeEdit         = new KDateTimeEdit( dateTimeBox, "datepicker");
 
     // Rating view --------------------------------------------------
 
@@ -174,15 +175,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
         
     // Tags view ---------------------------------------------------
 
-    QGroupBox* tagsBox = new QGroupBox(i18n("&Tags"), settingsArea);
+    QGroupBox* tagsBox         = new QGroupBox(i18n("&Tags"), settingsArea);
     QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsBox);
     d->tagsSearchClearBtn->setAutoRaise(true);
-    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase", KIcon::Toolbar, KIcon::SizeSmall));
+    d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
+                                      KIcon::Toolbar, KIcon::SizeSmall));
 
     QLabel* tagsSearchTextBtn = new QLabel(i18n("Search:"), tagsBox);
-    d->tagsSearchEdit = new KLineEdit(tagsBox);
+    d->tagsSearchEdit         = new KLineEdit(tagsBox);
 
     QHBoxLayout* tagsSearchLayout = new QHBoxLayout(0, 5, 5);
     tagsSearchLayout->addWidget(d->tagsSearchClearBtn);
@@ -193,7 +195,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsView = new TAlbumListView(tagsBox);
     tagsBoxLayout->addWidget(d->tagsView);
 
-    d->recentTagsBtn = new QPushButton(i18n("Recent Tags"), tagsBox);
+    d->recentTagsBtn      = new QToolButton(tagsBox);
+    QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
+    d->recentTagsBtn->setTextLabel(i18n("Recent Tags"));
+    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag", KIcon::NoGroup,
+                                 KIcon::SizeSmall, KIcon::DefaultState, 0, true));
+    d->recentTagsBtn->setUsesTextLabel(true);
+    d->recentTagsBtn->setUsesBigPixmap(false);
+    d->recentTagsBtn->setTextPosition(QToolButton::BesideIcon);
+    d->recentTagsBtn->setPopup(popupMenu);
+    d->recentTagsBtn->setPopupDelay(1);
     tagsBoxLayout->addWidget(d->recentTagsBtn);
 
     d->tagsView->addColumn(i18n( "Tags" ));
@@ -213,7 +224,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     vLayout->addWidget(settingsArea);    
 
     // --------------------------------------------------
-    
+
+    connect(popupMenu, SIGNAL(activated(int)),
+            this, SLOT(slotRecentTagsMenuActivated(int)));
+
     connect(d->tagsView, SIGNAL(signalItemStateChanged()),
             this, SLOT(slotModified()));
     
@@ -247,9 +261,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged()));
             
-    connect(d->recentTagsBtn, SIGNAL(clicked()),
-            this, SLOT(slotRecentTags()));
-
     // Initalize ---------------------------------------------
 
     d->commentsEdit->installEventFilter(this);
@@ -257,6 +268,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
     d->commentsEdit->setFocus();
+    updateRecentTags();
 
     // Connect to album manager -----------------------------
 
@@ -277,10 +289,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
 
     connect(loader, SIGNAL(signalFailed(Album *)),
-            SLOT(slotThumbnailLost(Album *)));
+            this, SLOT(slotThumbnailLost(Album *)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -449,6 +461,8 @@ void ImageDescEditTab::applyAllChanges()
     }
 
     d->modified = false;
+
+    updateRecentTags();
 }
 
 void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
@@ -556,14 +570,11 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     QPopupMenu popmenu(this);
 
-    popmenu.insertItem(SmallIcon("tag"),
-                       i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
     if (!album->isRoot())
     {
-        popmenu.insertItem(SmallIcon("pencil"),
-                           i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("edittrash"),
-                           i18n("Delete Tag"), 12);
+        popmenu.insertItem(SmallIcon("pencil"),    i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"),             12);
     }
 
     switch (popmenu.exec(QCursor::pos()))
@@ -780,8 +791,7 @@ void ImageDescEditTab::setTagThumbnail(TAlbum *album)
     }
 }
 
-void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album,
-                                             const QPixmap& thumbnail)
+void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail)
 {
     if(!album || album->type() != Album::TAG)
         return;
@@ -832,17 +842,18 @@ void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
         updateDate();
 }
 
-void ImageDescEditTab::slotRecentTags()
+void ImageDescEditTab::updateRecentTags()
 {
-    QPopupMenu menu(this);
-
+    QPopupMenu *menu = d->recentTagsBtn->popup();
+    menu->clear();
+    
     AlbumManager* albumMan = AlbumManager::instance();
-    IntList recentTags = albumMan->albumDB()->getRecentlyAssignedTags();
+    IntList recentTags     = albumMan->albumDB()->getRecentlyAssignedTags();
 
     if (recentTags.isEmpty())
     {
-        menu.insertItem(i18n("No Recently Assigned Tags"), 0);
-        menu.setItemEnabled(0, false);
+        menu->insertItem(i18n("No Recently Assigned Tags"), 0);
+        menu->setItemEnabled(0, false);
     }
     else
     {
@@ -852,25 +863,25 @@ void ImageDescEditTab::slotRecentTags()
             TAlbum* album = albumMan->findTAlbum(*it);
             if (album)
             {
-                QPixmap pix = SyncJob::getTagThumbnail(album->icon(),
-                                                       KIcon::SizeSmall);
-                QString text = album->title() + " (" +
-                               ((TAlbum*)album->parent())->prettyURL() +
-                               ")";
-                menu.insertItem(pix, text, album->id());
+                QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ")";
+                menu->insertItem(pix, text, album->id());
             }
         }
     }
+}
 
-    int id = menu.exec(QCursor::pos());
-
+void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
+    
+{
+    AlbumManager* albumMan = AlbumManager::instance();
+    
     if (id > 0)
     {
         TAlbum* album = albumMan->findTAlbum(id);
         if (album)
         {
-            TAlbumCheckListItem* viewItem =
-                (TAlbumCheckListItem*)album->extraData(this);
+            TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)album->extraData(this);
             if (viewItem)
             {
                 viewItem->setOn(true);
@@ -929,8 +940,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
             }
         }
 
-        TAlbumCheckListItem* viewItem
-            = (TAlbumCheckListItem*)(tag->extraData(this));
+        TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(tag->extraData(this));
 
         if (match)
         {
@@ -952,16 +962,14 @@ void ImageDescEditTab::slotTagsSearchChanged()
     {
         d->tagsSearchEdit->unsetPalette();
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
-        TAlbumCheckListItem* rootItem =
-            (TAlbumCheckListItem*)(root->extraData(this));
+        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, root->title());
     }
     else
     {
         TAlbum* root = AlbumManager::instance()->findTAlbum(0);
-        TAlbumCheckListItem* rootItem =
-            (TAlbumCheckListItem*)(root->extraData(this));
+        TAlbumCheckListItem* rootItem = (TAlbumCheckListItem*)(root->extraData(this));
         if (rootItem)
             rootItem->setText(0, i18n("Found Tags"));
 
@@ -976,7 +984,7 @@ void ImageDescEditTab::slotTagsSearchChanged()
 // ------------------------------------------------------------------------
 
 TAlbumListView::TAlbumListView(QWidget* parent)
-    : QListView(parent)
+              : QListView(parent)
 {
 }
 
