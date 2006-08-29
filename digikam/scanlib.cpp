@@ -172,7 +172,7 @@ void ScanLib::findMissingItems()
     m_progressBar->setAllowCancel( false );
     m_progressBar->showCancelButton (false );
     m_progressBar->progressBar()->setProgress( 0 );
-    m_progressBar->setLabel(i18n("Scanning items..."));
+    m_progressBar->setLabel(i18n("Scanning items, please wait..."));
     m_progressBar->progressBar()->
             setTotalSteps( countItemsInFolder( albumPath ) );
     m_progressBar->show();
