@@ -160,6 +160,7 @@ void IconGroupItem::takeItem(IconItem* item)
     if (!item)
         return;
 
+    // take item triggers update
     d->view->takeItem(item);
     d->count--;
 
@@ -189,11 +190,6 @@ void IconGroupItem::takeItem(IconItem* item)
             if ( i->m_next )
                 i->m_next->m_prev = i->m_prev;
         }
-    }
-
-    if (!d->clearing)
-    {
-        d->view->triggerUpdate();
     }
 }
 

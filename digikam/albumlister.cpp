@@ -44,6 +44,8 @@ extern "C"
 
 // KDE includes.
 
+#include <kapplication.h>
+#include <kcursor.h>
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
@@ -282,6 +284,7 @@ void AlbumLister::slotFilterItems()
     }
 
     QPtrList<ImageInfo> newFilteredItemsList;
+    QPtrList<ImageInfo> deleteFilteredItemsList;
 
     ImageInfo* item;
     for (ImageInfoListIterator it(d->itemList);
@@ -295,12 +298,27 @@ void AlbumLister::slotFilterItems()
         else
         {
             if (item->getViewItem())
-                emit signalDeleteFilteredItem(item);
+                deleteFilteredItemsList.append(item);
         }
     }
 
+    // This takes linear time - and deleting seems to take longer. Set wait cursor for large numbers.
+    bool setCursor = (3*deleteFilteredItemsList.count() + newFilteredItemsList.count()) > 1500;
+    if (setCursor)
+        kapp->setOverrideCursor(KCursor::waitCursor());
+
+    if (!deleteFilteredItemsList.isEmpty())
+    {
+        for (ImageInfo *info=deleteFilteredItemsList.first(); info; info = deleteFilteredItemsList.next())
+            emit signalDeleteFilteredItem(info);
+    }
     if (!newFilteredItemsList.isEmpty())
+    {
         emit signalNewFilteredItems(newFilteredItemsList);
+    }
+
+    if (setCursor)
+        kapp->restoreOverrideCursor();
 }
 
 void AlbumLister::slotResult(KIO::Job* job)

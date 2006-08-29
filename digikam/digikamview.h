@@ -133,6 +133,7 @@ private slots:
     void slotAlbumHighlight();
 
     void slotImageSelected();
+    void slotDispatchImageSelected();
     void slotImageCopyResult(KIO::Job* job);
 
     void slotLeftSidebarChangedTab(QWidget* w);

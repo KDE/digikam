@@ -317,7 +317,7 @@ void IconView::clearSelection()
 
 void IconView::selectAll()
 {
-    bool wasBlocked = signalsBlocked();;
+    bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
         blockSignals(true);
@@ -338,7 +338,7 @@ void IconView::selectAll()
 
 void IconView::invertSelection()
 {
-    bool wasBlocked = signalsBlocked();;
+    bool wasBlocked = signalsBlocked();
 
     if (!wasBlocked)
         blockSignals(true);
@@ -497,6 +497,7 @@ void IconView::takeItem(IconItem* item)
         d->currItem = item->nextItem();
         if (!d->currItem)
             d->currItem = item->prevItem();
+        // defer calling d->currItem->setSelected (and emitting the signals) to slotUpdate
     }
 
     d->anchorItem = d->currItem;
@@ -601,6 +602,11 @@ void IconView::slotUpdate()
     {
         d->currItem->setSelected(true, true);
     }
+    else
+    {
+        // no selection
+        emit signalSelectionChanged();
+    }
 
     // set first visible item if they where stored before update was triggered
     if (d->firstVisibleItem)
@@ -619,9 +625,6 @@ void IconView::slotUpdate()
 
 void IconView::rearrangeItems(bool update)
 {
-    if (!d->firstGroup || !d->lastGroup)
-        return;
-
     int  y   = 0;
     int  itemW = itemRect().width();
     int  itemH = itemRect().height();

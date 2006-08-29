@@ -31,6 +31,7 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qsplitter.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -91,6 +92,8 @@ public:
         searchFolderView = 0;
         tagFilterView    = 0;
         albumPreviews    = 0;
+        selectionTimer   = 0;
+        dispatchSelectedItem = 0;
     }
 
     int                       initialAlbumID;
@@ -112,6 +115,9 @@ public:
     TagFolderView            *tagFolderView;
     SearchFolderView         *searchFolderView;
     TagFilterView            *tagFilterView;
+
+    QTimer                   *selectionTimer;
+    AlbumIconItem            *dispatchSelectedItem;
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -150,6 +156,8 @@ DigikamView::DigikamView(QWidget *parent)
     // To the right.
     d->tagFilterView = new TagFilterView(this);
     d->rightSideBar->appendTab(d->tagFilterView, SmallIcon("tag"), i18n("Tag Filters"));
+
+    d->selectionTimer = new QTimer(this);
 
     setupConnections();
 
@@ -218,8 +226,8 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotAlbumHighlight()));
 
-    connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
-            this, SIGNAL(signal_noCurrentItem()));
+    //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+      //      this, SIGNAL(signal_noCurrentItem()));
 
     connect(d->folderView, SIGNAL(signalAlbumModified()),
             d->iconView, SLOT(slotAlbumModified()));
@@ -257,6 +265,11 @@ void DigikamView::setupConnections()
     
     connect(d->albumPreviews, SIGNAL(editImageSignal()),
             this, SLOT(slotEditImage()));
+
+    // -- Selection timer ---------------
+
+    connect(d->selectionTimer, SIGNAL(timeout()),
+            this, SLOT(slotDispatchImageSelected()));
 }
 
 void DigikamView::loadViewState()
@@ -585,28 +598,27 @@ void DigikamView::slot_albumRefresh()
 
 void DigikamView::slotImageSelected()
 {
-    bool selected = false;
+    d->dispatchSelectedItem = d->iconView->firstSelectedItem();
+    // delay to slotDispatchImageSelected
+    d->selectionTimer->start(75, true);
+}
 
-    for (IconItem* item=d->iconView->firstItem(); item; item=item->nextItem())
+void DigikamView::slotDispatchImageSelected()
+{
+    if (d->dispatchSelectedItem)
     {
-        if (item->isSelected())
-        {
-            selected = true;
-            AlbumIconItem *firstSelectedItem = d->iconView->firstSelectedItem();
-            d->rightSideBar->itemChanged(firstSelectedItem->imageInfo()->kurl(),
-                                         d->iconView, firstSelectedItem, 0, 0);
-            d->albumPreviews->setPreviewItem(firstSelectedItem->imageInfo()->kurl().path());
-            break;
-        }
+        d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo()->kurl(),
+                                     d->iconView, d->dispatchSelectedItem, 0, 0);
+        d->albumPreviews->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl().path());
+        emit signal_imageSelected(true);
+        d->dispatchSelectedItem = 0;
     }
-
-    if (!selected)
+    else
     {
         d->albumPreviews->setPreviewItem();
+        emit signal_imageSelected(false);
         emit signal_noCurrentItem();
     }
-
-    emit signal_imageSelected(selected);
 }
 
 void DigikamView::slotAlbumsCleared()
