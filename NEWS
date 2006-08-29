@@ -241,6 +241,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 146 ==> 130547 : automatically download RAW-images into separate folder below the JPG-images.
 147 ==> 128296 : Icon selector for tags wont let user select 'other icons'.
 148 ==> 115161 : image comments/tags: 'Recent tags' looks like a button but funktons like a menu.
-149 ==> 
+149 ==> 121423 : Rename file loses Album thumbnail.
+150 ==> 
 
 ----------------------------------------------------------------------------------------------------
