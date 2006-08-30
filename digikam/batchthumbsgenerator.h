@@ -21,9 +21,9 @@
 #ifndef BATCHTHUMBSGENERATOR_H
 #define BATCHTHUMBSGENERATOR_H
 
-// KDE includes.
+// Local includes.
 
-#include <kprogress.h>
+#include "dprogressdlg.h"
 
 class QWidget;
 
@@ -34,7 +34,7 @@ namespace Digikam
 
 class BatchThumbsGeneratorPriv;
 
-class BatchThumbsGenerator : public KProgressDialog
+class BatchThumbsGenerator : public DProgressDlg
 {
     Q_OBJECT
 

@@ -3,7 +3,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libdialog.la
 
 libdialog_la_SOURCES = ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp \
-	                   iccprofileinfodlg.cpp deletedialogbase.ui deletedialog.cpp
+	                   iccprofileinfodlg.cpp deletedialogbase.ui deletedialog.cpp \
+			   dprogressdlg.cpp
 
 libdialog_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
@@ -17,6 +18,6 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
 	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
 	       $(all_includes)
 
-digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h iccprofileinfodlg.h 
+digikaminclude_HEADERS = ctrlpaneldlg.h imagedlgbase.h imageguidedlg.h iccprofileinfodlg.h dprogressdlg.h 
 digikamincludedir = $(includedir)/digikam
 

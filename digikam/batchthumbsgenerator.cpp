@@ -71,14 +71,15 @@ public:
 };
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
-                    : KProgressDialog(parent)
+                    : DProgressDlg(parent)
 {
     d = new BatchThumbsGeneratorPriv;
-    progressBar()->setValue(0);
-    setLabel(i18n("Updating thumbnails database in progress. Please wait..."));
+    setValue(0);
+    setCaption(i18n("Thumbnails processing"));
+    setLabel(i18n("<b>Updating thumbnails database in progress. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    setAutoClose(false);
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs128()));
+    resize(500, 300);
 }
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
@@ -88,7 +89,7 @@ BatchThumbsGenerator::~BatchThumbsGenerator()
 
 void BatchThumbsGenerator::slotRebuildThumbs128()
 {
-    kdDebug() << "Rebuild Thumbnails of size 128x128: " << endl;   
+    addedAction("Processing thumbnails size 128x128:");
     rebuildAllThumbs(128);
 
     connect(this, SIGNAL(signalRebuildThumbsDone()),
@@ -97,7 +98,7 @@ void BatchThumbsGenerator::slotRebuildThumbs128()
 
 void BatchThumbsGenerator::slotRebuildThumbs256()
 {
-    kdDebug() << "Rebuild Thumbnails of size 256x256: " << endl;   
+    addedAction("Processing thumbnails size 256x256:");
 
     rebuildAllThumbs(256);
 
@@ -112,7 +113,8 @@ void BatchThumbsGenerator::slotRebuildAllThumbComplete()
 {
     QTime t;
     t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("Thumbnails database updated (duration: %1).").arg(t.toString()));
+    setLabel(i18n("<b>Thumbnails database updated (duration: %1)</b>").arg(t.toString()));
+    setButtonText(i18n("&Close"));
 }
 
 void BatchThumbsGenerator::rebuildAllThumbs(int size)
@@ -149,7 +151,7 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
         allPicturesPath += pathSorted;
     }
 
-    progressBar()->setTotalSteps(allPicturesPath.count()*2);
+    setTotalSteps(allPicturesPath.count()*2);
 
     // Remove all current album item thumbs from disk cache.
 
@@ -189,8 +191,8 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
 
 void BatchThumbsGenerator::slotRebuildThumbDone(const KURL& url)
 {
-    kdDebug() << "Thumb done: " << url << endl;    
-    progressBar()->advance(1);
+    addedAction(url.path());
+    advance(1);
 }
 
 void BatchThumbsGenerator::slotCancel()
