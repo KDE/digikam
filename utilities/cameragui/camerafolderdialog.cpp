@@ -53,7 +53,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
     m_rootPath = rootPath;
 
-    QWidget *page     = new QWidget(this);
+    QFrame *page      = makeMainWidget();
     QGridLayout* grid = new QGridLayout(page, 2, 1, 0, spacingHint());
     
     m_folderView    = new CameraFolderView(page);
@@ -90,8 +90,6 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
             kdDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
         }
     }
-
-    setMainWidget(page);
 
     connect(m_folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
