@@ -102,7 +102,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_previewWidget = new Digikam::ImageWidget("colormanagement Tool Dialog", plainPage(),
                                                i18n("<p>Here you can see the image preview after "
-                                                    "convert it with a color profile</p>"));
+                                                    "applying a color profile</p>"));
     setPreviewAreaWidget(m_previewWidget); 
 
     // -------------------------------------------------------------------
@@ -119,17 +119,17 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_channelCB->insertItem(i18n("Blue"));
     QWhatsThis::add( m_channelCB, i18n("<p>Select here the histogram channel to display:<p>"
                                        "<b>Luminosity</b>: display the image's luminosity values.<p>"
-                                       "<b>Red</b>: display the red image-channel values.<p>"
-                                       "<b>Green</b>: display the green image-channel values.<p>"
-                                       "<b>Blue</b>: display the blue image-channel values.<p>"));
+                                       "<b>Red</b>: display the red channel values.<p>"
+                                       "<b>Green</b>: display the green channel values.<p>"
+                                       "<b>Blue</b>: display the blue channel values.<p>"));
 
     m_scaleBG = new QHButtonGroup(gboxSettings);
     m_scaleBG->setExclusive(true);
     m_scaleBG->setFrameShape(QFrame::NoFrame);
     m_scaleBG->setInsideMargin( 0 );
     QWhatsThis::add( m_scaleBG, i18n("<p>Select here the histogram scale.<p>"
-                                     "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                     "Logarithmic scale can be used when the maximal counts are big; "
+                                     "If the image's maximal values are small, you can use the linear scale.<p>"
+                                     "Logarithmic scale can be used when the maximal values are big; "
                                      "if it is used, all values (small and large) will be visible on the "
                                      "graph."));
 
@@ -161,9 +161,8 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
-                                             "drawing of the "
-                                             "selected image channel. This one is re-computed at any "
-                                             "settings changes."));
+                                             "of the selected image channel. " 
+					     "This one is updated after setting changes."));
 
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
                                                     gboxSettings );
@@ -185,37 +184,37 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, 
                                  SmallIconSet("misc"), i18n("General Settings"));
-    QWhatsThis::add(generalOptions, i18n("<p>You can set here general parameters.</p>"));
+    QWhatsThis::add(generalOptions, i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions, 5, 1, 
                                   KDialog::marginHint(), KDialog::spacingHint());
 
     m_doSoftProofBox = new QCheckBox(generalOptions);
     m_doSoftProofBox->setText(i18n("Soft-proofing"));
-    QWhatsThis::add(m_doSoftProofBox, i18n("<p>The obtained transform emulates the device described "
+    QWhatsThis::add(m_doSoftProofBox, i18n("<p>Rendering emulation of the device described "
                                            "by the \"Proofing\" profile. Useful to preview final "
                                            "result without rendering to physical medium.</p>"));
 
     m_checkGamutBox = new QCheckBox(generalOptions);
     m_checkGamutBox->setText(i18n("Check gamut"));
     QWhatsThis::add(m_checkGamutBox, i18n("<p>You can use this option if you want to show "
-                                          "the colors that are out of the printer gamut<p>"));
+                                          "the colors that are outside the printer's gamut<p>"));
 
     m_embeddProfileBox = new QCheckBox(generalOptions);
     m_embeddProfileBox->setChecked(true);
     m_embeddProfileBox->setText(i18n("Embed profile"));
-    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option if you want to embed "
-                                             "into the image the selected work-space color profile.</p>"));
+    QWhatsThis::add(m_embeddProfileBox, i18n("<p>You can use this option to embed "
+                                             "the selected work-space color profile into the image.</p>"));
 
     m_BPCBox = new QCheckBox(generalOptions);
     m_BPCBox->setText(i18n("Use BPC"));
     QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
-                                   "with relative colorimetric intent. Perceptual intent should make no "
-                                   "difference, although it affects some profiles.</p>"
-                                   "<p>The mechanics are simple. BPC does scale full image across gray "
-                                   "axis in order to accommodate the darkest tone origin media can "
-                                   "render to darkest tone destination media can render. As a such, "
-                                   "BPC is primarily targeting CMYK.</p>"));
+                                   "with Relative Colorimetric Intent. Perceptual intent should make no "
+                                   "difference, since BPC is always on, and in Absolute Colorimetric "
+				   "Intent it is always turned off.</p>"
+                                   "<p>BPC does compensate a lack of ICC profiles in the dark tone rendering."
+                                   "With BPC the dark tones are optimally mapped (no clipping) from original media "
+                                   "to the destination media can render, e.g. the combination paper/ink.</p>"));
 
     QLabel *intent = new QLabel(i18n("Rendering Intent:"), generalOptions);
     m_renderingIntentsCB = new QComboBox(false, generalOptions);
@@ -224,7 +223,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_renderingIntentsCB->insertItem("Relative Colorimetric");
     m_renderingIntentsCB->insertItem("Saturation");
     QWhatsThis::add( m_renderingIntentsCB, i18n("<ul><li>Perceptual intent causes the full gamut "
-                "of the image to be compressed or expanded to fill the gamut of the destination device, "
+                "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br>"
                 "In other words, if certain colors in an image fall outside of the range of colors that "
                 "the output device can render, the picture intent will cause all the colors in the image "
@@ -302,7 +301,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
-    QGroupBox *pictureInfo = new QGroupBox(2, Qt::Horizontal, i18n("Picture Informations"), inProfiles);
+    QGroupBox *pictureInfo = new QGroupBox(2, Qt::Horizontal, i18n("Picture Information"), inProfiles);
     new QLabel(i18n("Make:"), pictureInfo);
     KSqueezedTextLabel *make  = new KSqueezedTextLabel(0, pictureInfo);
     new QLabel(i18n("Model:"), pictureInfo);
@@ -321,7 +320,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, 
                                  SmallIconSet("tablet"), i18n("Work-space Profile"));
-    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Workspace Color "
+    QWhatsThis::add(spaceProfiles, i18n("<p>Set here all parameters relevant of Color Work-space "
                     "Profiles.</p>"));
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles, 3, 2, 
@@ -356,7 +355,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, 
                                  SmallIconSet("printer1"), i18n("Proofing Profile"));
-    QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant of Proofing Color "
+    QWhatsThis::add(proofProfiles, i18n("<p>Set here all parameters relevant to Proofing Color "
                     "Profiles.</p>"));
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles, 3, 2, 
@@ -796,12 +795,12 @@ void ImageEffect_ICCProof::slotEffect()
     if ( proofCondition || spaceCondition )
     {
         kapp->restoreOverrideCursor();
-        QString error = i18n("<p>Your settings are not correct</p>"
+        QString error = i18n("<p>Your settings are not insufficient</p>"
                         "<p>To apply a color transform, you need at least two ICC profiles:</p>"
                         "<ul><li>An \"Input\" profile.</li>"
                         "<li>A \"Workspace\" profile.</li></ul>"
                         "<p>If you want to do a \"soft-proof\" transform, in adition to these profiles "
-                        "you need a \"Proof\" one.</p>");
+                        "you need a \"Proof\" profile.</p>");
         KMessageBox::information(this, error);
         enableButtonOK(false);
     }
@@ -1037,7 +1036,7 @@ void ImageEffect_ICCProof::getICCInfo(const QString& profile)
 {
     if (profile.isEmpty())
     {
-        KMessageBox::error(this, i18n("Sorry, there is not any selected profile"), i18n("Profile Error"));
+        KMessageBox::error(this, i18n("Sorry, there is no selected profile"), i18n("Profile Error"));
         return;
     }
     
@@ -1062,7 +1061,7 @@ void ImageEffect_ICCProof::slotCMDisabledWarning()
     if (!m_cmEnabled)
     {
         QString message = i18n("<p>You do not have enabled Color Management in digiKam preferences.</p>");
-        message.append( i18n("<p>\"Use default profile\" options will be disabled now.</p>"));
+        message.append( i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
         KMessageBox::information(this, message);
         slotToggledWidgets(false);
     }
