@@ -79,7 +79,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
     setLabel(i18n("<b>Updating thumbnails database in progress. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs128()));
-    resize(500, 300);
+    resize(600, 300);
 }
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
