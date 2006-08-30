@@ -9,7 +9,7 @@
 
 name       = "digikamimageplugins"
 egmodule   = "graphics"
-version    = "doc-0.9.0-beta1"
+version    = "doc-0.9.0-beta2"
 docs       = "yes"
 
 svnbase    = "svn://anonsvn.kde.org/home/kde"
