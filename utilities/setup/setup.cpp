@@ -221,7 +221,7 @@ void Setup::slotOkClicked()
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
                            "Do you want to rebuild all albums items thumbnails now?\n\n"
-                           "Note: thumbnails processing can take a while! You can start\n"
+                           "Note: thumbnails processing can take a while! You can start "
                            "this job later using \"Tools\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
         if (result != KMessageBox::Yes)
