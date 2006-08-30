@@ -62,30 +62,31 @@
 
 // Local includes.
 
-#include "kipiinterface.h"
 #include "albummanager.h"
-#include "albumlister.h"
 #include "album.h"
-#include "themeengine.h"
+#include "albumlister.h"
+#include "albumsettings.h"
+#include "albumthumbnailloader.h"
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameraui.h"
-#include "albumsettings.h"
 #include "setup.h"
 #include "setupplugins.h"
 #include "setupeditor.h"
 #include "setupimgplugins.h"
-#include "digikamview.h"
 #include "imagepluginloader.h"
 #include "imagewindow.h"
 #include "splashscreen.h"
 #include "thumbnailsize.h"
+#include "themeengine.h"
+#include "kipiinterface.h"
 #include "scanlib.h"
 #include "loadingcacheinterface.h"
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
+#include "batchthumbsgenerator.h"
+#include "digikamview.h"
 #include "digikamapp.h"
-#include "albumthumbnailloader.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -93,6 +94,8 @@ using KIO::UDSEntry;
 
 namespace Digikam
 {
+
+DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
@@ -752,6 +755,10 @@ void DigikamApp::setupActions()
     new KAction(i18n("Scan for New Images"), "reload_page", 0,
                 this, SLOT(slotDatabaseRescan()), actionCollection(), 
                 "database_rescan");
+
+    new KAction(i18n("Rebuild all Thumbnails..."), "reload_page", 0,
+                this, SLOT(slotRebuildAllThumbs()), actionCollection(),
+                "thumbs_rebuild");
 
     // -----------------------------------------------------------
 
@@ -1582,7 +1589,21 @@ void DigikamApp::slotDatabaseRescan()
     sLib.startScan();
 }
 
-DigikamApp* DigikamApp::m_instance = 0;
+void DigikamApp::slotRebuildAllThumbs()
+{
+    QString msg = i18n("Rebuild all album item thumbnails can take a while.\n"
+                       "Do you want to continue?");
+    int result = KMessageBox::warningContinueCancel(this, msg);
+    if (result != KMessageBox::Continue)
+        return;
+
+    BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
+    
+    connect(thumbsGenerator, SIGNAL(signalRebuildAllThumbsDone()),
+            mView, SLOT(slot_albumRefresh()));
+
+    thumbsGenerator->exec();
+}
 
 }  // namespace Digikam
 

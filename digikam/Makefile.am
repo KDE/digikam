@@ -49,7 +49,7 @@ libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
 			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
 			upgradedb_sqlite2tosqlite3.cpp \
 			ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
-			albumthumbnailloader.cpp \
+			albumthumbnailloader.cpp batchthumbsgenerator.cpp \
 			dcopiface.cpp dcopiface.skel
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
