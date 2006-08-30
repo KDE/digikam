@@ -79,7 +79,8 @@ Image Plugins : "Add Border" tool now respect aspect ratio of original image to 
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
 
 General       : New option to force the refresh of Album contents.
-General       : Usabilty improvements of albums/pictures deletion.
+General       : Usability improvements of albums/pictures deletion.
+General       : New option to process a batch creation of all albums items thumbnails.
 
 ...
 
@@ -242,6 +243,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 147 ==> 128296 : Icon selector for tags wont let user select 'other icons'.
 148 ==> 115161 : image comments/tags: 'Recent tags' looks like a button but funktons like a menu.
 149 ==> 121423 : Rename file loses Album thumbnail.
-150 ==> 
+150 ==> 120308 : batch creation of thumbnails.
+151 ==> 
 
 ----------------------------------------------------------------------------------------------------
