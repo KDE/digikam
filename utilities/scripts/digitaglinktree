@@ -463,7 +463,7 @@ sub runClone{
 #
 sub usage{
     print "$0 -r <photoroot> \n",
-          "                  -l <taglinkdir> | -A archivedir \n",
+          "                  -l <taglinkdir> | -A <archivedir> \n",
 	  "                  -d <digikamdatabasefile> \n",
 	  "                  [-H|-f|-a|-v|-C] \n",
           "  -r <rootdir> path to digikams root directory containing all photos\n",
