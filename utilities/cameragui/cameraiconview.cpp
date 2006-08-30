@@ -277,7 +277,7 @@ void CameraIconView::slotDownloadNameChanged()
             QString downloadName;
             CameraIconViewItem* viewItem = static_cast<CameraIconViewItem*>(item);
 
-            if (viewItem->isSelected())
+            if (item->isSelected())
             {
                 if (!useDefault)
                     downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
@@ -285,7 +285,6 @@ void CameraIconView::slotDownloadNameChanged()
                     downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
                 startIndex++;
-
             }
     
             if (convertLossLessJpeg && !downloadName.isEmpty())
