@@ -173,6 +173,8 @@ void TagFolderView::slotAlbumAdded(Album *album)
     {
         item = new TagFolderViewItem(this, tag);
         tag->setExtraData(this, item);
+        // Toplevel tags are all children of root, and should always be visible - set root to open
+        item->setOpen(true);
     }
     else
     {
