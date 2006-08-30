@@ -1600,9 +1600,14 @@ void DigikamApp::slotRebuildAllThumbs()
     BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
     
     connect(thumbsGenerator, SIGNAL(signalRebuildAllThumbsDone()),
-            mView, SLOT(slot_albumRefresh()));
+            this, SLOT(slotRebuildAllThumbsDone()));
 
     thumbsGenerator->exec();
+}
+
+void DigikamApp::slotRebuildAllThumbsDone()
+{
+    mView->applySettings(mAlbumSettings);
 }
 
 }  // namespace Digikam

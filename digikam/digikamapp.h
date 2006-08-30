@@ -156,7 +156,8 @@ private slots:
     void slotToggleFullScreen();
     void slotDatabaseRescan();
     void slotRebuildAllThumbs();
-
+    void slotRebuildAllThumbsDone();
+    
     void slotChangeTheme(const QString& theme);
 
 private:
