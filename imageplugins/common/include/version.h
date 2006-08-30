@@ -1,10 +1,9 @@
 /* ============================================================
- * File   : version.h
  * Authors: Gilles Caulier <caulier dot gilles at free.fr>
  * Date   : 2004-09-09
  * Description : DigikamImagePlugins release ID header.
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +22,7 @@
 #ifndef DIGIKAMIMAGEPLUGINS_VERSION_H
 #define DIGIKAMIMAGEPLUGINS_VERSION_H
 
-static const char digikamimageplugins_version[] = "0.9.0-beta1";
+static const char digikamimageplugins_version[] = "0.9.0-beta2";
 
 #endif // DIGIKAMIMAGEPLUGINS_VERSION_H
 
