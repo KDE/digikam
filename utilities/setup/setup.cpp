@@ -30,11 +30,13 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
 
 // Local includes.
 
+#include "batchthumbsgenerator.h"
 #include "setupgeneral.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
@@ -214,6 +216,20 @@ void Setup::slotOkClicked()
     d->slideshowPage->applySettings();    
     d->iccPage->applySettings();
     d->miscPage->applySettings();
+    
+    if (d->metadataPage->exifAutoRotateAsChanged())
+    {
+        QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
+                           "Do you want to rebuild all albums items thumbnails now?\n\n"
+                           "Note: thumbnails processing can take a while!");
+        int result = KMessageBox::warningYesNo(this, msg);
+        if (result != KMessageBox::Yes)
+            return;
+
+        BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
+        thumbsGenerator->exec();
+    }
+
     close();
 }
 

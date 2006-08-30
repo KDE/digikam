@@ -43,13 +43,16 @@ public:
 
     void applySettings();
 
+    bool exifAutoRotateAsChanged();
+
 private:
 
     void readSettings();
 
 private slots:
 
-    void processExiv2URL(const QString& url);
+    void processExiv2URL(const QString&);
+    void slotExifAutoRotateToggled(bool);
 
 private:
 

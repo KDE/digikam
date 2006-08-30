@@ -58,6 +58,7 @@ public:
 
     SetupMetadataPriv()
     {
+        ExifAutoRotateAsChanged   = false;
         saveCommentsBox           = 0;
         ExifRotateBox             = 0;
         ExifSetOrientationBox     = 0;
@@ -68,6 +69,9 @@ public:
         saveCreditsIptcBox        = 0;
     }
 
+    bool       ExifAutoRotateAsChanged;
+    bool       ExifAutoRotateOrg;
+    
     QCheckBox *saveCommentsBox;
     QCheckBox *ExifRotateBox;
     QCheckBox *ExifSetOrientationBox;
@@ -163,16 +167,18 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     
     mainLayout->addWidget(hbox);
     mainLayout->addStretch();
+    mainLayout->addWidget(this);
 
+    readSettings();
+    adjustSize();
+  
     // --------------------------------------------------------
 
     connect(exiv2LogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processExiv2URL(const QString&)));
 
-    readSettings();
-    adjustSize();
-  
-    mainLayout->addWidget(this);
+    connect(d->ExifRotateBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotExifAutoRotateToggled(bool)));
 }
 
 SetupMetadata::~SetupMetadata()
@@ -207,7 +213,8 @@ void SetupMetadata::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    d->ExifRotateBox->setChecked(settings->getExifRotate());
+    d->ExifAutoRotateOrg = settings->getExifRotate();
+    d->ExifRotateBox->setChecked(d->ExifAutoRotateOrg);
     d->ExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
     d->saveCommentsBox->setChecked(settings->getSaveComments());
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
@@ -215,6 +222,19 @@ void SetupMetadata::readSettings()
     d->saveTagsIptcBox->setChecked(settings->getSaveIptcTags());
     d->savePhotographerIdIptcBox->setChecked(settings->getSaveIptcPhotographerId());
     d->saveCreditsIptcBox->setChecked(settings->getSaveIptcCredits());
+}
+
+bool SetupMetadata::exifAutoRotateAsChanged()
+{
+    return d->ExifAutoRotateAsChanged;
+}
+
+void SetupMetadata::slotExifAutoRotateToggled(bool b)
+{
+    if ( b != d->ExifAutoRotateOrg)
+        d->ExifAutoRotateAsChanged = true;
+    else
+        d->ExifAutoRotateAsChanged = false;
 }
 
 }  // namespace Digikam
