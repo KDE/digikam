@@ -926,11 +926,11 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
         else if (e->state() & Qt::ShiftButton)
         {
             blockSignals(true);
-            
+
             if (d->currItem)
             {
                 clearSelection();
-                
+
                 // select all items from/upto the current item
                 bool bwdSelect = false;
 
@@ -969,6 +969,8 @@ void IconView::contentsMousePressEvent(QMouseEvent* e)
             }
 
             blockSignals(false);
+
+            emit signalSelectionChanged();
         }
         else
         {
