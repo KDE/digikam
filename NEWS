@@ -82,6 +82,8 @@ General       : New option to force the refresh of Album contents.
 General       : Usability improvements of albums/pictures deletion.
 General       : New option to process a batch creation of all albums items thumbnails.
 
+Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option has been changed.
+
 ...
 
 ----------------------------------------------------------------------------------------------------
