@@ -1591,7 +1591,7 @@ void DigikamApp::slotDatabaseRescan()
 
 void DigikamApp::slotRebuildAllThumbs()
 {
-    QString msg = i18n("Rebuild all album item thumbnails can take a while.\n"
+    QString msg = i18n("Rebuild all albums items thumbnails can take a while.\n"
                        "Do you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
