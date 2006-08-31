@@ -97,6 +97,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->addColumn("Status");  // no i18n here: hiden column
     d->actionsList->setSorting(-1);
     d->actionsList->setItemMargin(1);
+    d->actionsList->setSelectionModeExt(KListView::NoSelection);
     d->actionsList->header()->hide();
     d->actionsList->setResizeMode(QListView::LastColumn);
 
@@ -206,6 +207,14 @@ bool DProgressDlg::wasCancelled() const
 KProgress *DProgressDlg::progressBar() const
 {
     return d->progress;
+}
+
+void DProgressDlg::setActionListVSBarVisible(bool visible)
+{
+    if (!visible)
+        d->actionsList->setVScrollBarMode(QScrollView::AlwaysOff);
+    else
+        d->actionsList->setVScrollBarMode(QScrollView::Auto);
 }
 
 }  // NameSpace Digikam
