@@ -143,7 +143,7 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
     d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"), 
                                                           i18n("The ICC profile device class"));
     d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"), 
-                                                          i18n("The ICC profile rendering indent"));
+                                                          i18n("The ICC profile rendering intent"));
     d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"), 
                                                           i18n("The ICC version used to record the profile"));
     d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"), 
