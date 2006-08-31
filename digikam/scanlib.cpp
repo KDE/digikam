@@ -36,6 +36,7 @@ extern "C"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -44,9 +45,11 @@ extern "C"
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes.
 
+#include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -59,18 +62,18 @@ namespace Digikam
 
 ScanLib::ScanLib()
 {
-    m_progressBar = new KProgressDialog(0);
-    m_progressBar->setInitialSize(QSize(300,100), true);
+    m_progressBar = new DProgressDlg(0);
+    m_progressBar->setInitialSize(QSize(500, 100), true);
+    m_progressBar->setActionListVSBarVisible(false);
     QWhatsThis::add( m_progressBar, i18n("This shows the progress of the "
         "scan. During the scan, all files on disk are registered in a "
         "database. This is required for sorting on exif-date and speeds up "
         "the overall performance of digiKam.") );
 
     // these two lines prevent the dialog to be shown in
-    // findFoldersWhichDoNotExist();
+    // findFoldersWhichDoNotExist() method.
     m_progressBar->progressBar()->setTotalSteps(1);
-    m_progressBar->progressBar()->setProgress(1);
-    
+    m_progressBar->progressBar()->setProgress(1);   
 }
 
 ScanLib::~ScanLib()
@@ -81,21 +84,29 @@ ScanLib::~ScanLib()
 void ScanLib::startScan()
 {
     struct timeval tv1, tv2;
+    QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
+                  "run", KIcon::NoGroup, 32);
 
+    QString message = i18n("Finding non-existing Albums");
+    m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findFoldersWhichDoNotExist();
     gettimeofday(&tv2, 0);
-    timing("Finding non-existing Albums",tv1, tv2);
+    timing(message, tv1, tv2);
 
+    message = i18n("Finding items not in the database or disk");
+    m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     findMissingItems();
     gettimeofday(&tv2, 0);
-    timing("Finding items not in the database or disk",tv1, tv2);
+    timing(message, tv1, tv2);
 
+    message = i18n("Updating items without date");
+    m_progressBar->addedAction(pix, message);
     gettimeofday(&tv1, 0);
     updateItemsWithoutDate();
     gettimeofday(&tv2, 0);
-    timing("Updating items without date",tv1, tv2);
+    timing(message, tv1, tv2);
 
     deleteStaleEntries();
 
@@ -181,15 +192,20 @@ void ScanLib::findMissingItems()
 
     QDir dir(albumPath);
     QStringList fileList(dir.entryList(QDir::Dirs));
+    QPixmap pix = KApplication::kApplication()->iconLoader()->loadIcon(
+                  "folder_image", KIcon::NoGroup, 32);
 
     AlbumDB* db = AlbumManager::instance()->albumDB();
-    db->beginTransaction();    
+    db->beginTransaction(); 
+
     for (QStringList::iterator it = fileList.begin(); it != fileList.end(); ++it)
     {
         if ((*it) == "." || (*it) == "..")
             continue;
 
-        allFiles( albumPath + '/' + (*it));
+        QString path = albumPath + '/' + (*it);
+        allFiles(path);
+        m_progressBar->addedAction(pix, path);
     }
     db->commitTransaction();    
 

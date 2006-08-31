@@ -29,7 +29,6 @@
 // KDE includes.
 
 #include <kurl.h>
-#include <kprogress.h>
 
 // Local includes.
 
@@ -39,6 +38,8 @@
 
 namespace Digikam
 {
+
+class DProgressDlg;
 
 /** 
  * Class which is responsible for keeping the database in sync
@@ -146,7 +147,7 @@ private:
     /**
      * Member variable so we can update the progress bar everywhere
      */
-    KProgressDialog     *m_progressBar;
+    DProgressDlg     *m_progressBar;
 
     /**
      * Member to store stale filesystem
