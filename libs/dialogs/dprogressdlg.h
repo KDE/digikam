@@ -29,6 +29,8 @@
 
 #include "digikam_export.h"
 
+class KProgress;
+
 namespace Digikam
 {
 
@@ -40,21 +42,31 @@ Q_OBJECT
 
  public:
 
-   DProgressDlg(QWidget *parent=0, const QString &caption=QString::null);
-   ~DProgressDlg();
+    DProgressDlg(QWidget *parent=0, const QString &caption=QString::null);
+    ~DProgressDlg();
 
-   void setButtonText(const QString &text);
-   void addedAction(const QPixmap& pix, const QString &text);
-   void reset();
-   void setTotalSteps(int total);
-   void setValue(int value);
-   void advance(int value);
-   void setTitle(const QString &text);
-   void setMessage(const QString &text);
-   
+    void setButtonText(const QString &text);
+    void addedAction(const QPixmap& pix, const QString &text);
+    void reset();
+    void setTotalSteps(int total);
+    void setValue(int value);
+    void advance(int value);
+    void setLabel(const QString &text);
+    void setTitle(const QString &text);
+    void showCancelButton(bool show);
+    void setAllowCancel(bool allowCancel);
+    bool wasCancelled() const;
+    bool allowCancel() const;
+
+    KProgress *progressBar() const;
+ 
+ protected slots:
+
+    void slotCancel();
+
  private:
  
-   DProgressDlgPriv* d;
+    DProgressDlgPriv* d;
 };
 
 }  // NameSpace Digikam

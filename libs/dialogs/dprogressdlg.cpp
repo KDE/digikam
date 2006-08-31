@@ -55,12 +55,17 @@ public:
         actionsList = 0;
         logo        = 0;
         title       = 0;
-        message     = 0;
+        label       = 0;
+        allowCancel = true;
+        cancelled   = false;
     }
+    
+    bool       allowCancel;
+    bool       cancelled;
 
     QLabel    *logo;
     QLabel    *title;
-    QLabel    *message;
+    QLabel    *label;
     
     KListView *actionsList;
    
@@ -76,13 +81,13 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     QGridLayout* grid = new QGridLayout(page, 1, 1, 0, spacingHint());
     QVBoxLayout *vlay = new QVBoxLayout();
     d->actionsList    = new KListView(page);
+    d->label          = new QLabel(page);
     d->title          = new QLabel(page);
-    d->message        = new QLabel(page);
     d->logo           = new QLabel(page);
     d->progress       = new KProgress(page);
     vlay->addWidget(d->logo);
     vlay->addWidget(d->progress);
-    vlay->addWidget(d->message);
+    vlay->addWidget(d->title);
     vlay->addStretch();
 
     KIconLoader* iconLoader = KApplication::kApplication()->iconLoader();
@@ -96,7 +101,7 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
     d->actionsList->setResizeMode(QListView::LastColumn);
 
     grid->addMultiCellLayout(vlay, 0, 1, 0, 0);
-    grid->addMultiCellWidget(d->title, 0, 0, 1, 1);
+    grid->addMultiCellWidget(d->label, 0, 0, 1, 1);
     grid->addMultiCellWidget(d->actionsList, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
     grid->setColStretch(1, 10);
@@ -105,6 +110,16 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
 DProgressDlg::~DProgressDlg()
 {
     delete d;
+}
+
+void DProgressDlg::slotCancel()
+{
+    d->cancelled = true;
+
+    if (d->allowCancel)
+    {
+        KDialogBase::slotCancel();
+    }
 }
 
 void DProgressDlg::setButtonText(const QString &text)
@@ -157,14 +172,40 @@ void DProgressDlg::advance(int value)
     d->progress->advance(value);
 }
 
+void DProgressDlg::setLabel(const QString &text)
+{
+    d->label->setText(text);
+}
+
 void DProgressDlg::setTitle(const QString &text)
 {
     d->title->setText(text);
 }
 
-void DProgressDlg::setMessage(const QString &text)
+void DProgressDlg::showCancelButton(bool show)
 {
-    d->message->setText(text);
+    showButtonCancel(show);
+}
+
+void DProgressDlg::setAllowCancel(bool allowCancel)
+{
+    d->allowCancel = allowCancel;
+    showCancelButton(allowCancel);
+}
+
+bool DProgressDlg::allowCancel() const
+{
+    return d->allowCancel;
+}
+
+bool DProgressDlg::wasCancelled() const
+{
+    return d->cancelled;
+}
+
+KProgress *DProgressDlg::progressBar() const
+{
+    return d->progress;
 }
 
 }  // NameSpace Digikam
