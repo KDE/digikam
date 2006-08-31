@@ -22,12 +22,20 @@
  * 
  * ============================================================ */
 
+// C Ansi includes.
+
+extern "C"
+{
+#include <unistd.h>
+}
+
 // C++ includes.
 
 #include <cmath>
 
 // Qt includes. 
- 
+
+#include <qdir.h>
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qpainter.h>
@@ -38,6 +46,7 @@
 
 // KDE includes.
 
+#include <kmdcodec.h>
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -138,6 +147,26 @@ ThumbBarView::~ThumbBarView()
 void ThumbBarView::setExifRotate(bool exifRotate)
 {
     d->exifRotate = exifRotate;
+    QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
+
+    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    {
+        // Remove all current album item thumbs from disk cache.
+
+        QString uri = "file://" + QDir::cleanDirPath(item->url().path(-1));
+        KMD5 md5(QFile::encodeName(uri));
+        uri = md5.hexDigest();
+    
+        QString smallThumbPath = thumbCacheDir + "normal/" + uri + ".png";
+        QString bigThumbPath   = thumbCacheDir + "large/"  + uri + ".png";
+
+        ::unlink(QFile::encodeName(smallThumbPath));
+        ::unlink(QFile::encodeName(bigThumbPath));
+
+        invalidateThumb(item);
+    }
+    
+    triggerUpdate();
 }
 
 int ThumbBarView::countItems()
