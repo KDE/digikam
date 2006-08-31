@@ -4,7 +4,6 @@
 
 * L10N fixes:
 	o informations -> information
-	o icc -> ICC
 	o ?? Credit -> Credits (need native Speaker?  There's e.g. about.addCredit() method not about.addCredits()
 
 * right hand side sidebar (allee):

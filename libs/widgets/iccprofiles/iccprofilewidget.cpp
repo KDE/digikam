@@ -123,31 +123,31 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
 
     // Set the translated ICC tags titles/descriptions list 
     d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),         
-                                                          i18n("The icc profile product name"));
+                                                          i18n("The ICC profile product name"));
     d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
-                                                          i18n("The icc profile product description"));
+                                                          i18n("The ICC profile product description"));
     d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),  
-                                                          i18n("The additional icc profile informations"));
+                                                          i18n("The additional ICC profile informations"));
     d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"), 
-                                                          i18n("The uncooked informations about icc profile manufacturer"));
+                                                          i18n("The uncooked informations about ICC profile manufacturer"));
     d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"), 
-                                                          i18n("The uncooked informations about icc profile model"));
+                                                          i18n("The uncooked informations about ICC profile model"));
     d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"), 
-                                                          i18n("The uncooked informations about icc profile copyright"));
+                                                          i18n("The uncooked informations about ICC profile copyright"));
     d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"), 
-                                                          i18n("The icc profile ID number"));
+                                                          i18n("The ICC profile ID number"));
     d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"), 
-                                                          i18n("The color space used by the icc profile"));
+                                                          i18n("The color space used by the ICC profile"));
     d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"), 
-                                                          i18n("The connection space used by the icc profile"));
+                                                          i18n("The connection space used by the ICC profile"));
     d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"), 
-                                                          i18n("The icc profile device class"));
+                                                          i18n("The ICC profile device class"));
     d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"), 
-                                                          i18n("The icc profile rendering indent"));
+                                                          i18n("The ICC profile rendering indent"));
     d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"), 
-                                                          i18n("The icc version used to record the profile"));
+                                                          i18n("The ICC version used to record the profile"));
     d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"), 
-                                                          i18n("The icc profile color management flags"));
+                                                          i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; i++)

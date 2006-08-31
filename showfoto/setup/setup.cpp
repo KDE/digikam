@@ -98,7 +98,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                 BarIcon("slideshow", KIcon::SizeMedium));
     d->slideshowPage = new Digikam::SetupSlideShow(d->page_slideshow);
 
-    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Profiles Management"),
+    d->page_icc = addPage(i18n("ICC Profiles"), i18n("Color Management Profiles"),
                           BarIcon("colorize", KIcon::SizeMedium));
     d->iccPage = new Digikam::SetupICC(d->page_icc, this);
 

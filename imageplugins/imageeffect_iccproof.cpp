@@ -467,7 +467,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_overExposureIndicatorBox, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));      
 
-    //-- Button Group icc profile options connections ----------------------------
+    //-- Button Group ICC profile options connections ----------------------------
 
     connect(m_inProfileBG, SIGNAL(released (int)),
             this, SLOT(slotEffect())); 
@@ -478,7 +478,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     connect(m_proofProfileBG, SIGNAL(released (int)),
             this, SLOT(slotEffect())); 
 
-    //-- url requester icc profile connections -----------------------------------
+    //-- url requester ICC profile connections -----------------------------------
 
     connect(m_inProfilesPath, SIGNAL(urlSelected(const QString&)),
             this, SLOT(slotEffect()));      
