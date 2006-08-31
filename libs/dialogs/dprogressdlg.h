@@ -40,16 +40,17 @@ Q_OBJECT
 
  public:
 
-   DProgressDlg( QWidget *parent=0, const QString &caption=QString::null );
+   DProgressDlg(QWidget *parent=0, const QString &caption=QString::null);
    ~DProgressDlg();
 
    void setButtonText(const QString &text);
-   void addedAction(const QString &text);
+   void addedAction(const QPixmap& pix, const QString &text);
    void reset();
    void setTotalSteps(int total);
    void setValue(int value);
    void advance(int value);
-   void setLabel(const QString &text);
+   void setTitle(const QString &text);
+   void setMessage(const QString &text);
    
  private:
  

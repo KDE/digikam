@@ -26,6 +26,7 @@
 #include "dprogressdlg.h"
 
 class QWidget;
+class QPixmap;
 
 class KURL;
 
@@ -65,7 +66,7 @@ private slots:
 
     void slotRebuildThumbs128();
     void slotRebuildThumbs256();
-    void slotRebuildThumbDone(const KURL&);
+    void slotRebuildThumbDone(const KURL& url, const QPixmap& pix=QPixmap());
     void slotRebuildAllThumbComplete();
 
 private:
