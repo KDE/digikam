@@ -245,9 +245,11 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 147 ==> 128296 : Icon selector for tags wont let user select 'other icons'.
 148 ==> 115161 : image comments/tags: 'Recent tags' looks like a button but funktons like a menu.
 149 ==> 121423 : Rename file loses Album thumbnail.
-150 ==> 120308 : batch creation of thumbnails.
-151 ==> 120074 : new tag doesn't appear
-152 ==> 120075 : can't restore system icons for tag
-153 ==> 133209 : shift selection is not working in download screen
+150 ==> 120308 : Batch creation of thumbnails.
+151 ==> 120074 : New tag doesn't appear
+152 ==> 120075 : Can't restore system icons for tag
+153 ==> 133209 : Shift selection is not working in download screen
+154 ==> 131552 : Typo inconsisted use of ICC.
+155 ==> 
 
 ----------------------------------------------------------------------------------------------------
