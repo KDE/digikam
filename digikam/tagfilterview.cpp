@@ -1,11 +1,12 @@
 /* ============================================================
- * File  : tagfilterview.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-05
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-05-05
+ * Description : tags filter view
  *
  * Copyright 2005 by Renchi Raju
-
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -136,13 +137,14 @@ public:
 
 class TagFilterViewPriv
 {
+
 public:
 
-    QTimer*                     timer;
+    QTimer *timer;
 };
 
 TagFilterView::TagFilterView(QWidget* parent)
-    : FolderView(parent)
+             : FolderView(parent)
 {
     d = new TagFilterViewPriv;
     d->timer = new QTimer(this);
@@ -159,29 +161,36 @@ TagFilterView::TagFilterView(QWidget* parent)
     notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
-            SLOT(slotTagAdded(Album*)));
+            this, SLOT(slotTagAdded(Album*)));
+            
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
-            SLOT(slotTagDeleted(Album*)));
+            this, SLOT(slotTagDeleted(Album*)));
+            
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
-            SLOT(slotTagRenamed(Album*)));
+            this, SLOT(slotTagRenamed(Album*)));
+            
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
-            SLOT(slotClear()));
+            this, SLOT(slotClear()));
+            
     connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
-            SLOT(slotAlbumIconChanged(Album*)));
+            this, SLOT(slotAlbumIconChanged(Album*)));
+            
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
-            SLOT(slotTagMoved(TAlbum*, TAlbum*)));
+            this, SLOT(slotTagMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+            
     connect(loader, SIGNAL(signalFailed(Album *)),
-            SLOT(slotThumbnailLost(Album *)));
+            this, SLOT(slotThumbnailLost(Album *)));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
 
     connect(d->timer, SIGNAL(timeout()),
-            SLOT(slotTimeOut()));
+            this, SLOT(slotTimeOut()));
 }
 
 TagFilterView::~TagFilterView()
@@ -280,8 +289,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         else
         {
             QPopupMenu popMenu(this);
-            popMenu.insertItem( SmallIcon("tag"),
-                                i18n("Assign Tag '%1' to Dropped Items")
+            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
@@ -359,8 +367,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     if (!tag || !newParent)
         return;
 
-    TagFilterViewItem* item =
-        (TagFilterViewItem*)(tag->extraData(this));
+    TagFilterViewItem* item = (TagFilterViewItem*)(tag->extraData(this));
     if (!item)
         return;
 
@@ -369,8 +376,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
         QListViewItem* oldPItem = item->parent();
         oldPItem->takeItem(item);
 
-        TagFilterViewItem* newPItem =
-            (TagFilterViewItem*)(newParent->extraData(this));
+        TagFilterViewItem* newPItem = (TagFilterViewItem*)(newParent->extraData(this));
         if (newPItem)
             newPItem->insertItem(item);
         else
@@ -380,8 +386,7 @@ void TagFilterView::slotTagMoved(TAlbum* tag, TAlbum* newParent)
     {
         takeItem(item);
 
-        TagFilterViewItem* newPItem =
-            (TagFilterViewItem*)(newParent->extraData(this));
+        TagFilterViewItem* newPItem = (TagFilterViewItem*)(newParent->extraData(this));
 
         if (newPItem)
             newPItem->insertItem(item);
@@ -399,8 +404,7 @@ void TagFilterView::slotTagDeleted(Album* album)
     if (!tag)
         return;
 
-    TagFilterViewItem* item =
-        (TagFilterViewItem*)(album->extraData(this));
+    TagFilterViewItem* item = (TagFilterViewItem*)(album->extraData(this));
     if (!item)
         return;
 
@@ -504,6 +508,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     if (item)
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"), 13);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
@@ -525,6 +530,12 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             tagDelete(item);
             break;
         }
+        case 13:
+        {
+            QString errMsg;
+            AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString(), 0, errMsg);
+            break;
+        }        
         default:
             break;
     }
@@ -623,19 +634,18 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
 
     if (children)
     {
-        int result =
-            KMessageBox::warningContinueCancel(this, 
-                i18n("Tag '%1' has one subtag. "
-                     "Deleting this will also delete "
-                     "the subtag. "
-                     "Are you sure you want to continue?",
-                     "Tag '%1' has %n subtags. "
-                     "Deleting this will also delete "
-                     "the subtags. "
-                     "Are you sure you want to continue?",
-                     children).arg(tag->title()),
-                i18n("Delete Tag"),
-                KGuiItem(i18n("Delete"),"editdelete"));
+        int result = KMessageBox::warningContinueCancel(this,
+                     i18n("Tag '%1' has one subtag. "
+                          "Deleting this will also delete "
+                          "the subtag. "
+                          "Are you sure you want to continue?",
+                          "Tag '%1' has %n subtags. "
+                          "Deleting this will also delete "
+                          "the subtags. "
+                          "Are you sure you want to continue?",
+                          children).arg(tag->title()),
+                          i18n("Delete Tag"),
+                          KGuiItem(i18n("Delete"),"editdelete"));
 
         if(result == KMessageBox::Continue)
         {
@@ -646,9 +656,9 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
     }
     else
     {
-        int result =
-            KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?")
-                                       .arg(tag->title()),i18n("Delete Tag"), KGuiItem(i18n("Delete"),"editdelete"));
+        int result = KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?")
+                                                        .arg(tag->title()),i18n("Delete Tag"),
+                                                        KGuiItem(i18n("Delete"), "editdelete"));
 
         if (result == KMessageBox::Continue)
         {

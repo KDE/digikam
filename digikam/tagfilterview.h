@@ -1,7 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-05-05
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-05-05
+ * Description : tags filter view
+ *
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,8 +61,7 @@ private slots:
     void slotAlbumIconChanged(Album* album);
     void slotTimeOut();
     void slotContextMenu(QListViewItem*, const QPoint&, int);
-    void slotGotThumbnailFromIcon(Album *album,
-                                  const QPixmap& thumbnail);
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
 
 private:
@@ -68,6 +71,8 @@ private:
     void tagDelete(TagFilterViewItem* item);
     void setTagThumbnail(TAlbum *album);
 
+private:
+    
     TagFilterViewPriv *d;
 };
 
