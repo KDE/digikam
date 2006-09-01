@@ -17,10 +17,18 @@
 #ifndef _DELETEDIALOG_H
 #define _DELETEDIALOG_H
 
+// Qt includes.
 
 #include <qcheckbox.h>
+
+// KDE includes.
+
 #include <kdialogbase.h>
 #include <kurl.h>
+
+// Local includes.
+
+#include "digikam_export.h"
 #include "deletedialogbase.h"
 
 class QStringList;
@@ -74,7 +82,7 @@ protected:
     DeleteDialogMode::DeleteMode m_deleteMode;
 };
 
-class DeleteDialog : public KDialogBase
+class DIGIKAM_EXPORT DeleteDialog : public KDialogBase
 {
     Q_OBJECT
 
