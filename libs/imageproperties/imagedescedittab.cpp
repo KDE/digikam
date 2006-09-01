@@ -571,31 +571,38 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
     if (!album->isRoot())
     {
-        popmenu.insertItem(SmallIcon("pencil"),    i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"),             12);
+        popmenu.insertItem(SmallIcon("pencil"),      i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"),         13);        
+        popmenu.insertItem(SmallIcon("edittrash"),   i18n("Delete Tag"),             12);
     }
 
     switch (popmenu.exec(QCursor::pos()))
     {
-    case 10:
-    {
-        tagNew(album);
-        break;
-    }
-    case 11:
-    {
-        if (!album->isRoot())
-            tagEdit(album);
-        break;
-    }
-    case 12:
-    {
-        if (!album->isRoot())
-            tagDelete(album);
-        break;
-    }
-    default:
-        break;
+        case 10:
+        {
+            tagNew(album);
+            break;
+        }
+        case 11:
+        {
+            if (!album->isRoot())
+                tagEdit(album);
+            break;
+        }
+        case 12:
+        {
+            if (!album->isRoot())
+                tagDelete(album);
+            break;
+        }
+        case 13:
+        {
+            QString errMsg;
+            AlbumManager::instance()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
+            break;
+        }
+        default:
+            break;
     }
 }
 
