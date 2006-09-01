@@ -241,16 +241,17 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 143 ==> 132660 : Shortcuts for ratings do not work as of 0.9.x beta.
 144 ==> 126874 : digikam does not support <shift+del>.
 145 ==> 132957 : Crash using dcop action: album_forward
-146 ==> 130547 : automatically download RAW-images into separate folder below the JPG-images.
+146 ==> 130547 : Automatically download RAW-images into separate folder below the JPG-images.
 147 ==> 128296 : Icon selector for tags wont let user select 'other icons'.
 148 ==> 115161 : image comments/tags: 'Recent tags' looks like a button but funktons like a menu.
 149 ==> 121423 : Rename file loses Album thumbnail.
 150 ==> 120308 : Batch creation of thumbnails.
-151 ==> 120074 : New tag doesn't appear
-152 ==> 120075 : Can't restore system icons for tag
-153 ==> 133209 : Shift selection is not working in download screen
+151 ==> 120074 : New tag doesn't appear.
+152 ==> 120075 : Can't restore system icons for tag.
+153 ==> 133209 : Shift selection is not working in download screen.
 154 ==> 131552 : Typo inconsisted use of ICC.
-155 ==> 131553 : typo indent must be intent?
-156 ==> 
+155 ==> 131553 : Typo indent must be intent?
+156 ==> 118526 : Make it possible to remove an album's thumbnail.
+157 ==>
 
 ----------------------------------------------------------------------------------------------------
