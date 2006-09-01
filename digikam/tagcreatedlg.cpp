@@ -204,8 +204,9 @@ public:
 
     TagEditDlgPriv()
     {
-        titleEdit  = 0;
-        iconButton = 0;
+        titleEdit       = 0;
+        iconButton      = 0;
+        resetIconButton = 0;
     }
 
     KLineEdit   *titleEdit;
@@ -213,6 +214,7 @@ public:
     QString      icon;
 
     QPushButton *iconButton;
+    QPushButton *resetIconButton;
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
@@ -248,28 +250,31 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
 
     QLabel *titleLabel = new QLabel(plainPage());
     titleLabel->setText(i18n("&Title:"));
-    gl->addWidget(titleLabel, 0, 0);
 
     d->titleEdit = new KLineEdit(plainPage());
     d->titleEdit->setText(album->title());
     titleLabel->setBuddy(d->titleEdit);
-    gl->addWidget(d->titleEdit, 0, 1);
-
     setFocusProxy(d->titleEdit);
 
     QLabel *iconTextLabel = new QLabel(plainPage());
     iconTextLabel->setText(i18n("&Icon:"));
-    gl->addWidget(iconTextLabel, 1, 0);
 
     d->iconButton = new QPushButton(plainPage());
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
-    gl->addWidget(d->iconButton, 1, 1);
+    
+    d->resetIconButton = new QPushButton(i18n("Reset"), plainPage());
 
     QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum,
-                                          QSizePolicy::Expanding);
-    gl->addItem(spacer, 2, 1);
-
+                                           QSizePolicy::Expanding);
+    
+    gl->addWidget(titleLabel, 0, 0);
+    gl->addMultiCellWidget(d->titleEdit, 0, 0, 1, 3);
+    gl->addWidget(iconTextLabel, 1, 0);
+    gl->addWidget(d->iconButton, 1, 1);
+    gl->addWidget(d->resetIconButton, 1, 2);
+    gl->addItem(spacer, 1, 3);
+    
     grid->addMultiCellWidget(logo, 0, 0, 0, 0);
     grid->addMultiCellLayout(topLayout, 0, 1, 1, 1);
     grid->setRowStretch(1, 10);
@@ -279,6 +284,9 @@ TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
     connect(d->iconButton, SIGNAL(clicked()),
             this, SLOT(slotIconChange()));
 
+    connect(d->resetIconButton, SIGNAL(clicked()),
+            this, SLOT(slotIconResetClicked()));
+            
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
@@ -306,6 +314,12 @@ QString TagEditDlg::icon() const
     return d->icon;
 }
 
+void TagEditDlg::slotIconResetClicked()
+{
+    d->icon = QString("tag");
+    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
+}
+    
 void TagEditDlg::slotIconChange()
 {
 #if KDE_IS_VERSION(3,3,0)

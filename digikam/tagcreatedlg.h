@@ -85,6 +85,7 @@ public:
 private slots:
 
     void slotIconChange();
+    void slotIconResetClicked();
     void slotTitleChanged(const QString& newtitle);
     
 private:
