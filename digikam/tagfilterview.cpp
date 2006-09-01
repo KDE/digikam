@@ -533,7 +533,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         case 13:
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString(), 0, errMsg);
+            AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
             break;
         }        
         default:

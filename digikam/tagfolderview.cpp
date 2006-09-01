@@ -408,7 +408,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         case 13:
         {
             QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString(), 0, errMsg);
+            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString("tag"), 0, errMsg);
             break;
         }
         default:
