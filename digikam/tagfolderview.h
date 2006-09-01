@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : tagfolderview.h
  * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-03-22
  * Copyright 2005-2006 by Joern Ahrens
@@ -33,8 +32,8 @@ namespace Digikam
 
 class Album;
 class TAlbum;
-class TagFolderViewPriv;
 class TagFolderViewItem;
+class TagFolderViewPriv;
 
 class TagFolderView : public FolderView
 {
@@ -68,20 +67,20 @@ private slots:
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
     void slotContextMenu(QListViewItem*, const QPoint&, int);
     void slotABCContextMenu();
-    void slotGotThumbnailFromIcon(Album *album,
-                                  const QPixmap& thumbnail);
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
 
 private:
 
-    void tagNew(TagFolderViewItem *item,
-                const QString& _title=QString(),
+    void tagNew(TagFolderViewItem *item, const QString& _title=QString(),
                 const QString& _icon=QString() );
     void tagEdit(TagFolderViewItem *item);
     void tagDelete(TagFolderViewItem *item);
     void setTagThumbnail(TAlbum *album);
 
-    TagFolderViewPriv   *d;
+private:
+
+    TagFolderViewPriv *d;
 };
 
 }  // namespace Digikam

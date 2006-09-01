@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : albumfolderview.h
  * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
@@ -14,6 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
  
 /** @file albumfoldeview.h */
@@ -39,8 +39,8 @@ namespace Digikam
 
 class Album;
 class PAlbum;
-class AlbumFolderViewPriv;
 class AlbumFolderViewItem;
+class AlbumFolderViewPriv;
 
 class AlbumFolderView : public FolderView
 {
@@ -59,6 +59,10 @@ public:
     void albumEdit();
 
     void setAlbumThumbnail(PAlbum *album);
+
+signals:
+    
+    void signalAlbumModified();
 
 private slots:
 
@@ -100,10 +104,10 @@ private:
     void reparentItem(AlbumFolderViewItem* folderItem);
     void clearEmptyGroupItems();
 
+private:
+
     AlbumFolderViewPriv   *d;
 
-signals:
-    void signalAlbumModified();
 };
 
 }  // namespace Digikam

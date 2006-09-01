@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : tagfolderview.cpp
  * Author: Joern Ahrens <joern.ahrens@kdemail.net>
  * Date  : 2005-05-05
  * Copyright 2005-2006 by Joern Ahrens
@@ -65,6 +64,7 @@ namespace Digikam
 class TagFolderViewItem : public FolderItem
 {
 public:
+
     TagFolderViewItem(QListView *parent, TAlbum *tag);
     TagFolderViewItem(QListViewItem *parent, TAlbum *tag);
 
@@ -72,18 +72,19 @@ public:
     int id() const;
 
 private:
+
     TAlbum      *m_tag;
 };
 
 TagFolderViewItem::TagFolderViewItem(QListView *parent, TAlbum *tag)
-    : FolderItem(parent, tag->title())
+                 : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
     m_tag = tag;
 }
 
 TagFolderViewItem::TagFolderViewItem(QListViewItem *parent, TAlbum *tag)
-    : FolderItem(parent, tag->title())
+                 : FolderItem(parent, tag->title())
 {
     setDragEnabled(true);
     m_tag = tag;
@@ -105,9 +106,18 @@ int TagFolderViewItem::id() const
 
 class TagFolderViewPriv
 {
+
 public:
-    AlbumManager                    *albumMan;
-    QPopupMenu                      *ABCMenu;
+
+    TagFolderViewPriv()
+    {
+        ABCMenu  = 0;
+        albumMan = 0;
+    }
+    
+    QPopupMenu   *ABCMenu;
+    
+    AlbumManager *albumMan;
 };
 
 //-----------------------------------------------------------------------------
@@ -115,7 +125,7 @@ public:
 //-----------------------------------------------------------------------------
 
 TagFolderView::TagFolderView(QWidget *parent)
-    : FolderView(parent, "TagFolderView")
+             : FolderView(parent, "TagFolderView")
 {
     d = new TagFolderViewPriv();
     d->albumMan = AlbumManager::instance();
@@ -123,28 +133,34 @@ TagFolderView::TagFolderView(QWidget *parent)
     addColumn(i18n("My Tags"));
     setResizeMode(QListView::LastColumn);
     setRootIsDecorated(false);
-
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
     connect(d->albumMan, SIGNAL(signalAlbumAdded(Album*)),
-            SLOT(slotAlbumAdded(Album*)));
+            this, SLOT(slotAlbumAdded(Album*)));
+
     connect(d->albumMan, SIGNAL(signalAlbumDeleted(Album*)),
-            SLOT(slotAlbumDeleted(Album*)));
+            this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(d->albumMan, SIGNAL(signalAlbumRenamed(Album*)),
-            SLOT(slotAlbumRenamed(Album*)));
+            this, SLOT(slotAlbumRenamed(Album*)));
+
     connect(d->albumMan, SIGNAL(signalAlbumsCleared()),
-            SLOT(slotAlbumsCleared()));
+            this, SLOT(slotAlbumsCleared()));
+
     connect(d->albumMan, SIGNAL(signalAlbumIconChanged(Album*)),
-            SLOT(slotAlbumIconChanged(Album*)));
+            this, SLOT(slotAlbumIconChanged(Album*)));
+
     connect(d->albumMan, SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
-            SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
+            this, SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+    
     connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
-            SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+            this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+
     connect(loader, SIGNAL(signalFailed(Album *)),
-            SLOT(slotThumbnailLost(Album *)));
+            this, SLOT(slotThumbnailLost(Album *)));
 
     connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
             SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
@@ -207,8 +223,7 @@ void TagFolderView::slotAlbumDeleted(Album *album)
     TagFolderViewItem *item = (TagFolderViewItem*)album->extraData(this);
     if(item)
     {
-        TagFolderViewItem *itemParent =
-                dynamic_cast<TagFolderViewItem*>(item->parent());
+        TagFolderViewItem *itemParent = dynamic_cast<TagFolderViewItem*>(item->parent());
 
         if(itemParent)
             itemParent->takeItem(item);
@@ -292,8 +307,7 @@ void TagFolderView::setTagThumbnail(TAlbum *album)
     }
 }
 
-void TagFolderView::slotGotThumbnailFromIcon(Album *album,
-                                             const QPixmap& thumbnail)
+void TagFolderView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail)
 {
     if(!album || album->type() != Album::TAG)
         return;
@@ -358,17 +372,18 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
     QPopupMenu popmenu(this);
     d->ABCMenu = new QPopupMenu;
+    
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
-             SLOT( slotABCContextMenu() ) );
+             this, SLOT( slotABCContextMenu() ) );
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag From AddressBook"),
-                       d->ABCMenu);
+    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
     if(tag && tag->parent())
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"), 13);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
@@ -388,6 +403,12 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
         case 12:
         {
             tagDelete(tag);
+            break;
+        }
+        case 13:
+        {
+            QString errMsg;
+            AlbumManager::instance()->updateTAlbumIcon(tag->getTag(), QString(), 0, errMsg);
             break;
         }
         default:
@@ -437,9 +458,7 @@ void TagFolderView::tagNew()
     tagNew(item);
 }
 
-void TagFolderView::tagNew( TagFolderViewItem *item,
-                            const QString& _title,
-                            const QString& _icon )
+void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, const QString& _icon )
 {
     QString title = _title;
     QString icon  = _icon;
@@ -527,25 +546,26 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     // find number of subtags
     int children = 0;
     AlbumIterator iter(tag);
-    while(iter.current()) {
+    while(iter.current())
+    {
         children++;
         ++iter;
     }
 
     if(children)
     {
-        int result =
-            KMessageBox::warningContinueCancel(this,
-                    i18n("Tag '%1' has one subtag. "
-                         "Deleting this will also delete "
-                         "the subtag. "
-                         "Are you sure you want to continue?",
-                         "Tag '%1' has %n subtags. "
-                         "Deleting this will also delete "
-                         "the subtags. "
-                         "Are you sure you want to continue?",
-                         children).arg(tag->title()),
-                      i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
+        int result = KMessageBox::warningContinueCancel(this,
+                       i18n("Tag '%1' has one subtag. "
+                            "Deleting this will also delete "
+                            "the subtag. "
+                            "Are you sure you want to continue?",
+                            "Tag '%1' has %n subtags. "
+                            "Deleting this will also delete "
+                            "the subtags. "
+                            "Are you sure you want to continue?",
+                            children).arg(tag->title()),
+                            i18n("Delete Tag"), KGuiItem(i18n("Delete"),
+                            "editdelete"));
 
         if(result == KMessageBox::Continue)
         {
@@ -558,7 +578,8 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     {
         int result =
             KMessageBox::warningContinueCancel(0, i18n("Delete '%1' tag?")
-                                       .arg(tag->title()),i18n("Delete Tag"),KGuiItem(i18n("Delete"),"editdelete"));
+                                               .arg(tag->title()), i18n("Delete Tag"),
+                                               KGuiItem(i18n("Delete"), "editdelete"));
 
         if(result == KMessageBox::Continue)
         {
