@@ -250,6 +250,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 152 ==> 120075 : Can't restore system icons for tag
 153 ==> 133209 : Shift selection is not working in download screen
 154 ==> 131552 : Typo inconsisted use of ICC.
-155 ==> 
+155 ==> 131553 : typo indent must be intent?
+156 ==> 
 
 ----------------------------------------------------------------------------------------------------
