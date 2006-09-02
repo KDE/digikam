@@ -124,16 +124,29 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     tsize_t   strip_size;
     tstrip_t  num_of_strips;
 
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEWIDTH, &w);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGELENGTH, &h);
 
-    TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
-    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
-    TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip);
 
-    if (TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0)
+    if (TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
     {
-        kdDebug() << k_funcinfo << "Can't handle non-stripped images." << endl;
+        kdWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file " << filePath << endl;
+        TIFFClose(tif);
+        return false;
+    }
+
+    if (bits_per_sample == 0 ||
+        samples_per_pixel == 0 ||
+        rows_per_strip == 0)
+    {
+        kdWarning() << "TIFF loader: Encountered invalid value 0 in image."
+                    << " bits_per_sample " << bits_per_sample
+                    << " samples_per_pixel " << samples_per_pixel
+                    << " rows_per_strip " << rows_per_strip
+                    << " Loading file " << filePath << endl;
         TIFFClose(tif);
         return false;
     }
