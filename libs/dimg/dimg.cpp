@@ -43,6 +43,7 @@ extern "C"
 
 // Local includes.
 
+#include "rawfiles.h"
 #include "dcraw_parse.h"
 #include "pngloader.h"
 #include "jpegloader.h"
@@ -433,6 +434,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
     }
 
+    QString rawFilesExt(raw_file_extentions);
     QString ext = fileInfo.extension().upper();
 
     if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
@@ -441,6 +443,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return PNG;
     else if (ext == QString("TIFF") || ext == QString("TIF"))
         return TIFF;
+    else if (rawFilesExt.upper().contains(ext))
+        return RAW;
 
     // In second, we trying to parse file header.
 
