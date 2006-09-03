@@ -151,15 +151,18 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
     
+    // TODO: check others TIFF color-spaces here. Actually, only RGB is supported.
+    // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url: 
+    // http://www.awaresystems.be/imaging/tiff/tifftags/photometricinterpretation.html
+
     TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
-/* 
     if (photometric != PHOTOMETRIC_RGB)
     {
-        kdWarning() << k_funcinfo << "Can't handle image without RGB photometric: " << photometric << endl;
+        kdWarning() << "Can't handle image without RGB color-space: " 
+                    << photometric << endl;
         TIFFClose(tif);
         return false;
     }
-  */  
     
     if (samples_per_pixel == 4)
         m_hasAlpha = true;
