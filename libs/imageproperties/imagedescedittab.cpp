@@ -508,8 +508,7 @@ void ImageDescEditTab::updateTagsView()
     QListViewItemIterator it( d->tagsView);
     while (it.current())
     {
-        TAlbumCheckListItem* tItem =
-                dynamic_cast<TAlbumCheckListItem*>(it.current());
+        TAlbumCheckListItem* tItem = dynamic_cast<TAlbumCheckListItem*>(it.current());
 
         if (tItem)
         {
@@ -569,12 +568,18 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     QPopupMenu popmenu(this);
 
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
+
     if (!album->isRoot())
     {
         popmenu.insertItem(SmallIcon("pencil"),      i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"),         13);        
         popmenu.insertItem(SmallIcon("edittrash"),   i18n("Delete Tag"),             12);
     }
+
+    popmenu.insertSeparator();
+    popmenu.insertItem(i18n("Select All"),       14);
+    popmenu.insertItem(i18n("Deselect"),         15);
+    popmenu.insertItem(i18n("Invert Selection"), 16);
 
     switch (popmenu.exec(QCursor::pos()))
     {
@@ -599,6 +604,43 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         {
             QString errMsg;
             AlbumManager::instance()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
+            break;
+        }
+        case 14:
+        {
+            QListViewItemIterator it(d->tagsView, QListViewItemIterator::NotChecked);
+            while (it.current())
+            {
+                TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+                item->setOn(true);
+                ++it;
+            }
+            break;
+        }
+        case 15:
+        {
+            QListViewItemIterator it(d->tagsView, QListViewItemIterator::Checked);
+            while (it.current())
+            {
+                TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+                item->setOn(false);
+                ++it;
+            }
+            break;
+        }
+        case 16:
+        {
+            QListViewItemIterator it(d->tagsView);
+            while (it.current())
+            {
+                TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+                TAlbum *tag = item->m_album;
+                if (tag)
+                    if (!tag->isRoot())
+                        item->setOn(!item->isOn());
+
+                ++it;
+            }
             break;
         }
         default:
@@ -823,7 +865,8 @@ void ImageDescEditTab::slotImageTagsChanged(Q_LLONG imageId)
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     Album *a = AlbumManager::instance()->findAlbum(albumId);
-    if (!d->ignoreImageAttributesWatch && !d->currInfo || !a || a->isRoot() || a->type() != Album::TAG)
+    if (!d->ignoreImageAttributesWatch && 
+        !d->currInfo || !a || a->isRoot() || a->type() != Album::TAG)
         return;
 
     updateTagsView();
@@ -831,19 +874,22 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
 
 void ImageDescEditTab::slotImageRatingChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && 
+        d->currInfo && d->currInfo->id() == imageId)
         updateRating();
 }
 
 void ImageDescEditTab::slotImageCaptionChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && 
+        d->currInfo && d->currInfo->id() == imageId)
         updateComments();
 }
 
 void ImageDescEditTab::slotImageDateChanged(Q_LLONG imageId)
 {
-    if (!d->ignoreImageAttributesWatch && d->currInfo && d->currInfo->id() == imageId)
+    if (!d->ignoreImageAttributesWatch && 
+        d->currInfo && d->currInfo->id() == imageId)
         updateDate();
 }
 
