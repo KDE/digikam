@@ -21,6 +21,9 @@
  * - http://freeimage.cvs.sourceforge.net/freeimage/FreeImage/Source/Metadata/XTIFF.cpp
  * - https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/tiff.c
  *
+ * Test images repository:
+ * - http://www.remotesensing.org/libtiff/images.html
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -151,12 +154,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
     
-    // TODO: check others TIFF color-spaces here. Actually, only RGB is supported.
+    // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK 
+    // have been tested.
     // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url: 
     // http://www.awaresystems.be/imaging/tiff/tifftags/photometricinterpretation.html
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
-    if (photometric != PHOTOMETRIC_RGB)
+    if (photometric != PHOTOMETRIC_RGB || 
+        photometric != PHOTOMETRIC_MINISBLACK)
     {
         kdWarning() << "Can't handle image without RGB color-space: " 
                     << photometric << endl;
