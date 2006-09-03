@@ -285,17 +285,17 @@ AdjustLevelDialog::AdjustLevelDialog(QWidget* parent, QString title, QFrame* ban
     m_pickerColorButtonGroup->setExclusive(true);
     m_pickerColorButtonGroup->setFrameShape(QFrame::NoFrame);    
 
-    KIconLoader icon;
     m_autoButton = new QPushButton(gboxSettings);
-    m_autoButton->setPixmap( icon.loadIcon( "run", (KIcon::Group)KIcon::Toolbar ) );
+    m_autoButton->setPixmap( SmallIcon( "run" ) );
     QToolTip::add( m_autoButton, i18n( "Adjust all levels automatically." ) );
     QWhatsThis::add( m_autoButton, i18n("<p>If you press this button, all channel levels will be adjusted "
                                         "automatically."));
 
     m_resetButton = new QPushButton(i18n("&Reset"), gboxSettings);
-    m_resetButton->setPixmap( icon.loadIcon( "locationbar_erase", (KIcon::Group)KIcon::Toolbar ) );
+    m_resetButton->setPixmap( SmallIcon("reload_page") );
     QToolTip::add( m_resetButton, i18n( "Reset current channel levels' values." ) );
-    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values from the current selected channel "
+    QWhatsThis::add( m_resetButton, i18n("<p>If you press this button, all levels' values "
+                                         "from the current selected channel "
                                          "will be reset to the default values."));
     
     QHBoxLayout* l3 = new QHBoxLayout();
