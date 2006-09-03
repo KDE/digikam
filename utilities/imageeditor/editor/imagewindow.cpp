@@ -169,7 +169,11 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     if (!promptUserSave(m_urlCurrent))
         return;
 
+    // put right side bar in a defined state
+    emit signalNoCurrentItem();
+
     saveSettings();
+
     e->accept();
 }
 
