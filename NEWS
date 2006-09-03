@@ -161,8 +161,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor.
 069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam.
 070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results.
-071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
-                 is written to console.
+071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console.
 072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
 073 ==> 127374 : unsharp mask: max. radius way too small.
 074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window.
@@ -252,6 +251,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 154 ==> 131552 : Typo inconsisted use of ICC.
 155 ==> 131553 : Typo indent must be intent?
 156 ==> 118526 : Make it possible to remove an album's thumbnail.
-157 ==>
+157 ==> 120050 : assigning an image as icon for a tag entry in 'Tag View' does not update the icons of this tag in 'Tag Filters'.
+158 ==> 
 
 ----------------------------------------------------------------------------------------------------
