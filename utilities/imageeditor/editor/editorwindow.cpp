@@ -70,6 +70,7 @@ extern "C"
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kprogress.h>
+#include <kwin.h>
 
 // Local includes.
 
@@ -1004,6 +1005,12 @@ bool EditorWindow::promptUserSave(const KURL& url)
 {
     if (m_saveAction->isEnabled())
     {
+        // if window is iconified, show it
+        if (isMinimized())
+        {
+            KWin::deIconifyWindow(winId());
+        }
+
         int result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image '%1' has been modified.\n"
                                        "Do you want to save it?")

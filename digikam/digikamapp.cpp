@@ -177,7 +177,8 @@ DigikamApp::~DigikamApp()
     ImageAttributesWatch::shutDown();
 
     if (ImageWindow::imagewindowCreated())
-        delete ImageWindow::imagewindow();
+        // close and delete
+        ImageWindow::imagewindow()->close(true);
 
     if (mView)
         delete mView;
@@ -283,7 +284,12 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
 
 bool DigikamApp::queryClose()
 {
-    return true;
+    if (ImageWindow::imagewindowCreated())
+    {
+        return ImageWindow::imagewindow()->queryClose();
+    }
+    else
+        return true;
 }
 
 void DigikamApp::setupView()

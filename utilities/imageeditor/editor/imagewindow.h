@@ -68,6 +68,8 @@ public:
     void applySettings();
     void setup(bool iccSetupPage=false);
 
+    bool queryClose();
+
 signals:
 
     void signalFileDeleted(const KURL& url);

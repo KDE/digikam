@@ -162,11 +162,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     if (!e)
         return;
 
-    // wait if a save operation is currently running
-    if (!waitForSavingToComplete())
-        return;
-
-    if (!promptUserSave(m_urlCurrent))
+    if (!queryClose())
         return;
 
     // put right side bar in a defined state
@@ -175,6 +171,18 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     saveSettings();
 
     e->accept();
+}
+
+bool ImageWindow::queryClose()
+{
+    // Note: we reimplement closeEvent above for this window.
+    // Additionally, queryClose is called from DigikamApp.
+
+    // wait if a save operation is currently running
+    if (!waitForSavingToComplete())
+        return false;
+
+    return promptUserSave(m_urlCurrent);
 }
 
 void ImageWindow::setupConnections()
