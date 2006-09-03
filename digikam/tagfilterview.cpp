@@ -65,6 +65,7 @@ namespace Digikam
 
 class TagFilterViewItem : public FolderCheckListItem
 {
+
 public:
 
     TagFilterViewItem(QListView* parent, TAlbum* tag, bool untagged=false)
@@ -135,15 +136,20 @@ public:
     bool    m_untagged;
 };
 
+// ---------------------------------------------------------------------
+
 class TagFilterViewPriv
 {
 
 public:
 
+    TagFilterViewPriv()
+    {
+        timer = 0;
+    }
+
     QTimer *timer;
 };
-
-// ---------------------------------------------------------------------
 
 TagFilterView::TagFilterView(QWidget* parent)
              : FolderView(parent)
@@ -438,8 +444,7 @@ void TagFilterView::setTagThumbnail(TAlbum *album)
     }
 }
 
-void TagFilterView::slotGotThumbnailFromIcon(Album *album,
-                                             const QPixmap& thumbnail)
+void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail)
 {
     if(!album || album->type() != Album::TAG)
         return;
