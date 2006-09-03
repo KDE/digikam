@@ -160,7 +160,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // http://www.awaresystems.be/imaging/tiff/tifftags/photometricinterpretation.html
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
-    if (photometric != PHOTOMETRIC_RGB || 
+    if (photometric != PHOTOMETRIC_RGB && 
         photometric != PHOTOMETRIC_MINISBLACK)
     {
         kdWarning() << "Can't handle image without RGB color-space: " 
