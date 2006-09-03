@@ -143,6 +143,8 @@ public:
     QTimer *timer;
 };
 
+// ---------------------------------------------------------------------
+
 TagFilterView::TagFilterView(QWidget* parent)
              : FolderView(parent)
 {
@@ -330,8 +332,7 @@ void TagFilterView::slotTagAdded(Album* album)
     }
     else
     {
-        TagFilterViewItem* parent =
-            (TagFilterViewItem*)(tag->parent()->extraData(this));
+        TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
         if (!parent)
         {
             kdWarning() << k_funcinfo << " Failed to find parent for Tag "
@@ -354,8 +355,7 @@ void TagFilterView::slotTagRenamed(Album* album)
     if (!tag)
         return;
 
-    TagFilterViewItem* item =
-            (TagFilterViewItem*)(tag->extraData(this));
+    TagFilterViewItem* item = (TagFilterViewItem*)(tag->extraData(this));
     if (item)
     {
         item->setText(0, tag->title());
@@ -507,10 +507,15 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
 
     if (item)
     {
-        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"), 13);
-        popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
+        popmenu.insertItem(SmallIcon("pencil"),      i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"),         13);
+        popmenu.insertItem(SmallIcon("edittrash"),   i18n("Delete Tag"),             12);
     }
+ 
+    popmenu.insertSeparator();
+    popmenu.insertItem(i18n("Select All"),       14);
+    popmenu.insertItem(i18n("Deselect"),         15);
+    popmenu.insertItem(i18n("Invert Selection"), 16);
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -536,6 +541,52 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             AlbumManager::instance()->updateTAlbumIcon(item->m_tag, QString("tag"), 0, errMsg);
             break;
         }        
+        case 14:
+        {
+            QListViewItemIterator it(this, QListViewItemIterator::NotChecked);
+            while (it.current())
+            {
+                TagFilterViewItem* item = (TagFilterViewItem*)it.current();
+                item->setOn(true);
+                ++it;
+            }
+            triggerChange();
+            break;
+        }
+        case 15:
+        {
+            QListViewItemIterator it(this, QListViewItemIterator::Checked);
+            while (it.current())
+            {
+                TagFilterViewItem* item = (TagFilterViewItem*)it.current();
+                item->setOn(false);
+                ++it;
+            }
+            triggerChange();
+            break;
+        }
+        case 16:
+        {
+            QListViewItemIterator it(this);
+            while (it.current())
+            {
+                TagFilterViewItem* item = (TagFilterViewItem*)it.current();
+
+                // Toogle all root tags filter.
+                TAlbum *tag = item->m_tag;
+                if (tag)
+                    if (tag->parent()->isRoot())
+                        item->setOn(!item->isOn());
+
+                // Toogle "Not Tagged" item tag filter.
+                if (item->m_untagged)
+                    item->setOn(!item->isOn());
+
+                ++it;
+            }
+            triggerChange();
+            break;
+        }
         default:
             break;
     }
