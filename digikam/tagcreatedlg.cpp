@@ -53,13 +53,14 @@ public:
     {
         titleEdit  = 0;
         iconButton = 0;
+        icon       = QString("tag");
     }
-
-    KLineEdit   *titleEdit;
 
     QString      icon;
 
     QPushButton *iconButton;
+
+    KLineEdit   *titleEdit;
 };
 
 TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
@@ -134,10 +135,9 @@ TagCreateDlg::TagCreateDlg(QWidget *parent, TAlbum* album)
     // by default assign the icon of the parent (if not root)
     // to this new tag
     if (!album->isRoot())
-    {
         d->icon = album->icon();
-        d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
-    }
+    
+    d->iconButton->setIconSet(SyncJob::getTagThumbnail(d->icon, 20));
 
     enableButtonOK(!d->titleEdit->text().isEmpty());
     adjustSize();
@@ -209,12 +209,12 @@ public:
         resetIconButton = 0;
     }
 
-    KLineEdit   *titleEdit;
-
     QString      icon;
 
     QPushButton *iconButton;
     QPushButton *resetIconButton;
+
+    KLineEdit   *titleEdit;
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
