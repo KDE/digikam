@@ -186,12 +186,11 @@ void GPSWidget::slotGPSDetails(void)
 
         case GoogleMaps: 
         {
-            url.append("http://maps.google.com/?spn=0.1,0.15");
-            url.append("&ll=");
+            url.append("http://maps.google.com/?q=");
             url.append(val.setNum(d->map->getLatitude(), 'f', 8));
             url.append(",");
             url.append(val.setNum(d->map->getLongitude(), 'f', 8));
-            url.append("&t=h");
+            url.append("&spn=0.05,0.05&t=h&om=1&hl=en");
             break;
         }
 
