@@ -84,6 +84,12 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* parent)
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
 {
+    if (!d->thumbJob.isNull())
+    {
+        d->thumbJob->kill();
+        d->thumbJob = 0;
+    }
+
     delete d;
 }
 
