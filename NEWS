@@ -256,6 +256,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 158 ==> 129365 : Keyword-List view still uses old description after renaming keyword.
 159 ==> 115154 : Tags filter misses 'deselect all Tags' in context menu.
 160 ==> 133525 : digiKam doesn't compile (KDE forces -fno-exception, digikam needs it).
-161 ==> 
+161 ==> 115160 : digikam: 'Filter tags' should use 'and' not 'or' or maybe better label 'Show Tags'.
+162 ==> 
 
 ----------------------------------------------------------------------------------------------------
