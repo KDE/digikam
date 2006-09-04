@@ -82,6 +82,8 @@ General       : New option to force the refresh of Album contents.
 General       : Usability improvements of albums/pictures deletion.
 General       : New option to process a batch creation of all albums items thumbnails.
 General       : New option to "Select All", "Deselect", or "Invert Selection" of filters in Tags Filter view.
+General       : New option to set image as tag thumbnail on Tag Filters View using D&D.
+General       : New option to set a matching condition to use between tags in Tag Filters View (OR or AND condition).
 
 Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option has been changed.
 
@@ -256,7 +258,8 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 158 ==> 129365 : Keyword-List view still uses old description after renaming keyword.
 159 ==> 115154 : Tags filter misses 'deselect all Tags' in context menu.
 160 ==> 133525 : digiKam doesn't compile (KDE forces -fno-exception, digikam needs it).
-161 ==> 115160 : digikam: 'Filter tags' should use 'and' not 'or' or maybe better label 'Show Tags'.
-162 ==> 
+161 ==> 115160 : 'Tag Filters' should use 'and' not 'or' or maybe better label 'Show Tags'.
+162 ==> 120056 : Allow to assign via drag and drop tag thumbnails in 'Tag Filters'.
+163 ==> 
 
 ----------------------------------------------------------------------------------------------------
