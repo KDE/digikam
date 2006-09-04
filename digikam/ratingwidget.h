@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Owen Hirst <n8rider@sbcglobal.net>
- * Date  : 2005-08-15
- * Description :
+ * Authors: Owen Hirst <n8rider@sbcglobal.net>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-08-15
+ * Description : a widget to draw stars rating
  * 
  * Copyright 2005 by Owen Hirst
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,10 +26,11 @@
 // Qt includes.
 
 #include <qwidget.h>
-#include <qpixmap.h>
 
 namespace Digikam
 {
+
+class RatingWidgetPriv;
 
 class RatingWidget : public QWidget
 {
@@ -40,6 +43,10 @@ public:
 
     void setRating(int val);
     int  rating() const;
+
+signals:
+
+    void signalRatingChanged(int);
     
 protected:
 
@@ -49,13 +56,8 @@ protected:
 
 private:
 
-    int     m_rating;
-    QPixmap m_selPixmap;
-    QPixmap m_regPixmap;
+    RatingWidgetPriv* d;
 
-signals:
-
-    void signalRatingChanged(int);
 };
 
 }  // namespace Digikam

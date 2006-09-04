@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Owen Hirst <n8rider@sbcglobal.net>
- * Date  : 2005-08-15
- * Description :
+ * Authors: Owen Hirst <n8rider@sbcglobal.net>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-08-15
+ * Description : a widget to draw stars rating
  * 
  * Copyright 2005 by Owen Hirst
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,6 +24,7 @@
 
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qpixmap.h>
 
 // KDE includes.
 
@@ -36,79 +39,92 @@
 namespace Digikam
 {
 
+class RatingWidgetPriv
+{
+public:
+
+    RatingWidgetPriv()
+    {
+        rating    = 0;
+        selPixmap = 0;
+        regPixmap = 0;
+    }
+
+    int     rating;
+
+    QPixmap selPixmap;
+    QPixmap regPixmap;
+};
+
 RatingWidget::RatingWidget(QWidget* parent)
             : QWidget(parent)
 {
-    m_rating = 0;    
+    d = new RatingWidgetPriv;
 
-    KGlobal::dirs()->addResourceType("digikam_rating",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating",
-                                                             "rating.png");
-    ratingPixPath += "/rating.png";
-    m_regPixmap = QPixmap(ratingPixPath);
-    m_selPixmap = m_regPixmap;
+    KGlobal::dirs()->addResourceType("digikam_rating", 
+                     KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
+    ratingPixPath.append("/rating.png");
 
-    {
-        QPainter painter(&m_regPixmap);
-        painter.fillRect(0, 0, m_regPixmap.width(), m_regPixmap.height(),
-                         colorGroup().dark());
-        painter.end();
-    }
+    d->regPixmap = QPixmap(ratingPixPath);
+    d->selPixmap = d->regPixmap;
 
-    {
-        QPainter painter(&m_selPixmap);
-        painter.fillRect(0, 0, m_selPixmap.width(), m_selPixmap.height(),
-                         ThemeEngine::instance()->textSpecialRegColor());
-        painter.end();
-    }
+    QPainter painter(&d->regPixmap);
+    painter.fillRect(0, 0, d->regPixmap.width(), d->regPixmap.height(),
+                     colorGroup().dark());
+    painter.end();
+
+    QPainter painter2(&d->selPixmap);
+    painter2.fillRect(0, 0, d->selPixmap.width(), d->selPixmap.height(),
+                      ThemeEngine::instance()->textSpecialRegColor());
+    painter2.end();
     
-    setFixedSize(QSize(m_regPixmap.width()*5, m_regPixmap.height()));
+    setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));
 }
 
 RatingWidget::~RatingWidget()
 {
+    delete d;
 }
 
 void RatingWidget::setRating(int val)
 {
-    m_rating = val;
-    emit signalRatingChanged(m_rating);
+    d->rating = val;
+    emit signalRatingChanged(d->rating);
     update();
 }
 
 int RatingWidget::rating() const
 {
-    return m_rating;
+    return d->rating;
 }
 
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    int pos = e->x() / m_regPixmap.width() +1;
+    int pos = e->x() / d->regPixmap.width() +1;
 
-    if (m_rating != pos)
+    if (d->rating != pos)
     {
-        m_rating = pos;
-        emit signalRatingChanged(m_rating);
+        d->rating = pos;
+        emit signalRatingChanged(d->rating);
         update();
     }
 }
 
 void RatingWidget::mousePressEvent(QMouseEvent* e)
 {
-    int pos = e->x() / m_regPixmap.width() +1;
+    int pos = e->x() / d->regPixmap.width() +1;
 
-    if (m_rating == pos)
+    if (d->rating == pos)
     {
-        m_rating--;
+        d->rating--;
     }
     else
     {
-        m_rating = pos;
+        d->rating = pos;
     }
 
-    emit signalRatingChanged(m_rating);
+    emit signalRatingChanged(d->rating);
 
     update();
 }
@@ -118,16 +134,16 @@ void RatingWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
 
     int x = 0;
-    for (int i=0; i<m_rating; i++)
+    for (int i=0; i<d->rating; i++)
     {
-        p.drawPixmap(x, 0, m_selPixmap);
-        x += m_selPixmap.width();
+        p.drawPixmap(x, 0, d->selPixmap);
+        x += d->selPixmap.width();
     }
 
-    for (int i=m_rating; i<5; i++)
+    for (int i=d->rating; i<5; i++)
     {
-        p.drawPixmap(x, 0, m_regPixmap);
-        x += m_regPixmap.width();
+        p.drawPixmap(x, 0, d->regPixmap);
+        x += d->regPixmap.width();
     }
 
     p.end();
