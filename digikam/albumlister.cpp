@@ -66,28 +66,31 @@ public:
 
     AlbumListerPriv()
     {
-        filterTimer = 0;
-        job         = 0;
-        currAlbum   = 0;
-        filter      = "*";
+        filterTimer  = 0;
+        job          = 0;
+        currAlbum    = 0;
+        filter       = "*";
+        matchingCond = AlbumLister::OrCondition;
     }
 
-    bool                       untaggedFilter;
+    bool                            untaggedFilter;
 
-    QString                    filter;
+    QString                         filter;
 
-    QMap<Q_LLONG, ImageInfo*>  itemMap;
-    QMap<int,bool>             dayFilter;
+    QMap<Q_LLONG, ImageInfo*>       itemMap;
+    QMap<int,bool>                  dayFilter;
 
-    QValueList<int>            tagFilter;
+    QValueList<int>                 tagFilter;
 
-    QTimer                    *filterTimer;
+    QTimer                         *filterTimer;
 
-    KIO::TransferJob          *job;
+    KIO::TransferJob               *job;
 
-    ImageInfoList              itemList;
+    ImageInfoList                   itemList;
 
-    Album                     *currAlbum;
+    Album                          *currAlbum;
+
+    AlbumLister::MatchingCondition matchingCond;
 };
 
 AlbumLister* AlbumLister::m_instance = 0;
@@ -202,9 +205,11 @@ void AlbumLister::setDayFilter(const QValueList<int>& days)
     d->filterTimer->start(100, true);
 }
 
-void AlbumLister::setTagFilter(const QValueList<int>& tags, bool showUnTagged)
+void AlbumLister::setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
+                               bool showUnTagged)
 {
-    d->tagFilter = tags;
+    d->tagFilter      = tags;
+    d->matchingCond   = matchingCond;
     d->untaggedFilter = showUnTagged;
     d->filterTimer->start(100, true);
 }
@@ -220,14 +225,31 @@ bool AlbumLister::matchesFilter(const ImageInfo* info) const
     if (!d->tagFilter.isEmpty())
     {
         QValueList<int> tagIDs = info->tagIDs();
-        for (QValueList<int>::iterator it = d->tagFilter.begin();
-             it != d->tagFilter.end(); ++it)
+        QValueList<int>::iterator it;
+
+        if (d->matchingCond == OrCondition)        
         {
-            if (tagIDs.contains(*it))
+            for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
             {
-                match = true;
-                break;
+                if (tagIDs.contains(*it))
+                {
+                    match = true;
+                    break;
+                }
             }
+        }
+        else
+        {
+            // AND matching condition...
+
+            for (it = d->tagFilter.begin(); it != d->tagFilter.end(); ++it)
+            {
+                if (!tagIDs.contains(*it))
+                    break;
+            }
+    
+            if (it == d->tagFilter.end())
+                match = true;
         }
 
         match |= (d->untaggedFilter && tagIDs.isEmpty());

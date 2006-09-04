@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kcursor.h>
@@ -72,7 +73,7 @@ public:
         : FolderCheckListItem(parent, tag ? tag->title() : i18n("Not Tagged"),
                               QCheckListItem::CheckBoxController)
     {
-        m_tag = tag;
+        m_tag      = tag;
         m_untagged = untagged;
         setDragEnabled(!untagged);
 
@@ -83,7 +84,7 @@ public:
     TagFilterViewItem(QListViewItem* parent, TAlbum* tag)
         : FolderCheckListItem(parent, tag->title(), QCheckListItem::CheckBoxController)
     {
-        m_tag = tag;
+        m_tag      = tag;
         m_untagged = false;
         setDragEnabled(true);
 
@@ -132,7 +133,7 @@ public:
         FolderCheckListItem::paintCell(p, mcg, column, width, align);
     }
 
-    TAlbum* m_tag;
+    TAlbum *m_tag;
     bool    m_untagged;
 };
 
@@ -145,10 +146,13 @@ public:
 
     TagFilterViewPriv()
     {
-        timer = 0;
+        timer        = 0;
+        matchingCond = AlbumLister::OrCondition;
     }
 
-    QTimer *timer;
+    QTimer                         *timer;
+ 
+    AlbumLister::MatchingCondition  matchingCond;
 };
 
 TagFilterView::TagFilterView(QWidget* parent)
@@ -167,6 +171,8 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     TagFilterViewItem* notTaggedItem = new TagFilterViewItem(this, 0, true);
     notTaggedItem->setPixmap(0, AlbumThumbnailLoader::instance()->getStandardTagIcon());
+
+    // -- setup slots ---------------------------------------------------------
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotTagAdded(Album*)));
@@ -199,10 +205,22 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotTimeOut()));
+
+    // -- read config ---------------------------------------------------------
+
+    KConfig* config = kapp->config();
+    config->setGroup("Tag Filters View");
+    d->matchingCond = (AlbumLister::MatchingCondition)(config->readNumEntry("Matching Condition", 
+                                                       AlbumLister::OrCondition));
 }
 
 TagFilterView::~TagFilterView()
 {
+    KConfig* config = kapp->config();
+    config->setGroup("Tag Filters View");
+    config->writeEntry("Matching Condition", (int)(d->matchingCond));
+    config->sync();
+
     delete d->timer;
     delete d;
 }
@@ -297,10 +315,10 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         else
         {
             QPopupMenu popMenu(this);
-            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
+            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"));
 
             popMenu.setMouseTracking(true);
             id = popMenu.exec(QCursor::pos());
@@ -497,7 +515,7 @@ void TagFilterView::slotTimeOut()
         ++it;
     }
 
-    AlbumLister::instance()->setTagFilter(filterTags, showUnTagged);
+    AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
 }
 
 void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
@@ -521,6 +539,14 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     popmenu.insertItem(i18n("Select All"),       14);
     popmenu.insertItem(i18n("Deselect"),         15);
     popmenu.insertItem(i18n("Invert Selection"), 16);
+    popmenu.insertSeparator();
+
+    QPopupMenu matchingCongMenu;
+    matchingCongMenu.setCheckable(true);
+    matchingCongMenu.insertItem(i18n("Or Between Tags"),  17);
+    matchingCongMenu.insertItem(i18n("And Between Tags"), 18);
+    matchingCongMenu.setItemChecked((d->matchingCond == AlbumLister::OrCondition) ? 17 : 18, true);
+    popmenu.insertItem(i18n("Matching Condition"), &matchingCongMenu);
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -589,6 +615,18 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
 
                 ++it;
             }
+            triggerChange();
+            break;
+        }
+        case 17:
+        {
+            d->matchingCond = AlbumLister::OrCondition;
+            triggerChange();
+            break;
+        }
+        case 18:
+        {
+            d->matchingCond = AlbumLister::AndCondition;
             triggerChange();
             break;
         }

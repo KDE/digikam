@@ -58,6 +58,17 @@ class AlbumLister : public QObject
 
 public:
 
+    /** @enum MatchingCondition
+     * Possible logical matching condition used to sort tags id.
+     */
+    enum MatchingCondition
+    {
+        OrCondition = 0,
+        AndCondition
+    };
+
+public:
+
     static AlbumLister* instance();
     
     ~AlbumLister();
@@ -76,7 +87,8 @@ public:
     void setNameFilter(const QString& nameFilter);
 
     void setDayFilter(const QValueList<int>& days);
-    void setTagFilter(const QValueList<int>& tags, bool showUnTagged=false);
+    void setTagFilter(const QValueList<int>& tags, const MatchingCondition& matchingCond, 
+                      bool showUnTagged=false);
     
 signals:
 
