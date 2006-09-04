@@ -317,6 +317,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             QPopupMenu popMenu(this);
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
+            popMenu.insertItem(i18n("Set as Tag Thumbnail"),  11);
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"));
 
@@ -337,6 +338,12 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
             db->commitTransaction();
 
             ImageAttributesWatch::instance()->imagesChanged(destAlbum->id());
+        }
+        else if(id == 11)
+        {
+            QString errMsg;
+            AlbumManager::instance()->updateTAlbumIcon(destAlbum, QString(),
+                                                       imageIDs.first(), errMsg);
         }
     }
 }
