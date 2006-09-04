@@ -135,7 +135,10 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
 ThumbBarView::~ThumbBarView()
 {
     if (!d->thumbJob.isNull())
+    {
         d->thumbJob->kill();
+        d->thumbJob = 0;
+    }
     
     clear(false);
         
@@ -295,7 +298,10 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
     }
     
     if (!d->thumbJob.isNull())
+    {
        d->thumbJob->kill();
+       d->thumbJob = 0;
+    }
        
     d->thumbJob = new ThumbnailJob(item->url(), d->tileSize, true, d->exifRotate);
     
@@ -549,7 +555,10 @@ void ThumbBarView::rearrangeItems()
     if (!urlList.isEmpty())
     {
         if (!d->thumbJob.isNull())
+        {
            d->thumbJob->kill();
+           d->thumbJob = 0;
+        }
 
         d->thumbJob = new ThumbnailJob(urlList, d->tileSize, true, d->exifRotate);
         
