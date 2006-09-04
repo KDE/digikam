@@ -91,8 +91,11 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 
 ImagePreviewWidget::~ImagePreviewWidget()
 {
-    if (d->previewJob)
+    if (!d->previewJob.isNull())
+    {
         d->previewJob->kill();
+        d->previewJob = 0;
+    }
 
     d->blinkPreviewTimer->stop();
 
@@ -107,8 +110,11 @@ void ImagePreviewWidget::setImagePath( const QString& path )
     d->previewBlink      = false;
     d->blinkPreviewTimer->start(200);
 
-    if (d->previewJob)
+    if (!d->previewJob.isNull())
+    {
         d->previewJob->kill();
+        d->previewJob = 0;
+    }
 
     d->previewJob = new ImagePreviewJob(KURL(path), 1024, AlbumSettings::instance()->getExifRotate());
 
@@ -138,9 +144,11 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
     // It is very important to kill the thumbnail job properly
     // so that is frees its shared memory. Otherwise the memory
     // will _never_ be freed, see b.k.o. #131277
-    if (d->previewJob)
+    if (!d->previewJob.isNull())
+    {
         d->previewJob->kill();
-    d->previewJob = 0;
+        d->previewJob = 0;
+    }
 
     updatePixmap();
     repaint(false);
@@ -151,9 +159,11 @@ void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
 {
     d->blinkPreviewTimer->stop();
 
-    if (d->previewJob)
+    if (!d->previewJob.isNull())
+    {
         d->previewJob->kill();
-    d->previewJob = 0;
+        d->previewJob = 0;
+    }
 
     d->preview    = QImage();
     d->pixmap     = QPixmap(contentsRect().size());
