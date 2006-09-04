@@ -218,7 +218,7 @@ public:
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album)
-          : KDialogBase(Plain, i18n("Edit Tag"), Ok|Cancel, Ok, parent, 0, true, true )
+          : KDialogBase(Plain, i18n("Edit Tag"), Help|Ok|Cancel, Ok, parent, 0, true, true )
 {
     d = new TagEditDlgPriv;
     setHelp("tagscreation.anchor", "digikam");
