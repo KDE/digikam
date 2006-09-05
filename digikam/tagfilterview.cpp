@@ -314,7 +314,8 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            QPopupMenu popMenu(this);
+            KPopupMenu popMenu(this);
+            popMenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
             popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertItem(i18n("Set as Tag Thumbnail"),  11);
