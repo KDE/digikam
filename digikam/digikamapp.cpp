@@ -46,6 +46,7 @@
 #include <kstdaccel.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kiconloader.h>
 #include <ktip.h>
 #include <kpopupmenu.h>
 #include <kdeversion.h>
@@ -752,11 +753,12 @@ void DigikamApp::setupActions()
     KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
     findAction->setText(i18n("Quick Search..."));
+    findAction->setIconSet(SmallIcon("filefind"));
 
-    findAction = KStdAction::find(mView, SLOT(slotNewAdvancedSearch()),
-                                  actionCollection(), "search_advanced");
-    findAction->setText(i18n("Advanced Search..."));
-    findAction->setShortcut("Ctrl+Alt+F");
+    KAction* advFindAction = KStdAction::find(mView, SLOT(slotNewAdvancedSearch()),
+                                              actionCollection(), "search_advanced");
+    advFindAction->setText(i18n("Advanced Search..."));
+    advFindAction->setShortcut("Ctrl+Alt+F");
 
     new KAction(i18n("Scan for New Images"), "reload_page", 0,
                 this, SLOT(slotDatabaseRescan()), actionCollection(), 

@@ -1,10 +1,10 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-05-21
- * Description : 
+ * Description : Searches folder view 
  * 
  * Copyright 2005 by Renchi Raju
-
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -23,15 +23,16 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 
 // KDe includes.
 
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdeversion.h>
+
 #if KDE_IS_VERSION(3,2,0)
 #include <kinputdialog.h>
 #else
@@ -87,7 +88,7 @@ public:
 };
 
 SearchFolderView::SearchFolderView(QWidget* parent)
-    : FolderView(parent, "SearchFolderView")
+                : FolderView(parent, "SearchFolderView")
 {
     addColumn(i18n("My Searches"));
     setResizeMode(QListView::LastColumn);
@@ -96,25 +97,26 @@ SearchFolderView::SearchFolderView(QWidget* parent)
     m_lastAddedItem = 0;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
-            SLOT(slotAlbumAdded(Album*)));
+            this, SLOT(slotAlbumAdded(Album*)));
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
-            SLOT(slotAlbumDeleted(Album*)));
+            this, SLOT(slotAlbumDeleted(Album*)));
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(clear()));
-    connect(this,
-            SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-            SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
-    connect(this,
-            SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-            SLOT(slotDoubleClicked(QListViewItem*, const QPoint&, int)));
+
+    connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+            this, SLOT(slotContextMenu(QListViewItem*, const QPoint&, int)));
+
+    connect(this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+            this, SLOT(slotDoubleClicked(QListViewItem*, const QPoint&, int)));
 
     connect(this, SIGNAL(selectionChanged()),
-            SLOT(slotSelectionChanged()));
+            this, SLOT(slotSelectionChanged()));
 }
 
 SearchFolderView::~SearchFolderView()
-{
-    
+{    
 }
 
 void SearchFolderView::quickSearchNew()
@@ -134,8 +136,7 @@ void SearchFolderView::quickSearchNew()
 
     if (album)
     {
-        SearchFolderItem* searchItem =
-            (SearchFolderItem*)(album->extraData(this));
+        SearchFolderItem* searchItem = (SearchFolderItem*)(album->extraData(this));
         if (searchItem)
         {
             clearSelection();
@@ -162,8 +163,7 @@ void SearchFolderView::extendedSearchNew()
 
     if (album)
     {
-        SearchFolderItem* searchItem =
-                (SearchFolderItem*)(album->extraData(this));
+        SearchFolderItem* searchItem = (SearchFolderItem*)(album->extraData(this));
         if (searchItem)
         {
             clearSelection();
@@ -175,29 +175,30 @@ void SearchFolderView::extendedSearchNew()
 
 bool SearchFolderView::checkName( KURL& url )
 {
-    QString albumTitle = url.queryItem("name");
-
+    QString albumTitle     = url.queryItem("name");
     AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList = aManager->allSAlbums();
+    AlbumList aList        = aManager->allSAlbums();
+    bool checked           = checkAlbum( albumTitle );
 
-    bool checked = checkAlbum( albumTitle );
-    while ( !checked) {
+    while ( !checked) 
+    {
         QString label = i18n( "Another search with same name exists."
-                                  "\nPlease enter a new name:" );
+                              "\nPlease enter a new name:" );
         bool ok;
 #if KDE_IS_VERSION(3,2,0)
         QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
-                                               albumTitle, &ok, this );
+                                                  albumTitle, &ok, this );
 #else
         QString newTitle = KLineEditDlg::getText( i18n("Name exists"), label,
-                                               albumTitle, ok, this );
+                                                  albumTitle, ok, this );
 #endif
         if (!ok)
             return( false );
 
         albumTitle=newTitle;
         checked = checkAlbum( albumTitle );
-        }
+    }
+
     url.removeQueryItem( "name" );
     url.addQueryItem( "name", albumTitle );
     return( true );
@@ -207,7 +208,7 @@ bool SearchFolderView::checkAlbum( const QString& name ) const
 {
 
     AlbumManager* aManager = AlbumManager::instance();
-    AlbumList aList = aManager->allSAlbums();
+    AlbumList aList        = aManager->allSAlbums();
 
     for ( AlbumList::Iterator it = aList.begin();
           it != aList.end(); ++it )
@@ -232,7 +233,6 @@ void SearchFolderView::quickSearchEdit(SAlbum* album)
     if (dlg.exec() != KDialogBase::Accepted)
         return;
 
-
     AlbumManager::instance()->updateSAlbum(album, url);
 
     ((SearchFolderItem*)album->extraData(this))->setText(0, album->title());
@@ -245,6 +245,7 @@ void SearchFolderView::extendedSearchEdit(SAlbum* album)
 {
     if (!album)
         return;
+
     KURL url = album->kurl();
     SearchAdvancedDialog dlg(this, url);
 
@@ -333,61 +334,63 @@ void SearchFolderView::slotContextMenu(QListViewItem* item, const QPoint&, int)
 {
     if (!item)
     {
-        QPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("find"), i18n("New Simple Search..."), 10);
-        popmenu.insertItem(SmallIcon("find"), i18n("New Advanced Search..."), 11);
+        KPopupMenu popmenu(this);
+        popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
+        popmenu.insertItem(SmallIcon("filefind"), i18n("New Simple Search..."), 10);
+        popmenu.insertItem(SmallIcon("find"),     i18n("New Advanced Search..."), 11);
 
         switch (popmenu.exec(QCursor::pos()))
         {
-        case 10:
-        {
-            quickSearchNew();
-            break;
-        }
-        case 11:
-        {
-            extendedSearchNew();
-            break;
-        }
-        default:
-            break;
+            case 10:
+            {
+                quickSearchNew();
+                break;
+            }
+            case 11:
+            {
+                extendedSearchNew();
+                break;
+            }
+            default:
+                break;
         }
     }
     else
     {
         SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
 
-        QPopupMenu popmenu(this);
-        popmenu.insertItem(SmallIcon("find"), i18n("Edit Search..."), 10);
+        KPopupMenu popmenu(this);
+        popmenu.insertTitle(SmallIcon("digikam"), i18n("My Searches"));
+        popmenu.insertItem(SmallIcon("filefind"), i18n("Edit Search..."), 10);
+
         if ( sItem->m_album->isSimple() )
-        {
-            popmenu.insertItem(SmallIcon("find"),
-                               i18n("Edit as Advanced Search..."), 11);
-        }
+            popmenu.insertItem(SmallIcon("find"), i18n("Edit as Advanced Search..."), 11);
+        
+        popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("editdelete"), i18n("Delete Search"), 12);
 
         switch (popmenu.exec(QCursor::pos()))
         {
-        case 10:
-        {
-            if (sItem->m_album->isSimple())
-                quickSearchEdit(sItem->m_album);
-            else
+            case 10:
+            {
+                if (sItem->m_album->isSimple())
+                    quickSearchEdit(sItem->m_album);
+                else
+                    extendedSearchEdit(sItem->m_album);
+                break;
+            }
+            case 11:
+            {
                 extendedSearchEdit(sItem->m_album);
-            break;
-        }
-        case 11:
-        {
-            extendedSearchEdit(sItem->m_album);
-            break;
-        }
-        case 12:
-        {
-            searchDelete(sItem->m_album);
-            break;
-        }
-        default:
-            break;
+                break;
+            }
+            case 12:
+            {
+                searchDelete(sItem->m_album);
+                break;
+            }
+            default:
+                break;
         }
     }
 }
@@ -411,8 +414,7 @@ void SearchFolderView::selectItem(int id)
     if(!album)
         return;
 
-    SearchFolderItem *item = 
-            (SearchFolderItem*)album->extraData(this);
+    SearchFolderItem *item = (SearchFolderItem*)album->extraData(this);
     if(item)
     {
         setSelected(item, true);
