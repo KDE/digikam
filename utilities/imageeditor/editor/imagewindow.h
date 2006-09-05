@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class AlbumIconView;
+class ImageWindowPriv;
 class ImagePropertiesSideBarDB;
 
 class ImageWindow : public EditorWindow
@@ -78,33 +79,9 @@ signals:
 
 private:
 
-    // If image editor is launched by camera interface, current
-    // image cannot be saved.
-    bool                      m_allowSaving;
+    ImageWindowPriv    *d;
 
-    KURL::List                m_urlList;
-    KURL                      m_urlCurrent;
-
-    // Rating actions.
-    KAction                  *m_0Star;
-    KAction                  *m_1Star;
-    KAction                  *m_2Star;
-    KAction                  *m_3Star;
-    KAction                  *m_4Star;
-    KAction                  *m_5Star;
-
-    // Delete actions
-    KAction                  *m_fileDeletePermanentlyAction;
-    KAction                  *m_fileDeletePermanentlyDirectlyAction;
-    KAction                  *m_fileTrashDirectlyAction;
-
-    AlbumIconView            *m_view;
-    ImageInfoList             m_imageInfoList;
-    ImageInfo                *m_imageInfoCurrent;
-
-    ImagePropertiesSideBarDB *m_rightSidebar;
-
-    static ImageWindow       *m_instance;
+    static ImageWindow *m_instance;
 
 private:
 
@@ -132,7 +109,7 @@ private slots:
     void slotBackward();
     void slotFirst();
     void slotLast();
-    void slotFilePrint(){ printImage(m_urlCurrent); };
+    void slotFilePrint();
 
     void slotLoadCurrent();
     void slotDeleteCurrentItem();

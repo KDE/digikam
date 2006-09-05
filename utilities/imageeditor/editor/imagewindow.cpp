@@ -93,6 +93,55 @@
 namespace Digikam
 {
 
+class ImageWindowPriv
+{
+
+public:
+
+    ImageWindowPriv()
+    {
+        allowSaving                         = true;
+        star0                               = 0;
+        star1                               = 0;
+        star2                               = 0;
+        star3                               = 0;
+        star4                               = 0;
+        star5                               = 0;
+        fileDeletePermanentlyAction         = 0;
+        fileDeletePermanentlyDirectlyAction = 0;
+        fileTrashDirectlyAction             = 0;
+        view                                = 0;
+        imageInfoCurrent                    = 0;
+        rightSidebar                        = 0;
+    }
+
+    // If image editor is launched by camera interface, current
+    // image cannot be saved.
+    bool                      allowSaving;
+
+    KURL::List                urlList;
+    KURL                      urlCurrent;
+
+    // Rating actions.
+    KAction                  *star0;
+    KAction                  *star1;
+    KAction                  *star2;
+    KAction                  *star3;
+    KAction                  *star4;
+    KAction                  *star5;
+
+    // Delete actions
+    KAction                  *fileDeletePermanentlyAction;
+    KAction                  *fileDeletePermanentlyDirectlyAction;
+    KAction                  *fileTrashDirectlyAction;
+
+    AlbumIconView            *view;
+    ImageInfoList             imageInfoList;
+    ImageInfo                *imageInfoCurrent;
+
+    ImagePropertiesSideBarDB *rightSidebar;
+};
+
 ImageWindow* ImageWindow::m_instance = 0;
 
 ImageWindow* ImageWindow::imagewindow()
@@ -111,22 +160,8 @@ bool ImageWindow::imagewindowCreated()
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
-    m_instance         = this;
-    m_allowSaving      = true;
-    m_view             = 0;
-    m_imageInfoCurrent = 0;
-    m_rightSidebar     = 0;
-
-    m_0Star            = 0;
-    m_1Star            = 0;
-    m_2Star            = 0;
-    m_3Star            = 0;
-    m_4Star            = 0;
-    m_5Star            = 0;
-
-    m_fileDeletePermanentlyAction         = 0;
-    m_fileDeletePermanentlyDirectlyAction = 0;
-    m_fileTrashDirectlyAction             = 0;
+    d = new ImageWindowPriv;
+    m_instance = this;
 
     // -- Build the GUI -------------------------------
 
@@ -155,8 +190,8 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
-    m_rightSidebar->loadViewState();
-    m_rightSidebar->populateTags();
+    d->rightSidebar->loadViewState();
+    d->rightSidebar->populateTags();
 }
 
 ImageWindow::~ImageWindow()
@@ -167,7 +202,8 @@ ImageWindow::~ImageWindow()
 
     // No need to delete m_imagePluginLoader instance here, it will be done by main interface.
 
-    delete m_rightSidebar;
+    delete d->rightSidebar;
+    delete d;
 }
 
 void ImageWindow::closeEvent(QCloseEvent* e)
@@ -195,7 +231,7 @@ bool ImageWindow::queryClose()
     if (!waitForSavingToComplete())
         return false;
 
-    return promptUserSave(m_urlCurrent);
+    return promptUserSave(d->urlCurrent);
 }
 
 void ImageWindow::setupConnections()
@@ -204,17 +240,17 @@ void ImageWindow::setupConnections()
 
     // To toogle properly keyboards shortcuts from comments & tags side bar tab.
 
-    connect(m_rightSidebar, SIGNAL(signalNextItem()),
+    connect(d->rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotForward()));
 
-    connect(m_rightSidebar, SIGNAL(signalPrevItem()),
+    connect(d->rightSidebar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
     connect(this, SIGNAL(signalSelectionChanged( QRect* )),
-            m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+            d->rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
-            m_rightSidebar, SLOT(slotNoCurrentItem()));
+            d->rightSidebar, SLOT(slotNoCurrentItem()));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
@@ -236,10 +272,10 @@ void ImageWindow::setupUserArea()
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
     m_canvas->setSizePolicy(rightSzPolicy);
 
-    m_rightSidebar   = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
+    d->rightSidebar  = new ImagePropertiesSideBarDB(widget, "ImageEditor Right Sidebar", m_splitter,
                                                     Sidebar::Right, true, false);
     lay->addWidget(m_splitter);
-    lay->addWidget(m_rightSidebar);
+    lay->addWidget(d->rightSidebar);
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
     m_splitter->setFrameShadow( QFrame::Plain );
@@ -254,29 +290,29 @@ void ImageWindow::setupActions()
 
     // -- Rating actions ---------------------------------------------------------------
 
-    m_0Star = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
-                          m_rightSidebar, SLOT(slotAssignRatingNoStar()),
+    d->star0 = new KAction(i18n("Assign Rating \"No Star\""), CTRL+Key_0,
+                          d->rightSidebar, SLOT(slotAssignRatingNoStar()),
                           actionCollection(), "imageview_ratenostar");
-    m_1Star = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
-                          m_rightSidebar, SLOT(slotAssignRatingOneStar()),
+    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), CTRL+Key_1,
+                          d->rightSidebar, SLOT(slotAssignRatingOneStar()),
                           actionCollection(), "imageview_rateonestar");
-    m_2Star = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
-                          m_rightSidebar, SLOT(slotAssignRatingTwoStar()),
+    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), CTRL+Key_2,
+                          d->rightSidebar, SLOT(slotAssignRatingTwoStar()),
                           actionCollection(), "imageview_ratetwostar");
-    m_3Star = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
-                          m_rightSidebar, SLOT(slotAssignRatingThreeStar()),
+    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), CTRL+Key_3,
+                          d->rightSidebar, SLOT(slotAssignRatingThreeStar()),
                           actionCollection(), "imageview_ratethreestar");
-    m_4Star = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
-                          m_rightSidebar, SLOT(slotAssignRatingFourStar()),
+    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), CTRL+Key_4,
+                          d->rightSidebar, SLOT(slotAssignRatingFourStar()),
                           actionCollection(), "imageview_ratefourstar");
-    m_5Star = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
-                          m_rightSidebar, SLOT(slotAssignRatingFiveStar()),
+    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), CTRL+Key_5,
+                          d->rightSidebar, SLOT(slotAssignRatingFiveStar()),
                           actionCollection(), "imageview_ratefivestar");
 
     // -- Special Delete actions ---------------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
-    m_fileDeletePermanentlyAction = new KAction(i18n("Delete File Permanently"),
+    d->fileDeletePermanentlyAction = new KAction(i18n("Delete File Permanently"),
             "editdelete",
             SHIFT+Key_Delete,
             this,
@@ -286,7 +322,7 @@ void ImageWindow::setupActions()
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    m_fileDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
+    d->fileDeletePermanentlyDirectlyAction = new KAction(i18n("Delete Permanently without Confirmation"),
             "editdelete",
             0,
             this,
@@ -294,7 +330,7 @@ void ImageWindow::setupActions()
             actionCollection(),
             "image_delete_permanently_directly");
 
-    m_fileTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
+    d->fileTrashDirectlyAction             = new KAction(i18n("Move to Trash without Confirmation"),
             "edittrash",
             0,
             this,
@@ -337,15 +373,15 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
         KWin::deIconifyWindow(winId());
     }
 
-    if (!promptUserSave(m_urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
-    m_view        = view;
-    m_urlList     = urlList;
-    m_urlCurrent  = urlCurrent;
-    m_allowSaving = allowSaving;
+    d->view        = view;
+    d->urlList     = urlList;
+    d->urlCurrent  = urlCurrent;
+    d->allowSaving = allowSaving;
 
     m_saveAction->setEnabled(false);
     m_revertAction->setEnabled(false);
@@ -358,15 +394,15 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
 void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
                                  const QString& caption, bool allowSaving, AlbumIconView* view)
 {
-    m_imageInfoList    = imageInfoList;
-    m_imageInfoCurrent = imageInfoCurrent;
+    d->imageInfoList    = imageInfoList;
+    d->imageInfoCurrent = imageInfoCurrent;
 
-    m_imageInfoList.setAutoDelete(true);
+    d->imageInfoList.setAutoDelete(true);
 
     // create URL list
     KURL::List urlList;
 
-    ImageInfoListIterator it(m_imageInfoList);
+    ImageInfoListIterator it(d->imageInfoList);
     ImageInfo *info;
     for (; (info = it.current()); ++it)
     {
@@ -378,50 +414,50 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *
 
 void ImageWindow::slotLoadCurrent()
 {
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-    if (it != m_urlList.end())
+    if (it != d->urlList.end())
     {
-        m_canvas->load(m_urlCurrent.path(), m_IOFileSettings);
+        m_canvas->load(d->urlCurrent.path(), m_IOFileSettings);
 
         ++it;
-        if (it != m_urlList.end())
+        if (it != d->urlList.end())
             m_canvas->preload((*it).path());
     }
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
     // a smaller version if a raw image, and after that the DImgInterface loads the full version.
     // So first let DImgInterface create its loading task, only then any external objects.
-    setViewToURL(m_urlCurrent);
+    setViewToURL(d->urlCurrent);
 }
 
 void ImageWindow::setViewToURL(const KURL &url)
 {
-    if (m_view)
+    if (d->view)
     {
-        IconItem* item = m_view->findItem(url.url());
-        m_view->clearSelection();
-        m_view->updateContents();
+        IconItem* item = d->view->findItem(url.url());
+        d->view->clearSelection();
+        d->view->updateContents();
         if (item)
-            m_view->setCurrentItem(item);
+            d->view->setCurrentItem(item);
     }
 }
 
 void ImageWindow::slotForward()
 {
-    if(!promptUserSave(m_urlCurrent))
+    if(!promptUserSave(d->urlCurrent))
         return;
 
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-    int index = m_imageInfoList.find(m_imageInfoCurrent);
+    KURL::List::iterator it = d->urlList.find(d->urlCurrent);
+    int index = d->imageInfoList.find(d->imageInfoCurrent);
 
-    if (it != m_urlList.end()) 
+    if (it != d->urlList.end()) 
     {
-        if (m_urlCurrent != m_urlList.last())
+        if (d->urlCurrent != d->urlList.last())
         {
            KURL urlNext = *(++it);
-           m_imageInfoCurrent = m_imageInfoList.at(index + 1);
-           m_urlCurrent = urlNext;
+           d->imageInfoCurrent = d->imageInfoList.at(index + 1);
+           d->urlCurrent = urlNext;
            slotLoadCurrent();
         }
     }
@@ -429,19 +465,19 @@ void ImageWindow::slotForward()
 
 void ImageWindow::slotBackward()
 {
-    if(!promptUserSave(m_urlCurrent))
+    if(!promptUserSave(d->urlCurrent))
         return;
 
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-    int index = m_imageInfoList.find(m_imageInfoCurrent);
+    KURL::List::iterator it = d->urlList.find(d->urlCurrent);
+    int index = d->imageInfoList.find(d->imageInfoCurrent);
 
-    if (it != m_urlList.begin()) 
+    if (it != d->urlList.begin()) 
     {
-        if (m_urlCurrent != m_urlList.first())
+        if (d->urlCurrent != d->urlList.first())
         {
             KURL urlPrev = *(--it);
-            m_imageInfoCurrent = m_imageInfoList.at(index - 1);
-            m_urlCurrent = urlPrev;
+            d->imageInfoCurrent = d->imageInfoList.at(index - 1);
+            d->urlCurrent = urlPrev;
             slotLoadCurrent();
         }
     }
@@ -449,21 +485,21 @@ void ImageWindow::slotBackward()
 
 void ImageWindow::slotFirst()
 {
-    if(!promptUserSave(m_urlCurrent))
+    if(!promptUserSave(d->urlCurrent))
         return;
 
-    m_urlCurrent = m_urlList.first();
-    m_imageInfoCurrent = m_imageInfoList.first();
+    d->urlCurrent = d->urlList.first();
+    d->imageInfoCurrent = d->imageInfoList.first();
     slotLoadCurrent();
 }
 
 void ImageWindow::slotLast()
 {
-    if(!promptUserSave(m_urlCurrent))
+    if(!promptUserSave(d->urlCurrent))
         return;
 
-    m_urlCurrent = m_urlList.last();
-    m_imageInfoCurrent = m_imageInfoList.first();
+    d->urlCurrent = d->urlList.last();
+    d->imageInfoCurrent = d->imageInfoList.first();
     slotLoadCurrent();
 }
 
@@ -475,9 +511,9 @@ void ImageWindow::slotContextMenu()
         TagsPopupMenu* removeTagsMenu = 0;
         int separatorID = -1;
 
-        if (m_imageInfoCurrent)
+        if (d->imageInfoCurrent)
         {
-            Q_LLONG id = m_imageInfoCurrent->id();
+            Q_LLONG id = d->imageInfoCurrent->id();
             QValueList<Q_LLONG> idList;
             idList.append(id);
 
@@ -521,24 +557,24 @@ void ImageWindow::slotChanged()
                   .arg(dims.width()).arg(dims.height()).arg(mpixels);
     m_resLabel->setText(str);
 
-    if (m_urlCurrent.isValid())
+    if (d->urlCurrent.isValid())
     {
-        KURL u(m_urlCurrent.directory());
+        KURL u(d->urlCurrent.directory());
 
         QRect sel = m_canvas->getSelectedArea();
         DImg* img = DImgInterface::instance()->getImg();
 
-        if (m_imageInfoCurrent)
+        if (d->imageInfoCurrent)
         {
-            KURL::List::iterator it = m_urlList.find(m_urlCurrent);
-            bool hasPrevious = it != m_urlList.end();
-            bool hasNext     = it != m_urlList.begin();
+            KURL::List::iterator it = d->urlList.find(d->urlCurrent);
+            bool hasPrevious = it != d->urlList.end();
+            bool hasNext     = it != d->urlList.begin();
 
-            m_rightSidebar->itemChanged(m_urlCurrent.url(), m_imageInfoCurrent,
+            d->rightSidebar->itemChanged(d->urlCurrent.url(), d->imageInfoCurrent,
                                         hasPrevious, hasNext, sel.isNull() ? 0 : &sel, img);
         }
         else
-            m_rightSidebar->itemChanged(m_urlCurrent.url(), sel.isNull() ? 0 : &sel, img);
+            d->rightSidebar->itemChanged(d->urlCurrent.url(), sel.isNull() ? 0 : &sel, img);
     }
 }
 
@@ -548,7 +584,7 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
     m_undoAction->setEnabled(moreUndo);
     m_redoAction->setEnabled(moreRedo);
 
-    if (m_allowSaving)
+    if (d->allowSaving)
         m_saveAction->setEnabled(canSave);
 
     if (!moreUndo)
@@ -557,11 +593,11 @@ void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSav
 
 void ImageWindow::slotAssignTag(int tagID)
 {
-    if (m_imageInfoCurrent)
+    if (d->imageInfoCurrent)
     {
-        QStringList oldKeywords = m_imageInfoCurrent->tagNames();
+        QStringList oldKeywords = d->imageInfoCurrent->tagNames();
 
-        m_imageInfoCurrent->setTag(tagID);
+        d->imageInfoCurrent->setTag(tagID);
 
         // Update Image Tags like Iptc keywords tags.
 
@@ -569,8 +605,8 @@ void ImageWindow::slotAssignTag(int tagID)
         {
             if (AlbumSettings::instance()->getSaveIptcRating())
             {
-                DMetadata metadata(m_imageInfoCurrent->filePath());
-                metadata.setImageKeywords(oldKeywords, m_imageInfoCurrent->tagNames());
+                DMetadata metadata(d->imageInfoCurrent->filePath());
+                metadata.setImageKeywords(oldKeywords, d->imageInfoCurrent->tagNames());
                 metadata.applyChanges();
             }
         }
@@ -579,11 +615,11 @@ void ImageWindow::slotAssignTag(int tagID)
 
 void ImageWindow::slotRemoveTag(int tagID)
 {
-    if (m_imageInfoCurrent)
+    if (d->imageInfoCurrent)
     {
-        QStringList oldKeywords = m_imageInfoCurrent->tagNames();
+        QStringList oldKeywords = d->imageInfoCurrent->tagNames();
 
-        m_imageInfoCurrent->removeTag(tagID);
+        d->imageInfoCurrent->removeTag(tagID);
 
         // Update Image Tags like Iptc keywords tags.
 
@@ -591,8 +627,8 @@ void ImageWindow::slotRemoveTag(int tagID)
         {
             if (AlbumSettings::instance()->getSaveIptcRating())
             {
-                DMetadata metadata(m_imageInfoCurrent->filePath());
-                metadata.setImageKeywords(oldKeywords, m_imageInfoCurrent->tagNames());
+                DMetadata metadata(d->imageInfoCurrent->filePath());
+                metadata.setImageKeywords(oldKeywords, d->imageInfoCurrent->tagNames());
                 metadata.applyChanges();
             }
         }
@@ -601,16 +637,16 @@ void ImageWindow::slotRemoveTag(int tagID)
 
 void ImageWindow::slotUpdateItemInfo()
 {
-    uint index = m_urlList.findIndex(m_urlCurrent);
+    uint index = d->urlList.findIndex(d->urlCurrent);
 
     m_rotatedOrFlipped = false;
     
-    QString text = m_urlCurrent.filename() + i18n(" (%2 of %3)")
+    QString text = d->urlCurrent.filename() + i18n(" (%2 of %3)")
                                              .arg(QString::number(index+1))
-                                             .arg(QString::number(m_urlList.count()));
+                                             .arg(QString::number(d->urlList.count()));
     m_nameLabel->setText(text);
 
-    if (m_urlList.count() == 1) 
+    if (d->urlList.count() == 1) 
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
@@ -631,7 +667,7 @@ void ImageWindow::slotUpdateItemInfo()
         m_firstAction->setEnabled(false);
     }
 
-    if (index == m_urlList.count()-1) 
+    if (index == d->urlList.count()-1) 
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -641,7 +677,7 @@ void ImageWindow::slotUpdateItemInfo()
     // isn't include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
 
-    KURL u(m_urlCurrent.directory());
+    KURL u(d->urlCurrent.directory());
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
@@ -672,9 +708,9 @@ void ImageWindow::setup(bool iccSetupPage)
 void ImageWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
-        m_rightSidebar->restore();
+        d->rightSidebar->restore();
     else
-        m_rightSidebar->backup();
+        d->rightSidebar->backup();
 }
 
 void ImageWindow::toggleActions2SlideShow(bool val)
@@ -695,10 +731,10 @@ void ImageWindow::saveIsComplete()
     emit signalFileModified(m_savingContext->destinationURL);
 
     // all that is done in slotLoadCurrent, except for loading
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    KURL::List::iterator it = d->urlList.find(d->urlCurrent);
     setViewToURL(*it);
 
-    if (++it != m_urlList.end()) 
+    if (++it != d->urlList.end()) 
     {
         m_canvas->preload((*it).path());
     }
@@ -708,7 +744,7 @@ void ImageWindow::saveIsComplete()
 void ImageWindow::saveAsIsComplete()
 {
     // Nothing to be done if operating without database
-    if (!m_imageInfoCurrent)
+    if (!d->imageInfoCurrent)
         return;
 
     // Find the src and dest albums ------------------------------------------
@@ -723,31 +759,31 @@ void ImageWindow::saveAsIsComplete()
     {
         // Now copy the metadata of the original file to the new file ------------
 
-        ImageInfo newInfo(m_imageInfoCurrent->copyItem(dstAlbum, m_savingContext->destinationURL.fileName()));
+        ImageInfo newInfo(d->imageInfoCurrent->copyItem(dstAlbum, m_savingContext->destinationURL.fileName()));
 
-        if ( m_urlList.find(m_savingContext->destinationURL) == m_urlList.end() )
+        if ( d->urlList.find(m_savingContext->destinationURL) == d->urlList.end() )
         {   // The image file did not exist in the list.
-            KURL::List::iterator it = m_urlList.find(m_savingContext->srcURL);
-            int index = m_urlList.findIndex(m_savingContext->srcURL);
-            m_urlList.insert(it, m_savingContext->destinationURL);
-            m_imageInfoCurrent = new ImageInfo(newInfo);
-            m_imageInfoList.insert(index, m_imageInfoCurrent);
+            KURL::List::iterator it = d->urlList.find(m_savingContext->srcURL);
+            int index = d->urlList.findIndex(m_savingContext->srcURL);
+            d->urlList.insert(it, m_savingContext->destinationURL);
+            d->imageInfoCurrent = new ImageInfo(newInfo);
+            d->imageInfoList.insert(index, d->imageInfoCurrent);
         }
-        else if (m_urlCurrent != m_savingContext->destinationURL)
+        else if (d->urlCurrent != m_savingContext->destinationURL)
         {
-            for (ImageInfo *info = m_imageInfoList.first(); info; info = m_imageInfoList.next())
+            for (ImageInfo *info = d->imageInfoList.first(); info; info = d->imageInfoList.next())
             {
                 if (info->kurl() == m_savingContext->destinationURL)
                 {
-                    m_imageInfoCurrent = new ImageInfo(newInfo);
+                    d->imageInfoCurrent = new ImageInfo(newInfo);
                     // setAutoDelete is true
-                    m_imageInfoList.replace(m_imageInfoList.at(), m_imageInfoCurrent);
+                    d->imageInfoList.replace(d->imageInfoList.at(), d->imageInfoCurrent);
                     break;
                 }
             }
         }
 
-        m_urlCurrent = m_savingContext->destinationURL;
+        d->urlCurrent = m_savingContext->destinationURL;
         m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
         slotUpdateItemInfo();
         LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
@@ -759,9 +795,9 @@ void ImageWindow::saveAsIsComplete()
             emit signalFileAdded(m_savingContext->destinationURL);
 
         // all that is done in slotLoadCurrent, except for loading
-        KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+        KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-        if (it != m_urlList.end()) 
+        if (it != d->urlList.end()) 
         {
             setViewToURL(*it);
             m_canvas->preload((*++it).path());
@@ -776,13 +812,13 @@ void ImageWindow::saveAsIsComplete()
 
 bool ImageWindow::save()
 {
-    startingSave(m_urlCurrent);
+    startingSave(d->urlCurrent);
     return true;
 }
 
 bool ImageWindow::saveAs()
 {
-    return ( startingSaveAs(m_urlCurrent) );
+    return ( startingSaveAs(d->urlCurrent) );
 }
 
 void ImageWindow::slotDeleteCurrentItem()
@@ -811,7 +847,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // The meaning of permanently differs depending on the value of ask
 
     KURL u;
-    u.setPath(m_urlCurrent.directory());
+    u.setPath(d->urlCurrent.directory());
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
@@ -826,7 +862,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         DeleteDialog dialog(this);
 
         KURL::List urlList;
-        urlList.append(m_urlCurrent);
+        urlList.append(d->urlCurrent);
         if (!dialog.confirmDeleteList(urlList,
              DeleteDialogMode::Files,
              preselectDeletePermanently ?
@@ -840,37 +876,37 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         useTrash = !permanently;
     }
 
-    if (!SyncJob::del(m_urlCurrent, useTrash))
+    if (!SyncJob::del(d->urlCurrent, useTrash))
     {
         QString errMsg(SyncJob::lastErrorMsg());
         KMessageBox::error(this, errMsg, errMsg);
         return;
     }
 
-    emit signalFileDeleted(m_urlCurrent);
+    emit signalFileDeleted(d->urlCurrent);
 
-    KURL CurrentToRemove = m_urlCurrent;
-    KURL::List::iterator it = m_urlList.find(m_urlCurrent);
+    KURL CurrentToRemove = d->urlCurrent;
+    KURL::List::iterator it = d->urlList.find(d->urlCurrent);
 
-    if (it != m_urlList.end())
+    if (it != d->urlList.end())
     {
-        if (m_urlCurrent != m_urlList.last())
+        if (d->urlCurrent != d->urlList.last())
         {
             // Try to get the next image in the current Album...
 
             KURL urlNext = *(++it);
-            m_urlCurrent = urlNext;
-            m_urlList.remove(CurrentToRemove);
+            d->urlCurrent = urlNext;
+            d->urlList.remove(CurrentToRemove);
             slotLoadCurrent();
             return;
         }
-        else if (m_urlCurrent != m_urlList.first())
+        else if (d->urlCurrent != d->urlList.first())
         {
             // Try to get the previous image in the current Album.
 
             KURL urlPrev = *(--it);
-            m_urlCurrent = urlPrev;
-            m_urlList.remove(CurrentToRemove);
+            d->urlCurrent = urlPrev;
+            d->urlList.remove(CurrentToRemove);
             slotLoadCurrent();
             return;
         }
@@ -888,7 +924,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
 void ImageWindow::slotFileMetadataChanged(const KURL &url)
 {
-    if (url == m_urlCurrent)
+    if (url == d->urlCurrent)
     {
         m_canvas->readMetadataFromFile(url.path());
     }
@@ -898,6 +934,11 @@ void ImageWindow::slotThemeChanged()
 {
     m_canvas->setBackgroundColor(ThemeEngine::instance()->baseColor());
 }
+
+void ImageWindow::slotFilePrint()
+{
+    printImage(d->urlCurrent); 
+};
 
 }  // namespace Digikam
 
