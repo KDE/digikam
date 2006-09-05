@@ -48,6 +48,10 @@ extern "C"
 #include <kio/netaccess.h>
 #include <kdebug.h>
 
+// libKipi Includes.
+
+#include <libkipi/version.h>
+
 // Local includes.
 
 #include "albummanager.h"
@@ -62,8 +66,7 @@ extern "C"
 namespace Digikam
 {
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// IMAGE INFO IMPLEMENTATION CLASS ////////////////////////////////////////
+//-- Image Info ------------------------------------------------------------------
 
 DigikamImageInfo::DigikamImageInfo( KIPI::Interface* interface, const KURL& url )
                 : KIPI::ImageInfoShared( interface, url ), palbum_(0)
@@ -239,8 +242,7 @@ void DigikamImageInfo::setAngle( int )
     // TODO : add here a DMetadata call (thru Exiv2) to set Exif orientation tag.
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// IMAGE COLLECTION IMPLEMENTATION CLASS ////////////////////////////////////
+//-- Image Collection ------------------------------------------------------------
 
 DigikamImageCollection::DigikamImageCollection( Type tp, Album* album, const QString& filter )
                       : tp_( tp ), album_(album), imgFilter_(filter)
@@ -448,7 +450,6 @@ KURL::List DigikamImageCollection::imagesFromTAlbum(TAlbum* album) const
     return urlList;
 }
 
-
 KURL DigikamImageCollection::path()
 {
     if (album_->type() == Album::PHYSICAL)
@@ -481,7 +482,6 @@ KURL DigikamImageCollection::uploadPath()
     }
 }
 
-
 KURL DigikamImageCollection::uploadRoot()
 {
     return KURL(AlbumManager::instance()->getLibraryPath() + '/');
@@ -506,8 +506,7 @@ bool DigikamImageCollection::operator==(ImageCollectionShared& imgCollection)
     return (album_ == thatCollection->album_);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////// KIPI INTERFACE IMPLEMENTATION CLASS //////////////////////////////////////////
+//-- LibKipi interface -----------------------------------------------------------
 
 DigikamKipiInterface::DigikamKipiInterface( QObject *parent, const char *name)
                     : KIPI::Interface( parent, name )
@@ -603,13 +602,17 @@ void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 
 int DigikamKipiInterface::features() const
 {
-    return KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
+    return (
+
+// HostSupportsTags feature require libkipi version > 1.4.0
+#if KIPI_VERSION>0x000104
+           KIPI::HostSupportsTags |
+#endif
+           KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
            KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
 	       KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
-	       KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview;
-           // FIXME (Gilles - 07/18/2006) : this require the current libkipi source code from svn.
-           // re-enable it when the new libkipi release will be available.
-           /*| KIPI::HostSupportsTags;*/
+	       KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
+           );
 }
 
 bool DigikamKipiInterface::addImage( const KURL& url, QString& errmsg )
