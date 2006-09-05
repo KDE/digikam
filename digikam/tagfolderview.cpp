@@ -19,12 +19,12 @@
 // Qt includes.
 
 #include <qpainter.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qlistview.h>
 
 // KDE includes.
 
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kabc/stdaddressbook.h>
@@ -370,13 +370,15 @@ void TagFolderView::slotSelectionChanged()
 
 void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 {
-    QPopupMenu popmenu(this);
     d->ABCMenu = new QPopupMenu;
     
     connect( d->ABCMenu, SIGNAL( aboutToShow() ),
              this, SLOT( slotABCContextMenu() ) );
 
     TagFolderViewItem *tag = dynamic_cast<TagFolderViewItem*>(item);
+
+    KPopupMenu popmenu(this);
+    popmenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
     popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
@@ -384,6 +386,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"), 13);
+        popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
     }
 
@@ -655,7 +658,8 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         if(!itemDrag)
             return;
 
-        QPopupMenu popMenu(this);
+        KPopupMenu popMenu(this);
+        popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
         popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
         popMenu.insertSeparator(-1);
         popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
@@ -735,7 +739,8 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                QPopupMenu popMenu(this);
+                KPopupMenu popMenu(this);
+                popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
                 popMenu.insertItem(i18n("Set as Tag Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
                 popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
@@ -763,9 +768,9 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            QPopupMenu popMenu(this);
-            popMenu.insertItem( SmallIcon("tag"),
-                                i18n("Assign Tag '%1' to Dropped Items")
+            KPopupMenu popMenu(this);
+            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
+            popMenu.insertItem( SmallIcon("tag"), i18n("Assign Tag '%1' to Dropped Items")
                                 .arg(destAlbum->prettyURL()), 10) ;
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
