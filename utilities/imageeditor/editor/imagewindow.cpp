@@ -111,9 +111,22 @@ bool ImageWindow::imagewindowCreated()
 ImageWindow::ImageWindow()
            : EditorWindow( "Image Editor" )
 {
-    m_instance    = this;
-    m_allowSaving = true;
-    m_view        = 0;
+    m_instance         = this;
+    m_allowSaving      = true;
+    m_view             = 0;
+    m_imageInfoCurrent = 0;
+    m_rightSidebar     = 0;
+
+    m_0Star            = 0;
+    m_1Star            = 0;
+    m_2Star            = 0;
+    m_3Star            = 0;
+    m_4Star            = 0;
+    m_5Star            = 0;
+
+    m_fileDeletePermanentlyAction         = 0;
+    m_fileDeletePermanentlyDirectlyAction = 0;
+    m_fileTrashDirectlyAction             = 0;
 
     // -- Build the GUI -------------------------------
 
