@@ -3,6 +3,8 @@
  * Date  : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
  *
+ * Description : Albums folder view.
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,7 +23,7 @@
 #include <qpixmap.h>
 #include <qguardedptr.h>
 #include <qdir.h>
-#include <qpopupmenu.h>
+#include <kpopupmenu.h>
 #include <qcursor.h>
 #include <qdatastream.h>
 #include <qvaluelist.h>
@@ -409,10 +411,11 @@ void AlbumFolderView::slotSelectionChanged()
 
 void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, int)
 {
-    QPopupMenu popmenu(this);
     KActionMenu menuImport(i18n("Import"));
     KActionMenu menuKIPIBatch(i18n("Batch Processes"));
 
+    KPopupMenu popmenu(this);
+    popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
     popmenu.insertItem(SmallIcon("albumfoldernew"), i18n("New Album..."), 10);
     popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
 
@@ -471,7 +474,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         if(!albumActions.isEmpty() || !batchActions.isEmpty() ||
            !importActions.isEmpty())
         {
-            popmenu.insertSeparator();
+            popmenu.insertSeparator(-1);
         }
 
         if(AlbumSettings::instance()->getUseTrash())
@@ -821,7 +824,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             == AlbumSettings::ByFolder)
         {
             // TODO: Copy?
-            QPopupMenu popMenu(this);
+            KPopupMenu popMenu(this);
+            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem(SmallIcon("goto"), i18n("&Move Here"), 10);
             popMenu.insertSeparator(-1);
             popMenu.insertItem(SmallIcon("cancel"), i18n("C&ancel"), 20);
@@ -916,11 +920,11 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             }
             else
             {
-                QPopupMenu popMenu(this);
+                KPopupMenu popMenu(this);
+                popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
                 popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
                 popMenu.insertSeparator(-1);
                 popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-
                 popMenu.setMouseTracking(true);
                 id = popMenu.exec(QCursor::pos());
             }
@@ -949,12 +953,12 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            QPopupMenu popMenu(this);
+            KPopupMenu popMenu(this);
+            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-
             popMenu.setMouseTracking(true);
             id = popMenu.exec(QCursor::pos());
         }
@@ -1022,12 +1026,12 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         }
         else
         {
-            QPopupMenu popMenu(this);
+            KPopupMenu popMenu(this);
+            popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
-
             popMenu.setMouseTracking(true);
             id = popMenu.exec(QCursor::pos());
         }

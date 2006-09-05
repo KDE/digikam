@@ -3,6 +3,8 @@
  * Date  : 2005-05-06
  * Copyright 2005-2006 by Joern Ahrens
  *
+ * Description : Albums folder view.
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -30,7 +32,6 @@
 #include "folderview.h"
 
 class QPixmap;
-class QDataStream;
 
 class KURL;
 
