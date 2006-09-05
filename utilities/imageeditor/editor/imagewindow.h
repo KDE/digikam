@@ -36,14 +36,11 @@
 #include "editorwindow.h"
 #include "imageinfo.h"
 
-class QStringList;
-
 namespace Digikam
 {
 
 class AlbumIconView;
 class ImageWindowPriv;
-class ImagePropertiesSideBarDB;
 
 class ImageWindow : public EditorWindow
 {
