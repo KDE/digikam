@@ -26,11 +26,11 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qtimer.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 
 // KDE includes.
 
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
@@ -527,7 +527,8 @@ void TagFilterView::slotTimeOut()
 
 void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
 {
-    QPopupMenu popmenu(this);
+    KPopupMenu popmenu(this);
+    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
 
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(it);
     if (item && item->m_untagged)
