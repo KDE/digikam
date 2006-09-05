@@ -356,7 +356,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
     emit signalImageLoaded(d->filename, valRet);
     setModified();
 
-    if (!valRet)
+    // Note: in showfoto, we using a null filename to clear canvas.
+    if (!valRet && fileName != QString::null)
     {
         QFileInfo fi(fileName);
         QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
