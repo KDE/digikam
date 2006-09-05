@@ -24,3 +24,4 @@ libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp \
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
 KDE_OPTIONS=nofinal
+
