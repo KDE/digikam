@@ -33,7 +33,6 @@
 #include <qlistview.h>
 #include <qguardedptr.h>
 #include <qheader.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
@@ -41,6 +40,7 @@
 
 // KDE includes.
 
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kdebug.h>
@@ -565,8 +565,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     if(!album)
         return;
 
-    QPopupMenu popmenu(this);
-
+    KPopupMenu popmenu(this);
+    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
     popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
 
     if (!album->isRoot())
