@@ -725,8 +725,11 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     dir.setSorting ( QDir::Time );
 
     const QFileInfoList* fileinfolist = dir.entryInfoList();
-    if (!fileinfolist)
-       return;
+    if (!fileinfolist || fileinfolist->isEmpty())
+    {
+        KMessageBox::sorry(this, i18n("There is no picture to load into this folder!"));
+        return;
+    }
     
     QFileInfoListIterator it(*fileinfolist);
     QFileInfo* fi;
@@ -902,7 +905,6 @@ bool ShowFoto::save()
 
     if (!m_currentItem->url().isLocalFile())
     {
-        KMessageBox::sorry(this, i18n("No yet support for saving non-local files"));
         return false;
     }
 
