@@ -30,7 +30,6 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include <qpixmap.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
@@ -39,6 +38,7 @@
 
 // KDE includes.
 
+#include <kpopupmenu.h>
 #include <kurldrag.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -410,7 +410,8 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
-    QPopupMenu menu;
+    KPopupMenu menu;
+    menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
     menu.insertSeparator();
     menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
@@ -530,7 +531,8 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
 
 void CameraIconView::uploadItemPopupMenu(const KURL::List& srcURLs)
 {
-    QPopupMenu popMenu(this);
+    KPopupMenu popMenu(this);
+    popMenu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     popMenu.insertItem( SmallIcon("goto"), i18n("&Upload into camera"), 10 );
     popMenu.insertSeparator(-1);
     popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );

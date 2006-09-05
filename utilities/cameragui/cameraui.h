@@ -61,6 +61,8 @@ public:
     // Get status of JPEG conversion files to lossless format during download.
     bool convertLosslessJpegFiles() const;
     QString losslessFormat();
+
+    QString cameraTitle() const;
     
 signals:
     

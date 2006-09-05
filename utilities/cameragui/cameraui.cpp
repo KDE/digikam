@@ -604,6 +604,11 @@ QString CameraUI::losslessFormat()
     return d->losslessFormat->currentText();
 }
 
+QString CameraUI::cameraTitle() const
+{
+    return d->cameraTitle;
+}
+
 void CameraUI::slotCancelButton()
 {
     d->status->setText(i18n("Cancelling current operation, please wait..."));
