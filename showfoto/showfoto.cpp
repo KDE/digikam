@@ -98,12 +98,19 @@ namespace ShowFoto
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : Digikam::EditorWindow( "Showfoto" )
 {
-    m_currentItem            = 0;
-    m_itemsNb                = 0;
-    m_splash                 = 0;
-    m_BCGAction              = 0;
-    m_deleteItem2Trash       = true;
-    m_fullScreenHideThumbBar = true;
+    m_currentItem             = 0;
+    m_itemsNb                 = 0;
+    m_splash                  = 0;
+    m_BCGAction               = 0;
+    m_showBarAction           = 0;
+    m_openFilesInFolderAction = 0;
+    m_fileOpenAction          = 0;
+    m_bar                     = 0;
+    m_rightSidebar            = 0;
+    m_splash                  = 0;
+    m_itemsNb                 = 0;
+    m_deleteItem2Trash        = true;
+    m_fullScreenHideThumbBar  = true;
 
     // -- Show splash at start ----------------------------
     

@@ -73,10 +73,6 @@ private:
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
     
-    // If current image file format is only available in read only,
-    // typicially all RAW image file formats.
-    bool                             m_isReadOnly;
-
     int                              m_itemsNb;
 
     KURL                             m_lastOpenedDirectory;
