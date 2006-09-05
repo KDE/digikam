@@ -21,6 +21,7 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	   -I$(top_srcdir)/digikam/utilities/splashscreen \
 	   -I$(top_srcdir)/digikam/utilities/setup \
 	   -I$(top_srcdir)/digikam/ \
+	   -I$(top_builddir)/digikam/libs/dialogs \
 	   $(LIBKIPI_CFLAGS) $(all_includes)
 
 # -- shared digiKam library rules -----------------------------------------------
