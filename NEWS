@@ -78,6 +78,7 @@ CameraGUI     : New option to auto-create files extension-based sub-albums.
 Image Plugins : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Plugins : "Add Border" tool now use a border size depending of a percent value of original image size.
 
+General       : New dcraw version detection at startup.
 General       : New option to force the refresh of Album contents.
 General       : Usability improvements of albums/pictures deletion.
 General       : New option to process a batch creation of all albums items thumbnails.
