@@ -132,7 +132,7 @@ bool DcrawBinary::versionIsRight() const
 
 QString DcrawBinary::minimalVersion() const
 {
-    return QString("8.09");
+    return QString("8.03");
 }
 
 void DcrawBinary::checkReport()
