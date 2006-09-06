@@ -217,6 +217,8 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     // put right side bar in a defined state
     emit signalNoCurrentItem();
 
+    m_canvas->resetImage();
+
     saveSettings();
 
     e->accept();

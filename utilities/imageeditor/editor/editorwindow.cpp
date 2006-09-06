@@ -96,7 +96,7 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const char *name)
-            : KMainWindow(0, name, WType_TopLevel|WDestructiveClose)
+            : KMainWindow(0, name, WType_TopLevel)
 {
     d = new EditorWindowPriv;
 

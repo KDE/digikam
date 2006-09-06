@@ -219,20 +219,22 @@ ShowFoto::~ShowFoto()
     delete m_rightSidebar;
 }
 
-void ShowFoto::closeEvent(QCloseEvent* e)
+bool ShowFoto::queryClose()
 {
-    if (!e)
-        return;
-
     // wait if a save operation is currently running
     if (!waitForSavingToComplete())
-        return;
+        return false;
 
     if (m_currentItem && !promptUserSave(m_currentItem->url()))
-        return;
+        return false;
 
+    return true;
+}
+
+bool ShowFoto::queryExit()
+{
     saveSettings();
-    e->accept();
+    return true;
 }
 
 void ShowFoto::setupConnections()

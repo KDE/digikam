@@ -175,8 +175,27 @@ DImgInterface::~DImgInterface()
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings,
                          QWidget *parent)
 {
-    d->valid          = false;
+    resetValues();
+
     d->filename       = filename;
+    d->iofileSettings = iofileSettings;
+    d->parent         = parent;
+
+    d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
+                     SharedLoadSaveThread::AccessModeReadWrite,
+                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+}
+
+void DImgInterface::resetImage()
+{
+    resetValues();
+    d->image.reset();
+}
+
+void DImgInterface::resetValues()
+{
+    d->valid          = false;
+    d->filename       = QString();
     d->width          = 0;
     d->height         = 0;
     d->origWidth      = 0;
@@ -189,15 +208,11 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
     d->contrast       = 1.0;
     d->brightness     = 0.0;
     d->changedBCG     = false;
-    d->iofileSettings = iofileSettings;
-    d->parent         = parent;
+    d->iofileSettings = 0;
+    d->parent         = 0;
 
     d->cmod.reset();
     d->undoMan->clear();
-
-    d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
-                     SharedLoadSaveThread::AccessModeReadWrite,
-                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
 
 void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)

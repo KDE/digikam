@@ -387,7 +387,14 @@ Canvas::~Canvas()
     delete d;
 }
 
-void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettings)
+void Canvas::resetImage()
+{
+    reset();
+    viewport()->setUpdatesEnabled(false);
+    d->im->resetImage();
+}
+
+void Canvas::reset()
 {
     if (d->rubber)
     {
@@ -401,11 +408,16 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
     {
         delete d->imageHistogram;
         d->imageHistogram = 0;
-    }    
-    
-    viewport()->setUpdatesEnabled(false);
+    }
 
     d->tileCache.clear();
+}
+
+void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettings)
+{
+    reset();
+
+    viewport()->setUpdatesEnabled(false);
 
     d->im->load( filename, IOFileSettings, d->parent );
     emit signalLoadingStarted(filename);
@@ -674,7 +686,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
 
-    if (!cr.isEmpty())
+    if (!cr.isEmpty() && d->im->imageValid())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
 

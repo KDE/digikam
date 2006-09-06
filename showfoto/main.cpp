@@ -119,5 +119,7 @@ int main(int argc, char *argv[])
     KGlobal::locale()->insertCatalogue("digikamimageplugins");
 
     return app.exec();
+
+    delete w;
 }
 

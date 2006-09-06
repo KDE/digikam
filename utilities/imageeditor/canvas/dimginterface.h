@@ -72,6 +72,7 @@ public:
     void   clearUndoManager();
     void   setUndoManagerOrigin();
     void   updateUndoState();
+    void   resetImage();
 
     void   zoom(double val);
 
@@ -165,6 +166,7 @@ signals:
 private:
 
     void   exifRotate(const QString& filename);
+    void   resetValues();
 
     DImgInterface();
 

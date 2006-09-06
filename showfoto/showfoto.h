@@ -91,7 +91,8 @@ private:
 
 private:
 
-    void closeEvent(QCloseEvent* e);
+    bool queryClose();
+    bool queryExit();
 
     void setupActions();
     void setupConnections();

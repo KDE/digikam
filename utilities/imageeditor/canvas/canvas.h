@@ -62,6 +62,7 @@ public:
 
     void  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
                  bool setExifOrientationTag, const QString& mimeType=QString::null);
+    void  resetImage();
     void  switchToLastSaved(const QString& newFilename);
     void  abortSaving();
     void  setModified();
@@ -126,6 +127,8 @@ private:
     void createHistogramPixmap();
     void drawHistogramPixmapBusy();
     void drawHistogramPixmap();
+
+    void reset();
 
 public slots:
 
