@@ -410,13 +410,14 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
 
     CameraIconViewItem* camItem = static_cast<CameraIconViewItem*>(item);
     
-    KPopupMenu menu;
+    KPopupMenu menu(this);
     menu.insertTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     menu.insertItem(SmallIcon("editimage"), i18n("&View"), 0);
-    menu.insertSeparator();
+    menu.insertSeparator(-1);
     menu.insertItem(SmallIcon("down"),i18n("Download"), 1);
-    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
     menu.insertItem(SmallIcon("encrypted"), i18n("Toggle lock"), 3);
+    menu.insertSeparator(-1);
+    menu.insertItem(SmallIcon("editdelete"), i18n("Delete"), 2);
 
     int result = menu.exec(QCursor::pos());
 
