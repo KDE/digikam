@@ -772,7 +772,7 @@ void DigikamApp::setupActions()
     KAction* findAction = KStdAction::find(mView, SLOT(slotNewQuickSearch()),
                                            actionCollection(), "search_quick");
     findAction->setText(i18n("Quick Search..."));
-    findAction->setIconSet(SmallIcon("filefind"));
+    findAction->setIconSet(BarIcon("filefind"));
 
     KAction* advFindAction = KStdAction::find(mView, SLOT(slotNewAdvancedSearch()),
                                               actionCollection(), "search_advanced");
