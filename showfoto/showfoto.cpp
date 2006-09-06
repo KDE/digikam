@@ -78,6 +78,7 @@ extern "C"
 #include "rawfiles.h"
 #include "canvas.h"
 #include "thumbbar.h"
+#include "dcrawbinary.h"
 #include "imagepropertiessidebar.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -123,6 +124,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     {
         m_splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
+
+    // Check witch dcraw version available
+
+    if(m_splash)
+        m_splash->message(i18n("Checking dcraw version"), AlignLeft, white);
+
+    Digikam::DcrawBinary::instance()->checkSystem();
 
     // -- Build the GUI -----------------------------------
 
@@ -408,6 +416,9 @@ void ShowFoto::slotOpenFile()
 #if KDE_IS_VERSION(3,5,2)
     //-- With KDE version >= 3.5.2, "image/x-raw" type mime exist ------------------------------
     
+    // TODO: - Remove all image/x-raw file format given by KDE and check if dcraw is available.
+    //       - Use the Raw file extension giving by digiKam API instead, because the list given 
+    //         by KDE is uncomplete.
     fileformats = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
 #else
     //-- with KDE version < 3.5.2, we need to add all camera RAW file formats ------------------
@@ -418,14 +429,20 @@ void ShowFoto::slotOpenFile()
     QString allPictures = patternList[0];
     
     // Add RAW file format to All Pictures" type mime and remplace current.
-    allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
-    patternList.remove(patternList[0]);
-    patternList.prepend(allPictures);
+    if (Digikam::DcrawBinary::instance()->versionIsRight())
+    {
+        allPictures.insert(allPictures.find("|"), QString(raw_file_extentions));
+        patternList.remove(patternList[0]);
+        patternList.prepend(allPictures);
+    }
     
     // Added RAW file formats supported by dcraw program like a type mime. 
     // Nota: we cannot use here "image/x-raw" type mime from KDE because it 
     // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
-    patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    if (Digikam::DcrawBinary::instance()->versionIsRight())
+    {
+        patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+    }
     
     fileformats = patternList.join("\n");
 #endif
@@ -606,6 +623,9 @@ void ShowFoto::show()
         m_splash = 0;
     }
     KMainWindow::show();
+
+    // Report errors from dcraw detection.
+    Digikam::DcrawBinary::instance()->checkReport();  
 }
 
 void ShowFoto::setup(bool iccSetupPage)

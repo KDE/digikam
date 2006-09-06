@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : main.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-22
@@ -37,7 +36,6 @@
 // Local includes.
 
 #include "showfoto.h"
-#include "dcrawbinary.h"
 
 static KCmdLineOptions options[] =
 {
@@ -100,9 +98,6 @@ int main(int argc, char *argv[])
 
     KApplication app;
     KImageIO::registerFormats();
-
-    if (!Digikam::DcrawBinary::instance()->checkSystem())
-        return 1;
 
     KURL::List urlList;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

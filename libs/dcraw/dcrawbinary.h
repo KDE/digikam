@@ -1,7 +1,7 @@
 /* ============================================================
  * Author: Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date  : 2006-04-13
- * Description : Autodetect dcraw binary
+ * Description : Autodetect dcraw binary program and version
  *
  * Copyright 2006 by Marcel Wiesweg
  *
@@ -24,35 +24,51 @@
 // Qt includes.
 
 #include <qstring.h>
+#include <qobject.h>
 
 // Digikam Includes.
 
 #include "digikam_export.h"
 
+class KProcess;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DcrawBinary
+class DcrawBinaryPriv;
+
+class DIGIKAM_EXPORT DcrawBinary : public QObject
 {
+    Q_OBJECT
 
 public:
 
     static DcrawBinary *instance();
     static void cleanUp();
 
-    bool checkSystem();
-
     const char *path();
-    bool isAvailable();
+    bool isAvailable() const;
+    QString version() const;
+    bool versionIsRight() const;
+    QString minimalVersion() const;
+
+    void checkSystem();
+    void checkReport();
+
+private slots:
+
+    void slotReadStderrFromDcraw(KProcess*, char*, int);
 
 private:
 
     DcrawBinary();
     ~DcrawBinary();
 
-    static DcrawBinary *m_instance;
+private:
 
-    bool m_available;
+    DcrawBinaryPriv    *d;
+
+    static DcrawBinary *m_instance;
 };
 
 } // namespace Digikam
