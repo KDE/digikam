@@ -573,10 +573,11 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     {
         popmenu.insertItem(SmallIcon("pencil"),      i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"),         13);        
+        popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("edittrash"),   i18n("Delete Tag"),             12);
     }
 
-    popmenu.insertSeparator();
+    popmenu.insertSeparator(-1);
     popmenu.insertItem(i18n("Select All"),       14);
     popmenu.insertItem(i18n("Deselect"),         15);
     popmenu.insertItem(i18n("Invert Selection"), 16);
