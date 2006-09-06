@@ -35,6 +35,7 @@
 
 // KDE includes.
 
+#include <kaboutdata.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -101,13 +102,12 @@ DigikamApp* DigikamApp::m_instance = 0;
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
-    m_instance     = this;
-    m_config       = kapp->config();
-    m_accelerators = 0;
-
-    mFullScreen   = false;
-    mView         = 0;
-    mValidIccPath = true;
+    m_instance        = this;
+    m_config          = kapp->config();
+    m_accelerators    = 0;
+    mFullScreen       = false;
+    mView             = 0;
+    mValidIccPath     = true;
     
     mSplash = 0;
     if(m_config->readBoolEntry("Show Splash", true) &&
@@ -123,8 +123,9 @@ DigikamApp::DigikamApp()
     AlbumLister::instance();
 
     mCameraMediaList = new QPopupMenu;
-    connect( mCameraMediaList, SIGNAL( aboutToShow() ),
-             SLOT( slotCameraMediaMenu() ) );
+
+    connect(mCameraMediaList, SIGNAL( aboutToShow() ),
+            this, SLOT(slotCameraMediaMenu()));
 
     mCameraList = new CameraList(this, locateLocal("appdata", "cameras.xml"));
 
@@ -140,22 +141,32 @@ DigikamApp::DigikamApp()
 
     applyMainWindowSettings(m_config);
 
+    // Check ICC profiles repository
+    if(mSplash)
+        mSplash->message(i18n("Checking ICC repository"), AlignLeft, white);
+
     m_config->setGroup("Color Management");
     QDir tmpPath(m_config->readPathEntry("DefaultPath", QString::null));
     if (!tmpPath.exists())
     {
         mValidIccPath = false;
     }
-
     kdDebug() << "ICC profiles repository is: " << tmpPath.dirName() << endl;
+
+    // Check witch dcraw version available
+
+    if(mSplash)
+        mSplash->message(i18n("Checking dcraw version"), AlignLeft, white);
+
+    Digikam::DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
 
+    // Read albums from database
     if(mSplash)
         mSplash->message(i18n("Reading database"), AlignLeft, white);
 
-    // Read albums from database
     mAlbumManager->startScan();
 
     // Load KIPI Plugins.
@@ -167,8 +178,10 @@ DigikamApp::DigikamApp()
     setAutoSaveSettings();
 
     mDcopIface = new DCOPIface(this, "camera");
+
     connect(mDcopIface, SIGNAL(signalCameraAutoDetect()), 
             this, SLOT(slotDcopCameraAutoDetect()));
+
     connect(mDcopIface, SIGNAL(signalDownloadImages( const QString & )),
             this, SLOT(slotDcopDownloadImages(const QString &)));
 }
@@ -205,6 +218,7 @@ DigikamApp* DigikamApp::getinstance()
 
 void DigikamApp::show()
 {
+    // Remove Splashscreen.
     if(mSplash)
     {
         mSplash->finish(this);
@@ -213,6 +227,8 @@ void DigikamApp::show()
     }
 
     KMainWindow::show();
+
+    // Report errors from ICC repository path.
     if(!mValidIccPath)
     {
         QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
@@ -232,6 +248,9 @@ void DigikamApp::show()
             m_config->writeEntry("EnableCM", false);
         }
     }
+
+    // Report errors from dcraw detection.
+    Digikam::DcrawBinary::instance()->checkReport();  
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()

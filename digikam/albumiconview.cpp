@@ -890,7 +890,7 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     QString imagefilter = settings->getImageFileFilter().lower() +
                           settings->getImageFileFilter().upper();
 
-    if (DcrawBinary::instance()->isAvailable())
+    if (DcrawBinary::instance()->versionIsRight())
     {
         // add raw files only if dcraw is available
         imagefilter += settings->getRawFileFilter().lower() +

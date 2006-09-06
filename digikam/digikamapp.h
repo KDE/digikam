@@ -163,7 +163,6 @@ private slots:
 private:
 
     bool                   mFullScreen;
-
     bool                   mValidIccPath;
     
     // KIPI plugins support
