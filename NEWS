@@ -260,6 +260,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 160 ==> 133525 : digiKam doesn't compile (KDE forces -fno-exception, digikam needs it).
 161 ==> 115160 : 'Tag Filters' should use 'and' not 'or' or maybe better label 'Show Tags'.
 162 ==> 120056 : Allow to assign via drag and drop tag thumbnails in 'Tag Filters'.
-163 ==> 
+163 ==> 132694 : RAW Thumbnailing very slower and resource intensive.
+164 ==> 
 
 ----------------------------------------------------------------------------------------------------
