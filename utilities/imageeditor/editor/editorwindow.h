@@ -61,7 +61,7 @@ public:
     ~EditorWindow();
 
     virtual void applySettings(){};
-    virtual void setup(bool iccSetupPage=false)=0;
+    virtual bool setup(bool iccSetupPage=false)=0;
 
 signals:
 

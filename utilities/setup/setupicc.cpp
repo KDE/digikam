@@ -37,6 +37,7 @@
 #include <qpushbutton.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qdir.h>
 #include <qtooltip.h>
 
 // KDE includes.
@@ -687,6 +688,26 @@ void SetupICC::slotToggleManagedView(bool b)
 {
     d->monitorProfilesKC->setEnabled(b);
     d->infoMonitorProfiles->setEnabled(b);
+}
+
+bool SetupICC::iccRepositoryIsValid()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management");
+
+    // If color management is disable, no need to check anymore.
+    if (!config->readBoolEntry("EnableCM", false))
+        return true;
+
+    // To be valid, the ICC profiles repository must exist and be readable.
+
+    QDir tmpPath(config->readPathEntry("DefaultPath", QString::null));
+    kdDebug() << "ICC profiles repository is: " << tmpPath.dirName() << endl;
+
+    if ( tmpPath.exists() && tmpPath.isReadable() )
+        return true;
+
+    return false;
 }
             
 }  // namespace Digikam

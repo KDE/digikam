@@ -47,6 +47,8 @@ public:
 
     void applySettings();
 
+    static bool iccRepositoryIsValid();
+
 private:
 
     void readSettings();

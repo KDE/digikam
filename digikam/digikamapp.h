@@ -114,6 +114,7 @@ protected slots:
 
 private:
 
+    bool setup(bool iccSetupPage=false);
     void setupView();
     void setupActions();
     void setupAccelerators();

@@ -75,6 +75,7 @@
 #include "setup.h"
 #include "setupplugins.h"
 #include "setupeditor.h"
+#include "setupicc.h"
 #include "setupimgplugins.h"
 #include "imagepluginloader.h"
 #include "imagewindow.h"
@@ -141,24 +142,19 @@ DigikamApp::DigikamApp()
 
     applyMainWindowSettings(m_config);
 
-    // Check ICC profiles repository
+    // Check ICC profiles repository availability
+
     if(mSplash)
         mSplash->message(i18n("Checking ICC repository"), AlignLeft, white);
 
-    m_config->setGroup("Color Management");
-    QDir tmpPath(m_config->readPathEntry("DefaultPath", QString::null));
-    if (!tmpPath.exists())
-    {
-        mValidIccPath = false;
-    }
-    kdDebug() << "ICC profiles repository is: " << tmpPath.dirName() << endl;
+    mValidIccPath = SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
     if(mSplash)
         mSplash->message(i18n("Checking dcraw version"), AlignLeft, white);
 
-    Digikam::DcrawBinary::instance()->checkSystem();
+    DcrawBinary::instance()->checkSystem();
 
     // Actual file scanning is done in main() - is this necessary here?
     mAlbumManager->setLibraryPath(mAlbumSettings->getAlbumLibraryPath());
@@ -219,6 +215,7 @@ DigikamApp* DigikamApp::getinstance()
 void DigikamApp::show()
 {
     // Remove Splashscreen.
+
     if(mSplash)
     {
         mSplash->finish(this);
@@ -226,31 +223,39 @@ void DigikamApp::show()
         mSplash = 0;
     }
 
+    // Display application window.
+
     KMainWindow::show();
 
     // Report errors from ICC repository path.
+
     if(!mValidIccPath)
     {
         QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
                                "<p>If you want to set it now, select \"Yes\", otherwise "
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p></qt>");
-        int answer = KMessageBox::warningYesNo(this, message);
-        if (answer == KMessageBox::Yes)
+
+        if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
         {
-            Setup setup(this, 0, Setup::IccProfiles);
-            if (setup.exec() != QDialog::Accepted)
-            return;
+            if (!setup(true))
+            {
+                m_config->setGroup("Color Management");
+                m_config->writeEntry("EnableCM", false);
+                m_config->sync();
+            }
         }
         else
         {
             m_config->setGroup("Color Management");
             m_config->writeEntry("EnableCM", false);
+            m_config->sync();
         }
     }
 
     // Report errors from dcraw detection.
-    Digikam::DcrawBinary::instance()->checkReport();  
+
+    DcrawBinary::instance()->checkReport();  
 }
 
 const QPtrList<KAction>& DigikamApp::menuImageActions()
@@ -1335,7 +1340,12 @@ void DigikamApp::slotCameraAutoDetect()
 
 void DigikamApp::slotSetup()
 {
-    Setup setup(this);
+    setup();
+}
+
+bool DigikamApp::setup(bool iccSetupPage)
+{
+    Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);
 
     // To show the number of KIPI plugins in the setup dialog.
 
@@ -1343,12 +1353,14 @@ void DigikamApp::slotSetup()
     setup.kipiPluginsPage()->initPlugins((int)list.count());
 
     if (setup.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     setup.kipiPluginsPage()->applyPlugins();
     m_ImagePluginsLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
 
     slotSetupChanged();
+
+    return true;
 }
 
 void DigikamApp::slotSetupCamera()

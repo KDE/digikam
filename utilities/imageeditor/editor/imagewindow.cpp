@@ -692,12 +692,12 @@ void ImageWindow::slotUpdateItemInfo()
     }
 }
 
-void ImageWindow::setup(bool iccSetupPage)
+bool ImageWindow::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::IccProfiles : Setup::LastPageUsed);    
         
     if (setup.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     unLoadImagePlugins();
     m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
@@ -705,6 +705,7 @@ void ImageWindow::setup(bool iccSetupPage)
     loadImagePlugins();
     
     applySettings();
+    return true;
 }
 
 void ImageWindow::toggleGUI2FullScreen()

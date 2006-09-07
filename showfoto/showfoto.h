@@ -66,12 +66,13 @@ public:
     ~ShowFoto();
     
     virtual void show();
-    void setup(bool iccSetupPage=false);
+    bool setup(bool iccSetupPage=false);
 
 private:
     
     bool                             m_fullScreenHideThumbBar;
     bool                             m_deleteItem2Trash;
+    bool                             m_validIccPath;
     
     int                              m_itemsNb;
 

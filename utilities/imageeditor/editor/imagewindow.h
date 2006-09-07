@@ -64,7 +64,7 @@ public:
     static bool         imagewindowCreated();
 
     void applySettings();
-    void setup(bool iccSetupPage=false);
+    bool setup(bool iccSetupPage=false);
 
     bool queryClose();
 

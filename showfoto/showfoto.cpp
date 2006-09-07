@@ -85,6 +85,7 @@ extern "C"
 #include "dimginterface.h"
 #include "splashscreen.h"
 #include "setup.h"
+#include "setupicc.h"
 #include "setupimgplugins.h"
 #include "iofileprogressbar.h"
 #include "iccsettingscontainer.h"
@@ -112,6 +113,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     m_itemsNb                 = 0;
     m_deleteItem2Trash        = true;
     m_fullScreenHideThumbBar  = true;
+    m_validIccPath            = true;
 
     // -- Show splash at start ----------------------------
     
@@ -124,6 +126,13 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     {
         m_splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
+
+    // Check ICC profiles repository availability
+
+    if(m_splash)
+        m_splash->message(i18n("Checking ICC repository"), AlignLeft, white);
+
+    m_validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
@@ -243,6 +252,53 @@ bool ShowFoto::queryExit()
 {
     saveSettings();
     return true;
+}
+
+void ShowFoto::show()
+{
+    // Remove Splashscreen.
+
+    if(m_splash)
+    {
+        m_splash->finish(this);
+        delete m_splash;
+        m_splash = 0;
+    }
+
+    // Display application window.
+
+    KMainWindow::show();
+
+    // Report errors from ICC repository path.
+
+    KConfig* config = kapp->config();
+    if(!m_validIccPath)
+    {
+        QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
+                               "<p>If you want to set it now, select \"Yes\", otherwise "
+                               "select \"No\". In this case, \"Color Management\" feature "
+                               "will be disabled until you solve this issue</p></qt>");
+
+        if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
+        {
+            if (!setup(true))
+            {
+                config->setGroup("Color Management");
+                config->writeEntry("EnableCM", false);
+                config->sync();
+            }
+        }
+        else
+        {
+            config->setGroup("Color Management");
+            config->writeEntry("EnableCM", false);
+            config->sync();
+        }
+    }
+
+    // Report errors from dcraw detection.
+
+    Digikam::DcrawBinary::instance()->checkReport();  
 }
 
 void ShowFoto::setupConnections()
@@ -614,26 +670,12 @@ void ShowFoto::slotFilePrint()
     printImage(m_currentItem->url());
 }
 
-void ShowFoto::show()
-{
-    if(m_splash)
-    {
-        m_splash->finish(this);
-        delete m_splash;
-        m_splash = 0;
-    }
-    KMainWindow::show();
-
-    // Report errors from dcraw detection.
-    Digikam::DcrawBinary::instance()->checkReport();  
-}
-
-void ShowFoto::setup(bool iccSetupPage)
+bool ShowFoto::setup(bool iccSetupPage)
 {
     Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
     
     if (setup.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     unLoadImagePlugins();
     m_imagePluginLoader->loadPluginsFromList(setup.imagePluginsPage()->getImagePluginsListEnable());
@@ -647,6 +689,8 @@ void ShowFoto::setup(bool iccSetupPage)
         slotUpdateItemInfo();
         toggleActions(false);
     }
+
+    return true;
 }
 
 void ShowFoto::slotUpdateItemInfo(void)
