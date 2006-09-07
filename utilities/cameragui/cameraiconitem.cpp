@@ -294,14 +294,20 @@ void CameraIconViewItem::paintItem()
             downloaded = SmallIcon( "button_cancel" );
             break;
         }
+        /* TODO: see B.K.O #107316 : disable temporally the unknow download status until     
+                 a new method to identify the already downloaded pictures from camera is 
+                 implemented.
+  
         case GPItemInfo::DownloadUnknow:
         {
             downloaded = d->pixmapUnknowPicture;
             break;
         }
+        */
     }
 
-    p.drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
+    if (!downloaded.isNull())
+        p.drawPixmap(rect().width() - downloaded.width() - 5, 5, downloaded);
 
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0) 
