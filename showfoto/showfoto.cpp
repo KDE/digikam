@@ -97,23 +97,53 @@ extern "C"
 namespace ShowFoto
 {
 
+class ShowFotoPriv
+{
+public:
+
+    ShowFotoPriv()
+    {
+        currentItem             = 0;
+        itemsNb                 = 0;
+        splash                  = 0;
+        BCGAction               = 0;
+        showBarAction           = 0;
+        openFilesInFolderAction = 0;
+        fileOpenAction          = 0;
+        thumbBar                = 0;
+        rightSidebar            = 0;
+        splash                  = 0;
+        itemsNb                 = 0;
+        deleteItem2Trash        = true;
+        fullScreenHideThumbBar  = true;
+        validIccPath            = true;
+    }
+
+    bool                             fullScreenHideThumbBar;
+    bool                             deleteItem2Trash;
+    bool                             validIccPath;
+    
+    int                              itemsNb;
+
+    KURL                             lastOpenedDirectory;
+    
+    KToggleAction                   *showBarAction;
+
+    KAction                         *openFilesInFolderAction;
+    KAction                         *fileOpenAction;
+    
+    KActionMenu                     *BCGAction;
+    
+    Digikam::ThumbBarView           *thumbBar;
+    Digikam::ThumbBarItem           *currentItem;
+    Digikam::ImagePropertiesSideBar *rightSidebar;
+    Digikam::SplashScreen           *splash;
+};
+
 ShowFoto::ShowFoto(const KURL::List& urlList)
         : Digikam::EditorWindow( "Showfoto" )
 {
-    m_currentItem             = 0;
-    m_itemsNb                 = 0;
-    m_splash                  = 0;
-    m_BCGAction               = 0;
-    m_showBarAction           = 0;
-    m_openFilesInFolderAction = 0;
-    m_fileOpenAction          = 0;
-    m_bar                     = 0;
-    m_rightSidebar            = 0;
-    m_splash                  = 0;
-    m_itemsNb                 = 0;
-    m_deleteItem2Trash        = true;
-    m_fullScreenHideThumbBar  = true;
-    m_validIccPath            = true;
+    d = new ShowFotoPriv();
 
     // -- Show splash at start ----------------------------
     
@@ -124,20 +154,20 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     if(config->readBoolEntry("ShowSplash", true) && !kapp->isRestored())
     {
-        m_splash = new Digikam::SplashScreen("showfoto-splash.png");
+        d->splash = new Digikam::SplashScreen("showfoto-splash.png");
     }
 
     // Check ICC profiles repository availability
 
-    if(m_splash)
-        m_splash->message(i18n("Checking ICC repository"), AlignLeft, white);
+    if(d->splash)
+        d->splash->message(i18n("Checking ICC repository"), AlignLeft, white);
 
-    m_validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
+    d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Check witch dcraw version available
 
-    if(m_splash)
-        m_splash->message(i18n("Checking dcraw version"), AlignLeft, white);
+    if(d->splash)
+        d->splash->message(i18n("Checking dcraw version"), AlignLeft, white);
 
     Digikam::DcrawBinary::instance()->checkSystem();
 
@@ -149,15 +179,15 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     
     // Load image plugins to GUI
 
-    m_imagePluginLoader = new Digikam::ImagePluginLoader(this, m_splash);
+    m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
     // If plugin core isn't available, plug BCG actions to collection instead.
     
     if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
     {
-        m_BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
-        m_BCGAction->setDelayed(false);
+        d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
+        d->BCGAction->setDelayed(false);
     
         KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
                                             this, SLOT(slotChangeBCG()),
@@ -178,15 +208,15 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
     
-        m_BCGAction->insert(incBrightAction);
-        m_BCGAction->insert(decBrightAction);
-        m_BCGAction->insert(incContrastAction);
-        m_BCGAction->insert(decContrastAction);
-        m_BCGAction->insert(incGammaAction);
-        m_BCGAction->insert(decGammaAction);
+        d->BCGAction->insert(incBrightAction);
+        d->BCGAction->insert(decBrightAction);
+        d->BCGAction->insert(incContrastAction);
+        d->BCGAction->insert(decContrastAction);
+        d->BCGAction->insert(incGammaAction);
+        d->BCGAction->insert(decGammaAction);
 
         QPtrList<KAction> bcg_actions;
-        bcg_actions.append( m_BCGAction );
+        bcg_actions.append( d->BCGAction );
         unplugActionList( "showfoto_bcg" );
         plugActionList( "showfoto_bcg", bcg_actions );
     }
@@ -210,8 +240,8 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
     for (KURL::List::const_iterator it = urlList.begin();
          it != urlList.end(); ++it)
     {
-        new Digikam::ThumbBarItem(m_bar, *it);
-        m_lastOpenedDirectory=(*it);
+        new Digikam::ThumbBarItem(d->thumbBar, *it);
+        d->lastOpenedDirectory=(*it);
     }
 
     if ( urlList.isEmpty() )
@@ -232,8 +262,9 @@ ShowFoto::~ShowFoto()
     unLoadImagePlugins();
 
     delete m_imagePluginLoader;
-    delete m_bar;
-    delete m_rightSidebar;
+    delete d->thumbBar;
+    delete d->rightSidebar;
+    delete d;
 }
 
 bool ShowFoto::queryClose()
@@ -242,7 +273,7 @@ bool ShowFoto::queryClose()
     if (!waitForSavingToComplete())
         return false;
 
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return false;
 
     return true;
@@ -258,11 +289,11 @@ void ShowFoto::show()
 {
     // Remove Splashscreen.
 
-    if(m_splash)
+    if(d->splash)
     {
-        m_splash->finish(this);
-        delete m_splash;
-        m_splash = 0;
+        d->splash->finish(this);
+        delete d->splash;
+        d->splash = 0;
     }
 
     // Display application window.
@@ -272,7 +303,7 @@ void ShowFoto::show()
     // Report errors from ICC repository path.
 
     KConfig* config = kapp->config();
-    if(!m_validIccPath)
+    if(!d->validIccPath)
     {
         QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
                                "<p>If you want to set it now, select \"Yes\", otherwise "
@@ -305,17 +336,17 @@ void ShowFoto::setupConnections()
 {
     setupStandardConnections();
 
-    connect(m_bar, SIGNAL(signalURLSelected(const KURL&)),
+    connect(d->thumbBar, SIGNAL(signalURLSelected(const KURL&)),
             this, SLOT(slotOpenURL(const KURL&)));
 
-    connect(m_bar, SIGNAL(signalItemAdded()),
+    connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
 
     connect(this, SIGNAL(signalSelectionChanged( QRect* )),
-            m_rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+            d->rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
-            m_rightSidebar, SLOT(slotNoCurrentItem()));
+            d->rightSidebar, SLOT(slotNoCurrentItem()));
 }
 
 void ShowFoto::setupUserArea()
@@ -333,13 +364,13 @@ void ShowFoto::setupUserArea()
         m_canvas          = new Digikam::Canvas(m_splitter);
         m_canvas->setSizePolicy(rightSzPolicy);
         
-        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+        d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
-        m_bar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
+        d->thumbBar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
         
-        hlay->addWidget(m_bar);
+        hlay->addWidget(d->thumbBar);
         hlay->addWidget(m_splitter);
-        hlay->addWidget(m_rightSidebar);
+        hlay->addWidget(d->rightSidebar);
     }
     else                                                     // Horizontal thumbbar layout
     {
@@ -349,17 +380,17 @@ void ShowFoto::setupUserArea()
         m_canvas          = new Digikam::Canvas(widget2);
         m_canvas->setSizePolicy(rightSzPolicy);
 
-        m_bar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
+        d->thumbBar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
 
         vlay->addWidget(m_canvas);
-        vlay->addWidget(m_bar);
+        vlay->addWidget(d->thumbBar);
                 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        m_rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+        d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
 
         hlay->addWidget(m_splitter);
-        hlay->addWidget(m_rightSidebar);        
+        hlay->addWidget(d->rightSidebar);        
     }        
 
     m_splitter->setFrameStyle( QFrame::NoFrame );
@@ -367,7 +398,7 @@ void ShowFoto::setupUserArea()
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
     setCentralWidget(widget);
-    m_rightSidebar->loadViewState();    
+    d->rightSidebar->loadViewState();    
 }
 
 void ShowFoto::setupActions()
@@ -376,10 +407,10 @@ void ShowFoto::setupActions()
 
     // Extra 'File' menu actions ---------------------------------------------
 
-    m_fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
+    d->fileOpenAction = KStdAction::open(this, SLOT(slotOpenFile()),
                        actionCollection(), "showfoto_open_file");
 
-    m_openFilesInFolderAction = new KAction(i18n("Open folder"),
+    d->openFilesInFolderAction = new KAction(i18n("Open folder"),
                                             "folder_image",
                                             CTRL+SHIFT+Key_O,
                                             this,
@@ -389,7 +420,7 @@ void ShowFoto::setupActions()
 
     // Extra 'View' menu actions ---------------------------------------------
 
-    m_showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
+    d->showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
                                         this, SLOT(slotToggleShowBar()),
                                         actionCollection(), "shofoto_showthumbs");
 
@@ -410,10 +441,10 @@ void ShowFoto::readSettings()
     bool showBar = false;
     showBar = config->readBoolEntry("Show Thumbnails", true);
     
-    if (!showBar && m_showBarAction->isChecked())
-        m_showBarAction->activate();
+    if (!showBar && d->showBarAction->isChecked())
+        d->showBarAction->activate();
 
-    m_lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
+    d->lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
                                    KGlobalSettings::documentPath()) );    
 }
 
@@ -424,8 +455,8 @@ void ShowFoto::saveSettings()
     KConfig* config = kapp->config();
     config->setGroup("ImageViewer Settings");
     
-    config->writeEntry("Last Opened Directory", m_lastOpenedDirectory.path() );
-    config->writeEntry("Show Thumbnails", !m_showBarAction->isChecked());
+    config->writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
+    config->writeEntry("Show Thumbnails", !d->showBarAction->isChecked());
 
     config->sync();    
 }
@@ -441,8 +472,8 @@ void ShowFoto::applySettings()
     m_canvas->setBackgroundColor(m_bgColor);
 
     // Current image deleted go to trash ?
-    m_deleteItem2Trash = config->readBoolEntry("DeleteItem2Trash", true);
-    if (m_deleteItem2Trash)
+    d->deleteItem2Trash = config->readBoolEntry("DeleteItem2Trash", true);
+    if (d->deleteItem2Trash)
     {
         m_fileDeleteAction->setIcon("edittrash");
         m_fileDeleteAction->setText(i18n("Move to Trash"));
@@ -455,16 +486,16 @@ void ShowFoto::applySettings()
 
     bool exifRotate = config->readBoolEntry("EXIF Rotate", true);
     m_canvas->setExifOrient(exifRotate);
-    m_bar->setExifRotate(exifRotate);
+    d->thumbBar->setExifRotate(exifRotate);
 
     m_setExifOrientationTag = config->readBoolEntry("EXIF Set Orientation", true);
     
-    m_fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
+    d->fullScreenHideThumbBar = config->readBoolEntry("FullScreenHideThumbBar", true);
 }
 
 void ShowFoto::slotOpenFile()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
     QString fileformats;
@@ -505,17 +536,17 @@ void ShowFoto::slotOpenFile()
 
     kdDebug () << "fileformats=" << fileformats << endl;   
     
-    KURL::List urls =  KFileDialog::getOpenURLs(m_lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
+    KURL::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
 
     if (!urls.isEmpty())
     {
-        m_bar->clear();
+        d->thumbBar->clear();
 
         for (KURL::List::const_iterator it = urls.begin();
              it != urls.end(); ++it)
         {
-            new Digikam::ThumbBarItem(m_bar, *it);
-            m_lastOpenedDirectory=(*it);
+            new Digikam::ThumbBarItem(d->thumbBar, *it);
+            d->lastOpenedDirectory=(*it);
         }
 
         toggleActions(true);
@@ -524,16 +555,16 @@ void ShowFoto::slotOpenFile()
 
 void ShowFoto::slotOpenURL(const KURL& url)
 {
-    if(m_currentItem && !promptUserSave(m_currentItem->url()))
+    if(d->currentItem && !promptUserSave(d->currentItem->url()))
     {
-        m_bar->blockSignals(true);
-        m_bar->setSelected(m_currentItem);
-        m_bar->blockSignals(false);
+        d->thumbBar->blockSignals(true);
+        d->thumbBar->setSelected(d->currentItem);
+        d->thumbBar->blockSignals(false);
         return;
     }
 
-    m_currentItem = m_bar->currentItem();
-    if(!m_currentItem)
+    d->currentItem = d->thumbBar->currentItem();
+    if(!d->currentItem)
         return;
 
     QString localFile;
@@ -552,31 +583,31 @@ void ShowFoto::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
-        m_rightSidebar->restore();
+        d->rightSidebar->restore();
 
         // If Hide Thumbbar option is checked, restore it.
-        if (!m_showBarAction->isChecked())
-            m_bar->show();
+        if (!d->showBarAction->isChecked())
+            d->thumbBar->show();
     }
     else
     {
-        m_rightSidebar->backup();
+        d->rightSidebar->backup();
 
         // If Hide Thumbbar option is checked, catch it if necessary.
-        if (!m_showBarAction->isChecked())
+        if (!d->showBarAction->isChecked())
         {
-            if (m_fullScreenHideThumbBar)
-                m_bar->hide();
+            if (d->fullScreenHideThumbBar)
+                d->thumbBar->hide();
         }
     }
 }
 
 void ShowFoto::slotToggleShowBar()
 {
-    if (m_showBarAction->isChecked())
-        m_bar->hide();
+    if (d->showBarAction->isChecked())
+        d->thumbBar->hide();
     else
-        m_bar->show();
+        d->thumbBar->show();
 }
 
 void ShowFoto::slotChangeBCG()
@@ -620,13 +651,13 @@ void ShowFoto::slotChanged()
                   .arg(dims.width()).arg(dims.height()).arg(mpixels);
     m_resLabel->setText(str);
 
-    if (m_currentItem)
+    if (d->currentItem)
     {
-        if (m_currentItem->url().isValid())
+        if (d->currentItem->url().isValid())
         {
             QRect sel          = m_canvas->getSelectedArea();
             Digikam::DImg* img = Digikam::DImgInterface::instance()->getImg();
-            m_rightSidebar->itemChanged(m_currentItem->url(),
+            d->rightSidebar->itemChanged(d->currentItem->url(),
                                         sel.isNull() ? 0 : &sel, img);
         }
     }    
@@ -648,8 +679,8 @@ void ShowFoto::toggleActions(bool val)
     toggleStandardActions(val);
         
     // if BCG actions exists then toggle it.
-    if (m_BCGAction)
-        m_BCGAction->setEnabled(val);
+    if (d->BCGAction)
+        d->BCGAction->setEnabled(val);
 
     // if no active slideshow then toggle it.
     if (!m_slideShowAction->isChecked())
@@ -661,13 +692,13 @@ void ShowFoto::toggleActions2SlideShow(bool val)
     toggleActions(val);
     
     // if slideshow mode then toggle file open actions.
-    m_fileOpenAction->setEnabled(val);
-    m_openFilesInFolderAction->setEnabled(val);
+    d->fileOpenAction->setEnabled(val);
+    d->openFilesInFolderAction->setEnabled(val);
 }
 
 void ShowFoto::slotFilePrint()
 {
-    printImage(m_currentItem->url());
+    printImage(d->currentItem->url());
 }
 
 bool ShowFoto::setup(bool iccSetupPage)
@@ -684,7 +715,7 @@ bool ShowFoto::setup(bool iccSetupPage)
     
     applySettings();
 
-    if ( m_itemsNb == 0 )
+    if ( d->itemsNb == 0 )
     {
         slotUpdateItemInfo();
         toggleActions(false);
@@ -695,31 +726,31 @@ bool ShowFoto::setup(bool iccSetupPage)
 
 void ShowFoto::slotUpdateItemInfo(void)
 {
-    m_itemsNb = m_bar->countItems();
+    d->itemsNb = d->thumbBar->countItems();
     
     m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
     
-    if (m_itemsNb > 0)
+    if (d->itemsNb > 0)
     {
         index = 1;
         
-        for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+        for (Digikam::ThumbBarItem *item = d->thumbBar->firstItem(); item; item = item->next())
         {
-            if (item->url().equals(m_currentItem->url()))
+            if (item->url().equals(d->currentItem->url()))
             {
                 break;
             }
             index++;
         }
 
-        text = m_currentItem->url().filename() +
+        text = d->currentItem->url().filename() +
                    i18n(" (%2 of %3)")
                    .arg(QString::number(index))
-                   .arg(QString::number(m_itemsNb));
+                   .arg(QString::number(d->itemsNb));
     
-        setCaption(m_currentItem->url().directory());
+        setCaption(d->currentItem->url().directory());
     }
     else 
     {
@@ -734,13 +765,13 @@ void ShowFoto::slotUpdateItemInfo(void)
     
 void ShowFoto::slotOpenFolder(const KURL& url)
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
     m_canvas->load(QString::null, m_IOFileSettings);
-    m_bar->clear(true);
+    d->thumbBar->clear(true);
     emit signalNoCurrentItem();
-    m_currentItem = 0;
+    d->currentItem = 0;
     
     if (!url.isValid() || !url.isLocalFile())
        return;
@@ -804,7 +835,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
 
     while( (fi = it.current() ) )
     {
-        new Digikam::ThumbBarItem( m_bar, KURL(fi->filePath()) );
+        new Digikam::ThumbBarItem( d->thumbBar, KURL(fi->filePath()) );
         ++it;
     }
         
@@ -814,64 +845,64 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     
 void ShowFoto::slotOpenFilesInFolder()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    KURL url(KFileDialog::getExistingDirectory(m_lastOpenedDirectory.directory(), 
+    KURL url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
                                                this, i18n("Open Images From Directory")));
 
     if (!url.isEmpty())
     {
-       m_lastOpenedDirectory = url;
+       d->lastOpenedDirectory = url;
        slotOpenFolder(url);
     }
 }
 
 void ShowFoto::slotFirst()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    m_bar->setSelected( m_bar->firstItem() );
+    d->thumbBar->setSelected( d->thumbBar->firstItem() );
 }
 
 void ShowFoto::slotLast()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    m_bar->setSelected( m_bar->lastItem() );
+    d->thumbBar->setSelected( d->thumbBar->lastItem() );
 }
 
 void ShowFoto::slotForward()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = d->thumbBar->currentItem();
     if (curr && curr->next())
     {
-        m_bar->setSelected(curr->next());
-        m_currentItem = m_bar->currentItem();
+        d->thumbBar->setSelected(curr->next());
+        d->currentItem = d->thumbBar->currentItem();
     }
 }
 
 void ShowFoto::slotBackward()
 {
-    if (m_currentItem && !promptUserSave(m_currentItem->url()))
+    if (d->currentItem && !promptUserSave(d->currentItem->url()))
         return;
 
-    Digikam::ThumbBarItem* curr = m_bar->currentItem();
+    Digikam::ThumbBarItem* curr = d->thumbBar->currentItem();
     if (curr && curr->prev())
     {
-        m_bar->setSelected(curr->prev());
-        m_currentItem = m_bar->currentItem();
+        d->thumbBar->setSelected(curr->prev());
+        d->currentItem = d->thumbBar->currentItem();
     }
 }
 
 void ShowFoto::toggleNavigation(int index)
 {
-    if ( m_itemsNb == 0 || m_itemsNb == 1 ) 
+    if ( d->itemsNb == 0 || d->itemsNb == 1 ) 
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
@@ -892,7 +923,7 @@ void ShowFoto::toggleNavigation(int index)
         m_firstAction->setEnabled(false);
     }
 
-    if (index == m_itemsNb) 
+    if (index == d->itemsNb) 
     {
         m_forwardAction->setEnabled(false);
         m_lastAction->setEnabled(false);
@@ -904,8 +935,8 @@ void ShowFoto::slotLoadingStarted(const QString& filename)
     Digikam::EditorWindow::slotLoadingStarted(filename);
 
     // Here we disable specific actions on showfoto.
-    m_openFilesInFolderAction->setEnabled(false);
-    m_fileOpenAction->setEnabled(false);
+    d->openFilesInFolderAction->setEnabled(false);
+    d->fileOpenAction->setEnabled(false);
 }
 
 void ShowFoto::slotLoadingFinished(const QString& filename, bool success)
@@ -913,8 +944,8 @@ void ShowFoto::slotLoadingFinished(const QString& filename, bool success)
     Digikam::EditorWindow::slotLoadingFinished(filename, success);
     
     // Here we re-enable specific actions on showfoto.
-    m_openFilesInFolderAction->setEnabled(true);
-    m_fileOpenAction->setEnabled(true);
+    d->openFilesInFolderAction->setEnabled(true);
+    d->fileOpenAction->setEnabled(true);
 }
 
 void ShowFoto::slotSavingStarted(const QString& filename)
@@ -922,8 +953,8 @@ void ShowFoto::slotSavingStarted(const QString& filename)
     Digikam::EditorWindow::slotSavingStarted(filename);
 
     // Here we disable specific actions on showfoto.
-    m_openFilesInFolderAction->setEnabled(false);
-    m_fileOpenAction->setEnabled(false);
+    d->openFilesInFolderAction->setEnabled(false);
+    d->fileOpenAction->setEnabled(false);
 }
 
 void ShowFoto::finishSaving(bool success)
@@ -931,15 +962,15 @@ void ShowFoto::finishSaving(bool success)
     Digikam::EditorWindow::finishSaving(success);
 
     // Here we re-enable specific actions on showfoto.
-    m_openFilesInFolderAction->setEnabled(true);
-    m_fileOpenAction->setEnabled(true);
+    d->openFilesInFolderAction->setEnabled(true);
+    d->fileOpenAction->setEnabled(true);
 }
 
 void ShowFoto::saveIsComplete()
 {
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
-    m_bar->invalidateThumb(m_currentItem);
-    //slotOpenURL(m_currentItem->url());
+    d->thumbBar->invalidateThumb(d->currentItem);
+    //slotOpenURL(d->currentItem->url());
 }
 
 void ShowFoto::saveAsIsComplete()
@@ -948,52 +979,52 @@ void ShowFoto::saveAsIsComplete()
     Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
-    Digikam::ThumbBarItem* foundItem = m_bar->findItemByURL(m_savingContext->destinationURL);
-    m_bar->invalidateThumb(foundItem);
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByURL(m_savingContext->destinationURL);
+    d->thumbBar->invalidateThumb(foundItem);
 
     if (!foundItem)
-        foundItem = new Digikam::ThumbBarItem(m_bar, m_savingContext->destinationURL);
+        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext->destinationURL);
 
     // shortcut slotOpenURL
-    m_bar->blockSignals(true);
-    m_bar->setSelected(foundItem);
-    m_bar->blockSignals(false);
-    m_currentItem = foundItem;
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->setSelected(foundItem);
+    d->thumbBar->blockSignals(false);
+    d->currentItem = foundItem;
 }
 
 bool ShowFoto::save()
 {
-    if (!m_currentItem)
+    if (!d->currentItem)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
         return true;
     }
 
-    if (!m_currentItem->url().isLocalFile())
+    if (!d->currentItem->url().isLocalFile())
     {
         return false;
     }
 
-    startingSave(m_currentItem->url());
+    startingSave(d->currentItem->url());
     return true;
 }
 
 bool ShowFoto::saveAs()
 {
-    if (!m_currentItem)
+    if (!d->currentItem)
     {
         kdWarning() << k_funcinfo << "This should not happen" << endl;
         return false;
     }
 
-    return ( startingSaveAs(m_currentItem->url()) );
+    return ( startingSaveAs(d->currentItem->url()) );
 }
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-    KURL urlCurrent(m_currentItem->url());
+    KURL urlCurrent(d->currentItem->url());
 
-    if (!m_deleteItem2Trash)
+    if (!d->deleteItem2Trash)
     {
         QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
                         .arg(urlCurrent.filename()));
@@ -1038,33 +1069,33 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
     // No error, remove item in thumbbar.
 
-    Digikam::ThumbBarItem *item2remove = m_currentItem;
+    Digikam::ThumbBarItem *item2remove = d->currentItem;
 
-    for (Digikam::ThumbBarItem *item = m_bar->firstItem(); item; item = item->next())
+    for (Digikam::ThumbBarItem *item = d->thumbBar->firstItem(); item; item = item->next())
     {
         if (item->url().equals(item2remove->url()))
         {
-            m_bar->removeItem(item);
+            d->thumbBar->removeItem(item);
             break;
         }
     }
     
-    m_itemsNb = m_bar->countItems();
+    d->itemsNb = d->thumbBar->countItems();
 
     // Disable menu actions and SideBar if no current image.
 
-    if ( m_itemsNb == 0 )
+    if ( d->itemsNb == 0 )
     {
         emit signalNoCurrentItem();
         slotUpdateItemInfo();
         toggleActions(false);
         m_canvas->load(QString::null, m_IOFileSettings);
-        m_currentItem = 0;
+        d->currentItem = 0;
     }
     else
     {
-        m_currentItem = m_bar->currentItem();
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(m_currentItem->url())));
+        d->currentItem = d->thumbBar->currentItem();
+        QTimer::singleShot(0, this, SLOT(slotOpenURL(d->currentItem->url())));
     }
 }
 

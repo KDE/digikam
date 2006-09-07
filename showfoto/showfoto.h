@@ -1,10 +1,12 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *         Tom Albers <tomalbers@kde.nl>
  * Date  : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  * 
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
+ * Copyright 2005-2006 by Tom Albers 
  * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
@@ -31,30 +33,15 @@
 
 #include "editorwindow.h"
 
-class QPopupMenu;
-
-class KAction;
-class KActionMenu;
-class KToggleAction;
-class KSelectAction;
-class KConfig;
-class KToolBarPopupAction;
-
 namespace KIO
 {
 class Job;
 }
 
-namespace Digikam
-{
-class ThumbBarView;
-class ThumbBarItem;
-class ImagePropertiesSideBar;
-class SplashScreen;
-}
-
 namespace ShowFoto
 {
+
+class ShowFotoPriv;
 
 class ShowFoto : public Digikam::EditorWindow
 {
@@ -67,28 +54,6 @@ public:
     
     virtual void show();
     bool setup(bool iccSetupPage=false);
-
-private:
-    
-    bool                             m_fullScreenHideThumbBar;
-    bool                             m_deleteItem2Trash;
-    bool                             m_validIccPath;
-    
-    int                              m_itemsNb;
-
-    KURL                             m_lastOpenedDirectory;
-    
-    KToggleAction                   *m_showBarAction;
-
-    KAction                         *m_openFilesInFolderAction;
-    KAction                         *m_fileOpenAction;
-    
-    KActionMenu                     *m_BCGAction;
-    
-    Digikam::ThumbBarView           *m_bar;
-    Digikam::ThumbBarItem           *m_currentItem;
-    Digikam::ImagePropertiesSideBar *m_rightSidebar;
-    Digikam::SplashScreen           *m_splash;
 
 private:
 
@@ -143,6 +108,11 @@ private slots:
     void slotLoadingStarted(const QString &filename);
     void slotLoadingFinished(const QString &filename, bool success);
     void slotSavingStarted(const QString &filename);
+
+private:
+    
+    ShowFotoPriv* d;
+
 };
 
 }   // namespace ShowFoto
