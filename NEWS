@@ -87,6 +87,7 @@ General       : New option to set image as tag thumbnail on Tag Filters View usi
 General       : New option to set a matching condition to use between tags in Tag Filters View (OR or AND condition).
 
 Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option has been changed.
+Setup         : New Album Items Tool Tip setup tab to set witch information to show over the pictures using the pop-up window.
 
 ...
 
