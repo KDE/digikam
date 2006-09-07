@@ -44,6 +44,7 @@ public:
     {
         LastPageUsed = -1,
         General = 0,
+        ToolTip,
         Metadata,
         Identify,
         Collections,

@@ -38,6 +38,7 @@
 
 #include "batchthumbsgenerator.h"
 #include "setupgeneral.h"
+#include "setuptooltip.h"
 #include "setupmetadata.h"
 #include "setupidentity.h"
 #include "setupcollections.h"
@@ -62,6 +63,7 @@ public:
     SetupPrivate()
     {
         page_general     = 0;
+        page_tooltip     = 0;
         page_metadata    = 0;
         page_identity    = 0;
         page_collections = 0;
@@ -76,6 +78,7 @@ public:
         page_misc        = 0;
 
         generalPage      = 0;
+        tooltipPage      = 0;
         metadataPage     = 0;
         identityPage     = 0;
         collectionsPage  = 0;
@@ -91,6 +94,7 @@ public:
     }
 
     QFrame           *page_general;
+    QFrame           *page_tooltip;
     QFrame           *page_metadata;
     QFrame           *page_identity;
     QFrame           *page_collections;
@@ -105,6 +109,7 @@ public:
     QFrame           *page_misc;
 
     SetupGeneral     *generalPage;
+    SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
     SetupIdentity    *identityPage;
     SetupCollections *collectionsPage;
@@ -129,6 +134,10 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_general = addPage(i18n("Albums"), i18n("Albums Settings"),
                               BarIcon("folder_image", KIcon::SizeMedium));
     d->generalPage = new SetupGeneral(d->page_general, this);
+
+    d->page_tooltip = addPage(i18n("Tool Tip"), i18n("Album Items Tool Tip Settings"),
+                              BarIcon("contents", KIcon::SizeMedium));
+    d->tooltipPage = new SetupToolTip(d->page_tooltip);
 
     d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Informations Management"),
                                BarIcon("exifinfo", KIcon::SizeMedium));
@@ -187,9 +196,9 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     {
         KConfig* config = kapp->config();
         config->setGroup("General Settings");
-        showPage(config->readNumEntry("Setup Page", General));        
+        showPage(config->readNumEntry("Setup Page", General));
     }
-    
+
     show();
 }
 
@@ -198,13 +207,14 @@ Setup::~Setup()
     KConfig* config = kapp->config();
     config->setGroup("General Settings");
     config->writeEntry("Setup Page", activePageIndex());
-    config->sync();    
+    config->sync();
     delete d;
 }
 
 void Setup::slotOkClicked()
 {
     d->generalPage->applySettings();
+    d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->identityPage->applySettings();
     d->collectionsPage->applySettings();
@@ -213,10 +223,10 @@ void Setup::slotOkClicked()
     d->editorPage->applySettings();
     d->iofilesPage->applySettings();
     d->imgpluginsPage->applySettings();
-    d->slideshowPage->applySettings();    
+    d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
-    
+
     if (d->metadataPage->exifAutoRotateAsChanged())
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"

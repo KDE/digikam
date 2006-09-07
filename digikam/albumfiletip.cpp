@@ -53,6 +53,7 @@
 #include "dmetadata.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
+#include "albumsettings.h"
 #include "album.h"
 #include "albumfiletip.h"
 
@@ -72,21 +73,21 @@ public:
     }
 
     int            corner;
-    
+
     QLabel        *label;
-    
+
     QPixmap        corners[4];
-    
+
     AlbumIconView *view;
-    
+
     AlbumIconItem *iconItem;
-};    
+};
 
 AlbumFileTip::AlbumFileTip(AlbumIconView* view)
             : QFrame(0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool |
                      WStyle_StaysOnTop | WX11BypassWM)
 {
-    d = new AlbumFileTipPriv;    
+    d = new AlbumFileTipPriv;
     d->view = view;
     hide();
 
@@ -148,7 +149,7 @@ void AlbumFileTip::reposition()
     QRect desk = KGlobalSettings::desktopGeometry(rect.center());
 #else
     QRect desk = QApplication::desktop()->screenGeometry(
-        QApplication::desktop()->screenNumber(rect.center()) );
+                               QApplication::desktop()->screenNumber(rect.center()) );
 #endif
 
     if (rect.center().x() + width() > desk.right())
@@ -165,6 +166,7 @@ void AlbumFileTip::reposition()
             d->corner = 1;
         }
     }
+
     // should the tooltip be shown above or below the ivi ?
     if (rect.bottom() + height() > desk.bottom())
     {
@@ -185,7 +187,7 @@ void AlbumFileTip::renderArrows()
     int w = 10;
 
     // -- left top arrow -------------------------------------
-    
+
     QPixmap& pix0 = d->corners[0];
     pix0.resize(w, w);
     pix0.fill(colorGroup().background());
@@ -195,11 +197,11 @@ void AlbumFileTip::renderArrows()
 
     for (int j=0; j<w; j++)
         p0.drawLine(0, j, w-j-1, j);
-    
+
     p0.end();
-        
+
     // -- right top arrow ------------------------------------
-    
+
     QPixmap& pix1 = d->corners[1];
     pix1.resize(w, w);
     pix1.fill(colorGroup().background());
@@ -211,9 +213,9 @@ void AlbumFileTip::renderArrows()
         p1.drawLine(j, j, w-1, j);
 
     p1.end();
-    
+
     // -- left bottom arrow ----------------------------------
-        
+
     QPixmap& pix2 = d->corners[2];
     pix2.resize(w, w);
     pix2.fill(colorGroup().background());
@@ -223,11 +225,11 @@ void AlbumFileTip::renderArrows()
 
     for (int j=0; j<w; j++)
         p2.drawLine(0, j, j, j);
-    
+
     p2.end();
-        
+
     // -- right bottom arrow ---------------------------------
-        
+
     QPixmap& pix3 = d->corners[3];
     pix3.resize(w, w);
     pix3.fill(colorGroup().background());
@@ -238,7 +240,7 @@ void AlbumFileTip::renderArrows()
     for (int j=0; j<w; j++)
         p3.drawLine(w-j-1, j, w-1, j);
 
-    p3.end();    
+    p3.end();
 }
 
 bool AlbumFileTip::event(QEvent *e)
@@ -255,7 +257,7 @@ bool AlbumFileTip::event(QEvent *e)
       default:
           break;
     }
-    
+
     return QFrame::event(e);
 }
 
@@ -319,139 +321,212 @@ void AlbumFileTip::updateText()
     QFileInfo fileInfo(info->kurl().path());
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, info->kurl());
     DMetadata metaData(info->kurl().path());
-        
+
+    AlbumSettings* settings = AlbumSettings::instance();
+
     // -- File properties ----------------------------------------------
 
-    tip += headBeg + i18n("File Properties") + headEnd;
-
-    tip += cellBeg + i18n("Name:") + cellMid;
-    tip += info->kurl().fileName() + cellEnd;
-    
-    QDateTime modifiedDate = fileInfo.lastModified();
-    str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
-    tip += cellBeg + i18n("Modified:") + cellMid + str + cellEnd;
-
-    tip += cellBeg + i18n("Size:") + cellMid;
-    str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
-                         .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
-    tip += str + cellEnd;
-
-    QSize   dims;
-    QString rawFilesExt(raw_file_extentions);
-    
-    if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
+    if (settings->getToolTipsShowFileName()  ||
+        settings->getToolTipsShowFileDate()  ||
+        settings->getToolTipsShowFileSize()  ||
+        settings->getToolTipsShowImageType() ||
+        settings->getToolTipsShowImageDim())
     {
-        str = i18n("RAW Image");
-        dims = metaData.getImageDimensions();
-    }
-    else
-    {
-        str = fi.mimeComment();
+        tip += headBeg + i18n("File Properties") + headEnd;
 
-        KFileMetaInfo meta = fi.metaInfo();
-        if (meta.isValid())
+        if (settings->getToolTipsShowFileName())
         {
-            if (meta.containsGroup("Jpeg EXIF Data"))
-                dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-            else if (meta.containsGroup("General"))
-                dims = meta.group("General").item("Dimensions").value().toSize();
-            else if (meta.containsGroup("Technical"))
-                dims = meta.group("Technical").item("Dimensions").value().toSize();
+            tip += cellBeg + i18n("Name:") + cellMid;
+            tip += info->kurl().fileName() + cellEnd;
         }
-    }    
-    
-    tip += cellBeg + i18n("Type:") + cellMid + str + cellEnd;
-    
-    QString mpixels;
-    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-    str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
-          .arg(dims.width()).arg(dims.height()).arg(mpixels);
-    tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;
-        
-    // -- Photograph Info ----------------------------------------------------
-    // NOTA: If something is changed here, please updated imageproperties section too.
-    
-    PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
-    
-    if (!photoInfo.isEmpty())
-    {
-        QString metaStr;
-        tip += headBeg + i18n("Photograph Properties") + headEnd;
-        
-        str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
-                                .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("Make/Model:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-        
-        if (photoInfo.dateTime.isValid())
+
+        if (settings->getToolTipsShowFileDate())
         {
-            str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
-            if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-            metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            QDateTime modifiedDate = fileInfo.lastModified();
+            str = KGlobal::locale()->formatDateTime(modifiedDate, true, true);
+            tip += cellBeg + i18n("Modified:") + cellMid + str + cellEnd;
+        }
+
+        if (settings->getToolTipsShowFileSize())
+        {
+            tip += cellBeg + i18n("Size:") + cellMid;
+            str = i18n("%1 (%2)").arg(KIO::convertSize(fi.size()))
+                                .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+            tip += str + cellEnd;
+        }
+
+        QSize   dims;
+        QString rawFilesExt(raw_file_extentions);
+
+        if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
+        {
+            str = i18n("RAW Image");
+            dims = metaData.getImageDimensions();
         }
         else
-            metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( unavailable ) + cellEnd;
-    
-        str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
-        
-        if (photoInfo.focalLenght35mm.isEmpty())
-            str += QString(" / %1").arg(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
-        else 
-            str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
-        
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-            
-        str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
-                                .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-    
-        if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-            str = unavailable;
-        else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
-            str = photoInfo.exposureMode;        
-        else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
-            str = photoInfo.exposureProgram;        
-        else 
-            str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("Mode/Program:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-            
-        str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("Flash:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-        
-        str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
-        if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-        metaStr += cellBeg + i18n("White Balance:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
-        
-        tip += metaStr;
+        {
+            str = fi.mimeComment();
+
+            KFileMetaInfo meta = fi.metaInfo();
+            if (meta.isValid())
+            {
+                if (meta.containsGroup("Jpeg EXIF Data"))
+                    dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("General"))
+                    dims = meta.group("General").item("Dimensions").value().toSize();
+                else if (meta.containsGroup("Technical"))
+                    dims = meta.group("Technical").item("Dimensions").value().toSize();
+            }
+        }
+
+        if (settings->getToolTipsShowImageType())
+        {
+            tip += cellBeg + i18n("Type:") + cellMid + str + cellEnd;
+        }
+
+        if (settings->getToolTipsShowImageDim())
+        {
+            QString mpixels;
+            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
+            str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)")
+                .arg(dims.width()).arg(dims.height()).arg(mpixels);
+            tip += cellBeg + i18n("Dimensions:") + cellMid + str + cellEnd;
+        }
     }
-        
+
+    // -- Photograph Info ----------------------------------------------------
+    // NOTA: If something is changed here, please updated imageproperties section too.
+
+    if (settings->getToolTipsShowPhotoMake()  ||
+        settings->getToolTipsShowPhotoDate()  ||
+        settings->getToolTipsShowPhotoFocal() ||
+        settings->getToolTipsShowPhotoExpo()  ||
+        settings->getToolTipsShowPhotoMode()  ||
+        settings->getToolTipsShowPhotoFlash() ||
+        settings->getToolTipsShowPhotoWB())
+    {
+        PhotoInfoContainer photoInfo = metaData.getPhotographInformations();
+
+        if (!photoInfo.isEmpty())
+        {
+            QString metaStr;
+            tip += headBeg + i18n("Photograph Properties") + headEnd;
+
+            if (settings->getToolTipsShowPhotoMake())
+            {
+                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? unavailable : photoInfo.make)
+                                        .arg(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("Make/Model:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoDate())
+            {
+                if (photoInfo.dateTime.isValid())
+                {
+                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, true, true);
+                    if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                    metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+                }
+                else
+                    metaStr += cellBeg + i18n("Created:") + cellMid + QStyleSheet::escape( unavailable ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoFocal())
+            {
+                str = photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture;
+
+                if (photoInfo.focalLenght35mm.isEmpty())
+                    str += QString(" / %1").arg(photoInfo.focalLenght.isEmpty() ? unavailable : photoInfo.focalLenght);
+                else 
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)").arg(photoInfo.focalLenght).arg(photoInfo.focalLenght35mm));
+
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("Aperture/Focal:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoExpo())
+            {
+                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime)
+                                        .arg(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO").arg(photoInfo.sensitivity));
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("Exposure/Sensitivity:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoMode())
+            {
+
+                if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                    str = unavailable;
+                else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                    str = photoInfo.exposureMode;
+                else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                    str = photoInfo.exposureProgram;
+                else 
+                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("Mode/Program:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoFlash())
+            {
+                str = photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash;
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("Flash:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoWB())
+            {
+                str = photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance;
+                if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+                metaStr += cellBeg + i18n("White Balance:") + cellMid + QStyleSheet::escape( str ) + cellEnd;
+            }
+
+            tip += metaStr;
+        }
+    }
+
     // -- digiKam properties  ------------------------------------------
+    if (settings->getToolTipsShowAlbumName() ||
+        settings->getToolTipsShowComments()  ||
+        settings->getToolTipsShowTags()      ||
+        settings->getToolTipsShowRating())
+    {
+        tip += headBeg + i18n("digiKam Properties") + headEnd;
 
-    tip += headBeg + i18n("digiKam Properties") + headEnd;
+        if (settings->getToolTipsShowAlbumName())
+        {
+            PAlbum* album = info->album();
+            if (album)
+                tip += cellBeg + i18n("Album:") + cellMid + album->url().remove(0, 1) + cellEnd;
+        }
 
-    PAlbum* album = info->album();
-    if (album)
-        tip += cellBeg + i18n("Album:") + cellMid + album->url().remove(0, 1) + cellEnd;
+        if (settings->getToolTipsShowComments())
+        {
+            tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString( info->caption() ) + cellSpecEnd;
+        }
 
-    tip += cellSpecBeg + i18n("Comments:") + cellSpecMid + breakString( info->caption() ) + cellSpecEnd;
+        if (settings->getToolTipsShowTags())
+        {
+            QStringList tagPaths = info->tagPaths();
 
-    QStringList tagPaths = info->tagPaths();
-    
-    for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
-        (*it).remove(0, 1);
-    
-    str = tagPaths.join(", ");
-    if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
-    tip += cellBeg + i18n("Tags:") + cellMid + str + cellEnd;
+            for (QStringList::iterator it = tagPaths.begin(); it != tagPaths.end(); ++it)
+                (*it).remove(0, 1);
 
-    str.fill( '*', info->rating() );
-    tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
+            str = tagPaths.join(", ");
+            if (str.length() > MAXSTRINGLEN) str = str.left(MAXSTRINGLEN-3) + "...";
+            tip += cellBeg + i18n("Tags:") + cellMid + str + cellEnd;
+        }
+
+        if (settings->getToolTipsShowRating())
+        {
+            str.fill( '*', info->rating() );
+            tip += cellSpecBeg + i18n("Rating:") + cellSpecMid + str + cellSpecEnd;
+        }
+    }
+
     tip += "</table>";
-        
+
     d->label->setText(tip);
 }
 
@@ -468,6 +543,7 @@ QString AlbumFileTip::breakString(const QString& input)
 
     uint i = 0;
     uint count = 0;
+
     while (i < str.length())
     {
         if (count >= maxLen && str[i].isSpace())
@@ -479,6 +555,7 @@ QString AlbumFileTip::breakString(const QString& input)
         {
             br.append(str[i]);
         }
+
         i++;
         count++;
     }

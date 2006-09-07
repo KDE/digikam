@@ -2,8 +2,8 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2003-16-10
- * Description : 
- * 
+ * Description : albums settings interface
+ *
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
  * Copyright 2005-2006 by Gilles Caulier
  *
@@ -12,12 +12,12 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef ALBUMSETTINGS_H
@@ -52,7 +52,7 @@ public:
         ByISize,
         ByIRating
     };
-    
+
     AlbumSettings();
     ~AlbumSettings();
 
@@ -73,7 +73,7 @@ public:
 
     bool addAlbumCollectionName(const QString& name);
     bool delAlbumCollectionName(const QString& name);
-    
+
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
 
@@ -82,25 +82,25 @@ public:
 
     void setImageFileFilter(const QString& filter);
     QString getImageFileFilter() const;
-    
+
     void setMovieFileFilter(const QString& filter);
     QString getMovieFileFilter() const;
 
     void setAudioFileFilter(const QString& filter);
     QString getAudioFileFilter() const;
-            
+
     void setRawFileFilter(const QString& filter);
     QString getRawFileFilter() const;
 
     bool    addImageFileExtension(const QString& ext);
     QString getAllFileFilter() const;
-    
+
     void setDefaultIconSize(int val);
     int  getDefaultIconSize() const;
 
     void setIconShowName(bool val);
     bool getIconShowName() const;
-    
+
     void setIconShowSize(bool val);
     bool getIconShowSize() const;
 
@@ -112,7 +112,7 @@ public:
 
     void setIconShowTags(bool val);
     bool getIconShowTags() const;
-    
+
     void setIconShowDate(bool val);
     bool getIconShowDate() const;
 
@@ -121,7 +121,7 @@ public:
 
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
-    
+
     void setExifRotate(bool val);
     bool getExifRotate() const;
 
@@ -160,10 +160,58 @@ public:
 
     void setSaveDateTime(bool val);
     bool getSaveDateTime() const;
-    
+
     void setShowToolTips(bool val);
     bool getShowToolTips() const;
-    
+
+    void setToolTipsShowFileName(bool val);
+    bool getToolTipsShowFileName() const;
+
+    void setToolTipsShowFileDate(bool val);
+    bool getToolTipsShowFileDate() const;
+
+    void setToolTipsShowFileSize(bool val);
+    bool getToolTipsShowFileSize() const;
+
+    void setToolTipsShowImageType(bool val);
+    bool getToolTipsShowImageType() const;
+
+    void setToolTipsShowImageDim(bool val);
+    bool getToolTipsShowImageDim() const;
+
+    void setToolTipsShowPhotoMake(bool val);
+    bool getToolTipsShowPhotoMake() const;
+
+    void setToolTipsShowPhotoDate(bool val);
+    bool getToolTipsShowPhotoDate() const;
+
+    void setToolTipsShowPhotoFocal(bool val);
+    bool getToolTipsShowPhotoFocal() const;
+
+    void setToolTipsShowPhotoExpo(bool val);
+    bool getToolTipsShowPhotoExpo() const;
+
+    void setToolTipsShowPhotoMode(bool val);
+    bool getToolTipsShowPhotoMode() const;
+
+    void setToolTipsShowPhotoFlash(bool val);
+    bool getToolTipsShowPhotoFlash() const;
+
+    void setToolTipsShowPhotoWB(bool val);
+    bool getToolTipsShowPhotoWB() const;
+
+    void setToolTipsShowAlbumName(bool val);
+    bool getToolTipsShowAlbumName() const;
+
+    void setToolTipsShowComments(bool val);
+    bool getToolTipsShowComments() const;
+
+    void setToolTipsShowTags(bool val);
+    bool getToolTipsShowTags() const;
+
+    void setToolTipsShowRating(bool val);
+    bool getToolTipsShowRating() const;
+
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
 
@@ -177,8 +225,8 @@ public:
 
 private:
 
-    static AlbumSettings* instance_;
-    
+    static AlbumSettings* m_instance;
+
     void init();
 
     AlbumSettingsPrivate* d;

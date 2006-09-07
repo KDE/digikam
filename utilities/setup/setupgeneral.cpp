@@ -61,7 +61,6 @@ public:
     SetupGeneralPriv()
     {
         albumPathEdit         = 0;
-        showToolTipsBox       = 0;
         iconShowNameBox       = 0;
         iconShowSizeBox       = 0;
         iconShowDateBox       = 0;
@@ -72,7 +71,6 @@ public:
         iconShowRatingBox     = 0;
     }
 
-    QCheckBox     *showToolTipsBox;
     QCheckBox     *iconShowNameBox;
     QCheckBox     *iconShowSizeBox;
     QCheckBox     *iconShowDateBox;
@@ -93,69 +91,58 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     d = new SetupGeneralPriv;
     d->mainDialog       = dialog;
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
-    
+
     // --------------------------------------------------------
-    
+
     QHGroupBox *albumPathBox = new QHGroupBox(parent);
     albumPathBox->setTitle(i18n("Album &Library Path"));
-    
+
     d->albumPathEdit = new KURLRequester(albumPathBox);
     d->albumPathEdit->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);    
     QWhatsThis::add( d->albumPathEdit, i18n("<p>Here you can set the main path to the digiKam album "
                                             "library in your computer."
                                             "<p>Write access is required for this path and do not use a "
                                             "remote path here, like an NFS mounted file system."));
-    
+
 
     connect(d->albumPathEdit, SIGNAL(urlSelected(const QString &)),
             this, SLOT(slotChangeAlbumPath(const QString &)));
 
     connect(d->albumPathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotPathEdited(const QString&)) );
-    
+
     layout->addWidget(albumPathBox);
-    
+
     // --------------------------------------------------------
-    
-    QVGroupBox *tipSettingBox = new QVGroupBox(parent);
-    tipSettingBox->setTitle(i18n("Tooltips Settings"));
-    
-    d->showToolTipsBox = new QCheckBox(tipSettingBox);
-    d->showToolTipsBox->setText(i18n("Show toolti&ps for items"));
-    QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image informations when "
-                                              "the mouse is moved under album items."));
-    
-    layout->addWidget(tipSettingBox);
-    
-    // --------------------------------------------------------
+
     QVGroupBox *iconTextGroup = new QVGroupBox(i18n("Thumbnails"), parent);
     iconTextGroup->setColumnLayout(0, Qt::Vertical );
     iconTextGroup->layout()->setMargin(KDialog::marginHint());
     QGridLayout* tagSettingsLayout = new QGridLayout(iconTextGroup->layout(), 3, 9,
                                                      KDialog::spacingHint());
-    
+
     d->iconShowNameBox = new QCheckBox(iconTextGroup);
     d->iconShowNameBox->setText(i18n("Show file &name"));
     QWhatsThis::add( d->iconShowNameBox, i18n("<p>Set this option to show file name behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowNameBox, 0, 0);
-    
+
     d->iconShowSizeBox = new QCheckBox(iconTextGroup);
     d->iconShowSizeBox->setText(i18n("Show file si&ze"));
     QWhatsThis::add( d->iconShowSizeBox, i18n("<p>Set this option to show file size behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowSizeBox, 1, 0);
-    
+
     d->iconShowDateBox = new QCheckBox(iconTextGroup);
     d->iconShowDateBox->setText(i18n("Show file creation &date"));
     QWhatsThis::add( d->iconShowDateBox, i18n("<p>Set this option to show file creation date "
                                               "behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowDateBox, 2, 0);
-    
+
     d->iconShowModDateBox = new QCheckBox(iconTextGroup);
     d->iconShowModDateBox->setText(i18n("Show file &modification date"));
     QWhatsThis::add( d->iconShowModDateBox, i18n("<p>Set this option to show file modification date "
                                                  "behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowModDateBox, 3, 0);
-    
+
     d->iconShowCommentsBox = new QCheckBox(iconTextGroup);
     d->iconShowCommentsBox->setText(i18n("Show digiKam &comments"));
     QWhatsThis::add( d->iconShowCommentsBox, i18n("<p>Set this option to show digiKam comments "
@@ -167,25 +154,25 @@ SetupGeneral::SetupGeneral(QWidget* parent, KDialogBase* dialog )
     QWhatsThis::add( d->iconShowTagsBox, i18n("<p>Set this option to show digiKam tags "
                                                   "behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowTagsBox, 5, 0);
-    
+
     d->iconShowRatingBox = new QCheckBox(iconTextGroup);
     d->iconShowRatingBox->setText(i18n("Show digiKam &rating"));
     QWhatsThis::add( d->iconShowRatingBox, i18n("<p>Set this option to show digiKam rating "
                                                 "behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowRatingBox, 6,0);
-    
+
     d->iconShowResolutionBox = new QCheckBox(iconTextGroup);
     d->iconShowResolutionBox->setText(i18n("Show ima&ge dimensions (warning: slow)"));
     QWhatsThis::add( d->iconShowResolutionBox, i18n("<p>Set this option to show picture size in pixels "
                                                     "behind image thumbnail."));
     tagSettingsLayout->addWidget(d->iconShowResolutionBox, 7, 0);
-    
+
     layout->addWidget(iconTextGroup);
-    
+
     // --------------------------------------------------------
-    
+
     layout->addStretch();
-    
+
     readSettings();
     adjustSize();
 }
@@ -201,8 +188,6 @@ void SetupGeneral::applySettings()
     if (!settings) return;
 
     settings->setAlbumLibraryPath(d->albumPathEdit->url());
-
-    settings->setShowToolTips(d->showToolTipsBox->isChecked());
 
     settings->setIconShowName(d->iconShowNameBox->isChecked());
     settings->setIconShowTags(d->iconShowTagsBox->isChecked());
@@ -223,8 +208,6 @@ void SetupGeneral::readSettings()
     if (!settings) return;
 
     d->albumPathEdit->setURL(settings->getAlbumLibraryPath());
-
-    d->showToolTipsBox->setChecked(settings->getShowToolTips());
 
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());

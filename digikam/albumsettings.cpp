@@ -2,8 +2,8 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2003-16-10
- * Description : 
- * 
+ * Description : albums settings interface
+ *
  * Copyright 2003-2004 by Renchi Raju and Gilles Caulier
  * Copyright 2005-2006 by Gilles Caulier
  *
@@ -12,16 +12,16 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
- 
+
 #include <qstring.h>
 
 // KDE includes.
@@ -44,12 +44,11 @@ class AlbumSettingsPrivate
 
 public:
 
-    bool showToolTips;
     bool showSplash;
     bool useTrash;
     bool showTrashDeleteDialog;
     bool scanAtStart;
-    
+
     bool iconShowName;
     bool iconShowSize;
     bool iconShowDate;
@@ -58,6 +57,24 @@ public:
     bool iconShowResolution;
     bool iconShowTags;
     bool iconShowRating;
+
+    bool showToolTips;
+    bool tooltipShowFileName;
+    bool tooltipShowFileDate;
+    bool tooltipShowFileSize;
+    bool tooltipShowImageType;
+    bool tooltipShowImageDim;
+    bool tooltipShowPhotoMake;
+    bool tooltipShowPhotoDate;
+    bool tooltipShowPhotoFocal;
+    bool tooltipShowPhotoExpo;
+    bool tooltipShowPhotoMode;
+    bool tooltipShowPhotoFlash;
+    bool tooltipShowPhotoWb;
+    bool tooltipShowAlbumName;
+    bool tooltipShowComments;
+    bool tooltipShowTags;
+    bool tooltipShowRating;
 
     bool exifRotate;
     bool exifSetOrientation;
@@ -86,7 +103,7 @@ public:
     QString      copyright;
 
     QStringList  albumCollectionNames;
-    
+
     KConfig     *config;
 
     AlbumSettings::AlbumSortOrder albumSortOrder;
@@ -94,25 +111,25 @@ public:
 };
 
 
-AlbumSettings* AlbumSettings::instance_ = 0;
+AlbumSettings* AlbumSettings::m_instance = 0;
 
 AlbumSettings* AlbumSettings::instance()
 {
-    return instance_;
+    return m_instance;
 }
 
 AlbumSettings::AlbumSettings()
 {
     d = new AlbumSettingsPrivate;
-    d->config = kapp->config();
-    instance_ = this;
+    d->config  = kapp->config();
+    m_instance = this;
     init();
 }
 
 AlbumSettings::~AlbumSettings()
 {
     delete d;
-    instance_ = 0;
+    m_instance = 0;
 }
 
 void AlbumSettings::init()
@@ -130,30 +147,47 @@ void AlbumSettings::init()
 
     d->albumSortOrder  = AlbumSettings::ByFolder;
     d->imageSortOrder  = AlbumSettings::ByIName;
-                                          
+
     d->imageFilefilter = "*.png *.jpg *.jpeg *.jpe *.tif *.tiff *.gif *.bmp *.xpm *.ppm *.pnm *.xcf *.pcx";
     d->movieFilefilter = "*.mpeg *.mpg *.mpo *.mpe *.avi *.mov *.wmf *.asf";
     d->audioFilefilter = "*.ogg *.mp3 *.wma *.wav";
-    
+
     // RAW files estentions supported by dcraw program and 
     // defines to digikam/libs/dcraw/rawfiles.h
     d->rawFilefilter      = QString(raw_file_extentions);
-      
+
     d->thumbnailSize      = ThumbnailSize::Medium;
 
-    d->showToolTips       = true;
-    d->showSplash         = true;
-    d->useTrash           = true;
-    d->showTrashDeleteDialog = true;
-    
-    d->iconShowName       = false;
-    d->iconShowSize       = false;
-    d->iconShowDate       = true;
-    d->iconShowModDate    = true;
-    d->iconShowComments   = true;
-    d->iconShowResolution = false;
-    d->iconShowTags       = true;
-    d->iconShowRating     = true;
+    d->showToolTips           = true;
+    d->showSplash             = true;
+    d->useTrash               = true;
+    d->showTrashDeleteDialog  = true;
+
+    d->iconShowName           = false;
+    d->iconShowSize           = false;
+    d->iconShowDate           = true;
+    d->iconShowModDate        = true;
+    d->iconShowComments       = true;
+    d->iconShowResolution     = false;
+    d->iconShowTags           = true;
+    d->iconShowRating         = true;
+
+    d->tooltipShowFileName    = true;
+    d->tooltipShowFileDate    = false;
+    d->tooltipShowFileSize    = false;
+    d->tooltipShowImageType   = false;
+    d->tooltipShowImageDim    = true;
+    d->tooltipShowPhotoMake   = true;
+    d->tooltipShowPhotoDate   = true;
+    d->tooltipShowPhotoFocal  = true;
+    d->tooltipShowPhotoExpo   = true;
+    d->tooltipShowPhotoMode   = true;
+    d->tooltipShowPhotoFlash  = false;
+    d->tooltipShowPhotoWb     = false;
+    d->tooltipShowAlbumName   = false;
+    d->tooltipShowComments    = true;
+    d->tooltipShowTags        = true;
+    d->tooltipShowRating      = true;
 
     d->exifRotate             = true;
     d->exifSetOrientation     = false;
@@ -162,7 +196,7 @@ void AlbumSettings::init()
     d->saveIptcRating         = false;
     d->saveIptcPhotographerId = false;
     d->saveIptcCredits        = false;
-    
+
     d->saveComments           = false;
     d->saveDateTime           = false;
 }
@@ -171,8 +205,10 @@ void AlbumSettings::readSettings()
 {
     KConfig* config = d->config;
 
+    // ---------------------------------------------------------------------
+
     config->setGroup("Album Settings");
-    
+
     d->albumLibraryPath = config->readPathEntry("Album Path", QString::null);
 
     QStringList collectionList = config->readListEntry("Album Collections");
@@ -187,42 +223,52 @@ void AlbumSettings::readSettings()
 
     d->imageSortOrder = AlbumSettings::ImageSortOrder(config->readNumEntry("Image Sort Order",
                                                       (int)AlbumSettings::ByIName));
-    
+
     d->imageFilefilter = config->readEntry("File Filter", d->imageFilefilter);
-
     d->movieFilefilter = config->readEntry("Movie File Filter", d->movieFilefilter);
-
     d->audioFilefilter = config->readEntry("Audio File Filter", d->audioFilefilter);
-                              
-    d->rawFilefilter = config->readEntry("Raw File Filter", d->rawFilefilter);
-                              
-    d->thumbnailSize = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->rawFilefilter   = config->readEntry("Raw File Filter", d->rawFilefilter);
+    d->thumbnailSize   = config->readNumEntry("Default Icon Size", ThumbnailSize::Medium);
+    d->currentTheme    = config->readEntry("Theme", i18n("Default"));
 
-    d->showToolTips = config->readBoolEntry("Show ToolTips", false);
-    
-    d->iconShowName = config->readBoolEntry("Icon Show Name", false); 
+    d->iconShowName       = config->readBoolEntry("Icon Show Name", false); 
+    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);
+    d->iconShowSize       = config->readBoolEntry("Icon Show Size", false);
+    d->iconShowDate       = config->readBoolEntry("Icon Show Date", true);
+    d->iconShowModDate    = config->readBoolEntry("Icon Show Modification Date", true);
+    d->iconShowComments   = config->readBoolEntry("Icon Show Comments", true);
+    d->iconShowTags       = config->readBoolEntry("Icon Show Tags", true);
+    d->iconShowRating     = config->readBoolEntry("Icon Show Rating", true);
 
-    d->iconShowResolution = config->readBoolEntry("Icon Show Resolution", false);   
+    d->showToolTips          = config->readBoolEntry("Show ToolTips", false);
+    d->tooltipShowFileName   = config->readBoolEntry("ToolTips Show File Name", true);
+    d->tooltipShowFileDate   = config->readBoolEntry("ToolTips Show File Date", false);
+    d->tooltipShowFileSize   = config->readBoolEntry("ToolTips Show File Size", false);
+    d->tooltipShowImageType  = config->readBoolEntry("ToolTips Show Image Type", false);
+    d->tooltipShowImageDim   = config->readBoolEntry("ToolTips Show Image Dim", true);
+    d->tooltipShowPhotoMake  = config->readBoolEntry("ToolTips Show Photo Make", true);
+    d->tooltipShowPhotoDate  = config->readBoolEntry("ToolTips Show Photo Date", true);
+    d->tooltipShowPhotoFocal = config->readBoolEntry("ToolTips Show Photo Focal", true);
+    d->tooltipShowPhotoExpo  = config->readBoolEntry("ToolTips Show Photo Expo", true);
+    d->tooltipShowPhotoMode  = config->readBoolEntry("ToolTips Show Photo Mode", true);
+    d->tooltipShowPhotoFlash = config->readBoolEntry("ToolTips Show Photo Flash", false);
+    d->tooltipShowPhotoWb    = config->readBoolEntry("ToolTips Show Photo WB", false);
+    d->tooltipShowAlbumName  = config->readBoolEntry("ToolTips Show Album Name", false);
+    d->tooltipShowComments   = config->readBoolEntry("ToolTips Show Comments", true);
+    d->tooltipShowTags       = config->readBoolEntry("ToolTips Show Tags", true);
+    d->tooltipShowRating     = config->readBoolEntry("ToolTips Show Rating", true);
 
-    d->iconShowSize = config->readBoolEntry("Icon Show Size", false);
+    // ---------------------------------------------------------------------
 
-    d->iconShowDate = config->readBoolEntry("Icon Show Date", true);
-
-    d->iconShowModDate = config->readBoolEntry("Icon Show Modification Date", true);
-
-    d->iconShowComments = config->readBoolEntry("Icon Show Comments", true);
-
-    d->iconShowTags = config->readBoolEntry("Icon Show Tags", true);
-
-    d->iconShowRating = config->readBoolEntry("Icon Show Rating", true);
-    
-    d->currentTheme = config->readEntry("Theme", i18n("Default"));
-    
     config->setGroup("EXIF Settings");
+
     d->exifRotate = config->readBoolEntry("EXIF Rotate", true);
     d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
 
+    // ---------------------------------------------------------------------
+
     config->setGroup("Metadata Settings");
+
     d->saveIptcTags           = config->readBoolEntry("Save IPTC Tags", false);
     d->saveIptcRating         = config->readBoolEntry("Save IPTC Rating", false);
     d->saveIptcPhotographerId = config->readBoolEntry("Save IPTC Photographer ID", false);
@@ -236,19 +282,25 @@ void AlbumSettings::readSettings()
     d->credit                 = config->readEntry("IPTC Credit", QString::null);
     d->source                 = config->readEntry("IPTC Source", QString::null);
     d->copyright              = config->readEntry("IPTC Copyright", QString::null);
-                                                  
+
+    // ---------------------------------------------------------------------
+
     config->setGroup("General Settings");
-    d->showSplash  = config->readBoolEntry("Show Splash", true);
-    d->useTrash    = config->readBoolEntry("Use Trash", true);
+
+    d->showSplash            = config->readBoolEntry("Show Splash", true);
+    d->useTrash              = config->readBoolEntry("Use Trash", true);
     d->showTrashDeleteDialog = config->readBoolEntry("Show Trash Delete Dialog", true);
-    d->scanAtStart = config->readBoolEntry("Scan At Start", true);
+    d->scanAtStart           = config->readBoolEntry("Scan At Start", true);
 }
 
 void AlbumSettings::saveSettings()
 {
     KConfig* config = d->config;
 
+    // ---------------------------------------------------------------------
+
     config->setGroup("Album Settings");
+
     config->writePathEntry("Album Path", d->albumLibraryPath);
     config->writeEntry("Album Collections", d->albumCollectionNames);
     config->writeEntry("Album Sort Order", (int)d->albumSortOrder);
@@ -258,7 +310,8 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Audio File Filter", d->audioFilefilter);
     config->writeEntry("Raw File Filter", d->rawFilefilter);
     config->writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
-    config->writeEntry("Show ToolTips", d->showToolTips);
+    config->writeEntry("Theme", d->currentTheme);
+
     config->writeEntry("Icon Show Name", d->iconShowName);
     config->writeEntry("Icon Show Resolution", d->iconShowResolution);
     config->writeEntry("Icon Show Size", d->iconShowSize);
@@ -267,13 +320,36 @@ void AlbumSettings::saveSettings()
     config->writeEntry("Icon Show Comments", d->iconShowComments);
     config->writeEntry("Icon Show Tags", d->iconShowTags);
     config->writeEntry("Icon Show Rating", d->iconShowRating);
-    config->writeEntry("Theme", d->currentTheme);
-    
+
+    config->writeEntry("Show ToolTips", d->showToolTips);
+    config->writeEntry("ToolTips Show File Name", d->tooltipShowFileName);
+    config->writeEntry("ToolTips Show File Date", d->tooltipShowFileDate);
+    config->writeEntry("ToolTips Show File Size", d->tooltipShowFileSize);
+    config->writeEntry("ToolTips Show Image Type", d->tooltipShowImageType);
+    config->writeEntry("ToolTips Show Image Dim", d->tooltipShowImageDim);
+    config->writeEntry("ToolTips Show Photo Make", d->tooltipShowPhotoMake);
+    config->writeEntry("ToolTips Show Photo Date", d->tooltipShowPhotoDate);
+    config->writeEntry("ToolTips Show Photo Focal", d->tooltipShowPhotoFocal);
+    config->writeEntry("ToolTips Show Photo Expo", d->tooltipShowPhotoExpo);
+    config->writeEntry("ToolTips Show Photo Mode", d->tooltipShowPhotoMode);
+    config->writeEntry("ToolTips Show Photo Flash", d->tooltipShowPhotoFlash);
+    config->writeEntry("ToolTips Show Photo WB", d->tooltipShowPhotoWb);
+    config->writeEntry("ToolTips Show Album Name", d->tooltipShowAlbumName);
+    config->writeEntry("ToolTips Show Comments", d->tooltipShowComments);
+    config->writeEntry("ToolTips Show Tags", d->tooltipShowTags);
+    config->writeEntry("ToolTips Show Rating", d->tooltipShowRating);
+
+    // ---------------------------------------------------------------------
+
     config->setGroup("EXIF Settings");
+
     config->writeEntry("EXIF Rotate", d->exifRotate);
     config->writeEntry("EXIF Set Orientation", d->exifSetOrientation);
 
+    // ---------------------------------------------------------------------
+
     config->setGroup("Metadata Settings");
+
     config->writeEntry("Save IPTC Tags", d->saveIptcTags);
     config->writeEntry("Save IPTC Rating", d->saveIptcRating);
     config->writeEntry("Save IPTC Photographer ID", d->saveIptcPhotographerId);
@@ -288,18 +364,21 @@ void AlbumSettings::saveSettings()
     config->writeEntry("IPTC Source", d->source);
     config->writeEntry("IPTC Copyright", d->copyright);
 
+    // ---------------------------------------------------------------------
+
     config->setGroup("General Settings");
+
     config->writeEntry("Show Splash", d->showSplash);
     config->writeEntry("Use Trash", d->useTrash);
     config->writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
     config->writeEntry("Scan At Start", d->scanAtStart);
-    
+
     config->sync();
 }
 
 void AlbumSettings::setAlbumLibraryPath(const QString& path)
 {
-    d->albumLibraryPath = path;    
+    d->albumLibraryPath = path;
 }
 
 QString AlbumSettings::getAlbumLibraryPath() const
@@ -309,7 +388,7 @@ QString AlbumSettings::getAlbumLibraryPath() const
 
 void AlbumSettings::setShowSplashScreen(bool val)
 {
-    d->showSplash = val;    
+    d->showSplash = val;
 }
 
 bool AlbumSettings::getShowSplashScreen() const
@@ -329,7 +408,7 @@ bool AlbumSettings::getScanAtStart() const
 
 void AlbumSettings::setAlbumCollectionNames(const QStringList& list)
 {
-    d->albumCollectionNames = list;    
+    d->albumCollectionNames = list;
 }
 
 QStringList AlbumSettings::getAlbumCollectionNames()
@@ -349,7 +428,7 @@ bool AlbumSettings::addAlbumCollectionName(const QString& name)
 bool AlbumSettings::delAlbumCollectionName(const QString& name)
 {
     uint count = d->albumCollectionNames.remove(name);
-    return (count > 0) ? true : false; 
+    return (count > 0) ? true : false;
 }
 
 void AlbumSettings::setAlbumSortOrder(const AlbumSettings::AlbumSortOrder order)
@@ -364,7 +443,7 @@ AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
 
 void AlbumSettings::setImageSortOrder(const ImageSortOrder order)
 {
-    d->imageSortOrder = order;    
+    d->imageSortOrder = order;
 }
 
 AlbumSettings::ImageSortOrder AlbumSettings::getImageSortOrder() const
@@ -374,7 +453,7 @@ AlbumSettings::ImageSortOrder AlbumSettings::getImageSortOrder() const
 
 void AlbumSettings::setImageFileFilter(const QString& filter)
 {
-    d->imageFilefilter = filter;    
+    d->imageFilefilter = filter;
 }
 
 QString AlbumSettings::getImageFileFilter() const
@@ -384,7 +463,7 @@ QString AlbumSettings::getImageFileFilter() const
 
 void AlbumSettings::setMovieFileFilter(const QString& filter)
 {
-    d->movieFilefilter = filter;    
+    d->movieFilefilter = filter;
 }
 
 QString AlbumSettings::getMovieFileFilter() const
@@ -394,7 +473,7 @@ QString AlbumSettings::getMovieFileFilter() const
 
 void AlbumSettings::setAudioFileFilter(const QString& filter)
 {
-    d->audioFilefilter = filter;    
+    d->audioFilefilter = filter;
 }
 
 QString AlbumSettings::getAudioFileFilter() const
@@ -404,7 +483,7 @@ QString AlbumSettings::getAudioFileFilter() const
 
 void AlbumSettings::setRawFileFilter(const QString& filter)
 {
-    d->rawFilefilter = filter;    
+    d->rawFilefilter = filter;
 }
 
 QString AlbumSettings::getRawFileFilter() const
@@ -484,7 +563,7 @@ bool AlbumSettings::getIconShowResolution() const
 
 void AlbumSettings::setIconShowTags(bool val)
 {
-    d->iconShowTags = val;    
+    d->iconShowTags = val;
 }
 
 bool AlbumSettings::getIconShowTags() const
@@ -514,7 +593,7 @@ bool AlbumSettings::getIconShowModDate() const
 
 void AlbumSettings::setIconShowRating(bool val)
 {
-    d->iconShowRating = val;    
+    d->iconShowRating = val;
 }
 
 bool AlbumSettings::getIconShowRating() const
@@ -662,9 +741,169 @@ bool AlbumSettings::getShowToolTips() const
     return d->showToolTips;
 }
 
+void AlbumSettings::setToolTipsShowFileName(bool val)
+{
+    d->tooltipShowFileName = val;
+}
+
+bool AlbumSettings::getToolTipsShowFileName() const
+{
+    return d->tooltipShowFileName;
+}
+
+void AlbumSettings::setToolTipsShowFileDate(bool val)
+{
+    d->tooltipShowFileDate = val;
+}
+
+bool AlbumSettings::getToolTipsShowFileDate() const
+{
+    return d->tooltipShowFileDate;
+}
+
+void AlbumSettings::setToolTipsShowFileSize(bool val)
+{
+    d->tooltipShowFileSize = val;
+}
+
+bool AlbumSettings::getToolTipsShowFileSize() const
+{
+    return d->tooltipShowFileSize;
+}
+
+void AlbumSettings::setToolTipsShowImageType(bool val)
+{
+    d->tooltipShowImageType = val;
+}
+
+bool AlbumSettings::getToolTipsShowImageType() const
+{
+    return d->tooltipShowImageType;
+}
+
+void AlbumSettings::setToolTipsShowImageDim(bool val)
+{
+    d->tooltipShowImageDim = val;
+}
+
+bool AlbumSettings::getToolTipsShowImageDim() const
+{
+    return d->tooltipShowImageDim;
+}
+
+void AlbumSettings::setToolTipsShowPhotoMake(bool val)
+{
+    d->tooltipShowPhotoMake = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoMake() const
+{
+    return d->tooltipShowPhotoMake;
+}
+
+void AlbumSettings::setToolTipsShowPhotoDate(bool val)
+{
+    d->tooltipShowPhotoDate = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoDate() const
+{
+    return d->tooltipShowPhotoDate;
+}
+
+void AlbumSettings::setToolTipsShowPhotoFocal(bool val)
+{
+    d->tooltipShowPhotoFocal = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoFocal() const
+{
+    return d->tooltipShowPhotoFocal;
+}
+
+void AlbumSettings::setToolTipsShowPhotoExpo(bool val)
+{
+    d->tooltipShowPhotoExpo = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoExpo() const
+{
+    return d->tooltipShowPhotoExpo;
+}
+
+void AlbumSettings::setToolTipsShowPhotoMode(bool val)
+{
+    d->tooltipShowPhotoMode = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoMode() const
+{
+    return d->tooltipShowPhotoMode;
+}
+
+void AlbumSettings::setToolTipsShowPhotoFlash(bool val)
+{
+    d->tooltipShowPhotoFlash = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoFlash() const
+{
+    return d->tooltipShowPhotoFlash;
+}
+
+void AlbumSettings::setToolTipsShowPhotoWB(bool val)
+{
+    d->tooltipShowPhotoWb = val;
+}
+
+bool AlbumSettings::getToolTipsShowPhotoWB() const
+{
+    return d->tooltipShowPhotoWb;
+}
+
+void AlbumSettings::setToolTipsShowAlbumName(bool val)
+{
+    d->tooltipShowAlbumName = val;
+}
+
+bool AlbumSettings::getToolTipsShowAlbumName() const
+{
+    return d->tooltipShowAlbumName;
+}
+
+void AlbumSettings::setToolTipsShowComments(bool val)
+{
+    d->tooltipShowComments = val;
+}
+
+bool AlbumSettings::getToolTipsShowComments() const
+{
+    return d->tooltipShowComments;
+}
+
+void AlbumSettings::setToolTipsShowTags(bool val)
+{
+    d->tooltipShowTags = val;
+}
+
+bool AlbumSettings::getToolTipsShowTags() const
+{
+    return d->tooltipShowTags;
+}
+
+void AlbumSettings::setToolTipsShowRating(bool val)
+{
+    d->tooltipShowRating = val;
+}
+
+bool AlbumSettings::getToolTipsShowRating() const
+{
+    return d->tooltipShowRating;
+}
+
 void AlbumSettings::setCurrentTheme(const QString& theme)
 {
-    d->currentTheme = theme;    
+    d->currentTheme = theme;
 }
 
 QString AlbumSettings::getCurrentTheme() const
