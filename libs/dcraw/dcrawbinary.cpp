@@ -158,6 +158,7 @@ void DcrawBinary::checkReport()
                      QString::null,
                      QString::null,
                      KMessageBox::Notify | KMessageBox::AllowLink);
+        return;
     }
 
     if (!versionIsRight()) 
