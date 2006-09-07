@@ -3,7 +3,7 @@ METASOURCES = AUTO
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
 	      -I$(top_srcdir)/digikam/libs/dialogs \
 	      -I$(top_srcdir)/digikam/libs/dimg \
-          -I$(top_srcdir)/digikam/libs/widgets/common \
+	      -I$(top_srcdir)/digikam/libs/widgets/common \
 	      $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS) \
 	      $(all_includes)
 
