@@ -156,7 +156,7 @@ void DcrawBinary::checkReport()
                           .arg(minimalVersion())
                           .arg(appName),
                      QString::null,
-                     QString::null,
+                     i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
         return;
     }
@@ -180,7 +180,7 @@ void DcrawBinary::checkReport()
                           .arg(Digikam::DcrawBinary::instance()->minimalVersion())
                           .arg(appName),
                      QString::null,
-                     QString::null,
+                     i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
     }
 }
