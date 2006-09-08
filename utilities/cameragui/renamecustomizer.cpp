@@ -23,6 +23,7 @@
 
 // Qt includes.
 
+#include <qdatetime.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -65,7 +66,10 @@ public:
         renameCustomPostfix   = 0;
         startIndexLabel       = 0;
         startIndexInput       = 0;
+        focusedWidget         = 0;
     }
+
+    QWidget      *focusedWidget;
 
     QRadioButton *renameDefault;
     QRadioButton *renameCustom;
@@ -148,6 +152,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     QLabel* prefixLabel = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(prefixLabel, 0, 0, 1, 1);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
+    d->focusedWidget = d->renameCustomPrefix;
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
     QWhatsThis::add( d->renameCustomPrefix, i18n("<p>Set here the string to use like a prefix of "
                                                  "image filenames."));
@@ -313,6 +318,7 @@ void RenameCustomizer::slotCustomOptionsActived(int i)
 
 void RenameCustomizer::slotRenameOptionsChanged()
 {
+    d->focusedWidget = focusWidget();
     d->changedTimer->start(500, true);
 }
 
@@ -365,9 +371,9 @@ void RenameCustomizer::saveSettings()
     config->sync();
 }
 
-void RenameCustomizer::setFocusToCustomPrefix()
+void RenameCustomizer::restoreFocus()
 {
-    d->renameCustomPrefix->setFocus();
+    d->focusedWidget->setFocus();
 }
 
 }  // namespace Digikam

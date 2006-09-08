@@ -27,7 +27,8 @@
 // Qt includes.
 
 #include <qbuttongroup.h>
-#include <qdatetime.h>
+
+class QDateTime;
 
 namespace Digikam
 {
@@ -69,7 +70,7 @@ signals:
     
 public slots:
 
-    void setFocusToCustomPrefix();
+    void restoreFocus();
 
 private:
 

@@ -711,7 +711,7 @@ void CameraUI::slotBusy(bool val)
 
         d->advBox->setEnabled(true);
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
-        d->renameCustomizer->setFocusToCustomPrefix();
+        d->renameCustomizer->restoreFocus();
 
         enableButton(User3, true);
         enableButton(User2, true);
