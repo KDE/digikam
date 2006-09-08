@@ -40,6 +40,7 @@
 #include "albumsettings.h"
 #include "imagepreviewjob.h"
 #include "imagepreviewwidget.h"
+#include "imagepreviewwidget.moc"
 
 namespace Digikam
 {
@@ -50,13 +51,9 @@ public:
 
     ImagePreviewWidgetPriv()
     {
-        previewBlink      = false;
-        blinkPreviewTimer = 0;
         previewJob        = 0;
     }
 
-    bool                          previewBlink;
-    
     QString                       path;
 
     QPixmap                       pixmap;
@@ -64,15 +61,12 @@ public:
     QImage                        preview;
     
     QGuardedPtr<ImagePreviewJob>  previewJob;
-    
-    QTimer                       *blinkPreviewTimer;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
                   : QFrame(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImagePreviewWidgetPriv;
-    d->blinkPreviewTimer = new QTimer(this);
     setBackgroundMode(Qt::NoBackground);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setFocusPolicy(QWidget::StrongFocus);
@@ -81,9 +75,6 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
     setLineWidth(0);
     
     // ---------------------------------------------------------------
-    
-    connect(d->blinkPreviewTimer, SIGNAL(timeout()),
-            this, SLOT(slotPreviewBlinkTimerDone()));
             
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -97,8 +88,6 @@ ImagePreviewWidget::~ImagePreviewWidget()
         d->previewJob = 0;
     }
 
-    d->blinkPreviewTimer->stop();
-
     delete d;
 }
 
@@ -106,9 +95,8 @@ void ImagePreviewWidget::setImagePath( const QString& path )
 {
     if (path == d->path) return;
 
-    d->path              = path;
-    d->previewBlink      = false;
-    d->blinkPreviewTimer->start(200);
+    setCursor( KCursor::waitCursor() );
+    d->path = path;
 
     if (!d->previewJob.isNull())
     {
@@ -127,19 +115,10 @@ void ImagePreviewWidget::setImagePath( const QString& path )
     emit previewStarted();
 }
 
-void ImagePreviewWidget::slotPreviewBlinkTimerDone()
-{
-    d->previewBlink = !d->previewBlink;
-    updatePixmap();
-    repaint(false);
-    d->blinkPreviewTimer->start(200);
-}
-                
 void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
 {
-    d->blinkPreviewTimer->stop();
-    d->preview    = preview;
-    d->pixmap     = QPixmap(contentsRect().size());
+    d->preview = preview;
+    d->pixmap  = QPixmap(contentsRect().size());
 
     // It is very important to kill the thumbnail job properly
     // so that is frees its shared memory. Otherwise the memory
@@ -152,23 +131,23 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
 
     updatePixmap();
     repaint(false);
+    unsetCursor();
     emit previewComplete();
 }
 
 void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
 {
-    d->blinkPreviewTimer->stop();
-
     if (!d->previewJob.isNull())
     {
         d->previewJob->kill();
         d->previewJob = 0;
     }
 
-    d->preview    = QImage();
-    d->pixmap     = QPixmap(contentsRect().size());
+    d->preview = QImage();
+    d->pixmap  = QPixmap(contentsRect().size());
     updatePixmap();
     repaint(false);
+    unsetCursor();
     emit previewFailed();
 }
 
@@ -179,35 +158,23 @@ void ImagePreviewWidget::updatePixmap( void )
 
     if (!d->path.isEmpty())
     {
-        if (!d->previewJob)
+        // Preview extraction is complete...
+        
+        if (!d->preview.isNull())
         {
-            // Preview extraction is complete...
-            
-            if (!d->preview.isNull())
-            {
-                QPixmap pix(d->preview.smoothScale(contentsRect().size(), QImage::ScaleMin));
-                p.drawPixmap((contentsRect().width()-pix.width())/2,
-                             (contentsRect().height()-pix.height())/2, pix,
-                             0, 0, pix.width(), pix.height());
-            }
-            else
-            {
-                // ...or failed...
-
-                p.setPen(QPen(Qt::red));
-                p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                           Qt::AlignCenter|Qt::WordBreak, 
-                           i18n("Cannot display image preview!"));
-            }
+            QPixmap pix(d->preview.smoothScale(contentsRect().size(), QImage::ScaleMin));
+            p.drawPixmap((contentsRect().width()-pix.width())/2,
+                            (contentsRect().height()-pix.height())/2, pix,
+                            0, 0, pix.width(), pix.height());
         }
         else
         {
-            // Preview extraction under progress
-            
-            p.setPen(QPen(d->previewBlink ? Qt::green : Qt::darkGreen));
+            // ...or failed...
+
+            p.setPen(QPen(Qt::red));
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                       Qt::AlignCenter|Qt::WordBreak, 
-                       i18n("Preview extraction in progress..."));
+                        Qt::AlignCenter|Qt::WordBreak, 
+                        i18n("Cannot display image preview!"));
         }
     }
     else
@@ -253,5 +220,3 @@ void ImagePreviewWidget::wheelEvent( QWheelEvent * e )
 }
 
 }  // NameSpace Digikam
-
-#include "imagepreviewwidget.moc"

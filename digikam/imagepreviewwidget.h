@@ -73,7 +73,6 @@ private slots:
     
     void slotGotImagePreview(const KURL&, const QImage& preview);
     void slotFailedImagePreview(const KURL&);
-    void slotPreviewBlinkTimerDone();    
     
 private:
 
