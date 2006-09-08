@@ -230,7 +230,6 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalPreviewItem(AlbumIconItem*)),
             this, SLOT(slot_imagePreview(AlbumIconItem*)));
 
-
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signal_noCurrentItem()));
 
