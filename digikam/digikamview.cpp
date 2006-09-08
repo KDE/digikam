@@ -69,6 +69,7 @@
 #include "dio.h"
 #include "digikamapp.h"
 #include "digikamview.h"
+#include "digikamview.moc"
 
 namespace Digikam
 {
@@ -225,6 +226,10 @@ void DigikamView::setupConnections()
 
     connect(d->iconView, SIGNAL(signalItemsAdded()),
             this, SLOT(slotAlbumHighlight()));
+
+    connect(d->iconView, SIGNAL(signalPreviewItem(AlbumIconItem*)),
+            this, SLOT(slot_imagePreview(AlbumIconItem*)));
+
 
     //connect(d->iconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
       //      this, SIGNAL(signal_noCurrentItem()));
@@ -977,5 +982,3 @@ void DigikamView::slotAssignRatingFiveStar()
 }
 
 }  // namespace Digikam
-
-#include "digikamview.moc"

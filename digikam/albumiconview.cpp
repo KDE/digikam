@@ -107,13 +107,14 @@ extern "C"
 #include "cameradragobject.h"
 #include "dragobjects.h"
 #include "dmetadata.h"
-#include "albumiconitem.h"
-#include "albumicongroupitem.h"
-#include "albumiconview.h"
 #include "albumdb.h"
 #include "imageattributeswatch.h"
 #include "dcrawbinary.h"
 #include "deletedialog.h"
+#include "albumiconitem.h"
+#include "albumicongroupitem.h"
+#include "albumiconview.h"
+#include "albumiconview.moc"
 
 namespace Digikam
 {
@@ -505,6 +506,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
     // --------------------------------------------------------
 
     QPopupMenu popmenu(this);
+    popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
     popmenu.insertSeparator();
@@ -655,6 +657,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
       case 17: 
       {
           slotSetAlbumThumbnail(iconItem);
+          break;
+      }
+
+      case 18: 
+      {
+          signalPreviewItem(iconItem);
           break;
       }
   
@@ -1838,5 +1846,3 @@ void AlbumIconView::slotAlbumImagesChanged(int /*albumId*/)
 }
 
 }  // namespace Digikam
-
-#include "albumiconview.moc"

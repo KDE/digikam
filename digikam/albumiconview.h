@@ -113,8 +113,9 @@ public:
 
 signals:
 
+    void signalPreviewItem(AlbumIconItem*);
     void signalItemsAdded();
-    void signalItemDeleted(AlbumIconItem* iconItem);
+    void signalItemDeleted(AlbumIconItem*);
     void signalCleared();
 
 public slots:
