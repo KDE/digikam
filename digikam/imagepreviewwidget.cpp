@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qimage.h>
+#include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qtimer.h>
@@ -173,11 +174,12 @@ void ImagePreviewWidget::updatePixmap( void )
         else
         {
             // ...or failed...
-
+            QFileInfo info(d->path);
             p.setPen(QPen(ThemeEngine::instance()->textSelColor()));
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                         Qt::AlignCenter|Qt::WordBreak, 
-                        i18n("Cannot display image preview!"));
+                        i18n("Cannot display preview for\n\"%1\"")
+                        .arg(info.fileName()));
         }
     }
     else
@@ -187,7 +189,7 @@ void ImagePreviewWidget::updatePixmap( void )
         p.setPen(QPen(ThemeEngine::instance()->textSelColor()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                     Qt::AlignCenter|Qt::WordBreak, 
-                    i18n("No item to preview."));
+                    i18n("No item to preview in this album."));
     }
     
     p.end();
