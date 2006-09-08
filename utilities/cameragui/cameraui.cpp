@@ -251,7 +251,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     d->advBox            = new QWidget(d->rightSidebar);
     QGridLayout* grid    = new QGridLayout( d->advBox, 3, 1, KDialog::marginHint());
-    d->renameCustomizer  = new RenameCustomizer(d->advBox);
+    d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
         
     // -- Albums Auto-creation options -----------------------------------------

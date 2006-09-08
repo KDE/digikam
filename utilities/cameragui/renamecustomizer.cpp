@@ -26,6 +26,7 @@
 #include <qdatetime.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qhbox.h>
 #include <qlabel.h>
@@ -60,7 +61,9 @@ public:
         renameCustomBox       = 0;
         renameDefaultCase     = 0;
         renameDefaultCaseType = 0;
-        renameCustomOptions   = 0;
+        addDateTimeBox        = 0;
+        addCameraNameBox      = 0;
+        addSeqNumberBox       = 0;
         changedTimer          = 0;
         renameCustomPrefix    = 0;
         renameCustomPostfix   = 0;
@@ -70,6 +73,8 @@ public:
     }
 
     QWidget      *focusedWidget;
+
+    QString       cameraTitle;
 
     QRadioButton *renameDefault;
     QRadioButton *renameCustom;
@@ -82,7 +87,9 @@ public:
 
     QComboBox    *renameDefaultCaseType;
 
-    QComboBox    *renameCustomOptions;
+    QCheckBox    *addDateTimeBox;
+    QCheckBox    *addCameraNameBox;
+    QCheckBox    *addSeqNumberBox;
 
     QTimer       *changedTimer;
 
@@ -92,12 +99,13 @@ public:
     KIntNumInput *startIndexInput;
 };
 
-RenameCustomizer::RenameCustomizer(QWidget* parent)
+RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
                 : QButtonGroup(parent)
 {
     d = new RenameCustomizerPriv;
     d->changedTimer = new QTimer();
-    
+    d->cameraTitle  = cameraTitle;
+
     setTitle(i18n("Renaming Options"));
     setRadioButtonExclusive(true);
     setColumnLayout(0, Qt::Vertical);
@@ -146,7 +154,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     d->renameCustomBox->setColumnLayout(0, Qt::Vertical);
 
     QGridLayout* renameCustomBoxLayout = new QGridLayout(d->renameCustomBox->layout(), 
-                                                         3, 2, KDialogBase::spacingHint());
+                                                         5, 2, KDialogBase::spacingHint());
     renameCustomBoxLayout->setColSpacing( 0, 10 );
 
     QLabel* prefixLabel = new QLabel(i18n("Prefix:"), d->renameCustomBox);
@@ -164,29 +172,26 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
     QWhatsThis::add( d->renameCustomPostfix, i18n("<p>Set here the string to use like a postfix of "
                                                   "image filenames."));
 
-    QLabel *renameOptionsLabel = new QLabel( i18n("Add:"), d->renameCustomBox );
-    renameOptionsLabel->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-    renameCustomBoxLayout->addMultiCellWidget(renameOptionsLabel, 2, 2, 1, 1);
+    d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
+    renameCustomBoxLayout->addMultiCellWidget(d->addDateTimeBox, 2, 2, 1, 2);
+    QWhatsThis::add( d->addDateTimeBox, i18n("<p>Set this option to add the camera provided date and time."));
 
-    d->renameCustomOptions = new QComboBox( d->renameCustomBox );
-    d->renameCustomOptions->insertItem(i18n("Date and time"), 0);
-    d->renameCustomOptions->insertItem(i18n("Sequence number"), 1);
-    d->renameCustomOptions->insertItem(i18n("Time stamp & number"), 2);
-    QWhatsThis::add( d->renameCustomOptions, i18n("<p>Set here the information to add to filename:<p>"
-                     "<b>Date and time</b>: add the camera provided date and time.<p>"
-                     "<b>Sequence number</b>: add a sequence number.<p>"
-                     "<b>Time stamp & number</b>: add both camera provided date and time and "
-                     "a sequence number."));
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomOptions, 2, 2, 2, 2);
+    d->addCameraNameBox = new QCheckBox( i18n("Add Camera Name"), d->renameCustomBox );
+    renameCustomBoxLayout->addMultiCellWidget(d->addCameraNameBox, 3, 3, 1, 2);
+    QWhatsThis::add( d->addCameraNameBox, i18n("<p>Set this option to add the camera name."));
+
+    d->addSeqNumberBox = new QCheckBox( i18n("Add Sequence Number"), d->renameCustomBox );
+    renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 4, 4, 1, 2);
+    QWhatsThis::add( d->addSeqNumberBox, i18n("<p>Set this option to add a sequence number starting with the index set below."));
 
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
-    d->startIndexInput->setRange(1, 999999, 1, false);
+    d->startIndexInput->setRange(1, 900000, 1, false);
     QWhatsThis::add( d->startIndexInput, i18n("<p>Set here the start index value used to rename picture "
                                               "files with a sequence number."));
 
-    renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 3, 3, 1, 1);
-    renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 3, 3, 2, 2);
+    renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 5, 5, 1, 1);
+    renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 5, 5, 2, 2);
 
     mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
 
@@ -200,10 +205,16 @@ RenameCustomizer::RenameCustomizer(QWidget* parent)
 
     connect(d->renameCustomPostfix, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
-            
-    connect(d->renameCustomOptions, SIGNAL(activated(int)),
-            this, SLOT(slotCustomOptionsActived(int)));
-            
+
+    connect(d->addDateTimeBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotRenameOptionsChanged()));
+
+    connect(d->addCameraNameBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotRenameOptionsChanged()));
+
+    connect(d->addSeqNumberBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotRenameOptionsChanged()));
+
     connect(d->renameDefaultCaseType, SIGNAL(activated(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
@@ -248,27 +259,16 @@ QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QS
 
         // it seems that QString::number does not support padding with zeros
         QString seq;
-        seq.sprintf("-%04d", index);
+        seq.sprintf("-%06d", index);
 
-        switch (d->renameCustomOptions->currentItem())
-        {
-            case ADDDATETIME:
-            {
-                name += date;
-                break;
-            }
-            case ADDSEQNUMB:
-            {
-                name += seq;
-                break;
-            }
-            case ADDBOTH:
-            {
-                name += date;
-                name += seq;
-                break;
-            }
-        }
+        if (d->addDateTimeBox->isChecked())
+            name += date;
+
+        if (d->addSeqNumberBox->isChecked())
+            name += seq;
+
+        if (d->addCameraNameBox->isChecked())
+            name += QString("-%1").arg(d->cameraTitle.simplifyWhiteSpace().replace(" ", ""));
 
         name += d->renameCustomPostfix->text();
         name += suffix;
@@ -300,9 +300,11 @@ void RenameCustomizer::slotRadioButtonClicked(int)
     slotRenameOptionsChanged();
 }
 
-void RenameCustomizer::slotCustomOptionsActived(int i)
+void RenameCustomizer::slotRenameOptionsChanged()
 {
-    if (i == ADDSEQNUMB || i == ADDBOTH)
+    d->focusedWidget = focusWidget();
+
+    if (d->addSeqNumberBox->isChecked())
     {
         d->startIndexInput->setEnabled(true);
         d->startIndexLabel->setEnabled(true);
@@ -312,13 +314,7 @@ void RenameCustomizer::slotCustomOptionsActived(int i)
         d->startIndexInput->setEnabled(false);
         d->startIndexLabel->setEnabled(false);
     }
-    
-    slotRenameOptionsChanged();
-}
 
-void RenameCustomizer::slotRenameOptionsChanged()
-{
-    d->focusedWidget = focusWidget();
     d->changedTimer->start(500, true);
 }
 
@@ -327,12 +323,14 @@ void RenameCustomizer::readSettings()
     KConfig* config = kapp->config();
     
     config->setGroup("Camera Settings");
-    bool def        = config->readBoolEntry("Rename Use Default", true);
-    int option      = config->readNumEntry("Rename Add Option", ADDSEQNUMB);
-    int chcaseT     = config->readNumEntry("Case Type", NONE);
-    QString prefix  = config->readEntry("Rename Prefix", i18n("photo"));
-    QString postfix = config->readEntry("Rename Postfix", QString());
-    int startIndex  = config->readNumEntry("Rename Start Index", 1);
+    bool def         = config->readBoolEntry("Rename Use Default", true);
+    bool addSeqNumb  = config->readBoolEntry("Add Sequence Number", true);
+    bool adddateTime = config->readBoolEntry("Add Date Time", false);
+    bool addCamName  = config->readBoolEntry("Add Camera Name", false);
+    int chcaseT      = config->readNumEntry("Case Type", NONE);
+    QString prefix   = config->readEntry("Rename Prefix", i18n("photo"));
+    QString postfix  = config->readEntry("Rename Postfix", QString());
+    int startIndex   = config->readNumEntry("Rename Start Index", 1);
 
     if (def)
     {
@@ -349,12 +347,14 @@ void RenameCustomizer::readSettings()
         d->renameDefaultBox->setEnabled(false);
     }
 
+    d->addDateTimeBox->setChecked(adddateTime);
+    d->addCameraNameBox->setChecked(addCamName);
+    d->addSeqNumberBox->setChecked(addSeqNumb);
     d->renameDefaultCaseType->setCurrentItem(chcaseT);
     d->renameCustomPrefix->setText(prefix);
     d->renameCustomPostfix->setText(postfix);
-    d->renameCustomOptions->setCurrentItem(option);
     d->startIndexInput->setValue(startIndex);
-    slotCustomOptionsActived(option);
+    slotRenameOptionsChanged();
 }
 
 void RenameCustomizer::saveSettings()
@@ -363,7 +363,9 @@ void RenameCustomizer::saveSettings()
 
     config->setGroup("Camera Settings");
     config->writeEntry("Rename Use Default", d->renameDefault->isChecked());
-    config->writeEntry("Rename Add Option", d->renameCustomOptions->currentItem());
+    config->writeEntry("Add Camera Name", d->addCameraNameBox->isChecked());
+    config->writeEntry("Add Date Time", d->addDateTimeBox->isChecked());
+    config->writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
     config->writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
     config->writeEntry("Rename Prefix", d->renameCustomPrefix->text());
     config->writeEntry("Rename Postfix", d->renameCustomPostfix->text());

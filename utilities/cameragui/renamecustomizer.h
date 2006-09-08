@@ -48,14 +48,7 @@ public:
         LOWER
     };
 
-    enum CustomOptions
-    {
-        ADDDATETIME = 0,
-        ADDSEQNUMB,
-        ADDBOTH
-    };
-
-    RenameCustomizer(QWidget* parent);
+    RenameCustomizer(QWidget* parent, const QString& cameraTitle);
     ~RenameCustomizer();
 
     void    setUseDefault(bool val);
@@ -81,7 +74,6 @@ private slots:
 
     void slotRadioButtonClicked(int);
     void slotRenameOptionsChanged();
-    void slotCustomOptionsActived(int);
 
 private:
     
