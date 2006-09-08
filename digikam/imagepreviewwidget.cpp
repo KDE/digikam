@@ -175,7 +175,7 @@ void ImagePreviewWidget::updatePixmap( void )
         {
             // ...or failed...
             QFileInfo info(d->path);
-            p.setPen(QPen(ThemeEngine::instance()->textSelColor()));
+            p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                         Qt::AlignCenter|Qt::WordBreak, 
                         i18n("Cannot display preview for\n\"%1\"")
@@ -186,7 +186,7 @@ void ImagePreviewWidget::updatePixmap( void )
     {
         // There is nothing to see.
         
-        p.setPen(QPen(ThemeEngine::instance()->textSelColor()));
+        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                     Qt::AlignCenter|Qt::WordBreak, 
                     i18n("No item to preview in this album."));
