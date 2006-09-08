@@ -51,6 +51,8 @@ public:
     }
 
     int     rating;
+    
+    QString ratingPixPath;
 
     QPixmap selPixmap;
     QPixmap regPixmap;
@@ -63,23 +65,13 @@ RatingWidget::RatingWidget(QWidget* parent)
 
     KGlobal::dirs()->addResourceType("digikam_rating", 
                      KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
-    ratingPixPath.append("/rating.png");
+    d->ratingPixPath = KGlobal::dirs()->findResourceDir("digikam_rating", "rating.png");
+    d->ratingPixPath.append("/rating.png");
 
-    d->regPixmap = QPixmap(ratingPixPath);
-    d->selPixmap = d->regPixmap;
+    slotThemeChanged();
 
-    QPainter painter(&d->regPixmap);
-    painter.fillRect(0, 0, d->regPixmap.width(), d->regPixmap.height(),
-                     colorGroup().dark());
-    painter.end();
-
-    QPainter painter2(&d->selPixmap);
-    painter2.fillRect(0, 0, d->selPixmap.width(), d->selPixmap.height(),
-                      ThemeEngine::instance()->textSpecialRegColor());
-    painter2.end();
-    
-    setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 RatingWidget::~RatingWidget()
@@ -147,6 +139,25 @@ void RatingWidget::paintEvent(QPaintEvent*)
     }
 
     p.end();
+}
+
+void RatingWidget::slotThemeChanged()
+{
+    d->regPixmap = QPixmap(d->ratingPixPath);
+    d->selPixmap = d->regPixmap;
+
+    QPainter painter(&d->regPixmap);
+    painter.fillRect(0, 0, d->regPixmap.width(), d->regPixmap.height(),
+                     colorGroup().dark());
+    painter.end();
+
+    QPainter painter2(&d->selPixmap);
+    painter2.fillRect(0, 0, d->selPixmap.width(), d->selPixmap.height(),
+                      ThemeEngine::instance()->textSpecialRegColor());
+    painter2.end();
+    
+    setFixedSize(QSize(d->regPixmap.width()*5, d->regPixmap.height()));
+    update();
 }
 
 }  // namespace Digikam

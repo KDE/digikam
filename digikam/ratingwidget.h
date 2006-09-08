@@ -54,6 +54,10 @@ protected:
     void mouseMoveEvent(QMouseEvent* e);
     void paintEvent(QPaintEvent* e);
 
+private slots:
+
+    void slotThemeChanged();
+
 private:
 
     RatingWidgetPriv* d;
