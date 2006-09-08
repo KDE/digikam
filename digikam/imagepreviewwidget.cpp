@@ -98,6 +98,9 @@ void ImagePreviewWidget::setImagePath( const QString& path )
     setCursor( KCursor::waitCursor() );
     d->path = path;
 
+    if (d->path.isEmpty())
+	slotFailedImagePreview(KURL());
+
     if (!d->previewJob.isNull())
     {
         d->previewJob->kill();
