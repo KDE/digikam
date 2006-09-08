@@ -136,7 +136,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->generalPage = new SetupGeneral(d->page_general, this);
 
     d->page_tooltip = addPage(i18n("Tool Tip"), i18n("Album Items Tool Tip Settings"),
-                              BarIcon("contents", KIcon::SizeMedium));
+                              BarIcon("filetypes", KIcon::SizeMedium));
     d->tooltipPage = new SetupToolTip(d->page_tooltip);
 
     d->page_metadata = addPage(i18n("Metadata"), i18n("Embedded Image Informations Management"),
