@@ -931,4 +931,30 @@ bool AlbumSettings::getShowTrashDeleteDialog() const
     return d->showTrashDeleteDialog;
 }
 
+bool AlbumSettings::showToolTipsIsValid() const
+{
+    if (d->showToolTips)
+    {
+        if (d->tooltipShowFileName   ||
+            d->tooltipShowFileDate   ||
+            d->tooltipShowFileSize   ||
+            d->tooltipShowImageType  ||
+            d->tooltipShowImageDim   ||
+            d->tooltipShowPhotoMake  ||
+            d->tooltipShowPhotoDate  ||
+            d->tooltipShowPhotoFocal ||
+            d->tooltipShowPhotoExpo  ||
+            d->tooltipShowPhotoMode  ||
+            d->tooltipShowPhotoFlash ||
+            d->tooltipShowPhotoWb    ||
+            d->tooltipShowAlbumName  ||
+            d->tooltipShowComments   ||
+            d->tooltipShowTags       ||
+            d->tooltipShowRating)
+           return true;
+    }
+
+    return false;
+}
+
 }  // namespace Digikam

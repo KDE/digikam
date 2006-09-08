@@ -59,6 +59,8 @@ public:
     void readSettings();
     void saveSettings();
 
+    bool showToolTipsIsValid() const;
+
     void setAlbumLibraryPath(const QString& path);
     QString getAlbumLibraryPath() const;
 
