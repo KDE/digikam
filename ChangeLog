@@ -1,3 +1,3165 @@
+v0.9.0-beta2 - 09/09/2006
+----------------------------------------------------------------------------
+
+2006-09-09 20:14  fjcruz
+
+    * trunk/extragear/graphics/digikam/release_digikam.rb,
+      trunk/extragear/graphics/digikam/release_digikam_docs.rb: Update
+      for 0.9.0-beta2 release
+
+2006-09-08 19:39  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      fix color text
+
+2006-09-08 17:08  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamview.cpp: polish
+
+2006-09-08 17:07  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+      trunk/extragear/graphics/digikam/digikam/digikamview.cpp:
+      digikam from trunk : add link to image preview feature into
+      album icon item popup menu.
+      CCBUGS: 132047
+
+2006-09-08 16:42  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      Fix i18n
+
+2006-09-08 16:30  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      better support of theme color with text to show
+
+2006-09-08 16:24  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      fix preview rendering if no item to show
+
+2006-09-08 14:49  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.h:
+      digiKam from trunk : image preview widget : do not run a
+      blinking text during image loading. Toggle mouse cursor to busy
+      instead.
+      CCBUGS: 133590
+
+2006-09-08 11:33  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/ratingwidget.cpp,
+      trunk/extragear/graphics/digikam/digikam/ratingwidget.h: digikam
+      from trunk : now rating widget follow the color theme change
+      event
+
+2006-09-08 10:47  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-08 10:45  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+      digikam from trunk : camera gui : add new option to add camera
+      name to target donwload file.
+      BUG: 124939
+
+2006-09-08 09:57  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+      digikam from trunk : more generic widget focus restoration on
+      camera gui rename customizer.
+
+2006-09-08 09:40  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      digikam from trunk : camera gui rename customizer : add postfix
+      string support
+      
+      CCBUGS: 124939
+
+2006-09-08 07:53  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-08 07:47  cgilles
+
+    * trunk/extragear/graphics/digikam/data/themes/Digikasa,
+      trunk/extragear/graphics/digikam/data/themes/Makefile.am:
+      digikam from trunk : new color theme 'Digikasa' from Sergio Di
+      Rio Mare:
+      http://www.kde-look.org/content/show.php?content=42042
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-08 06:09  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setup.cpp: fix
+      icon
+
+2006-09-08 06:01  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.h:
+      digiKam from trunk : do not show album item tool tip if this
+      option is enable and none sub-option to show tool tip content is
+      enable.
+
+2006-09-07 19:05  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp:
+      digikam from trunk : fix album item tool tip font size. More
+      readable.
+
+2006-09-07 16:52  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-07 16:49  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop,
+      trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+      trunk/extragear/graphics/digikam/utilities/setup/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/setup/setup.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setup.h,
+      trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.h:
+      digiKam from trunk : new Setup album item tooltip section to
+      optimize the informations to show over the picture using the
+      pop-up tool tip window. Each item to show can be set in this new
+      setup dialog tab.
+      
+      CCBUGS: 126086
+
+2006-09-07 12:14  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/Makefile.am:
+      fix tab
+
+2006-09-07 11:32  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp:
+      digikam from trunk : do not show the "unknow downloaded" icon
+      tag on camera gui item until a right solution to identify the
+      already downloaded images is implemented
+      
+      CCBUGS: 107316
+
+2006-09-07 10:23  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+      digikam from trunk : allow to do not show the error message box
+      in the future
+
+2006-09-07 09:30  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+      digikam from trunk : no need to show 2 messages box if dcraw
+      cannot be found
+
+2006-09-07 09:24  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h: digikam
+      from trunk : showfoto : using an internal d private class
+
+2006-09-07 07:49  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h,
+      trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setupicc.h:
+      digikam from trunk : ICC profiles repository at startup bugfix :
+      
+      - Add new common static method on SetupIcc to perform icc
+      repository validity check
+      - Showfoto have been forget to check icc repository at startup.
+      Fixed.
+      - Fix to sync config to disk if icc management need to be
+      disable.
+      - Using the setup() method available on digiKam/showfoto to
+      start Setup instance in case of icc repository path is not valid.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-06 14:42  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: fix
+      load icon method
+
+2006-09-06 14:21  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-06 14:15  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+      digikam from trunk : dcraw 8.03 can be used with digiKam
+      (minimal requirement)
+
+2006-09-06 13:12  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-06 13:10  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop,
+      trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp,
+      trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.h,
+      trunk/extragear/graphics/digikam/showfoto/main.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
+      from trunk : dcraw autodetection at startup : now digiKAm check
+      the dcraw version installed on your computer and report the
+      results to user if necessary.
+      
+      This commit fix showfoto RAW files rules if dcraw detection has
+      failed.
+      
+      Note :
+      - minimum dcraw version require : 8.09.
+      - recommended dcraw version >= 8.30.
+      
+      CCBUGS: 132694
+
+2006-09-06 13:09  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-06 13:07  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+      trunk/extragear/graphics/digikam/digikam/main.cpp: digikam from
+      trunk : dcraw autodetection at startup : now digiKAm check the
+      dcraw version installed on your computer and report the results
+      to user if necessary.
+      
+      This commit fix showfoto RAW files rules if dcraw detection has
+      failed.
+      
+      Note :
+      - minimum dcraw version require : 8.09.
+      - recommended dcraw version >= 8.30.
+      
+      CCBUGS: 132694
+
+2006-09-06 13:04  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-06 11:57  mwiesweg
+
+    * trunk/extragear/graphics/digikam/showfoto/main.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/canvas.h,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+      Open image editor faster (when is has been opened once)
+      
+      - EditorWindow is no longer WDestructiveClose:
+      - initialization for each opening takes significant time
+      - introduce resetImage method in Canvas and DImgInterface
+      to reduce memory usage when closed (most importantly, delete
+      DImg object)
+      
+      If the image is cached, scaling and drawing is now the limiting
+      factor when opening IE.
+      
+      - use queryClose and queryExit in ShowFoto
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-05 18:21  amantia
+
+    * trunk/extragear/graphics/digikam/digikam/Makefile.am: builddir
+      != srcdir fix
+
+2006-09-05 18:15  amantia
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/setup/Makefile.am:
+      builddir != srcdir fix
+
+2006-09-05 14:39  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp:
+      digikam from trunk : kipi-interface : if libkipi version is >
+      1.4.0, KIPI::HostSupportsTags feature is supported.
+
+2006-09-05 13:38  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumfolderview.h:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-05 13:28  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-05 12:54  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/searchfolderview.h:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-05 12:32  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk :using KPopupMenu instead QPopupMenu
+
+2006-09-05 12:23  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      digikam from trunk : no need to handle an error with showfoto
+      if the the current image filename to load is empty because
+      showfoto use this way to clear editor canvas
+
+2006-09-05 11:08  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: digikam
+      from trunk : showfoto : if open file in folder action failed to
+      load at least one image, report an error to user
+
+2006-09-05 10:56  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.h: polish
+
+2006-09-05 10:52  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+      polish
+
+2006-09-05 10:49  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+      digikam from trunk : image window : using internal d private
+      class
+
+2006-09-05 10:26  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+      digikam from trunk : camera gui : using KPopupMenu instead
+      QPopupMenu
+
+2006-09-05 10:25  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+      digikam from trunk : fix a crash with camera gui when an image
+      is open from camera.
+
+2006-09-05 07:15  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      digikam from trunk :tag filters view: using KPopupMenu instead
+      QPopupMenu again
+
+2006-09-05 07:11  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      digikam from trunk :tag filters view: using KPopupMenu instead
+      QPopupMenu
+
+2006-09-04 11:35  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-04 11:32  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      digikam from trunk: Tag Filters View: new option in popup menu
+      to assign an image as tags thumbnail using drag & drop like with
+      Tags View.
+      BUG: 120056
+
+2006-09-04 11:14  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp:
+      missing Help button
+
+2006-09-04 10:58  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-04 10:56  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumlister.h,
+      trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      digiKam from trunk: tag filters view: new options to set the
+      matching condition to use between tags : OR condition or AND
+      condition
+      The settings is stored in digiKAm config file and is restored
+      between session.
+      
+      BUG: 115160
+
+2006-09-04 08:02  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp:
+      digikam from trunk : set the right icon to new tag
+
+2006-09-04 07:55  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+      polish
+
+2006-09-04 07:52  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      digikam from trunk : preview job pointer is a QGuardedPtr
+
+2006-09-04 07:46  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp:
+      digikam from trunk : fix memory leak if thumbnail job is in
+      progress and digiKam is closed violently
+
+2006-09-04 07:39  gkulzer
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      Update maps.google with marker at location
+
+2006-09-04 07:37  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/ratingwidget.cpp,
+      trunk/extragear/graphics/digikam/digikam/ratingwidget.h: digikam
+      from trunk : using d private class
+
+2006-09-04 06:09  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-04 06:06  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/Makefile.am:
+      digiKam from trunk: fix C++ Exception rules require by Exiv2
+      library
+      BUG: 133525
+
+2006-09-03 17:04  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+      Properly handle closing: When IE needs to save, and the main
+      window
+      is closed or session management closes, ask for saving.
+
+2006-09-03 15:58  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      polish
+
+2006-09-03 15:47  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk : Tags view from Comments & Tags side bar
+      tab : new options to:
+      
+      - "Select All" tags
+      - "Deselect" all tags
+      - "Invert Selection" of tags
+      
+      CCBUGS: 115154, 115157
+
+2006-09-03 15:45  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+      Emit signalNoCurrentItem when closing so that changes in
+      ImageDescEditTab are applied
+      before the Widgets are destroyed
+
+2006-09-03 14:50  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-03 14:49  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+      digikam from trunk : Tags Filter View : new options to
+      
+      - "Select All" tags
+      - "Deselect" all tags
+      - "Invert Selection" of tags
+      
+      BUG: 115154
+      CCBUGS: 115157
+
+2006-09-03 13:18  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-03 13:09  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-03 09:29  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+      || -> &&
+
+2006-09-03 08:52  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+      digikam from trunk : DImg::TiffLoader : the loader work fine
+      with PHOTOMETRIC_MINISBLACK TIFF color-space (Blacl & white
+      picture converted with ImageMagick).
+      
+      Marcel, we need to check the current implementation with others
+      TIFF color-spaces. There are a lots of tiff sample pictures in
+      libtiff repository :
+      
+      http://www.remotesensing.org/libtiff/images.html
+      
+      CCBUGS: 125916
+
+2006-09-03 08:33  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+      digikam from trunk : DImg::TiffLoader : digiKam cannot handle
+      TIFF file without RGB color-space.
+      
+      Marcel, this is still to do in tiff decoder RGB color-space is
+      used with 90% of tiff files, especially with photograph
+      pictures, but we need to finalize this part to support others
+      tiff color-spaces.
+      
+      This commit prevent dummy image data decoding in editor.
+      
+      CCBUGS: 125916
+
+2006-09-03 08:09  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp: digikam
+      from trunk : DImg::fileFormat() optimizations : no need to parse
+      RAW file structure to check file format if the file extension is
+      know like a RAW file
+
+2006-09-02 15:34  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+      - check that rows_per_strip, bits_per_sample and
+      samples_per_pixel is not 0.
+      If these value are invalid, refuse to load.
+      - rows_per_strip of 0 results in an endless loop
+      - samples_per_pixel of 0 is invalid, leads to bad data
+      - use TiffGetFieldDefaulted instead of TiffGetField (inspired by
+      ImageMagick)
+      
+      Note: this does not fix the problem that libtiff returns invalid
+      values,
+      but now digikam notices the fact.
+      
+      CCBUG: 125916
+
+2006-09-01 13:29  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagcreatedlg.h: digikam
+      from trunk: new button to reset tag thumb in tag properties
+      dialog
+      CCBUGS: 118526
+
+2006-09-01 13:26  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/deletedialog.h:
+      Use DIGIKAM_EXPORT for DeleteDialog
+
+2006-09-01 12:47  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk: new popup menu options to reset album/tag
+      thumbs in comments & tags side bar tab
+      CCBUGS: 118526
+
+2006-09-01 12:39  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+      digikam from trunk: set tag dile name to "tag" (default)
+      CCBUGS: 118526
+
+2006-09-01 11:19  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfilterview.h:
+      digikam from trunk: new popup menu options to reset album/tag
+      thumbs in tag filter view
+      CCBUGS: 118526
+
+2006-09-01 10:59  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-01 10:59  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.h:
+      digikam from trunk: new popup menu options to reset album/tag
+      thumbs
+      BUG: 118526
+
+2006-09-01 05:26  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-31 19:00  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+      digikam from trunk : with showfoto, refresh all thumbbar items
+      if exif auto-rotation option is changed in setup
+      
+      CCBUGS: 127179
+
+2006-08-31 14:06  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp,
+      trunk/extragear/graphics/digikam/digikam/scanlib.cpp,
+      trunk/extragear/graphics/digikam/digikam/scanlib.h: digikam from
+      trunk : scanlib use now the new digiKam batch progress dialog
+
+2006-08-31 13:59  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.h:
+      cleanup
+
+2006-08-31 12:32  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.h:
+      digikam from trunk: DProgressDlg is now compatible with scanlib
+      implementation to remplace KProgressDialog
+
+2006-08-31 11:11  gkulzer
+
+    * trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp:
+      indent -> intent
+
+2006-08-31 11:06  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-31 10:44  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp,
+      
+      trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.h,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.h:
+      digikam from trunk : thumbnails generator give a little preview
+      of thumbs now
+
+2006-08-31 07:27  gkulzer
+
+    * trunk/extragear/graphics/digikam/TODO,
+      trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/dialogs/iccprofileinfodlg.h,
+      trunk/extragear/graphics/digikam/libs/jpegutils/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      trunk/extragear/graphics/digikam/showfoto/setup/setup.cpp: icc
+      -> ICC in i18n strings, loose -> lose in Makefile.am
+
+2006-08-30 17:42  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS: three more
+
+2006-08-30 17:36  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/iconview.cpp: Properly
+      emit signalSelectionChanged when selecting with Shift
+      
+      BUG: 133209
+
+2006-08-30 17:20  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: -
+      when setting the iconKDE string, reset the icon ID to 0, which
+      has precedence
+      - set root item to "open" initially. (If items are added in
+      TagFolderView,
+      ensureItemVisible is called. TagFilterView has no root item.
+      So this appeared only
+      when creating the very first item from TagFilterView)
+      
+      BUG: 120075, 120074
+
+2006-08-30 15:32  gkulzer
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+      I18 polishing
+
+2006-08-30 14:58  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h: digikam
+      from trunk : refresh current album properlly after batch
+      thumbnails processing
+
+2006-08-30 14:48  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp:
+      polish
+
+2006-08-30 14:47  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp,
+      
+      trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.h,
+      trunk/extragear/graphics/digikam/libs/dialogs/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.h:
+      digikam from trunk : new batch progress dialog used by
+      thumbnails processing tool.
+      BUG: 120308
+
+2006-08-30 13:38  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp:
+      polish
+
+2006-08-30 12:36  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree:
+      Fixed typo
+
+2006-08-30 12:34  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree:
+      Updated scripts help text
+
+2006-08-30 12:24  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/Makefile.am: Added
+      scripts subdirectory to utilities/Makefile.am
+
+2006-08-30 12:19  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+      polish
+
+2006-08-30 10:55  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-30 10:36  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setup.cpp: fix
+      i18n
+
+2006-08-30 10:34  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp:
+      digikam from trunk : code polishing : there is no LibKExif
+      depencies here.
+
+2006-08-30 10:34  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setup.cpp: fix
+      i18n
+
+2006-08-30 10:32  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setup.cpp:
+      update descriptions using Peter patch
+
+2006-08-30 10:28  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setup.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.h:
+      digikam from trunk : When the Exif auto-rotation option is
+      canged in setup dialog, digiKam ask now to user if the new batch
+      tool to re-generate all albums items thumbnails must be started
+      to refresh thumbs database.
+      
+      CCBUGS: 127179, 110658, 128308
+
+2006-08-30 10:23  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp:
+      fix i18n
+
+2006-08-30 10:21  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: fix i18n
+
+2006-08-30 09:22  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-30 09:02  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/Makefile.am,
+      trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp,
+      
+      trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.h,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+      trunk/extragear/graphics/digikam/digikam/digikamui.rc: digikam
+      from trunk : new batch tool to re-generate all albums items
+      thumbnails for all icon sizes. Use the new Tools/Rebuild all
+      Thumbnails option for that.
+      
+      This tool can take a while on slow computers (you can take a
+      coffee (:=)). Note : you cannot use digiKam during thumbnails
+      processing.
+      
+      BUG : 128308
+      CCBUGS : 110658, 127179
+
+2006-08-30 06:49  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : regroup all MPEG files to the same folder
+      during downloading from camera
+      CCBUGS : 133185
+
+2006-08-30 06:46  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumsettings.cpp:
+      digikam from trunk : add by default *.mpe and *.mpo about MPEG
+      movie file extensions to sort in album gui
+      CCBUGS : 133185
+
+2006-08-30 05:27  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.lsm,
+      trunk/extragear/graphics/digikam/release_digikam.rb,
+      trunk/extragear/graphics/digikam/version.h: update digiKam
+      0.9.0-beta1 to beta2
+
+2006-08-29 20:58  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamview.h,
+      trunk/extragear/graphics/digikam/digikam/icongroupitem.cpp,
+      trunk/extragear/graphics/digikam/digikam/iconview.cpp:
+      View/IconView optimizations or bug fixes
+      
+      Problems to fix:
+      - when removing many images with the tag filter, the GUI would
+      hang
+      Try with >1000 tagged images and filter with "Not tagged" - it
+      took
+      more than a minute with full CPU, now 500 ms
+      - improve GUI responsiveness when selecting images in
+      AlbumIconView,
+      especially with key presses or keeping the key pressed
+      
+      Fixes:
+      - use a QTimer to decouple the selection signal from
+      AlbumIconView
+      and setting the right side bar in AlbumView.
+      Using 75 ms.
+      - set a wait cursor when filtering large numbers of images with
+      tag filter
+      (here it is 500 ms for 1000 images)
+      No cursor for small numbers of images.
+      - emit a signalSelectionChanged from IconView when the last
+      image has been
+      removed (and no image is selected any more)
+      - disconnect signalItemDeleted(AlbumIconItem*) from DigikamView's
+      signal_noCurrentItem
+      - when all items are removed, make sure that the contents size
+      is updated (to 0x0)
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-29 20:38  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: bug fixed in trunk
+
+2006-08-29 13:09  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebar.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp:
+      Filter out duplicate itemChanged calls in sidebar
+
+2006-08-29 11:03  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/scanlib.cpp: fix i18n
+
+2006-08-29 10:49  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/scanlib.cpp: please to
+      user
+
+2006-08-28 20:54  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/ctrlpaneldlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dimg/filters/dimgthreadedfilter.cpp:
+      some small changes
+
+2006-08-28 13:58  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-28 13:53  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      just polish
+
+2006-08-28 13:51  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+      digikam from trunk : Comments and Tags side bar tab : the
+      "Recents Tags" button us a popup menu to display recents tags
+      used. A QToolButton look better for that.
+      
+      BUG: 115161
+
+2006-08-28 11:21  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk : bugfix : I'm so surprise than nobody
+      has'nt reported that : chage an icon tag will always display an
+      empty error message box...
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-28 09:14  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-28 09:12  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp:
+      digikam from trunk : Tags Edit/Create dialog : Let's user select
+      others folder to choose a tag icon.
+      
+      BUG: 128296
+
+2006-08-28 08:15  bram
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/deletedialogbase.ui,
+      trunk/extragear/multimedia/amarok/src/Options1.ui,
+      trunk/extragear/network/kftpgrabber/src/ui/bookmark_properties.ui,
+      
+      trunk/extragear/network/kftpgrabber/src/ui/kftpbookmarkeditortlswidget.ui,
+      trunk/extragear/network/knemo/knemod/interfacestatusdlg.ui:
+      SVN_SILENT: fixuifiles
+
+2006-08-28 05:40  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/ctrlpaneldlg.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/imageguidedlg.cpp:
+      digikam from trunk : threaded Image plugin dialogs : Change test
+      to check if computation is already in progress to prevent
+      dupplicate event from gui
+      Heiner, please check if this fix improve the stability with MT
+      on your system. Thanks in advance
+      
+      CCBUGS: 133026
+
+2006-08-28 05:37  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/Makefile.am:
+      missing tab
+
+2006-08-27 19:57  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp: add
+      decorative logo. fix i18n
+
+2006-08-27 17:25  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagcreatedlg.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagcreatedlg.h,
+      trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      digikam from trunk : tags create/edit dialogs :
+      
+      - Use the active parent window to display dialog (bugfix).
+      - Use an internal 'd' private class.
+      - Use KLineEdit instead QLineEdit.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-27 16:41  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      polish
+
+2006-08-27 16:06  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      digikam from trunk : Raw files are already rotated properlly by
+      dcraw.Because we don't have a feedback from dcraw about
+      auto-rotated RAW file during decoding, we set on the transformed
+      flag as well.
+
+2006-08-26 18:29  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : cameragui : when we create sub-albums
+      based on file extensions, group same file extension together
+
+2006-08-25 20:57  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : cameragui bugfix : need to check the
+      target file extension to create sub-albums based on file
+      extensions
+
+2006-08-25 17:00  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupcamera.cpp:
+      hide 'last acess date' from camera setup
+
+2006-08-25 15:07  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/deletedialog.cpp,
+      trunk/extragear/graphics/digikam/libs/dialogs/deletedialog.h,
+      trunk/extragear/graphics/digikam/libs/dialogs/deletedialogbase.ui:
+      Oops: Add missing files
+
+2006-08-25 14:44  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: Update
+
+2006-08-25 14:42  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digiKam from trunk : Camera Gui improvements : new option to
+      download pictures into files 'Auto-created Extension-based
+      sub-albums'. You can separate RAW, JPEG, MOV files easily in
+      your destination album.
+      
+      Note : you can use this options at the same time than
+      'Auto-created Date-based sub-albums' option. You will have
+      something like this :
+      
+      - 2006-03-24/JPG
+      - 2006-03-24/CR2
+      - 2006-03-24/MOV
+      etc...
+      
+      BUG: 130547
+
+2006-08-25 13:33  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/digikam/albumhistory.cpp: Set
+      this to 0 as in the other similar methods
+      
+      BUG: 132957
+
+2006-08-25 13:30  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupmisc.cpp:
+      Missing in last commit
+
+2006-08-25 13:24  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update last fix by Marcel
+
+2006-08-25 13:20  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/Makefile.am,
+      trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumfolderview.h,
+      trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumiconview.h,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.h,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+      trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamview.h,
+      trunk/extragear/graphics/digikam/digikam/dio.cpp,
+      trunk/extragear/graphics/digikam/digikam/dio.h,
+      trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+      trunk/extragear/graphics/digikam/digikam/syncjob.h,
+      trunk/extragear/graphics/digikam/libs/dialogs/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/Makefile.am,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+      File Deletion handling
+      
+      After long discussion (#126874) and input from KDE usability
+      team:
+      - <Del> brings up the trash dialog with a "Do not ask again"
+      - <Shift+Del> brings up the permanently-delete dialog without an
+      option
+      - there are hidden actions for delete without confirmation to
+      which power users can assign shortcuts
+      - the current setup option whether to trash or permanently
+      delete is removed from the setup
+      - it is kept internally and used for album deletion, see below
+      - add a new setup option which is identical to the "Do not ask
+      again" option is the trash
+      dialog, so that this setting is reversible
+      - added to AlbumSettings as well
+      - in the AlbumFolderView, if deleting a whole album,
+      only the context menu can be used to select a delete operation
+      - Shift+Del is reserved for images.
+      Here, the user can choose in the dialog whether to trash or
+      delete permanently. This setting is stored.
+      No "Do not ask again" will be available.
+      - all subalbums will be included in the list in the
+      DeleteDialog to make the user aware that
+      he deletes them as well
+      - fix a bug in ImageWindow slotDeleteCurrent with directories
+      that contain a "#"
+      - The DeleteDialog has now five modes of operation, see above.
+      The checkboxes
+      are in a widget stack, all the functionality that was there is
+      still there for future needs.
+      
+      BUG: 126874
+      CCMAIL: digikam-devel@kde.org
+      
+
+2006-08-25 12:28  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/cameradragobject.cpp,
+      trunk/extragear/graphics/digikam/digikam/cameradragobject.h,
+      trunk/extragear/graphics/digikam/digikam/cameralist.cpp,
+      trunk/extragear/graphics/digikam/digikam/cameralist.h,
+      trunk/extragear/graphics/digikam/digikam/cameratype.cpp,
+      trunk/extragear/graphics/digikam/digikam/cameratype.h,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpiteminfo.h,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setupcamera.cpp:
+      digikam from trunk : Camera Gui improvement : first approach to
+      itentify the NEW pictures taken by a camera.
+      
+      digiKam now store in the camera XML config file the "last camera
+      used date". Each camera are tagged with a date value between
+      camera gui sessions if some pictures have been donwloaded to
+      computer. If no pictures are donloaded with camera gui, the date
+      is unchanged.
+      
+      In fact, all picture dates in the camera witch are most recent
+      than the "last camera used date" will be displayed with a little
+      yellow start to indentify the most recent pictures taken with
+      the camera.
+      
+      To use properlly this little feature, you need to set the right
+      date in your camera !
+      
+      Of course, this way cannot be used to identify the pictures
+      "already downloaded" from camera to computer. For that, we need
+      to have a full camera activity log somewhere (perhaps using the
+      digiKam database).
+      
+      I'm waiting your comments about to implement camera log feature
+      in digiKam.
+      
+      CCBUGS: 107316
+
+2006-08-25 08:04  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/cameratype.cpp,
+      trunk/extragear/graphics/digikam/digikam/cameratype.h: digikam
+      from trunk : polishing and using d private internal class
+
+2006-08-25 07:48  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/cameralist.cpp,
+      trunk/extragear/graphics/digikam/digikam/cameralist.h: polishing
+
+2006-08-25 06:11  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-24 19:56  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+      - for main view shortcuts, use assignRating slots from
+      AlbumIconView,
+      which assigns directly (right side bar does not)
+      - give shortcuts for rating clearer names so that they can be
+      identified in the shortcuts dialog
+      
+      BUG: 132660
+
+2006-08-24 18:50  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+      Do not dismiss result from "better" loadingDescriptions
+
+2006-08-24 18:17  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+      RAW loader progress:
+      Any progress is better than no progress, so for the RAW loader,
+      we now have progress.
+      As dcraw does not allow us to have real progress information, do
+      some guessing and emit fake progress.
+      It works pretty well on my machine, and the progress curve is
+      sigmoidal not linear so I hope it works on most
+      machines well enough.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-24 17:24  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      fix
+
+2006-08-24 17:18  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      added QWhatsThis
+
+2006-08-24 15:32  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-24 15:28  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera gui improvements : new option to
+      set configurable date format for auto album creation.
+      
+      BUG: 119075, 128817
+
+2006-08-24 15:19  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+      Filter out duplicate events from AlbumIconView (two for mouse
+      presses, four or five for key presses)
+      in the Color sidebar.
+      They messed up the timing of the progress info display in the
+      histogram widget, especially navigating
+      with the keys.
+      
+      While it cannot hurt to filter out these dups here,
+      I'd certainly like to get them before (between AlbumIconView and
+      Sidebar)
+
+2006-08-24 14:42  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadingcache.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadingcache.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadingdescription.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/loadsavethread.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/managedloadsavethread.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.h:
+      Fix the longstanding problem that a half-size loading from
+      histogram would not
+      be stopped when the full image is loaded in IE
+      
+      - a signalMoreCompleteLoadingAvailabe is now available from the
+      loading thread
+      - sent this signal when appropriate, add all necessary
+      inter-thread stuff
+      - connect histogram sidebar to this signal and restart loading
+      with full image
+      if available
+      - loading signals now sent the full LoadingDescription, not only
+      filePath.
+      Change inter-thread events as necessary
+      - some polishing in LoadingDescription
+      - usedProcess is now m_usedProcess
+      - some more comments in LoadingCache.h
+
+2006-08-24 12:22  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS: this one was still
+      missing on the list
+
+2006-08-24 11:46  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      polish
+
+2006-08-24 11:45  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      polish
+
+2006-08-24 11:15  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      fix comments
+
+2006-08-24 11:12  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h:
+      digikam from trunk : more debug libgphoto2 statements on the
+      console
+
+2006-08-24 07:56  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp:
+      remove duplicate debug messages
+
+2006-08-24 07:55  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      remove duplicate debug messages
+
+2006-08-24 07:54  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      more debug message
+
+2006-08-24 07:44  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      more debug message
+
+2006-08-23 17:53  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      stupid bug (:=)))
+
+2006-08-23 17:46  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      digikam from trunk : Exif auto-rotate into image editor :
+      support PNG and TIFF like JPEG
+
+2006-08-23 14:39  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+      digikam from trunk : cameraiconview : ensure that the current
+      selected item from the camera icon view is always visible when
+      the thumbs size is changed.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-23 14:08  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/iconview.cpp: digikam
+      from trunk : iconview : ensure that the current selected item
+      from the icon view is always visible when the sidebar size is
+      changed.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-23 12:35  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-23 12:33  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      digikam from trunk: With UMS camera, fix full path of camera
+      item for krename dialog to render preview properlly.
+      
+      Note: with gphoto2 camera, the problem still exist because
+      camera items aren't in the local file system. This require a
+      lots of advanced changes in the implementation.
+      
+      CCBUGS: 126427
+
+2006-08-23 09:49  cgilles
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp:
+      digikam from trunk : thumbs kio slave : with RAW files try to
+      load preview image in first to parse file extension.
+
+2006-08-23 09:28  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-23 09:25  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+      trunk/extragear/graphics/digikam/digikam/digikamui.rc,
+      trunk/extragear/graphics/digikam/digikam/digikamview.cpp,
+      trunk/extragear/graphics/digikam/digikam/digikamview.h: digikam
+      from trunk : albums gui : New menu option to force the refresh
+      of album contents. The thumbnails will be recomputed by digikam
+      kio-slave.
+      
+      Note: The keyboard shorcut for this action is F5
+      
+      BUG: 128673
+
+2006-08-23 06:01  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/thumbbar/thumbbar.cpp:
+      polish
+
+2006-08-22 14:09  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/thumbbar/thumbnailjob.cpp:
+      digikam from trunk : thumbnailjob : backport of fix from Marcel
+      on previewjob implementation.
+      
+      Marcel: I suspose that all is right for you with this commit...
+      
+      CCMAIL: marcel.wiesweg@gmx.de
+      
+
+2006-08-22 13:06  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      fix i18n
+
+2006-08-22 12:48  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera gui : moving auto-rotate/flip
+      option to "On the fly Operations" section. Remaning "Use Camera
+      Informations" section to "Auto-Creation of Albums"
+
+2006-08-22 11:58  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : upload/download camera dialog polish
+
+2006-08-22 11:08  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      typo
+
+2006-08-22 10:53  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+      digikam from trunk : camera gui improvements : add "Toggle lock"
+      option to camera item popup menu
+
+2006-08-22 10:44  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      typo
+
+2006-08-22 10:33  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp:
+      polish
+
+2006-08-22 09:51  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-22 09:48  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+      trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/downloadsettingscontainer.h:
+      digikam from trunk : Camera gui improvements : JPEG image files
+      conversion on the fly during donwloading from digital camera.
+      All Metadata (Exif/Makernote/Iptc) are preserved.
+      
+      Nota : duing Exiv2 limitation of read-only capability with Tiff
+      file, the only lossless file format supported actually is PNG.
+      TIFF file format will be added later when Tiff write support
+      will be added to Exiv2.
+      
+      BUG: 124183
+
+2006-08-22 09:13  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/iconview.cpp: digikam
+      from trunk : general improvements of icon view reactivity !
+      
+      This commit is simple : during items selection using mouse
+      draging, it dispatch the current icons selection event only when
+      user have release the left mouse.
+      
+      Before this commit the implementation sent an event when a new
+      item have been selected during the selection (under the mouse
+      draging with the left button pressed). I other word, the gui
+      will recieve a lot of events to refresh the sidebar. This way
+      decreased the gui reactivity when metadata/properties sidebar is
+      enable. This problem exist also with the Camera Gui. The problem
+      is more important in this case because the data exanged between
+      the computer and the camera will be important to extract
+      metadata for each camera items.
+      
+      IMPORTANT : I have tested digiKam Album Gui and Camera Gui with
+      this fix. All work fine but i would to have a right feedback
+      from the team before to valid this change for the next
+      0.9.0-beta2 planed to september.
+      
+      Thanks in advance for your reports.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-22 06:45  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree.1:
+      corrections to the text
+
+2006-08-22 05:34  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop: update
+
+2006-08-21 19:01  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: typo
+
+2006-08-21 16:49  toma
+
+    * trunk/extragear/graphics/digikam/release_digikam_docs.rb: Fix
+      release script to include the correct COPYING file
+
+2006-08-21 16:08  toma
+
+    * trunk/extragear/graphics/digikam/release_digikam_docs.rb:
+      SVN_SILENT: Copy COPYING-DOC to root in tarball
+
+2006-08-21 15:59  jriddell
+
+    * trunk/extragear/graphics/digikam/COPYING-DOCS: Add FDL licence
+      for documentation
+
+2006-08-21 13:09  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      compile
+
+2006-08-21 12:49  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/jpegutils/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/jpegutils/exifrotate.cpp,
+      trunk/extragear/graphics/digikam/libs/jpegutils/exifrotate.h,
+      trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.cpp,
+      trunk/extragear/graphics/digikam/libs/jpegutils/jpegutils.h:
+      exifrotate ->jpegutils
+
+2006-08-21 12:10  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/jpegutils/transupp.cpp,
+      trunk/extragear/graphics/digikam/libs/jpegutils/transupp.h:
+      polish
+
+2006-08-21 11:48  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/jpegutils/transupp.cpp,
+      trunk/extragear/graphics/digikam/libs/jpegutils/transupp.h:
+      polish
+
+2006-08-21 11:07  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk: camera gui improvements : the camera folder
+      dialog will display the number of camera items by folders
+
+2006-08-21 08:50  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : Camera gui improvements : if some items
+      are locked by camera, give a feedback to user if user want to
+      delete it.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-21 08:26  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp:
+      polish
+
+2006-08-21 08:20  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp:
+      polish
+
+2006-08-21 08:15  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.h:
+      more debug statements of libgphoto2 on the console
+
+2006-08-20 21:35  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-20 21:33  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.h:
+      digikam from trunk : camera gui improvements : New option to
+      toggle on/off the write acess on files (Lock feature to prevent
+      unwanted deletion of pictures)
+      
+      This mode have been tested with my Olympus C3000Z (Gphoto2
+      driver) and my Dynax 5D in USM mode.
+      
+      Duing a limitiation in libgphoto2, this feature is unsupported
+      actually by cameras in PTP mode.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-19 23:38  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera gui : fix progress bar during
+      listing of items if a camera have more than one folder with
+      pictures to download
+
+2006-08-19 23:18  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+      digikam from trunk : camera gui improvements : during deletion
+      of camera items, show progress bar
+
+2006-08-19 22:34  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      polish
+
+2006-08-19 22:04  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      digikam from trunk : if image editor fa&iled to load an image,
+      display an error message box.
+
+2006-08-19 21:42  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/tiffloader.cpp:
+      add link to krita tiff loader
+
+2006-08-19 15:04  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : do not remove the camera items locked
+      (read only) from camera item view during items deletion.
+
+2006-08-19 14:53  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h:
+      polish : status ==> m_status (it's a private member)
+
+2006-08-19 14:12  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      fix typo
+
+2006-08-19 13:37  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-18 16:57  cgilles
+
+    * trunk/extragear/graphics/digikam/README: update depency with
+      dcraw
+
+2006-08-18 16:47  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: Update
+
+2006-08-18 16:22  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-18 11:43  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp:
+      polish
+
+2006-08-18 11:35  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp:
+      digikam from trunk : camera gui improvements : some camera can
+      lock files to prevent unwanted item deletion.
+      In fact, the file access is in Read Only. This commit draw a
+      small "lock" icon under camera item in this case.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-18 09:12  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-08-17 21:10  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+      Remove comments for "-2" option
+
+2006-08-17 12:38  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      digikam from trunk: Bug fix: with Minolta camera (Dynax5D and
+      7D), we need to set the Minolta Makernote Orientation tag to
+      "Normal"
+      when we set the Exif orientation tag, else preview and thumb
+      will not be orientated properlly after to have created a new
+      image
+      from editor using a Minolta picture.
+      CCBUGS: 131603, 131532
+
+2006-08-17 10:07  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+      trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+      digikam from trunk: add "*.jpe" file extension. Some camera use
+      this file extension to identify JPEG files
+      taken in enhanced color mode (with my Dynax 5D, .jpe pictures
+      are taken in AdobeRGB with the ICC right color profile embeded.)
+      CCMAIL: digikam-devel@kde.org
+
+2006-08-17 10:03  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : since Exiv2 can extract
+      Exif/Makernotes/Iptc from RAW files, it not need to use .thm
+      file from camera to get Exif data.
+
+2006-08-17 09:42  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop: fix
+
+2006-08-17 08:52  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      polish
+
+2006-08-17 08:48  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : CameraGUI improvements : thumbnail items
+      extraction can be take a while with a large pictures list from
+      camera.
+      We will display a progress bar during this task.
+
+2006-08-17 08:00  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk : improve quality preview with RAW files
+      into camera gui.
+
+2006-08-17 01:01  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop: fix
+
+2006-08-17 00:31  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp:
+      digikam from trunk : do not use dcraw "-2" option to decoding
+      RAW file in 8 bit by default. This will be compatible with dcraw
+      8.29 realease
+      CCBUGS: 131686
+
+2006-08-16 23:22  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/rawfiles.h: digikam
+      from trunk : added Sony ALpha RAW file extension by default.
+      CCBUGS: 131686
+
+2006-08-16 07:28  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree.1:
+      Fixed more typos
+
+2006-08-15 15:43  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-08-15 14:11  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree,
+      
+      trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree.1:
+      Added -C, -A, -H Options to script;
+      fixed number ob exported photos in -A mode;
+      updated manual page;
+
+2006-08-14 15:51  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/gwenview/tools/gimp.desktop,
+      trunk/extragear/graphics/gwenview/tools/wallpaper.desktop,
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/drivers/odbc/kphotoalbum_kexidb_odbcdriver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/drivers/pqxx/kphotoalbum_kexidb_pqxxsqldriver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/drivers/sqlite/kexidb_sqlitedriver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/drivers/sqlite/kphotoalbum_kexidb_sqlite3driver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/drivers/sqlite2/kphotoalbum_kexidb_sqlite2driver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/kexidb/kphotoalbum_kexidb_driver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/migration/keximigration_driver.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/migration/mysql/keximigrate_mysql.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kexi/migration/pqxx/keximigrate_pqxx.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-08-13 15:37  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+      trunk/extragear/graphics/fraqtive/src/fraqtive.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-08-13 13:22  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+      Make renaming unicode-proof:
+      - Move generation of new name to RenameCustomizer,
+      CameraIconView provides necessary information
+      - Rewrite custom renaming
+      - remove strftime, use QDateTime
+      - remove QFile::encodeName to QCString and back to QString
+      conversion,
+      which break UTF8
+      
+      CCBUG: 131558
+
+2006-08-13 13:04  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS: update bug list
+
+2006-08-13 12:59  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+      trunk/extragear/graphics/digikam/digikam/imageattributeswatch.cpp,
+      
+      trunk/extragear/graphics/digikam/digikam/imageattributeswatch.h:
+      - Shut down ImageAttributesWatch connections when closing,
+      widgets may have been deleted at that time, which will cause a
+      crash.
+      - properly shut down albumthumbnailloader when closing to free
+      Shared Memory
+      
+      CCBUG: 131972
+
+2006-08-13 12:52  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+      Wait for saving to complete in ImageWindow as well
+      
+      BUG: 132081
+
+2006-08-11 21:59  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageresizedlg.cpp:
+      Adapt absolute maximum in ResizeDlg to current image dimension
+      
+      BUG: 132113
+
+2006-08-11 15:39  scripty
+
+    * trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/ascii/kstdata_ascii.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/healpix/kstdata_healpix.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/naddirect/kstdata_naddirect.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-08-10 21:12  mwiesweg
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp:
+      Only use QFile::encodeName immediately for system calls.
+      DImg takes a QString, give it a QString.
+      Please test if this solves the UTF8 problems.
+      
+      CCBUGS: 131920
+
+2006-08-10 12:55  ach
+
+    * trunk/extragear/graphics/digikam/utilities/hotplug/configure.in.in:
+      digikam trunk: better not to confuse a svk feature with svn :(
+      unbreak built: use AC_OUTPUT again.
+
+2006-08-09 21:17  mwiesweg
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
+      When a save operation is runnnig, wait, show a message box and
+      enter a loop.
+      
+      - it would be better if the dialog shown does not have a OK
+      button,
+      but queuedMessageBox comes in very handy
+      - fix still missing for ImageWindow (IE), interfering with other
+      local changes here
+      
+      CCBUG: 132081
+
+2006-08-09 19:38  ach
+
+    * trunk/extragear/graphics/digikam/digikam.kdevelop,
+      trunk/extragear/graphics/digikam/digikam/album.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+      trunk/extragear/graphics/digikam/digikam/albummanager.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.cpp,
+      trunk/extragear/graphics/digikam/digikam/imageinfo.cpp,
+      trunk/extragear/graphics/digikam/digikam/kipiinterface.cpp,
+      trunk/extragear/graphics/digikam/digikam/scanlib.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.cpp,
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/hotplug/configure.in.in,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/undocache.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+      Krazy-fix: Check for adding single char string to a QString
+
+2006-08-09 18:55  ach
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+      Krazy-fix: Check for contractions in strings...
+      don't -> do not
+
+2006-08-09 18:42  ach
+
+    * trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp: krazy-fix:
+      == QString::NULL -> .isNull()
+
+2006-08-08 21:57  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      First part of a fix: Properly delete thread.
+      
+      CCBUG: 132081
+
+2006-08-08 13:43  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/ppmloader.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+      Fix PPC compatibility: Do not swab.
+      Thanks to Yannick Roehlly for testing.
+      
+      CCMAIL: yannick.roehlly@free.fr
+
+2006-08-07 20:57  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/searchwidgets.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.cpp:
+      Applying proposed patch. Thanks to Richard Kralovic.
+      
+      BUG: 132011
+
+2006-08-05 20:22  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS: some bugs killed
+
+2006-08-05 13:11  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp: Improve
+      debug messages
+
+2006-08-03 21:53  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/jpegloader.cpp:
+      Make JPEG signature checking endianness-proof
+      (please test)
+      
+      CCBUGS: 131550
+
+2006-08-03 20:56  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/pngloader.cpp:
+      Fix PNG loader for PPC.
+      As suggested by testing, use the same code for little and big
+      endian.
+      (This now changes all color types, not only RGB as the first
+      patch)
+      
+      CCBUGS: 131549
+
+2006-08-02 20:59  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp:
+      The "-2" option does no longer exist in dcraw 8.27.
+      It was the default in older 8.x version.
+      Removing this option now (unless someone claims it does not work)
+
+2006-08-02 15:58  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-08-01 21:23  mwiesweg
+
+    * trunk/extragear/graphics/digikam/kioslave/digikampreview.cpp:
+      The same fix as for the thumbnails ioslave, now for the preview
+      ioslave
+      
+      BUG: 131603, 131532
+
+2006-08-01 14:49  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/kphotoalbum-import.desktop,
+      trunk/extragear/graphics/kphotoalbum/kphotoalbum.desktop,
+      trunk/extragear/graphics/kphotoalbum/x-vnd.kde.kphotoalbum-import.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/cdf/kstdata_cdf.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop,
+      trunk/extragear/graphics/kst/src/kst/x-kst.desktop: SVN_SILENT
+      made messages (.desktop file)
+
+2006-07-31 21:40  mwiesweg
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp:
+      Rotate RAW thumbnails as well, not only JPEGs contains rotation
+      information.
+      
+      CCBUGS: 131532, 131603
+
+2006-07-31 21:22  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      Older Exiv2 versions throw an error when they encounter Minolta
+      Makernote key names.
+      Only query these keys if they are supported by Exiv2.
+      Otherwise, the Exif.Image.Orientation tag will be ignored as
+      well.
+      
+      CCBUGS: 131532, 131603
+
+2006-07-28 21:29  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/imagepreviewjob.cpp,
+      trunk/extragear/graphics/digikam/digikam/imagepreviewwidget.cpp:
+      Kill the preview ioslave each time properly so that is frees its
+      Shared Memory.
+      
+      Note: It seems that the usage of Shared Memory is dangerous,
+      as the segments are not freed when the application crashes.
+      
+      BUG: 131277
+      CCMAIL: digikam-devel@kde.org
+
+2006-07-28 07:22  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+      setup icc :simplify toogling option widgets using group box
+      properties
+
+2006-07-28 07:05  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      disable 'Image' button is cameragui is busy
+
+2006-07-28 07:02  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-28 06:50  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree.1:
+      Fixed typos.
+
+2006-07-28 06:50  krienke
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree:
+      Added license (GPL) to script file.
+
+2006-07-27 18:49  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digiKam from trunk : Camera Gui improvements : camera item
+      thumbnails increase/decrease size options...
+      
+      - Rename 'Select' button to 'Image' button. Add 2 new menu
+      entries to increase/decrease the thumbs size.
+      - Thumb size values are the same than Main interface.
+      - The thumbnails are taken from camera in huge size and cached
+      into memory: it very fast! No need to reload the thumbs from
+      camera when size value is changed (digiKam 0.6.2, witch support
+      this feature used this technic).
+      - The thumbs size is saved at each camera gui session and
+      restored later.
+      - 2 keyboard shorcuts can be used to change thumbs size : CTRL+
+      and CTRL-
+      
+      A screenshot :
+      
+      http://digikam3rdparty.free.fr/Screenshots/camera_gui_with_huge_thumbs.png
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-07-27 15:00  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-07-27 13:59  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk: store the UMS camera root path properlly
+      using a "/" at end if necessary.
+
+2006-07-27 12:11  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+      polish
+
+2006-07-27 08:03  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera gui upload : do not include file
+      name extension during file renaming operation from users if
+      picture already exist into camera.
+
+2006-07-27 07:45  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp:
+      fix i18n
+
+2006-07-27 07:24  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-27 07:22  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumiconview.h:
+      digikam from trunk : do not include file name extension during
+      file renaming operation from users.
+      
+      Note : with the old implementation, when the the filename
+      extension is changed by user, we will check if this one is in
+      the mimetype setup. if no, it's added, bu _always_ like an image
+      mimetype !!! Imaging if you put a sound or a video mimetype in
+      the image mimetype list : image editor will trying to open it...
+      
+      The mimetype registration with renaming is now removed.
+      
+      BUG: 117375
+      CCBUGS: 113801
+
+2006-07-27 06:26  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      fix parent menu of separator
+
+2006-07-26 19:49  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-26 14:39  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/Makefile:
+      remove
+
+2006-07-26 14:34  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-26 14:28  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/scripts/Makefile.in:
+      no need
+
+2006-07-26 14:27  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/scripts,
+      trunk/extragear/graphics/digikam/utilities/scripts/Makefile,
+      trunk/extragear/graphics/digikam/utilities/scripts/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/scripts/Makefile.in,
+      trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree,
+      
+      trunk/extragear/graphics/digikam/utilities/scripts/digitaglinktree.1:
+      Add script from Rainer Krienke to export digiKam tags from
+      database.
+      
+      BUG: 109820
+
+2006-07-26 13:07  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/digikamview.cpp:
+      digikam from trunk : dialog to import pictures in existing album
+      use the right file formats pattern (like showfoto and cameragui)
+
+2006-07-26 12:46  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+      digikam from trunk : camera interface : new 'Upload' option into
+      'Download' camera dialog button to upload pictures into camera.
+
+2006-07-26 11:34  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp:
+      polish
+
+2006-07-26 11:21  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      digikam from trunk : camera interface : enable/disable OK
+      button in camera folder selection dialog if no camera directory
+      is selected
+
+2006-07-26 08:58  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumlister.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumlister.h: polish
+
+2006-07-26 08:20  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-26 08:10  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumlister.cpp:
+      digikam from trunk : fix crash under FreeBsd
+      
+      CCBUGS: 131301
+
+2006-07-26 06:37  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      fix i18n
+
+2006-07-25 20:25  cgilles
+
+    * trunk/extragear/graphics/digikam/README: add bugs report url
+
+2006-07-25 16:10  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+      
+      trunk/extragear/graphics/gwenview/desktopfiles/konqgwenview.desktop,
+      
+      trunk/extragear/graphics/kphotoalbum/x-vnd.kde.kphotoalbum-import.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/ascii/kstdata_ascii.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/cdf/kstdata_cdf.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/dirfile/kstdata_dirfile.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/frame/kstdata_frame.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/healpix/kstdata_healpix.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/indirect/kstdata_indirect.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/lfiio/kstdata_lfiio.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/kstdata_nad.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/nad/nadslave/x-piolib.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/naddirect/kstdata_naddirect.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/naddirect/nadslave/x-piolib.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/netcdf/kstdata_netcdf.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/planck/kstdata_planck.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/qimagesource/kstdata_qimagesource.desktop,
+      
+      trunk/extragear/graphics/kst/src/datasources/template/kstdata_template.desktop,
+      
+      trunk/extragear/graphics/kst/src/extensions/js/kjsembed/kjscmd.desktop,
+      
+      trunk/extragear/graphics/kst/src/extensions/js/kstextension_js.desktop,
+      
+      trunk/extragear/graphics/kst/src/extensions/pulse/kstextension_pulse.desktop,
+      
+      trunk/extragear/graphics/kst/src/extensions/rana/kstextension_rana.desktop,
+      trunk/extragear/graphics/kst/src/kst/x-kst.desktop,
+      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/mySQL/showimg_kexidb_mysqldriver.desktop,
+      
+      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/odbc/showimg_kexidb_odbcdriver.desktop,
+      
+      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/pqxx/showimg_kexidb_pqxxsqldriver.desktop,
+      
+      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/sqlite/showimg_kexidb_sqlite3driver.desktop,
+      
+      trunk/extragear/graphics/showimg/kexi/kexidb/drivers/sqlite2/showimg_kexidb_sqlite2driver.desktop,
+      
+      trunk/extragear/graphics/showimg/kexi/kexidb/showimg_kexidb_driver.desktop,
+      
+      trunk/extragear/graphics/showimg/showimg/mimetypes/x-psd.desktop,
+      
+      trunk/extragear/graphics/showimg/showimg/mimetypes/x-sia.desktop,
+      
+      trunk/extragear/graphics/showimg/showimgapp/konqshowimg.desktop,
+      trunk/extragear/graphics/showimg/showimgapp/showimg.desktop,
+      trunk/extragear/graphics/showimg/showimgpart/showimgpart.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-07-25 14:07  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-25 14:04  cgilles
+
+    * trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core_ui.rc:
+      digikam from trunk: use same menu mnemonic for Filter as Krita
+      and Photoshop
+      CCBUGS : 124060
+
+2006-07-25 13:42  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-25 13:41  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+      digikam from trunk : camera interface : add new option to set
+      start number sequence index with a custom value.
+      
+      BUG: 121526
+
+2006-07-25 12:58  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dialogs/imageguidedlg.h:
+      polish
+
+2006-07-25 11:14  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-25 11:13  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/jpegloader.cpp:
+      digikam from trunk : DImg:JPEGLoader : set horizontal and
+      vertical Subsampling factor to 1 for a best quality of color
+      picture compression.
+      CCBUGS: 130996
+
+2006-07-25 11:00  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-25 10:59  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumsettings.cpp:
+      digikam from trunk : like Exif auto-rotation of
+      thumbs/preview/image is an option witch do not change the
+      pictures contents, this can be enable by default.
+      
+      BUG: 107724
+
+2006-07-25 09:48  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h:
+      digikam from trunk : camera interface : upload pictures : do
+      not popup copy&paste menu if clipboard content isn't urls
+
+2006-07-25 08:51  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera interface : upload pictures : if
+      target image in camera already exist, give a feedback to user to
+      rename the file to upload.
+
+2006-07-25 07:15  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : camera interface : fix camera folder
+      selection dialog to be compatible with GPhoto2 and UMS camera
+      drivers
+
+2006-07-25 06:42  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.h:
+      digikam from trunk : using internal d private class
+
+2006-07-25 06:37  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h:
+      digikam from trunk : using internal d private class
+
+2006-07-24 20:05  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      add bugs report url
+
+2006-07-24 15:37  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      polish implementation : indent, header, moc file, namespace,
+      etc...
+
+2006-07-24 15:19  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp:
+      digikam from trunk : don't popup drag&drop and copy&paste menus
+      if camera is busy
+
+2006-07-24 15:14  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h:
+      digikam from trunk: simplify popup menu with paste action
+
+2006-07-24 15:04  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: Update
+
+2006-07-24 14:58  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.h:
+      digikam from trunk : improvement of camera interface :
+      Restoring an old feature from digiKam 0.6.2 to upload pictures
+      to camera.
+      
+      In fact the interface to upload into gphoto2 camera have been
+      never removed but the interface with the new digiKam folder view
+      have never written by renchi.
+      
+      All camera type are supported : Gphoto2, PTP, UMS, etc. This
+      implementation have been tested with my Olympus C3000Z and my
+      Minolta Dynax 5D.
+      
+      By this commit, there is 2 ways to upload pictures in your
+      camera :
+      
+      - Drag & drop between digiKam main interface (or quesror if you
+      want), and camera interface.
+      - Copy and Paste like between digiKam album.
+      
+      Todo : add a new 'Upload' button on the bottom of Camera
+      Interface. I need a feedback from user before to do it... This
+      one is really mandatory ?
+      
+      Note : with Gphoto2 camera, check if the camera dirver support
+      upload using the new camera info dialog available by Camera
+      Interface Help menu.
+      
+      CCMAIL: digikam-devel@kde.org
+      CCBUGS: 96186
+
+2006-07-23 12:13  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk : add more camera info in "sumary" dialog tab
+
+2006-07-21 19:53  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      removing version.h depency
+
+2006-07-21 15:08  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-21 15:04  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp:
+      Fix typo
+
+2006-07-21 15:00  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk : improving camera drivers bug report
+      information. Fix camera dialog about data. fix Camera
+      Informations menu entry rules
+
+2006-07-21 11:51  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk : add informations about UMS camera drivers
+
+2006-07-21 11:24  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerainfodialog.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.h:
+      digikam from trunk : Camera Interafce improvements :
+      restoration of an old options available in digiKam 0.6.x about
+      to get all camera information from gphoto2 drivers.
+      A new Help button menu have been add instead a basic button and
+      a new option can launch the camera informations dialog when the
+      camera
+      interface is not busy (out of pictures downloading for example).
+      
+      Note : if an user have any problems to download pictures with a
+      gphoto2 drivers, there is a notice to report problems to
+      libghoto2 developpers.
+      
+      A screenshot :
+      http://digikam3rdparty.free.fr/Screenshots/camera_gui_with_camera_informations_dialog.png
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-07-21 08:12  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/downloadsettingscontainer.h:
+      digikam form trunk : code simplification about download method
+      parameters in camera controler implementation. We using a simple
+      settings container instead a large comple of parameters.
+
+2006-07-21 05:39  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/animwidget.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/animwidget.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h:
+      fix header
+
+2006-07-20 19:51  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-20 19:30  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-07-20 19:26  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h:
+      digikam from trunk : improvements of Camera Gui again !!!
+      
+      Now the custom prefix index depand of current images selection
+      in the camera icon items. A screenshot :
+      
+      http://digikam3rdparty.free.fr/Screenshots/cameragui_custom_index_and_
+      pictures_selection.png
+      
+      BUG: 124425
+
+2006-07-20 14:53  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/TODO,
+      trunk/extragear/graphics/digikam/digikam/albumiconitem.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumiconitem.h,
+      trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/cameraitempropertiestab.h,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebarcamgui.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconitem.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/dkcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpiteminfo.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      digikam from trunk : camera gui improvement and fix :
+      
+      - fix rename customizer rule about custom prefix widget focus
+      (#127614)
+      - Add small icon on top/roght of camera ites to indicate
+      download status (#131034)
+      - Fix some minor internal bugs.
+      - Polish implementation.
+      - using d private class to speed up compilation
+      - camera gui support digiKam theme now. A screenshot :
+      
+      http://digikam3rdparty.free.fr/Screenshots/camera_gui_with_theme_and_icon_download_status.png
+      
+      BUG: 127614, 131034
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-07-20 14:36  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: fix taggings section
+
+2006-07-20 10:24  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: update
+
+2006-07-19 20:56  mwiesweg
+
+    * trunk/extragear/graphics/digikam/ChangeLog,
+      trunk/extragear/graphics/digikam/PACKAGING,
+      trunk/extragear/graphics/digikam/release_digikam.rb: - Update
+      Changelog
+      - Remove comment from release_digikam.rb - delete temp dir
+      - at a hint in PACKAGING where to find digikamimageplugin's
+      version.h
+      
 v0.9.0-beta1 - 20/07/2006
 ----------------------------------------------------------------------------
 
