@@ -149,7 +149,7 @@ void DcrawBinary::checkReport()
                           "to view or edit any images in raw file formats. "
                           "Please install dcraw as a package from your distributor "
                           "or <a href=\"%3\">download the source</a>.</p>"
-                          "<p>Note: at least, dcraw version %4 is require by %5</p></qt>")
+                          "<p>Note: at least, dcraw version %4 is required by %5</p></qt>")
                           .arg(appName)
                           .arg(appName)
                           .arg("http://www.cybercom.net/~dcoffin/dcraw")
@@ -172,7 +172,7 @@ void DcrawBinary::checkReport()
                           "to view or edit any images in raw file formats. "
                           "Please update dcraw as a package from your distributor "
                           "or <a href=\"%4\">download the source</a>.</p>"
-                          "<p>Note: at least, dcraw version %5 is require by %6</p></qt>")
+                          "<p>Note: at least, dcraw version %5 is required by %6</p></qt>")
                           .arg(Digikam::DcrawBinary::instance()->version())
                           .arg(appName)
                           .arg(appName)
