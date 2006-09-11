@@ -14,6 +14,7 @@ docs       = "no"
 
 svnbase	   = "svn://anonsvn.kde.org/home/kde"
 svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
+svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
