@@ -24,7 +24,7 @@
  * 
  * ============================================================ */
 
-// Represents 1º 
+// Represents 1 
 #define ANGLE_RATIO  0.017453292519943295769236907685   
   
 // C++ includes. 
@@ -1230,7 +1230,7 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
 
     do
     {
-        RandNumber = abs( (int)((rand_r(randomSeed) + 1) * ((double)counter / (RAND_MAX + 1))) );
+        RandNumber = abs( (int)((rand_r(randomSeed) + 1) * ((double)counter / (1 + (double) RAND_MAX))) );
         count = 0;
         Index = 0;
 
