@@ -1,97 +1,19 @@
-------------------------------------------------------------------------------------
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-* L10N fixes:
-	o informations -> information
-	o ?? Credit -> Credits (need native Speaker?  There's e.g. about.addCredit() method not about.addCredits()
-
-* right hand side sidebar (allee):
-	o Select an album 
-        o click on some empty space in the thumbnail view (-> selected image changes from blue selection
-          background to dotted line (aka still has keyboard focus, right?)
-        o Now select tabs in right hand side:
-		+ Properties, metadata..: everyhing is disabled
-		+ comments/tags tab on the other hand  shows info about the image with keyboard focus
-        Shouldn't every tab show now it's info in this case? (alternatively disable comments/tags too)
-
-* ImageEditor:
-
-   - Polish keyboard focus in sidebar when navigate between album pictures.
-
-* Main Interface:
-
-   - Finalize IPTC keywords tags parsing to create new digiKam tags in database when new images are imported.
-
-
-
-* B.K.O files to fix :
-
-==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99.
-
-==> 111446 : Image Editor   : bad behaviour when out of disk space.
-==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor.
-
-==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC.
-==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam.
-==> 126874 : Main interface : digiKam does not support <shift+del>.
-==> 127182 : Main interface : Crash when scanning jpeg images.   
-==> 113797 : Main interface : Little thumbnail refresh problem. 
-==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
-
-==> 113801 : Main interface : Little problem with image files extensions.
-
-
-* Media support:
-
-    o Testing 3 plug cases with GPhoto camera
-        1) digikam is not running and camera is pluged in
-            -> media action dialog pops up and digikam should
-               be in the list. 
-        2) digikam is already running when camera is plug in
-            -> as 1) but already instance should be used
-            (uniconize, switchToDesktop and bringToFront applied
-            if necessary
-        3) digikam is started/activated after action dialog was closed and
-           camera is already connected
-            -> camera menu allows to 
-                select the 'dynamicly added camera menu item
-                to start download dialog
-                ditto for unmounting in usm case 
+   - Superimpose      : - Fix dirselect widget.
+                        - Fix zooming.
 
 
 ------------------------------------------------------------------------------------
-LATER 0.9.0 TODO LIST
-------------------------------------------------------------------------------------
 
-* Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
-  Port to QT 4.0.
+* New features (Later than 0.9.0 release) :
 
-* Improving metadata support:
-   - Better embbeded thumbnail support, especially for TIFF/EP (Exiv2)
-   - Add DNG file format (implmente RAWLoader::save() method for that).
-   - Improved PNG Metadata file format support (Exiv2).
-
-* CameraGui: 
-
-   - Image conversion on the fly tool included in camera interface
-   - New option to embedded an ICC workspace profile to JPEG, TIFF, and PNG.
-
-* New CD/DVD album folders+database backup/restore tool :
-   - Take a look of music database backup in amarok.
-   - Take a look of image database backup in showimg.
-    
-* Showfoto improvements :
-
-   - Add DCOP interface.
-   - Add Support KURL for better konqueror interactions.
-
-* General:
-
-   - Custom ordering of images
-   - New Batch RAW converter based on Dimg API instead kipi RAW converter plugin.
-   - New TimeLine tool (take a look in kimdaba and f-spot)
-   - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
-     1/ instead of a "current album" there will a list of "current urls"
-     2/ will lead to widesweeping changes all over the core and the kioslaves
+   - Perspective      : - Check why antialiasing filter don't give any effects.
+   - Emboss           : The algorithms must render embossed image in color, not in B&W (like krita).
+   - Add Border       : Add capability to preserve original image aspect ratio.
+   - Hot Pixels       : Add manual hot pixel selection. Need to implement pixel selection on
+                        imageregionwidget from digikam core.
+   - Insert Text      : Fix plugin to support multiText edition in a same session (see B.K.O). 
+   - Superimpose      : complete rewrite of plugin widget (See B.K.O files #103695 and #103696).
 
