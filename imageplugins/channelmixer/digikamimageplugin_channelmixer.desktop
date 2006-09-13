@@ -2,6 +2,7 @@
 Name=ImagePlugin_ChannelMixer
 Name[bg]=Приставка за снимки - Смесител на канали
 Name[el]=ΠρόσθετοΕικόνας_ΑνάμειξηΚαναλιών
+Name[fi]=KanavatasapainonSäätö
 Name[hr]=Miješanje kanala
 Name[it]=PluginImmagini_MixerDeiCanali
 Name[ms]=ImagePlugin_PengadunSaluran
@@ -25,6 +26,7 @@ Comment[el]=Μείκτης καναλιών χρώματος εικόνας γι
 Comment[en_GB]=Image colour channels mixer plugin for digiKam
 Comment[es]=Plugin de mezcla de los canales de color de las imágenes para digiKam
 Comment[et]=DigiKami pildi värvikanalite mikseri plugin
+Comment[fi]=Muokkaa värikanavien sekoitussuhteita
 Comment[fr]=Module externe pour mixer les canaux des couleurs d'une image
 Comment[gl]=Un plugin de digiKam para misturar os canais de cores
 Comment[hr]=digiKam dodatak za miješanje kanala boja
