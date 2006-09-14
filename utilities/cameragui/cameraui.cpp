@@ -277,7 +277,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "(YYYY-MM-DD). Ex.: <i>2006-08-24</i><p>"
                      "<b>Full Text</b>: the date format is in a user-readable string. "
                      "Ex.: <i>Thu Aug 24 2006</i><p>"
-                     "<b>Local Settings</b>: the date format depend of KDE control pannel settings.<p>"));
+                     "<b>Local Settings</b>: the date format depend of KDE control panel settings.<p>"));
 
     // -- On the Fly options ---------------------------------------------------
 
@@ -303,7 +303,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "tags to the right values if your camera don't set "
                      "properly these tags when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toogle on this option to convert automaticly all JPEG file "
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toogle on this option to convert automatically all JPEG files "
                      "to a lossless image format. Nota: image conversion can take a while on slow computer."));
     QWhatsThis::add( d->losslessFormat, i18n("<p>Select here your prefered lossless image file format to "
                      "convert JPEG files. Nota: all metadata will be preserved during conversions."));
