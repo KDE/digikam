@@ -161,7 +161,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->umsMountURL = new KURLRequester( QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     QWhatsThis::add( d->umsMountURL, i18n("<p>Set here the mount path to use on your computer. This "
-                                          "option is only required if you use an <b>Usb Mass Storage</b> "
+                                          "option is only required if you use an <b>USB Mass Storage</b> "
                                           "camera.</p>"));
     
     // --------------------------------------------------------------
@@ -177,14 +177,14 @@ CameraSelection::CameraSelection( QWidget* parent )
                     KIcon::DefaultState, 0, true));
 
     KActiveLabel* link = new KActiveLabel(box2);
-    link->setText(i18n("<p>To set an <b>Usb Mass Storage</b> camera<br>"
+    link->setText(i18n("<p>To set an <b>USB Mass Storage</b> camera<br>"
                        "(which appears like a removable drive), please<br>"
                        "use <a href=\"umscamera\">%1</a> from camera list.</p>") 
                        .arg(d->UMSCameraNameShown));
 
     KActiveLabel* link2 = new KActiveLabel(box2);
-    link2->setText(i18n("<p>To set a <b>Generic PTP Usb Device</b><br>"
-                        "(which use Picture Transfert Protocol), please<br>"
+    link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br>"
+                        "(which use Picture Transfer Protocol), please<br>"
                         "use <a href=\"ptpcamera\">%1</a> from camera list.</p>")
                         .arg(d->PTPCameraNameShown));
                            
