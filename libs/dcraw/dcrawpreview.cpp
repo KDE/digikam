@@ -52,7 +52,7 @@ namespace Digikam
 
 bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
 {
-    FILE       *f;
+    FILE       *f=0;
     QByteArray  imgData;
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
