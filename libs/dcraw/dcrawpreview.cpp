@@ -115,6 +115,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
 
+    f=0;
     command  = "dcraw -c -h -w -a ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
