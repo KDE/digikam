@@ -849,7 +849,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
 
     KURL url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(), 
-                                               this, i18n("Open Images From Directory")));
+                                               this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
     {
