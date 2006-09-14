@@ -52,7 +52,7 @@ namespace Digikam
 
 bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
 {
-    FILE       *f=0;
+    FILE       *f=NULL;
     QByteArray  imgData;
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
@@ -77,7 +77,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
 
     f = popen( command.data(), "r" );
 
-    if ( !f )
+    if ( f == NULL )
         return false;
 
     file.open( IO_ReadOnly,  f );
@@ -115,14 +115,14 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
 
-    f=0;
+    f=NULL;
     command  = "dcraw -c -h -w -a ";
     command += QFile::encodeName( KProcess::quote( path ) );
     kdDebug() << "Running dcraw command " << command << endl;
 
     f = popen( command.data(), "r" );
 
-    if ( !f )
+    if ( f == NULL )
         return false;
 
     file.open( IO_ReadOnly,  f );
