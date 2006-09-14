@@ -173,11 +173,11 @@ void DcrawBinary::checkReport()
                           "Please update dcraw as a package from your distributor "
                           "or <a href=\"%4\">download the source</a>.</p>"
                           "<p>Note: at least, dcraw version %5 is required by %6</p></qt>")
-                          .arg(Digikam::DcrawBinary::instance()->version())
+                          .arg(version())
                           .arg(appName)
                           .arg(appName)
                           .arg("http://www.cybercom.net/~dcoffin/dcraw")
-                          .arg(Digikam::DcrawBinary::instance()->minimalVersion())
+                          .arg(minimalVersion())
                           .arg(appName),
                      QString::null,
                      i18n("Do not show this message again"),
