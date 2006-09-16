@@ -175,13 +175,16 @@ DImgInterface::~DImgInterface()
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings,
                          QWidget *parent)
 {
+    // store here in case filename == d->fileName, and is then reset by resetValues
+    QString newFileName = filename;
+
     resetValues();
 
-    d->filename       = filename;
+    d->filename       = newFileName;
     d->iofileSettings = iofileSettings;
     d->parent         = parent;
 
-    d->thread->load( LoadingDescription(filename, iofileSettings->rawDecodingSettings),
+    d->thread->load( LoadingDescription(d->filename, iofileSettings->rawDecodingSettings),
                      SharedLoadSaveThread::AccessModeReadWrite,
                      SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 }
