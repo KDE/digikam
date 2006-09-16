@@ -468,6 +468,11 @@ void TagFilterView::setTagThumbnail(TAlbum *album)
             item->setPixmap(0, blendedIcon);
         }
     }
+    else
+    {
+        // for the time being, set standard icon
+        item->setPixmap(0, loader->getStandardTagIcon(album));
+    }
 }
 
 void TagFilterView::slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail)
