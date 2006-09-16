@@ -46,6 +46,9 @@ class Job;
 namespace Digikam
 {
 
+class Album;
+class TAlbum;
+
 class SyncJob : public QObject
 {
     Q_OBJECT
@@ -59,6 +62,7 @@ public:
     static bool file_move(const KURL &src, const KURL &dest);
 
     /* Load the image or icon for the tag thumbnail */    
+    static QPixmap getTagThumbnail(TAlbum *album);
     static QPixmap getTagThumbnail(const QString &name, int size);
 
     static QString lastErrorMsg();
@@ -74,6 +78,7 @@ private:
 
     bool fileMovePriv(const KURL &src, const KURL &dest);
     
+    QPixmap getTagThumbnailPriv(TAlbum *album);
     QPixmap getTagThumbnailPriv(const QString &name, int size);
 
     void enter_loop();
@@ -83,11 +88,14 @@ private:
     bool            success_;
     
     QPixmap         *thumbnail_;
+    Album           *album_;
     int             thumbnailSize_;
 
 private slots:
 
     void slotResult( KIO::Job * job );
+    void slotGotThumbnailFromIcon(Album *album, const QPixmap& pix);
+    void slotLoadThumbnailFailed(Album *album);
     void slotGotThumbnailFromIcon(const KURL& url, const QPixmap& pix);
     void slotLoadThumbnailFailed();
 };

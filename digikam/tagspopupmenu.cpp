@@ -155,7 +155,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
                           ADDTAGID + album->id());
         popup->insertSeparator();
                 
-        QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+        QPixmap pix = SyncJob::getTagThumbnail(album);
         if ((m_mode == ASSIGN) && (m_assignedTags.contains(album->id())))
         {
             popup->insertItem(new TagsPopupCheckedMenuItem(popup, album->title(), pix),
@@ -175,7 +175,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         if (!album->isRoot())
         {
-            QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+            QPixmap pix = SyncJob::getTagThumbnail(album);
             popup->insertItem(pix, album->title(), m_addToID + album->id());
             popup->insertSeparator();
         }
@@ -280,7 +280,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
                 continue;
         }
         
-        QPixmap pix = SyncJob::getTagThumbnail(((TAlbum*)a)->icon(), KIcon::SizeSmall);
+        QPixmap pix = SyncJob::getTagThumbnail((TAlbum*)a);
         if (a->firstChild())
         {
             menu->insertItem(pix, a->title(), buildSubMenu(a->id()));

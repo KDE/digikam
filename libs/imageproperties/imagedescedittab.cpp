@@ -915,7 +915,7 @@ void ImageDescEditTab::updateRecentTags()
             TAlbum* album = albumMan->findTAlbum(*it);
             if (album)
             {
-                QPixmap pix = SyncJob::getTagThumbnail(album->icon(), KIcon::SizeSmall);
+                QPixmap pix = SyncJob::getTagThumbnail(album);
                 QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ")";
                 menu->insertItem(pix, text, album->id());
             }

@@ -43,6 +43,7 @@ namespace Digikam
 {
 
 typedef QMap<KURL, QValueList<int> > UrlAlbumMap;
+typedef QMap<int, QPixmap> TagThumbnailMap;
 
 class AlbumThumbnailLoaderPrivate
 {
@@ -63,7 +64,21 @@ public:
 
     UrlAlbumMap             urlAlbumMap;
 
+    TagThumbnailMap         tagThumbnailMap;
+
     //QCache<QPixmap>        *m_cache;
+};
+
+class AlbumThumbnailLoaderEvent : public QCustomEvent
+{
+public:
+    AlbumThumbnailLoaderEvent(int albumID, const QPixmap &thumbnail)
+        : QCustomEvent(QEvent::User),
+          albumID(albumID), thumbnail(thumbnail)
+        {};
+
+    int albumID;
+    QPixmap thumbnail;
 };
 
 AlbumThumbnailLoader *AlbumThumbnailLoader::m_instance = 0;
@@ -83,6 +98,12 @@ void AlbumThumbnailLoader::cleanUp()
 AlbumThumbnailLoader::AlbumThumbnailLoader()
 {
     d = new AlbumThumbnailLoaderPrivate;
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
+            this, SLOT(slotIconChanged(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotIconChanged(Album*)));
 }
 
 AlbumThumbnailLoader::~AlbumThumbnailLoader()
@@ -190,6 +211,19 @@ void AlbumThumbnailLoader::addURL(Album *album, const KURL &url)
     return pix;
     */
 
+    // First check cached thumbnails.
+    // At startup, this is not relevant, as the views will add their requests in a row.
+    // This is to speed up context menu and IE imagedescedit
+    TagThumbnailMap::iterator ttit = d->tagThumbnailMap.find(album->globalID());
+    if (ttit != d->tagThumbnailMap.end())
+    {
+        // It is not necessary to return cached icon asynchronously - they could be
+        // returned by getTagThumbnail already - but this would make the API
+        // less elegant, it feels much better this way.
+        QApplication::postEvent(this, new AlbumThumbnailLoaderEvent(album->globalID(), *ttit));
+        return;
+    }
+
     // Check if the URL has already been added (ThumbnailJob will _not_ check this)
     UrlAlbumMap::iterator it = d->urlAlbumMap.find(url);
 
@@ -291,6 +325,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixm
                     if (tagThumbnail.isNull())
                     {
                         tagThumbnail = createTagThumbnail(thumbnail);
+                        d->tagThumbnailMap.insert(album->globalID(), tagThumbnail);
                     }
 
                     emit signalThumbnail(album, tagThumbnail);
@@ -305,6 +340,30 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const KURL &url, const QPixm
         d->urlAlbumMap.remove(it);
     }
 
+}
+
+void AlbumThumbnailLoader::customEvent(QCustomEvent *e)
+{
+    // for cached thumbnails
+
+    AlbumThumbnailLoaderEvent *atle = (AlbumThumbnailLoaderEvent *)e;
+    AlbumManager *manager = AlbumManager::instance();
+    Album *album = manager->findAlbum(atle->albumID);
+    if (album)
+    {
+        if (atle->thumbnail.isNull())
+            emit signalFailed(album);
+        else
+            emit signalThumbnail(album, atle->thumbnail);
+    }
+}
+
+void AlbumThumbnailLoader::slotIconChanged(Album* album)
+{
+    if(!album || album->type() != Album::TAG)
+        return;
+
+    d->tagThumbnailMap.remove(album->globalID());
 }
 
 QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)

@@ -44,6 +44,8 @@
 #include "syncjob.h"
 #include "thumbnailjob.h"
 #include "thumbnailsize.h"
+#include "albumthumbnailloader.h"
+#include "album.h"
 
 void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
@@ -70,6 +72,12 @@ bool SyncJob::file_move(const KURL &src, const KURL &dest)
     return sj.fileMovePriv(src, dest);
 }
 
+QPixmap SyncJob::getTagThumbnail(TAlbum *album)
+{
+    SyncJob sj;
+    return sj.getTagThumbnailPriv(album);
+}
+
 QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
 {
     SyncJob sj;
@@ -79,6 +87,7 @@ QPixmap SyncJob::getTagThumbnail(const QString &name, int size)
 SyncJob::SyncJob()
 {
     thumbnail_ = 0;
+    album_ = 0;
 }
 
 SyncJob::~SyncJob()
@@ -152,6 +161,57 @@ void SyncJob::slotResult( KIO::Job * job )
     qApp->exit_loop();
 }
 
+QPixmap SyncJob::getTagThumbnailPriv(TAlbum *album)
+{
+    if (thumbnail_)
+        delete thumbnail_;
+    thumbnail_ = new QPixmap;
+
+    AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+
+    if (!loader->getTagThumbnail(album, *thumbnail_))
+    {
+        if (thumbnail_->isNull())
+        {
+            return loader->getStandardTagIcon(album);
+        }
+        else
+        {
+            return loader->blendIcons(loader->getStandardTagIcon(), *thumbnail_);
+        }
+    }
+    else
+    {
+        connect(loader, SIGNAL(signalThumbnail(Album *, const QPixmap&)),
+                this, SLOT(slotGotThumbnailFromIcon(Album *, const QPixmap&)));
+
+        connect(loader, SIGNAL(signalFailed(Album *)),
+                this, SLOT(slotLoadThumbnailFailed(Album *)));
+
+        album_ = album;
+        enter_loop();
+    }
+    return *thumbnail_;
+}
+
+void SyncJob::slotLoadThumbnailFailed(Album *album)
+{
+    // TODO: setting _lastError*
+    if (album == album_)
+    {
+        qApp->exit_loop();
+    }
+}
+
+void SyncJob::slotGotThumbnailFromIcon(Album *album, const QPixmap& pix)
+{
+    if (album == album_)
+    {
+        *thumbnail_ = pix;
+        qApp->exit_loop();
+    }
+}
+
 QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
 {
     thumbnailSize_ = size;
@@ -181,7 +241,7 @@ QPixmap SyncJob::getTagThumbnailPriv(const QString &name, int size)
     {
         KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
         *thumbnail_ = iconLoader->loadIcon(name, KIcon::NoGroup, thumbnailSize_,
-                                          KIcon::DefaultState, 0, true);
+                                           KIcon::DefaultState, 0, true);
     }
     return *thumbnail_;
 }

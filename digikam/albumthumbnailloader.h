@@ -30,6 +30,8 @@
 
 #include <kurl.h>
 
+class QCustomEvent;
+
 namespace Digikam
 {
 
@@ -110,6 +112,11 @@ protected slots:
 
     void slotGotThumbnailFromIcon(const KURL&, const QPixmap&);
     void slotThumbnailLost(const KURL&);
+    void slotIconChanged(Album* album);
+
+protected:
+
+    void customEvent(QCustomEvent *e);
 
 private:
 
