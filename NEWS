@@ -84,13 +84,16 @@ General       : New dcraw version detection at startup.
 General       : New option to force the refresh of Album contents.
 General       : Usability improvements of albums/pictures deletion.
 General       : New option to process a batch creation of all albums items thumbnails.
-General       : New option to "Select All", "Deselect", or "Invert Selection" of filters in Tags Filter view.
+General       : New option to "Select All", "Deselect", or "Invert Selection" of Tags in Tags Filter View and 
+                Comments and Tags side bar tabs.
 General       : New option to set image as tag thumbnail on Tag Filters View using D&D.
 General       : New option to set a matching condition to use between tags in Tag Filters View (OR or AND condition).
 
 Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option has been changed.
 Setup         : New Album Items Tool Tip setup tab to set witch information to show over the pictures using the pop-up window.
 Setup         : New color sheme theme 'Digikasa' from Sergio Di Rio Mare.
+
+*** 0.9.0-beta3 *******************************************************
 
 ...
 
@@ -266,6 +269,11 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 161 ==> 115160 : 'Tag Filters' should use 'and' not 'or' or maybe better label 'Show Tags'.
 162 ==> 120056 : Allow to assign via drag and drop tag thumbnails in 'Tag Filters'.
 163 ==> 132694 : RAW Thumbnailing very slower and resource intensive.
-164 ==> 
+
+*** 0.9.0-beta3 *******************************************************
+
+164 ==> 134013 : Tag menu extremly slow.
+165 ==> 
+
 
 ----------------------------------------------------------------------------------------------------
