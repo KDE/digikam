@@ -32,6 +32,7 @@
 // Local includes
 
 #include "dcrawbinary.h"
+#include "dcrawbinary.moc"
 
 namespace Digikam
 {
@@ -167,7 +168,7 @@ void DcrawBinary::checkReport()
                      kapp->activeWindow(),
                      i18n("<qt><p>dcraw executable isn't up to date:<br> "
                           "The version %1 of dcraw have been found on your computer. "
-                          "This version is too old to run properlly with %2. "
+                          "This version is too old to run properly with %2. "
                           "You can run %3 like this, but you will not be able "
                           "to view or edit any images in raw file formats. "
                           "Please update dcraw as a package from your distributor "
@@ -186,5 +187,3 @@ void DcrawBinary::checkReport()
 }
 
 }  // namespace Digikam
-
-#include "dcrawbinary.moc"
