@@ -689,37 +689,25 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
 
         if (supportMinolta)
         {
-            uint16_t MinoltaOrientation = 72;    // Horizontal (Normal)
-            switch((uint16_t)orientation)
-            {    
-                case ORIENTATION_ROT_90:
-                        MinoltaOrientation = 76; // Rotate 90 CW
-                    break;
-        
-                case ORIENTATION_ROT_270:
-                        MinoltaOrientation = 82; // Rotate 180 CW
-                    break;
-            }
+            // Minolta camera store image rotation in Makernote.
+            // We remove these informations to prevent duplicate values. 
     
-            Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it;
 
             Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-            it = exifData.findKey(minoltaKey1);
-            if (it != exifData.end())
+            it = d->exifMetadata.findKey(minoltaKey1);
+            if (it != d->exifMetadata.end())
             {
-                d->exifMetadata["Exif.MinoltaCs7D.Rotation"] = MinoltaOrientation;
-                kdDebug() << "Minolta Camera Setting 7D makernote orientation tag set to: " 
-                          << MinoltaOrientation << endl;
+                d->exifMetadata.erase(it);
+                kdDebug() << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
             }
         
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-            it = exifData.findKey(minoltaKey2);
-            if (it != exifData.end())
+            it = d->exifMetadata.findKey(minoltaKey2);
+            if (it != d->exifMetadata.end())
             {
-                d->exifMetadata["Exif.MinoltaCs5D.Rotation"] = MinoltaOrientation;
-                kdDebug() << "Minolta Camera Setting 5D makernote orientation tag set to: " 
-                          << MinoltaOrientation << endl;
+                d->exifMetadata.erase(it);
+                kdDebug() << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
             }
         }
 
