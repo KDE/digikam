@@ -266,18 +266,18 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
     d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
 
-    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toogle on this option if you want to download your pictures "
+    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your pictures "
                      "into automatically created file extension-based sub-albums of destination album. "
                      "By this way, you can separate JPEG and RAW files from your camera."));
-    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toogle on this option if you want to download your pictures "
+    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to download your pictures "
                      "into automatically created file date-based sub-albums of destination album."));
-    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your prefered date format used to "
+    QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
                      "(YYYY-MM-DD). Ex.: <i>2006-08-24</i><p>"
                      "<b>Full Text</b>: the date format is in a user-readable string. "
                      "Ex.: <i>Thu Aug 24 2006</i><p>"
-                     "<b>Local Settings</b>: the date format depend of KDE control panel settings.<p>"));
+                     "<b>Local Settings</b>: the date format depending on KDE control panel settings.<p>"));
 
     // -- On the Fly options ---------------------------------------------------
 
@@ -293,20 +293,20 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->losslessFormat    = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);
     
-    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toogle on this option if you want automatically "
+    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want automatically "
                      "rotated or flipped images using EXIF information provided by camera."));
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toogle on this option to store default "
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store default "
                      "photographer identity into IPTC tags using main digiKam metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toogle on this option to store default credit "
+    QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store default credit "
                      "and copyright information into IPTC tags using main digiKam metadata settings."));
-    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toogle on this option to set date and time metadata "
-                     "tags to the right values if your camera don't set "
-                     "properly these tags when pictures are taken. The values will "
+    QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
+                     "tags to the right values if your camera does not set "
+                     "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toogle on this option to convert automatically all JPEG files "
-                     "to a lossless image format. Nota: image conversion can take a while on slow computer."));
-    QWhatsThis::add( d->losslessFormat, i18n("<p>Select here your prefered lossless image file format to "
-                     "convert JPEG files. Nota: all metadata will be preserved during conversions."));
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to convert automatically all JPEG files "
+                     "to a lossless image format. Note: Image conversion can take a while on a slow computer."));
+    QWhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
+                     "convert JPEG files. Note: All metadata will be preserved during conversions."));
                                                
     grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
     grid->addMultiCellWidget(albumBox, 1, 1, 0, 1);
