@@ -1149,7 +1149,11 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
     atom.m_uds = KIO::UDS_NAME;
     atom.m_str = QFileInfo(path).fileName();
     entry.append(atom);
-    
+
+    atom.m_uds = KIO::UDS_LOCAL_PATH;
+    atom.m_str = path;
+    entry.append(atom);
+
     return true;
 }
 
