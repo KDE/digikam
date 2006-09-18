@@ -139,8 +139,12 @@ KIO::Job* del(const KURL::List& srcList, bool useTrash)
 
 bool renameFile(const KURL& src, const KURL& dest)
 {
-    Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::instance()->findPAlbum(src.directory());
-    Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dest.directory());
+    KURL srcdir;
+    srcdir.setDirectory(src.directory());
+    KURL dstdir;
+    dstdir.setDirectory(src.directory());
+    Digikam::PAlbum* srcAlbum = Digikam::AlbumManager::instance()->findPAlbum(srcdir);
+    Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dstdir);
     if (!srcAlbum || !dstAlbum)
     {
         kdWarning() << "Source Album " << src.directory() << " not found" << endl;
