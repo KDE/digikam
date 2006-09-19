@@ -12,5 +12,6 @@ libthreadimageio_la_SOURCES = loadsavethread.cpp \
 libthreadimageio_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 INCLUDES = -I$(top_srcdir)/digikam/libs/dimg \
-	       -I$(top_srcdir)/digikam/digikam \
-	       $(all_includes)
+	   -I$(top_srcdir)/digikam/libs/dimg/loaders \
+	   -I$(top_srcdir)/digikam/digikam \
+	   $(all_includes)
