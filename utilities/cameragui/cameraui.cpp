@@ -711,7 +711,8 @@ void CameraUI::slotBusy(bool val)
 
         d->advBox->setEnabled(true);
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
-        d->renameCustomizer->restoreFocus();
+        //commenting this out again:  If we do not disable, no need to restore focus
+        //d->renameCustomizer->restoreFocus();
 
         enableButton(User3, true);
         enableButton(User2, true);
@@ -738,7 +739,9 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = true;
         d->cancelBtn->setEnabled(true);
-        d->advBox->setEnabled(false);
+        // Settings tab is disabled in slotDownload, selectively when downloading
+        // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
+        //d->advBox->setEnabled(false);
 
         enableButton(User3, false);
         enableButton(User2, false);
@@ -1183,6 +1186,10 @@ void CameraUI::slotDownload(bool onlySelected)
     d->progress->setProgress(0);
     d->progress->setTotalSteps(total);
     d->progress->show();
+
+    // disable settings tab here instead of slotBusy:
+    // Only needs to be disabled while downloading
+    d->advBox->setEnabled(false);
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)

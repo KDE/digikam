@@ -106,14 +106,17 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     // ----------------------------------------------------------------
 
     connect(this, SIGNAL(signalSelectionChanged()),
-            this, SLOT(slotDownloadNameChanged()));
-            
+            this, SLOT(slotSelectionChanged()));
+
+    connect(this, SIGNAL(signalNewSelection(bool)),
+            this, SLOT(slotUpdateDownloadNames(bool)));
+
     connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
             this, SLOT(slotContextMenu(IconItem*, const QPoint&)));
 
     connect(this, SIGNAL(signalRightButtonClicked(const QPoint &)),
             this, SLOT(slotRightButtonClicked(const QPoint &)));
-            
+
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
@@ -242,6 +245,21 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
 
 void CameraIconView::slotDownloadNameChanged()
 {
+    bool hasSelection = false;
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        if (item->isSelected())
+        {
+            hasSelection = true;
+            break;
+        }
+    }
+
+    slotUpdateDownloadNames(hasSelection);
+}
+
+void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
+{
     bool useDefault = true;
     int  startIndex = 0;
 
@@ -255,18 +273,6 @@ void CameraIconView::slotDownloadNameChanged()
     QString losslessFormat   = d->cameraUI->losslessFormat();
 
     viewport()->setUpdatesEnabled(false);
-
-    bool hasSelection = false;
-    for (IconItem* item = firstItem(); item; item = item->nextItem())
-    {
-        if (item->isSelected())
-        {
-            hasSelection = true;
-            break;
-        }
-    }
-
-    emit signalNewSelection(hasSelection);
 
     if (hasSelection)
     {
@@ -330,12 +336,10 @@ void CameraIconView::slotDownloadNameChanged()
             startIndex++;
         }
     }
-    
+
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
-
-    slotSelectionChanged();
 }
 
 QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
@@ -384,9 +388,8 @@ void CameraIconView::slotSelectionChanged()
 {
     bool selected               = false;
     CameraIconViewItem* camItem = 0;
-    
-    for (IconItem* item = firstItem(); item;
-         item = item->nextItem())
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         if (item->isSelected())
         {
@@ -396,7 +399,10 @@ void CameraIconView::slotSelectionChanged()
         }
     }
 
+    emit signalNewSelection(selected);
     emit signalSelected(camItem, selected);
+
+    viewport()->update();
 }
 
 void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
