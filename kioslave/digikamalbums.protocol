@@ -26,6 +26,7 @@ Description[nl]=Digikam Albums kioslave
 Description[pa]=ਡਿਜ਼ੀਕੈਮ ਐਲਬਮ kioslave
 Description[pt]='kioslave' de álbuns do digiKam
 Description[ru]=Digikam kioslave - альбомы
+Description[sk]=kioslave albumov digiKamu
 Description[sv]=I/O-slav för Digikams album
 Description[tr]=digiKam albümler kioslave
 Class=:local
