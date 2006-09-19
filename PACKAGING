@@ -36,6 +36,21 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 
 11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/)
 
+12/ Upload tarball to sourceforge.net area using this url:
+
+ftp://upload.sourceforge.net/incoming
+
+...and admin file releases on sourceforge.net project page using this url:
+
+http://sourceforge.net/project/admin/editpackages.php?group_id=42641
+
+13/ Perform an official release announcement to these ML:
+
+* digikam-users@kde.org
+* digikam-devel@kde.org
+* kde-extra-gear@kde.org
+* kde-announce@kde.org
+
 ------------------ TAGGING ------------------
 
 Each release has to be tagged. All tags are located in svn in the directory /tags/digikam
