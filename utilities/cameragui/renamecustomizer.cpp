@@ -66,7 +66,7 @@ public:
         addSeqNumberBox       = 0;
         changedTimer          = 0;
         renameCustomPrefix    = 0;
-        renameCustomPostfix   = 0;
+        renameCustomSuffix   = 0;
         startIndexLabel       = 0;
         startIndexInput       = 0;
         focusedWidget         = 0;
@@ -94,7 +94,7 @@ public:
     QTimer       *changedTimer;
 
     KLineEdit    *renameCustomPrefix;
-    KLineEdit    *renameCustomPostfix;
+    KLineEdit    *renameCustomSuffix;
 
     KIntNumInput *startIndexInput;
 };
@@ -162,14 +162,14 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
     d->focusedWidget = d->renameCustomPrefix;
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPrefix, 0, 0, 2, 2);
-    QWhatsThis::add( d->renameCustomPrefix, i18n("<p>Set here the string to use like a prefix of "
+    QWhatsThis::add( d->renameCustomPrefix, i18n("<p>Set the prefix which will be prepended to "
                                                  "image filenames."));
-                                                 
-    QLabel* postfixLabel = new QLabel(i18n("Postfix:"), d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(postfixLabel, 1, 1, 1, 1);
-    d->renameCustomPostfix = new KLineEdit(d->renameCustomBox);
-    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomPostfix, 1, 1, 2, 2);
-    QWhatsThis::add( d->renameCustomPostfix, i18n("<p>Set here the string to use like a postfix of "
+
+    QLabel* suffixLabel = new QLabel(i18n("Suffix:"), d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
+    d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
+    renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
+    QWhatsThis::add( d->renameCustomSuffix, i18n("<p>Set the suffix which will be added to "
                                                   "image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
@@ -203,7 +203,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     connect(d->renameCustomPrefix, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
-    connect(d->renameCustomPostfix, SIGNAL(textChanged(const QString&)),
+    connect(d->renameCustomSuffix, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
     connect(d->addDateTimeBox, SIGNAL(toggled(bool)),
@@ -246,7 +246,7 @@ int RenameCustomizer::startIndex() const
     return d->startIndexInput->value();
 }
 
-QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QString &suffix) const
+QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QString &extension) const
 {
     if (d->renameDefault->isChecked())
         return QString();
@@ -270,8 +270,8 @@ QString RenameCustomizer::newName(const QDateTime &dateTime, int index, const QS
         if (d->addCameraNameBox->isChecked())
             name += QString("-%1").arg(d->cameraTitle.simplifyWhiteSpace().replace(" ", ""));
 
-        name += d->renameCustomPostfix->text();
-        name += suffix;
+        name += d->renameCustomSuffix->text();
+        name += extension;
 
         return name;
     }
@@ -329,7 +329,7 @@ void RenameCustomizer::readSettings()
     bool addCamName  = config->readBoolEntry("Add Camera Name", false);
     int chcaseT      = config->readNumEntry("Case Type", NONE);
     QString prefix   = config->readEntry("Rename Prefix", i18n("photo"));
-    QString postfix  = config->readEntry("Rename Postfix", QString());
+    QString suffix   = config->readEntry("Rename Postfix", QString());
     int startIndex   = config->readNumEntry("Rename Start Index", 1);
 
     if (def)
@@ -352,7 +352,7 @@ void RenameCustomizer::readSettings()
     d->addSeqNumberBox->setChecked(addSeqNumb);
     d->renameDefaultCaseType->setCurrentItem(chcaseT);
     d->renameCustomPrefix->setText(prefix);
-    d->renameCustomPostfix->setText(postfix);
+    d->renameCustomSuffix->setText(suffix);
     d->startIndexInput->setValue(startIndex);
     slotRenameOptionsChanged();
 }
@@ -368,7 +368,7 @@ void RenameCustomizer::saveSettings()
     config->writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
     config->writeEntry("Case Type", d->renameDefaultCaseType->currentItem());
     config->writeEntry("Rename Prefix", d->renameCustomPrefix->text());
-    config->writeEntry("Rename Postfix", d->renameCustomPostfix->text());
+    config->writeEntry("Rename Suffix", d->renameCustomSuffix->text());
     config->writeEntry("Rename Start Index", d->startIndexInput->value());
     config->sync();
 }
