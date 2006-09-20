@@ -740,22 +740,22 @@ void EditorWindow::applyStandardSettings()
     // else, sRGB color workspace will be used.
 
     if (d->ICCSettings->enableCMSetting) 
-        m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode = RawDecodingSettings::NO_ICC;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = RawDecodingSettings::RAWCOLOR;
     else
-        m_IOFileSettings->rawDecodingSettings.ICCColorCorrectionMode = RawDecodingSettings::SRGB_WORKSPACE;
+        m_IOFileSettings->rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = config->readBoolEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.automaticColorBalance   = config->readBoolEntry("AutomaticColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.cameraColorBalance      = config->readBoolEntry("CameraColorBalance", true);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = config->readBoolEntry("RGBInterpolate4Colors", false);
     m_IOFileSettings->rawDecodingSettings.SuperCCDsecondarySensor = config->readBoolEntry("SuperCCDsecondarySensor", false);
-    m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readBoolEntry("UnclipColors", false);
-    m_IOFileSettings->rawDecodingSettings.enableRAWQuality        = config->readBoolEntry("EnableRAWQuality", true);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = config->readNumEntry("RAWQuality", 0);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = config->readBoolEntry("EnableNoiseReduction", false);
+    m_IOFileSettings->rawDecodingSettings.unclipColors            = config->readNumEntry("UnclipColors", 0);
+    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (RawDecodingSettings::DecodingQuality)config->readNumEntry("RAWQuality", RawDecodingSettings::BILINEAR);
     m_IOFileSettings->rawDecodingSettings.NRSigmaDomain           = config->readDoubleNumEntry("NRSigmaDomain", 2.0);
     m_IOFileSettings->rawDecodingSettings.NRSigmaRange            = config->readDoubleNumEntry("NRSigmaRange", 4.0);
-    
+    m_IOFileSettings->rawDecodingSettings.brightness              = config->readDoubleNumEntry("RAWBrightness", 1.0);
+
     // -- GUI Settings -----------------------------------------------------------------------
     
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);

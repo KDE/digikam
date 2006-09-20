@@ -332,79 +332,24 @@ void RAWLoader::startProcess()
     if (m_rawDecodingSettings.SuperCCDsecondarySensor)
         *m_process << "-s";
 
-    if (m_rawDecodingSettings.unclipColors)
-    {
-        *m_process << "-n";
-        *m_process << "-b";
-        *m_process << "0.25";
-    }
+    *m_process << "-H";
+    *m_process << QString::number(m_rawDecodingSettings.unclipColors);
 
-    // -- Quality option ---------------------------------------------
-    //
-    // Since dcraw 0.8, the command line compatibility have been broken about Quality option:
-    // '-q' alone (dcraw < 8.0)
-    // '-q numerical value' (dcraw >= 8.0)
-    // For that, the current implementation is only compatible with dcraw >= 8.0.
-        
-    if (m_rawDecodingSettings.enableRAWQuality)
-    {
-        *m_process << "-q";
-        *m_process << QString::number(m_rawDecodingSettings.RAWQuality);
-    }
+    *m_process << "-b";
+    *m_process << QString::number(m_rawDecodingSettings.brightness);
 
-    // -- Noise Reduction option -------------------------------------
+    *m_process << "-q";
+    *m_process << QString::number(m_rawDecodingSettings.RAWQuality);
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
         *m_process << "-B";
-        
         *m_process << QString::number(m_rawDecodingSettings.NRSigmaDomain);
         *m_process << QString::number(m_rawDecodingSettings.NRSigmaRange);
     }
 
-    // -- Color Profile options --------------------------------------
-
-    switch (m_rawDecodingSettings.ICCColorCorrectionMode)
-    {
-        case RawDecodingSettings::EMBED_WORKSPACE:
-        {
-            *m_process << "-p";
-            *m_process << "embed";
-            break;
-        }
-
-        case RawDecodingSettings::SRGB_WORKSPACE:
-        {
-            *m_process << "-o";
-            *m_process << "1";
-
-            KGlobal::dirs()->addResourceType("profiles", KGlobal::dirs()->kde_default("data") + "digikam/profiles");
-            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-            m_image->getICCProfilFromFile(directory + "srgb.icm");
-            break;
-        }
-
-        case RawDecodingSettings::USER_PROFILES:
-        {
-            *m_process << "-p";
-            *m_process << QFile::encodeName( m_rawDecodingSettings.cameraICCProfilePath );
-            break;
-        }
-
-        default:    // No ICC color Correction : converter to RAW Color Mode.
-        {
-            *m_process << "-o";
-            *m_process << "0";
-            break;
-        }
-    }
-
-    if (m_rawDecodingSettings.ICCColorCorrectionMode != RawDecodingSettings::NO_ICC &&
-        !m_rawDecodingSettings.outputICCProfilePath.isEmpty())
-    {
-        *m_process << "-o";
-        *m_process << QFile::encodeName( m_rawDecodingSettings.outputICCProfilePath );
-    }
+    *m_process << "-o";
+    *m_process << QString::number( m_rawDecodingSettings.outputColorSpace );
 
     // -----------------------------------------------------------------
     
