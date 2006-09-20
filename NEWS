@@ -95,6 +95,8 @@ Setup         : New color sheme theme 'Digikasa' from Sergio Di Rio Mare.
 
 *** 0.9.0-beta3 *******************************************************
 
+Setup         : new dcraw options set compatible with dcraw release >= 8.16.
+
 ...
 
 ----------------------------------------------------------------------------------------------------
@@ -274,6 +276,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 
 164 ==> 134013 : Tag menu extremly slow.
 165 ==> 122653 : File-dialogue claims that pictures are not on the local-storage, yet they are.
-166 ==> 
+166 ==> 134091 : dcraw -n option not valid for version > 8.15.
+167 ==> 
 
 ----------------------------------------------------------------------------------------------------
