@@ -53,7 +53,7 @@ public:
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
-    QString newName(const QDateTime &date, int index, const QString &suffix) const;
+    QString newName(const QDateTime &date, int index, const QString &extension) const;
     Case    changeCase() const;
     int     startIndex() const;
 
@@ -74,6 +74,9 @@ private slots:
 
     void slotRadioButtonClicked(int);
     void slotRenameOptionsChanged();
+    void slotDateTimeBoxToggled(bool);
+    void slotDateTimeFormatChanged(int);
+    void slotDateTimeButtonClicked();
 
 private:
     
