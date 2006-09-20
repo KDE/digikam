@@ -277,6 +277,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 164 ==> 134013 : Tag menu extremly slow.
 165 ==> 122653 : File-dialogue claims that pictures are not on the local-storage, yet they are.
 166 ==> 134091 : dcraw -n option not valid for version > 8.15.
-167 ==> 
+167 ==> 134224 : prefix for image filename in camera dialog not working
+168 ==> 
 
 ----------------------------------------------------------------------------------------------------
