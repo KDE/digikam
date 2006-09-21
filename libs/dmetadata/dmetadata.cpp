@@ -868,6 +868,7 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).ascii());
+        d->exifMetadata["Exif.Image.DateTime"] = exifdatetime;
         d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
