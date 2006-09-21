@@ -44,6 +44,7 @@ extern "C"
 #include <qsplitter.h>
 #include <qpixmap.h>
 #include <qcombobox.h>
+#include <qtoolbox.h>
 #include <qframe.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
@@ -104,6 +105,7 @@ extern "C"
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameraui.h"
+#include "cameraui.moc"
 
 namespace Digikam
 {
@@ -111,6 +113,13 @@ namespace Digikam
 class CameraUIPriv
 {
 public:
+
+    enum SettingsTab
+    {
+        RENAMEFILEPAGE=0,
+        AUTOALBUMPAGE,
+        ONFLYPAGE
+    };
 
     enum DateFormatOptions
     {
@@ -166,7 +175,7 @@ public:
     
     QToolButton                  *cancelBtn;
 
-    QWidget                      *advBox;
+    QToolBox                     *advBox;
 
     QCheckBox                    *autoRotateCheck;
     QCheckBox                    *autoAlbumDateCheck;
@@ -249,28 +258,41 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     
     // -------------------------------------------------------------------------
 
-    d->advBox            = new QWidget(d->rightSidebar);
-    QGridLayout* grid    = new QGridLayout( d->advBox, 3, 1, KDialog::marginHint());
+    d->advBox            = new QToolBox(d->rightSidebar);
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
+
+    QWhatsThis::add( d->advBox, i18n("<p>Set here all options to rename picture filenames automaticly "
+                                     "during downoading."));
+
+    d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
+                          SmallIconSet("fileimport"), i18n("Files Renaming Options"));
         
     // -- Albums Auto-creation options -----------------------------------------
 
-    QVGroupBox* albumBox  = new QVGroupBox(i18n("Auto-creation of Albums"), d->advBox);
-    d->autoAlbumExtCheck  = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
-    d->autoAlbumDateCheck = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    QHBox *hbox1          = new QHBox(albumBox);
-    d->folderDateLabel    = new QLabel(i18n("Date format:"), hbox1);
-    d->folderDateFormat   = new QComboBox(hbox1);
+    QWidget* albumBox      = new QWidget(d->advBox);
+    QVBoxLayout* albumVlay = new QVBoxLayout(albumBox, marginHint(), spacingHint());
+    d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
+    d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
+    QHBox *hbox1           = new QHBox(albumBox);
+    d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
+    d->folderDateFormat    = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(i18n("ISO"),            CameraUIPriv::IsoDateFormat);
     d->folderDateFormat->insertItem(i18n("Full Text"),      CameraUIPriv::TextDateFormat);
     d->folderDateFormat->insertItem(i18n("Local Settings"), CameraUIPriv::LocalDateFormat);
+    albumVlay->addWidget(d->autoAlbumExtCheck);
+    albumVlay->addWidget(d->autoAlbumDateCheck);
+    albumVlay->addWidget(hbox1);
+    albumVlay->addStretch();
 
-    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your pictures "
-                     "into automatically created file extension-based sub-albums of destination album. "
-                     "By this way, you can separate JPEG and RAW files from your camera."));
-    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to download your pictures "
-                     "into automatically created file date-based sub-albums of destination album."));
+    QWhatsThis::add( albumBox, i18n("<p>Set here all options to create albums automaticly "
+                     "during downlading."));
+    QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
+                     "pictures into automatically created file extension-based sub-albums of destination "
+                     "album. By this way, you can separate JPEG and RAW files from your camera."));
+    QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
+                     "download your pictures into automatically created file date-based sub-albums "
+                     "of destination album."));
     QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
@@ -279,20 +301,34 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "Ex.: <i>Thu Aug 24 2006</i><p>"
                      "<b>Local Settings</b>: the date format depending on KDE control panel settings.<p>"));
 
+    d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIconSet("folder_new"), 
+                          i18n("Auto-creation of Albums"));
+
     // -- On the Fly options ---------------------------------------------------
 
-    QVGroupBox* onFlyBox = new QVGroupBox(i18n("On the Fly Operations (JPEG only)"), d->advBox);
-    d->setPhotographerId = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
-    d->setCredits        = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
-    d->fixDateTimeCheck  = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
-    d->dateTimeEdit      = new KDateTimeEdit(onFlyBox, "datepicker");
-    d->autoRotateCheck   = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
-    d->convertJpegCheck  = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    QHBox *hbox2         = new QHBox(onFlyBox);
-    d->formatLabel       = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat    = new QComboBox(hbox2);
+    QWidget* onFlyBox      = new QWidget(d->advBox);
+    QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox, marginHint(), spacingHint());
+    d->setPhotographerId   = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
+    d->setCredits          = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
+    d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
+    d->dateTimeEdit        = new KDateTimeEdit(onFlyBox, "datepicker");
+    d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
+    d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
+    QHBox *hbox2           = new QHBox(onFlyBox);
+    d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
+    d->losslessFormat      = new QComboBox(hbox2);
     d->losslessFormat->insertItem("PNG", 0);
-    
+    onFlyVlay->addWidget(d->setPhotographerId);
+    onFlyVlay->addWidget(d->setCredits);
+    onFlyVlay->addWidget(d->fixDateTimeCheck);
+    onFlyVlay->addWidget(d->dateTimeEdit);
+    onFlyVlay->addWidget(d->autoRotateCheck);
+    onFlyVlay->addWidget(d->convertJpegCheck);
+    onFlyVlay->addWidget(hbox2);
+    onFlyVlay->addStretch();
+
+    QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automaticly "
+                     "during downlading."));
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want automatically "
                      "rotated or flipped images using EXIF information provided by camera."));
     QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store default "
@@ -303,16 +339,15 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to convert automatically all JPEG files "
-                     "to a lossless image format. Note: Image conversion can take a while on a slow computer."));
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to convert automatically "
+                     "all JPEG files to a lossless image format. Note: Image conversion can take a "
+                     "while on a slow computer."));
     QWhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
                      "convert JPEG files. Note: All metadata will be preserved during conversions."));
-                                               
-    grid->addMultiCellWidget(d->renameCustomizer, 0, 0, 0, 1);
-    grid->addMultiCellWidget(albumBox, 1, 1, 0, 1);
-    grid->addMultiCellWidget(onFlyBox, 2, 2, 0, 1);
-    grid->setRowStretch(3, 10);
 
+    d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIconSet("run"), 
+                          i18n("On the Fly Operations (JPEG only)"));
+                                               
     d->rightSidebar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
     
     // -------------------------------------------------------------------------
@@ -534,6 +569,7 @@ void CameraUI::readSettings()
 {
     KConfig* config = kapp->config();
     config->setGroup("Camera Settings");
+    d->advBox->setCurrentIndex(config->readNumEntry("Settings Tab", CameraUIPriv::RENAMEFILEPAGE));
     d->autoRotateCheck->setChecked(config->readBoolEntry("AutoRotate", true));
     d->autoAlbumDateCheck->setChecked(config->readBoolEntry("AutoAlbumDate", false));
     d->autoAlbumExtCheck->setChecked(config->readBoolEntry("AutoAlbumExt", false));
@@ -565,6 +601,7 @@ void CameraUI::saveSettings()
 
     KConfig* config = kapp->config();
     config->setGroup("Camera Settings");
+    config->writeEntry("Settings Tab", d->advBox->currentIndex());
     config->writeEntry("AutoRotate", d->autoRotateCheck->isChecked());
     config->writeEntry("AutoAlbumDate", d->autoAlbumDateCheck->isChecked());
     config->writeEntry("AutoAlbumExt", d->autoAlbumExtCheck->isChecked());
@@ -1626,4 +1663,3 @@ void CameraUI::keyPressEvent(QKeyEvent *e)
 
 }  // namespace Digikam
 
-#include "cameraui.moc"

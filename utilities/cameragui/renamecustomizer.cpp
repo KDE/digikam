@@ -52,6 +52,7 @@
 // Local includes.
 
 #include "renamecustomizer.h"
+#include "renamecustomizer.moc"
 
 namespace Digikam
 {
@@ -130,10 +131,10 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->changedTimer = new QTimer();
     d->cameraTitle  = cameraTitle;
 
-    setTitle(i18n("Renaming Options"));
+    setFrameStyle( QFrame::NoFrame );
     setRadioButtonExclusive(true);
     setColumnLayout(0, Qt::Vertical);
-    QGridLayout* mainLayout = new QGridLayout(layout(), 3, 1);
+    QGridLayout* mainLayout = new QGridLayout(layout(), 4, 1);
 
     // ----------------------------------------------------------------
 
@@ -246,6 +247,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexInput, 6, 6, 2, 2);
 
     mainLayout->addMultiCellWidget(d->renameCustomBox, 3, 3, 0, 1);
+    mainLayout->setRowStretch(4, 10);
 
     // -- setup connections -------------------------------------------------
 
@@ -428,22 +430,25 @@ void RenameCustomizer::slotDateTimeFormatChanged(int index)
 void RenameCustomizer::slotDateTimeButtonClicked()
 {
     bool ok;
+    QString message = i18n("<qt><p>Enter the format for date and time.</p>"
+                           "<p>Use <i>dd</i> for the day, "
+                           "<i>MM</i> for the month, "
+                           "<i>yyyy</i> for the year, "
+                           "<i>hh</i> for the hour, "
+                           "<i>mm</i> for the minute, "
+                           "<i>ss</i> for the second.</p>"
+                           "<p>Examples: <i>yyyyMMddThhmmss</i> "
+                           "for 20060824T142418,<br>"
+                           "<i>yyyy-MM-dd hh:mm:ss</i> "
+                           "for 2006-08-24 14:24:18.</p></qt>");
 
 #if KDE_IS_VERSION(3,2,0)
-    QString newFormat = KInputDialog::getText(i18n("Change Date & Time Format"),
-                                              i18n("<p>Enter the format for date and time.</p>"
-                                                      "<p>Use <i>dd</i> for the day, <i>MM</i> for the month, <i>yyyy</i> for the year, "
-                                                   "<i>hh</i> for the hour, <i>mm</i> for the minute, <i>ss</i> for the second.</p>"
-                                                   "<p>Examples: <i>yyyyMMddThhmmss</i> for 20060824T142418,<br>"
-                                                   "<i>yyyy-MM-dd hh:mm:ss</i> for 2006-08-24 14:24:18.</p>"),
+    QString newFormat = KInputDialog::getText(i18n("Change Date and Time Format"),
+                                              message,
                                               d->dateTimeFormatString, &ok, this);
 #else
-    QString newFormat = KLineEditDlg::getText(i18n("Change Date & Time Format"),
-                                              i18n("<p>Enter the format for date and time.</p>"
-                                                   "<p>Use <i>dd</i> for the day, <i>MM</i> for the month, <i>yyyy</i> for the year, "
-                                                   "<i>hh</i> for the hour, <i>mm</i> for the minute, <i>ss</i> for the second.</p>"
-                                                   "<p>Examples: <i>yyyyMMddThhmmss</i> for 20060824T142418,<br>"
-                                                   "<i>yyyy-MM-dd hh:mm:ss</i> for 2006-08-24 14:24:18.</p>"),
+    QString newFormat = KLineEditDlg::getText(i18n("Change Date and Time Format"),
+                                              message,
                                               d->dateTimeFormatString, &ok, this);
 #endif
 
@@ -522,4 +527,3 @@ void RenameCustomizer::restoreFocus()
 
 }  // namespace Digikam
 
-#include "renamecustomizer.moc"

@@ -31,6 +31,7 @@
 // Local includes.
 
 #include "animwidget.h"
+#include "animwidget.moc"
 
 namespace Digikam
 {
@@ -129,4 +130,3 @@ bool AnimWidget::running() const
 
 }  // namespace Digikam
 
-#include "animwidget.moc"

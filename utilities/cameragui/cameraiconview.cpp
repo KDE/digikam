@@ -49,15 +49,16 @@
 
 // Local includes.
 
-#include "cameraui.h"
 #include "themeengine.h"
 #include "thumbnailsize.h"
 #include "gpiteminfo.h"
+#include "renamecustomizer.h"
+#include "icongroupitem.h"
+#include "cameraui.h"
 #include "cameradragobject.h"
 #include "cameraiconitem.h"
 #include "cameraiconview.h"
-#include "renamecustomizer.h"
-#include "icongroupitem.h"
+#include "cameraiconview.moc"
 
 namespace Digikam
 {
@@ -98,7 +99,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     d->groupItem = new IconGroupItem(this);
 
     setHScrollBarMode(QScrollView::AlwaysOff);
-    setMinimumSize(450, 400);
+    setMinimumSize(400, 300);
 
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -657,4 +658,3 @@ int CameraIconView::itemsDownloaded()
 
 }  // namespace Digikam
 
-#include "cameraiconview.moc"

@@ -47,6 +47,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectdialog.h"
+#include "albumselectdialog.moc"
 
 namespace Digikam
 {
@@ -326,4 +327,3 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
 
 }  // namespace Digikam
 
-#include "albumselectdialog.moc"

@@ -68,6 +68,7 @@ extern "C"
 #include "jpegutils.h"
 #include "mtqueue.h"
 #include "cameracontroller.h"
+#include "cameracontroller.moc"
 
 namespace Digikam
 {
@@ -1209,4 +1210,3 @@ void CameraController::slotProcessNext()
 
 }  // namespace Digikam
 
-#include "cameracontroller.moc"

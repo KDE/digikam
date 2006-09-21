@@ -37,6 +37,7 @@
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderdialog.h"
+#include "camerafolderdialog.moc"
 
 namespace Digikam
 {
@@ -132,4 +133,3 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 
 }  // namespace Digikam
 
-#include "camerafolderdialog.moc"

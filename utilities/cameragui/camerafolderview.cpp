@@ -30,6 +30,7 @@
 
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
+#include "camerafolderview.moc"
 
 namespace Digikam
 {
@@ -170,4 +171,3 @@ void CameraFolderView::clear()
 
 } // namespace Digikam
 
-#include "camerafolderview.h"
