@@ -528,7 +528,7 @@ void ShowFoto::slotOpenFile()
     // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
     if (Digikam::DcrawBinary::instance()->versionIsRight())
     {
-        patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
+        patternList.append(i18n("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
     }
     
     fileformats = patternList.join("\n");
