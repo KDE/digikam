@@ -1130,7 +1130,7 @@ bool ImageEffect_ICCProof::useDefaultProofProfile()
 void ImageEffect_ICCProof::slotUser3()
 {
     KURL loadColorManagementFile = KFileDialog::getOpenURL(KGlobalSettings::documentPath(),
-                                                QString( "*" ), this,
+                                                i18n("%1|Color profile file").arg("*.icc *.icm|"), this,
                                                 QString( i18n("Color Management Settings File to Load")) );
     if( loadColorManagementFile.isEmpty() )
        return;
