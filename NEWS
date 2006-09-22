@@ -282,6 +282,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 166 ==> 134091 : dcraw -n option not valid for version > 8.15.
 167 ==> 134224 : prefix for image filename in camera dialog not working
 168 ==> 133359 : Google maps support to show satellite images of the photos.
-169 ==> 
+169 ==> 131347 : Comments modified in Digikam Image Editor are not saved.
+170 ==> 
 
 ----------------------------------------------------------------------------------------------------
