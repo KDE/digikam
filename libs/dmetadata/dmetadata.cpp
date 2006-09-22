@@ -20,6 +20,7 @@
 
  // C++ includes.
 
+#include <cmath>
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
@@ -1622,6 +1623,260 @@ bool DMetadata::setImagePreview(const QImage& preview)
     }
 
     return false;
+}
+
+bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude)
+{
+    try
+    {    
+        QString rational, num, den;
+        altitude = 0.0, latitude=0.0, longitude=0.0;
+        
+        // Latitude decoding.
+        
+        QString latRef = getExifTagString("Exif.GPSInfo.GPSLatitudeRef");
+        if (latRef.isEmpty()) return false;
+            
+        QString lat = getExifTagString("Exif.GPSInfo.GPSLatitude");
+        if (lat.isEmpty()) return false;
+        rational = lat.section(" ", 0, 0);
+        num      = rational.section("/", 0, 0);
+        den      = rational.section("/", 1, 1);
+        latitude = num.toDouble()/den.toDouble();
+        rational = lat.section(" ", 1, 1);
+        num      = rational.section("/", 0, 0);
+        den      = rational.section("/", 1, 1);
+        latitude = latitude + (num.toDouble()/den.toDouble())/60.0;
+        rational = lat.section(" ", 2, 2);
+        num      = rational.section("/", 0, 0);
+        den      = rational.section("/", 1, 1);
+        latitude = latitude + (num.toDouble()/den.toDouble())/3600.0;
+        
+        if (latRef == "S") latitude *= -1.0;
+    
+        // Longitude decoding.
+        
+        QString lngRef = getExifTagString("Exif.GPSInfo.GPSLongitudeRef");
+        if (lngRef.isEmpty()) return false;
+    
+        QString lng = getExifTagString("Exif.GPSInfo.GPSLongitude");
+        if (lng.isEmpty()) return false;
+        rational  = lng.section(" ", 0, 0);
+        num       = rational.section("/", 0, 0);
+        den       = rational.section("/", 1, 1);
+        longitude = num.toDouble()/den.toDouble();
+        rational  = lng.section(" ", 1, 1);
+        num       = rational.section("/", 0, 0);
+        den       = rational.section("/", 1, 1);
+        longitude = longitude + (num.toDouble()/den.toDouble())/60.0;
+        rational  = lng.section(" ", 2, 2);
+        num       = rational.section("/", 0, 0);
+        den       = rational.section("/", 1, 1);
+        longitude = longitude + (num.toDouble()/den.toDouble())/3600.0;
+        
+        if (lngRef == "W") longitude *= -1.0;
+
+        // Altitude decoding.
+
+        QString altRef = getExifTagString("Exif.GPSInfo.GPSAltitudeRef");
+        if (altRef.isEmpty()) return false;
+        QString alt = getExifTagString("Exif.GPSInfo.GPSAltitude");
+        if (alt.isEmpty()) return false;
+        num       = rational.section("/", 0, 0);
+        den       = rational.section("/", 1, 1);
+        altitude  = num.toDouble()/den.toDouble();
+        
+        if (altRef == "1") altitude *= -1.0;
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot get Exif GPS tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+bool DMetadata::setGPSInfo(double altitude, double latitude, double longitude)
+{
+    try
+    {    
+        char scratchBuf[100];
+        long int nom, denom;
+        long int deg, min;
+        
+        // Do all the easy constant ones first.
+        // GPSVersionID tag: standard says is should be four bytes: 02 00 00 00
+        // (and, must be present).
+        Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+        value->read("2 0 0 0");
+        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSVersionID"), value.get());
+
+        // Datum: the datum of the measured data. If not given, we insert WGS-84.
+        d->exifMetadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
+        
+        // Now start adding data.
+
+        // ALTITUDE.
+        // Altitude reference: byte "00" meaning "sea level".
+        value = Exiv2::Value::create(Exiv2::unsignedByte);
+        value->read("0");
+        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
+        
+        // And the actual altitude.
+        value = Exiv2::Value::create(Exiv2::signedRational);
+        convertToRational(altitude, &nom, &denom, 4);
+        snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
+        value->read(scratchBuf);
+        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitude"), value.get());
+
+        // LATTITUDE
+        // Latitude reference: "N" or "S".
+        if (latitude < 0)
+        {
+            // Less than Zero: ie, minus: means
+            // Southern hemisphere. Where I live.
+            d->exifMetadata["Exif.GPSInfo.GPSLatitudeRef"] = "S";
+        } 
+        else 
+        {
+            // More than Zero: ie, plus: means
+            // Northern hemisphere.
+            d->exifMetadata["Exif.GPSInfo.GPSLatitudeRef"] = "N";
+        }
+        
+        // Now the actual lattitude itself.
+        // This is done as three rationals.
+        // I choose to do it as:
+        //   dd/1 - degrees.
+        //   mmmm/100 - minutes
+        //   0/1 - seconds
+        // Exif standard says you can do it with minutes
+        // as mm/1 and then seconds as ss/1, but its
+        // (slightly) more accurate to do it as
+        //  mmmm/100 than to split it.
+        // We also absolute the value (with fabs())
+        // as the sign is encoded in LatRef.
+        // Further note: original code did not translate between
+        //   dd.dddddd to dd mm.mm - that's why we now multiply
+        //   by 6000 - x60 to get minutes, x100 to get to mmmm/100.
+        value = Exiv2::Value::create(Exiv2::signedRational);
+        deg   = (int)floor(fabs(latitude)); // Slice off after decimal.
+        min   = (int)floor((fabs(latitude) - floor(fabs(latitude))) * 6000);
+        snprintf(scratchBuf, 100, "%ld/1 %ld/100 0/1", deg, min);
+        value->read(scratchBuf);
+        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSLatitude"), value.get());
+        
+        // LONGITUDE
+        // Longitude reference: "E" or "W".
+        if (longitude < 0)
+        {
+            // Less than Zero: ie, minus: means
+            // Western hemisphere.
+            d->exifMetadata["Exif.GPSInfo.GPSLongitudeRef"] = "W";
+        } 
+        else 
+        {
+            // More than Zero: ie, plus: means
+            // Eastern hemisphere. Where I live.
+            d->exifMetadata["Exif.GPSInfo.GPSLongitudeRef"] = "E";
+        }
+
+        // Now the actual longitude itself.
+        // This is done as three rationals.
+        // I choose to do it as:
+        //   dd/1 - degrees.
+        //   mmmm/100 - minutes
+        //   0/1 - seconds
+        // Exif standard says you can do it with minutes
+        // as mm/1 and then seconds as ss/1, but its
+        // (slightly) more accurate to do it as
+        //  mmmm/100 than to split it.
+        // We also absolute the value (with fabs())
+        // as the sign is encoded in LongRef.
+        // Further note: original code did not translate between
+        //   dd.dddddd to dd mm.mm - that's why we now multiply
+        //   by 6000 - x60 to get minutes, x100 to get to mmmm/100.
+        value = Exiv2::Value::create(Exiv2::signedRational);
+        deg   = (int)floor(fabs(longitude)); // Slice off after decimal.
+        min   = (int)floor((fabs(longitude) - floor(fabs(longitude))) * 6000);
+        snprintf(scratchBuf, 100, "%ld/1 %ld/100 0/1", deg, min);
+        value->read(scratchBuf);
+        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSLongitude"), value.get());
+    
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Exif GPS tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+void DMetadata::convertToRational(double number, long int* numerator, 
+                                   long int* denominator, int rounding)
+{
+    // This function converts the given decimal number
+    // to a rational (fractional) number.
+    //
+    // Examples in comments use Number as 25.12345, Rounding as 4.
+    
+    // Split up the number.
+    double whole      = trunc(number);
+    double fractional = number - whole;
+
+    // Calculate the "number" used for rounding.
+    // This is 10^Digits - ie, 4 places gives us 10000.
+    double rounder = pow(10, rounding);
+
+    // Round the fractional part, and leave the number
+    // as greater than 1.
+    // To do this we: (for example)
+    //  0.12345 * 10000 = 1234.5
+    //  floor(1234.5) = 1234 - now bigger than 1 - ready...
+    fractional = trunc(fractional * rounder);
+
+    // Convert the whole thing to a fraction.
+    // Fraction is:
+    //     (25 * 10000) + 1234   251234
+    //     ------------------- = ------ = 25.1234
+    //           10000            10000
+    double numTemp = (whole * rounder) + fractional;
+    double denTemp = rounder;
+
+    // Now we should reduce until we can reduce no more.
+    
+    // Try simple reduction...
+    // if   Num
+    //     ----- = integer out then....
+    //      Den
+    if (trunc(numTemp / denTemp) == (numTemp / denTemp))
+    {
+        // Divide both by Denominator.
+        numTemp /= denTemp;
+        denTemp /= denTemp;
+    }
+    
+    // And, if that fails, brute force it.
+    while (1)
+    {
+        // Jump out if we can't integer divide one.
+        if ((numTemp / 2) != trunc(numTemp / 2)) break;
+        if ((denTemp / 2) != trunc(denTemp / 2)) break;
+        // Otherwise, divide away.
+        numTemp /= 2;
+        denTemp /= 2;
+    }
+
+    // Copy out the numbers.
+    *numerator   = (int)numTemp;
+    *denominator = (int)denTemp;
 }
 
 }  // NameSpace Digikam

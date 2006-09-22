@@ -128,12 +128,17 @@ public:
 
     PhotoInfoContainer getPhotographInformations() const;
 
+    bool setGPSInfo(double altitude, double latitude, double longitude);
+    bool getGPSInfo(double& altitude, double& latitude, double& longitude);
+
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
     static QString detectEncodingAndDecode(const std::string &value);
 
 private:
 
-    bool         setImageProgramId();
+    bool setImageProgramId();
+    void convertToRational(double number, long int* numerator, 
+                           long int* denominator, int rounding);
 
 private:
 
