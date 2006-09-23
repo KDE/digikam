@@ -576,6 +576,7 @@ void ImageEffect_ICCProof::readSettings()
     m_spaceProfileBG->setButton(config->readNumEntry("SpaceProfileMethod", 0));
     m_proofProfileBG->setButton(config->readNumEntry("ProofProfileMethod", 0));
     m_cInput->setValue(config->readDoubleNumEntry("ContrastAjustment", 0.0));
+    m_overExposureIndicatorBox->setChecked(config->readBoolEntry("OverExpoIndicator", false));
 
     for (int i = 0 ; i < 5 ; i++)
         m_curves->curvesChannelReset(i);
@@ -621,6 +622,7 @@ void ImageEffect_ICCProof::writeSettings()
     config->writeEntry("SpaceProfileMethod", m_spaceProfileBG->selectedId());
     config->writeEntry("ProofProfileMethod", m_proofProfileBG->selectedId());
     config->writeEntry("ContrastAjustment", m_cInput->value());
+    config->writeEntry("OverExpoIndicator", m_overExposureIndicatorBox->isChecked());
 
     for (int j = 0 ; j < 17 ; j++)
     {
