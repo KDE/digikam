@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_Texture : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Texture : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_DistortionFX : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_DistortionFX : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

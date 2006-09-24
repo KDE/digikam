@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_NoiseReduction : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_NoiseReduction : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

@@ -28,7 +28,7 @@
 
 class KAction;
 
-class ImagePlugin_Border : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Border : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

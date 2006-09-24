@@ -27,7 +27,7 @@
 
 #include <digikamheaders.h>
 
-class ImagePlugin_HotPixels : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_HotPixels : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

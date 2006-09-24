@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_ChannelMixer : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_ChannelMixer : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_InPainting : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_InPainting : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_AntiVignetting : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_AntiVignetting : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

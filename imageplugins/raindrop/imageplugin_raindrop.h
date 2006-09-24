@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_RainDrop : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_RainDrop : public Digikam::ImagePlugin
 {
     Q_OBJECT
     

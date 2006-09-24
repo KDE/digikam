@@ -29,7 +29,7 @@
 
 class KAction;
 
-class ImagePlugin_Solarize : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Solarize : public Digikam::ImagePlugin
 {
     Q_OBJECT
 

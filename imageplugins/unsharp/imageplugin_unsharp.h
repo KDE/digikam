@@ -28,7 +28,7 @@
 
 class KAction;
 
-class ImagePlugin_Unsharp : public Digikam::ImagePlugin
+class DIGIKAMIMAGEPLUGINS_EXPORT ImagePlugin_Unsharp : public Digikam::ImagePlugin
 {
     Q_OBJECT
     
