@@ -58,6 +58,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "metadatalistview.h"
 #include "worldmapwidget.h"
 #include "gpswidget.h"
+#include "gpswidget.moc"
 
 namespace Digikam
 {
@@ -80,6 +81,14 @@ class GPSWidgetPriv
 {
 
 public:
+
+    enum WebGPSLocator
+    {
+        MapQuest = 0,
+        GoogleMaps,
+        MsnMaps,
+        MultiMap
+    };
 
     GPSWidgetPriv()
     {
@@ -125,10 +134,10 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     d->detailsCombo  = new QComboBox( false, box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsCombo->insertItem(QString("Map Quest"), MapQuest);
-    d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
-    d->detailsCombo->insertItem(QString("Msn Maps"), MsnMaps);
-    d->detailsCombo->insertItem(QString("Multi Map"), MultiMap);
+    d->detailsCombo->insertItem(QString("Map Quest"), GPSWidgetPriv::MapQuest);
+    d->detailsCombo->insertItem(QString("Google Maps"), GPSWidgetPriv::GoogleMaps);
+    d->detailsCombo->insertItem(QString("Msn Maps"), GPSWidgetPriv::MsnMaps);
+    d->detailsCombo->insertItem(QString("Multi Map"), GPSWidgetPriv::MultiMap);
     
     box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
     box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 1, 1 );
@@ -173,7 +182,7 @@ void GPSWidget::slotGPSDetails(void)
 
     switch( getWebGPSLocator() )
     {
-        case MapQuest:
+        case GPSWidgetPriv::MapQuest:
         {
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
                         "&formtype=address&latlongtype=decimal");
@@ -184,7 +193,7 @@ void GPSWidget::slotGPSDetails(void)
             break;
         }
 
-        case GoogleMaps: 
+        case GPSWidgetPriv::GoogleMaps: 
         {
             url.append("http://maps.google.com/?q=");
             url.append(val.setNum(d->map->getLatitude(), 'f', 8));
@@ -194,7 +203,7 @@ void GPSWidget::slotGPSDetails(void)
             break;
         }
 
-        case MsnMaps:  
+        case GPSWidgetPriv::MsnMaps:  
         {
             url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
@@ -206,7 +215,7 @@ void GPSWidget::slotGPSDetails(void)
             break;
         }
 
-        case MultiMap:
+        case GPSWidgetPriv::MultiMap:
         {
             url.append("http://www.multimap.com/map/browse.cgi?");
             url.append("lat=");
@@ -421,5 +430,3 @@ void GPSWidget::slotSaveMetadataToFile(void)
 }
 
 }  // namespace Digikam
-
-#include "gpswidget.moc"
