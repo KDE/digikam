@@ -86,9 +86,10 @@
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
-#include "imagewindow.h"
 #include "imageattributeswatch.h"
 #include "deletedialog.h"
+#include "imagewindow.h"
+#include "imagewindow.moc"
 
 namespace Digikam
 {
@@ -240,7 +241,7 @@ void ImageWindow::setupConnections()
 {
     setupStandardConnections();
 
-    // To toogle properly keyboards shortcuts from comments & tags side bar tab.
+    // To toggle properly keyboards shortcuts from comments & tags side bar tab.
 
     connect(d->rightSidebar, SIGNAL(signalNextItem()),
             this, SLOT(slotForward()));
@@ -945,5 +946,4 @@ void ImageWindow::slotFilePrint()
 
 }  // namespace Digikam
 
-#include "imagewindow.moc"
 

@@ -40,6 +40,13 @@
 #include <kcursor.h>
 #include <kmessagebox.h>
 
+// X11 includes.
+
+extern "C"
+{
+#include <X11/Xlib.h>
+}
+
 // Local includes.
 
 #include "albummanager.h"
@@ -50,16 +57,10 @@
 #include "dragobjects.h"
 #include "folderitem.h"
 #include "imageattributeswatch.h"
+#include "albumthumbnailloader.h"
 #include "tagcreatedlg.h"
 #include "tagfilterview.h"
-#include "albumthumbnailloader.h"
-
-// X11 includes.
-
-extern "C"
-{
-#include <X11/Xlib.h>
-}
+#include "tagfilterview.moc"
 
 namespace Digikam
 {
@@ -618,13 +619,13 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
             {
                 TagFilterViewItem* item = (TagFilterViewItem*)it.current();
 
-                // Toogle all root tags filter.
+                // Toggle all root tags filter.
                 TAlbum *tag = item->m_tag;
                 if (tag)
                     if (tag->parent()->isRoot())
                         item->setOn(!item->isOn());
 
-                // Toogle "Not Tagged" item tag filter.
+                // Toggle "Not Tagged" item tag filter.
                 if (item->m_untagged)
                     item->setOn(!item->isOn());
 
@@ -780,4 +781,3 @@ void TagFilterView::tagDelete(TagFilterViewItem* item)
 
 }  // namespace Digikam
 
-#include "tagfilterview.moc"

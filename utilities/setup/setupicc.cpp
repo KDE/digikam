@@ -70,6 +70,7 @@
 #include "iccprofileinfodlg.h"
 #include "albumsettings.h"
 #include "setupicc.h"
+#include "setupicc.moc"
 
 namespace Digikam
 {
@@ -238,7 +239,7 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfilesKC    = new SqueezedComboBox(d->profilesGB);
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
-                     "You need to toogle on <b>Use color managed view</b> option from "
+                     "You need to toggle on <b>Use color managed view</b> option from "
                      "the Advanced Settings pannel to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailled "
@@ -712,4 +713,3 @@ bool SetupICC::iccRepositoryIsValid()
             
 }  // namespace Digikam
 
-#include "setupicc.moc"

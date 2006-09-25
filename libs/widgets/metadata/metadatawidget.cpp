@@ -54,6 +54,7 @@
 #include "metadatalistview.h"
 #include "mdkeylistviewitem.h"
 #include "metadatawidget.h"
+#include "metadatawidget.moc"
 
 namespace Digikam
 {
@@ -101,13 +102,13 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QPushButton *simpleLevel = new QPushButton( d->levelButtons );
     simpleLevel->setPixmap( iconLoader->loadIcon( "ascii", (KIcon::Group)KIcon::Toolbar ) );
     simpleLevel->setToggleButton(true);
-    QWhatsThis::add( simpleLevel, i18n( "Toogle tags view to a simple human-readable list" ) );
+    QWhatsThis::add( simpleLevel, i18n( "Toggle tags view to a simple human-readable list" ) );
     d->levelButtons->insert(simpleLevel, SIMPLE);
 
     QPushButton *fullLevel = new QPushButton( d->levelButtons );
     fullLevel->setPixmap( iconLoader->loadIcon( "document", (KIcon::Group)KIcon::Toolbar ) );
     fullLevel->setToggleButton(true);
-    QWhatsThis::add( fullLevel, i18n( "Toogle tags view to a full list" ) );
+    QWhatsThis::add( fullLevel, i18n( "Toggle tags view to a full list" ) );
     d->levelButtons->insert(fullLevel, FULL);
 
     d->toolButtons = new QHButtonGroup(this);
@@ -414,6 +415,6 @@ void MetadataWidget::setUserAreaWidget(QWidget *w)
     vLayout->addStretch();
     d->mainLayout->addMultiCellLayout(vLayout, 2, 2, 0, 4);
 }
+
 }  // namespace Digikam
 
-#include "metadatawidget.moc"
