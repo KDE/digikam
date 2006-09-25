@@ -97,6 +97,16 @@ public:
     {
         QCheckListItem::stateChange(val);
 
+        // All TagFilterViewItems are CheckBoxControllers. If they have no children,
+        // they should be of type CheckBox, but that is not possible with our way of adding items.
+        // When clicked, children-less items first change to the NoChange state, and a second
+        // click is necessary to set them to On and make the filter take effect.
+        // So set them to On if the condition is met.
+        if (!firstChild() && state() == NoChange)
+        {
+            setState(On);
+        }
+
         ((TagFilterView*)listView())->triggerChange();
     }
 

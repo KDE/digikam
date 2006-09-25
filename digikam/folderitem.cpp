@@ -199,7 +199,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup & cg,
         (type() == QCheckListItem::CheckBoxController))
     {
         int boxsize = fv->style().pixelMetric(QStyle::PM_CheckListButtonSize, fv); 
-        int x = 0;
+        int x = 3;
         int y = (height() - boxsize)/2 + margin;
         r += boxsize + 4;
 
