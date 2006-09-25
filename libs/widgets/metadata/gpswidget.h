@@ -43,6 +43,16 @@ class DIGIKAM_EXPORT GPSWidget : public MetadataWidget
     
 public:
 
+    enum WebGPSLocator
+    {
+        MapQuest = 0,
+        GoogleMaps,
+        MsnMaps,
+        MultiMap
+    };
+
+public:
+
     GPSWidget(QWidget* parent, const char* name=0);
     ~GPSWidget();
 
