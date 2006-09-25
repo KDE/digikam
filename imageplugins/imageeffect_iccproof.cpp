@@ -797,11 +797,11 @@ void ImageEffect_ICCProof::slotEffect()
     if ( proofCondition || spaceCondition )
     {
         kapp->restoreOverrideCursor();
-        QString error = i18n("<p>Your settings are not insufficient</p>"
+        QString error = i18n("<p>Your settings are not sufficient.</p>"
                         "<p>To apply a color transform, you need at least two ICC profiles:</p>"
                         "<ul><li>An \"Input\" profile.</li>"
                         "<li>A \"Workspace\" profile.</li></ul>"
-                        "<p>If you want to do a \"soft-proof\" transform, in adition to these profiles "
+                        "<p>If you want to do a \"soft-proof\" transform, in addition to these profiles "
                         "you need a \"Proof\" profile.</p>");
         KMessageBox::information(this, error);
         enableButtonOK(false);
