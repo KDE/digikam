@@ -80,6 +80,8 @@ public:
     QPixmap* itemBaseSelPixmap() const;
 
     virtual QRect itemRect() const;
+
+    QString defaultDownloadName(CameraIconViewItem *item);
     
 signals:
 

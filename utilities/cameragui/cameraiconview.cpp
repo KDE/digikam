@@ -256,7 +256,8 @@ void CameraIconView::slotDownloadNameChanged()
         }
     }
 
-    slotUpdateDownloadNames(hasSelection);
+    // connected to slotUpdateDownloadNames, and used externally
+    emit signalNewSelection(hasSelection);
 }
 
 void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
@@ -341,6 +342,15 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     rearrangeItems();
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
+}
+
+QString CameraIconView::defaultDownloadName(CameraIconViewItem *viewItem)
+{
+    RenameCustomizer::Case renamecase = RenameCustomizer::NONE;
+    if (d->renamer)
+        renamecase = d->renamer->changeCase();
+
+    return getCasedName( renamecase, viewItem->itemInfo() );
 }
 
 QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)

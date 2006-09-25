@@ -694,8 +694,8 @@ bool CameraUI::dialogClosed()
     }
     else
     {
-        finishDialog();
         d->closed = true;
+        finishDialog();
     }
 
     return true;
@@ -718,6 +718,7 @@ void CameraUI::finishDialog()
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
 
+    d->status->setText(i18n("Scanning new files, please Wait..."));
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
@@ -1146,6 +1147,12 @@ void CameraUI::slotDownload(bool onlySelected)
         downloadSettings.file        = iconItem->itemInfo()->name;
         downloadName                 = iconItem->getDownloadName();
         mtime                        = iconItem->itemInfo()->mtime;
+
+        // occurs if renameCustomizer->useDefault() and Download All is used.
+        // If !useDefault, downloadName depends on selection,
+        // so Download All is disabled! (see slotNewSelection)
+        if (downloadName.isEmpty())
+            downloadName = d->view->defaultDownloadName(iconItem);
         
         KURL u(url);
         QString errMsg;
@@ -1237,8 +1244,8 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         iconItem->setDownloaded(status);
         d->view->ensureItemVisible(iconItem);
 
-        if (iconItem->isSelected())
-            slotItemsSelected(iconItem, true);
+        //if (iconItem->isSelected())
+          //  slotItemsSelected(iconItem, true);
     }
     
     if (status == GPItemInfo::DownloadedYes || status == GPItemInfo::DownloadFailed)
@@ -1297,8 +1304,8 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         if (iconItem)
         {
             iconItem->toggleLock();
-            if (iconItem->isSelected())
-                slotItemsSelected(iconItem, true);
+            //if (iconItem->isSelected())
+              //  slotItemsSelected(iconItem, true);
         }
     }
 
@@ -1506,8 +1513,18 @@ void CameraUI::slotNewSelection(bool hasSelection)
 {
     if (!d->renameCustomizer->useDefault())
     {
+        // for customized names, the downloadNames depend on the selection.
+        // So do not allow Download All if there is a selection!
         d->downloadMenu->setItemEnabled(0, hasSelection);
         d->downloadMenu->setItemEnabled(1, !hasSelection);
+    }
+    else
+    {
+        // if useDefault, the name can easily be computed without selection context,
+        // so we can allow Download All.
+        // This is the easiest default for new users
+        d->downloadMenu->setItemEnabled(0, hasSelection);
+        d->downloadMenu->setItemEnabled(1, true);
     }
 }
 
