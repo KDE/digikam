@@ -187,6 +187,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 
                     ++cpt;
                 }
+                else
+                {
+                    kdError() << "ImagePluginLoader: Failed to load plugin " << service->name() << endl;
+                }
             }
         }
     }
