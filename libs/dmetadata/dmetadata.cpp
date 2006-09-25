@@ -1704,6 +1704,9 @@ bool DMetadata::setGPSInfo(double altitude, double latitude, double longitude)
 {
     try
     {    
+        // In first, we need to clean up all existing GPS info.
+        removeGPSInfo();
+
         char scratchBuf[100];
         long int nom, denom;
         long int deg, min;
@@ -1812,6 +1815,41 @@ bool DMetadata::setGPSInfo(double altitude, double latitude, double longitude)
     catch( Exiv2::Error &e )
     {
         kdDebug() << "Cannot set Exif GPS tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+bool DMetadata::removeGPSInfo()
+{
+    try
+    {  
+        QStringList gpsTagsKeys;
+  
+        for (Exiv2::ExifData::iterator it = d->exifMetadata.begin();
+             it != d->exifMetadata.end(); ++it)
+        {
+            QString key = QString::fromLocal8Bit(it->key().c_str());
+
+            if (key.section(".", 1, 1) == QString("GPSInfo"))
+                gpsTagsKeys.append(key);
+        }
+
+        for(QStringList::Iterator it2 = gpsTagsKeys.begin(); it2 != gpsTagsKeys.end(); ++it2)             
+        {
+            Exiv2::ExifKey gpsKey((*it2).ascii());
+            Exiv2::ExifData::iterator it3 = d->exifMetadata.findKey(gpsKey);
+            if (it3 != d->exifMetadata.end())
+                d->exifMetadata.erase(it3);
+        }
+        
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot remove Exif GPS tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        

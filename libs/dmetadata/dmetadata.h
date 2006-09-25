@@ -130,6 +130,7 @@ public:
 
     bool setGPSInfo(double altitude, double latitude, double longitude);
     bool getGPSInfo(double& altitude, double& latitude, double& longitude);
+    bool removeGPSInfo();
 
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
     static QString detectEncodingAndDecode(const std::string &value);
