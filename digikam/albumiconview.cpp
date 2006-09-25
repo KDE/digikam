@@ -113,6 +113,7 @@ extern "C"
 #include "deletedialog.h"
 #include "albumiconitem.h"
 #include "albumicongroupitem.h"
+#include "loadingcacheinterface.h"
 #include "albumiconview.h"
 #include "albumiconview.moc"
 
@@ -411,7 +412,7 @@ void AlbumIconView::slotImageListerDeleteItem(ImageInfo* item)
         return;
     }
 
-    d->pixMan->remove(item->kurl());
+    //d->pixMan->remove(item->kurl());
 
     emit signalItemDeleted(iconItem);
 
@@ -1308,6 +1309,8 @@ void AlbumIconView::refreshItems(const KURL::List& urlList)
 
         iconItem->imageInfo()->refresh();
         d->pixMan->remove(iconItem->imageInfo()->kurl());
+        // clean LoadingCache as well - be pragmatic, do it here.
+        LoadingCacheInterface::cleanFromCache((*it).path());
     }
 
     // trigger a delayed update, in case we need to resort items
