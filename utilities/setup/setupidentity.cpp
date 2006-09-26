@@ -36,6 +36,7 @@
 
 #include "albumsettings.h"
 #include "setupidentity.h"
+#include "setupidentity.moc"
 
 namespace Digikam
 {
@@ -116,7 +117,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
-    QWhatsThis::add( d->sourceEdit, i18n("<p>Set here the default original owner indentification of the intellectual "
+    QWhatsThis::add( d->sourceEdit, i18n("<p>Set here the default original owner identification of the intellectual "
                                          "content of the picture. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
                                          "to 32 ASCII characters."));
@@ -172,4 +173,3 @@ void SetupIdentity::readSettings()
 
 }  // namespace Digikam
 
-#include "setupidentity.moc"
