@@ -67,12 +67,15 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
     
     // --------------------------------------------------------
+    QString asciiMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+                      "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
 
     QGroupBox *photographerIdGroup = new QGroupBox(0, Qt::Horizontal, i18n("Photographer Informations"), parent);
     QGridLayout* grid = new QGridLayout( photographerIdGroup->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
-    d->authorEdit = new KLineEdit(photographerIdGroup);
+    d->authorEdit  = new KLineEdit(photographerIdGroup);
+    d->authorEdit->setInputMask(asciiMask);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
@@ -82,6 +85,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
+    d->authorTitleEdit->setInputMask(asciiMask);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
@@ -96,6 +100,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit = new KLineEdit(creditsGroup);
+    d->creditEdit->setInputMask(asciiMask);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
@@ -106,6 +111,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit = new KLineEdit(creditsGroup);
+    d->sourceEdit->setInputMask(asciiMask);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
@@ -117,6 +123,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label5 = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
+    d->copyrightEdit->setInputMask(asciiMask);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
