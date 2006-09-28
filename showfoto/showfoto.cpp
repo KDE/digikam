@@ -824,7 +824,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     const QFileInfoList* fileinfolist = dir.entryInfoList();
     if (!fileinfolist || fileinfolist->isEmpty())
     {
-        KMessageBox::sorry(this, i18n("There is no picture to load into this folder!"));
+        KMessageBox::sorry(this, i18n("There are no pictures in this folder!"));
         return;
     }
     

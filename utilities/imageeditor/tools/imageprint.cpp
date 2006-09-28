@@ -503,8 +503,8 @@ void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
 {
     if (t && !d->cmEnabled)
     {
-        QString message = i18n("<p>Color Management is disabled</p> \
-                                <p>You can enabled now clicking on \"Settings\" button.</p>");
+        QString message = i18n("<p>Color Management is disabled.</p> \
+                                <p>You can enable it now by clicking on the \"Settings\" button.</p>");
         KMessageBox::information(this, message);
         d->colorManaged->setChecked(!t);
     }
