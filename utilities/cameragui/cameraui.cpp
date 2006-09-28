@@ -296,9 +296,9 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
-                     "(YYYY-MM-DD). Ex.: <i>2006-08-24</i><p>"
+                     "(YYYY-MM-DD). E.g.: <i>2006-08-24</i><p>"
                      "<b>Full Text</b>: the date format is in a user-readable string. "
-                     "Ex.: <i>Thu Aug 24 2006</i><p>"
+                     "E.g.: <i>Thu Aug 24 2006</i><p>"
                      "<b>Local Settings</b>: the date format depending on KDE control panel settings.<p>"));
 
     d->advBox->insertItem(CameraUIPriv::AUTOALBUMPAGE, albumBox, SmallIconSet("folder_new"), 

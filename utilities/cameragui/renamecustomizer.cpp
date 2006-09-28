@@ -212,11 +212,11 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QWhatsThis::add( d->dateTimeFormat, i18n("<p>Select here your preferred date format used to "
                     "create new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
-                    "Ex.: <i>20060824T142618</i></p>"
+                    "E.g.: <i>20060824T142618</i></p>"
                     "<p/><b>ISO</b>: the date format is in accordance with ISO 8601 "
-                    "(YYYY-MM-DD). Ex.: <i>2006-08-24T14:26:18</i></p>"
+                    "(YYYY-MM-DD). E.g.: <i>2006-08-24T14:26:18</i></p>"
                     "<p><b>Full Text</b>: the date format is in a user-readable string. "
-                    "Ex.: <i>Thu Aug 24 14:26:18 2006</i></p>"
+                    "E.g.: <i>Thu Aug 24 14:26:18 2006</i></p>"
                     "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"
                     "<p><b>Advanced:</b> allows to specify a custom date format.</p>"));
     d->dateTimeButton = new QPushButton(SmallIcon("configure"), QString(), dateTimeWidget);
