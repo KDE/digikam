@@ -115,8 +115,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     d->listView->setMinimumWidth(350);
     QWhatsThis::add( d->listView, i18n("<p>Select here the camera name that you want to use. All "
                                        "default settings on the right panel "
-                                       "will be set automatically.</p><p>This list have been generated "
-                                       "using gphoto2 library installed in your computer.</p>"));
+                                       "will be set automatically.</p><p>This list has been generated "
+                                       "using the gphoto2 library installed on your computer.</p>"));
     
     // --------------------------------------------------------------
 

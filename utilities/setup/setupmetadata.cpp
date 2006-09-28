@@ -117,14 +117,14 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
     QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Toggle on this option to store default "
-                                                        "photographer identity into IPTC tags. You can set these "
-                                                        "informations into Identity setup page."));
+                                                        "photographer identity into IPTC tags. You can set this "
+                                                        "value in the Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
     QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Toggle on this option to store default "
                                                  "credit and copyright identity into IPTC tags. "
-                                                 "You can set these informations into Identity setup page."));
+                                                 "You can set this value in the Identity setup page."));
                                                            
     mainLayout->addWidget(IptcGroup);
 

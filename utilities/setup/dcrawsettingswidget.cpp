@@ -106,13 +106,13 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
     // ---------------------------------------------------------------
 
     d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), this);
-    QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enable, all RAW files will be decoded to 16-bit "
+    QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enabled, all RAW files will be decoded to 16-bit "
                                                "color depth using a linear gamma curve. To prevent black "
-                                               "picture rendering on editor, it's recommended to use "
+                                               "picture rendering in the editor, it is recommended to use "
                                                "Color Management in this mode.<p>"
-                                               "If disable, all RAW files will be decoded to 8-bit "
+                                               "If disabled, all RAW files will be decoded to 8-bit "
                                                "color depth with a BT.709 gamma curve and a 99th-percentile "
-                                               "white point. This mode is more faster than 16-bit decoding."));
+                                               "white point. This mode is faster than 16-bit decoding."));
     settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 1);
 
     d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), this);
@@ -166,11 +166,11 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
     d->unclipColorComboBox->insertItem( i18n("Unclip"),      1 );
     d->unclipColorComboBox->insertItem( i18n("Reconstruct"), 2 );
     QWhatsThis::add( d->unclipColorComboBox, i18n("<p><b>Highlights</b><p>"
-                                             "Select here the highlight cliping method:<p>"
-                                             "<b>Solid white</b>: clip all highlights to solid white<p>"
-                                             "<b>Unclip</b>: leave highlights unclipped in various "
+                                             "Select here the highlight clipping method:<p>"
+                                             "<b>Solid white</b>: Clip all highlights to solid white<p>"
+                                             "<b>Unclip</b>: Leave highlights unclipped in various "
                                              "shades of pink<p>"
-                                             "<b>Reconstruct</b>: reconstruct highlights using a "
+                                             "<b>Reconstruct</b>: Reconstruct highlights using a "
                                              "level value."));
     settingsBoxLayout->addMultiCellWidget(d->unclipColorLabel, 5, 5, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->unclipColorComboBox, 5, 5, 1, 1);    
@@ -179,8 +179,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
     d->reconstructSpinBox = new KIntNumInput(this);
     d->reconstructSpinBox->setRange(0, 7, 1, true);
     QWhatsThis::add(d->reconstructSpinBox, i18n("<p><b>Level</b><p>"
-                                               "Specify the reconstruct highlights level of ouput image. "
-                                               "Low value favor whites and high value favor colors."));
+                                               "Specify the reconstruct highlights level of output image. "
+                                               "Low values favor whites and high values favor colors."));
     settingsBoxLayout->addMultiCellWidget(d->reconstructLabel, 6, 6, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->reconstructSpinBox, 6, 6, 1, 1);    
 
@@ -209,9 +209,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, const QString& dcrawVe
                 "interpolate a complete image from the partial raw data received from the color-filtered "
                 "image sensor internal to many digital cameras in form of a matrix of colored pixels. "
                 "Also known as CFA interpolation or color reconstruction, another common spelling "
-                "is demosaicing. There are 3 methods to demosaicing RAW images:<p>"
+                "is demosaicking. There are 3 methods to demosaic RAW images:<p>"
                 "<b>Bilinear</b>: use high-speed but low-quality bilinear "
-                "interpolation (default - for slow computer). In this method, "
+                "interpolation (default - for a slow computer). In this method, "
                 "the red value of a non-red pixel is computed as the average of "
                 "the adjacent red pixels, and similar for blue and green.<p>"
                 "<b>VNG</b>: use Variable Number of Gradients interpolation. "

@@ -143,7 +143,7 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                BarIcon("exifinfo", KIcon::SizeMedium));
     d->metadataPage = new SetupMetadata(d->page_metadata);
 
-    d->page_identity = addPage(i18n("Identity"), i18n("Default IPTC identity informations"),
+    d->page_identity = addPage(i18n("Identity"), i18n("Default IPTC identity information"),
                                BarIcon("identity", KIcon::SizeMedium));
     d->identityPage = new SetupIdentity(d->page_identity);
 

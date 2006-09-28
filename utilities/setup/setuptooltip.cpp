@@ -103,8 +103,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QVBoxLayout *layout = new QVBoxLayout( parent, 0, KDialog::spacingHint() );
 
     d->showToolTipsBox = new QCheckBox(i18n("Show album items toolti&ps"), parent);
-    QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image informations when "
-                                              "the mouse is moved under album items."));
+    QWhatsThis::add( d->showToolTipsBox, i18n("<p>Set this option to display image information when "
+                                              "the mouse is hovered over an album item."));
 
     layout->addWidget(d->showToolTipsBox);
 
@@ -134,10 +134,11 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->photoSettingBox = new QVGroupBox(i18n("Photograph Informations"), parent);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model witch have taken the picture."));
+    QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model "
+                                               "with which the picture has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when have been taken the picture."));
+    QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the picture has been taken."));
 
     d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
     QWhatsThis::add( d->showPhotoFocalBox, i18n("<p>Set this option to display camera aperture and focal settings "
@@ -169,10 +170,10 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QWhatsThis::add( d->showAlbumNameBox, i18n("<p>Set this option to display album name."));
 
     d->showCommentsBox = new QCheckBox(i18n("Show picture comments"), d->digikamSettingBox);
-    QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to picture comments."));
+    QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to display picture comments."));
 
     d->showTagsBox = new QCheckBox(i18n("Show picture tags"), d->digikamSettingBox);
-    QWhatsThis::add( d->showTagsBox, i18n("<p>Set this option to picture tags."));
+    QWhatsThis::add( d->showTagsBox, i18n("<p>Set this option to display picture tags."));
 
     d->showRatingBox = new QCheckBox(i18n("Show picture rating"), d->digikamSettingBox);
     QWhatsThis::add( d->showRatingBox, i18n("<p>Set this option to display picture rating."));
