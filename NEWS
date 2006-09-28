@@ -286,6 +286,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 169 ==> 131347 : Comments modified in digiKam Image Editor are not saved.
 170 ==> 134351 : Error while make install.
 171 ==> 132841 : Tag filtering works only a the second click on the tag filter list.
-172 ==> 
+172 ==> 133359 : Google maps support to show satellite images of the photos.
+173 ==> 
 
 ----------------------------------------------------------------------------------------------------
