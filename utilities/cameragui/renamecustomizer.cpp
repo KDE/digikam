@@ -211,7 +211,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->dateTimeFormat->insertItem(i18n("Advanced..."),    RenameCustomizerPriv::Advanced);
     QWhatsThis::add( d->dateTimeFormat, i18n("<p>Select here your preferred date format used to "
                     "create new albums. The options available are:</p>"
-                    "<p><b>Standard</b>: the date format that has been used as a standard by digiKam."
+                    "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
                     "Ex.: <i>20060824T142618</i></p>"
                     "<p/><b>ISO</b>: the date format is in accordance with ISO 8601 "
                     "(YYYY-MM-DD). Ex.: <i>2006-08-24T14:26:18</i></p>"
@@ -235,7 +235,8 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->addSeqNumberBox = new QCheckBox( i18n("Add Sequence Number"), d->renameCustomBox );
     renameCustomBoxLayout->addMultiCellWidget(d->addSeqNumberBox, 5, 5, 1, 2);
-    QWhatsThis::add( d->addSeqNumberBox, i18n("<p>Set this option to add a sequence number starting with the index set below."));
+    QWhatsThis::add( d->addSeqNumberBox, i18n("<p>Set this option to add a sequence number "
+                                              "starting with the index set below."));
 
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
