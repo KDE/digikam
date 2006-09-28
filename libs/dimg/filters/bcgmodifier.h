@@ -3,7 +3,7 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net> 
  * Date  : 2005-03-06
- * Description : Brighness/Contrast/Gamma modifier methods
+ * Description : Brightness/Contrast/Gamma modifier methods
  *               for DImg framework
  * 
  * Copyright 2005 by Renchi Raju, Gilles Caulier
