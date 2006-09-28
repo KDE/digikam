@@ -225,7 +225,7 @@ void GPSWidget::slotGPSDetails(void)
 
 QString GPSWidget::getMetadataTitle(void)
 {
-    return i18n("Global Positioning System Informations");
+    return i18n("Global Positioning System Information");
 }
 
 bool GPSWidget::loadFromURL(const KURL& url)

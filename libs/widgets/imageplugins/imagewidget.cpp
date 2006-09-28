@@ -102,7 +102,10 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewBothButtonVert->setPixmap( QPixmap( directory + "bothvert.png" ) );
     previewBothButtonVert->setToggleButton(true);
     QWhatsThis::add( previewBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
-                                                  "be separated vertically. The original and target images are contiguous" ) );
+                                                  "be separated vertically. "
+                                                  "A contiguous area of the image will be shown, "
+                                                  "with one half from the original image, "
+                                                  "the other half from the target image.") );
 
     QPushButton *previewBothButtonHorz = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
@@ -111,7 +114,10 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewBothButtonHorz->setPixmap( QPixmap( directory + "bothhorz.png" ) );
     previewBothButtonHorz->setToggleButton(true);
     QWhatsThis::add( previewBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
-                                                  "be separated horizontally. The original and target images are contiguous" ) );
+                                                  "be separated horizontally. "
+                                                  "A contiguous area of the image will be shown, "
+                                                  "with one half from the original image, "
+                                                  "the other half from the target image.") );
 
     QPushButton *previewDuplicateBothButtonVert = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
@@ -120,7 +126,9 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewDuplicateBothButtonVert->setPixmap( QPixmap( directory + "duplicatebothvert.png" ) );
     previewDuplicateBothButtonVert->setToggleButton(true);
     QWhatsThis::add( previewDuplicateBothButtonVert, i18n( "<p>If you enable this option, the preview area will "
-                                                           "be separated vertically. The original and target images are duplicated" ) );
+                                                           "be separated vertically. "
+                                                           "The same part of the original and the target image "
+                                                           "will be shown side by side.") );
 
     QPushButton *previewDupplicateBothButtonHorz = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
@@ -129,7 +137,9 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     previewDupplicateBothButtonHorz->setPixmap( QPixmap( directory + "duplicatebothhorz.png" ) );
     previewDupplicateBothButtonHorz->setToggleButton(true);
     QWhatsThis::add( previewDupplicateBothButtonHorz, i18n( "<p>If you enable this option, the preview area will "
-                                                            "be separated horizontally. The original and target images are duplicated" ) );
+                                                            "be separated horizontally. "
+                                                            "The same part of the original and the target image "
+                                                            "will be shown side by side.") );
 
     QPushButton *previewtargetButton = new QPushButton( d->previewButtons );
     d->previewButtons->insert(previewtargetButton, ImageGuideWidget::PreviewTargetImage);

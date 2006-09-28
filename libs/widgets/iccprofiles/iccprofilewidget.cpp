@@ -127,13 +127,13 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
     d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),  
                                                           i18n("The ICC profile product description"));
     d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),  
-                                                          i18n("The additional ICC profile informations"));
+                                                          i18n("The additional ICC profile information"));
     d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"), 
-                                                          i18n("The uncooked informations about ICC profile manufacturer"));
+                                                          i18n("The raw information about ICC profile manufacturer"));
     d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"), 
-                                                          i18n("The uncooked informations about ICC profile model"));
+                                                          i18n("The raw information about ICC profile model"));
     d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"), 
-                                                          i18n("The uncooked informations about ICC profile copyright"));
+                                                          i18n("The raw information about ICC profile copyright"));
     d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"), 
                                                           i18n("The ICC profile ID number"));
     d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"), 
@@ -160,18 +160,18 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, const char* name, int w, int
         
     d->cieTongue = new CIETongueWidget(w, h, this);
     QWhatsThis::add( d->cieTongue, i18n("<p>This area contains a CIE or chromaticity diagram. "
-                    "A CIE diagram is a representation of all of the colors "
+                    "A CIE diagram is a representation of all the colors "
                     "that a person with normal vision can see. This is represented "
-                    "by the colored sail shaped area. In addition you will see a "
+                    "by the colored sail-shaped area. In addition you will see a "
                     "triangle that is superimposed on the diagram outlined in white. "
-                    "This triangle represents that outer boundries of the color space "
-                    "of the device that is characterized by the profile being inspected. "
+                    "This triangle represents the outer boundaries of the color space "
+                    "of the device that is characterized by the inspected profile. "
                     "This is called the device gamut.<p>"
                     "In addition there are black dots and yellow lines on the diagram. "
-                    "Each black dot represents one of the measurement points that was "
+                    "Each black dot represents one of the measurement points that were "
                     "used to create this profile. The yellow line represents the "
-                    "amount that each point is corrected by the profile and the "
-                    "direction of the correction."));
+                    "amount that each point is corrected by the profile, and the "
+                    "direction of this correction."));
                     
     setUserAreaWidget(d->cieTongue);
     decodeMetadata();
