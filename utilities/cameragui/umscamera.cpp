@@ -360,7 +360,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     ::utime(QFile::encodeName(dest), &ut);
 
-    // Get new camera item informations.
+    // Get new camera item information.
 
     QFileInfo fi(dest);
     QString mime = mimeType(fi.extension(false).lower());
@@ -452,7 +452,7 @@ bool UMSCamera::cameraSummary(QString& summary)
 
 bool UMSCamera::cameraManual(QString& manual)
 {
-    manual = QString(i18n("For more informations about the <b>Mounted Camera</b> driver, "
+    manual = QString(i18n("For more information about the <b>Mounted Camera</b> driver, "
                           "please read the digiKam manual on <b>Supported Digital Still "
                           "Cameras</b> section."));
     return true;
@@ -460,10 +460,10 @@ bool UMSCamera::cameraManual(QString& manual)
 
 bool UMSCamera::cameraAbout(QString& about)
 {
-    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface of a remote camera disk "
-                         "mounted localy on your system.<br><br>"
+    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a remote camera disk "
+                         "mounted locally on your system.<br><br>"
                          "It doesn't use a libgphoto2 driver.<br><br>"
-                         "To report any problems with this driver, please contact digiKam team using this url:<br><br>"
+                         "To report any problems with this driver, please contact the digiKam team at this address:<br><br>"
                          "http://www.digikam.org/?q=contact"));
     return true;
 }

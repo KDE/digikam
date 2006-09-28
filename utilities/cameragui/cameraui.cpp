@@ -718,7 +718,7 @@ void CameraUI::finishDialog()
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
 
-    d->status->setText(i18n("Scanning new files, please Wait..."));
+    d->status->setText(i18n("Scanning new files, please wait..."));
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
@@ -872,7 +872,7 @@ void CameraUI::slotConnected(bool val)
     {
       if (KMessageBox::warningYesNo(this,
                                     i18n("Failed to connect to camera. "
-                                         "Please make sure its connected "
+                                         "Please make sure it is connected "
                                          "properly and turned on. "
                                          "Would you like to try again?"), 
                                     i18n("Connection Failed"),
@@ -1072,7 +1072,7 @@ void CameraUI::slotDownload(bool onlySelected)
     if (album && album->type() != Album::PHYSICAL)
         album = 0;
 
-    QString header(i18n("<p>Please, select the right destination album from digiKam library to "
+    QString header(i18n("<p>Please select the destination album from digiKam library to "
                         "import camera pictures.</p>"));
 
     QString newDirName;
@@ -1344,9 +1344,9 @@ void CameraUI::slotDeleteSelected()
     // If we want to delete some locked files, just give a feedback to user.
     if (!lockedList.isEmpty())
     {
-        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
-                             "These items will not be deleted. If you want really to delete these items, "
-                             "please unlock it before."));        
+        QString infoMsg(i18n("The items listed below are locked by the camera (read-only). "
+                             "These items will not be deleted. If you really want to delete these items, "
+                             "please unlock them before."));
         KMessageBox::informationList(this, infoMsg, lockedList, i18n("Informations"));
     }    
 

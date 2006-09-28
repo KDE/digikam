@@ -228,7 +228,7 @@ void CameraThread::run()
             }
             case(CameraCommand::gp_cameraInformations):
             {
-                sendInfo(i18n("Get camera informations..."));
+                sendInfo(i18n("Getting camera information..."));
             
                 QString summary, manual, about;
 
@@ -497,7 +497,7 @@ void CameraThread::run()
                 // The source file path to download in camera.
                 QString src    = cmd->map["srcFilePath"].asString();
     
-                sendInfo(i18n("Uploading file %1 into camera...").arg(file));
+                sendInfo(i18n("Uploading file %1 to camera...").arg(file));
     
                 GPItemInfo itemsInfo;
 
