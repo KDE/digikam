@@ -167,22 +167,22 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->channelCB->insertItem( i18n("Alpha") );
     d->channelCB->insertItem( i18n("Colors") );
     QWhatsThis::add( d->channelCB, i18n("<p>Select here the histogram channel to display:<p>"
-                                        "<b>Luminosity</b>: drawing the image luminosity values.<p>"
-                                        "<b>Red</b>: drawing the red image channel values.<p>"
-                                        "<b>Green</b>: drawing the green image channel values.<p>"
-                                        "<b>Blue</b>: drawing the blue image channel values.<p>"
-                                        "<b>Alpha</b>: drawing the alpha image channel values. " 
-                                        "This channel corresponding to the transparency value and "
-                                        "is supported by some image formats such as PNG or TIF.<p>"
-                                        "<b>Colors</b>: drawing all color channels values at the same time."));
+                                        "<b>Luminosity</b>: Display luminosity (perceived brightness) values.<p>"
+                                        "<b>Red</b>: Display the red image channel.<p>"
+                                        "<b>Green</b>: Display the green image channel.<p>"
+                                        "<b>Blue</b>: Display the blue image channel.<p>"
+                                        "<b>Alpha</b>: Display the alpha image channel. "
+                                        "This channel corresponds to the transparency value and "
+                                        "is supported by some image formats such as PNG or TIFF.<p>"
+                                        "<b>Colors</b>: Display all color channel values at the same time."));
 
     d->scaleBG = new QHButtonGroup(histogramPage);
     d->scaleBG->setExclusive(true);
     d->scaleBG->setFrameShape(QFrame::NoFrame);
     d->scaleBG->setInsideMargin( 0 );
     QWhatsThis::add( d->scaleBG, i18n("<p>Select here the histogram scale.<p>"
-                                      "If the image's maximal counts are small, you can use the linear scale.<p>"
-                                      "Logarithmic scale can be used when the maximal counts are big; "
+                                      "If the image's maximal values are small, you can use the linear scale.<p>"
+                                      "Logarithmic scale can be used when the maximal values are big; "
                                       "if it is used, all values (small and large) will be visible on the "
                                       "graph."));
 
@@ -210,18 +210,18 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     d->colorsCB->insertItem( i18n("Blue") );
     d->colorsCB->setEnabled( false );
     QWhatsThis::add( d->colorsCB, i18n("<p>Select here the main color displayed with Colors Channel mode:<p>"
-                                       "<b>Red</b>: drawing the red image channel on the foreground.<p>"
-                                       "<b>Green</b>: drawing the green image channel on the foreground.<p>"
-                                       "<b>Blue</b>: drawing the blue image channel on the foreground.<p>"));
+                                       "<b>Red</b>: Draw the red image channel in the foreground.<p>"
+                                       "<b>Green</b>: Draw the green image channel in the foreground.<p>"
+                                       "<b>Blue</b>: Draw the blue image channel in the foreground.<p>"));
 
     d->regionBG = new QHButtonGroup(histogramPage);
     d->regionBG->setExclusive(true);
     d->regionBG->setFrameShape(QFrame::NoFrame);
     d->regionBG->setInsideMargin( 0 );
     d->regionBG->hide();
-    QWhatsThis::add( d->regionBG, i18n("<p>Select here the histogram region computation:<p>"
-                                       "<b>Full Image</b>: drawing histogram using the full image.<p>"
-                                       "<b>Selection</b>: drawing histogram using the current image "
+    QWhatsThis::add( d->regionBG, i18n("<p>Select here from which region the histogram will be computed:<p>"
+                                       "<b>Full Image</b>: Compute histogram using the full image.<p>"
+                                       "<b>Selection</b>: Compute histogram using the current image "
                                        "selection."));
 
     QPushButton *fullImageButton = new QPushButton( d->regionBG );
@@ -280,7 +280,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
     // -------------------------------------------------------------
 
     QGroupBox *gbox = new QGroupBox(2, Qt::Horizontal, i18n("Statistics"), histogramPage);
-    QWhatsThis::add( gbox, i18n("<p>Here you can see the statistic results calculated with the "
+    QWhatsThis::add( gbox, i18n("<p>Here you can see the statistical results calculated from the "
                                 "selected histogram part. These values are available for all "
                                 "channels."));
 
