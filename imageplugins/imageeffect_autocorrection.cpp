@@ -160,8 +160,8 @@ ImageEffect_AutoCorrection::ImageEffect_AutoCorrection(QWidget* parent)
     
     whatsThis->add( item, i18n("<img source=\"%1\"> <b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
-                               "Green, and Blue channels. It search the image shadow and highlight "
-                               "limit values and adjust the Red, Green, and Blue channels "
+                               "Green, and Blue channels. It searches the image shadow and highlight "
+                               "limit values and adjusts the Red, Green, and Blue channels "
                                "to a full histogram range.</p>").arg(previewEffectPic("autolevels")));
     m_correctionTools->insertItem(item, AutoLevelsCorrection);
 

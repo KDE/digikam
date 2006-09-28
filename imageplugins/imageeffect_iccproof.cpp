@@ -390,7 +390,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, 
                                  SmallIconSet("blend"), i18n("Lightness Adjustments"));
-    QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustements of target image.</p>"));
+    QWhatsThis::add(lightnessadjust, i18n("<p>Set here all lightness adjustments of target image.</p>"));
 
     QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust, 4, 1, marginHint(), spacingHint());
 
@@ -996,7 +996,7 @@ void ImageEffect_ICCProof::slotInICCInfo()
     else if(useBuiltinProfile())
     {
         QString message = i18n("<p>You have selected the \"Default builtin sRGB profile\"</p>");
-        message.append(i18n("<p>This profile is built on the fly, so there is not relevant information "
+        message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
                             "about it.</p>"));
         KMessageBox::information(this, message);
     }
