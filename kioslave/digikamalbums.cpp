@@ -36,6 +36,7 @@
 #include <kio/global.h>
 #include <kio/ioslave_defaults.h>
 #include <klargefile.h>
+#include <kdeversion.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -1150,9 +1151,11 @@ bool kio_digikamalbums::createUDSEntry(const QString& path, KIO::UDSEntry& entry
     atom.m_str = QFileInfo(path).fileName();
     entry.append(atom);
 
+#if KDE_IS_VERSION(3,4,0)
     atom.m_uds = KIO::UDS_LOCAL_PATH;
     atom.m_str = path;
     entry.append(atom);
+#endif
 
     return true;
 }
