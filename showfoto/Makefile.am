@@ -22,9 +22,7 @@ INCLUDES = -I$(top_srcdir)/digikam/showfoto/setup \
 
 showfoto_SOURCES = main.cpp showfoto.cpp 
 
-showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
-		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) $(LIB_EXIV2) \
-		   $(top_builddir)/digikam/showfoto/setup/libsetup.la \
+showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 		   $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 		   $(top_builddir)/digikam/libs/dialogs/libdialog.la \
 		   $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
@@ -33,7 +31,9 @@ showfoto_LDADD   = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
 		   $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
 		   $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
 		   $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
-		   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la
+		   $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
+		   $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
+		   $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) $(LIB_EXIV2) 
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
