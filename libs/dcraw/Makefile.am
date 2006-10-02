@@ -13,7 +13,7 @@ libdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 bin_PROGRAMS = digikamdcraw
 
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
-dcraw.o: CFLAGS = -w
+CFLAGS = -w
 
 digikamdcraw_SOURCES = dcraw.c
 
