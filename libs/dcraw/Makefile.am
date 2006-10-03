@@ -9,11 +9,19 @@ libdcraw_la_SOURCES = dcraw_parse.cpp dcrawbinary.cpp dcrawpreview.cpp
 libdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 #-- dcraw binary -------------------------------------------------
+# digiKam use a dedicaced dcraw binary program to run. This is mandatory 
+# since dcraw author have broken the command line option 
+# compatibility with the 8.x serie.
+# Also, dcraw is not available like a library.
+# The dcraw.c source code is just a copy of official implementation, but 
+# this one have been completly tested with the digiKam core.
 
 bin_PROGRAMS = digikamdcraw
 
-# This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
-AM_CFLAGS = -w
+# Gilles Caulier: this line is require to prevent broken compilation with "-std=iso9899:1990" gcc option.
+# If someone know a solution to disable this gcc option in Makefile, let's me hear...
+dcraw.o: CFLAGS = -w
+#AM_CFLAGS = -w
 
 digikamdcraw_SOURCES = dcraw.c
 
