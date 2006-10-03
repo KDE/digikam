@@ -52,7 +52,7 @@ public:
 
     QString getMetadataTitle(void);
 
-    void    setLoadingComplete(bool b);
+    void    setLoadingFailed();
     void    setDataLoading();
 
 protected slots:    

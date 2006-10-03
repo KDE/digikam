@@ -187,9 +187,9 @@ void ICCProfileWidget::setDataLoading()
     d->cieTongue->loadingStarted();
 }
 
-void ICCProfileWidget::setLoadingComplete(bool b)
+void ICCProfileWidget::setLoadingFailed()
 {
-    d->cieTongue->loadingComplete(b);
+    d->cieTongue->loadingFailed();
 }
 
 QString ICCProfileWidget::getMetadataTitle(void)

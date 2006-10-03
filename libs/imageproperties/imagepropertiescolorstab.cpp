@@ -506,7 +506,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
         else 
         {
             d->histogramWidget->setLoadingFailed();
-            d->iccProfileWidget->setLoadingComplete(false);
+            d->iccProfileWidget->setLoadingFailed();
             slotHistogramComputationFailed();
         }
     }
@@ -571,7 +571,7 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
     else
     {
         d->histogramWidget->setLoadingFailed();
-        d->iccProfileWidget->setLoadingComplete(false);
+        d->iccProfileWidget->setLoadingFailed();
         slotHistogramComputationFailed();
     }
 }
@@ -793,7 +793,7 @@ void ImagePropertiesColorsTab::getICCData()
 {
     if (d->image.getICCProfil().isNull())
     {
-        d->iccProfileWidget->setLoadingComplete(false);
+        d->iccProfileWidget->setLoadingFailed();
     }
     else
     {

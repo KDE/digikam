@@ -260,6 +260,7 @@ bool CIETongueWidget::setProfileData(const QByteArray &profileData)
 
     d->loadingImageMode = false;
     
+    d->blinkTimer->stop();
     repaint(false);
     return (d->profileDataAvailable);
 }
@@ -289,6 +290,7 @@ bool CIETongueWidget::setProfileFromFile(const KURL& file)
         d->loadingImageSucess   = false;
     }
 
+    d->blinkTimer->stop();
     repaint(false);
     return (d->profileDataAvailable);
 }
@@ -681,11 +683,11 @@ void CIETongueWidget::loadingStarted()
     d->blinkTimer->start(200);
 }
 
-void CIETongueWidget::loadingComplete(bool b)
+void CIETongueWidget::loadingFailed()
 {
     d->blinkTimer->stop();
     d->loadingImageMode   = false;
-    d->loadingImageSucess = b;
+    d->loadingImageSucess = false;
     repaint(false);
 }
 

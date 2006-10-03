@@ -65,7 +65,7 @@ public:
     bool setProfileFromFile(const KURL& file=KURL());
     
     void loadingStarted();
-    void loadingComplete(bool);
+    void loadingFailed();
 
 protected:
 
