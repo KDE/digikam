@@ -1629,63 +1629,84 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
 {
     try
     {    
-        QString rational, num, den;
+        double num, den;
         altitude = 0.0, latitude=0.0, longitude=0.0;
         
-        // Latitude decoding.
+        // Get the reference in first.
+
+        QString altRef = getExifTagString("Exif.GPSInfo.GPSAltitudeRef");
+        if (altRef.isEmpty()) return false;
         
         QString latRef = getExifTagString("Exif.GPSInfo.GPSLatitudeRef");
         if (latRef.isEmpty()) return false;
-            
-        QString lat = getExifTagString("Exif.GPSInfo.GPSLatitude");
-        if (lat.isEmpty()) return false;
-        rational = lat.section(" ", 0, 0);
-        num      = rational.section("/", 0, 0);
-        den      = rational.section("/", 1, 1);
-        latitude = num.toDouble()/den.toDouble();
-        rational = lat.section(" ", 1, 1);
-        num      = rational.section("/", 0, 0);
-        den      = rational.section("/", 1, 1);
-        latitude = latitude + (num.toDouble()/den.toDouble())/60.0;
-        rational = lat.section(" ", 2, 2);
-        num      = rational.section("/", 0, 0);
-        den      = rational.section("/", 1, 1);
-        latitude = latitude + (num.toDouble()/den.toDouble())/3600.0;
+
+        QString lngRef = getExifTagString("Exif.GPSInfo.GPSLongitudeRef");
+        if (lngRef.isEmpty()) return false;
+
+        // Latitude decoding.
+
+        Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        if (it != exifData.end())
+        {
+            num      = (*it).toRational(0).first;
+            den      = (*it).toRational(0).second;
+            latitude = num/den;
+
+            num      = (*it).toRational(1).first;
+            den      = (*it).toRational(1).second;
+            if (num != -1.0 && den != 1.0)
+                latitude = latitude + (num/den)/60.0;
+
+            num      = (*it).toRational(2).first;
+            den      = (*it).toRational(2).second;
+            if (num != -1.0 && den != 1.0)
+                latitude = latitude + (num/den)/3600.0;
+        }
+        else 
+            return false;
         
         if (latRef == "S") latitude *= -1.0;
     
         // Longitude decoding.
-        
-        QString lngRef = getExifTagString("Exif.GPSInfo.GPSLongitudeRef");
-        if (lngRef.isEmpty()) return false;
-    
-        QString lng = getExifTagString("Exif.GPSInfo.GPSLongitude");
-        if (lng.isEmpty()) return false;
-        rational  = lng.section(" ", 0, 0);
-        num       = rational.section("/", 0, 0);
-        den       = rational.section("/", 1, 1);
-        longitude = num.toDouble()/den.toDouble();
-        rational  = lng.section(" ", 1, 1);
-        num       = rational.section("/", 0, 0);
-        den       = rational.section("/", 1, 1);
-        longitude = longitude + (num.toDouble()/den.toDouble())/60.0;
-        rational  = lng.section(" ", 2, 2);
-        num       = rational.section("/", 0, 0);
-        den       = rational.section("/", 1, 1);
-        longitude = longitude + (num.toDouble()/den.toDouble())/3600.0;
+
+        Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
+        it = exifData.findKey(exifKey2);
+        if (it != exifData.end())
+        {
+            num      = (*it).toRational(0).first;
+            den      = (*it).toRational(0).second;
+            longitude = num/den;
+
+            num      = (*it).toRational(1).first;
+            den      = (*it).toRational(1).second;
+            if (num != -1.0 && den != 1.0)
+                longitude = longitude + (num/den)/60.0;
+
+            num      = (*it).toRational(2).first;
+            den      = (*it).toRational(2).second;
+            if (num != -1.0 && den != 1.0)
+                longitude = longitude + (num/den)/3600.0;
+        }
+        else 
+            return false;
         
         if (lngRef == "W") longitude *= -1.0;
 
         // Altitude decoding.
 
-        QString altRef = getExifTagString("Exif.GPSInfo.GPSAltitudeRef");
-        if (altRef.isEmpty()) return false;
-        QString alt = getExifTagString("Exif.GPSInfo.GPSAltitude");
-        if (alt.isEmpty()) return false;
-        num       = alt.section("/", 0, 0);
-        den       = alt.section("/", 1, 1);
-        altitude  = num.toDouble()/den.toDouble();
-        
+        Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
+        it = exifData.findKey(exifKey3);
+        if (it != exifData.end())
+        {
+            num      = (*it).toRational(0).first;
+            den      = (*it).toRational(0).second;
+            altitude = num/den;
+        }
+        else 
+            return false;
+       
         if (altRef == "1") altitude *= -1.0;
 
         return true;

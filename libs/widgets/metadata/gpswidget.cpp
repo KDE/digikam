@@ -51,6 +51,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include <exiv2/tags.hpp>
 #include <exiv2/exif.hpp>
+#include <exiv2/exiv2_version.h>
 
 // Local includes.
 
@@ -363,54 +364,16 @@ QString GPSWidget::getTagDescription(const QString& key)
 
 bool GPSWidget::decodeGPSPosition(void)
 {
-    QString rational, num, den;
-    double latitude=0.0, longitude=0.0;
+    double latitude=0.0, longitude=0.0, altitude=0.0;
     
-    // Latitude decoding.
-    
-    QString latRef = *getMetadataMap().find("Exif.GPSInfo.GPSLatitudeRef");
-    if (latRef.isEmpty()) return false;
-        
-    QString lat = *getMetadataMap().find("Exif.GPSInfo.GPSLatitude");
-    if (lat.isEmpty()) return false;
-    rational = lat.section(" ", 0, 0);
-    num      = rational.section("/", 0, 0);
-    den      = rational.section("/", 1, 1);
-    latitude = num.toDouble()/den.toDouble();
-    rational = lat.section(" ", 1, 1);
-    num      = rational.section("/", 0, 0);
-    den      = rational.section("/", 1, 1);
-    latitude = latitude + (num.toDouble()/den.toDouble())/60.0;
-    rational = lat.section(" ", 2, 2);
-    num      = rational.section("/", 0, 0);
-    den      = rational.section("/", 1, 1);
-    latitude = latitude + (num.toDouble()/den.toDouble())/3600.0;
-    
-    if (latRef == "S") latitude *= -1.0;
+    DMetadata meta;
+    meta.setExif(getMetadata());
 
-    // Longitude decoding.
-    
-    QString lngRef = *getMetadataMap().find("Exif.GPSInfo.GPSLongitudeRef");
-    if (lngRef.isEmpty()) return false;
+    if (meta.getGPSInfo(altitude, latitude, longitude))
+        d->map->setGPSPosition(latitude, longitude);
+    else 
+        return false;
 
-    QString lng = *getMetadataMap().find("Exif.GPSInfo.GPSLongitude");
-    if (lng.isEmpty()) return false;
-    rational  = lng.section(" ", 0, 0);
-    num       = rational.section("/", 0, 0);
-    den       = rational.section("/", 1, 1);
-    longitude = num.toDouble()/den.toDouble();
-    rational  = lng.section(" ", 1, 1);
-    num       = rational.section("/", 0, 0);
-    den       = rational.section("/", 1, 1);
-    longitude = longitude + (num.toDouble()/den.toDouble())/60.0;
-    rational  = lng.section(" ", 2, 2);
-    num       = rational.section("/", 0, 0);
-    den       = rational.section("/", 1, 1);
-    longitude = longitude + (num.toDouble()/den.toDouble())/3600.0;
-    
-    if (lngRef == "W") longitude *= -1.0;
-
-    d->map->setGPSPosition(latitude, longitude);
     return true;
 }
 
