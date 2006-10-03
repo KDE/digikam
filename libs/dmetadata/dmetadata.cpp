@@ -1634,14 +1634,13 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
         
         // Get the reference in first.
 
-        QString altRef = getExifTagString("Exif.GPSInfo.GPSAltitudeRef");
-        if (altRef.isEmpty()) return false;
-        
-        QString latRef = getExifTagString("Exif.GPSInfo.GPSLatitudeRef");
+        QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
         if (latRef.isEmpty()) return false;
 
-        QString lngRef = getExifTagString("Exif.GPSInfo.GPSLongitudeRef");
+        QByteArray lngRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
         if (lngRef.isEmpty()) return false;
+
+        QByteArray altRef = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
 
         // Latitude decoding.
 
@@ -1667,7 +1666,7 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
         else 
             return false;
         
-        if (latRef == "S") latitude *= -1.0;
+        if (latRef[0] == 'S') latitude *= -1.0;
     
         // Longitude decoding.
 
@@ -1692,22 +1691,23 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
         else 
             return false;
         
-        if (lngRef == "W") longitude *= -1.0;
+        if (lngRef[0] == 'W') longitude *= -1.0;
 
         // Altitude decoding.
 
-        Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
-        it = exifData.findKey(exifKey3);
-        if (it != exifData.end())
+        if (!altRef.isEmpty()) 
         {
-            num      = (*it).toRational(0).first;
-            den      = (*it).toRational(0).second;
-            altitude = num/den;
+            Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
+            it = exifData.findKey(exifKey3);
+            if (it != exifData.end())
+            {
+                num      = (*it).toRational(0).first;
+                den      = (*it).toRational(0).second;
+                altitude = num/den;
+            }
+        
+            if (altRef[0] == '1') altitude *= -1.0;
         }
-        else 
-            return false;
-       
-        if (altRef == "1") altitude *= -1.0;
 
         return true;
     }
