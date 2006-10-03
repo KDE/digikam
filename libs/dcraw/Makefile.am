@@ -18,10 +18,8 @@ libdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 bin_PROGRAMS = digikamdcraw
 
-# Gilles Caulier: this line is require to prevent broken compilation with "-std=iso9899:1990" gcc option.
-# If someone know a solution to disable this gcc option in Makefile, let's me hear...
-dcraw.o: CFLAGS = -w
-#AM_CFLAGS = -w
+# This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
+KDE_CFLAGS = -std=c99
 
 digikamdcraw_SOURCES = dcraw.c
 
