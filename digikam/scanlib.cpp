@@ -404,7 +404,7 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
 
-    Digikam::DMetadata metadata(filePath);
+    DMetadata metadata(filePath);
 
     // Trying to get comments from image :
     // In first, from standard JPEG comments, or
@@ -441,7 +441,7 @@ void ScanLib::updateItemDate(const QString& albumURL,
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
 
-    Digikam::DMetadata metadata(filePath);
+    DMetadata metadata(filePath);
 
     // Trying to get date and time from image :
     // In first, from EXIF date & time tags, or
