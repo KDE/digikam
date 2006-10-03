@@ -190,7 +190,7 @@ void AlbumSettings::init()
     d->tooltipShowRating      = true;
 
     d->exifRotate             = true;
-    d->exifSetOrientation     = false;
+    d->exifSetOrientation     = true;
 
     d->saveIptcTags           = false;
     d->saveIptcRating         = false;
@@ -263,7 +263,7 @@ void AlbumSettings::readSettings()
     config->setGroup("EXIF Settings");
 
     d->exifRotate = config->readBoolEntry("EXIF Rotate", true);
-    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", false);
+    d->exifSetOrientation = config->readBoolEntry("EXIF Set Orientation", true);
 
     // ---------------------------------------------------------------------
 
