@@ -68,14 +68,13 @@ LATER 0.9.0 TODO LIST
   Port to QT 4.0.
 
 * Improving metadata support:
-   - Better embbeded thumbnail support, especially for TIFF/EP (Exiv2)
-   - Add DNG file format (implmente RAWLoader::save() method for that).
+   - Add DNG file format (implemente RAWLoader::save() method for that).
    - Improved PNG Metadata file format support (Exiv2).
 
 * CameraGui: 
 
-   - Image conversion on the fly tool included in camera interface
    - New option to embedded an ICC workspace profile to JPEG, TIFF, and PNG.
+   - New option to set digiKam tags on the fly.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
@@ -89,7 +88,6 @@ LATER 0.9.0 TODO LIST
 * General:
 
    - Custom ordering of images
-   - New Batch RAW converter based on Dimg API instead kipi RAW converter plugin.
    - New TimeLine tool (take a look in kimdaba and f-spot)
    - Post conversion to qlistview: allow selection of multiple albums/tags/dates:
      1/ instead of a "current album" there will a list of "current urls"
