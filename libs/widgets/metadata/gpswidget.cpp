@@ -180,18 +180,18 @@ void GPSWidget::slotGPSDetails(void)
             url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
                         "&formtype=address&latlongtype=decimal");
             url.append("&latitude=");
-            url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&longitude=");
-            url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
             break;
         }
 
         case GoogleMaps: 
         {
             url.append("http://maps.google.com/?q=");
-            url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append(",");
-            url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
             url.append("&spn=0.05,0.05&t=h&om=1&hl=en");
             break;
         }
@@ -200,9 +200,9 @@ void GPSWidget::slotGPSDetails(void)
         {
             url.append("http://maps.msn.com/map.aspx?");
             url.append("&lats1=");
-            url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&lons1=");
-            url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
             url.append("&name=HERE");            
             url.append("&alts1=7");            
             break;
@@ -212,9 +212,9 @@ void GPSWidget::slotGPSDetails(void)
         {
             url.append("http://www.multimap.com/map/browse.cgi?");
             url.append("lat=");
-            url.append(val.setNum(d->map->getLatitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append("&lon=");
-            url.append(val.setNum(d->map->getLongitude(), 'f', 8));
+            url.append(val.setNum(d->map->getLongitude(), 'g', 12));
             url.append("&scale=10000");            
             url.append("&icon=x");            
             break;
