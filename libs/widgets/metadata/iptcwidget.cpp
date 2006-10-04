@@ -126,12 +126,12 @@ bool IptcWidget::decodeMetadata()
 
         for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
-            QString key = QString::fromLocal8Bit(md->key().c_str());
+            QString key = QString::fromAscii(md->key().c_str());
             
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString::fromLocal8Bit(os.str().c_str());
+            QString value = QString::fromAscii(os.str().c_str());
             // To make a string just on one line.
             value.replace("\n", " ");
 
@@ -157,7 +157,7 @@ bool IptcWidget::decodeMetadata()
     catch (Exiv2::Error& e)
     {
         kdDebug() << "Cannot parse IPTC metadata using Exiv2 ("
-                  << QString::fromLocal8Bit(e.what().c_str())
+                  << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
     }
@@ -181,12 +181,12 @@ QString IptcWidget::getTagTitle(const QString& key)
     {
         std::string iptckey(key.ascii());
         Exiv2::IptcKey ik(iptckey); 
-        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
+        return QString::fromAscii( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
     }
     catch (Exiv2::Error& e) 
     {
         kdDebug() << "Cannot get metadata tag title using Exiv2 ("
-                  << QString::fromLocal8Bit(e.what().c_str())
+                  << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("Unknow");
     }
@@ -198,12 +198,12 @@ QString IptcWidget::getTagDescription(const QString& key)
     {
         std::string iptckey(key.ascii());
         Exiv2::IptcKey ik(iptckey); 
-        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
+        return QString::fromAscii( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
     }
     catch (Exiv2::Error& e) 
     {
         kdDebug() << "Cannot get metadata tag description using Exiv2 ("
-                  << QString::fromLocal8Bit(e.what().c_str())
+                  << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("No description available");
     }
