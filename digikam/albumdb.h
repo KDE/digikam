@@ -1,10 +1,14 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-18
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-06-18
+ * Description : album interface with database.
  * 
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 by Marcel Wiesweg
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -258,12 +262,15 @@ public:
      * file.
      * @param rating The user rating as found in the iptc-headers of the 
      * file.
+     * @param keywords The user keywords as found in the iptc-headers of the 
+     * file.
      * @return the id of item added or -1 if it fails
      */
     Q_LLONG addItem(int albumID, const QString& name,
                     const QDateTime& datetime,
                     const QString& comment,
-                    int rating);
+                    int rating,
+                    QStringList& keywordsList);
 
     /**
      * Update the date of a item to supplied date
@@ -544,8 +551,13 @@ private:
      */
     QString escapeString(QString str) const;
 
-    sqleet3* m_db;
+
+private:
+
     bool     m_valid;
+
+    sqleet3* m_db;
+
     IntList  m_recentlyAssignedTags;
 };
 

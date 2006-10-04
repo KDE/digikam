@@ -397,29 +397,31 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
     if (albumURL.isEmpty())
         return;
 
-    QString   comment;
-    QDateTime datetime;
-    int       rating;
+    QString     comment;
+    QStringList keywords;
+    QDateTime   datetime;
+    int         rating;
 
     QString filePath( AlbumManager::instance()->getLibraryPath());
     filePath += albumURL + '/' + filename;
 
     DMetadata metadata(filePath);
 
-    // Trying to get comments from image :
+    // Try to get comments from image :
     // In first, from standard JPEG comments, or
     // In second, from EXIF comments tag, or
     // In third, from IPTC comments tag.
 
     comment = metadata.getImageComment();
 
-    // Trying to get date and time from image :
+    // Try to get date and time from image :
     // In first, from EXIF date & time tags, or
     // In second, from IPTC date & time tags.
 
     datetime = metadata.getImageDateTime();
 
-    // Trying to get image rating from IPTC Urgency tag.
+    // Try to get image rating from IPTC Urgency tag 
+    // else use file system time stamp.
     rating = metadata.getImageRating();
 
     if ( !datetime.isValid() )
@@ -428,8 +430,12 @@ void ScanLib::storeItemInDatabase(const QString& albumURL,
         datetime = info.lastModified();
     }
 
+    // Try to get image tags from IPTC keywords tags.
+
+    keywords = metadata.getImageKeywords();
+
     AlbumDB* dbstore = AlbumManager::instance()->albumDB();
-    dbstore->addItem(albumID, filename, datetime, comment, rating);
+    dbstore->addItem(albumID, filename, datetime, comment, rating, keywords);
 }
 
 void ScanLib::updateItemDate(const QString& albumURL,

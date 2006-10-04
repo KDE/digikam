@@ -1,10 +1,14 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-06-18
- * Description :
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Date   : 2004-06-18
+ * Description : album interafce with database.
  *
- * Copyright 2004 by Renchi Raju
-
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 by Marcel Wiesweg
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -26,13 +30,13 @@ extern "C"
 {
 #include <sqlite3.h>
 #include <sys/time.h>
-#include <time.h>
 }
 
 // C++ includes.
 
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 
 // Qt includes.
 
@@ -48,6 +52,7 @@ extern "C"
 // Local includes.
 
 #include "albummanager.h"
+#include "album.h"
 #include "albumdb.h"
 
 namespace Digikam
@@ -983,7 +988,8 @@ Q_LLONG AlbumDB::addItem(int albumID,
                          const QString& name,
                          const QDateTime& datetime,
                          const QString& comment,
-                         int rating)
+                         int rating,
+                         QStringList& keywordsList)
 {
     execSql ( QString ("REPLACE INTO Images "
                        "( caption , datetime, name, dirid ) "
@@ -995,9 +1001,67 @@ Q_LLONG AlbumDB::addItem(int albumID,
     
     Q_LLONG item = sqlite3_last_insert_rowid(m_db);
     
+    // Set Rating value to item in database.
     if ( item != -1 && rating != -1 )               
         setItemRating(item, rating);
     
+    // Set existing tags in database or create new tags if not exist.
+    if ( item != -1 && !keywordsList.isEmpty() )               
+    {
+        TagInfo::List tagsList = scanTags();
+
+        for (QStringList::iterator kwd = keywordsList.begin(); 
+            kwd != keywordsList.end(); ++kwd )
+        {
+            QStringList tagHierarchy = QStringList::split('/', *kwd);
+            if (tagHierarchy.isEmpty())
+                continue;
+
+            QString tagName = tagHierarchy.back();
+            tagHierarchy.pop_back();
+
+            for (TagInfo::List::iterator tag = tagsList.begin();
+                 tag != tagsList.end(); ++tag )
+            {
+                if ((*tag).name == tagName)
+                {
+                    int parentID = (*tag).pid;
+                    bool foundTag = true;
+                    // make a copy, we pop_back. Better traverse with iterators
+                    QStringList parentTagHierarchy = tagHierarchy;
+
+                    while (foundTag && !parentTagHierarchy.isEmpty())
+                    {
+                        QString parenttagName = parentTagHierarchy.back();
+                        parentTagHierarchy.pop_back();
+                        foundTag = false;
+
+                        for (TagInfo::List::iterator parenttag = tagsList.begin();
+                             parenttag != tagsList.end(); ++parenttag )
+                        {
+                            if ((*parenttag).name == parenttagName && (!parentID || (*parenttag).id == parentID))
+                            {
+                                parentID = (*parenttag).pid;
+                                foundTag = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (foundTag)
+                    {
+                        addItemTag(item, (*tag).id);
+                        break;
+                    }
+		    else
+		    {
+		    // TODO : add new tag in DB and tags item with it.
+		    }
+                }
+            }
+        }
+    }
+
     return item;
 }
 
