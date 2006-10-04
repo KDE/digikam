@@ -1629,8 +1629,8 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
 {
     try
     {    
-        double num, den;
-        altitude = 0.0, latitude=0.0, longitude=0.0;
+        double num, den, min, sec;
+        latitude=0.0, longitude=0.0, altitude=0.0;
         
         // Get the reference in first.
 
@@ -1649,19 +1649,21 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
-            num      = (*it).toRational(0).first;
-            den      = (*it).toRational(0).second;
+            num = (double)((*it).toRational(0).first);
+            den = (double)((*it).toRational(0).second);
             latitude = num/den;
 
-            num      = (*it).toRational(1).first;
-            den      = (*it).toRational(1).second;
-            if (num != -1.0 && den != 1.0)
-                latitude = latitude + (num/den)/60.0;
+            num = (double)((*it).toRational(1).first);
+            den = (double)((*it).toRational(1).second);
+            min = num/den;
+            if (min != -1.0)
+                latitude = latitude + min/60.0;
 
-            num      = (*it).toRational(2).first;
-            den      = (*it).toRational(2).second;
-            if (num != -1.0 && den != 1.0)
-                latitude = latitude + (num/den)/3600.0;
+            num = (double)((*it).toRational(2).first);
+            den = (double)((*it).toRational(2).second);
+            sec = num/den;
+            if (sec != -1.0)
+                latitude = latitude + sec/3600.0;
         }
         else 
             return false;
@@ -1674,19 +1676,21 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
         it = exifData.findKey(exifKey2);
         if (it != exifData.end())
         {
-            num      = (*it).toRational(0).first;
-            den      = (*it).toRational(0).second;
+            num = (double)((*it).toRational(0).first);
+            den = (double)((*it).toRational(0).second);
             longitude = num/den;
 
-            num      = (*it).toRational(1).first;
-            den      = (*it).toRational(1).second;
-            if (num != -1.0 && den != 1.0)
-                longitude = longitude + (num/den)/60.0;
+            num = (double)((*it).toRational(1).first);
+            den = (double)((*it).toRational(1).second);
+            min = num/den;
+            if (min != -1.0)
+                longitude = longitude + min/60.0;
 
-            num      = (*it).toRational(2).first;
-            den      = (*it).toRational(2).second;
-            if (num != -1.0 && den != 1.0)
-                longitude = longitude + (num/den)/3600.0;
+            num = (double)((*it).toRational(2).first);
+            den = (double)((*it).toRational(2).second);
+            sec = num/den;
+            if (sec != -1.0)
+                longitude = longitude + sec/3600.0;
         }
         else 
             return false;
@@ -1701,8 +1705,8 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
             it = exifData.findKey(exifKey3);
             if (it != exifData.end())
             {
-                num      = (*it).toRational(0).first;
-                den      = (*it).toRational(0).second;
+                num = (double)((*it).toRational(0).first);
+                den = (double)((*it).toRational(0).second);
                 altitude = num/den;
             }
         
