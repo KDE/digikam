@@ -144,17 +144,14 @@ void DcrawBinary::checkReport()
     {
         KMessageBox::information(
                      kapp->activeWindow(),
-                     i18n("<qt><p>Unable to find the dcraw executable:<br> "
-                          "This program is required by %1 to support raw file formats. "
-                          "You can use %2 without this, but you will not be able "
-                          "to view or edit any images in raw file formats. "
-                          "Please install dcraw as a package from your distributor "
-                          "or <a href=\"%3\">download the source</a>.</p>"
-                          "<p>Note: at least, dcraw version %4 is required by %5</p></qt>")
+                     i18n("<qt><p>Unable to find the <b>%1</b> executable:<br>"
+                          "This program is required by %2 to support Raw file formats. "
+                          "You can use %3 without this, but you will not be able "
+                          "to view or edit any Raw images. "
+                          "Please check %4 installation on your computer.")
+                          .arg(path())
                           .arg(appName)
                           .arg(appName)
-                          .arg("http://www.cybercom.net/~dcoffin/dcraw")
-                          .arg(minimalVersion())
                           .arg(appName),
                      QString::null,
                      i18n("Do not show this message again"),
@@ -166,18 +163,19 @@ void DcrawBinary::checkReport()
     {
         KMessageBox::information(
                      kapp->activeWindow(),
-                     i18n("<qt><p>dcraw executable isn't up to date:<br> "
-                          "The version %1 of dcraw have been found on your computer. "
-                          "This version is too old to run properly with %2. "
-                          "You can run %3 like this, but you will not be able "
-                          "to view or edit any images in raw file formats. "
-                          "Please update dcraw as a package from your distributor "
-                          "or <a href=\"%4\">download the source</a>.</p>"
-                          "<p>Note: at least, dcraw version %5 is required by %6</p></qt>")
+                     i18n("<qt><p><b>%1</b> executable isn't up to date:<br> "
+                          "The version %2 of %3 have been found on your computer. "
+                          "This version is too old to run properly with %4. "
+                          "You can run %5 like this, but you will not be able "
+                          "to view or edit any images in Raw file formats. "
+                          "Please check %6 installation on your computer."
+                          "<p>Note: at least, dcraw version %7 is required by %8</p></qt>")
+                          .arg(path())
                           .arg(version())
+                          .arg(path())
                           .arg(appName)
                           .arg(appName)
-                          .arg("http://www.cybercom.net/~dcoffin/dcraw")
+                          .arg(appName)
                           .arg(minimalVersion())
                           .arg(appName),
                      QString::null,
