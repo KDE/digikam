@@ -19,11 +19,11 @@
    copy them from an earlier, non-GPL Revision of dcraw.c, or (c)
    purchase a license from the author.
 
-   $Revision: 1.349 $
-   $Date: 2006/09/12 08:38:59 $
+   $Revision: 1.351 $
+   $Date: 2006/09/22 04:59:09 $
  */
 
-#define VERSION "8.38"
+#define VERSION "8.39"
 
 #define _GNU_SOURCE
 #define _USE_MATH_DEFINES
@@ -42,7 +42,6 @@
    NO_JPEG disables decoding of compressed Kodak DC120 files.
    NO_LCMS disables the "-p" option.
  */
-
 #ifndef NO_JPEG
 #include <jpeglib.h>
 #endif
@@ -4771,6 +4770,10 @@ void CLASS parse_ciff (int offset, int length)
       raw_width = (get2(),get2());
       raw_height = get2();
     }
+    if (type == 0x5029) {
+      focal_len = len >> 16;
+      if ((len & 0xffff) == 2) focal_len /= 32;
+    }
     if (type == 0x5813) flash_used = int_to_float(len);
     if (type == 0x5814) canon_ev   = int_to_float(len);
     if (type == 0x5817) shot_order = len;
@@ -5233,6 +5236,8 @@ void CLASS adobe_coeff (char *make, char *model)
 	{ 16414,-6060,-1470,-3555,13037,473,2545,122,4948 } },
     { "Kodak ProBack", 0,
 	{ 21179,-8316,-2918,-915,11019,-165,3477,-180,4210 } },
+    { "KODAK P712", 0,
+	{ 9658,-3314,-823,-5163,12695,2768,-1342,1843,6044 } },
     { "KODAK P850", 0,
 	{ 10511,-3836,-1102,-6946,14587,2558,-1481,1792,6246 } },
     { "KODAK P880", 0,
@@ -5247,7 +5252,7 @@ void CLASS adobe_coeff (char *make, char *model)
 	{ 7914,1414,-1190,-8777,16582,2280,-2811,4605,5562 } },
     { "Leaf", 0,
 	{ 8236,1746,-1314,-8251,15953,2428,-3673,5786,5771 } },
-    { "Micron 2010", 110,
+    { "Micron 2010", 110,	/* DJC */
 	{ 16695,-3761,-2151,155,9682,163,3433,951,4904 } },
     { "Minolta DiMAGE 5", 0,
 	{ 8983,-2942,-963,-6556,14476,2237,-2426,2887,8014 } },
@@ -5348,17 +5353,17 @@ void CLASS adobe_coeff (char *make, char *model)
     { "PENTAX *ist D", 0,
 	{ 9651,-2059,-1189,-8881,16512,2487,-1460,1345,10687 } },
     { "PENTAX K100D", 0,
-	{ 20129,-6819,-1857,-12757,32020,5793,-1219,1356,17788 } },
+	{ 10504,-2438,-1189,-8603,16207,2531,-1022,863,12242 } },
     { "Panasonic DMC-FZ30", 0,
 	{ 10976,-4029,-1141,-7918,15491,2600,-1670,2071,8246 } },
-    { "Panasonic DMC-FZ50", 0,	/* copied from above */
-	{ 10976,-4029,-1141,-7918,15491,2600,-1670,2071,8246 } },
+    { "Panasonic DMC-FZ50", 0,
+	{ 7906,-2709,-594,-6231,13351,3220,-1922,2631,6537 } },
     { "Panasonic DMC-LC1", 0,
 	{ 11340,-4069,-1275,-7555,15266,2448,-2960,3426,7685 } },
     { "Panasonic DMC-LX1", 0,
 	{ 10704,-4187,-1230,-8314,15952,2501,-920,945,8927 } },
-    { "Panasonic DMC-LX2", 0,	/* copied from above */
-	{ 10704,-4187,-1230,-8314,15952,2501,-920,945,8927 } },
+    { "Panasonic DMC-LX2", 0,
+	{ 7970,-2904,-583,-6252,13395,3191,-1641,2282,6864 } },
     { "SAMSUNG GX-1S", 0,
 	{ 10504,-2438,-1189,-8603,16207,2531,-1022,863,12242 } },
     { "Sinar", 0,		/* DJC */
@@ -5370,7 +5375,7 @@ void CLASS adobe_coeff (char *make, char *model)
     { "SONY DSC-V3", 0,
 	{ 7511,-2571,-692,-7894,15088,3060,-948,1111,8128 } },
     { "SONY DSLR-A100", 0,
-	{ 8367,-2248,-763,-8758,16447,2422,-1527,1550,8053 } }
+	{ 9437,-2811,-774,-8405,16215,2290,-710,596,7181 } }
   };
   double cam_xyz[4][3];
   char name[130];
@@ -6973,7 +6978,7 @@ int CLASS main (int argc, char **argv)
 	shutter = (printf ("1/"), 1 / shutter);
       printf ("%0.1f sec\n", shutter);
       printf ("Aperture: f/%0.1f\n", aperture);
-      printf ("Focal Length: %d mm\n", (int) focal_len);
+      printf ("Focal Length: %0.1f mm\n", focal_len);
       printf ("Secondary pixels: %s\n", fuji_secondary ? "yes":"no");
       printf ("Embedded ICC profile: %s\n", profile_length ? "yes":"no");
       printf ("Decodable with dcraw: %s\n", is_raw ? "yes":"no");
