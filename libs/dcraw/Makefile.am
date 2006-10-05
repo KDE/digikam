@@ -1,6 +1,7 @@
-INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes)
-
+KDE_OPTIONS = nofinal
 METASOURCES = AUTO
+
+INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes)
 
 noinst_LTLIBRARIES = libdcraw.la
 
@@ -9,6 +10,7 @@ libdcraw_la_SOURCES = dcraw_parse.cpp dcrawbinary.cpp dcrawpreview.cpp
 libdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 #-- dcraw binary -------------------------------------------------
+
 # digiKam use a dedicaced dcraw binary program to run. This is mandatory 
 # since dcraw author have broken the command line options 
 # compatibility with the 8.x serie.
