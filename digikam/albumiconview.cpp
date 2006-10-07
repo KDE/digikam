@@ -784,7 +784,7 @@ void AlbumIconView::slotRename(AlbumIconItem* item)
         return;
 
     QFileInfo fi(item->imageInfo()->name());
-    QString ext  = QString(".") + fi.extension();
+    QString ext  = QString(".") + fi.extension(false);
     QString name = fi.fileName();
     name.truncate(fi.fileName().length() - ext.length());
 
