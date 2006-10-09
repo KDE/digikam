@@ -301,5 +301,7 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 177 ==> 134761 : a rotated RAW image get saved straight with an inconsistent Exif orientation
 178 ==> 135236 : Right-click menu rename function cuts to the first period (not the extention one)
 179 ==> 135307 : After deleting a file, user comments entered for pictures apply to the wrong picture
+180 ==> 135145 : Raw image converter fails on my raw files (cr2, crw, dng).
+181 ==> 
 
 ----------------------------------------------------------------------------------------------------
