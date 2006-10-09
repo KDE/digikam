@@ -62,7 +62,6 @@
 #include "album.h"
 #include "albumsettings.h"
 #include "tagcreatedlg.h"
-#include "syncjob.h"
 #include "navigatebarwidget.h"
 #include "imageinfo.h"
 #include "ratingwidget.h"
@@ -281,6 +280,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(man, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
     
+    connect(man, SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
+    
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
 
@@ -497,6 +499,7 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     updateRating();
     updateDate();
     updateTagsView();
+    update();
 }
 
 void ImageDescEditTab::updateTagsView()
@@ -788,6 +791,11 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     album->removeExtraData(this);
 }
 
+void ImageDescEditTab::slotAlbumsCleared()
+{
+    d->tagsView->clear();
+}
+
 void ImageDescEditTab::slotAlbumIconChanged(Album* a)
 {
     if (!a || a->isRoot() || a->type() != Album::TAG)
@@ -844,12 +852,20 @@ void ImageDescEditTab::slotGotThumbnailFromIcon(Album *album, const QPixmap& thu
     if(!album || album->type() != Album::TAG)
         return;
 
+    // update item in tags tree
     QCheckListItem* item = (QCheckListItem*)album->extraData(this);
 
     if(!item)
         return;
 
     item->setPixmap(0, thumbnail);
+
+    // update item in recent tags popup menu, if found therein
+    QPopupMenu *menu = d->recentTagsBtn->popup();
+    if (menu->indexOf(album->id()) != -1)
+    {
+        menu->changeItem(album->id(), thumbnail, menu->text(album->id()));
+    }
 }
 
 void ImageDescEditTab::slotThumbnailLost(Album *)
@@ -915,9 +931,17 @@ void ImageDescEditTab::updateRecentTags()
             TAlbum* album = albumMan->findTAlbum(*it);
             if (album)
             {
-                QPixmap pix = SyncJob::getTagThumbnail(album);
+                AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
+                QPixmap icon;
+                if (!loader->getTagThumbnail(album, icon))
+                {
+                    if (icon.isNull())
+                    {
+                        icon = loader->getStandardTagIcon(album, 20);
+                    }
+                }
                 QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyURL() + ")";
-                menu->insertItem(pix, text, album->id());
+                menu->insertItem(icon, text, album->id());
             }
         }
     }

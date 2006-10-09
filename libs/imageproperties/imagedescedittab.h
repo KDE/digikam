@@ -109,6 +109,7 @@ private slots:
     void slotAlbumDeleted(Album* a);
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
+    void slotAlbumsCleared();
 
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
