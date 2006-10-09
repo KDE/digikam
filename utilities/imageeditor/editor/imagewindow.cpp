@@ -370,6 +370,42 @@ void ImageWindow::applySettings()
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                           const QString& caption, bool allowSaving, AlbumIconView* view)
 {
+    d->urlList     = urlList;
+    d->urlCurrent  = urlCurrent;
+    d->imageInfoList    = ImageInfoList();
+    d->imageInfoCurrent = 0;
+
+    loadCurrentList(caption, allowSaving, view);
+}
+
+void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
+                                 const QString& caption, bool allowSaving, AlbumIconView* view)
+{
+    // the ownership of the list's objects is passed to us
+    d->imageInfoList    = imageInfoList;
+    d->imageInfoCurrent = imageInfoCurrent;
+
+    d->imageInfoList.setAutoDelete(true);
+
+    // create URL list
+    d->urlList = KURL::List();
+
+    ImageInfoListIterator it(d->imageInfoList);
+    ImageInfo *info;
+    for (; (info = it.current()); ++it)
+    {
+        d->urlList.append(info->kurl());
+    }
+
+    d->urlCurrent  = d->imageInfoCurrent->kurl();
+
+    loadCurrentList(caption, allowSaving, view);
+}
+
+void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving, AlbumIconView* view)
+{
+    // this method contains the code shared by loadURL and loadImageInfos
+
     // if window is iconified, show it
     if (isMinimized())
     {
@@ -382,8 +418,6 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
     setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
     d->view        = view;
-    d->urlList     = urlList;
-    d->urlCurrent  = urlCurrent;
     d->allowSaving = allowSaving;
 
     m_saveAction->setEnabled(false);
@@ -392,27 +426,6 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
     m_redoAction->setEnabled(false);
 
     QTimer::singleShot(0, this, SLOT(slotLoadCurrent()));
-}
-
-void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
-                                 const QString& caption, bool allowSaving, AlbumIconView* view)
-{
-    d->imageInfoList    = imageInfoList;
-    d->imageInfoCurrent = imageInfoCurrent;
-
-    d->imageInfoList.setAutoDelete(true);
-
-    // create URL list
-    KURL::List urlList;
-
-    ImageInfoListIterator it(d->imageInfoList);
-    ImageInfo *info;
-    for (; (info = it.current()); ++it)
-    {
-        urlList.append(info->kurl());
-    }
-
-    loadURL(urlList, imageInfoCurrent->kurl(), caption, allowSaving, view);
 }
 
 void ImageWindow::slotLoadCurrent()
@@ -880,6 +893,9 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         useTrash = !permanently;
     }
 
+    // bring all (sidebar) to a defined state without letting them sit on the deleted file
+    emit signalNoCurrentItem();
+
     if (!SyncJob::del(d->urlCurrent, useTrash))
     {
         QString errMsg(SyncJob::lastErrorMsg());
@@ -891,6 +907,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     KURL CurrentToRemove = d->urlCurrent;
     KURL::List::iterator it = d->urlList.find(d->urlCurrent);
+    int index = d->imageInfoList.find(d->imageInfoCurrent);
 
     if (it != d->urlList.end())
     {
@@ -900,7 +917,9 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
             KURL urlNext = *(++it);
             d->urlCurrent = urlNext;
+            d->imageInfoCurrent = d->imageInfoList.at(index + 1);
             d->urlList.remove(CurrentToRemove);
+            d->imageInfoList.remove(index);
             slotLoadCurrent();
             return;
         }
@@ -910,7 +929,9 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
             KURL urlPrev = *(--it);
             d->urlCurrent = urlPrev;
+            d->imageInfoCurrent = d->imageInfoList.at(index - 1);
             d->urlList.remove(CurrentToRemove);
+            d->imageInfoList.remove(index);
             slotLoadCurrent();
             return;
         }

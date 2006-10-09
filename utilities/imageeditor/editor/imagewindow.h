@@ -82,6 +82,7 @@ private:
 
 private:
 
+    void loadCurrentList(const QString& caption, bool allowSaving, AlbumIconView* view);
     void closeEvent(QCloseEvent* e);
 
     void setupActions();
