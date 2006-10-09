@@ -298,10 +298,11 @@ digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
 174 ==> 134841 : weird behaviour of identity setup.
 175 ==> 131382 : All thumbnails of album destroyed when using Tag Filters.
 176 ==> 134869 : High CPU usage while displaying ICC Profile.
-177 ==> 134761 : a rotated RAW image get saved straight with an inconsistent Exif orientation
-178 ==> 135236 : Right-click menu rename function cuts to the first period (not the extention one)
-179 ==> 135307 : After deleting a file, user comments entered for pictures apply to the wrong picture
+177 ==> 134761 : a rotated RAW image get saved straight with an inconsistent Exif orientation.
+178 ==> 135236 : Right-click menu rename function cuts to the first period (not the extention one).
+179 ==> 135307 : After deleting a file, user comments entered for pictures apply to the wrong picture.
 180 ==> 135145 : Raw image converter fails on my raw files (cr2, crw, dng).
-181 ==> 
+181 ==> 125727 : digiKam open with of raw file only shows application for octet-stream.
+182 ==> 
 
 ----------------------------------------------------------------------------------------------------
