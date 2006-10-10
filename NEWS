@@ -19,7 +19,6 @@ General       : digiKam comments are now store in JPEG file to JFIF section, Exi
                 and Caption Iptc tags.
 General       : New fast preview pictures mode embedded into main interface.
 
-
 Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
 Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
                 is now common and is more easy to maintain!
@@ -28,7 +27,6 @@ Image Editor  : Support of ICC color profiles management using LCMS into Image e
 Image Editor  : digiKam setup is now available from Image Editor menu.
 Image Editor  : TIFF and JPEG Exif thumbnail are recomputed at saving pictures.
 Image Editor  : Iptc preview image are recomputed at saving pictures.
-
 
 Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Plugins : New powerfull Black & White converter tool using curves adjustements.
@@ -47,12 +45,10 @@ Setup         : Setup implementation are now common between Showfoto and digiKam
 Setup         : new Identity setup page to set default strings informations about Photographer and 
                 copyright used when IPTC tags are updated.
 
-
 CameraGUI     : new option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
                 on the fly.
 CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
 CameraGUI     : digiKam theme support.
-
 
 Showfoto      : image properties sidebar support
 Showfoto      : all images from a folder can be loaded at the same time.
@@ -98,8 +94,9 @@ Setup         : New color sheme theme 'Digikasa' from Sergio Di Rio Mare.
 
 *** 0.9.0-beta3 *******************************************************
 
-Setup         : new dcraw options set compatible with dcraw release >= 8.16.
+Setup         : New dcraw options set compatible with dcraw release >= 8.16.
 
+General       : Automatic image Tags creation/set using IPTC Keywords contents.
 General       : New kipi plugin to set pictures GPS informations using a GPS device (available with 
                 next kipi-plugins 0.1.3).
 General       : Removing external dcraw depency. Now digiKam include a full supported version of 
@@ -111,7 +108,7 @@ CameraGUI     : New advanced config dialog to set date/time format used to renam
 ...
 
 ----------------------------------------------------------------------------------------------------
-digiKam/DigikamImagePlugins BUGFIX from B.K.O (http://bugs.kde.org):
+digiKam/DigikamImagePlugins BUGFIX FROM B.K.O (http://bugs.kde.org):
 
 *** 0.9.0-beta1 *******************************************************
 
