@@ -275,6 +275,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
         // root album
         item = new AlbumFolderViewItem(this, palbum);
         palbum->setExtraData(this, item);
+        item->setOpen(true);
     }
     else
     {
