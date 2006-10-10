@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-06-18
- * Description : album interface with database.
+ * Description : database album interface.
  * 
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
@@ -46,10 +46,10 @@
 namespace Digikam
 {
 
-typedef struct sqlite3 sqleet3; // hehe.
-
 typedef QValueList<int>     IntList;
 typedef QValueList<Q_LLONG> LLongList;
+
+class AlbumDBPriv;
 
 /**
  * This class is responsible for the communication
@@ -68,6 +68,12 @@ public:
      * Destructor
      */
     ~AlbumDB();
+
+    /**
+     * Check if the database interface is initialized properly.
+     * @return true if it's ready to use, else false.
+     */
+    bool isValid() const;
 
     /**
      * Makes a connection to the database and makes sure all tables
@@ -366,7 +372,6 @@ public:
      */
     Q_LLONG getImageId(int albumID, const QString& name);
 
-
     /**
      * Get a list of names of all the tags for the item
      * @param imageID the ID of the item
@@ -379,7 +384,7 @@ public:
      * @param imageID the ID of the item
      * @return the list of IDs of all tags for the item
      */
-    IntList     getItemTagIDs(Q_LLONG imageID);
+    IntList getItemTagIDs(Q_LLONG imageID);
 
     /**
      * Given a set of items (identified by their IDs),
@@ -395,7 +400,7 @@ public:
      * @param imageIDList a list of IDs of the items
      * @return the list of common IDs of the given items
      */
-    IntList     getItemCommonTagIDs(const LLongList& imageIDList);
+    IntList getItemCommonTagIDs(const LLongList& imageIDList);
 
     /**
      * Remove a specific tag for the item
@@ -404,8 +409,19 @@ public:
      */
     void removeItemTag(Q_LLONG imageID, int tagID);
 
+    /**
+     * Update the rating of a item to supplied value
+     * @param imageID The ID of the item
+     * @param rating The rating value to be stored.
+     */
     void setItemRating(Q_LLONG imageID, int rating);
-    int  getItemRating(Q_LLONG imageID);
+
+    /**
+     * Get the item rating
+     * @param imageID the ID of the item
+     * @return the rating for the item
+     */
+    int getItemRating(Q_LLONG imageID);
 
     /**
      * Remove all tags for the item
@@ -526,8 +542,6 @@ public:
     bool execSql(const QString& sql, QStringList* const values = 0, 
                  const bool debug = false);
 
-    bool isValid() const { return m_valid; }
-
     /**
      * To be used only if you are sure of what you are doing
      * @return the last inserted row in one the db table.
@@ -551,14 +565,9 @@ private:
      */
     QString escapeString(QString str) const;
 
-
 private:
 
-    bool     m_valid;
-
-    sqleet3* m_db;
-
-    IntList  m_recentlyAssignedTags;
+    AlbumDBPriv* d;
 };
 
 }  // namespace Digikam

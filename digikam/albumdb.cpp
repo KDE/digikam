@@ -3,7 +3,7 @@
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2004-06-18
- * Description : album interafce with database.
+ * Description : database album interface.
  *
  * Copyright 2004-2005 by Renchi Raju
  * Copyright 2006 by Gilles Caulier
@@ -59,36 +59,61 @@ namespace Digikam
 {
 
 typedef struct sqlite3_stmt sqlite3_stmt;
+typedef struct sqlite3 sqleet3;            // hehe.
+
+class AlbumDBPriv
+{
+
+public:
+
+    AlbumDBPriv()
+    {
+        valid    = false;
+        dataBase = 0;
+    }
+
+    bool     valid;
+
+    sqleet3 *dataBase;
+
+    IntList  recentlyAssignedTags;
+};
 
 AlbumDB::AlbumDB()
 {
-    m_valid = false;
-    m_db    = 0;
+    d = new AlbumDBPriv;
 }
 
 AlbumDB::~AlbumDB()
 {
-    if (m_db)
+    if (d->dataBase)
     {
-        sqlite3_close(m_db);
+        sqlite3_close(d->dataBase);
     }
+
+    delete d;
+}
+
+bool AlbumDB::isValid() const
+{
+    return d->valid; 
 }
 
 void AlbumDB::setDBPath(const QString& path)
 {
-    if (m_db)
+    if (d->dataBase)
     {
-        sqlite3_close(m_db);
-        m_db = 0;
+        sqlite3_close(d->dataBase);
+        d->dataBase = 0;
     }
 
-    m_valid = false;
+    d->valid = false;
 
-    sqlite3_open(QFile::encodeName(path), &m_db);
-    if (m_db == 0)
+    sqlite3_open(QFile::encodeName(path), &d->dataBase);
+    if (d->dataBase == 0)
     {
         kdWarning() << "Cannot open database: "
-                    << sqlite3_errmsg(m_db)
+                    << sqlite3_errmsg(d->dataBase)
                     << endl;
     }
     else
@@ -99,7 +124,7 @@ void AlbumDB::setDBPath(const QString& path)
 
 void AlbumDB::initDB()
 {
-    m_valid = false;
+    d->valid = false;
 
     // Check if we have the required tables
 
@@ -271,7 +296,7 @@ void AlbumDB::initDB()
                 "END;");
     }
 
-    m_valid = true;
+    d->valid = true;
 }
 
 AlbumInfo::List AlbumDB::scanAlbums()
@@ -393,7 +418,7 @@ void AlbumDB::commitTransaction()
 int AlbumDB::addAlbum(const QString& url, const QString& caption,
                       const QDate& date, const QString& collection)
 {
-    if (!m_db)
+    if (!d->dataBase)
         return -1;
 
     execSql( QString("REPLACE INTO Albums (url, date, caption, collection) "
@@ -403,7 +428,7 @@ int AlbumDB::addAlbum(const QString& url, const QString& caption,
                   escapeString(caption),
                   escapeString(collection)));
 
-    int id = sqlite3_last_insert_rowid(m_db);
+    int id = sqlite3_last_insert_rowid(d->dataBase);
     return id;
 }
 
@@ -469,7 +494,7 @@ void AlbumDB::deleteAlbum(int albumID)
 int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
                     Q_LLONG iconID)
 {
-    if (!m_db)
+    if (!d->dataBase)
         return -1;
 
     if (!execSql( QString("INSERT INTO Tags (pid, name) "
@@ -480,7 +505,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
         return -1;
     }
 
-    int id = sqlite3_last_insert_rowid(m_db);
+    int id = sqlite3_last_insert_rowid(d->dataBase);
 
     if (!iconKDE.isEmpty())
     {
@@ -566,7 +591,7 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 
 int AlbumDB::addSearch(const QString& name, const KURL& url)
 {
-    if (!m_db)
+    if (!d->dataBase)
 	return -1;
 
     QString str("INSERT INTO Searches (name, url) \n"
@@ -579,7 +604,7 @@ int AlbumDB::addSearch(const QString& name, const KURL& url)
 	return -1;
     }
 
-    return sqlite3_last_insert_rowid(m_db);
+    return sqlite3_last_insert_rowid(d->dataBase);
 }
 
 void AlbumDB::updateSearch(int searchID, const QString& name,
@@ -627,7 +652,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     if ( debug )
         kdDebug() << "SQL-query: " << sql << endl;
 
-    if ( !m_db )
+    if ( !d->dataBase )
     {
         kdWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
@@ -639,12 +664,12 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     int           error;
 
     //compile SQL program to virtual machine
-    error = sqlite3_prepare(m_db, sql.utf8(), -1, &stmt, &tail);
+    error = sqlite3_prepare(d->dataBase, sql.utf8(), -1, &stmt, &tail);
     if ( error != SQLITE_OK )
     {
         kdWarning() << k_funcinfo
                     << "sqlite_compile error: "
-                    << sqlite3_errmsg(m_db)
+                    << sqlite3_errmsg(d->dataBase)
                     << " on query: "
                     << sql << endl;
         return false;
@@ -671,7 +696,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     if ( error != SQLITE_DONE )
     {
         kdWarning() << "sqlite_step error: "
-                    << sqlite3_errmsg( m_db )
+                    << sqlite3_errmsg( d->dataBase )
                     << " on query: "
                     << sql << endl;
         return false;
@@ -895,11 +920,11 @@ void AlbumDB::addItemTag(Q_LLONG imageID, int tagID)
                  .arg(imageID)
                  .arg(tagID) );
 
-    if (!m_recentlyAssignedTags.contains(tagID))
+    if (!d->recentlyAssignedTags.contains(tagID))
     {
-        m_recentlyAssignedTags.push_front(tagID);
-        if (m_recentlyAssignedTags.size() > 10)
-            m_recentlyAssignedTags.pop_back();
+        d->recentlyAssignedTags.push_front(tagID);
+        if (d->recentlyAssignedTags.size() > 10)
+            d->recentlyAssignedTags.pop_back();
     }
 }
 
@@ -915,7 +940,7 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
 
 IntList AlbumDB::getRecentlyAssignedTags() const
 {
-    return m_recentlyAssignedTags;    
+    return d->recentlyAssignedTags;    
 }
 
 void AlbumDB::removeItemTag(Q_LLONG imageID, int tagID)
@@ -977,7 +1002,7 @@ int AlbumDB::getOrCreateAlbumId(const QString& folder)
                           "VALUES ('%1','%2')")
                  .arg(escapeString(folder),
                       QDateTime::currentDateTime().toString(Qt::ISODate)) );
-        albumID = sqlite3_last_insert_rowid(m_db);
+        albumID = sqlite3_last_insert_rowid(d->dataBase);
     } else
         albumID = values[0].toInt();
 
@@ -998,66 +1023,175 @@ Q_LLONG AlbumDB::addItem(int albumID,
                    datetime.toString(Qt::ISODate),
                    escapeString(name),
                    QString::number(albumID)) );
-    
-    Q_LLONG item = sqlite3_last_insert_rowid(m_db);
-    
-    // Set Rating value to item in database.
-    if ( item != -1 && rating != -1 )               
-        setItemRating(item, rating);
-    
-    // Set existing tags in database or create new tags if not exist.
-    if ( item != -1 && !keywordsList.isEmpty() )               
-    {
-        TagInfo::List tagsList = scanTags();
 
-        for (QStringList::iterator kwd = keywordsList.begin(); 
+    Q_LLONG item = sqlite3_last_insert_rowid(d->dataBase);
+
+    // Set Rating value to item in database.
+
+    if ( item != -1 && rating != -1 )
+        setItemRating(item, rating);
+
+    // Set existing tags in database or create new tags if not exist.
+
+    if ( item != -1 && !keywordsList.isEmpty() )
+    {
+        QStringList keywordsList2Create;
+
+        // Create a list of the tags currently in database
+
+        TagInfo::List tagsList;
+
+        QStringList values;
+        execSql( "SELECT id, pid, name FROM Tags;", &values );
+
+        for (QStringList::iterator it = values.begin(); it != values.end();)
+        {
+            TagInfo info;
+
+            info.id   = (*it).toInt();
+            ++it;
+            info.pid  = (*it).toInt();
+            ++it;
+            info.name = *it;
+            ++it;
+            tagsList.append(info);
+        }
+
+        // For every tag in keywordsList, scan taglist to check if tag already exists.
+
+        for (QStringList::iterator kwd = keywordsList.begin();
             kwd != keywordsList.end(); ++kwd )
         {
+            // split full tag "url" into list of single tag names 
             QStringList tagHierarchy = QStringList::split('/', *kwd);
             if (tagHierarchy.isEmpty())
                 continue;
 
+            // last entry in list is the actual tag name
+            bool foundTag   = false;
             QString tagName = tagHierarchy.back();
             tagHierarchy.pop_back();
 
             for (TagInfo::List::iterator tag = tagsList.begin();
-                 tag != tagsList.end(); ++tag )
+                tag != tagsList.end(); ++tag )
             {
+                // There might be multiple tags with the same name, but in different
+                // hierarchies. We must check them all until we find the correct hierarchy
                 if ((*tag).name == tagName)
                 {
                     int parentID = (*tag).pid;
-                    bool foundTag = true;
-                    // make a copy, we pop_back. Better traverse with iterators
-                    QStringList parentTagHierarchy = tagHierarchy;
 
-                    while (foundTag && !parentTagHierarchy.isEmpty())
+                    // Check hierarchy, from bottom to top
+                    bool foundParentTag                 = true;
+                    QStringList::iterator parentTagName = tagHierarchy.end();
+
+                    while (foundParentTag && parentTagName != tagHierarchy.begin())
                     {
-                        QString parenttagName = parentTagHierarchy.back();
-                        parentTagHierarchy.pop_back();
-                        foundTag = false;
+                        --parentTagName;
 
-                        for (TagInfo::List::iterator parenttag = tagsList.begin();
-                             parenttag != tagsList.end(); ++parenttag )
+                        foundParentTag = false;
+
+                        for (TagInfo::List::iterator parentTag = tagsList.begin();
+                            parentTag != tagsList.end(); ++parentTag )
                         {
-                            if ((*parenttag).name == parenttagName && (!parentID || (*parenttag).id == parentID))
+                            // check if name is the same, and if ID is identical
+                            // to the parent ID we got from the child tag
+                            if ( (*parentTag).id == parentID &&
+                                (*parentTag).name == (*parentTagName) )
                             {
-                                parentID = (*parenttag).pid;
-                                foundTag = true;
+                                parentID       = (*parentTag).pid;
+                                foundParentTag = true;
+                                break;
+                            }
+                        }
+
+                        // If we traversed the list without a match,
+                        // foundParentTag will be false, the while loop breaks.
+                    }
+
+                    // If we managed to traverse the full hierarchy,
+                    // we have our tag.
+                    if (foundParentTag)
+                    {
+                        addItemTag(item, (*tag).id);
+                        foundTag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!foundTag)
+                keywordsList2Create.append(*kwd);
+        }
+
+        // If tags do not exist in database, create them.
+
+        if (!keywordsList2Create.isEmpty())
+        {
+            for (QStringList::iterator kwd = keywordsList2Create.begin(); 
+                kwd != keywordsList2Create.end(); ++kwd )
+            {
+                // split full tag "url" into list of single tag names 
+                QStringList tagHierarchy = QStringList::split('/', *kwd);
+
+                if (tagHierarchy.isEmpty())
+                    continue;
+
+                int  parentTagID      = 0;
+                int  tagID            = 0;
+                bool parentTagExisted = true;
+
+                // Traverse hierarchy from top to bottom
+                for (QStringList::iterator tagName = tagHierarchy.begin();
+                    tagName != tagHierarchy.end(); ++tagName)
+                {
+                    tagID = 0;
+
+                    // if the parent tag did not exist, we need not check if the child exists
+                    if (parentTagExisted)
+                    {
+                        for (TagInfo::List::iterator tag = tagsList.begin();
+                            tag != tagsList.end(); ++tag )
+                        {
+                            // find the tag with tag name according to tagHierarchy,
+                            // and parent ID identical to the ID of the tag we found in
+                            // the previous run.
+                            if ((*tag).name == (*tagName) && (*tag).pid == parentTagID)
+                            {
+                                tagID = (*tag).id;
                                 break;
                             }
                         }
                     }
 
-                    if (foundTag)
+                    if (tagID != 0)
                     {
-                        addItemTag(item, (*tag).id);
+                        // tag already found in DB
+                        parentTagID = tagID;
+                        continue;
+                    }
+
+                    // Tag does not yet exist in DB, add it
+                    tagID = addTag(parentTagID, (*tagName), QString::null, 0);
+
+                    if (tagID == -1)
+                    {
+                        // Something is wrong in database. Abort.
                         break;
                     }
-		    else
-		    {
-		    // TODO : add new tag in DB and tags item with it.
-		    }
+
+                    // append to our list of existing tags (for following keywords)
+                    TagInfo info;
+                    info.id   = tagID;
+                    info.pid  = parentTagID;
+                    info.name = (*tagName);
+                    tagsList.append(info);
+
+                    parentTagID      = tagID;
+                    parentTagExisted = false;
                 }
+
+                addItemTag(item, tagID);
             }
         }
     }
@@ -1282,7 +1416,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
              .arg(QString::number(dstAlbumID), escapeString(dstName),
                   QString::number(srcId)) );
 
-    int dstId = sqlite3_last_insert_rowid(m_db);
+    int dstId = sqlite3_last_insert_rowid(d->dataBase);
 
     // copy tags
     execSql( QString("INSERT INTO ImageTags (imageid, tagid) "
@@ -1301,7 +1435,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
 
 Q_LLONG AlbumDB::lastInsertedRow()
 {
-    return sqlite3_last_insert_rowid(m_db);    
+    return sqlite3_last_insert_rowid(d->dataBase);    
 }
 
 }  // namespace Digikam
