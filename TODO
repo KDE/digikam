@@ -19,11 +19,6 @@
 
    - Polish keyboard focus in sidebar when navigate between album pictures.
 
-* Main Interface:
-
-   - Finalize IPTC keywords tags parsing to create new digiKam tags in database when new images are imported.
-
-
 
 * B.K.O files to fix :
 
@@ -34,7 +29,6 @@
 
 ==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC.
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam.
-==> 126874 : Main interface : digiKam does not support <shift+del>.
 ==> 127182 : Main interface : Crash when scanning jpeg images.   
 ==> 113797 : Main interface : Little thumbnail refresh problem. 
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
