@@ -1,4 +1,6 @@
+# Requires by dcraw.c implementation.
 KDE_OPTIONS = nofinal
+
 METASOURCES = AUTO
 
 INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes)

@@ -19,11 +19,11 @@
    copy them from an earlier, non-GPL Revision of dcraw.c, or (c)
    purchase a license from the author.
 
-   $Revision: 1.351 $
-   $Date: 2006/09/22 04:59:09 $
+   $Revision: 1.353 $
+   $Date: 2006/10/10 04:46:02 $
  */
 
-#define VERSION "8.39"
+#define VERSION "8.40"
 
 #define _GNU_SOURCE
 #define _USE_MATH_DEFINES
@@ -1070,12 +1070,7 @@ int CLASS nikon_e2100()
   return 1;
 }
 
-/*
-   Returns 0 for a Pentax Optio 33WR,
-	   1 for a Nikon E3700,
-	   2 for an Olympus C740UZ.
- */
-int CLASS nikon_3700()
+void CLASS nikon_3700()
 {
   int i, sum[] = { 0, 0 };
   uchar tail[952];
@@ -1084,8 +1079,20 @@ int CLASS nikon_3700()
   fread (tail, 1, sizeof tail, ifp);
   for (i=0; i < sizeof tail; i++)
     sum[(i>>2) & 1] += tail[i];
-  if (sum[1] > 4*sum[0]) return 2;
-  return sum[0] > 4*sum[1];
+  if (sum[0] > 4*sum[1]) return;
+  if (sum[1] > 4*sum[0]) {
+    strcpy (make, "OLYMPUS");
+    strcpy (model, "C740UZ");
+    return;
+  }
+  sum[0] = sum[1] = 0;
+  for (i=0; i < sizeof tail; i++)
+    sum[i & 1] += tail[i];
+  if (sum[1] > 4*sum[0] || sum[0]+sum[1] > 216000) {
+    strcpy (make, "PENTAX");
+    strcpy (model,"Optio 33WR");
+  } else
+    strcpy (model, "E3200");
 }
 
 /*
@@ -3310,7 +3317,7 @@ void CLASS lin_interpolate()
 
    "Interpolation using a Threshold-based variable number of gradients"
 
-   described in http://www-ise.stanford.edu/~tingchen/algodep/vargra.html
+   described in http://scien.stanford.edu/class/psych221/projects/99/tingchen/algodep/vargra.html
 
    I've extended the basic idea to work with non-Bayer filter arrays.
    Gradients are numbered clockwise from NW=0 to W=7.
@@ -5769,6 +5776,7 @@ nucore:
   } else if (is_canon && raw_width == 4476) {
     top_margin  = 34;
     left_margin = 90;
+    maximum = 0xe6c;
     goto canon_cr2;
   } else if (is_canon && raw_width == 5108) {
     top_margin  = 13;
@@ -5859,12 +5867,10 @@ cp_e2500:
     load_raw = &CLASS nikon_e2100_load_raw;
     pre_mul[0] = 1.818;
     pre_mul[2] = 1.618;
-    if ((i = nikon_3700()) == 2) {
-      strcpy (make, "OLYMPUS");
-      strcpy (model, "C740UZ");
-    } else if (i == 0) {
-      strcpy (make, "PENTAX");
-      strcpy (model,"Optio 33WR");
+    if (!timestamp) nikon_3700();
+    if (model[0] == 'E' && atoi(model+1) < 3700)
+      filters = 0x49494949;
+    if (!strcmp(model,"Optio 33WR")) {
       flip = 1;
       filters = 0x16161616;
       pre_mul[0] = 1.331;
