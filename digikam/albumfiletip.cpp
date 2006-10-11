@@ -360,7 +360,7 @@ void AlbumFileTip::updateText()
         QSize   dims;
         QString rawFilesExt(raw_file_extentions);
 
-        if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
+        if (rawFilesExt.upper().contains( fileInfo.extension(false).upper() ))
         {
             str = i18n("RAW Image");
             dims = metaData.getImageDimensions();

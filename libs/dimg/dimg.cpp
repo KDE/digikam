@@ -435,7 +435,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     QString rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension().upper();
+    QString ext = fileInfo.extension(false).upper();
 
     if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         return JPEG;

@@ -187,7 +187,7 @@ void kio_digikamalbums::special(const QByteArray& data)
             QString rawFilesExt(raw_file_extentions);
 
             QFileInfo fileInfo(base + name);
-            if (rawFilesExt.upper().contains( fileInfo.extension().upper() ))
+            if (rawFilesExt.upper().contains( fileInfo.extension(false).upper() ))
             {
                 Digikam::DMetadata metaData(base + name);
                 dims = metaData.getImageDimensions();

@@ -1195,13 +1195,15 @@ void CameraUI::slotDownload(bool onlySelected)
             // convertion on the fly option.
             QFileInfo fi(downloadName);
 
-            QString subAlbum = fi.extension().upper();
-	        if (fi.extension().upper() == QString("JPEG") || fi.extension().upper() == QString("JPE")) 
+            QString subAlbum = fi.extension(false).upper();
+	        if (fi.extension(false).upper() == QString("JPEG") || 
+                fi.extension(false).upper() == QString("JPE")) 
                 subAlbum = QString("JPG");
-            if (fi.extension().upper() == QString("TIFF")) 
+            if (fi.extension(false).upper() == QString("TIFF")) 
                 subAlbum = QString("TIF");
-            if (fi.extension().upper() == QString("MPEG") || fi.extension().upper() == QString("MPE") ||
-                fi.extension().upper() == QString("MPO"))
+            if (fi.extension(false).upper() == QString("MPEG") || 
+                fi.extension(false).upper() == QString("MPE") ||
+                fi.extension(false).upper() == QString("MPO"))
                 subAlbum = QString("MPG");
 
             if (!createAutoAlbum(u, subAlbum, dateTime.date(), errMsg))

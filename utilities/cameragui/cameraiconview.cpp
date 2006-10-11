@@ -298,7 +298,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg && !downloadName.isEmpty())
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension().upper();
+                QString ext = fi.extension(false).upper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());
@@ -326,7 +326,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (convertLossLessJpeg)
             {
                 QFileInfo fi(downloadName);
-                QString ext = fi.extension().upper();
+                QString ext = fi.extension(false).upper();
                 if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
                 {
                     downloadName.truncate(downloadName.length() - ext.length());

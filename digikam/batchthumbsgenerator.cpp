@@ -150,7 +150,7 @@ void BatchThumbsGenerator::rebuildAllThumbs(int size)
              !d->cancel && (it2 != albumItemsPath.end()); ++it2)
         {
             QFileInfo fi(*it2);
-            if (filesFilter.contains(fi.extension()))
+            if (filesFilter.contains(fi.extension(false)))
                 pathSorted.append(*it2);
         }
         
