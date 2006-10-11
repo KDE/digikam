@@ -404,7 +404,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 {
     // If there is a currently histogram computation when dialog is closed,
-    // stop it before the d->image data are deleted automaticly!
+    // stop it before the d->image data are deleted automatically!
     d->histogramWidget->stopHistogramComputation();
 
     KConfig* config = kapp->config();
