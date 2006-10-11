@@ -262,7 +262,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    QWhatsThis::add( d->advBox, i18n("<p>Set here all options to rename picture filenames automaticly "
+    QWhatsThis::add( d->advBox, i18n("<p>Set here all options to rename picture filenames automatically "
                                      "during downoading."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
@@ -285,7 +285,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     albumVlay->addWidget(hbox1);
     albumVlay->addStretch();
 
-    QWhatsThis::add( albumBox, i18n("<p>Set here all options to create albums automaticly "
+    QWhatsThis::add( albumBox, i18n("<p>Set here all options to create albums automatically "
                      "during downlading."));
     QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
                      "pictures into automatically created file extension-based sub-albums of destination "
@@ -327,7 +327,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
 
-    QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automaticly "
+    QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
                      "during downlading."));
     QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want automatically "
                      "rotated or flipped images using EXIF information provided by camera."));

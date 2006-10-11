@@ -369,7 +369,7 @@ void ImageEffect_RatioCrop::readSettings(void)
         }
         else
         {
-            m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
+            m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
             m_heightInput->setValue( config->readNumEntry("Hor.Oriented Custom Aspect Ratio Height", 600) );
         }
 
@@ -397,7 +397,7 @@ void ImageEffect_RatioCrop::readSettings(void)
         }
         else
         {
-            m_widthInput->setValue( 1 ); // It will be recalculed automaticly with the ratio.
+            m_widthInput->setValue( 1 ); // It will be recalculed automatically with the ratio.
             m_heightInput->setValue( config->readNumEntry("Ver.Oriented Custom Aspect Ratio Height", 600) );
         }
 

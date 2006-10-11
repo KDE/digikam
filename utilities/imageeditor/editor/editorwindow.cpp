@@ -1158,7 +1158,7 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*succe
 
     // Enable actions as appropriate after loading
     // No need to re-enable image properties sidebar here, it's will be done
-    // automaticly by a signal from canvas
+    // automatically by a signal from canvas
     toggleActions(true);
 
     unsetCursor();
