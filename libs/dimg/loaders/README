@@ -7,7 +7,7 @@ Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency     Remarks
 JPG     Done  Done   Done  Done      TODO    yes      N.A     libjpeg    Metadata are EXIF/IPTC/XMP/ICC profil
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng     Metadata are EXIF/IPTC/XMP/ICC profil
 TIF/EP  Done  Done   Done  Done      TODO    yes      yes     libtiff    Metadata are EXIF/IPTC/XMP/ICC profil
-RAW     Done  N.A    TODO  Done      Done    yes      yes     dcraw      Metadata are EXIF
+RAW     Done  N.A    N.A   Done      Done    yes      yes     dcraw      Metadata are EXIF
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 
 Others file formats are supported only in 8 bits/color/pixel using QImage/kimgio. 
@@ -36,4 +36,7 @@ GIF      yes        no
 
 ---------------------------------------------------------------------------
 
+TODO :
+
+Add PCD support using http://linux.bytesex.org/fbida/libpcd.html
 
