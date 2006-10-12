@@ -89,7 +89,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
     d->authorTitleEdit = new KLineEdit(photographerIdGroup);
-    d->authorEdit->setValidator(asciiValidator);
+    d->authorTitleEdit->setValidator(asciiValidator);
     d->authorTitleEdit->setMaxLength(32);
     label2->setBuddy(d->authorTitleEdit);
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
@@ -104,7 +104,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label3 = new QLabel(i18n("Credit:"), creditsGroup);
     d->creditEdit = new KLineEdit(creditsGroup);
-    d->authorEdit->setValidator(asciiValidator);
+    d->creditEdit->setValidator(asciiValidator);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
@@ -115,7 +115,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label4 = new QLabel(i18n("Source:"), creditsGroup);
     d->sourceEdit = new KLineEdit(creditsGroup);
-    d->authorEdit->setValidator(asciiValidator);
+    d->sourceEdit->setValidator(asciiValidator);
     d->sourceEdit->setMaxLength(32);
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
@@ -127,7 +127,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
 
     QLabel *label5 = new QLabel(i18n("Copyright:"), creditsGroup);
     d->copyrightEdit = new KLineEdit(creditsGroup);
-    d->authorEdit->setValidator(asciiValidator);
+    d->copyrightEdit->setValidator(asciiValidator);
     d->copyrightEdit->setMaxLength(128);
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
