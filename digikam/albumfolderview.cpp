@@ -958,6 +958,8 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             popMenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
             popMenu.insertItem( SmallIcon("goto"), i18n("&Move Here"), 10 );
             popMenu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here"), 11 );
+            if (imageIDs.count() == 1)
+                popMenu.insertItem(i18n("Set as Album Thumbnail"), 12);
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
             popMenu.setMouseTracking(true);
@@ -979,6 +981,11 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 connect(job, SIGNAL(result(KIO::Job*)),
                         SLOT(slotDIOResult(KIO::Job*)));
                 break;
+            }
+            case 12:
+            {
+                QString errMsg;
+                AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
             }
             default:
                 break;

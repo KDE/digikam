@@ -306,9 +306,12 @@ AlbumInfo::List AlbumDB::scanAlbums()
     QString basePath(AlbumManager::instance()->getLibraryPath());
 
     QStringList values;
-    execSql( "SELECT A.id, A.url, A.date, A.caption, A.collection, I.name \n "
-             "FROM Albums AS A LEFT OUTER JOIN Images AS I \n "
-             "ON A.icon=I.id;", &values);
+    execSql( "SELECT A.id, A.url, A.date, A.caption, A.collection, B.url, I.name \n "
+             "FROM Albums AS A \n "
+             "  LEFT OUTER JOIN Images AS I ON A.icon=I.id \n"
+             "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid;", &values);
+
+    QString iconAlbumUrl, iconName;
 
     for (QStringList::iterator it = values.begin(); it != values.end();)
     {
@@ -324,11 +327,15 @@ AlbumInfo::List AlbumDB::scanAlbums()
         ++it;
         info.collection = *it;
         ++it;
-        if (!(*it).isEmpty())
-        {
-            info.icon = basePath + info.url + '/' + *it;
-        }
+        iconAlbumUrl = *it;
         ++it;
+        iconName = *it;
+        ++it;
+
+        if (!iconName.isEmpty())
+        {
+            info.icon = basePath + iconAlbumUrl + '/' + iconName;
+        }
 
         aList.append(info);
     }
@@ -464,9 +471,11 @@ void AlbumDB::setAlbumIcon(int albumID, Q_LLONG iconID)
 QString AlbumDB::getAlbumIcon(int albumID)
 {
     QStringList values;
-    execSql( QString("SELECT Albums.url, Images.name FROM Albums "
-                     "LEFT OUTER JOIN Images ON Albums.icon=Images.id "
-                     "WHERE Albums.id=%1;")
+    execSql( QString("SELECT B.url, I.name \n "
+                     "FROM Albums AS A \n "
+                     "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                     "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid \n "
+                     "WHERE T.id=%1;")
              .arg(albumID), &values );
     if (values.isEmpty())
         return QString();
@@ -549,7 +558,8 @@ QString AlbumDB::getTagIcon(int tagID)
 {
     QStringList values;
     execSql( QString("SELECT A.url, I.name, T.iconkde \n "
-                     "FROM Tags AS T LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                     "FROM Tags AS T \n "
+                     "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
                      "  LEFT OUTER JOIN Albums AS A ON A.id=I.dirid \n "
                      "WHERE T.id=%1;")
              .arg(tagID), &values );

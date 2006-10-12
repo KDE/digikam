@@ -301,6 +301,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM B.K.O (http://bugs.kde.org):
 180 ==> 135145 : Raw image converter fails on my raw files (cr2, crw, dng).
 181 ==> 125727 : digiKam open with of raw file only shows application for octet-stream.
 182 ==> 135430 : Typo automaticly should be automatically in raw image converter.
-183 ==> 
+183 ==> 135060 : Folders without pictures in it cannot be assigned icons
+184 ==> 
 
 ----------------------------------------------------------------------------------------------------
