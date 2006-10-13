@@ -164,12 +164,15 @@ void DMetadata::setComments(const QByteArray& data)
     d->imageComments = str;
 }
     
-void DMetadata::setExif(const QByteArray& data)
+bool DMetadata::setExif(const QByteArray& data)
 {
     try
     {    
         if (!data.isEmpty())
+        {
             d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
@@ -180,14 +183,19 @@ void DMetadata::setExif(const QByteArray& data)
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
+    
+    return false;
 }
 
-void DMetadata::setExif(Exiv2::DataBuf const data)
+bool DMetadata::setExif(Exiv2::DataBuf const data)
 {
     try
     {    
         if (data.size_ != 0)
+        {
             d->exifMetadata.load(data.pData_, data.size_);
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
@@ -197,15 +205,20 @@ void DMetadata::setExif(Exiv2::DataBuf const data)
         kdDebug() << "Cannot set Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
-    }        
+    }    
+
+    return false;    
 }
 
-void DMetadata::setIptc(const QByteArray& data)
+bool DMetadata::setIptc(const QByteArray& data)
 {
     try
     {    
         if (!data.isEmpty())
+        {
             d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
@@ -216,14 +229,19 @@ void DMetadata::setIptc(const QByteArray& data)
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
+
+    return false;
 }
 
-void DMetadata::setIptc(Exiv2::DataBuf const data)
+bool DMetadata::setIptc(Exiv2::DataBuf const data)
 {
     try
     {    
         if (data.size_ != 0)
+        {
             d->iptcMetadata.load(data.pData_, data.size_);
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
@@ -234,6 +252,8 @@ void DMetadata::setIptc(Exiv2::DataBuf const data)
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
+
+    return false;
 }
 
 bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
@@ -1469,7 +1489,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     return PhotoInfoContainer();
 }
 
-QString DMetadata::getExifTagString(const char* exifTagName) const
+QString DMetadata::getExifTagString(const char* exifTagName, bool escapeCR) const
 {
     try
     {
@@ -1481,7 +1501,10 @@ QString DMetadata::getExifTagString(const char* exifTagName) const
             std::ostringstream os;
             os << *it;
             QString tagValue = QString::fromLocal8Bit(os.str().c_str());
-            tagValue.replace("\n", " ");
+
+            if (escapeCR)
+                tagValue.replace("\n", " ");
+
             return tagValue;
         }
     }
@@ -1496,7 +1519,7 @@ QString DMetadata::getExifTagString(const char* exifTagName) const
     return QString();
 }
 
-bool DMetadata::setExifTagString(const char * exifTagName, const QString& value)
+bool DMetadata::setExifTagString(const char *exifTagName, const QString& value)
 {
     try
     {
@@ -1506,6 +1529,53 @@ bool DMetadata::setExifTagString(const char * exifTagName, const QString& value)
     catch( Exiv2::Error &e )
     {
         kdDebug() << "Cannot set Exif tag string into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return false;
+}
+
+QString DMetadata::getIptcTagString(const char* iptcTagName, bool escapeCR) const
+{
+    try
+    {
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        if (it != iptcData.end())
+        {
+            std::ostringstream os;
+            os << *it;
+            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+            if (escapeCR)
+                tagValue.replace("\n", " ");
+
+            return tagValue;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot find Iptc key '"
+                  << iptcTagName << "' into image using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }
+
+    return QString();
+}
+
+bool DMetadata::setIptcTagString(const char *iptcTagName, const QString& value)
+{
+    try
+    {
+        d->iptcMetadata[iptcTagName] = value.ascii();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot set Iptc tag string into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }

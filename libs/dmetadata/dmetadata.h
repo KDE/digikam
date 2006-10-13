@@ -93,16 +93,18 @@ public:
     QByteArray getIptc(bool addIrbHeader=false) const;
 
     void setComments(const QByteArray& data);
-    void setExif(const QByteArray& data);
-    void setIptc(const QByteArray& data);
+    bool setExif(const QByteArray& data);
+    bool setIptc(const QByteArray& data);
 
-    void setExif(Exiv2::DataBuf const data);
-    void setIptc(Exiv2::DataBuf const data);
+    bool setExif(Exiv2::DataBuf const data);
+    bool setIptc(Exiv2::DataBuf const data);
 
-    QString             getExifTagString(const char *exifTagName) const;
+    QString             getExifTagString(const char *exifTagName, bool escapeCR=true) const;
     QByteArray          getExifTagData(const char *exifTagName) const;
-    QImage              getExifThumbnail(bool fixOrientation) const;
+    QString             getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
     QByteArray          getIptcTagData(const char *iptcTagName) const;
+
+    QImage              getExifThumbnail(bool fixOrientation) const;
 
     ImageColorWorkSpace getImageColorWorkSpace();
     bool                getImagePreview(QImage& preview);
@@ -114,6 +116,8 @@ public:
     QStringList         getImageKeywords() const;
 
     bool setExifTagString(const char *exifTagName, const QString& value);
+    bool setIptcTagString(const char *iptcTagName, const QString& value);
+
     bool setExifThumbnail(const QImage& thumb);
     bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
     bool setImagePreview(const QImage& preview);
