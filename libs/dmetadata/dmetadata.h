@@ -81,6 +81,9 @@ public:
     /** Load Metadata from image file */
     DMetadata(const QString& filePath, DImg::FORMAT ff=DImg::NONE);
 
+    bool clearExif();
+    bool clearIptc();
+
     bool applyChanges();
 
     /** File access method */

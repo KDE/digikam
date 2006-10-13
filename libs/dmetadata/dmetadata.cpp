@@ -76,6 +76,40 @@ DMetadata::~DMetadata()
     delete d;
 }
 
+bool DMetadata::clearExif()
+{
+    try
+    {    
+        d->exifMetadata.clear();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot clear Exif data using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }    
+
+    return false;       
+}
+
+bool DMetadata::clearIptc()
+{
+    try
+    {    
+        d->iptcMetadata.clear();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot clear Iptc data using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }    
+
+    return false;       
+}
+
 bool DMetadata::applyChanges()
 {
     return save(d->filePath, d->fileFormat);
