@@ -1667,6 +1667,50 @@ QByteArray DMetadata::getIptcTagData(const char *iptcTagName) const
     return QByteArray();
 }
 
+bool DMetadata::removeExifTag(const char *exifTagName)
+{
+    try
+    {  
+        Exiv2::ExifKey exifKey(exifTagName);
+        Exiv2::ExifData::iterator it = d->exifMetadata.findKey(exifKey);
+        if (it != d->exifMetadata.end())
+        {
+            d->exifMetadata.erase(it);
+            return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot remove Exif tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
+bool DMetadata::removeIptcTag(const char *iptcTagName)
+{
+    try
+    {  
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData::iterator it = d->iptcMetadata.findKey(iptcKey);
+        if (it != d->iptcMetadata.end())
+        {
+            d->iptcMetadata.erase(it);
+            return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        kdDebug() << "Cannot remove Iptc tag using Exiv2 (" 
+                  << QString::fromLocal8Bit(e.what().c_str())
+                  << ")" << endl;
+    }        
+    
+    return false;
+}
+
 bool DMetadata::getImagePreview(QImage& preview)
 {
     try

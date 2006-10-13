@@ -139,6 +139,9 @@ public:
     bool getGPSInfo(double& altitude, double& latitude, double& longitude);
     bool removeGPSInfo();
 
+    bool removeExifTag(const char *exifTagName);
+    bool removeIptcTag(const char *iptcTagName);
+
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
     static QString detectEncodingAndDecode(const std::string &value);
 
