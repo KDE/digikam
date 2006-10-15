@@ -1328,7 +1328,7 @@ QStringList DMetadata::getImageKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Keywords from image using Exiv2 (" 
+        kdDebug() << "Cannot get IPTC Keywords from image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1381,7 +1381,7 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Keywords into image using Exiv2 (" 
+        kdDebug() << "Cannot set IPTC Keywords into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
