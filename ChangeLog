@@ -1,3 +1,1036 @@
+v0.9.0-beta3 - 15-Oct.-2006
+----------------------------------------------------------------------------
+
+2006-10-15 16:03  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      fix debug strings
+
+2006-10-15 16:01  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      remove old comments
+
+2006-10-15 14:53  cgilles
+
+    * trunk/extragear/graphics/digikam/README: update
+
+2006-10-13 13:53  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+      kipi-plugins from trunk : backport from kipi-plugins Exiv2
+      interface new methods to remove Exif or Iptc tag
+
+2006-10-13 07:39  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+      digikam from trunk : backport new Kipi-Plugins::Exiv2Iface
+      methods to clear Exif or Iptc metadata
+
+2006-10-13 07:21  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+      digikam from trunk : backport new Kipi-Plugins::Exiv2Iface
+      methods to be able to set/get IPTC/exif text tags
+
+2006-10-12 18:03  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupidentity.cpp:
+      digikam from trunk : fix ASCII validator
+
+2006-10-12 11:39  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+      Allow the freedom to assign albums thumbnails from any other
+      album.
+      Backport functionality from Tags icons.
+      
+      BUG: 135060
+
+2006-10-11 13:42  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/loaders/README: Added
+      link to libpcd to decode Kodak Photo CD picture.
+
+2006-10-11 11:43  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumfiletip.cpp,
+      trunk/extragear/graphics/digikam/digikam/batchthumbsgenerator.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.cpp,
+      trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp,
+      trunk/extragear/graphics/digikam/libs/dimg/dimg.cpp,
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiestab.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      digikam from trunk : Filenames with multiple periods are not
+      properly drived by digiKam core (duing an incorrect extension
+      identification)
+
+2006-10-11 05:56  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+      typo
+
+2006-10-11 05:54  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-11 05:53  cgilles
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_ratiocrop.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+      digikam from trunk : fix automaticly to automatically
+      BUG:135430
+
+2006-10-10 12:18  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+      Set root item open. Similar to a recent fix in TagFolderView,
+      but this
+      solves a problem that appears only if the album library path is
+      changed
+      and all albums reloaded
+
+2006-10-10 10:28  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dcraw/dcraw.c: digikam
+      from trunk : backport dcraw.c 8.40 to digiKam core
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-10-10 09:34  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumdb.h: digikam from
+      trunk : album database interface : image Tags can be created to
+      database using IPTC keywords. Feedback welcome
+      
+      CCMAIL: marcel.wiesweg@gmx.de, digikam-devel@kde.org
+
+2006-10-10 09:24  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-10 09:20  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: update
+
+2006-10-09 19:42  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-09 19:36  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-09 14:02  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+      - get rid of SyncJob here, use standard AlbumThumbnailLoader
+      and change menu entry
+      when icon is available. The event loop of SyncJob caused a bug
+      very difficult to find,
+      when the ImageLoaded event was actually received in the event
+      loop opened by SyncJob,
+      called from handling the ImageLoadingStarted event in the end.
+      All assumptions about the order of events are thwarted.
+      - Handle the AlbumsCleared signal from AlbumManager here as well
+      
+      CCBUG: 135307
+
+2006-10-09 13:57  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.h:
+      - in deleteCurrentItem, set d->imageInfoCurrent and
+      d->imageInfoList to new image as well
+      - add loadCurrentList for shared code of loadURL and
+      loadImageInfos, so that loadURL can
+      now properly set d->imageInfoList to empty list
+      
+      BUG: 135307
+
+2006-10-07 10:32  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: It
+      is a matter of definition where begins the extension and what
+      "should" be done,
+      but I agree for image file formats the common case is to use the
+      last period.
+      
+      BUG: 135236
+
+2006-10-05 08:56  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcraw.c: digikam
+      from trunk : backport last dcraw implementation 8.39
+
+2006-10-05 08:51  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp: fix
+      i18n
+
+2006-10-05 05:50  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: no want
+      final here
+
+2006-10-04 20:39  cgilles
+
+    * trunk/extragear/graphics/digikam/TODO: update
+
+2006-10-04 20:35  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam.lsm: beta3
+
+2006-10-04 20:34  cgilles
+
+    * trunk/extragear/graphics/digikam/version.h: beta3
+
+2006-10-04 20:10  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/albumdb.cpp,
+      trunk/extragear/graphics/digikam/digikam/albumdb.h,
+      trunk/extragear/graphics/digikam/digikam/scanlib.cpp: digikam
+      from trunk : first step to tag new pictures automaticly during
+      startup, import, or when "scan for new items" is invoqued for
+      album gui.
+      
+      This commit check IPTC keywords contents to tag pictures in
+      database only if the tag already exist. This commit is not
+      intrusive to database. No new tag is created.
+      
+      A second step will be done to create new tags if current
+      keywords are not found in database. This way is intrusive to
+      tags DB table and the implementation need to be checked indeep
+      to prevent indeep problems. Still TODO.
+      
+      Note to digikam users: i need Jpeg pictures to test :
+      
+      - witch have been tagged using digikam and tags saved in IPTC
+      keywords.
+      - witch have been tagged to IPTC keywords using another
+      application (linux, mac, win32).
+      
+      The digikam tags are saved to IPTC keywords using a separated
+      '/' like this:
+      
+      Countries/France
+      City/Paris/Monuments
+      Countries/GB
+      City/London/Monuments
+      
+      Thanks in advance for your help
+      
+      CCMAIL: digikam-devel@kde.org, digikam-users@kde.org
+
+2006-10-04 10:21  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      digikam from trunk : bugfix in altitude and longitude decoding
+
+2006-10-04 08:35  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      improve precision
+
+2006-10-04 08:11  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/exifwidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/iptcwidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/makernotewidget.cpp:
+      digikam from trunk : strings from Exiv2 to render metadata
+      content are ascii, not local 8 bits formated. If we use a linux
+      dist using UTF8 encoding (like Suse 10.1 for ex.), some
+      characters can be wrongly decoded.
+      
+      CCBUGS: 132244
+
+2006-10-03 13:41  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS,
+      trunk/extragear/graphics/digikam/digikam/albumsettings.cpp:
+      Change default value.
+      
+      I think this option was added a long time ago because of user
+      request, so I dont remove it now.
+      
+      BUG: 134761
+
+2006-10-03 12:25  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/scanlib.cpp: digikam
+      from trunk : fix possible broken compilation using gcc > 4.1
+
+2006-10-03 11:39  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-03 11:21  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/cietonguewidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/cietonguewidget.h,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.h:
+      Stop blink timer when ICC data is loaded
+      (Previously, the timer would run and triggered a full repaint
+      every 200ms)
+      
+      BUG:134869
+
+2006-10-03 11:08  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      digikam from trunk : Exiv2 interface : fix lat/lon/alt GPS ref
+      extraction
+
+2006-10-03 10:46  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-03 10:34  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: digikam
+      from trunk : fix broken digikamdcraw binary compilation with
+      unsermake. Automake still supported of course.
+      Thanks to Andras Mantia for this investiguations.
+
+2006-10-03 07:34  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      digikam from trunk : fix broken GPS location decoding using
+      current Exiv2 implementation.
+      
+      in GPSWidget, GPS location decoding use now common method from
+      DMetadata without using the rational values from tags (not
+      decoded strings)
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-10-03 07:08  amantia
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: The
+      right fix, but please test.
+      
+      CCMAIL: caulier.gilles@kdemail.net
+
+2006-10-03 05:50  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: Fix
+      broken compilation. Work fine with automake/autoconf !
+
+2006-10-02 19:42  amantia
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: Dirk
+      says, I shoudl use AM_CFLAGS.
+
+2006-10-02 19:02  amantia
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: I need
+      this for unsermake.
+
+2006-10-02 09:47  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-02 09:46  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupidentity.cpp:
+      digikam from trunk : Use a QValidator to limit string
+      characters to all printable ASCII char.
+      BUG: 134841
+
+2006-10-01 18:01  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-10-01 17:59  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/Makefile.am: digikam
+      from trunk : fix broken compilation under Gentoo.
+      BUG: 134924
+
+2006-09-30 13:03  mwiesweg
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp:
+      Make compile on KDE <3.4
+
+2006-09-28 15:17  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiescolorstab.cpp:
+      Fix some strings in Colors Tab
+
+2006-09-28 15:15  mwiesweg
+
+    * trunk/extragear/graphics/digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/imageplugins/imagewidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      Fix some strings in widgets/
+
+2006-09-28 15:14  mwiesweg
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_autocorrection.cpp,
+      
+      trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp,
+      
+      trunk/extragear/graphics/digikam/imageplugins/imageplugin_core.cpp:
+      Fix some strings in imageplugins/
+
+2006-09-28 15:13  mwiesweg
+
+    * trunk/extragear/graphics/digikam/showfoto/setup/setupeditor.cpp,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.cpp,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/tools/imageprint.cpp:
+      Fix some strings in showfoto and IE
+
+2006-09-28 15:12  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/gpcamera.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/umscamera.cpp:
+      Fix some strings in cameraUI
+
+2006-09-28 15:10  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/dcrawsettingswidget.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setup.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setupmetadata.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setuptooltip.cpp:
+      Fix some strings in setup/
+
+2006-09-28 11:02  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      fix typo : "Ex." ==> "E.g.:"
+
+2006-09-28 10:52  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-28 07:56  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      fix typo
+
+2006-09-28 07:53  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/filters/bcgmodifier.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/dimg/filters/bcgmodifier.h,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/dcrawsettingswidget.cpp:
+      fix typo
+
+2006-09-27 21:15  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-27 21:14  cgilles
+
+    * trunk/extragear/graphics/digikam/README: bye bye dcraw depency
+
+2006-09-27 14:48  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      fix extraction of GPS altitude value
+
+2006-09-27 09:02  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am: add
+      comments
+
+2006-09-26 11:40  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupidentity.cpp:
+      fix i18n
+
+2006-09-26 09:59  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupidentity.cpp:
+      digikam from trunk: limit IPTC photograph ID strings to ascii
+      char only
+
+2006-09-25 18:33  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+      backport new GPS set/get api from kipi-plugins
+
+2006-09-25 17:28  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+      using digikamdcraw binary instead dcraw
+
+2006-09-25 14:38  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-25 14:05  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.h:
+      compile
+
+2006-09-25 14:02  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.h:
+      polish
+
+2006-09-25 14:02  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/widgets/metadata/gpswidget.cpp:
+      polish
+
+2006-09-25 12:10  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/folderitem.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp: Fix
+      two subtle but annoying bugs in TagFilterView:
+      
+      - all items are CheckBoxControllers.
+      Children-less controller items will enter the NoChange state
+      after first click,
+      so a second click is necessary to make the filter take effect.
+      Set state to On directly in this case
+      - draw the checkbox three pixels to the right, as expected by Qt
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-25 11:52  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/albumiconview.cpp: -
+      don't remove items from pixmap cache upon filtering.
+      One mouse click later, they may be needed again.
+      - remove items from LoadingCache when they were changed
+      (by KIPI plugin, e.g. JPEGLossLess.
+      TODO: invalidate preview as well
+
+2006-09-25 11:25  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      - avoid calling finishDialog twice (there is an event loop
+      called from ScanLib!)
+      - add status message for Scanlib scan
+      - do not call slotItemsSelected from slotDownloaded, avoid
+      loading files twice (for Exif)
+      - allow "Download All" option when camera file names are used -
+      easy default, not confusing
+      - get default name from iconview if necessary
+
+2006-09-25 11:21  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dcraw/dcraw.c: digikam
+      from trunk : prepare to use an embedded dcraw binary version
+      into digiKam
+      
+      This is want mean that we can remove the external dcraw depency
+      definitivly.
+      digiKAm will build and install a 'digikamdcraw' binary file
+      witch can be used instead 'dcraw'
+      
+      This way will solve all bug reported from users about
+      uncompatible dcraw command options.
+      When we want to update dcraw in digiKam, we just need to update
+      the dcraw.c and test the
+      compatibility with all options used by digiKAm core.
+      
+      To digikam team : please let's me here if this way is right for
+      you. Thanks in advance.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-25 11:20  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/imagepluginloader.cpp:
+      Add error message if loading failed
+
+2006-09-25 11:20  mwiesweg
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+      Remove double negation
+
+2006-09-25 07:54  cgilles
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/libs/widgets/metadata/metadatawidget.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/setupicc.cpp:
+      digikam from trunk : fix i18n
+      
+      BUG: 127946
+
+2006-09-23 20:47  cgilles
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+      digikam from trunk : CM plugin : missing to save/restore "Over
+      Exposure Indicator" option between sessions
+
+2006-09-22 14:37  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-22 13:31  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp,
+      trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.h:
+      just backport set/get GPS position methods from kipi Exiv2
+      interface
+
+2006-09-22 12:38  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-22 09:01  cgilles
+
+    * trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+      missing i18n
+
+2006-09-22 08:53  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: missing
+      i18n
+
+2006-09-21 12:58  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-21 12:15  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      missing to set Exif.Image.DateTime
+
+2006-09-21 06:35  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/animwidget.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameracontroller.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderdialog.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/camerafolderview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp,
+      trunk/extragear/graphics/digikam/utilities/cameragui/mtqueue.h,
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      digikam from trunk : fix camera gui dialog:
+      
+      - fix minimum size of camera icon view to prevent large window
+      size of camera gui dialog. This one is too large for small
+      screen resolutions.
+      - Use a QToolBox widget to stack all download settings area.
+      This way optimize settings widgets space used in sidebar. The
+      dialog will remember witch last settings area have been used
+      betbeen camera gui sessions.
+      - fix .moc rules (one .moc include missing).
+      - fix i18n.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-20 20:10  mwiesweg
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-20 20:06  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.h:
+      Allow to configure date & time format.
+      Choice is Standard (previous default), Iso, User readable, Local
+      settings, Advanced.
+      Advanced allows to specify the format in QDateTime syntax.
+      
+      BUG: 134224
+
+2006-09-20 08:32  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp: fix
+      minimum dcraw release number
+
+2006-09-20 08:32  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-20 08:30  cgilles
+
+    * trunk/extragear/graphics/digikam/README,
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/rawloader.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/dimg/rawdecodingsettings.h,
+      
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+      trunk/extragear/graphics/digikam/utilities/setup/Makefile.am,
+      trunk/extragear/graphics/digikam/utilities/setup/dcrawsettingswidget.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/dcrawsettingswidget.h,
+      
+      trunk/extragear/graphics/digikam/utilities/setup/setupiofiles.cpp:
+      digikam from trunk : update dcraw depency to at least 8.16
+      release.
+      
+      - backport dcraw settings widget from kipi raw converter plugin.
+      - using this settings widget to setup io files.
+      - new options set from most recent dcraw release are now
+      availlable.
+      - update Rawloader options. Remove old/obsolete/unused dcraw
+      options.
+      
+      BUG: 134091
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-19 21:12  cgilles
+
+    * trunk/extragear/graphics/digikam/PACKAGING: update
+
+2006-09-19 20:07  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dimg/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dimg/dimgloader.cpp,
+      trunk/extragear/graphics/digikam/libs/dimg/dimgloader.h,
+      trunk/extragear/graphics/digikam/libs/dimg/dimgloaderobserver.h,
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/Makefile.am,
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/dimgloader.cpp,
+      
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/dimgloader.h,
+      trunk/extragear/graphics/digikam/libs/dimg/loaders/dimgloaderobserver.h,
+      
+      trunk/extragear/graphics/digikam/libs/threadimageio/Makefile.am:
+      digikam from trunk : fix exception rules in makefile.am about
+      exiv2/DMetadata.
+      CCBUGS: 134351
+
+2006-09-19 14:36  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.cpp,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraiconview.h,
+      
+      trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      Cam GUI:
+      - Remove "flicker" of settings tab
+      - make keyboard navigation possible again
+      
+      Flicker was caused from two sides:
+      - handling of signalChanged from RenameCustomizer
+      and signalSelectionChanged from IconView was entangled in one
+      method,
+      slotDownloadNamesChanged. Splitting that up, no
+      signalNewSelection is
+      emitted any more in response to a signalChanged
+      - Fast dis/enabling will create the impression of flicker and
+      lose focus (127614)
+      Only disable now when downloading.
+      Previously, signalSelected -> getExif -> slotBusy (disable
+      tab),
+      when Exif is ready -> slotBusy (enable tab)
+      
+      CC'ing 127614 because this explains the reason for the reported
+      bug, and
+      because I removed the restoreFocus again, which broke keyboard
+      navigation, but does not seem to be needed any more.
+      
+      CCBUG: 127614
+
+2006-09-19 11:58  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/renamecustomizer.cpp:
+      Change postfix -> suffix,
+      some language changes
+
+2006-09-19 11:46  scripty
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamdates.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikampreview.protocol,
+      
+      trunk/extragear/graphics/digikam/kioslave/digikamsearch.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamtags.protocol,
+      trunk/extragear/graphics/digikam/kioslave/digikamthumbnail.protocol,
+      
+      trunk/extragear/graphics/digikamimageplugins/hotpixels/digikamimageplugin_hotpixels.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-09-19 03:56  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-18 20:16  mwiesweg
+
+    * trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp:
+      Provide the UDS_LOCAL_PATH entry.
+      Now the KDE replace file dialog will no longer think
+      digikamalbums:/ is a remote file.
+      
+      CCBUG: 122653
+
+2006-09-18 20:14  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/dio.cpp: Fix renaming
+      for images in directories which contain "#"
+      (Default KURL constructor requires escaped URLs, not paths - use
+      setDirectory, setPath, addPath)
+
+2006-09-18 19:31  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      English
+
+2006-09-18 11:40  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/infrared/digikamimageplugin_infrared.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/lensdistortion/digikamimageplugin_lensdistortion.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/noisereduction/digikamimageplugin_despeckle.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/perspective/digikamimageplugin_perspective.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/refocus/digikamimageplugin_refocus.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/restoration/digikamimageplugin_restoration.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/solarize/digikamimageplugin_solarize.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/texture/digikamimageplugin_texture.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/unsharp/digikamimageplugin_unsharp.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/whitebalance/digikamimageplugin_whitebalance.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-09-18 11:25  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+      digikam from trunk : bug fix : Set Exif orientation tag during
+      download from camera or using Album Gui
+      
+      - instead to fix the Minolta makernote Rotation tag to the right
+      orientation value, we will remove it. No need to duplicate
+      values with standard Exif Orientation tags.
+      
+      - Fix a bug witch do not write the tag in exif when Exif
+      orientation tag is fixed (we works on a copy of exif data (:=))).
+      
+      CCMAIL: digikam-devel@kde.org
+
+2006-09-18 11:13  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp: fix
+      typo
+
+2006-09-17 19:05  cgilles
+
+    * trunk/extragear/graphics/digikam/NEWS: update
+
+2006-09-16 20:15  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/albumthumbnailloader.cpp,
+      
+      trunk/extragear/graphics/digikam/digikam/albumthumbnailloader.h,
+      trunk/extragear/graphics/digikam/digikam/syncjob.cpp,
+      trunk/extragear/graphics/digikam/digikam/syncjob.h,
+      trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+      trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+      Cache tag thumbnails
+      - add a cache (actually it is a QMap) to AlbumThumbnailLoader
+      - add a method to SyncJob to load icon for a TAlbum, using the
+      AlbumThumbnailLoader
+      - use this in TagPopupMenu
+      
+      BUG: 134013
+
+2006-09-16 20:03  mwiesweg
+
+    * trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+      trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp: Load
+      standard tag icons initially for the time while the real icons
+      are being loaded
+      (as already done by albumfolderview)
+
+2006-09-16 20:00  mwiesweg
+
+    * trunk/extragear/graphics/digikam/utilities/imageeditor/canvas/dimginterface.cpp:
+      Fix "Revert" action in IE.
+      (Nice example what a const QString& actually means)
+
+2006-09-14 12:25  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp:
+      init pointer to 0
+
+2006-09-14 12:20  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp:
+      init pointer to 0
+
+2006-09-14 12:16  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawpreview.cpp:
+      init pointer to 0
+
+2006-09-14 10:02  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/cameragui/cameraui.cpp:
+      fix i18n
+
+2006-09-14 10:00  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp:
+      fix i18n
+
+2006-09-14 09:58  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/cameraselection.cpp:
+      fix i18n
+
+2006-09-14 09:55  cgilles
+
+    * trunk/extragear/graphics/digikam/utilities/setup/setupgeneral.cpp:
+      fix i18n
+
+2006-09-14 09:52  cgilles
+
+    * trunk/extragear/graphics/digikam/showfoto/showfoto.cpp: fix i18n
+
+2006-09-14 09:49  cgilles
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp: fix
+      internal methods call
+
+2006-09-13 11:40  scripty
+
+    * trunk/extragear/graphics/digikam/digikam/digikam.desktop,
+      trunk/extragear/graphics/digikam/imageplugins/digikamimageplugin_core.desktop,
+      trunk/extragear/graphics/digikam/showfoto/showfoto.desktop,
+      trunk/extragear/graphics/digikam/utilities/imageeditor/editor/digikamimageplugin.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/antivignetting/digikamimageplugin_antivignetting.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blowup/digikamimageplugin_blowup.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/border/digikamimageplugin_border.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/emboss/digikamimageplugin_emboss.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      
+      trunk/extragear/graphics/digikamimageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      trunk/extragear/graphics/showimg/showimgapp/showimg.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2006-09-11 19:03  ach
+
+    * trunk/extragear/graphics/digikam/libs/dcraw/dcrawbinary.cpp:
+      digikam trunk: typo s/require/required/
+
 v0.9.0-beta2 - 09/09/2006
 ----------------------------------------------------------------------------
 
