@@ -1303,7 +1303,6 @@ bool DMetadata::setImageRating(int rating)
     return false;
 }
 
-// Warning: this method haven't be tested yet!
 QStringList DMetadata::getImageKeywords() const
 {
     try
