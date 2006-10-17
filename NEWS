@@ -11,7 +11,7 @@ General       : Ported all image filter algorithms to new DImg API. Support of 1
 General       : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, 
                 and GPS locator.
 General       : New ICC profiles profile viewer based on LCMS.
-General       : New powerfull widget to display CIE color space used by ICC profiles.
+General       : New powerful widget to display CIE color space used by ICC profiles.
 General       : New implementation to load/save images file using a separate thread.
 General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif 
                 and/or IPTC metadata tags.
