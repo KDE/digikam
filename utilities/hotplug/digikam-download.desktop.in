@@ -1,8 +1,0 @@
-[Desktop Action digiKam Download]
-Exec=@digikamhelper_dir@/digikam-camera storage %u
-Icon=digikam
-Name=digiKam Download
-
-[Desktop Entry]
-Actions=digiKam Download
-ServiceTypes=media/removable_mounted,media/camera_mounted
