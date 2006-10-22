@@ -312,6 +312,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 184 ==> 103255 : Add (not edit) EXIF headers like date, comment etc.
 185 ==> 91812  : Viewer/editor for IPTC meta data.
 186 ==> 136138 : set as album thumbnail doesn't change the icon immediately.
-187 ==> 
+187 ==> 135851 : Wish to view IPTC in different order.
+188 ==> 
 
 ----------------------------------------------------------------------------------------------------
