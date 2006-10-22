@@ -309,6 +309,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM B.K.O (http://bugs.kde.org):
 
 *** 0.9.0-rc **********************************************************
 
-184 ==> 
+184 ==> 103255 : Add (not edit) EXIF headers like date, comment etc.
+185 ==> 91812  : viewer/editor for IPTC meta data.
 
 ----------------------------------------------------------------------------------------------------
