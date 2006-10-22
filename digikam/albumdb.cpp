@@ -473,9 +473,9 @@ QString AlbumDB::getAlbumIcon(int albumID)
     QStringList values;
     execSql( QString("SELECT B.url, I.name \n "
                      "FROM Albums AS A \n "
-                     "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
+                     "  LEFT OUTER JOIN Images AS I ON I.id=A.icon \n "
                      "  LEFT OUTER JOIN Albums AS B ON B.id=I.dirid \n "
-                     "WHERE T.id=%1;")
+                     "WHERE A.id=%1;")
              .arg(albumID), &values );
     if (values.isEmpty())
         return QString();
