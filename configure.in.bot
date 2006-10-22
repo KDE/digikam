@@ -16,14 +16,14 @@ else
 fi
 
 if test -z "$GPHOTO_CONFIG" ; then
-  echo "-- gphoto2 found.................. NO"
+  echo "-- libgphoto2 found............... NO"
   echo ""
-  echo "digiKam needs gPhoto2. You need to install gPhoto2, e.g. from"
+  echo "digiKam needs libgphoto2. You need to install libgphoto2, e.g. from"
   echo "http://www.gphoto.org/download.html"
   echo ""
   all_tests=bad
 else
-  echo "-- gphoto2 found.................. YES"
+  echo "-- libgphoto2 found............... YES"
 fi
 
 if test "x$have_libkipi" != "xyes"; then
