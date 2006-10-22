@@ -105,6 +105,10 @@ General       : Removing external dcraw depency. Now digiKam include a full supp
 CameraGUI     : New advanced config dialog to set date/time format used to rename camera pictures
                 file name during download.
 
+*** 0.9.0-rc **********************************************************
+
+General       : New kipi plugin to edit EXIF and IPTC metadata (available with next kipi-plugins 0.1.3).
+
 ...
 
 ----------------------------------------------------------------------------------------------------
@@ -302,6 +306,9 @@ digiKam/DigikamImagePlugins BUGFIX FROM B.K.O (http://bugs.kde.org):
 181 ==> 125727 : digiKam open with of raw file only shows application for octet-stream.
 182 ==> 135430 : Typo automaticly should be automatically in raw image converter.
 183 ==> 135060 : Folders without pictures in it cannot be assigned icons
+
+*** 0.9.0-rc **********************************************************
+
 184 ==> 
 
 ----------------------------------------------------------------------------------------------------
