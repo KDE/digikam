@@ -51,7 +51,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include <exiv2/tags.hpp>
 #include <exiv2/exif.hpp>
-#include <exiv2/exiv2_version.h>
 
 // Local includes.
 
