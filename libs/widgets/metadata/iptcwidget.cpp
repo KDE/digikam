@@ -49,20 +49,18 @@ namespace Digikam
 
 static const char* IptcHumanList[] =
 {
-     "Headline",
-     "Source",
-     "DateCreated",
      "Caption",
+     "City",
+     "Contact",
      "Copyright",
      "Credit",
-     "Contact",
-     "Source",
-     "Writer",
-     "Copyright",
-     "Program",
-     "ProgramVersion",
+     "DateCreated",
+     "Headline",
      "Keywords",
+     "ProvinceState",
+     "Source",
      "Urgency",
+     "Writer",
      "-1"
 };
 
