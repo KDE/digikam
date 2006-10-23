@@ -78,7 +78,7 @@ ImageEffect_FilmGrain::ImageEffect_FilmGrain(QWidget* parent, QString title, QFr
 
     QWidget *gboxSettings = new QWidget(m_imagePreviewWidget);
     QGridLayout* gridSettings = new QGridLayout( gboxSettings, 1, 1, 0, spacingHint());
-    QLabel *label1 = new QLabel(i18n("Sensibility (ISO):"), gboxSettings);
+    QLabel *label1 = new QLabel(i18n("Sensitivity (ISO):"), gboxSettings);
 
     m_sensibilitySlider = new QSlider(2, 30, 1, 12, Qt::Horizontal, gboxSettings);
     m_sensibilitySlider->setTracking ( false );
