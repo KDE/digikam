@@ -235,13 +235,13 @@ void ImagePlugin_Core::slotConvertTo8Bits()
 
     if (!iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This picture is already using a depth of 8 bits / color / pixel!"));
+       KMessageBox::error(parentWidget(), i18n("This picture is already using a depth of 8 bits / color / pixel."));
        return;
     }
     else
     {
        if (KMessageBox::warningContinueCancel(parentWidget(),
-                                              i18n("Performing this operation will reduce image color quality! "
+                                              i18n("Performing this operation will reduce image color quality. "
                                                    "Do you want to continue?")) == KMessageBox::Cancel)
            return;
     }
@@ -257,7 +257,7 @@ void ImagePlugin_Core::slotConvertTo16Bits()
     
     if (iface.originalSixteenBit())
     {
-       KMessageBox::error(parentWidget(), i18n("This picture is already using a depth of 16 bits / color / pixel!"));
+       KMessageBox::error(parentWidget(), i18n("This picture is already using a depth of 16 bits / color / pixel."));
        return;
     }
     

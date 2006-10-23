@@ -1202,7 +1202,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\"!")
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
                                 .arg(m_savingContext->destinationURL.filename())
                                 .arg(m_savingContext->destinationURL.path()));
             }
@@ -1243,7 +1243,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext->abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\"!")
+                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".")
                                 .arg(m_savingContext->destinationURL.filename())
                                 .arg(m_savingContext->destinationURL.path()));
             }
