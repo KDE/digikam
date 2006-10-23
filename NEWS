@@ -313,6 +313,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 185 ==> 91812  : Viewer/editor for IPTC meta data.
 186 ==> 136138 : set as album thumbnail doesn't change the icon immediately.
 187 ==> 135851 : Wish to view IPTC in different order.
-188 ==> 
+188 ==> 136162 : ISO Slider label is incorrectly labeled as "sensibility", should be sensitivity.
+189 ==> 
 
 ----------------------------------------------------------------------------------------------------
