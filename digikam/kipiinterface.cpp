@@ -62,6 +62,7 @@ extern "C"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
 #include "kipiinterface.h"
+#include "kipiinterface.moc"
 
 namespace Digikam
 {
@@ -597,6 +598,13 @@ KIPI::ImageInfo DigikamKipiInterface::info( const KURL& url )
 
 void DigikamKipiInterface::refreshImages( const KURL::List& urls )
 {
+    KURL::List ulist = urls;
+
+    // Re-scan metadata from pictures. This way will update Metadata sidebar and database.
+    for ( KURL::List::Iterator it = ulist.begin() ; it != ulist.end() ; ++it )
+        ImageAttributesWatch::instance()->fileMetadataChanged(*it);
+    
+    // Refresh preview.
     albumManager_->refreshItemHandler(urls);
 }
 
@@ -684,6 +692,4 @@ QString DigikamKipiInterface::fileExtensions()
 }
 
 }  // namespace Digikam
-
-#include "kipiinterface.moc"
 
