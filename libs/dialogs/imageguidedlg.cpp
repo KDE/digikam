@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : imageguidedlg.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-05-07
  * Description : A threaded filter plugin dialog with a preview
@@ -57,6 +56,7 @@
 #include "dimgthreadedfilter.h"
 #include "dimginterface.h"
 #include "imageguidedlg.h"
+#include "imageguidedlg.moc"
 
 namespace Digikam
 {
@@ -196,14 +196,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
 
     // -------------------------------------------------------------
 
-    d->settings       = new QWidget(plainPage());
-    d->settingsLayout = new QGridLayout( d->settings, 1, 0);
+    d->settings          = new QWidget(plainPage());
+    d->settingsLayout    = new QGridLayout( d->settings, 1, 0);
     QVBoxLayout *vLayout = new QVBoxLayout( spacingHint() );
     
     // -------------------------------------------------------------
 
     QWidget *gboxGuideSettings = new QWidget(d->settings);
-    QGridLayout* grid          = new QGridLayout( gboxGuideSettings, 2, 2, 0, spacingHint());
+    QGridLayout* grid          = new QGridLayout( gboxGuideSettings, 2, 2, marginHint(), spacingHint());
     KSeparator *line           = new KSeparator (Horizontal, gboxGuideSettings);
     grid->addMultiCellWidget(line, 0, 0, 0, 2);
 
@@ -211,13 +211,14 @@ ImageGuideDlg::ImageGuideDlg(QWidget* parent, QString title, QString name,
     d->guideColorBt = new KColorButton( QColor( Qt::red ), gboxGuideSettings );
     QWhatsThis::add( d->guideColorBt, i18n("<p>Set here the color used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label5, 1, 1, 0, 0);
-    grid->addMultiCellWidget(d->guideColorBt, 1, 1, 1, 2);
+    grid->addMultiCellWidget(d->guideColorBt, 1, 1, 2, 2);
 
     QLabel *label6 = new QLabel(i18n("Guide width:"), gboxGuideSettings);
     d->guideSize   = new QSpinBox( 1, 5, 1, gboxGuideSettings);
     QWhatsThis::add( d->guideSize, i18n("<p>Set here the width in pixels used to draw guides dashed-lines."));
     grid->addMultiCellWidget(label6, 2, 2, 0, 0);
-    grid->addMultiCellWidget(d->guideSize, 2, 2, 1, 2);
+    grid->addMultiCellWidget(d->guideSize, 2, 2, 2, 2);
+    grid->setColStretch(1, 10);
 
     if (guideVisible) gboxGuideSettings->show();
     else gboxGuideSettings->hide();
@@ -564,5 +565,3 @@ void ImageGuideDlg::keyPressEvent(QKeyEvent *e)
 }
 
 }  // NameSpace Digikam
-
-#include "imageguidedlg.moc"
