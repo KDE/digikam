@@ -90,6 +90,7 @@
 #include "batchthumbsgenerator.h"
 #include "digikamview.h"
 #include "digikamapp.h"
+#include "digikamapp.moc"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -123,7 +124,7 @@ DigikamApp::DigikamApp()
     mAlbumManager = AlbumManager::instance();
     AlbumLister::instance();
 
-    mCameraMediaList = new QPopupMenu;
+    mCameraMediaList = new KPopupMenu;
 
     connect(mCameraMediaList, SIGNAL( aboutToShow() ),
             this, SLOT(slotCameraMediaMenu()));
@@ -1261,8 +1262,8 @@ void DigikamApp::slotCameraMediaMenu()
     mMediaItems.clear();
     
     mCameraMediaList->clear();
-    mCameraMediaList->insertItem(i18n("No Media Devices Found"),1);
-    mCameraMediaList->setItemEnabled(1,false);
+    mCameraMediaList->insertItem(i18n("No Media Devices Found"), 0);
+    mCameraMediaList->setItemEnabled(0, false);
         
     KURL kurl("media:/");
     KIO::ListJob *job = KIO::listDir(kurl, false, false);
@@ -1275,12 +1276,12 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
 {
     int i = 0;
 
-    for(KIO::UDSEntryList::ConstIterator it = list.begin() ; it!=list.end() ; ++it)
+    for(KIO::UDSEntryList::ConstIterator it = list.begin() ; it != list.end() ; ++it)
     {
         QString name;
         QString path;
 
-        for ( UDSEntry::const_iterator et = (*it).begin() ; et !=   (*it).end() ; ++et ) 
+        for ( UDSEntry::const_iterator et = (*it).begin() ; et != (*it).end() ; ++et ) 
         {
             if ( (*et).m_uds == KIO::UDS_NAME)
                 name = ( *et ).m_str;
@@ -1651,4 +1652,3 @@ void DigikamApp::slotRebuildAllThumbsDone()
 
 }  // namespace Digikam
 
-#include "digikamapp.moc"

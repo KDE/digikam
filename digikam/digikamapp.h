@@ -51,6 +51,7 @@ class KActionMenu;
 class KToolBarPopupAction;
 class KSelectAction;
 class KConfig;
+class KPopupMenu;
 
 namespace KIPI
 {
@@ -59,6 +60,7 @@ class PluginLoader;
 
 namespace Digikam
 {
+
 class ImagePluginLoader;
 class AlbumManager;
 class PluginLoader;               //   For KIPI pluggins support.
@@ -174,10 +176,11 @@ private:
     QPtrList<KAction>      m_kipiBatchActions;
     QPtrList<KAction>      m_kipiAlbumActions;
 
-    QPopupMenu            *mCameraMediaList;
     QMap<int, QString>     mMediaItems;
 
     QString                mCameraGuiPath;
+
+    KPopupMenu            *mCameraMediaList;
 
     KAccel                *m_accelerators;
 
