@@ -138,8 +138,8 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 
 void DImgThreadedFilter::startComputation()
 {
-    kdDebug() << m_name
-              << "::Start of computation... " << endl;
+    /*kdDebug() << m_name
+              << "::Start of computation... " << endl;*/
               
     QDateTime startDate = QDateTime::currentDateTime();
     
@@ -155,18 +155,18 @@ void DImgThreadedFilter::startComputation()
        if (m_parent)
           postProgress(0, false, true);
           
-       kdDebug() << m_name
+/*       kdDebug() << m_name
                  << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" 
-                 << endl;
+                 << endl;*/
     }
     else
     {
        if (m_parent)
           postProgress(0, false, false);
           
-       kdDebug() << m_name
+/*       kdDebug() << m_name
                  << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" 
-                 << endl;
+                 << endl;*/
     }
 }
 
