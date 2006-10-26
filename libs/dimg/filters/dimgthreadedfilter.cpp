@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : dimgthreadedfilter.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-05-25
  * Description : threaded image filter class.
@@ -24,6 +23,7 @@
 #include <qobject.h>
 #include <qdatetime.h> 
 #include <qevent.h>
+#include <qdeepcopy.h>
 
 // KDE includes.
 
@@ -36,34 +36,42 @@
 namespace Digikam
 {
 
-DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, QString name)
+DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent, 
+                                       const QString& name)
                   : QThread()
 {
     // remove meta data
-    m_orgImage = orgImage->copyImageData();
-    m_parent   = parent;
-    m_cancel   = false;
-    m_name     = name;
+    m_orgImage      = orgImage->copyImageData();
+    m_parent        = parent;
+    m_cancel        = false;
 
-    m_master   = 0;
-    m_slave    = 0;
+    // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
+    // on Hyperthreading computer.
+    m_name          = QDeepCopy<QString>(name);
+
+    m_master        = 0;
+    m_slave         = 0;
     m_progressBegin = 0;
     m_progressSpan  = 100;
 }
 
-DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, const DImg &destImage,
-                                       int progressBegin, int progressEnd, QString name)
+DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage, 
+                                       const DImg &destImage, int progressBegin, int progressEnd, 
+                                       const QString& name)
 {
-    m_orgImage  = orgImage;
-    m_destImage = destImage;
-    m_parent    = 0;
-    m_cancel    = false;
-    m_name      = name;
+    m_orgImage      = orgImage;
+    m_destImage     = destImage;
+    m_parent        = 0;
+    m_cancel        = false;
 
-    m_master    = master;
-    m_slave     = 0;
+    // See B.K.O #133026: make a deep copy of Qstring to prevent crash 
+    // on Hyperthreading computer.
+    m_name          = QDeepCopy<QString>(name);
+
+    m_master        = master;
+    m_slave         = 0;
     m_progressBegin = progressBegin;
-    m_progressSpan = progressEnd - progressBegin;
+    m_progressSpan  = progressEnd - progressBegin;
 
     m_master->setSlave(this);
 }
@@ -74,8 +82,6 @@ DImgThreadedFilter::~DImgThreadedFilter()
     if (m_master)
         m_master->setSlave(0);
 }
-
-
 
 void DImgThreadedFilter::initFilter(void)
 {
@@ -123,9 +129,9 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
     else if (m_parent)
     {
        EventData *eventData = new EventData();
-       eventData->progress = progress;
-       eventData->starting = starting;
-       eventData->success  = success;
+       eventData->progress  = progress;
+       eventData->starting  = starting;
+       eventData->success   = success;
        QApplication::postEvent(m_parent, new QCustomEvent(QEvent::User, eventData));
     }
 }
@@ -150,7 +156,8 @@ void DImgThreadedFilter::startComputation()
           postProgress(0, false, true);
           
        kdDebug() << m_name
-                 << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" << endl;
+                 << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" 
+                 << endl;
     }
     else
     {
@@ -158,7 +165,8 @@ void DImgThreadedFilter::startComputation()
           postProgress(0, false, false);
           
        kdDebug() << m_name
-                 << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" << endl;
+                 << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" 
+                 << endl;
     }
 }
 
