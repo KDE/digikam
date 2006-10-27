@@ -21,7 +21,6 @@
 // Qt includes.
 
 #include <qobject.h>
-#include <qdatetime.h> 
 #include <qevent.h>
 #include <qdeepcopy.h>
 
@@ -138,35 +137,23 @@ void DImgThreadedFilter::postProgress(int progress, bool starting, bool success)
 
 void DImgThreadedFilter::startComputation()
 {
-    /*kdDebug() << m_name
-              << "::Start of computation... " << endl;*/
-              
-    QDateTime startDate = QDateTime::currentDateTime();
-    
+    // See B.K.O #133026: do not use kdDebug() statements in threaded implementation
+    // to prevent crash under Hyperthreaded CPU.
+
     if (m_parent)
        postProgress(0, true, false);
 
     filterImage();
     
-    QDateTime endDate = QDateTime::currentDateTime();    
-    
     if (!m_cancel)
     {
        if (m_parent)
           postProgress(0, false, true);
-          
-/*       kdDebug() << m_name
-                 << "::End of computation !!! ... ( " << startDate.secsTo(endDate) << " s )" 
-                 << endl;*/
     }
     else
     {
        if (m_parent)
           postProgress(0, false, false);
-          
-/*       kdDebug() << m_name
-                 << "::Computation aborted... ( " << startDate.secsTo(endDate) << " s )" 
-                 << endl;*/
     }
 }
 
