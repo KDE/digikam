@@ -314,6 +314,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 186 ==> 136138 : set as album thumbnail doesn't change the icon immediately.
 187 ==> 135851 : Wish to view IPTC in different order.
 188 ==> 136162 : ISO Slider label is incorrectly labeled as "sensibility", should be sensitivity.
-189 ==> 
+189 ==> 133026 : Crashes on systems using hyperthreading.
+190 ==>
 
 ----------------------------------------------------------------------------------------------------
