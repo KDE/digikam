@@ -168,7 +168,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
             m_image->getICCProfilFromFile(directory + "srgb.icm");
-            kdDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;       
+            kdDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
             return true;
             break;
         }
