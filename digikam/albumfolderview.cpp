@@ -418,7 +418,6 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Albums"));
     popmenu.insertItem(SmallIcon("albumfoldernew"), i18n("New Album..."), 10);
-    popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
 
     AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(listitem);
     if (item && !item->getAlbum())
@@ -431,6 +430,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     if(item && item->parent())
     {
         popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Album Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
         popmenu.insertSeparator();
 
         // Add KIPI Albums plugins Actions
