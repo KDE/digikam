@@ -246,9 +246,16 @@ bool IccTransform::apply(DImg& image)
 
     kdDebug() << "intent: " << getRenderingIntent() << endl;
 
+    if (d->has_embedded_profile)
+    {
+        inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
+                                           (DWORD)d->embedded_profile.size());
+    }
+    else
+    {
     inprofile = cmsOpenProfileFromMem(d->input_profile.data(),
                                       (DWORD)d->input_profile.size());
-
+    }
     if (inprofile == NULL)
     {
         kdDebug() << "Error: Input profile is NULL" << endl;
@@ -256,16 +263,16 @@ bool IccTransform::apply(DImg& image)
         return false;
     }
 
-    if (d->has_embedded_profile)
-    {
-        outprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-                                           (DWORD)d->embedded_profile.size());
-    }
-    else
-    {
+//     if (d->has_embedded_profile)
+//     {
+//         outprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
+//                                            (DWORD)d->embedded_profile.size());
+//     }
+//     else
+//     {
         outprofile = cmsOpenProfileFromMem(d->output_profile.data(), 
                                            (DWORD)d->output_profile.size());
-    }
+//     }
 
     if (outprofile == NULL)
     {
