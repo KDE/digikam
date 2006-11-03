@@ -315,6 +315,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 187 ==> 135851 : Wish to view IPTC in different order.
 188 ==> 136162 : ISO Slider label is incorrectly labeled as "sensibility", should be sensitivity.
 189 ==> 133026 : Crashes on systems using hyperthreading.
-190 ==>
+190 ==> 136260 : Awkward management of metadata and digikam-tags and comments.
+191 ==> 
 
 ----------------------------------------------------------------------------------------------------
