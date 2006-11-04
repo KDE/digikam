@@ -74,14 +74,22 @@ namespace Digikam
 
 // To manage Errors/Warnings handling provide by libtiff
 
-void TIFFLoader::dimg_tiff_warning(const char* module, const char* fmt, va_list ap)
+void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-    kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+#ifdef ENABLE_DEBUG_MESSAGES    
+    char message[4096];
+    vsnprintf(message, 4096, format, warnings);
+    kdDebug() << module <<  "::" <<  message << endl;
+#endif
 }
 
-void TIFFLoader::dimg_tiff_error(const char* module, const char* fmt, va_list ap)
+void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-    kdDebug() << k_funcinfo << module << "::" << fmt << "::" << ap << endl;
+#ifdef ENABLE_DEBUG_MESSAGES    
+    char message[4096];
+    vsnprintf(message, 4096, format, errors);
+    kdDebug() << module << "::" << message << endl;
+#endif
 }
 
 TIFFLoader::TIFFLoader(DImg* image)
