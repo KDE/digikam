@@ -107,6 +107,7 @@ CameraGUI     : New advanced config dialog to set date/time format used to renam
 
 *** 0.9.0-rc **********************************************************
 
+General       : dcraw implementation updated to version 8.41.
 General       : New kipi plugin to edit EXIF and IPTC metadata (available with next kipi-plugins 0.1.3).
 
 ...
