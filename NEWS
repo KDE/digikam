@@ -316,7 +316,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 188 ==> 136162 : ISO Slider label is incorrectly labeled as "sensibility", should be sensitivity.
 189 ==> 133026 : Crashes on systems using hyperthreading.
 190 ==> 136260 : Awkward management of metadata and digikam-tags and comments.
-191 ==> 136769 : digikam crashes when resetting Album icon (with no album selected)
-192 ==>
+191 ==> 136769 : digiKam crashes when resetting Album icon (with no album selected)
+192 ==> 136749 : Tags are not kept with images when album is moved in album hierarchy.
+193 ==>
 
 ----------------------------------------------------------------------------------------------------
