@@ -319,6 +319,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 190 ==> 136260 : Awkward management of metadata and digikam-tags and comments.
 191 ==> 136769 : digiKam crashes when resetting Album icon (with no album selected)
 192 ==> 136749 : Tags are not kept with images when album is moved in album hierarchy.
-193 ==>
+193 ==> 123623 : digiKam freezes or is very slow.
+194 ==> 
 
 ----------------------------------------------------------------------------------------------------
