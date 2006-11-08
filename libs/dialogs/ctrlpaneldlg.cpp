@@ -42,10 +42,10 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimgthreadedfilter.h"
 #include "dimginterface.h"
 #include "ctrlpaneldlg.h"
@@ -291,7 +291,7 @@ void CtrlPanelDlg::slotEffect()
         return;
 
     d->currentRenderingMode = CtrlPanelDlgPriv::PreviewRendering;
-    kdDebug() << "Preview " << d->name << " started..." << endl;
+    DDebug() << "Preview " << d->name << " started..." << endl;
 
     m_imagePreviewWidget->setEnable(false);
     m_imagePreviewWidget->setProgressVisible(true);
@@ -316,7 +316,7 @@ void CtrlPanelDlg::slotEffect()
 void CtrlPanelDlg::slotOk()
 {
     d->currentRenderingMode = CtrlPanelDlgPriv::FinalRendering;
-    kdDebug() << "Final " << d->name << " started..." << endl;
+    DDebug() << "Final " << d->name << " started..." << endl;
     saveDialogSize(d->name + QString(" Tool Dialog"));
     writeUserSettings();
 
@@ -360,7 +360,7 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
             {
               case CtrlPanelDlgPriv::PreviewRendering:
               {
-                 kdDebug() << "Preview " << d->name << " completed..." << endl;
+                 DDebug() << "Preview " << d->name << " completed..." << endl;
                  putPreviewData();
                  abortPreview();
                  break;
@@ -368,7 +368,7 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
 
               case CtrlPanelDlgPriv::FinalRendering:
               {
-                 kdDebug() << "Final" << d->name << " completed..." << endl;
+                 DDebug() << "Final" << d->name << " completed..." << endl;
                  putFinalData();
                  kapp->restoreOverrideCursor();
                  accept();
@@ -382,7 +382,7 @@ void CtrlPanelDlg::customEvent(QCustomEvent *event)
             {
                 case CtrlPanelDlgPriv::PreviewRendering:
                 {
-                    kdDebug() << "Preview " << d->name << " failed..." << endl;
+                    DDebug() << "Preview " << d->name << " failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;

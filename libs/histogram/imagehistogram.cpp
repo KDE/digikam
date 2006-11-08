@@ -35,10 +35,10 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "imagehistogram.h"
 

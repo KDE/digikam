@@ -31,11 +31,11 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"

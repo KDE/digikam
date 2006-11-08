@@ -43,7 +43,6 @@
 #include <kpopupmenu.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -54,8 +53,9 @@
 
 // Local includes.
 
-#include "kdatetimeedit.h"
+#include "ddebug.h"
 #include "dmetadata.h"
+#include "kdatetimeedit.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
 #include "albumdb.h"

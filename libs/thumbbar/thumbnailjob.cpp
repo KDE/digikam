@@ -45,10 +45,10 @@ extern "C"
 // KDE includes.
 
 #include <kglobal.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "thumbnailjob.h"
 
 namespace Digikam

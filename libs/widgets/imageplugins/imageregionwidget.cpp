@@ -36,11 +36,11 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes
 
+#include "ddebug.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 

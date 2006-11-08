@@ -30,11 +30,11 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "themeengine.h"
 #include "gpiteminfo.h"

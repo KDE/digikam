@@ -35,12 +35,9 @@
 #include <cstdlib>
 #include <cerrno>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
  
+#include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
 

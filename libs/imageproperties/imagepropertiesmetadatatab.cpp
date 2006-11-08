@@ -34,11 +34,11 @@
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kfileitem.h>
-#include <kdebug.h>
 #include <ktabwidget.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "exifwidget.h"
 #include "makernotewidget.h"

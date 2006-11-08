@@ -35,7 +35,6 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -49,6 +48,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "metadatalistview.h"
 #include "cietonguewidget.h"
 #include "iccprofilewidget.h"
@@ -250,7 +250,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        kdDebug() << "Cannot parse ICC profile tags using LCMS" << endl;
+        DDebug() << "Cannot parse ICC profile tags using LCMS" << endl;
         return false;
     }
 

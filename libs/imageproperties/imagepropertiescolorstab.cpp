@@ -42,11 +42,11 @@
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <ktabwidget.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "imagehistogram.h"
 #include "histogramwidget.h"

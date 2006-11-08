@@ -41,12 +41,12 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 
 // Digikam includes.
 
+#include "ddebug.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
 

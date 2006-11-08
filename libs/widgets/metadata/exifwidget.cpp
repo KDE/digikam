@@ -32,7 +32,6 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // LibExiv2 includes.
@@ -42,6 +41,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "metadatalistview.h"
 #include "exifwidget.h"
@@ -177,7 +177,7 @@ bool ExifWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("
+        DDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
@@ -207,7 +207,7 @@ QString ExifWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag title using Exiv2 ("
+        DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("Unknow");
@@ -224,7 +224,7 @@ QString ExifWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag description using Exiv2 ("
+        DDebug() << "Cannot get metadata tag description using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("No description available");

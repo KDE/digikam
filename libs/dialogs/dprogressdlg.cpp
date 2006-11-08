@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kprogress.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klistview.h>
@@ -40,6 +39,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "dprogressdlg.h"
 
 namespace Digikam

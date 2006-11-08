@@ -36,12 +36,12 @@
 #include <kdialogbase.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
-#include <kdebug.h>
 #include <kseparator.h>
 #include <ksqueezedtextlabel.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "navigatebarwidget.h"

@@ -37,7 +37,6 @@
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kprogress.h>
 #include <kapplication.h>
@@ -48,6 +47,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "sidebar.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"

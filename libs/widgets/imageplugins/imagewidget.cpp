@@ -33,12 +33,12 @@
 #include <kdialog.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
+#include "ddebug.h"
 #include "imagewidget.h"
 
 namespace Digikam

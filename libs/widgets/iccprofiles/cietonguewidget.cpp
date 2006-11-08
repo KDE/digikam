@@ -36,11 +36,11 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "lcmsprf.h"
 #include "cietonguewidget.h"
 

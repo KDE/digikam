@@ -19,12 +19,9 @@
  *
  * ============================================================ */
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"

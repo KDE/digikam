@@ -33,12 +33,12 @@
 #include <klocale.h>
 #include <kdialogbase.h>
 #include <kfileitem.h>
-#include <kdebug.h>
 #include <ksqueezedtextlabel.h>
 #include <kseparator.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "rawfiles.h"
 #include "navigatebarwidget.h"

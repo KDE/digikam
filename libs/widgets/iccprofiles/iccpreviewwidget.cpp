@@ -28,10 +28,10 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "iccprofilewidget.h"
 #include "iccpreviewwidget.h"
 
@@ -60,12 +60,12 @@ void ICCPreviewWidget::showPreview( const KURL &url)
     
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        kdDebug() << url << " is a readble local file" << endl;
+        DDebug() << url << " is a readble local file" << endl;
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        kdDebug() << url << " is not a readable local file" << endl;
+        DDebug() << url << " is not a readable local file" << endl;
     }
 }
 

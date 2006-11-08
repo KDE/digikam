@@ -45,13 +45,13 @@
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kprogress.h>
-#include <kdebug.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kseparator.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "sidebar.h"
 #include "dimgthreadedfilter.h"
 #include "dimginterface.h"
@@ -432,7 +432,7 @@ void ImageGuideDlg::slotEffect()
         return;
 
     d->currentRenderingMode = ImageGuideDlgPriv::PreviewRendering;
-    kdDebug() << "Preview " << d->name << " started..." << endl;
+    DDebug() << "Preview " << d->name << " started..." << endl;
 
     enableButton(Ok,      false);
     enableButton(User1,   true);
@@ -451,7 +451,7 @@ void ImageGuideDlg::slotEffect()
 void ImageGuideDlg::slotOk()
 {
     d->currentRenderingMode = ImageGuideDlgPriv::FinalRendering;
-    kdDebug() << "Final " << d->name << " started..." << endl;
+    DDebug() << "Final " << d->name << " started..." << endl;
     writeSettings();
     writeUserSettings();
 
@@ -489,7 +489,7 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
             {
                 case ImageGuideDlgPriv::PreviewRendering:
                 {
-                    kdDebug() << "Preview " << d->name << " completed..." << endl;
+                    DDebug() << "Preview " << d->name << " completed..." << endl;
                     putPreviewData();
                     abortPreview();
                     break;
@@ -497,7 +497,7 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
 
                 case ImageGuideDlgPriv::FinalRendering:
                 {
-                    kdDebug() << "Final" << d->name << " completed..." << endl;
+                    DDebug() << "Final" << d->name << " completed..." << endl;
                     putFinalData();
                     kapp->restoreOverrideCursor();
                     accept();
@@ -511,7 +511,7 @@ void ImageGuideDlg::customEvent(QCustomEvent *event)
             {
                 case ImageGuideDlgPriv::PreviewRendering:
                 {
-                    kdDebug() << "Preview " << d->name << " failed..." << endl;
+                    DDebug() << "Preview " << d->name << " failed..." << endl;
                     // abortPreview() must be call here for set progress bar to 0 properly.
                     abortPreview();
                     break;

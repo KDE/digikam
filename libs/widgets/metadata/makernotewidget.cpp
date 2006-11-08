@@ -33,7 +33,6 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // LibExiv2 includes.
@@ -44,6 +43,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "makernotewidget.h"
 
@@ -195,7 +195,7 @@ bool MakerNoteWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        kdDebug() << "Cannot parse MAKERNOTE metadata using Exiv2 ("
+        DDebug() << "Cannot parse MAKERNOTE metadata using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
@@ -224,7 +224,7 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag title using Exiv2 ("
+        DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("Unknow");
@@ -241,7 +241,7 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag description using Exiv2 ("
+        DDebug() << "Cannot get metadata tag description using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("No description available");

@@ -46,11 +46,11 @@
 #include <kprinter.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "metadatalistview.h"
 #include "mdkeylistviewitem.h"
 #include "metadatawidget.h"

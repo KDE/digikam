@@ -28,12 +28,12 @@
 // KDE includes.
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "worldmapwidget.h"
 
 namespace Digikam

@@ -42,7 +42,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -54,6 +53,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "metadatalistview.h"
 #include "worldmapwidget.h"
@@ -307,7 +307,7 @@ bool GPSWidget::decodeMetadata()
         d->map->setEnabled(false);
         d->detailsButton->setEnabled(false);
         d->detailsCombo->setEnabled(false);
-        kdDebug() << "Cannot parse EXIF metadata using Exiv2 ("
+        DDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
@@ -337,7 +337,7 @@ QString GPSWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag title using Exiv2 ("
+        DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("Unknow");
@@ -354,7 +354,7 @@ QString GPSWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {   
-        kdDebug() << "Cannot get metadata tag description using Exiv2 ("
+        DDebug() << "Cannot get metadata tag description using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("No description available");

@@ -52,11 +52,11 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h> 
 
 // Local includes.
 
+#include "ddebug.h"
 #include "imageiface.h"
 #include "dimg.h"
 #include "imageselectionwidget.h"

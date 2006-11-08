@@ -33,7 +33,6 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kdebug.h>
 
 // LibExiv2 includes.
 
@@ -41,6 +40,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "iptcwidget.h"
 
@@ -113,7 +113,7 @@ bool IptcWidget::decodeMetadata()
         Exiv2::IptcData iptcData;
         if (iptcData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
         {
-            kdDebug() << "Cannot parse IPTC metadata using Exiv2" << endl;
+            DDebug() << "Cannot parse IPTC metadata using Exiv2" << endl;
             return false;
         }
 
@@ -154,7 +154,7 @@ bool IptcWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        kdDebug() << "Cannot parse IPTC metadata using Exiv2 ("
+        DDebug() << "Cannot parse IPTC metadata using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
@@ -183,7 +183,7 @@ QString IptcWidget::getTagTitle(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag title using Exiv2 ("
+        DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("Unknow");
@@ -200,7 +200,7 @@ QString IptcWidget::getTagDescription(const QString& key)
     }
     catch (Exiv2::Error& e) 
     {
-        kdDebug() << "Cannot get metadata tag description using Exiv2 ("
+        DDebug() << "Cannot get metadata tag description using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return i18n("No description available");
