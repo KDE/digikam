@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const char*, const QSt
                 
     setXMLFile( "digikamimageplugin_texture_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_Texture plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Texture plugin loaded" << endl;
 }
 
 ImagePlugin_Texture::~ImagePlugin_Texture()

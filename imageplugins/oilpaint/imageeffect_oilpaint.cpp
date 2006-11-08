@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>

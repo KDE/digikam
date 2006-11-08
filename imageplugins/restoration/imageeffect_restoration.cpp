@@ -45,7 +45,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 

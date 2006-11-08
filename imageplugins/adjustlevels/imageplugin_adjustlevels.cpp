@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
     
-    kdDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
+    DDebug() << "ImagePlugin_AdjustLevels plugin loaded" << endl;
 }
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()

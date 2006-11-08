@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const char*, const Q
 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );
 
-    kdDebug() << "ImagePlugin_Infrared plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Infrared plugin loaded" << endl;
 }
 
 ImagePlugin_Infrared::~ImagePlugin_Infrared()

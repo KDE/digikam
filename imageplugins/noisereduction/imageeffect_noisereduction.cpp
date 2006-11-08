@@ -40,7 +40,6 @@
 #include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kfiledialog.h>

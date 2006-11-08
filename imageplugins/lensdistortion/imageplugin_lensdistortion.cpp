@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const ch
     
     setXMLFile("digikamimageplugin_lensdistortion_ui.rc");            
         
-    kdDebug() << "ImagePlugin_LensDistortion plugin loaded" << endl;
+    DDebug() << "ImagePlugin_LensDistortion plugin loaded" << endl;
 }
 
 ImagePlugin_LensDistortion::~ImagePlugin_LensDistortion()

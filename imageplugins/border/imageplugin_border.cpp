@@ -25,7 +25,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -45,7 +44,7 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const char*, const QStri
 
     setXMLFile("digikamimageplugin_border_ui.rc");
     
-    kdDebug() << "ImagePlugin_Border plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Border plugin loaded" << endl;
 }
 
 ImagePlugin_Border::~ImagePlugin_Border()

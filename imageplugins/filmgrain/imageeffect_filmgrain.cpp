@@ -38,7 +38,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes.
 

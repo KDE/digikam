@@ -39,7 +39,6 @@
 #include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 

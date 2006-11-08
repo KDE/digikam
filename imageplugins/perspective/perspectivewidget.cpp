@@ -44,7 +44,6 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h> 
 #include <kapplication.h>
 
@@ -659,7 +658,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
                 else
                 {
-                    kdDebug() << "homogeneous coordinate = 0...\n" << endl;
+                    DDebug() << "homogeneous coordinate = 0...\n" << endl;
                 }
             }
 

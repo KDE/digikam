@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const char*, c
 
     setXMLFile("digikamimageplugin_superimpose_ui.rc");        
                                     
-    kdDebug() << "ImagePlugin_SuperImpose plugin loaded" << endl;
+    DDebug() << "ImagePlugin_SuperImpose plugin loaded" << endl;
 }
 
 ImagePlugin_SuperImpose::~ImagePlugin_SuperImpose()

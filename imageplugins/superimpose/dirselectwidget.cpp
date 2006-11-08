@@ -28,12 +28,16 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+
+// Digikam includes.
+
+#include <digikamheaders.h>
 
 // Local includes.
 
 #include "dirselectwidget.h"
+#include "dirselectwidget.moc"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -74,13 +78,13 @@ KURL DirSelectWidget::path() const
 void DirSelectWidget::load()
 {
     if ( d->m_pendingPath.isEmpty() ) 
-        {
+    {
         disconnect( d->m_item, SIGNAL( populateFinished(KFileTreeViewItem *) ), 
                     this, SLOT( load() ) );
         
         emit folderItemSelected(currentURL());
         return;
-        }
+    }
 
     QString item = d->m_pendingPath.front();
     d->m_pendingPath.pop_front();
@@ -88,11 +92,11 @@ void DirSelectWidget::load()
     KFileTreeViewItem* branch = findItem( d->m_item, d->m_handled );
     
     if ( !branch ) 
-        {
-        kdDebug() << "Unable to open " << d->m_handled << endl;
-        }
+    {
+        DDebug() << "Unable to open " << d->m_handled << endl;
+    }
     else
-        {
+    {
         branch->setOpen( true );
         setSelected( branch, true );
         ensureItemVisible ( branch );
@@ -100,7 +104,7 @@ void DirSelectWidget::load()
         
         if ( branch->alreadyListed() )
             load();
-        }
+    }
 }
 
 void DirSelectWidget::setCurrentPath(KURL currentUrl)
@@ -162,4 +166,3 @@ void DirSelectWidget::slotFolderSelected(QListViewItem *)
 
 }   // NameSpace DigikamSuperImposeImagesPlugin
 
-#include "dirselectwidget.moc"

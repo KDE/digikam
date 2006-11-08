@@ -50,7 +50,6 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -204,7 +203,7 @@ void ImageEffect_LensDistortion::readUserSettings(void)
     m_mainInput->setValue( config->readDoubleNumEntry( "2nd order distortion", 0.0 ) );
     m_edgeInput->setValue( config->readDoubleNumEntry("4th order distortion",0.0) );
     m_rescaleInput->setValue( config->readDoubleNumEntry( "Zoom factor", 0.0 ) );
-    kdDebug() << "Reading LensDistortion settings" << endl;
+    DDebug() << "Reading LensDistortion settings" << endl;
     
     m_mainInput->blockSignals(false);
     m_edgeInput->blockSignals(false);
@@ -221,7 +220,7 @@ void ImageEffect_LensDistortion::writeUserSettings(void)
     config->writeEntry( "4th order distortion", m_edgeInput->value() );
     config->writeEntry( "Zoom factor", m_rescaleInput->value() );
     config->sync();
-    kdDebug() << "Writing LensDistortion settings" << endl;
+    DDebug() << "Writing LensDistortion settings" << endl;
 }
 
 void ImageEffect_LensDistortion::renderingFinished()

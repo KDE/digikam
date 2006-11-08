@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -48,7 +47,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const char*, con
                 
     setXMLFile( "digikamimageplugin_inpainting_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_InPainting plugin loaded" << endl;
+    DDebug() << "ImagePlugin_InPainting plugin loaded" << endl;
 }
 
 ImagePlugin_InPainting::~ImagePlugin_InPainting()

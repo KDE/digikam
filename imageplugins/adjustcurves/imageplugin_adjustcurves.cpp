@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
 
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
-    kdDebug() << "ImagePlugin_AdjustCurves plugin loaded" << endl;
+    DDebug() << "ImagePlugin_AdjustCurves plugin loaded" << endl;
 }
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()

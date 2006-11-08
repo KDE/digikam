@@ -35,10 +35,6 @@
 #include <qdatetime.h> 
 #include <qrect.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "raindrop.h"

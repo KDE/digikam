@@ -61,7 +61,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kpassivepopup.h>
 
 // Local includes.
@@ -543,7 +542,7 @@ void ImageEffect_InPainting_Dialog::customEvent(QCustomEvent *event)
             {
                 case FinalRendering:
                 {
-                    kdDebug() << "Final InPainting completed..." << endl;
+                    DDebug() << "Final InPainting completed..." << endl;
                     Digikam::ImageIface iface(0, 0);
                     Digikam::DImg target = m_cimgInterface->getTargetImage();
                     m_originalImage.bitBltImage(&target, m_maskRect.left(), m_maskRect.top());

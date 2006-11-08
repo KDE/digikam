@@ -34,7 +34,6 @@
 #include <kapplication.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes.
 

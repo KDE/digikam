@@ -19,10 +19,6 @@
  * 
  * ============================================================ */
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "superimpose.h"

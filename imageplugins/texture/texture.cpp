@@ -26,10 +26,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "texture.h"
@@ -72,7 +68,7 @@ void Texture::filterImage(void)
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    kdDebug() << "Texture File: " << m_texturePath << endl;
+    DDebug() << "Texture File: " << m_texturePath << endl;
     Digikam::DImg texture(m_texturePath);
     if ( texture.isNull() ) return;
 

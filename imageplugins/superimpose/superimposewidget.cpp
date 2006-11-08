@@ -33,7 +33,6 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h> 
 
 // Local includes.

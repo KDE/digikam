@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const char*, const
                 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_FilmGrain plugin loaded" << endl;
+    DDebug() << "ImagePlugin_FilmGrain plugin loaded" << endl;
 }
 
 ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()

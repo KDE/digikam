@@ -36,10 +36,6 @@
 
 #include <qdatetime.h> 
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "distortionfx.h"

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const char*, const
     
     setXMLFile("digikamimageplugin_sheartool_ui.rc");         
                                     
-    kdDebug() << "ImagePlugin_ShearTool plugin loaded" << endl;
+    DDebug() << "ImagePlugin_ShearTool plugin loaded" << endl;
 }
 
 ImagePlugin_ShearTool::~ImagePlugin_ShearTool()

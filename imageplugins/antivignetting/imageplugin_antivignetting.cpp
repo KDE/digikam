@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_AntiVignetting::ImagePlugin_AntiVignetting(QObject *parent, const ch
 
     setXMLFile("digikamimageplugin_antivignetting_ui.rc");                
     
-    kdDebug() << "ImagePlugin_AntiVignetting plugin loaded" << endl;
+    DDebug() << "ImagePlugin_AntiVignetting plugin loaded" << endl;
 }
 
 ImagePlugin_AntiVignetting::~ImagePlugin_AntiVignetting()

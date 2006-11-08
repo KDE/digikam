@@ -29,10 +29,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "antivignetting.h"

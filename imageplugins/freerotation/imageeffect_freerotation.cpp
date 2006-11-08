@@ -40,7 +40,6 @@
 #include <kcursor.h>
 #include <kseparator.h>
 #include <kconfig.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -174,7 +173,7 @@ void ImageEffect_FreeRotation::readUserSettings(void)
 
     m_autoCropCB->setCurrentItem( config->readNumEntry("Auto Crop Type", FreeRotation::NoAutoCrop) );
     m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-    kdDebug() << "Reading FreeRotation settings" << endl;
+    DDebug() << "Reading FreeRotation settings" << endl;
 }
 
 void ImageEffect_FreeRotation::writeUserSettings(void)
@@ -185,7 +184,7 @@ void ImageEffect_FreeRotation::writeUserSettings(void)
     config->writeEntry( "Auto Crop Type", m_autoCropCB->currentItem() );
     config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
     config->sync();
-    kdDebug() << "Writing FreeRotation settings" << endl;
+    DDebug() << "Writing FreeRotation settings" << endl;
 }
 
 void ImageEffect_FreeRotation::renderingFinished()

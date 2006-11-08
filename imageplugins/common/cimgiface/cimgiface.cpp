@@ -42,7 +42,6 @@ extern "C"
 // KDE includes.
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes.
  
@@ -84,7 +83,7 @@ CimgIface::CimgIface(Digikam::DImg *orgImage,
     if (m_resize)
     {
         m_destImage = Digikam::DImg(newWidth, newHeight, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-        kdDebug() << "CimgIface::m_resize is on, new size: (" << newWidth << ", " << newHeight << ")" << endl;
+        DDebug() << "CimgIface::m_resize is on, new size: (" << newWidth << ", " << newHeight << ")" << endl;
     }
     else 
     {
@@ -101,7 +100,7 @@ CimgIface::CimgIface(Digikam::DImg *orgImage,
        m_tmpMaskFile.append(".png");
        m_inPaintingMask = inPaintingMask->copy();
        m_inPaintingMask.save(m_tmpMaskFile, "PNG");
-       kdDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
+       DDebug() << "CimgIface::InPainting Mask : " << m_tmpMaskFile << endl;
     }
     
     initFilter();       
@@ -134,7 +133,7 @@ void CimgIface::initFilter(void)
        if (m_parent)           // If parent then send event about a problem.
        {
           postProgress(0, false, false);
-          kdDebug() << m_name << "::No valid image data !!! ..." << endl;
+          DDebug() << m_name << "::No valid image data !!! ..." << endl;
        }
     }
 }
@@ -148,7 +147,7 @@ void CimgIface::cleanupFilter(void)
 
 void CimgIface::filterImage()
 {
-    kdDebug() << "CimgIface::Initialization..." << endl;
+    DDebug() << "CimgIface::Initialization..." << endl;
                    
     // Copy the src data into a CImg type image with three channels and no alpha. 
     // This means that a CImg is always RGBA.
@@ -192,11 +191,11 @@ void CimgIface::filterImage()
         }
     }
     
-    kdDebug() << "CimgIface::Process Computation..." << endl;
+    DDebug() << "CimgIface::Process Computation..." << endl;
               
     if (!process()) 
     {
-       kdDebug() << "CimgIface::Error during CImg filter computation!" << endl;
+       DDebug() << "CimgIface::Error during CImg filter computation!" << endl;
        // Everything went wrong.
        
        if (m_parent)
@@ -207,7 +206,7 @@ void CimgIface::filterImage()
     
     // Copy CImg onto destination.
     
-    kdDebug() << "CimgIface::Finalization..." << endl;
+    DDebug() << "CimgIface::Finalization..." << endl;
 
     uchar* newData = m_destImage.bits();
     int newWidth   = m_destImage.width();
@@ -282,7 +281,7 @@ bool CimgIface::process()
     
     if (m_cancel) 
     {
-      kdDebug() << "CImg filter arborted!" << endl;
+      DDebug() << "CImg filter arborted!" << endl;
       return false;    
     }
 
@@ -299,7 +298,7 @@ bool CimgIface::prepare()
 {
     if (!m_restore && !m_inpaint && !m_resize && !m_visuflow) 
     {
-       kdDebug() << "Unspecified CImg filter computation Mode!" << endl;
+       DDebug() << "Unspecified CImg filter computation Mode!" << endl;
        return false;
     }
 
@@ -325,7 +324,7 @@ bool CimgIface::check_args()
 {
     if (m_power2 < m_power1)
     {
-       kdDebug() << "Error : p2<p1 !" << endl;
+       DDebug() << "Error : p2<p1 !" << endl;
        return false;
     }
        
@@ -345,13 +344,13 @@ bool CimgIface::prepare_resize()
 {
     if (!m_destImage.width() && !m_destImage.height())
     {
-       kdDebug() << "Invalid output geometry (" << m_destImage.width() 
+       DDebug() << "Invalid output geometry (" << m_destImage.width() 
                  << "x" << m_destImage.height() << ")!" << endl;
        return false;
     }
     else 
     {
-       kdDebug() << "Output geometry (" << m_destImage.width() 
+       DDebug() << "Output geometry (" << m_destImage.width() 
                  << "x" << m_destImage.height() << ")" << endl;
     }
               
@@ -370,7 +369,7 @@ bool CimgIface::prepare_inpaint()
     
     if (!file_m) 
     {
-       kdDebug() << "Unspecified CImg inpainting mask !" << endl;
+       DDebug() << "Unspecified CImg inpainting mask !" << endl;
        return false;
     }
 

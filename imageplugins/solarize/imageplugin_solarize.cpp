@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_Solarize::ImagePlugin_Solarize(QObject *parent, const char*,
                 
     setXMLFile( "digikamimageplugin_solarize_ui.rc" );    
         
-    kdDebug() << "ImagePlugin_Solarize plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Solarize plugin loaded" << endl;
 }
 
 ImagePlugin_Solarize::~ImagePlugin_Solarize()

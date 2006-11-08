@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*,
     
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");         
                                     
-    kdDebug() << "ImagePlugin_WhiteBalance plugin loaded" << endl;
+    DDebug() << "ImagePlugin_WhiteBalance plugin loaded" << endl;
 }
 
 ImagePlugin_WhiteBalance::~ImagePlugin_WhiteBalance()

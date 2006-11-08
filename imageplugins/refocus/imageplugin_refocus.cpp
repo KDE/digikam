@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_Refocus::ImagePlugin_Refocus(QObject *parent, const char*, const QSt
                 
     setXMLFile( "digikamimageplugin_refocus_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_Refocus plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Refocus plugin loaded" << endl;
 }
 
 ImagePlugin_Refocus::~ImagePlugin_Refocus()

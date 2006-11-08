@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const ch
                 
     setXMLFile("digikamimageplugin_despeckle_ui.rc");                
 
-    kdDebug() << "ImagePlugin_NoiseReduction plugin loaded" << endl;
+    DDebug() << "ImagePlugin_NoiseReduction plugin loaded" << endl;
 }
 
 ImagePlugin_NoiseReduction::~ImagePlugin_NoiseReduction()

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const char*,
                 
     setXMLFile( "digikamimageplugin_charcoal_ui.rc" );
     
-    kdDebug() << "ImagePlugin_Charcoal plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Charcoal plugin loaded" << endl;
 }
 
 ImagePlugin_Charcoal::~ImagePlugin_Charcoal()

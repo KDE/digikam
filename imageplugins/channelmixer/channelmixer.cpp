@@ -52,7 +52,6 @@
 // KDE includes.
 
 #include <kcursor.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -675,7 +674,7 @@ void ChannelMixerDialog::slotUser2()
               str = "BLUE";
               break;
            default:
-              kdWarning() <<  "Unknown Color channel gains" << endl;;
+              DWarning() <<  "Unknown Color channel gains" << endl;
               break;
         }
 

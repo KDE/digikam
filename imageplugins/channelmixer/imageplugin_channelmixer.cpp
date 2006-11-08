@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
     
-    kdDebug() << "ImagePlugin_ChannelMixer plugin loaded" << endl;
+    DDebug() << "ImagePlugin_ChannelMixer plugin loaded" << endl;
 }
 
 ImagePlugin_ChannelMixer::~ImagePlugin_ChannelMixer()

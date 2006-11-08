@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -45,7 +44,7 @@ ImagePlugin_BlowUp::ImagePlugin_BlowUp(QObject *parent, const char*, const QStri
                 
     setXMLFile( "digikamimageplugin_blowup_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_BlowUp plugin loaded" << endl;
+    DDebug() << "ImagePlugin_BlowUp plugin loaded" << endl;
 }
 
 ImagePlugin_BlowUp::~ImagePlugin_BlowUp()

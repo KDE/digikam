@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const char*,
                 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );    
         
-    kdDebug() << "ImagePlugin_DistortionFX plugin loaded" << endl;
+    DDebug() << "ImagePlugin_DistortionFX plugin loaded" << endl;
 }
 
 ImagePlugin_DistortionFX::~ImagePlugin_DistortionFX()

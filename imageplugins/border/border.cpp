@@ -31,10 +31,6 @@
 #include <qregion.h>
 #include <qpointarray.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "border.h"
@@ -210,7 +206,7 @@ void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
     }
 
     Digikam::DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
-    kdDebug() << "Border File:" << m_borderPath << endl;
+    DDebug() << "Border File:" << m_borderPath << endl;
     Digikam::DImg border(m_borderPath);
     if ( border.isNull() )
         return;

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const char*, const
     
     setXMLFile("digikamimageplugin_hotpixels_ui.rc");            
         
-    kdDebug() << "ImagePlugin_HotPixels plugin loaded" << endl;
+    DDebug() << "ImagePlugin_HotPixels plugin loaded" << endl;
 }
 
 ImagePlugin_HotPixels::~ImagePlugin_HotPixels()

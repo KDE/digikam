@@ -37,10 +37,6 @@
 #define FG 0.715160
 #define FB 0.072169
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "noisereduction.h"

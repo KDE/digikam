@@ -62,7 +62,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kpassivepopup.h>
 
 // Digikam includes.
@@ -458,7 +457,7 @@ void ImageEffect_BlowUp::customEvent(QCustomEvent *event)
             {
                 case FinalRendering:
                 {
-                    kdDebug() << "Final BlowUp completed..." << endl;
+                    DDebug() << "Final BlowUp completed..." << endl;
                     
                     Digikam::ImageIface iface(0, 0);
                     Digikam::DImg resizedImage = m_cimgInterface->getTargetImage();

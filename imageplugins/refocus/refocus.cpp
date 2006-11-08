@@ -23,10 +23,6 @@
  
 #include <cmath>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "matrix.h"
@@ -61,7 +57,7 @@ void Refocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
     CMat *matrix=0;
     
     // Compute matrix
-    kdDebug() << "Refocus::Compute matrix..." << endl;
+    DDebug() << "Refocus::Compute matrix..." << endl;
 
     CMat circle, gaussian, convolution;
     
@@ -77,7 +73,7 @@ void Refocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
     RefocusMatrix::finish_c_mat (&circle);
 
     // Apply deconvolution kernel to image.
-    kdDebug() << "Refocus::Apply Matrix to image..." << endl;
+    DDebug() << "Refocus::Apply Matrix to image..." << endl;
     convolveImage(data, m_destImage.bits(), width, height, sixteenBit,
                   matrix->data, 2 * matrixSize + 1);
     

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const char*,
                     
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );          
     
-    kdDebug() << "ImagePlugin_OilPaint plugin loaded" << endl;
+    DDebug() << "ImagePlugin_OilPaint plugin loaded" << endl;
 }
 
 ImagePlugin_OilPaint::~ImagePlugin_OilPaint()

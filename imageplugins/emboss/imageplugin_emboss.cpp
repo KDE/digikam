@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -47,7 +46,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const char*,
                 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );                
     
-    kdDebug() << "ImagePlugin_Emboss plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Emboss plugin loaded" << endl;
 }
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()

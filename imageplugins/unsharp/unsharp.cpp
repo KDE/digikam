@@ -24,10 +24,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
 #include "unsharp.h"
@@ -56,7 +52,7 @@ void UnsharpMask::filterImage(void)
 
     if (m_orgImage.isNull())
     {
-       kdWarning() << k_funcinfo << "No image data available!" << endl;
+       DWarning() << k_funcinfo << "No image data available!" << endl;
        return;
     }
 

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const char*, c
                 
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );                                
     
-    kdDebug() << "ImagePlugin_Restoration plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Restoration plugin loaded" << endl;
 }
 
 ImagePlugin_Restoration::~ImagePlugin_Restoration()

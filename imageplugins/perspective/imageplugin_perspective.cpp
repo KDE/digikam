@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const char*, c
     
     setXMLFile("digikamimageplugin_perspective_ui.rc");      
                                     
-    kdDebug() << "ImagePlugin_Perspective plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Perspective plugin loaded" << endl;
 }
 
 ImagePlugin_Perspective::~ImagePlugin_Perspective()

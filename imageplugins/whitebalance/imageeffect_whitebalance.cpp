@@ -61,7 +61,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kseparator.h>
 
@@ -408,7 +407,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
     
     expo = -log((float)(i+1) / m_rgbMax) / log(2);
-    kdDebug() << "White level at:" << i << endl;
+    DDebug() << "White level at:" << i << endl;
     
     // Cutoff at 0.5% of the histogram. 
     
@@ -420,7 +419,7 @@ void ImageEffect_WhiteBalance::slotAutoAdjustExposure(void)
     black = (double)i / m_rgbMax;
     black /= 2;
     
-    kdDebug() << "Black:" << black << "  Exposition:" << expo << endl;
+    DDebug() << "Black:" << black << "  Exposition:" << expo << endl;
 
     m_blackInput->setValue(black);
     m_exposureInput->setValue(expo);        
@@ -552,7 +551,7 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
        sB  = tc.blue()  / t;
        mRB = sR / sB;
 
-       kdDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
+       DDebug() << "Sums:  R:" << sR << " G:" << sG  << " B:" << sB << endl;
     
        l = 0;
        r = sizeof(bbWB)/(sizeof(float)*3);
@@ -565,16 +564,16 @@ void ImageEffect_WhiteBalance::slotColorSelectedFromOriginal( const Digikam::DCo
           else
               r = m;
     
-          kdDebug() << "L,M,R:  " << l << " " << m << " " << r 
+          DDebug() << "L,M,R:  " << l << " " << m << " " << r 
                     << " bbWB[m]=:"    << bbWB[m][0]/bbWB[m][2]
                     << endl;
        }
        
-       kdDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
+       DDebug() << "Temperature (K):" << m*10.0+2000.0 << endl;
 
        t = (bbWB[m][1]/bbWB[m][0]) / (sG/sR);
     
-       kdDebug() << "Green component:" << t << endl;
+       DDebug() << "Green component:" << t << endl;
     
        m_temperatureInput->setValue(m*10.0+2000.0);
        m_greenInput->setValue(t);
@@ -741,7 +740,7 @@ void ImageEffect_WhiteBalance::setLUTv(void)
     
     if (m_WP - m_BP < 1) m_WP = m_BP + 1;
 
-    kdDebug() << "T(K): " << m_temperature
+    DDebug() << "T(K): " << m_temperature
               << " => R:" << m_mr
               << " G:"    << m_mg
               << " B:"    << m_mb

@@ -37,7 +37,6 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <knuminput.h>
-#include <kdebug.h>
 
 // Local includes.
 

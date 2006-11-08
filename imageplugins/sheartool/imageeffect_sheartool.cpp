@@ -39,7 +39,6 @@
 #include <kseparator.h>
 #include <kcursor.h>
 #include <kconfig.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -179,7 +178,7 @@ void ImageEffect_ShearTool::readUserSettings(void)
     config->setGroup("ShearTool Settings");
 
     m_antialiasInput->setChecked( config->readBoolEntry("Anti Aliasing", true) );
-    kdDebug() << "Reading ShearTool settings" << endl;
+    DDebug() << "Reading ShearTool settings" << endl;
 }
 
 void ImageEffect_ShearTool::writeUserSettings(void)
@@ -189,7 +188,7 @@ void ImageEffect_ShearTool::writeUserSettings(void)
 
     config->writeEntry( "Anti Aliasing", m_antialiasInput->isChecked() );
     config->sync();
-    kdDebug() << "Writing ShearTool settings" << endl;
+    DDebug() << "Writing ShearTool settings" << endl;
 }
 
 void ImageEffect_ShearTool::renderingFinished()

@@ -26,7 +26,6 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kcursor.h>
-#include <kdebug.h>
 
 // Local includes.
 
@@ -46,7 +45,7 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const char*,
     
     setXMLFile("digikamimageplugin_freerotation_ui.rc");         
                                     
-    kdDebug() << "ImagePlugin_FreeRotation plugin loaded" << endl;
+    DDebug() << "ImagePlugin_FreeRotation plugin loaded" << endl;
 }
 
 ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()
