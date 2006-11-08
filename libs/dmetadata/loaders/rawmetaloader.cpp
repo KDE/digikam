@@ -26,12 +26,9 @@
 
 #include <qfile.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dcraw_parse.h"
 #include "rawmetaloader.h"
 
@@ -70,7 +67,7 @@ bool RAWMetaLoader::load(const QString& filePath)
         }
         catch( Exiv2::Error &e )
         {
-            kdDebug() << "Exiv2 Exception (" << e.code() << ")" << endl;
+            DDebug() << "Exiv2 Exception (" << e.code() << ")" << endl;
         }   
     }
 

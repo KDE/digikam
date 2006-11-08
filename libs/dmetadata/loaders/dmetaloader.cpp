@@ -29,10 +29,6 @@
 
 #include <qfile.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // LibExiv2 includes.
 
 #include <exiv2/image.hpp>
@@ -41,6 +37,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadataprivate.h"
 #include "dmetadata.h"
 #include "dmetaloader.h"
@@ -107,7 +104,7 @@ bool DMetaLoader::loadWithExiv2(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load metadata using Exiv2 (" 
+        DDebug() << "Cannot load metadata using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
         return false;
@@ -151,7 +148,7 @@ bool DMetaLoader::saveWithExiv2(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot save metadata using Exiv2 ("
+        DDebug() << "Cannot save metadata using Exiv2 ("
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
         return false;

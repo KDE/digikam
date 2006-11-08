@@ -35,7 +35,6 @@
 // KDE includes.
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kstringhandler.h>
 #include <ktempfile.h>
 
@@ -55,6 +54,7 @@
 #include "tiffmetaloader.h"
 #include "rawmetaloader.h"
 #include "dmetadataprivate.h"
+#include "ddebug.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -85,7 +85,7 @@ bool DMetadata::clearExif()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot clear Exif data using Exiv2 (" 
+        DDebug() << "Cannot clear Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }    
@@ -102,7 +102,7 @@ bool DMetadata::clearIptc()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot clear Iptc data using Exiv2 (" 
+        DDebug() << "Cannot clear Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }    
@@ -139,9 +139,9 @@ QByteArray DMetadata::getExif() const
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot get Exif data using Exiv2 (" 
+        DDebug() << "Cannot get Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }       
@@ -165,7 +165,7 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
                     c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
                 else
                 {
-                    kdDebug() << "Exiv2 version is to old. Cannot add Irb header to IPTC metadata" << endl;
+                    DDebug() << "Exiv2 version is to old. Cannot add Irb header to IPTC metadata" << endl;
                     return QByteArray();
                 }
 #endif
@@ -181,9 +181,9 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot get Iptc data using Exiv2 (" 
+        DDebug() << "Cannot get Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }       
@@ -211,9 +211,9 @@ bool DMetadata::setExif(const QByteArray& data)
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot set Exif data using Exiv2 (" 
+        DDebug() << "Cannot set Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -234,9 +234,9 @@ bool DMetadata::setExif(Exiv2::DataBuf const data)
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot set Exif data using Exiv2 (" 
+        DDebug() << "Cannot set Exif data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }    
@@ -257,9 +257,9 @@ bool DMetadata::setIptc(const QByteArray& data)
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot set Iptc data using Exiv2 (" 
+        DDebug() << "Cannot set Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -280,9 +280,9 @@ bool DMetadata::setIptc(Exiv2::DataBuf const data)
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            kdDebug() << "From file " << d->filePath << endl;
+            DDebug() << "From file " << d->filePath << endl;
 
-        kdDebug() << "Cannot set Iptc data using Exiv2 (" 
+        DDebug() << "Cannot set Iptc data using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -397,7 +397,7 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
                 {
                     QWMatrix matrix;
                     long orientation = it->toLong();
-                    kdDebug() << " Exif Thumbnail Orientation: " << orientation << endl;
+                    DDebug() << " Exif Thumbnail Orientation: " << orientation << endl;
                     
                     switch (orientation) 
                     {
@@ -445,7 +445,7 @@ QImage DMetadata::getExifThumbnail(bool fixOrientation) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Exif Thumbnail using Exiv2 (" 
+        DDebug() << "Cannot get Exif Thumbnail using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -467,7 +467,7 @@ bool DMetadata::setExifThumbnail(const QImage& thumb)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Thumbnail using Exiv2 (" 
+        DDebug() << "Cannot set Exif Thumbnail using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -510,7 +510,7 @@ DMetadata::ImageColorWorkSpace DMetadata::getImageColorWorkSpace()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse image color workspace tag using Exiv2 (" 
+        DDebug() << "Cannot parse image color workspace tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -526,12 +526,12 @@ bool DMetadata::setImageColorWorkSpace(ImageColorWorkSpace workspace)
     try
     {    
         d->exifMetadata["Exif.Photo.ColorSpace"] = (uint16_t)workspace;
-        kdDebug() << "Exif color workspace tag set to: " << workspace << endl;
+        DDebug() << "Exif color workspace tag set to: " << workspace << endl;
         return true;
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif color workspace tag using Exiv2 (" 
+        DDebug() << "Cannot set Exif color workspace tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -588,7 +588,7 @@ QSize DMetadata::getImageDimensions()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse image dimensions tag using Exiv2 (" 
+        DDebug() << "Cannot parse image dimensions tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -610,7 +610,7 @@ bool DMetadata::setImageDimensions(const QSize& size)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
+        DDebug() << "Cannot set Date & Time into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -656,7 +656,7 @@ DMetadata::ImageOrientation DMetadata::getImageOrientation()
             if (it != exifData.end())
             {
                 orientation = it->toLong();
-                kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+                DDebug() << "Minolta Makernote Orientation: " << orientation << endl;
                 switch(orientation)
                 {
                     case 76:
@@ -675,7 +675,7 @@ DMetadata::ImageOrientation DMetadata::getImageOrientation()
             if (it != exifData.end())
             {
                 orientation = it->toLong();
-                kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+                DDebug() << "Minolta Makernote Orientation: " << orientation << endl;
                 switch(orientation)
                 {
                     case 76:
@@ -697,13 +697,13 @@ DMetadata::ImageOrientation DMetadata::getImageOrientation()
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kdDebug() << "Exif Orientation: " << orientation << endl;
+            DDebug() << "Exif Orientation: " << orientation << endl;
             return (ImageOrientation)orientation;
         }
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif Orientation tag using Exiv2 (" 
+        DDebug() << "Cannot parse Exif Orientation tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -733,12 +733,12 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
     {    
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
-            kdDebug() << k_funcinfo << "Exif orientation tag value is not correct!" << endl;
+            DDebug() << k_funcinfo << "Exif orientation tag value is not correct!" << endl;
             return false;
         }
         
         d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
-        kdDebug() << "Exif orientation tag set to: " << orientation << endl;
+        DDebug() << "Exif orientation tag set to: " << orientation << endl;
 
         // -- Minolta Cameras ----------------------------------
 
@@ -754,7 +754,7 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
             if (it != d->exifMetadata.end())
             {
                 d->exifMetadata.erase(it);
-                kdDebug() << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
+                DDebug() << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
             }
         
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
@@ -762,7 +762,7 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
             if (it != d->exifMetadata.end())
             {
                 d->exifMetadata.erase(it);
-                kdDebug() << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
+                DDebug() << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
             }
         }
 
@@ -770,7 +770,7 @@ bool DMetadata::setImageOrientation(ImageOrientation orientation)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
+        DDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -798,7 +798,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    // kdDebug() << "DateTime (Exif standard): " << dateTime << endl;
+                    // DDebug() << "DateTime (Exif standard): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -814,7 +814,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    // kdDebug() << "DateTime (Exif original): " << dateTime << endl;
+                    // DDebug() << "DateTime (Exif original): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -830,7 +830,7 @@ QDateTime DMetadata::getImageDateTime() const
     
                 if (dateTime.isValid())
                 {
-                    // kdDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
+                    // DDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
                     return dateTime;
                 }
             }
@@ -863,7 +863,7 @@ QDateTime DMetadata::getImageDateTime() const
                     
                     if (dateTime.isValid())
                     {
-                        // kdDebug() << "Date (IPTC created): " << dateTime << endl;
+                        // DDebug() << "Date (IPTC created): " << dateTime << endl;
                         return dateTime;
                     }                    
                 }
@@ -891,7 +891,7 @@ QDateTime DMetadata::getImageDateTime() const
                     
                     if (dateTime.isValid())
                     {
-                        // kdDebug() << "Date (IPTC digitalized): " << dateTime << endl;
+                        // DDebug() << "Date (IPTC digitalized): " << dateTime << endl;
                         return dateTime;
                     }                    
                 }
@@ -900,7 +900,7 @@ QDateTime DMetadata::getImageDateTime() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif date & time tag using Exiv2 (" 
+        DDebug() << "Cannot parse Exif date & time tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -945,7 +945,7 @@ bool DMetadata::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Date & Time into image using Exiv2 (" 
+        DDebug() << "Cannot set Date & Time into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1005,7 +1005,7 @@ QString DMetadata::getImageComment() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Image comments using Exiv2 (" 
+        DDebug() << "Cannot get Image comments using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1020,7 +1020,7 @@ bool DMetadata::setImageComment(const QString& comment)
         if (comment.isEmpty())
             return false;
 
-        kdDebug() << d->filePath << " ==> Comment: " << comment << endl;
+        DDebug() << d->filePath << " ==> Comment: " << comment << endl;
 
         // In first we trying to set image comments, outside of Exif and IPTC.
 
@@ -1064,7 +1064,7 @@ bool DMetadata::setImageComment(const QString& comment)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Comment into image using Exiv2 (" 
+        DDebug() << "Cannot set Comment into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1137,7 +1137,7 @@ QString DMetadata::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot convert Comment using Exiv2 (" 
+        DDebug() << "Cannot convert Comment using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1244,7 +1244,7 @@ int DMetadata::getImageRating() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Image Rating tag using Exiv2 (" 
+        DDebug() << "Cannot get Image Rating tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1258,11 +1258,11 @@ bool DMetadata::setImageRating(int rating)
     {    
         if (rating < 0 || rating > 5)
         {
-            kdDebug() << k_funcinfo << "Rating value to write out of range!" << endl;
+            DDebug() << k_funcinfo << "Rating value to write out of range!" << endl;
             return false;
         }
 
-        kdDebug() << d->filePath << " ==> Rating: " << rating << endl;
+        DDebug() << d->filePath << " ==> Rating: " << rating << endl;
             
         setImageProgramId();
         QString urgencyTag;
@@ -1295,7 +1295,7 @@ bool DMetadata::setImageRating(int rating)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Rating tag into image using Exiv2 (" 
+        DDebug() << "Cannot set Rating tag into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1328,7 +1328,7 @@ QStringList DMetadata::getImageKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get IPTC Keywords from image using Exiv2 (" 
+        DDebug() << "Cannot get IPTC Keywords from image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1344,7 +1344,7 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         QStringList newkeys = newKeywords;
         
         setImageProgramId();
-        kdDebug() << d->filePath << " ==> Keywords: " << newkeys << endl;
+        DDebug() << d->filePath << " ==> Keywords: " << newkeys << endl;
         
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata);
@@ -1381,7 +1381,7 @@ bool DMetadata::setImageKeywords(const QStringList& oldKeywords, const QStringLi
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set IPTC Keywords into image using Exiv2 (" 
+        DDebug() << "Cannot set IPTC Keywords into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1398,20 +1398,20 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
         // Byline IPTC tag is limited to 32 char.
         QString Byline = author;
         Byline.truncate(32);
-        kdDebug() << d->filePath << " ==> Author: " << Byline << endl;
+        DDebug() << d->filePath << " ==> Author: " << Byline << endl;
         d->iptcMetadata["Iptc.Application2.Byline"] = Byline.latin1();
         
         // BylineTitle IPTC tag is limited to 32 char.
         QString BylineTitle = authorTitle;
         BylineTitle.truncate(32);
-        kdDebug() << d->filePath << " ==> Author Title: " << BylineTitle << endl;
+        DDebug() << d->filePath << " ==> Author Title: " << BylineTitle << endl;
         d->iptcMetadata["Iptc.Application2.BylineTitle"] = BylineTitle.latin1();
 
         return true;
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Photographer identity into image using Exiv2 (" 
+        DDebug() << "Cannot set Photographer identity into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1428,26 +1428,26 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
         // Credit IPTC tag is limited to 32 char.
         QString Credit = credit;
         Credit.truncate(32);
-        kdDebug() << d->filePath << " ==> Credit: " << Credit << endl;
+        DDebug() << d->filePath << " ==> Credit: " << Credit << endl;
         d->iptcMetadata["Iptc.Application2.Credit"] = Credit.latin1();
 
         // Source IPTC tag is limited to 32 char.
         QString Source = source;
         Source.truncate(32);
-        kdDebug() << d->filePath << " ==> Source: " << Source << endl;
+        DDebug() << d->filePath << " ==> Source: " << Source << endl;
         d->iptcMetadata["Iptc.Application2.Source"] = Source.latin1();
 
         // Copyright IPTC tag is limited to 128 char.
         QString Copyright = copyright;
         Copyright.truncate(128);
-        kdDebug() << d->filePath << " ==> Copyright: " << Copyright << endl;
+        DDebug() << d->filePath << " ==> Copyright: " << Copyright << endl;
         d->iptcMetadata["Iptc.Application2.Copyright"] = Copyright.latin1();
 
         return true;
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Credits identity into image using Exiv2 (" 
+        DDebug() << "Cannot set Credits identity into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1469,7 +1469,7 @@ bool DMetadata::setImageProgramId()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Program identity into image using Exiv2 (" 
+        DDebug() << "Cannot set Program identity into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1514,7 +1514,7 @@ PhotoInfoContainer DMetadata::getPhotographInformations() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Photograph informations into image using Exiv2 (" 
+        DDebug() << "Cannot get Photograph informations into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1543,7 +1543,7 @@ QString DMetadata::getExifTagString(const char* exifTagName, bool escapeCR) cons
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif key '"
+        DDebug() << "Cannot find Exif key '"
                   << exifTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -1561,7 +1561,7 @@ bool DMetadata::setExifTagString(const char *exifTagName, const QString& value)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif tag string into image using Exiv2 (" 
+        DDebug() << "Cannot set Exif tag string into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1590,7 +1590,7 @@ QString DMetadata::getIptcTagString(const char* iptcTagName, bool escapeCR) cons
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Iptc key '"
+        DDebug() << "Cannot find Iptc key '"
                   << iptcTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -1608,7 +1608,7 @@ bool DMetadata::setIptcTagString(const char *iptcTagName, const QString& value)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Iptc tag string into image using Exiv2 (" 
+        DDebug() << "Cannot set Iptc tag string into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1632,7 +1632,7 @@ QByteArray DMetadata::getExifTagData(const char* exifTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif key '"
+        DDebug() << "Cannot find Exif key '"
                   << exifTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -1657,7 +1657,7 @@ QByteArray DMetadata::getIptcTagData(const char *iptcTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Iptc key '"
+        DDebug() << "Cannot find Iptc key '"
                   << iptcTagName << "' into image using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
@@ -1680,7 +1680,7 @@ bool DMetadata::removeExifTag(const char *exifTagName)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Exif tag using Exiv2 (" 
+        DDebug() << "Cannot remove Exif tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1702,7 +1702,7 @@ bool DMetadata::removeIptcTag(const char *iptcTagName)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Iptc tag using Exiv2 (" 
+        DDebug() << "Cannot remove Iptc tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1722,7 +1722,7 @@ bool DMetadata::getImagePreview(QImage& preview)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get image preview using Exiv2 (" 
+        DDebug() << "Cannot get image preview using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1743,7 +1743,7 @@ bool DMetadata::setImagePreview(const QImage& preview)
         if ( !file.open(IO_ReadOnly) ) 
             return false;
 
-        kdDebug() << "(" << preview.width() << "x" << preview.height() 
+        DDebug() << "(" << preview.width() << "x" << preview.height() 
                   << ") JPEG image preview size: " << file.size() 
                   << " bytes" << endl;
         
@@ -1764,7 +1764,7 @@ bool DMetadata::setImagePreview(const QImage& preview)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get image preview using Exiv2 (" 
+        DDebug() << "Cannot get image preview using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }
@@ -1864,7 +1864,7 @@ bool DMetadata::getGPSInfo(double& altitude, double& latitude, double& longitude
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Exif GPS tag using Exiv2 (" 
+        DDebug() << "Cannot get Exif GPS tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -1986,7 +1986,7 @@ bool DMetadata::setGPSInfo(double altitude, double latitude, double longitude)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif GPS tag using Exiv2 (" 
+        DDebug() << "Cannot set Exif GPS tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
@@ -2021,7 +2021,7 @@ bool DMetadata::removeGPSInfo()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Exif GPS tag using Exiv2 (" 
+        DDebug() << "Cannot remove Exif GPS tag using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        

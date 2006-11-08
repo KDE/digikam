@@ -39,7 +39,6 @@ extern "C"
 // KDE includes.
 
 #include <kfilemetainfo.h>
-#include <kdebug.h>
 
 // LibExiv2 includes.
 
@@ -48,6 +47,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "pngmetaloader.h"
 
 namespace Digikam
@@ -105,7 +105,7 @@ bool PNGMetaLoader::load(const QString& filePath)
                             int i = exifData.find(*exifHeader);
                             if (i != -1)
                             {
-                                kdDebug() << filePath << " : Exif header found at position " << i << endl;
+                                DDebug() << filePath << " : Exif header found at position " << i << endl;
                                 i = i + sizeof(exifHeader);
                                 exifMetadata().load((const Exiv2::byte*)data+i, exifData.size()-i);
                             }
@@ -224,7 +224,7 @@ bool PNGMetaLoader::load(const QString& filePath)
                         if (exifKey != "Exif.")
                         {
                             QString txtValue = item.string();
-                            kdDebug() << exifKey << "=" << txtValue << endl;
+                            DDebug() << exifKey << "=" << txtValue << endl;
                             exifData[exifKey.ascii()] = std::string(txtValue.ascii());
                         }
                     }
@@ -263,7 +263,7 @@ bool PNGMetaLoader::load(const QString& filePath)
         }
         catch( Exiv2::Error &e )
         {
-            kdDebug() << "Exiv2 Exception (" << e.code() << ")" << endl;
+            DDebug() << "Exiv2 Exception (" << e.code() << ")" << endl;
             return false;
         }
 
@@ -313,7 +313,7 @@ uchar* PNGMetaLoader::readRawProfile(const char* text, uint *length)
 
     if (*length == 0)
     {
-        kdDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
+        DDebug() << "Unable To Copy Raw Profile: invalid profile length"  << endl;
         return 0;
     }
 
@@ -321,7 +321,7 @@ uchar* PNGMetaLoader::readRawProfile(const char* text, uint *length)
 
     if (!info)
     {
-        kdDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
+        DDebug() << "Unable To Copy Raw Profile: cannot allocate memory"  << endl;
         return 0;
     }
 
@@ -336,7 +336,7 @@ uchar* PNGMetaLoader::readRawProfile(const char* text, uint *length)
         {
             if (*sp == '\0')
             {
-                kdDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
+                DDebug() << "Unable To Copy Raw Profile: ran out of data" << endl;
                 return 0;
             }
 
