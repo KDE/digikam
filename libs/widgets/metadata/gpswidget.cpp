@@ -279,8 +279,11 @@ bool GPSWidget::decodeMetadata()
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString tagValue = QString::fromAscii(os.str().c_str());
-            
+
+            // Exif tag contents can be an i18n strings, no only simple ascii.
+            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            tagValue.replace("\n", " ");
+
             // We apply a filter to get only standard Exif tags, not maker notes.
             if (d->keysFilter.contains(key.section(".", 1, 1)))
                 metaDataMap.insert(key, tagValue);

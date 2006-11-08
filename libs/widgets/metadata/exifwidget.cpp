@@ -161,7 +161,9 @@ bool ExifWidget::decodeMetadata()
             {
                 std::ostringstream os;
                 os << *md;
-                tagValue = QString::fromAscii(os.str().c_str());
+
+                // Exif tag contents can be an i18n strings, no only simple ascii.
+                tagValue = QString::fromLocal8Bit(os.str().c_str());
             }
             tagValue.replace("\n", " ");
 

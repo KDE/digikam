@@ -180,12 +180,14 @@ bool MakerNoteWidget::decodeMetadata()
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString::fromAscii(os.str().c_str());
-            value.replace("\n", " ");
+
+            // Exif tag contents can be an i18n strings, no only simple ascii.
+            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            tagValue.replace("\n", " ");
 
             // We apply a filter to get only standard Exif tags, not maker notes.
             if (!m_keysFilter.contains(key.section(".", 1, 1)))
-                metaDataMap.insert(key, value);
+                metaDataMap.insert(key, tagValue);
         }
         
         // Update all metadata contents.
