@@ -26,12 +26,12 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 
 // Local includes
 
+#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"

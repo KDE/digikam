@@ -75,7 +75,6 @@ extern "C"
 #include <krun.h>
 #include <kaction.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <kiconeffect.h>
 
 #include <kdeversion.h>
@@ -93,6 +92,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "dio.h"
@@ -380,7 +380,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
 
         if (!item->album())
         {
-            kdWarning() << "No album for item: " << item->name()
+            DWarning() << "No album for item: " << item->name()
                         << ", albumID: " << item->albumID() << endl;
             continue;
         }
@@ -608,7 +608,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
         if (plugin && (*it)->name() == "JPEGLossless")
         {
-            kdDebug() << "Found JPEGLossless plugin" << endl;
+            DDebug() << "Found JPEGLossless plugin" << endl;
 
             KActionPtrList actionList = plugin->actions();
             
@@ -1353,7 +1353,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kdDebug() << "Setting Exif Orientation tag to " << orientation << endl;
+        DDebug() << "Setting Exif Orientation tag to " << orientation << endl;
 
         DMetadata metadata((*it).path());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

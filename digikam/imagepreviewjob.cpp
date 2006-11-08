@@ -38,10 +38,10 @@ extern "C"
 // KDE includes.
 
 #include <kglobal.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "imagepreviewjob.h"
 
 namespace Digikam
@@ -187,7 +187,7 @@ void ImagePreviewJob::slotImagePreviewData(KIO::Job*, const QByteArray &data)
 
     if (preview.isNull()) 
     {
-        kdWarning() << k_funcinfo << "preview is null" << endl;
+        DWarning() << k_funcinfo << "preview is null" << endl;
         emit signalFailed(d->imageUrl);
         return;
     }

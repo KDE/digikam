@@ -56,10 +56,10 @@ extern "C"
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "digikamfirstrun.h"
 #include "version.h"
 #include "firstrun.h"
@@ -165,7 +165,7 @@ void DigikamFirstRun::slotOk()
 
     if (kapp->startServiceByDesktopName("digikam", URL , &ErrorMsg) > 0)
     {
-        kdError() << ErrorMsg << endl;
+        DError() << ErrorMsg << endl;
         KMessageBox::sorry(this, i18n("Cannot restart digiKam automatically.\n"
                                       "Please restart digiKam manually."));
     }

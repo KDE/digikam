@@ -45,7 +45,6 @@ extern "C"
 // KDE includes.
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
@@ -57,6 +56,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumitemhandler.h"
@@ -211,7 +211,7 @@ void AlbumManager::setLibraryPath(const QString& path)
     
     if (dbLocale.isNull())
     {
-        kdDebug() << "No locale found in database" << endl;
+        DDebug() << "No locale found in database" << endl;
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -219,7 +219,7 @@ void AlbumManager::setLibraryPath(const QString& path)
         config->setGroup("General Settings");
         if (config->hasKey("Locale"))
         {
-            kdDebug() << "Locale found in configfile" << endl;
+            DDebug() << "Locale found in configfile" << endl;
             dbLocale = config->readEntry("Locale");
 
             // this hack is necessary, as we used to store the entire
@@ -237,7 +237,7 @@ void AlbumManager::setLibraryPath(const QString& path)
         }
         else
         {
-            kdDebug() << "No locale found in config file"  << endl;
+            DDebug() << "No locale found in config file"  << endl;
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -417,7 +417,7 @@ void AlbumManager::scanPAlbums()
         PAlbum* parent = d->pAlbumDict.find(purl);
         if (!parent)
         {
-            kdWarning() << k_funcinfo <<  "Could not find parent with url: "
+            DWarning() << k_funcinfo <<  "Could not find parent with url: "
                         << purl << " for: " << info.url << endl;
             continue;
         }
@@ -494,7 +494,7 @@ void AlbumManager::scanTAlbums()
             }
             else
             {
-                kdWarning() << "Failed to find parent tag for tag "
+                DWarning() << "Failed to find parent tag for tag "
                             << iter.current()->m_title
                             << " with pid "
                             << iter.current()->m_pid << endl;
@@ -531,7 +531,7 @@ void AlbumManager::scanTAlbums()
         TagMap::iterator iter = tmap.find(info.pid);
         if (iter == tmap.end())
         {
-            kdWarning() << "Failed to find parent tag for tag "
+            DWarning() << "Failed to find parent tag for tag "
                         << info.name 
                         << " with pid "
                         << info.pid << endl;
@@ -1272,7 +1272,7 @@ void AlbumManager::slotResult(KIO::Job* job)
 
     if (job->error())
     {
-        kdWarning() << k_funcinfo << "Failed to list dates" << endl;
+        DWarning() << k_funcinfo << "Failed to list dates" << endl;
         return;
     }
     
@@ -1340,7 +1340,7 @@ void AlbumManager::slotDirty(const QString& path)
     if (d->dirtyAlbums.contains(url))
         return;
 
-    kdDebug() << "Dirty: " << url << endl;
+    DDebug() << "Dirty: " << url << endl;
     d->dirtyAlbums.append(url);
 
     if (DIO::running())

@@ -26,7 +26,6 @@
 
 #include <kpopupmenu.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kabc/stdaddressbook.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -34,6 +33,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "tagfolderview.h"
 #include "album.h"
 #include "albumdb.h"
@@ -199,7 +199,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
 
         if (!parent)
         {
-            kdWarning() << k_funcinfo << " Failed to find parent for Tag "
+            DWarning() << k_funcinfo << " Failed to find parent for Tag "
                         << tag->title() << endl;
             return;
         }
@@ -721,7 +721,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kdWarning() << "Could not find source album of drag"
+            DWarning() << "Could not find source album of drag"
                     << endl;
             return;
         }

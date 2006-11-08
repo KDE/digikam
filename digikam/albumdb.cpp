@@ -46,11 +46,11 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumdb.h"
@@ -112,7 +112,7 @@ void AlbumDB::setDBPath(const QString& path)
     sqlite3_open(QFile::encodeName(path), &d->dataBase);
     if (d->dataBase == 0)
     {
-        kdWarning() << "Cannot open database: "
+        DWarning() << "Cannot open database: "
                     << sqlite3_errmsg(d->dataBase)
                     << endl;
     }
@@ -602,7 +602,7 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 int AlbumDB::addSearch(const QString& name, const KURL& url)
 {
     if (!d->dataBase)
-	return -1;
+    return -1;
 
     QString str("INSERT INTO Searches (name, url) \n"
                 "VALUES('$$@@$$', '$$##$$');");
@@ -611,14 +611,14 @@ int AlbumDB::addSearch(const QString& name, const KURL& url)
     
     if (!execSql(str))
     {
-	return -1;
+    return -1;
     }
 
     return sqlite3_last_insert_rowid(d->dataBase);
 }
 
 void AlbumDB::updateSearch(int searchID, const QString& name,
-			   const KURL& url)
+               const KURL& url)
 {
     QString str = QString("UPDATE Searches SET name='$$@@$$', url='$$##$$' \n"
                           "WHERE id=%1")
@@ -660,11 +660,11 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
                       const bool debug)
 {
     if ( debug )
-        kdDebug() << "SQL-query: " << sql << endl;
+        DDebug() << "SQL-query: " << sql << endl;
 
     if ( !d->dataBase )
     {
-        kdWarning() << k_funcinfo << "SQLite pointer == NULL"
+        DWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
         return false;
     }
@@ -677,7 +677,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
     error = sqlite3_prepare(d->dataBase, sql.utf8(), -1, &stmt, &tail);
     if ( error != SQLITE_OK )
     {
-        kdWarning() << k_funcinfo
+        DWarning() << k_funcinfo
                     << "sqlite_compile error: "
                     << sqlite3_errmsg(d->dataBase)
                     << " on query: "
@@ -705,7 +705,7 @@ bool AlbumDB::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_DONE )
     {
-        kdWarning() << "sqlite_step error: "
+        DWarning() << "sqlite_step error: "
                     << sqlite3_errmsg( d->dataBase )
                     << " on query: "
                     << sql << endl;
@@ -809,7 +809,7 @@ QStringList AlbumDB::getItemTagNames(Q_LLONG imageID)
                      "ORDER BY name;")
              .arg(imageID),
              &values );
-	
+    
     return values;
 }
 

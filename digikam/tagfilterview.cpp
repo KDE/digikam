@@ -32,7 +32,6 @@
 
 #include <kpopupmenu.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kiconloader.h>
@@ -49,6 +48,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "albumlister.h"
 #include "albumdb.h"
@@ -378,7 +378,7 @@ void TagFilterView::slotTagAdded(Album* album)
         TagFilterViewItem* parent = (TagFilterViewItem*)(tag->parent()->extraData(this));
         if (!parent)
         {
-            kdWarning() << k_funcinfo << " Failed to find parent for Tag "
+            DWarning() << k_funcinfo << " Failed to find parent for Tag "
                         << tag->url() << endl;
             return;
         }

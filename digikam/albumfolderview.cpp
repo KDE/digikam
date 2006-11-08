@@ -34,7 +34,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -43,6 +42,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "digikamapp.h"
 #include "album.h"
 #include "albumfolderview.h"
@@ -264,7 +264,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        kdWarning() << k_funcinfo << " Failed to find parent for Album "
+        DWarning() << k_funcinfo << " Failed to find parent for Album "
                     << palbum->url() << endl;
         return;
     }
@@ -537,7 +537,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kdWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
+        DWarning() << "AlbumFolderView: Couldn't get Album Settings" << endl;
         return;
     }
 
@@ -896,7 +896,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findPAlbum(albumID);
         if (!srcAlbum)
         {
-            kdWarning() << "Could not find source album of drag"
+            DWarning() << "Could not find source album of drag"
                     << endl;
             return;
         }

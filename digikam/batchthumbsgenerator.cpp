@@ -35,13 +35,13 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kmdcodec.h>
 #include <klocale.h>
 #include <kapplication.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

@@ -42,10 +42,10 @@ extern "C"
 #include <kio/renamedlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albumsettings.h"
 #include "albummanager.h"
 #include "albumlister.h"
@@ -147,7 +147,7 @@ bool renameFile(const KURL& src, const KURL& dest)
     Digikam::PAlbum* dstAlbum = Digikam::AlbumManager::instance()->findPAlbum(dstdir);
     if (!srcAlbum || !dstAlbum)
     {
-        kdWarning() << "Source Album " << src.directory() << " not found" << endl;
+        DWarning() << "Source Album " << src.directory() << " not found" << endl;
         return false;
     }
 

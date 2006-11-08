@@ -39,11 +39,11 @@
 
 #include <kurl.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <klineedit.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "searchwidgets.h"
 #include "searchadvanceddialog.h"
 #include "searchresultsview.h"
@@ -510,7 +510,7 @@ void SearchAdvancedDialog::slotTimeOut()
     m_url = url;
     if (!count == 0)
         d->resultsView->openURL( url );
-    kdDebug() << url << endl;
+    DDebug() << url << endl;
 
     if (!d->baseList.isEmpty())
     {
@@ -636,7 +636,7 @@ void SearchAdvancedDialog::fillWidgets( const KURL& url )
         }
         else
         {
-            kdDebug() << "IGNORED:" << *it << endl;
+            DDebug() << "IGNORED:" << *it << endl;
         }
     }
 

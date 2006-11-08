@@ -40,12 +40,12 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"

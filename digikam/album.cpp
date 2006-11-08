@@ -20,11 +20,11 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
@@ -171,7 +171,7 @@ int Album::globalID() const
     case(SEARCH):
         return 40000 + m_id;
     default:
-        kdError() << "Unknown album type" << endl;
+        DError() << "Unknown album type" << endl;
         return -1;
     }
 }

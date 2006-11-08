@@ -26,12 +26,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -87,7 +84,7 @@ bool ImageInfo::setName(const QString& newName)
     PAlbum* a = album();
     if (!a)
     {
-        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        DWarning() << "No album found for ID: " << m_albumID << endl;
         return false;
     }
     
@@ -141,7 +138,7 @@ KURL ImageInfo::kurl() const
     PAlbum* a = album();
     if (!a)
     {
-        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        DWarning() << "No album found for ID: " << m_albumID << endl;
         return KURL();
     }
     
@@ -156,7 +153,7 @@ QString ImageInfo::filePath() const
     PAlbum* a = album();
     if (!a)
     {
-        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        DWarning() << "No album found for ID: " << m_albumID << endl;
         return QString();
     }
 
@@ -170,7 +167,7 @@ KURL ImageInfo::kurlForKIO() const
     PAlbum* a = album();
     if (!a)
     {
-        kdWarning() << "No album found for ID: " << m_albumID << endl;
+        DWarning() << "No album found for ID: " << m_albumID << endl;
         return KURL();
     }
 
@@ -279,7 +276,7 @@ void ImageInfo::setRating(int value)
 
 ImageInfo ImageInfo::copyItem(PAlbum *dstAlbum, const QString &dstFileName)
 {
-    kdDebug() << "ImageInfo::copyItem " << m_albumID << " " << m_name << " to " << dstAlbum->id() << " " << dstFileName << endl;
+    DDebug() << "ImageInfo::copyItem " << m_albumID << " " << m_name << " to " << dstAlbum->id() << " " << dstFileName << endl;
     if (dstAlbum->id() == m_albumID && dstFileName == m_name)
         return (*this);
 

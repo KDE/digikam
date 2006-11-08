@@ -34,10 +34,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albumiconview.h"
 #include "albumiconitem.h"
 #include "albummanager.h"
@@ -310,7 +310,7 @@ void TagsPopupMenu::slotActivated(int id)
         TAlbum* parent = man->findTAlbum(tagID);
         if (!parent)
         {
-            kdWarning() << "Failed to find album with id "
+            DWarning() << "Failed to find album with id "
                         << tagID << endl;
             return;
         }

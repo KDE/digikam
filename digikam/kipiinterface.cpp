@@ -46,7 +46,6 @@ extern "C"
 #include <kconfig.h>
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
-#include <kdebug.h>
 
 // libKipi Includes.
 
@@ -54,6 +53,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "albumitemhandler.h"
 #include "album.h"
@@ -161,7 +161,7 @@ void DigikamImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        kdWarning() << k_funcinfo << "Invalid datetime specified" << endl;
+        DWarning() << k_funcinfo << "Invalid datetime specified" << endl;
         return;
     }
 
@@ -250,7 +250,7 @@ DigikamImageCollection::DigikamImageCollection( Type tp, Album* album, const QSt
 {
     if (!album)
     {
-        kdWarning() << k_funcinfo << "This should not happen. No album specified" << endl;
+        DWarning() << k_funcinfo << "This should not happen. No album specified" << endl;
     }
 }
 
@@ -372,7 +372,7 @@ KURL::List DigikamImageCollection::images()
         }
             else
             {
-                kdWarning() << k_funcinfo << "Unknown album type" << endl;
+                DWarning() << k_funcinfo << "Unknown album type" << endl;
                 return KURL::List();
             }
     
@@ -462,7 +462,7 @@ KURL DigikamImageCollection::path()
     }
     else
     {
-        kdWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
+        DWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
         return QString();
     }
 }
@@ -478,7 +478,7 @@ KURL DigikamImageCollection::uploadPath()
     }
     else
     {
-        kdWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
+        DWarning() << k_funcinfo << "Requesting kurl from a virtual album" << endl;
         return KURL();
     }
 }
@@ -618,8 +618,8 @@ int DigikamKipiInterface::features() const
 #endif
            KIPI::ImagesHasComments          | KIPI::AcceptNewImages            |
            KIPI::AlbumsHaveComments         | KIPI::ImageTitlesWritable        |
-	       KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
-	       KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
+           KIPI::ImagesHasTime              | KIPI::AlbumsHaveCategory         |
+           KIPI::AlbumsHaveCreationDate     | KIPI::AlbumsUseFirstImagePreview 
            );
 }
 
@@ -651,7 +651,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     KURL rootURL(albumManager_->getLibraryPath());
     if ( !rootURL.isParentOf(url) )
     {
-        kdWarning() << k_funcinfo << "URL not in the Digikam Album library" << endl;
+        DWarning() << k_funcinfo << "URL not in the Digikam Album library" << endl;
     }
 
     // Is there a PAlbum for this url
@@ -665,7 +665,7 @@ void DigikamKipiInterface::delImage( const KURL& url )
     }
     else
     {
-        kdWarning() << k_funcinfo << "Cannot find Parent album in digiKam Album library" << endl;
+        DWarning() << k_funcinfo << "Cannot find Parent album in digiKam Album library" << endl;
     }
 }
 

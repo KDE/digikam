@@ -33,7 +33,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <kconfig.h>
 
 #include <kdeversion.h>
@@ -43,6 +42,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "monthwidget.h"

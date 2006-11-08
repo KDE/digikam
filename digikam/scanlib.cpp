@@ -40,7 +40,6 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
@@ -49,6 +48,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "albumdb.h"
@@ -166,7 +166,7 @@ void ScanLib::findFoldersWhichDoNotExist()
         QMapIterator<QString,int> it;
         for (it = toBeDeleted.begin() ; it != toBeDeleted.end(); ++it)
         {
-            kdDebug() << "Removing Album: " << it.key() << endl;
+            DDebug() << "Removing Album: " << it.key() << endl;
             db->deleteAlbum( it.data() );
         }
     }
@@ -257,7 +257,7 @@ void ScanLib::updateItemsWithoutDate()
 
         if (albumID <= 0)
         {
-            kdWarning() << "Album ID == -1: " << albumURL << endl;
+            DWarning() << "Album ID == -1: " << albumURL << endl;
         }
         
         if (fi.exists())
@@ -315,7 +315,7 @@ void ScanLib::allFiles(const QString& directory)
     QDir dir( directory );
     if ( !dir.exists() or !dir.isReadable() )
     {
-        kdWarning() << "Folder does not exist or is not readable: "
+        DWarning() << "Folder does not exist or is not readable: "
                     << directory << endl;
         return;
     }
@@ -332,7 +332,7 @@ void ScanLib::allFiles(const QString& directory)
 
     if (albumID <= 0)
     {
-        kdWarning() << "Album ID == -1: " << albumURL << endl;
+        DWarning() << "Album ID == -1: " << albumURL << endl;
     }
     
     QStringList filesInAlbum = db->getItemNamesInAlbum( albumID );
@@ -509,7 +509,7 @@ void ScanLib::deleteStaleEntries()
         for (it = m_filesToBeDeleted.begin() ; it != m_filesToBeDeleted.end();
              ++it)
         {
-            kdDebug() << "Removing: " << (*it).first << " in "
+            DDebug() << "Removing: " << (*it).first << " in "
                       << (*it).second << endl;
             db->deleteItem( (*it).second, (*it).first );
         }
@@ -519,7 +519,7 @@ void ScanLib::deleteStaleEntries()
 
 void ScanLib::timing(const QString& text, struct timeval tv1, struct timeval tv2)
 {
-    kdDebug() << "ScanLib: "
+    DDebug() << "ScanLib: "
               << text + ": "
               << (((tv2.tv_sec-tv1.tv_sec)*1000000 +
                    (tv2.tv_usec-tv1.tv_usec))/1000)

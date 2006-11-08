@@ -41,7 +41,6 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <krun.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
@@ -49,6 +48,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "rawfiles.h"
 #include "albummanager.h"
 #include "album.h"

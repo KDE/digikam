@@ -26,12 +26,12 @@
 
 #include <kglobalsettings.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "themeengine.h"
 #include "folderview.h"

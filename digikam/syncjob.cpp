@@ -36,10 +36,10 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albumsettings.h"
 #include "syncjob.h"
 #include "thumbnailjob.h"

@@ -25,12 +25,9 @@
 #include <qstringlist.h>
 #include <qwidget.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albumhistory.h"
 

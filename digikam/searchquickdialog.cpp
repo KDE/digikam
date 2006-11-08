@@ -35,11 +35,11 @@
 
 #include <klineedit.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kurl.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "searchresultsview.h"
 #include "searchquickdialog.h"
 

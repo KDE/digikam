@@ -37,7 +37,6 @@
 
 #include <kaboutdata.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
@@ -64,6 +63,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "albummanager.h"
 #include "album.h"
 #include "albumlister.h"
@@ -1079,7 +1079,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         if (mlu.isLocalFile())
             return mlu.path();
 
-        kdWarning() << folder << " mlu " << mlu << endl;
+        DWarning() << folder << " mlu " << mlu << endl;
 
         QString path = mlu.path();
 
@@ -1090,7 +1090,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
         else
             return folder; // nothing to see - go on
 
-        kdDebug() << "parsed import path is: " << path << endl;
+        DDebug() << "parsed import path is: " << path << endl;
         DCOPRef ref("kded", "mediamanager");
         DCOPReply reply = ref.call("properties", path);
         if (reply.isValid()) {
@@ -1101,7 +1101,7 @@ QString DigikamApp::convertToLocalUrl( const QString& folder )
             else
                 return slreply[6];
         } else {
-            kdWarning() << "dcop call failed\n";
+            DWarning() << "dcop call failed\n";
         }
 
         return path;
@@ -1171,7 +1171,7 @@ void DigikamApp::slotDownloadImages()
     KIO::NetAccess::synchronousRun(job,0);
 
     QString localUrl = convertToLocalUrl(mCameraGuiPath);
-    kdDebug() << "slotDownloadImages: convertToLocalUrl " << mCameraGuiPath << " to " << localUrl << endl;
+    DDebug() << "slotDownloadImages: convertToLocalUrl " << mCameraGuiPath << " to " << localUrl << endl;
 
     if (localUrl.isNull())
         return;
@@ -1288,12 +1288,12 @@ void DigikamApp::slotCameraMediaMenuEntries( Job *, const UDSEntryList & list )
             if ( (*et).m_uds == KIO::UDS_URL)
                 path = ( *et ).m_str;
 
-            //kdDebug() << ( *et ).m_str << endl;
+            //DDebug() << ( *et ).m_str << endl;
         }
 
         if (!name.isEmpty() && !path.isEmpty())
         {
-            //kdDebug() << "slotCameraMediaMenuEntries: Adding " << name << ", path " << path << endl;
+            //DDebug() << "slotCameraMediaMenuEntries: Adding " << name << ", path " << path << endl;
             if (i == 0)
                 mCameraMediaList->clear();
 
@@ -1564,7 +1564,7 @@ void DigikamApp::slotKipiPluginPlug()
             if ( popup )
                popup->append( *it2 );
             else
-               kdDebug() << "No menu found for a plugin!!!" << endl;
+               DDebug() << "No menu found for a plugin!!!" << endl;
         }
 
         plugin->actionCollection()->readShortcutSettings();

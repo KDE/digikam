@@ -36,12 +36,9 @@ extern "C"
 
 #include <qfile.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "albumdb_sqlite2.h"
 
 namespace Digikam
@@ -66,7 +63,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
 {
     if (m_db) {
         sqlite_close(m_db);
-	m_db = 0;
+    m_db = 0;
         m_valid = false;
     }
 
@@ -74,7 +71,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        kdWarning() << k_funcinfo << "Cannot open database: "
+        DWarning() << k_funcinfo << "Cannot open database: "
                     << errMsg << endl;
         free(errMsg);
         return;
@@ -89,10 +86,10 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
                       const bool debug)
 {
     if ( debug )
-        kdDebug() << "SQL-query: " << sql << endl;
+        DDebug() << "SQL-query: " << sql << endl;
 
     if ( !m_db ) {
-        kdWarning() << k_funcinfo << "SQLite pointer == NULL"
+        DWarning() << k_funcinfo << "SQLite pointer == NULL"
                     << endl;
         return false;
     }
@@ -106,7 +103,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     error = sqlite_compile( m_db, sql.local8Bit(), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK ) {
-        kdWarning() << k_funcinfo << "sqlite_compile error: "
+        DWarning() << k_funcinfo << "sqlite_compile error: "
                     << errorStr 
                     << " on query: " << sql << endl;
         sqlite_freemem( errorStr );
@@ -131,7 +128,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     sqlite_finalize( vm, &errorStr );
 
     if ( error != SQLITE_DONE ) {
-        kdWarning() << k_funcinfo << "sqlite_step error: "
+        DWarning() << k_funcinfo << "sqlite_step error: "
                     << errorStr
                     << " on query: " << sql << endl;
         return false;

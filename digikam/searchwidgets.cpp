@@ -38,18 +38,18 @@
 
 #include <klocale.h>
 #include <kdateedit.h>
-#include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
 
 // Local includes.
 
-#include <album.h>
-#include <albuminfo.h>
-#include <albummanager.h>
-#include <searchwidgets.h>
-#include <ratingwidget.h>
-#include <squeezedcombobox.h>
+#include "ddebug.h"
+#include "album.h"
+#include "albuminfo.h"
+#include "albummanager.h"
+#include "searchwidgets.h"
+#include "ratingwidget.h"
+#include "squeezedcombobox.h"
 
 namespace Digikam
 {

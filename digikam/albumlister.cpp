@@ -46,12 +46,12 @@ extern "C"
 
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -349,7 +349,7 @@ void AlbumLister::slotResult(KIO::Job* job)
 
     if (job->error())
     {
-        kdWarning() << "Failed to list url: " << job->errorString() << endl;
+        DWarning() << "Failed to list url: " << job->errorString() << endl;
         d->itemMap.clear();
         return;
     }

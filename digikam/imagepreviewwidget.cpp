@@ -32,11 +32,11 @@
 
 #include <kcursor.h>
 #include <kprocess.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "themeengine.h"
 #include "albumsettings.h"
 #include "imagepreviewjob.h"
