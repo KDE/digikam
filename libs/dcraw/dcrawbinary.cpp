@@ -26,11 +26,11 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kaboutdata.h>
 
 // Local includes
 
+#include "ddebug.h"
 #include "dcrawbinary.h"
 #include "dcrawbinary.moc"
 
@@ -101,7 +101,7 @@ void DcrawBinary::slotReadStderrFromDcraw(KProcess*, char* buffer, int buflen)
     if (firstLine.startsWith(dcrawHeader))
     {
         d->version = firstLine.remove(0, dcrawHeader.length());    
-        kdDebug() << "Found dcraw version: " << version() << endl;    
+        DDebug() << "Found dcraw version: " << version() << endl;    
     }
 }
 

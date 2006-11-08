@@ -3,7 +3,9 @@ KDE_OPTIONS = nofinal
 
 METASOURCES = AUTO
 
-INCLUDES = -I$(top_srcdir)/digikam/digikam $(all_includes)
+INCLUDES = -I$(top_srcdir)/digikam/digikam \
+	       -I$(top_srcdir)/digikam/libs/dimg \
+	       $(all_includes)
 
 noinst_LTLIBRARIES = libdcraw.la
 

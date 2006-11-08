@@ -39,11 +39,11 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kprocess.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "rawfiles.h"
 #include "dcrawpreview.h"
 
@@ -73,7 +73,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
 
     command  = "dcraw -c -e ";
     command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
+    DDebug() << "Running dcraw command " << command << endl;
 
     f = popen( command.data(), "r" );
 
@@ -104,7 +104,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     {
         if (image.loadFromData( imgData ))
         {
-            kdDebug() << "Using embedded RAW preview extraction" << endl;
+            DDebug() << "Using embedded RAW preview extraction" << endl;
             return true;
         }
     }
@@ -118,7 +118,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     f=NULL;
     command  = "dcraw -c -h -w -a ";
     command += QFile::encodeName( KProcess::quote( path ) );
-    kdDebug() << "Running dcraw command " << command << endl;
+    DDebug() << "Running dcraw command " << command << endl;
 
     f = popen( command.data(), "r" );
 
@@ -149,7 +149,7 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     {
         if (image.loadFromData( imgData ))
         {
-            kdDebug() << "Using reduced RAW picture extraction" << endl;
+            DDebug() << "Using reduced RAW picture extraction" << endl;
             return true;
         }
     }
