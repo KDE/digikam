@@ -47,11 +47,11 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kfilemetainfo.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dmetadata.h"
 #include "transupp.h"
 #include "jpegutils.h"
@@ -64,7 +64,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     QFileInfo fi(file);
     if (!fi.exists())
     {
-        kdDebug() << "ExifRotate: file do not exist: " << file << endl;
+        DDebug() << "ExifRotate: file do not exist: " << file << endl;
         return false;
     }
         
@@ -73,7 +73,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         DMetadata metaData;
         if (!metaData.load(file))
         {
-            kdDebug() << "ExifRotate: no Exif data found: " << file << endl;
+            DDebug() << "ExifRotate: no Exif data found: " << file << endl;
             return true;
         }
 
@@ -136,7 +136,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     
         if (transformoption.transform == JXFORM_NONE)
         {
-            kdDebug() << "ExifRotate: no rotation to perform: " << file << endl;
+            DDebug() << "ExifRotate: no rotation to perform: " << file << endl;
             return true;
         }
     
@@ -212,7 +212,7 @@ bool exifRotate(const QString& file, const QString& documentName)
         // -- Metadata operations ------------------------------------------------------
 
         // Reset the Exif orientation tag of the temp image to normal
-        kdDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
+        DDebug() << "ExifRotate: set Orientation tag to normal: " << file << endl;
 
         metaData.load(temp);
         metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
@@ -269,7 +269,7 @@ bool exifRotate(const QString& file, const QString& documentName)
     }
     
     // Not a jpeg image.
-    kdDebug() << "ExifRotate: not a JPEG file: " << file << endl;
+    DDebug() << "ExifRotate: not a JPEG file: " << file << endl;
     return false;
 }
 
@@ -278,7 +278,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
     QFileInfo fi(src);
     if (!fi.exists())
     {
-        kdDebug() << "JpegConvert: file do not exist: " << src << endl;
+        DDebug() << "JpegConvert: file do not exist: " << src << endl;
         return false;
     }
         

@@ -25,12 +25,9 @@
 
 #include <qapplication.h>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Locale includes.
 
+#include "ddebug.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -174,7 +171,7 @@ void SharedLoadingTask::execute()
                 m_usedProcess->removeListener(this);
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
-                //kdDebug() << "SharedLoadingTask " << this << ": waited" << endl;
+                //DDebug() << "SharedLoadingTask " << this << ": waited" << endl;
                 return;
             }
             else
@@ -211,7 +208,7 @@ void SharedLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-        //kdDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
+        //DDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull() << endl;
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 

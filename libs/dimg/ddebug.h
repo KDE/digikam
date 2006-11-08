@@ -50,5 +50,5 @@ DIGIKAM_EXPORT Digikam::Ddbgstream DDebug(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DWarning(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DError(int area = 0);
 
-#endif //  DDEBUG_H
+#endif //  _DDEBUG_H_
 
