@@ -203,7 +203,7 @@ QString ExifWidget::getTagTitle(const QString& key)
     {
         std::string exifkey(key.ascii());
         Exiv2::ExifKey ek(exifkey); 
-        return QString::fromAscii( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
+        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
     }
     catch (Exiv2::Error& e) 
     {
@@ -220,7 +220,7 @@ QString ExifWidget::getTagDescription(const QString& key)
     {
         std::string exifkey(key.ascii());
         Exiv2::ExifKey ek(exifkey); 
-        return QString::fromAscii( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
+        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
     }
     catch (Exiv2::Error& e) 
     {

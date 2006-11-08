@@ -179,7 +179,7 @@ QString IptcWidget::getTagTitle(const QString& key)
     {
         std::string iptckey(key.ascii());
         Exiv2::IptcKey ik(iptckey); 
-        return QString::fromAscii( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
     }
     catch (Exiv2::Error& e) 
     {
@@ -196,7 +196,7 @@ QString IptcWidget::getTagDescription(const QString& key)
     {
         std::string iptckey(key.ascii());
         Exiv2::IptcKey ik(iptckey); 
-        return QString::fromAscii( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
     }
     catch (Exiv2::Error& e) 
     {
