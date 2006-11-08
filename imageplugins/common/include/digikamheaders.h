@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-12-22
+ * Date   : 2004-12-22
  *
  * Copyright 2004 by Renchi Raju
  * Copyright 2005-2006 by Gilles Caulier
@@ -26,6 +26,7 @@
 #ifdef HAVE_DIGIKAM_TOPLEVEL
 
 #include <dimg.h>
+#include <ddebug.h>
 #include <dimgimagefilters.h>
 #include <dimgthreadedfilter.h>
 #include <bcgmodifier.h>
@@ -55,6 +56,7 @@
 #else
 
 #include <digikam/dimg.h>
+#include <digikam/ddebug.h>
 #include <digikam/dimgimagefilters.h>
 #include <digikam/dimgthreadedfilter.h>
 #include <digikam/bcgmodifier.h>
