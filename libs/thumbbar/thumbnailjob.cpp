@@ -277,7 +277,7 @@ void ThumbnailJob::slotThumbData(KIO::Job*, const QByteArray &data)
 
     if (thumb.isNull()) 
     {
-        kdWarning() << k_funcinfo << "thumbnail is null" << endl;
+        DWarning() << k_funcinfo << "thumbnail is null" << endl;
         emit signalFailed(d->curr_url);
         return;
     }

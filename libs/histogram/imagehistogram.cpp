@@ -175,7 +175,7 @@ void ImageHistogram::calcHistogramValues()
 
     if ( !d->histogram )
     {
-       kdWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
+       DWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!") << endl;
 
        if (d->parent)
           postProgress(false, false);

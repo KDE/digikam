@@ -362,7 +362,7 @@ void RAWLoader::startProcess()
     // actually start the process
     if ( !m_process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
     {
-        kdError() << "Failed to start dcraw" << endl;
+        DError() << "Failed to start dcraw" << endl;
         delete m_process;
         m_process    = 0;
         m_running    = false;
@@ -413,7 +413,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         QString magic = QString::fromAscii(buffer, 2);
         if (magic != "P6") 
         {
-            kdError() << "Cannot parse header from dcraw: Magic is " << magic << endl;
+            DError() << "Cannot parse header from dcraw: Magic is " << magic << endl;
             m_process->kill();
             return;
         }
@@ -437,7 +437,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         QStringList sizes = QStringList::split(" ", splitlist[1]);
         if (splitlist.size() < 3 || sizes.size() < 2)
         {
-            kdError() << "Cannot parse header from dcraw: Could not split" << endl;
+            DError() << "Cannot parse header from dcraw: Could not split" << endl;
             m_process->kill();
             return;
         }

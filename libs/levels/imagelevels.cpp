@@ -603,14 +603,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 
        if (fields != 4)
        {
-          kdWarning() <<  "Invalid Gimp levels file!" << endl;
+          DWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }
 
        if (!fgets (buf, 50, file))
        {
-          kdWarning() <<  "Invalid Gimp levels file!" << endl;
+          DWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }
@@ -619,7 +619,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(KURL fileUrl)
 
        if (buf == nptr || errno == ERANGE)
        {
-          kdWarning() <<  "Invalid Gimp levels file!" << endl;
+          DWarning() <<  "Invalid Gimp levels file!" << endl;
           fclose(file);
           return false;
        }

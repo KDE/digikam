@@ -490,7 +490,7 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     PAlbum *album = d->currInfo->album();
     if (!album)
     {
-        kdWarning() << k_funcinfo << "Failed to find parent album for"
+        DWarning() << k_funcinfo << "Failed to find parent album for"
                     << fileURL << endl;
         return;
     }
@@ -763,7 +763,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parentItem)
         {
-            kdWarning() << k_funcinfo << "Failed to find parent for Tag " << tag->title()
+            DWarning() << k_funcinfo << "Failed to find parent for Tag " << tag->title()
                         << endl;
             return;
         }
@@ -814,7 +814,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     QCheckListItem* viewItem = (QCheckListItem*)(album->extraData(this));
     if (!viewItem)
     {
-        kdWarning() << "Failed to find view item for Tag "
+        DWarning() << "Failed to find view item for Tag "
                     << album->title() << endl;
         return;
     }

@@ -75,7 +75,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
 {
     if (m_orgImage.isNull())
     {
-       kdWarning() << k_funcinfo << "No image data available!"
+       DWarning() << k_funcinfo << "No image data available!"
                    << endl;
        return;
     }
@@ -93,7 +93,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
     
     if((int)m_orgImage.width() < kernelWidth)
     {
-        kdWarning() << k_funcinfo << "Image is smaller than radius!"
+        DWarning() << k_funcinfo << "Image is smaller than radius!"
                     << endl;
         return;
     }
@@ -102,7 +102,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
     
     if(!kernel)
     {
-        kdWarning() << k_funcinfo << "Unable to allocate memory!"
+        DWarning() << k_funcinfo << "Unable to allocate memory!"
                     << endl;
         return;
     }
@@ -137,7 +137,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     
     if((kernelWidth % 2) == 0)
     {
-        kdWarning() << k_funcinfo << "Kernel width must be an odd number!"
+        DWarning() << k_funcinfo << "Kernel width must be an odd number!"
                     << endl;
         return(false);
     }
@@ -146,7 +146,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     
     if(!normal_kernel)
     {
-        kdWarning() << k_funcinfo << "Unable to allocate memory!"
+        DWarning() << k_funcinfo << "Unable to allocate memory!"
                     << endl;
         return(false);
     }

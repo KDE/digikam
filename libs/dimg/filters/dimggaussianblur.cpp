@@ -66,7 +66,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       kdWarning() << ("DImgGaussianBlur::gaussianBlurImage: no image data available!")
+       DWarning() << ("DImgGaussianBlur::gaussianBlurImage: no image data available!")
                    << endl;
        return;
     }

@@ -58,7 +58,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       kdWarning() << ("DImgImageFilters::equalizeImage: no image data available!") << endl;
+       DWarning() << ("DImgImageFilters::equalizeImage: no image data available!") << endl;
        return;
     }
        
@@ -85,7 +85,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
        if(equalize_map)
            delete [] equalize_map;
         
-       kdWarning() << ("DImgImageFilters::equalizeImage: Unable to allocate memory!") << endl;
+       DWarning() << ("DImgImageFilters::equalizeImage: Unable to allocate memory!") << endl;
        return;
     }
     
@@ -207,7 +207,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 {
     if (!data || !w || !h)
     {
-       kdWarning() << ("DImgImageFilters::stretchContrastImage: no image data available!") << endl;
+       DWarning() << ("DImgImageFilters::stretchContrastImage: no image data available!") << endl;
        return;
     }
 
@@ -231,7 +231,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        if(normalize_map)
            delete [] normalize_map;
         
-       kdWarning() << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!") << endl;
+       DWarning() << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!") << endl;
        return;
     }
 
@@ -624,7 +624,7 @@ void DImgImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool
 {
     if (!data || !w || !h)
     {
-       kdWarning() << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!")
+       DWarning() << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!")
                    << endl;
        return;
     }
@@ -667,7 +667,7 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       kdWarning() << ("DImgImageFilters::invertImage: no image data available!")
+       DWarning() << ("DImgImageFilters::invertImage: no image data available!")
                    << endl;
        return;
     }
@@ -710,7 +710,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
 {
     if (!data || !Width || !Height)
     {
-       kdWarning() << ("DImgImageFilters::channelMixerImage: no image data available!")
+       DWarning() << ("DImgImageFilters::channelMixerImage: no image data available!")
                    << endl;
        return;
     }
@@ -785,7 +785,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 {
     if (!data || !width || !height)
     {
-       kdWarning() << ("DImgImageFilters::changeTonality: no image data available!")
+       DWarning() << ("DImgImageFilters::changeTonality: no image data available!")
                    << endl;
        return;
     }
@@ -839,7 +839,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       kdWarning() << ("DImgImageFilters::gaussianBlurImage: no image data available!")
+       DWarning() << ("DImgImageFilters::gaussianBlurImage: no image data available!")
                    << endl;
        return;
     }
@@ -860,7 +860,7 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
 {
     if (!data || !width || !height)
     {
-       kdWarning() << ("DImgImageFilters::sharpenImage: no image data available!")
+       DWarning() << ("DImgImageFilters::sharpenImage: no image data available!")
                    << endl;
        return;
     }

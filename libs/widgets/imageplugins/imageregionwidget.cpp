@@ -205,7 +205,7 @@ void ImageRegionWidget::updatePixmap(const QImage& img)
             break;
         }
         default:
-            kdWarning() << "Unknown separation view specified"
+            DWarning() << "Unknown separation view specified"
                         << endl;
     }
 

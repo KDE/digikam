@@ -797,7 +797,7 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kdWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        DWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
         return;
     }
 
@@ -819,7 +819,7 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
 
     if (bytesDepth() != sdepth)
     {
-        kdWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        DWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
         return;
     }
 
@@ -933,7 +933,7 @@ void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kdWarning() << "Blending from 8-bit to 16-bit or vice versa is not supported" << endl;
+        DWarning() << "Blending from 8-bit to 16-bit or vice versa is not supported" << endl;
         return;
     }
 
