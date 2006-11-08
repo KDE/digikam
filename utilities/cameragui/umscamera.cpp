@@ -41,12 +41,12 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dcrawpreview.h"
 #include "dmetadata.h"
@@ -204,7 +204,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
     // not necessary to implement this. read it directly from the file
     // (done in camera controller)
-    kdWarning() << "exif implemented yet in camera controler" << endl;
+    DWarning() << "exif implemented yet in camera controler" << endl;
     return false;
 }
 
@@ -220,7 +220,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if ( !sFile.open(IO_ReadOnly) )
     {
-        kdWarning() << "Failed to open source file for reading: "
+        DWarning() << "Failed to open source file for reading: "
                     << src << endl;
         return false;
     }
@@ -228,7 +228,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     if ( !dFile.open(IO_WriteOnly) )
     {
         sFile.close();
-        kdWarning() << "Failed to open dest file for writing: "
+        DWarning() << "Failed to open dest file for writing: "
                     << dest << endl;
         return false;
     }
@@ -319,7 +319,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if ( !sFile.open(IO_ReadOnly) )
     {
-        kdWarning() << "Failed to open source file for reading: "
+        DWarning() << "Failed to open source file for reading: "
                     << src << endl;
         return false;
     }
@@ -327,7 +327,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     if ( !dFile.open(IO_WriteOnly) )
     {
         sFile.close();
-        kdWarning() << "Failed to open dest file for writing: "
+        DWarning() << "Failed to open dest file for writing: "
                     << dest << endl;
         return false;
     }

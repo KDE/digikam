@@ -48,11 +48,11 @@
 // KDE includes.
 
 #include <kcursor.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "imagehistogram.h"
 #include "dimginterface.h"
 #include "iccsettingscontainer.h"

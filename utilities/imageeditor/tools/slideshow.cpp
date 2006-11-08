@@ -26,10 +26,10 @@
 
 #include <kaction.h>
 #include <kconfig.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "slideshow.h"
 
 namespace Digikam

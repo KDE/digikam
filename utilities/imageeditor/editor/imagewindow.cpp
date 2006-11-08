@@ -44,7 +44,6 @@
 #include <ktempfile.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -60,6 +59,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"

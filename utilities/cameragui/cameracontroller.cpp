@@ -55,11 +55,11 @@ extern "C"
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kio/renamedlg.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "thumbnailsize.h"
 #include "imagewindow.h"
 #include "gpcamera.h"
@@ -380,7 +380,7 @@ void CameraThread::run()
                 {
                     if (autoRotate)
                     {
-                        kdDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
+                        DDebug() << "Exif autorotate: " << file << " using (" << tempURL.path() << ")" << endl;
                         sendInfo(i18n("EXIF rotating file %1...").arg(file));
                         exifRotate(tempURL.path(), file);
                     }
@@ -575,7 +575,7 @@ void CameraThread::run()
                 break;
             }
             default:
-                kdWarning() << k_funcinfo << " unknown action specified" << endl;
+                DWarning() << k_funcinfo << " unknown action specified" << endl;
         }    
 
         delete cmd;
@@ -613,7 +613,7 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
                                    const QString& port, const QString& path)
                 : QObject(parent)
 {
-    d = new CameraControllerPriv;	
+    d = new CameraControllerPriv;   
     d->parent        = parent;
     d->canceled      = false;
     d->close         = false;
@@ -626,17 +626,17 @@ CameraController::CameraController(QWidget* parent, const QString& title, const 
     if (path.startsWith("camera:/"))
     {
         KURL url(path);
-        kdDebug() << "path " << path << " " << url <<  " " << url.host() << endl;
+        DDebug() << "path " << path << " " << url <<  " " << url.host() << endl;
         QString xport = url.host();
         if (xport.startsWith("usb:"))
         {
-            kdDebug() << "xport " << xport << endl;
+            DDebug() << "xport " << xport << endl;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
             if (x.search(xport) != -1) 
             {
                 QString usbport = x.cap(1);
-                kdDebug() << "USB " << xport << " " << usbport << endl;
+                DDebug() << "USB " << xport << " " << usbport << endl;
                 // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
                 //   model = xmodel;
                 d->camera = new GPCamera(title, url.user(), "usb:", "/");
@@ -754,7 +754,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert("destFile", QVariant(destFile));
     cmd->map.insert("destFolder", QVariant(destFolder));
     d->cmdQueue.enqueue(cmd);
-    kdDebug() << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
+    DDebug() << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder << 
                  "' (" << destFile << ")" << endl;
 }
 
@@ -1080,7 +1080,7 @@ void CameraController::customEvent(QCustomEvent* e)
             break;
         }
         default:
-            kdWarning() << k_funcinfo << "Unknown event" << endl;
+            DWarning() << k_funcinfo << "Unknown event" << endl;
     }
 }
 

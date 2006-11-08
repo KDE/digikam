@@ -31,7 +31,6 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -39,6 +38,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "icctransform.h"
 #include "iccprofileinfodlg.h"
@@ -175,7 +175,7 @@ void ColorCorrectionDlg::slotEmbeddedProfInfo()
 
 void ColorCorrectionDlg::slotApplyClicked()
 {
-    kdDebug() << "colorcorrectiondlg: Apply pressed" << endl;
+    DDebug() << "colorcorrectiondlg: Apply pressed" << endl;
     done(-1);
 }
 

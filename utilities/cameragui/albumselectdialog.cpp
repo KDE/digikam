@@ -33,7 +33,6 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kaction.h>
@@ -42,6 +41,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "folderview.h"
 #include "folderitem.h"
 #include "album.h"
@@ -131,7 +131,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
             
             if (!parentItem)
             {
-                kdWarning() << "Failed to find parent for Album "
+                DWarning() << "Failed to find parent for Album "
                             << album->title() << endl;
                 continue;
             }
@@ -191,7 +191,7 @@ void AlbumSelectDialog::slotAlbumAdded(Album* album)
 
     if (!parentItem)
     {
-        kdWarning() << "Failed to find parent for Album "
+        DWarning() << "Failed to find parent for Album "
                     << album->title() << endl;
         return;
     }

@@ -40,12 +40,12 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "bcgmodifier.h"
 #include "icctransform.h"
 #include "colorcorrectiondlg.h"
@@ -303,7 +303,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent) d->parent->unsetCursor();
-                                kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                                DDebug() << "dimginterface.cpp: Apply pressed" << endl;
                             break;
                         }
                     }
@@ -328,7 +328,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         {
                             // Embedded profile and default workspace profile are different: ask to user!
                         
-                            kdDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+                            DDebug() << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
     
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
@@ -349,7 +349,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                                     if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                     if (d->parent) d->parent->unsetCursor();
-                                    kdDebug() << "dimginterface.cpp: Apply pressed" << endl;
+                                    DDebug() << "dimginterface.cpp: Apply pressed" << endl;
                                 break;
                             }
                         }
@@ -380,7 +380,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
         QFileInfo fi(fileName);
         QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
         KMessageBox::error(d->parent, message);
-        kdWarning() << "Failed to load image " << fi.fileName() << endl;
+        DWarning() << "Failed to load image " << fi.fileName() << endl;
     }
 }
 
@@ -528,12 +528,12 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         // It is a bug if format attribute is not given
         if (mimeType.isEmpty())
         {
-            kdWarning() << "DImg object does not contain attribute \"format\"" << endl;
+            DWarning() << "DImg object does not contain attribute \"format\"" << endl;
             mimeType = QImageIO::imageFormat(d->filename);
         }
     }
 
-    kdDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
+    DDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType << ")" << endl;
 
     if ( mimeType.upper() == QString("JPG") || mimeType.upper() == QString("JPEG") || 
@@ -594,7 +594,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
-        kdWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
+        DWarning() << "error saving image '" << QFile::encodeName(filePath).data() << endl;
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -1002,7 +1002,7 @@ DImg* DImgInterface::getImg()
     }
     else
     {
-        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << k_funcinfo << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1015,7 +1015,7 @@ uchar* DImgInterface::getImage()
     }
     else
     {
-        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << k_funcinfo << "d->image is NULL" << endl;
         return 0;
     }
 }
@@ -1040,13 +1040,13 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-       kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+       DWarning() << k_funcinfo << "d->image is NULL" << endl;
        return;
     }
 
     if (!data)
     {
-       kdWarning() << k_funcinfo << "New image is NULL" << endl;
+       DWarning() << k_funcinfo << "New image is NULL" << endl;
        return;
     }
 
@@ -1063,7 +1063,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //kdDebug() << k_funcinfo << data << " " << w << " " << h << endl;
+    //DDebug() << k_funcinfo << data << " " << w << " " << h << endl;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
     setModified();
@@ -1073,11 +1073,11 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
     if (d->image.isNull())
     {
-        kdWarning() << k_funcinfo << "d->image is NULL" << endl;
+        DWarning() << k_funcinfo << "d->image is NULL" << endl;
         return;
     }
      
-     kdDebug() << k_funcinfo << "Embedding profile: " << profilePath << endl;
+     DDebug() << k_funcinfo << "Embedding profile: " << profilePath << endl;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
 }

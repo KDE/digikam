@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libcameragui.la
 
 libcameragui_la_SOURCES = cameraui.cpp cameraiconview.cpp  \
 	                  cameraiconitem.cpp cameracontroller.cpp \
-			  camerafolderview.cpp camerafolderitem.cpp \
+	                  camerafolderview.cpp camerafolderitem.cpp \
 	                  animwidget.cpp renamecustomizer.cpp  \
 	                  dkcamera.cpp gpcamera.cpp umscamera.cpp \
 	                  gpiteminfo.cpp camerainfodialog.cpp \

@@ -19,12 +19,9 @@
  * 
  * ============================================================ */
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimginterface.h"
 #include "undoaction.h"
 
@@ -82,7 +79,7 @@ void UndoActionRotate::rollBack()
         m_iface->rotate90(false);
         return;
     default:
-        kdWarning() << "Unknown rotate angle specified" << endl;
+        DWarning() << "Unknown rotate angle specified" << endl;
     }
 }
 
@@ -100,7 +97,7 @@ void UndoActionRotate::execute()
         m_iface->rotate270(false);
         return;
     default:
-        kdWarning() << "Unknown rotate angle specified" << endl;
+        DWarning() << "Unknown rotate angle specified" << endl;
     }
 }
 
@@ -129,7 +126,7 @@ void UndoActionFlip::rollBack()
         m_iface->flipVert(false);
         return;
     default:
-        kdWarning() << "Unknown flip direction specified" << endl;
+        DWarning() << "Unknown flip direction specified" << endl;
     }
 }
 

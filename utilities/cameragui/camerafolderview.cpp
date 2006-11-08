@@ -22,12 +22,12 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 #include "camerafolderview.moc"
@@ -100,7 +100,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 {
     CameraFolderItem *parentItem = findFolder(folder);
 
-    kdDebug() << "CameraFolderView: Adding Subfolder " << subFolder
+    DDebug() << "CameraFolderView: Adding Subfolder " << subFolder
               << " of folder " << folder << endl;
     
     if (parentItem) 
@@ -113,7 +113,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
         
-        kdDebug() << "CameraFolderView: Added ViewItem with path "
+        DDebug() << "CameraFolderView: Added ViewItem with path "
                   << item->folderPath() << endl;
 
         item->setCount(nbItems);
@@ -122,7 +122,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else 
     {
-        kdWarning() << "CameraFolderView: Couldn't find parent for subFolder "
+        DWarning() << "CameraFolderView: Couldn't find parent for subFolder "
                     << subFolder << " of folder " << folder << endl;
         return 0;
     }

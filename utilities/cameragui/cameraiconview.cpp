@@ -43,12 +43,12 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <kaction.h>
 #include <kapplication.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "themeengine.h"
 #include "thumbnailsize.h"
 #include "gpiteminfo.h"

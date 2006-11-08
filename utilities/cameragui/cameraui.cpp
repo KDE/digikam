@@ -71,7 +71,6 @@ extern "C"
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <khelpmenu.h>
-#include <kdebug.h>
 #include <kcalendarsystem.h>
 #include <kurllabel.h>
 #include <ksqueezedtextlabel.h>
@@ -84,6 +83,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "rawfiles.h"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
@@ -723,7 +723,7 @@ void CameraUI::finishDialog()
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
     {
-        //kdDebug() << "Scanning " << (*it) << endl;
+        //DDebug() << "Scanning " << (*it) << endl;
         sLib.findMissingItems( (*it) );
     }
 
@@ -1491,7 +1491,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place 
     // to please with Exiv2...
 
-    kdDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
+    DDebug() << "Size of Exif metadata from camera = " << exifData.size() << endl;
     char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
     
     if (!exifData.isEmpty())
@@ -1499,7 +1499,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
         int i = exifData.find(*exifHeader);
         if (i != -1)
         {
-            kdDebug() << "Exif header found at position " << i << endl;
+            DDebug() << "Exif header found at position " << i << endl;
             i = i + sizeof(exifHeader);
             QByteArray data(exifData.size()-i);
             memcpy(data.data(), exifData.data()+i, data.size());

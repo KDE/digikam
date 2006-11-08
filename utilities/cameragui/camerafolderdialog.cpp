@@ -27,12 +27,12 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
@@ -88,7 +88,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
             QString sub = folder.section( '/', -1 );
             m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
-            kdDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
+            DDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
         }
     }
 
@@ -123,7 +123,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item) 
     {
         enableButtonOK(true);
-        kdDebug() << "Camera folder path: " << selectedFolderPath() << endl;
+        DDebug() << "Camera folder path: " << selectedFolderPath() << endl;
     }
     else
     {

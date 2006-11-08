@@ -36,7 +36,6 @@ extern "C"
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kinstance.h>
@@ -44,6 +43,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "undocache.h"
 
 namespace Digikam

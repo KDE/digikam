@@ -24,7 +24,6 @@
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -32,6 +31,7 @@
 
 // Local includes.
 
+#include "ddebug.h"
 #include "splashscreen.h"
 #include "imagepluginloader.h"
 
@@ -132,7 +132,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
                 
-                    kdDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
+                    DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
                  
                     if (d->splash)      
                         d->splash->message(i18n("Loading: %1").arg(service->name()));
@@ -141,13 +141,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    kdWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
+                    DWarning() << "KIPI::PluginLoader:: createInstanceFromLibrary returned 0 for "
                                 << service->name()
                                 << " (" << service->library() << ")"
                                 << " with error number "
                                 << error << endl;
                     if (error == KParts::ComponentFactory::ErrNoLibrary)
-                        kdWarning() << "KLibLoader says: "
+                        DWarning() << "KLibLoader says: "
                                     << KLibLoader::self()->lastErrorMessage() << endl;
                 }
             }
@@ -180,7 +180,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 {
                     d->pluginList.append(ImagePluginLoaderPrivate::PluginType(service->name(), plugin));
                 
-                    kdDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
+                    DDebug() << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
                 
                     if (d->splash)      
                         d->splash->message(i18n("Loading: %1").arg(service->name()));
@@ -189,7 +189,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& list)
                 }
                 else
                 {
-                    kdError() << "ImagePluginLoader: Failed to load plugin " << service->name() << endl;
+                    DError() << "ImagePluginLoader: Failed to load plugin " << service->name() << endl;
                 }
             }
         }

@@ -59,7 +59,6 @@ extern "C"
 #include <kimageio.h>
 #include <kaccel.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -74,6 +73,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "imageplugin.h"
@@ -645,7 +645,7 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
         }
         else
-            kdDebug() << "Invalid plugin to add!" << endl;
+            DDebug() << "Invalid plugin to add!" << endl;
     }
 }
 
@@ -1210,7 +1210,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        DDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {
@@ -1253,7 +1253,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write exif if both src and destination are jpeg files
 
-        kdDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        DDebug() << "renaming to " << m_savingContext->destinationURL.path() << endl;
 
         if (!moveFile())
         {
@@ -1393,7 +1393,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.")
                         .arg(m_savingContext->format));
-                kdWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
+                DWarning() << k_funcinfo << "target image file format " << m_savingContext->format << " unsupported!" << endl;
                 return false;
             }
         }
@@ -1404,7 +1404,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\" to\n\"%2\".")
                            .arg(newURL.filename())
                            .arg(newURL.path().section('/', -2, -2)));
-        kdWarning() << k_funcinfo << "target URL isn't valid !" << endl;
+        DWarning() << k_funcinfo << "target URL isn't valid !" << endl;
         return false;
     }
 
@@ -1516,7 +1516,7 @@ bool EditorWindow::moveFile()
     {
         if (::chmod(dstFileName, filePermissions) != 0)
         {
-            kdWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
+            DWarning() << "Failed to restore file permissions for file " << dstFileName << endl;
         }
     }
 

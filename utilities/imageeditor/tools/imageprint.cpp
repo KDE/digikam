@@ -55,7 +55,6 @@
 #include <kconfig.h>
 #include <kimageio.h>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <knuminput.h>
 #include <kprinter.h>
@@ -64,6 +63,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "editorwindow.h"
 #include "icctransform.h"
@@ -103,7 +103,7 @@ bool ImagePrint::printImageWithQt()
 {
     if ( d->image.isNull() )
     {
-        kdWarning() << "Supplied Image for printing is null" << endl;
+        DWarning() << "Supplied Image for printing is null" << endl;
         return false;
     }
 

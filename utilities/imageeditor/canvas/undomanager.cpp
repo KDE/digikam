@@ -27,12 +27,9 @@
 
 #include <qstringlist.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimginterface.h"
 #include "undoaction.h"
 #include "undocache.h"
