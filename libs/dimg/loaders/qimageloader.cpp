@@ -24,12 +24,9 @@
 
 #include <qimage.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "qimageloader.h"
@@ -53,7 +50,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (image.isNull())
     {
-        kdDebug() << "Cannot loading \"" << filePath << "\" using DImg::QImageLoader!" << endl;
+        DDebug() << "Cannot loading \"" << filePath << "\" using DImg::QImageLoader!" << endl;
         return false;
     }
 

@@ -32,18 +32,12 @@
 #include <cstring>
 #include <cstdlib>
 
-// KDE includes.
-
-#include <kdebug.h>
-
-// Digikam includes.
+// Local includes.
  
 #include "imagehistogram.h"
 #include "imagelevels.h"
 #include "dcolor.h"
-
-// Local includes.
-
+#include "ddebug.h"
 #include "dimggaussianblur.h"
 #include "dimgsharpen.h"
 #include "dimgimagefilters.h"

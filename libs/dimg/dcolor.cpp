@@ -26,12 +26,9 @@
 
 #include <cmath>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dcolor.h"
 
 namespace Digikam

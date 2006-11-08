@@ -24,12 +24,9 @@
 #include <qevent.h>
 #include <qdeepcopy.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimgthreadedfilter.h"
 
 namespace Digikam
@@ -100,7 +97,7 @@ void DImgThreadedFilter::initFilter(void)
        if (m_parent)           // If parent then send event about a problem.
        {
           postProgress(0, false, false);
-          kdDebug() << m_name << "::No valid image data !!! ..." << endl;
+          DDebug() << m_name << "::No valid image data !!! ..." << endl;
        }
     }
 }

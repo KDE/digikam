@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
 
@@ -42,6 +41,7 @@
 
 // Local includes
 
+#include "ddebug.h"
 #include "icctransform.h"
 
 namespace Digikam
@@ -244,7 +244,7 @@ bool IccTransform::apply(DImg& image)
             break;
     }
 
-    kdDebug() << "intent: " << getRenderingIntent() << endl;
+    DDebug() << "intent: " << getRenderingIntent() << endl;
 
     if (d->has_embedded_profile)
     {
@@ -258,7 +258,7 @@ bool IccTransform::apply(DImg& image)
     }
     if (inprofile == NULL)
     {
-        kdDebug() << "Error: Input profile is NULL" << endl;
+        DDebug() << "Error: Input profile is NULL" << endl;
         cmsCloseProfile(inprofile);
         return false;
     }
@@ -276,7 +276,7 @@ bool IccTransform::apply(DImg& image)
 
     if (outprofile == NULL)
     {
-        kdDebug() << "Error: Output profile is NULL" << endl;
+        DDebug() << "Error: Output profile is NULL" << endl;
         cmsCloseProfile(outprofile);
         return false;
     }
@@ -308,7 +308,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -335,7 +335,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -365,7 +365,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -378,11 +378,11 @@ bool IccTransform::apply(DImg& image)
                          break;
                      case icSigCmykData:
                          inputFormat = TYPE_CMYK_8;
-                         kdDebug() << "input profile: cmyk no alpha" << endl;
+                         DDebug() << "input profile: cmyk no alpha" << endl;
                          break;
                      default:
                          inputFormat = TYPE_BGR_8;
-                         kdDebug() << "input profile: default no alpha" << endl;
+                         DDebug() << "input profile: default no alpha" << endl;
                 }
 
                 transform = cmsCreateTransform( inprofile,
@@ -394,7 +394,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -407,7 +407,7 @@ bool IccTransform::apply(DImg& image)
 
         if (proofprofile == NULL)
         {
-            kdDebug() << "Error: Input profile is NULL" << endl;
+            DDebug() << "Error: Input profile is NULL" << endl;
             cmsCloseProfile(inprofile);
             cmsCloseProfile(outprofile);
             return false;
@@ -428,7 +428,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -445,7 +445,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -465,7 +465,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -482,7 +482,7 @@ bool IccTransform::apply(DImg& image)
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -539,7 +539,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
             break;
     }
 
-    kdDebug() << k_funcinfo << "Intent is: " << intent << endl;
+    DDebug() << k_funcinfo << "Intent is: " << intent << endl;
 
     if (!profile.isNull())
     {
@@ -558,7 +558,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
      if (inprofile == NULL)
     {
-        kdDebug() << "Error: Input profile is NULL" << endl;
+        DDebug() << "Error: Input profile is NULL" << endl;
         return false;
     }
 
@@ -567,7 +567,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
     if (outprofile == NULL)
     {
-        kdDebug() << "Error: Output profile is NULL" << endl;
+        DDebug() << "Error: Output profile is NULL" << endl;
         cmsCloseProfile(inprofile);
         return false;
     }
@@ -604,7 +604,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -631,7 +631,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -661,7 +661,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -688,7 +688,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -701,7 +701,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
         if (proofprofile == NULL)
         {
-            kdDebug() << "Error: Input profile is NULL" << endl;
+            DDebug() << "Error: Input profile is NULL" << endl;
             cmsCloseProfile(inprofile);
             cmsCloseProfile(outprofile);
             return false;
@@ -729,7 +729,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -746,7 +746,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -766,7 +766,7 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
@@ -783,14 +783,14 @@ bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool use
 
                 if (!transform)
                 {
-                    kdDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
+                    DDebug() << k_funcinfo << "LCMS internal error: cannot create a color transform instance" << endl;
                     return false;
                 }
             }
         }
     }
 
-    kdDebug() << k_funcinfo << "Transform flags are: " << transformFlags << endl;
+    DDebug() << k_funcinfo << "Transform flags are: " << transformFlags << endl;
 
      // We need to work using temp pixel buffer to apply ICC transformations.
     uchar  transdata[image.bytesDepth()];

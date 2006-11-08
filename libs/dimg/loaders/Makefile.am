@@ -13,5 +13,6 @@ INCLUDES = $(all_includes) -I$(top_srcdir)/digikam/libs/dimg \
 	                   -I$(top_srcdir)/digikam/libs/dmetadata \
 	                   -I$(top_srcdir)/digikam/libs/dcraw \
 	                   -I$(top_srcdir)/digikam/digikam \
-	                   -I$(top_srcdir)/digikam
+	                   -I$(top_srcdir)/digikam \
+	                   -include $(top_srcdir)/digikam/libs/dimg/ddebug.h
 

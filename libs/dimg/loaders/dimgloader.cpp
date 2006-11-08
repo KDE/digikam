@@ -22,10 +22,10 @@
 // KDE includes.
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimgprivate.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
@@ -154,7 +154,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     QByteArray profile = metaData.getExifTagData("Exif.Image.InterColorProfile");
     if (!profile.isNull())
     {
-        kdDebug() << "Found an ICC profile in Exif metadata" << endl;
+        DDebug() << "Found an ICC profile in Exif metadata" << endl;
         m_image->setICCProfil(profile);
         return true;
     }
@@ -168,7 +168,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
             m_image->getICCProfilFromFile(directory + "srgb.icm");
-            kdDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
+            DDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
             return true;
             break;
         }
@@ -177,7 +177,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
         {
             QString directory = KGlobal::dirs()->findResourceDir("profiles", "adobergb.icm");
             m_image->getICCProfilFromFile(directory + "adobergb.icm");
-            kdDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
+            DDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;       
             return true;
             break;
         }

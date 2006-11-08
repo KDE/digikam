@@ -43,12 +43,12 @@
 
 // KDE includes.
 
-#include <kdebug.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dcrawbinary.h"
@@ -150,7 +150,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
 
         QMutexLocker lock(&m_mutex);
         m_condVar.wait(&m_mutex, 10);
-        //kdDebug() << "Waiting for dcraw, is running " << process.isRunning() << endl;
+        //DDebug() << "Waiting for dcraw, is running " << process.isRunning() << endl;
     }
 
     if (!m_normalExit)
@@ -356,7 +356,7 @@ void RAWLoader::startProcess()
     *m_process << QFile::encodeName( m_filePath );
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << "Running dcraw command " << m_process->args() << endl;
+    DDebug() << "Running dcraw command " << m_process->args() << endl;
 #endif
 
     // actually start the process
@@ -433,7 +433,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         }
 
         QStringList splitlist = QStringList::split("\n", QString::fromAscii(buffer, i));
-        //kdDebug() << "Header: " << QString::fromAscii(buffer, i) << endl;
+        //DDebug() << "Header: " << QString::fromAscii(buffer, i) << endl;
         QStringList sizes = QStringList::split(" ", splitlist[1]);
         if (splitlist.size() < 3 || sizes.size() < 2)
         {
@@ -447,7 +447,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         m_rgbmax = splitlist[2].toInt();
 
 #ifdef ENABLE_DEBUG_MESSAGES
-        kdDebug() << "Parsed PPM header: width " << m_width << " height " 
+        DDebug() << "Parsed PPM header: width " << m_width << " height " 
                   << m_height << " rgbmax " << m_rgbmax << endl;
 #endif
 
@@ -468,7 +468,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 void RAWLoader::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 {
     QCString message(buffer, buflen);
-    kdDebug() << "Dcraw StdErr: " << message << endl;
+    DDebug() << "Dcraw StdErr: " << message << endl;
 }
 
 bool RAWLoader::save(const QString&, DImgLoaderObserver *)

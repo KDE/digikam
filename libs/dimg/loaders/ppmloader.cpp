@@ -43,12 +43,9 @@ extern "C"
 #include <qfile.h>
 #include <qimage.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "ppmloader.h"
@@ -70,7 +67,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        kdDebug() << k_funcinfo << "Cannot open image file." << endl;
+        DDebug() << k_funcinfo << "Cannot open image file." << endl;
         return false;
     }
 
@@ -78,7 +75,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        kdDebug() << k_funcinfo << "Cannot read header of file." << endl;
+        DDebug() << k_funcinfo << "Cannot read header of file." << endl;
         fclose(file);
         return false;
     }
@@ -86,7 +83,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uchar* c = (uchar*) &header;
     if (*c != 'P')
     {
-        kdDebug() << k_funcinfo << "Not a PPM file." << endl;
+        DDebug() << k_funcinfo << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -94,7 +91,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     c++;
     if (*c != '6')
     {
-        kdDebug() << k_funcinfo << "Not a PPM file." << endl;
+        DDebug() << k_funcinfo << "Not a PPM file." << endl;
         fclose(file);
         return false;
     }
@@ -103,14 +100,14 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4) 
     {
-        kdDebug() << "Corrupted PPM file." << endl;
+        DDebug() << "Corrupted PPM file." << endl;
         pclose (file);
         return false;
     }
     
     if (rgbmax <= 255)
     {
-        kdDebug() << k_funcinfo << "Not a 16 bits per color per pixel PPM file." << endl;
+        DDebug() << k_funcinfo << "Not a 16 bits per color per pixel PPM file." << endl;
         pclose (file);
         return false;
     }
@@ -127,7 +124,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     int checkpoint = 0;
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+    DDebug() << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
 #endif
 
     for (int h = 0; h < height; h++)

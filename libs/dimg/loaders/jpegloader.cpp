@@ -43,12 +43,9 @@ extern "C"
 #include <qfile.h>
 #include <qcstring.h>
 
-// KDE includes.
-
-#include <kdebug.h>
-
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "jpegloader.h"
@@ -66,7 +63,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << k_funcinfo << buffer << endl;
+    DDebug() << k_funcinfo << buffer << endl;
 #endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -78,7 +75,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
+    DDebug() << k_funcinfo << buffer << " (" << msg_level << ")" << endl;
 #endif
 }
 
@@ -88,7 +85,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kdDebug() << k_funcinfo << buffer << endl;
+    DDebug() << k_funcinfo << buffer << endl;
 #endif
 }
 
@@ -200,7 +197,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
-        kdDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
+        DDebug() << k_funcinfo << "Height of JPEG scanline buffer out of range!" << endl;
         return false;
     }
 
@@ -212,7 +209,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
-        kdDebug() << k_funcinfo
+        DDebug() << k_funcinfo
                   << "JPEG colorspace ("
                   << cinfo.out_color_space
                   << ") or Number of JPEG color components ("
@@ -227,7 +224,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
-        kdDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+        DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
         return false;
     }
 
@@ -238,7 +235,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         delete [] data;
         jpeg_destroy_decompress(&cinfo);
         fclose(file);
-        kdDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
+        DDebug() << k_funcinfo << "Cannot allocate memory!" << endl;
         return false;
     }
 
@@ -495,7 +492,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
-    kdDebug() << "Using LibJPEG quality compression value: " << quality << endl;
+    DDebug() << "Using LibJPEG quality compression value: " << quality << endl;
 
     if (observer)
         observer->progressInfo(m_image, 0.1);
