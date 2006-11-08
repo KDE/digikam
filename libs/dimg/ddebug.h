@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DDEBUG_INTERNAL_H
-#define DDEBUG_INTERNAL_H
+#ifndef _DDEBUG_H_
+#define _DDEBUG_H_
 
 // KDE includes.
 
@@ -50,5 +50,5 @@ DIGIKAM_EXPORT Digikam::Ddbgstream DDebug(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DWarning(int area = 0);
 DIGIKAM_EXPORT Digikam::Ddbgstream DError(int area = 0);
 
-#endif //  DDEBUG_INTERNAL_H
+#endif //  DDEBUG_H
 
