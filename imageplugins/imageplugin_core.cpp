@@ -30,10 +30,10 @@
 #include <kaction.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
@@ -123,7 +123,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
 
     setXMLFile("digikamimageplugin_core_ui.rc");
 
-    kdDebug() << "ImagePlugin_Core plugin loaded" << endl;
+    DDebug() << "ImagePlugin_Core plugin loaded" << endl;
 }
 
 ImagePlugin_Core::~ImagePlugin_Core()

@@ -34,10 +34,10 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kpassivepopup.h>
-#include <kdebug.h>
 
 // Digikam includes.
 
+#include "ddebug.h"
 #include "dimg.h"
 #include "imageiface.h"
 

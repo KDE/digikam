@@ -50,7 +50,6 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <ktabwidget.h>
 #include <kconfig.h>
 #include <kurlrequester.h>
@@ -64,6 +63,7 @@
 
 // Digikam includes.
 
+#include "ddebug.h"
 #include "bcgmodifier.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -162,7 +162,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     m_histogramWidget = new Digikam::HistogramWidget(256, 140, gboxSettings, false, true, true);
     QWhatsThis::add( m_histogramWidget, i18n("<p>Here you can see the target preview image histogram "
                                              "of the selected image channel. " 
-					     "This one is updated after setting changes."));
+                         "This one is updated after setting changes."));
 
     m_hGradient = new Digikam::ColorGradientWidget( Digikam::ColorGradientWidget::Horizontal, 10, 
                                                     gboxSettings );
@@ -211,7 +211,7 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     QWhatsThis::add(m_BPCBox, i18n("<p>The Black Point Compensation (BPC) feature does work in conjunction "
                                    "with Relative Colorimetric Intent. Perceptual intent should make no "
                                    "difference, since BPC is always on, and in Absolute Colorimetric "
-				   "Intent it is always turned off.</p>"
+                   "Intent it is always turned off.</p>"
                                    "<p>BPC does compensate a lack of ICC profiles in the dark tone rendering."
                                    "With BPC the dark tones are optimally mapped (no clipping) from original media "
                                    "to the destination media can render, e.g. the combination paper/ink.</p>"));
@@ -955,7 +955,7 @@ void ImageEffect_ICCProof::finalRendering()
             if (m_embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
-                kdDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
+                DDebug() << k_funcinfo << QFile::encodeName(tmpSpacePath) << endl;
             }
 
             //-- Calculate and apply the curve on image after transformation -------------

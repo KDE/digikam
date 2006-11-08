@@ -31,10 +31,10 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kapplication.h>
-#include <kdebug.h>
 
 // Digikam includes.
 
+#include "ddebug.h"
 #include "imageiface.h"
 #include "dimggaussianblur.h"
 
