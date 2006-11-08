@@ -765,7 +765,7 @@ void DigikamView::slot_albumAddImages()
     fileformats = patternList.join("\n");
 #endif
 
-    kdDebug () << "fileformats=" << fileformats << endl;   
+    DDebug () << "fileformats=" << fileformats << endl;   
 
     KURL::List urls = KFileDialog::getOpenURLs(AlbumManager::instance()->getLibraryPath(), 
                                                fileformats, this, i18n("Select Image to Add"));

@@ -1331,7 +1331,7 @@ bool EditorWindow::startingSaveAs(const KURL& url)
 
     QString mimetypes = KImageIO::mimeTypes(KImageIO::Writing).join(" ");
     mimetypes.append(" image/tiff");
-    kdDebug () << "mimetypes=" << mimetypes << endl;    
+    DDebug () << "mimetypes=" << mimetypes << endl;    
 
     m_savingContext->srcURL = url;
 
