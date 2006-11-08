@@ -60,7 +60,6 @@ extern "C"
 #include <kaccel.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -75,6 +74,7 @@ extern "C"
 
 // Local includes.
 
+#include "ddebug.h"
 #include "rawfiles.h"
 #include "canvas.h"
 #include "thumbbar.h"
@@ -93,6 +93,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "showfoto.h"
+#include "showfoto.moc"
 
 namespace ShowFoto
 {
@@ -534,7 +535,7 @@ void ShowFoto::slotOpenFile()
     fileformats = patternList.join("\n");
 #endif
 
-    kdDebug () << "fileformats=" << fileformats << endl;   
+    DDebug() << "fileformats=" << fileformats << endl;   
     
     KURL::List urls =  KFileDialog::getOpenURLs(d->lastOpenedDirectory.path(), fileformats, this, i18n("Open Images"));
 
@@ -808,7 +809,7 @@ void ShowFoto::slotOpenFolder(const KURL& url)
     patterns.append (" ");
     patterns.append (filter.upper());
 
-    kdDebug () << "patterns=" << patterns << endl;    
+    DDebug() << "patterns=" << patterns << endl;    
 
     // Get all image files from directory.
 
@@ -996,7 +997,7 @@ bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        kdWarning() << k_funcinfo << "This should not happen" << endl;
+        DWarning() << k_funcinfo << "This should not happen" << endl;
         return true;
     }
 
@@ -1013,7 +1014,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        kdWarning() << k_funcinfo << "This should not happen" << endl;
+        DWarning() << k_funcinfo << "This should not happen" << endl;
         return false;
     }
 
@@ -1101,4 +1102,3 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
 
 }   // namespace ShowFoto
 
-#include "showfoto.moc"
