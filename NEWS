@@ -323,6 +323,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 191 ==> 136769 : digiKam crashes when resetting Album icon (with no album selected)
 192 ==> 136749 : Tags are not kept with images when album is moved in album hierarchy.
 193 ==> 123623 : digiKam freezes or is very slow.
-194 ==> 
+194 ==> 96993  : Ability to view next next image in folder in showfoto.
+195 ==> 
 
 ----------------------------------------------------------------------------------------------------
