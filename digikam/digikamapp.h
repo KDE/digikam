@@ -105,6 +105,8 @@ signals:
     void signalPrevItem();
     void signalFirstItem();
     void signalLastItem();
+    void signalCopyAlbumItemsSelection();
+    void signalPasteAlbumItemsSelection();
 
 protected:
 

@@ -198,6 +198,12 @@ void DigikamView::setupConnections()
 
     connect(d->parent, SIGNAL(signalLastItem()),
             this, SLOT(slotLastItem()));
+
+    connect(d->parent, SIGNAL(signalCopyAlbumItemsSelection()),
+            d->iconView, SLOT(slotCopy()));
+
+    connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
+            d->iconView, SLOT(slotPaste()));
                         
     // -- AlbumManager connections --------------------------------
 

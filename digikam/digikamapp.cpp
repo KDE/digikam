@@ -104,12 +104,12 @@ DigikamApp* DigikamApp::m_instance = 0;
 DigikamApp::DigikamApp()
           : KMainWindow( 0, "Digikam" )
 {
-    m_instance        = this;
-    m_config          = kapp->config();
-    m_accelerators    = 0;
-    mFullScreen       = false;
-    mView             = 0;
-    mValidIccPath     = true;
+    m_instance     = this;
+    m_config       = kapp->config();
+    m_accelerators = 0;
+    mFullScreen    = false;
+    mView          = 0;
+    mValidIccPath  = true;
     
     mSplash = 0;
     if(m_config->readBoolEntry("Show Splash", true) &&
@@ -375,6 +375,16 @@ void DigikamApp::setupAccelerators()
                            i18n("Last Image"),
                            Key_End, this, SIGNAL(signalLastItem()),
                            false, true);
+
+    m_accelerators->insert("Copy Album Items Selection CTRL+Key_C", i18n("Copy Album Items Selection"),
+                           i18n("Copy Album Items Selection"),
+                           CTRL+Key_C, this, SIGNAL(signalCopyAlbumItemsSelection()),
+                           false, true);
+
+    m_accelerators->insert("Paste Album Items Selection CTRL+Key_V", i18n("Paste Album Items Selection"),
+                           i18n("Paste Album Items Selection"),
+                           CTRL+Key_V, this, SIGNAL(signalPasteAlbumItemsSelection()),
+                           false, true);
 }
 
 void DigikamApp::setupActions()
@@ -389,15 +399,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    mThemeMenuAction = new KSelectAction(i18n("&Themes"), 0,
-                                         actionCollection(),
-                                         "theme_menu");
+    mThemeMenuAction = new KSelectAction(i18n("&Themes"), 0, actionCollection(), "theme_menu");
     connect(mThemeMenuAction, SIGNAL(activated(const QString&)),
-            SLOT(slotChangeTheme(const QString&)));
+            this, SLOT(slotChangeTheme(const QString&)));
 
     // -----------------------------------------------------------------
 
-    mBackwardActionMenu = new  KToolBarPopupAction(i18n("&Back"),
+    mBackwardActionMenu = new KToolBarPopupAction(i18n("&Back"),
                                     "back",
                                     ALT+Key_Left,
                                     mView,
@@ -405,14 +413,12 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_back");
     mBackwardActionMenu->setEnabled(false);
-    connect(mBackwardActionMenu->popupMenu(),
-            SIGNAL(aboutToShow()),
-            this,
-            SLOT(slotAboutToShowBackwardMenu()));
-    connect(mBackwardActionMenu->popupMenu(),
-            SIGNAL(activated(int)),
-            mView,
-            SLOT(slotAlbumHistoryBack(int)));
+
+    connect(mBackwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowBackwardMenu()));
+    
+    connect(mBackwardActionMenu->popupMenu(), SIGNAL(activated(int)),
+            mView, SLOT(slotAlbumHistoryBack(int)));
 
     mForwardActionMenu = new  KToolBarPopupAction(i18n("Forward"),
                                     "forward",
@@ -422,14 +428,12 @@ void DigikamApp::setupActions()
                                     actionCollection(),
                                     "album_forward");
     mForwardActionMenu->setEnabled(false);
-    connect(mForwardActionMenu->popupMenu(),
-            SIGNAL(aboutToShow()),
-            this,
-            SLOT(slotAboutToShowForwardMenu()));
-    connect(mForwardActionMenu->popupMenu(),
-            SIGNAL(activated(int)),
-            mView,
-            SLOT(slotAlbumHistoryForward(int)));
+    
+    connect(mForwardActionMenu->popupMenu(), SIGNAL(aboutToShow()),
+            this, SLOT(slotAboutToShowForwardMenu()));
+
+    connect(mForwardActionMenu->popupMenu(), SIGNAL(activated(int)),
+            mView, SLOT(slotAlbumHistoryForward(int)));
 
     mNewAction = new KAction(i18n("&New Album..."),
                                     "albumfoldernew",
