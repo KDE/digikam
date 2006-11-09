@@ -308,9 +308,6 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 182 ==> 135430 : Typo automaticly should be automatically in raw image converter.
 183 ==> 135060 : Folders without pictures in it cannot be assigned icons.
 
-
-
-
 *** 0.9.0-rc **********************************************************
 
 184 ==> 103255 : Add (not edit) EXIF headers like date, comment etc.

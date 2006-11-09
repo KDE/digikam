@@ -963,13 +963,6 @@ void CameraUI::slotUpload()
 
     QString fileformats;
     
-#if KDE_IS_VERSION(3,5,2)
-    //-- With KDE version >= 3.5.2, "image/x-raw" type mime exist ------------------------------
-    
-    fileformats = KImageIO::mimeTypes(KImageIO::Reading).join(" ");
-#else
-    //-- with KDE version < 3.5.2, we need to add all camera RAW file formats ------------------
-    
     QStringList patternList = QStringList::split('\n', KImageIO::pattern(KImageIO::Reading));
     
     // All Pictures from list must been always the first entry given by KDE API
@@ -981,12 +974,11 @@ void CameraUI::slotUpload()
     patternList.prepend(allPictures);
     
     // Added RAW file formats supported by dcraw program like a type mime. 
-    // Nota: we cannot use here "image/x-raw" type mime from KDE because it 
-    // will be only available for KDE 3.5.2, not before (see file #121242 in B.K.O).
+    // Nota: we cannot use here "image/x-raw" type mime from KDE because it uncomplete 
+    // or unvailable(dcraw_0)(see file #121242 in B.K.O).
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(raw_file_extentions)));
     
     fileformats = patternList.join("\n");
-#endif
 
     DDebug () << "fileformats=" << fileformats << endl;   
 
