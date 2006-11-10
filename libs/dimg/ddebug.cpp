@@ -33,26 +33,26 @@ namespace Digikam
 {
 
 //static KStaticDeleter<QMutex> deleter;
-static QMutex *mutex = 0;
+static QMutex *_ddebug_mutex_ = 0;
 
 Ddbgstream::Ddbgstream(kdbgstream stream)
           : kdbgstream(stream)
 {
     // using a static variable here - we can safely assume that kdDebug
     // is called at least once from the main thread before threads start.
-    if (!mutex)
+    if (!_ddebug_mutex_)
     {
         // leak the mutex object for simplicity
-        mutex = new QMutex;
+        _ddebug_mutex_ = new QMutex;
         //deleter.setObject(mutex, new QMutex);
         //KGlobal::unregisterStaticDeleter(&deleter);
     }
-    mutex->lock();
+    _ddebug_mutex_->lock();
 }
 
 Ddbgstream::~Ddbgstream()
 {
-    mutex->unlock();
+    _ddebug_mutex_->unlock();
 }
 
 } // namespace Digikam
