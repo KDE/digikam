@@ -1,35 +1,34 @@
 DEVELOPERS :
 
 Gilles Caulier <caulier dot gilles at kdemail dot net>                : Coordinator, lead developer, French translations.
-Joern Ahrens <kde at jokele.de>                                       : Developer, digiKam webpage maintainer.
-Tom Albers <tomalbers at kde.nl>                                      : Developer, digiKam webpage maintainer.
+Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                     : Developer.
+Francisco J. Cruz <fj dot cruz at supercable dot es>                  : Developer.
 
 CURRENT CONTRIBUTORS :
 
-Francisco J. Cruz <fj dot cruz at supercable dot es>                  : Developer.
-Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                     : Developer.
-
 Achim Bohnet <ach at mpe dot mpg dot de>                              : Bugs reports and patchs.
 Gerhard Kulzer <gerhard at kulzer dot net>                            : Feedback, patchs, and handbook writter.
-Tung NGUYEN <ntung at free dot fr>                                    : Bugs reports, French translations
-Oliver Dörr <oliver at doerr-privat dot de>                           : Beta tester, German translations.
+Oliver Doerr <oliver at doerr-privat dot de>                          : Beta tester, German translations.
+Fabien Salvi <fabien dot ubuntu at gmail dot com>                     : Webmaster.
 
 OLD CONTRIBUTORS :
 
 Renchi Raju <renchi.raju at kdemail.net>                              : 0.1.0 to 0.8.0 : main coordinator and lead developer.
 Ralf Holzer <kde at ralfhoelzer.com>                                  : Developer (0.7.x).
+Joern Ahrens <kde at jokele.de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
+Tom Albers <tomalbers at kde.nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Todd Shoemaker <todd at theshoemakers.net>                            : Developer (0.6.x).
 Gregory Kokanosky <gregory dot kokanosky at free.fr>                  : Feedback and patchs (0.6.x).
 Richard Taylor <r dot taylor at bcs.org.uk>                           : Feedback, patchs, and handbook writter (0.7.x).
 Yves Chaufour <yves dot chaufour at wanadoo.fr>                       : digiKam webpage maintainer (0.7.x).
 Charles Bouveyron <c dot bouveyron at tuxfamily.org>                  : Beta tester (0.6.x).
 Sebastian Rooder <seppelrockt at web.de>                              : Crystal icons style (0.6.2).
+Tung NGUYEN <ntung at free dot fr>                                    : Bugs reports, French translations
 
 OLD TRANSLATORS :
 
 Stefano Rivoir <s dot rivoir at gts.it>                               : Italian translations.
 Jan Toenjes <jan dot toenjes at web.de>                               : German translations.
-Oliver Dörr <oliver at doerr-privat.de>                               : German translations.
 Quique <quique at sindominio.net>                                     : Spanish translations.
 Marcus Meissner <marcus at jet.franken.de>                            : Czech translations.
 Janos Tamasi <janusz at vnet.hu>                                      : Hungarian translations.
