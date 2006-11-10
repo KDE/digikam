@@ -82,16 +82,6 @@ int main(int argc, char *argv[])
                           "caulier dot gilles at kdemail dot net",
                           "http://www.digikam.org/?q=blog/3");
 
-    aboutData.addAuthor ( "Joern Ahrens",
-                          I18N_NOOP("Developer"),
-                          "kde at jokele.de",
-                          "http://www.digikam.org/?q=blog/1");
-
-    aboutData.addAuthor ( "Tom Albers",
-                          I18N_NOOP("Developer"),
-                          "tomalbers at kde.nl",
-                          "http://www.omat.nl/drupal/?q=blog/1");
-    
     aboutData.addAuthor ( "Marcel Wiesweg",
                           I18N_NOOP("Developer"),
                           "marcel dot wiesweg at gmx dot de",
@@ -111,6 +101,16 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Developer"),
                           "kde at ralfhoelzer.com",
                           0);
+
+    aboutData.addAuthor ( "Joern Ahrens",
+                          I18N_NOOP("Developer"),
+                          "kde at jokele.de",
+                          "http://www.digikam.org/?q=blog/1");
+
+    aboutData.addAuthor ( "Tom Albers",
+                          I18N_NOOP("Developer"),
+                          "tomalbers at kde.nl",
+                          "http://www.omat.nl/drupal/?q=blog/1");
     
     aboutData.addCredit ( "Todd Shoemaker",
                           I18N_NOOP("Developer"),
