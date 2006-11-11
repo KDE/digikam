@@ -8,7 +8,7 @@ digikampic_DATA = image_broken.png histogram-lin.png histogram-log.png \
 	          bothvert.png bothhorz.png curvefree.png curvemooth.png original.png \
 	          duplicatebothvert.png duplicatebothhorz.png togglemouseover.png \
 	          zoom10.png zoom15.png zoom20.png zoom25.png zoom30.png \
-		  worldmap.jpg
+		  worldmap.jpg menusidepixmap.png 
 
 iconsdir = $(kde_datadir)/digikam/icons/hicolor/32x32/actions
 icons_DATA = tag.png tag-folder.png tag-events.png tag-people.png tag-places.png 
