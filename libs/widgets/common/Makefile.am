@@ -3,7 +3,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libcommonwidgets.la
 
 libcommonwidgets_la_SOURCES = histogramwidget.cpp colorgradientwidget.cpp curveswidget.cpp \
-	                          sidebar.cpp squeezedcombobox.cpp 
+	                      sidebar.cpp squeezedcombobox.cpp dpopupmenu.cpp 
 
 libcommonwidgets_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

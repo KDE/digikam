@@ -103,6 +103,7 @@ extern "C"
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "themeengine.h"
+#include "dpopupmenu.h"
 #include "pixmapmanager.h"
 #include "cameradragobject.h"
 #include "dragobjects.h"
@@ -506,7 +507,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    QPopupMenu popmenu(this);
+    DPopupMenu popmenu(this);
     popmenu.insertItem(SmallIcon("viewimage"), i18n("View..."), 18);
     popmenu.insertItem(SmallIcon("editimage"), i18n("Edit..."), 10);
     popmenu.insertItem(i18n("Open With"), &openWithMenu, 11);
