@@ -81,8 +81,6 @@ protected:
 
     QSplitter               *m_splitter;
 
-    QPopupMenu              *m_contextMenu;
-
     KAction                 *m_saveAction;
     KAction                 *m_saveAsAction;
     KAction                 *m_revertAction;
@@ -183,8 +181,6 @@ protected slots:
     virtual void slotLoadingFinished(const QString &filename, bool success);
     virtual void slotSavingStarted(const QString &filename);
 
-    virtual void slotContextMenu();
-
     virtual void slotSetup() { setup(); };
 
     virtual void slotFilePrint()=0;
@@ -195,6 +191,7 @@ protected slots:
     virtual void slotLast()=0;
     virtual void slotUpdateItemInfo()=0;
     virtual void slotChanged()=0;
+    virtual void slotContextMenu()=0;
 
 private slots:
 

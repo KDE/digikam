@@ -35,7 +35,6 @@ extern "C"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
@@ -46,7 +45,6 @@ extern "C"
 #include <kkeydialog.h>
 #include <kdeversion.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
 #include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <kcursor.h>
@@ -60,6 +58,7 @@ extern "C"
 #include <kaccel.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
+#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
@@ -100,7 +99,6 @@ EditorWindow::EditorWindow(const char *name)
 {
     d = new EditorWindowPriv;
 
-    m_contextMenu            = 0;
     m_canvas                 = 0;
     m_slideShow              = 0;
     m_imagePluginLoader      = 0;
@@ -951,11 +949,6 @@ void EditorWindow::slotToggleFullScreen()
         showFullScreen();
         m_fullScreen = true;
     }
-}
-
-void EditorWindow::slotContextMenu()
-{
-    m_contextMenu->exec(QCursor::pos());
 }
 
 void EditorWindow::slotToggleSlideShow()

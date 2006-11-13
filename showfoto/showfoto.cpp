@@ -41,7 +41,6 @@ extern "C"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
@@ -104,6 +103,7 @@ public:
 
     ShowFotoPriv()
     {
+        contextMenu             = 0;
         currentItem             = 0;
         itemsNb                 = 0;
         splash                  = 0;
@@ -134,6 +134,8 @@ public:
     KAction                         *fileOpenAction;
     
     KActionMenu                     *BCGAction;
+
+    QPopupMenu                      *contextMenu;
     
     Digikam::ThumbBarView           *thumbBar;
     Digikam::ThumbBarItem           *currentItem;
@@ -224,7 +226,7 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
 
     // Create context menu.
     
-    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+    d->contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
 
     // Make signals/slots connections
     
@@ -1087,6 +1089,11 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
         d->currentItem = d->thumbBar->currentItem();
         QTimer::singleShot(0, this, SLOT(slotOpenURL(d->currentItem->url())));
     }
+}
+
+void ShowFoto::slotContextMenu()
+{
+    d->contextMenu->exec(QCursor::pos());
 }
 
 }   // namespace ShowFoto

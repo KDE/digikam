@@ -109,6 +109,8 @@ private slots:
     void slotLoadingFinished(const QString &filename, bool success);
     void slotSavingStarted(const QString &filename);
 
+    void slotContextMenu();
+
 private:
     
     ShowFotoPriv* d;

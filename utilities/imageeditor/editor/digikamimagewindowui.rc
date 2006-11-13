@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="4" name="digikamimagewindow" >
+<gui version="5" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -93,16 +93,6 @@
      <Action name="editorwindow_slideshow" />      
      <Merge />
 </ToolBar>
- 
-<Menu name="RMBMenu">
-     <Action name="editorwindow_backward" />
-     <Action name="editorwindow_forward" />
-     <Separator/>
-     <Action name="editorwindow_rotate" /> 
-     <Action name="editorwindow_crop" />
-     <Separator/>
-     <Action name="editorwindow_delete" />
-</Menu>
  
 <ActionProperties/>
 

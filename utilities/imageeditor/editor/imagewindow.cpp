@@ -26,7 +26,6 @@
 
 // Qt includes.
 
-#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qtimer.h>
 #include <qlabel.h>
@@ -53,13 +52,13 @@
 #include <kstdaction.h>
 #include <kstdguiitem.h>
 #include <kstatusbar.h>
-#include <kpopupmenu.h>
 #include <kprogress.h>
 #include <kwin.h>
 
 // Local includes.
 
 #include "ddebug.h"
+#include "dpopupmenu.h"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "themeengine.h"
@@ -114,6 +113,7 @@ public:
         view                                = 0;
         imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
+        contextMenu                         = 0;
     }
 
     // If image editor is launched by camera interface, current
@@ -141,6 +141,8 @@ public:
     ImageInfo                *imageInfoCurrent;
 
     ImagePropertiesSideBarDB *rightSidebar;
+
+    DPopupMenu               *contextMenu;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;
@@ -177,7 +179,15 @@ ImageWindow::ImageWindow()
 
     // Create context menu.
 
-    m_contextMenu = static_cast<QPopupMenu*>(factory()->container("RMBMenu", this));
+    d->contextMenu = new DPopupMenu(this);
+    KActionCollection *ac = actionCollection();
+    if( ac->action("editorwindow_backward") ) ac->action("editorwindow_backward")->plug(d->contextMenu);
+    if( ac->action("editorwindow_forward") ) ac->action("editorwindow_forward")->plug(d->contextMenu);
+    d->contextMenu->insertSeparator();
+    if( ac->action("editorwindow_rotate") ) ac->action("editorwindow_rotate")->plug(d->contextMenu);
+    if( ac->action("editorwindow_crop") ) ac->action("editorwindow_crop")->plug(d->contextMenu);
+    d->contextMenu->insertSeparator();
+    if( ac->action("editorwindow_delete") ) ac->action("editorwindow_delete")->plug(d->contextMenu);
 
     // Make signals/slots connections
 
@@ -370,8 +380,8 @@ void ImageWindow::applySettings()
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                           const QString& caption, bool allowSaving, AlbumIconView* view)
 {
-    d->urlList     = urlList;
-    d->urlCurrent  = urlCurrent;
+    d->urlList          = urlList;
+    d->urlCurrent       = urlCurrent;
     d->imageInfoList    = ImageInfoList();
     d->imageInfoCurrent = 0;
 
@@ -521,7 +531,7 @@ void ImageWindow::slotLast()
 
 void ImageWindow::slotContextMenu()
 {
-    if (m_contextMenu)
+    if (d->contextMenu)
     {
         TagsPopupMenu* assignTagsMenu = 0;
         TagsPopupMenu* removeTagsMenu = 0;
@@ -536,10 +546,10 @@ void ImageWindow::slotContextMenu()
             assignTagsMenu = new TagsPopupMenu(idList, 1000, TagsPopupMenu::ASSIGN);
             removeTagsMenu = new TagsPopupMenu(idList, 2000, TagsPopupMenu::REMOVE);
 
-            separatorID = m_contextMenu->insertSeparator();
+            separatorID = d->contextMenu->insertSeparator();
 
-            m_contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
-            int i = m_contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
+            d->contextMenu->insertItem(i18n("Assign Tag"), assignTagsMenu);
+            int i = d->contextMenu->insertItem(i18n("Remove Tag"), removeTagsMenu);
 
             connect(assignTagsMenu, SIGNAL(signalTagActivated(int)),
                     this, SLOT(slotAssignTag(int)));
@@ -549,14 +559,14 @@ void ImageWindow::slotContextMenu()
 
             AlbumDB* db = AlbumManager::instance()->albumDB();
             if (!db->hasTags( idList ))
-                m_contextMenu->setItemEnabled(i,false);
+                d->contextMenu->setItemEnabled(i,false);
         }
 
-        m_contextMenu->exec(QCursor::pos());
+        d->contextMenu->exec(QCursor::pos());
 
         if (separatorID != -1)
         {
-            m_contextMenu->removeItem(separatorID);
+            d->contextMenu->removeItem(separatorID);
         }
 
         delete assignTagsMenu;
