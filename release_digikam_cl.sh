@@ -11,8 +11,8 @@
 
 name="digikam"
 egmodule="graphics"
-#startrev="539364"   # check existing ChangeLog file for the most recent entry
-startrev='{2006-10-15}'   # check existing ChangeLog file for the most recent entry
+startrev="605234"   # check existing ChangeLog file for the most recent entry
+#startrev='{2006-10-15}'   # check existing ChangeLog file for the most recent entry
 
 svnbase="svn+ssh://toma@svn.kde.org/home/kde"
 svnbase="https://ach@svn.kde.org/home/kde/"

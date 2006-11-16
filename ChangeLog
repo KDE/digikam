@@ -1,6 +1,42 @@
 v0.9.0-rc1 - 16-Oct-2006
 ----------------------------------------------------------------------------
 
+2006-11-16 09:52 +0000 [r605305]  cgilles
+
+	* digikam/libs/widgets/metadata/exifwidget.cpp,
+	  digikam/libs/widgets/metadata/exifwidget.h: digikam from trunk :
+	  compile under kubuntu without using C++ exception management
+	  everywhere : do not include Exiv2 headers here. CCMAIL:
+	  digikam-devel@kde.org
+
+2006-11-16 09:24 +0000 [r605297]  cgilles
+
+	* digikam/libs/dmetadata/dmetadata.h,
+	  digikam/libs/dmetadata/dmetadata.cpp: digikam from trunk :
+	  compile under kubuntu without using C++ exception management
+	  everywhere : do not include exiv2 headers in DMetadata header.
+	  CCMAIL: digikam-devel@kde.org
+
+2006-11-16 00:28 +0000 [r605240]  ach
+
+	* digikam/release_digikam.rb,
+	  digikamimageplugins/release_digikamimageplugins_docs.rb,
+	  digikam/release_digikam_docs.rb,
+	  digikamimageplugins/release_digikamimageplugins.rb:
+	  digikam(imageplugins) trunk: fix svnbase in release scripts
+
+2006-11-16 00:21 +0000 [r605239]  ach
+
+	* digikam/ChangeLog, digikam/release_digikam_cl.sh,
+	  digikam/PACKAGING: digikam trunk: o adpat release_digikam_cl.sh o
+	  update Changelog o update PACKAGING accordingly
+
+2006-11-15 23:41 +0000 [r605234]  ach
+
+	* digikam/release_digikam_cl.sh (added): digikam trunk: copy
+	  changelog script from stable to trunk
+
+
 2006-11-15 23:41 +0000 [r605234]  ach
 
 	* digikam/release_digikam_cl.sh (added): digikam trunk: copy
