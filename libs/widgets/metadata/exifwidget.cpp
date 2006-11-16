@@ -36,6 +36,7 @@
 
 // LibExiv2 includes.
 
+#include <exiv2/exif.hpp>
 #include <exiv2/tags.hpp>
 #include <exiv2/ifd.hpp>
 

@@ -25,10 +25,6 @@
 
 #include <qstring.h>
 
-// LibExiv2 includes.
-
-#include <exiv2/exif.hpp>
-
 // Local includes
 
 #include "metadatawidget.h"
