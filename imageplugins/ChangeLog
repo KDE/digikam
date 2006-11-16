@@ -1,3 +1,139 @@
+v0.9.0-rc1 - 15-Oct-2006
+----------------------------------------------------------------------------
+
+2006-11-16 00:28 +0000 [r605240]  ach
+
+	* digikam/release_digikam.rb,
+	  digikamimageplugins/release_digikamimageplugins_docs.rb,
+	  digikam/release_digikam_docs.rb,
+	  digikamimageplugins/release_digikamimageplugins.rb:
+	  digikam(imageplugins) trunk: fix svnbase in release scripts
+
+2006-11-15 23:06 +0000 [r605230]  ach
+
+	* digikam/release_digikam.rb,
+	  digikamimageplugins/digikamimageplugins.lsm,
+	  digikamimageplugins/release_digikamimageplugins_docs.rb,
+	  digikam/version.h, digikamimageplugins/common/include/version.h,
+	  digikam/digikam.lsm, digikam/release_digikam_docs.rb,
+	  digikamimageplugins/release_digikamimageplugins.rb:
+	  digikam(&imageplugins): * prepare for 0.9.0-rc1 release *
+	  release*_doc set version to rc? docs not yet ready for a release
+
+2006-11-10 13:31 +0000 [r603848]  cgilles
+
+	* digikamimageplugins/AUTHORS: update--Cette ligne, et les
+	  suivantes ci-dessous, seront ignorees-- M AUTHORS
+
+2006-11-08 14:38 +0000 [r603309]  cgilles
+
+	* digikamimageplugins/inpainting/imageplugin_inpainting.cpp,
+	  digikamimageplugins/freerotation/imageeffect_freerotation.cpp,
+	  digikamimageplugins/noisereduction/noisereduction.cpp,
+	  digikamimageplugins/antivignetting/antivignetting.cpp,
+	  digikamimageplugins/refocus/imageeffect_refocus.cpp,
+	  digikamimageplugins/superimpose/dirselectwidget.cpp,
+	  digikamimageplugins/emboss/imageeffect_emboss.cpp,
+	  digikamimageplugins/texture/texture.cpp,
+	  digikamimageplugins/inserttext/fontchooserwidget.cpp,
+	  digikamimageplugins/refocus/matrix.cpp,
+	  digikamimageplugins/texture/imageplugin_texture.cpp,
+	  digikamimageplugins/sheartool/imageplugin_sheartool.cpp,
+	  digikamimageplugins/freerotation/imageplugin_freerotation.cpp,
+	  digikamimageplugins/blurfx/imageeffect_blurfx.cpp,
+	  digikamimageplugins/superimpose/superimpose.cpp,
+	  digikamimageplugins/charcoal/charcoal.cpp,
+	  digikamimageplugins/superimpose/superimposewidget.cpp,
+	  digikamimageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  digikamimageplugins/raindrop/raindrop.cpp,
+	  digikamimageplugins/blowup/imageeffect_blowup.cpp,
+	  digikamimageplugins/unsharp/unsharp.cpp,
+	  digikamimageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  digikamimageplugins/emboss/imageplugin_emboss.cpp,
+	  digikamimageplugins/inserttext/imageplugin_inserttext.cpp,
+	  digikamimageplugins/restoration/imageplugin_restoration.cpp,
+	  digikamimageplugins/adjustcurves/adjustcurves.cpp,
+	  digikamimageplugins/charcoal/imageeffect_charcoal.cpp,
+	  digikamimageplugins/superimpose/imageplugin_superimpose.cpp,
+	  digikamimageplugins/border/imageplugin_border.cpp,
+	  digikamimageplugins/raindrop/imageeffect_raindrop.cpp,
+	  digikamimageplugins/lensdistortion/imageeffect_lensdistortion.cpp,
+	  digikamimageplugins/sheartool/imageeffect_sheartool.cpp,
+	  digikamimageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  digikamimageplugins/texture/imageeffect_texture.cpp,
+	  digikamimageplugins/unsharp/imageplugin_unsharp.cpp,
+	  digikamimageplugins/blurfx/imageplugin_blurfx.cpp,
+	  digikamimageplugins/perspective/perspectivewidget.cpp,
+	  digikamimageplugins/inserttext/inserttextwidget.cpp,
+	  digikamimageplugins/distortionfx/distortionfx.cpp,
+	  digikamimageplugins/channelmixer/channelmixer.cpp,
+	  digikamimageplugins/border/border.cpp,
+	  digikamimageplugins/whitebalance/imageeffect_whitebalance.cpp,
+	  digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp,
+	  digikamimageplugins/sheartool/sheartool.cpp,
+	  digikamimageplugins/restoration/imageeffect_restoration.cpp,
+	  digikamimageplugins/blowup/imageplugin_blowup.cpp,
+	  digikamimageplugins/perspective/imageplugin_perspective.cpp,
+	  digikamimageplugins/noisereduction/imageeffect_noisereduction.cpp,
+	  digikamimageplugins/antivignetting/imageeffect_antivignetting.cpp,
+	  digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  digikamimageplugins/blurfx/blurfx.cpp,
+	  digikamimageplugins/common/cimgiface/cimgiface.cpp,
+	  digikamimageplugins/charcoal/imageplugin_charcoal.cpp,
+	  digikamimageplugins/refocus/refocus.cpp,
+	  digikamimageplugins/hotpixels/imageeffect_hotpixels.cpp,
+	  digikamimageplugins/oilpaint/imageeffect_oilpaint.cpp,
+	  digikamimageplugins/raindrop/imageplugin_raindrop.cpp,
+	  digikamimageplugins/unsharp/imageeffect_unsharp.cpp,
+	  digikamimageplugins/inpainting/imageeffect_inpainting.cpp,
+	  digikamimageplugins/lensdistortion/imageplugin_lensdistortion.cpp,
+	  digikamimageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  digikamimageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  digikamimageplugins/refocus/imageplugin_refocus.cpp,
+	  digikamimageplugins/lensdistortion/lensdistortion.cpp,
+	  digikamimageplugins/perspective/imageeffect_perspective.cpp,
+	  digikamimageplugins/solarize/imageplugin_solarize.cpp,
+	  digikamimageplugins/freerotation/freerotation.cpp,
+	  digikamimageplugins/antivignetting/imageplugin_antivignetting.cpp,
+	  digikamimageplugins/infrared/imageplugin_infrared.cpp,
+	  digikamimageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  digikamimageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  digikamimageplugins/adjustlevels/adjustlevels.cpp,
+	  digikamimageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  digikamimageplugins/oilpaint/imageplugin_oilpaint.cpp: digikam
+	  from trunk : DigikamImagePlugins use DDebug() & DWarning() &
+	  DError() class instead kdDebug() & kdWarning() & kdError(). See
+	  B.K.O file 133026 for details. CCBUGS: 133026 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-11-08 14:09 +0000 [r603297]  cgilles
+
+	* digikamimageplugins/common/include/digikamheaders.h:
+	  DigikamImagePlugins from trunk : add ddebug.h
+
+2006-10-23 05:34 +0000 [r598272]  cgilles
+
+	* digikamimageplugins/infrared/imageeffect_infrared.cpp,
+	  digikamimageplugins/filmgrain/imageeffect_filmgrain.cpp: Fix i18n
+	  : "sensibility" ==> "sensitivity" BUG: 136162
+
+2006-10-19 15:56 +0000 [r597206]  fjcruz
+
+	* digikamimageplugins/release_digikamimageplugins.rb: An error that
+	  avoid to get *.po files for hotpixels and refocus plugins, has
+	  been corrected.
+
+2006-10-16 20:07 +0000 [r596159]  fjcruz
+
+	* digikamimageplugins/release_digikamimageplugins.rb: Updated for
+	  Beta 3 release
+
+2006-10-15 21:18 +0000 [r595841]  fjcruz
+
+	* digikamimageplugins/ChangeLog: Updated for Beta 3 release
+
+
+
 v0.9.0-beta3 - 15-Oct.-2006
 ----------------------------------------------------------------------------
 
