@@ -17,12 +17,21 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 
 4/ Backup old ChangeLog file to ChangeLog.old.
 
-5/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. Please check if ChangeLog file is updated properly.
+5a/ Create a fresh ChangeLog file using svn2cl script. Just run it from main digiKam root directory. Please check if ChangeLog file is updated properly.
 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
 
 Note : svn2cl need xstlproc program. Please install it before. (check libxstl-proc package).
+
+5b) Alternatively:
+	* check Changelog for last change, modify release_digikam(imageplguins)_cl.sh
+	  and run it.
+	* add a version header for the new release, include the generated
+	  Changelog.new-entries at the top of Changelog. Check if the last
+	  entry of the new-entries is not already in the old Changelog entries
+	* commit the new changelog
+        * skip item 6 and 7 below
 
 6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scriptly' entries in log.
 

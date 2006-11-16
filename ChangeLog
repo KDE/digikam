@@ -1,3 +1,487 @@
+v0.9.0-rc1 - 16-Oct-2006
+----------------------------------------------------------------------------
+
+2006-11-15 23:41 +0000 [r605234]  ach
+
+	* digikam/release_digikam_cl.sh (added): digikam trunk: copy
+	  changelog script from stable to trunk
+
+2006-11-15 23:06 +0000 [r605230]  ach
+
+	* digikam/release_digikam.rb,
+	  digikamimageplugins/digikamimageplugins.lsm,
+	  digikamimageplugins/release_digikamimageplugins_docs.rb,
+	  digikam/version.h, digikamimageplugins/common/include/version.h,
+	  digikam/digikam.lsm, digikam/release_digikam_docs.rb,
+	  digikamimageplugins/release_digikamimageplugins.rb:
+	  digikam(&imageplugins): * prepare for 0.9.0-rc1 release *
+	  release*_doc set version to rc? docs not yet ready for a release
+
+2006-11-15 18:04 +0000 [r605173]  mwiesweg
+
+	* digikam/kioslave/digikamalbums.cpp: Revert fix for bug #122653,
+	  as a temporary fix for bug #137282 CCBUG: 137282, 122653
+
+2006-11-15 02:37 +0000 [r605035]  wheeler
+
+	* digikam/data/pics/worldmap.jpg: At least use an optimized image
+	  here... (Reduces the repo size by about 2 MB, without a loss of
+	  quality.)
+
+2006-11-13 21:45 +0000 [r604711]  cgilles
+
+	* digikam/showfoto/showfoto.h,
+	  digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  digikam/utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  digikam/utilities/imageeditor/editor/editorwindow.h,
+	  digikam/showfoto/showfoto.cpp,
+	  digikam/utilities/imageeditor/editor/imagewindow.cpp: digikam
+	  from trunk : using a popup menu with a side pixmap in image
+	  editor.
+
+2006-11-12 15:24 +0000 [r604332]  cgilles
+
+	* digikam/libs/widgets/common/dpopupmenu.h (added),
+	  digikam/digikam/albumiconview.cpp,
+	  digikam/libs/widgets/common/Makefile.am,
+	  digikam/libs/widgets/common/dpopupmenu.cpp (added): digikam from
+	  trunk : using a popup menu with a side pixmap. Code backported
+	  from Amarok
+
+2006-11-11 21:40 +0000 [r604179]  cgilles
+
+	* digikam/data/pics/menusidepixmap.xcf (added),
+	  digikam/data/pics/Makefile.am,
+	  digikam/data/pics/menusidepixmap.png (added): digikam from trunk
+	  : menu side pixmap
+
+2006-11-10 13:30 +0000 [r603847]  cgilles
+
+	* digikam/AUTHORS: update
+
+2006-11-10 13:25 +0000 [r603845-603846]  cgilles
+
+	* digikam/showfoto/main.cpp: moicing core team on the top
+
+	* digikam/digikam/main.cpp: just moving core team on the top
+
+2006-11-10 08:41 +0000 [r603785]  cgilles
+
+	* digikam/libs/dimg/ddebug.cpp: digikam from trunk: using a static
+	  mutex name more complex than a simple "mutex"
+
+2006-11-09 10:46 +0000 [r603528-603529]  cgilles
+
+	* digikam/NEWS: update
+
+	* digikam/digikam/digikamview.cpp, digikam/digikam/digikamapp.cpp,
+	  digikam/digikam/digikamapp.h: digikam from trunk : add
+	  accelerators to the application list for Copy & Paste album items
+	  operations. BUG: 137063
+
+2006-11-09 09:33 +0000 [r603500-603501]  cgilles
+
+	* digikam/NEWS: update
+
+	* digikam/digikam/digikamview.cpp, digikam/NEWS,
+	  digikam/utilities/cameragui/cameraui.cpp,
+	  digikam/showfoto/showfoto.cpp: digikam from trunk : RAW file
+	  formats mime type still unavialable with KDE version >= 3.52. We
+	  need to use an internal method instead. BUG: 136643
+
+2006-11-09 08:30 +0000 [r603488]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-08 20:38 +0000 [r603407]  cgilles
+
+	* digikam/libs/widgets/metadata/makernotewidget.cpp,
+	  digikam/libs/widgets/metadata/gpswidget.cpp,
+	  digikam/libs/widgets/metadata/exifwidget.cpp: digikam from trunk
+	  : use the local 8 bits encoding to get strings from Exiv2 (again)
+
+2006-11-08 17:05 +0000 [r603360]  cgilles
+
+	* digikam/libs/widgets/metadata/makernotewidget.cpp,
+	  digikam/libs/widgets/metadata/gpswidget.cpp,
+	  digikam/libs/widgets/metadata/exifwidget.cpp,
+	  digikam/libs/widgets/metadata/iptcwidget.cpp: digikam from trunk
+	  : use the local 8 bits encoding to get strings from Exiv2
+
+2006-11-08 13:00 +0000 [r603277-603278]  cgilles
+
+	* digikam/digikam/digikamview.cpp,
+	  digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  digikam/utilities/cameragui/cameraui.cpp: digikam from trunk :
+	  fix missing use of DDebug() & DWarning() & DError() class instead
+	  kdDebug() & kdWarning() & kdError(). See B.K.O file 133026 for
+	  details CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+	* digikam/showfoto/showfoto.cpp: kipi-plugins from trunk :
+	  RAWConverter : updated dcraw.c implementation to version 8.41
+	  CCMAIL: kde-imaging@kde.org
+
+2006-11-08 12:45 +0000 [r603271]  cgilles
+
+	* digikam/digikam/searchquickdialog.cpp,
+	  digikam/digikam/albumhistory.cpp, digikam/digikam/iconview.cpp,
+	  digikam/digikam/albumlister.cpp,
+	  digikam/digikam/albumfolderview.cpp,
+	  digikam/digikam/dragobjects.cpp,
+	  digikam/digikam/imagepreviewwidget.cpp,
+	  digikam/digikam/albummanager.cpp,
+	  digikam/digikam/albumthumbnailloader.cpp,
+	  digikam/digikam/searchwidgets.cpp, digikam/digikam/imageinfo.cpp,
+	  digikam/digikam/digikamview.cpp, digikam/digikam/album.cpp,
+	  digikam/digikam/digikamfirstrun.cpp,
+	  digikam/digikam/tagfolderview.cpp,
+	  digikam/digikam/albumiconview.cpp,
+	  digikam/digikam/datefolderview.cpp,
+	  digikam/digikam/folderview.cpp, digikam/digikam/albumdb.cpp,
+	  digikam/digikam/digikamapp.cpp,
+	  digikam/digikam/tagspopupmenu.cpp, digikam/digikam/syncjob.cpp,
+	  digikam/digikam/upgradedb_sqlite2tosqlite3.cpp,
+	  digikam/digikam/albumdb_sqlite2.cpp,
+	  digikam/digikam/batchthumbsgenerator.cpp,
+	  digikam/digikam/dio.cpp, digikam/digikam/scanlib.cpp,
+	  digikam/digikam/searchadvanceddialog.cpp,
+	  digikam/digikam/tagfilterview.cpp,
+	  digikam/digikam/kipiinterface.cpp,
+	  digikam/digikam/imagepreviewjob.cpp: digikam from trunk : digiKam
+	  core use DDebug() & DWarning() & DError() class instead kdDebug()
+	  & kdWarning() & kdError(). See B.K.O file 133026 for details
+	  CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+2006-11-08 12:26 +0000 [r603265]  cgilles
+
+	* digikam/imageplugins/imageeffect_blur.cpp,
+	  digikam/imageplugins/imageeffect_iccproof.cpp,
+	  digikam/imageplugins/imageplugin_core.cpp,
+	  digikam/imageplugins/imageeffect_redeye.cpp,
+	  digikam/imageplugins/imageeffect_sharpen.cpp: digikam from trunk
+	  : core ImagePlugins use DDebug() & DWarning() & DError() class
+	  instead kdDebug() & kdWarning() & kdError(). See B.K.O file
+	  133026 for details CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+2006-11-08 12:12 +0000 [r603261]  cgilles
+
+	* digikam/utilities/cameragui/umscamera.cpp,
+	  digikam/utilities/cameragui/gpcamera.cpp,
+	  digikam/utilities/cameragui/camerafolderview.cpp,
+	  digikam/utilities/cameragui/albumselectdialog.cpp,
+	  digikam/utilities/imageeditor/canvas/canvas.cpp,
+	  digikam/utilities/setup/setupicc.cpp,
+	  digikam/utilities/cameragui/cameraui.cpp,
+	  digikam/utilities/cameragui/Makefile.am,
+	  digikam/utilities/imageeditor/tools/imageprint.cpp,
+	  digikam/utilities/imageeditor/editor/imagewindow.cpp,
+	  digikam/utilities/imageeditor/editor/imageiface.cpp,
+	  digikam/utilities/cameragui/cameracontroller.cpp,
+	  digikam/utilities/cameragui/cameraiconview.cpp,
+	  digikam/utilities/imageeditor/tools/slideshow.cpp,
+	  digikam/utilities/imageeditor/canvas/imagepluginloader.cpp,
+	  digikam/utilities/imageeditor/canvas/undocache.cpp,
+	  digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  digikam/utilities/setup/gpiface.cpp,
+	  digikam/utilities/cameragui/camerafolderdialog.cpp,
+	  digikam/utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  digikam/utilities/imageeditor/canvas/undomanager.cpp,
+	  digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+	  digikam/utilities/imageeditor/canvas/undoaction.cpp: digikam from
+	  trunk : all implementations in digikam/utilities use DDebug() &
+	  DWarning() & DError() class instead kdDebug() & kdWarning() &
+	  kdError(). See B.K.O file 133026 for details CCBUGS: 133026
+	  CCMAIL: digikam-devel@kde.org
+
+2006-11-08 12:00 +0000 [r603259]  cgilles
+
+	* digikam/libs/jpegutils/jpegutils.cpp,
+	  digikam/libs/histogram/imagehistogram.cpp,
+	  digikam/libs/imageproperties/imagedescedittab.cpp,
+	  digikam/libs/dimg/dimg.cpp, digikam/libs/curves/imagecurves.cpp,
+	  digikam/libs/thumbbar/thumbnailjob.cpp,
+	  digikam/libs/dimg/filters/dimgimagefilters.cpp,
+	  digikam/libs/widgets/imageplugins/imageregionwidget.cpp,
+	  digikam/libs/levels/imagelevels.cpp,
+	  digikam/libs/dimg/filters/dimggaussianblur.cpp,
+	  digikam/libs/dimg/loaders/tiffloader.cpp,
+	  digikam/libs/dimg/filters/dimgsharpen.cpp,
+	  digikam/libs/dimg/loaders/rawloader.cpp: digikam from trunk : all
+	  implementations in digiKam core libs use DWarning() & DError()
+	  class instead kdWarning() && kdError(). See B.K.O file 133026 for
+	  details CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+2006-11-08 11:44 +0000 [r603254]  cgilles
+
+	* digikam/libs/dialogs/ctrlpaneldlg.cpp,
+	  digikam/libs/imageproperties/imagepropertiessidebardb.cpp,
+	  digikam/libs/dialogs/iccprofileinfodlg.cpp,
+	  digikam/libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  digikam/libs/imageproperties/imagepropertiescolorstab.cpp,
+	  digikam/libs/widgets/common/curveswidget.cpp,
+	  digikam/libs/dialogs/imageguidedlg.cpp,
+	  digikam/libs/widgets/metadata/metadatawidget.cpp,
+	  digikam/libs/imageproperties/imagedescedittab.cpp,
+	  digikam/libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  digikam/libs/threadimageio/sharedloadsavethread.cpp,
+	  digikam/libs/widgets/metadata/worldmapwidget.cpp,
+	  digikam/libs/widgets/imageplugins/imagewidget.cpp,
+	  digikam/libs/dialogs/dprogressdlg.cpp,
+	  digikam/libs/widgets/imageplugins/imageregionwidget.cpp,
+	  digikam/libs/widgets/metadata/exifwidget.cpp,
+	  digikam/libs/imageproperties/imagepropertiestab.cpp,
+	  digikam/libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  digikam/libs/widgets/imageplugins/imageselectionwidget.cpp,
+	  digikam/libs/levels/imagelevels.cpp,
+	  digikam/libs/themeengine/theme.cpp,
+	  digikam/libs/thumbbar/Makefile.am,
+	  digikam/libs/histogram/imagehistogram.cpp,
+	  digikam/libs/widgets/imageplugins/imageguidewidget.cpp,
+	  digikam/libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  digikam/libs/widgets/common/histogramwidget.cpp,
+	  digikam/libs/curves/Makefile.am,
+	  digikam/libs/widgets/iccprofiles/Makefile.am,
+	  digikam/libs/imageproperties/cameraitempropertiestab.cpp,
+	  digikam/libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+	  digikam/libs/widgets/metadata/makernotewidget.cpp,
+	  digikam/libs/themeengine/Makefile.am,
+	  digikam/libs/curves/imagecurves.cpp,
+	  digikam/libs/thumbbar/thumbnailjob.cpp,
+	  digikam/libs/widgets/metadata/gpswidget.cpp,
+	  digikam/libs/dialogs/imagedlgbase.cpp,
+	  digikam/libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  digikam/libs/threadimageio/loadsavethread.cpp,
+	  digikam/libs/imageproperties/imagepropertiessidebar.cpp,
+	  digikam/libs/widgets/metadata/iptcwidget.cpp,
+	  digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp: digikam
+	  from trunk : all implementations in digiKam core libs use
+	  DDebug() class instead kdDebug(). See B.K.O file 133026 for
+	  details CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+2006-11-08 10:51 +0000 [r603237]  cgilles
+
+	* digikam/libs/jpegutils/jpegutils.cpp, digikam/libs/dimg/ddebug.h,
+	  digikam/libs/threadimageio/loadsavetask.cpp,
+	  digikam/libs/threadimageio/managedloadsavethread.cpp,
+	  digikam/libs/threadimageio/Makefile.am: digikam from trunk :
+	  threadimageio and jpegutils use DDebug() class instead kdDebug().
+	  See B.K.O file 133026 for details CCBUGS: 133026 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-11-08 09:50 +0000 [r603221]  cgilles
+
+	* digikam/libs/dcraw/dcrawpreview.cpp,
+	  digikam/libs/dcraw/dcrawbinary.cpp,
+	  digikam/libs/dcraw/Makefile.am,
+	  digikam/libs/dcraw/dcraw_parse.cpp: digikam from trunk : dcraw
+	  interface use DDebug() class instead kdDebug(). See B.K.O file
+	  133026 for details CCBUGS: 133026 CCMAIL: digikam-devel@kde.org
+
+2006-11-08 09:17 +0000 [r603210]  cgilles
+
+	* digikam/libs/dimg/ddebug.h,
+	  digikam/libs/dimg/filters/Makefile.am,
+	  digikam/libs/dimg/loaders/Makefile.am,
+	  digikam/digikam/Makefile.am: digikam from trunk : compile with
+	  DDebug() class
+
+2006-11-08 08:59 +0000 [r603205]  cgilles
+
+	* digikam/libs/dmetadata/Makefile.am,
+	  digikam/libs/dmetadata/loaders/dmetaloader.cpp,
+	  digikam/libs/dmetadata/loaders/pngmetaloader.cpp,
+	  digikam/libs/dmetadata/loaders/rawmetaloader.cpp,
+	  digikam/libs/dmetadata/loaders/Makefile.am,
+	  digikam/libs/dmetadata/dmetadata.cpp: digikam from trunk :
+	  DMetadata use DDebug() class instead kdDebug(). See B.K.O file
+	  133026 for details CCMAIL: digikam-devel@kde.org CCBUGS: 133026
+
+2006-11-08 08:46 +0000 [r603203]  cgilles
+
+	* digikam/libs/dimg/loaders/ppmloader.cpp,
+	  digikam/libs/dimg/filters/hslmodifier.cpp,
+	  digikam/libs/dimg/dimg.cpp,
+	  digikam/libs/dimg/loaders/Makefile.am,
+	  digikam/libs/dimg/dcolor.cpp,
+	  digikam/libs/dimg/loaders/qimageloader.cpp,
+	  digikam/libs/dimg/filters/dimgimagefilters.cpp,
+	  digikam/libs/dimg/Makefile.am, digikam/libs/dimg/ddebug.cpp
+	  (added), digikam/libs/dimg/filters/dimgthreadedfilter.cpp,
+	  digikam/libs/dimg/ddebug.h (added),
+	  digikam/libs/dimg/loaders/dimgloader.cpp,
+	  digikam/libs/dimg/filters/Makefile.am,
+	  digikam/libs/dimg/filters/icctransform.cpp,
+	  digikam/libs/dimg/loaders/pngloader.cpp,
+	  digikam/libs/dimg/loaders/jpegloader.cpp,
+	  digikam/libs/dimg/loaders/tiffloader.cpp,
+	  digikam/libs/dimg/filters/dimggaussianblur.cpp,
+	  digikam/libs/dimg/loaders/rawloader.cpp,
+	  digikam/libs/dimg/filters/dimgsharpen.cpp: digikam from trunk :
+	  new DDebug class from marcel to use instead kdDebug (this one is
+	  not thread-safe). This commit remplace kdDebug() call directly by
+	  DDebug() as well in source code. All DImg framework is patched. I
+	  have tested this implementation on 3 PIV-HT computers in debug
+	  mode using gdb and valgrind. No problems appears. TODO : patch
+	  all others part of digiKam and DigikamImagePlugins. CCMAIL:
+	  digikam-devel@kde.org CCBUGS: 133026
+
+2006-11-07 18:02 +0000 [r603065]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-07 17:15 +0000 [r603053]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-07 12:11 +0000 [r602964]  cgilles
+
+	* digikam/libs/dcraw/dcraw.c, digikam/NEWS: digikam from trunk :
+	  updated dcraw.c implementation to version 8.41 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-11-07 11:20 +0000 [r602959]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-04 09:49 +0000 [r601741]  cgilles
+
+	* digikam/libs/dimg/loaders/tiffloader.h,
+	  digikam/libs/dimg/loaders/tiffloader.cpp: digikam from trunk :
+	  DImg::TIFFLoader : fix va_list compilation in Alpha computers.
+	  Using vnsprintf to get warnings and errors contents (inspired
+	  from ImageMagick source code). libtiff source code is only
+	  compiled is advanced debug statements are enabled in source code.
+
+2006-11-03 22:07 +0000 [r601623]  mwiesweg
+
+	* digikam/NEWS, digikam/digikam/albumfolderview.cpp: Only display
+	  "Reset album icon" if there is an item under the cursor BUG:
+	  136769
+
+2006-11-03 20:09 +0000 [r601593]  fjcruz
+
+	* digikam/libs/dimg/filters/icctransform.cpp: A serious bug has
+	  been fixed. This one went unnoticed unless digikam was executed
+	  from a console. It avoided to do color transforms via lcms in
+	  color correction dialog, showing a false "corrupted profile"
+	  error, dued to the embedded profile was never used.
+
+2006-11-03 12:27 +0000 [r601482]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-02 22:53 +0000 [r601345]  fjcruz
+
+	* digikam/libs/dimg/loaders/dimgloader.cpp: A serious bug has been
+	  fixed. This one went unnoticed unless digikam was executed from a
+	  console. It avoided to do color transforms via lcms in color
+	  correction dialog, showing a false "corrupted profile" error,
+	  dued to the embedded profile was never used.
+
+2006-10-30 10:26 +0000 [r600307]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-27 07:49 +0000 [r599453]  cgilles
+
+	* digikam/libs/dimg/filters/dimgthreadedfilter.cpp: code cleanup
+
+2006-10-26 10:32 +0000 [r599227]  cgilles
+
+	* digikam/libs/dimg/filters/dimgthreadedfilter.cpp: digikam from
+	  trunk : remove KDebug statements for testing
+
+2006-10-26 10:09 +0000 [r599220]  cgilles
+
+	* digikam/libs/dialogs/imageguidedlg.cpp: digikam from trunk : fix
+	  image plugins Guide settings layout
+
+2006-10-26 08:17 +0000 [r599195]  cgilles
+
+	* digikam/digikam/digikamapp.cpp, digikam/digikam/digikamapp.h:
+	  using KPopupMenu instead QPopupMenu
+
+2006-10-26 06:24 +0000 [r599179]  cgilles
+
+	* digikam/libs/dimg/filters/dimgthreadedfilter.cpp,
+	  digikam/libs/dimg/filters/dimgthreadedfilter.h: digikam from
+	  trunk : make a deep copy of QString in threaded image filter
+	  constructor to prevent crash into Hyperthreading CPU. To digiKam
+	  users : feedback is welcome... CCBUGS:133026 CCMAIL:
+	  digikam-devel@kde.org
+
+2006-10-25 07:00 +0000 [r598955]  cgilles
+
+	* digikam/digikam/kipiinterface.cpp: digikam from trunk :
+	  KipiInterface : if a kipi-plugin change pictures metadata, use
+	  libkipi::Interface::refreshImages() to update sidebar Metadata
+	  contents. Important: Marcel, this way do not yet update database
+	  contents accordinly with metadata contents
+	  (Tags/Rating/date/comments <==> EXIF/IPTC) from an existing item
+	  in picture collections. This requires more indeep changes in
+	  Digikam::Scanlib and digikam::AlbumDB class. We need to discut
+	  about these changes together. CCMAIL: marcel.wiesweg@gmx.de
+	  CCBUGS: 136260, 136258, 136256
+
+2006-10-23 17:45 +0000 [r598475]  hasso
+
+	* digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  digikam/imageplugins/imageplugin_core.cpp,
+	  digikam/showfoto/showfoto.cpp: Don't shout.
+
+2006-10-23 05:35 +0000 [r598273]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-22 19:59 +0000 [r598191-598192]  cgilles
+
+	* digikam/NEWS: update
+
+	* digikam/libs/widgets/metadata/iptcwidget.cpp: digikam from trunk
+	  : fix IPTC human readable tags list : remove program and
+	  programversion, add provincestate. BUG: 135851
+
+2006-10-22 19:45 +0000 [r598186]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-22 19:40 +0000 [r598184]  mwiesweg
+
+	* digikam/digikam/albumdb.cpp: Correct copy-and-paste mistake.
+	  Oops, would have thought I had checked this twice. Ok, it only
+	  affects changing the thumbnail. Thanks for the report. BUG:
+	  136138
+
+2006-10-22 12:32 +0000 [r598067]  cgilles
+
+	* digikam/libs/widgets/metadata/gpswidget.cpp: compile
+
+2006-10-22 11:10 +0000 [r598018]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-22 08:11 +0000 [r597977]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-22 07:55 +0000 [r597972]  cgilles
+
+	* digikam/NEWS: update
+
+2006-10-22 07:41 +0000 [r597967]  cgilles
+
+	* digikam/configure.in.bot: fix gphoto2 to libgphoto2
+
+2006-10-15 21:03 +0000 [r595838]  fjcruz
+
+	* digikam/ChangeLog: Updated from Beta 3 release
+
+2006-10-15 20:42 +0000 [r595833]  fjcruz
+
+	* digikam/release_digikam.rb, digikam/release_digikam_docs.rb:
+	  Updated form Beta 3 release
+
 v0.9.0-beta3 - 15-Oct.-2006
 ----------------------------------------------------------------------------
 
