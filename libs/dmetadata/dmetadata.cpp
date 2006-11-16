@@ -44,6 +44,8 @@
 #include <exiv2/jpgimage.hpp>
 #include <exiv2/datasets.hpp>
 #include <exiv2/tags.hpp>
+#include <exiv2/types.hpp>
+#include <exiv2/exif.hpp>
 
 // Local includes.
 

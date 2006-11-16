@@ -29,16 +29,17 @@
 #include <qimage.h>
 #include <qdatetime.h>
 
-// Exiv2 includes.
-
-#include <exiv2/types.hpp>
-#include <exiv2/exif.hpp>
-
 // Local includes.
 
 #include "dimg.h"
 #include "photoinfocontainer.h"
 #include "digikam_export.h"
+
+namespace Exiv2
+{
+    class DataBuf;
+    class Exifdatum;
+}
 
 namespace Digikam
 {
