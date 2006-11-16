@@ -317,12 +317,12 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 188 ==> 136162 : ISO Slider label is incorrectly labeled as "sensibility", should be sensitivity.
 189 ==> 133026 : Crashes on systems using hyperthreading.
 190 ==> 136260 : Awkward management of metadata and digikam-tags and comments.
-191 ==> 136769 : digiKam crashes when resetting Album icon (with no album selected)
+191 ==> 136769 : digiKam crashes when resetting Album icon (with no album selected).
 192 ==> 136749 : Tags are not kept with images when album is moved in album hierarchy.
 193 ==> 123623 : digiKam freezes or is very slow.
 194 ==> 96993  : Ability to view next next image in folder in showfoto.
 195 ==> 136643 : showfoto can open CRW, but not shown in file dialogue.
 196 ==> 137063 : Keyboard shortcut for 'paste' action not working.
-197 ==> 
+197 ==> 137461 : Typo croping must be cropping.
 
 ----------------------------------------------------------------------------------------------------
