@@ -37,6 +37,7 @@
 // LibExiv2 includes.
 
 #include <exiv2/iptc.hpp>
+#include <exiv2/datasets.hpp>
 
 // Local includes.
 
