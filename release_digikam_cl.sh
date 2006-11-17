@@ -11,7 +11,7 @@
 
 name="digikam"
 egmodule="graphics"
-startrev="605234"   # check existing ChangeLog file for the most recent entry
+startrev="605305"   # check existing ChangeLog file for the most recent entry
 #startrev='{2006-10-15}'   # check existing ChangeLog file for the most recent entry
 
 svnbase="svn+ssh://toma@svn.kde.org/home/kde"
@@ -22,7 +22,7 @@ adminroot="$svnbase/branches/KDE/3.5"
 #----------------------------------------------------------------
 
 set -x
-LC_ALL=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # using accounts it with svn2log.py -u  add even more of email addresses to changelog :(
 #svn cat $svnbase/trunk/KDE/kde-common/accounts > accounts.tmp.$$

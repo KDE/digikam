@@ -1,6 +1,27 @@
 v0.9.0-rc1 - 16-Oct-2006
 ----------------------------------------------------------------------------
 
+2006-11-16 20:12 +0000 [r605459]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-16 19:28 +0000 [r605450]  cgilles
+
+	* digikam/libs/widgets/metadata/iptcwidget.cpp: compile
+
+2006-11-16 10:13 +0000 [r605312]  ach
+
+	* digikam/ChangeLog, digikam/release_digikam_cl.sh: digikam trunk:
+	  update changelog
+
+2006-11-16 09:52 +0000 [r605305]  cgilles
+
+	* digikam/libs/widgets/metadata/exifwidget.cpp,
+	  digikam/libs/widgets/metadata/exifwidget.h: digikam from trunk :
+	  compile under kubuntu without using C++ exception management
+	  everywhere : do not include Exiv2 headers here. CCMAIL:
+	  digikam-devel@kde.org
+
 2006-11-16 09:52 +0000 [r605305]  cgilles
 
 	* digikam/libs/widgets/metadata/exifwidget.cpp,
