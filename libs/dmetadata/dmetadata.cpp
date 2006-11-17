@@ -206,8 +206,10 @@ bool DMetadata::setExif(const QByteArray& data)
     {    
         if (!data.isEmpty())
         {
-            d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size());
-            return true;
+            if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+                return false;
+            else
+                return true;
         }
     }
     catch( Exiv2::Error &e )
@@ -229,8 +231,10 @@ bool DMetadata::setExif(Exiv2::DataBuf const data)
     {    
         if (data.size_ != 0)
         {
-            d->exifMetadata.load(data.pData_, data.size_);
-            return true;
+            if (d->exifMetadata.load(data.pData_, data.size_) != 0)
+                return false;
+            else
+                return true;
         }
     }
     catch( Exiv2::Error &e )
@@ -252,8 +256,10 @@ bool DMetadata::setIptc(const QByteArray& data)
     {    
         if (!data.isEmpty())
         {
-            d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size());
-            return true;
+            if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+                return false;
+            else
+                return true;
         }
     }
     catch( Exiv2::Error &e )
@@ -275,8 +281,10 @@ bool DMetadata::setIptc(Exiv2::DataBuf const data)
     {    
         if (data.size_ != 0)
         {
-            d->iptcMetadata.load(data.pData_, data.size_);
-            return true;
+            if (d->iptcMetadata.load(data.pData_, data.size_) != 0)
+                return false;
+            else
+                return true;
         }
     }
     catch( Exiv2::Error &e )
