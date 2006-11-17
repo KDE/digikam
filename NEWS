@@ -324,5 +324,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 195 ==> 136643 : showfoto can open CRW, but not shown in file dialogue.
 196 ==> 137063 : Keyboard shortcut for 'paste' action not working.
 197 ==> 137461 : Typo croping must be cropping.
+198 ==> 137282 : Comments are lost when copying or moving a picture to another album.
+199 ==> 
 
 ----------------------------------------------------------------------------------------------------
