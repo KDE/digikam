@@ -327,6 +327,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 198 ==> 137282 : Comments are lost when copying or moving a picture to another album.
 199 ==> 132805 : Crash when assinging keywords.
 200 ==> 137204 : Crash when applying IPTC data.
-201 ==> 
+201 ==> 135407 : Reproducible crash selecting photos from collection.
+202 ==> 
 
 ----------------------------------------------------------------------------------------------------
