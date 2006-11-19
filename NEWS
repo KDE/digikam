@@ -328,6 +328,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 199 ==> 132805 : Crash when assinging keywords.
 200 ==> 137204 : Crash when applying IPTC data.
 201 ==> 135407 : Reproducible crash selecting photos from collection.
-202 ==> 
+202 ==> 136086 : Crash when saving any type of files.
+203 ==> 
 
 ----------------------------------------------------------------------------------------------------
