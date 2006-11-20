@@ -329,6 +329,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 200 ==> 137204 : Crash when applying IPTC data.
 201 ==> 135407 : Reproducible crash selecting photos from collection.
 202 ==> 136086 : Crash when saving any type of files.
-203 ==> 
+203 ==> 137612 : Showfoto doesn't refresh the photo preview when deleting a picture.
+204 ==> 
 
 ----------------------------------------------------------------------------------------------------
