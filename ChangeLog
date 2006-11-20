@@ -1,6 +1,53 @@
 v0.9.0-rc1 - 16-Oct-2006
 ----------------------------------------------------------------------------
 
+2006-11-20 15:21 +0000 [r606488]  cgilles
+
+	* digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  digikam/utilities/imageeditor/canvas/dimginterface.cpp: digikam
+	  from trunk : Check the validity of current loaded image to
+	  enable/disable menu actions accordinly. This commit do not solve
+	  showfoto problem when it's invoqued from command. CCBUGS: 137495
+
+2006-11-20 14:24 +0000 [r606463-606464]  cgilles
+
+	* digikam/NEWS: update
+
+	* digikam/showfoto/showfoto.cpp: Showfoto from trunk : no need a
+	  Qtimer to dispatch change when removing a picture from the list.
+	  Call directly the slot instead. BUG: 137612
+
+2006-11-19 08:42 +0000 [r606083]  cgilles
+
+	* digikam/README: fix lib depency
+
+2006-11-19 08:39 +0000 [r606079-606081]  cgilles
+
+	* digikam/README: fix Exiv2 depency to next 0.12 release (this is
+	  mandatory duing an internal indeep bug into current 0.11 release)
+
+	* digikam/NEWS: update
+
+2006-11-18 18:07 +0000 [r605950-605951]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-17 15:03 +0000 [r605621]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-17 10:00 +0000 [r605581]  cgilles
+
+	* digikam/libs/dmetadata/dmetadata.cpp: digikam from trunk : bugfix
+	  : missing to test return values from Exiv2 library to Load
+	  IPTC/EXIF data. See B.K.O #136855 for details CCMAIL:
+	  digikam-devel@kde.org
+
+2006-11-17 00:45 +0000 [r605517]  ach
+
+	* digikam/ChangeLog, digikam/release_digikam_cl.sh: digikam trunk:
+	  now it compiles with exiv2 0.10. Next try...
+
 2006-11-16 20:12 +0000 [r605459]  cgilles
 
 	* digikam/NEWS: update
