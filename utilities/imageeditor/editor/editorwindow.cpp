@@ -87,6 +87,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "editorwindowprivate.h"
 #include "editorwindow.h"
+#include "editorwindow.moc"
 
 void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
@@ -122,7 +123,7 @@ EditorWindow::EditorWindow(const char *name)
     
     // Settings containers instance.
 
-    d->ICCSettings    = new ICCSettingsContainer();
+    d->ICCSettings   = new ICCSettingsContainer();
     m_IOFileSettings = new IOFileSettingsContainer();
     m_savingContext  = new SavingContextContainer();
 }
@@ -1142,19 +1143,26 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(IOFileProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
-void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool /*success*/)
+void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
 {
-    //TODO: handle success == false
-
     m_nameLabel->progressBarMode(IOFileProgressBar::FileNameMode);
     slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
     // No need to re-enable image properties sidebar here, it's will be done
     // automatically by a signal from canvas
-    toggleActions(true);
-
+    toggleActions(success);
     unsetCursor();
+
+    // Note: in showfoto, we using a null filename to clear canvas.
+    if (!success && filename != QString::null)
+    {
+        QFileInfo fi(filename);
+        QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
+        KMessageBox::error(this, message);
+        DWarning() << "Failed to load image " << fi.fileName() << endl;
+    }
+
 }
 
 void EditorWindow::slotNameLabelCancelButtonPressed()
@@ -1518,4 +1526,3 @@ bool EditorWindow::moveFile()
 
 }  // namespace Digikam
 
-#include "editorwindow.moc"

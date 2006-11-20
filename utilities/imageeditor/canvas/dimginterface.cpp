@@ -35,7 +35,6 @@
 #include <qbitmap.h>
 #include <qcolor.h>
 #include <qfile.h>
-#include <qfileinfo.h>
 #include <qvariant.h>
 
 // KDE includes.
@@ -56,6 +55,7 @@
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
 #include "dimginterface.h"
+#include "dimginterface.moc"
 
 namespace Digikam
 {
@@ -373,15 +373,6 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
 
     emit signalImageLoaded(d->filename, valRet);
     setModified();
-
-    // Note: in showfoto, we using a null filename to clear canvas.
-    if (!valRet && fileName != QString::null)
-    {
-        QFileInfo fi(fileName);
-        QString message = i18n("Failed to load image \"%1\"").arg(fi.fileName());
-        KMessageBox::error(d->parent, message);
-        DWarning() << "Failed to load image " << fi.fileName() << endl;
-    }
 }
 
 void DImgInterface::slotLoadingProgress(const LoadingDescription &loadingDescription, float progress)
@@ -1145,4 +1136,3 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 
 }  // namespace Digikam
 
-#include "dimginterface.moc"
