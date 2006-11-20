@@ -42,7 +42,6 @@ extern "C"
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qcursor.h>
-#include <qtimer.h>
 #include <qfileinfo.h>
 
 // KDE includes.
@@ -1087,7 +1086,7 @@ void ShowFoto::slotDeleteCurrentItemResult( KIO::Job * job )
     else
     {
         d->currentItem = d->thumbBar->currentItem();
-        QTimer::singleShot(0, this, SLOT(slotOpenURL(d->currentItem->url())));
+        slotOpenURL(d->currentItem->url());
     }
 }
 
