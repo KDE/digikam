@@ -29,6 +29,9 @@
 
 #include "ddebug.h"
 
+#undef DDebug
+#undef kdDebug
+
 namespace Digikam
 {
 
@@ -55,9 +58,31 @@ Ddbgstream::~Ddbgstream()
     _ddebug_mutex_->unlock();
 }
 
+Dndbgstream::Dndbgstream(kndbgstream stream)
+           : kndbgstream(stream)
+{
+    // using a static variable here - we can safely assume that kdDebug
+    // is called at least once from the main thread before threads start.
+    if (!_ddebug_mutex_)
+    {
+        // leak the mutex object for simplicity
+        _ddebug_mutex_ = new QMutex;
+        //deleter.setObject(mutex, new QMutex);
+        //KGlobal::unregisterStaticDeleter(&deleter);
+    }
+    _ddebug_mutex_->lock();
+}
+
+Dndbgstream::~Dndbgstream()
+{
+    _ddebug_mutex_->unlock();
+}
+
 } // namespace Digikam
 
 Digikam::Ddbgstream DDebug(int area)   { return Digikam::Ddbgstream(kdDebug(area));   }
 Digikam::Ddbgstream DError(int area)   { return Digikam::Ddbgstream(kdError(area));   }
 Digikam::Ddbgstream DWarning(int area) { return Digikam::Ddbgstream(kdWarning(area)); }
+
+Digikam::Dndbgstream DnDebug(int area) { return Digikam::Dndbgstream(kndDebug(area)); }
 
