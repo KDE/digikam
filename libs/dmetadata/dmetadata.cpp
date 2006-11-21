@@ -620,7 +620,7 @@ bool DMetadata::setImageDimensions(const QSize& size)
     }
     catch( Exiv2::Error &e )
     {
-        DDebug() << "Cannot set Date & Time into image using Exiv2 (" 
+        DDebug() << "Cannot set image dimensions using Exiv2 (" 
                   << QString::fromLocal8Bit(e.what().c_str())
                   << ")" << endl;
     }        
