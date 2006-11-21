@@ -43,7 +43,8 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 
 10/ Upload tarball to digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from pakagers before posting an offical release annoucement.
 
-11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/)
+11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/). See TAGGING below.
+
 
 12/ Upload tarball to sourceforge.net area using this url:
 
@@ -51,7 +52,7 @@ ftp://upload.sourceforge.net/incoming
 
 ...and admin file releases on sourceforge.net project page using this url:
 
-http://sourceforge.net/project/admin/editpackages.php?group_id=42641
+https://sourceforge.net/project/admin/editpackages.php?group_id=42641
 
 13/ Perform an official release announcement to these ML:
 
@@ -63,14 +64,21 @@ http://sourceforge.net/project/admin/editpackages.php?group_id=42641
 ------------------ TAGGING ------------------
 
 Each release has to be tagged. All tags are located in svn in the directory /tags/digikam
-You can make a tag by going into your working copy of that folder and issue something like this:
+You'll find the svn revision used in the tarball in the file RELEAVE.rev
 
-1/ In your local repository go to digikam root folder.
-2/ Perform the copy using 'svn cp svn cp . https://svn.kde.org/home/kde/tags/digikam/digikam_0_8_2' with digikam_x_y_z the tags name using the release numbers.
+For a X.Y.Z.UVW release
 
-Do the same for the digikamimageplugins. As you see translations or documentation is not tagged. 
+   svn copy -r{last-used-rev_from_RELEASE.rev} \
+	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikam_X_Y_Z_UVW
+
+   svn copy -r{last-used-rev_from_RELEASE.rev} \
+	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikamimageplugins_X_Y_Z_UVW
 
 If anyone knows what the purpose of this tagging is, please put it here ;-)
+	* easy svn diff against released version? -- allee
+	* nevermind, feel free to remove the tagging section -- allee
 
 ----------------- Branching -----------------
 
