@@ -1,1 +1,0 @@
-SUBDIRS = canvas tools editor 

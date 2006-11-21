@@ -1,258 +1,46 @@
-#MIN_CONFIG(3)
+#MIN_CONFIG(3.1)
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
 
-AM_INIT_AUTOMAKE(digikam,0.9.0)
+#------------------------------------------------------------------
+# Digikam headers detection
+#------------------------------------------------------------------
 
-# -----------------------------------------------------------------
-# enable hidden visibility only if kde >= 3.3.2 and kdelibs has
-# been compiled with visibility enabled
-# -----------------------------------------------------------------
+# first test if we are in the toplevel directory has digikam
 
-AC_LANG_PUSH(C++)
-digikam_save_cppflags=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $all_includes"  
-AC_MSG_CHECKING([if hidden visibility should be enabled])
-AC_COMPILE_IFELSE(
- [
-   #include <kdeversion.h>
-   #include <kdemacros.h>
-   int other_func( void )
-   { 
-      #if KDE_IS_VERSION(3,3,2)
-      #else
-        iam dying;
-      #endif
-      #ifdef __KDE_HAVE_GCC_VISIBILITY
-      #else
-        no, iam really dead;
-      #endif      
-      return 0;
-   }
- ], 
- [ AC_MSG_RESULT([yes])
-   digikam_enable_hidden_visibility="yes" ],
- [ AC_MSG_RESULT([no]) ] 
-)
-CPPFLAGS=$digikam_save_cppflags
-AC_LANG_POP(C++)
+AC_MSG_CHECKING([for digiKam in our sources])
 
-if test "x$digikam_enable_hidden_visibility" = "xyes"; then
-   KDE_ENABLE_HIDDEN_VISIBILITY 
-fi
-
-# -----------------------------------------------------------------
-# pkg config check
-# -----------------------------------------------------------------
-
-AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
-AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
-
-# -----------------------------------------------------------------
-# sqlite2 type check
-# -----------------------------------------------------------------
-KDE_CHECK_TYPES
-
-# -------------------------------------------------------
-# Check endianness
-# -------------------------------------------------------
-AC_LANG_SAVE
-AC_LANG_C
-AC_C_BIGENDIAN
-AC_LANG_RESTORE
-
-# -----------------------------------------------------------------
-# sqlite3 check
-# -----------------------------------------------------------------
-
-LIB_SQLITE3=""
-
-if test x$PKGCONFIGFOUND = xyes; then
-   PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
-
-   if test x$have_sqlite3 = xyes; then
-      LIB_SQLITE3=`pkg-config --libs sqlite3`
-   else
-      DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
-   fi
-fi
-
-AC_SUBST(LIB_SQLITE3)
-
-# -----------------------------------------------------------------
-# lcms check
-# -----------------------------------------------------------------
-
-have_lcms_header='no'
-KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
-if test "$have_lcms_header" = 'yes'
-then
-    AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
+have_digikamheader=no
+if test -d $srcdir/digikam; then
+   AC_MSG_RESULT([found])
+   have_digikam_toplevel=yes
+   have_digikam=yes
+   have_digikamheader=yes
+   LIBDIGIKAM_CFLAGS='-I$(top_srcdir)/digikam/digikam -I$(top_srcdir)/digikam/utilities/imageeditor/editor -I$(top_srcdir)/digikam/utilities/imageeditor/canvas -I$(top_srcdir)/digikam/libs/guibuilder -I$(top_srcdir)/digikam/libs/curves -I$(top_srcdir)/digikam/libs/histogram -I$(top_srcdir)/digikam/libs/levels -I$(top_srcdir)/digikam/libs/filters -I$(top_srcdir)/digikam/libs/widgets/common -I$(top_srcdir)/digikam/libs/widgets/imageplugins -I$(top_srcdir)/digikam/libs/thumbbar -I$(top_srcdir)/digikam/libs/dimg -I$(top_srcdir)/digikam/libs/dimg/filters -I$(top_srcdir)/digikam/libs/dialogs -I$(top_srcdir)/digikam/libs/dmetadata'
+   LIBDIGIKAM_LIBS='$(top_builddir)/digikam/digikam/libdigikam.la'
+   LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
+   AC_SUBST(LIBDIGIKAM_CFLAGS)
+   AC_SUBST(LIBDIGIKAM_LIBS)
+   AC_SUBST(LIBDIGIKAM_LIBS_DEP)
 else
-    # Alternative! Debian does it this way...
-    KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
-    if test "$have_lcms_header" = 'yes'
-    then
-        AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
-    fi
-fi
-
-LCMS_LIBS=''
-have_lcms='no'
-if test "$have_lcms_header" = 'yes'
-then
-    saved_libs=$LIBS
-    LIBS="$LIBS -llcms"
-    AC_TRY_LINK([
-#define inline __inline /* gcc is in ansi mode */
-#include LCMS_HEADER
-#if LCMS_VERSION < 112
-choke!
-#endif
-], [
-cmsOpenProfileFromFile("foo", "r");
-],
-        [LCMS_LIBS='-llcms'; have_lcms='yes'])
-    LIBS=$saved_libs
-fi
-
-if test -z "$LCMS_LIBS"; then
-    DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
-fi
-
-AC_SUBST(LCMS_LIBS)
-
-
-# -------------------------------------------------------
-# Check endianness
-# -------------------------------------------------------
-AC_LANG_SAVE
-AC_LANG_C
-AC_C_BIGENDIAN
-AC_LANG_RESTORE
-
-#------------------------------------------------------------------
-# gphoto2 detection
-#------------------------------------------------------------------
-
-dnl Check for gPhoto2 configuration
-
-AC_PATH_PROG(GPHOTO_CONFIG,gphoto2-config)
-AC_PATH_PROG(GPHOTO_PORT_CONFIG,gphoto2-port-config)
-if test -n "${GPHOTO_CONFIG}"; then
-  GPHOTO_CFLAGS="`$GPHOTO_CONFIG --cflags`"
-  AC_SUBST(GPHOTO_CFLAGS)
-  LIB_GPHOTO="`$GPHOTO_CONFIG --libs` `$GPHOTO_PORT_CONFIG --libs`"
-  AC_SUBST(LIB_GPHOTO)
-else
-  AC_MSG_WARN([gPhoto2 not found.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-fi
-
-CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE"
-
-#------------------------------------------------------------------
-# KIPI support (KDE Image Plugin Interface) 
-#------------------------------------------------------------------
-
-if test "$PKGCONFIGFOUND" = "yes" ; then
-   # check for libkipi
-   have_libkipi=no
-
-   KDE_PKG_CHECK_MODULES(LIBKIPI, libkipi >= 0.1,
-	 	         have_libkipi=yes, have_libkipi=no)
-
-   if test "x$have_libkipi" = "xno"; then
-	LIBKIPI_CFLAGS=""
-	LIBKIPI_LIBS=""
-        AC_MSG_RESULT([not found])
-   else
-	AC_MSG_RESULT([found])
-   fi
-else
-   LIBKIPI_CFLAGS=""
-   LIBKIPI_LIBS=""
    AC_MSG_RESULT([not found])
-fi 
-AC_SUBST(LIBKIPI_CFLAGS)
-AC_SUBST(LIBKIPI_LIBS)
+   have_digikam_toplevel=no
+   AC_MSG_CHECKING(if digiKam is installed)
+   KDE_CHECK_HEADER(digikam/dimg.h,  have_digikam=yes,  have_digikam=no)
+   if test "x$have_digikam" = "xno"; then
+      AC_MSG_WARN([Can't find digiKam 0.9.0 headers!]) 
+      DO_NOT_COMPILE="$DO_NOT_COMPILE digikamimageplugins"
+   else
+      have_digikamheader=yes
+      LIBDIGIKAM_CFLAGS=''
+      LIBDIGIKAM_LIBS='-ldigikam'
+      LIBDIGIKAM_LIBS_DEP='$(LIBDIGIKAM_LIBS)'
+      AC_SUBST(LIBDIGIKAM_CFLAGS)
+      AC_SUBST(LIBDIGIKAM_LIBS)
+      AC_SUBST(LIBDIGIKAM_LIBS_DEP)
+   fi
+fi   
 
-if test "x$have_libkipi" != "xyes"; then
-     DO_NOT_COMPILE="$DO_NOT_COMPILE digikam digikamimageplugins"
-fi
-
-#------------------------------------------------------------------
-# Check for libtiff
-#------------------------------------------------------------------
-
-have_tiff=no
-KDE_CHECK_LIB(tiff, TIFFWriteScanline,
-  have_tiff=yes,
-  AC_MSG_WARN([TIFF library not found]), 
-  -ljpeg -lz -lm)
-
-if test "x$have_tiff" = "xyes"; then
-  KDE_CHECK_HEADER(tiffio.h, have_tiff=yes, have_tiff=no)
-fi
-
-if test "x$have_tiff" != "xyes"; then
-  AC_WARN([TIFF library not found, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-else
-  LIB_TIFF="-ltiff"
-  AC_SUBST(LIB_TIFF)
-fi
-
-#------------------------------------------------------------------
-# Check for libpng with png_set_add_alpha() function
-#------------------------------------------------------------------
-
-have_png=no
-KDE_CHECK_LIB(png, png_set_add_alpha,
-        have_png=yes,
-        AC_MSG_WARN([digiKam requires libpng >= 1.2.7]),
-        -lpng -lz -lm)
-
-if test "x$have_png" != "xyes"; then
-  AC_WARN([digiKam requires libpng >= 1.2.7; digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-else
-  LIB_PNG="-lpng"
-  AC_SUBST(LIB_PNG)
-fi
-
-#------------------------------------------------------------------
-# Check for Exiv2 library
-#------------------------------------------------------------------
-
-have_exiv2='no'
-KDE_CHECK_HEADER(exiv2/exif.hpp, have_exiv2=yes, have_exiv2=no)
-
-if test "x$have_exiv2" != "xyes"; then
-  AC_WARN([Exiv2 library not found, digiKam will not be compiled.])
-  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
-else
-  LIB_EXIV2="-lexiv2"
-  AC_SUBST(LIB_EXIV2)
-fi
-
-#------------------------------------------------------------------
-# NFS is Evil (sqlite makes use of file locking for allowing 
-# multiple processes to access the database. but on many 
-# nfs implementations, this file locking is horribly broken and
-# can end up locking the app or not allowing access to the app. 
-# since we use kioslaves which access the db too)
-#------------------------------------------------------------------
-
-AC_ARG_ENABLE(nfs-hack,
-	AC_HELP_STRING([--enable-nfs-hack],
-[Enable a hack for album libraries on a nfs mount, 
- which causes the database to be saved in 
- $HOMEDIR/.kde/share/apps/digikam/directoryname.db [default=disable]]),
- [enable_nfs_hack=$enableval],
- [enable_nfs_hack=no]
-)
-
-if test "x$enable_nfs_hack" == "xyes"; then
-   AC_DEFINE(NFS_HACK, 1, [NFS hack enabled])
-   AC_MSG_NOTICE([NFS hack enabled. Make sure you know what you are doing])
+if test "x$have_digikam_toplevel" = "xyes"; then
+   AC_DEFINE(HAVE_DIGIKAM_TOPLEVEL, 1, [Using digiKam sources from toplevel])
 fi
 
