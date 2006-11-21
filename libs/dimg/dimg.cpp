@@ -433,15 +433,18 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     QString rawFilesExt(raw_file_extentions);
     QString ext = fileInfo.extension(false).upper();
-
-    if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
-        return JPEG;
-    else if (ext == QString("PNG"))
-        return PNG;
-    else if (ext == QString("TIFF") || ext == QString("TIF"))
-        return TIFF;
-    else if (rawFilesExt.upper().contains(ext))
-        return RAW;
+    
+    if (!ext.isEmpty())
+    {
+        if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+            return JPEG;
+        else if (ext == QString("PNG"))
+            return PNG;
+        else if (ext == QString("TIFF") || ext == QString("TIF"))
+            return TIFF;
+        else if (rawFilesExt.upper().contains(ext))
+            return RAW;
+    }
 
     // In second, we trying to parse file header.
 

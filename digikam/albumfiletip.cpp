@@ -359,8 +359,9 @@ void AlbumFileTip::updateText()
 
         QSize   dims;
         QString rawFilesExt(raw_file_extentions);
+        QString ext = fileInfo.extension(false).upper();
 
-        if (rawFilesExt.upper().contains( fileInfo.extension(false).upper() ))
+        if (!ext.isEmpty() && rawFilesExt.upper().contains(ext))
         {
             str = i18n("RAW Image");
             dims = metaData.getImageDimensions();

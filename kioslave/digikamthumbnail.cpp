@@ -259,14 +259,17 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     QString ext = fileInfo.extension(false).upper();
     QString rawFilesExt(raw_file_extentions);
 
-    if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
-        return (loadJPEG(image, path));
-    else if (ext == QString("PNG"))
-        return (loadDImg(image, path));
-    else if (ext == QString("TIFF") || ext == QString("TIF"))
-        return (loadDImg(image, path));
-    else if (rawFilesExt.upper().contains(ext))
-        return (DcrawPreview::loadDcrawPreview(image, path));
+    if (!ext.isEmpty())
+    {
+        if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+            return (loadJPEG(image, path));
+        else if (ext == QString("PNG"))
+            return (loadDImg(image, path));
+        else if (ext == QString("TIFF") || ext == QString("TIF"))
+            return (loadDImg(image, path));
+        else if (rawFilesExt.upper().contains(ext))
+            return (DcrawPreview::loadDcrawPreview(image, path));
+    }
 
     return false;
 }

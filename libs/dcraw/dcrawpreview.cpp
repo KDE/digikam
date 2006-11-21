@@ -62,8 +62,9 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
+    QString ext = fileInfo.extension(false).upper();
 
-    if (!fileInfo.exists() || !rawFilesExt.upper().contains( fileInfo.extension(false).upper() ))
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.upper().contains(ext))
         return false;
 
     // Try to extract embedded thumbnail using dcraw with options:
