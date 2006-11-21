@@ -105,10 +105,14 @@ General       : Removing external dcraw depency. Now digiKam include a full supp
 CameraGUI     : New advanced config dialog to set date/time format used to rename camera pictures
                 file name during download.
 
-*** 0.9.0-rc **********************************************************
+*** 0.9.0-rc1 **********************************************************
 
 General       : dcraw implementation updated to version 8.41.
 General       : New kipi plugin to edit EXIF and IPTC metadata (available with next kipi-plugins 0.1.3).
+
+*** 0.9.0-rc2 **********************************************************
+
+General       : Exiv2 depency fixed to 0.12 release.
 
 ...
 
@@ -308,7 +312,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 182 ==> 135430 : Typo automaticly should be automatically in raw image converter.
 183 ==> 135060 : Folders without pictures in it cannot be assigned icons.
 
-*** 0.9.0-rc **********************************************************
+*** 0.9.0-rc1 **********************************************************
 
 184 ==> 103255 : Add (not edit) EXIF headers like date, comment etc.
 185 ==> 91812  : Viewer/editor for IPTC meta data.
@@ -330,6 +334,10 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 201 ==> 135407 : Reproducible crash selecting photos from collection.
 202 ==> 136086 : Crash when saving any type of files.
 203 ==> 137612 : Showfoto doesn't refresh the photo preview when deleting a picture.
-204 ==> 
+
+*** 0.9.0-rc2 **********************************************************
+
+204 ==> 115125 : White Balance tool: remaining endianess issue on ppc.
+205 ==> 
 
 ----------------------------------------------------------------------------------------------------
