@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class Ddbgstream : public kdbgstream
+class DIGIKAM_EXPORT Ddbgstream : public kdbgstream
 {
 
 public:
