@@ -1,5 +1,31 @@
-v0.9.0-rc1 - 16-Oct-2006
+v0.9.0-rc1 - 21-Oct-2006
 ----------------------------------------------------------------------------
+
+2006-11-21 12:51 +0000 [r606699]  cgilles
+
+	* digikam/libs/dmetadata/dmetadata.cpp: fix warning
+
+2006-11-21 12:23 +0000 [r606694]  cgilles
+
+	* digikam/NEWS: update
+
+2006-11-21 11:30 +0000 [r606671]  cgilles
+
+	* digikam/libs/dimg/ddebug.h, digikam/libs/dimg/ddebug.cpp: digikam
+	  from trunk: compile with ./configure --disable-debug option
+	  Marcel, please checkif all is right for you. Thanks in advance.
+	  CCMAIL: marcel.wiesweg@gmx.de, ach@mpe.mpg.de
+
+2006-11-21 07:11 +0000 [r606634]  cgilles
+
+	* digikam/libs/dimg/ddebug.h: digikam from trunk: missing
+	  DIGIKAM_EXPORT macro to compile fine with gcc visibility option.
+
+2006-11-20 19:26 +0000 [r606550]  ach
+
+	* digikam/ChangeLog: digikam trunk: showstopper found and fixed ->
+	  new rc1 tarball
+
 
 2006-11-20 15:21 +0000 [r606488]  cgilles
 

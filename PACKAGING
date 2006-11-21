@@ -26,8 +26,8 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 
 5b) Alternatively:
 	* check Changelog for last change, modify release_digikam(imageplguins)_cl.sh
-	  and run it.
-	* add a version header for the new release, include the generated
+	  (use last-rev+1 or date) and run it.
+	* add a version header and release date for the new release, include the generated
 	  Changelog.new-entries at the top of Changelog. Check if the last
 	  entry of the new-entries is not already in the old Changelog entries
 	* commit the new changelog
