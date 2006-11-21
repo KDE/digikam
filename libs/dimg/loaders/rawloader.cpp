@@ -53,6 +53,7 @@
 #include "dimgloaderobserver.h"
 #include "dcrawbinary.h"
 #include "rawloader.h"
+#include "rawloader.moc"
 
 namespace Digikam
 {
@@ -89,9 +90,9 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer)
 {
-    m_observer = observer;
-    m_filePath = filePath;
-    m_running  = true;
+    m_observer   = observer;
+    m_filePath   = filePath;
+    m_running    = true;
     m_normalExit = false;
 
     // trigger startProcess and loop to wait dcraw decoding
@@ -120,7 +121,6 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // Remove when porting to Qt4.
     while (m_running && !m_observer->isShuttingDown())
     {
-
         if (m_dataPos == 0)
         {
             int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
@@ -391,10 +391,10 @@ void RAWLoader::slotProcessExited(KProcess *)
     // set variables, clean up, wake up loader thread
 
     QMutexLocker lock(&m_mutex);
-    m_running = false;
-    m_normalExit = m_process->normalExit();
+    m_running    = false;
+    m_normalExit = m_process->normalExit() && m_process->exitStatus() == 0; 
     delete m_process;
-    m_process = 0;
+    m_process    = 0;
     delete m_queryTimer;
     m_queryTimer = 0;
     m_condVar.wakeAll();
@@ -484,5 +484,4 @@ bool RAWLoader::sixteenBit() const
 
 }  // NameSpace Digikam
 
-#include "rawloader.moc"
 
