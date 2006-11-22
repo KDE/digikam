@@ -141,12 +141,6 @@ void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
 
 void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
 {
-    if (!d->previewJob.isNull())
-    {
-        d->previewJob->kill();
-        d->previewJob = 0;
-    }
-
     d->preview = QImage();
     d->pixmap  = QPixmap(contentsRect().size());
     updatePixmap();
