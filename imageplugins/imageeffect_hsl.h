@@ -31,6 +31,7 @@ class QComboBox;
 class QHButtonGroup;
 
 class KDoubleNumInput;
+class KHSSelector;
 
 namespace Digikam
 {
@@ -79,6 +80,8 @@ private:
     KDoubleNumInput              *m_hInput;
     KDoubleNumInput              *m_sInput;
     KDoubleNumInput              *m_lInput;
+
+    KHSSelector                  *m_HSSelector;
     
     Digikam::ImageWidget         *m_previewWidget;
 
@@ -93,6 +96,9 @@ private slots:
     void slotChannelChanged(int channel);
     void slotScaleChanged(int scale);
     void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotHSChanged(int h, int s);
+    void slotHChanged(double h);
+    void slotSChanged(double s);
 
 protected:
 

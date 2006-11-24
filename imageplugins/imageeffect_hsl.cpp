@@ -35,6 +35,7 @@
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qtimer.h>
 
 // KDE includes.
 
@@ -43,6 +44,7 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
+#include <kcolordialog.h>
 
 // Digikam includes.
 
@@ -56,6 +58,7 @@
 // Local includes.
 
 #include "imageeffect_hsl.h"
+#include "imageeffect_hsl.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -139,14 +142,18 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    m_HSSelector = new KHSSelector(gboxSettings);
+    m_HSSelector->setMinimumSize(256, 142);
+    gridSettings->addMultiCellWidget(m_HSSelector, 3, 3, 0, 4);
+
     QLabel *label2 = new QLabel(i18n("Hue:"), gboxSettings);
     m_hInput       = new KDoubleNumInput(gboxSettings);
     m_hInput->setPrecision(0);
     m_hInput->setRange(-180.0, 180.0, 1.0, true);
     m_hInput->setValue(0.0);
     QWhatsThis::add( m_hInput, i18n("<p>Set here the hue adjustment of the image."));
-    gridSettings->addMultiCellWidget(label2, 3, 3, 0, 4);
-    gridSettings->addMultiCellWidget(m_hInput, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(label2, 4, 4, 0, 4);
+    gridSettings->addMultiCellWidget(m_hInput, 5, 5, 0, 4);
 
     QLabel *label3 = new QLabel(i18n("Saturation:"), gboxSettings);
     m_sInput       = new KDoubleNumInput(gboxSettings);
@@ -154,8 +161,8 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_sInput->setRange(-100.0, 100.0, 0.01, true);
     m_sInput->setValue(0.0);
     QWhatsThis::add( m_sInput, i18n("<p>Set here the saturation adjustment of the image."));
-    gridSettings->addMultiCellWidget(label3, 5, 5, 0, 4);
-    gridSettings->addMultiCellWidget(m_sInput, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(label3, 6, 6, 0, 4);
+    gridSettings->addMultiCellWidget(m_sInput, 7, 7, 0, 4);
 
     QLabel *label4 = new QLabel(i18n("Lightness:"), gboxSettings);
     m_lInput       = new KDoubleNumInput(gboxSettings);
@@ -163,19 +170,22 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
     m_lInput->setRange(-100.0, 100.0, 0.01, true);
     m_lInput->setValue(0.0);
     QWhatsThis::add( m_lInput, i18n("<p>Set here the lightness adjustment of the image."));    
-    gridSettings->addMultiCellWidget(label4, 7, 7, 0, 4);
-    gridSettings->addMultiCellWidget(m_lInput, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(label4, 8, 8, 0, 4);
+    gridSettings->addMultiCellWidget(m_lInput, 9, 9, 0, 4);
 
     m_overExposureIndicatorBox = new QCheckBox(i18n("Over exposure indicator"), gboxSettings);
     QWhatsThis::add( m_overExposureIndicatorBox, i18n("<p>If you enable this option, over-exposed pixels "
-            "from the target image preview will be over-colored. "
+                    "from the target image preview will be over-colored. "
                     "This will not have an effect on the final rendering."));
-    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 9, 9, 0, 4);
+    gridSettings->addMultiCellWidget(m_overExposureIndicatorBox, 10, 10, 0, 4);
 
-    gridSettings->setRowStretch(10, 10);
+    gridSettings->setRowStretch(11, 10);
     setUserAreaWidget(gboxSettings);
 
     // -------------------------------------------------------------
+
+    connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
+            this, SLOT(slotHSChanged(int, int)));
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
@@ -188,9 +198,15 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
 
     connect(m_hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
+
+    connect(m_hInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotHChanged(double)));
             
     connect(m_sInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
+
+    connect(m_sInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotSChanged(double)));
             
     connect(m_lInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
@@ -203,6 +219,7 @@ ImageEffect_HSL::ImageEffect_HSL(QWidget* parent)
             
     // -------------------------------------------------------------            
 
+    QTimer::singleShot(0, this, SLOT(slotDefault()));
     enableButtonOK( false );
 }
 
@@ -256,6 +273,43 @@ void ImageEffect_HSL::slotColorSelectedFromTarget( const Digikam::DColor &color 
     m_histogramWidget->setHistogramGuideByColor(color);
 }
 
+void ImageEffect_HSL::slotHSChanged(int h, int s)
+{
+    double hue = double(h);
+    if (h >= 180 && h <= 359)
+        hue = double(h) - 359.0;
+
+    double sat = ((double)s * (200.0/255.0)) - 100.0;
+
+    m_hInput->blockSignals(true);       
+    m_sInput->blockSignals(true);       
+    m_hInput->setValue(hue);
+    m_sInput->setValue(sat);
+    m_hInput->blockSignals(false);       
+    m_sInput->blockSignals(false);   
+    slotTimer();    
+}
+
+void ImageEffect_HSL::slotHChanged(double h)
+{
+    int hue = int(h);
+    if (h >= -180 && h < 0)
+        hue = int(h) + 359;
+
+    m_HSSelector->blockSignals(true);       
+    m_HSSelector->setXValue(hue);
+    m_HSSelector->blockSignals(false);       
+}
+
+void ImageEffect_HSL::slotSChanged(double s)
+{
+    int sat = (int)((s + 100.0) * (255.0/200.0));
+
+    m_HSSelector->blockSignals(true);       
+    m_HSSelector->setYValue(sat);
+    m_HSSelector->blockSignals(false);       
+}
+
 void ImageEffect_HSL::slotDefault()
 {
     m_hInput->blockSignals(true);	
@@ -264,6 +318,8 @@ void ImageEffect_HSL::slotDefault()
     m_hInput->setValue(0.0);
     m_sInput->setValue(0.0);
     m_lInput->setValue(0.0);
+    slotHChanged(0.0);
+    slotSChanged(0.0);
     m_hInput->blockSignals(false);	
     m_sInput->blockSignals(false);	
     m_lInput->blockSignals(false);	
@@ -342,4 +398,3 @@ void ImageEffect_HSL::finalRendering()
 
 }  // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_hsl.moc"
