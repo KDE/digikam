@@ -777,6 +777,12 @@ void DigikamView::slot_albumAddImages()
     }
 }
 
+void DigikamView::slotImageCopyResult(KIO::Job* job)
+{
+    if (job->error())
+        job->showErrorDialog(this);
+}
+
 void DigikamView::slotAlbumImportFolder()
 {
     d->folderView->albumImportFolder();
@@ -794,12 +800,6 @@ void DigikamView::slotAlbumHighlight()
 
     d->folderView->setAlbumThumbnail(dynamic_cast<PAlbum*>(album));
     */
-}
-
-void DigikamView::slotImageCopyResult(KIO::Job* job)
-{
-    if (job->error())
-        job->showErrorDialog(this);
 }
 
 // ----------------------------------------------------------------
