@@ -80,20 +80,20 @@ public:
 
     DigikamViewPriv()
     {
-        splitter         = 0;
-        parent           = 0;
-        iconView         = 0;
-        folderView       = 0;
-        albumManager     = 0;
-        albumHistory     = 0;
-        leftSideBar      = 0;
-        rightSideBar     = 0;
-        dateFolderView   = 0;
-        tagFolderView    = 0;
-        searchFolderView = 0;
-        tagFilterView    = 0;
-        albumPreviews    = 0;
-        selectionTimer   = 0;
+        splitter             = 0;
+        parent               = 0;
+        iconView             = 0;
+        folderView           = 0;
+        albumManager         = 0;
+        albumHistory         = 0;
+        leftSideBar          = 0;
+        rightSideBar         = 0;
+        dateFolderView       = 0;
+        tagFolderView        = 0;
+        searchFolderView     = 0;
+        tagFilterView        = 0;
+        albumPreviews        = 0;
+        selectionTimer       = 0;
         dispatchSelectedItem = 0;
     }
 
