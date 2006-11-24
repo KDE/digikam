@@ -1,0 +1,239 @@
+
+/*
+ * text styles
+ */
+
+img {margin: 0px; padding: 0px}
+body {margin: 0px; padding: 0px; background-color: #418ade;}
+.bar_text a {color: #008;}
+
+#subtext {
+    font-size: 10pt;
+    font-style: italic;
+}
+
+#nextlink {
+    margin-bottom: 0px;
+    text-align: right;
+    font-size: 10pt;
+}
+
+/*
+ * the header
+ */
+
+#header {
+  background-image: url(top-middle.png);
+  width: 100%;
+  height: 131px;
+}
+
+#headerL {
+  position: absolute;
+  background-image: url(top-left.png);
+  left: 0px;
+  height: 131px;
+  width: 147px;
+  z-index: 1;
+}
+
+#headerR {
+  position: absolute;
+  right: 0px;
+}
+
+/* title and tagline are part of the header diff */
+#title {
+  position: absolute;
+  top: 63px;
+  right: 100px;
+  margin-top: -1em;
+  text-align: right;
+  font-size: xx-large;
+  font-weight: bold;
+  text-shadow: #fff 0px 0px 5px;
+  color: #444;
+  z-index: 5;
+}
+
+#tagline {
+  position: absolute;
+  top: 70px;
+  right: 100px;
+  text-align: right;
+  font-size: large;
+  font-weight: bold;
+  text-shadow: #fff 0px 0px 5px;
+  color: #444;
+  z-index: 5;
+}
+
+/*
+ * the nav bar
+ */
+
+#bar {
+  width: 100%;
+  background-color: #5babe5;
+  padding-top: 0.5ex;
+  border-bottom: 1px solid black;
+  padding-bottom: 0.5ex;
+}
+
+#barCenter {
+  text-align: center;
+  color: #282828;
+  font-weight: bold;
+  font-size: small;
+}
+
+#barCenter a.selected, #barCenter a.selected:hover {
+  color: #282828;
+  text-decoration: none;
+  text-shadow: #fff 0px 0px 5px;
+}
+
+
+#barCenter li a:link, #barCenter li a:visited, #barCenter li a:active {
+  color: #282828;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+#barCenter li a:hover {
+  color: #282828;
+  text-decoration: none;
+  text-shadow: #fff 0px 0px 6px;
+}
+
+#barCenter ul {
+  margin: 0;
+  padding: 0;
+}
+
+#barCenter li {
+  display: inline;
+}
+
+#barCenter li:not(:first-child):before { /* Aren't css3 selectors great? */
+  content: " · ";
+}
+
+/*
+ * the main box
+ */
+
+#box {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#boxT {
+  width: 100%;
+  height: 22px;
+}
+
+#boxTL {
+  width: 25px;
+  height: 22px;
+  float: left;
+  background-image: url(box-top-left.png);
+}
+
+#boxTR {
+  width: 25px;
+  height: 22px;
+  float: right;
+  background-image: url(box-top-right.png);
+}
+
+#boxTC {
+  height: 22px;
+  margin-left: 25px;
+  margin-right: 25px;
+  background-image: url(box-top-middle.png);
+  background-repeat: repeat-x;
+}
+
+#boxL {
+  background-image: url(box-middle-left.png);
+  background-repeat: repeat-y;
+  background-position: left;
+  padding-left: 20px;
+}
+
+#boxCenter {
+  background-color: #dfe7f3;
+  background-position: center;
+  text-align: left;
+}
+
+#boxR {
+  background-image: url(box-middle-right.png);
+  background-repeat: repeat-y;
+  background-position: right;
+  padding-right: 20px;
+}
+
+#boxB {
+  width: 100%;
+  height: 22px;
+}
+
+#boxBL {
+  width: 25px;
+  height: 22px;
+  float: left;
+  background-image: url(box-bottom-left.png);
+}
+
+#boxBR {
+  width: 25px;
+  height: 22px;
+  float: right;
+  background-image: url(box-bottom-right.png);
+}
+
+#boxBC {
+  height: 22px;
+  margin-left: 25px;
+  margin-right: 25px;
+  background-image: url(box-bottom-middle.png);
+  background-repeat: repeat-x;
+}
+
+/*
+ * the footer
+ */
+
+#footer {
+  position: fixed;
+  background-image: url(bottom-middle.png);
+  width: 100%;
+  height: 100px;
+  z-index: -2;
+  bottom:0;
+}
+
+#footerL {
+  position: fixed;
+  background-image: url(bottom-left.png);
+  left: 0px;
+  width: 155px;
+  height: 100px;
+  z-index: -2;
+}
+
+#footerR {
+  position: fixed;
+  background-image: url(bottom-right.png);
+  right: 0px;
+  width: 429px;
+  height: 100px;
+  z-index: -1;
+}
+
+/* vim:set sw=2 et nocindent smartindent: */
