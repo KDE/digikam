@@ -229,7 +229,8 @@ void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.find("rating") != attributes.end())
         {
             int rating = attributes["rating"].asInt();
-            db->setItemRating(imageId, rating); 
+	    if (rating >= 0 && rating <= 5)
+                db->setItemRating(imageId, rating); 
         }
 
         // TODO: add here future picture attributes stored by digiKam database
