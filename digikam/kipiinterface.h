@@ -85,9 +85,9 @@ public:
     virtual QDateTime time( KIPI::TimeSpec spec );
     virtual void setTime( const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
     
-    virtual QMap<QString,QVariant> attributes();                    
+    virtual QMap<QString, QVariant> attributes();                    
+    virtual void addAttributes(const QMap<QString, QVariant>& res);
     virtual void clearAttributes();
-    virtual void addAttributes( const QMap<QString,QVariant>& );
     
     virtual int  angle();
     virtual void setAngle( int angle );

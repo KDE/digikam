@@ -186,28 +186,61 @@ void DigikamImageInfo::cloneData( ImageInfoShared* other )
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
 }
 
-QMap<QString,QVariant> DigikamImageInfo::attributes()
+QMap<QString, QVariant> DigikamImageInfo::attributes()
 {
-    QMap<QString,QVariant> res;
+    QMap<QString, QVariant> res;
 
     PAlbum* p = parentAlbum();
     if (p)
     {
-        AlbumDB* db = AlbumManager::instance()->albumDB();
-        Q_LLONG imageId = db->getImageId(p->id(), _url.filename());
-        QStringList tags = db->getItemTagNames(imageId); // imageID
-        QStringList::iterator it = tags.begin();
-        res["tags"] = tags;
+        AlbumDB* db      = AlbumManager::instance()->albumDB();
+        Q_LLONG imageId  = db->getImageId(p->id(), _url.filename());
+        
+        // Get digiKam Tags list of picture.
+        QStringList tags         = db->getItemTagNames(imageId); 
+        res["tags"]              = tags;
+
+        // Get digiKam Rating of picture.
+        int rating               = db->getItemRating(imageId); 
+        res["rating"]            = rating;
+
+        // TODO: add here future picture attributes stored by digiKam database
     }
     return res;
 }
 
-void DigikamImageInfo::clearAttributes()
+void DigikamImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 {
-    // TODO ! This will used for the futures tags digiKam features.
+    PAlbum* p = parentAlbum();
+    if (p)
+    {
+        AlbumDB* db                        = AlbumManager::instance()->albumDB();
+        Q_LLONG imageId                    = db->getImageId(p->id(), _url.filename());
+        QMap<QString, QVariant> attributes = res;
+        
+        // Set digiKam Tags list of picture.
+        if (attributes.find("tags") != attributes.end())
+        {
+            QStringList tags = attributes["tags"].asStringList();
+            //TODO
+        }
+
+        // Set digiKam Rating of picture.
+        if (attributes.find("rating") != attributes.end())
+        {
+            int rating = attributes["rating"].asInt();
+            db->setItemRating(imageId, rating); 
+        }
+
+        // TODO: add here future picture attributes stored by digiKam database
+    }
+
+    // To update sidebar content. Some kipi-plugins use this way to refresh sidebar 
+    // using an empty QMap(). 
+    ImageAttributesWatch::instance()->fileMetadataChanged(_url);
 }
 
-void DigikamImageInfo::addAttributes( const QMap<QString,QVariant>& )
+void DigikamImageInfo::clearAttributes()
 {
     // TODO ! This will used for the futures tags digiKam features.
 }
