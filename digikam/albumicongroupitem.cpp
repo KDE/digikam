@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : albumicongroupitem.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-25
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-04-25
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
@@ -42,16 +41,13 @@
 namespace Digikam
 {
 
-AlbumIconGroupItem::AlbumIconGroupItem(AlbumIconView* view,
-                                       int albumID)
-    : IconGroupItem(view), m_albumID(albumID), m_view(view)
-{
-    
+AlbumIconGroupItem::AlbumIconGroupItem(AlbumIconView* view, int albumID)
+                  : IconGroupItem(view), m_albumID(albumID), m_view(view)
+{    
 }
 
 AlbumIconGroupItem::~AlbumIconGroupItem()
-{
-    
+{    
 }
 
 int AlbumIconGroupItem::compare(IconGroupItem* group)
@@ -68,22 +64,22 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
     
     switch (settings->getImageSortOrder())
     {
-    case(AlbumSettings::ByIName):
-    case(AlbumSettings::ByISize):
-    case(AlbumSettings::ByIPath):
-    case(AlbumSettings::ByIRating):
-    {
-        return mine->url().localeAwareCompare(his->url());
-    }
-    case(AlbumSettings::ByIDate):
-    {
-        if (mine->date() < his->date())
-            return -1;
-        else if (mine->date() > his->date())
-            return 1;
-        else
-            return 0;
-    }
+        case(AlbumSettings::ByIName):
+        case(AlbumSettings::ByISize):
+        case(AlbumSettings::ByIPath):
+        case(AlbumSettings::ByIRating):
+        {
+            return mine->url().localeAwareCompare(his->url());
+        }
+        case(AlbumSettings::ByIDate):
+        {
+            if (mine->date() < his->date())
+                return -1;
+            else if (mine->date() > his->date())
+                return 1;
+            else
+                return 0;
+        }
     }
 
     return 0;
@@ -92,7 +88,7 @@ int AlbumIconGroupItem::compare(IconGroupItem* group)
 void AlbumIconGroupItem::paintBanner()
 {
     AlbumManager* man = AlbumManager::instance();
-    PAlbum* album = man->findPAlbum(m_albumID);
+    PAlbum* album     = man->findPAlbum(m_albumID);
 
     QString dateAndComments;
     QString prettyURL;
@@ -106,7 +102,10 @@ void AlbumIconGroupItem::paintBanner()
                           .arg(KGlobal::locale()->calendar()->year(date));
         
         if (!album->caption().isEmpty())
-            dateAndComments += " - " + album->caption();
+        {
+            QString caption = album->caption();
+            dateAndComments += " - " + caption.replace("\n", " ");
+        }
 
         prettyURL = album->prettyURL();
     }        
@@ -119,11 +118,13 @@ void AlbumIconGroupItem::paintBanner()
     fn.setBold(true);
     int fnSize = fn.pointSize();
     bool usePointSize;
-    if (fnSize > 0) {
+    if (fnSize > 0) 
+    {
         fn.setPointSize(fnSize+2);
         usePointSize = true;
     }
-    else {
+    else 
+    {
         fnSize = fn.pixelSize();
         fn.setPixelSize(fnSize+2);
         usePointSize = false;

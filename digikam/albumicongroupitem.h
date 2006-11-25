@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : albumicongroupitem.h
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-25
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-04-25
  * Description : 
  * 
  * Copyright 2005 by Renchi Raju
