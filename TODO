@@ -2,10 +2,6 @@
 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-* L10N fixes:
-	o informations -> information
-	o ?? Credit -> Credits (need native Speaker?  There's e.g. about.addCredit() method not about.addCredits()
-
 * right hand side sidebar (allee):
 	o Select an album 
         o click on some empty space in the thumbnail view (-> selected image changes from blue selection
@@ -22,14 +18,9 @@
 
 * B.K.O files to fix :
 
-==> 125696 : CameraGUI      : digiKam does not connect to USB camera with libgphoto-2.1.99.
-
 ==> 111446 : Image Editor   : bad behaviour when out of disk space.
-==> 128104 : Image Editor   : digiKam Crash when browsing photos in Image Editor.
 
-==> 127583 : Main interface : keywords, copyright, photographer info not saved to IPTC.
 ==> 127179 : Main interface : thumbnails does not adhere to the Rotate Images setting in Configure digiKam.
-==> 127182 : Main interface : Crash when scanning jpeg images.   
 ==> 113797 : Main interface : Little thumbnail refresh problem. 
 ==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
 
@@ -59,16 +50,23 @@ LATER 0.9.0 TODO LIST
 ------------------------------------------------------------------------------------
 
 * Port project to CMake (see: http://dot.kde.org/1151688350 for notice)
-  Port to QT 4.0.
+  Port to QT4/KDE4.
 
 * Improving metadata support:
-   - Add DNG file format (implemente RAWLoader::save() method for that).
-   - Improved PNG Metadata file format support (Exiv2).
+   - Add native JPEG 2000 support with 16 bits color depth and ICC profile support.
+   - Writting Metadata into PNG file like JPEG (Exiv2).
+   - Writting Metadata into TIFF file like JPEG (Exiv2).
 
-* CameraGui: 
+* Database:
+
+   - New database interface to suport remote repository and others DB backend than sqlite.
+   - Implement versionning of picture based on Image editor 'Action List' feature.
+
+* Database: 
 
    - New option to embedded an ICC workspace profile to JPEG, TIFF, and PNG.
    - New option to set digiKam tags on the fly.
+   - Storing new Pictures meta-information : all major photograph informations and GPS.
 
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
