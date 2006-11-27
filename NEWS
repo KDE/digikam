@@ -181,7 +181,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 058 ==> 116520 : Slideshow should work for search results as well
 059 ==> 119073 : wish list rescan option
 060 ==> 118543 : enable-nfs-hack no longer works
-061 ==> 113807 : Is it possible to have the tags of the contextual menus "Assign Tag" and "Remove Tag" sorted ?
+061 ==> 113807 : Is it possible to have the tags of the contextual menus "Assign Tag" and 
+                 "Remove Tag" sorted ?
 062 ==> 116343 : "Not Tagged" has disappeared from the Tags Filter view when changing album library path
 063 ==> 117225 : digikam requires at least libpng >= 1.2.7
 064 ==> 115423 : thumbnails view jumps to top when new photos are added
@@ -191,7 +192,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 068 ==> 121367 : Add properties tab to digiKam and (especially) Image Editor.
 069 ==> 125926 : Directories with a '#' in their name are not properly detected when created outside digikam.
 070 ==> 125733 : Enabling 'Always apply ICM profiles' can lead to suprising results.
-071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console.
+071 ==> 126326 : camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' 
+                 is written to console.
 072 ==> 121242 : mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
 073 ==> 127374 : unsharp mask: max. radius way too small.
 074 ==> 116485 : Mimimize button missing on "Compaq Flash Reader" camera window.
@@ -207,7 +209,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 084 ==> 128069 : crash when moving an album to another album.
 085 ==> 125779 : use deflate compression for tiffs.
 086 ==> 127972 : digikam does not *add* EXIF:DateTimeOriginal when modifying date
-087 ==> 127697 : camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File Mime Types/ Image Files.
+087 ==> 127697 : Camera gui always puts *.JPG and *.NEF in the configure - digikam dialog/File 
+                 Mime Types/ Image Files.
 088 ==> 128373 : "Makernote - Simple" should show ISO.
 089 ==> 113915 : Tags are lost after "Save As..."ing.
 090 ==> 128283 : thumbnail generation fails with raw images.
@@ -281,7 +284,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 154 ==> 131552 : Typo inconsisted use of ICC.
 155 ==> 131553 : Typo indent must be intent?
 156 ==> 118526 : Make it possible to remove an album's thumbnail.
-157 ==> 120050 : Assigning an image as icon for a tag entry in 'Tag View' does not update the icons of this tag in 'Tag Filters'.
+157 ==> 120050 : Assigning an image as icon for a tag entry in 'Tag View' does not update 
+                 the icons of this tag in 'Tag Filters'.
 158 ==> 129365 : Keyword-List view still uses old description after renaming keyword.
 159 ==> 115154 : Tags filter misses 'deselect all Tags' in context menu.
 160 ==> 133525 : digiKam doesn't compile (KDE forces -fno-exception, digikam needs it).
@@ -339,7 +343,10 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 
 204 ==> 115125 : White Balance tool: remaining endianess issue on ppc.
 205 ==> 137495 : showfoto crashes when doing any modification to a loaded directory.
-206 ==> 137845 : Album Header cut off (squeezed) when entering two or more lines in Album comment.
-207 ==> 
+206 ==> 137845 : Album Header cut off (squeezed) when entering two or more lines 
+                 in Album comment.
+207 ==> 137886 : When a tag is moved in the left panel it's position is not updated 
+                 in the right panel.
+208 ==> 
 
 ----------------------------------------------------------------------------------------------------
