@@ -356,13 +356,13 @@ void RAWLoader::startProcess()
     *m_process << QFile::encodeName( m_filePath );
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << "Running dcraw command " << m_process->args() << endl;
+    DDebug() << "Running RAW decoding command " << m_process->args() << endl;
 #endif
 
     // actually start the process
     if ( !m_process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
     {
-        DError() << "Failed to start dcraw" << endl;
+        DError() << "Failed to start RAW decoding" << endl;
         delete m_process;
         m_process    = 0;
         m_running    = false;
@@ -413,7 +413,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         QString magic = QString::fromAscii(buffer, 2);
         if (magic != "P6") 
         {
-            DError() << "Cannot parse header from dcraw: Magic is " << magic << endl;
+            DError() << "Cannot parse header from RAW decoding: Magic is " << magic << endl;
             m_process->kill();
             return;
         }
@@ -437,7 +437,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         QStringList sizes = QStringList::split(" ", splitlist[1]);
         if (splitlist.size() < 3 || sizes.size() < 2)
         {
-            DError() << "Cannot parse header from dcraw: Could not split" << endl;
+            DError() << "Cannot parse header from RAW decoding: Could not split" << endl;
             m_process->kill();
             return;
         }
@@ -468,7 +468,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 void RAWLoader::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 {
     QCString message(buffer, buflen);
-    DDebug() << "Dcraw StdErr: " << message << endl;
+    DDebug() << "RAW decoding StdErr: " << message << endl;
 }
 
 bool RAWLoader::save(const QString&, DImgLoaderObserver *)

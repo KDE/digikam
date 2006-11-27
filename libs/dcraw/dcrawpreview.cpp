@@ -45,6 +45,7 @@ extern "C"
 
 #include "ddebug.h"
 #include "rawfiles.h"
+#include "dcrawbinary.h"
 #include "dcrawpreview.h"
 
 namespace Digikam
@@ -72,9 +73,10 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
     // Note : this code require at least dcraw version 8.x
 
-    command  = "dcraw -c -e ";
+    command  = DcrawBinary::instance()->path();
+    command += " -c -e ";
     command += QFile::encodeName( KProcess::quote( path ) );
-    DDebug() << "Running dcraw command " << command << endl;
+    DDebug() << "Running RAW decoding command " << command << endl;
 
     f = popen( command.data(), "r" );
 
@@ -117,9 +119,10 @@ bool DcrawPreview::loadDcrawPreview(QImage& image, const QString& path)
     // -w : Use camera white balance, if possible
 
     f=NULL;
-    command  = "dcraw -c -h -w -a ";
+    command  = DcrawBinary::instance()->path();
+    command += " -c -h -w -a ";
     command += QFile::encodeName( KProcess::quote( path ) );
-    DDebug() << "Running dcraw command " << command << endl;
+    DDebug() << "Running RAW decoding command " << command << endl;
 
     f = popen( command.data(), "r" );
 
