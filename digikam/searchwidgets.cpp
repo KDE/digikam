@@ -48,7 +48,6 @@
 #include "albummanager.h"
 #include "ratingwidget.h"
 #include "squeezedcombobox.h"
-#include "kdateedit.h"
 #include "searchwidgets.h"
 #include "searchwidgets.moc"
 
