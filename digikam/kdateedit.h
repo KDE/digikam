@@ -28,12 +28,11 @@
 #include <qcombobox.h>
 #include <qdatetime.h>
 #include <qmap.h>
+#include <qevent.h>
 
 // KDE includes.
 
 #include "kdatepickerpopup.h"
-
-class QEvent;
 
 namespace Digikam
 {

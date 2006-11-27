@@ -38,6 +38,7 @@
 // Local includes.
 
 #include "kdateedit.h"
+#include "kdateedit.moc"
 
 namespace Digikam
 {
@@ -375,4 +376,3 @@ void KDateEdit::updateView()
 
 }  // namespace Digikam
 
-#include "kdateedit.moc"
