@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date  : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier & Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,9 +66,10 @@
 #include "navigatebarwidget.h"
 #include "imageinfo.h"
 #include "ratingwidget.h"
-#include "imagedescedittab.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
+#include "imagedescedittab.h"
+#include "imagedescedittab.moc"
 
 namespace Digikam
 {
@@ -285,6 +287,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     
     connect(man, SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotAlbumIconChanged(Album*)));
+
+    connect(man, SIGNAL(signalTAlbumMoved(TAlbum*, TAlbum*)),
+            this, SLOT(slotAlbumMoved(TAlbum*, TAlbum*)));
 
     AlbumThumbnailLoader *loader = AlbumThumbnailLoader::instance();
 
@@ -804,6 +809,32 @@ void ImageDescEditTab::slotAlbumIconChanged(Album* a)
     setTagThumbnail((TAlbum *)a);
 }
 
+void ImageDescEditTab::slotAlbumMoved(TAlbum* tag, TAlbum* newParent)
+{
+    if (!tag || !newParent)
+        return;
+
+    QCheckListItem* item = (QCheckListItem*)tag->extraData(this);
+    if (!item)
+        return;
+
+    if (item->parent())
+    {
+        QListViewItem* oldPItem = item->parent();
+        oldPItem->takeItem(item);
+    }
+    else
+    {
+        d->tagsView->takeItem(item);
+    }
+
+    QCheckListItem* newPItem = (QCheckListItem*)newParent->extraData(this);
+    if (newPItem)
+        newPItem->insertItem(item);
+    else
+        d->tagsView->insertItem(item);
+}
+
 void ImageDescEditTab::slotAlbumRenamed(Album* a)
 {
     if (!a || a->isRoot() || a->type() != Album::TAG)
@@ -948,7 +979,6 @@ void ImageDescEditTab::updateRecentTags()
 }
 
 void ImageDescEditTab::slotRecentTagsMenuActivated(int id)
-    
 {
     AlbumManager* albumMan = AlbumManager::instance();
     
@@ -1071,4 +1101,3 @@ void TAlbumListView::emitSignalItemStateChanged()
 
 }  // NameSpace Digikam
 
-#include "imagedescedittab.moc"

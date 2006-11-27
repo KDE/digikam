@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date  : 2003-03-09
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 by Gilles Caulier & Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,6 +111,7 @@ private slots:
     void slotAlbumIconChanged(Album* a);
     void slotAlbumRenamed(Album* a);
     void slotAlbumsCleared();
+    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
 
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
