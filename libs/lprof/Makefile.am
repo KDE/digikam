@@ -1,3 +1,5 @@
+KDE_OPTIONS = nofinal
+
 noinst_LTLIBRARIES = liblprof.la
 
 noinst_HEADERS = lcmsprf.h
