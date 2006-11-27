@@ -62,7 +62,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 namespace Digikam
 {
-static const char* ExifHumanList[] =
+static const char* ExifGPSHumanList[] =
 {
      "GPSLatitude",
      "GPSLongitude",
@@ -71,7 +71,7 @@ static const char* ExifHumanList[] =
 };
 
 // Standard Exif Entry list from to less important to the most important for photograph.
-static const char* StandardExifEntryList[] =
+static const char* StandardExifGPSEntryList[] =
 {
      "GPSInfo",
      "-1"
@@ -104,11 +104,11 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 {
     d = new GPSWidgetPriv;
     
-    for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; i++)
-        d->keysFilter << StandardExifEntryList[i];
+    for (int i=0 ; QString(StandardExifGPSEntryList[i]) != QString("-1") ; i++)
+        d->keysFilter << StandardExifGPSEntryList[i];
 
-    for (int i=0 ; QString(ExifHumanList[i]) != QString("-1") ; i++)
-        d->tagsfilter << ExifHumanList[i];
+    for (int i=0 ; QString(ExifGPSHumanList[i]) != QString("-1") ; i++)
+        d->tagsfilter << ExifGPSHumanList[i];
 
     // --------------------------------------------------------
             
