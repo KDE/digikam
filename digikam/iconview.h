@@ -1,6 +1,8 @@
 /* ============================================================
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-24
+ * Description : 
+ *
  * Copyright 2005 by Renchi Raju
  *
  * This program is free software; you can redistribute it
@@ -124,6 +126,8 @@ private:
     bool anchorIsBehind() const;
 
     void startUpdateTimer();
+
+    static int cmpItems(const void *n1, const void *n2);
     
 signals:
 

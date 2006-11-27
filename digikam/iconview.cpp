@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : iconview.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-24
  * Description : 
@@ -49,6 +48,7 @@ extern "C"
 #include "iconitem.h"
 #include "icongroupitem.h"
 #include "iconview.h"
+#include "iconview.moc"
 
 namespace Digikam
 {
@@ -129,17 +129,6 @@ public:
         IconGroupItem *group;
     };
 };
-
-static int cmpItems( const void *n1, const void *n2 )
-{
-    if ( !n1 || !n2 )
-        return 0;
-
-    IconViewPriv::SortableItem *i1 = (IconViewPriv::SortableItem *)n1;
-    IconViewPriv::SortableItem *i2 = (IconViewPriv::SortableItem *)n2;
-
-    return i1->group->compare( i2->group );
-}
 
 IconView::IconView(QWidget* parent, const char* name)
         : QScrollView(parent, name, Qt::WStaticContents|Qt::WNoAutoErase)
@@ -1878,6 +1867,16 @@ void IconView::itemClickedToOpen(IconItem* item)
     emit signalDoubleClicked(item);
 }
 
+int IconView::cmpItems(const void *n1, const void *n2)
+{
+    if ( !n1 || !n2 )
+        return 0;
+
+    IconViewPriv::SortableItem *i1 = (IconViewPriv::SortableItem *)n1;
+    IconViewPriv::SortableItem *i2 = (IconViewPriv::SortableItem *)n2;
+
+    return i1->group->compare( i2->group );
+}
+
 }  // namespace Digikam
 
-#include "iconview.moc"

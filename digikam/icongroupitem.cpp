@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : icongroupitem.cpp
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Date  : 2005-04-24
  * Description : 
@@ -65,17 +64,6 @@ public:
         IconItem *item;
     };
 };
-
-static int cmpItems( const void *n1, const void *n2 )
-{
-    if ( !n1 || !n2 )
-        return 0;
-
-    IconGroupItemPriv::SortableItem *i1 = (IconGroupItemPriv::SortableItem *)n1;
-    IconGroupItemPriv::SortableItem *i2 = (IconGroupItemPriv::SortableItem *)n2;
-
-    return i1->item->compare( i2->item );
-}
 
 IconGroupItem::IconGroupItem(IconView* parent)
 {
@@ -300,6 +288,17 @@ void IconGroupItem::paintBanner()
 int IconGroupItem::compare(IconGroupItem*)
 {
     return 0;
+}
+
+int IconGroupItem::cmpItems(const void *n1, const void *n2)
+{
+    if ( !n1 || !n2 )
+        return 0;
+
+    IconGroupItemPriv::SortableItem *i1 = (IconGroupItemPriv::SortableItem *)n1;
+    IconGroupItemPriv::SortableItem *i2 = (IconGroupItemPriv::SortableItem *)n2;
+
+    return i1->item->compare( i2->item );
 }
 
 }  // namespace Digikam
