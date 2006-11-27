@@ -38,6 +38,8 @@
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 #include <qiconset.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
 
 // KDE includes.
 
@@ -174,38 +176,30 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
         
     // Tags view ---------------------------------------------------
 
-    QGroupBox* tagsBox         = new QGroupBox(i18n("&Tags"), settingsArea);
-    QVBoxLayout* tagsBoxLayout = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
+    QVGroupBox* tagsBox = new QVGroupBox(i18n("&Tags"), settingsArea);
 
-    d->tagsSearchClearBtn = new QToolButton(tagsBox);
+    QHBox* tagsSearch = new QHBox(tagsBox);
+    tagsSearch->setSpacing(KDialog::spacingHint());
+
+    d->tagsSearchClearBtn = new QToolButton(tagsSearch);
     d->tagsSearchClearBtn->setAutoRaise(true);
     d->tagsSearchClearBtn->setIconSet(kapp->iconLoader()->loadIcon("locationbar_erase",
                                       KIcon::Toolbar, KIcon::SizeSmall));
 
-    QLabel* tagsSearchTextBtn = new QLabel(i18n("Search:"), tagsBox);
-    d->tagsSearchEdit         = new KLineEdit(tagsBox);
+    new QLabel(i18n("Search:"), tagsSearch);
+    d->tagsSearchEdit = new KLineEdit(tagsSearch);
+    d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    QHBoxLayout* tagsSearchLayout = new QHBoxLayout(0, 5, 5);
-    tagsSearchLayout->addWidget(d->tagsSearchClearBtn);
-    tagsSearchLayout->addWidget(tagsSearchTextBtn);
-    tagsSearchLayout->addWidget(d->tagsSearchEdit);
-    tagsBoxLayout->addLayout(tagsSearchLayout);
-
-    d->tagsView = new TAlbumListView(tagsBox);
-    tagsBoxLayout->addWidget(d->tagsView);
-
-    d->recentTagsBtn      = new QToolButton(tagsBox);
+    d->recentTagsBtn      = new QToolButton(tagsSearch);
     QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
-    d->recentTagsBtn->setTextLabel(i18n("Recent Tags"));
+    QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
     d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag", KIcon::NoGroup,
                                  KIcon::SizeSmall, KIcon::DefaultState, 0, true));
-    d->recentTagsBtn->setUsesTextLabel(true);
     d->recentTagsBtn->setUsesBigPixmap(false);
-    d->recentTagsBtn->setTextPosition(QToolButton::BesideIcon);
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
-    tagsBoxLayout->addWidget(d->recentTagsBtn);
 
+    d->tagsView = new TAlbumListView(tagsBox);
     d->tagsView->addColumn(i18n( "Tags" ));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
@@ -496,7 +490,7 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     if (!album)
     {
         DWarning() << k_funcinfo << "Failed to find parent album for"
-                    << fileURL << endl;
+                   << fileURL << endl;
         return;
     }
 
@@ -846,7 +840,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     if (!viewItem)
     {
         DWarning() << "Failed to find view item for Tag "
-                    << album->title() << endl;
+                   << album->title() << endl;
         return;
     }
 
