@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-01-01
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-01-01
  * Description : 
  * 
  * Copyright 2005 by Tom Albers and Renchi Raju
@@ -37,7 +37,6 @@
 // KDE includes.
 
 #include <klocale.h>
-#include <kdateedit.h>
 #include <kurl.h>
 #include <kdialog.h>
 
@@ -47,9 +46,11 @@
 #include "album.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "searchwidgets.h"
 #include "ratingwidget.h"
 #include "squeezedcombobox.h"
+#include "kdateedit.h"
+#include "searchwidgets.h"
+#include "searchwidgets.moc"
 
 namespace Digikam
 {
@@ -111,7 +112,7 @@ SearchRuleLabel::SearchRuleLabel( const QString & text,
                       QWidget * parent,
                       const char * name,
                       WFlags f )
-    : QLabel(  text, parent, name, f )
+               : QLabel(  text, parent, name, f )
 {
 }
 
@@ -122,7 +123,7 @@ void SearchRuleLabel::mouseDoubleClickEvent( QMouseEvent * e )
 
 SearchAdvancedRule::SearchAdvancedRule(QWidget* parent,
                                        SearchAdvancedRule::Option option)
-    : SearchAdvancedBase(SearchAdvancedBase::RULE)
+                  : SearchAdvancedBase(SearchAdvancedBase::RULE)
 {
     m_box = new QVBox(parent);
     m_box->layout()->setSpacing( KDialog::spacingHint() );
@@ -563,4 +564,3 @@ void SearchAdvancedGroup::removeOption()
 
 }  // namespace Digikam
 
-#include "searchwidgets.moc"

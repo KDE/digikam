@@ -1,7 +1,7 @@
 /* ============================================================
- * Author: Tom Albers <tomalbers@kde.nl>
- *         Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-01-01
+ * Authors: Tom Albers <tomalbers@kde.nl>
+ *          Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Date   : 2005-01-01
  * Description : 
  * 
  * Copyright 2005 by Tom Albers and Renchi Raju
@@ -33,8 +33,9 @@ class QLabel;
 class QVGroupBox;
 class QLabel;
 
-class KDateEdit;
 class KURL;
+
+class KDateEdit;
 
 namespace Digikam
 {
@@ -50,7 +51,9 @@ class SqueezedComboBox;
 class SearchRuleLabel: public QLabel
 {
     Q_OBJECT
+
 public:
+
     /** Constructor. See for more info the QLabel clas.
      * @param text Text of the label
      * @param parent The parent widget
@@ -62,9 +65,11 @@ public:
                const char * name=0,
                WFlags f=0 );
 private:
+
     void mouseDoubleClickEvent( QMouseEvent * e );
 
 signals:
+
     /**
      * Signal which gets emitted when a double clicked
      * event occurs
@@ -85,7 +90,9 @@ signals:
 class SearchAdvancedBase : public QObject
 {
     Q_OBJECT
+
 public:
+
     /** @enum Type
      * Possible types. A Base item can either be a Rule on its own
      * or hold a group of rules.
@@ -169,6 +176,7 @@ signals:
     void signalPropertyChanged();
 
 protected:
+
     enum Option m_option;
     enum Type m_type;
 };
@@ -272,7 +280,16 @@ public:
     };
 
 private:
+
     void setValueWidget(valueWidgetTypes oldType, valueWidgetTypes newType);
+
+private slots:
+
+    void slotKeyChanged(int);
+    void slotLabelDoubleClick();
+
+private:
+
     QLabel*                 m_label;
 
     QVBox*                  m_box;
@@ -296,10 +313,6 @@ private:
     QHBox*                  m_optionsBox;
 
     enum valueWidgetTypes   m_widgetType;
-
-private slots:
-    void slotKeyChanged(int);
-    void slotLabelDoubleClick();
 };
 
 /** @class SearchAdvancedGroup
@@ -308,6 +321,7 @@ private slots:
  */
 class SearchAdvancedGroup : public SearchAdvancedBase
 {
+
 public:
     /**
      * Constructor
@@ -361,6 +375,7 @@ public:
     QValueList<SearchAdvancedRule*> childRules() const;
 
 private:
+
     QHBox*            m_box;
     QVGroupBox*       m_groupbox;
     QCheckBox*        m_check;
