@@ -28,7 +28,6 @@
 #include <qcombobox.h>
 #include <qdatetime.h>
 #include <qmap.h>
-#include <qevent.h>
 
 // KDE includes.
 

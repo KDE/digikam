@@ -250,15 +250,15 @@ bool AlbumFileTip::event(QEvent *e)
 {
     switch ( e->type() )
     {
-      case QEvent::Leave:
-      case QEvent::MouseButtonPress:
-      case QEvent::MouseButtonRelease:
-      case QEvent::FocusIn:
-      case QEvent::FocusOut:
-      case QEvent::Wheel:
-          hide();
-      default:
-          break;
+        case QEvent::Leave:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+        case QEvent::Wheel:
+            hide();
+        default:
+            break;
     }
 
     return QFrame::event(e);

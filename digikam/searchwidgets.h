@@ -24,9 +24,6 @@
 #ifndef SEARCHWIDGETS_H
 #define SEARCHWIDGETS_H
 
-// local includes.
-
-#include "kdateedit.h"
 
 class QHBox;
 class QVBox;
@@ -38,6 +35,8 @@ class QVGroupBox;
 class QLabel;
 
 class KURL;
+
+class KDateEdit;
 
 namespace Digikam
 {
