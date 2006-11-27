@@ -35,6 +35,7 @@
 
 #include "themeengine.h"
 #include "ratingwidget.h"
+#include "ratingwidget.moc"
 
 namespace Digikam
 {
@@ -46,8 +47,6 @@ public:
     RatingWidgetPriv()
     {
         rating    = 0;
-        selPixmap = 0;
-        regPixmap = 0;
     }
 
     int     rating;
@@ -162,4 +161,3 @@ void RatingWidget::slotThemeChanged()
 
 }  // namespace Digikam
 
-#include "ratingwidget.moc"
