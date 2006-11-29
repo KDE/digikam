@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : thumbbar.cpp
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-22
@@ -58,8 +57,9 @@ extern "C"
 
 // Local includes.
 
-#include "thumbbar.h"
 #include "thumbnailjob.h"
+#include "thumbbar.h"
+#include "thumbbar.moc"
 
 namespace Digikam
 {
@@ -97,6 +97,31 @@ public:
     
     QDict<ThumbBarItem>       itemDict;
     QGuardedPtr<ThumbnailJob> thumbJob;
+};
+
+class ThumbBarItemPriv
+{
+public:
+
+    ThumbBarItemPriv()
+    {
+        pos    = 0;
+        pixmap = 0;
+        next   = 0;
+        prev   = 0;
+        view   = 0;
+    }
+    
+    int           pos;
+        
+    QPixmap      *pixmap;
+
+    KURL          url;
+    
+    ThumbBarItem *next;
+    ThumbBarItem *prev;
+    
+    ThumbBarView *view;
 };
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate)
@@ -152,7 +177,7 @@ void ThumbBarView::setExifRotate(bool exifRotate)
     d->exifRotate = exifRotate;
     QString thumbCacheDir = QDir::homeDirPath() + "/.thumbnails/";
 
-    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         // Remove all current album item thumbs from disk cache.
 
@@ -184,7 +209,7 @@ void ThumbBarView::clear(bool updateView)
     ThumbBarItem *item = d->firstItem;
     while (item)
     {
-        ThumbBarItem *tmp = item->m_next;
+        ThumbBarItem *tmp = item->d->next;
         delete item;
         item = tmp;
     }
@@ -229,9 +254,9 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
     else
         itemPos = pos.x();
     
-    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
-        if (itemPos >= item->m_pos && itemPos <= (item->m_pos+d->tileSize+2*d->margin))
+        if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin))
         {
             return item;
         }
@@ -242,7 +267,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 
 ThumbBarItem* ThumbBarView::findItemByURL(const KURL& url) const
 {
-    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (item->url().equals(url))
         {
@@ -275,10 +300,10 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
         if (d->orientation == Vertical)
-            ensureVisible(0, (int)(item->m_pos+d->margin+d->tileSize*.5),
+            ensureVisible(0, (int)(item->d->pos+d->margin+d->tileSize*.5),
                           0, (int)(d->tileSize*1.5+3*d->margin));
         else
-            ensureVisible((int)(item->m_pos+d->margin+d->tileSize*.5), 0,
+            ensureVisible((int)(item->d->pos+d->margin+d->tileSize*.5), 0,
                           (int)(d->tileSize*1.5+3*d->margin), 0);
           
         item->repaint();
@@ -291,10 +316,10 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* item)
     if (!item)
         return;
 
-    if (item->m_pixmap)
+    if (item->d->pixmap)
     {
-        delete item->m_pixmap;
-        item->m_pixmap = 0;
+        delete item->d->pixmap;
+        item->d->pixmap = 0;
     }
     
     if (!d->thumbJob.isNull())
@@ -345,11 +370,11 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     
     bgPix.fill(colorGroup().background());
     
-    for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+    for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Vertical)
         {
-            if (y1 <= item->m_pos && item->m_pos <= y2)
+            if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
                     tile.fill(colorGroup().highlight());
@@ -361,19 +386,19 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
                 
-                if (item->m_pixmap)
+                if (item->d->pixmap)
                 {
-                    int x = (tile.width() -item->m_pixmap->width())/2;
-                    int y = (tile.height()-item->m_pixmap->height())/2;
-                    bitBlt(&tile, x, y, item->m_pixmap);
+                    int x = (tile.width() -item->d->pixmap->width())/2;
+                    int y = (tile.height()-item->d->pixmap->height())/2;
+                    bitBlt(&tile, x, y, item->d->pixmap);
                 }
                 
-                bitBlt(&bgPix, 0, item->m_pos - cy, &tile);
+                bitBlt(&bgPix, 0, item->d->pos - cy, &tile);
             }
         }
         else
         {
-            if (x1 <= item->m_pos && item->m_pos <= x2)
+            if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
                     tile.fill(colorGroup().highlight());
@@ -385,14 +410,14 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
                 
-                if (item->m_pixmap)
+                if (item->d->pixmap)
                 {
-                    int x = (tile.width() -item->m_pixmap->width())/2;
-                    int y = (tile.height()-item->m_pixmap->height())/2;
-                    bitBlt(&tile, x, y, item->m_pixmap);
+                    int x = (tile.width() -item->d->pixmap->width())/2;
+                    int y = (tile.height()-item->d->pixmap->height())/2;
+                    bitBlt(&tile, x, y, item->d->pixmap);
                 }
                 
-                bitBlt(&bgPix, item->m_pos - cx, 0, &tile);
+                bitBlt(&bgPix, item->d->pos - cx, 0, &tile);
             }
         }
     }
@@ -411,10 +436,10 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     {
        int y = e->pos().y();
        
-       for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
        {
-           if (y >= item->m_pos &&
-               y <= (item->m_pos + d->tileSize + 2*d->margin))
+           if (y >= item->d->pos &&
+               y <= (item->d->pos + d->tileSize + 2*d->margin))
            {
                 barItem = item;
                 break;
@@ -425,10 +450,10 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     {
        int x = e->pos().x();
        
-       for (ThumbBarItem *item = d->firstItem; item; item = item->m_next)
+       for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
        {
-           if (x >= item->m_pos &&
-               x <= (item->m_pos + d->tileSize + 2*d->margin))
+           if (x >= item->d->pos &&
+               x <= (item->d->pos + d->tileSize + 2*d->margin))
            {
                 barItem = item;
                 break;
@@ -460,14 +485,14 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
     {
         d->firstItem = item;
         d->lastItem  = item;
-        item->m_prev = 0;
-        item->m_next = 0;
+        item->d->prev = 0;
+        item->d->next = 0;
     }
     else
     {
-        d->lastItem->m_next = item;
-        item->m_prev = d->lastItem;
-        item->m_next = 0;
+        d->lastItem->d->next = item;
+        item->d->prev = d->lastItem;
+        item->d->next = 0;
         d->lastItem = item;
 
     }
@@ -493,17 +518,17 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
 
     if (item == d->firstItem)
     {
-        d->firstItem = d->currItem = d->firstItem->m_next;
+        d->firstItem = d->currItem = d->firstItem->d->next;
         if (d->firstItem)
-            d->firstItem->m_prev = 0;
+            d->firstItem->d->prev = 0;
         else
             d->firstItem = d->lastItem = d->currItem = 0;
     }
     else if (item == d->lastItem)
     {
-        d->lastItem = d->currItem = d->lastItem->m_prev;
+        d->lastItem = d->currItem = d->lastItem->d->prev;
         if ( d->lastItem )
-           d->lastItem->m_next = 0;
+           d->lastItem->d->next = 0;
         else
             d->firstItem = d->lastItem = d->currItem = 0;
     }
@@ -512,13 +537,13 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
         ThumbBarItem *i = item;
         if (i)
         {
-            if (i->m_prev )
+            if (i->d->prev )
             {
-                i->m_prev->m_next = d->currItem = i->m_next;
+                i->d->prev->d->next = d->currItem = i->d->next;
             }
-            if ( i->m_next )
+            if ( i->d->next )
             {
-                i->m_next->m_prev = d->currItem = i->m_prev;
+                i->d->next->d->prev = d->currItem = i->d->prev;
             }
         }
     }
@@ -540,11 +565,11 @@ void ThumbBarView::rearrangeItems()
     
     while (item)
     {
-        item->m_pos = pos;
+        item->d->pos = pos;
         pos += d->tileSize + 2*d->margin;
-        if (!(item->m_pixmap))
-            urlList.append(item->m_url);
-        item = item->m_next;
+        if (!(item->d->pixmap))
+            urlList.append(item->d->url);
+        item = item->d->next;
     }
 
     if (d->orientation == Vertical)
@@ -575,9 +600,9 @@ void ThumbBarView::repaintItem(ThumbBarItem* item)
     if (item)
     {
        if (d->orientation == Vertical)
-           repaintContents(0, item->m_pos, visibleWidth(), d->tileSize+2*d->margin);
+           repaintContents(0, item->d->pos, visibleWidth(), d->tileSize+2*d->margin);
        else
-           repaintContents(item->m_pos, 0, d->tileSize+2*d->margin, visibleHeight());
+           repaintContents(item->d->pos, 0, d->tileSize+2*d->margin, visibleHeight());
     }
 }
 
@@ -595,13 +620,13 @@ void ThumbBarView::slotGotThumbnail(const KURL& url, const QPixmap& pix)
         if (!item)
             return;
     
-        if (item->m_pixmap)
+        if (item->d->pixmap)
         {
-            delete item->m_pixmap;
-            item->m_pixmap = 0;
+            delete item->d->pixmap;
+            item->d->pixmap = 0;
         }
         
-        item->m_pixmap = new QPixmap(pix);
+        item->d->pixmap = new QPixmap(pix);
         item->repaint();
     }
 }
@@ -624,13 +649,13 @@ void ThumbBarView::slotGotPreview(const KFileItem *fileItem,
     if (!item)
         return;
 
-    if (item->m_pixmap)
+    if (item->d->pixmap)
     {
-        delete item->m_pixmap;
-        item->m_pixmap = 0;
+        delete item->d->pixmap;
+        item->d->pixmap = 0;
     }
     
-    item->m_pixmap = new QPixmap(pix);
+    item->d->pixmap = new QPixmap(pix);
     item->repaint();
 }
 
@@ -644,71 +669,76 @@ void ThumbBarView::slotFailedPreview(const KFileItem* fileItem)
     QPixmap pix = iconLoader->loadIcon("image", KIcon::NoGroup,
                                        d->tileSize);
 
-    if (item->m_pixmap)
+    if (item->d->pixmap)
     {
-        delete item->m_pixmap;
-        item->m_pixmap = 0;
+        delete item->d->pixmap;
+        item->d->pixmap = 0;
     }
     
-    item->m_pixmap = new QPixmap(pix);
+    item->d->pixmap = new QPixmap(pix);
     item->repaint();
 }
 
 // -------------------------------------------------------------------------
 
 ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KURL& url)
-            : m_pos(0), m_pixmap(0), m_url(url), m_next(0), m_prev(0), m_view(view)
 {
-    m_view->insertItem(this);
+    d = new ThumbBarItemPriv;
+    d->url  = url;
+    d->view = view;
+    d->view->insertItem(this);
 }
 
 ThumbBarItem::~ThumbBarItem()
 {
-    m_view->removeItem(this);
-    if (m_pixmap)
-        delete m_pixmap;
+    d->view->removeItem(this);
+
+    if (d->pixmap)
+        delete d->pixmap;
+
+    delete d;
 }
 
 KURL ThumbBarItem::url() const
 {
-    return m_url;
+    return d->url;
 }
 
 ThumbBarItem* ThumbBarItem::next() const
 {
-    return m_next;
+    return d->next;
 }
 
 ThumbBarItem* ThumbBarItem::prev() const
 {
-    return m_prev;
+    return d->prev;
 }
 
 QRect ThumbBarItem::rect() const
 {
-    if (m_view->d->orientation == ThumbBarView::Vertical)
+    if (d->view->d->orientation == ThumbBarView::Vertical)
     {
-        return QRect(0, m_pos,
-                     m_view->visibleWidth(),
-                     m_view->d->tileSize + 2*m_view->d->margin);
+        return QRect(0, d->pos,
+                     d->view->visibleWidth(),
+                     d->view->d->tileSize + 2*d->view->d->margin);
     }
     else
     {
-        return QRect(m_pos, 0,
-                     m_view->d->tileSize + 2*m_view->d->margin,
-                     m_view->visibleHeight());
+        return QRect(d->pos, 0,
+                     d->view->d->tileSize + 2*d->view->d->margin,
+                     d->view->visibleHeight());
     }
 }
 
 void ThumbBarItem::repaint()
 {
-    m_view->repaintItem(this);   
+    d->view->repaintItem(this);   
 }
 
 // -------------------------------------------------------------------------
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-    : QToolTip(parent->viewport()), m_view(parent)
+               : QToolTip(parent->viewport()), m_view(parent)
 {
 }
 
@@ -758,4 +788,3 @@ void ThumbBarToolTip::maybeTip(const QPoint& pos)
 
 }  // NameSpace Digikam
 
-#include "thumbbar.moc"

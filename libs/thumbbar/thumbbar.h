@@ -1,5 +1,4 @@
 /* ============================================================
- * File  : thumbbar.h
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-11-22
@@ -43,8 +42,10 @@ class KFileItem;
 
 namespace Digikam
 {
+
 class ThumbBarItem;
 class ThumbBarViewPriv;
+class ThumbBarItemPriv;
 
 class DIGIKAM_EXPORT ThumbBarView : public QScrollView
 {
@@ -133,16 +134,7 @@ public:
 
 private:
 
-    int               m_pos;
-        
-    QPixmap*          m_pixmap;
-
-    KURL              m_url;
-    
-    ThumbBarItem*     m_next;
-    ThumbBarItem*     m_prev;
-    
-    ThumbBarView*     m_view;
+    ThumbBarItemPriv* d;
 
     friend class ThumbBarView;
 };
