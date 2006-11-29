@@ -7,8 +7,6 @@ noinst_LTLIBRARIES = libimagepropertiesshowfoto.la libimagepropertiesdigikam.la 
 
 libimagepropertiescamgui_la_SOURCES = imagepropertiessidebarcamgui.cpp cameraitempropertiestab.cpp 
 
-#libimagepropertiescamgui_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la
-
 libimagepropertiescamgui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
 # Image Properties SideBar for Showfoto (without digiKam database support).
