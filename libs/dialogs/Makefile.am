@@ -1,6 +1,14 @@
 METASOURCES = AUTO
 
-noinst_LTLIBRARIES = libdialog.la
+noinst_LTLIBRARIES = libdialog.la libdialogshowfoto.la
+
+# Dialogs collection used by Showfoto.
+
+libdialogshowfoto_la_SOURCES = iccprofileinfodlg.cpp 
+
+libdialogshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+
+# Dialogs collection used by digiKam.
 
 libdialog_la_SOURCES = ctrlpaneldlg.cpp imagedlgbase.cpp imageguidedlg.cpp \
 	                   iccprofileinfodlg.cpp deletedialogbase.ui deletedialog.cpp \
