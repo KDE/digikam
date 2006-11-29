@@ -1,7 +1,7 @@
 /* ============================================================
- * Author : Gilles Caulier <caulier dot gilles at kdemail dot net> 
- *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date   : 2005-11-01
+ * Authors : Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *           Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Date    : 2005-11-01
  * Description : A digital camera RAW files loader for DImg 
  *               framework using an external dcraw instance.
  * 
@@ -25,9 +25,7 @@
 
 // Qt includes
 
-#include <qmutex.h>
 #include <qobject.h>
-#include <qwaitcondition.h>
 
 // Local includes.
 
@@ -35,14 +33,13 @@
 #include "rawdecodingsettings.h"
 #include "digikam_export.h"
 
-class QCustomEvent;
-class QTimer;
-
 class KProcess;
 
 namespace Digikam
 {
+
 class DImg;
+class RAWLoaderPriv;
 
 class DIGIKAM_EXPORT RAWLoader : public QObject, public DImgLoader
 {
@@ -52,6 +49,7 @@ class DIGIKAM_EXPORT RAWLoader : public QObject, public DImgLoader
 public:
 
     RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings=RawDecodingSettings());
+    ~RAWLoader();
 
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
     bool save(const QString& filePath, DImgLoaderObserver *observer=0);
@@ -78,31 +76,7 @@ private slots:
 
 private:
 
-    bool                m_sixteenBit;
-    bool                m_hasAlpha;
-    bool                m_running;
-    bool                m_normalExit;
-
-    uchar              *m_data;
-    
-    int                 m_dataPos;
-    int                 m_width;
-    int                 m_height;
-    int                 m_rgbmax;
-
-    QString             m_filePath;
-
-    QMutex              m_mutex;
-    
-    QWaitCondition      m_condVar;
-    
-    QTimer             *m_queryTimer;
-
-    KProcess           *m_process;
-    
-    DImgLoaderObserver *m_observer;
-
-    RawDecodingSettings m_rawDecodingSettings;
+    RAWLoaderPriv *d;
 
 };
 
