@@ -342,13 +342,14 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 
 *** 0.9.0-rc2 **********************************************************
 
-204 ==> 115125 : White Balance tool: remaining endianess issue on ppc.
+204 ==> 115125 : White Balance tool: remaining endianess issue on PowerPC.
 205 ==> 137495 : showfoto crashes when doing any modification to a loaded directory.
 206 ==> 137845 : Album Header cut off (squeezed) when entering two or more lines 
                  in Album comment.
 207 ==> 137886 : When a tag is moved in the left panel it's position is not updated 
                  in the right panel.
 208 ==> 135834 : Lowercasing camera filenames only works for first imported file.
-209 ==> 
+209 ==> 134391 : digiKam camera gui dialog crashes if there is a filename without extension.
+210 ==> 
 
 ----------------------------------------------------------------------------------------------------
