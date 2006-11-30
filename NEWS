@@ -347,6 +347,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
                  in Album comment.
 207 ==> 137886 : When a tag is moved in the left panel it's position is not updated 
                  in the right panel.
-208 ==> 
+208 ==> 135834 : Lowercasing camera filenames only works for first imported file.
+209 ==> 
 
 ----------------------------------------------------------------------------------------------------
