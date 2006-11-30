@@ -1,4 +1,3 @@
-#KDE_OPTIONS = nofinal
 METASOURCES = AUTO  
 
 INCLUDES = -I$(top_srcdir)/digikam/sqlite \
@@ -29,30 +28,67 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
        
 lib_LTLIBRARIES = libdigikam.la
 
-libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
-	                    albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
-	                    albumlister.cpp dragobjects.cpp \
-	                    iconview.cpp icongroupitem.cpp iconitem.cpp \
-	                    digikamapp.cpp digikamview.cpp \
-	                    albumfolderview.cpp albumwidgetstack.cpp \
-	                    albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
-	                    albumpropsedit.cpp albumsettings.cpp \
-	                    cameralist.cpp cameratype.cpp cameradragobject.cpp \
-	                    kipiinterface.cpp tagcreatedlg.cpp \
-	                    albumfiletip.cpp tagspopupmenu.cpp \
-	                    syncjob.cpp albumhistory.cpp scanlib.cpp \
-	                    imageinfo.cpp imagepreviewwidget.cpp imagepreviewjob.cpp \
-	                    datefolderview.cpp pixmapmanager.cpp \
-	                    tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
-	                    searchfolderview.cpp dio.cpp \
-	                    searchresultsview.cpp searchresultsitem.cpp \
-	                    searchquickdialog.cpp searchadvanceddialog.cpp \
-	                    searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
-	                    kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
-	                    upgradedb_sqlite2tosqlite3.cpp \
-	                    ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
-	                    albumthumbnailloader.cpp batchthumbsgenerator.cpp \
-	                    dcopiface.cpp dcopiface.skel
+# NOTE from Gilles (30-11-06): kdatetimeedit.cpp must be placed on the top of source file list 
+# to unbreak compilation with './configure -enable-final' option. I suspect a problem with 
+# X11 header included into albumfolderview.cpp.
+libdigikam_la_SOURCES = kdatetimeedit.cpp \
+	                    album.cpp \
+	                    albumdb.cpp \
+	                    albumdb_sqlite2.cpp \
+	                    albumiconview.cpp \
+	                    albumicongroupitem.cpp \
+	                    albumiconitem.cpp \
+	                    albumitemhandler.cpp \
+	                    albumfiletip.cpp \
+	                    albumfolderview.cpp \
+	                    albumhistory.cpp \
+	                    albumlister.cpp \
+	                    albummanager.cpp \
+	                    albumpropsedit.cpp \
+	                    albumsettings.cpp \
+	                    albumthumbnailloader.cpp \
+	                    albumwidgetstack.cpp \
+	                    batchthumbsgenerator.cpp \
+	                    cameradragobject.cpp \
+	                    cameralist.cpp \
+	                    cameratype.cpp \
+	                    datefolderview.cpp \
+	                    dcopiface.cpp \
+	                    dcopiface.skel \
+	                    digikamapp.cpp \
+	                    digikamfirstrun.cpp \
+	                    digikamview.cpp \
+	                    dio.cpp \
+	                    dragobjects.cpp \
+	                    firstrun.cpp \
+	                    folderitem.cpp \
+	                    folderview.cpp \
+	                    iconview.cpp \
+	                    icongroupitem.cpp \
+	                    iconitem.cpp \
+	                    imageattributeswatch.cpp \
+	                    imageinfo.cpp \
+	                    imagepreviewwidget.cpp \
+	                    imagepreviewjob.cpp \
+	                    kdateedit.cpp \
+	                    kdatepickerpopup.cpp \
+	                    kipiinterface.cpp \
+	                    monthwidget.cpp \
+	                    pixmapmanager.cpp \
+	                    ratingwidget.cpp \
+	                    scanlib.cpp \
+	                    searchadvanceddialog.cpp \
+	                    searchfolderview.cpp \
+	                    searchquickdialog.cpp \
+	                    searchresultsview.cpp \
+	                    searchresultsitem.cpp \
+	                    searchwidgets.cpp \
+	                    syncjob.cpp \
+	                    tagcreatedlg.cpp \
+	                    tagfilterview.cpp \
+	                    tagfolderview.cpp \
+	                    tagspopupmenu.cpp \
+	                    upgradedb_sqlite2tosqlite3.cpp 
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
