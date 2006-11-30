@@ -28,10 +28,10 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
        
 lib_LTLIBRARIES = libdigikam.la
 
-# NOTE from Gilles (30-11-06): kdatetimeedit.cpp must be placed on the top of source file list 
+# NOTE from Gilles (30-11-06): kdateedit.cpp must be placed on the top of source file list 
 # to unbreak compilation with './configure -enable-final' option. I suspect a problem with 
 # X11 header included into albumfolderview.cpp.
-libdigikam_la_SOURCES = kdatetimeedit.cpp \
+libdigikam_la_SOURCES = kdateedit.cpp \
 	                    album.cpp \
 	                    albumdb.cpp \
 	                    albumdb_sqlite2.cpp \
@@ -70,7 +70,7 @@ libdigikam_la_SOURCES = kdatetimeedit.cpp \
 	                    imageinfo.cpp \
 	                    imagepreviewwidget.cpp \
 	                    imagepreviewjob.cpp \
-	                    kdateedit.cpp \
+	                    kdatetimeedit.cpp \
 	                    kdatepickerpopup.cpp \
 	                    kipiinterface.cpp \
 	                    monthwidget.cpp \
