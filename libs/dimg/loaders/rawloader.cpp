@@ -106,14 +106,14 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // if there is progress which does not stay at a fixed value.
     // So we make up some progress (0% - 90%), using the file size as an indicator how long it might take.
     QTime dcrawStartTime = QTime::currentTime();
-    int fileSize = QFileInfo(m_filePath).size();
+    int fileSize         = QFileInfo(m_filePath).size();
+    
     // This is the magic number that describes how fast the function grows
     // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
     // So this is a number that works well on my computer.
-    double K50 = 3000.0*fileSize;
+    double K50         = 3000.0*fileSize;
     int checkpointTime = 0;
-
-    int checkpoint = 0;
+    int checkpoint     = 0;
 
     // The shuttingDown is a hack needed to prevent hanging when this KProcess-based loader
     // is waiting for the process to finish, but the main thread is waiting
@@ -142,7 +142,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
         else if (m_dataPos > checkpoint)
         {
             // While receiving data, progress from 90% to 95%
-            int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            int size    = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += granularity(observer, size, 0.05);
             if (observer)
                 observer->progressInfo(m_image, 0.9 + 0.05*(((float)m_dataPos)/((float)size)) );
@@ -238,7 +238,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
             }
         }
 
-        imageData()  = image;
+        imageData() = image;
     }
 
     delete [] m_data;
@@ -448,7 +448,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 
 #ifdef ENABLE_DEBUG_MESSAGES
         DDebug() << "Parsed PPM header: width " << m_width << " height " 
-                  << m_height << " rgbmax " << m_rgbmax << endl;
+                 << m_height << " rgbmax " << m_rgbmax << endl;
 #endif
 
         // cut header from data for memcpy below
