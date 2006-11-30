@@ -1,28 +1,28 @@
-KDE_OPTIONS = nofinal
+#KDE_OPTIONS = nofinal
 METASOURCES = AUTO  
 
 INCLUDES = -I$(top_srcdir)/digikam/sqlite \
-	   -I$(top_srcdir)/digikam/libs/histogram \
-	   -I$(top_srcdir)/digikam/libs/levels \
-	   -I$(top_srcdir)/digikam/libs/curves \
-	   -I$(top_srcdir)/digikam/libs/themeengine \
-	   -I$(top_srcdir)/digikam/libs/widgets/common \
-	   -I$(top_srcdir)/digikam/libs/thumbbar \
-	   -I$(top_srcdir)/digikam/libs/jpegutils \
-	   -I$(top_srcdir)/digikam/libs/dcraw \
-	   -I$(top_srcdir)/digikam/libs/dimg \
-	   -I$(top_srcdir)/digikam/libs/dmetadata \
-	   -I$(top_srcdir)/digikam/libs/imageproperties \
-	   -I$(top_srcdir)/digikam/libs/threadimageio \
-	   -I$(top_srcdir)/digikam/libs/dialogs \
-	   -I$(top_srcdir)/digikam/utilities/cameragui \
-	   -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
-	   -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
-	   -I$(top_srcdir)/digikam/utilities/splashscreen \
-	   -I$(top_srcdir)/digikam/utilities/setup \
-	   -I$(top_srcdir)/digikam/ \
-	   -I$(top_builddir)/digikam/libs/dialogs \
-	   $(LIBKIPI_CFLAGS) $(all_includes) 
+	       -I$(top_srcdir)/digikam/libs/histogram \
+	       -I$(top_srcdir)/digikam/libs/levels \
+	       -I$(top_srcdir)/digikam/libs/curves \
+	       -I$(top_srcdir)/digikam/libs/themeengine \
+	       -I$(top_srcdir)/digikam/libs/widgets/common \
+	       -I$(top_srcdir)/digikam/libs/thumbbar \
+	       -I$(top_srcdir)/digikam/libs/jpegutils \
+	       -I$(top_srcdir)/digikam/libs/dcraw \
+	       -I$(top_srcdir)/digikam/libs/dimg \
+	       -I$(top_srcdir)/digikam/libs/dmetadata \
+	       -I$(top_srcdir)/digikam/libs/imageproperties \
+	       -I$(top_srcdir)/digikam/libs/threadimageio \
+	       -I$(top_srcdir)/digikam/libs/dialogs \
+	       -I$(top_srcdir)/digikam/utilities/cameragui \
+	       -I$(top_srcdir)/digikam/utilities/imageeditor/editor \
+	       -I$(top_srcdir)/digikam/utilities/imageeditor/canvas \
+	       -I$(top_srcdir)/digikam/utilities/splashscreen \
+	       -I$(top_srcdir)/digikam/utilities/setup \
+	       -I$(top_srcdir)/digikam/ \
+	       -I$(top_builddir)/digikam/libs/dialogs \
+	       $(LIBKIPI_CFLAGS) $(all_includes) 
 
 
 # -- shared digiKam library rules -----------------------------------------------
@@ -30,29 +30,29 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 lib_LTLIBRARIES = libdigikam.la
 
 libdigikam_la_SOURCES = firstrun.cpp albummanager.cpp album.cpp \
-			albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
-			albumlister.cpp dragobjects.cpp \
-			iconview.cpp icongroupitem.cpp iconitem.cpp \
-			digikamapp.cpp digikamview.cpp \
-			albumfolderview.cpp albumwidgetstack.cpp \
-			albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
-			albumpropsedit.cpp albumsettings.cpp \
-			cameralist.cpp cameratype.cpp cameradragobject.cpp \
-			kipiinterface.cpp tagcreatedlg.cpp \
-			albumfiletip.cpp tagspopupmenu.cpp \
-			syncjob.cpp albumhistory.cpp scanlib.cpp \
-			imageinfo.cpp imagepreviewwidget.cpp imagepreviewjob.cpp \
-			datefolderview.cpp pixmapmanager.cpp \
-			tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
-			searchfolderview.cpp dio.cpp \
-			searchresultsview.cpp searchresultsitem.cpp \
-			searchquickdialog.cpp searchadvanceddialog.cpp \
-			searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
-			kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
-			upgradedb_sqlite2tosqlite3.cpp \
-			ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
-			albumthumbnailloader.cpp batchthumbsgenerator.cpp \
-			dcopiface.cpp dcopiface.skel
+	                    albumitemhandler.cpp albumdb.cpp albumdb_sqlite2.cpp \
+	                    albumlister.cpp dragobjects.cpp \
+	                    iconview.cpp icongroupitem.cpp iconitem.cpp \
+	                    digikamapp.cpp digikamview.cpp \
+	                    albumfolderview.cpp albumwidgetstack.cpp \
+	                    albumiconview.cpp albumicongroupitem.cpp albumiconitem.cpp \
+	                    albumpropsedit.cpp albumsettings.cpp \
+	                    cameralist.cpp cameratype.cpp cameradragobject.cpp \
+	                    kipiinterface.cpp tagcreatedlg.cpp \
+	                    albumfiletip.cpp tagspopupmenu.cpp \
+	                    syncjob.cpp albumhistory.cpp scanlib.cpp \
+	                    imageinfo.cpp imagepreviewwidget.cpp imagepreviewjob.cpp \
+	                    datefolderview.cpp pixmapmanager.cpp \
+	                    tagfolderview.cpp tagfilterview.cpp monthwidget.cpp \
+	                    searchfolderview.cpp dio.cpp \
+	                    searchresultsview.cpp searchresultsitem.cpp \
+	                    searchquickdialog.cpp searchadvanceddialog.cpp \
+	                    searchwidgets.cpp kdateedit.cpp kdatetimeedit.cpp \
+	                    kdatepickerpopup.cpp folderview.cpp folderitem.cpp \
+	                    upgradedb_sqlite2tosqlite3.cpp \
+	                    ratingwidget.cpp digikamfirstrun.cpp imageattributeswatch.cpp \
+	                    albumthumbnailloader.cpp batchthumbsgenerator.cpp \
+	                    dcopiface.cpp dcopiface.skel
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
 		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(LIB_EXIV2) \
