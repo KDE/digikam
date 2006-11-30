@@ -40,8 +40,6 @@
 #include <qcstring.h>
 #include <qimage.h>
 #include <qtimer.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
 
 // KDE includes.
 
@@ -60,59 +58,23 @@
 namespace Digikam
 {
 
-class RAWLoaderPriv
-{
-public:
-
-    RAWLoaderPriv()
-    {
-        observer   = 0;
-        process    = 0;
-        queryTimer = 0;
-        running    = false;
-        normalExit = false;
-        data       = 0;
-        dataPos    = 0;
-        width      = 0;
-        height     = 0;
-        rgbmax     = 0;
-    }
-    
-    bool                running;
-    bool                normalExit;
-
-    uchar              *data;
-    
-    int                 dataPos;
-    int                 width;
-    int                 height;
-    int                 rgbmax;
-
-    QString             filePath;
-
-    QMutex              mutex;
-    
-    QWaitCondition      condVar;
-    
-    QTimer             *queryTimer;
-
-    KProcess           *process;
-    
-    DImgLoaderObserver *observer;
-
-    RawDecodingSettings rawDecodingSettings;
-};
-
 RAWLoader::RAWLoader(DImg* image, RawDecodingSettings rawDecodingSettings)
          : DImgLoader(image)
 {
-    d = new RAWLoaderPriv;
-    d->rawDecodingSettings = rawDecodingSettings;
-}
+    m_sixteenBit          = rawDecodingSettings.sixteenBitsImage;
+    m_rawDecodingSettings = rawDecodingSettings;
 
-RAWLoader::~RAWLoader()
-{
-    delete d;
+    m_observer            = 0;
+    m_process             = 0;
+    m_queryTimer          = 0;
+    m_running             = false;
+    m_normalExit          = false;
+    m_data                = 0;
+    m_dataPos             = 0;
+
+    m_width               = 0;
+    m_height              = 0;
+    m_rgbmax              = 0;
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
@@ -128,10 +90,10 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *observer)
 {
-    d->observer   = observer;
-    d->filePath   = filePath;
-    d->running    = true;
-    d->normalExit = false;
+    m_observer   = observer;
+    m_filePath   = filePath;
+    m_running    = true;
+    m_normalExit = false;
 
     // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
@@ -144,7 +106,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // if there is progress which does not stay at a fixed value.
     // So we make up some progress (0% - 90%), using the file size as an indicator how long it might take.
     QTime dcrawStartTime = QTime::currentTime();
-    int fileSize = QFileInfo(d->filePath).size();
+    int fileSize = QFileInfo(m_filePath).size();
     // This is the magic number that describes how fast the function grows
     // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
     // So this is a number that works well on my computer.
@@ -157,9 +119,9 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // is waiting for the process to finish, but the main thread is waiting
     // for the thread to finish and no KProcess events are delivered.
     // Remove when porting to Qt4.
-    while (d->running && !d->observer->isShuttingDown())
+    while (m_running && !m_observer->isShuttingDown())
     {
-        if (d->dataPos == 0)
+        if (m_dataPos == 0)
         {
             int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
             if (elapsedMsecs > checkpointTime)
@@ -177,55 +139,55 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
                 observer->progressInfo(m_image, 0.9*part );
             }
         }
-        else if (d->dataPos > checkpoint)
+        else if (m_dataPos > checkpoint)
         {
             // While receiving data, progress from 90% to 95%
-            int size = d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            int size = m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += granularity(observer, size, 0.05);
             if (observer)
-                observer->progressInfo(m_image, 0.9 + 0.05*(((float)d->dataPos)/((float)size)) );
+                observer->progressInfo(m_image, 0.9 + 0.05*(((float)m_dataPos)/((float)size)) );
         }
 
-        QMutexLocker lock(&d->mutex);
-        d->condVar.wait(&d->mutex, 10);
+        QMutexLocker lock(&m_mutex);
+        m_condVar.wait(&m_mutex, 10);
         //DDebug() << "Waiting for dcraw, is running " << process.isRunning() << endl;
     }
 
-    if (!d->normalExit)
+    if (!m_normalExit)
     {
-        delete [] d->data;
-        d->data = 0;
+        delete [] m_data;
+        m_data = 0;
         return false;
     }
 
     // -------------------------------------------------------------------
     // Get image data
 
-    if (d->rawDecodingSettings.sixteenBitsImage)       // 16 bits image
+    if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
-        uchar *image = new uchar[d->width*d->height*8];
+        uchar *image = new uchar[m_width*m_height*8];
 
         unsigned short *dst = (unsigned short *)image;
-        uchar          *src = d->data;
-        float fac           = 65535.0 / d->rgbmax;
+        uchar          *src = m_data;
+        float fac           = 65535.0 / m_rgbmax;
         checkpoint          = 0;
 
-        for (int h = 0; h < d->height; h++)
+        for (int h = 0; h < m_height; h++)
         {
 
             if (observer && h == checkpoint)
             {
-                checkpoint += granularity(observer, d->height, 0.1);
+                checkpoint += granularity(observer, m_height, 0.1);
                 if (!observer->continueQuery(m_image))
                 {
-                    delete [] d->data;
-                    d->data = 0;
+                    delete [] m_data;
+                    m_data = 0;
                     return false;
                 }
-                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)d->height)) );
+                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)m_height)) );
             }
 
-            for (int w = 0; w < d->width; w++)
+            for (int w = 0; w < m_width; w++)
             {
                 dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
                 dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
@@ -241,27 +203,27 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     }
     else        // 8 bits image
     {
-        uchar *image = new uchar[d->width*d->height*4];
+        uchar *image = new uchar[m_width*m_height*4];
         uchar *dst   = image;
-        uchar *src   = d->data;
+        uchar *src   = m_data;
         checkpoint   = 0;
 
-        for (int h = 0; h < d->height; h++)
+        for (int h = 0; h < m_height; h++)
         {
 
             if (observer && h == checkpoint)
             {
-                checkpoint += granularity(observer, d->height, 0.1);
+                checkpoint += granularity(observer, m_height, 0.1);
                 if (!observer->continueQuery(m_image))
                 {
-                    delete [] d->data;
-                    d->data = 0;
+                    delete [] m_data;
+                    m_data = 0;
                     return false;
                 }
-                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)d->height)) );
+                observer->progressInfo(m_image, 0.95 + 0.05*(((float)h)/((float)m_height)) );
             }
 
-            for (int w = 0; w < d->width; w++)
+            for (int w = 0; w < m_width; w++)
             {
                 // No need to adapt RGB components accordinly with rgbmax value because dcraw
                 // always return rgbmax to 255 in 8 bits/color/pixels.
@@ -279,13 +241,13 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
         imageData()  = image;
     }
 
-    delete [] d->data;
-    d->data = 0;
+    delete [] m_data;
+    m_data = 0;
 
     //----------------------------------------------------------
 
-    imageWidth()  = d->width;
-    imageHeight() = d->height;
+    imageWidth()  = m_width;
+    imageHeight() = m_height;
     imageSetAttribute("format", "RAW");
 
     return true;
@@ -298,38 +260,38 @@ void RAWLoader::customEvent(QCustomEvent *)
     startProcess();
 
     // set up timer to call continueQuery at regular intervals
-    if (d->running)
+    if (m_running)
     {
-        d->queryTimer = new QTimer;
-        connect(d->queryTimer, SIGNAL(timeout()),
+        m_queryTimer = new QTimer;
+        connect(m_queryTimer, SIGNAL(timeout()),
                 this, SLOT(slotContinueQuery()));
-        d->queryTimer->start(30);
+        m_queryTimer->start(30);
     }
 }
 
 void RAWLoader::startProcess()
 {
-    if (d->observer)
+    if (m_observer)
     {
-        if (!d->observer->continueQuery(m_image))
+        if (!m_observer->continueQuery(m_image))
         {
-            d->running    = false;
-            d->normalExit = false;
+            m_running    = false;
+            m_normalExit = false;
             return;
         }
     }
 
     // create KProcess and build argument list
 
-    d->process = new KProcess;
+    m_process = new KProcess;
 
-    connect(d->process, SIGNAL(processExited(KProcess *)),
+    connect(m_process, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotProcessExited(KProcess *)));
              
-    connect(d->process, SIGNAL(receivedStdout(KProcess *, char *, int)),
+    connect(m_process, SIGNAL(receivedStdout(KProcess *, char *, int)),
             this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
              
-    connect(d->process, SIGNAL(receivedStderr(KProcess *, char *, int)),
+    connect(m_process, SIGNAL(receivedStderr(KProcess *, char *, int)),
             this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
 
     // run dcraw with options:
@@ -349,62 +311,62 @@ void RAWLoader::startProcess()
     // -o : Use ICC profiles to define the output colorspace.
     // -h : Output a half-size color image. Twice as fast as -q 0.
 
-    *d->process << DcrawBinary::instance()->path();
-    *d->process << "-c";
+    *m_process << DcrawBinary::instance()->path();
+    *m_process << "-c";
 
-    if (d->rawDecodingSettings.sixteenBitsImage)
-        *d->process << "-4";
+    if (m_rawDecodingSettings.sixteenBitsImage)
+        *m_process << "-4";
 
-    if (d->rawDecodingSettings.halfSizeColorImage)
-        *d->process << "-h";
+    if (m_rawDecodingSettings.halfSizeColorImage)
+        *m_process << "-h";
 
-    if (d->rawDecodingSettings.cameraColorBalance)
-        *d->process << "-w";
+    if (m_rawDecodingSettings.cameraColorBalance)
+        *m_process << "-w";
 
-    if (d->rawDecodingSettings.automaticColorBalance)
-        *d->process << "-a";
+    if (m_rawDecodingSettings.automaticColorBalance)
+        *m_process << "-a";
 
-    if (d->rawDecodingSettings.RGBInterpolate4Colors)
-        *d->process << "-f";
+    if (m_rawDecodingSettings.RGBInterpolate4Colors)
+        *m_process << "-f";
 
-    if (d->rawDecodingSettings.SuperCCDsecondarySensor)
-        *d->process << "-s";
+    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
+        *m_process << "-s";
 
-    *d->process << "-H";
-    *d->process << QString::number(d->rawDecodingSettings.unclipColors);
+    *m_process << "-H";
+    *m_process << QString::number(m_rawDecodingSettings.unclipColors);
 
-    *d->process << "-b";
-    *d->process << QString::number(d->rawDecodingSettings.brightness);
+    *m_process << "-b";
+    *m_process << QString::number(m_rawDecodingSettings.brightness);
 
-    *d->process << "-q";
-    *d->process << QString::number(d->rawDecodingSettings.RAWQuality);
+    *m_process << "-q";
+    *m_process << QString::number(m_rawDecodingSettings.RAWQuality);
 
-    if (d->rawDecodingSettings.enableNoiseReduction)
+    if (m_rawDecodingSettings.enableNoiseReduction)
     {
-        *d->process << "-B";
-        *d->process << QString::number(d->rawDecodingSettings.NRSigmaDomain);
-        *d->process << QString::number(d->rawDecodingSettings.NRSigmaRange);
+        *m_process << "-B";
+        *m_process << QString::number(m_rawDecodingSettings.NRSigmaDomain);
+        *m_process << QString::number(m_rawDecodingSettings.NRSigmaRange);
     }
 
-    *d->process << "-o";
-    *d->process << QString::number( d->rawDecodingSettings.outputColorSpace );
+    *m_process << "-o";
+    *m_process << QString::number( m_rawDecodingSettings.outputColorSpace );
 
     // -----------------------------------------------------------------
     
-    *d->process << QFile::encodeName( d->filePath );
+    *m_process << QFile::encodeName( m_filePath );
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    DDebug() << "Running RAW decoding command " << d->process->args() << endl;
+    DDebug() << "Running RAW decoding command " << m_process->args() << endl;
 #endif
 
     // actually start the process
-    if ( !d->process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
+    if ( !m_process->start(KProcess::NotifyOnExit, KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
     {
         DError() << "Failed to start RAW decoding" << endl;
-        delete d->process;
-        d->process    = 0;
-        d->running    = false;
-        d->normalExit = false;
+        delete m_process;
+        m_process    = 0;
+        m_running    = false;
+        m_normalExit = false;
         return;
     }
 }
@@ -413,13 +375,13 @@ void RAWLoader::slotContinueQuery()
 {
     // this is called from the timer
 
-    if (d->observer)
+    if (m_observer)
     {
-        if (!d->observer->continueQuery(m_image))
+        if (!m_observer->continueQuery(m_image))
         {
-            d->process->kill();
-            d->process->wait();
-            d->normalExit = false;
+            m_process->kill();
+            m_process->wait();
+            m_normalExit = false;
         }
     }
 }
@@ -428,19 +390,19 @@ void RAWLoader::slotProcessExited(KProcess *)
 {
     // set variables, clean up, wake up loader thread
 
-    QMutexLocker lock(&d->mutex);
-    d->running    = false;
-    d->normalExit = d->process->normalExit() && d->process->exitStatus() == 0; 
-    delete d->process;
-    d->process    = 0;
-    delete d->queryTimer;
-    d->queryTimer = 0;
-    d->condVar.wakeAll();
+    QMutexLocker lock(&m_mutex);
+    m_running    = false;
+    m_normalExit = m_process->normalExit() && m_process->exitStatus() == 0; 
+    delete m_process;
+    m_process    = 0;
+    delete m_queryTimer;
+    m_queryTimer = 0;
+    m_condVar.wakeAll();
 }
 
 void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 {
-    if (!d->data)
+    if (!m_data)
     {
         // first data packet:
         // Parse PPM header to find out size and allocate buffer
@@ -452,7 +414,7 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         if (magic != "P6") 
         {
             DError() << "Cannot parse header from RAW decoding: Magic is " << magic << endl;
-            d->process->kill();
+            m_process->kill();
             return;
         }
 
@@ -476,17 +438,17 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         if (splitlist.size() < 3 || sizes.size() < 2)
         {
             DError() << "Cannot parse header from RAW decoding: Could not split" << endl;
-            d->process->kill();
+            m_process->kill();
             return;
         }
 
-        d->width  = sizes[0].toInt();
-        d->height = sizes[1].toInt();
-        d->rgbmax = splitlist[2].toInt();
+        m_width  = sizes[0].toInt();
+        m_height = sizes[1].toInt();
+        m_rgbmax = splitlist[2].toInt();
 
 #ifdef ENABLE_DEBUG_MESSAGES
-        DDebug() << "Parsed PPM header: width " << d->width << " height " 
-                  << d->height << " rgbmax " << d->rgbmax << endl;
+        DDebug() << "Parsed PPM header: width " << m_width << " height " 
+                  << m_height << " rgbmax " << m_rgbmax << endl;
 #endif
 
         // cut header from data for memcpy below
@@ -494,13 +456,13 @@ void RAWLoader::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         buflen -= i;
 
         // allocate buffer
-        d->data    = new uchar[d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
-        d->dataPos = 0;
+        m_data    = new uchar[m_width * m_height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
+        m_dataPos = 0;
     }
 
     // copy data to buffer
-    memcpy(d->data + d->dataPos, buffer, buflen);
-    d->dataPos += buflen;
+    memcpy(m_data + m_dataPos, buffer, buflen);
+    m_dataPos += buflen;
 }
 
 void RAWLoader::slotReceivedStderr(KProcess *, char *buffer, int buflen)
@@ -517,7 +479,7 @@ bool RAWLoader::save(const QString&, DImgLoaderObserver *)
 
 bool RAWLoader::sixteenBit() const
 {
-    return d->rawDecodingSettings.sixteenBitsImage;
+    return m_sixteenBit;
 }
 
 }  // NameSpace Digikam
