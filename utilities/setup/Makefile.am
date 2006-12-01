@@ -1,3 +1,6 @@
+# Require by libgphoto2 header.
+KDE_OPTIONS = nofinal
+
 METASOURCES = AUTO
 
 INCLUDES= -I$(top_srcdir)/digikam/digikam \
@@ -24,6 +27,4 @@ libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp \
 	                          setupicc.cpp setupslideshow.cpp dcrawsettingswidget.cpp 
 
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
-
-KDE_OPTIONS=nofinal
 

@@ -28,7 +28,6 @@ showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 	               $(top_builddir)/digikam/libs/imageproperties/libimagepropertiesshowfoto.la \
 	               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/canvas/libdimgcanvas.la \
-	               $(top_builddir)/digikam/utilities/imageeditor/editor/libdimgeditor.la \
 	               $(top_builddir)/digikam/utilities/imageeditor/editor/libshowfoto.la \
 	               $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
