@@ -21,8 +21,6 @@ kde_services_DATA = digikamimageplugin_adjustcurves.desktop
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/digikamimageplugin_adjustcurves.pot
 
-KDE_OPTIONS=nofinal
-
 rcdir = $(kde_datadir)/digikam
 rc_DATA = digikamimageplugin_adjustcurves_ui.rc
 
