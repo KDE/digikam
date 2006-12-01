@@ -434,7 +434,7 @@ void SetupICC::readSettings()
     else
         d->defaultAskICC->setChecked(true);
 
-    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", false));
+    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", true));
 
     slotToggledWidgets(d->enableColorManagement->isChecked());
     slotToggleManagedView(d->managedView->isChecked());
