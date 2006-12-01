@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-13
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-07-13
  * Description : image editor printing interface.
  *
  * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by F.J. Cruz
  *
  * Original printing code from Kuickshow program.
  * Copyright (C) 2002 Carsten Pfeiffer <pfeiffer at kde.org>
@@ -68,6 +70,7 @@
 #include "editorwindow.h"
 #include "icctransform.h"
 #include "imageprint.h"
+#include "imageprint.moc"
 
 namespace Digikam
 {
@@ -285,11 +288,11 @@ QString ImagePrint::minimizeString( QString text, const QFontMetrics& metrics,
 
 void ImagePrint::readSettings()
 {
-     KConfig* config = kapp->config();
+    KConfig* config = kapp->config();
 
     config->setGroup("Color Management");
 
-    d->inProfilePath = config->readPathEntry("InProfileFile");
+    d->inProfilePath     = config->readPathEntry("WorkSpaceProfile");
     d->outputProfilePath = config->readPathEntry("ProofProfileFile");
 }
 
@@ -512,4 +515,3 @@ void ImageEditorPrintDialogPage::slotAlertSettings( bool t)
 
 }  // namespace Digikam
 
-#include "imageprint.moc"

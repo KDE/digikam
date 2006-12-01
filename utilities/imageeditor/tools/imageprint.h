@@ -1,9 +1,11 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-07-13
+ * Authors: F.J. Cruz <fj.cruz@supercable.es>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ * Date   : 2004-07-13
  * Description : image editor printing interface.
  *
  * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2006 by F.J. Cruz
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
