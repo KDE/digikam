@@ -531,7 +531,15 @@ void SetupICC::fillCombos(const QString& path, bool report)
     parseProfilesfromDir(digiKamFiles);
 
     d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
-    
+    /*
+    if (d->inICCPath.keys().isEmpty())
+    {
+        // See B.K.O #131947 : if there is no input icc profiles available, 
+        // the CM is broken and cannot be used. 
+        d->mainDialog->enableButtonOK(false);
+        return;
+    }*/
+
     d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
     {
@@ -544,8 +552,8 @@ void SetupICC::fillCombos(const QString& path, bool report)
     }
     
     d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
-    
     d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
+    d->mainDialog->enableButtonOK(true);
 }
 
 bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
@@ -576,7 +584,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
                         
                         DDebug() << "ICC file: " << fileName << " ==> Input device class (" 
-                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
@@ -594,7 +602,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                         }
     
                         DDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
-                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
@@ -606,7 +614,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                             d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
     
                         DDebug() << "ICC file: " << fileName << " ==> Output device class (" 
-                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
@@ -624,14 +632,14 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
                         }
     
                         DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
-                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         findIccFiles = true;
                         break;
                     }
                     default:
                     {
                         DDebug() << "ICC file: " << fileName << " ==> UNKNOW device class (" 
-                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
                         break;
                     }
                 }
