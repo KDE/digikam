@@ -1202,7 +1202,10 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
     // Without embedded profile
     if (img.getICCProfil().isNull())
     {
-        monitorICCtrans->apply( img );
+        QByteArray fakeProfile; 
+        monitorICCtrans->apply(img, fakeProfile, monitorICCtrans->getRenderingIntent(),
+                               monitorICCtrans->getUseBPC(), false, 
+                               monitorICCtrans->inputProfile().isNull()); 
     }
     // With embedded profile.
     else

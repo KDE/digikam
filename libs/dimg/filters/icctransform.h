@@ -50,6 +50,9 @@ public:
     void getTransformType(bool do_proof_profile);
     void getEmbeddedProfile(const DImg& image);
     int  getRenderingIntent();
+    bool getUseBPC();
+
+    bool hasInputProfile();
     bool hasOutputProfile();
 
     QByteArray embeddedProfile() const;

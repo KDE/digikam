@@ -349,7 +349,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h)
         QPixmap      pixImage;
         IccTransform monitorICCtrans;
         ICCSettingsContainer* iccSettings = DImgInterface::instance()->getICCSettings();
-        monitorICCtrans.setProfiles(iccSettings->inputSetting, iccSettings->monitorSetting);
+        monitorICCtrans.setProfiles(iccSettings->workspaceSetting, iccSettings->monitorSetting);
 
         if (iccSettings)
         {

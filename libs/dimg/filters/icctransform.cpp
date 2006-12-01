@@ -53,14 +53,12 @@ public:
 
     IccTransformPriv()
     {
-        has_output_profile   = false;
         has_embedded_profile = false;
         do_proof_profile     = false;
     }
 
     bool       do_proof_profile;
     bool       has_embedded_profile; 
-    bool       has_output_profile; 
 
     QByteArray embedded_profile;
     QByteArray input_profile;
@@ -79,9 +77,14 @@ IccTransform::~IccTransform()
     delete d;
 }
 
+bool IccTransform::hasInputProfile()
+{
+    return !(d->input_profile.isEmpty());
+}
+
 bool IccTransform::hasOutputProfile()
 {
-    return d->has_output_profile;
+    return !(d->output_profile.isEmpty());
 }
 
 QByteArray IccTransform::embeddedProfile() const
@@ -140,11 +143,18 @@ int IccTransform::getRenderingIntent()
     return config->readNumEntry("RenderingIntent", 0);
 }
 
+bool IccTransform::getUseBPC()
+{
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management");
+    return config->readBoolEntry("BPCAlgorithm", false);
+}
+
 QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
 {
     QFile file(filePath);
     if ( !file.open(IO_ReadOnly) )
-        return false;
+        return QByteArray();
 
     QByteArray data(file.size());
     QDataStream stream( &file );
@@ -155,40 +165,39 @@ QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
 
 void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile)
 {
-    d->input_profile      = loadICCProfilFile(input_profile);
-    d->output_profile     = loadICCProfilFile(output_profile);
-    d->has_output_profile = true;
+    d->input_profile  = loadICCProfilFile(input_profile);
+    d->output_profile = loadICCProfilFile(output_profile);
 }
 
 void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile, 
                                const QString& proof_profile)
 {
-    d->input_profile      = loadICCProfilFile(input_profile);
-    d->output_profile     = loadICCProfilFile(output_profile);
-    d->proof_profile      = loadICCProfilFile(proof_profile);
-    d->has_output_profile = true;
+    d->input_profile  = loadICCProfilFile(input_profile);
+    d->output_profile = loadICCProfilFile(output_profile);
+    d->proof_profile  = loadICCProfilFile(proof_profile);
 }
 
 void IccTransform::setProfiles(const QString& output_profile)
 {
-    d->output_profile     = loadICCProfilFile(output_profile);
-    d->has_output_profile = true;
+    d->output_profile = loadICCProfilFile(output_profile);
 }
 
 void IccTransform::setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof)
 {
     if (forProof)
     {
-        d->output_profile     = loadICCProfilFile(output_profile);
-        d->proof_profile      = loadICCProfilFile(proof_profile);
-        d->has_output_profile = true;
+        d->output_profile = loadICCProfilFile(output_profile);
+        d->proof_profile  = loadICCProfilFile(proof_profile);
     }
 }
 
 QString IccTransform::getEmbeddedProfileDescriptor()
 {
-    if (d->embedded_profile.isEmpty()) return QString();
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(), (DWORD)d->embedded_profile.size());
+    if (d->embedded_profile.isEmpty())
+        return QString();
+
+    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(),
+                                                   (DWORD)d->embedded_profile.size());
     QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
     cmsCloseProfile(tmpProfile);
     return embeddedProfileDescriptor;

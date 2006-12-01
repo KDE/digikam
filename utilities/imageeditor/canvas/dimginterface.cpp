@@ -221,7 +221,7 @@ void DImgInterface::resetValues()
 void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->cmSettings = cmSettings;
-    d->monitorICCtrans.setProfiles(d->cmSettings->inputSetting, d->cmSettings->monitorSetting);
+    d->monitorICCtrans.setProfiles(d->cmSettings->workspaceSetting, d->cmSettings->monitorSetting);
 }
 
 void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
@@ -263,11 +263,11 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                 // With RAW files, we load the Color Management image plugin.
                 emit signalColorManagementTool();        
             }
-            else if (QFile::exists(d->cmSettings->workspaceSetting) && 
-                     QFile::exists(d->cmSettings->inputSetting))
+            else if (QFile::exists(d->cmSettings->workspaceSetting))
             {
                 IccTransform trans;
-    
+                QByteArray fakeProfile;
+
                 // First possibility: image has no embedded profile
                 if(d->image.getICCProfil().isNull())
                 {
@@ -275,9 +275,14 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                     if (d->cmSettings->askOrApplySetting)
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                        trans.setProfiles( QFile::encodeName(d->cmSettings->inputSetting),
-                                           QFile::encodeName(d->cmSettings->workspaceSetting));
-                        trans.apply( d->image );
+                        trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
+                                          QFile::encodeName(d->cmSettings->workspaceSetting));
+
+                        // NOTE: If Input color profile do not exist, using built-in sRGB intead.
+                        trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
+                                    d->cmSettings->BPCSetting, false, 
+                                    QFile::exists(d->cmSettings->inputSetting)); 
+
                         d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                         if (d->parent) d->parent->unsetCursor();
                     }
@@ -295,7 +300,12 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                         {
                             case QDialog::Accepted:
                                 if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                                trans.apply( d->image );
+        
+                                // NOTE: If Input color profile do not exist, using built-in sRGB intead.
+                                trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
+                                            d->cmSettings->BPCSetting, false, 
+                                            QFile::exists(d->cmSettings->inputSetting)); 
+
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent) d->parent->unsetCursor();
                             break;
@@ -318,7 +328,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                     {
                         if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
                         trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                        trans.apply( d->image );
+                        trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
+                                    d->cmSettings->BPCSetting, false, false); 
                         if (d->parent) d->parent->unsetCursor();
                     }
                     else
@@ -341,7 +352,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
                             {
                                 case QDialog::Accepted:
                                     if (d->parent) d->parent->setCursor( KCursor::waitCursor() );
-                                    trans.apply( d->image );
+                                    trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
+                                                d->cmSettings->BPCSetting, false, false); 
                                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                     if (d->parent) d->parent->unsetCursor();
                                 break;
@@ -358,7 +370,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
             }
             else
             {
-                QString message = i18n("ICC profiles path seems to be invalid. "
+                QString message = i18n("Cannot find ICC color-space profile file."
+                                       "ICC profiles path seems to be invalid. "
                                        "No color transform will be done. "
                                        "Please, check the color management "
                                        "configuration it in digiKam setup.");
