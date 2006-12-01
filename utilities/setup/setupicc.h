@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- *         F.J. Cruz <fj.cruz@supercable.es>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
@@ -18,7 +18,6 @@
  * GNU General Public License for more details.
  * 
  * ============================================================ */
-
 
 #ifndef SETUPICC_H
 #define SETUPICC_H
@@ -73,7 +72,6 @@ private slots:
 private:
 
     SetupICCPriv* d;
-
 };
 
 }  // namespace Digikam

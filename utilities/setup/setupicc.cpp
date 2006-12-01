@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net> 
- *         F.J. Cruz <fj.cruz@supercable.es>
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net> 
+ *          F.J. Cruz <fj.cruz@supercable.es>
  * Date  : 2005-11-24
  * Description : ICC profils setup tab.
  * 
@@ -556,83 +556,88 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList* files)
     if (files)
     {
         QFileInfoListIterator it(*files);
-        QFileInfo *fileInfo;
+        QFileInfo *fileInfo=0;
 
         while ((fileInfo = it.current()) != 0)
         {
-            QString fileName = fileInfo->filePath();
-            tmpProfile = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
-            QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-
-            switch ((int)cmsGetDeviceClass(tmpProfile))
-            {
-                case icSigInputClass:
-                    
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                        d->inICCPath.insert(fileName, fileName);
-                    else
-                        d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                    
-                    DDebug() << "ICC file: " << fileName << " ==> Input device class (" 
-                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
-                    findIccFiles = true;
-                    break;
-                
-                case icSigDisplayClass:
-                    
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+            if (fileInfo->isFile() && fileInfo->isReadable())
+            { 
+                QString fileName = fileInfo->filePath();
+                tmpProfile       = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
+                QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
+    
+                switch ((int)cmsGetDeviceClass(tmpProfile))
+                {
+                    case icSigInputClass:
                     {
-                        d->monitorICCPath.insert(fileName, fileName);
-                        d->workICCPath.insert(fileName, fileName);
+                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                            d->inICCPath.insert(fileName, fileName);
+                        else
+                            d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        
+                        DDebug() << "ICC file: " << fileName << " ==> Input device class (" 
+                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        findIccFiles = true;
+                        break;
                     }
-                    else
+                    case icSigDisplayClass:
+                    {    
+                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                        {
+                            d->monitorICCPath.insert(fileName, fileName);
+                            d->workICCPath.insert(fileName, fileName);
+                        }
+                        else
+                        {
+                            d->monitorICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                            d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        }
+    
+                        DDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
+                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        findIccFiles = true;
+                        break;
+                    }
+                    case icSigOutputClass:
                     {
-                        d->monitorICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                        d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                            d->proofICCPath.insert(fileName, fileName);
+                        else
+                            d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+    
+                        DDebug() << "ICC file: " << fileName << " ==> Output device class (" 
+                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        findIccFiles = true;
+                        break;
                     }
-
-                    DDebug() << "ICC file: " << fileName << " ==> Monitor device class (" 
-                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
-                    findIccFiles = true;
-                    break;
-                
-                case icSigOutputClass:
-                
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                        d->proofICCPath.insert(fileName, fileName);
-                    else
-                        d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-
-                    DDebug() << "ICC file: " << fileName << " ==> Output device class (" 
-                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
-                    findIccFiles = true;
-                    break;
-                
-                case icSigColorSpaceClass:
-                
-                    if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                    case icSigColorSpaceClass:
                     {
-                        d->inICCPath.insert(fileName, fileName);
-                        d->workICCPath.insert(fileName, fileName);
+                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
+                        {
+                            d->inICCPath.insert(fileName, fileName);
+                            d->workICCPath.insert(fileName, fileName);
+                        }
+                        else
+                        {
+                            d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                            d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        }
+    
+                        DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
+                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        findIccFiles = true;
+                        break;
                     }
-                    else
+                    default:
                     {
-                        d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                        d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
+                        DDebug() << "ICC file: " << fileName << " ==> UNKNOW device class (" 
+                                << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                        break;
                     }
-
-                    DDebug() << "ICC file: " << fileName << " ==> WorkingSpace device class (" 
-                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
-                    findIccFiles = true;
-                    break;
-            
-                default:
-                    DDebug() << "ICC file: " << fileName << " ==> UNKNOW device class (" 
-                              << cmsGetDeviceClass(tmpProfile) << ")" << endl;
-                    break;
+                }
+    
+                cmsCloseProfile(tmpProfile);
             }
-
-            cmsCloseProfile(tmpProfile);
             ++it;
         }
     }
