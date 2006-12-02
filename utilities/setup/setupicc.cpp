@@ -223,9 +223,10 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     d->managedView = new QCheckBox(d->profilesGB);
     d->managedView->setText(i18n("Use color managed view (warning: slow)"));
-    QWhatsThis::add( d->managedView, i18n("<p>You have to use this option if " 
+    QWhatsThis::add( d->managedView, i18n("<p>Turn on this option if " 
                      "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
-                     "Image Editor window. Warning: this option can take a while to render "
+                     "Image Editor window with a color correction adapted to your monitor. "
+                     "Warning: this option can take a while to render "
                      "pictures on the screen, especially with a slow computer.</p>"));
 
     d->monitorIcon       = new QLabel(d->profilesGB);
@@ -233,9 +234,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
     d->monitorProfiles   = new QLabel(i18n("Monitor:"), d->profilesGB);
     d->monitorProfilesKC = new SqueezedComboBox(d->profilesGB);
     d->monitorProfiles->setBuddy(d->monitorProfilesKC);
-    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>You must select the profile for your monitor. "
-                     "You need to toggle on <b>Use color managed view</b> option from "
-                     "the Advanced Settings pannel to use this profile.</p>"));
+    QWhatsThis::add( d->monitorProfilesKC, i18n("<p>Select here the color profile for your monitor. "
+                     "You need to toggle on <b>Use color managed view</b> option to use this profile.</p>"));
     d->infoMonitorProfiles = new QPushButton(i18n("Info..."), d->profilesGB);
     QWhatsThis::add( d->infoMonitorProfiles, i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
