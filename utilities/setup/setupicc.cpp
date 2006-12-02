@@ -530,15 +530,6 @@ void SetupICC::fillCombos(const QString& path, bool report)
     DDebug() << "Scanning ICC profiles include with digiKam: " << digiKamProfilesPath << endl;
     parseProfilesfromDir(digiKamFiles);
 
-    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
-    /*
-    if (d->inICCPath.keys().isEmpty())
-    {
-        // See B.K.O #131947 : if there is no input icc profiles available, 
-        // the CM is broken and cannot be used. 
-        d->mainDialog->enableButtonOK(false);
-        return;
-    }*/
 
     d->monitorProfilesKC->insertStringList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
@@ -551,8 +542,18 @@ void SetupICC::fillCombos(const QString& path, bool report)
         d->managedView->setEnabled(true);
     }
     
-    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
+    d->inProfilesKC->insertStringList(d->inICCPath.keys(), 0);
     d->proofProfilesKC->insertStringList(d->proofICCPath.keys(), 0);
+
+    d->workProfilesKC->insertStringList(d->workICCPath.keys(), 0);
+    if (d->workICCPath.keys().isEmpty())
+    {
+        // If there is no workspace icc profiles available, 
+        // the CM is broken and cannot be used. 
+        d->mainDialog->enableButtonOK(false);
+        return;
+    }
+
     d->mainDialog->enableButtonOK(true);
 }
 
