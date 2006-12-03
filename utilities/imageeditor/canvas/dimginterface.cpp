@@ -370,7 +370,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
             }
             else
             {
-                QString message = i18n("Cannot find ICC color-space profile file."
+                QString message = i18n("Cannot find ICC color-space profile file. "
                                        "ICC profiles path seems to be invalid. "
                                        "No color transform will be done. "
                                        "Please, check the color management "
