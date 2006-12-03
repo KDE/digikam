@@ -55,7 +55,6 @@ private:
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
-    void restoreSettings();
     bool parseProfilesfromDir(const QFileInfoList* files);
 
 private slots:
