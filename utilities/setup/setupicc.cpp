@@ -377,6 +377,8 @@ SetupICC::SetupICC(QWidget* parent, KDialogBase* dialog )
 
     adjustSize();
     readSettings();
+    slotToggledWidgets(d->enableColorManagement->isChecked());
+    slotToggleManagedView(d->managedView->isChecked());
 }
 
 SetupICC::~SetupICC()
@@ -441,33 +443,6 @@ void SetupICC::readSettings()
         d->defaultAskICC->setChecked(true);
 
     d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", true));
-
-    slotToggledWidgets(d->enableColorManagement->isChecked());
-    slotToggleManagedView(d->managedView->isChecked());
-    fillCombos(d->defaultPathKU->url(), false);
-
-    d->workProfilesKC->setCurrentItem(config->readNumEntry("WorkSpaceProfile", 0));
-    d->monitorProfilesKC->setCurrentItem(config->readNumEntry("MonitorProfile", 0));
-    d->inProfilesKC->setCurrentItem(config->readNumEntry("InProfile", 0));
-    d->proofProfilesKC->setCurrentItem(config->readNumEntry("ProofProfile", 0));
-}
-
-void SetupICC::restoreSettings()
-{
-    KConfig* config = kapp->config();
-    config->setGroup("Color Management");
-
-    d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
-    d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
-    d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
-    d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
-
-    if (config->readBoolEntry("BehaviourICC"))
-        d->defaultApplyICC->setChecked(true);
-    else
-        d->defaultAskICC->setChecked(true);
- 
-    d->cmToolInRawLoading->setChecked(config->readBoolEntry("CMInRawLoading", false));
 
     fillCombos(d->defaultPathKU->url(), false);
 
@@ -668,7 +643,10 @@ void SetupICC::slotToggledWidgets(bool t)
     d->advancedSettingsGB->setEnabled(t);
 
     if (t)
-        restoreSettings();
+    {
+        readSettings();
+        slotToggleManagedView(d->managedView->isChecked());
+    }
     else
         d->mainDialog->enableButtonOK(true);
 }
