@@ -1365,6 +1365,13 @@ void Canvas::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
+void Canvas::setICCSettings(ICCSettingsContainer *cmSettings)
+{
+    d->im->setICCSettings(cmSettings);
+    d->tileCache.clear();    
+    viewport()->update();
+}
+
 void Canvas::setExifOrient(bool exifOrient)
 {
     d->im->setExifOrient(exifOrient);

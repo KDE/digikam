@@ -85,6 +85,7 @@ public:
     void  resizeImage(int w, int h);
 
     void  setBackgroundColor(const QColor& color);
+    void  setICCSettings(ICCSettingsContainer *cmSettings);
 
     void  setExifOrient(bool exifOrient);
 
