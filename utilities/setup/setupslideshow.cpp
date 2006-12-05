@@ -68,17 +68,17 @@ SetupSlideShow::SetupSlideShow(QWidget* parent )
     d->delayInput = new KIntNumInput(5, parent);
     d->delayInput->setRange(1, 3600, 1, true );
     d->delayInput->setLabel( i18n("&Delay between images:"), AlignLeft|AlignTop );
-    QWhatsThis::add( d->delayInput, i18n("<p>The delay in seconds between images."));
+    QWhatsThis::add( d->delayInput, i18n("<p>The delay, in seconds, between images."));
     
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), parent);
     QWhatsThis::add( d->startWithCurrent, i18n("<p>If this option is enabled, Slideshow will be started "
-                                                "with current image selected from images list."));
+                                                "with current image selected from the images list."));
     
     d->loopMode = new QCheckBox(i18n("Display in loop"), parent);
-    QWhatsThis::add( d->loopMode, i18n("<p>Slideshow running in loop with all current images."));
+    QWhatsThis::add( d->loopMode, i18n("<p>Run the slideshow in a loop."));
     
     d->fullScreenMode = new QCheckBox(i18n("Fullscreen mode"), parent);
-    QWhatsThis::add( d->fullScreenMode, i18n("<p>Toggle in fullScreen mode during Slideshow."));
+    QWhatsThis::add( d->fullScreenMode, i18n("<p>Use full-screen mode during the slideshow."));
     
     layout->addWidget( d->delayInput );
     layout->addWidget( d->startWithCurrent );

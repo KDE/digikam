@@ -75,7 +75,7 @@ SetupMime::SetupMime(QWidget* parent )
     d->imageFileFilterEdit = new QLineEdit(imageFileFilterBox);
     QWhatsThis::add( d->imageFileFilterEdit, i18n("<p>Here you can set the extensions of image files "
                                                     "to be displayed in Albums (such as JPEG or TIFF); "
-                                                    "when these files are double-clicked on "
+                                                    "when these files are clicked on "
                                                     "they will be opened with the digiKam Image Editor."));
     imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
     layout->addWidget(imageFileFilterBox);
@@ -90,7 +90,7 @@ SetupMime::SetupMime(QWidget* parent )
     d->movieFileFilterEdit = new QLineEdit(movieFileFilterBox);
     QWhatsThis::add( d->movieFileFilterEdit, i18n("<p>Here you can set the extensions of movie files "
                                                     "to be displayed in Albums (such as MPEG or AVI); "
-                                                    "when these files are double-clicked on they will "
+                                                    "when these files are clicked on they will "
                                                     "be opened with the default KDE movie player."));
     movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     layout->addWidget(movieFileFilterBox);
@@ -105,7 +105,7 @@ SetupMime::SetupMime(QWidget* parent )
     d->audioFileFilterEdit = new QLineEdit(audioFileFilterBox);
     QWhatsThis::add( d->audioFileFilterEdit, i18n("<p>Here you can set the extensions of audio files "
                                                     "to be displayed in Albums (such as MP3 or OGG); "
-                                                    "when these files are double-clicked on they will "
+                                                    "when these files are clicked on they will "
                                                     "be opened with the default KDE audio player."));
     
     audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);

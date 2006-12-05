@@ -1035,7 +1035,7 @@ bool GPCamera::cameraAbout(QString& about)
 
     about = QString(abt.text);
     about.append(i18n("\n\nTo report problems about this driver, please contact "
-                      "the gphoto2 team at this address:\n\nhttp://gphoto.org/bugs"));
+                      "the gphoto2 team at:\n\nhttp://gphoto.org/bugs"));
 
     delete m_status;
     m_status = 0;

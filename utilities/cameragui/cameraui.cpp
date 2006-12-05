@@ -262,11 +262,10 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     d->renameCustomizer  = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->view->setRenameCustomizer(d->renameCustomizer);
 
-    QWhatsThis::add( d->advBox, i18n("<p>Set here all options to rename picture filenames automatically "
-                                     "during downoading."));
+    QWhatsThis::add( d->advBox, i18n("<p>Set how digiKam will rename picture files as they are downloaded."));
 
     d->advBox->insertItem(CameraUIPriv::RENAMEFILEPAGE, d->renameCustomizer, 
-                          SmallIconSet("fileimport"), i18n("Files Renaming Options"));
+                          SmallIconSet("fileimport"), i18n("File Renaming Options"));
         
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -285,14 +284,13 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     albumVlay->addWidget(hbox1);
     albumVlay->addStretch();
 
-    QWhatsThis::add( albumBox, i18n("<p>Set here all options to create albums automatically "
-                     "during downlading."));
+    QWhatsThis::add( albumBox, i18n("<p>Set how digiKam creates albums automatically when downloading."));
     QWhatsThis::add( d->autoAlbumExtCheck, i18n("<p>Toggle on this option if you want to download your "
-                     "pictures into automatically created file extension-based sub-albums of destination "
-                     "album. By this way, you can separate JPEG and RAW files from your camera."));
+                     "pictures into automatically created file extension-based sub-albums of the destination "
+                     "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
     QWhatsThis::add( d->autoAlbumDateCheck, i18n("<p>Toggle on this option if you want to "
                      "download your pictures into automatically created file date-based sub-albums "
-                     "of destination album."));
+                     "of the destination album."));
     QWhatsThis::add( d->folderDateFormat, i18n("<p>Select here your preferred date format used to "
                      "create new albums. The options available are:<p>"
                      "<b>ISO</b>: the date format is in accordance with ISO 8601 "
@@ -328,22 +326,22 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
     onFlyVlay->addStretch();
 
     QWhatsThis::add( onFlyBox, i18n("<p>Set here all options to fix/transform JPEG files automatically "
-                     "during downlading."));
-    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want automatically "
-                     "rotated or flipped images using EXIF information provided by camera."));
-    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store default "
-                     "photographer identity into IPTC tags using main digiKam metadata settings."));
-    QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store default credit "
-                     "and copyright information into IPTC tags using main digiKam metadata settings."));
+                     "as they are downloaded."));
+    QWhatsThis::add( d->autoRotateCheck, i18n("<p>Toggle on this option if you want images automatically "
+                     "rotated or flipped using EXIF information provided by the camera."));
+    QWhatsThis::add( d->setPhotographerId, i18n("<p>Toggle on this option to store the default "
+                     "photographer identity into IPTC tags using digiKam's metadata settings."));
+    QWhatsThis::add( d->setCredits, i18n("<p>Toggle on this option to store the default credit "
+                     "and copyright information into IPTC tags using digiKam's metadata settings."));
     QWhatsThis::add( d->fixDateTimeCheck, i18n("<p>Toggle on this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
                      "be saved in the DateTimeDigitized and DateTimeCreated EXIF/IPTC fields."));
-    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to convert automatically "
-                     "all JPEG files to a lossless image format. Note: Image conversion can take a "
+    QWhatsThis::add( d->convertJpegCheck, i18n("<p>Toggle on this option to automatically convert "
+                     "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
                      "while on a slow computer."));
     QWhatsThis::add( d->losslessFormat, i18n("<p>Select your preferred lossless image file format to "
-                     "convert JPEG files. Note: All metadata will be preserved during conversions."));
+                     "convert to.  <b>Note:</b> All metadata will be preserved during the conversion."));
 
     d->advBox->insertItem(CameraUIPriv::ONFLYPAGE, onFlyBox, SmallIconSet("run"), 
                           i18n("On the Fly Operations (JPEG only)"));
@@ -434,7 +432,7 @@ CameraUI::CameraUI(QWidget* /*parent*/, const QString& cameraTitle,
 
     QPushButton *helpButton = actionButton( Help );
     d->helpMenu = new KHelpMenu(this, kapp->aboutData(), false);
-    d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Informations"), 
+    d->helpMenu->menu()->insertItem(SmallIcon("camera"), i18n("Camera Information"), 
                                     this, SLOT(slotInformations()), 0, CAMERA_INFO_MENU_ID, 0);
     helpButton->setPopup( d->helpMenu->menu() );
 
@@ -682,7 +680,7 @@ bool CameraUI::dialogClosed()
             return false;
     }
 
-    d->status->setText(i18n("Disconnecting from camera, please Wait..."));
+    d->status->setText(i18n("Disconnecting from camera, please wait..."));
     d->progress->hide();
 
     if (isBusy())
@@ -718,7 +716,7 @@ void CameraUI::finishDialog()
     // completely setup. That is why as an extra safeguard run scanlib
     // over the folders we used. Bug: 119201
 
-    d->status->setText(i18n("Scanning new files, please wait..."));
+    d->status->setText(i18n("Scanning for new files, please wait..."));
     ScanLib sLib;
     for (QStringList::iterator it = d->foldersToScan.begin();
          it != d->foldersToScan.end(); ++it)
@@ -871,7 +869,7 @@ void CameraUI::slotConnected(bool val)
     if (!val)
     {
       if (KMessageBox::warningYesNo(this,
-                                    i18n("Failed to connect to camera. "
+                                    i18n("Failed to connect to the camera. "
                                          "Please make sure it is connected "
                                          "properly and turned on. "
                                          "Would you like to try again?"), 
@@ -1019,13 +1017,13 @@ void CameraUI::slotUploadItems(const KURL::List& urls)
         while (d->view->findItem(cameraFolder, name + ext)) 
         {
             QString msg(i18n("Camera Folder <b>%1</b> already contains item <b>%2</b><br>"
-                             "Please, enter New Name (without extension):")
+                             "Please enter a new file name (without extension):")
                              .arg(cameraFolder).arg(fi.fileName()));
 #if KDE_IS_VERSION(3,2,0)
-            name = KInputDialog::getText(i18n("File already exist"), msg, name, &ok, this);
+            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
 
 #else
-            name = KLineEditDlg::getText(i18n("File already exist"), msg, name, &ok, this);
+            name = KLineEditDlg::getText(i18n("File already exists"), msg, name, &ok, this);
 #endif
             if (!ok) 
                 return;
@@ -1064,8 +1062,8 @@ void CameraUI::slotDownload(bool onlySelected)
     if (album && album->type() != Album::PHYSICAL)
         album = 0;
 
-    QString header(i18n("<p>Please select the destination album from digiKam library to "
-                        "import camera pictures.</p>"));
+    QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                        "import the camera pictures into.</p>"));
 
     QString newDirName;
     IconItem* firstItem = d->view->firstItem();
@@ -1340,8 +1338,8 @@ void CameraUI::slotDeleteSelected()
     {
         QString infoMsg(i18n("The items listed below are locked by the camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
-                             "please unlock them before."));
-        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Informations"));
+                             "please unlock them and try again."));
+        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
     }    
 
     if (folders.isEmpty())
@@ -1407,8 +1405,8 @@ void CameraUI::slotDeleteAll()
     {
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you want really to delete these items, "
-                             "please unlock it before."));        
-        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Informations"));
+                             "please unlock them and try again."));        
+        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
     }    
 
     if (folders.isEmpty())

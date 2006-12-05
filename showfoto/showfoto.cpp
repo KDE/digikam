@@ -307,7 +307,7 @@ void ShowFoto::show()
     KConfig* config = kapp->config();
     if(!d->validIccPath)
     {
-        QString message = i18n("<qt><p>ICC profiles path seems to be invalid.</p>"
+        QString message = i18n("<qt><p>The ICC profile path seems to be invalid.</p>"
                                "<p>If you want to set it now, select \"Yes\", otherwise "
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p></qt>");
@@ -1017,7 +1017,7 @@ void ShowFoto::slotDeleteCurrentItem()
 
     if (!d->deleteItem2Trash)
     {
-        QString warnMsg(i18n("About to Delete File \"%1\"\nAre you sure?")
+        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?")
                         .arg(urlCurrent.filename()));
         if (KMessageBox::warningContinueCancel(this,
                                                warnMsg,

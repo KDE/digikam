@@ -194,7 +194,7 @@ void ICCProfileWidget::setLoadingFailed()
 
 QString ICCProfileWidget::getMetadataTitle(void)
 {
-    return i18n("ICC Color Profile Informations");
+    return i18n("ICC Color Profile Information");
 }
 
 bool ICCProfileWidget::loadFromURL(const KURL& url)

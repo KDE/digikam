@@ -80,7 +80,7 @@ SetupEditor::SetupEditor(QWidget* parent )
                                             interfaceOptionsGroup);
 
     QWhatsThis::add( d->themebackgroundColor, i18n("<p>Enable this option to use the background theme "
-                                              "color into image editor area") );
+                                              "color in the image editor area") );
 
     d->colorBox = new QHBox(interfaceOptionsGroup);
 
@@ -89,8 +89,8 @@ SetupEditor::SetupEditor(QWidget* parent )
 
     d->backgroundColor = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    QWhatsThis::add( d->backgroundColor, i18n("<p>Customize here the background color to use "
-                                              "into image editor area.") );
+    QWhatsThis::add( d->backgroundColor, i18n("<p>Customize the background color to use "
+                                              "in the image editor area.") );
     backgroundColorlabel->setBuddy( d->backgroundColor );
 
     d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),

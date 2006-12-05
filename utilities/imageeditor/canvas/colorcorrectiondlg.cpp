@@ -58,7 +58,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Ok,     i18n("Apply"));
     setButtonTip(Ok,      i18n("Apply the default color workspace profile to the image"));
-    setButtonText(Cancel, i18n("Do Nothing"));
+    setButtonText(Cancel, i18n("Do nothing"));
     setButtonTip(Cancel,  i18n("Do not change the image"));
     setButtonText(Apply,  i18n("Embed only"));
     setButtonTip(Apply,   i18n("Embed only the color workspace profile to the image without changing the image"));
@@ -85,7 +85,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     
     if (m_iccTrans->embeddedProfile().isEmpty())
     {
-        message->setText(i18n("<p>This picture has not assigned any color profile.</p>"
+        message->setText(i18n("<p>This picture has not been assigned any color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
                               
         line->hide();
@@ -95,7 +95,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     }
     else
     {
-        message->setText(i18n("<p>This picture has assigned a color profile that does not "
+        message->setText(i18n("<p>This picture has been assigned a color profile that does not "
                               "match with your default workspace color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
     }

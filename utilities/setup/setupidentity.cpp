@@ -74,7 +74,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     QRegExp asciiRx("[\x20-\x7F]+$");
     QValidator *asciiValidator = new QRegExpValidator(asciiRx, this);
 
-    QGroupBox *photographerIdGroup = new QGroupBox(0, Qt::Horizontal, i18n("Photographer Informations"), parent);
+    QGroupBox *photographerIdGroup = new QGroupBox(0, Qt::Horizontal, i18n("Photographer Information"), parent);
     QGridLayout* grid = new QGridLayout( photographerIdGroup->layout(), 1, 1, KDialog::spacingHint());
 
     QLabel *label1 = new QLabel(i18n("Author:"), photographerIdGroup);
@@ -84,7 +84,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label1->setBuddy(d->authorEdit);
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);
     grid->addMultiCellWidget(d->authorEdit, 0, 0, 1, 1);
-    QWhatsThis::add( d->authorEdit, i18n("<p>Set here the photographer name. This field is limited "
+    QWhatsThis::add( d->authorEdit, i18n("<p>Set the photographer name. This field is limited "
                                          "to 32 ASCII characters."));
 
     QLabel *label2 = new QLabel(i18n("Author Title:"), photographerIdGroup);
@@ -94,7 +94,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label2->setBuddy(d->authorTitleEdit);
     grid->addMultiCellWidget(label2, 1, 1, 0, 0);
     grid->addMultiCellWidget(d->authorTitleEdit, 1, 1, 1, 1);
-    QWhatsThis::add( d->authorTitleEdit, i18n("<p>Set here the photographer title. This field is limited "
+    QWhatsThis::add( d->authorTitleEdit, i18n("<p>Set the photographer title. This field is limited "
                                               "to 32 ASCII characters."));
         
     // --------------------------------------------------------
@@ -109,7 +109,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label3->setBuddy(d->creditEdit);
     grid2->addMultiCellWidget(label3, 0, 0, 0, 0);
     grid2->addMultiCellWidget(d->creditEdit, 0, 0, 1, 1);
-    QWhatsThis::add( d->creditEdit, i18n("<p>Set here the default provider identification of the picture, "
+    QWhatsThis::add( d->creditEdit, i18n("<p>Set the default provider identification of the picture, "
                                          "not necessarily the owner/creator. This field is limited "
                                          "to 32 ASCII characters."));
 
@@ -120,7 +120,7 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label4->setBuddy(d->sourceEdit);
     grid2->addMultiCellWidget(label4, 1, 1, 0, 0);
     grid2->addMultiCellWidget(d->sourceEdit, 1, 1, 1, 1);
-    QWhatsThis::add( d->sourceEdit, i18n("<p>Set here the default original owner identification of the intellectual "
+    QWhatsThis::add( d->sourceEdit, i18n("<p>Set the default original owner identification of the intellectual "
                                          "content of the picture. This could be an agency, a member of an agency or "
                                          "an individual photographer name. This field is limited "
                                          "to 32 ASCII characters."));
@@ -132,12 +132,12 @@ SetupIdentity::SetupIdentity(QWidget* parent )
     label5->setBuddy(d->copyrightEdit);
     grid2->addMultiCellWidget(label5, 2, 2, 0, 0);
     grid2->addMultiCellWidget(d->copyrightEdit, 2, 2, 1, 1);
-    QWhatsThis::add( d->copyrightEdit, i18n("<p>Set here the default copyright notice of the pictures. "
+    QWhatsThis::add( d->copyrightEdit, i18n("<p>Set the default copyright notice of the pictures. "
                                             "This field is limited to 128 ASCII characters."));
 
     // --------------------------------------------------------
 
-    QLabel *iptcNote = new QLabel(i18n("<b>Note: IPTC text tags only support printable "
+    QLabel *iptcNote = new QLabel(i18n("<b>Note: IPTC text tags only support the printable "
                                        "ASCII characters set.</b>"), parent);
                                          
     // --------------------------------------------------------

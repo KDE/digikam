@@ -437,7 +437,7 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
 bool UMSCamera::cameraSummary(QString& summary)
 {
     summary = QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
-                           "Flash Disk card readers.<br><br>"));
+                           "Flash disk card readers.<br><br>"));
 
     summary.append(i18n("Title: %1<br>"
                         "Model: %2<br>"
@@ -460,10 +460,10 @@ bool UMSCamera::cameraManual(QString& manual)
 
 bool UMSCamera::cameraAbout(QString& about)
 {
-    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a remote camera disk "
+    about = QString(i18n("The <b>Mounted Camera</b> driver is a simple interface to a camera disk "
                          "mounted locally on your system.<br><br>"
-                         "It doesn't use a libgphoto2 driver.<br><br>"
-                         "To report any problems with this driver, please contact the digiKam team at this address:<br><br>"
+                         "It doesn't use any libgphoto2 drivers.<br><br>"
+                         "To report any problems with this driver, please contact the digiKam team at:<br><br>"
                          "http://www.digikam.org/?q=contact"));
     return true;
 }

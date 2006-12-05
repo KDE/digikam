@@ -89,8 +89,8 @@ SetupEditor::SetupEditor(QWidget* parent )
     
     d->backgroundColor = new KColorButton(colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    QWhatsThis::add( d->backgroundColor, i18n("<p>Select here the background color to use "
-                                              "for image editor area.") );
+    QWhatsThis::add( d->backgroundColor, i18n("<p>Select the background color to use "
+                                              "for the image editor area.") );
     backgroundColorlabel->setBuddy( d->backgroundColor );
     
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);

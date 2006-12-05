@@ -78,7 +78,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     
     QLabel *label1 = new QLabel("<b>" + i18n("Search:") + "</b>", plainPage());
     d->searchEdit  = new KLineEdit(plainPage());
-    QWhatsThis::add( d->searchEdit, i18n("<p>Enter here your search arguments in albums library"));
+    QWhatsThis::add( d->searchEdit, i18n("<p>Enter your search arguments to find items in the albums library"));
     
     d->resultsView = new SearchResultsView(plainPage());
     d->resultsView->setMinimumSize(320, 200);
@@ -88,7 +88,7 @@ SearchQuickDialog::SearchQuickDialog(QWidget* parent, KURL& url)
     QLabel *label2 = new QLabel(i18n("Save search as:"), plainPage());
     d->nameEdit    = new KLineEdit(plainPage());
     d->nameEdit->setText(i18n("Last Search"));
-    QWhatsThis::add( d->nameEdit, i18n("<p>Enter here the name used to save the current search in "
+    QWhatsThis::add( d->nameEdit, i18n("<p>Enter the name used to save the current search in the "
                                        "\"My Searches\" view"));
 
     grid->addMultiCellWidget(label1, 0, 0, 0, 0);

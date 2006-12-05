@@ -347,7 +347,7 @@ void EditorWindow::setupStandardActions()
     
     d->cropAction->setEnabled(false);
     d->cropAction->setWhatsThis( i18n("This option can be used to crop the image. "
-                                     "Select the image region to enable this action.") );
+                                     "Select a region of the image to enable this action.") );
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
     
@@ -411,7 +411,7 @@ void EditorWindow::setupStandardAccelerators()
 {
     d->accelerators = new KAccel(this);
 
-    d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen"),
+    d->accelerators->insert("Exit fullscreen", i18n("Exit Fullscreen mode"),
                     i18n("Exit out of the fullscreen mode"),
                     Key_Escape, this, SLOT(slotEscapePressed()),
                     false, true);
@@ -437,7 +437,7 @@ void EditorWindow::setupStandardAccelerators()
                     false, true);
 
     d->accelerators->insert("Zoom Plus Key_Plus", i18n("Zoom In"),
-                    i18n("Zoom into Image"),
+                    i18n("Zoom in on Image"),
                     Key_Plus, m_canvas, SLOT(slotIncreaseZoom()),
                     false, true);
     

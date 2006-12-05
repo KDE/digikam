@@ -131,7 +131,7 @@ MakerNoteWidget::~MakerNoteWidget()
 
 QString MakerNoteWidget::getMetadataTitle(void)
 {
-    return i18n("Maker Note Exif Tags");
+    return i18n("MakerNote EXIF Tags");
 }
 
 bool MakerNoteWidget::loadFromURL(const KURL& url)
@@ -229,7 +229,7 @@ QString MakerNoteWidget::getTagTitle(const QString& key)
         DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
-        return i18n("Unknow");
+        return i18n("Unknown");
     }
 }
 
@@ -252,8 +252,8 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
 
 void MakerNoteWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("Exif File to Save"),
-                                  QString("*.dat|"+i18n("Exif binary Files (*.dat)")));
+    KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
+                                  QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
     storeMetadataToFile(url);
 }
 

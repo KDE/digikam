@@ -106,24 +106,24 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     d->saveTagsIptcBox = new QCheckBox(IptcGroup);
     d->saveTagsIptcBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
-    QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Toggle on this option to store image tags "
-                                              "into IPTC <i>Keywords</i> tag."));
+    QWhatsThis::add( d->saveTagsIptcBox, i18n("<p>Turn this option on to store the image tags "
+                                              "in the IPTC <i>Keywords</i> tag."));
   
     d->saveRatingIptcBox = new QCheckBox(IptcGroup);
     d->saveRatingIptcBox->setText(i18n("&Save image rating as \"Urgency\" tag"));
-    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Toggle on this option to store image rating "
-                                                "into IPTC <i>Urgency</i> tag."));
+    QWhatsThis::add( d->saveRatingIptcBox, i18n("<p>Turn this option on to store the image rating "
+                                                "in the IPTC <i>Urgency</i> tag."));
 
     d->savePhotographerIdIptcBox = new QCheckBox(IptcGroup);
     d->savePhotographerIdIptcBox->setText(i18n("&Save default photographer identity as tags"));
-    QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Toggle on this option to store default "
-                                                        "photographer identity into IPTC tags. You can set this "
+    QWhatsThis::add( d->savePhotographerIdIptcBox, i18n("<p>Turn this option on to store the default "
+                                                        "photographer identity into the IPTC tags. You can set this "
                                                         "value in the Identity setup page."));
 
     d->saveCreditsIptcBox = new QCheckBox(IptcGroup);
     d->saveCreditsIptcBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Toggle on this option to store default "
-                                                 "credit and copyright identity into IPTC tags. "
+    QWhatsThis::add( d->saveCreditsIptcBox, i18n("<p>Turn this option on to store the default "
+                                                 "credit and copyright identity into the IPTC tags. "
                                                  "You can set this value in the Identity setup page."));
                                                            
     mainLayout->addWidget(IptcGroup);
@@ -134,13 +134,13 @@ SetupMetadata::SetupMetadata(QWidget* parent )
   
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image comments as embedded text"));
-    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Toggle on this option to store image comments "
-                                              "into JFIF section, Exif tag, and IPTC tag."));
+    QWhatsThis::add( d->saveCommentsBox, i18n("<p>Turn this option on to store image comments "
+                                              "into the JFIF section, EXIF tag, and IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image time stamp as tags"));
-    QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Toggle on this option to store image date and time "
-                                              "into Exif and IPTC tags."));
+    QWhatsThis::add( d->saveDateTimeBox, i18n("<p>Turn this option on to store the image date and time "
+                                              "into the EXIF and IPTC tags."));
     
     mainLayout->addWidget(commonGroup);
     mainLayout->addSpacing(KDialog::spacingHint());
@@ -159,10 +159,10 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     KActiveLabel* explanation = new KActiveLabel(hbox);
     explanation->setText(i18n("<p><b>EXIF</b> is a standard used by most digital cameras today to store "
-                              "technical information about photograph. You can learn more "
+                              "technical information about the photograph as metadata in the image file. You can learn more "
                               "about EXIF at <a href='http://www.exif.org'>www.exif.org</a>.</p>"
                               "<p><b>IPTC</b> is another standard used in digital photography to store "
-                              "embeded informations in pictures. You can learn more "
+                              "embeded information in pictures. You can learn more "
                               "about IPTC at <a href='http://www.iptc.org/IIM'>www.iptc.org</a>.</p>"));
     
     mainLayout->addWidget(hbox);

@@ -40,7 +40,7 @@ namespace Digikam
 
 CameraInfoDialog::CameraInfoDialog(QWidget *parent, const QString& summary, const QString& manual,
                                    const QString& about)
-                : KDialogBase(IconList, i18n("Camera Informations"), Help|Ok, Ok, parent, 0, true, true)
+                : KDialogBase(IconList, i18n("Camera Information"), Help|Ok, Ok, parent, 0, true, true)
 {
     setHelp("digitalstillcamera.anchor", "digikam");
     resize(500, 400);

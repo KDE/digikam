@@ -126,10 +126,10 @@ GPSWidget::GPSWidget(QWidget* parent, const char* name)
 
     d->detailsCombo  = new QComboBox( false, box2 );
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsCombo->insertItem(QString("Map Quest"), MapQuest);
+    d->detailsCombo->insertItem(QString("MapQuest"), MapQuest);
     d->detailsCombo->insertItem(QString("Google Maps"), GoogleMaps);
-    d->detailsCombo->insertItem(QString("Msn Maps"), MsnMaps);
-    d->detailsCombo->insertItem(QString("Multi Map"), MultiMap);
+    d->detailsCombo->insertItem(QString("MSN Maps"), MsnMaps);
+    d->detailsCombo->insertItem(QString("MultiMap"), MultiMap);
     
     box2Layout->addMultiCellWidget( d->detailsCombo, 0, 0, 0, 0 );
     box2Layout->addMultiCellWidget( d->detailsButton, 0, 0, 1, 1 );
@@ -343,7 +343,7 @@ QString GPSWidget::getTagTitle(const QString& key)
         DDebug() << "Cannot get metadata tag title using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
-        return i18n("Unknow");
+        return i18n("Unknown");
     }
 }
 
@@ -381,8 +381,8 @@ bool GPSWidget::decodeGPSPosition(void)
 
 void GPSWidget::slotSaveMetadataToFile(void)
 {
-    KURL url = saveMetadataToFile(i18n("Exif File to Save"),
-                                  QString("*.dat|"+i18n("Exif binary Files (*.dat)")));
+    KURL url = saveMetadataToFile(i18n("EXIF File to Save"),
+                                  QString("*.dat|"+i18n("EXIF binary Files (*.dat)")));
     storeMetadataToFile(url);
 }
 

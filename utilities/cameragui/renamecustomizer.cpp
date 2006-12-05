@@ -139,7 +139,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     // ----------------------------------------------------------------
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
-    QWhatsThis::add( d->renameDefault, i18n("<p>Toggle on this option to use camera "
+    QWhatsThis::add( d->renameDefault, i18n("<p>Turn on this option to use camera "
                                             "provided image filenames without modifications."));
     mainLayout->addMultiCellWidget(d->renameDefault, 0, 0, 0, 1);
 
@@ -156,7 +156,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(i18n("Upper"), 1);
     d->renameDefaultCaseType->insertItem(i18n("Lower"), 2);
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    QWhatsThis::add( d->renameDefaultCaseType, i18n("<p>Set here the method to use to change case "
+    QWhatsThis::add( d->renameDefaultCaseType, i18n("<p>Set the method to use to change the case "
                                                     "of image filenames."));
                                            
     QHBoxLayout* boxLayout1 = new QHBoxLayout( d->renameDefaultBox->layout() );
@@ -170,7 +170,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
     mainLayout->addMultiCellWidget(d->renameCustom, 2, 2, 0, 1);
-    QWhatsThis::add( d->renameCustom, i18n("<p>Toggle on this option to customize image filenames "
+    QWhatsThis::add( d->renameCustom, i18n("<p>Turn on this option to customize image filenames "
                                            "during download."));
 
     d->renameCustomBox = new QGroupBox(this);
@@ -194,7 +194,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     renameCustomBoxLayout->addMultiCellWidget(suffixLabel, 1, 1, 1, 1);
     d->renameCustomSuffix = new KLineEdit(d->renameCustomBox);
     renameCustomBoxLayout->addMultiCellWidget(d->renameCustomSuffix, 1, 1, 2, 2);
-    QWhatsThis::add( d->renameCustomSuffix, i18n("<p>Set the suffix which will be added to "
+    QWhatsThis::add( d->renameCustomSuffix, i18n("<p>Set the suffix which will be postpended to "
                                                   "image filenames."));
 
     d->addDateTimeBox = new QCheckBox( i18n("Add Date && Time"), d->renameCustomBox );
@@ -209,7 +209,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->dateTimeFormat->insertItem(i18n("Full Text"),      RenameCustomizerPriv::TextDateFormat);
     d->dateTimeFormat->insertItem(i18n("Local Settings"), RenameCustomizerPriv::LocalDateFormat);
     d->dateTimeFormat->insertItem(i18n("Advanced..."),    RenameCustomizerPriv::Advanced);
-    QWhatsThis::add( d->dateTimeFormat, i18n("<p>Select here your preferred date format used to "
+    QWhatsThis::add( d->dateTimeFormat, i18n("<p>Select your preferred date format used to "
                     "create new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
                     "E.g.: <i>20060824T142618</i></p>"
@@ -241,7 +241,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->startIndexLabel = new QLabel( i18n("Start Index:"), d->renameCustomBox );
     d->startIndexInput = new KIntNumInput(1, d->renameCustomBox);
     d->startIndexInput->setRange(1, 900000, 1, false);
-    QWhatsThis::add( d->startIndexInput, i18n("<p>Set here the start index value used to rename picture "
+    QWhatsThis::add( d->startIndexInput, i18n("<p>Set the starting index value used to rename picture "
                                               "files with a sequence number."));
 
     renameCustomBoxLayout->addMultiCellWidget(d->startIndexLabel, 6, 6, 1, 1);

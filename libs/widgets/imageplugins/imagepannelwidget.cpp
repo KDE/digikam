@@ -150,7 +150,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     zoomX10Button->setPixmap( QPixmap( directory + "zoom10.png" ) );
     d->zoomButtons->insert(zoomX10Button, ImagePannelWidgetPriv::ZoomX10);
     zoomX10Button->setToggleButton(true);
-    QWhatsThis::add( zoomX10Button, i18n( "<p>Press this buttom to not magnify image" ) );
+    QWhatsThis::add( zoomX10Button, i18n( "<p>Press this button to stop magnifying the image" ) );
 
     QPushButton *zoomX15Button = new QPushButton( d->zoomButtons );
     KGlobal::dirs()->addResourceType("zoom15", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -158,7 +158,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     zoomX15Button->setPixmap( QPixmap( directory + "zoom15.png" ) );
     d->zoomButtons->insert(zoomX15Button, ImagePannelWidgetPriv::ZoomX15);
     zoomX15Button->setToggleButton(true);
-    QWhatsThis::add( zoomX15Button, i18n( "<p>Press this buttom to magnify image using 1.5:1 zoom factor." ) );
+    QWhatsThis::add( zoomX15Button, i18n( "<p>Press this button to magnify image using 1.5:1 zoom factor." ) );
 
     QPushButton *zoomX20Button = new QPushButton( d->zoomButtons );
     KGlobal::dirs()->addResourceType("zoom20", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -166,7 +166,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     zoomX20Button->setPixmap( QPixmap( directory + "zoom20.png" ) );
     d->zoomButtons->insert(zoomX20Button, ImagePannelWidgetPriv::ZoomX20);
     zoomX20Button->setToggleButton(true);
-    QWhatsThis::add( zoomX20Button, i18n( "<p>Press this buttom to magnify image using 2:1 zoom factor." ) );
+    QWhatsThis::add( zoomX20Button, i18n( "<p>Press this button to magnify image using 2:1 zoom factor." ) );
 
     QPushButton *zoomX25Button = new QPushButton( d->zoomButtons );
     KGlobal::dirs()->addResourceType("zoom25", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -174,7 +174,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     zoomX25Button->setPixmap( QPixmap( directory + "zoom25.png" ) );
     d->zoomButtons->insert(zoomX25Button, ImagePannelWidgetPriv::ZoomX25);
     zoomX25Button->setToggleButton(true);
-    QWhatsThis::add( zoomX25Button, i18n( "<p>Press this buttom to magnify image using 2.5:1 zoom factor." ) );
+    QWhatsThis::add( zoomX25Button, i18n( "<p>Press this button to magnify image using 2.5:1 zoom factor." ) );
 
     QPushButton *zoomX30Button = new QPushButton( d->zoomButtons );
     KGlobal::dirs()->addResourceType("zoom30", KGlobal::dirs()->kde_default("data") + "digikam/data");
@@ -182,7 +182,7 @@ ImagePannelWidget::ImagePannelWidget(uint w, uint h, const QString& settingsSect
     zoomX30Button->setPixmap( QPixmap( directory + "zoom30.png" ) );
     d->zoomButtons->insert(zoomX30Button, ImagePannelWidgetPriv::ZoomX30);
     zoomX30Button->setToggleButton(true);
-    QWhatsThis::add( zoomX30Button, i18n( "<p>Press this buttom to magnify image using 3:1 zoom factor." ) );
+    QWhatsThis::add( zoomX30Button, i18n( "<p>Press this button to magnify image using 3:1 zoom factor." ) );
 
     d->zoomButtons->setButton(ImagePannelWidgetPriv::ZoomX10);
 

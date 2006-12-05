@@ -110,7 +110,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->fileSettingBox = new QVGroupBox(i18n("File/Image Informations"), parent);
+    d->fileSettingBox = new QVGroupBox(i18n("File/Image Information"), parent);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     QWhatsThis::add( d->showFileNameBox, i18n("<p>Set this option to display image file name."));
@@ -131,14 +131,14 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->photoSettingBox = new QVGroupBox(i18n("Photograph Informations"), parent);
+    d->photoSettingBox = new QVGroupBox(i18n("Photograph Information"), parent);
 
     d->showPhotoMakeBox = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     QWhatsThis::add( d->showPhotoMakeBox, i18n("<p>Set this option to display the camera make and model "
                                                "with which the picture has been taken."));
 
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
-    QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the picture has been taken."));
+    QWhatsThis::add( d->showPhotoDateBox, i18n("<p>Set this option to display the date when the picture was taken."));
 
     d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal"), d->photoSettingBox);
     QWhatsThis::add( d->showPhotoFocalBox, i18n("<p>Set this option to display camera aperture and focal settings "
@@ -164,10 +164,10 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->digikamSettingBox = new QVGroupBox(i18n("digiKam Informations"), parent);
+    d->digikamSettingBox = new QVGroupBox(i18n("digiKam Information"), parent);
 
     d->showAlbumNameBox = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
-    QWhatsThis::add( d->showAlbumNameBox, i18n("<p>Set this option to display album name."));
+    QWhatsThis::add( d->showAlbumNameBox, i18n("<p>Set this option to display the album name."));
 
     d->showCommentsBox = new QCheckBox(i18n("Show picture comments"), d->digikamSettingBox);
     QWhatsThis::add( d->showCommentsBox, i18n("<p>Set this option to display picture comments."));
@@ -176,7 +176,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     QWhatsThis::add( d->showTagsBox, i18n("<p>Set this option to display picture tags."));
 
     d->showRatingBox = new QCheckBox(i18n("Show picture rating"), d->digikamSettingBox);
-    QWhatsThis::add( d->showRatingBox, i18n("<p>Set this option to display picture rating."));
+    QWhatsThis::add( d->showRatingBox, i18n("<p>Set this option to display the picture rating."));
 
     layout->addWidget(d->digikamSettingBox);
     layout->addStretch();
