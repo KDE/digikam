@@ -9,13 +9,13 @@
 
 name       = "digikamimageplugins"
 egmodule   = "graphics"
-version    = "0.9.0-rc1"
+version    = "0.9.0-rc2"
 docs       = "no"
 
 svnbase	   = "svn://anonsvn.kde.org/home/kde"
-svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
+svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
