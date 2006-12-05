@@ -50,7 +50,7 @@ public:
 
 private:
 
-    void readSettings();
+    void readSettings(bool restore=false);
     void fillCombos(const QString& path, bool report);
     void enableWidgets();
     void disableWidgets();

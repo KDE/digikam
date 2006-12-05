@@ -426,13 +426,15 @@ void SetupICC::applySettings()
             *(d->proofICCPath.find(d->proofProfilesKC->currentText())));
 }
 
-void SetupICC::readSettings()
+void SetupICC::readSettings(bool restore)
 {
     KConfig* config = kapp->config();
     config->setGroup("Color Management");
 
+    if (!restore)
+        d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
+
     d->defaultPathKU->setURL(config->readPathEntry("DefaultPath", QString::null));
-    d->enableColorManagement->setChecked(config->readBoolEntry("EnableCM", false));
     d->bpcAlgorithm->setChecked(config->readBoolEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentItem(config->readNumEntry("RenderingIntent", 0));
     d->managedView->setChecked(config->readBoolEntry("ManagedView", false));
@@ -644,7 +646,7 @@ void SetupICC::slotToggledWidgets(bool t)
 
     if (t)
     {
-        readSettings();
+        readSettings(true);
         slotToggleManagedView(d->managedView->isChecked());
     }
     else
