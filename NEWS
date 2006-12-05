@@ -114,7 +114,7 @@ General       : New kipi plugin to edit EXIF and IPTC metadata (available with n
 
 General       : Exiv2 depency fixed to 0.12 release.
 General       : Fix broken compilation using "./configure -enable-final" option.
-ImageEditor   : Fix and improvement of Color Management View workflow.
+ImageEditor   : Fixed and improved Color Management View workflow.
 
 ...
 
@@ -354,6 +354,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 210 ==> 131947 : digiKam complains about invalid ICC profiles path.
 211 ==> 130176 : Typos in digiKam.po and one plugin.
 212 ==> 138252 : Display is not updates when switching color managed view on/off.
-213 ==> 
+213 ==> 138253 : Keyboard shortcut for turning color managed display on/off.
+214 ==> 
 
 ----------------------------------------------------------------------------------------------------
