@@ -195,6 +195,7 @@ protected slots:
 
 private slots:
 
+    void slotToggleColorManagedView();
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString &filename, bool success);
 

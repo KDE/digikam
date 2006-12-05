@@ -445,6 +445,11 @@ void EditorWindow::setupStandardAccelerators()
                     i18n("Zoom out of Image"),
                     Key_Minus, m_canvas, SLOT(slotDecreaseZoom()),
                     false, true);
+
+    d->accelerators->insert("Toggle Color Managed View", i18n("Toggle CM View"),
+                    i18n("Toggle On/Off Monitor Color Correction"),
+                    Key_F12, this, SLOT(slotToggleColorManagedView()),
+                    false, true);
 }
 
 void EditorWindow::setupStatusBar()
@@ -1523,6 +1528,20 @@ bool EditorWindow::moveFile()
 
     return true;
 }
+
+void EditorWindow::slotToggleColorManagedView()
+{
+    bool cmv = !d->ICCSettings->managedViewSetting;
+    d->ICCSettings->managedViewSetting = cmv;
+    m_canvas->setICCSettings(d->ICCSettings);
+
+    // Save Color Managed View setting in config file. For performance 
+    // reason, no need to flush file, it cached in memory and wil be flushed 
+    // to disk at end of session.  
+    KConfig* config = kapp->config();
+    config->setGroup("Color Management");
+    config->writeEntry("ManagedView", cmv);
+}    
 
 }  // namespace Digikam
 
