@@ -114,6 +114,7 @@ General       : New kipi plugin to edit EXIF and IPTC metadata (available with n
 
 General       : Exiv2 depency fixed to 0.12 release.
 General       : Fix broken compilation using "./configure -enable-final" option.
+ImageEditor   : Fix and improvement of Color Management View workflow.
 
 ...
 
@@ -351,6 +352,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 208 ==> 135834 : Lowercasing camera filenames only works for first imported file.
 209 ==> 134391 : digiKam camera gui dialog crashes if there is a filename without extension.
 210 ==> 131947 : digiKam complains about invalid ICC profiles path.
-211 ==> 
+211 ==> 130176 : Typos in digiKam.po and one plugin.
+212 ==> 
 
 ----------------------------------------------------------------------------------------------------
