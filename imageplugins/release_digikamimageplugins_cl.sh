@@ -11,8 +11,8 @@
 
 name="digikamimageplugins"
 egmodule="graphics"
-#startrev="539364"   # check existing ChangeLog file for the most recent entry
-startrev='{2006-10-05}'   # check existing ChangeLog file for the most recent entry
+startrev="605241"   # check existing ChangeLog file for the most recent entry
+#startrev='{2006-10-05}'   # check existing ChangeLog file for the most recent entry
 
 svnbase="svn+ssh://toma@svn.kde.org/home/kde"
 svnbase="https://ach@svn.kde.org/home/kde/"

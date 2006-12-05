@@ -1,3 +1,449 @@
+v0.9.0-rc2 - 05-Dec-2006
+----------------------------------------------------------------------------
+
+2006-12-05 15:22 +0000 [r610786]  mwiesweg
+
+        * digikam/release_digikam.rb,
+          digikamimageplugins/digikamimageplugins.lsm, digikam/version.h,
+          digikamimageplugins/common/include/version.h,
+          digikam/digikam.lsm,
+          digikamimageplugins/release_digikamimageplugins.rb: Preparing RC2
+
+2006-12-05 14:48 +0000 [r610779]  cgilles
+
+        * digikam/NEWS: update
+
+2006-12-05 14:43 +0000 [r610777]  cgilles
+
+        * digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          digikam/utilities/imageeditor/canvas/canvas.cpp,
+          digikam/utilities/imageeditor/canvas/canvas.h: digikam from trunk
+          : bugfix : refresh image editor canvas if Color Management
+          settings have changed. BUG: 138252
+
+2006-12-05 14:33 +0000 [r610775]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp,
+          digikam/utilities/setup/setupicc.h: digikam from trunk : bugfix :
+          if CM is not enable at the first time, the user cannot set on
+          this option duing a bug in factorization of methods
+          readSettings() and restoreSettings()
+
+2006-12-05 10:59 +0000 [r610748]  cgilles
+
+        * digikam/NEWS: update
+
+2006-12-05 07:07 +0000 [r610714]  cgilles
+
+        * digikam/utilities/setup/setupidentity.cpp,
+          digikam/utilities/cameragui/umscamera.cpp,
+          digikam/utilities/setup/setuptooltip.cpp,
+          digikam/digikam/searchquickdialog.cpp,
+          digikam/utilities/cameragui/gpcamera.cpp,
+          digikam/utilities/cameragui/camerainfodialog.cpp,
+          digikam/utilities/setup/setupslideshow.cpp,
+          digikam/utilities/cameragui/cameraui.cpp,
+          digikam/utilities/cameragui/renamecustomizer.cpp,
+          digikam/libs/widgets/imageplugins/imagepannelwidget.cpp,
+          digikam/utilities/imageeditor/editor/editorwindow.cpp,
+          digikam/libs/widgets/metadata/makernotewidget.cpp,
+          digikam/utilities/setup/setup.cpp,
+          digikam/utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+          digikam/libs/widgets/metadata/gpswidget.cpp,
+          digikam/utilities/setup/setupmetadata.cpp,
+          digikam/libs/widgets/metadata/exifwidget.cpp,
+          digikam/showfoto/setup/setupeditor.cpp,
+          digikam/showfoto/showfoto.cpp,
+          digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+          digikam/utilities/setup/setupeditor.cpp,
+          digikam/utilities/setup/setupmime.cpp,
+          digikam/libs/widgets/iccprofiles/iccprofilewidget.cpp: digikam
+          from trunk : by English typo fix from Ducan Hill. BUG: 130176
+
+2006-12-03 19:41 +0000 [r610214]  cgilles
+
+        * digikam/utilities/imageeditor/canvas/dimginterface.cpp: typo
+
+2006-12-03 07:48 +0000 [r610020-610021]  cgilles
+
+        * digikam/utilities/setup/setupicc.h: digikam from trunk :
+          factorize code: restoreSettings() ==> readSettings()
+
+        * digikam/utilities/setup/setupicc.cpp: digikam from trunk :
+          factorize code: restoreSettings() ==> readSettings()
+
+2006-12-02 17:42 +0000 [r609948]  cgilles
+
+        * digikam/NEWS: update
+
+2006-12-02 17:30 +0000 [r609945]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp: fix Color Managed View
+          options decription
+
+2006-12-02 17:27 +0000 [r609944]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp: digikam from trunk:
+          Usability of ICC Setup page : fix layout widgets : move "Color
+          managed view" option to the top of ICC profiles setting group,
+          just before "Monitor" color profile setting. More explicit for
+          users.
+
+2006-12-02 09:40 +0000 [r609788]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp: polish
+
+2006-12-01 14:37 +0000 [r609653]  cgilles
+
+        * digikam/utilities/imageeditor/canvas/Makefile.am,
+          digikam/showfoto/Makefile.am, digikam/showfoto/setup/Makefile.am,
+          digikam/utilities/cameragui/Makefile.am,
+          digikam/utilities/imageeditor/editor/Makefile.am,
+          digikam/libs/lprof/Makefile.am,
+          digikam/utilities/setup/Makefile.am: digikam from trunk : compile
+          with -nofinal option from .configure script (optimizations)
+
+2006-12-01 13:51 +0000 [r609634]  cgilles
+
+        * digikam/utilities/imageeditor/tools/imageprint.h,
+          digikam/utilities/imageeditor/tools/imageprint.cpp: digikam from
+          trunk: fix in color management printing workflow : same problem
+          here than Managed View color management. In fact this mode do not
+          work properlly before this commit, because the input profile is
+          the camera profile. This is wrong with printing : the input
+          profile must be the workspace profile. CCMAIL:
+          digikam-devel@kde.org, fj.cruz@supercable.es CCBUGS: 131947
+
+2006-12-01 13:26 +0000 [r609570]  cgilles
+
+        * digikam/libs/dimg/dimg.cpp,
+          digikam/libs/dimg/filters/icctransform.cpp,
+          digikam/libs/dimg/filters/icctransform.h,
+          digikam/utilities/imageeditor/canvas/dimginterface.cpp,
+          digikam/utilities/imageeditor/editor/imageiface.cpp: digikam from
+          trunk: fix in color management : - To be abble to use CM is no
+          input color profile is set in CM setup. In this case, we use
+          built-in sRGB color profile from lcms. This will be enough for
+          0.9.0. Paco, perhaps we must provide an option into CM setup to
+          choose the right mode between "built-in" or "from input icc
+          file". Krita run like this. - By default, using the CM plugin
+          with RAW file instead Color correction dialog. Paco, in fact, I
+          think it's a a non-sence to use ColorCorrection with RAW file. A
+          common option in CM setup is certainly better than 2 separate
+          options : if user choose "Ask when open an image in Image editor"
+          option, well digikam will start CM plugin if the image is a RAW
+          file, or if its JPEG/TIFF/PNG it will start Color correction
+          dialog. - Fix Color Managed View (for Monitor) color management.
+          In fact this mode do not work properlly before this commit,
+          because the input profile is the camera profile. This is wrong
+          with managed view : the input profile must be the workspace
+          profile. This is why some users have reported a wrong color
+          rendering if this option is enable. Paco, please let's me here
+          your comments if necessary. Please update your TODO accordinly
+          for future actions later 0.9.0 final release. CCMAIL:
+          digikam-devel@kde.org, fj.cruz@supercable.es CCBUGS: 131947
+
+2006-12-01 13:12 +0000 [r609553]  cgilles
+
+        * digikam/data/about/Makefile (removed),
+          digikam/data/about/Makefile.in (removed): no need these files in
+          svn
+
+2006-12-01 11:16 +0000 [r609539]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp: digikam from trunk: always
+          enable CM tool with RAW files by default
+
+2006-12-01 11:12 +0000 [r609538]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp: polish
+
+2006-12-01 10:00 +0000 [r609528]  cgilles
+
+        * digikam/utilities/setup/setupicc.cpp,
+          digikam/utilities/setup/setupicc.h: digikam from trunk : Setup
+          Color Management : fix crash into lcms library if a subfolder in
+          icc profiles repository use ".icc" or ".icm" extension (for
+          example /home/gilles/myprofiles.icc) CCBUGS: 131947
+
+2006-11-30 17:27 +0000 [r609410]  cgilles
+
+        * digikam/NEWS: update
+
+2006-11-30 14:11 +0000 [r609382-609384]  cgilles
+
+        * digikam/NEWS: update
+
+        * digikam/digikam/Makefile.am: compile
+
+        * digikam/digikam/Makefile.am: digikam from trunk : main
+          digikam/digikam folder compile with -nofinal option from
+          .configure script now. Before, enable-final have been disable for
+          this folder. digikam/digikam/Makefile.am is now fixed and all
+          compile fine in this mode. The files order to compile
+          libdigikam.la is very important in this mode. We need to take a
+          care about this point in the future. Please report me if you have
+          any problems on your Linux dist when you compile packages. Thanks
+          in advance CCMAIL: digikam-devel@kde.org
+
+2006-11-30 13:36 +0000 [r609376]  cgilles
+
+        * digikam/digikam/Makefile.am: digikam from trunk : compile with
+          -nofinal option from .configure script
+
+2006-11-30 07:39 +0000 [r609323-609324]  cgilles
+
+        * digikam/libs/dimg/loaders/rawloader.cpp: polish
+
+        * digikam/libs/dimg/loaders/rawloader.h,
+          digikam/libs/dimg/loaders/rawloader.cpp: digikam from trunk :
+          DImg::RawLoader : using an internal d private class here doesn't
+          work properlly. RAW Loader crash with Hyperthreading CPU. Code is
+          reverted. We will inverstiguate this problem later than 0.9.0
+          final release. CCMAIL: Marcel Wiesweg <marcel.wiesweg@gmx.de>
+
+2006-11-30 06:32 +0000 [r609314]  cgilles
+
+        * digikam/NEWS: update
+
+2006-11-29 21:35 +0000 [r609246]  cgilles
+
+        * digikam/configure.in.in: digikam from trunk : fixed wrong message
+          if exiv2_config is not present
+
+2006-11-29 15:33 +0000 [r609156]  cgilles
+
+        * digikam/configure.in.in: digikam from trunk : fix .configure
+          script to check properlly the Exiv2 version availalble to the
+          release >= 0.12. Implmeentation backported from kipi-plugins
+
+2006-11-29 15:17 +0000 [r609155]  cgilles
+
+        * digikam/libs/dimg/loaders/rawloader.h,
+          digikam/libs/dimg/loaders/rawloader.cpp: digikam from trunk :
+          using d private internal class
+
+2006-11-29 14:21 +0000 [r609145]  cgilles
+
+        * digikam/libs/thumbbar/thumbbar.h,
+          digikam/libs/thumbbar/thumbbar.cpp: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+2006-11-29 13:40 +0000 [r609127-609128]  cgilles
+
+        * digikam/showfoto/Makefile.am: digikam from trunk : compile with
+          -nofinal option from .configure script
+
+        * digikam/libs/dialogs/Makefile.am: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+2006-11-29 13:32 +0000 [r609109]  cgilles
+
+        * digikam/libs/imageproperties/Makefile.am: polish
+
+2006-11-29 13:27 +0000 [r609081]  cgilles
+
+        * digikam/libs/thumbbar/thumbbar.h,
+          digikam/libs/thumbbar/thumbbar.cpp: digikam from trunk : using d
+          private internal class
+
+2006-11-27 16:45 +0000 [r608469]  cgilles
+
+        * digikam/README: fix depency to Exiv2 0.12 release
+
+2006-11-27 12:43 +0000 [r608311]  cgilles
+
+        * digikam/libs/dcraw/dcrawpreview.cpp,
+          digikam/libs/dimg/loaders/rawloader.cpp: digikam from trunk : bug
+          fix : RAW preview extraction use an external dcraw instance
+          instead the digikamdcraw.
+
+2006-11-27 12:29 +0000 [r608302]  cgilles
+
+        * digikam/digikam/iconview.cpp, digikam/digikam/icongroupitem.cpp,
+          digikam/digikam/iconview.h, digikam/digikam/icongroupitem.h:
+          digikam from trunk : compile with -nofinal option from .configure
+          script : fix redondant static methods
+
+2006-11-27 12:09 +0000 [r608294]  cgilles
+
+        * digikam/libs/dialogs/Makefile.am: polish
+
+2006-11-27 11:41 +0000 [r608290]  cgilles
+
+        * digikam/digikam/searchwidgets.h, digikam/digikam/kdateedit.h,
+          digikam/digikam/searchwidgets.cpp,
+          digikam/digikam/albumfiletip.cpp: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+2006-11-27 11:34 +0000 [r608287-608288]  cgilles
+
+        * digikam/digikam/kdateedit.h, digikam/digikam/kdateedit.cpp:
+          digikam from trunk : compile with -nofinal option from .configure
+          script
+
+        * digikam/digikam/searchwidgets.h,
+          digikam/digikam/searchwidgets.cpp: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+2006-11-27 11:30 +0000 [r608284-608285]  cgilles
+
+        * digikam/digikam/searchwidgets.h,
+          digikam/digikam/searchwidgets.cpp: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+        * digikam/digikam/ratingwidget.cpp: digikam from trunk : compile
+          with -nofinal option from .configure script
+
+2006-11-27 11:01 +0000 [r608273]  cgilles
+
+        * digikam/libs/widgets/metadata/gpswidget.cpp: digikam from trunk :
+          compile with -nofinal option from .configure script : fix
+          redefinition of static char* list
+
+2006-11-27 10:49 +0000 [r608268]  cgilles
+
+        * digikam/libs/lprof/Makefile.am: digikam from trunk : compile with
+          -nofinal option from .configure script
+
+2006-11-27 10:04 +0000 [r608260]  cgilles
+
+        * digikam/libs/imageproperties/imagedescedittab.cpp: digiKam from
+          trunk : optimize space used to display tags list in Comment &
+          Tags sidebar: move "Recents Tags" button to the top on the Search
+          Tags box. Optimize spacing layout.
+
+2006-11-27 09:11 +0000 [r608247-608249]  cgilles
+
+        * digikam/NEWS: update
+
+        * digikam/libs/imageproperties/imagedescedittab.cpp,
+          digikam/libs/imageproperties/imagedescedittab.h: digiKam from
+          trunk : patch from Marcel to dispach Tags moving from left pannel
+          to right pannel on Album Gui. BUG: 137866
+
+2006-11-26 08:36 +0000 [r607893]  cgilles
+
+        * digikam/TODO: update
+
+2006-11-25 17:33 +0000 [r607766]  cgilles
+
+        * digikam/digikam/kipiinterface.cpp: digikam from trunk :
+          kipi-interface : check if rating value is right before to store
+          it in database
+
+2006-11-25 16:55 +0000 [r607751]  cgilles
+
+        * digikam/digikam/kipiinterface.h,
+          digikam/digikam/kipiinterface.cpp: digikam from trunk :
+          kipi-interface : - ImageInfo::attributes() can give rating value
+          of picture stored in database. - ImageInfo::addAttributes() can
+          set rating value of picture in database. Implementation to set
+          picture Tags list based on a QStringList is not yet implemented.
+          We need to add a new method in albumdb.cpp for that. -
+          ImageInfo::addAttributes() used with an empty QMap() will be use
+          to refresh sidebar content without refresh picture thumbnail in
+          AlbumView. Note: meta-data management kipi-plugins will use these
+          methods to sync database picture attributes with picture
+          meta-data. CCMAIL: marcel.wiesweg@gmx.de
+
+2006-11-25 07:40 +0000 [r607571-607572]  cgilles
+
+        * digikam/NEWS: update
+
+        * digikam/digikam/albumicongroupitem.cpp,
+          digikam/digikam/albumicongroupitem.h: digikam from trunk : do not
+          break album banner layout if album caption is very long. BUG:
+          137845
+
+2006-11-24 22:19 +0000 [r607515]  cgilles
+
+        * digikam/imageplugins/imageeffect_hsl.cpp,
+          digikam/imageplugins/imageeffect_hsl.h: digikam from trunk: added
+          Hue/Saturation KDE selector widget in HSL tool to improve
+          settings tool selection in dialog
+
+2006-11-24 15:35 +0000 [r607418]  cgilles
+
+        * digikam/data/about/bottom-middle.png (added),
+          digikam/data/about/bar-top-middle.png (added),
+          digikam/data/about/bar-bottom-middle.png (added),
+          digikam/data/about/box-top-right.png (added),
+          digikam/data/about/main.html (added),
+          digikam/data/about/box-bottom-right.png (added),
+          digikam/data/about/digikam.css (added),
+          digikam/data/about/bar-middle-right.png (added),
+          digikam/data/about/box-middle-left.png (added),
+          digikam/data/Makefile.am, digikam/data/about (added),
+          digikam/data/about/kde_infopage.css (added),
+          digikam/data/about/bar-top-right.png (added),
+          digikam/data/about/bottom-right.png (added),
+          digikam/data/about/top-right-digikam.png (added),
+          digikam/data/about/box-top-left.png (added),
+          digikam/data/about/bar-bottom-right.png (added),
+          digikam/data/about/box-bottom-left.png (added),
+          digikam/data/about/box-top-middle.png (added),
+          digikam/data/about/box-bottom-middle.png (added),
+          digikam/data/about/Makefile.am (added),
+          digikam/data/about/bar-middle-left.png (added),
+          digikam/data/about/top-left.png (added),
+          digikam/data/about/Makefile (added),
+          digikam/data/about/bar-top-left.png (added),
+          digikam/data/about/bottom-left.png (added),
+          digikam/data/about/top-middle.png (added),
+          digikam/data/about/bar-bottom-left.png (added),
+          digikam/data/about/box-middle-right.png (added),
+          digikam/data/about/Makefile.in (added): digiKam from trunk : new
+          about data on startup to be more user-friendly. It inspired from
+          KMail. Not yet used.
+
+2006-11-24 10:08 +0000 [r607361-607363]  cgilles
+
+        * digikam/digikam/digikamview.cpp: polish
+
+        * digikam/digikam/digikamview.cpp: polish
+
+2006-11-23 14:42 +0000 [r607180]  cgilles
+
+        * digikam/configure.in.in: fix duplicate test about endianess
+
+2006-11-22 11:42 +0000 [r606923]  cgilles
+
+        * digikam/digikam/imagepreviewwidget.cpp: digikam from trunk : fix
+          huge memory corruption relevant of a wrong deletion of data
+          shared between preview kio-slave and digiKam. Without this fix,
+          digiKam is unstable with unsupported/broken pictures to show. It
+          can crash everywhere with a non suitable backtrace. I have
+          working hard to find this problem. I would to thanks again and
+          again valgrind team who have provided a great debuging tool.
+          CCMAIL: digikam-devel@kde.org
+
+2006-11-21 23:14 +0000 [r606834]  ach
+
+        * digikam/PACKAGING: digikam: add tagging example to PACKAGING that
+          does not really on HEAD-not-changed-since-tarball-creation
+
+2006-11-21 21:19 +0000 [r606804-606806]  cgilles
+
+        * digikam/NEWS: update
+
+        * digikam/kioslave/digikamalbums.cpp,
+          digikam/kioslave/digikamthumbnail.cpp,
+          digikam/libs/dimg/dimg.cpp, digikam/libs/dcraw/dcrawpreview.cpp,
+          digikam/libs/imageproperties/imagepropertiestab.cpp,
+          digikam/digikam/albumfiletip.cpp: digikam from trunk : fix
+          file-extention parsing when it's a null string CCBUGS: 137495
+
+        * digikam/libs/dimg/loaders/rawloader.cpp: digikam from trunk :
+          patch from Marcel to take a care if dcraw fail to decode a RAW
+          file CCBUGS: 137495
+
+2006-11-21 15:43 +0000 [r606740]  ach
+
+        * digikam/ChangeLog, digikam/release_digikam_cl.sh,
+          digikam/PACKAGING: digikam trunk: prepare tarball with
+          --disable-debug fix
+
 v0.9.0-rc1 - 21-Oct-2006
 ----------------------------------------------------------------------------
 

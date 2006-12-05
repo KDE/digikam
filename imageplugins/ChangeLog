@@ -1,3 +1,39 @@
+v0.9.0-rc2 - 05-Dec-2006
+----------------------------------------------------------------------------
+
+2006-12-05 15:22 +0000 [r610786]  mwiesweg
+
+        * digikam/release_digikam.rb,
+          digikamimageplugins/digikamimageplugins.lsm, digikam/version.h,
+          digikamimageplugins/common/include/version.h,
+          digikam/digikam.lsm,
+          digikamimageplugins/release_digikamimageplugins.rb: Preparing RC2
+
+2006-12-01 14:42 +0000 [r609655]  cgilles
+
+        * digikamimageplugins/superimpose/Makefile.am: digikam from trunk :
+          compile with -nofinal option from .configure script
+
+2006-12-01 14:37 +0000 [r609654]  cgilles
+
+        * digikamimageplugins/adjustcurves/Makefile.am: digikam from trunk
+          : compile with -nofinal option from .configure script
+
+2006-11-21 23:03 +0000 [r606831]  ach
+
+        * digikamimageplugins/release_digikamimageplugins.rb:
+          digikamimageplugins: create RELEASE.rev in release script
+
+2006-11-19 08:59 +0000 [r606086]  cgilles
+
+        * digikamimageplugins/README: update
+
+2006-11-16 00:48 +0000 [r605242]  ach
+
+        * digikamimageplugins/release_digikamimageplugins_cl.sh (added),
+          digikamimageplugins/ChangeLog: digikamimageplugins trunk: copy
+          changelog script from digikam and update ChangeLog file
+
 v0.9.0-rc1 - 15-Oct-2006
 ----------------------------------------------------------------------------
 
