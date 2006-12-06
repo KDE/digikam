@@ -116,6 +116,8 @@ General       : Exiv2 depency fixed to 0.12 release.
 General       : Fix broken compilation using "./configure -enable-final" option.
 ImageEditor   : Fixed and improved Color Management View workflow.
 
+*** 0.9.0-final *********************************************************
+
 ...
 
 ----------------------------------------------------------------------------------------------------
@@ -355,6 +357,10 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 211 ==> 130176 : Typos in digiKam.po and one plugin.
 212 ==> 138252 : Display is not updates when switching color managed view on/off.
 213 ==> 138253 : Keyboard shortcut for turning color managed display on/off.
-214 ==> 
+
+*** 0.9.0-final *********************************************************
+
+214 ==> 137461 : Typo croping must be cropping.
+215 ==> 
 
 ----------------------------------------------------------------------------------------------------
