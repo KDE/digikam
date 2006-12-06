@@ -1,30 +1,29 @@
-# Require by libgphoto2 header.
-KDE_OPTIONS = nofinal
-
 METASOURCES = AUTO
 
-INCLUDES= -I$(top_srcdir)/digikam/digikam \
-	      -I$(top_srcdir)/digikam/libs/dialogs \
-	      -I$(top_srcdir)/digikam/libs/dimg \
-	      -I$(top_srcdir)/digikam/libs/dcraw \
-	      -I$(top_srcdir)/digikam/libs/widgets/common \
-	      $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS) \
-	      $(all_includes)
+INCLUDES = -I$(top_srcdir)/digikam/digikam \
+	   -I$(top_srcdir)/digikam/libs/dialogs \
+	   -I$(top_srcdir)/digikam/libs/dimg \
+	   -I$(top_srcdir)/digikam/libs/dcraw \
+	   -I$(top_srcdir)/digikam/libs/widgets/common \
+	   $(GPHOTO_CFLAGS) $(LIBKIPI_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libsetup.la libshowfotosetup.la
 
-libsetup_la_SOURCES = setup.cpp setupcamera.cpp setupimgplugins.cpp \
-	                  cameraselection.cpp setupgeneral.cpp \
-	                  gpiface.cpp setupmime.cpp setupplugins.cpp \
-	                  setupcollections.cpp setupmetadata.cpp \
-	                  setupeditor.cpp setupmisc.cpp setupicc.cpp \
-	                  setupiofiles.cpp setupslideshow.cpp setupidentity.cpp \
-	                  setuptooltip.cpp dcrawsettingswidget.cpp 
+# NOTE from Gilles (06-12-06): gpiface.cpp must be placed on the top of source file list 
+# to unbreak compilation with './configure -enable-final' option. I suspect a problem with 
+# Gphoto2 C Ansi header.
+libsetup_la_SOURCES = gpiface.cpp cameraselection.cpp setupcamera.cpp \
+	              setupmime.cpp setupplugins.cpp setupidentity.cpp \
+	              setupgeneral.cpp setup.cpp setupimgplugins.cpp \
+	              setupcollections.cpp setupmetadata.cpp \
+	              setupeditor.cpp setupmisc.cpp setupicc.cpp \
+	              setupiofiles.cpp setupslideshow.cpp \
+	              setuptooltip.cpp dcrawsettingswidget.cpp 
 
 libsetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(LIB_GPHOTO)
 
 libshowfotosetup_la_SOURCES = setupimgplugins.cpp setupiofiles.cpp \
-	                          setupicc.cpp setupslideshow.cpp dcrawsettingswidget.cpp 
+	                      setupicc.cpp setupslideshow.cpp dcrawsettingswidget.cpp 
 
 libshowfotosetup_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
