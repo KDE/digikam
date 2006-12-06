@@ -118,6 +118,9 @@ ImageEditor   : Fixed and improved Color Management View workflow.
 
 *** 0.9.0-final *********************************************************
 
+General       : About final release packaging, improve support of "./configure --enable-final" 
+                option everywhere.
+
 ...
 
 ----------------------------------------------------------------------------------------------------
