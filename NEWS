@@ -365,6 +365,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 
 214 ==> 137461 : Typo croping must be cropping.
 215 ==> 135477 : View mode which shows the comment of an image.
-216 ==> 
+216 ==> 137770 : digiKam doesn't keep original unix rights when modifying comments/tags/rating.
+217 ==> 
 
 ----------------------------------------------------------------------------------------------------
