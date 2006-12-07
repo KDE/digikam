@@ -69,16 +69,20 @@ You'll find the svn revision used in the tarball in the file RELEAVE.rev
 For a X.Y.Z.UVW release
 
    svn copy -r{last-used-rev_from_RELEASE.rev} \
-	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam \
 	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikam_X_Y_Z_UVW
 
    svn copy -r{last-used-rev_from_RELEASE.rev} \
-	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikamimageplugins \
 	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikamimageplugins_X_Y_Z_UVW
 
 If anyone knows what the purpose of this tagging is, please put it here ;-)
 	* easy svn diff against released version? -- allee
 	* nevermind, feel free to remove the tagging section -- allee
+	* information about releases is stored in SVN database,
+	  SVN history will be kept for a long time -- marcel
+	* the idea of tagging comes from CVS, with SVN, you copy -- marcel
+	* copying in SVN is a cheap operation, it doesn't hurt -- marcel
 
 ----------------- Branching -----------------
 
