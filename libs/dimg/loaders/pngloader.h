@@ -23,6 +23,7 @@
 
 extern "C"
 {
+#include <stdarg.h>
 #include <png.h>
 }
 
