@@ -79,19 +79,14 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
     if (!url.isValid())
         return;
 
-    if (url  == m_currentURL &&
-        rect == m_currentRect &&
-        img  == m_image)
-        return;
-    
     m_currentURL         = url;
     m_currentRect        = rect;
     m_image              = img;
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
-    
-    slotChangedTab( getActiveTab() );    
+
+    slotChangedTab( getActiveTab() );
 }
 
 void ImagePropertiesSideBar::slotNoCurrentItem(void)

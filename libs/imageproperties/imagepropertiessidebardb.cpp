@@ -184,20 +184,6 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     if ( !url.isValid() )
         return;
 
-    // filter out duplicates
-    if (url  == m_currentURL &&
-        rect == m_currentRect &&
-        img  == m_image &&
-        view == d->currentView &&
-        item == d->currentItem &&
-        info == d->currentInfo &&
-        ( (!hasPrevious && d->currentItemPosition == NavigateBarWidget::ItemFirst) ||
-          (!hasNext && d->currentItemPosition == NavigateBarWidget::ItemLast) ||
-          (hasNext && hasPrevious && d->currentItemPosition == NavigateBarWidget::ItemCurrent)
-        )
-       )
-        return;
-
     m_currentURL         = url;
     m_currentRect        = rect;
     m_image              = img;
