@@ -349,7 +349,7 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
 
 bool DMetadata::save(const QString& filePath, DImg::FORMAT ff)
 {
-    // NOTE: see B.K.O #137770 : never touch the file is is read only.
+    // NOTE: see B.K.O #137770 : never touch the file if is read only.
     QFileInfo info(filePath); 
     if (!info.isWritable())
     {
