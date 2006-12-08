@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-20
  * Description : main image editor GUI implementation
  *
  * Copyright 2006 by Gilles Caulier
@@ -208,7 +208,6 @@ private:
 private:
 
     EditorWindowPriv *d;
-
 };
 
 }  // namespace Digikam

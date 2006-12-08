@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-01-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-01-20
  * Description : main image editor GUI implementation
  *
  * Copyright 2006 by Gilles Caulier
@@ -131,10 +131,10 @@ EditorWindow::EditorWindow(const char *name)
 EditorWindow::~EditorWindow()
 {
     delete m_canvas;
-    delete d->ICCSettings;
     delete m_IOFileSettings;
     delete m_savingContext;
     delete m_slideShow;
+    delete d->ICCSettings;
     delete d;
 }
 
@@ -373,15 +373,15 @@ void EditorWindow::setupStandardActions()
     d->rotateAction->setDelayed(false);
 
     d->rotate90Action  = new KAction(i18n("90 Degrees"),
-                                    0, Key_9, m_canvas, SLOT(slotRotate90()),
+                                    0, CTRL+Key_9, m_canvas, SLOT(slotRotate90()),
                                     actionCollection(),
                                     "rotate_90");
     d->rotate180Action = new KAction(i18n("180 Degrees"),
-                                    0, Key_8, m_canvas, SLOT(slotRotate180()),
+                                    0, CTRL+Key_8, m_canvas, SLOT(slotRotate180()),
                                     actionCollection(),
                                     "rotate_180");
     d->rotate270Action = new KAction(i18n("270 Degrees"),
-                                    0, Key_7, m_canvas, SLOT(slotRotate270()),
+                                    0, CTRL+Key_7, m_canvas, SLOT(slotRotate270()),
                                     actionCollection(),
                                     "rotate_270");
 
