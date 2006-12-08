@@ -81,6 +81,7 @@
 // Local includes.
 
 #include "imageeffect_iccproof.h"
+#include "imageeffect_iccproof.moc"
 
 namespace DigikamImagesPluginCore
 {
@@ -435,6 +436,11 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    enableButtonOK( false );
+    readSettings();
+
+    // -------------------------------------------------------------
+
     connect(lcmsLogoLabel, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processLCMSURL(const QString&)));
 
@@ -510,11 +516,6 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
 
     connect(proofProfilesInfo, SIGNAL(clicked()),
             this, SLOT(slotProofICCInfo()));
-
-    // -------------------------------------------------------------
-
-    enableButtonOK( false );
-    readSettings();
 }
 
 ImageEffect_ICCProof::~ImageEffect_ICCProof()
@@ -1255,4 +1256,3 @@ void ImageEffect_ICCProof::slotUser2()
 
 } // NameSpace DigikamImagesPluginCore
 
-#include "imageeffect_iccproof.moc"
