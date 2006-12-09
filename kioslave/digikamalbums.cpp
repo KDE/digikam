@@ -457,6 +457,23 @@ void kio_digikamalbums::put(const KURL& url, int permissions, bool overwrite, bo
         }
     }
 
+    // set modification time
+    const QString mtimeStr = metaData( "modified" );
+    if ( !mtimeStr.isEmpty() ) {
+        QDateTime dt = QDateTime::fromString( mtimeStr, Qt::ISODate );
+        if ( dt.isValid() ) {
+            KDE_struct_stat dest_statbuf;
+            if (KDE_stat( _dest.data(), &dest_statbuf ) == 0) {
+                struct utimbuf utbuf;
+                utbuf.actime = dest_statbuf.st_atime; // access time, unchanged
+                utbuf.modtime = dt.toTime_t(); // modification time
+                kdDebug() << k_funcinfo << "setting modtime to " << utbuf.modtime << endl;
+                utime( _dest.data(), &utbuf );
+            }
+        }
+
+    }
+
     // First check if the file is already in database
     if (!findImage(album.id, url.fileName()))
     {
