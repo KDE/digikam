@@ -368,6 +368,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 216 ==> 137770 : digiKam doesn't keep original unix rights when modifying comments/tags/rating.
 217 ==> 133091 : Changing date/time with numblock changes also the orientation.
 218 ==> 137993 : Importing photos into albums results in time/date file override with current one.
-219 ==> 
+219 ==> 138620 : Saving a picture destroy another picture
+220 ==> 
 
 ----------------------------------------------------------------------------------------------------

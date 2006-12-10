@@ -380,6 +380,9 @@ void ImageWindow::applySettings()
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                           const QString& caption, bool allowSaving, AlbumIconView* view)
 {
+    if (!promptUserSave(d->urlCurrent))
+        return;
+
     d->urlList          = urlList;
     d->urlCurrent       = urlCurrent;
     d->imageInfoList    = ImageInfoList();
@@ -391,7 +394,19 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
 void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
                                  const QString& caption, bool allowSaving, AlbumIconView* view)
 {
-    // the ownership of the list's objects is passed to us
+    // The ownership of objects of imageInfoList is passed to us.
+    // imageInfoCurrent is contained in imageInfoList.
+
+    // Very first thing is to check for changes, user may choose to cancel operation
+    if (!promptUserSave(d->urlCurrent))
+    {
+        // delete objects from list
+        for (ImageInfoList::iterator it = imageInfoList.begin(); it != imageInfoList.end(); ++it)
+            delete *it;
+        return;
+    }
+
+    // take over ImageInfo list
     d->imageInfoList    = imageInfoList;
     d->imageInfoCurrent = imageInfoCurrent;
 
@@ -421,9 +436,6 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving, Albu
     {
         KWin::deIconifyWindow(winId());
     }
-
-    if (!promptUserSave(d->urlCurrent))
-        return;
 
     setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
