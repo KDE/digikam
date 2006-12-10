@@ -66,7 +66,7 @@ AC_LANG_RESTORE
 LIB_SQLITE3=""
 
 if test x$PKGCONFIGFOUND = xyes; then
-   PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
+   KDE_PKG_CHECK_MODULES(SQLITE, sqlite3 >= 3.0, have_sqlite3=yes,have_sqlite3=no)
 
    if test x$have_sqlite3 = xyes; then
       LIB_SQLITE3=`pkg-config --libs sqlite3`
@@ -221,7 +221,7 @@ if test -n "${EXIV2_CONFIG}"; then
   AC_SUBST(EXIV2_CFLAGS)
   LIB_EXIV2="`$EXIV2_CONFIG --libs`"
   AC_SUBST(LIB_EXIV2)
-  PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
+  KDE_PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
 fi
 
 if test "x$have_exiv2" != "xyes"; then
