@@ -354,11 +354,11 @@ void EditorWindow::setupStandardActions()
     d->flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
     d->flipAction->setDelayed(false);
 
-    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, CTRL+Key_Asterisk,
+    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, SHIFT+Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_fliphorizontal");
 
-    d->flipVertAction = new KAction(i18n("Vertically"), 0, CTRL+Key_Slash,
+    d->flipVertAction = new KAction(i18n("Vertically"), 0, SHIFT+Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flipvertical");
                                    
@@ -373,15 +373,15 @@ void EditorWindow::setupStandardActions()
     d->rotateAction->setDelayed(false);
 
     d->rotate90Action  = new KAction(i18n("90 Degrees"),
-                                    0, CTRL+Key_9, m_canvas, SLOT(slotRotate90()),
+                                    0, SHIFT+Key_9, m_canvas, SLOT(slotRotate90()),
                                     actionCollection(),
                                     "rotate_90");
     d->rotate180Action = new KAction(i18n("180 Degrees"),
-                                    0, CTRL+Key_8, m_canvas, SLOT(slotRotate180()),
+                                    0, SHIFT+Key_8, m_canvas, SLOT(slotRotate180()),
                                     actionCollection(),
                                     "rotate_180");
     d->rotate270Action = new KAction(i18n("270 Degrees"),
-                                    0, CTRL+Key_7, m_canvas, SLOT(slotRotate270()),
+                                    0, SHIFT+Key_7, m_canvas, SLOT(slotRotate270()),
                                     actionCollection(),
                                     "rotate_270");
 
