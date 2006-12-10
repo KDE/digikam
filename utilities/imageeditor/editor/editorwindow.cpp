@@ -354,11 +354,11 @@ void EditorWindow::setupStandardActions()
     d->flipAction = new KActionMenu(i18n("Flip"), "flip", actionCollection(), "editorwindow_flip");
     d->flipAction->setDelayed(false);
 
-    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, Key_Asterisk,
+    d->flipHorzAction = new KAction(i18n("Horizontally"), 0, CTRL+Key_Asterisk,
                                    m_canvas, SLOT(slotFlipHoriz()),
                                    actionCollection(), "editorwindow_fliphorizontal");
 
-    d->flipVertAction = new KAction(i18n("Vertically"), 0, Key_Slash,
+    d->flipVertAction = new KAction(i18n("Vertically"), 0, CTRL+Key_Slash,
                                    m_canvas, SLOT(slotFlipVert()),
                                    actionCollection(), "editorwindow_flipvertical");
                                    
