@@ -375,6 +375,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 223 ==> 133276 : Make changing EXIF date of multiple files easier.
 224 ==> 133590 : Usability: walking through photos using image View (F3).
 225 ==> 122746 : Images are not shown anymore. black screen.
-226 ==> 
+226 ==> 132470 : Plugins not available unless logged in as superuser.
+227 ==> 
 
 ----------------------------------------------------------------------------------------------------
