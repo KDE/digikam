@@ -18,6 +18,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Unsharp mask image filter plugin for digiKam
 Comment[bg]=Приставка на digiKam за изостряне на снимки с нерязко (контурно) маскиране
+Comment[ca]=Connector pel digiKam de filtre per emmascarar els desenfocaments
 Comment[da]=Plugin til forbedring af skarphed med uskarphedsfilter i Digikam
 Comment[de]=digiKam-Modul zum Filtern des Bildes mit einer Unschärfemaske
 Comment[el]=Πρόσθετο φίλτρο εξομάλυνσης εικόνας για το digiKam

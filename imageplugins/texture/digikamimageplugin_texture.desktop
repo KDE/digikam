@@ -18,6 +18,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to apply texture on image
 Comment[bg]=Приставка на digiKam за добавяне на текстури към снимки
+Comment[ca]=Connector pel digiKam per aplicar una textura a una imatge
 Comment[da]=digiKam-plugin til at anvende tekstur på billedet
 Comment[de]=digiKam-Modul zum Hinzufügen einer Textur zu einem Bild
 Comment[el]=Πρόσθετο εφαρμογής υφής σε εικόνα για το digiKam

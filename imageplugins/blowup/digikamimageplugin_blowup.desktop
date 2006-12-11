@@ -19,6 +19,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to blowup a photograph
 Comment[bg]=Приставка на digiKam за цифрово увеличение на снимки
+Comment[ca]=Connector pel digiKam per ampliar una fotografia
 Comment[da]=Digikam plugin til at forstørre et fotografi
 Comment[de]=digiKam-Modul zum Vergrößern von Bildern
 Comment[el]=Πρόσθετο αστάθειας μιας φωτογραφίας για το digiKam

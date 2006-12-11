@@ -19,6 +19,7 @@ ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Shear tool plugin for digiKam
 Comment[bg]=Приставка на digiKam с инструмент за изрязване на снимки
+Comment[ca]=Connector pel digiKam d'eina per retallar
 Comment[da]=Forskydningsværktøjs-plugin for Digikam
 Comment[de]=digiKam-Modul zum Scheren eines Bildes
 Comment[el]=Πρόσθετο εργαλείο στρέβλωσης για το digiKam
