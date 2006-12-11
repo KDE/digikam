@@ -739,6 +739,13 @@ void ImageEffect_ICCProof::slotEffect()
     else if (useSelectedInProfile())
     {
         tmpInPath = m_inProfilesPath->url();
+        QFileInfo info(tmpInPath);
+        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        {
+            KMessageBox::information(this, i18n("<p>Selected ICC input profile path seems to be invalid.<p>"
+                                                "Please check it."));
+            return;
+        }
     }
 
     //-- Proof profile parameters ------------------
@@ -750,6 +757,13 @@ void ImageEffect_ICCProof::slotEffect()
     else
     {
         tmpProofPath = m_proofProfilePath->url();
+        QFileInfo info(tmpProofPath);
+        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        {
+            KMessageBox::information(this, i18n("<p>Selected ICC proof profile path seems to be invalid.<p>"
+                                                "Please check it."));
+            return;
+        }
     }
 
     if (m_doSoftProofBox->isChecked())
@@ -764,6 +778,13 @@ void ImageEffect_ICCProof::slotEffect()
     else
     {
         tmpSpacePath = m_spaceProfilePath->url();
+        QFileInfo info(tmpSpacePath);
+        if (!info.exists() || !info.isReadable() || !info.isFile() )
+        {
+            KMessageBox::information(this, i18n("<p>Selected ICC workspace profile path seems to be invalid.<p>"
+                                                "Please check it."));
+            return;
+        }
     }
 
     spaceCondition = tmpSpacePath.isEmpty();
@@ -878,15 +899,15 @@ void ImageEffect_ICCProof::finalRendering()
             else if (useSelectedInProfile())
             {
                 tmpInPath = m_inProfilesPath->url();
+                QFileInfo info(tmpInPath);
+                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                {
+                    KMessageBox::information(this, i18n("<p>Selected ICC input profile path seems "
+                                                        "to be invalid.<p>Please check it."));
+                    return;
+                }
             }
 
-            if (tmpInPath.isNull() && !m_useEmbeddedProfile->isChecked() &&    
-                !m_useSRGBDefaultProfile->isChecked())
-            {
-                KMessageBox::information(this, "Profile error");
-                return;
-            }
-                
             //-- Proof profile parameters ------------------
         
             if (useDefaultProofProfile())
@@ -896,6 +917,13 @@ void ImageEffect_ICCProof::finalRendering()
             else
             {
                 tmpProofPath = m_proofProfilePath->url();
+                QFileInfo info(tmpProofPath);
+                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                {
+                    KMessageBox::information(this, i18n("<p>Selected ICC proof profile path seems "
+                                                        "to be invalid.<p>Please check it."));
+                    return;
+                }
             }
 
             if (tmpProofPath.isNull())
@@ -910,6 +938,13 @@ void ImageEffect_ICCProof::finalRendering()
             else
             {
                 tmpSpacePath = m_spaceProfilePath->url();
+                QFileInfo info(tmpSpacePath);
+                if (!info.exists() || !info.isReadable() || !info.isFile() )
+                {
+                    KMessageBox::information(this, i18n("<p>Selected ICC workspace profile path seems "
+                                                        "to be invalid.<p>Please check it."));
+                    return;
+                }
             }
         
             //-- Perform the color transformations ------------------
