@@ -370,6 +370,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 218 ==> 137993 : Importing photos into albums results in time/date file override with current one.
 219 ==> 138620 : Saving a picture destroy another picture
 220 ==> 119205 : Drag & Drop of image into librarypath root dir ==> images are invisible.
-221 ==> 
+221 ==> 121651 : Export menu not available in context menu from album.
+222 ==>  
 
 ----------------------------------------------------------------------------------------------------
