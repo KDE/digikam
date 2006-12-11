@@ -372,6 +372,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 220 ==> 119205 : Drag & Drop of image into librarypath root dir ==> images are invisible.
 221 ==> 121651 : Export menu not available in context menu from album.
 222 ==> 131601 : Need preview pane (large) in main digikam window.
-223 ==>   
+223 ==> 133276 : make changing EXIF date of multiple files easier.
+224 ==> 
 
 ----------------------------------------------------------------------------------------------------
