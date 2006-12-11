@@ -369,6 +369,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 217 ==> 133091 : Changing date/time with numblock changes also the orientation.
 218 ==> 137993 : Importing photos into albums results in time/date file override with current one.
 219 ==> 138620 : Saving a picture destroy another picture
-220 ==> 
+220 ==> 119205 : Drag & Drop of image into librarypath root dir ==> images are invisible.
+221 ==> 
 
 ----------------------------------------------------------------------------------------------------
