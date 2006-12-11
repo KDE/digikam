@@ -414,6 +414,7 @@ void AlbumFolderView::slotSelectionChanged()
 void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, int)
 {
     KActionMenu menuImport(i18n("Import"));
+    KActionMenu menuExport(i18n("Export"));
     KActionMenu menuKIPIBatch(i18n("Batch Processes"));
 
     KPopupMenu popmenu(this);
@@ -458,6 +459,19 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
                 ++it3;
             }
             menuImport.plug(&popmenu);
+        }
+
+        // Add All Export Actions
+        const QPtrList<KAction> exportActions = DigikamApp::getinstance()->menuExportActions();
+        if(!exportActions.isEmpty())
+        {
+            QPtrListIterator<KAction> it4(exportActions);
+            while((action = it4.current()))
+            {
+                menuExport.insert(action);
+                ++it4;
+            }
+            menuExport.plug(&popmenu);
         }
 
         // Add KIPI Batch processes plugins Actions

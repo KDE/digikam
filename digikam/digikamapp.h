@@ -90,6 +90,7 @@ public:
     const QPtrList<KAction>& menuAlbumActions();
     
     const QPtrList<KAction> menuImportActions();
+    const QPtrList<KAction> menuExportActions();
 
     void autoDetect();
     void downloadFrom(const QString &cameraGuiPath);

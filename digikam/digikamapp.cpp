@@ -283,6 +283,11 @@ const QPtrList<KAction> DigikamApp::menuImportActions()
     return importMenu;
 }
 
+const QPtrList<KAction> DigikamApp::menuExportActions()
+{
+    return m_kipiFileActionsExport;
+}
+
 void DigikamApp::autoDetect()
 {
     // Called from main if command line option is set
