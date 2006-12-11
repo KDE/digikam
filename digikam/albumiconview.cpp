@@ -464,7 +464,7 @@ void AlbumIconView::slotRightButtonClicked(const QPoint& pos)
     }
             
     QPopupMenu popmenu(this);
-    KAction *paste = KStdAction::paste(this, SLOT(slotPaste()), 0);
+    KAction *paste    = KStdAction::paste(this, SLOT(slotPaste()), 0);
     QMimeSource *data = kapp->clipboard()->data(QClipboard::Clipboard);
     
     if(!data || !QUriDrag::canDecode(data))
@@ -740,13 +740,17 @@ void AlbumIconView::slotPaste()
             d->currentAlbum->type() == Album::PHYSICAL)
         {
             PAlbum* palbum = (PAlbum*)d->currentAlbum;
+            
+            // B.K.O #119205: do not handle root album.
+            if (palbum->isRoot())
+                return;
+
             KURL destURL(palbum->kurl());
 
             KURL::List srcURLs;
             KURLDrag::decode(data, srcURLs);
 
             KIO::Job* job = DIO::copy(srcURLs, destURL);
-
             connect(job, SIGNAL(result(KIO::Job*)),
                     this, SLOT(slotDIOResult(KIO::Job*)));
         }
@@ -848,7 +852,7 @@ void AlbumIconView::slotDeleteSelectedItems(bool deletePermanently)
 
     KIO::Job* job = DIO::del(urlList, useTrash);
     connect(job, SIGNAL(result(KIO::Job*)),
-            SLOT(slotDIOResult(KIO::Job*)));
+            this, SLOT(slotDIOResult(KIO::Job*)));
 }
 
 void AlbumIconView::slotDeleteSelectedItemsDirectly(bool useTrash)
@@ -1513,16 +1517,16 @@ void AlbumIconView::updateBannerRectPixmap()
 
 void AlbumIconView::updateItemRectsPixmap()
 {
-    d->itemRect = QRect(0,0,0,0);
-    d->itemRatingRect = QRect(0,0,0,0);
-    d->itemDateRect = QRect(0,0,0,0);
-    d->itemModDateRect = QRect(0,0,0,0);
-    d->itemPixmapRect = QRect(0,0,0,0);
-    d->itemNameRect = QRect(0,0,0,0);
-    d->itemCommentsRect = QRect(0,0,0,0);
+    d->itemRect           = QRect(0,0,0,0);
+    d->itemRatingRect     = QRect(0,0,0,0);
+    d->itemDateRect       = QRect(0,0,0,0);
+    d->itemModDateRect    = QRect(0,0,0,0);
+    d->itemPixmapRect     = QRect(0,0,0,0);
+    d->itemNameRect       = QRect(0,0,0,0);
+    d->itemCommentsRect   = QRect(0,0,0,0);
     d->itemResolutionRect = QRect(0,0,0,0);
-    d->itemSizeRect = QRect(0,0,0,0);
-    d->itemTagRect = QRect(0,0,0,0);
+    d->itemSizeRect       = QRect(0,0,0,0);
+    d->itemTagRect        = QRect(0,0,0,0);
 
     d->fnReg  = font();
     d->fnCom  = font();

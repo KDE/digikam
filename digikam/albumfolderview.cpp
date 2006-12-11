@@ -45,7 +45,6 @@
 #include "ddebug.h"
 #include "digikamapp.h"
 #include "album.h"
-#include "albumfolderview.h"
 #include "albumpropsedit.h"
 #include "album.h"
 #include "albummanager.h"
@@ -59,6 +58,8 @@
 #include "dragobjects.h"
 #include "albumthumbnailloader.h"
 #include "deletedialog.h"
+#include "albumfolderview.h"
+#include "albumfolderview.moc"
 
 // X11 C Ansi includes.
 
@@ -103,7 +104,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListView *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
-    m_album = album;
+    m_album     = album;
     m_groupItem = false;
 }
 
@@ -111,7 +112,7 @@ AlbumFolderViewItem::AlbumFolderViewItem(QListViewItem *parent, PAlbum *album)
                    : FolderItem(parent, album->title())
 {
     setDragEnabled(true);
-    m_album = album;
+    m_album     = album;
     m_groupItem = false;
 }
 
@@ -265,7 +266,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     if (failed)
     {
         DWarning() << k_funcinfo << " Failed to find parent for Album "
-                    << palbum->url() << endl;
+                   << palbum->url() << endl;
         return;
     }
 
@@ -777,7 +778,7 @@ bool AlbumFolderView::acceptDrop(const QDropEvent *e) const
             {
                 return false;
             }
-        };
+        }
     }
 
     if(itemDrop  && !itemDrop->parent())
@@ -812,7 +813,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
     if(!acceptDrop(e))
         return;
 
-    QPoint vp = contentsToViewport(e->pos());
+    QPoint vp                     = contentsToViewport(e->pos());
     AlbumFolderViewItem *itemDrop = dynamic_cast<AlbumFolderViewItem*>(itemAt(vp));
 
     if(AlbumDrag::canDecode(e))
@@ -849,7 +850,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
                 }
                 KIO::Job* job = DIO::move(album->kurl(), destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
+                        this, SLOT(slotDIOResult(KIO::Job*)));
             }
         }
         else if (AlbumSettings::instance()->getAlbumSortOrder()
@@ -893,7 +894,7 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         // all the albumids will be the same
         int albumID = albumIDs.first();
-        srcAlbum = d->albumMan->findPAlbum(albumID);
+        srcAlbum    = d->albumMan->findPAlbum(albumID);
         if (!srcAlbum)
         {
             DWarning() << "Could not find source album of drag"
@@ -972,14 +973,14 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             {
                 KIO::Job* job = DIO::move(kioURLs, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
+                        this, SLOT(slotDIOResult(KIO::Job*)));
                 break;
             }
             case 11:
             {
                 KIO::Job* job = DIO::copy(kioURLs, destAlbum->kurl());
                 connect(job, SIGNAL(result(KIO::Job*)),
-                        SLOT(slotDIOResult(KIO::Job*)));
+                        this, SLOT(slotDIOResult(KIO::Job*)));
                 break;
             }
             case 12:
@@ -994,16 +995,20 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
         return;
     }
 
-    if(QUriDrag::canDecode(e))
-    {
-        // DnD from an external source
+    // -- DnD from an external source ----------------------------------------
 
+    if(QUriDrag::canDecode(e))               
+    {
         PAlbum* destAlbum = 0;
 
         if (itemDrop)
             destAlbum = itemDrop->getAlbum();
         else
             destAlbum = d->albumMan->findPAlbum(0);
+
+        // B.K.O #119205: do not handle root album.
+        if (destAlbum->isRoot())
+            return;
 
         KURL destURL(destAlbum->kurl());
 
@@ -1147,7 +1152,7 @@ AlbumFolderViewItem* AlbumFolderView::findParent(PAlbum* album, bool& failed)
         {
             return findParentByDate(album, failed);
         }
-    };
+    }
 
     failed = true;
     return 0;
@@ -1312,5 +1317,3 @@ void AlbumFolderView::clearEmptyGroupItems()
 }
 
 }  // namespace Digikam
-
-#include "albumfolderview.moc"
