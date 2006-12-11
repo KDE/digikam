@@ -373,6 +373,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 221 ==> 121651 : Export menu not available in context menu from album.
 222 ==> 131601 : Need preview pane (large) in main digikam window.
 223 ==> 133276 : make changing EXIF date of multiple files easier.
-224 ==> 
+224 ==> 133590 : Usability: walking through photos using image View (F3).
+225 ==> 
 
 ----------------------------------------------------------------------------------------------------
