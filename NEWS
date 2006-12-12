@@ -378,6 +378,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 226 ==> 132470 : Plugins not available unless logged in as superuser.
 227 ==> 113801 : Little problem with image files extensions.
 228 ==> 127112 : Tools -> 'Gamma Adjustment...' fails silently when kgamma is not installed.
-229 ==> 
+229 ==> 136258 : User comments in the EXIF/IPTC-data aren't carried over to the "Comments".
+230 ==> 
 
 ----------------------------------------------------------------------------------------------------
