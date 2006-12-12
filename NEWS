@@ -368,7 +368,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 216 ==> 137770 : digiKam doesn't keep original unix rights when modifying comments/tags/rating.
 217 ==> 133091 : Changing date/time with numblock changes also the orientation.
 218 ==> 137993 : Importing photos into albums results in time/date file override with current one.
-219 ==> 138620 : Saving a picture destroy another picture
+219 ==> 138620 : Saving a picture destroy another picture.
 220 ==> 119205 : Drag & Drop of image into librarypath root dir ==> images are invisible.
 221 ==> 121651 : Export menu not available in context menu from album.
 222 ==> 131601 : Need preview pane (large) in main digikam window.
@@ -380,6 +380,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 228 ==> 127112 : Tools -> 'Gamma Adjustment...' fails silently when kgamma is not installed.
 229 ==> 136258 : User comments in the EXIF/IPTC-data aren't carried over to the "Comments".
 230 ==> 136932 : Access to a specific jpg photo crashed digiKam.
-231 ==> 
+231 ==> 135442 : Add 'rename' entry to album RMB menu.
+232 ==> 
 
 ----------------------------------------------------------------------------------------------------
