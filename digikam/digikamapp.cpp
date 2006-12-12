@@ -753,13 +753,13 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    mGammaAdjustmentAction = new KAction(i18n("Gamma Adjustment..."),
+    mGammaAdjustmentAction = new KAction(i18n("Display Adjustment..."),
                                    "kgamma",
                                    0,
                                    this,
-                                   SLOT(slot_gammaAdjustment()),
+                                   SLOT(slotDisplayAdjustment()),
                                    actionCollection(),
-                                   "gamma_adjustment");
+                                   "display_adjustment");
 
     // -- Rating actions ---------------------------------------------------------------
 
@@ -1056,18 +1056,18 @@ void DigikamApp::slot_imageSelected(bool val)
     mImageExifOrientationActionMenu->setEnabled(val);
 }
 
-void DigikamApp::slot_gammaAdjustment()
+void DigikamApp::slotDisplayAdjustment()
 {
    QStringList args;
    QString *perror = 0;
    int *ppid = 0;
 
-   args << "kgamma";
+   args << "display";
    int ValRet = KApplication::kdeinitExec(QString::fromLatin1("kcmshell"), args, perror, ppid);
 
    if ( ValRet != 0 )
-      KMessageBox::error(this, i18n("Cannot start \"KGamma\" extension from KDE control center;\n"
-                                 "please check your installation."));
+      KMessageBox::error(this, i18n("Cannot start \"Display\" configuration panel from KDE control center;\n"
+                                    "please check your installation."));
 }
 
 void DigikamApp::slot_exit()

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="10" name="digikam" >
+<kpartgui version="11" name="digikam" >
 
  <MenuBar>
 
@@ -73,7 +73,7 @@
       <Separator/>
         <ActionList name="album_actions"/>
       <Separator/>
-        <Action name="gamma_adjustment" />
+        <Action name="display_adjustment" />
         <ActionList name="tool_actions"/>
       <Menu name="BatchProcesses"><text>&amp;Batch Processes</text>
         <ActionList name="batch_actions"/>

@@ -135,7 +135,7 @@ private slots:
     void slot_exit();
     void slotShowTip();
     void slotShowKipiHelp();
-    void slot_gammaAdjustment();
+    void slotDisplayAdjustment();
 
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
