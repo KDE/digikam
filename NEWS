@@ -377,6 +377,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 225 ==> 122746 : Images are not shown anymore. black screen.
 226 ==> 132470 : Plugins not available unless logged in as superuser.
 227 ==> 113801 : Little problem with image files extensions.
-228 ==> 
+228 ==> 127112 : Tools -> 'Gamma Adjustment...' fails silently when kgamma is not installed.
+229 ==> 
 
 ----------------------------------------------------------------------------------------------------
