@@ -359,10 +359,9 @@ bool DMetadata::save(const QString& filePath, DImg::FORMAT ff)
     }
     if (!dinfo.isWritable())
     {
-        DDebug() << "Dir '" << finfo.filePath() << "' is read-only. Metadata not saved." << endl;
+        DDebug() << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved." << endl;
         return false;
     }
-
 
     switch (ff)
     {
