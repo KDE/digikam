@@ -58,6 +58,7 @@ public:
     void albumNew();
     void albumDelete();
     void albumEdit();
+    void albumRename();
 
     void setAlbumThumbnail(PAlbum *album);
 
@@ -93,6 +94,7 @@ private:
 
     void albumNew(AlbumFolderViewItem *item);
     void albumEdit(AlbumFolderViewItem *item);
+    void albumRename(AlbumFolderViewItem *item);
     void albumDelete(AlbumFolderViewItem *item);
 
     void addAlbumChildrenToList(KURL::List &list, Album *album);

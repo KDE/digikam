@@ -40,6 +40,13 @@
 #include <kaction.h>
 #include <kfiledialog.h>
 
+#include <kdeversion.h>
+#if KDE_IS_VERSION(3,2,0)
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#endif
+
 // Local includes.
 
 #include "ddebug.h"
@@ -431,6 +438,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     // Root folder only shows "New Album..."
     if(item && item->parent())
     {
+        popmenu.insertItem(SmallIcon("pencil"), i18n("Rename..."), 14);
         popmenu.insertItem(SmallIcon("albumfoldercomment"), i18n("Edit Album Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
         popmenu.insertSeparator();
@@ -526,6 +534,11 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
         {
             QString err;
             AlbumManager::instance()->updatePAlbumIcon(item->getAlbum(), 0, err);
+            break;
+        }
+        case 14:
+        {
+            albumRename(item);
             break;
         }
         default:
@@ -676,6 +689,48 @@ void AlbumFolderView::slotDIOResult(KIO::Job* job)
 {
     if (job->error())
         job->showErrorDialog(this);
+}
+
+void AlbumFolderView::albumRename()
+{
+    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(selectedItem());
+    if(!item)
+        return;
+
+    albumRename(item);
+}
+
+void AlbumFolderView::albumRename(AlbumFolderViewItem* item)
+{
+    PAlbum *album = item->getAlbum();
+
+    if (!album)
+        return;
+
+    QString oldTitle(album->title());
+    bool    ok;
+
+#if KDE_IS_VERSION(3,2,0)
+    QString title = KInputDialog::getText(i18n("Rename Album (%1)").arg(oldTitle), 
+                                          i18n("Enter new album name:"),
+                                          oldTitle, &ok, this);
+#else
+    QString title = KLineEditDlg::getText(i18n("Rename Item (%1)").arg(oldTitle), 
+                                          i18n("Enter new album name:"),
+                                          oldTitle, &ok, this);
+#endif
+
+    if (!ok)
+        return;
+
+    if(title != oldTitle)
+    {
+        QString errMsg;
+        if (!d->albumMan->renamePAlbum(album, title, errMsg))
+            KMessageBox::error(0, errMsg);
+    }
+
+    emit signalAlbumModified();
 }
 
 void AlbumFolderView::albumEdit()
