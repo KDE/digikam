@@ -384,6 +384,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 232 ==> 138540 : Pictures files are updated (but not modified) when setting new 
                  metadatas albeit they are unset.
 233 ==> 136256 : Tags are not filled from the IPTC-keywords.
-234 ==> 
+234 ==> 136062 : Charset problem saving EXIV comments (JPEG files).
+235 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
