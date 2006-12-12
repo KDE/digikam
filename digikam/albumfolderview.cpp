@@ -431,7 +431,7 @@ void AlbumFolderView::slotContextMenu(QListViewItem *listitem, const QPoint &, i
     // Root folder only shows "New Album..."
     if(item && item->parent())
     {
-        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Album Properties..."), 11);
+        popmenu.insertItem(SmallIcon("albumfoldercomment"), i18n("Edit Album Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Album Icon"), 13);
         popmenu.insertSeparator();
 
