@@ -349,13 +349,20 @@ bool DMetadata::load(const QString& filePath, DImg::FORMAT ff)
 
 bool DMetadata::save(const QString& filePath, DImg::FORMAT ff)
 {
-    // NOTE: see B.K.O #137770 : never touch the file if is read only.
-    QFileInfo info(filePath); 
-    if (!info.isWritable())
+    // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
+    QFileInfo finfo(filePath); 
+    QFileInfo dinfo(finfo.dirPath()); 
+    if (!finfo.isWritable())
     {
-        DDebug() << "File '" << info.fileName() << "' is read-only. Metadata not saved." << endl;
+        DDebug() << "File '" << finfo.fileName() << "' is read-only. Metadata not saved." << endl;
         return false;
     }
+    if (!dinfo.isWritable())
+    {
+        DDebug() << "Dir '" << finfo.filePath() << "' is read-only. Metadata not saved." << endl;
+        return false;
+    }
+
 
     switch (ff)
     {
