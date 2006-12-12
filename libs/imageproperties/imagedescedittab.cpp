@@ -410,24 +410,28 @@ void ImageDescEditTab::applyAllChanges()
 
     if (AlbumSettings::instance())
     {
+	bool dirty = false;
         DMetadata metadata(d->currInfo->filePath());
 
         if (AlbumSettings::instance()->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
             metadata.setImageComment(d->commentsEdit->text());
+	    dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveDateTime())
         {
             // Store Image Date & Time as Exif and Iptc tags.
             metadata.setImageDateTime(d->dateTimeEdit->dateTime(), false);
+	    dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcRating())
         {
             // Store Image rating as Iptc tag.
             metadata.setImageRating(d->ratingWidget->rating());
+	    dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcTags())
@@ -438,6 +442,7 @@ void ImageDescEditTab::applyAllChanges()
                 (*it).remove(0, 1);
     
             metadata.setImageKeywords(oldKeywords, tagPaths);
+	    dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())
@@ -445,6 +450,7 @@ void ImageDescEditTab::applyAllChanges()
             // Store Photograph indentity into Iptc tags.
             metadata.setImagePhotographerId(AlbumSettings::instance()->getIptcAuthor(),
                                             AlbumSettings::instance()->getIptcAuthorTitle());
+	    dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcCredits())
@@ -453,10 +459,14 @@ void ImageDescEditTab::applyAllChanges()
             metadata.setImageCredits(AlbumSettings::instance()->getIptcCredit(),
                                      AlbumSettings::instance()->getIptcSource(),
                                      AlbumSettings::instance()->getIptcCopyright());
+	    dirty = true;
         }
 
-        metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(d->currInfo->kurl());
+	if (dirty)
+	{
+            metadata.applyChanges();
+            ImageAttributesWatch::instance()->fileMetadataChanged(d->currInfo->kurl());
+	}
     }
 
     d->modified = false;
