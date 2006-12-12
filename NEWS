@@ -381,6 +381,8 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 229 ==> 136258 : User comments in the EXIF/IPTC-data aren't carried over to the "Comments".
 230 ==> 136932 : Access to a specific jpg photo crashed digiKam.
 231 ==> 135442 : Add 'rename' entry to album RMB menu.
-232 ==> 
+232 ==> 138540 : Pictures files are updated (but not modified) when setting new 
+                 metadatas albeit they are unset.
+233 ==> 
 
 ----------------------------------------------------------------------------------------------------
