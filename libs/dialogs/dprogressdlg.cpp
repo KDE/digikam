@@ -137,8 +137,8 @@ void DProgressDlg::addedAction(const QPixmap& pix, const QString &text)
     if (pix.isNull())
     {
         QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
-                                                       "image_broken.png");
-        dir = dir + "/image_broken.png";
+                                                       "image-broken.png");
+        dir = dir + "/image-broken.png";
         QPixmap pixbi(dir);
         img = pixbi.convertToImage().scale(32, 32, QImage::ScaleMin);
     }

@@ -165,8 +165,8 @@ void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 void PixmapManager::slotFailedThumbnail(const KURL& url)
 {
     QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
-                                                   "image_broken.png");
-    dir = dir + "/image_broken.png";
+                                                   "image-broken.png");
+    dir = dir + "/image-broken.png";
 
     QImage img(dir);
 
