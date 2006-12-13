@@ -386,6 +386,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 233 ==> 136256 : Tags are not filled from the IPTC-keywords.
 234 ==> 136062 : Charset problem saving EXIV comments (JPEG files).
 235 ==> 133567 : Crash when testing tags in digikam image editor (saveWithExiv2).
-236 ==> 
+236 ==> 138300 : Crash on startup with one user's collection.
+237 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
