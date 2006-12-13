@@ -34,7 +34,6 @@
 // Local includes.
 
 #include "ddebug.h"
-#include "tagfolderview.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -45,6 +44,8 @@
 #include "dio.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
+#include "tagfolderview.h"
+#include "tagfolderview.moc"
 
 // X11 Includes.
 
@@ -817,6 +818,4 @@ void TagFolderView::selectItem(int id)
 }
 
 }  // namespace Digikam
-
-#include "tagfolderview.moc"
 
