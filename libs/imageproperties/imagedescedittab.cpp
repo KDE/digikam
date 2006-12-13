@@ -197,14 +197,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
     QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
-    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag", KIcon::NoGroup,
+    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", KIcon::NoGroup,
                                  KIcon::SizeSmall, KIcon::DefaultState, 0, true));
     d->recentTagsBtn->setUsesBigPixmap(false);
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
 
     d->tagsView = new TAlbumListView(tagsBox);
-    d->tagsView->addColumn(i18n( "Tags" ));
+    d->tagsView->addColumn(i18n("Tags"));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
     d->tagsView->setResizeMode(QListView::LastColumn);
