@@ -579,14 +579,14 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
-    popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
 
     if (!album->isRoot())
     {
-        popmenu.insertItem(SmallIcon("pencil"),      i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"),         13);        
+        popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("reload_page"),    i18n("Reset Tag Icon"),         13);        
         popmenu.insertSeparator(-1);
-        popmenu.insertItem(SmallIcon("edittrash"),   i18n("Delete Tag"),             12);
+        popmenu.insertItem(SmallIcon("edittrash"),      i18n("Delete Tag"),             12);
     }
 
     popmenu.insertSeparator(-1);
@@ -773,7 +773,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
         if (!parentItem)
         {
             DWarning() << k_funcinfo << "Failed to find parent for Tag " << tag->title()
-                        << endl;
+                       << endl;
             return;
         }
 
