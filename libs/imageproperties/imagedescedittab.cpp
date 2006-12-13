@@ -43,6 +43,7 @@
 
 // KDE includes.
 
+#include <kabc/stdaddressbook.h>
 #include <kpopupmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -123,6 +124,7 @@ public:
         tagsView                   = 0;
         ratingWidget               = 0;
         navigateBar                = 0;
+        ABCMenu                    = 0;
     }
 
     bool               modified;
@@ -130,6 +132,8 @@ public:
 
     QToolButton       *recentTagsBtn;
     QToolButton       *tagsSearchClearBtn;
+
+    QPopupMenu        *ABCMenu;
 
     KTextEdit         *commentsEdit;
 
@@ -577,9 +581,15 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     if(!album)
         return;
 
+    d->ABCMenu = new QPopupMenu;
+    
+    connect(d->ABCMenu, SIGNAL( aboutToShow() ),
+            this, SLOT( slotABCContextMenu() ));
+
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
     popmenu.insertItem(SmallIcon("tag-new"),  i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("contents"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
     if (!album->isRoot())
     {
@@ -594,7 +604,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     popmenu.insertItem(i18n("Deselect"),         15);
     popmenu.insertItem(i18n("Invert Selection"), 16);
 
-    switch (popmenu.exec(QCursor::pos()))
+    int choice = popmenu.exec((QCursor::pos()));
+    switch( choice )
     {
         case 10:
         {
@@ -659,18 +670,58 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         default:
             break;
     }
+
+    if ( choice > 100 )
+    {
+        tagNew(album, d->ABCMenu->text( choice ), "tag-people" );
+    }
+
+    delete d->ABCMenu;
+    d->ABCMenu = 0;
 }
 
-void ImageDescEditTab::tagNew(TAlbum* parAlbum)
+void ImageDescEditTab::slotABCContextMenu()
+{
+    d->ABCMenu->clear();
+
+    int counter = 100;
+    KABC::AddressBook* ab = KABC::StdAddressBook::self();
+    QStringList names;
+    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
+    {
+        names.push_back(it->formattedName());
+    }
+
+    qHeapSort(names);
+
+    for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
+    {
+        QString name = *it;
+        if ( !name.isNull() )
+            d->ABCMenu->insertItem( name, ++counter );
+    }
+
+    if (counter == 100)
+    {
+        d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
+        d->ABCMenu->setItemEnabled( counter, false );
+    }
+}
+
+void ImageDescEditTab::tagNew(TAlbum* parAlbum, const QString& _title, const QString& _icon)
 {
     if (!parAlbum)
         return;
 
-    QString title, icon;
+    QString title           = _title;
+    QString icon            = _icon;
     AlbumManager *albumMan_ = AlbumManager::instance();
 
-    if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
-        return;
+    if (title.isNull())
+    {
+        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parAlbum, title, icon))
+            return;
+    }
 
     QString errMsg;
     TAlbum* album = albumMan_->createTAlbum(parAlbum, title, icon, errMsg);

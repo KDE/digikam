@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kabc/stdaddressbook.h>
 #include <kpopupmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -157,12 +158,15 @@ public:
 
     TagFilterViewPriv()
     {
+        ABCMenu      = 0;
         timer        = 0;
         matchingCond = AlbumLister::OrCondition;
     }
 
     QTimer                         *timer;
- 
+
+    QPopupMenu                     *ABCMenu;
+
     AlbumLister::MatchingCondition  matchingCond;
 };
 
@@ -544,14 +548,19 @@ void TagFilterView::slotTimeOut()
 
 void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
 {
-    KPopupMenu popmenu(this);
-    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
-
     TagFilterViewItem *item = dynamic_cast<TagFilterViewItem*>(it);
     if (item && item->m_untagged)
         return;
 
+    d->ABCMenu = new QPopupMenu;
+    
+    connect(d->ABCMenu, SIGNAL( aboutToShow() ),
+            this, SLOT( slotABCContextMenu() ));
+
+    KPopupMenu popmenu(this);
+    popmenu.insertTitle(SmallIcon("digikam"), i18n("Tag Filters"));
     popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("contents"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
     if (item)
     {
@@ -659,22 +668,61 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
         default:
             break;
     }
+
+    if ( choice > 100 )
+    {
+        tagNew(item, d->ABCMenu->text( choice ), "tag-people" );
+    }
+
+    delete d->ABCMenu;
+    d->ABCMenu = 0;
 }
 
-void TagFilterView::tagNew(TagFilterViewItem* item)
+void TagFilterView::slotABCContextMenu()
 {
-    TAlbum *parent;
-    AlbumManager* man = AlbumManager::instance();
+    d->ABCMenu->clear();
+
+    int counter = 100;
+    KABC::AddressBook* ab = KABC::StdAddressBook::self();
+    QStringList names;
+    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
+    {
+        names.push_back(it->formattedName());
+    }
+
+    qHeapSort(names);
+
+    for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it )
+    {
+        QString name = *it;
+        if ( !name.isNull() )
+            d->ABCMenu->insertItem( name, ++counter );
+    }
+
+    if (counter == 100)
+    {
+        d->ABCMenu->insertItem( i18n("No AddressBook Entries Found"), ++counter );
+        d->ABCMenu->setItemEnabled( counter, false );
+    }
+}
+
+void TagFilterView::tagNew(TagFilterViewItem* item, const QString& _title, const QString& _icon)
+{
+    TAlbum  *parent;
+    QString  title    = _title;
+    QString  icon     = _icon;
+    AlbumManager *man = AlbumManager::instance();
 
     if (!item)
         parent = man->findTAlbum(0);
     else
         parent = item->m_tag;
 
-    QString title;
-    QString icon;
-    if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
-        return;
+    if (title.isNull())
+    {
+        if (!TagCreateDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
+            return;
+    }
 
     QString errMsg;
     TAlbum* newAlbum = man->createTAlbum(parent, title, icon, errMsg);

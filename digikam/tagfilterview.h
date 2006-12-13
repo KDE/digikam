@@ -61,12 +61,14 @@ private slots:
     void slotAlbumIconChanged(Album* album);
     void slotTimeOut();
     void slotContextMenu(QListViewItem*, const QPoint&, int);
+    void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
 
 private:
 
-    void tagNew(TagFilterViewItem* item);
+    void tagNew(TagFilterViewItem* item, const QString& _title=QString(),
+                const QString& _icon=QString());
     void tagEdit(TagFilterViewItem* item);
     void tagDelete(TagFilterViewItem* item);
     void setTagThumbnail(TAlbum *album);

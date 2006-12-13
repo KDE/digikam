@@ -94,7 +94,8 @@ private:
     void updateDate();
     void updateRecentTags();
 
-    void tagNew(TAlbum* parAlbum);
+    void tagNew(TAlbum* parAlbum, const QString& _title=QString(),
+                const QString& _icon=QString());
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
 
@@ -112,7 +113,8 @@ private slots:
     void slotAlbumRenamed(Album* a);
     void slotAlbumsCleared();
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
-
+    
+    void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
 
