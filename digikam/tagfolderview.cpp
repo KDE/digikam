@@ -384,12 +384,12 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
 
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("My Tags"));
-    popmenu.insertItem(SmallIcon("tag"), i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("tag"), i18n("Create Tag From AddressBook"), d->ABCMenu);
+    popmenu.insertItem(SmallIcon("tag-new"), i18n("New Tag..."), 10);
+    popmenu.insertItem(SmallIcon("contents"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
     if(tag && tag->parent())
     {
-        popmenu.insertItem(SmallIcon("pencil"), i18n("Edit Tag Properties..."), 11);
+        popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
         popmenu.insertItem(SmallIcon("reload_page"), i18n("Reset Tag Icon"), 13);
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("edittrash"), i18n("Delete Tag"), 12);
