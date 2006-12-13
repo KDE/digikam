@@ -45,10 +45,8 @@
 #include "album.h"
 #include "syncjob.h"
 #include "tagcreatedlg.h"
-
-// Local includes.
-
 #include "tagspopupmenu.h"
+#include "tagspopupmenu.moc"
 
 namespace Digikam
 {
@@ -117,16 +115,17 @@ TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
       m_mode(mode)
 {
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    m_addTagPix =  iconLoader->loadIcon("tag",
+    m_addTagPix             = iconLoader->loadIcon("tag",
                                         KIcon::NoGroup,
                                         KIcon::SizeSmall,
                                         KIcon::DefaultState,
                                         0, true);
     
     connect(this, SIGNAL(aboutToShow()),
-            SLOT(slotAboutToShow()));
+            this, SLOT(slotAboutToShow()));
+
     connect(this, SIGNAL(activated(int)),
-            SLOT(slotActivated(int)));
+            this, SLOT(slotActivated(int)));
 }
 
 TagsPopupMenu::~TagsPopupMenu()
@@ -142,17 +141,18 @@ void TagsPopupMenu::clearPopup()
 QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
     AlbumManager* man = AlbumManager::instance();
-    TAlbum* album = man->findTAlbum(tagid);
+    TAlbum* album     = man->findTAlbum(tagid);
     if (!album)
         return 0;
 
-    QPopupMenu*  popup      = new QPopupMenu(this);
-    connect(popup, SIGNAL(activated(int)), SLOT(slotActivated(int)));
+    QPopupMenu* popup = new QPopupMenu(this);
+
+    connect(popup, SIGNAL(activated(int)), 
+            this, SLOT(slotActivated(int)));
 
     if (m_mode == ASSIGN)
     {
-        popup->insertItem(m_addTagPix, i18n("Add New Tag..."),
-                          ADDTAGID + album->id());
+        popup->insertItem(m_addTagPix, i18n("Add New Tag..."), ADDTAGID + album->id());
         popup->insertSeparator();
                 
         QPixmap pix = SyncJob::getTagThumbnail(album);
@@ -339,4 +339,3 @@ void TagsPopupMenu::slotActivated(int id)
 
 }  // namespace Digikam
 
-#include "tagspopupmenu.moc"
