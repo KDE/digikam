@@ -441,12 +441,12 @@ void DigikamApp::setupActions()
             mView, SLOT(slotAlbumHistoryForward(int)));
 
     mNewAction = new KAction(i18n("&New Album..."),
-                                    "albumfoldernew",
-                                    KStdAccel::shortcut(KStdAccel::New),
-                                    mView,
-                                    SLOT(slot_newAlbum()),
-                                    actionCollection(),
-                                    "album_new");
+                                   "albumfolder-new",
+                                   KStdAccel::shortcut(KStdAccel::New),
+                                   mView,
+                                   SLOT(slot_newAlbum()),
+                                   actionCollection(),
+                                   "album_new");
     mNewAction->setWhatsThis(i18n("This option creates a new empty Album in the database."));
 
     mAlbumSortAction = new KSelectAction(i18n("&Sort Albums"),
@@ -474,7 +474,7 @@ void DigikamApp::setupActions()
                                     "album_delete");
 
     mAddImagesAction = new KAction( i18n("Add Images..."),
-                                    "addimagefolder",
+                                    "albumfolder-importimages",
                                     CTRL+Key_I,
                                     mView,
                                     SLOT(slot_albumAddImages()),
@@ -483,16 +483,15 @@ void DigikamApp::setupActions()
     mAddImagesAction->setWhatsThis(i18n("This option adds new images to the current Album."));
 
     mAlbumImportAction = new KAction( i18n("Import Folders..."),
-                                    "fileopen",
+                                    "albumfolder-importdir",
                                     0,
                                     mView,
                                     SLOT(slotAlbumImportFolder()),
                                     actionCollection(),
                                     "album_importFolder");
 
-
     mPropsEditAction = new KAction( i18n("Edit Album Properties..."),
-                                    "albumfoldercomment",
+                                    "albumfolder-properties",
                                     0,
                                     mView,
                                     SLOT(slot_albumPropsEdit()),

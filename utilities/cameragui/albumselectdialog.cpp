@@ -255,7 +255,7 @@ void AlbumSelectDialog::slotContextMenu(QListViewItem *, const QPoint &, int)
 {
     QPopupMenu popmenu(d->folderView);
     KAction *action = new KAction(i18n( "Create New Album" ),
-                                  "albumfoldernew", 0, this,
+                                  "albumfolder-new", 0, this,
                                   SLOT( slotUser1() ),
                                   &popmenu);
     action->plug(&popmenu);
