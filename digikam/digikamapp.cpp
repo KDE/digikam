@@ -527,7 +527,7 @@ void DigikamApp::setupActions()
                                  0, mView, SLOT(slotEditTag()),
                                  actionCollection(), "tag_edit");
 
-    mDeleteTagAction = new KAction(i18n("Delete Tag"), "tag",
+    mDeleteTagAction = new KAction(i18n("Delete Tag"), "tag-delete",
                                    0, mView, SLOT(slotDeleteTag()),
                                    actionCollection(), "tag_delete");
 
