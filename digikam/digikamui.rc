@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="11" name="digikam" >
+<kpartgui version="12" name="digikam" >
 
  <MenuBar>
 
@@ -33,6 +33,7 @@
    <text>T&amp;ag</text>
      <Action name="tag_new" />
      <Action name="tag_edit" />
+   <Separator/>
      <Action name="tag_delete" />
   </Menu>
 
