@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------
-digiKam/DigikamImagePlugins 0.9.0 NEW FEATURES
+digiKam and DigikamImagePlugins 0.9.x NEW FEATURES
 
 *** 0.9.0-beta1 *******************************************************
 
@@ -124,7 +124,7 @@ General       : About final release packaging, improve support of "./configure -
 ...
 
 ----------------------------------------------------------------------------------------------------
-digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.org):
+digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 *** 0.9.0-beta1 *******************************************************
 
@@ -384,7 +384,7 @@ digiKam/DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (B.K.O | http://bugs.kde.or
 232 ==> 138540 : Pictures files are updated (but not modified) when setting new 
                  metadatas albeit they are unset.
 233 ==> 136256 : Tags are not filled from the IPTC-keywords.
-234 ==> 136062 : Charset problem saving EXIV comments (JPEG files).
+234 ==> 136062 : Charset problem saving EXIF comments (JPEG files).
 235 ==> 133567 : Crash when testing tags in digikam image editor (saveWithExiv2).
 236 ==> 138300 : Crash on startup with one user's collection.
 237 ==> 
