@@ -520,17 +520,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    mNewTagAction = new KAction(i18n("New &Tag..."), "tag",
+    mNewTagAction = new KAction(i18n("New &Tag..."), "tag-new",
                                 0, mView, SLOT(slotNewTag()),
                                 actionCollection(), "tag_new");
+
+    mEditTagAction = new KAction(i18n("Edit Tag Properties..."), "tag-properties",
+                                 0, mView, SLOT(slotEditTag()),
+                                 actionCollection(), "tag_edit");
 
     mDeleteTagAction = new KAction(i18n("Delete Tag"), "tag",
                                    0, mView, SLOT(slotDeleteTag()),
                                    actionCollection(), "tag_delete");
-
-    mEditTagAction = new KAction( i18n("Edit Tag Properties..."), "tag",
-                                  0, mView, SLOT(slotEditTag()),
-                                  actionCollection(), "tag_edit");
 
     // -----------------------------------------------------------
 
