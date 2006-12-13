@@ -556,7 +556,7 @@ void TagFilterView::slotContextMenu(QListViewItem* it, const QPoint&, int)
     if (item)
     {
         popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("reload_page"),    i18n("Reset Tag Icon"),         13);
+        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
     }

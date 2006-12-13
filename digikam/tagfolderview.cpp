@@ -391,7 +391,7 @@ void TagFolderView::slotContextMenu(QListViewItem *item, const QPoint &, int)
     if(tag && tag->parent())
     {
         popmenu.insertItem(SmallIcon("tag-properties"), i18n("Edit Tag Properties..."), 11);
-        popmenu.insertItem(SmallIcon("reload_page"),    i18n("Reset Tag Icon"),         13);
+        popmenu.insertItem(SmallIcon("tag-reset"),      i18n("Reset Tag Icon"),         13);
         popmenu.insertSeparator(-1);
         popmenu.insertItem(SmallIcon("tag-delete"),     i18n("Delete Tag"),             12);
     }
