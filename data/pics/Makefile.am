@@ -11,4 +11,5 @@ digikampic_DATA = image_broken.png histogram-lin.png histogram-log.png \
 		  worldmap.jpg menusidepixmap.png 
 
 iconsdir = $(kde_datadir)/digikam/icons/hicolor/32x32/actions
-icons_DATA = tag.png tag-folder.png tag-events.png tag-people.png tag-places.png 
+icons_DATA = tag.png tag-new.png tag-properties.png \
+	     tag-folder.png tag-events.png tag-people.png tag-places.png 
