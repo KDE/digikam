@@ -589,7 +589,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     KPopupMenu popmenu(this);
     popmenu.insertTitle(SmallIcon("digikam"), i18n("Tags"));
     popmenu.insertItem(SmallIcon("tag-new"),  i18n("New Tag..."), 10);
-    popmenu.insertItem(SmallIcon("contents"), i18n("Create Tag From AddressBook"), d->ABCMenu);
+    popmenu.insertItem(SmallIcon("tag-addressbook"), i18n("Create Tag From AddressBook"), d->ABCMenu);
 
     if (!album->isRoot())
     {
