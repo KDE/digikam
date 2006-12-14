@@ -333,11 +333,11 @@ void TagsPopupMenu::slotActivated(int id)
         int tagID = id - ADDTAGID;
 
         AlbumManager* man = AlbumManager::instance();
-        TAlbum* parent = man->findTAlbum(tagID);
+        TAlbum* parent    = man->findTAlbum(tagID);
         if (!parent)
         {
             DWarning() << "Failed to find album with id "
-                        << tagID << endl;
+                       << tagID << endl;
             return;
         }
 
