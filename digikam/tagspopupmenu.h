@@ -1,9 +1,12 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-07
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-07
+ * Description : a pop-up menu implementation to diplay the 
+ *               hierarchical view of digiKam tags.
  * 
- * Copyright 2004 by Renchi Raju
+ * Copyright 2004-2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,9 +47,17 @@ public:
         REMOVE
     };
     
-    TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
-                  int addToID, Mode mode);
+    TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode);
     ~TagsPopupMenu();
+
+signals:
+
+    void signalTagActivated(int id);
+
+private slots:
+
+    void slotAboutToShow();
+    void slotActivated(int id);
 
 private:
 
@@ -55,20 +66,16 @@ private:
     void        iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album);
     bool        showThisTag(int tagid);
 
-    QValueList<Q_LLONG>  m_selectedImageIDs;
-    int              m_addToID;
-    Mode             m_mode;
-    QValueList<int>  m_assignedTags;
-    QPixmap          m_addTagPix;
-        
-private slots:
+private:
 
-    void slotAboutToShow();
-    void slotActivated(int id);
+    int                 m_addToID;
 
-signals:
+    QPixmap             m_addTagPix;
 
-    void signalTagActivated(int id);
+    QValueList<int>     m_assignedTags;
+    QValueList<Q_LLONG> m_selectedImageIDs;
+
+    Mode                m_mode;
 };
 
 }  // namespace Digikam

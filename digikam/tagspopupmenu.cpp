@@ -1,10 +1,13 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2004-09-07
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-09-07
+ * Description : a pop-up menu implementation to diplay the 
+ *               hierarchical view of digiKam tags.
  * 
  * Copyright 2004 by Renchi Raju
-
+ * Copyright 2006 by Gilles Caulier
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -96,23 +99,20 @@ public:
         QFont fn = m_popup->font();
         QFontMetrics fm(fn);
         QRect r(x + 5 + fm.width(m_txt), y, checkWidth, checkHeight);
-        kapp->style().drawPrimitive(QStyle::PE_Indicator, p, r, cg, flags);
+        kapp->style().drawPrimitive(QStyle::PE_CheckMark, p, r, cg, flags);
     }
 
 private:
 
-    QPopupMenu* m_popup;
+    QPopupMenu *m_popup;
+
     QString     m_txt;
+
     QPixmap     m_pix;
 };
 
-TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs,
-                             int addToID,
-                             Mode mode)
-    : QPopupMenu(0),
-      m_selectedImageIDs(selectedImageIDs),
-      m_addToID(addToID),
-      m_mode(mode)
+TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode)
+             : QPopupMenu(0), m_selectedImageIDs(selectedImageIDs), m_addToID(addToID), m_mode(mode)
 {
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
     m_addTagPix             = iconLoader->loadIcon("tag",
