@@ -387,6 +387,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 234 ==> 136062 : Charset problem saving EXIF comments (JPEG files).
 235 ==> 133567 : Crash when testing tags in digikam image editor (saveWithExiv2).
 236 ==> 138300 : Crash on startup with one user's collection.
-237 ==> 
+237 ==> 138747 : Crash on Add Camera.
+238 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
