@@ -100,7 +100,7 @@ public:
         
         QFont fn = m_popup->font();
         QFontMetrics fm(fn);
-        QRect r(x + 5 + fm.width(m_txt), y, checkWidth, checkHeight);
+        QRect r(x + 5 + fm.width(m_txt), y + (h/2-checkHeight/2), checkWidth, checkHeight);
         kapp->style().drawPrimitive(QStyle::PE_CheckMark, p, r, cg, flags);
     }
 
