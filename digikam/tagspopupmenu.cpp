@@ -29,6 +29,8 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qstyle.h>
+#include <qvaluelist.h>
+#include <qpixmap.h>
 #include <qvaluevector.h>
 
 // KDE includes.
@@ -111,11 +113,34 @@ private:
     QPixmap     m_pix;
 };
 
-TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode)
-             : QPopupMenu(0), m_selectedImageIDs(selectedImageIDs), m_addToID(addToID), m_mode(mode)
+// ------------------------------------------------------------------------
+
+class TagsPopupMenuPriv
 {
+public:
+
+    TagsPopupMenuPriv(){}
+
+    int                 addToID;
+
+    QPixmap             addTagPix;
+
+    QValueList<int>     assignedTags;
+    QValueList<Q_LLONG> selectedImageIDs;
+
+    TagsPopupMenu::Mode mode;
+};
+
+TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int addToID, Mode mode)
+             : QPopupMenu(0)
+{
+    d = new TagsPopupMenuPriv;
+    d->selectedImageIDs = selectedImageIDs;
+    d->addToID          = addToID;
+    d->mode             = mode;
+
     KIconLoader *iconLoader = KApplication::kApplication()->iconLoader();
-    m_addTagPix             = iconLoader->loadIcon("tag",
+    d->addTagPix            = iconLoader->loadIcon("tag",
                                         KIcon::NoGroup,
                                         KIcon::SizeSmall,
                                         KIcon::DefaultState,
@@ -130,11 +155,12 @@ TagsPopupMenu::TagsPopupMenu(const QValueList<Q_LLONG>& selectedImageIDs, int ad
 
 TagsPopupMenu::~TagsPopupMenu()
 {
+    delete d;
 }
 
 void TagsPopupMenu::clearPopup()
 {
-    m_assignedTags.clear();
+    d->assignedTags.clear();
     clear();
 }
 
@@ -150,20 +176,20 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
     connect(popup, SIGNAL(activated(int)), 
             this, SLOT(slotActivated(int)));
 
-    if (m_mode == ASSIGN)
+    if (d->mode == ASSIGN)
     {
-        popup->insertItem(m_addTagPix, i18n("Add New Tag..."), ADDTAGID + album->id());
+        popup->insertItem(d->addTagPix, i18n("Add New Tag..."), ADDTAGID + album->id());
         popup->insertSeparator();
                 
         QPixmap pix = SyncJob::getTagThumbnail(album);
-        if ((m_mode == ASSIGN) && (m_assignedTags.contains(album->id())))
+        if ((d->mode == ASSIGN) && (d->assignedTags.contains(album->id())))
         {
             popup->insertItem(new TagsPopupCheckedMenuItem(popup, album->title(), pix),
-                              m_addToID + album->id());
+                              d->addToID + album->id());
         }
         else
         {
-            popup->insertItem(pix, album->title(), m_addToID + album->id());
+            popup->insertItem(pix, album->title(), d->addToID + album->id());
         }                
         
         if (album->firstChild())
@@ -176,7 +202,7 @@ QPopupMenu* TagsPopupMenu::buildSubMenu(int tagid)
         if (!album->isRoot())
         {
             QPixmap pix = SyncJob::getTagThumbnail(album);
-            popup->insertItem(pix, album->title(), m_addToID + album->id());
+            popup->insertItem(pix, album->title(), d->addToID + album->id());
             popup->insertSeparator();
         }
     }
@@ -192,20 +218,20 @@ void TagsPopupMenu::slotAboutToShow()
 
     AlbumManager* man = AlbumManager::instance();
 
-    if (m_mode == REMOVE)
+    if (d->mode == REMOVE)
     {
-        if (m_selectedImageIDs.isEmpty())
+        if (d->selectedImageIDs.isEmpty())
             return;
 
-        m_assignedTags = man->albumDB()->getItemCommonTagIDs(m_selectedImageIDs);
+        d->assignedTags = man->albumDB()->getItemCommonTagIDs(d->selectedImageIDs);
 
-        if (m_assignedTags.isEmpty())
+        if (d->assignedTags.isEmpty())
             return;
 
         // also add the parents of the assigned tags
         IntList tList;
-        for (IntList::iterator it = m_assignedTags.begin();
-             it != m_assignedTags.end(); ++it)
+        for (IntList::iterator it = d->assignedTags.begin();
+             it != d->assignedTags.end(); ++it)
         {
             TAlbum* album = man->findTAlbum(*it);
             if (album)
@@ -222,14 +248,14 @@ void TagsPopupMenu::slotAboutToShow()
         for (IntList::iterator it = tList.begin();
              it != tList.end(); ++it)
         {
-            m_assignedTags.append(*it);
+            d->assignedTags.append(*it);
         }
     }
-    else if (m_mode == ASSIGN)
+    else if (d->mode == ASSIGN)
     {
-        if (m_selectedImageIDs.count() == 1)
+        if (d->selectedImageIDs.count() == 1)
         {
-            m_assignedTags = man->albumDB()->getItemCommonTagIDs(m_selectedImageIDs);
+            d->assignedTags = man->albumDB()->getItemCommonTagIDs(d->selectedImageIDs);
         }
     }
         
@@ -237,9 +263,9 @@ void TagsPopupMenu::slotAboutToShow()
     if (!album)
         return;
 
-    if (m_mode == ASSIGN)
+    if (d->mode == ASSIGN)
     {
-        insertItem(m_addTagPix, i18n("Add New Tag..."), ADDTAGID);
+        insertItem(d->addTagPix, i18n("Add New Tag..."), ADDTAGID);
         if (album->firstChild())
         {
             insertSeparator();
@@ -271,12 +297,12 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
     {
         Album *a = i->second;
         
-        if (m_mode == REMOVE)
+        if (d->mode == REMOVE)
         {
-            IntList::iterator it = qFind(m_assignedTags.begin(),
-                                         m_assignedTags.end(),
+            IntList::iterator it = qFind(d->assignedTags.begin(),
+                                         d->assignedTags.end(),
                                          a->id());
-            if (it == m_assignedTags.end())
+            if (it == d->assignedTags.end())
                 continue;
         }
         
@@ -287,14 +313,14 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
         }
         else
         {
-            if ((m_mode == ASSIGN) && (m_assignedTags.contains(a->id())))
+            if ((d->mode == ASSIGN) && (d->assignedTags.contains(a->id())))
             {
                 menu->insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
-                           m_addToID + a->id());
+                           d->addToID + a->id());
             }
             else
             {
-                menu->insertItem(pix, a->title(), m_addToID + a->id());
+                menu->insertItem(pix, a->title(), d->addToID + a->id());
             }
         }
     }
@@ -332,7 +358,7 @@ void TagsPopupMenu::slotActivated(int id)
     }
     else
     {
-        int tagID = id - m_addToID;
+        int tagID = id - d->addToID;
         emit signalTagActivated(tagID);
     }
 }

@@ -27,13 +27,12 @@
 // Qt includes.
 
 #include <qpopupmenu.h>
-#include <qvaluelist.h>
-#include <qpixmap.h>
 
 namespace Digikam
 {
 
 class TAlbum;
+class TagsPopupMenuPriv;
 
 class TagsPopupMenu : public QPopupMenu
 {
@@ -68,14 +67,7 @@ private:
 
 private:
 
-    int                 m_addToID;
-
-    QPixmap             m_addTagPix;
-
-    QValueList<int>     m_assignedTags;
-    QValueList<Q_LLONG> m_selectedImageIDs;
-
-    Mode                m_mode;
+    TagsPopupMenuPriv* d;
 };
 
 }  // namespace Digikam
