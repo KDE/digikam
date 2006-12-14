@@ -80,7 +80,7 @@ public:
      * highlighted item.
      * @return full text of the highlighted item
      */
-    QString itemHighlighted( );
+    QString itemHighlighted();
 
     /**
      * Sets the sizeHint() of this widget.
@@ -90,12 +90,12 @@ public:
 private slots:
 
     void slotTimeOut();
-    void slotUpdateToolTip( int index );
+    void slotUpdateToolTip(int index);
 
 private:
 
-    void resizeEvent( QResizeEvent * );
-    QString squeezeText( const QString& original);
+    void resizeEvent(QResizeEvent *);
+    QString squeezeText(const QString& original);
 
 private:
 
@@ -127,7 +127,7 @@ public:
      * @param parent parent widget (viewport)
      * @param name parent widget
      */
-    SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
+    SqueezedComboBoxTip(QWidget *parent, SqueezedComboBox *name);
 
 protected:
     /**
@@ -135,7 +135,7 @@ protected:
      * tooltip when needed.
      * @param  pos the point where the mouse currently is
      */
-    void maybeTip( const QPoint& pos );
+    void maybeTip(const QPoint& pos);
 
 private:
     

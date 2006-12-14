@@ -38,9 +38,11 @@
 // Local includes.
 
 #include "squeezedcombobox.h"
+#include "squeezedcombobox.moc"
 
 namespace Digikam
 {
+
 class SqueezedComboBoxPriv
 {
 public:
@@ -58,12 +60,17 @@ public:
     SqueezedComboBoxTip *tooltip;
 };
 
-SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
-                : QComboBox( parent, name )
+SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
+                : QComboBox(parent, name)
 {
     d = new SqueezedComboBoxPriv;
-    d->timer   = new QTimer(this);
-    d->tooltip = new SqueezedComboBoxTip( listBox()->viewport(), this );
+    d->timer = new QTimer(this);
+
+    // See B.K.O #138747 : always for QComboBox instance to use a QListbox to 
+    // render content independently of Widget style used. 
+    setListBox(new QListBox(this));
+
+    d->tooltip = new SqueezedComboBoxTip(listBox()->viewport(), this);
     setMinimumWidth(100);
 
     connect(d->timer, SIGNAL(timeout()),
@@ -102,7 +109,7 @@ void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
         slotUpdateToolTip(0);
 }
 
-void SqueezedComboBox::resizeEvent( QResizeEvent * )
+void SqueezedComboBox::resizeEvent(QResizeEvent *)
 {
     d->timer->start(200, true);
 }
@@ -113,15 +120,15 @@ void SqueezedComboBox::slotTimeOut()
     for (it = d->originalItems.begin() ; it != d->originalItems.end();
          ++it)
     {
-        changeItem( squeezeText( it.data() ), it.key() );
+        changeItem(squeezeText(it.data()), it.key());
     }
 }
 
-QString SqueezedComboBox::squeezeText( const QString& original)
+QString SqueezedComboBox::squeezeText(const QString& original)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
     int widgetSize = width()-30;
-    QFontMetrics fm( fontMetrics() );
+    QFontMetrics fm(fontMetrics());
 
     // If we can fit the full text, return that.
     if (fm.width(original) < widgetSize)
@@ -132,7 +139,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
     widgetSize = widgetSize-fm.width("...");
     for (uint i = 0 ; i != original.length(); ++i)
     {
-        if ( (int)fm.width(original.right(i)) > widgetSize)
+        if ((int)fm.width(original.right(i)) > widgetSize)
         {
             sqItem = QString("..." + original.right(--i));
             break;
@@ -141,7 +148,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
     return sqItem;
 }
 
-void SqueezedComboBox::slotUpdateToolTip( int index )
+void SqueezedComboBox::slotUpdateToolTip(int index)
 {
     QToolTip::remove(this);
     QToolTip::add(this, d->originalItems[index]);
@@ -155,13 +162,13 @@ QString SqueezedComboBox::itemHighlighted()
 
 // ------------------------------------------------------------------------
 
-SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* name )
+SqueezedComboBoxTip::SqueezedComboBoxTip(QWidget *parent, SqueezedComboBox *name)
                    : QToolTip( parent )
 {
     m_originalWidget = name;
 }
 
-void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
+void SqueezedComboBoxTip::maybeTip(const QPoint &pos)
 {
     QListBox* listBox = m_originalWidget->listBox();
     if (!listBox)
@@ -170,7 +177,7 @@ void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
     QListBoxItem* selectedItem = listBox->itemAt( pos );
     if (selectedItem)
     {
-        QRect positionToolTip = listBox->itemRect( selectedItem );
+        QRect positionToolTip = listBox->itemRect(selectedItem);
         QString toolTipText = m_originalWidget->itemHighlighted();
         if (!toolTipText.isNull())
             tip(positionToolTip, toolTipText);
@@ -179,4 +186,3 @@ void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
 
 }  // namespace Digikam
 
-#include "squeezedcombobox.moc"
