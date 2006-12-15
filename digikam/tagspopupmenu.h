@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2004-09-07
- * Description : a pop-up menu implementation to diplay the 
+ * Description : a pop-up menu implementation to display a 
  *               hierarchical view of digiKam tags.
  * 
  * Copyright 2004-2005 by Renchi Raju

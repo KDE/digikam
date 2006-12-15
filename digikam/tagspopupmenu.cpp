@@ -2,7 +2,7 @@
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
  * Date   : 2004-09-07
- * Description : a pop-up menu implementation to diplay the 
+ * Description : a pop-up menu implementation to display a 
  *               hierarchical view of digiKam tags.
  * 
  * Copyright 2004 by Renchi Raju
@@ -299,9 +299,8 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
         
         if (d->mode == REMOVE)
         {
-            IntList::iterator it = qFind(d->assignedTags.begin(),
-                                         d->assignedTags.end(),
-                                         a->id());
+            IntList::iterator it = qFind(d->assignedTags.begin(), 
+                                         d->assignedTags.end(), a->id());
             if (it == d->assignedTags.end())
                 continue;
         }
@@ -316,7 +315,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QPopupMenu *menu, TAlbum *album)
             if ((d->mode == ASSIGN) && (d->assignedTags.contains(a->id())))
             {
                 menu->insertItem(new TagsPopupCheckedMenuItem(this, a->title(), pix),
-                           d->addToID + a->id());
+                                                              d->addToID + a->id());
             }
             else
             {
@@ -364,4 +363,3 @@ void TagsPopupMenu::slotActivated(int id)
 }
 
 }  // namespace Digikam
-
