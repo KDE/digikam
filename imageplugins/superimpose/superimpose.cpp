@@ -65,5 +65,5 @@ void SuperImpose::filterImage(void)
     delete composer;
 }
 
-}
+} // namespace DigikamSuperImposeImagesPlugin
 

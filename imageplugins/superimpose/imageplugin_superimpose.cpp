@@ -32,6 +32,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_superimpose.h"
 #include "imageplugin_superimpose.h"
+#include "imageplugin_superimpose.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_superimpose,
                             KGenericFactory<ImagePlugin_SuperImpose>("digikamimageplugin_superimpose"));
@@ -67,4 +68,3 @@ void ImagePlugin_SuperImpose::slotSuperImpose()
     delete headerFrame;
 }
 
-#include "imageplugin_superimpose.moc"

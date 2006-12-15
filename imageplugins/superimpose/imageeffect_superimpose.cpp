@@ -61,6 +61,7 @@
 #include "superimposewidget.h"
 #include "dirselectwidget.h"
 #include "imageeffect_superimpose.h"
+#include "imageeffect_superimpose.moc"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -266,4 +267,3 @@ void ImageEffect_SuperImpose::finalRendering()
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
 
-#include "imageeffect_superimpose.moc"

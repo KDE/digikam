@@ -79,22 +79,22 @@ public slots:
 
 private:
 
-    int         m_w;
-    int         m_h;
+    int            m_w;
+    int            m_h;
 
-    int         m_xpos;
-    int         m_ypos;
-    int         m_editMode;
-    float       m_zoomFactor;
+    int            m_xpos;
+    int            m_ypos;
+    int            m_editMode;
+    float          m_zoomFactor;
 
-    QPixmap    *m_pixmap;              // For image region selection manipulations.
+    QPixmap       *m_pixmap;            // For image region selection manipulations.
 
-    Digikam::DImg m_template;          // Full template data.
-    Digikam::DImg m_templateScaled;    // Template scaled to preview widget
+    Digikam::DImg  m_template;          // Full template data.
+    Digikam::DImg  m_templateScaled;    // Template scaled to preview widget
 
 
-    QRect       m_rect;                // For mouse drag position.
-    QRect       m_currentSelection;    // Region selection in image displayed in the widget.
+    QRect          m_rect;              // For mouse drag position.
+    QRect          m_currentSelection;  // Region selection in image displayed in the widget.
 
 protected:
 

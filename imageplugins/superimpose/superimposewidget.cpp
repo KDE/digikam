@@ -37,8 +37,9 @@
 
 // Local includes.
 
-#include "superimposewidget.h"
 #include "superimpose.h"
+#include "superimposewidget.h"
+#include "superimposewidget.moc"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -324,6 +325,3 @@ void SuperImposeWidget::setEditModeCursor()
 }
 
 }  // NameSpace DigikamSuperImposeImagesPlugin
-
-
-#include "superimposewidget.moc"

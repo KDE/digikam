@@ -35,7 +35,9 @@ namespace DigikamSuperImposeImagesPlugin
 
 class SuperImpose
 {
+
 public:
+
     SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
                 QRect orgImageSelection,
                 Digikam::DColorComposer::CompositingOperation
@@ -47,13 +49,16 @@ private:
 
     void filterImage(void);
 
-    Digikam::DImg m_orgImage;
-    Digikam::DImg m_template;
-    Digikam::DImg m_destImage;
-    QRect         m_selection;
+private:
+
+    QRect                                         m_selection;
+
+    Digikam::DImg                                 m_orgImage;
+    Digikam::DImg                                 m_template;
+    Digikam::DImg                                 m_destImage;
     Digikam::DColorComposer::CompositingOperation m_compositeRule;
 };
 
-}
+} // namespace DigikamSuperImposeImagesPlugin
 
-#endif
+#endif /* SUPERIMPOSE_H */
