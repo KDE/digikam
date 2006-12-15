@@ -171,6 +171,8 @@ void SharedLoadingTask::execute()
                 m_usedProcess->removeListener(this);
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
+                // set to 0, as checked in setStatus
+                m_usedProcess = 0;
                 //DDebug() << "SharedLoadingTask " << this << ": waited" << endl;
                 return;
             }
@@ -279,6 +281,8 @@ void SharedLoadingTask::execute()
         // wait until all listeners have removed themselves
         while (m_listeners.count() != 0)
             lock.timedWait();
+        // set to 0, as checked in setStatus
+        m_usedProcess = 0;
     }
 };
 
@@ -311,10 +315,15 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        // remove this from list of listeners - check in continueQuery() of active thread
-        m_usedProcess->removeListener(this);
-        // wake all listeners - particularly this - from waiting on cache condvar
-        lock.wakeAll();
+
+        // check for m_usedProcess, to avoid race condition that it has finished before
+        if (m_usedProcess)
+        {
+            // remove this from list of listeners - check in continueQuery() of active thread
+            m_usedProcess->removeListener(this);
+            // wake all listeners - particularly this - from waiting on cache condvar
+            lock.wakeAll();
+        }
     }
 }
 
