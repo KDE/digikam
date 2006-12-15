@@ -21,7 +21,7 @@ protocoldir = $(kde_servicesdir)
 
 kio_digikamthumbnail_la_SOURCES = digikamthumbnail.cpp 
 
-kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) $(LIB_EXIV2) \
+kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) $(EXIV2_LIBS) \
 	                          $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries)	                          
@@ -30,7 +30,7 @@ kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_lib
 
 kio_digikampreview_la_SOURCES = digikampreview.cpp 
 
-kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(LIB_EXIV2) \
+kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(EXIV2_LIBS) \
 	                        $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikampreview_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries) 
@@ -48,7 +48,7 @@ kio_digikamtags_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGI
 kio_digikamalbums_la_SOURCES = digikamalbums.cpp sqlitedb.cpp
 
 kio_digikamalbums_la_LIBADD  = $(top_builddir)/digikam/libs/jpegutils/libjpegutils.la \
-	                       $(LIB_KIO) $(LIB_SQLITE3) $(LIB_EXIV2) \
+	                       $(LIB_KIO) $(LIB_SQLITE3) $(EXIV2_LIBS) \
 	                       $(top_builddir)/digikam/libs/dimg/libdimg.la 
 
 kio_digikamalbums_la_LDFLAGS = -module -avoid-version $(all_libraries) $(KDE_PLUGIN) 

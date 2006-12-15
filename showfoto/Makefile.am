@@ -32,7 +32,7 @@ showfoto_LDADD   = $(top_builddir)/digikam/showfoto/setup/libsetup.la \
 	               $(top_builddir)/digikam/utilities/splashscreen/libsplashscreen.la \
 	               $(top_builddir)/digikam/libs/threadimageio/libthreadimageio.la \
 	               $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KUTILS) \
-	               $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) $(LIB_EXIV2) 
+	               $(LIB_KFILE) $(LIB_KPARTS) $(LIBJPEG) $(EXIV2_LIBS) 
 
 showfoto_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
