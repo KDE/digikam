@@ -390,6 +390,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 237 ==> 138747 : Crash on Add Camera.
 238 ==> 138715 : Crash when quickly switching to previous/next image.
 239 ==> 138616 : Cannot compile: cannot verify exiv2 version.
-240 ==> 
+240 ==> 134999 : Crash in exiv2 when searching for new images.
+241 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
