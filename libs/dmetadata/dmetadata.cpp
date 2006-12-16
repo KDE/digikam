@@ -1209,7 +1209,14 @@ QString DMetadata::detectEncodingAndDecode(const std::string &value)
     // convert string:
     // Use whatever has the larger score, local or ASCII
     if (localScore >= 0 && localScore >= latin1Score)
-        return localCodec->toUnicode(value.c_str(), value.length());
+    {
+        // workaround for bug #134999:
+        // The QLatin15Codec may crash if strlen < value.length()
+        int length = value.length();
+        if (localCodec->name() == QString::fromLatin1("ISO 8859-15"))
+            length = strlen(value.c_str());
+        return localCodec->toUnicode(value.c_str(), length);
+    }
     else
         return QString::fromLatin1(value.c_str());
 }
