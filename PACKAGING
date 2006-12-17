@@ -8,7 +8,7 @@ Notice to make release tarballs from SVN
 
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
    - version.
-   - svnbase.
+   - svnbase (your own svn access that  you used for checkout must appear here).
    - addPo (for example addPo = ["showfoto"] if showofoto is include in digikam tarball).
    
 Note : docs must be set to 'no' because the documentation must be packaged in a separate tarball to decrease the source code tarball size. There is a seperate script to generate this.
@@ -22,7 +22,7 @@ Note : docs must be set to 'no' because the documentation must be packaged in a 
 svn2cl can be dowloaded at this url: http://ch.tudelft.nl/~arthur/svn2cl/
 Just copying this tarball content on digikam root directory to use it.
 
-Note : svn2cl need xstlproc program. Please install it before. (check libxstl-proc package).
+Note : svn2cl need xsltproc program. Please install it before. (check libxslt-proc package).
 
 5b) Alternatively:
 	* check Changelog for last change, modify release_digikam(imageplguins)_cl.sh
@@ -33,7 +33,7 @@ Note : svn2cl need xstlproc program. Please install it before. (check libxstl-pr
 	* commit the new changelog
         * skip item 6 and 7 below
 
-6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scriptly' entries in log.
+6/ Copy last changes of fresh ChangeLog file to ChangeLog.old using a simple text editor. Place a release tag at the top of ChangeLog. Remove all 'scripty' entries in log.
 
 7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
 

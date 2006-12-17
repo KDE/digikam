@@ -1,3 +1,523 @@
+v0.9 - 17-Dec-2006
+----------------------------------------------------------------------------
+2006-12-16 17:28  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-16 17:12  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  Workaround for problem in QLatin15Codec.
+	  The string provided as comment may contain \0 characters (often
+	  256 '\0').
+	  QLatin15Codec uses QString::fromLatin1 internally, which stops at
+	  the first \0.
+	  Then QLatin15Codec does not check if the string returned is
+	  shorter than
+	  the length provided to toUnicode. This means we have to adjust
+	  the string length
+	  to strlen() if QLatin15Codec is used.
+	  
+	  BUG: 134999
+
+2006-12-15 15:28  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-15 15:27  cgilles
+
+	* trunk/extragear/graphics/digikam/configure.in.in,
+	  trunk/extragear/graphics/digikam/digikam/Makefile.am,
+	  trunk/extragear/graphics/digikam/kioslave/Makefile.am,
+	  trunk/extragear/graphics/digikam/showfoto/Makefile.am: digikam
+	  from trunk : patch about Exiv2 0.12 version detection from
+	  Angelo.
+	  BUG: 138616
+
+2006-12-15 07:11  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h: typo
+
+2006-12-15 06:47  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-15 06:40  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/threadimageio/loadsavetask.cpp:
+	  digikam from trunk : Patch from Marcel to fix a race condition in
+	  threaded image I/O witch can crash digiKam in image editor.
+	  BUG: 138715
+
+2006-12-14 13:08  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp:
+	  polish
+
+2006-12-14 12:54  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp:
+	  digikam from trunk : center vertically check mark is more intuive
+	  to see witch tags are set on pop-up menu
+
+2006-12-14 12:31  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h: digikam
+	  from trunk : using d private internal class
+
+2006-12-14 12:19  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagspopupmenu.h: digikam
+	  from trunk : using PE_CheckMark primitive is more intuive to see
+	  witch tags are set on pop-up menu
+
+2006-12-14 06:47  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-14 06:46  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.cpp,
+	  trunk/extragear/graphics/digikam/libs/widgets/common/squeezedcombobox.h:
+	  digikam from trunk : Force QComboBox to use internaly a QListBox
+	  independantly of current widget style used by QT.
+	  CCBUGS: 138747
+
+2006-12-13 14:06  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/tag-addressbook.png,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 14:01  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/tag-recents.png,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 13:50  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.h,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.h:
+	  digikam from trunk : to render all tag popup menus on album gui,
+	  "Add tag from AdressBook" option have been added on tag filter
+	  view and Comment & Tag side bar .
+
+2006-12-13 13:35  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamui.rc: insert
+	  separator
+
+2006-12-13 11:31  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/tag-reset.png,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 11:25  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/tag-delete.png,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 10:30  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/image-comment.png:
+	  digikam from trunk : obsolete
+
+2006-12-13 10:30  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/image-broken.png,
+	  trunk/extragear/graphics/digikam/data/pics/image-comment.png,
+	  trunk/extragear/graphics/digikam/data/pics/image_broken.png,
+	  trunk/extragear/graphics/digikam/data/pics/imagecomment.png,
+	  trunk/extragear/graphics/digikam/digikam/pixmapmanager.cpp,
+	  trunk/extragear/graphics/digikam/libs/dialogs/dprogressdlg.cpp:
+	  digikam from trunk : fix image icons
+
+2006-12-13 10:21  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/addimagefolder.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfolder-importdir.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfolder-importimages.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfolder-new.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfolder-properties.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfoldercomment.png,
+	  trunk/extragear/graphics/digikam/data/pics/albumfoldernew.png,
+	  trunk/extragear/graphics/digikam/data/pics/importfolders2albums.png,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/utilities/cameragui/albumselectdialog.cpp:
+	  digikam from trunk : fix album folder icons
+
+2006-12-13 09:29  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp: digikam
+	  from trunk : fix tag icons
+
+2006-12-13 09:25  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 09:21  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagspopupmenu.cpp:
+	  polish
+
+2006-12-13 09:18  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagfilterview.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 09:17  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  polish
+
+2006-12-13 09:14  cgilles
+
+	* trunk/extragear/graphics/digikam/data/pics/Makefile.am,
+	  trunk/extragear/graphics/digikam/data/pics/tag-new.png,
+	  trunk/extragear/graphics/digikam/data/pics/tag-properties.png:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 09:13  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/tagfolderview.cpp:
+	  digikam from trunk : fix tag icons
+
+2006-12-13 07:09  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: typo
+
+2006-12-13 07:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-13 06:50  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/hotplug/digikam-camera,
+	  trunk/extragear/graphics/digikam/utilities/hotplug/digikam-gphoto2-camera.desktop.in:
+	  digikam from trunk : patch from ismail donmez (cartman) to fix
+	  hotplug digiKam script : digikam-gphoto2-camera.desktop has no %u
+	  in Exec line hence KDE tries to download with kioexec, solution
+	  is to add %u there and ignore extra argument for detect case in
+	  digikam-camera.
+	  
+	  BUG: 117248
+	  CCMAIL: ismail@kde.org
+
+2006-12-13 05:10  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 21:20  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagedescedittab.cpp:
+	  digikam from trunk : missing rule about metadata to write in file
+	  depending of digiKam metadata setup
+
+2006-12-12 21:13  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 20:23  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 14:27  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: digikam from trunk :
+	  bugfix : if CM is not enable at the first time, the user cannot
+	  set on this option duing a bug in factorization of methods
+	  readSettings() and restoreSettings()
+
+2006-12-12 14:25  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  polish
+
+2006-12-12 14:22  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  digikam from trunk : if file dir-path is read-only, do not try to
+	  save metadata on pictures.
+	  BUG: 138540
+
+2006-12-12 14:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 14:04  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumfolderview.h:
+	  digiKam from trunk : Added missing "Rename..." option on Album
+	  RMB menu.
+	  BUG: 135442
+
+2006-12-12 13:43  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp:
+	  digikam from trunk : fix icon used by "Edit Album Properties" RMB
+	  menu from Folder view
+
+2006-12-12 13:03  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 12:39  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 08:04  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-12 08:03  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.h,
+	  trunk/extragear/graphics/digikam/digikam/digikamui.rc: digikam
+	  from trunk : fix kgamma to display module from KDE control center
+	  BUG: 127112
+
+2006-12-12 07:26  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 17:56  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 17:44  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: typo
+
+2006-12-11 17:43  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 14:00  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 13:56  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 13:52  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 13:30  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 13:29  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.cpp,
+	  trunk/extragear/graphics/digikam/digikam/digikamapp.h: digikam
+	  from trunk : add Export menu into Album context pop-up menu.
+	  BUG: 121651
+
+2006-12-11 12:11  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-11 12:10  cgilles
+
+	* trunk/extragear/graphics/digikam/digikam/albumfolderview.cpp,
+	  trunk/extragear/graphics/digikam/digikam/albumiconview.cpp:
+	  digikam from trunk : never handle root album with Drag & Drop and
+	  Copy & Paste operations.
+	  BUG: 119205
+
+2006-12-11 08:54  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management plugin BugFix : if
+	  input|proof|workspace ICC profile files path are wrong (files do
+	  not exist or file not readable, or path is not a file), ask to
+	  user to check settings before to perform color transformations...
+	  else digiKam will crash with an error from LCMS library.
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-12-10 15:00  mwiesweg
+
+	* trunk/extragear/graphics/digikam/NEWS,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/imagewindow.cpp:
+	  Call promptUserSave _before_ changing variables, namely
+	  d->urlCurrent.
+	  
+	  BUG: 138620
+
+2006-12-10 10:18  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : Image Editor : using SHIFT instead CTRL is
+	  better with Flip/Rotate keyboard shortcuts
+	  CCBUGS : 133091
+
+2006-12-10 10:04  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp:
+	  digikam from trunk : Image Editor : Fix horizontally and
+	  vertically flip actions keyboard shortcuts to prevents any
+	  problems with right sidebar :
+	  
+	  flip H : '*' ==> CTRL + '*'
+	  flip V : '/' ==> CTRL + '/'
+	  
+	  CCBUGS: 133091
+
+2006-12-10 09:27  cgilles
+
+	* trunk/extragear/graphics/digikam/configure.in.in: digikam from
+	  trunk : patch from Angelo : using KDE_PKG_CHECK_MODULES instead
+	  PKG_CHECK_MODULES like with kipi-plugins configure check
+
+2006-12-09 16:25  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-09 15:49  mwiesweg
+
+	* trunk/extragear/graphics/digikam/kioslave/digikamalbums.cpp: Set
+	  modification date in digikamalbums::put.
+	  Code copied from kdelibs/kioslave/file/file.cc
+	  
+	  BUG: 137993
+
+2006-12-08 13:59  cgilles
+
+	* trunk/extragear/graphics/digikam/imageplugins/imageeffect_iccproof.cpp:
+	  digikam from trunk : Color Management plugin : optimization : do
+	  not read plugin settings after to set signal/slots connection
+	  else we will have a lots of event emitted to slotEffect() witch
+	  slowdown plugin startup.
+	  CCMAIL: fj.cruz@supercable.es
+
+2006-12-08 05:15  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-08 05:14  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
+	  digikam from trunk : instead to use '7', '8', and '9' keys to
+	  rotate an image in editor, use CTRL+7, CTRL+8, CTRL+9 to prevent
+	  conflic with Comments & Tags side bar.
+	  
+	  BUG: 133091
+
+2006-12-07 20:48  mwiesweg
+
+	* trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebar.cpp,
+	  trunk/extragear/graphics/digikam/libs/imageproperties/imagepropertiessidebardb.cpp:
+	  Remove code that tries to filter out duplicates.
+	  It cannot notice if the image data changed.
+
+2006-12-07 20:45  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dimg/loaders/pngloader.h:
+	  missing C ANSI header
+
+2006-12-07 14:15  mwiesweg
+
+	* trunk/extragear/graphics/digikam/PACKAGING: Small changes
+
+2006-12-07 12:35  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-07 12:32  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  typo
+
+2006-12-07 12:30  cgilles
+
+	* trunk/extragear/graphics/digikam/libs/dmetadata/dmetadata.cpp:
+	  digikam from trunk : Don't touch read-only file when metadat need
+	  to be updated.
+	  BUG: 137770
+
+2006-12-06 17:03  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-06 10:29  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-06 10:22  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/cameragui/Makefile.am,
+	  trunk/extragear/graphics/digikam/utilities/setup/Makefile.am:
+	  digikam from trunk : and improve again --enable-final .configure
+	  option. Now all digikam
+	  folders are compiled using this rule.
+	  
+	  To packagers : let's me hear if you have some problems with this
+	  change.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2006-12-06 07:42  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-05 15:49  cgilles
+
+	* trunk/extragear/graphics/digikam/NEWS: update
+
+2006-12-05 15:45  cgilles
+
+	* trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.cpp,
+	  trunk/extragear/graphics/digikam/utilities/imageeditor/editor/editorwindow.h:
+	  digikam from trunk : Image Editor : add a keyboard shortcut to
+	  toggle on/off Monitor Color Corrections (F12 key)
+	  BUG: 138253
+
+2006-12-05 15:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/ChangeLog: Correct
+	  RC1 release date
+
+2006-12-05 15:29  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog,
+	  trunk/extragear/graphics/digikam/release_digikam_cl.sh,
+	  trunk/extragear/graphics/digikamimageplugins/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_cl.sh:
+	  Preparing RC2
+
+
+
+
 v0.9.0-rc2 - 05-Dec-2006
 ----------------------------------------------------------------------------
 

@@ -12,6 +12,7 @@ egmodule   = "graphics"
 version    = "0.9.0"
 docs       = "no"
 
+svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
 svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
 svnbase    = "https://fjcruz@svn.kde.org/home/kde"
 svnbase    = "https://ach@svn.kde.org/home/kde"
