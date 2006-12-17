@@ -391,6 +391,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 238 ==> 138715 : Crash when quickly switching to previous/next image.
 239 ==> 138616 : Cannot compile: cannot verify exiv2 version.
 240 ==> 134999 : Crash in exiv2 when searching for new images.
-241 ==> 
+241 ==> 136771 : Image editor crashes when using undo.
+242 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
