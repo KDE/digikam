@@ -13,14 +13,10 @@ version    = "0.9.0"
 docs       = "no"
 
 svnbase    = "svn+ssh://gkulzer@svn.kde.org/home/kde"
-svnbase    = "svn+ssh://toma@svn.kde.org/home/kde"
-svnbase    = "https://fjcruz@svn.kde.org/home/kde"
-svnbase    = "https://ach@svn.kde.org/home/kde"
-svnbase    = "https://mwiesweg@svn.kde.org/home/kde"
 svnroot    = "#{svnbase}/trunk"
 adminroot  = "#{svnbase}/branches/KDE/3.5"
 
-addDocs    = [no]
+addDocs    = []
 addPo      = ["showfoto"]
 
 #----------------------------------------------------------------

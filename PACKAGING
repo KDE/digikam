@@ -8,7 +8,7 @@ Notice to make release tarballs from SVN
 
 2/ Edited release_digikam.rb and release_digikam_docs.rb script. Update these settings :
    - version.
-   - svnbase (your own svn access that  you used for checkout must appear here).
+   - svnbase (your own svn access that  you used for checkout must appear here. In case of pb, eliminate the others).
    - addPo (for example addPo = ["showfoto"] if showofoto is include in digikam tarball).
    
 Note : docs must be set to 'no' because the documentation must be packaged in a separate tarball to decrease the source code tarball size. There is a seperate script to generate this.
@@ -37,7 +37,7 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
 
 7/ Renamed ChangeLog.old to ChangeLog and commit it on svn.
 
-8/ Run release_digikam.rb script and the release_digikam_docs.rb
+8/ Run release_digikam.rb script and the release_digikam_docs.rb ($ ruby foo.rb)
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
