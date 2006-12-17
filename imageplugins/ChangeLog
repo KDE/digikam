@@ -1,3 +1,32 @@
+v0.9.0  -  17-Dec-2006
+----------------------------------------------------------------------------
+
+2006-12-15 10:27  cgilles
+
+	* trunk/extragear/graphics/digikamimageplugins/superimpose/Makefile.am,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageeffect_superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/imageplugin_superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimpose.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimpose.h,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.cpp,
+	  trunk/extragear/graphics/digikamimageplugins/superimpose/superimposewidget.h:
+	  digikam from trunk : better support of --enable-final compilation
+	  option
+
+2006-12-05 15:31  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/ChangeLog: Correct
+	  RC1 release date
+
+2006-12-05 15:29  mwiesweg
+
+	* trunk/extragear/graphics/digikam/ChangeLog,
+	  trunk/extragear/graphics/digikam/release_digikam_cl.sh,
+	  trunk/extragear/graphics/digikamimageplugins/ChangeLog,
+	  trunk/extragear/graphics/digikamimageplugins/release_digikamimageplugins_cl.sh:
+	  Preparing RC2
+
 v0.9.0-rc2 - 05-Dec-2006
 ----------------------------------------------------------------------------
 
