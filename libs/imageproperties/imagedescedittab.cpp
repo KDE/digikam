@@ -22,21 +22,15 @@
  * ============================================================ */
 
 // Qt includes.
- 
-#include <qframe.h>
+
+#include <qhbox.h>
 #include <qlabel.h>
-#include <qtextedit.h>
-#include <qcheckbox.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
-#include <qvgroupbox.h>
 #include <qhgroupbox.h>
-#include <qlistview.h>
-#include <qguardedptr.h>
+#include <qvgroupbox.h>
 #include <qheader.h>
-#include <qcursor.h>
+#include <qtoolbox.h>
 #include <qtoolbutton.h>
-#include <qpushbutton.h>
 #include <qiconset.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -47,6 +41,7 @@
 #include <kpopupmenu.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kcursor.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -71,45 +66,22 @@
 #include "ratingwidget.h"
 #include "imageattributeswatch.h"
 #include "albumthumbnailloader.h"
+#include "talbumlistview.h"
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
 namespace Digikam
 {
 
-class TAlbumCheckListItem : public QCheckListItem
-{
-public:
-
-    TAlbumCheckListItem(QListView* parent, TAlbum* album)
-        : QCheckListItem(parent, album->title()),
-          m_album(album)
-    {
-    }
-
-    TAlbumCheckListItem(QCheckListItem* parent, TAlbum* album)
-        : QCheckListItem(parent, album->title(), QCheckListItem::CheckBox),
-          m_album(album)
-    {
-    }
-
-    TAlbum* m_album;
-
-protected:
-    
-    virtual void stateChange(bool val)
-    {
-        QCheckListItem::stateChange(val);
-        TAlbumListView* view = dynamic_cast<TAlbumListView*>(listView());
-        view->emitSignalItemStateChanged();
-    }
-};
-
-// ------------------------------------------------------------------------
-
 class ImageDescEditTabPriv
 {
 public:
+
+    enum SettingsTab
+    {
+        COMMENTSPAGE=0,
+        TAGSPAGE
+    };
 
     ImageDescEditTabPriv()
     {
@@ -125,10 +97,13 @@ public:
         ratingWidget               = 0;
         navigateBar                = 0;
         ABCMenu                    = 0;
+        toolBox                    = 0;
     }
 
     bool               modified;
     bool               ignoreImageAttributesWatch;
+
+    QToolBox          *toolBox;
 
     QToolButton       *recentTagsBtn;
     QToolButton       *tagsSearchClearBtn;
@@ -154,35 +129,41 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
                 : QWidget(parent, 0, Qt::WDestructiveClose)
 {
     d = new ImageDescEditTabPriv;
-    
+
     QVBoxLayout *vLayout        = new QVBoxLayout(this);
     d->navigateBar              = new NavigateBarWidget(this, navBar);
-    QWidget *settingsArea       = new QWidget(this);
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
+    d->toolBox                  = new QToolBox(this);
+    QWidget *propertiesBox      = new QWidget(d->toolBox);
+    QGridLayout *settingsLayout = new QGridLayout(propertiesBox, 2, 1, 
+                                      KDialog::marginHint(), KDialog::spacingHint());
     
-    // Comments view ---------------------------------------------------
+    // Comments/Date/Rating view -----------------------------------
     
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), settingsArea);
+    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), propertiesBox);
     d->commentsEdit         = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    // Date and Time view ---------------------------------------------------
-    
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), settingsArea);
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), propertiesBox);
     d->dateTimeEdit         = new KDateTimeEdit( dateTimeBox, "datepicker");
 
-    // Rating view --------------------------------------------------
-
-    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), settingsArea);
+    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), propertiesBox);
     ratingBox->layout()->setAlignment(Qt::AlignCenter);
     d->ratingWidget = new RatingWidget(ratingBox);
-        
+
+    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
+    settingsLayout->addMultiCellWidget(dateTimeBox, 1, 1, 0, 1);
+    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
+    settingsLayout->setRowStretch(0, 10);
+
+    d->toolBox->insertItem(ImageDescEditTabPriv::COMMENTSPAGE, propertiesBox, 
+                           SmallIconSet("imagecomment"), i18n("Comments/Date/Rating"));
+
     // Tags view ---------------------------------------------------
 
-    QVGroupBox* tagsBox = new QVGroupBox(i18n("&Tags"), settingsArea);
-
-    QHBox* tagsSearch = new QHBox(tagsBox);
+    QWidget *tagsBox      = new QWidget(d->toolBox);
+    QVBoxLayout *vLayout2 = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
+    QHBox* tagsSearch     = new QHBox(tagsBox);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
@@ -209,16 +190,22 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsView->setSelectionMode(QListView::Single);
     d->tagsView->setResizeMode(QListView::LastColumn);
 
+    vLayout2->addWidget(tagsSearch);
+    vLayout2->addWidget(d->tagsView);
+
+    d->toolBox->insertItem(ImageDescEditTabPriv::TAGSPAGE, tagsBox, 
+                           kapp->iconLoader()->loadIcon("tag", KIcon::NoGroup, KIcon::SizeSmall,
+                           KIcon::DefaultState, 0, true), i18n("Tags"));
+
     // --------------------------------------------------
     
-    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
-    settingsLayout->addMultiCellWidget(dateTimeBox, 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
-    settingsLayout->addMultiCellWidget(tagsBox, 3, 3, 0, 1);
-    settingsLayout->setRowStretch(3, 10);
-
     vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(settingsArea);    
+    vLayout->addWidget(d->toolBox);    
+
+    KConfig* config = kapp->config();
+    config->setGroup("Image Properties SideBar");
+    d->toolBox->setCurrentIndex(config->readNumEntry("Comments And Tags Tab",
+                                ImageDescEditTabPriv::COMMENTSPAGE));
 
     // --------------------------------------------------
 
@@ -318,7 +305,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 ImageDescEditTab::~ImageDescEditTab()
 {
     applyAllChanges();
-    
+ 
+    KConfig* config = kapp->config();
+    config->setGroup("Image Properties SideBar");
+    config->writeEntry("Comments And Tags Tab", d->toolBox->currentIndex());
+    config->sync();
+   
     /*
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
@@ -1140,18 +1132,6 @@ void ImageDescEditTab::slotTagsSearchChanged()
                      QColor(255,200,200));
         d->tagsSearchEdit->setPalette(pal);
     }
-}
-
-// ------------------------------------------------------------------------
-
-TAlbumListView::TAlbumListView(QWidget* parent)
-              : QListView(parent)
-{
-}
-
-void TAlbumListView::emitSignalItemStateChanged()
-{
-    emit signalItemStateChanged();
 }
 
 }  // NameSpace Digikam

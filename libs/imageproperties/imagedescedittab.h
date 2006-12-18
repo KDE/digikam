@@ -28,7 +28,6 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
-#include <qlistview.h>
 
 // Local includes.
 
@@ -44,22 +43,6 @@ class TAlbum;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
-class TAlbumListView : public QListView
-{
-    Q_OBJECT
-
-public:
-
-    TAlbumListView(QWidget* parent);
-
-    void emitSignalItemStateChanged();
-
-signals:
-
-    void signalItemStateChanged();
-};
-
-// ------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ImageDescEditTab : public QWidget
 {
