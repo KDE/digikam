@@ -121,6 +121,12 @@ ImageEditor   : Fixed and improved Color Management View workflow.
 General       : About final release packaging, improve support of "./configure --enable-final" 
                 option everywhere.
 
+*** 0.9.1-Beta1 *********************************************************
+
+General       : New optimized layout to show Comments & Tags side bar contents.
+General       : Tags View from Comments & Tags side bar support drag & drop.
+General       : Root album show a Welcome page for new users (like Kmail or Konqueror).
+
 ...
 
 ----------------------------------------------------------------------------------------------------
@@ -392,6 +398,9 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 239 ==> 138616 : Cannot compile: cannot verify exiv2 version.
 240 ==> 134999 : Crash in exiv2 when searching for new images.
 241 ==> 136771 : Image editor crashes when using undo.
+
+*** 0.9.1-Beta1 *********************************************************
+
 242 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
