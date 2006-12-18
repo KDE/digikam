@@ -268,7 +268,11 @@ QString AlbumWidgetStack::infoPage()
     newFeatures << i18n("Full color management support");
     newFeatures << i18n("Makernote and IPTC metadata support");
     newFeatures << i18n("Geolocalization of photograph");
-    newFeatures << i18n("...TODO: add more informations here...");
+    newFeatures << i18n("Sidebar used everywhere");
+    newFeatures << i18n("Advanced RAW pictures decoding settings");
+    newFeatures << i18n("Fast preview of RAW pictures");
+    newFeatures << i18n("Metadata support for RAW pictures");
+    newFeatures << i18n("New advanced options to download pictures from camera");
 
     QString featureItems;
     for ( uint i = 0 ; i < newFeatures.count() ; i++ )
