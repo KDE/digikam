@@ -41,12 +41,12 @@ Note : svn2cl need xsltproc program. Please install it before. (check libxslt-pr
 
 9/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
-10/ Upload tarball to digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from pakagers before posting an offical release annoucement.
+10/ Upload tarball to http://digikam3rdparty.free.fr area via ftp and post a message on digikam-devel@kde.org mailing list to have a feedback from packagers before posting an offical release annoucement.
 
 11/ When official tarball is ready to post, don't forget to copy current trunk svn branch to tags branch (http://websvn.kde.org/tags/digikam/). See TAGGING below.
 
 
-12/ Upload tarball to sourceforge.net area using this url:
+12/ Upload tarball to sourceforge.net area using this url (must be admin on SF-digikam):
 
 ftp://upload.sourceforge.net/incoming
 
@@ -64,17 +64,19 @@ https://sourceforge.net/project/admin/editpackages.php?group_id=42641
 ------------------ TAGGING ------------------
 
 Each release has to be tagged. All tags are located in svn in the directory /tags/digikam
-You'll find the svn revision used in the tarball in the file RELEAVE.rev
+You'll find the svn revision used in the tarball in the file RELEASE.rev
 
 For a X.Y.Z.UVW release
 
-   svn copy -r{last-used-rev_from_RELEASE.rev} \
+   svn copy -r{last-used-rev_number} \
 	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikam \
 	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikam_X_Y_Z_UVW
 
-   svn copy -r{last-used-rev_from_RELEASE.rev} \
+   svn copy -r{last-used-rev_number} \
 	https://{svn-user}@svn.kde.org/home/kde/trunk/extragear/graphics/digikamimageplugins \
 	https://{svn-user}@svn.kde.org/home/kde/tags/digikam/digikamimageplugins_X_Y_Z_UVW
+
+You also can use svn+ssh://{svn-user... instead of password requiring interface https://
 
 If anyone knows what the purpose of this tagging is, please put it here ;-)
 	* easy svn diff against released version? -- allee
