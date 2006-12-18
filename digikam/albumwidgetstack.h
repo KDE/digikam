@@ -25,6 +25,7 @@
 // KDE includes.
 
 #include <qwidgetstack.h>
+#include <qcstring.h>
 #include <qstring.h>
 
 // Local includes
@@ -47,7 +48,8 @@ public:
     enum AlbumWidgetStackMode
     {
         PreviewAlbumMode=0,
-        PreviewItemMode
+        PreviewItemMode,
+        HtmlViewMode
     };
 
 public:
@@ -73,7 +75,13 @@ private slots:
     void slotPreviewStarted();
     void slotPreviewComplete();
     void slotPreviewFailed();
+    void slotUrlOpen(const KURL &);
 
+private:
+
+    QCString fileToString(const QString &aFileName);
+    QString  infoPage();
+    
 private:
 
     AlbumWidgetStackPriv* d;

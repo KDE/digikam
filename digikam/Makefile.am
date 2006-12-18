@@ -20,7 +20,6 @@ INCLUDES = -I$(top_srcdir)/digikam/sqlite \
 	       -I$(top_srcdir)/digikam/utilities/splashscreen \
 	       -I$(top_srcdir)/digikam/utilities/setup \
 	       -I$(top_srcdir)/digikam/ \
-	       -I$(top_builddir)/digikam/libs/dialogs \
 	       $(LIBKIPI_CFLAGS) $(all_includes) 
 
 
@@ -90,7 +89,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                    tagspopupmenu.cpp \
 	                    upgradedb_sqlite2tosqlite3.cpp 
 
-libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) \
+libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(EXIV2_LIBS) \
 		               $(top_builddir)/digikam/sqlite/libsqlite.la \
 		               $(top_builddir)/digikam/libs/thumbbar/libthumbbar.la \

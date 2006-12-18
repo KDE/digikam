@@ -588,6 +588,10 @@ void DigikamView::slot_albumSelected(Album* album)
     d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());    
 
     d->iconView->setAlbum(album);
+    if (album->isRoot())
+        d->albumPreviews->setPreviewMode(AlbumWidgetStack::HtmlViewMode);
+    else 
+        d->albumPreviews->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
 
 void DigikamView::slot_albumOpenInKonqui()
