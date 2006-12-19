@@ -78,7 +78,7 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-KDE        >= 3.x   (>=3.5.x recommended)  http://www.kde.org
+libkde     >= 3.x   (>=3.5.x recommended)  http://www.kde.org
 libsqlite  >= 3.x                          http://www.sqlite.org
 libexiv2   >= 0.12                         http://www.exiv2.org
 libgphoto2 >= 2.x   (>=2.2.x recommended)  http://www.gphoto.org
@@ -86,6 +86,10 @@ libkipi    >= 0.1                          http://extragear.kde.org/apps/kipi
 liblcms    >= 1.14.x                       http://www.littlecms.com
 libtiff    >= 3.6.x (>=3.8.2 recommended)  http://www.remotesensing.org/libtiff
 libpng     >= 1.2.x                        http://www.libpng.org/pub/png/libpng.html
+libjasper  >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jasper
+
+Note : all libraries depencies requires developement and binary packages installed on your 
+computer to compile digiKam.
 
 -- INSTALLATION --------------------------------------------------------
 

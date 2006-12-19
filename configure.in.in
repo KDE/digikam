@@ -1,6 +1,6 @@
 #MIN_CONFIG(3)
 
-AM_INIT_AUTOMAKE(digikam,0.9.0)
+AM_INIT_AUTOMAKE(digikam,0.9.1)
 
 # -----------------------------------------------------------------
 # enable hidden visibility only if kde >= 3.3.2 and kdelibs has
@@ -208,6 +208,24 @@ if test "x$have_png" != "xyes"; then
 else
   LIB_PNG="-lpng"
   AC_SUBST(LIB_PNG)
+fi
+
+#------------------------------------------------------------------
+# Check for libjasper (JPEG2000)
+#------------------------------------------------------------------
+
+have_jasper=no
+KDE_CHECK_LIB(jasper, jas_init,
+              have_jasper=yes,
+              AC_MSG_WARN([digiKam requires libjasper >= 1.7.0]),
+              -ljasper)
+
+if test "x$have_jasper" != "xyes"; then
+  AC_WARN([digiKam requires libjasper >= 1.7.0; digiKam will not be compiled.])
+  DO_NOT_COMPILE="digikam digikamimageplugins $DO_NOT_COMPILE"
+else
+  LIB_JASPER="-ljasper"
+  AC_SUBST(LIB_JASPER)
 fi
 
 #------------------------------------------------------------------

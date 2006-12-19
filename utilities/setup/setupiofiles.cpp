@@ -94,7 +94,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     d->JPEGcompression = new KIntNumInput(75, savingOptionsGroup);
     d->JPEGcompression->setRange(1, 100, 1, true );
-    d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), savingOptionsGroup);
+    d->labelJPEGcompression = new QLabel(i18n("JPEG/JPEG2000 quality:"), savingOptionsGroup);
 
     QWhatsThis::add( d->JPEGcompression, i18n("<p>The quality value for JPEG images:<p>"
                                                 "<b>1</b>: low quality (high compression and small "

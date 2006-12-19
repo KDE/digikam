@@ -60,6 +60,7 @@ public:
         TIFF,
         RAW,
         PPM,
+        JP2K,
         QIMAGE
     };
 
