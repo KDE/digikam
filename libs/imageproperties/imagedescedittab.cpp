@@ -29,7 +29,6 @@
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
 #include <qheader.h>
-#include <qtoolbox.h>
 #include <qtoolbutton.h>
 #include <qiconset.h>
 #include <qwhatsthis.h>
@@ -49,6 +48,7 @@
 #include <kconfig.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
+#include <ktabwidget.h>
 
 // Local includes.
 
@@ -79,7 +79,7 @@ public:
 
     enum SettingsTab
     {
-        COMMENTSPAGE=0,
+        DESCRIPTIONPAGE=0,
         TAGSPAGE
     };
 
@@ -97,13 +97,11 @@ public:
         ratingWidget               = 0;
         navigateBar                = 0;
         ABCMenu                    = 0;
-        toolBox                    = 0;
+        tab                        = 0;
     }
 
     bool               modified;
     bool               ignoreImageAttributesWatch;
-
-    QToolBox          *toolBox;
 
     QToolButton       *recentTagsBtn;
     QToolButton       *tagsSearchClearBtn;
@@ -113,6 +111,8 @@ public:
     KTextEdit         *commentsEdit;
 
     KLineEdit         *tagsSearchEdit;
+
+    KTabWidget        *tab;
 
     KDateTimeEdit     *dateTimeEdit;
 
@@ -130,24 +130,29 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 {
     d = new ImageDescEditTabPriv;
 
-    QVBoxLayout *vLayout        = new QVBoxLayout(this);
-    d->navigateBar              = new NavigateBarWidget(this, navBar);
-    d->toolBox                  = new QToolBox(this);
-    QWidget *propertiesBox      = new QWidget(d->toolBox);
-    QGridLayout *settingsLayout = new QGridLayout(propertiesBox, 2, 1, 
+    QVBoxLayout *vLayout = new QVBoxLayout(this);
+    d->navigateBar       = new NavigateBarWidget(this, navBar);
+    d->tab               = new KTabWidget(this);
+    
+    vLayout->addWidget(d->navigateBar);
+    vLayout->addSpacing(KDialog::spacingHint());
+    vLayout->addWidget(d->tab);
+
+    // Comments/Date/Rating view -----------------------------------
+
+    QWidget *descriptionPage    = new QWidget(d->tab);
+    QGridLayout *settingsLayout = new QGridLayout(descriptionPage, 2, 1, 
                                       KDialog::marginHint(), KDialog::spacingHint());
     
-    // Comments/Date/Rating view -----------------------------------
-    
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), propertiesBox);
+    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), descriptionPage);
     d->commentsEdit         = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), propertiesBox);
+    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), descriptionPage);
     d->dateTimeEdit         = new KDateTimeEdit( dateTimeBox, "datepicker");
 
-    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), propertiesBox);
+    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), descriptionPage);
     ratingBox->layout()->setAlignment(Qt::AlignCenter);
     d->ratingWidget = new RatingWidget(ratingBox);
 
@@ -156,14 +161,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
     settingsLayout->setRowStretch(0, 10);
 
-    d->toolBox->insertItem(ImageDescEditTabPriv::COMMENTSPAGE, propertiesBox, 
-                           SmallIconSet("imagecomment"), i18n("Comments/Date/Rating"));
+    d->tab->insertTab(descriptionPage, i18n("Description"), ImageDescEditTabPriv::DESCRIPTIONPAGE);
 
     // Tags view ---------------------------------------------------
 
-    QWidget *tagsBox      = new QWidget(d->toolBox);
-    QVBoxLayout *vLayout2 = new QVBoxLayout(tagsBox, KDialog::marginHint(), KDialog::spacingHint());
-    QHBox* tagsSearch     = new QHBox(tagsBox);
+    QWidget *tagsPage     = new QWidget(d->tab);
+    QVBoxLayout *vLayout2 = new QVBoxLayout(tagsPage, KDialog::marginHint(), KDialog::spacingHint());
+    QHBox* tagsSearch     = new QHBox(tagsPage);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
@@ -184,7 +188,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
 
-    d->tagsView = new TAlbumListView(tagsBox);
+    d->tagsView = new TAlbumListView(tagsPage);
     d->tagsView->addColumn(i18n("Tags"));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
@@ -193,19 +197,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     vLayout2->addWidget(tagsSearch);
     vLayout2->addWidget(d->tagsView);
 
-    d->toolBox->insertItem(ImageDescEditTabPriv::TAGSPAGE, tagsBox, 
-                           kapp->iconLoader()->loadIcon("tag", KIcon::NoGroup, KIcon::SizeSmall,
-                           KIcon::DefaultState, 0, true), i18n("Tags"));
-
+    d->tab->insertTab(tagsPage, i18n("Tags"), ImageDescEditTabPriv::TAGSPAGE);
+    
     // --------------------------------------------------
     
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(d->toolBox);    
-
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
-    d->toolBox->setCurrentIndex(config->readNumEntry("Comments And Tags Tab",
-                                ImageDescEditTabPriv::COMMENTSPAGE));
+    d->tab->setCurrentPage(config->readNumEntry("Comments And Tags Tab",
+                           ImageDescEditTabPriv::DESCRIPTIONPAGE));
 
     // --------------------------------------------------
 
@@ -308,7 +307,7 @@ ImageDescEditTab::~ImageDescEditTab()
  
     KConfig* config = kapp->config();
     config->setGroup("Image Properties SideBar");
-    config->writeEntry("Comments And Tags Tab", d->toolBox->currentIndex());
+    config->writeEntry("Comments And Tags Tab", d->tab->currentPageIndex());
     config->sync();
    
     /*
