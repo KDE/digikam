@@ -401,6 +401,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 
 *** 0.9.1-Beta1 *********************************************************
 
-242 ==> 
+242 ==> 115157 : Usability: Image comments/tags dialog: hard to find/see all already selected 
+                 tags (and to 'de'select them).
+243 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
