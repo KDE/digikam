@@ -13,6 +13,6 @@ digikampic_DATA = image-broken.png image-full.png image-selection.png \
 iconsdir = $(kde_datadir)/digikam/icons/hicolor/32x32/actions
 icons_DATA = tag.png tag-new.png tag-properties.png tag-delete.png tag-reset.png \
 	     tag-folder.png tag-events.png tag-people.png tag-places.png \
-	     tag-addressbook.png tag-recents.png tags-assigned.png \
+	     tag-addressbook.png tag-recents.png tag-assigned.png \
 	     albumfolder-importimages.png albumfolder-properties.png \
 	     albumfolder-new.png albumfolder-importdir.png 
