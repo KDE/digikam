@@ -30,6 +30,7 @@
 #include <qvgroupbox.h>
 #include <qheader.h>
 #include <qtoolbutton.h>
+#include <qpushbutton.h>
 #include <qiconset.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -98,6 +99,7 @@ public:
         navigateBar                = 0;
         ABCMenu                    = 0;
         tab                        = 0;
+        assignedTagsBtn            = 0;
     }
 
     bool               modified;
@@ -107,6 +109,8 @@ public:
     QToolButton       *tagsSearchClearBtn;
 
     QPopupMenu        *ABCMenu;
+
+    QPushButton       *assignedTagsBtn;
 
     KTextEdit         *commentsEdit;
 
@@ -179,11 +183,19 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchEdit = new KLineEdit(tagsSearch);
     d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
+    d->assignedTagsBtn = new QPushButton(tagsSearch);
+    QToolTip::add(d->assignedTagsBtn, i18n("Already Assigned Tags"));
+    d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
+                                   KIcon::NoGroup, KIcon::SizeSmall, 
+                                   KIcon::DefaultState, 0, true));
+    d->assignedTagsBtn->setToggleButton(true);
+
     d->recentTagsBtn      = new QToolButton(tagsSearch);
     QPopupMenu *popupMenu = new QPopupMenu(d->recentTagsBtn);
     QToolTip::add(d->recentTagsBtn, i18n("Recent Tags"));
-    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", KIcon::NoGroup,
-                                 KIcon::SizeSmall, KIcon::DefaultState, 0, true));
+    d->recentTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-recents", 
+                                 KIcon::NoGroup, KIcon::SizeSmall, 
+                                 KIcon::DefaultState, 0, true));
     d->recentTagsBtn->setUsesBigPixmap(false);
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
@@ -243,6 +255,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
             
     connect(d->tagsSearchEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTagsSearchChanged()));
+
+    connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
+            this, SLOT(slotAssignedTagsToggled(bool)));
             
     // Initalize ---------------------------------------------
 
@@ -627,7 +642,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-                item->setOn(true);
+                if (item->isVisible())
+                    item->setOn(true);
                 ++it;
             }
             break;
@@ -638,7 +654,8 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-                item->setOn(false);
+                if (item->isVisible())
+                    item->setOn(false);
                 ++it;
             }
             break;
@@ -649,11 +666,13 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             while (it.current())
             {
                 TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-                TAlbum *tag = item->m_album;
-                if (tag)
-                    if (!tag->isRoot())
-                        item->setOn(!item->isOn());
-
+                if (item->isVisible())
+                {
+                    TAlbum *tag = item->m_album;
+                    if (tag)
+                        if (!tag->isRoot())
+                            item->setOn(!item->isOn());
+                }
                 ++it;
             }
             break;
@@ -1130,6 +1149,53 @@ void ImageDescEditTab::slotTagsSearchChanged()
                      atleastOneMatch ?  QColor(200,255,200) :
                      QColor(255,200,200));
         d->tagsSearchEdit->setPalette(pal);
+    }
+}
+
+void ImageDescEditTab::slotAssignedTagsToggled(bool t)
+{
+    QListViewItemIterator it(d->tagsView);
+    while (it.current())
+    {
+        TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+        TAlbum *tag               = item->m_album;
+        if (tag)
+        {
+            if (!tag->isRoot())
+            {
+                if (t)
+                {
+                    bool isOn = item->isOn();
+                    item->setVisible(isOn);
+
+                    if (isOn)
+                    {
+                        Album* parent = tag->parent();
+                        while (parent && !parent->isRoot())
+                        {
+                            QCheckListItem *pitem = (QCheckListItem*)parent->extraData(this);
+                            pitem->setVisible(true);
+                            parent = parent->parent();
+                        }
+                    }
+                }
+                else
+                {
+                    item->setVisible(true);
+                }
+            }
+        }
+        ++it;
+    }
+
+    TAlbum *root                  = AlbumManager::instance()->findTAlbum(0);
+    TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(this));
+    if (rootItem)
+    {
+        if (t)
+            rootItem->setText(0, i18n("Assigned Tags"));
+        else
+            rootItem->setText(0, root->title());
     }
 }
 

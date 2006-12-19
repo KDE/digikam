@@ -108,6 +108,7 @@ private slots:
     void slotImageCaptionChanged(Q_LLONG imageId);
 
     void slotRecentTagsMenuActivated(int);
+    void slotAssignedTagsToggled(bool);
 
 private:
 
