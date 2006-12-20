@@ -30,10 +30,14 @@
 
 #include <khtml_part.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class WelcomePage : public KHTMLPart
+class DIGIKAM_EXPORT WelcomePage : public KHTMLPart
 {
     Q_OBJECT
 
