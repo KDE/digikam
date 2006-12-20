@@ -70,7 +70,6 @@ protected:
 
 private:
 
-    void applyAllChanges();
     void updateTagsView();
     void updateComments();
     void updateRating();
@@ -86,6 +85,7 @@ private:
 
 private slots:
 
+    void slotApplyAllChanges();
     void slotModified();
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
     void slotTagsSearchChanged();

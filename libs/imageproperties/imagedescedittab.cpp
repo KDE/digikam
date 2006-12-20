@@ -24,10 +24,9 @@
 // Qt includes.
 
 #include <qhbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qhgroupbox.h>
-#include <qvgroupbox.h>
 #include <qheader.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
@@ -49,7 +48,6 @@
 #include <kconfig.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
-#include <ktabwidget.h>
 
 // Local includes.
 
@@ -78,12 +76,6 @@ class ImageDescEditTabPriv
 {
 public:
 
-    enum SettingsTab
-    {
-        DESCRIPTIONPAGE=0,
-        TAGSPAGE
-    };
-
     ImageDescEditTabPriv()
     {
         modified                   = false;
@@ -98,8 +90,8 @@ public:
         ratingWidget               = 0;
         navigateBar                = 0;
         ABCMenu                    = 0;
-        tab                        = 0;
         assignedTagsBtn            = 0;
+        applyBtn                   = 0;
     }
 
     bool               modified;
@@ -107,16 +99,15 @@ public:
 
     QToolButton       *recentTagsBtn;
     QToolButton       *tagsSearchClearBtn;
+    QToolButton       *assignedTagsBtn;
 
     QPopupMenu        *ABCMenu;
 
-    QPushButton       *assignedTagsBtn;
+    QPushButton       *applyBtn;
 
     KTextEdit         *commentsEdit;
 
     KLineEdit         *tagsSearchEdit;
-
-    KTabWidget        *tab;
 
     KDateTimeEdit     *dateTimeEdit;
 
@@ -134,44 +125,35 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 {
     d = new ImageDescEditTabPriv;
 
-    QVBoxLayout *vLayout = new QVBoxLayout(this);
-    d->navigateBar       = new NavigateBarWidget(this, navBar);
-    d->tab               = new KTabWidget(this);
+    QVBoxLayout *vLayout  = new QVBoxLayout(this);
+    d->navigateBar        = new NavigateBarWidget(this, navBar);
+    QWidget *settingsArea = new QWidget(this);
     
     vLayout->addWidget(d->navigateBar);
-    vLayout->addSpacing(KDialog::spacingHint());
-    vLayout->addWidget(d->tab);
+    vLayout->addWidget(settingsArea);
+
+    QGridLayout *settingsLayout = new QGridLayout(settingsArea, 5, 1, 
+                                      KDialog::marginHint(), KDialog::spacingHint());
 
     // Comments/Date/Rating view -----------------------------------
-
-    QWidget *descriptionPage    = new QWidget(d->tab);
-    QGridLayout *settingsLayout = new QGridLayout(descriptionPage, 2, 1, 
-                                      KDialog::marginHint(), KDialog::spacingHint());
     
-    QVGroupBox* commentsBox = new QVGroupBox(i18n("&Comments"), descriptionPage);
-    d->commentsEdit         = new KTextEdit(commentsBox);
+    QVBox *commentsBox = new QVBox(settingsArea);
+    new QLabel(i18n("Comments:"), commentsBox);
+    d->commentsEdit    = new KTextEdit(commentsBox);
     d->commentsEdit->setTextFormat(QTextEdit::PlainText);
     d->commentsEdit->setCheckSpellingEnabled(true);
 
-    QHGroupBox* dateTimeBox = new QHGroupBox(i18n("&Date && Time"), descriptionPage);
-    d->dateTimeEdit         = new KDateTimeEdit( dateTimeBox, "datepicker");
+    QHBox *dateBox  = new QHBox(settingsArea);
+    new QLabel(i18n("Date:"), dateBox);
+    d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    QHGroupBox* ratingBox = new QHGroupBox(i18n("Rating"), descriptionPage);
-    ratingBox->layout()->setAlignment(Qt::AlignCenter);
-    d->ratingWidget = new RatingWidget(ratingBox);
-
-    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
-    settingsLayout->addMultiCellWidget(dateTimeBox, 1, 1, 0, 1);
-    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
-    settingsLayout->setRowStretch(0, 10);
-
-    d->tab->insertTab(descriptionPage, i18n("Description"), ImageDescEditTabPriv::DESCRIPTIONPAGE);
+    QHBox *ratingBox = new QHBox(settingsArea);
+    new QLabel(i18n("Rating:"), ratingBox);
+    d->ratingWidget  = new RatingWidget(ratingBox);
 
     // Tags view ---------------------------------------------------
 
-    QWidget *tagsPage     = new QWidget(d->tab);
-    QVBoxLayout *vLayout2 = new QVBoxLayout(tagsPage, KDialog::marginHint(), KDialog::spacingHint());
-    QHBox* tagsSearch     = new QHBox(tagsPage);
+    QHBox *tagsSearch = new QHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchClearBtn = new QToolButton(tagsSearch);
@@ -183,7 +165,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchEdit = new KLineEdit(tagsSearch);
     d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    d->assignedTagsBtn = new QPushButton(tagsSearch);
+    d->assignedTagsBtn = new QToolButton(tagsSearch);
     QToolTip::add(d->assignedTagsBtn, i18n("Already Assigned Tags"));
     d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
                                    KIcon::NoGroup, KIcon::SizeSmall, 
@@ -200,23 +182,24 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->recentTagsBtn->setPopup(popupMenu);
     d->recentTagsBtn->setPopupDelay(1);
 
-    d->tagsView = new TAlbumListView(tagsPage);
+    d->tagsView = new TAlbumListView(settingsArea);
     d->tagsView->addColumn(i18n("Tags"));
     d->tagsView->header()->hide();
     d->tagsView->setSelectionMode(QListView::Single);
     d->tagsView->setResizeMode(QListView::LastColumn);
 
-    vLayout2->addWidget(tagsSearch);
-    vLayout2->addWidget(d->tagsView);
-
-    d->tab->insertTab(tagsPage, i18n("Tags"), ImageDescEditTabPriv::TAGSPAGE);
-    
     // --------------------------------------------------
-    
-    KConfig* config = kapp->config();
-    config->setGroup("Image Properties SideBar");
-    d->tab->setCurrentPage(config->readNumEntry("Comments And Tags Tab",
-                           ImageDescEditTabPriv::DESCRIPTIONPAGE));
+
+    d->applyBtn = new QPushButton(i18n("Apply Changes"), settingsArea);
+    d->applyBtn->setEnabled(false);
+
+    settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
+    settingsLayout->addMultiCellWidget(dateBox, 1, 1, 0, 1);
+    settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
+    settingsLayout->addMultiCellWidget(d->tagsView, 3, 3, 0, 1);
+    settingsLayout->addMultiCellWidget(tagsSearch, 4, 4, 0, 1);
+    settingsLayout->addMultiCellWidget(d->applyBtn, 5, 5, 0, 1);
+    settingsLayout->setRowStretch(3, 10);
 
     // --------------------------------------------------
 
@@ -258,7 +241,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
-            
+
+    connect(d->applyBtn, SIGNAL(clicked()),
+            this, SLOT(slotApplyAllChanges()));
+           
     // Initalize ---------------------------------------------
 
     d->commentsEdit->installEventFilter(this);
@@ -318,12 +304,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    applyAllChanges();
- 
-    KConfig* config = kapp->config();
-    config->setGroup("Image Properties SideBar");
-    config->writeEntry("Comments And Tags Tab", d->tab->currentPageIndex());
-    config->sync();
+    slotApplyAllChanges();
    
     /*
     AlbumList tList = AlbumManager::instance()->allTAlbums();
@@ -367,8 +348,7 @@ void ImageDescEditTab::populateTags()
     AlbumList tList = AlbumManager::instance()->allTAlbums();
     for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
     {
-        TAlbum* tag  = (TAlbum*)(*it);
-
+        TAlbum *tag = (TAlbum*)(*it);
         slotAlbumAdded(tag);
     }
 }
@@ -376,6 +356,7 @@ void ImageDescEditTab::populateTags()
 void ImageDescEditTab::slotModified()
 {
     d->modified = true;
+    d->applyBtn->setEnabled(true);
 }
 
 void ImageDescEditTab::assignRating(int rating)
@@ -383,7 +364,7 @@ void ImageDescEditTab::assignRating(int rating)
     d->ratingWidget->setRating(rating);
 }
 
-void ImageDescEditTab::applyAllChanges()
+void ImageDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
         return;
@@ -480,13 +461,14 @@ void ImageDescEditTab::applyAllChanges()
     }
 
     d->modified = false;
+    d->applyBtn->setEnabled(false);
 
     updateRecentTags();
 }
 
 void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
 {
-    applyAllChanges();
+    slotApplyAllChanges();
 
     if (!info)
     {
@@ -500,6 +482,7 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     setEnabled(true);
     d->currInfo = info;
     d->modified = false;
+    d->applyBtn->setEnabled(false);
 
     KURL fileURL;
     fileURL.setPath(d->currInfo->filePath());
