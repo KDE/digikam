@@ -1,6 +1,6 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2006-06-13
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-06-13
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
@@ -49,7 +49,7 @@ public:
     {
         PreviewAlbumMode=0,
         PreviewItemMode,
-        HtmlViewMode
+        WelcomePageMode
     };
 
 public:
@@ -75,13 +75,7 @@ private slots:
     void slotPreviewStarted();
     void slotPreviewComplete();
     void slotPreviewFailed();
-    void slotUrlOpen(const KURL &);
 
-private:
-
-    QCString fileToString(const QString &aFileName);
-    QString  infoPage();
-    
 private:
 
     AlbumWidgetStackPriv* d;

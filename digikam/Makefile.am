@@ -87,7 +87,8 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                    tagfilterview.cpp \
 	                    tagfolderview.cpp \
 	                    tagspopupmenu.cpp \
-	                    upgradedb_sqlite2tosqlite3.cpp 
+	                    upgradedb_sqlite2tosqlite3.cpp \
+			    welcomepage.cpp 
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(EXIV2_LIBS) \

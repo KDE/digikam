@@ -589,7 +589,7 @@ void DigikamView::slot_albumSelected(Album* album)
 
     d->iconView->setAlbum(album);
     if (album->isRoot())
-        d->albumPreviews->setPreviewMode(AlbumWidgetStack::HtmlViewMode);
+        d->albumPreviews->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
     else 
         d->albumPreviews->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
