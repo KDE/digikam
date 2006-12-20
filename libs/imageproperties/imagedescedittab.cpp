@@ -525,6 +525,8 @@ void ImageDescEditTab::updateTagsView()
         ++it;
     }
 
+    slotAssignedTagsToggled(d->assignedTagsBtn->isOn());
+
     d->tagsView->blockSignals(false);
 }
 
