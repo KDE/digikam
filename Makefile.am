@@ -1,6 +1,6 @@
 SUBDIRS = sqlite libs utilities digikam kioslave imageplugins data showfoto
 
-EXTRA_DIST = Digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
+EXTRA_DIST = digikam.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO digikam.lsm 
 
 AUTOMAKE_OPTIONS = foreign 
 
