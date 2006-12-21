@@ -134,30 +134,30 @@ public:
         toolTip       = 0;
     }
 
-    QString albumTitle;
-    QString albumDate;
-    QString albumComments;
+    QString                       albumTitle;
+    QString                       albumDate;
+    QString                       albumComments;
 
-    QRect   itemRect;
-    QRect   itemRatingRect;
-    QRect   itemDateRect;
-    QRect   itemModDateRect;
-    QRect   itemPixmapRect;
-    QRect   itemNameRect;
-    QRect   itemCommentsRect;
-    QRect   itemResolutionRect;
-    QRect   itemSizeRect;
-    QRect   itemTagRect;
-    QRect   bannerRect;
+    QRect                         itemRect;
+    QRect                         itemRatingRect;
+    QRect                         itemDateRect;
+    QRect                         itemModDateRect;
+    QRect                         itemPixmapRect;
+    QRect                         itemNameRect;
+    QRect                         itemCommentsRect;
+    QRect                         itemResolutionRect;
+    QRect                         itemSizeRect;
+    QRect                         itemTagRect;
+    QRect                         bannerRect;
 
-    QPixmap itemRegPixmap;
-    QPixmap itemSelPixmap;
-    QPixmap bannerPixmap;
-    QPixmap ratingPixmap;
+    QPixmap                       itemRegPixmap;
+    QPixmap                       itemSelPixmap;
+    QPixmap                       bannerPixmap;
+    QPixmap                       ratingPixmap;
 
-    QFont   fnReg;
-    QFont   fnCom;
-    QFont   fnXtra;
+    QFont                         fnReg;
+    QFont                         fnCom;
+    QFont                         fnXtra;
 
     QDict<AlbumIconItem>          itemDict;
     
@@ -382,7 +382,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         if (!item->album())
         {
             DWarning() << "No album for item: " << item->name()
-                        << ", albumID: " << item->albumID() << endl;
+                       << ", albumID: " << item->albumID() << endl;
             continue;
         }
 
@@ -486,8 +486,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint& pos)
 
     // --------------------------------------------------------
 
-    KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->kurl(),
-                                                  0, true, true);
+    KMimeType::Ptr mimePtr = KMimeType::findByURL(iconItem->imageInfo()->kurl(), 0, true, true);
 
     QValueVector<KService::Ptr> serviceVector;
     KTrader::OfferList offers = KTrader::self()->query(mimePtr->name(), "Type == 'Application'");
@@ -1150,8 +1149,21 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         if (talbum)
         {
             QPopupMenu popMenu(this);
-            popMenu.insertItem(i18n("&Assign Tag '%1' to Selected Images")
-                .arg(talbum->prettyURL()), 10 );
+
+            bool itemsSelected = false;
+            for (IconItem *it = firstItem(); it; it = it->nextItem())
+                if (it->isSelected())
+                    itemsSelected = true;
+    
+            if (itemsSelected)
+            {
+                popMenu.insertItem(i18n("&Assign '%1' to Selected Items").arg(talbum->url()),         10);
+                popMenu.insertItem(i18n("&Assign '%1' to Selected/Dropped Items").arg(talbum->url()), 11);
+                popMenu.insertSeparator(-1);
+            }
+
+            popMenu.insertItem(i18n("&Assign '%1' to All Items").arg(talbum->url()),                  12);
+            popMenu.insertItem(i18n("&Assign '%1' to Dropped Item").arg(talbum->url()),               13);
             popMenu.insertSeparator(-1);
             popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
@@ -1159,14 +1171,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             int id = popMenu.exec(QCursor::pos());
             switch(id) 
             {
-                case 10:
+                case 10:    // Selected Items
                 {
-                    AlbumIconItem *albumItem = findItem(event->pos());
-                    if (albumItem)
-                    {
-                        albumItem->imageInfo()->setTag(tagID);
-                    }
-    
                     for (IconItem *it = firstItem(); it; it = it->nextItem())
                     {
                         if (it->isSelected())
@@ -1176,6 +1182,47 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                         }
                     }
     
+                    d->imageLister->refresh();
+                    updateContents();
+                    break;
+                }
+                case 11:    // Selected and Dropped Items
+                {
+                    for (IconItem *it = firstItem(); it; it = it->nextItem())
+                    {
+                        if (it->isSelected())
+                        {
+                            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                            albumItem->imageInfo()->setTag(tagID);
+                        }
+                    }
+
+                    AlbumIconItem *albumItem = findItem(event->pos());
+                    if (albumItem)
+                        albumItem->imageInfo()->setTag(tagID);
+    
+                    d->imageLister->refresh();
+                    updateContents();
+                    break;
+                }
+                case 12:    // All Items
+                {
+                    for (IconItem *it = firstItem(); it; it = it->nextItem())
+                    {
+                        AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
+                        albumItem->imageInfo()->setTag(tagID);
+                    }
+    
+                    d->imageLister->refresh();
+                    updateContents();
+                    break;
+                }
+                case 13:    // Dropped Item only.
+                {
+                    AlbumIconItem *albumItem = findItem(event->pos());
+                    if (albumItem)
+                        albumItem->imageInfo()->setTag(tagID);
+
                     d->imageLister->refresh();
                     updateContents();
                     break;
@@ -1193,7 +1240,21 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         ds >> tagIDs;
 
         QPopupMenu popMenu(this);
-        popMenu.insertItem(i18n("&Assign Tags to Selected Images"), 10);
+
+        bool itemsSelected = false;
+        for (IconItem *it = firstItem(); it; it = it->nextItem())
+            if (it->isSelected())
+                itemsSelected = true;
+
+        if (itemsSelected)
+        {
+            popMenu.insertItem(i18n("&Assign Tags to Selected Items"),         10);
+            popMenu.insertItem(i18n("&Assign Tags to Selected/Dropped Items"), 11);
+            popMenu.insertSeparator(-1);
+        }
+
+        popMenu.insertItem(i18n("&Assign Tags to All Items"),                  12);
+        popMenu.insertItem(i18n("&Assign Tags to Dropped Item"),               13);
         popMenu.insertSeparator(-1);
         popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
 
@@ -1201,18 +1262,8 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
         int id = popMenu.exec(QCursor::pos());
         switch(id) 
         {
-            case 10:
+            case 10:    // Selected Items
             {
-                AlbumIconItem *albumItem = findItem(event->pos());
-                if (albumItem)
-                {
-                    for (QValueList<int>::iterator it = tagIDs.begin();
-                        it != tagIDs.end(); ++it)
-                    {
-                        albumItem->imageInfo()->setTag(*it);
-                    }
-                }
-    
                 for (IconItem *it = firstItem(); it; it = it->nextItem())
                 {
                     if (it->isSelected())
@@ -1226,6 +1277,67 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     }
                 }
     
+                d->imageLister->refresh();
+                updateContents();
+                break;
+            }
+            case 11:    // Selected and Dropped Items
+            {
+                for (IconItem *it = firstItem(); it; it = it->nextItem())
+                {
+                    if (it->isSelected())
+                    {
+                        AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
+                        for (QValueList<int>::iterator it = tagIDs.begin();
+                            it != tagIDs.end(); ++it)
+                        {
+                            albumItem->imageInfo()->setTag(*it);
+                        }
+                    }
+                }
+
+                AlbumIconItem *albumItem = findItem(event->pos());
+                if (albumItem)
+                {
+                    for (QValueList<int>::iterator it = tagIDs.begin();
+                        it != tagIDs.end(); ++it)
+                    {
+                        albumItem->imageInfo()->setTag(*it);
+                    }
+                }
+    
+                d->imageLister->refresh();
+                updateContents();
+                break;
+            }
+            case 12:    // All Items
+            {
+                for (IconItem *it = firstItem(); it; it = it->nextItem())
+                {
+                    AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
+                    for (QValueList<int>::iterator it = tagIDs.begin();
+                        it != tagIDs.end(); ++it)
+                    {
+                        albumItem->imageInfo()->setTag(*it);
+                    }
+                }
+    
+                d->imageLister->refresh();
+                updateContents();
+                break;
+            }
+            case 13:    // Dropped item only.
+            {
+                AlbumIconItem *albumItem = findItem(event->pos());
+                if (albumItem)
+                {
+                    for (QValueList<int>::iterator it = tagIDs.begin();
+                        it != tagIDs.end(); ++it)
+                    {
+                        albumItem->imageInfo()->setTag(*it);
+                    }
+                }
+
                 d->imageLister->refresh();
                 updateContents();
                 break;
