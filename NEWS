@@ -125,7 +125,9 @@ General       : About final release packaging, improve support of "./configure -
 
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
-General       : Root album show a Welcome page for new users (like Kmail or Konqueror).
+
+AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
+AlbumGUI      : Video files can be previewed using an embedded instance of default KDE media player.
 
 ...
 
@@ -403,6 +405,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 
 242 ==> 115157 : Usability: Image comments/tags dialog: hard to find/see all already selected 
                  tags (and to 'de'select them).
-243 ==> 
+243 ==> 132309 : Wish: enhance video support in digikam.
+244 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
