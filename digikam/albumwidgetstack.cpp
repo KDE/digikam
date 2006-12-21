@@ -19,24 +19,14 @@
  *
  * ============================================================ */
 
-// Qt includes. 
- 
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-
 // KDE includes.
 
-#include <klocale.h>
-#include <kdialogbase.h>
 #include <khtmlview.h>
 
 // Local includes.
 
-#include "themeengine.h"
-#include "imagepreviewwidget.h"
 #include "albumiconview.h"
+#include "imagepreviewview.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "albumwidgetstack.h"
@@ -52,27 +42,19 @@ public:
 
     AlbumWidgetStackPriv()
     {
-        buttonsArea        = 0;
-        previewItemWidget  = 0;
-        previewAlbumWidget = 0;
-        backButton         = 0;
-        editButton         = 0;
-        welcomePageView    = 0;
-        mediaPlayerView    = 0;
+        albumIconView    = 0;
+        imagePreviewView = 0;
+        welcomePageView  = 0;
+        mediaPlayerView  = 0;
     }
 
-    QPushButton        *backButton;
-    QPushButton        *editButton;
+    AlbumIconView    *albumIconView;
 
-    QWidget            *buttonsArea;
+    ImagePreviewView *imagePreviewView;
 
-    WelcomePageView    *welcomePageView;
+    WelcomePageView  *welcomePageView;
 
-    ImagePreviewWidget *previewItemWidget;
-
-    AlbumIconView      *previewAlbumWidget;
-
-    MediaPlayerView    *mediaPlayerView;
+    MediaPlayerView  *mediaPlayerView;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -80,41 +62,13 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 {
     d = new AlbumWidgetStackPriv;
 
-    // -- Album icon view -----------------------------------------------
+    d->albumIconView    = new AlbumIconView(this);
+    d->imagePreviewView = new ImagePreviewView(this);
+    d->welcomePageView  = new WelcomePageView(this);
+    d->mediaPlayerView  = new MediaPlayerView(this);
 
-    d->previewAlbumWidget = new AlbumIconView(this);
-
-    // -- Picture preview -----------------------------------------------
-
-    QVBox *previewArea   = new QVBox(this);
-    d->previewItemWidget = new ImagePreviewWidget(previewArea);
-    d->buttonsArea       = new QWidget(previewArea);
-    QHBoxLayout *hlay    = new QHBoxLayout(d->buttonsArea);
-    d->backButton        = new QPushButton(i18n("Back to Album"), d->buttonsArea);
-    d->editButton        = new QPushButton(i18n("Edit..."), d->buttonsArea);
-    previewArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
-    previewArea->setMargin(0);
-    previewArea->setLineWidth(1);
-
-    hlay->setMargin(KDialogBase::marginHint());
-    hlay->addStretch(1);
-    hlay->addWidget(d->backButton);
-    hlay->addStretch(10);
-    hlay->addWidget(d->editButton);
-    hlay->addStretch(1);
-
-    // -- Welcome page view --------------------------------------------
-
-    d->welcomePageView = new WelcomePageView(this);
-
-    // -- Media player view --------------------------------------------
-
-    d->mediaPlayerView = new MediaPlayerView(this);
-
-    // -- Stack widgets ------------------------------------------------
-
-    addWidget(previewArea,                PreviewItemMode);
-    addWidget(d->previewAlbumWidget,      PreviewAlbumMode);
+    addWidget(d->albumIconView,           PreviewAlbumMode);
+    addWidget(d->imagePreviewView,        PreviewImageMode);
     addWidget(d->welcomePageView->view(), WelcomePageMode);
     addWidget(d->mediaPlayerView,         MediaPlayerMode);
 
@@ -125,33 +79,16 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->mediaPlayerView, SIGNAL( backToAlbumSignal() ),
             this, SIGNAL( backToAlbumSignal() ) );
 
-    connect(d->backButton, SIGNAL( clicked() ),
+    connect(d->imagePreviewView, SIGNAL( backToAlbumSignal() ),
             this, SIGNAL( backToAlbumSignal() ) );
-             
-    connect(d->editButton, SIGNAL( clicked() ),
-            this, SIGNAL( editImageSignal() ) );          
-             
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));                
 
-    connect(d->previewItemWidget, SIGNAL( previewStarted() ),
-            this, SLOT( slotPreviewStarted() ) );          
-    
-    connect(d->previewItemWidget, SIGNAL( previewComplete() ),
-            this, SLOT( slotPreviewComplete() ) );          
-    
-    connect(d->previewItemWidget, SIGNAL( previewFailed() ),
-            this, SLOT( slotPreviewFailed() ) );    
+    connect(d->imagePreviewView, SIGNAL( editImageSignal() ),
+            this, SIGNAL( editImageSignal() ) );
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
 {
     delete d;
-}
-
-void AlbumWidgetStack::slotThemeChanged()
-{
-    d->buttonsArea->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
 void AlbumWidgetStack::slotEscapePreview()
@@ -162,29 +99,30 @@ void AlbumWidgetStack::slotEscapePreview()
 
 AlbumIconView* AlbumWidgetStack::albumIconView()
 {
-    return d->previewAlbumWidget;
+    return d->albumIconView;
 }
 
 ImagePreviewWidget* AlbumWidgetStack::imagePreviewWidget()
 {
-    return d->previewItemWidget;
+    return d->imagePreviewView->imagePreviewWidget();
 }
 
 void AlbumWidgetStack::setPreviewItem(const KURL& url)
 {
-    if (url.isEmpty())
-        slotPreviewFailed();
-    
+    if (url.isEmpty() )
+    {
+        if (previewMode() == MediaPlayerMode)
+            d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
+        else if (previewMode() == PreviewImageMode)
+            d->imagePreviewView->slotPreviewFailed();
+    }    
+
     visibleWidget()->setFocus();
 
     if (previewMode() == MediaPlayerMode)
-    {
         d->mediaPlayerView->setMediaPlayerFromUrl(url);
-    }
-    else
-    {
-        d->previewItemWidget->setImagePath(url.path());
-    }
+    else if (previewMode() == PreviewImageMode)
+        imagePreviewWidget()->setImagePath(url.path());
 }
 
 int AlbumWidgetStack::previewMode(void)
@@ -194,30 +132,12 @@ int AlbumWidgetStack::previewMode(void)
 
 void AlbumWidgetStack::setPreviewMode(int mode)
 {
-    if (mode != PreviewAlbumMode && mode != PreviewItemMode && 
+    if (mode != PreviewAlbumMode && mode != PreviewImageMode && 
         mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
 
     raiseWidget(mode);
     visibleWidget()->setFocus();
-}
-
-void AlbumWidgetStack::slotPreviewStarted()
-{
-    d->backButton->setEnabled(false);
-    d->editButton->setEnabled(false);
-}
-
-void AlbumWidgetStack::slotPreviewComplete()
-{
-    d->backButton->setEnabled(true);
-    d->editButton->setEnabled(true);
-}
-
-void AlbumWidgetStack::slotPreviewFailed()
-{
-    d->backButton->setEnabled(true);
-    d->editButton->setEnabled(false);
 }
 
 }  // namespace Digikam

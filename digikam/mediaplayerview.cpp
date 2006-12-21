@@ -95,12 +95,21 @@ MediaPlayerView::~MediaPlayerView()
 
 void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
 {
+    if (url.isEmpty())
+    {
+        d->mediaPlayerPart->closeURL();
+        delete d->mediaPlayerWidget;
+        d->mediaPlayerWidget = 0;
+        return;
+    }
+
     KMimeType::Ptr mimePtr = KMimeType::findByURL(url, 0, true, true);
     KServiceTypeProfile::OfferList services = KServiceTypeProfile::offers(mimePtr->name(),
                          QString::fromLatin1("KParts/ReadOnlyPart"));    
 
     if (d->mediaPlayerWidget)
     {
+        d->mediaPlayerPart->closeURL();
         delete d->mediaPlayerWidget;
         d->mediaPlayerWidget = 0;
     }

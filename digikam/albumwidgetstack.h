@@ -48,7 +48,7 @@ public:
     enum AlbumWidgetStackMode
     {
         PreviewAlbumMode=0,
-        PreviewItemMode,
+        PreviewImageMode,
         WelcomePageMode,
         MediaPlayerMode
     };
@@ -58,8 +58,8 @@ public:
     AlbumWidgetStack( QWidget *parent=0 );
     ~AlbumWidgetStack();
 
-    AlbumIconView* albumIconView();
-    ImagePreviewWidget* imagePreviewWidget();
+    AlbumIconView      *albumIconView();
+    ImagePreviewWidget *imagePreviewWidget();
 
     void setPreviewItem(const KURL& url=QString::null);
     int  previewMode(void);
@@ -73,13 +73,6 @@ signals:
 public slots:
 
     void slotEscapePreview();
-
-private slots:
-    
-    void slotThemeChanged();
-    void slotPreviewStarted();
-    void slotPreviewComplete();
-    void slotPreviewFailed();
 
 private:
 

@@ -857,7 +857,7 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
                                        settings->getAudioFileFilter().lower() +
                                        settings->getAudioFileFilter().upper();
         if ( !mediaplayerfilter.contains(currentFileExtension) )
-            d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
+            d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewImageMode );
         else
             d->albumPreviews->setPreviewMode( AlbumWidgetStack::MediaPlayerMode );
 
