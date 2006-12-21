@@ -49,7 +49,8 @@ public:
     {
         PreviewAlbumMode=0,
         PreviewItemMode,
-        WelcomePageMode
+        WelcomePageMode,
+        MediaPlayerMode
     };
 
 public:
@@ -60,7 +61,7 @@ public:
     AlbumIconView* albumIconView();
     ImagePreviewWidget* imagePreviewWidget();
 
-    void setPreviewItem(const QString& path=QString::null);
+    void setPreviewItem(const KURL& url=QString::null);
     int  previewMode(void);
     void setPreviewMode(int mode);
 
@@ -68,6 +69,10 @@ signals:
 
     void backToAlbumSignal();    
     void editImageSignal();
+
+public slots:
+
+    void slotEscapePreview();
 
 private slots:
     

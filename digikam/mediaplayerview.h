@@ -1,10 +1,9 @@
 /* ============================================================
- * Authors: Caulier Gilles <caulier dot gilles at kdemail dot net>
- * Date   : 2006-12-20
- * Description : a widget to display a welcome page 
- *               on root album.
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2006-20-12
+ * Description : a view to embed a KPart media player.
  * 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006 Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -16,19 +15,19 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
 
-#ifndef WELCOMEPAGE_H
-#define WELCOMEPAGE_H
+#ifndef MEDIAPLAYERVIEW_H
+#define MEDIAPLAYERVIEW_H
 
 // Qt includes.
 
-#include <qstring.h>
+#include <qwidget.h>
 
 // KDE includes.
 
-#include <khtml_part.h>
+#include <kurl.h>
 
 // Local includes
 
@@ -37,25 +36,36 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT WelcomePage : public KHTMLPart
+class MediaPlayerViewPriv;
+
+class DIGIKAM_EXPORT MediaPlayerView : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    WelcomePage(QWidget* parent);
-    ~WelcomePage();
+    MediaPlayerView(QWidget *parent=0);
+    ~MediaPlayerView();    
+
+    void setMediaPlayerFromUrl(const KURL& url);
+           
+signals:
+
+    void backToAlbumSignal();  
+
+public slots:
+
+    void slotBackButtonClicked();
+   
+private slots:
+
+    void slotThemeChanged();
 
 private:
 
-    QCString fileToString(const QString &aFileName);
-    QString  infoPage();
-
-private slots:
-
-    void slotUrlOpen(const KURL &);
+    MediaPlayerViewPriv* d;        
 };
 
-}  // namespace Digikam
+}  // NameSpace Digikam
 
-#endif /* WELCOMEPAGE_H */
+#endif /* MEDIAPLAYERVIEW_H */

@@ -38,14 +38,14 @@
 // Local includes.
 
 #include "version.h"
-#include "welcomepage.h"
-#include "welcomepage.moc"
+#include "welcomepageview.h"
+#include "welcomepageview.moc"
 
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(QWidget* parent)
-           : KHTMLPart(parent)
+WelcomePageView::WelcomePageView(QWidget* parent)
+               : KHTMLPart(parent)
 {
     widget()->setFocusPolicy(QWidget::WheelFocus);
     // Let's better be paranoid and disable plugins (it defaults to enabled):
@@ -75,16 +75,16 @@ WelcomePage::WelcomePage(QWidget* parent)
             this, SLOT(slotUrlOpen(const KURL &)));    
 }
 
-WelcomePage::~WelcomePage()
+WelcomePageView::~WelcomePageView()
 {
 }
 
-void WelcomePage::slotUrlOpen(const KURL &url)
+void WelcomePageView::slotUrlOpen(const KURL &url)
 {
     KApplication::kApplication()->invokeBrowser(url.url());
 }
 
-QString WelcomePage::infoPage()
+QString WelcomePageView::infoPage()
 {
     QString info =
         i18n("%1: digiKam version; %2: help:// URL; %3: homepage URL; "
@@ -140,7 +140,7 @@ QString WelcomePage::infoPage()
     return info;
 }
 
-QCString WelcomePage::fileToString(const QString &aFileName)
+QCString WelcomePageView::fileToString(const QString &aFileName)
 {
     QCString result;
     QFileInfo info(aFileName);

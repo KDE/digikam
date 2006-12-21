@@ -187,6 +187,9 @@ void DigikamView::setupConnections()
     connect(d->parent, SIGNAL(signalEscapePressed()),
             this, SLOT(slotEscapePreview()));
 
+    connect(d->parent, SIGNAL(signalEscapePressed()),
+            d->albumPreviews, SLOT(slotEscapePreview()));
+
     connect(d->parent, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
@@ -623,7 +626,7 @@ void DigikamView::slotDispatchImageSelected()
     {
         d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo()->kurl(),
                                      d->iconView, d->dispatchSelectedItem, 0, 0);
-        d->albumPreviews->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl().path());
+        d->albumPreviews->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl());
         emit signal_imageSelected(true);
         d->dispatchSelectedItem = 0;
     }
@@ -831,7 +834,6 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
 {
     if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
         AlbumIconItem *item=0;
 
         if (!iconItem)
@@ -848,7 +850,18 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
             item = iconItem;
         }
 
-        d->albumPreviews->setPreviewItem( item->imageInfo()->kurl().path() );
+        AlbumSettings *settings      = AlbumSettings::instance();
+        QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
+        QString mediaplayerfilter    = settings->getMovieFileFilter().lower() +
+                                       settings->getMovieFileFilter().upper() +
+                                       settings->getAudioFileFilter().lower() +
+                                       settings->getAudioFileFilter().upper();
+        if ( !mediaplayerfilter.contains(currentFileExtension) )
+            d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewItemMode );
+        else
+            d->albumPreviews->setPreviewMode( AlbumWidgetStack::MediaPlayerMode );
+
+        d->albumPreviews->setPreviewItem( item->imageInfo()->kurl() );
     }
     else
     {

@@ -72,6 +72,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                    kdatetimeedit.cpp \
 	                    kdatepickerpopup.cpp \
 	                    kipiinterface.cpp \
+			    mediaplayerview.cpp \
 	                    monthwidget.cpp \
 	                    pixmapmanager.cpp \
 	                    ratingwidget.cpp \
@@ -88,7 +89,7 @@ libdigikam_la_SOURCES = kdateedit.cpp \
 	                    tagfolderview.cpp \
 	                    tagspopupmenu.cpp \
 	                    upgradedb_sqlite2tosqlite3.cpp \
-			    welcomepage.cpp 
+			    welcomepageview.cpp 
 
 libdigikam_la_LIBADD = $(LIB_KIO) $(LIB_SQLITE3) $(LIB_KABC) $(LIB_KHTML) \
 		               $(LIBKIPI_LIBS) $(LIB_KUTILS) $(EXIV2_LIBS) \

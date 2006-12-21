@@ -37,7 +37,8 @@
 #include "themeengine.h"
 #include "imagepreviewwidget.h"
 #include "albumiconview.h"
-#include "welcomepage.h"
+#include "welcomepageview.h"
+#include "mediaplayerview.h"
 #include "albumwidgetstack.h"
 #include "albumwidgetstack.moc"
 
@@ -57,6 +58,7 @@ public:
         backButton         = 0;
         editButton         = 0;
         welcomePageView    = 0;
+        mediaPlayerView    = 0;
     }
 
     QPushButton        *backButton;
@@ -64,11 +66,13 @@ public:
 
     QWidget            *buttonsArea;
 
-    WelcomePage        *welcomePageView;
+    WelcomePageView    *welcomePageView;
 
     ImagePreviewWidget *previewItemWidget;
 
     AlbumIconView      *previewAlbumWidget;
+
+    MediaPlayerView    *mediaPlayerView;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -99,19 +103,27 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     hlay->addWidget(d->editButton);
     hlay->addStretch(1);
 
-    // -- HTML help view -----------------------------------------------
+    // -- Welcome page view --------------------------------------------
 
-    d->welcomePageView = new WelcomePage(this);
+    d->welcomePageView = new WelcomePageView(this);
+
+    // -- Media player view --------------------------------------------
+
+    d->mediaPlayerView = new MediaPlayerView(this);
 
     // -- Stack widgets ------------------------------------------------
 
     addWidget(previewArea,                PreviewItemMode);
     addWidget(d->previewAlbumWidget,      PreviewAlbumMode);
     addWidget(d->welcomePageView->view(), WelcomePageMode);
+    addWidget(d->mediaPlayerView,         MediaPlayerMode);
 
     setPreviewMode(PreviewAlbumMode);
 
     // -----------------------------------------------------------------
+
+    connect(d->mediaPlayerView, SIGNAL( backToAlbumSignal() ),
+            this, SIGNAL( backToAlbumSignal() ) );
 
     connect(d->backButton, SIGNAL( clicked() ),
             this, SIGNAL( backToAlbumSignal() ) );
@@ -142,6 +154,12 @@ void AlbumWidgetStack::slotThemeChanged()
     d->buttonsArea->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
 }
 
+void AlbumWidgetStack::slotEscapePreview()
+{
+    if (previewMode() == MediaPlayerMode)
+        d->mediaPlayerView->slotBackButtonClicked();
+}
+
 AlbumIconView* AlbumWidgetStack::albumIconView()
 {
     return d->previewAlbumWidget;
@@ -152,13 +170,21 @@ ImagePreviewWidget* AlbumWidgetStack::imagePreviewWidget()
     return d->previewItemWidget;
 }
 
-void AlbumWidgetStack::setPreviewItem(const QString& path)
+void AlbumWidgetStack::setPreviewItem(const KURL& url)
 {
-    if (path.isNull())
+    if (url.isEmpty())
         slotPreviewFailed();
     
     visibleWidget()->setFocus();
-    d->previewItemWidget->setImagePath(path);
+
+    if (previewMode() == MediaPlayerMode)
+    {
+        d->mediaPlayerView->setMediaPlayerFromUrl(url);
+    }
+    else
+    {
+        d->previewItemWidget->setImagePath(url.path());
+    }
 }
 
 int AlbumWidgetStack::previewMode(void)
@@ -168,7 +194,8 @@ int AlbumWidgetStack::previewMode(void)
 
 void AlbumWidgetStack::setPreviewMode(int mode)
 {
-    if (mode != PreviewAlbumMode && mode != PreviewItemMode && mode != WelcomePageMode)
+    if (mode != PreviewAlbumMode && mode != PreviewItemMode && 
+        mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
 
     raiseWidget(mode);
