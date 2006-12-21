@@ -1,10 +1,11 @@
 /* ============================================================
- * File  : pixmapmanager.cpp
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-14
- * Description : 
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-14
+ * Description : a pixmap manager for album icon view.  
  * 
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,9 +38,8 @@ extern "C"
 // KDE includes.
 
 #include <kurl.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kmdcodec.h>
+#include <kiconloader.h>
 
 // Local includes.
 
@@ -48,6 +48,7 @@ extern "C"
 #include "albumiconitem.h"
 #include "albumsettings.h"
 #include "pixmapmanager.h"
+#include "pixmapmanager.moc"
 
 /** @file pixmapmanager.cpp */
 
@@ -64,12 +65,7 @@ PixmapManager::PixmapManager(AlbumIconView* view)
     
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()),
-            SLOT(slotCompleted()));
-
-    // -- resource for broken image thumbnail ---------------------------
-    KGlobal::dirs()->addResourceType("digikam_imagebroken",
-                                     KGlobal::dirs()->kde_default("data")
-                                     + "digikam/data");
+            this, SLOT(slotCompleted()));
 }
 
 PixmapManager::~PixmapManager()
@@ -108,17 +104,14 @@ QPixmap* PixmapManager::find(const KURL& url)
     {
         m_thumbJob = new ThumbnailJob(url, m_size, true, AlbumSettings::instance()->getExifRotate());
         
-        connect(m_thumbJob,
-                SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
-                SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
+        connect(m_thumbJob, SIGNAL(signalThumbnail(const KURL&, const QPixmap&)),
+                this, SLOT(slotGotThumbnail(const KURL&, const QPixmap&)));
 
-        connect(m_thumbJob,
-                SIGNAL(signalFailed(const KURL&)),
-                SLOT(slotFailedThumbnail(const KURL&)));
+        connect(m_thumbJob, SIGNAL(signalFailed(const KURL&)),
+                this, SLOT(slotFailedThumbnail(const KURL&)));
 
-        connect(m_thumbJob, 
-                SIGNAL(signalCompleted()),
-                SLOT(slotCompleted()));
+        connect(m_thumbJob, SIGNAL(signalCompleted()),
+                this, SLOT(slotCompleted()));
     }
     
     return 0;
@@ -164,11 +157,33 @@ void PixmapManager::slotGotThumbnail(const KURL& url, const QPixmap& pix)
 
 void PixmapManager::slotFailedThumbnail(const KURL& url)
 {
-    QString dir = KGlobal::dirs()->findResourceDir("digikam_imagebroken",
-                                                   "image-broken.png");
-    dir = dir + "/image-broken.png";
+    QImage img;
+    QString ext = QFileInfo(url.path()).extension(false);
 
-    QImage img(dir);
+    // Wrapper around mime type of item to get the right icon.
+
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (settings)
+    {
+        if (settings->getImageFileFilter().upper().contains(ext.upper()) ||
+            settings->getRawFileFilter().upper().contains(ext.upper()))
+        { 
+            img = DesktopIcon("image", KIcon::SizeEnormous).convertToImage();
+        }
+        else if (settings->getMovieFileFilter().upper().contains(ext.upper()))
+        {
+            img = DesktopIcon("video", KIcon::SizeEnormous).convertToImage();
+        }
+        else if (settings->getAudioFileFilter().upper().contains(ext.upper()))
+        {
+            img = DesktopIcon("sound", KIcon::SizeEnormous).convertToImage();
+        }
+    }
+
+    if (img.isNull())
+        img = DesktopIcon("file_broken", KIcon::SizeEnormous).convertToImage();
+
+    // Resize icon to the right size depending of current settings.
 
     QSize size(img.size());
     size.scale(m_size, m_size, QSize::ScaleMin);
@@ -206,5 +221,3 @@ int PixmapManager::cacheSize() const
 }
 
 }  // namespace Digikam
-
-#include "pixmapmanager.moc"
