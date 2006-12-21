@@ -1,5 +1,5 @@
 digikampicdir = $(kde_datadir)/digikam/data
-digikampic_DATA = image-broken.png image-full.png image-selection.png \
+digikampic_DATA = image-full.png image-selection.png \
 	          histogram-lin.png histogram-log.png \
 	          digikamlogo.png gphotologo.png lcmslogo.png exiv2logo.png \
 	          browntone.png coldtone.png neutralbw.png platinum.png selenium.png sepia.png \
