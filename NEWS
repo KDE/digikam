@@ -406,6 +406,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 242 ==> 115157 : Usability: Image comments/tags dialog: hard to find/see all already selected 
                  tags (and to 'de'select them).
 243 ==> 132309 : Wish: enhance video support in digikam.
-244 ==> 
+244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
+245 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
