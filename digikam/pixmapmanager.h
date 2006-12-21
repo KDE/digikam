@@ -1,7 +1,11 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Date  : 2005-04-14
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-14
+ * Description : a pixmap manager for album icon view.  
+ * 
  * Copyright 2005 by Renchi Raju
+ * Copyright 2006 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,24 +26,18 @@
 // Qt includes.
 
 #include <qobject.h>
-#include <qcache.h>
-#include <qguardedptr.h>
-#include <qpixmap.h>
-
-// KDE includes.
-
-#include <kurl.h>
 
 /** @file pixmapmanager.h */
 
 class QPixmap;
-class QTimer;
+
+class KURL;
 
 namespace Digikam
 {
 
 class AlbumIconView;
-class ThumbnailJob;
+class PixmapManagerPriv;
 
 /**
  * Since there are date based folders, the number of pixmaps which
@@ -49,7 +47,6 @@ class ThumbnailJob;
  */
 class PixmapManager : public QObject
 {
-
     Q_OBJECT
     
 public:
@@ -62,17 +59,7 @@ public:
     void     clear();
     void     setThumbnailSize(int size);
     int      cacheSize() const;
-
-private:
-
-    QCache<QPixmap>*          m_cache;
-    QGuardedPtr<ThumbnailJob> m_thumbJob;
-    int                       m_size;
-    AlbumIconView*            m_view;
-    QTimer*                   m_timer;
-    KURL                      m_url;
-    QString                   m_thumbCacheDir;
-    
+   
 signals:
 
     void signalPixmap(const KURL& url);
@@ -82,6 +69,10 @@ private slots:
     void slotGotThumbnail(const KURL& url, const QPixmap& pix);
     void slotFailedThumbnail(const KURL& url);
     void slotCompleted();
+
+private:
+
+    PixmapManagerPriv *d;
 };
 
 }  // namespace Digikam
