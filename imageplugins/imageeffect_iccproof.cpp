@@ -253,9 +253,9 @@ ImageEffect_ICCProof::ImageEffect_ICCProof(QWidget* parent)
     lcmsLogoLabel->setAlignment( AlignTop | AlignRight );
     lcmsLogoLabel->setText(QString::null);
     lcmsLogoLabel->setURL("http://www.littlecms.com");
-    KGlobal::dirs()->addResourceType("lcmslogo", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    directory = KGlobal::dirs()->findResourceDir("lcmslogo", "lcmslogo.png");
-    lcmsLogoLabel->setPixmap( QPixmap( directory + "lcmslogo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-lcms", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    directory = KGlobal::dirs()->findResourceDir("logo-lcms", "logo-lcms.png");
+    lcmsLogoLabel->setPixmap( QPixmap( directory + "logo-lcms.png" ) );
     QToolTip::add(lcmsLogoLabel, i18n("Visit Little CMS project website"));
 
     zeroPageLayout->addMultiCellWidget(m_doSoftProofBox, 0, 0, 0, 0);

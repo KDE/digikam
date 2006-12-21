@@ -117,9 +117,9 @@ SetupCamera::SetupCamera( QWidget* parent )
     KURLLabel *gphotoLogoLabel = new KURLLabel(this);
     gphotoLogoLabel->setText(QString::null);
     gphotoLogoLabel->setURL("http://www.gphoto.org");
-    KGlobal::dirs()->addResourceType("gphotologo", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("gphotologo", "gphotologo.png");
-    gphotoLogoLabel->setPixmap( QPixmap( directory + "gphotologo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-gphoto", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-gphoto", "logo-gphoto.png");
+    gphotoLogoLabel->setPixmap( QPixmap( directory + "logo-gphoto.png" ) );
     QToolTip::add(gphotoLogoLabel, i18n("Visit Gphoto project website"));
     groupBoxLayout->addWidget( gphotoLogoLabel, 5, 1 );
 

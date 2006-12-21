@@ -152,9 +152,9 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     KURLLabel *exiv2LogoLabel = new KURLLabel(hbox);
     exiv2LogoLabel->setText(QString::null);
     exiv2LogoLabel->setURL("http://www.exiv2.org");
-    KGlobal::dirs()->addResourceType("exiv2logo", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("exiv2logo", "exiv2logo.png");
-    exiv2LogoLabel->setPixmap( QPixmap( directory + "exiv2logo.png" ) );
+    KGlobal::dirs()->addResourceType("logo-exiv2", KGlobal::dirs()->kde_default("data") + "digikam/data");
+    QString directory = KGlobal::dirs()->findResourceDir("logo-exiv2", "logo-exiv2.png");
+    exiv2LogoLabel->setPixmap( QPixmap( directory + "logo-exiv2.png" ) );
     QToolTip::add(exiv2LogoLabel, i18n("Visit Exiv2 project website"));
 
     KActiveLabel* explanation = new KActiveLabel(hbox);
