@@ -251,7 +251,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
-    d->commentsEdit->setFocus();
+    setFocusToComments();
     updateRecentTags();
 
     // Connect to album manager -----------------------------
@@ -317,53 +317,6 @@ ImageDescEditTab::~ImageDescEditTab()
     delete d;
 }
 
-bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
-{
-    if ( e->type() == QEvent::KeyPress )
-    {
-        QKeyEvent *k = (QKeyEvent *)e;
-        if (k->state() == Qt::ControlButton &&
-            (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            emit signalNextItem();
-            return true;
-        }
-        else if (k->state() == Qt::ShiftButton &&
-                 (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
-        {
-            emit signalPrevItem();
-            return true;
-        }
-
-        return false;
-    }
-    
-    return false;
-}
-
-void ImageDescEditTab::populateTags()
-{
-    d->tagsView->clear();
-
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-    {
-        TAlbum *tag = (TAlbum*)(*it);
-        slotAlbumAdded(tag);
-    }
-}
-
-void ImageDescEditTab::slotModified()
-{
-    d->modified = true;
-    d->applyBtn->setEnabled(true);
-}
-
-void ImageDescEditTab::assignRating(int rating)
-{
-    d->ratingWidget->setRating(rating);
-}
-
 void ImageDescEditTab::slotApplyAllChanges()
 {
     if (!d->modified)
@@ -401,28 +354,28 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     if (AlbumSettings::instance())
     {
-	bool dirty = false;
+        bool dirty = false;
         DMetadata metadata(d->currInfo->filePath());
 
         if (AlbumSettings::instance()->getSaveComments())
         {
             // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
             metadata.setImageComment(d->commentsEdit->text());
-	    dirty = true;
+            dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveDateTime())
         {
             // Store Image Date & Time as Exif and Iptc tags.
             metadata.setImageDateTime(d->dateTimeEdit->dateTime(), false);
-	    dirty = true;
+            dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcRating())
         {
             // Store Image rating as Iptc tag.
             metadata.setImageRating(d->ratingWidget->rating());
-	    dirty = true;
+            dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcTags())
@@ -433,7 +386,7 @@ void ImageDescEditTab::slotApplyAllChanges()
                 (*it).remove(0, 1);
     
             metadata.setImageKeywords(oldKeywords, tagPaths);
-	    dirty = true;
+            dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcPhotographerId())
@@ -441,7 +394,7 @@ void ImageDescEditTab::slotApplyAllChanges()
             // Store Photograph indentity into Iptc tags.
             metadata.setImagePhotographerId(AlbumSettings::instance()->getIptcAuthor(),
                                             AlbumSettings::instance()->getIptcAuthorTitle());
-	    dirty = true;
+            dirty = true;
         }
 
         if (AlbumSettings::instance()->getSaveIptcCredits())
@@ -450,14 +403,14 @@ void ImageDescEditTab::slotApplyAllChanges()
             metadata.setImageCredits(AlbumSettings::instance()->getIptcCredit(),
                                      AlbumSettings::instance()->getIptcSource(),
                                      AlbumSettings::instance()->getIptcCopyright());
-	    dirty = true;
+            dirty = true;
         }
 
-	if (dirty)
-	{
+        if (dirty)
+        {
             metadata.applyChanges();
             ImageAttributesWatch::instance()->fileMetadataChanged(d->currInfo->kurl());
-	}
+        }
     }
 
     d->modified = false;
@@ -502,9 +455,58 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     updateDate();
     updateTagsView();
     update();
+}
 
-    // See B.K.O #131632 and #131743 : always give focus to Comments widget.
+bool ImageDescEditTab::eventFilter(QObject *, QEvent *e)
+{
+    if ( e->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *k = (QKeyEvent *)e;
+        if (k->state() == Qt::ControlButton &&
+            (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
+        {
+            emit signalNextItem();
+            return true;
+        }
+        else if (k->state() == Qt::ShiftButton &&
+                 (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
+        {
+            emit signalPrevItem();
+            return true;
+        }
+
+        return false;
+    }
+    
+    return false;
+}
+
+void ImageDescEditTab::populateTags()
+{
+    d->tagsView->clear();
+
+    AlbumList tList = AlbumManager::instance()->allTAlbums();
+    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
+    {
+        TAlbum *tag = (TAlbum*)(*it);
+        slotAlbumAdded(tag);
+    }
+}
+
+void ImageDescEditTab::slotModified()
+{
+    d->modified = true;
+    d->applyBtn->setEnabled(true);
+}
+
+void ImageDescEditTab::setFocusToComments()
+{
     d->commentsEdit->setFocus();
+}
+
+void ImageDescEditTab::assignRating(int rating)
+{
+    d->ratingWidget->setRating(rating);
 }
 
 void ImageDescEditTab::updateTagsView()

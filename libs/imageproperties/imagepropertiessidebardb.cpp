@@ -41,13 +41,14 @@
 #include "themeengine.h"
 #include "albumiconitem.h"
 #include "albumiconview.h"
+#include "navigatebarwidget.h"
+#include "imagedescedittab.h"
+#include "imageattributeswatch.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
-#include "imagedescedittab.h"
-#include "navigatebarwidget.h"
 #include "imagepropertiessidebardb.h"
-#include "imageattributeswatch.h"
+#include "imagepropertiessidebardb.moc"
 
 namespace Digikam
 {
@@ -225,7 +226,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     setCursor(KCursor::waitCursor());
 
     // No database data available, for example in the case of image editor is 
-    // launched from camera GUI.
+    // started from camera GUI.
     if (!d->currentInfo)
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
@@ -284,6 +285,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->dirtyDesceditTab = true;
         }
     }
+
+    // See B.K.O #131632 and #131743 : always give focus to Comments widget 
+    // when we toogle between tab and when we change current item.
+    d->desceditTab->setFocusToComments();
 
     unsetCursor();
 }
@@ -345,4 +350,3 @@ void ImagePropertiesSideBarDB::slotThemeChanged()
 
 }  // NameSpace Digikam
 
-#include "imagepropertiessidebardb.moc"

@@ -56,6 +56,7 @@ public:
     void assignRating(int rating);
     void setItem(ImageInfo *info=0, int itemType=0);
     void populateTags();
+    void setFocusToComments();
 
 signals:
 
