@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+#include <qframe.h>
 
 // KDE includes.
 
@@ -45,18 +46,28 @@ namespace Digikam
 
 class MediaPlayerViewPriv
 {
+
+public:
+
+    enum MediaPlayerViewMode
+    {
+        ErrorView=0,
+        PlayerView
+    };
+
 public:
 
     MediaPlayerViewPriv()
     {
         mediaPlayerPart   = 0;
-        mediaPlayerWidget = 0;
         grid              = 0;
-        buttonsArea       = 0;
+        errorView         = 0;
+        mediaPlayerView   = 0;
     }
 
-    QWidget              *buttonsArea;
-    QWidget              *mediaPlayerWidget;
+    QWidget              *errorView;
+
+    QFrame               *mediaPlayerView;
 
     QGridLayout          *grid;
 
@@ -64,24 +75,48 @@ public:
 };
     
 MediaPlayerView::MediaPlayerView(QWidget *parent)
-               : QWidget(parent, 0, Qt::WDestructiveClose)
+               : QWidgetStack(parent, 0, Qt::WDestructiveClose)
 {
     d = new MediaPlayerViewPriv;
-    d->grid = new QGridLayout(this, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-    d->buttonsArea          = new QWidget(this);
-    QHBoxLayout *hlay       = new QHBoxLayout(d->buttonsArea);
-    QPushButton *backButton = new QPushButton(i18n("Back to Album"), d->buttonsArea);
+    // --------------------------------------------------------------------------
 
-    hlay->setMargin(KDialogBase::marginHint());
-    hlay->addStretch(10);
-    hlay->addWidget(backButton);
-    hlay->addStretch(10);
+    d->errorView          = new QWidget(this);
+    QLabel *errorMsg      = new QLabel(i18n("No media player available..."), d->errorView);
+    QGridLayout *grid     = new QGridLayout(d->errorView, 1, 2, 
+                                            KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QPushButton *backBtn1 = new QPushButton(i18n("Back to Album"), d->errorView);
 
-    d->grid->addMultiCellWidget(d->buttonsArea, 1, 1, 0, 1);
+    errorMsg->setAlignment(Qt::AlignCenter);
+    grid->addMultiCellWidget(errorMsg, 0, 0, 0, 2);
+    grid->addMultiCellWidget(backBtn1, 1, 1, 1, 1);
+    grid->setColStretch(0, 10),
+    grid->setColStretch(2, 10),
+    grid->setRowStretch(0, 10),
+
+    addWidget(d->errorView, MediaPlayerViewPriv::ErrorView);
+
+    // --------------------------------------------------------------------------
+
+    d->mediaPlayerView    = new QFrame(this);
+    d->grid               = new QGridLayout(d->mediaPlayerView, 1, 2, 
+                                            KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QPushButton *backBtn2 = new QPushButton(i18n("Back to Album"), d->mediaPlayerView);
+
+    d->grid->addMultiCellWidget(backBtn2, 1, 1, 1, 1);
+    d->grid->setColStretch(0, 10),
+    d->grid->setColStretch(2, 10),
     d->grid->setRowStretch(0, 10),
 
-    connect(backButton, SIGNAL(clicked()),
+    addWidget(d->mediaPlayerView, MediaPlayerViewPriv::PlayerView);
+    setPreviewMode(MediaPlayerViewPriv::PlayerView);
+
+    // --------------------------------------------------------------------------
+
+    connect(backBtn1, SIGNAL(clicked()),
+            this, SLOT(slotBackButtonClicked()) );
+
+    connect(backBtn2, SIGNAL(clicked()),
             this, SLOT(slotBackButtonClicked()) );
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -90,6 +125,14 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
 MediaPlayerView::~MediaPlayerView()
 {
+    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
+        d->mediaPlayerPart)
+    {
+        d->mediaPlayerPart->closeURL();
+        delete d->mediaPlayerPart;
+        d->mediaPlayerPart = 0;
+    }
+
     delete d;
 }
 
@@ -97,9 +140,13 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
 {
     if (url.isEmpty())
     {
-        d->mediaPlayerPart->closeURL();
-        delete d->mediaPlayerWidget;
-        d->mediaPlayerWidget = 0;
+        if (previewMode() == MediaPlayerViewPriv::PlayerView && 
+            d->mediaPlayerPart)
+        {
+            d->mediaPlayerPart->closeURL();
+            delete d->mediaPlayerPart;
+            d->mediaPlayerPart = 0;
+        }
         return;
     }
 
@@ -107,11 +154,12 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
     KServiceTypeProfile::OfferList services = KServiceTypeProfile::offers(mimePtr->name(),
                          QString::fromLatin1("KParts/ReadOnlyPart"));    
 
-    if (d->mediaPlayerWidget)
+    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
+        d->mediaPlayerPart)
     {
         d->mediaPlayerPart->closeURL();
-        delete d->mediaPlayerWidget;
-        d->mediaPlayerWidget = 0;
+        delete d->mediaPlayerPart;
+        d->mediaPlayerPart = 0;
     }
 
     for( KServiceTypeProfile::OfferList::Iterator it = services.begin(); it != services.end(); ++it ) 
@@ -142,8 +190,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
             continue;
         }
     
-        d->mediaPlayerWidget = d->mediaPlayerPart->widget();
-        if ( !d->mediaPlayerWidget ) 
+        if ( !d->mediaPlayerPart->widget() ) 
         {            
             DWarning() << "Failed to get KPart widget from library " << library << endl;
             continue;
@@ -152,31 +199,49 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
         break;
     }
 
-    if (!d->mediaPlayerWidget)
+    if (!d->mediaPlayerPart)
     { 
-        d->mediaPlayerWidget = new QLabel(this, "No media player available...");
-        d->mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        d->grid->addMultiCellWidget(d->mediaPlayerWidget, 0, 0, 0, 1);
+        setPreviewMode(MediaPlayerViewPriv::ErrorView);
         return;
     }
     
-    d->mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->grid->addMultiCellWidget(d->mediaPlayerWidget, 0, 0, 0, 1);
+    d->mediaPlayerPart->widget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->grid->addMultiCellWidget(d->mediaPlayerPart->widget(), 0, 0, 0, 2);
     d->mediaPlayerPart->openURL(url);
+    setPreviewMode(MediaPlayerViewPriv::PlayerView);
 }
 
 void MediaPlayerView::slotBackButtonClicked()
 {
-    if (d->mediaPlayerWidget)
+    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
+        d->mediaPlayerPart)
+    {
         d->mediaPlayerPart->closeURL();
+        delete d->mediaPlayerPart;
+        d->mediaPlayerPart = 0;
+    }
 
     emit backToAlbumSignal();
 }
 
 void MediaPlayerView::slotThemeChanged()
 {
-    setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
-    d->buttonsArea->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
+    d->errorView->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
+    d->mediaPlayerView->setPaletteBackgroundColor(ThemeEngine::instance()->baseColor());
+}
+
+int MediaPlayerView::previewMode(void)
+{
+    return id(visibleWidget());
+}
+
+void MediaPlayerView::setPreviewMode(int mode)
+{
+    if (mode != MediaPlayerViewPriv::ErrorView && mode != MediaPlayerViewPriv::PlayerView)
+        return;
+
+    raiseWidget(mode);
+    visibleWidget()->setFocus();
 }
 
 }  // NameSpace Digikam
