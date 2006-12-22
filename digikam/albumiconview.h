@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2002-16-10
  * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Gilles Caulier
+ * Copyright      2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -185,7 +186,6 @@ private:
 private:
 
     AlbumIconViewPrivate *d;
-
 };
 
 }  // namespace Digikam

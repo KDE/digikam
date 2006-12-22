@@ -1,11 +1,12 @@
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Caulier Gilles <caulier dot gilles at kdemail dot net>
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2002-16-10
  * Description : album icon view 
  * 
  * Copyright 2002-2005 by Renchi Raju and Gilles Caulier
- * Copyright      2006 by Gilles Caulier
+ * Copyright      2006 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1155,38 +1156,30 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 if (it->isSelected())
                     itemsSelected = true;
     
-            if (itemsSelected)
-            {
-                popMenu.insertItem(i18n("&Assign '%1' to Selected Items").arg(talbum->url()),         10);
-                popMenu.insertItem(i18n("&Assign '%1' to Selected/Dropped Items").arg(talbum->url()), 11);
-                popMenu.insertSeparator(-1);
-            }
+            bool itemDropped = false;
+            AlbumIconItem *albumItem = findItem(event->pos());
+            if (albumItem) 
+                itemDropped = true;
 
-            popMenu.insertItem(i18n("&Assign '%1' to All Items").arg(talbum->url()),                  12);
-            popMenu.insertItem(i18n("&Assign '%1' to Dropped Item").arg(talbum->url()),               13);
+            popMenu.insertItem(SmallIcon("tag"), 
+                               i18n("Assign '%1' to &All Items").arg(talbum->url().mid(1)),          11);
+
+            if (itemsSelected)
+                popMenu.insertItem(SmallIcon("tag"), 
+                                   i18n("Assign '%1' to &Selected Items").arg(talbum->url().mid(1)), 10);
+            
+            if (itemDropped)
+                popMenu.insertItem(SmallIcon("tag"),
+                                   i18n("Assign '%1' to &Dropped Item").arg(talbum->url().mid(1)),   12);
+
             popMenu.insertSeparator(-1);
-            popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+            popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
 
             popMenu.setMouseTracking(true);
             int id = popMenu.exec(QCursor::pos());
             switch(id) 
             {
-                case 10:    // Selected Items
-                {
-                    for (IconItem *it = firstItem(); it; it = it->nextItem())
-                    {
-                        if (it->isSelected())
-                        {
-                            AlbumIconItem *albumItem = static_cast<AlbumIconItem *>(it);
-                            albumItem->imageInfo()->setTag(tagID);
-                        }
-                    }
-    
-                    d->imageLister->refresh();
-                    updateContents();
-                    break;
-                }
-                case 11:    // Selected and Dropped Items
+                case 10:    // Selected and Dropped Items
                 {
                     for (IconItem *it = firstItem(); it; it = it->nextItem())
                     {
@@ -1205,7 +1198,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     updateContents();
                     break;
                 }
-                case 12:    // All Items
+                case 11:    // All Items
                 {
                     for (IconItem *it = firstItem(); it; it = it->nextItem())
                     {
@@ -1217,7 +1210,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                     updateContents();
                     break;
                 }
-                case 13:    // Dropped Item only.
+                case 12:    // Dropped Item only.
                 {
                     AlbumIconItem *albumItem = findItem(event->pos());
                     if (albumItem)
@@ -1246,42 +1239,27 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
             if (it->isSelected())
                 itemsSelected = true;
 
-        if (itemsSelected)
-        {
-            popMenu.insertItem(i18n("&Assign Tags to Selected Items"),         10);
-            popMenu.insertItem(i18n("&Assign Tags to Selected/Dropped Items"), 11);
-            popMenu.insertSeparator(-1);
-        }
+        bool itemDropped = false;
+        AlbumIconItem *albumItem = findItem(event->pos());
+        if (albumItem) 
+            itemDropped = true;
 
-        popMenu.insertItem(i18n("&Assign Tags to All Items"),                  12);
-        popMenu.insertItem(i18n("&Assign Tags to Dropped Item"),               13);
+        popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &All Items"),          11);
+
+        if (itemsSelected)
+            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"), 10);
+
+        if (itemDropped)
+            popMenu.insertItem(SmallIcon("tag"), i18n("Assign Tags to &Dropped Item"),   12);
+    
         popMenu.insertSeparator(-1);
-        popMenu.insertItem( SmallIcon("cancel"), i18n("C&ancel") );
+        popMenu.insertItem(SmallIcon("cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
         int id = popMenu.exec(QCursor::pos());
         switch(id) 
         {
-            case 10:    // Selected Items
-            {
-                for (IconItem *it = firstItem(); it; it = it->nextItem())
-                {
-                    if (it->isSelected())
-                    {
-                        AlbumIconItem *albumItem = static_cast<AlbumIconItem*>(it);
-                        for (QValueList<int>::iterator it = tagIDs.begin();
-                            it != tagIDs.end(); ++it)
-                        {
-                            albumItem->imageInfo()->setTag(*it);
-                        }
-                    }
-                }
-    
-                d->imageLister->refresh();
-                updateContents();
-                break;
-            }
-            case 11:    // Selected and Dropped Items
+            case 10:    // Selected and Dropped Items
             {
                 for (IconItem *it = firstItem(); it; it = it->nextItem())
                 {
@@ -1310,7 +1288,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 updateContents();
                 break;
             }
-            case 12:    // All Items
+            case 11:    // All Items
             {
                 for (IconItem *it = firstItem(); it; it = it->nextItem())
                 {
@@ -1326,7 +1304,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *event)
                 updateContents();
                 break;
             }
-            case 13:    // Dropped item only.
+            case 12:    // Dropped item only.
             {
                 AlbumIconItem *albumItem = findItem(event->pos());
                 if (albumItem)
