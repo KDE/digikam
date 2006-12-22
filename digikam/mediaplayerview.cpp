@@ -125,8 +125,7 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
 MediaPlayerView::~MediaPlayerView()
 {
-    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
-        d->mediaPlayerPart)
+    if (d->mediaPlayerPart)
     {
         d->mediaPlayerPart->closeURL();
         delete d->mediaPlayerPart;
@@ -140,8 +139,7 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
 {
     if (url.isEmpty())
     {
-        if (previewMode() == MediaPlayerViewPriv::PlayerView && 
-            d->mediaPlayerPart)
+        if (d->mediaPlayerPart)
         {
             d->mediaPlayerPart->closeURL();
             delete d->mediaPlayerPart;
@@ -154,13 +152,14 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
     KServiceTypeProfile::OfferList services = KServiceTypeProfile::offers(mimePtr->name(),
                          QString::fromLatin1("KParts/ReadOnlyPart"));    
 
-    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
-        d->mediaPlayerPart)
+    if (d->mediaPlayerPart)
     {
         d->mediaPlayerPart->closeURL();
         delete d->mediaPlayerPart;
         d->mediaPlayerPart = 0;
     }
+
+    QWidget *mediaPlayerWidget = 0;
 
     for( KServiceTypeProfile::OfferList::Iterator it = services.begin(); it != services.end(); ++it ) 
     {
@@ -183,14 +182,15 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
         }
 
         d->mediaPlayerPart = KParts::ComponentFactory::createPartInstanceFromService
-                             <KParts::ReadOnlyPart>(service, this, 0, this, 0);
+                             <KParts::ReadOnlyPart>(service, d->mediaPlayerView, 0, d->mediaPlayerView, 0);
         if (!d->mediaPlayerPart) 
         {
             DWarning() << "Failed to instantiate KPart from library " << library << endl;
             continue;
         }
     
-        if ( !d->mediaPlayerPart->widget() ) 
+        mediaPlayerWidget = d->mediaPlayerPart->widget(); 
+        if ( !mediaPlayerWidget ) 
         {            
             DWarning() << "Failed to get KPart widget from library " << library << endl;
             continue;
@@ -199,22 +199,21 @@ void MediaPlayerView::setMediaPlayerFromUrl(const KURL& url)
         break;
     }
 
-    if (!d->mediaPlayerPart)
+    if (!mediaPlayerWidget)
     { 
         setPreviewMode(MediaPlayerViewPriv::ErrorView);
         return;
     }
     
-    d->mediaPlayerPart->widget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->grid->addMultiCellWidget(d->mediaPlayerPart->widget(), 0, 0, 0, 2);
+    d->grid->addMultiCellWidget(mediaPlayerWidget, 0, 0, 0, 2);
+    mediaPlayerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->mediaPlayerPart->openURL(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
 }
 
 void MediaPlayerView::slotBackButtonClicked()
 {
-    if (previewMode() == MediaPlayerViewPriv::PlayerView && 
-        d->mediaPlayerPart)
+    if (d->mediaPlayerPart)
     {
         d->mediaPlayerPart->closeURL();
         delete d->mediaPlayerPart;

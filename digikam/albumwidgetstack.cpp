@@ -19,12 +19,17 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qfileinfo.h>
+
 // KDE includes.
 
 #include <khtmlview.h>
 
 // Local includes.
 
+#include "albumsettings.h"
 #include "albumiconview.h"
 #include "imagepreviewview.h"
 #include "welcomepageview.h"
@@ -109,20 +114,39 @@ ImagePreviewWidget* AlbumWidgetStack::imagePreviewWidget()
 
 void AlbumWidgetStack::setPreviewItem(const KURL& url)
 {
-    if (url.isEmpty() )
+    if (url.isEmpty())
     {
         if (previewMode() == MediaPlayerMode)
             d->mediaPlayerView->setMediaPlayerFromUrl(KURL());
         else if (previewMode() == PreviewImageMode)
             d->imagePreviewView->slotPreviewFailed();
     }    
+    else
+    {
+        AlbumSettings *settings      = AlbumSettings::instance();
+        QString currentFileExtension = QFileInfo(url.path()).extension(false);
+        QString mediaplayerfilter    = settings->getMovieFileFilter().lower() +
+                                       settings->getMovieFileFilter().upper() +
+                                       settings->getAudioFileFilter().lower() +
+                                       settings->getAudioFileFilter().upper();
+        if (mediaplayerfilter.contains(currentFileExtension) )
+        {
+            setPreviewMode(AlbumWidgetStack::MediaPlayerMode);
+            d->mediaPlayerView->setMediaPlayerFromUrl(url);
+        }
+        else
+        {
+            // Stop media player if running...
+            if (previewMode() == MediaPlayerMode)
+                setPreviewItem();
 
-    visibleWidget()->setFocus();
+            setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+            imagePreviewWidget()->setImagePath(url.path());
+        }
+    }
 
-    if (previewMode() == MediaPlayerMode)
-        d->mediaPlayerView->setMediaPlayerFromUrl(url);
-    else if (previewMode() == PreviewImageMode)
-        imagePreviewWidget()->setImagePath(url.path());
+    if (visibleWidget())
+        visibleWidget()->setFocus();
 }
 
 int AlbumWidgetStack::previewMode(void)
@@ -135,6 +159,9 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     if (mode != PreviewAlbumMode && mode != PreviewImageMode && 
         mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
+
+    if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+        setPreviewItem();
 
     raiseWidget(mode);
     visibleWidget()->setFocus();

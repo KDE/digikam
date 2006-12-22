@@ -92,7 +92,7 @@ public:
         tagFolderView        = 0;
         searchFolderView     = 0;
         tagFilterView        = 0;
-        albumPreviews        = 0;
+        albumWidgetStack     = 0;
         selectionTimer       = 0;
         dispatchSelectedItem = 0;
     }
@@ -107,7 +107,7 @@ public:
     AlbumFolderView          *folderView;
     AlbumManager             *albumManager;
     AlbumHistory             *albumHistory;
-    AlbumWidgetStack         *albumPreviews;
+    AlbumWidgetStack         *albumWidgetStack;
     
     Sidebar                  *leftSideBar;
     ImagePropertiesSideBarDB *rightSideBar;
@@ -136,10 +136,10 @@ DigikamView::DigikamView(QWidget *parent)
     d->splitter->setOpaqueResize(false);
 
     d->leftSideBar->setSplitter(d->splitter);
-    d->albumPreviews = new AlbumWidgetStack(d->splitter);
+    d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
     QSizePolicy rightSzPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding, 2, 1);
-    d->albumPreviews->setSizePolicy(rightSzPolicy);
-    d->iconView = d->albumPreviews->albumIconView();
+    d->albumWidgetStack->setSizePolicy(rightSzPolicy);
+    d->iconView = d->albumWidgetStack->albumIconView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, "Digikam Right Sidebar", d->splitter, 
                                                    Sidebar::Right, true, true);
@@ -188,7 +188,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotEscapePreview()));
 
     connect(d->parent, SIGNAL(signalEscapePressed()),
-            d->albumPreviews, SLOT(slotEscapePreview()));
+            d->albumWidgetStack, SLOT(slotEscapePreview()));
 
     connect(d->parent, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
@@ -267,16 +267,16 @@ void DigikamView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(signalNextItem()),
+    connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
-    connect(d->albumPreviews->imagePreviewWidget(), SIGNAL(signalPrevItem()),
+    connect(d->albumWidgetStack->imagePreviewWidget(), SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
     
-    connect(d->albumPreviews, SIGNAL(backToAlbumSignal()),
+    connect(d->albumWidgetStack, SIGNAL(backToAlbumSignal()),
             this, SLOT(slotEscapePreview()));
     
-    connect(d->albumPreviews, SIGNAL(editImageSignal()),
+    connect(d->albumWidgetStack, SIGNAL(editImageSignal()),
             this, SLOT(slotEditImage()));
 
     // -- Selection timer ---------------
@@ -592,9 +592,9 @@ void DigikamView::slot_albumSelected(Album* album)
 
     d->iconView->setAlbum(album);
     if (album->isRoot())
-        d->albumPreviews->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
+        d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
     else 
-        d->albumPreviews->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+        d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
 }
 
 void DigikamView::slot_albumOpenInKonqui()
@@ -626,13 +626,16 @@ void DigikamView::slotDispatchImageSelected()
     {
         d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo()->kurl(),
                                      d->iconView, d->dispatchSelectedItem, 0, 0);
-        d->albumPreviews->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl());
+        
+        if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+            d->albumWidgetStack->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl());
+
         emit signal_imageSelected(true);
         d->dispatchSelectedItem = 0;
     }
     else
     {
-        d->albumPreviews->setPreviewItem();
+        d->albumWidgetStack->setPreviewItem();
         emit signal_imageSelected(false);
         emit signal_noCurrentItem();
     }
@@ -813,7 +816,7 @@ void DigikamView::slotAlbumHighlight()
 
 void DigikamView::slotEscapePreview()
 {
-    if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
         return;
 
     AlbumIconItem *currItem = dynamic_cast<AlbumIconItem*>(d->iconView->currentItem());
@@ -832,7 +835,7 @@ void DigikamView::slotEditImage()
 
 void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
 {
-    if (d->albumPreviews->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         AlbumIconItem *item=0;
 
@@ -841,7 +844,7 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
             item = d->iconView->firstSelectedItem();
             if (!item) 
             {
-                d->albumPreviews->setPreviewItem();
+                d->albumWidgetStack->setPreviewItem();
                 return;
             }
         }
@@ -850,22 +853,11 @@ void DigikamView::slot_imagePreview(AlbumIconItem *iconItem)
             item = iconItem;
         }
 
-        AlbumSettings *settings      = AlbumSettings::instance();
-        QString currentFileExtension = item->imageInfo()->name().section( '.', -1 );
-        QString mediaplayerfilter    = settings->getMovieFileFilter().lower() +
-                                       settings->getMovieFileFilter().upper() +
-                                       settings->getAudioFileFilter().lower() +
-                                       settings->getAudioFileFilter().upper();
-        if ( !mediaplayerfilter.contains(currentFileExtension) )
-            d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewImageMode );
-        else
-            d->albumPreviews->setPreviewMode( AlbumWidgetStack::MediaPlayerMode );
-
-        d->albumPreviews->setPreviewItem( item->imageInfo()->kurl() );
+        d->albumWidgetStack->setPreviewItem( item->imageInfo()->kurl() );
     }
     else
     {
-        d->albumPreviews->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+        d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
     }
 }
 
