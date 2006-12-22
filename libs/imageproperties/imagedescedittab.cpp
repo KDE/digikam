@@ -502,6 +502,9 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     updateDate();
     updateTagsView();
     update();
+
+    // See B.K.O #131632 and #131743 : always give focus to Comments widget.
+    d->commentsEdit->setFocus();
 }
 
 void ImageDescEditTab::updateTagsView()

@@ -240,7 +240,6 @@ void MediaPlayerView::setPreviewMode(int mode)
         return;
 
     raiseWidget(mode);
-    visibleWidget()->setFocus();
 }
 
 }  // NameSpace Digikam

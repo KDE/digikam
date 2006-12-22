@@ -407,6 +407,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
                  tags (and to 'de'select them).
 243 ==> 132309 : Wish: enhance video support in digikam.
 244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
-245 ==> 
+245 ==> 131743 : Comments and tag edit widgets should retain focus when changing image.
+246 ==> 131632 : Shortcuts for better captioning workflow.
+247 ==> 
 
 ---------------------------------------------------------------------------------------------------- 

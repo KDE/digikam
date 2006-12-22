@@ -144,9 +144,6 @@ void AlbumWidgetStack::setPreviewItem(const KURL& url)
             imagePreviewWidget()->setImagePath(url.path());
         }
     }
-
-    if (visibleWidget())
-        visibleWidget()->setFocus();
 }
 
 int AlbumWidgetStack::previewMode(void)
@@ -164,7 +161,6 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         setPreviewItem();
 
     raiseWidget(mode);
-    visibleWidget()->setFocus();
 }
 
 }  // namespace Digikam
