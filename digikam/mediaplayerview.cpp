@@ -65,7 +65,7 @@ public:
         mediaPlayerView   = 0;
     }
 
-    QWidget              *errorView;
+    QFrame               *errorView;
 
     QFrame               *mediaPlayerView;
 
@@ -81,13 +81,17 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
 
     // --------------------------------------------------------------------------
 
-    d->errorView          = new QWidget(this);
+    d->errorView          = new QFrame(this);
     QLabel *errorMsg      = new QLabel(i18n("No media player available..."), d->errorView);
     QGridLayout *grid     = new QGridLayout(d->errorView, 1, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
     QPushButton *backBtn1 = new QPushButton(i18n("Back to Album"), d->errorView);
 
     errorMsg->setAlignment(Qt::AlignCenter);
+    d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->errorView->setMargin(0);
+    d->errorView->setLineWidth(1);
+
     grid->addMultiCellWidget(errorMsg, 0, 0, 0, 2);
     grid->addMultiCellWidget(backBtn1, 1, 1, 1, 1);
     grid->setColStretch(0, 10),
@@ -102,6 +106,10 @@ MediaPlayerView::MediaPlayerView(QWidget *parent)
     d->grid               = new QGridLayout(d->mediaPlayerView, 1, 2, 
                                             KDialogBase::marginHint(), KDialogBase::spacingHint());
     QPushButton *backBtn2 = new QPushButton(i18n("Back to Album"), d->mediaPlayerView);
+
+    d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->mediaPlayerView->setMargin(0);
+    d->mediaPlayerView->setLineWidth(1);
 
     d->grid->addMultiCellWidget(backBtn2, 1, 1, 1, 1);
     d->grid->setColStretch(0, 10),
