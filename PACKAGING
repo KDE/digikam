@@ -64,7 +64,7 @@ https://sourceforge.net/project/admin/editpackages.php?group_id=42641
 ------------------ TAGGING ------------------
 
 Each release has to be tagged. All tags are located in svn in the directory /tags/digikam
-You'll find the svn revision used in the tarball in the file RELEASE.rev
+You'll find the svn revision used in the tarball in the file RELEASE.rev. You have to do this out of your svn graphics folder.
 
 For a X.Y.Z.UVW release
 
@@ -89,7 +89,7 @@ If anyone knows what the purpose of this tagging is, please put it here ;-)
 ----------------- Branching -----------------
 
 Branching is done, so translators can work in two seperate areas and we can develop unstable and a next stable release.
-To set it up, you need to do following. Remember it will take you two evenings to succeed But you need to finish the first part completely, because automated kde scripts will ruin your work.!
+To set it up, you need to do following. Remember it will take you two evenings to succeed, but you need to finish the first part completely, because automated kde scripts will ruin your work!
 
 - go to /branches/stable/extragear/graphics. 
 - svn rm digikam and digikamimageplugins. 
@@ -99,7 +99,7 @@ To set it up, you need to do following. Remember it will take you two evenings t
 - svn rm digikam and digikamimageplugins and showfoto
 - svn cp http://anonsvn.kde.org/home/kde/extragear/graphics/doc/digikam digikam  and the same for the plugins and showfoto
 
-- go to /branches/stale/l10n/templates/docmessages/extragear/graphics
+- go to /branches/stable/l10n/templates/docmessages/extragear/graphics
 - copy over all digikam, showfoto and plugin files (dont forget the desktop files) from /trunk/l10n/templates/docmessages/extragear/graphics
 
 - repeat last to steps for "messages" instead of "docmessages". No showfoto files in this case.
@@ -112,6 +112,6 @@ sh  update_l10n_stable.sh --section graphics --app digikamimageplugins -u toma -
 
 -check that all plugins are copied over, last time the last one in the list did not make it.
 
-- send a mail to the ml and kde-i18n-docs.
+-send a mail to the ml and kde-i18n-docs.
 
 ---------------------------------------------------
