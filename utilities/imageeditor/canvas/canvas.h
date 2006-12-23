@@ -71,6 +71,7 @@ public:
     void  setUndoHistoryOrigin();
     void  updateUndoState();
     DImg  currentImage();
+    QString currentImageFileFormat();
 
     bool  maxZoom();
     bool  minZoom();

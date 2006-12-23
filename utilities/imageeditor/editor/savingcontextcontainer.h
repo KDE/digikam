@@ -67,7 +67,8 @@ public:
     bool                     synchronousSavingResult;
     bool                     destinationExisted;
     bool                     abortingSaving;
-    
+
+    QString                  originalFormat;
     QString                  format;
 
     KURL                     srcURL;

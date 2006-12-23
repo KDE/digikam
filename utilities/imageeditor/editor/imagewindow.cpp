@@ -825,7 +825,11 @@ void ImageWindow::saveAsIsComplete()
         d->urlCurrent = m_savingContext->destinationURL;
         m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
         slotUpdateItemInfo();
-        LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+        // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
+        // This may irritate users who want to check for quality loss in lossy formats.
+        // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
+        if (m_savingContext->originalFormat == m_savingContext->format)
+            LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
         // notify main app that file changed or a file is added
         if(m_savingContext->destinationExisted)

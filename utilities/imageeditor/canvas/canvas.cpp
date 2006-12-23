@@ -516,6 +516,11 @@ DImg Canvas::currentImage()
     return DImg(*d->im->getImg());
 }
 
+QString Canvas::currentImageFileFormat()
+{
+    return d->im->getImageFormat();
+}
+
 int Canvas::imageWidth()
 {
     return d->im->origWidth();  

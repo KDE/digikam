@@ -143,6 +143,7 @@ public:
     ICCSettingsContainer *getICCSettings();
 
     QString               getImageFileName();
+    QString               getImageFormat();
 
 protected slots:
 

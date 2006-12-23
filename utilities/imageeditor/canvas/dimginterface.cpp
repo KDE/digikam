@@ -527,15 +527,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // This is possibly empty
     if (mimeType.isEmpty())
-    {
-        mimeType = d->image.attribute("format").toString();
-        // It is a bug if format attribute is not given
-        if (mimeType.isEmpty())
-        {
-            DWarning() << "DImg object does not contain attribute \"format\"" << endl;
-            mimeType = QImageIO::imageFormat(d->filename);
-        }
-    }
+        mimeType = getImageFormat();
 
     DDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " (" 
               << mimeType << ")" << endl;
@@ -1140,6 +1132,21 @@ QByteArray DImgInterface::getIptc()
 QString DImgInterface::getImageFileName()
 {
     return d->filename.section( '/', -1 );
+}
+
+QString DImgInterface::getImageFormat()
+{
+    if (d->image.isNull())
+        return QString();
+
+    QString mimeType = d->image.attribute("format").toString();
+    // It is a bug in the loader if format attribute is not given
+    if (mimeType.isEmpty())
+    {
+        DWarning() << "DImg object does not contain attribute \"format\"" << endl;
+        mimeType = QImageIO::imageFormat(d->filename);
+    }
+    return mimeType;
 }
 
 ICCSettingsContainer* DImgInterface::getICCSettings()
