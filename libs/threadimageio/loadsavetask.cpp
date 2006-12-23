@@ -200,7 +200,7 @@ void SharedLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
         if (!img.isNull())
-            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(img));
+            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(img), m_loadingDescription.filePath);
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }

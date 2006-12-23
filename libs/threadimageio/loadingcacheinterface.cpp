@@ -52,7 +52,7 @@ void LoadingCacheInterface::putImage(const QString &filePath, const DImg &img)
     {
         DImg *copy = new DImg(img);
         copy->detach();
-        cache->putImage(filePath, copy);
+        cache->putImage(filePath, copy, filePath);
     }
 }
 

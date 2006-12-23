@@ -58,8 +58,11 @@ public:
 
 class LoadingCachePriv;
 
-class LoadingCache
+class LoadingCache : public QObject
 {
+
+    Q_OBJECT
+
 public:
 
     static LoadingCache *cache();
@@ -87,7 +90,9 @@ public:
     // Returns true if image has been put in the cache, false otherwise.
     // Ownership of the DImg instance is passed to the cache.
     // When it cannot be put in the cache it is deleted.
-    bool putImage(const QString &cacheKey, DImg *img);
+    // The third parameter specifies a file path that will be watched.
+    // If this file changes, the object will be removed from the cache.
+    bool putImage(const QString &cacheKey, DImg *img, const QString &filePath);
     void removeImage(const QString &cacheKey);
     void removeImages();
 
@@ -102,6 +107,14 @@ public:
     void notifyNewLoadingProcess(LoadingProcess *process, LoadingDescription description);
 
     void setCacheSize(int megabytes);
+
+protected:
+
+    virtual void customEvent (QCustomEvent *event);
+
+private slots:
+
+    void slotFileDirty(const QString &path);
 
 private:
 

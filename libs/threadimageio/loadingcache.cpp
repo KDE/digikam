@@ -19,7 +19,13 @@
  * ============================================================ */
 
 
+#include <qapplication.h>
+#include <qvariant.h>
+
+#include <kdirwatch.h>
+
 #include "loadingcache.h"
+#include "ddebug.h"
 
 namespace Digikam
 {
@@ -32,6 +38,8 @@ public:
     QDict<LoadingProcess> loadingDict;
     QMutex mutex;
     QWaitCondition condVar;
+    KDirWatch *watch;
+    QStringList watchedFiles;
 };
 
 
@@ -58,10 +66,16 @@ LoadingCache::LoadingCache()
     d->imageCache.setAutoDelete(true);
     // default value: 60 MB of cache
     setCacheSize(60);
+
+    d->watch = new KDirWatch;
+
+    connect(d->watch, SIGNAL(dirty(const QString &)),
+            this, SLOT(slotFileDirty(const QString &)));
 }
 
 LoadingCache::~LoadingCache()
 {
+    delete d->watch;
     delete d;
     m_instance = 0;
 }
@@ -71,19 +85,33 @@ DImg *LoadingCache::retrieveImage(const QString &cacheKey)
     return d->imageCache.find(cacheKey);
 }
 
-bool LoadingCache::putImage(const QString &cacheKey, DImg *img)
+bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &filePath)
 {
+    bool successfullyInserted;
     // use size of image as cache cost
     if ( d->imageCache.insert(cacheKey, img, img->numBytes()) )
     {
-        return true;
+        if (!filePath.isEmpty())
+        {
+            // store file path as attribute for our own use
+            img->setAttribute("loadingCacheFilePath", QVariant(filePath));
+        }
+        successfullyInserted = true;
     }
     else
     {
         // need to delete object if it was not successfully inserted (too large)
         delete img;
-        return false;
+        successfullyInserted = false;
     }
+
+    if (!filePath.isEmpty())
+    {
+        // schedule update of file watch
+        // KDirWatch can only be accessed from main thread!
+        QApplication::postEvent(this, new QCustomEvent(QEvent::User));
+    }
+    return successfullyInserted;
 }
 
 void LoadingCache::removeImage(const QString &cacheKey)
@@ -94,6 +122,58 @@ void LoadingCache::removeImage(const QString &cacheKey)
 void LoadingCache::removeImages()
 {
     d->imageCache.clear();
+}
+
+void LoadingCache::slotFileDirty(const QString &path)
+{
+    // Signal comes from main thread, we need to lock ourselves.
+    CacheLock lock(this);
+    //DDebug() << "LoadingCache slotFileDirty " << path << endl;
+    for (QCacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+    {
+        if (it.current()->attribute("loadingCacheFilePath").toString() == path)
+        {
+            //DDebug() << " removing watch and cache entry for " << path << endl;
+            d->imageCache.remove(it.currentKey());
+            d->watch->removeFile(path);
+            d->watchedFiles.remove(path);
+        }
+    }
+}
+
+void LoadingCache::customEvent(QCustomEvent *event)
+{
+    // Event comes from main thread, we need to lock ourselves.
+    CacheLock lock(this);
+
+    // get a list of files in cache that need watch
+    QStringList toBeAdded;
+    QStringList toBeRemoved = d->watchedFiles;
+    for (QCacheIterator<DImg> it(d->imageCache); it.current(); ++it)
+    {
+        QString watchPath = it.current()->attribute("loadingCacheFilePath").toString();
+        if (!watchPath.isEmpty())
+        {
+            if (!d->watchedFiles.contains(watchPath))
+                toBeAdded.append(watchPath);
+            toBeRemoved.remove(watchPath);
+        }
+    }
+
+    for (QStringList::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
+    {
+        //DDebug() << "removing watch for " << *it << endl;
+        d->watch->removeFile(*it);
+        d->watchedFiles.remove(*it);
+    }
+
+    for (QStringList::iterator it = toBeAdded.begin(); it != toBeAdded.end(); ++it)
+    {
+        //DDebug() << "adding watch for " << *it << endl;
+        d->watch->addFile(*it);
+        d->watchedFiles.append(*it);
+    }
+
 }
 
 bool LoadingCache::isCacheable(const DImg *img)
