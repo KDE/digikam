@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kstaticdeleter.h>
 
 // Local includes.
 
@@ -60,26 +61,26 @@ public:
     double   longitude;
 
     QLabel  *latLonPos;
-    
-    QPixmap  worldMap;
+
+    static QPixmap *worldMap;
 };
+
+static KStaticDeleter<QPixmap> pixmapDeleter;
+
+QPixmap *WorldMapWidgetPriv::worldMap         = 0;
 
 WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
               : QScrollView(parent, 0, Qt::WDestructiveClose)
 {
     d = new WorldMapWidgetPriv;
-    
-    KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
-    QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.jpg");
-    d->worldMap = QPixmap(directory + "worldmap.jpg");
-    
+
     setVScrollBarMode(QScrollView::AlwaysOff);
     setHScrollBarMode(QScrollView::AlwaysOff);
     viewport()->setMouseTracking(true);
     viewport()->setPaletteBackgroundColor(colorGroup().background());
     setMinimumWidth(w);
     setMaximumHeight(h);
-    resizeContents(d->worldMap.width(), d->worldMap.height());
+    resizeContents(worldMapPixmap().width(), worldMapPixmap().height());
     
     d->latLonPos = new QLabel(viewport());
     d->latLonPos->setMaximumHeight(fontMetrics().height());
@@ -91,6 +92,17 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 WorldMapWidget::~WorldMapWidget()
 {
     delete d;
+}
+
+QPixmap &WorldMapWidget::worldMapPixmap()
+{
+    if (!d->worldMap)
+    {
+        KGlobal::dirs()->addResourceType("worldmap", KGlobal::dirs()->kde_default("data") + "digikam/data");
+        QString directory = KGlobal::dirs()->findResourceDir("worldmap", "worldmap.jpg");
+        pixmapDeleter.setObject(d->worldMap, new QPixmap(directory + "worldmap.jpg"));
+    }
+    return *d->worldMap;
 }
 
 double WorldMapWidget::getLatitude(void)
@@ -141,7 +153,7 @@ void WorldMapWidget::drawContents(QPainter *p, int x, int y, int w, int h)
 {
     if (isEnabled())
     {   
-        p->drawPixmap(x, y, d->worldMap, x, y, w, h);
+        p->drawPixmap(x, y, worldMapPixmap(), x, y, w, h);
         p->setPen(QPen(Qt::white, 0, Qt::SolidLine));
         p->drawLine(d->xPos, 0, d->xPos, contentsHeight());
         p->drawLine(0, d->yPos, contentsWidth(), d->yPos);

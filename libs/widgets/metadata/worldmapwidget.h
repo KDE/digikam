@@ -56,6 +56,8 @@ private:
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void contentsMouseMoveEvent( QMouseEvent * e );
 
+    QPixmap &worldMapPixmap();
+
 private:
 
     WorldMapWidgetPriv *d;
