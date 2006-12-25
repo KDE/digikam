@@ -176,8 +176,7 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
 
     if (d->metadata.isEmpty())
     {
-        d->view->clear();
-        enabledToolButtons(false);
+        setMetadataEmpty();
         return false;
     }
 
@@ -191,6 +190,12 @@ bool MetadataWidget::setMetadata(const QByteArray& data)
     buildView();
 
     return true;
+}
+
+void MetadataWidget::setMetadataEmpty()
+{
+    d->view->clear();
+    enabledToolButtons(false);
 }
 
 const QByteArray& MetadataWidget::getMetadata()

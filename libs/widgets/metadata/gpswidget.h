@@ -79,7 +79,8 @@ private:
     bool decodeMetadata(void);
     void buildView(void);
     bool decodeGPSPosition(void);
-    
+    virtual void setMetadataEmpty();
+
 private:
 
     GPSWidgetPriv *d;

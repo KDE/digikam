@@ -105,6 +105,7 @@ protected:
     virtual bool decodeMetadata(void)=0;
     virtual void buildView(void)=0;
     virtual QString getMetadataTitle(void)=0;
+    virtual void setMetadataEmpty();
 
 private:
 

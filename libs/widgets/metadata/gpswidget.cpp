@@ -261,9 +261,7 @@ bool GPSWidget::decodeMetadata()
         Exiv2::ExifData exifData;
         if (exifData.load((Exiv2::byte*)getMetadata().data(), getMetadata().size()) != 0)
         {
-            d->map->setEnabled(false);
-            d->detailsButton->setEnabled(false);
-            d->detailsCombo->setEnabled(false);
+            setMetadataEmpty();
             return false;
         }
 
@@ -294,9 +292,7 @@ bool GPSWidget::decodeMetadata()
         bool ret = decodeGPSPosition();
         if (!ret)
         {
-            d->map->setEnabled(false);
-            d->detailsButton->setEnabled(false);
-            d->detailsCombo->setEnabled(false);
+            setMetadataEmpty();
             return false;
         }
 
@@ -307,14 +303,20 @@ bool GPSWidget::decodeMetadata()
     }
     catch (Exiv2::Error& e)
     {
-        d->map->setEnabled(false);
-        d->detailsButton->setEnabled(false);
-        d->detailsCombo->setEnabled(false);
+        setMetadataEmpty();
         DDebug() << "Cannot parse EXIF metadata using Exiv2 ("
                   << QString::fromAscii(e.what().c_str())
                   << ")" << endl;
         return false;
     }
+}
+
+void GPSWidget::setMetadataEmpty()
+{
+    MetadataWidget::setMetadataEmpty();
+    d->map->setEnabled(false);
+    d->detailsButton->setEnabled(false);
+    d->detailsCombo->setEnabled(false);
 }
 
 void GPSWidget::buildView(void)
