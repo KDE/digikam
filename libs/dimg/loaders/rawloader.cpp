@@ -119,7 +119,7 @@ bool RAWLoader::loadFromDcraw(const QString& filePath, DImgLoaderObserver *obser
     // is waiting for the process to finish, but the main thread is waiting
     // for the thread to finish and no KProcess events are delivered.
     // Remove when porting to Qt4.
-    while (m_running && !m_observer->isShuttingDown())
+    while (m_running && (m_observer ? !m_observer->isShuttingDown() : true))
     {
         if (m_dataPos == 0)
         {
