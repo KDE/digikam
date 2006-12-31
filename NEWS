@@ -409,6 +409,9 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
 245 ==> 131743 : Comments and tag edit widgets should retain focus when changing image.
 246 ==> 131632 : Shortcuts for better captioning workflow.
-247 ==> 
+247 ==> 137491 : Editor image cache not flush when an image is modified outside digikam
+248 ==> 138949 : save/overwrite fails: wrong dialog
+249 ==> 139197 : crash during import of raw imagefiles (dng)
+250 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
