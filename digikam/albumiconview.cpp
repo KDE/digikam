@@ -890,6 +890,13 @@ void AlbumIconView::slotFilesModified(const KURL& url)
     refreshItems(url);
 }
 
+void AlbumIconView::slotImageWindowURLChanged(const KURL &url)
+{
+    IconItem* item = findItem(url.url());
+    if (item)
+        setCurrentItem(item);
+}
+
 void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
 {
     if (!item) return;
@@ -961,11 +968,13 @@ void AlbumIconView::slotDisplayItem(AlbumIconItem *item )
     connect(imview, SIGNAL(signalFileDeleted(const KURL&)),
             this, SLOT(slotFilesModified()));
 
+    connect(imview, SIGNAL(signalURLChanged(const KURL&)),
+            this, SLOT(slotImageWindowURLChanged(const KURL &)));
+
     imview->loadImageInfos(imageInfoList,
                            currentImageInfo,
                            d->currentAlbum ? i18n("Album \"%1\"").arg(d->currentAlbum->title()) : QString(),
-                           true,
-                           this);
+                           true);
 
     if (imview->isHidden())
         imview->show();

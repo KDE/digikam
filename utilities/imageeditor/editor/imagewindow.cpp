@@ -110,7 +110,6 @@ public:
         fileDeletePermanentlyAction         = 0;
         fileDeletePermanentlyDirectlyAction = 0;
         fileTrashDirectlyAction             = 0;
-        view                                = 0;
         imageInfoCurrent                    = 0;
         rightSidebar                        = 0;
         contextMenu                         = 0;
@@ -136,7 +135,6 @@ public:
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
 
-    AlbumIconView            *view;
     ImageInfoList             imageInfoList;
     ImageInfo                *imageInfoCurrent;
 
@@ -378,7 +376,7 @@ void ImageWindow::applySettings()
 }
 
 void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
-                          const QString& caption, bool allowSaving, AlbumIconView* view)
+                          const QString& caption, bool allowSaving)
 {
     if (!promptUserSave(d->urlCurrent))
         return;
@@ -388,11 +386,11 @@ void ImageWindow::loadURL(const KURL::List& urlList, const KURL& urlCurrent,
     d->imageInfoList    = ImageInfoList();
     d->imageInfoCurrent = 0;
 
-    loadCurrentList(caption, allowSaving, view);
+    loadCurrentList(caption, allowSaving);
 }
 
 void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *imageInfoCurrent,
-                                 const QString& caption, bool allowSaving, AlbumIconView* view)
+                                 const QString& caption, bool allowSaving)
 {
     // The ownership of objects of imageInfoList is passed to us.
     // imageInfoCurrent is contained in imageInfoList.
@@ -424,10 +422,10 @@ void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, ImageInfo *
 
     d->urlCurrent  = d->imageInfoCurrent->kurl();
 
-    loadCurrentList(caption, allowSaving, view);
+    loadCurrentList(caption, allowSaving);
 }
 
-void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving, AlbumIconView* view)
+void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving)
 {
     // this method contains the code shared by loadURL and loadImageInfos
 
@@ -439,7 +437,6 @@ void ImageWindow::loadCurrentList(const QString& caption, bool allowSaving, Albu
 
     setCaption(i18n("digiKam Image Editor - %1").arg(caption));
 
-    d->view        = view;
     d->allowSaving = allowSaving;
 
     m_saveAction->setEnabled(false);
@@ -471,14 +468,7 @@ void ImageWindow::slotLoadCurrent()
 
 void ImageWindow::setViewToURL(const KURL &url)
 {
-    if (d->view)
-    {
-        IconItem* item = d->view->findItem(url.url());
-        d->view->clearSelection();
-        d->view->updateContents();
-        if (item)
-            d->view->setCurrentItem(item);
-    }
+    emit signalURLChanged(url);
 }
 
 void ImageWindow::slotForward()

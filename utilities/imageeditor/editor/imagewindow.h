@@ -52,13 +52,11 @@ public:
 
     void loadURL(const KURL::List& urlList, const KURL& urlCurrent,
                  const QString& caption=QString::null,
-                 bool allowSaving=true,
-                 AlbumIconView* view=0L);
+                 bool allowSaving=true);
 
     void loadImageInfos(const ImageInfoList &imageInfoList,
                         ImageInfo *imageInfoCurrent,
-                        const QString& caption, bool allowSaving,
-                        AlbumIconView* view=0);
+                        const QString& caption, bool allowSaving);
 
     static ImageWindow* imagewindow();
     static bool         imagewindowCreated();
@@ -73,6 +71,7 @@ signals:
     void signalFileDeleted(const KURL& url);
     void signalFileAdded(const KURL& url);
     void signalFileModified(const KURL& url);
+    void signalURLChanged(const KURL& url);
 
 private:
 
@@ -82,7 +81,7 @@ private:
 
 private:
 
-    void loadCurrentList(const QString& caption, bool allowSaving, AlbumIconView* view);
+    void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
 
     void setupActions();

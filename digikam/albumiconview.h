@@ -165,6 +165,7 @@ private slots:
 
     void slotFilesModified();
     void slotFilesModified(const KURL& url);
+    void slotImageWindowURLChanged(const KURL &url);
 
     void slotShowToolTip(IconItem* item);
 
