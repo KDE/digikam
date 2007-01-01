@@ -1038,8 +1038,11 @@ bool DMetadata::setImageComment(const QString& comment)
 {
     try
     {
+        /*
+        See bug #139313: An empty string is also a valid value
         if (comment.isEmpty())
             return false;
+        */
 
         DDebug() << d->filePath << " ==> Comment: " << comment << endl;
 
