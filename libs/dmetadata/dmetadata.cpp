@@ -120,9 +120,7 @@ bool DMetadata::applyChanges()
 
 QByteArray DMetadata::getComments() const
 {
-    QByteArray data(d->imageComments.size());
-    memcpy(data.data(), d->imageComments.c_str(), d->imageComments.size());
-    return data;
+    return QByteArray().duplicate(d->imageComments.data(), d->imageComments.size());
 }
 
 QByteArray DMetadata::getExif() const
@@ -196,11 +194,9 @@ QByteArray DMetadata::getIptc(bool addIrbHeader) const
 
 void DMetadata::setComments(const QByteArray& data)
 {
-    QString string(data);
-    const std::string str(string.utf8());
-    d->imageComments = str;
+    d->imageComments = std::string(data.data(), data.size());
 }
-    
+
 bool DMetadata::setExif(const QByteArray& data)
 {
     try
