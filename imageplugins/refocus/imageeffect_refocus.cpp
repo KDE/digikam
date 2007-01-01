@@ -170,7 +170,7 @@ ImageEffect_Refocus::ImageEffect_Refocus(QWidget* parent, QString title, QFrame*
     // -------------------------------------------------------------
     
     // Image creation with dummy borders (mosaic mode). It needs to do it before to apply deconvolution filter 
-    // on original image border pixels including on matrix size area. This way limit artefacts on image border.
+    // on original image border pixels including on matrix size area. This way limit artifacts on image border.
     
     Digikam::ImageIface iface(0, 0);
         

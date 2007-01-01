@@ -107,9 +107,9 @@ ImageEffect_Restoration::ImageEffect_Restoration(QWidget* parent, QString title,
     m_restorationTypeCB->insertItem( i18n("Reduce Texturing") );
     QWhatsThis::add( m_restorationTypeCB, i18n("<p>Select here the filter preset to use for photograph restoration:<p>"
                                                "<b>None</b>: Most common values. Puts settings to default.<p>"
-                                               "<b>Reduce Uniform Noise</b>: reduce small image artefacts like sensor noise.<p>"
-                                               "<b>Reduce JPEG Artefacts</b>: reduce large image artefacts like JPEG compression mosaic.<p>"
-                                               "<b>Reduce Texturing</b>: reduce image artefacts like paper texture or Moire patterns "
+                                               "<b>Reduce Uniform Noise</b>: reduce small image artifacts like sensor noise.<p>"
+                                               "<b>Reduce JPEG Artefacts</b>: reduce large image artifacts like JPEG compression mosaic.<p>"
+                                               "<b>Reduce Texturing</b>: reduce image artifacts like paper texture or Moire patterns "
                                                "of a scanned image.<p>"));
 
     grid->addMultiCellWidget(cimgLogoLabel, 0, 0, 1, 1);
