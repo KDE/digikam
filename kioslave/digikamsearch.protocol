@@ -24,4 +24,5 @@ Description[ru]=Digikam kioslave - поиск
 Description[sk]=kioslave vyhľadávaní digiKamu
 Description[sv]=I/O-slav för Digikams sökning
 Description[tr]=digiKam arama kioslave
+Description[vi]=kioslave tìm kiếm digiKam
 Class=:local

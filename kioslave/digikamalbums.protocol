@@ -31,4 +31,5 @@ Description[ru]=Digikam kioslave - альбомы
 Description[sk]=kioslave albumov digiKamu
 Description[sv]=I/O-slav för Digikams album
 Description[tr]=digiKam albümler kioslave
+Description[vi]=kioslave tập ảnh digiKam
 Class=:local

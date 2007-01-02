@@ -35,6 +35,7 @@ Comment[sk]=digiKam plugin pre korekciu vypálených pixelov
 Comment[sv]=Digikam insticksprogram för korrigering av heta bildpunkter
 Comment[tr]=digiKam için beyaz dengesini düzeltme eklentisi
 Comment[uk]=Втулок виправлення гарячих пікселів для Digikam
+Comment[vi]=Bổ sung sửa điểm ảnh nóng cho digiKam
 
 X-KDE-Library=digikamimageplugin_hotpixels
 author=Unai Garro, ugarro at sourceforge dot net

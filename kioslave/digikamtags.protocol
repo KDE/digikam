@@ -30,4 +30,5 @@ Description[ru]=Digikam kioslave - метки
 Description[sk]=kioslave tagov digiKamu
 Description[sv]=I/O-slav för Digikams etiketter
 Description[tr]=digiKam etiketler kioslave
+Description[vi]=kioslave thẻ digiKam
 Class=:local
