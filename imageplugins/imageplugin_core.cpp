@@ -93,7 +93,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                                  this, SLOT(slotAutoCorrection()),
                                  actionCollection(), "implugcore_autocorrection");
 
-    m_invertAction = new KAction(i18n("Invert"), "invertimage", 0,
+    m_invertAction = new KAction(i18n("Invert"), "invertimage", 
+                         CTRL+Key_I,      // NOTE: Photoshop 7 use CTRL+I.
                          this, SLOT(slotInvert()),
                          actionCollection(), "implugcore_invert");
     
