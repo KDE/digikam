@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_inpainting.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-03-30
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-03-30
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +30,7 @@
 
 #include "imageeffect_inpainting.h"
 #include "imageplugin_inpainting.h"
+#include "imageplugin_inpainting.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_inpainting,
                             KGenericFactory<ImagePlugin_InPainting>("digikamimageplugin_inpainting"));
@@ -38,7 +38,8 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_inpainting,
 ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const char*, const QStringList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
-    m_inPaintingAction = new KAction(i18n("Inpainting..."), "inpainting", 0, 
+    m_inPaintingAction = new KAction(i18n("Inpainting..."), "inpainting",
+                             CTRL+Key_E, 
                              this, SLOT(slotInPainting()),
                              actionCollection(), "imageplugin_inpainting");
     
@@ -64,4 +65,3 @@ void ImagePlugin_InPainting::slotInPainting()
     DigikamInPaintingImagesPlugin::ImageEffect_InPainting::inPainting(parentWidget());
 }
 
-#include "imageplugin_inpainting.moc"
