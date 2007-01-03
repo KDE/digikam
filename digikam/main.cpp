@@ -5,6 +5,7 @@
  * Description : 
  * 
  * Copyright 2002-2006 by Renchi Raju and Gilles Caulier
+ * Copyright 2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
                           digikam_version,        
                           description.latin1(),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2002-2006, digiKam developers team"),
+                          I18N_NOOP("(c) 2002-2007, digiKam developers team"),
                           0,
                           "http://www.digikam.org");
 
