@@ -5,7 +5,7 @@
  * Description : digiKam image editor plugin core
  *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,7 @@
 #include "imageeffect_autocorrection.h"
 #include "imageeffect_iccproof.h"
 #include "imageplugin_core.h"
+#include "imageplugin_core.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_core,
                             KGenericFactory<ImagePlugin_Core>("digikam"));
@@ -81,7 +82,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotHSL()),
                       actionCollection(), "implugcore_hsl");
 
-    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb", 0,
+    m_RGBAction = new KAction(i18n("Color Balance..."), "adjustrgb", 
+                      CTRL+Key_B,      // NOTE: Photoshop 7 use CTRL+B.
                       this, SLOT(slotRGB()),
                       actionCollection(), "implugcore_rgb");
 
@@ -265,5 +267,3 @@ void ImagePlugin_Core::slotConvertTo16Bits()
     iface.convertOriginalColorDepth(64);
     parentWidget()->unsetCursor();
 }
-
-#include "imageplugin_core.moc"
