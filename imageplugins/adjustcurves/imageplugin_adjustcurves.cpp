@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_adjustcurves.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-12-01
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-12-01
  * Description : 
  * 
- * Copyright 2004-2006 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "adjustcurves.h"
 #include "imageplugin_adjustcurves.h"
+#include "imageplugin_adjustcurves.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustcurves,
                             KGenericFactory<ImagePlugin_AdjustCurves>("digikamimageplugin_adjustcurves"));
@@ -40,7 +40,8 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
-    m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 0, 
+    m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 
+			 CTRL+Key_U, 
                          this, SLOT(slotCurvesAdjust()),
                          actionCollection(), "imageplugin_adjustcurves");
 
@@ -67,6 +68,3 @@ void ImagePlugin_AdjustCurves::slotCurvesAdjust()
     dlg.exec();
     delete headerFrame;
 }
-
-
-#include "imageplugin_adjustcurves.moc"
