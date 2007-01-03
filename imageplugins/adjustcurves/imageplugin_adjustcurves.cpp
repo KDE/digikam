@@ -41,7 +41,7 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const char*,
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustCurves")
 {
     m_curvesAction = new KAction(i18n("Curves Adjust..."), "adjustcurves", 
-			 CTRL+Key_U, 
+			 CTRL+Key_M,         // NOTE: Photoshop 7 use CTRL+M.
                          this, SLOT(slotCurvesAdjust()),
                          actionCollection(), "imageplugin_adjustcurves");
 
