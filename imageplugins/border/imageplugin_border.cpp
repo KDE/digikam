@@ -40,7 +40,7 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const char*, const QStri
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Border")
 {
     m_borderAction = new KAction(i18n("Add Border..."), "bordertool", 
-                         CTRL+Key_B, 
+                         CTRL+Key_F, 
                          this, SLOT(slotBorder()),
                          actionCollection(), "imageplugin_border");
 
