@@ -303,7 +303,7 @@ void EditorWindow::setupStandardActions()
     d->zoomMinusAction = KStdAction::zoomOut(m_canvas, SLOT(slotDecreaseZoom()),
                                             actionCollection(), "editorwindow_zoomminus");
     d->zoomFitAction = new KToggleAction(i18n("Zoom &AutoFit"), "viewmagfit",
-                                        Key_A, this, SLOT(slotToggleAutoZoom()),
+                                        CTRL+SHIFT+Key_A, this, SLOT(slotToggleAutoZoom()),
                                         actionCollection(), "editorwindow_zoomfit");
 
 #if KDE_IS_VERSION(3,2,0)
