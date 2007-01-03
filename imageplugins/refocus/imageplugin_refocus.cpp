@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_refocus.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-04-29
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-04-29
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_refocus.h"
 #include "imageplugin_refocus.h"
+#include "imageplugin_refocus.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_refocus,
                             KGenericFactory<ImagePlugin_Refocus>("digikamimageplugin_refocus"));
@@ -39,7 +39,8 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_refocus,
 ImagePlugin_Refocus::ImagePlugin_Refocus(QObject *parent, const char*, const QStringList &)
                    : Digikam::ImagePlugin(parent, "ImagePlugin_Refocus")
 {
-    m_refocusAction = new KAction(i18n("Refocus..."), "refocus", 0, 
+    m_refocusAction = new KAction(i18n("Refocus..."), "refocus", 
+                          CTRL+Key_F, 
                           this, SLOT(slotRefocus()),
                           actionCollection(), "imageplugin_refocus");
                 
@@ -67,4 +68,3 @@ void ImagePlugin_Refocus::slotRefocus()
     delete headerFrame;
 }
 
-#include "imageplugin_refocus.moc"
