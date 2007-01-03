@@ -2,12 +2,13 @@
  * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *         Gilles Caulier <caulier dot gilles at kdemail dot net>
  *         Tom Albers <tomalbers@kde.nl>
+ *         Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date  : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
  * Copyright 2005-2006 by Tom Albers 
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -191,22 +192,22 @@ ShowFoto::ShowFoto(const KURL::List& urlList)
         d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0, 0, "showfoto_bcg");
         d->BCGAction->setDelayed(false);
     
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, Key_G,
+        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), 0, ALT+Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_plus");
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, SHIFT+Key_G,
+        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), 0, ALT+SHIFT+Key_G,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "gamma_minus");
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, Key_B,
+        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), 0, ALT+Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_plus");
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, SHIFT+Key_B,
+        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), 0, ALT+SHIFT+Key_B,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "brightness_minus");
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, Key_C,
+        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), 0, ALT+Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_plus");
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, SHIFT+Key_C,
+        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), 0, ALT+SHIFT+Key_C,
                                             this, SLOT(slotChangeBCG()),
                                             actionCollection(), "contrast_minus");
     
@@ -367,8 +368,8 @@ void ShowFoto::setupUserArea()
         m_canvas->setSizePolicy(rightSzPolicy);
         
         d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
-                                                                Digikam::Sidebar::Right);
-        d->thumbBar             = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
+                                                                 Digikam::Sidebar::Right);
+        d->thumbBar        = new Digikam::ThumbBarView(widget, Digikam::ThumbBarView::Vertical);
         
         hlay->addWidget(d->thumbBar);
         hlay->addWidget(m_splitter);
@@ -382,13 +383,13 @@ void ShowFoto::setupUserArea()
         m_canvas          = new Digikam::Canvas(widget2);
         m_canvas->setSizePolicy(rightSzPolicy);
 
-        d->thumbBar             = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
+        d->thumbBar       = new Digikam::ThumbBarView(widget2, Digikam::ThumbBarView::Horizontal);
 
         vlay->addWidget(m_canvas);
         vlay->addWidget(d->thumbBar);
                 
         QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSidebar    = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
+        d->rightSidebar   = new Digikam::ImagePropertiesSideBar(widget, "ShowFoto Sidebar Right", m_splitter, 
                                                                 Digikam::Sidebar::Right);
 
         hlay->addWidget(m_splitter);
@@ -413,18 +414,19 @@ void ShowFoto::setupActions()
                        actionCollection(), "showfoto_open_file");
 
     d->openFilesInFolderAction = new KAction(i18n("Open folder"),
-                                            "folder_image",
-                                            CTRL+SHIFT+Key_O,
-                                            this,
-                                            SLOT(slotOpenFilesInFolder()),
-                                            actionCollection(),
-                                            "showfoto_open_folder");
+                                             "folder_image",
+                                             CTRL+SHIFT+Key_O,
+                                             this,
+                                             SLOT(slotOpenFilesInFolder()),
+                                             actionCollection(),
+                                             "showfoto_open_folder");
 
     // Extra 'View' menu actions ---------------------------------------------
 
-    d->showBarAction = new KToggleAction(i18n("Hide Thumbnails"), 0, Key_T,
-                                        this, SLOT(slotToggleShowBar()),
-                                        actionCollection(), "shofoto_showthumbs");
+    d->showBarAction = new KToggleAction(i18n("Show Thumbnails"), 0, 
+                                         CTRL+Key_T,
+                                         this, SLOT(slotToggleShowBar()),
+                                         actionCollection(), "shofoto_showthumbs");
 
     // --- Create the gui --------------------------------------------------------------
 
@@ -441,13 +443,13 @@ void ShowFoto::readSettings()
     config->setGroup("ImageViewer Settings");
     
     bool showBar = false;
-    showBar = config->readBoolEntry("Show Thumbnails", true);
+    showBar      = config->readBoolEntry("Show Thumbnails", true);
     
-    if (!showBar && d->showBarAction->isChecked())
+    if (showBar && !d->showBarAction->isChecked())
         d->showBarAction->activate();
 
     d->lastOpenedDirectory.setPath( config->readEntry("Last Opened Directory",
-                                   KGlobalSettings::documentPath()) );    
+                                    KGlobalSettings::documentPath()) );    
 }
 
 void ShowFoto::saveSettings()
@@ -596,9 +598,9 @@ void ShowFoto::toggleGUI2FullScreen()
 void ShowFoto::slotToggleShowBar()
 {
     if (d->showBarAction->isChecked())
-        d->thumbBar->hide();
-    else
         d->thumbBar->show();
+    else
+        d->thumbBar->hide();
 }
 
 void ShowFoto::slotChangeBCG()
