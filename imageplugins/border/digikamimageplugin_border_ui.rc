@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="digikamimageplugin_border" >
+<kpartgui version="4" name="digikamimageplugin_border" >
 
  <MenuBar>
 
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-     <Action shortcut="Shift+B" name="imageplugin_border" />
+     <Action name="imageplugin_border" />
  </ActionProperties>
 
 </kpartgui>

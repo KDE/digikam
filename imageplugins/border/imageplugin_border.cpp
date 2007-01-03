@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-20
  * Description : 
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_border.h"
 #include "imageplugin_border.h"
+#include "imageplugin_border.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_border,
                             KGenericFactory<ImagePlugin_Border>("digikamimageplugin_border"));
@@ -38,7 +39,8 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_border,
 ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const char*, const QStringList &)
                   : Digikam::ImagePlugin(parent, "ImagePlugin_Border")
 {
-    m_borderAction = new KAction(i18n("Add Border..."), "bordertool", 0, 
+    m_borderAction = new KAction(i18n("Add Border..."), "bordertool", 
+                         CTRL+Key_B, 
                          this, SLOT(slotBorder()),
                          actionCollection(), "imageplugin_border");
 
@@ -66,4 +68,3 @@ void ImagePlugin_Border::slotBorder()
     delete headerFrame;    
 }
 
-#include "imageplugin_border.moc"
