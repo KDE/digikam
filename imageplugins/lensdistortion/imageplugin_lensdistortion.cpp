@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_lensdistortion.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2004-12-27
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,12 +31,13 @@
 #include "bannerwidget.h"
 #include "imageeffect_lensdistortion.h"
 #include "imageplugin_lensdistortion.h"
+#include "imageplugin_lensdistortion.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_lensdistortion,
                             KGenericFactory<ImagePlugin_LensDistortion>("digikamimageplugin_lensdistortion"));
 
 ImagePlugin_LensDistortion::ImagePlugin_LensDistortion(QObject *parent, const char*, const QStringList &)
-                            : Digikam::ImagePlugin(parent, "ImagePlugin_LensDistortion")
+                          : Digikam::ImagePlugin(parent, "ImagePlugin_LensDistortion")
 {
     m_lensdistortionAction = new KAction(i18n("Lens Distortion Correction..."), "lensdistortion", 0, 
                                  this, SLOT(slotLensDistortion()),
@@ -66,6 +66,3 @@ void ImagePlugin_LensDistortion::slotLensDistortion()
     dlg.exec();
     delete headerFrame;
 }
-
-
-#include "imageplugin_lensdistortion.moc"
