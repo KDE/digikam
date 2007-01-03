@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_whitebalance.cpp
  * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date  : 2005-03-11
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_whitebalance.h"
 #include "imageplugin_whitebalance.h"
+#include "imageplugin_whitebalance.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_whitebalance,
                             KGenericFactory<ImagePlugin_WhiteBalance>("digikamimageplugin_whitebalance"));
@@ -39,7 +39,8 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_whitebalance,
 ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const char*, const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
-    m_whitebalanceAction = new KAction(i18n("White Balance..."), "whitebalance", 0, 
+    m_whitebalanceAction = new KAction(i18n("White Balance..."), "whitebalance", 
+                               CTRL+Key_W, 
                                this, SLOT(slotWhiteBalance()),
                                actionCollection(), "imageplugin_whitebalance");
     
@@ -66,5 +67,3 @@ void ImagePlugin_WhiteBalance::slotWhiteBalance()
     dlg.exec();
     delete headerFrame; 
 }
-
-#include "imageplugin_whitebalance.moc"
