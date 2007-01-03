@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_antivignetting" >
+<kpartgui version="3" name="digikamimageplugin_antivignetting" >
 
  <MenuBar>
 
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="Shift+V" name="imageplugin_antivignetting" />
+  <Action name="imageplugin_antivignetting" />
  </ActionProperties>
 
 </kpartgui>
