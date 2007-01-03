@@ -284,7 +284,7 @@ public:
     virtual QObject *eventReceiver();
     virtual LoadSaveThread::AccessMode accessMode();
 
-private:
+protected:
 
     LoadSaveThread::AccessMode m_accessMode;
     bool m_completed;

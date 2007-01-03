@@ -29,6 +29,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "loadingdescription.h"
 
 class QPixmap;
 
@@ -70,10 +71,9 @@ protected:
     void wheelEvent(QWheelEvent * e);
 
 private slots:
-    
-    void slotGotImagePreview(const KURL&, const QImage& preview);
-    void slotFailedImagePreview(const KURL&);
-    
+
+    void slotGotImagePreview(const LoadingDescription &loadingDescription, const QImage &image);
+
 private:
 
     void updatePixmap(void);

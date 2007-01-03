@@ -24,6 +24,7 @@
 #include "ddebug.h"
 #include "managedloadsavethread.h"
 #include "loadsavetask.h"
+#include "previewtask.h"
 
 namespace Digikam
 {
@@ -204,6 +205,45 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
     }
     m_condVar.wakeAll();
 }
+
+void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
+{
+    // This is similar to the LoadingPolicyFirstRemovePrevious policy with normal loading tasks.
+    // Preview threads typically only support preview tasks,
+    // so no need to differentiate with normal loading tasks.
+
+    QMutexLocker lock(&m_mutex);
+    LoadingTask *loadingTask = 0;
+    LoadingTask *existingTask = findExistingTask(description);
+
+    // reuse task if it exists
+    if (existingTask)
+    {
+        existingTask->setStatus(LoadingTask::LoadingTaskStatusLoading);
+    }
+    // stop current task
+    if (m_currentTask && m_currentTask != existingTask)
+    {
+        if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
+            loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
+    }
+    // remove all loading tasks
+    for (LoadSaveTask *task = m_todo.first(); task; task = m_todo.next())
+    {
+        if (task != existingTask && checkLoadingTask(task, LoadingTaskFilterAll))
+        {
+            m_todo.remove();
+            m_todo.prev();
+        }
+    }
+    //DDebug()<<"loadPreview for " << description.filePath << " existingTask " << existingTask << " currentTask " << m_currentTask << endl;
+    // append new loading task
+    if (existingTask)
+        return;
+    m_todo.append(new PreviewLoadingTask(this, description));
+    m_condVar.wakeAll();
+}
+
 
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription &description,
          bool preloading, LoadingMode loadingMode, AccessMode accessMode)

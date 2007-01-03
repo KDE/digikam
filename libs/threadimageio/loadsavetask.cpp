@@ -284,7 +284,7 @@ void SharedLoadingTask::execute()
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
-};
+}
 
 void SharedLoadingTask::progressInfo(const DImg *, float progress)
 {

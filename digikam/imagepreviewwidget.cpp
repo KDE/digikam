@@ -37,9 +37,9 @@
 // Local includes.
 
 #include "ddebug.h"
+#include "previewloadthread.h"
 #include "themeengine.h"
 #include "albumsettings.h"
-#include "imagepreviewjob.h"
 #include "imagepreviewwidget.h"
 #include "imagepreviewwidget.moc"
 
@@ -52,7 +52,7 @@ public:
 
     ImagePreviewWidgetPriv()
     {
-        previewJob        = 0;
+        previewThread      = 0;
     }
 
     QString                       path;
@@ -60,8 +60,8 @@ public:
     QPixmap                       pixmap;
 
     QImage                        preview;
-    
-    QGuardedPtr<ImagePreviewJob>  previewJob;
+
+    PreviewLoadThread            *previewThread;
 };
 
 ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
@@ -83,11 +83,7 @@ ImagePreviewWidget::ImagePreviewWidget(QWidget *parent)
 
 ImagePreviewWidget::~ImagePreviewWidget()
 {
-    if (!d->previewJob.isNull())
-    {
-        d->previewJob->kill();
-        d->previewJob = 0;
-    }
+    delete d->previewThread;
 
     delete d;
 }
@@ -100,53 +96,43 @@ void ImagePreviewWidget::setImagePath( const QString& path )
     d->path = path;
 
     if (d->path.isEmpty())
-	slotFailedImagePreview(KURL());
-
-    if (!d->previewJob.isNull())
     {
-        d->previewJob->kill();
-        d->previewJob = 0;
+        d->pixmap  = QPixmap(contentsRect().size());
+
+        updatePixmap();
+        update();
+        unsetCursor();
+        emit previewFailed();
     }
 
-    d->previewJob = new ImagePreviewJob(KURL(path), 1024, AlbumSettings::instance()->getExifRotate());
+    if (!d->previewThread)
+    {
+        d->previewThread = new PreviewLoadThread();
+        connect(d->previewThread, SIGNAL(signalPreviewLoaded(const LoadingDescription &, const QImage &)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription &, const QImage&)));
+    }
 
-    connect(d->previewJob, SIGNAL(signalImagePreview(const KURL&, const QImage&)),
-            this, SLOT(slotGotImagePreview(const KURL&, const QImage&)));
-
-    connect(d->previewJob, SIGNAL(signalFailed(const KURL&)),
-            this, SLOT(slotFailedImagePreview(const KURL&)));   
+    d->previewThread->load(LoadingDescription(path, 1024, AlbumSettings::instance()->getExifRotate()));
 
     emit previewStarted();
 }
 
-void ImagePreviewWidget::slotGotImagePreview(const KURL&, const QImage& preview)
+void ImagePreviewWidget::slotGotImagePreview(const LoadingDescription &description, const QImage& preview)
 {
+    if (description.filePath != d->path)
+        return;
+
     d->preview = preview;
     d->pixmap  = QPixmap(contentsRect().size());
 
-    // It is very important to kill the thumbnail job properly
-    // so that is frees its shared memory. Otherwise the memory
-    // will _never_ be freed, see b.k.o. #131277
-    if (!d->previewJob.isNull())
-    {
-        d->previewJob->kill();
-        d->previewJob = 0;
-    }
-
     updatePixmap();
-    repaint(false);
+    update();
     unsetCursor();
-    emit previewComplete();
-}
 
-void ImagePreviewWidget::slotFailedImagePreview(const KURL&)
-{
-    d->preview = QImage();
-    d->pixmap  = QPixmap(contentsRect().size());
-    updatePixmap();
-    repaint(false);
-    unsetCursor();
-    emit previewFailed();
+    if (preview.isNull())
+        emit previewFailed();
+    else
+        emit previewComplete();
 }
 
 void ImagePreviewWidget::updatePixmap( void )
@@ -178,12 +164,14 @@ void ImagePreviewWidget::updatePixmap( void )
     }
     else
     {
-        // There is nothing to see.
-        
+        // There is nothing to see: Empty album, or initially waiting to load preview
+
+        /*
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
                     Qt::AlignCenter|Qt::WordBreak, 
                     i18n("No item to preview in this album."));
+        */
     }
     
     p.end();

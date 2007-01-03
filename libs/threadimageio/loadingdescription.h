@@ -34,6 +34,18 @@ class DIGIKAM_EXPORT LoadingDescription
 {
 public:
 
+    class PreviewParameters
+    {
+    public:
+        PreviewParameters()
+        {
+            size = 0;
+            exifRotate = false;
+        }
+        int size;
+        bool exifRotate;
+    };
+
     /*
         An invalid LoadingDescription
     */
@@ -59,8 +71,20 @@ public:
         : filePath(filePath), rawDecodingSettings(settings)
         {};
 
+    /*
+        For preview jobs:
+        Stores preview max size and exif rotation
+    */
+    LoadingDescription(const QString &filePath, int size, bool exifRotate)
+        : filePath(filePath)
+        {
+            previewParameters.size       = size;
+            previewParameters.exifRotate = exifRotate;
+        };
+
     QString             filePath;
     RawDecodingSettings rawDecodingSettings;
+    PreviewParameters   previewParameters;
 
     /*
         Return the cache key this description shall be stored as

@@ -88,8 +88,16 @@ DImg *LoadingCache::retrieveImage(const QString &cacheKey)
 bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &filePath)
 {
     bool successfullyInserted;
-    // use size of image as cache cost
-    if ( d->imageCache.insert(cacheKey, img, img->numBytes()) )
+
+    // use size of image as cache cost, take care for wrapped preview QImages
+    int cost = img->numBytes();
+    QVariant attribute(img->attribute("previewQImage"));
+    if (attribute.isValid())
+    {
+        cost = attribute.toImage().numBytes();
+    }
+
+    if ( d->imageCache.insert(cacheKey, img, cost) )
     {
         if (!filePath.isEmpty())
         {
@@ -141,7 +149,7 @@ void LoadingCache::slotFileDirty(const QString &path)
     }
 }
 
-void LoadingCache::customEvent(QCustomEvent *event)
+void LoadingCache::customEvent(QCustomEvent *)
 {
     // Event comes from main thread, we need to lock ourselves.
     CacheLock lock(this);

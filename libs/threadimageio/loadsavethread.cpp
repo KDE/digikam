@@ -38,6 +38,8 @@ QString LoadingDescription::cacheKey() const
     // so we do not need to store check for every option here.
     if (rawDecodingSettings.halfSizeColorImage)
         return filePath + "-halfSizeColorImage";
+    else if (previewParameters.size)
+        return filePath + "-previewImage";
     else
         return filePath;
 }
@@ -51,13 +53,16 @@ QStringList LoadingDescription::lookupCacheKeys() const
     keys.append(filePath);
     if (rawDecodingSettings.halfSizeColorImage)
         keys.append(filePath + "-halfSizeColorImage");
+    if (previewParameters.size)
+        keys.append(filePath + "-previewImage");
     return keys;
 }
 
 bool LoadingDescription::isReducedVersion() const
 {
-    // currently the only way to get a reduced, speed optimized loading
-    return rawDecodingSettings.halfSizeColorImage;
+    // return true if this loads anything but the full version
+    return rawDecodingSettings.halfSizeColorImage
+        || previewParameters.size;
 }
 
 bool LoadingDescription::operator==(const LoadingDescription &other) const
@@ -65,7 +70,8 @@ bool LoadingDescription::operator==(const LoadingDescription &other) const
     // NOTE: If we start loading RAW files with different loading settings in parallel,
     //       this and the next methods must be better implemented!
     return filePath == other.filePath &&
-            rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage;
+            rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage &&
+            previewParameters.size == other.previewParameters.size;
 }
 
 bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription &other) const
@@ -79,6 +85,10 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) con
             (
              (rawDecodingSettings.halfSizeColorImage == other.rawDecodingSettings.halfSizeColorImage) ||
              other.rawDecodingSettings.halfSizeColorImage
+            ) &&
+            (
+             (previewParameters.size == other.previewParameters.size) ||
+              other.previewParameters.size
             );
 }
 
