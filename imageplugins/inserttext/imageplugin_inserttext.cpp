@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_inserttext.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-01-20
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-01-20
  * Description : 
  * 
- * Copyright 2005 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "imageeffect_inserttext.h"
 #include "imageplugin_inserttext.h"
+#include "imageplugin_inserttext.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_inserttext,
                             KGenericFactory<ImagePlugin_InsertText>("digikamimageplugin_inserttext"));
@@ -39,7 +39,8 @@ K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_inserttext,
 ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const char*, const QStringList &)
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
-    m_insertTextAction = new KAction(i18n("Insert Text..."), "inserttext", 0, 
+    m_insertTextAction = new KAction(i18n("Insert Text..."), "inserttext", 
+                         CTRL+Key_T, 
                          this, SLOT(slotInsertText()),
                          actionCollection(), "imageplugin_inserttext");
 
@@ -67,4 +68,3 @@ void ImagePlugin_InsertText::slotInsertText()
     delete headerFrame;
 }
 
-#include "imageplugin_inserttext.moc"

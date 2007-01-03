@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_inserttext" >
+<kpartgui version="3" name="digikamimageplugin_inserttext" >
 
  <MenuBar>
 
@@ -15,7 +15,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="Shift+T" name="imageplugin_inserttext" />
+  <Action name="imageplugin_inserttext" />
  </ActionProperties>
 
 </kpartgui>
