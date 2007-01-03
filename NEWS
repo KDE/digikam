@@ -123,11 +123,14 @@ General       : About final release packaging, improve support of "./configure -
 
 *** 0.9.1-Beta1 *********************************************************
 
+General       : New native JPEG2000 image loader using Jasper library witch can support 
+                16 bits color depth pictures.
 General       : New optimized layout to show Comments & Tags side bar contents.
 General       : Tags View from Comments & Tags side bar support drag & drop.
 
 AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konqueror).
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE media player.
+AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
 
 ...
 
@@ -405,15 +408,15 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 
 242 ==> 115157 : Usability: Image comments/tags dialog: hard to find/see all already selected 
                  tags (and to 'de'select them).
-243 ==> 132309 : Wish: enhance video support in digikam.
+243 ==> 132309 : Wish: enhance video support in digiKam.
 244 ==> 115153 : Assigns tags not only to selected images with drag and drop.
 245 ==> 131743 : Comments and tag edit widgets should retain focus when changing image.
 246 ==> 131632 : Shortcuts for better captioning workflow.
-247 ==> 137491 : Editor image cache not flush when an image is modified outside digikam
-248 ==> 138949 : save/overwrite fails: wrong dialog
-249 ==> 139197 : crash during import of raw imagefiles (dng)
-250 ==> 139313 : utf-8 image comments are mangled when input from image editor
-251 ==> 136903 : if partition gets full during camera/card copy there is no warning and empty files are created.
+247 ==> 137491 : Editor image cache not flush when an image is modified outside digiKam.
+248 ==> 138949 : Save/overwrite fails: wrong dialog.
+249 ==> 139197 : Crash during import of raw imagefiles (DNG).
+250 ==> 139313 : UTF-8 image comments are mangled when input from image editor.
+251 ==> 136903 : If partition gets full during camera/card copy there is no warning and empty files are created.
 252 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
