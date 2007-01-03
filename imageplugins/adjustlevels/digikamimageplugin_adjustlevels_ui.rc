@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="2" name="digikamimageplugin_adjustlevels" >
+<kpartgui version="3" name="digikamimageplugin_adjustlevels" >
 
  <MenuBar>
 
@@ -18,7 +18,7 @@
  </ToolBar>
  
  <ActionProperties>
-  <Action shortcut="Shift+L" name="imageplugin_adjustlevels" />
+  <Action name="imageplugin_adjustlevels" />
  </ActionProperties>
 
 </kpartgui>

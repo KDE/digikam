@@ -1,10 +1,9 @@
 /* ============================================================
- * File  : imageplugin_adjustlevels.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2004-06-04
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2004-06-04
  * Description : 
  * 
- * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2004-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "adjustlevels.h"
 #include "imageplugin_adjustlevels.h"
+#include "imageplugin_adjustlevels.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_adjustlevels,
                             KGenericFactory<ImagePlugin_AdjustLevels>("digikamimageplugin_adjustlevels"))
@@ -40,7 +40,8 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
-    m_levelsAction = new KAction(i18n("Levels Adjust..."), "adjustlevels", 0, 
+    m_levelsAction = new KAction(i18n("Levels Adjust..."), "adjustlevels", 
+                         CTRL+Key_L,         // NOTE: Photoshop 7 use CTRL+L. 
                          this, SLOT(slotLevelsAdjust()),
                          actionCollection(), "imageplugin_adjustlevels");
 
@@ -68,4 +69,3 @@ void ImagePlugin_AdjustLevels::slotLevelsAdjust()
     delete headerFrame;    
 }
 
-#include "imageplugin_adjustlevels.moc"
