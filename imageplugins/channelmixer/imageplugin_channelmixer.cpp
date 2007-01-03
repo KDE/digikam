@@ -1,7 +1,6 @@
 /* ============================================================
- * File  : imageplugin_channelmixer.cpp
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-02-26
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-02-26
  * Description : 
  * 
  * Copyright 2005 by Gilles Caulier
@@ -32,6 +31,7 @@
 #include "bannerwidget.h"
 #include "channelmixer.h"
 #include "imageplugin_channelmixer.h"
+#include "imageplugin_channelmixer.moc"
 
 K_EXPORT_COMPONENT_FACTORY( digikamimageplugin_channelmixer,
                             KGenericFactory<ImagePlugin_ChannelMixer>("digikamimageplugin_channelmixer"))
@@ -40,7 +40,8 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const char*,
                                                    const QStringList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
-    m_channelMixerAction = new KAction(i18n("Channel Mixer..."), "channelmixer", 0, 
+    m_channelMixerAction = new KAction(i18n("Channel Mixer..."), "channelmixer", 
+                               CTRL+Key_H, 
                                this, SLOT(slotChannelMixer()),
                                actionCollection(), "imageplugin_channelmixer");
 
@@ -68,4 +69,3 @@ void ImagePlugin_ChannelMixer::slotChannelMixer()
     delete headerFrame; 
 }
 
-#include "imageplugin_channelmixer.moc"
