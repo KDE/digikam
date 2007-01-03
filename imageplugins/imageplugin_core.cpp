@@ -78,7 +78,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotBCG()),
                       actionCollection(), "implugcore_bcg");
 
-    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 0,
+    m_HSLAction = new KAction(i18n("Hue/Saturation/Lightness..."), "adjusthsl", 
+                      CTRL+Key_U,      // NOTE: Photoshop 7 use CTRL+U.
                       this, SLOT(slotHSL()),
                       actionCollection(), "implugcore_hsl");
 
@@ -87,7 +88,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const char*,
                       this, SLOT(slotRGB()),
                       actionCollection(), "implugcore_rgb");
 
-    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 0,
+    m_autoCorrectionAction = new KAction(i18n("Auto-Correction..."), "autocorrection", 
+                                 CTRL+SHIFT+Key_B, // NOTE: Photoshop 7 use CTRL+SHIFT+B with 'Auto-Color' option.
                                  this, SLOT(slotAutoCorrection()),
                                  actionCollection(), "implugcore_autocorrection");
 
