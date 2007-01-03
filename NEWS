@@ -412,6 +412,8 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 247 ==> 137491 : Editor image cache not flush when an image is modified outside digikam
 248 ==> 138949 : save/overwrite fails: wrong dialog
 249 ==> 139197 : crash during import of raw imagefiles (dng)
-250 ==> 
+250 ==> 139313 : utf-8 image comments are mangled when input from image editor
+251 ==> 136903 : if partition gets full during camera/card copy there is no warning and empty files are created.
+252 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
