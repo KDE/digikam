@@ -391,6 +391,7 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
         compression = i18n("None");
         bitDepth    = "48";
         dims        = metaData.getImageDimensions();
+	colorMode   = i18n("Uncalibrated");
     }
     else
     {
