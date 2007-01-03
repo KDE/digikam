@@ -9,11 +9,11 @@ INCLUDES = -I$(top_srcdir)/digikam/libs/jpegutils \
 
 kde_module_LTLIBRARIES = kio_digikamthumbnail.la kio_digikamtags.la \
 			 kio_digikamalbums.la kio_digikamdates.la \
-			 kio_digikamsearch.la kio_digikampreview.la 
+			 kio_digikamsearch.la
 
 protocol_DATA = digikamthumbnail.protocol digikamtags.protocol \
 		digikamalbums.protocol digikamdates.protocol \
-		digikamsearch.protocol digikampreview.protocol 
+		digikamsearch.protocol
 
 protocoldir = $(kde_servicesdir)
 
@@ -26,15 +26,6 @@ kio_digikamthumbnail_la_LIBADD  = $(LIB_KIO) $(LIBJPEG) $(LIBPNG) $(EXIV2_LIBS) 
 
 kio_digikamthumbnail_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries)	                          
 
-# -- digikam KIO image preview extractor ------------------------------------------
-
-kio_digikampreview_la_SOURCES = digikampreview.cpp 
-
-kio_digikampreview_la_LIBADD  = $(LIB_KIO) $(EXIV2_LIBS) \
-	                        $(top_builddir)/digikam/libs/dimg/libdimg.la 
-
-kio_digikampreview_la_LDFLAGS = -module -avoid-version $(KDE_PLUGIN) $(all_libraries) 
-                        
 # -- digikam tags KIO --------------------------------------------------------------
 
 kio_digikamtags_la_SOURCES = digikamtags.cpp sqlitedb.cpp
