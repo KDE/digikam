@@ -239,7 +239,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     Q_LONG len;
     while ((len = sFile.readBlock(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
-        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) == -1)
+        if (len == -1 || dFile.writeBlock(buffer, (Q_ULONG)len) != len)
         {
             sFile.close();
             dFile.close();
