@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Renchi Raju <renchi@pooh.tam.uiuc.edu>
- *         Gilles Caulier <caulier dot gilles at kdemail dot net>
- *         Tom Albers <tomalbers@kde.nl>
- *         Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Date  : 2004-11-22
+ * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ *          Gilles Caulier <caulier dot gilles at kdemail dot net>
+ *          Tom Albers <tomalbers@kde.nl>
+ *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Date   : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
  * Copyright 2004-2005 by Renchi Raju, Gilles Caulier
