@@ -51,14 +51,14 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent, const char *name
                       : Sidebar(parent, name, side, mimimizedDefault)
 {
     m_image              = 0;
-    m_currentRect        = 0;
+    m_currentRect        = QRect();
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     
     m_propertiesTab = new ImagePropertiesTab(parent, navBar);
     m_metadataTab   = new ImagePropertiesMetaDataTab(parent, navBar);
-    m_colorTab      = new ImagePropertiesColorsTab(parent, 0, navBar);
+    m_colorTab      = new ImagePropertiesColorsTab(parent, navBar);
     
     setSplitter(splitter);
          
@@ -74,7 +74,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img)
+void ImagePropertiesSideBar::itemChanged(const KURL& url, const QRect &rect, DImg *img)
 {
     if (!url.isValid())
         return;
@@ -92,18 +92,25 @@ void ImagePropertiesSideBar::itemChanged(const KURL& url, QRect *rect, DImg *img
 void ImagePropertiesSideBar::slotNoCurrentItem(void)
 {
     m_currentURL = KURL();
+
     m_propertiesTab->setCurrentURL();
+    m_propertiesTab->setNavigateBarFileName();
+
     m_metadataTab->setCurrentURL();
+    m_metadataTab->setNavigateBarFileName();
+
     m_colorTab->setData();
+    m_colorTab->setNavigateBarFileName();
+
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
 }
 
-void ImagePropertiesSideBar::slotImageSelectionChanged(QRect *rect)
+void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect &rect)
 {
     m_currentRect = rect;
-    
+
     if (m_dirtyColorTab)
        m_colorTab->setSelection(rect);
     else

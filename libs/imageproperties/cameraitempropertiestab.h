@@ -33,6 +33,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "navigatebartab.h"
 
 namespace Digikam
 {
@@ -40,7 +41,7 @@ namespace Digikam
 class GPItemInfo;
 class CameraItemPropertiesTabPriv;
 
-class DIGIKAM_EXPORT CameraItemPropertiesTab : public QWidget
+class DIGIKAM_EXPORT CameraItemPropertiesTab : public NavigateBarTab
 {
     Q_OBJECT
 
@@ -49,18 +50,11 @@ public:
     CameraItemPropertiesTab(QWidget* parent, bool navBar=true);
     ~CameraItemPropertiesTab();
 
-    void setCurrentItem(const GPItemInfo* itemInfo=0, int itemType=0,
+    void setCurrentItem(const GPItemInfo* itemInfo=0,
                         const QString &newFileName=QString::null,
                         const QByteArray& exifData=QByteArray(),
                         const KURL &currentURL = KURL());
     void colorChanged(const QColor& back, const QColor& fore);
-
-signals:
-
-    void signalFirstItem(void);
-    void signalPrevItem(void);
-    void signalNextItem(void);
-    void signalLastItem(void);
 
 private:
 

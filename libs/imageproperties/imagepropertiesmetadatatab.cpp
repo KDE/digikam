@@ -67,7 +67,6 @@ public:
         exifWidget      = 0;
         makernoteWidget = 0;
         iptcWidget      = 0;
-        navigateBar     = 0;
         gpsWidget       = 0;
         tab             = 0;
     }
@@ -81,22 +80,18 @@ public:
     IptcWidget        *iptcWidget;
 
     GPSWidget         *gpsWidget;
-        
-    NavigateBarWidget *navigateBar;
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool navBar)
-                          : QWidget(parent, 0, Qt::WDestructiveClose)
+                          : NavigateBarTab(parent)
 {
     d = new ImagePropertiesMetadataTabPriv;
 
-    QVBoxLayout *vLayout = new QVBoxLayout(this);
-    d->navigateBar       = new NavigateBarWidget(this, navBar);
+    setupNavigateBar(navBar);
     d->tab               = new KTabWidget(this);
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addSpacing(KDialog::spacingHint());
-    vLayout->addWidget(d->tab);
-    
+    m_navigateBarLayout->addSpacing(KDialog::spacingHint());
+    m_navigateBarLayout->addWidget(d->tab);
+
     // Exif tab area -----------------------------------------------------
 
     d->exifWidget = new ExifWidget(d->tab);
@@ -116,20 +111,6 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent, bool nav
     
     d->gpsWidget = new GPSWidget(d->tab);
     d->tab->insertTab(d->gpsWidget, i18n("GPS"), ImagePropertiesMetadataTabPriv::GPS);
-
-    // -------------------------------------------------------------
-            
-    connect(d->navigateBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-                    
-    connect(d->navigateBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-    
-    connect(d->navigateBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigateBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
 
     // -- read config ---------------------------------------------------------
 
@@ -167,7 +148,7 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     delete d;
 }
 
-void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url, int itemType)
+void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url)
 {
     if (url.isEmpty())
     {
@@ -175,7 +156,7 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url, int itemType)
         d->makernoteWidget->loadFromURL(url);
         d->iptcWidget->loadFromURL(url);
         d->gpsWidget->loadFromURL(url);
-        d->navigateBar->setFileName();
+        setNavigateBarFileName();
         setEnabled(false);
         return;
     }
@@ -190,14 +171,11 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KURL& url, int itemType)
     d->makernoteWidget->loadFromData(url.filename(), exifData);
     d->iptcWidget->loadFromData(url.filename(), iptcData);
     d->gpsWidget->loadFromData(url.filename(), exifData);
-
-    d->navigateBar->setFileName(url.filename());
-    d->navigateBar->setButtonsState(itemType);
 }
     
 void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData, 
                                                 const QByteArray& iptcData, 
-                                                const QString& filename, int itemType)
+                                                const QString& filename)
 {
     if (exifData.isEmpty() && iptcData.isEmpty())
     {
@@ -205,7 +183,7 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
         d->makernoteWidget->loadFromData(filename, exifData);
         d->iptcWidget->loadFromData(filename, iptcData);
         d->gpsWidget->loadFromData(filename, exifData);
-        d->navigateBar->setFileName();
+        setNavigateBarFileName();
         setEnabled(false);
         return;
     }
@@ -216,9 +194,6 @@ void ImagePropertiesMetaDataTab::setCurrentData(const QByteArray& exifData,
     d->makernoteWidget->loadFromData(filename, exifData);
     d->iptcWidget->loadFromData(filename, iptcData);
     d->gpsWidget->loadFromData(filename, exifData);
-        
-    d->navigateBar->setFileName(filename);
-    d->navigateBar->setButtonsState(itemType);
 }
 
 }  // NameSpace Digikam

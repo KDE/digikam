@@ -345,8 +345,8 @@ void ShowFoto::setupConnections()
     connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
 
-    connect(this, SIGNAL(signalSelectionChanged( QRect* )),
-            d->rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+    connect(this, SIGNAL(signalSelectionChanged(const QRect &)),
+            d->rightSidebar, SLOT(slotImageSelectionChanged(const QRect &)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSidebar, SLOT(slotNoCurrentItem()));
@@ -650,8 +650,7 @@ void ShowFoto::slotChanged()
         {
             QRect sel          = m_canvas->getSelectedArea();
             Digikam::DImg* img = Digikam::DImgInterface::instance()->getImg();
-            d->rightSidebar->itemChanged(d->currentItem->url(),
-                                        sel.isNull() ? 0 : &sel, img);
+            d->rightSidebar->itemChanged(d->currentItem->url(), sel, img);
         }
     }    
 }

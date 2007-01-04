@@ -5,7 +5,7 @@ noinst_LTLIBRARIES = libimagepropertiesshowfoto.la libimagepropertiesdigikam.la 
 
 # Image Properties SideBar for Camera GUI.
 
-libimagepropertiescamgui_la_SOURCES = imagepropertiessidebarcamgui.cpp cameraitempropertiestab.cpp 
+libimagepropertiescamgui_la_SOURCES = imagepropertiessidebarcamgui.cpp cameraitempropertiestab.cpp
 
 libimagepropertiescamgui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 
@@ -13,7 +13,7 @@ libimagepropertiescamgui_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libimagepropertiesshowfoto_la_SOURCES = imagepropertiessidebar.cpp navigatebarwidget.cpp \
 	                                    imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp \
-	                                    imagepropertiestab.cpp 
+	                                    imagepropertiestab.cpp navigatebartab.cpp
 
 libimagepropertiesshowfoto_la_LIBADD = $(top_builddir)/digikam/libs/widgets/libwidgets.la \
 	                                   $(top_builddir)/digikam/libs/dmetadata/libdmetadata.la \
@@ -27,7 +27,7 @@ libimagepropertiesshowfoto_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libimagepropertiesdigikam_la_SOURCES = imagedescedittab.cpp imagepropertiessidebar.cpp imagepropertiessidebardb.cpp \
 	                               talbumlistview.cpp imagepropertiesmetadatatab.cpp imagepropertiescolorstab.cpp \
-	                               navigatebarwidget.cpp imagepropertiestab.cpp 
+	                               navigatebarwidget.cpp imagepropertiestab.cpp navigatebartab.cpp
 
 libimagepropertiesdigikam_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

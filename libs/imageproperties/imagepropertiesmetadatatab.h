@@ -33,13 +33,14 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "navigatebartab.h"
 
 namespace Digikam
 {
 
 class ImagePropertiesMetadataTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public NavigateBarTab
 {
     Q_OBJECT
 
@@ -48,18 +49,11 @@ public:
     ImagePropertiesMetaDataTab(QWidget* parent, bool navBar=true);
     ~ImagePropertiesMetaDataTab();
 
-    void setCurrentURL(const KURL& url=KURL(), int itemType=0);
+    void setCurrentURL(const KURL& url=KURL());
     void setCurrentData(const QByteArray& exifData=QByteArray(), 
                         const QByteArray& iptcData=QByteArray(), 
-                        const QString& filename=QString::null, int itemType=0);
+                        const QString& filename=QString::null);
 
-signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void); 
-        
 private:
 
     ImagePropertiesMetadataTabPriv* d;

@@ -158,7 +158,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KURL&
         d->exifData = metaData.getExif();
     }
 
-    slotChangedTab( getActiveTab() );    
+    slotChangedTab( getActiveTab() );
 }
 
 void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
@@ -178,32 +178,38 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 {
     if (!d->itemInfo)
         return;
-    
+
     setCursor(KCursor::waitCursor());
 
-    int currentItemType = NavigateBarWidget::ItemCurrent;
-
-    if (d->cameraView->firstItem() == d->cameraItem)
-        currentItemType = NavigateBarWidget::ItemFirst;
-    else if (d->cameraView->lastItem() == d->cameraItem)
-        currentItemType = NavigateBarWidget::ItemLast;
-             
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
-        d->cameraItemTab->setCurrentItem(d->itemInfo, currentItemType,
+        d->cameraItemTab->setCurrentItem(d->itemInfo,
                                          d->cameraItem->getDownloadName(), d->exifData,
                                          d->currentURL);
-        
+
         d->dirtyCameraItemTab = true;
     }
     else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
         d->metadataTab->setCurrentData(d->exifData, QByteArray(), 
-                                       d->itemInfo->name, currentItemType);
- 
+                                       d->itemInfo->name);
+
         d->dirtyMetadataTab = true;
     }
-    
+
+    // setting of NavigateBar, common for all tabs
+    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
+    if (tab)
+    {
+        int currentItemType = NavigateBarWidget::ItemCurrent;
+        if (d->cameraView->firstItem() == d->cameraItem)
+            currentItemType = NavigateBarWidget::ItemFirst;
+        else if (d->cameraView->lastItem() == d->cameraItem)
+            currentItemType = NavigateBarWidget::ItemLast;
+
+        navtab->setNavigateBarState(currentItemType);
+        navtab->setNavigateBarFileName(d->itemInfo->name);
+    }
     unsetCursor();
 }
 

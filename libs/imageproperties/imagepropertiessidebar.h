@@ -49,17 +49,17 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 
 public:
 
-    ImagePropertiesSideBar(QWidget* parent, const char *name, QSplitter *splitter, 
+    ImagePropertiesSideBar(QWidget* parent, const char *name, QSplitter *splitter,
                            Side side=Left, bool mimimizedDefault=false, bool navBar=false);
-                    
+
     ~ImagePropertiesSideBar();
-    
-    virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
-                    
+
+    virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
+
 public slots:
 
-    void slotImageSelectionChanged(QRect *rect);                 
-    virtual void slotNoCurrentItem(void);                               
+    void slotImageSelectionChanged(const QRect &rect);
+    virtual void slotNoCurrentItem(void);
 
 
 protected slots:
@@ -71,17 +71,17 @@ protected:
     bool                        m_dirtyPropertiesTab;
     bool                        m_dirtyMetadataTab;
     bool                        m_dirtyColorTab;
- 
-    QRect                      *m_currentRect;
- 
+
+    QRect                       m_currentRect;
+
     KURL                        m_currentURL;
- 
+
     DImg                       *m_image;
-     
+
     ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;
-        
+
 };
 
 }  // NameSpace Digikam

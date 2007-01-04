@@ -88,7 +88,6 @@ public:
         currInfo                   = 0;
         tagsView                   = 0;
         ratingWidget               = 0;
-        navigateBar                = 0;
         ABCMenu                    = 0;
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
@@ -118,21 +117,17 @@ public:
     TAlbumListView    *tagsView;
 
     RatingWidget      *ratingWidget;
-
-    NavigateBarWidget *navigateBar;
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
-                : QWidget(parent, 0, Qt::WDestructiveClose)
+                : NavigateBarTab(parent)
 {
     d = new ImageDescEditTabPriv;
 
-    QVBoxLayout *vLayout  = new QVBoxLayout(this);
-    d->navigateBar        = new NavigateBarWidget(this, navBar);
+    setupNavigateBar(navBar);
     QWidget *settingsArea = new QWidget(this);
-    
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(settingsArea);
+
+    m_navigateBarLayout->addWidget(settingsArea);
 
     QGridLayout *settingsLayout = new QGridLayout(settingsArea, 5, 1, 
                                       KDialog::marginHint(), KDialog::spacingHint());
@@ -223,18 +218,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     connect(d->tagsView, SIGNAL(signalItemStateChanged()),
             this, SLOT(slotModified()));
     
-    connect(d->navigateBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-                    
-    connect(d->navigateBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-    
-    connect(d->navigateBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigateBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
     connect(d->commentsEdit, SIGNAL(textChanged()),
             this, SLOT(slotModified()));
     
@@ -445,20 +428,19 @@ void ImageDescEditTab::slotRevertAllChanges()
     if (!d->currInfo)
         return;
 
-    setInfo(d->currInfo, d->navigateBar->getButtonsState());
+    setInfo(d->currInfo);
 }
 
-void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
+void ImageDescEditTab::setItem(ImageInfo *info)
 {
     slotApplyAllChanges();
-    setInfo(info, itemType);
+    setInfo(info);
 }
 
-void ImageDescEditTab::setInfo(ImageInfo *info, int itemType)
+void ImageDescEditTab::setInfo(ImageInfo *info)
 {
     if (!info)
     {
-       d->navigateBar->setFileName();
        d->commentsEdit->clear();
        d->currInfo = 0;
        setEnabled(false);
@@ -473,8 +455,6 @@ void ImageDescEditTab::setInfo(ImageInfo *info, int itemType)
 
     KURL fileURL;
     fileURL.setPath(d->currInfo->filePath());
-    d->navigateBar->setFileName(d->currInfo->name());
-    d->navigateBar->setButtonsState(itemType);
 
     PAlbum *album = d->currInfo->album();
     if (!album)

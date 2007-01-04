@@ -53,7 +53,6 @@ public:
 
     ImagePropertiesTabPriv()
     {
-        navigateBar            = 0;
         settingsArea           = 0;
         title                  = 0;
         folder                 = 0;
@@ -150,17 +149,14 @@ public:
     KSqueezedTextLabel *labelPhotoExposureMode;
     KSqueezedTextLabel *labelPhotoFlash;
     KSqueezedTextLabel *labelPhotoWhiteBalance;
-
-    NavigateBarWidget  *navigateBar;
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
-                  : QWidget(parent, 0, Qt::WDestructiveClose)
+                  : NavigateBarTab(parent)
 {
     d = new ImagePropertiesTabPriv;
 
-    QVBoxLayout *vLayout        = new QVBoxLayout(this);
-    d->navigateBar              = new NavigateBarWidget(this, navBar);
+    setupNavigateBar(navBar);
     d->settingsArea             = new QFrame(this);
     d->settingsArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->settingsArea->setMargin(0);
@@ -295,22 +291,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(d->settingsArea);
+    m_navigateBarLayout->addWidget(d->settingsArea);
 
-    // --------------------------------------------------
-
-    connect(d->navigateBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(d->navigateBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(d->navigateBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigateBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
 }
 
 ImagePropertiesTab::~ImagePropertiesTab()
@@ -318,11 +300,11 @@ ImagePropertiesTab::~ImagePropertiesTab()
     delete d;
 }
 
-void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
+void ImagePropertiesTab::setCurrentURL(const KURL& url)
 {
     if (url.isEmpty())
     {
-        d->navigateBar->setFileName();
+        setNavigateBarFileName();
 
         d->labelFolder->setText(QString::null);
         d->labelFileModifiedDate->setText(QString::null);
@@ -359,9 +341,6 @@ void ImagePropertiesTab::setCurrentURL(const KURL& url, int itemType)
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
     QFileInfo fileInfo(url.path());
     DMetadata metaData(url.path());
-
-    d->navigateBar->setFileName(url.filename());
-    d->navigateBar->setButtonsState(itemType);
 
     // -- File system informations ------------------------------------------
 

@@ -66,7 +66,6 @@ public:
         dimensions             = 0;
         newFileName            = 0;
         downloaded             = 0;
-        navigateBar            = 0;
         settingsArea           = 0;
         title2                 = 0;
         make                   = 0;
@@ -145,17 +144,14 @@ public:
     KSqueezedTextLabel *labelPhotoExposureMode;
     KSqueezedTextLabel *labelPhotoFlash;
     KSqueezedTextLabel *labelPhotoWhiteBalance;
-
-    NavigateBarWidget  *navigateBar;
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
-                       : QWidget(parent, 0, Qt::WDestructiveClose)
+                       : NavigateBarTab(parent)
 {
     d = new CameraItemPropertiesTabPriv;
 
-    QVBoxLayout *vLayout        = new QVBoxLayout(this);
-    d->navigateBar              = new NavigateBarWidget(this, navBar);
+    setupNavigateBar(navBar);
     d->settingsArea             = new QFrame(this);
     d->settingsArea->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
     d->settingsArea->setMargin(0);
@@ -270,22 +266,8 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent, bool navBar)
 
     // --------------------------------------------------
 
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addWidget(d->settingsArea);
+    m_navigateBarLayout->addWidget(d->settingsArea);
 
-    // --------------------------------------------------
-
-    connect(d->navigateBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(d->navigateBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(d->navigateBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigateBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()
@@ -293,13 +275,13 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int itemType, 
+void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
                                              const QString &newFileName, const QByteArray& exifData,
                                              const KURL &currentURL)
 {
     if (!itemInfo)
     {
-        d->navigateBar->setFileName();
+        setNavigateBarFileName();
 
         d->labelFolder->setText(QString::null);
         d->labelFileIsReadable->setText(QString::null);
@@ -330,9 +312,6 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, int ite
 
     QString str;
     QString unknown(i18n("<i>unknown</i>"));
-
-    d->navigateBar->setFileName(itemInfo->name);
-    d->navigateBar->setButtonsState(itemType);
 
     // -- Camera file system informations ------------------------------------------
 

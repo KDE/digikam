@@ -89,12 +89,10 @@ public:
         labelPercentileValue = 0;
         labelColorDepth      = 0;
         labelAlphaChannel    = 0;
-        selectionArea        = 0;
 
         iccProfileWidget     = 0;
         hGradient            = 0;
         histogramWidget      = 0;
-        navigateBar          = 0;
         imageLoaderThread    = 0;
     }
 
@@ -122,7 +120,7 @@ public:
     QString                currentFilePath;
     LoadingDescription     currentLoadingDescription;
 
-    QRect                 *selectionArea;
+    QRect                  selectionArea;
 
     QByteArray             embedded_profile;
 
@@ -134,23 +132,18 @@ public:
     ICCProfileWidget      *iccProfileWidget;
     ColorGradientWidget   *hGradient;
     HistogramWidget       *histogramWidget;
-    NavigateBarWidget     *navigateBar;
     SharedLoadSaveThread  *imageLoaderThread;
 };
 
-ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar)
-                        : QWidget(parent)
+ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, bool navBar)
+                        : NavigateBarTab(parent)
 {
     d = new ImagePropertiesColorsTabPriv;
 
-    d->selectionArea = selectionArea;
-
-    QVBoxLayout *vLayout = new QVBoxLayout(this);
-    d->navigateBar       = new NavigateBarWidget(this, navBar);
+    setupNavigateBar(navBar);
     d->tab               = new KTabWidget(this);
-    vLayout->addWidget(d->navigateBar);
-    vLayout->addSpacing(KDialog::spacingHint());
-    vLayout->addWidget(d->tab);
+    m_navigateBarLayout->addSpacing(KDialog::spacingHint());
+    m_navigateBarLayout->addWidget(d->tab);
 
     // Histogram tab area -----------------------------------------------------
 
@@ -342,20 +335,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent, QRect* selec
 
     // -------------------------------------------------------------
 
-    connect(d->navigateBar, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(d->navigateBar, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(d->navigateBar, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->navigateBar, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
-    // -------------------------------------------------------------
-
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged(int)));
 
@@ -430,8 +409,8 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     delete d;
 }
 
-void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
-                                       DImg *img, int itemType)
+void ImagePropertiesColorsTab::setData(const KURL& url, const QRect &selectionArea,
+                                       DImg *img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -445,7 +424,7 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
     // threaded histogram algorithm.
     d->histogramWidget->stopHistogramComputation();
 
-    d->navigateBar->setFileName();
+    setNavigateBarFileName();
     d->currentFilePath = QString();
     d->currentLoadingDescription = LoadingDescription();
     d->iccProfileWidget->loadFromURL(KURL());
@@ -466,8 +445,6 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
        return;
     }
 
-    d->navigateBar->setFileName(url.filename());
-    d->navigateBar->setButtonsState(itemType);
     d->selectionArea = selectionArea;
     d->image.reset();
     setEnabled(true);
@@ -486,9 +463,9 @@ void ImagePropertiesColorsTab::setData(const KURL& url, QRect *selectionArea,
 
             // If a selection area is done in Image Editor and if the current image is the same 
             // in Image Editor, then compute too the histogram for this selection.
-            if (d->selectionArea)
+            if (d->selectionArea.isValid())
             {
-                d->imageSelection = d->image.copy(*d->selectionArea);
+                d->imageSelection = d->image.copy(d->selectionArea);
                 d->histogramWidget->updateData(d->image.bits(), d->image.width(), d->image.height(),
                                                d->image.sixteenBit(), d->imageSelection.bits(),
                                                d->imageSelection.width(), d->imageSelection.height());
@@ -592,7 +569,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
     }
 }
 
-void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
+void ImagePropertiesColorsTab::setSelection(const QRect &selectionArea)
 {
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
@@ -600,9 +577,9 @@ void ImagePropertiesColorsTab::setSelection(QRect *selectionArea)
     d->histogramWidget->stopHistogramComputation();
     d->selectionArea = selectionArea;
 
-    if (d->selectionArea)
+    if (d->selectionArea.isValid())
     {
-        d->imageSelection = d->image.copy(*d->selectionArea);
+        d->imageSelection = d->image.copy(d->selectionArea);
         d->histogramWidget->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
                                                 d->imageSelection.height(), d->imageSelection.sixteenBit());
         d->regionBG->show();
@@ -620,7 +597,7 @@ void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
     slotScaleChanged(d->scaleBG->selectedId());
     slotColorsChanged(d->colorsCB->currentItem());
 
-    if (d->selectionArea)
+    if (d->selectionArea.isValid())
        slotRenderingChanged(d->regionBG->selectedId());
 }
 

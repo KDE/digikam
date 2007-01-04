@@ -1105,11 +1105,9 @@ void EditorWindow::slotSelected(bool val)
             plugin->setEnabledSelectionActions(val);
         }
     }
-    
+
     // Update histogram into sidebar.
-    
-    QRect sel = m_canvas->getSelectedArea();
-    emit signalSelectionChanged( sel.isNull() ? 0 : &sel );
+    emit signalSelectionChanged( m_canvas->getSelectedArea() );
 }
 
 void EditorWindow::hideToolBars()

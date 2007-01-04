@@ -624,9 +624,10 @@ void DigikamView::slotDispatchImageSelected()
 {
     if (d->dispatchSelectedItem)
     {
-        d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo()->kurl(),
-                                     d->iconView, d->dispatchSelectedItem, 0, 0);
-        
+        d->rightSideBar->itemChanged(d->dispatchSelectedItem->imageInfo());
+        d->rightSideBar->setPreviousNextState(d->iconView->firstItem() != d->dispatchSelectedItem,
+                                              d->iconView->lastItem() != d->dispatchSelectedItem);
+
         if (!d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
             d->albumWidgetStack->setPreviewItem(d->dispatchSelectedItem->imageInfo()->kurl());
 

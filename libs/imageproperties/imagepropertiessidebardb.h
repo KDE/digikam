@@ -42,6 +42,7 @@ class DImg;
 class AlbumIconView;
 class AlbumIconItem;
 class ImageInfo;
+class NavigateBarTab;
 class ImagePropertiesSideBarDBPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
@@ -50,17 +51,16 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Left, 
+    ImagePropertiesSideBarDB(QWidget* parent, const char *name, QSplitter *splitter, Side side=Left,
                              bool mimimizedDefault=false, bool navBar=true);
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KURL& url, AlbumIconView* view,
-                             AlbumIconItem* item, QRect *rect=0, DImg *img=0);
-    virtual void itemChanged(const KURL& url, ImageInfo *info,
-                             bool hasPrevious, bool hasNext,
-                             QRect *rect=0, DImg *img=0);
-    virtual void itemChanged(const KURL& url, QRect *rect=0, DImg *img=0);
+    virtual void itemChanged(const KURL& url, const QRect &rect = QRect(), DImg *img = 0);
+
+    virtual void itemChanged(ImageInfo *info, const QRect &rect = QRect(), DImg *img = 0);
+
+    void setPreviousNextState(bool hasPrevious, bool hasNext);
 
     void populateTags(void);
 
@@ -91,9 +91,9 @@ private slots:
 
 private:
 
-    void itemChanged(const KURL& url, QRect *rect, DImg *img,
-                     AlbumIconView* view, AlbumIconItem* item,
-                     ImageInfo *info, bool hasPrevious, bool hasNext);
+    void itemChanged(const KURL& url, ImageInfo *info,
+                     const QRect &rect, DImg *img);
+    void connectTab(NavigateBarTab *tab);
 
 private:
 

@@ -59,25 +59,21 @@ public:
 
     ImagePropertiesSideBarDBPriv()
     {
-        currentView         = 0;
-        currentItem         = 0;
         currentInfo         = 0;
         desceditTab         = 0;
         dirtyDesceditTab    = false;
-        currentItemPosition = NavigateBarWidget::ItemCurrent;
+        hasPrevious         = false;
+        hasNext             = false;
     }
 
     bool              dirtyDesceditTab;
-
-    AlbumIconView    *currentView;
-
-    AlbumIconItem    *currentItem;
 
     ImageInfo        *currentInfo;
 
     ImageDescEditTab *desceditTab;
 
-    NavigateBarWidget::CurrentItemPosition currentItemPosition;
+    bool              hasPrevious;
+    bool              hasNext;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *name, QSplitter *splitter, 
@@ -93,53 +89,10 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, const char *
 
     // ----------------------------------------------------------
 
-    connect(m_propertiesTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(m_propertiesTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(m_propertiesTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(m_propertiesTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
-    connect(m_metadataTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(m_metadataTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(m_metadataTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(m_metadataTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
-    connect(m_colorTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(m_colorTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(m_colorTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(m_colorTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
-
-    connect(d->desceditTab, SIGNAL(signalFirstItem()),
-            this, SIGNAL(signalFirstItem()));
-
-    connect(d->desceditTab, SIGNAL(signalPrevItem()),
-            this, SIGNAL(signalPrevItem()));
-
-    connect(d->desceditTab, SIGNAL(signalNextItem()),
-            this, SIGNAL(signalNextItem()));
-
-    connect(d->desceditTab, SIGNAL(signalLastItem()),
-            this, SIGNAL(signalLastItem()));
+    connectTab(m_propertiesTab);
+    connectTab(m_metadataTab);
+    connectTab(m_colorTab);
+    connectTab(d->desceditTab);
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -158,29 +111,34 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, AlbumIconView* view,
-                                           AlbumIconItem* item, QRect *rect, DImg *img)
+void ImagePropertiesSideBarDB::connectTab(NavigateBarTab *tab)
 {
-    bool hasPrevious = view->firstItem() != item;
-    bool hasNext     = view->lastItem() != item;
-    itemChanged(url, rect, img, view, item, item->imageInfo(), hasPrevious, hasNext);
+    connect(tab, SIGNAL(signalFirstItem()),
+            this, SIGNAL(signalFirstItem()));
+
+    connect(tab, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+
+    connect(tab, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(tab, SIGNAL(signalLastItem()),
+            this, SIGNAL(signalLastItem()));
+}
+
+void ImagePropertiesSideBarDB::itemChanged(ImageInfo *info,
+                                           const QRect &rect, DImg *img)
+{
+    itemChanged(info->kurl(), info, rect, img);
+}
+
+void ImagePropertiesSideBarDB::itemChanged(const KURL& url, const QRect &rect, DImg *img)
+{
+    itemChanged(url, 0, rect, img);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KURL& url, ImageInfo *info,
-                                           bool hasPrevious, bool hasNext,
-                                           QRect *rect, DImg *img)
-{
-    itemChanged(url, rect, img, 0, 0, info, hasPrevious, hasNext);
-}
-
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *img)
-{
-    itemChanged(url, rect, img, 0, 0, 0, false, false);
-}
-
-void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *img,
-                                           AlbumIconView* view, AlbumIconItem* item,
-                                           ImageInfo *info, bool hasPrevious, bool hasNext)
+                                           const QRect &rect, DImg *img)
 {
     if ( !url.isValid() )
         return;
@@ -188,21 +146,12 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
     m_currentURL         = url;
     m_currentRect        = rect;
     m_image              = img;
-    d->currentView       = view;
-    d->currentItem       = item;
     d->currentInfo       = info;
-    
+
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     d->dirtyDesceditTab  = false;
-    
-    if (!hasPrevious)
-        d->currentItemPosition = NavigateBarWidget::ItemFirst;
-    else if (!hasNext)
-        d->currentItemPosition = NavigateBarWidget::ItemLast;
-    else
-        d->currentItemPosition = NavigateBarWidget::ItemCurrent;
 
     slotChangedTab( getActiveTab() );
 }
@@ -210,15 +159,27 @@ void ImagePropertiesSideBarDB::itemChanged(const KURL& url, QRect *rect, DImg *i
 void ImagePropertiesSideBarDB::slotNoCurrentItem(void)
 {
     ImagePropertiesSideBar::slotNoCurrentItem();
-    d->currentItem = 0;
     d->currentInfo = 0;
     d->desceditTab->setItem();
+    d->desceditTab->setNavigateBarFileName();
     d->dirtyDesceditTab = false;
 }
 
 void ImagePropertiesSideBarDB::populateTags(void)
 {
     d->desceditTab->populateTags();
+}
+
+void ImagePropertiesSideBarDB::setPreviousNextState(bool hasPrevious, bool hasNext)
+{
+    d->hasPrevious = hasPrevious;
+    d->hasNext     = hasNext;
+
+    NavigateBarTab *navtab = static_cast<NavigateBarTab *>(getActiveTab());
+    if (navtab)
+    {
+        navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
+    }
 }
 
 void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
@@ -231,23 +192,22 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
-            m_propertiesTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+            m_propertiesTab->setCurrentURL(m_currentURL);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
                 m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(), 
-                                              m_currentURL.fileName(),
-                                              NavigateBarWidget::ItemCurrent);
+                                              m_currentURL.fileName());
             else
-                m_metadataTab->setCurrentURL(m_currentURL, NavigateBarWidget::ItemCurrent);
+                m_metadataTab->setCurrentURL(m_currentURL);
 
             m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            m_colorTab->setData(m_currentURL, m_currentRect, m_image, NavigateBarWidget::ItemCurrent);
+            m_colorTab->setData(m_currentURL, m_currentRect, m_image);
             m_dirtyColorTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
@@ -261,29 +221,38 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     {
         if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
         {
-            m_propertiesTab->setCurrentURL(m_currentURL, d->currentItemPosition);
+            m_propertiesTab->setCurrentURL(m_currentURL);
             m_dirtyPropertiesTab = true;
         }
         else if (tab == m_metadataTab && !m_dirtyMetadataTab)
         {
             if (m_image)
                 m_metadataTab->setCurrentData(m_image->getExif(), m_image->getIptc(),
-                                              m_currentURL.fileName(), d->currentItemPosition);
+                                              m_currentURL.fileName());
             else
-                m_metadataTab->setCurrentURL(m_currentURL, d->currentItemPosition);
+                m_metadataTab->setCurrentURL(m_currentURL);
 
             m_dirtyMetadataTab = true;
         }
         else if (tab == m_colorTab && !m_dirtyColorTab)
         {
-            m_colorTab->setData(m_currentURL, m_currentRect, m_image, d->currentItemPosition);
+            m_colorTab->setData(m_currentURL, m_currentRect, m_image);
             m_dirtyColorTab = true;
         }
         else if (tab == d->desceditTab && !d->dirtyDesceditTab)
         {
-            d->desceditTab->setItem(d->currentInfo, d->currentItemPosition);
+            d->desceditTab->setItem(d->currentInfo);
             d->dirtyDesceditTab = true;
         }
+    }
+
+    // setting of NavigateBar, common for all tabs
+    // there may be tabs added that we don't know of
+    NavigateBarTab *navtab = dynamic_cast<NavigateBarTab *>(tab);
+    if (navtab)
+    {
+        navtab->setNavigateBarState(d->hasPrevious, d->hasNext);
+        navtab->setNavigateBarFileName(m_currentURL.filename());
     }
 
     // See B.K.O #131632 and #131743 : always give focus to Comments widget 

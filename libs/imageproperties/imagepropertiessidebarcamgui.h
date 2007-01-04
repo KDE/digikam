@@ -50,22 +50,22 @@ public:
 
     ImagePropertiesSideBarCamGui(QWidget* parent, const char *name, QSplitter *splitter,
                                  Side side=Left, bool mimimizedDefault=false);
-                    
+
     ~ImagePropertiesSideBarCamGui();
-    
+
     void itemChanged(GPItemInfo* itemInfo, const KURL& url, const QByteArray& exifData=QByteArray(),
                      CameraIconView* view=0, CameraIconViewItem* item=0);
-                    
-signals:
 
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void);
-                        
 public slots:
 
     virtual void slotNoCurrentItem(void);
+
+signals:
+
+    void signalFirstItem(void);
+    void signalPrevItem(void);
+    void signalNextItem(void);
+    void signalLastItem(void);
 
 private slots:
 

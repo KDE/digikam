@@ -32,6 +32,7 @@
 // Local includes.
 
 #include "digikam_export.h"
+#include "navigatebartab.h"
 
 class QListViewItem;
 
@@ -44,7 +45,7 @@ class ImageInfo;
 class ImageDescEditTabPriv;
 
 
-class DIGIKAM_EXPORT ImageDescEditTab : public QWidget
+class DIGIKAM_EXPORT ImageDescEditTab : public NavigateBarTab
 {
     Q_OBJECT
 
@@ -54,16 +55,9 @@ public:
     ~ImageDescEditTab();
 
     void assignRating(int rating);
-    void setItem(ImageInfo *info=0, int itemType=0);
+    void setItem(ImageInfo *info=0);
     void populateTags();
     void setFocusToComments();
-
-signals:
-
-    void signalFirstItem(void);
-    void signalPrevItem(void);
-    void signalNextItem(void);
-    void signalLastItem(void);
 
 protected:
 
@@ -71,7 +65,7 @@ protected:
 
 private:
 
-    void setInfo(ImageInfo *info, int itemType);
+    void setInfo(ImageInfo *info);
 
     void updateTagsView();
     void updateComments();

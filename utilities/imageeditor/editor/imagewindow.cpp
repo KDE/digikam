@@ -257,8 +257,8 @@ void ImageWindow::setupConnections()
     connect(d->rightSidebar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(this, SIGNAL(signalSelectionChanged( QRect* )),
-            d->rightSidebar, SLOT(slotImageSelectionChanged( QRect * )));
+    connect(this, SIGNAL(signalSelectionChanged( const QRect &)),
+            d->rightSidebar, SLOT(slotImageSelectionChanged( const QRect &)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSidebar, SLOT(slotNoCurrentItem()));
@@ -589,7 +589,6 @@ void ImageWindow::slotChanged()
     {
         KURL u(d->urlCurrent.directory());
 
-        QRect sel = m_canvas->getSelectedArea();
         DImg* img = DImgInterface::instance()->getImg();
 
         if (d->imageInfoCurrent)
@@ -598,11 +597,15 @@ void ImageWindow::slotChanged()
             bool hasPrevious = it != d->urlList.end();
             bool hasNext     = it != d->urlList.begin();
 
-            d->rightSidebar->itemChanged(d->urlCurrent.url(), d->imageInfoCurrent,
-                                        hasPrevious, hasNext, sel.isNull() ? 0 : &sel, img);
+            d->rightSidebar->itemChanged(d->imageInfoCurrent,
+                                         m_canvas->getSelectedArea(), img);
+            d->rightSidebar->setPreviousNextState(hasPrevious, hasNext);
         }
         else
-            d->rightSidebar->itemChanged(d->urlCurrent.url(), sel.isNull() ? 0 : &sel, img);
+        {
+            d->rightSidebar->itemChanged(d->urlCurrent, m_canvas->getSelectedArea(), img);
+            d->rightSidebar->setPreviousNextState(false, false);
+        }
     }
 }
 

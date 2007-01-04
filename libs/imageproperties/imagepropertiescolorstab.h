@@ -33,6 +33,7 @@
 
 #include "dimg.h"
 #include "digikam_export.h"
+#include "navigatebartab.h"
 
 class QRect;
 
@@ -43,26 +44,19 @@ class DImg;
 class LoadingDescription;
 class ImagePropertiesColorsTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QWidget
+class DIGIKAM_EXPORT ImagePropertiesColorsTab : public NavigateBarTab
 {
     Q_OBJECT
 
 public:
 
-    ImagePropertiesColorsTab(QWidget* parent, QRect* selectionArea, bool navBar=true);
+    ImagePropertiesColorsTab(QWidget* parent, bool navBar=true);
     ~ImagePropertiesColorsTab();
 
-    void setData(const KURL& url=KURL(), QRect *selectionArea=0, 
-                 DImg *img=0, int itemType=0);
+    void setData(const KURL& url=KURL(), const QRect &selectionArea = QRect(),
+                 DImg *img=0);
 
-    void setSelection(QRect *selectionArea);
-
-signals:
-    
-    void signalFirstItem(void);    
-    void signalPrevItem(void);    
-    void signalNextItem(void);    
-    void signalLastItem(void); 
+    void setSelection(const QRect &selectionArea);
 
 private:
 
@@ -70,7 +64,7 @@ private:
     void updateInformations();
     void updateStatistiques();
     void getICCData();
-    
+
 private slots:
 
     void slotRefreshOptions(bool sixteenBit);
