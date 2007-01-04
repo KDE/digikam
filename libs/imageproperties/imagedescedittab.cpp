@@ -633,19 +633,21 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     popmenu.insertSeparator(-1);
 
     QPopupMenu selectTagsMenu;
-    selectTagsMenu.insertItem(i18n("All"),       14);
-    selectTagsMenu.insertItem(i18n("Childs"),    17);
-    selectTagsMenu.insertItem(i18n("Parents"),   19);
+    selectTagsMenu.insertItem(i18n("All Tags"),   14);
+    selectTagsMenu.insertSeparator(-1);
+    selectTagsMenu.insertItem(i18n("Childs"),     17);
+    selectTagsMenu.insertItem(i18n("Parents"),    19);
     popmenu.insertItem(i18n("Select"), &selectTagsMenu);
 
     QPopupMenu deselectTagsMenu;
-    deselectTagsMenu.insertItem(i18n("All"),     15);
-    deselectTagsMenu.insertItem(i18n("Childs"),  18);
-    deselectTagsMenu.insertItem(i18n("Parents"), 20);
+    deselectTagsMenu.insertItem(i18n("All Tags"), 15);
+    deselectTagsMenu.insertSeparator(-1);
+    deselectTagsMenu.insertItem(i18n("Childs"),   18);
+    deselectTagsMenu.insertItem(i18n("Parents"),  20);
     popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
 
 
-    popmenu.insertItem(i18n("Invert Selection"), 16);
+    popmenu.insertItem(i18n("Invert Selection"),  16);
 
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
@@ -717,21 +719,29 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
         case 17:   // Select Child Tags.
         {
             toggleChildTags(album, true);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            item->setOn(true);            
             break;
         }
         case 18:   // Deselect Child Tags.
         {
             toggleChildTags(album, false);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            item->setOn(false);            
             break;
         }
         case 19:   // Select Parent Tags.
         {
             toggleParentTags(album, true);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            item->setOn(true);            
             break;
         }
         case 20:   // Deselect Parent Tags.
         {
             toggleParentTags(album, false);
+            TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(this);
+            item->setOn(false);            
             break;
         }
         default:
