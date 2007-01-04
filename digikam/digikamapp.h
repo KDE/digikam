@@ -254,6 +254,7 @@ private:
     KAction               *mQuitAction;
     KAction               *mTipAction;
     KAction               *mKipiHelpAction;
+    KAction               *mDonateMoneyAction;
     KAction               *mGammaAdjustmentAction;
     
     AlbumSettings         *mAlbumSettings;

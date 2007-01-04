@@ -752,7 +752,7 @@ void DigikamApp::setupActions()
                                    actionCollection(),
                                    "help_tipofday");
 
-    mKipiHelpAction = new KAction(i18n("Donate Money"),
+    mDonateMoneyAction = new KAction(i18n("Donate Money..."),
                                    0,
                                    0,
                                    this,
