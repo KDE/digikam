@@ -1,5 +1,6 @@
 DIGIKAM PROJECT
 
+
 -- AUTHORS -----------------------------------------------------------
 
 See AUTHORS file for details.
@@ -91,6 +92,7 @@ libjasper  >= 1.7.x                        http://www.ece.uvic.ca/~mdadams/jaspe
 Note : all libraries depencies requires developement and binary packages installed on your 
 computer to compile digiKam.
 
+
 -- INSTALLATION --------------------------------------------------------
 
 In the source directory do :
@@ -111,3 +113,8 @@ Check it with './configure --help' command line.
 
 Nota : use the '--enable-debug=full' option with the configure script for to provide
 a full informations bug report.
+
+
+-- DONATE MONEY --------------------------------------------------------
+
+Look at this url : http://www.digikam.org/?q=donation
