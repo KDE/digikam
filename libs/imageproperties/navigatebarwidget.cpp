@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-07-07
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-07-07
  * Description : A button bar to navigate between album items
  * 
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@
 
 #include "imagepropertiessidebardb.h"
 #include "navigatebarwidget.h"
+#include "navigatebarwidget.moc"
 
 namespace Digikam
 {
@@ -51,7 +52,10 @@ public:
         prevButton  = 0;
         nextButton  = 0;
         lastButton  = 0;
+        itemType    = NavigateBarWidget::ItemCurrent;
     }
+
+    int                 itemType;
 
     QPushButton        *firstButton;
     QPushButton        *prevButton;
@@ -116,24 +120,26 @@ NavigateBarWidget::~NavigateBarWidget()
 
 void NavigateBarWidget::setFileName(QString filename)
 {
-    d->filename->setText( filename );
+    d->filename->setText(filename);
 }
 
 QString NavigateBarWidget::getFileName()
 {
-    return ( d->filename->text() );
+    return (d->filename->text());
 }
 
 void NavigateBarWidget::setButtonsState(int itemType)
 {
-    if (itemType == ItemFirst)
+    d->itemType = itemType;
+
+    if (d->itemType == ItemFirst)
     {
        d->firstButton->setEnabled(false);
        d->prevButton->setEnabled(false);
        d->nextButton->setEnabled(true);
        d->lastButton->setEnabled(true);
     }
-    else if (itemType == ItemLast)
+    else if (d->itemType == ItemLast)
     {
        d->firstButton->setEnabled(true);
        d->prevButton->setEnabled(true);
@@ -149,6 +155,10 @@ void NavigateBarWidget::setButtonsState(int itemType)
     }
 }
 
+int NavigateBarWidget::getButtonsState()
+{
+    return (d->itemType);
+}
+
 }  // namespace Digikam
 
-#include "navigatebarwidget.moc"

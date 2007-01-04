@@ -1,9 +1,9 @@
 /* ============================================================
- * Author: Gilles Caulier <caulier dot gilles at kdemail dot net>
- * Date  : 2005-07-07
+ * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Date   : 2005-07-07
  * Description : A button bar to navigate between album items
  *
- * Copyright 2005-2006 by Gilles Caulier
+ * Copyright 2005-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +56,7 @@ public:
     void    setFileName(QString filename=QString::null);
     QString getFileName();
     void    setButtonsState(int itemType);
+    int     getButtonsState();
 
 signals:
     
@@ -66,8 +67,7 @@ signals:
         
 private :
 
-    NavigateBarWidgetPriv* d;
-    
+    NavigateBarWidgetPriv* d;    
 };
 
 }  // namespace Digikam

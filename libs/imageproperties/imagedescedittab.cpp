@@ -92,6 +92,7 @@ public:
         ABCMenu                    = 0;
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
+        revertBtn                  = 0;
     }
 
     bool               modified;
@@ -100,6 +101,7 @@ public:
     QToolButton       *recentTagsBtn;
     QToolButton       *tagsSearchClearBtn;
     QToolButton       *assignedTagsBtn;
+    QToolButton       *revertBtn;
 
     QPopupMenu        *ABCMenu;
 
@@ -166,7 +168,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsSearchEdit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
-    QToolTip::add(d->assignedTagsBtn, i18n("Already Assigned Tags"));
+    QToolTip::add(d->assignedTagsBtn, i18n("Already assigned tags"));
     d->assignedTagsBtn->setIconSet(kapp->iconLoader()->loadIcon("tag-assigned",
                                    KIcon::NoGroup, KIcon::SizeSmall, 
                                    KIcon::DefaultState, 0, true));
@@ -188,17 +190,29 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
     d->tagsView->setSelectionMode(QListView::Single);
     d->tagsView->setResizeMode(QListView::LastColumn);
 
-    // --------------------------------------------------
+    // Buttons -----------------------------------------
 
-    d->applyBtn = new QPushButton(i18n("Apply Changes"), settingsArea);
+    QHBox *buttonsBox = new QHBox(settingsArea);
+    buttonsBox->setSpacing(KDialog::spacingHint());
+
+    d->revertBtn = new QToolButton(buttonsBox);
+    d->revertBtn->setIconSet(SmallIcon("reload_page"));
+    QToolTip::add(d->revertBtn, i18n("Revert all changes"));
+    d->revertBtn->setEnabled(false);
+    
+    d->applyBtn = new QPushButton(i18n("Apply Changes"), buttonsBox);
+    d->applyBtn->setIconSet(SmallIcon("apply"));
     d->applyBtn->setEnabled(false);
+    buttonsBox->setStretchFactor(d->applyBtn, 10); 
+
+    // --------------------------------------------------
 
     settingsLayout->addMultiCellWidget(commentsBox, 0, 0, 0, 1);
     settingsLayout->addMultiCellWidget(dateBox, 1, 1, 0, 1);
     settingsLayout->addMultiCellWidget(ratingBox, 2, 2, 0, 1);
     settingsLayout->addMultiCellWidget(d->tagsView, 3, 3, 0, 1);
     settingsLayout->addMultiCellWidget(tagsSearch, 4, 4, 0, 1);
-    settingsLayout->addMultiCellWidget(d->applyBtn, 5, 5, 0, 1);
+    settingsLayout->addMultiCellWidget(buttonsBox, 5, 5, 0, 1);
     settingsLayout->setRowStretch(3, 10);
 
     // --------------------------------------------------
@@ -244,6 +258,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, bool navBar)
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
+
+    connect(d->revertBtn, SIGNAL(clicked()),
+            this, SLOT(slotRevertAllChanges()));
            
     // Initalize ---------------------------------------------
 
@@ -415,14 +432,30 @@ void ImageDescEditTab::slotApplyAllChanges()
 
     d->modified = false;
     d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);
 
     updateRecentTags();
+}
+
+void ImageDescEditTab::slotRevertAllChanges()
+{
+    if (!d->modified)
+        return;
+
+    if (!d->currInfo)
+        return;
+
+    setInfo(d->currInfo, d->navigateBar->getButtonsState());
 }
 
 void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
 {
     slotApplyAllChanges();
+    setInfo(info, itemType);
+}
 
+void ImageDescEditTab::setInfo(ImageInfo *info, int itemType)
+{
     if (!info)
     {
        d->navigateBar->setFileName();
@@ -436,6 +469,7 @@ void ImageDescEditTab::setItem(ImageInfo *info, int itemType)
     d->currInfo = info;
     d->modified = false;
     d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);
 
     KURL fileURL;
     fileURL.setPath(d->currInfo->filePath());
@@ -497,6 +531,7 @@ void ImageDescEditTab::slotModified()
 {
     d->modified = true;
     d->applyBtn->setEnabled(true);
+    d->revertBtn->setEnabled(true);
 }
 
 void ImageDescEditTab::setFocusToComments()

@@ -71,6 +71,8 @@ protected:
 
 private:
 
+    void setInfo(ImageInfo *info, int itemType);
+
     void updateTagsView();
     void updateComments();
     void updateRating();
@@ -90,6 +92,7 @@ private:
 private slots:
 
     void slotApplyAllChanges();
+    void slotRevertAllChanges();
     void slotModified();
     void slotRightButtonClicked(QListViewItem *, const QPoint &, int);
     void slotTagsSearchChanged();
