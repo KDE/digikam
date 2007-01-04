@@ -6,7 +6,7 @@
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
- * Copyright 2006 by Gilles Caulier & Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier & Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -596,10 +596,23 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
     }
 
     popmenu.insertSeparator(-1);
-    popmenu.insertItem(i18n("Select All"),       14);
-    popmenu.insertItem(i18n("Deselect"),         15);
-    popmenu.insertItem(i18n("Invert Selection"), 16);
 
+    QPopupMenu allTagsMenu;
+    allTagsMenu.insertItem(i18n("Select "),     14);
+    allTagsMenu.insertItem(i18n("Deselect"),    15);
+    allTagsMenu.insertItem(i18n("Invert"),      16);
+    popmenu.insertItem(i18n("All Tags"), &allTagsMenu);
+
+    QPopupMenu childTagsMenu;
+    childTagsMenu.insertItem(i18n("Select"),    17);
+    childTagsMenu.insertItem(i18n("Deselect"),  18);
+    popmenu.insertItem(i18n("Childs Tags"), &childTagsMenu);
+
+    QPopupMenu parentTagsMenu;
+    parentTagsMenu.insertItem(i18n("Select"),   19);
+    parentTagsMenu.insertItem(i18n("Deselect"), 20);
+    popmenu.insertItem(i18n("Parent Tags"), &parentTagsMenu);
+    
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
     {
@@ -626,7 +639,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             AlbumManager::instance()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
             break;
         }
-        case 14:
+        case 14:   // Select All Tags.
         {
             QListViewItemIterator it(d->tagsView, QListViewItemIterator::NotChecked);
             while (it.current())
@@ -638,7 +651,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             }
             break;
         }
-        case 15:
+        case 15:   // Deselect All Tags.
         {
             QListViewItemIterator it(d->tagsView, QListViewItemIterator::Checked);
             while (it.current())
@@ -650,7 +663,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             }
             break;
         }
-        case 16:
+        case 16:  // Invert All Tags Selection.
         {
             QListViewItemIterator it(d->tagsView);
             while (it.current())
@@ -665,6 +678,26 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
                 }
                 ++it;
             }
+            break;
+        }
+        case 17:    // Select Child Tags.
+        {
+            toggleChildTags(album, true);
+            break;
+        }
+        case 18:    // Deselect Child Tags.
+        {
+            toggleChildTags(album, false);
+            break;
+        }
+        case 19:    // Select Parent Tags.
+        {
+            toggleParentTags(album, true);
+            break;
+        }
+        case 20:    // Deselect Parent Tags.
+        {
+            toggleParentTags(album, false);
             break;
         }
         default:
@@ -906,6 +939,48 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     }
 
     viewItem->setText(0, album->title());
+}
+
+void ImageDescEditTab::toggleChildTags(TAlbum *album, bool b)
+{
+    if (!album)
+        return;
+
+    AlbumIterator it(album);
+    while ( it.current() )
+    {
+        TAlbum *ta                = (TAlbum*)it.current();
+        TAlbumCheckListItem *item = (TAlbumCheckListItem*)ta->extraData(this);
+        if (item)
+            if (item->isVisible())
+                item->setOn(b);
+        ++it;
+    }
+}
+
+void ImageDescEditTab::toggleParentTags(TAlbum *album, bool b)
+{
+    if (!album)
+        return;
+
+    QListViewItemIterator it(d->tagsView);
+    while (it.current())
+    {
+        TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
+        if (item->isVisible())
+        {
+            Album *a = dynamic_cast<Album*>(item->m_album);
+            if (a)
+            {
+                if (a == album->parent())
+                {
+                    item->setOn(b);
+                    toggleParentTags(item->m_album , b);
+                }
+            }
+        }
+        ++it;
+    }
 }
 
 void ImageDescEditTab::setTagThumbnail(TAlbum *album)

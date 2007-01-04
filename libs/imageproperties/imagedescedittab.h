@@ -6,7 +6,7 @@
  * Description : Comments, Tags, and Rating properties editor
  *
  * Copyright 2003-2005 by Renchi Raju & Gilles Caulier
- * Copyright 2006 by Gilles Caulier & Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier & Marcel Wiesweg
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,6 +81,9 @@ private:
                 const QString& _icon=QString());
     void tagEdit(TAlbum* album);
     void tagDelete(TAlbum *album);
+
+    void toggleChildTags(TAlbum *album, bool b);
+    void toggleParentTags(TAlbum *album, bool b);
 
     void setTagThumbnail(TAlbum *album);
 
