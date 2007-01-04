@@ -419,6 +419,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (alias B.K.O | http://b
 249 ==> 139197 : Crash during import of raw imagefiles (DNG).
 250 ==> 139313 : UTF-8 image comments are mangled when input from image editor.
 251 ==> 136903 : If partition gets full during camera/card copy there is no warning and empty files are created.
-252 ==> 
+252 ==> 133955 : Rating search: less, equal, and larger comparison.
+253 ==> 
 
 ---------------------------------------------------------------------------------------------------- 
