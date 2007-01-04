@@ -132,6 +132,8 @@ AlbumGUI      : Root album show a Welcome page for new users (like Kmail or Konq
 AlbumGUI      : Video files can be previewed using an embedded instance of default KDE media player.
 AlbumGUI      : Preview picture mode use a memory cache to speed-up loading.
 
+Image Plugins : All tools use the same keyboard shortcuts than PhotoShop.
+ 
 ...
 
 ----------------------------------------------------------------------------------------------------
