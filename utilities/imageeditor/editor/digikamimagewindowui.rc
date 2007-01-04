@@ -53,6 +53,8 @@
 
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="editorwindow_imagepluginshelp" />
+        <Separator/>
+        <Action name="editorwindow_donatemoney" />
     </Menu>
   
     <Merge/>

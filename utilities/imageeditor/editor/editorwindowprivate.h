@@ -45,6 +45,7 @@ public:
         slideShowInFullScreen  = true;
 
         imagePluginsHelpAction = 0;
+        donateMoneyAction      = 0;
         accelerators           = 0;
         viewHistogramAction    = 0;
         filePrintAction        = 0;
@@ -73,6 +74,7 @@ public:
     bool                  slideShowInFullScreen;
 
     KAction              *imagePluginsHelpAction;
+    KAction              *donateMoneyAction;
     KAction              *filePrintAction;
     KAction              *copyAction;
     KAction              *resizeAction;

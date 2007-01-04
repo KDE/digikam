@@ -3,7 +3,7 @@
  * Date   : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -398,9 +398,16 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     d->imagePluginsHelpAction = new KAction(i18n("Image Plugins Handbooks"),
-                                           "digikamimageplugins", 0,
-                                           this, SLOT(slotImagePluginsHelp()),
-                                           actionCollection(), "editorwindow_imagepluginshelp");
+                                            "digikamimageplugins", 0,
+                                            this, SLOT(slotImagePluginsHelp()),
+                                            actionCollection(), 
+                                            "editorwindow_imagepluginshelp");
+
+    d->donateMoneyAction = new KAction(i18n("Donate Money..."),
+                                       0, 0, 
+                                       this, SLOT(slotDonateMoney()),
+                                       actionCollection(),
+                                       "editorwindow_donatemoney");
 
     // -- Init SlideShow instance -------------------------------------------------
 
@@ -1545,6 +1552,11 @@ void EditorWindow::slotToggleColorManagedView()
     config->setGroup("Color Management");
     config->writeEntry("ManagedView", cmv);
 }    
+
+void EditorWindow::slotDonateMoney()
+{
+    KApplication::kApplication()->invokeBrowser("http://www.digikam.org/?q=donation");
+}
 
 }  // namespace Digikam
 

@@ -3,7 +3,7 @@
  * Date   : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -198,6 +198,7 @@ private slots:
     void slotToggleColorManagedView();
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString &filename, bool success);
+    void slotDonateMoney();
 
 private:
 
