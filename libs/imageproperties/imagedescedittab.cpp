@@ -59,13 +59,13 @@
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
+#include "albumthumbnailloader.h"
 #include "tagcreatedlg.h"
 #include "navigatebarwidget.h"
-#include "imageinfo.h"
 #include "ratingwidget.h"
-#include "imageattributeswatch.h"
-#include "albumthumbnailloader.h"
 #include "talbumlistview.h"
+#include "imageinfo.h"
+#include "imageattributeswatch.h"
 #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
@@ -632,43 +632,42 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
 
     popmenu.insertSeparator(-1);
 
-    QPopupMenu allTagsMenu;
-    allTagsMenu.insertItem(i18n("Select "),     14);
-    allTagsMenu.insertItem(i18n("Deselect"),    15);
-    allTagsMenu.insertItem(i18n("Invert"),      16);
-    popmenu.insertItem(i18n("All Tags"), &allTagsMenu);
+    QPopupMenu selectTagsMenu;
+    selectTagsMenu.insertItem(i18n("All"),       14);
+    selectTagsMenu.insertItem(i18n("Childs"),    17);
+    selectTagsMenu.insertItem(i18n("Parents"),   19);
+    popmenu.insertItem(i18n("Select"), &selectTagsMenu);
 
-    QPopupMenu childTagsMenu;
-    childTagsMenu.insertItem(i18n("Select"),    17);
-    childTagsMenu.insertItem(i18n("Deselect"),  18);
-    popmenu.insertItem(i18n("Childs Tags"), &childTagsMenu);
+    QPopupMenu deselectTagsMenu;
+    deselectTagsMenu.insertItem(i18n("All"),     15);
+    deselectTagsMenu.insertItem(i18n("Childs"),  18);
+    deselectTagsMenu.insertItem(i18n("Parents"), 20);
+    popmenu.insertItem(i18n("Deselect"), &deselectTagsMenu);
 
-    QPopupMenu parentTagsMenu;
-    parentTagsMenu.insertItem(i18n("Select"),   19);
-    parentTagsMenu.insertItem(i18n("Deselect"), 20);
-    popmenu.insertItem(i18n("Parent Tags"), &parentTagsMenu);
-    
+
+    popmenu.insertItem(i18n("Invert Selection"), 16);
+
     int choice = popmenu.exec((QCursor::pos()));
     switch( choice )
     {
-        case 10:
+        case 10:   // New Tag.
         {
             tagNew(album);
             break;
         }
-        case 11:
+        case 11:   // Edit Tag Properties.
         {
             if (!album->isRoot())
                 tagEdit(album);
             break;
         }
-        case 12:
+        case 12:   // Delete Tag.
         {
             if (!album->isRoot())
                 tagDelete(album);
             break;
         }
-        case 13:
+        case 13:   // Reset Tag Icon.
         {
             QString errMsg;
             AlbumManager::instance()->updateTAlbumIcon(album, QString("tag"), 0, errMsg);
@@ -698,7 +697,7 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             }
             break;
         }
-        case 16:  // Invert All Tags Selection.
+        case 16:   // Invert All Tags Selection.
         {
             QListViewItemIterator it(d->tagsView);
             while (it.current())
@@ -715,22 +714,22 @@ void ImageDescEditTab::slotRightButtonClicked(QListViewItem *item, const QPoint 
             }
             break;
         }
-        case 17:    // Select Child Tags.
+        case 17:   // Select Child Tags.
         {
             toggleChildTags(album, true);
             break;
         }
-        case 18:    // Deselect Child Tags.
+        case 18:   // Deselect Child Tags.
         {
             toggleChildTags(album, false);
             break;
         }
-        case 19:    // Select Parent Tags.
+        case 19:   // Select Parent Tags.
         {
             toggleParentTags(album, true);
             break;
         }
-        case 20:    // Deselect Parent Tags.
+        case 20:   // Deselect Parent Tags.
         {
             toggleParentTags(album, false);
             break;
@@ -822,7 +821,7 @@ void ImageDescEditTab::tagDelete(TAlbum *album)
     {
         KMessageBox::error(this, i18n("You are currently viewing items in the "
                                       "tag '%1' that you are about to delete. "
-                                      "You will need to close this dialog first "
+                                      "You will need to apply change first "
                                       "if you want to delete the tag." )
                            .arg(album->title()));
         return;
